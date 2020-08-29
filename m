@@ -1,46 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 16:30:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trace-cmd: bump to version 2.9.1
-In-Reply-To: <20200829134529.17445-1-egorenar-dev@posteo.net>
-References: <20200829134529.17445-1-egorenar-dev@posteo.net>
-Message-ID: <20200829163048.38790541@windsurf.home>
+Date: Sat, 29 Aug 2020 16:35:17 +0200
+Subject: [Buildroot] [PATCH v3 02/13] package/libblockdev: new package
+In-Reply-To: <20200725230618.3640682-3-aduskett@gmail.com>
+References: <20200725230618.3640682-1-aduskett@gmail.com>
+ <20200725230618.3640682-3-aduskett@gmail.com>
+Message-ID: <20200829163517.3c43d0ea@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adam,
 
-On Sat, 29 Aug 2020 15:45:29 +0200
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+On Sat, 25 Jul 2020 16:06:07 -0700
+aduskett at gmail.com wrote:
 
-> - This also fixes gcc 10 issues
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> libblockdev is a C library supporting GObject introspection for manipulation
+> of block devices. It has a plugin-based architecture where each technology
+> (like LVM, Btrfs, MD RAID, Swap,...) is implemented in a separate plugin,
+> possibly with multiple implementations.
+> 
+> Gobject-introspection is not a strict dependency and may be disabled via a
+> configure flag.
+> 
+> This is the base package with everything disabled, the subsequent patches in
+> this series will add more options necessary to bump udisk to the latest.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-Do we have autobuilder reports of those build issues ?
+I've applied to next, but I encountered several issues, and almost gave
+up.
 
-> diff --git a/package/trace-cmd/0001-Cross-compilation-fixes.patch b/package/trace-cmd/0001-Cross-compilation-fixes.patch
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9105626083..ff475a3234 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -43,6 +43,7 @@ F:	package/gstreamer1/gst1-vaapi/
+>  F:	package/imx-usb-loader/
+>  F:	package/janus-gateway/
+>  F:	package/json-for-modern-cpp/
+> +F:	package/libblockdev/
+>  F:	package/libabseil-cpp/
+
+Alphabetic ordering was not correct here.
+
+> diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
 > new file mode 100644
-> index 0000000000..07428204fe
+> index 0000000000..4fd80f1f5c
 > --- /dev/null
-> +++ b/package/trace-cmd/0001-Cross-compilation-fixes.patch
+> +++ b/package/libblockdev/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_LIBBLOCKDEV
+> +	bool "libblockdev"
+> +	depends on !BR2_STATIC_LIBS # kmod
+> +	depends on BR2_USE_WCHAR # libglib2 -> gettext
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+> +	depends on BR2_USE_MMU # fork() # libglib2
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_KMOD
 
-All patches need a description + Signed-off-by, and should be generated
-with "git format-patch -N" when the upstream project uses git, which I
-guess is the case here.
+Alphabetic ordering here as well.
 
-> diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-> index c6447f34d4..91c0512d5f 100644
-> --- a/package/trace-cmd/trace-cmd.hash
-> +++ b/package/trace-cmd/trace-cmd.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256 3b3f564cc6ee30341051ccb7589b42f3abe4e676a21c029c7c127c7edf5bdcf0  trace-cmd-trace-cmd-v2.7.tar.gz
-> -sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> +sha256 f7d591ac13ac3de004aa69fa3c2d333f620bb29ad0fec064ec215f488588b333  trace-cmd-trace-cmd-v2.9.1.tar.gz
-> +sha256 b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+> +	help
+> +	  libblockdev is a C library supporting GObject introspection
+> +	  for manipulation of block devices. It has a plugin-based
+> +	  architecture where each technology (like LVM, Btrfs, MD RAID,
+> +	  Swap,...) is implemented in a separate plugin, possibly with
+> +	  multiple implementations.
+> +
+> +	  https://github.com/storaged-project/libblockdev/
+> +
+> +comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_PACKAGE_HAS_UDEV
+> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || BR2_TOOLCHAIN_HAS_THREADS
 
-The hash of COPYING has changed, what are the changes ?
+BR2_TOOLCHAIN_HAS_THREADS should have been !BR2_TOOLCHAIN_HAS_THREADS.
+
+Also, due to depends on !BR2_PACKAGE_HAS_UDEV, the message will not
+appear at all when udev is enabled, so you won't see the
+wchar/threads/dynamic library messages!
+
+Changed to:
+
++       depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
++               !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+
+> +LIBBLOCKDEV_VERSION = 2.24
+> +LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+> +LIBBLOCKDEV_LICENSE = LGPL-2.1
+> +LIBBLOCKDEV_LICENSE_FILES = LICENSE
+> +LIBBLOCKDEV_INSTALL_STAGING = YES
+> +LIBBLOCKDEV_DEPENDENCIES = host-pkgconf libglib2 kmod udev
+> +
+> +LIBBLOCKDEV_CONF_OPTS = \
+> +	--disable-introspection \
+> +	--with-loop \
+> +	--without-bcache \
+> +	--without-btrfs \
+> +	--without-crypto \
+> +	--without-dm \
+> +	--without-dmraid \
+> +	--without-escrow \
+> +	--without-fs \
+> +	--without-kbd \
+> +	--without-loop \
+> +	--without-lvm \
+> +	--without-lvm_dbus \
+> +	--without-mdraid \
+> +	--without-mpath \
+> +	--without-nvdimm \
+> +	--without-parted \
+
+The first issue was this: this option doesn't exist, the actual option
+is --without-part. Due to this, it was trying to find libparted, which
+was not available. So it simply means that you didn't test this patch
+on its own.
+
+The second problem was that libblockdev simply didn't build with
+uClibc, as it uses strerror_l(), which uClibc doesn't provide.
+
+I'd like to remind that uClibc is our default C library today, so not
+testing against uClibc is really, really wrong. I fixed that by adding
+a patch that implements a fallback to strerror() when strerror_l() is
+not available, which of course requires LIBBLOCKDEV_AUTORECONF = YES.
+
+Could you have a look at that patch and submit it for upstream
+inclusion ?
 
 Thanks!
 
