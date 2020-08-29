@@ -1,54 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:36:31 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] Makefile: hide commands
- that build the package file lists at end of build
-Message-ID: <20200829173331.4758E86F1F@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:39:45 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/postgresql:
+ security bump to version 12.4
+Message-ID: <20200829173331.7498286F1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e27d0d8b5bc16f20d09bc646a2aaa9d9c6d11ca0
+commit: https://git.buildroot.net/buildroot/commit/?id=a8b1eac71b278b6de9e733222d472f64176806fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Since commit 0e2be4db8ab01d479177a3a187c22525752195ae
-("package/pkg-generic: make file list logic parallel build
-compatible"), the commands executed at the every end of the build
-to assemble the list of files installed by the different packages
-are visible in the make output. They are quite noisy, and clutter
-the output.
+- Fix CVE-2020-14349: It was found that PostgreSQL versions before 12.4,
+  before 11.9 and before 10.14 did not properly sanitize the search_path
+  during logical replication. An authenticated attacker could use this
+  flaw in an attack similar to CVE-2018-1058, in order to execute
+  arbitrary SQL command in the context of the user used for replication.
+- Fix CVE-2020-14350: It was found that some PostgreSQL extensions did
+  not use search_path safely in their installation script. An attacker
+  with sufficient privileges could use this flaw to trick an
+  administrator into executing a specially crafted script, during the
+  installation or update of such extension. This affects PostgreSQL
+  versions before 12.4, before 11.9, before 10.14, before 9.6.19, and
+  before 9.5.23.
 
-The other commands in target-finalize are also hidden using "@",
-so we should also do the same for those commands. But that hurts
-debuggability, so we use $(Q) (the existing '@'s can be changed
-in a followup patch).
+https://www.postgresql.org/docs/12/release-12-4.html
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr: use '$(Q)', not '@']
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 18f6c2611898c852a10e38978249a9ce81c24163)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 35ebee6510a19f87aa007b9302bff8d29e1add21)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0026e7761c..79096fdc90 100644
---- a/Makefile
-+++ b/Makefile
-@@ -816,11 +816,11 @@ endif # merged /usr
- 		$(call MESSAGE,"Copying overlay $(d)"); \
- 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ff3a76258e..4e410d187a 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.md5
+-md5  a30c023dd7088e44d73be71af2ef404a  postgresql-12.3.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.sha256
+-sha256  94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41  postgresql-12.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.md5
++md5  80ebbf0e55193b123760e5f8e48c6cff  postgresql-12.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.sha256
++sha256  bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc  postgresql-12.4.tar.bz2
  
--	$(if $(TARGET_DIR_FILES_LISTS), \
-+	$(Q)$(if $(TARGET_DIR_FILES_LISTS), \
- 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
--	$(if $(HOST_DIR_FILES_LISTS), \
-+	$(Q)$(if $(HOST_DIR_FILES_LISTS), \
- 		cat $(HOST_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-host.txt
--	$(if $(STAGING_DIR_FILES_LISTS), \
-+	$(Q)$(if $(STAGING_DIR_FILES_LISTS), \
- 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
+ # License file, Locally calculated
+ sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c0bf199eb4..18c7b2ade4 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+-POSTGRESQL_VERSION = 12.3
++POSTGRESQL_VERSION = 12.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
