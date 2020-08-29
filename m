@@ -1,65 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 11:51:19 +0200
-Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.13
-Message-ID: <20200829095120.15263-1-peter@korsgaard.com>
+From: Suniel Mahesh <sunil@amarulasolutions.com>
+Date: Sat, 29 Aug 2020 15:05:02 +0530
+Subject: [Buildroot] [PATCH v2 0/4] Add support for rk3399 based targets
+Message-ID: <20200829093506.25260-1-sunil@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+This patch series adds support for targets from friendlyarm, pine64 and orangepi,
+based on rk3399 SOC.
 
-CVE-2020-15810: HTTP(S) Request Smuggling
-Due to incorrect data validation Squid is vulnerable to HTTP Request
-Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
-poisoning.
-https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
+Merged two patch series at https://patchwork.ozlabs.org/project/buildroot/list/?series=174279,
+into this series.
 
-CVE-2020-15811: HTTP(S) Request Splitting
-Due to incorrect data validation Squid is vulnerable to HTTP Request
-Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
-poisoning.
-https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
+patch #1, #2, are basically a resend. patch #3, #4 are new patches.
 
-CVE-2020-24606: Denial of Service processing Cache Digest Response
-Due to Improper Input Validation Squid is vulnerable to a Denial of Service
-attack against the machine operating Squid.
-https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
+Changes for v2:
+- Done few changes based on Thomas Pettazonni suggestions and 
+  mailing list
+- bumped linux version from 5.4.46 to 5.8.2
+- bumped u-boot version from 2020.04 to 2020.07
+- recent series is at:
+  https://patchwork.ozlabs.org/project/buildroot/cover/1592073154-13731-1-git-send-email-sunil at amarulasolutions.com/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Suniel Mahesh (4):
+  configs/rockpro64: new defconfig
+  configs/orangepi_rk3399: new defconfig
+  configs/nanopi_m4: new defconfig
+  configs/nanopc_t4: new defconfig
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index a3ef655185..b7e051960e 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
--md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
--sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
-+md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
-+sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
- # Locally calculated
--sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
-+sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 6bce74b7d6..1ba375e547 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.12
-+SQUID_VERSION = 4.13
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+ DEVELOPERS                                   |  8 ++++
+ board/friendlyarm/nanopc-t4/extlinux.conf    |  4 ++
+ board/friendlyarm/nanopc-t4/genimage.cfg     | 39 ++++++++++++++++++
+ board/friendlyarm/nanopc-t4/post-build.sh    |  5 +++
+ board/friendlyarm/nanopc-t4/readme.txt       | 45 +++++++++++++++++++++
+ board/friendlyarm/nanopi-m4/extlinux.conf    |  4 ++
+ board/friendlyarm/nanopi-m4/genimage.cfg     | 39 ++++++++++++++++++
+ board/friendlyarm/nanopi-m4/post-build.sh    |  5 +++
+ board/friendlyarm/nanopi-m4/readme.txt       | 45 +++++++++++++++++++++
+ board/orangepi/orangepi-rk3399/extlinux.conf |  4 ++
+ board/orangepi/orangepi-rk3399/genimage.cfg  | 39 ++++++++++++++++++
+ board/orangepi/orangepi-rk3399/post-build.sh |  5 +++
+ board/orangepi/orangepi-rk3399/readme.txt    | 56 ++++++++++++++++++++++++++
+ board/pine64/rockpro64/extlinux.conf         |  4 ++
+ board/pine64/rockpro64/genimage.cfg          | 39 ++++++++++++++++++
+ board/pine64/rockpro64/post-build.sh         |  5 +++
+ board/pine64/rockpro64/readme.txt            | 60 ++++++++++++++++++++++++++++
+ configs/nanopc_t4_defconfig                  | 53 ++++++++++++++++++++++++
+ configs/nanopi_m4_defconfig                  | 53 ++++++++++++++++++++++++
+ configs/orangepi_rk3399_defconfig            | 53 ++++++++++++++++++++++++
+ configs/rockpro64_defconfig                  | 53 ++++++++++++++++++++++++
+ 21 files changed, 618 insertions(+)
+ create mode 100644 board/friendlyarm/nanopc-t4/extlinux.conf
+ create mode 100644 board/friendlyarm/nanopc-t4/genimage.cfg
+ create mode 100755 board/friendlyarm/nanopc-t4/post-build.sh
+ create mode 100644 board/friendlyarm/nanopc-t4/readme.txt
+ create mode 100644 board/friendlyarm/nanopi-m4/extlinux.conf
+ create mode 100644 board/friendlyarm/nanopi-m4/genimage.cfg
+ create mode 100755 board/friendlyarm/nanopi-m4/post-build.sh
+ create mode 100644 board/friendlyarm/nanopi-m4/readme.txt
+ create mode 100644 board/orangepi/orangepi-rk3399/extlinux.conf
+ create mode 100644 board/orangepi/orangepi-rk3399/genimage.cfg
+ create mode 100755 board/orangepi/orangepi-rk3399/post-build.sh
+ create mode 100644 board/orangepi/orangepi-rk3399/readme.txt
+ create mode 100644 board/pine64/rockpro64/extlinux.conf
+ create mode 100644 board/pine64/rockpro64/genimage.cfg
+ create mode 100755 board/pine64/rockpro64/post-build.sh
+ create mode 100644 board/pine64/rockpro64/readme.txt
+ create mode 100644 configs/nanopc_t4_defconfig
+ create mode 100644 configs/nanopi_m4_defconfig
+ create mode 100644 configs/orangepi_rk3399_defconfig
+ create mode 100644 configs/rockpro64_defconfig
+
 -- 
-2.20.1
+2.7.4
