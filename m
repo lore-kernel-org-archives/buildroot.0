@@ -1,76 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:36:24 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Makefile: use $(Q)
- instead of @ to silence target-finalize commands
-Message-ID: <20200829173326.8E8EB7F9A7@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:36:17 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] Makefile: hide commands
+ that build the package file lists at end of build
+Message-ID: <20200829173326.6FF3386F1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eac943b2349c00890dca3011b96f54bb9fbd85af
+commit: https://git.buildroot.net/buildroot/commit/?id=72ec125c16e23b278c5e3109798386fa478a60ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-As 18f6c26118 just did to silence the file lists commands, switch to
-using $(Q) instead of a plain @, to silence the commands.
+Since commit 0e2be4db8ab01d479177a3a187c22525752195ae
+("package/pkg-generic: make file list logic parallel build
+compatible"), the commands executed at the every end of the build
+to assemble the list of files installed by the different packages
+are visible in the make output. They are quite noisy, and clutter
+the output.
 
-Using $(Q) will allow to debug the commands with V=1.
+The other commands in target-finalize are also hidden using "@",
+so we should also do the same for those commands. But that hurts
+debuggability, so we use $(Q) (the existing '@'s can be changed
+in a followup patch).
 
-We keep @ for the calls to MESSAGE, though.
-
-The commands that are not currently silenced are left as-is, and they
-can be converted to being silent in a followup patch, if need be,
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: use '$(Q)', not '@']
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5754d9c9b17189d05e7436143a46098fdfeae762)
+(cherry picked from commit 18f6c2611898c852a10e38978249a9ce81c24163)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 384518d61b..9598ef4eca 100644
+index 7eb08a7972..384518d61b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -799,9 +799,9 @@ endif
- # counterparts are appropriately setup as symlinks ones to the others.
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+@@ -815,11 +815,11 @@ endif # merged /usr
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+ 		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
  
--	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
--		$(call MESSAGE,"Sanity check in overlay $(d)"); \
--		not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
-+	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		@$(call MESSAGE,"Sanity check in overlay $(d)")$(sep) \
-+		$(Q)not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
- 		test -n "$$not_merged_dirs" && { \
- 			echo "ERROR: The overlay in $(d) is not" \
- 				"using a merged /usr for the following directories:" \
-@@ -811,9 +811,9 @@ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- 
- endif # merged /usr
- 
--	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
--		$(call MESSAGE,"Copying overlay $(d)"); \
--		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
-+	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		@$(call MESSAGE,"Copying overlay $(d)")$(sep) \
-+		$(Q)$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
- 
- 	$(Q)$(if $(TARGET_DIR_FILES_LISTS), \
+-	$(if $(TARGET_DIR_FILES_LISTS), \
++	$(Q)$(if $(TARGET_DIR_FILES_LISTS), \
  		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
-@@ -822,9 +822,9 @@ endif # merged /usr
- 	$(Q)$(if $(STAGING_DIR_FILES_LISTS), \
+-	$(if $(HOST_DIR_FILES_LISTS), \
++	$(Q)$(if $(HOST_DIR_FILES_LISTS), \
+ 		cat $(HOST_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-host.txt
+-	$(if $(STAGING_DIR_FILES_LISTS), \
++	$(Q)$(if $(STAGING_DIR_FILES_LISTS), \
  		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
  
--	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
--		$(call MESSAGE,"Executing post-build script $(s)"); \
--		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+	$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		@$(call MESSAGE,"Executing post-build script $(s)")$(sep) \
-+		$(Q)$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
- 	touch $(TARGET_DIR)/usr
- 
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
