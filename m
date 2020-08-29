@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:57:47 +0200
-Subject: [Buildroot] [git commit branch/next] package/botan: bump to version
- 2.15.0
-Message-ID: <20200829195246.E00C18149E@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 21:58:21 +0200
+Subject: [Buildroot] [git commit branch/next] package/gupnp: bump to version
+ 1.2.4
+Message-ID: <20200829195247.1782D8149E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b517934b791ba77e77af9abab82341486d3c2bac
+commit: https://git.buildroot.net/buildroot/commit/?id=e62a61614eaf81870fc810d95d5838db49262179
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://botan.randombit.net/news.html
+Extract from NEWS:
+- Fix subscription check on V6 link-local addresses
+- Add autofree function for GUPnPServiceProxyAction
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 15e79bbe40..e8d62aa98c 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  0c10f12b424a40ee19bde00292098e201d7498535c062d8d5b586d07861a54b5  Botan-2.14.0.tar.xz
-+sha256  d88af1307f1fefac79aa4f2f524699478d69ce15a857cf2d0a90ac6bf2a50009  Botan-2.15.0.tar.xz
- # Locally computed
- sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index a5551b110f..19677a40e0 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 6baf105318..60339ec9ca 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.3.sha256sum:
+-sha256  d447e54d88e4a8fab84ad1766070e9208e21166fc7e2ce95df6e33e49e8d29b1  gupnp-1.2.3.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.4.sha256sum:
++sha256  f7a0307ea51f5e44d1b832f493dd9045444a3a4e211ef85dfd9aa5dd6eaea7d1  gupnp-1.2.4.tar.xz
+ 
+ # Hash for license file:
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 953beb2559..e90787eb84 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BOTAN_VERSION = 2.14.0
-+BOTAN_VERSION = 2.15.0
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+ GUPNP_VERSION_MAJOR = 1.2
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPL-2.0+
