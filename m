@@ -1,387 +1,740 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Aug 2020 13:34:01 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nvidia-tegra23: remove package
-Message-ID: <20200829113403.122144-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Aug 2020 13:34:03 +0200
+Subject: [Buildroot] [PATCH 3/3] package/x11r7/xserver_xorg-server: remove
+ unmaintained versions 1.14.7 & 1.17.4
+In-Reply-To: <20200829113403.122144-1-bernd.kuhls@t-online.de>
+References: <20200829113403.122144-1-bernd.kuhls@t-online.de>
+Message-ID: <20200829113403.122144-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current X.org X server is incompatible with this driver.
+Upstream does not maintain these older versions anymore. Due to security
+fixes not being backported to these versions anymore we remove these old
+X server versions.
 
-We no longer support unmaintainted versions of X.org X server.
+Move current patches from version-specific directory to package directory.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
  Config.in.legacy                              |  6 ++
- DEVELOPERS                                    |  2 -
- package/Config.in                             |  1 -
- package/nvidia-tegra23/Config.in              | 38 -----------
- .../nvidia-tegra23-binaries/Config.in         | 26 --------
- .../nvidia-tegra23-binaries/egl.pc            | 10 ---
- .../nvidia-tegra23-binaries/gles.pc           | 10 ---
- .../nvidia-tegra23-binaries/glesv2.pc         | 10 ---
- .../nvidia-tegra23-binaries.hash              |  3 -
- .../nvidia-tegra23-binaries.mk                | 64 -------------------
- .../nvidia-tegra23-codecs/Config.in           |  7 --
- .../nvidia-tegra23-codecs.hash                |  3 -
- .../nvidia-tegra23-codecs.mk                  | 32 ----------
- package/nvidia-tegra23/nvidia-tegra23.mk      | 18 ------
- support/scripts/pkg-stats                     |  1 -
- 15 files changed, 6 insertions(+), 225 deletions(-)
- delete mode 100644 package/nvidia-tegra23/Config.in
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
- delete mode 100644 package/nvidia-tegra23/nvidia-tegra23.mk
+ .../0001-modesettings-needs-dri2.patch        |  0
+ ...002-Remove-check-for-useSIGIO-option.patch |  0
+ ...0003-include-misc.h-fix-uClibc-build.patch |  0
+ ...nd-Makefile.am-fix-build-without-glx.patch |  0
+ ...mon-xf86Init.c-fix-build-without-glx.patch |  0
+ .../1.14.7/0001-sdksyms-gcc5.patch            | 50 -------------
+ ...t-buffer-in-SProcXSendExtensionEvent.patch | 39 ----------
+ ...ow-GenericEvent-in-SendEvent-request.patch | 71 -------------------
+ ...ll-events-in-ProcXSendExtensionEvent.patch | 50 -------------
+ ...5-Xi-Do-not-try-to-swap-GenericEvent.patch | 45 ------------
+ .../1.17.4/0001-modesettings-needs-dri2.patch | 19 -----
+ ...t-buffer-in-SProcXSendExtensionEvent.patch | 39 ----------
+ ...ow-GenericEvent-in-SendEvent-request.patch | 71 -------------------
+ ...ll-events-in-ProcXSendExtensionEvent.patch | 50 -------------
+ ...5-Xi-Do-not-try-to-swap-GenericEvent.patch | 45 ------------
+ package/x11r7/xserver_xorg-server/Config.in   | 48 -------------
+ .../xserver_xorg-server.hash                  |  5 --
+ .../xserver_xorg-server.mk                    |  8 +--
+ 19 files changed, 7 insertions(+), 539 deletions(-)
+ rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0001-modesettings-needs-dri2.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0002-Remove-check-for-useSIGIO-option.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0003-include-misc.h-fix-uClibc-build.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch (100%)
+ rename package/x11r7/xserver_xorg-server/{1.20.9 => }/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch (100%)
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+ delete mode 100644 package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 4e2809b562..a718e645d8 100644
+index b91e6dbc69..45fb18540b 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,12 @@ endif
  
  comment "Legacy options removed in 2020.08"
  
-+config BR2_PACKAGE_NVIDIA_TEGRA23
-+	bool "nvidia-tegra23 package removed"
++config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
++	bool "X.org Enable AIGLX Extension"
 +	select BR2_LEGACY
 +	help
-+	  Current X.org server is incompatible with this driver.
++	  AIGLX Extension was removed in X.org X server version 1.19.0
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64
- 	bool "toolchain-external-codesourcery-amd64 removed"
+ config BR2_PACKAGE_AMD_CATALYST
+ 	bool "amd-catalyst"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a975875cf8..4801f45c25 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1898,8 +1898,6 @@ F:	package/libgit2/
- 
- N:	Nicolas Serafini <nicolas.serafini@sensefly.com>
- F:	package/exiv2/
--F:	package/nvidia-tegra23/nvidia-tegra23-binaries/
--F:	package/nvidia-tegra23/nvidia-tegra23-codecs/
- F:	package/ofono/
- 
- N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
-diff --git a/package/Config.in b/package/Config.in
-index 036a5bf439..3d5a087986 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -500,7 +500,6 @@ endmenu
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
- 	source "package/nvidia-driver/Config.in"
--	source "package/nvidia-tegra23/Config.in"
- 	source "package/nvme/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/nvidia-tegra23/Config.in b/package/nvidia-tegra23/Config.in
+diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch
+rename to package/x11r7/xserver_xorg-server/0001-modesettings-needs-dri2.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch
+rename to package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch
+rename to package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+rename to package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+rename to package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch b/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
 deleted file mode 100644
-index 9c9fd198d9..0000000000
---- a/package/nvidia-tegra23/Config.in
+index ad544aa30c..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.14.7/0001-sdksyms-gcc5.patch
 +++ /dev/null
-@@ -1,38 +0,0 @@
--menuconfig BR2_PACKAGE_NVIDIA_TEGRA23
--	bool "nvidia-tegra23"
--	depends on BR2_cortex_a9
--	depends on BR2_ARM_EABIHF && BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
--	help
--	  Install NVidia proprietary blobs to drive Tegra2 or Tegra3
--	  GPUs found in some mobile-targeted ARM SoCs.
+@@ -1,50 +0,0 @@
+-From 21b896939c5bb242f3aacc37baf12379e43254b6 Mon Sep 17 00:00:00 2001
+-From: Egbert Eich <eich@freedesktop.org>
+-Date: Tue, 3 Mar 2015 16:27:05 +0100
+-Subject: symbols: Fix sdksyms.sh to cope with gcc5
 -
--if BR2_PACKAGE_NVIDIA_TEGRA23
+-Gcc5 adds additional lines stating line numbers before and
+-after __attribute__() which need to be skipped.
+-
+-Downloaded from upstream commit
+-https://cgit.freedesktop.org/xorg/xserver/commit/hw/xfree86/sdksyms.sh?id=21b896939c5bb242f3aacc37baf12379e43254b6
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Egbert Eich <eich@freedesktop.org>
+-Tested-by: Daniel Stone <daniels@collabora.com>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-
+-diff --git a/hw/xfree86/sdksyms.sh b/hw/xfree86/sdksyms.sh
+-index 2305073..05ac410 100755
+---- a/hw/xfree86/sdksyms.sh
+-+++ b/hw/xfree86/sdksyms.sh
+-@@ -350,13 +350,25 @@ BEGIN {
+-     if (sdk) {
+- 	n = 3;
+- 
+-+        # skip line numbers GCC 5 adds before __attribute__
+-+        while ($n == "" || $0 ~ /^# [0-9]+ "/) {
+-+           getline;
+-+           n = 1;
+-+        }
+-+
+- 	# skip attribute, if any
+- 	while ($n ~ /^(__attribute__|__global)/ ||
+- 	    # skip modifiers, if any
+- 	    $n ~ /^\*?(unsigned|const|volatile|struct|_X_EXPORT)$/ ||
+- 	    # skip pointer
+--	    $n ~ /^[a-zA-Z0-9_]*\*$/)
+-+	    $n ~ /^[a-zA-Z0-9_]*\*$/) {
+- 	    n++;
+-+            # skip line numbers GCC 5 adds after __attribute__
+-+            while ($n == "" || $0 ~ /^# [0-9]+ "/) {
+-+               getline;
+-+               n = 1;
+-+            }
+-+        }
+- 
+- 	# type specifier may not be set, as in
+- 	#   extern _X_EXPORT unsigned name(...)
+--- 
+-cgit v0.10.2
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+deleted file mode 100644
+index c15dc9f50c..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.14.7/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:39 +0300
+-Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
+-
+-Make sure that the xEvent eventT is initialized with zeros, the same way as
+-in SProcSendEvent.
+-
+-Some event swapping functions do not overwrite all 32 bytes of xEvent
+-structure, for example XSecurityAuthorizationRevoked. Two cooperating
+-clients, one swapped and the other not, can send
+-XSecurityAuthorizationRevoked event to each other to retrieve old stack data
+-from X server. This can be potentialy misused to go around ASLR or
+-stack-protector.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 11d82029f..1cf118ab6 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
+- {
+-     CARD32 *p;
+-     int i;
+--    xEvent eventT;
+-+    xEvent eventT = { .u.u.type = 0 };
+-     xEvent *eventP;
+-     EventSwapPtr proc;
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+deleted file mode 100644
+index 12da5f5cba..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.14.7/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:40 +0300
+-Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
+-
+-The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
+-no less. Both ProcSendEvent and SProcSendEvent verify that the received data
+-exactly match the request size. However nothing stops the client from passing
+-in event with xEvent::type = GenericEvent and any value of
+-xGenericEvent::length.
+-
+-In the case of ProcSendEvent, the event will be eventually passed to
+-WriteEventsToClient which will see that it is Generic event and copy the
+-arbitrary length from the receive buffer (and possibly past it) and send it to
+-the other client. This allows clients to copy unitialized heap memory out of X
+-server or to crash it.
+-
+-In case of SProcSendEvent, it will attempt to swap the incoming event by
+-calling a swapping function from the EventSwapVector array. The swapped event
+-is written to target buffer, which in this case is local xEvent variable. The
+-xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
+-expect that the target buffer has size matching the size of the source
+-GenericEvent. This allows clients to cause stack buffer overflows.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- dix/events.c  | 6 ++++++
+- dix/swapreq.c | 7 +++++++
+- 2 files changed, 13 insertions(+)
+-
+-diff --git a/dix/events.c b/dix/events.c
+-index 3e3a01ef9..d3a33ea3f 100644
+---- a/dix/events.c
+-+++ b/dix/events.c
+-@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
+-         client->errorValue = stuff->event.u.u.type;
+-         return BadValue;
+-     }
+-+    /* Generic events can have variable size, but SendEvent request holds
+-+       exactly 32B of event data. */
+-+    if (stuff->event.u.u.type == GenericEvent) {
+-+        client->errorValue = stuff->event.u.u.type;
+-+        return BadValue;
+-+    }
+-     if (stuff->event.u.u.type == ClientMessage &&
+-         stuff->event.u.u.detail != 8 &&
+-         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
+-diff --git a/dix/swapreq.c b/dix/swapreq.c
+-index 719e9b81c..67850593b 100644
+---- a/dix/swapreq.c
+-+++ b/dix/swapreq.c
+-@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
+-     swapl(&stuff->destination);
+-     swapl(&stuff->eventMask);
+- 
+-+    /* Generic events can have variable size, but SendEvent request holds
+-+       exactly 32B of event data. */
+-+    if (stuff->event.u.u.type == GenericEvent) {
+-+        client->errorValue = stuff->event.u.u.type;
+-+        return BadValue;
+-+    }
+-+
+-     /* Swap event */
+-     proc = EventSwapVector[stuff->event.u.u.type & 0177];
+-     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+deleted file mode 100644
+index 2e651006ba..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.14.7/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:41 +0300
+-Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
+-
+-The requirement is that events have type in range
+-EXTENSION_EVENT_BASE..lastEvent, but it was tested
+-only for first event of all.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 1cf118ab6..5e63bfcca 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
+- int
+- ProcXSendExtensionEvent(ClientPtr client)
+- {
+--    int ret;
+-+    int ret, i;
+-     DeviceIntPtr dev;
+-     xEvent *first;
+-     XEventClass *list;
+-@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
+-     /* The client's event type must be one defined by an extension. */
+- 
+-     first = ((xEvent *) &stuff[1]);
+--    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
+--          (first->u.u.type < lastEvent))) {
+--        client->errorValue = first->u.u.type;
+--        return BadValue;
+-+    for (i = 0; i < stuff->num_events; i++) {
+-+        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
+-+            (first[i].u.u.type < lastEvent))) {
+-+            client->errorValue = first[i].u.u.type;
+-+            return BadValue;
+-+        }
+-     }
+- 
+-     list = (XEventClass *) (first + stuff->num_events);
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+deleted file mode 100644
+index 871e7621ed..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.14.7/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:42 +0300
+-Subject: [PATCH] Xi: Do not try to swap GenericEvent.
+-
+-The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
+-it is assuming that the event has fixed size and gives the swapping function
+-xEvent-sized buffer.
+-
+-A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 5e63bfcca..5c2e0fc56 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
+- 
+-     eventP = (xEvent *) &stuff[1];
+-     for (i = 0; i < stuff->num_events; i++, eventP++) {
+-+        if (eventP->u.u.type == GenericEvent) {
+-+            client->errorValue = eventP->u.u.type;
+-+            return BadValue;
+-+        }
+-+
+-         proc = EventSwapVector[eventP->u.u.type & 0177];
+--        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
+-+        /* no swapping proc; invalid event type? */
+-+        if (proc == NotImplemented) {
+-+            client->errorValue = eventP->u.u.type;
+-             return BadValue;
+-+        }
+-         (*proc) (eventP, &eventT);
+-         *eventP = eventT;
+-     }
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
+deleted file mode 100644
+index 4ef95efc3e..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.17.4/0001-modesettings-needs-dri2.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Kernel modesettings support also depends on dri2, see
+-http://cgit.freedesktop.org/xorg/xserver/tree/hw/xfree86/drivers/modesetting/Makefile.am#n46
+-
+-Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=91584
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr xorg-server-1.17.2.org/configure.ac xorg-server-1.17.2/configure.ac
+---- xorg-server-1.17.2.org/configure.ac	2015-06-16 17:42:40.000000000 +0200
+-+++ xorg-server-1.17.2/configure.ac	2015-08-08 10:44:59.702382624 +0200
+-@@ -2036,7 +2036,7 @@
+- 	        XORG_SYS_LIBS="$XORG_SYS_LIBS $XORG_MODULES_LIBS"
+- 	fi
+- 
+--	if test "x$DRM" = xyes; then
+-+	if test "x$DRM" = xyes -a "x$DRI2" = xyes; then
+- 		dnl 2.4.46 is required for cursor hotspot support.
+- 		PKG_CHECK_EXISTS(libdrm >= 2.4.46)
+- 		XORG_DRIVER_MODESETTING=yes
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
+deleted file mode 100644
+index c15dc9f50c..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.17.4/0002-Xi-Zero-target-buffer-in-SProcXSendExtensionEvent.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 05442de962d3dc624f79fc1a00eca3ffc5489ced Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:39 +0300
+-Subject: [PATCH] Xi: Zero target buffer in SProcXSendExtensionEvent.
+-
+-Make sure that the xEvent eventT is initialized with zeros, the same way as
+-in SProcSendEvent.
+-
+-Some event swapping functions do not overwrite all 32 bytes of xEvent
+-structure, for example XSecurityAuthorizationRevoked. Two cooperating
+-clients, one swapped and the other not, can send
+-XSecurityAuthorizationRevoked event to each other to retrieve old stack data
+-from X server. This can be potentialy misused to go around ASLR or
+-stack-protector.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 11d82029f..1cf118ab6 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -78,7 +78,7 @@ SProcXSendExtensionEvent(ClientPtr client)
+- {
+-     CARD32 *p;
+-     int i;
+--    xEvent eventT;
+-+    xEvent eventT = { .u.u.type = 0 };
+-     xEvent *eventP;
+-     EventSwapPtr proc;
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch b/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
+deleted file mode 100644
+index 12da5f5cba..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.17.4/0003-dix-Disallow-GenericEvent-in-SendEvent-request.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 215f894965df5fb0bb45b107d84524e700d2073c Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:40 +0300
+-Subject: [PATCH] dix: Disallow GenericEvent in SendEvent request.
+-
+-The SendEvent request holds xEvent which is exactly 32 bytes long, no more,
+-no less. Both ProcSendEvent and SProcSendEvent verify that the received data
+-exactly match the request size. However nothing stops the client from passing
+-in event with xEvent::type = GenericEvent and any value of
+-xGenericEvent::length.
+-
+-In the case of ProcSendEvent, the event will be eventually passed to
+-WriteEventsToClient which will see that it is Generic event and copy the
+-arbitrary length from the receive buffer (and possibly past it) and send it to
+-the other client. This allows clients to copy unitialized heap memory out of X
+-server or to crash it.
+-
+-In case of SProcSendEvent, it will attempt to swap the incoming event by
+-calling a swapping function from the EventSwapVector array. The swapped event
+-is written to target buffer, which in this case is local xEvent variable. The
+-xEvent variable is 32 bytes long, but the swapping functions for GenericEvents
+-expect that the target buffer has size matching the size of the source
+-GenericEvent. This allows clients to cause stack buffer overflows.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- dix/events.c  | 6 ++++++
+- dix/swapreq.c | 7 +++++++
+- 2 files changed, 13 insertions(+)
+-
+-diff --git a/dix/events.c b/dix/events.c
+-index 3e3a01ef9..d3a33ea3f 100644
+---- a/dix/events.c
+-+++ b/dix/events.c
+-@@ -5366,6 +5366,12 @@ ProcSendEvent(ClientPtr client)
+-         client->errorValue = stuff->event.u.u.type;
+-         return BadValue;
+-     }
+-+    /* Generic events can have variable size, but SendEvent request holds
+-+       exactly 32B of event data. */
+-+    if (stuff->event.u.u.type == GenericEvent) {
+-+        client->errorValue = stuff->event.u.u.type;
+-+        return BadValue;
+-+    }
+-     if (stuff->event.u.u.type == ClientMessage &&
+-         stuff->event.u.u.detail != 8 &&
+-         stuff->event.u.u.detail != 16 && stuff->event.u.u.detail != 32) {
+-diff --git a/dix/swapreq.c b/dix/swapreq.c
+-index 719e9b81c..67850593b 100644
+---- a/dix/swapreq.c
+-+++ b/dix/swapreq.c
+-@@ -292,6 +292,13 @@ SProcSendEvent(ClientPtr client)
+-     swapl(&stuff->destination);
+-     swapl(&stuff->eventMask);
+- 
+-+    /* Generic events can have variable size, but SendEvent request holds
+-+       exactly 32B of event data. */
+-+    if (stuff->event.u.u.type == GenericEvent) {
+-+        client->errorValue = stuff->event.u.u.type;
+-+        return BadValue;
+-+    }
+-+
+-     /* Swap event */
+-     proc = EventSwapVector[stuff->event.u.u.type & 0177];
+-     if (!proc || proc == NotImplemented)        /* no swapping proc; invalid event type? */
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
+deleted file mode 100644
+index 2e651006ba..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.17.4/0004-Xi-Verify-all-events-in-ProcXSendExtensionEvent.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 8caed4df36b1f802b4992edcfd282cbeeec35d9d Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:41 +0300
+-Subject: [PATCH] Xi: Verify all events in ProcXSendExtensionEvent.
+-
+-The requirement is that events have type in range
+-EXTENSION_EVENT_BASE..lastEvent, but it was tested
+-only for first event of all.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 1cf118ab6..5e63bfcca 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -117,7 +117,7 @@ SProcXSendExtensionEvent(ClientPtr client)
+- int
+- ProcXSendExtensionEvent(ClientPtr client)
+- {
+--    int ret;
+-+    int ret, i;
+-     DeviceIntPtr dev;
+-     xEvent *first;
+-     XEventClass *list;
+-@@ -141,10 +141,12 @@ ProcXSendExtensionEvent(ClientPtr client)
+-     /* The client's event type must be one defined by an extension. */
+- 
+-     first = ((xEvent *) &stuff[1]);
+--    if (!((EXTENSION_EVENT_BASE <= first->u.u.type) &&
+--          (first->u.u.type < lastEvent))) {
+--        client->errorValue = first->u.u.type;
+--        return BadValue;
+-+    for (i = 0; i < stuff->num_events; i++) {
+-+        if (!((EXTENSION_EVENT_BASE <= first[i].u.u.type) &&
+-+            (first[i].u.u.type < lastEvent))) {
+-+            client->errorValue = first[i].u.u.type;
+-+            return BadValue;
+-+        }
+-     }
+- 
+-     list = (XEventClass *) (first + stuff->num_events);
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch b/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
+deleted file mode 100644
+index 871e7621ed..0000000000
+--- a/package/x11r7/xserver_xorg-server/1.17.4/0005-Xi-Do-not-try-to-swap-GenericEvent.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From ba336b24052122b136486961c82deac76bbde455 Mon Sep 17 00:00:00 2001
+-From: Michal Srb <msrb@suse.com>
+-Date: Wed, 24 May 2017 15:54:42 +0300
+-Subject: [PATCH] Xi: Do not try to swap GenericEvent.
+-
+-The SProcXSendExtensionEvent must not attempt to swap GenericEvent because
+-it is assuming that the event has fixed size and gives the swapping function
+-xEvent-sized buffer.
+-
+-A GenericEvent would be later rejected by ProcXSendExtensionEvent anyway.
+-
+-Signed-off-by: Michal Srb <msrb@suse.com>
+-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Xi/sendexev.c | 10 +++++++++-
+- 1 file changed, 9 insertions(+), 1 deletion(-)
+-
+-diff --git a/Xi/sendexev.c b/Xi/sendexev.c
+-index 5e63bfcca..5c2e0fc56 100644
+---- a/Xi/sendexev.c
+-+++ b/Xi/sendexev.c
+-@@ -95,9 +95,17 @@ SProcXSendExtensionEvent(ClientPtr client)
+- 
+-     eventP = (xEvent *) &stuff[1];
+-     for (i = 0; i < stuff->num_events; i++, eventP++) {
+-+        if (eventP->u.u.type == GenericEvent) {
+-+            client->errorValue = eventP->u.u.type;
+-+            return BadValue;
+-+        }
+-+
+-         proc = EventSwapVector[eventP->u.u.type & 0177];
+--        if (proc == NotImplemented)     /* no swapping proc; invalid event type? */
+-+        /* no swapping proc; invalid event type? */
+-+        if (proc == NotImplemented) {
+-+            client->errorValue = eventP->u.u.type;
+-             return BadValue;
+-+        }
+-         (*proc) (eventP, &eventT);
+-         *eventP = eventT;
+-     }
+--- 
+-2.11.0
+-
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 87f1b37daf..d53083ef90 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -42,47 +42,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
+ if BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+-	bool
+-
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	bool
+-
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+-	bool
+-
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI
+-	int
+-	default 14 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+-	default 19 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	default 24 if BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
 -
 -choice
--	prompt "Tegra platform"
--	help
--	  Select the SOC platform.
+-	bool "X Window System server version"
 -
--config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2
--	bool "Tegra 2"
--	help
--	  NVIDIA Tegra 2 is a dual-core Cortex-A9 without NEON.
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+-	bool "1.20.9"
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
+-	select BR2_PACKAGE_XLIB_LIBXFONT2
 -
--config BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3
--	bool "Tegra 3"
--	depends on BR2_ARM_CPU_HAS_NEON
--	help
--	  NVIDIA Tegra 3 is a quad-core Cortex-A9 with NEON.
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+-	bool "1.17.4"
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_19
+-	select BR2_PACKAGE_XLIB_LIBXFONT
+-
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+-	bool "1.14.7"
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
+-	select BR2_PACKAGE_XLIB_LIBXFONT
 -
 -endchoice
 -
--source "package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in"
--source "package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in"
--endif
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+-	string
+-	default "1.20.9" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
+-	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
+-	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
 -
--comment "nvidia-tegra23 needs Xorg <= 1.14 and a glibc toolchain w/ EABIhf"
--	depends on BR2_cortex_a9
--	depends on !BR2_ARM_EABIHF || !BR2_TOOLCHAIN_USES_GLIBC \
--		|| !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_14
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in b/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-deleted file mode 100644
-index 0c09051b6a..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/Config.in
-+++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
--	bool "nvidia-tegra23 binaries"
--	select BR2_PACKAGE_MESA3D_HEADERS
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_HAS_LIBGLES
--	select BR2_PACKAGE_HAS_LIBOPENMAX
+ choice
+ 	prompt "X Window System server type"
+ 	help
+@@ -114,13 +73,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+-	bool "Enable AIGLX Extension"
+-	# AIGLX Extension removed in 1.19.0
+-	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14 || BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
 -	help
--	  Those packages provide libraries, drivers and firmware that
--	  comes from NVIDIA Linux For Tegra.
+-	  Enable/Use AIGLX extension.
 -
--	  https://developer.nvidia.com/linux-tegra
--
--if BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
--
--config BR2_PACKAGE_PROVIDES_LIBEGL
--	default "nvidia-tegra23-binaries"
--
--config BR2_PACKAGE_PROVIDES_LIBGLES
--	default "nvidia-tegra23-binaries"
--
--config BR2_PACKAGE_PROVIDES_LIBOPENMAX
--	default "nvidia-tegra23-binaries"
--
--endif
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
-deleted file mode 100644
-index 3af7eecc01..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/egl.pc
-+++ /dev/null
-@@ -1,10 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=/usr/lib
--includedir=/usr/include
--
--Name: egl
--Description: EGL implementation
--Version: 1
--Cflags: -I${includedir}/EGL
--Libs: -L${libdir} -lEGL
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
-deleted file mode 100644
-index 91387c9793..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/gles.pc
-+++ /dev/null
-@@ -1,10 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=/usr/lib
--includedir=/usr/include
--
--Name: glesv2
--Description: OpenGL ES 1.1 implementation
--Version: 1.1
--Cflags: -I${includedir}/GLES
--Libs: -L${libdir} -lGLESv1_CM
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc b/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
-deleted file mode 100644
-index 356a1cba4f..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/glesv2.pc
-+++ /dev/null
-@@ -1,10 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=/usr/lib
--includedir=/usr/include
--
--Name: glesv2
--Description: OpenGL ES 2 implementation
--Version: 2
--Cflags: -I${includedir}/GLESv2
--Libs: -L${libdir} -lGLESv2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
-deleted file mode 100644
-index 50c3cda645..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From https://developer.nvidia.com/linux-tegra-rel-16
--sha1 295dcd63b2f122c2d99f07fcc083db9adb8ac178 Tegra20_Linux_R16.5_armhf.tbz2
--sha1 6be645c20d81d518856bc8520ef4c2472d57eaef Tegra30_Linux_R16.5_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk b/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-deleted file mode 100644
-index ed3c5a78b4..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-binaries/nvidia-tegra23-binaries.mk
-+++ /dev/null
-@@ -1,64 +0,0 @@
--################################################################################
--#
--# nvidia-tegra23-binaries
--#
--################################################################################
--
--NVIDIA_TEGRA23_BINARIES_VERSION = $(NVIDIA_TEGRA23_VERSION)
--NVIDIA_TEGRA23_BINARIES_SITE = $(NVIDIA_TEGRA23_SITE)
--NVIDIA_TEGRA23_BINARIES_SOURCE = $(NVIDIA_TEGRA23_BASE)_R$(NVIDIA_TEGRA23_BINARIES_VERSION)_armhf.tbz2
--
--NVIDIA_TEGRA23_BINARIES_LICENSE = License For Customer Use of NVIDIA Software
--NVIDIA_TEGRA23_BINARIES_LICENSE_FILES = nv_tegra/LICENSE
--
--NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING = YES
--
--# Those are not really needed to build nvidia-tegra23-binaries, but
--# will be needed by packages who link against libraries provided by
--# nvidia-tegra23-binaries.
--
--NVIDIA_TEGRA23_BINARIES_DEPENDENCIES = mesa3d-headers \
--	xlib_libX11 xlib_libXext
--
--NVIDIA_TEGRA23_BINARIES_PROVIDES = libegl libgles libopenmax
--
--NVIDIA_TEGRA23_BINARIES_DRV = \
--	nv_tegra/nvidia_drivers/usr/lib/xorg/modules/drivers/tegra_drv.abi$(BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI).so
--
--define NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
--	$(INSTALL) -d $(@D)/nv_tegra/nvidia_drivers
--	$(call suitable-extractor,$(@D)/nv_tegra/nvidia_drivers.tbz2) \
--		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
--	$(TAR) --strip-components=0 -C $(@D)/nv_tegra/nvidia_drivers/ $(TAR_OPTIONS) -
--endef
--NVIDIA_TEGRA23_BINARIES_POST_EXTRACT_HOOKS += NVIDIA_TEGRA23_BINARIES_EXTRACT_FURTHER
--
--define NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS
--	mkdir -p $(1)/usr/lib
--	cp -dpfr $(@D)/nv_tegra/nvidia_drivers/usr/lib/*.so $(1)/usr/lib/
--	(cd $(1)/usr/lib; \
--		ln -sf libGLESv2.so.2 libGLESv2.so; \
--		ln -sf libGLESv1_CM.so.1 libGLESv1_CM.so; \
--		ln -sf libEGL.so.1 libEGL.so \
--	)
--endef
--
--define NVIDIA_TEGRA23_BINARIES_INSTALL_STAGING_CMDS
--	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(STAGING_DIR))
--	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig/
--	cp -dpfr package/nvidia-tegra23/nvidia-tegra23-binaries/*.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/
--endef
--
--define NVIDIA_TEGRA23_BINARIES_INSTALL_TARGET_CMDS
--	$(call NVIDIA_TEGRA23_BINARIES_INSTALL_LIBS,$(TARGET_DIR))
--	mkdir -p $(TARGET_DIR)/lib/firmware/
--	cp -dpfr $(@D)/nv_tegra/nvidia_drivers/lib/firmware/*.bin \
--		$(TARGET_DIR)/lib/firmware/
--	$(INSTALL) -D -m 0644 $(@D)/nv_tegra/nvidia_drivers/etc/nv_tegra_release \
--		$(TARGET_DIR)/etc/nv_tegra_release
--	$(INSTALL) -D -m 0644 $(@D)/$(NVIDIA_TEGRA23_BINARIES_DRV) \
--		$(TARGET_DIR)/usr/lib/xorg/modules/drivers/tegra_drv.so
--endef
--
--$(eval $(generic-package))
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in b/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-deleted file mode 100644
-index df9de69dc4..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-codecs/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_NVIDIA_TEGRA23_CODECS
--	bool "nvidia-tegra23 codecs"
--	depends on BR2_PACKAGE_NVIDIA_TEGRA23_BINARIES
--	help
--	  NVIDIA Tegra restricted codecs from Linux For Tegra 16.5.
--
--	  https://developer.nvidia.com/linux-tegra-rel-16
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-deleted file mode 100644
-index 9b5c61496f..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From https://developer.nvidia.com/linux-tegra-rel-16
--sha1 540e89d5462537cd59c8a86efdb786b3b4310868 Tegra20_Linux-codecs_R16.5_armhf.tbz2
--sha1 3637efe808f25594e3cdc2756aef6e0274ab70f4 Tegra30_Linux-codecs_R16.5_armhf.tbz2
-diff --git a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk b/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-deleted file mode 100644
-index 2885021c58..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23-codecs/nvidia-tegra23-codecs.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# nvidia-tegra23-codecs
--#
--################################################################################
--
--NVIDIA_TEGRA23_CODECS_VERSION = $(NVIDIA_TEGRA23_VERSION)
--NVIDIA_TEGRA23_CODECS_SOURCE = $(NVIDIA_TEGRA23_BASE)-codecs_R$(NVIDIA_TEGRA23_CODECS_VERSION)_armhf.tbz2
--NVIDIA_TEGRA23_CODECS_SITE = $(NVIDIA_TEGRA23_SITE)
--NVIDIA_TEGRA23_CODECS_LICENSE = NVIDIA(r) Tegra(r) Software License Agreement
--NVIDIA_TEGRA23_CODECS_LICENSE_FILES = Tegra_Software_License_Agreement-Tegra-Linux-codecs.txt
--NVIDIA_TEGRA23_CODECS_REDISTRIBUTE = NO
--
--# The archive contains an archive with the firmware codecs
--define NVIDIA_TEGRA23_CODECS_EXTRACT_CMDS
--	$(INSTALL) -d $(@D)
--	$(call suitable-extractor,$(NVIDIA_TEGRA23_CODECS_SOURCE)) \
--		$(NVIDIA_TEGRA23_CODECS_DL_DIR)/$(NVIDIA_TEGRA23_CODECS_SOURCE) | \
--	$(TAR) --strip-components=0 -C $(@D) $(TAR_OPTIONS) -
--	$(INSTALL) -d $(@D)/restricted_codecs
--	$(call suitable-extractor,$(@D)/restricted_codecs.tbz2) \
--		$(@D)/restricted_codecs.tbz2 | \
--	$(TAR) --strip-components=0 -C $(@D)/restricted_codecs/ $(TAR_OPTIONS) -
--endef
--
--define NVIDIA_TEGRA23_CODECS_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/lib/firmware/
--	cp -dpfr $(@D)/restricted_codecs/lib/firmware/*.axf \
--		$(TARGET_DIR)/lib/firmware/
--endef
--
--$(eval $(generic-package))
-diff --git a/package/nvidia-tegra23/nvidia-tegra23.mk b/package/nvidia-tegra23/nvidia-tegra23.mk
-deleted file mode 100644
-index b97d0ccac4..0000000000
---- a/package/nvidia-tegra23/nvidia-tegra23.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--################################################################################
--#
--# nvidia-tegra23
--#
--################################################################################
--
--NVIDIA_TEGRA23_VERSION = 16.5
--
--ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA2),y)
--NVIDIA_TEGRA23_SITE = http://developer.download.nvidia.com/mobile/tegra/l4t/r16.5.0/ventana_release_armhf
--NVIDIA_TEGRA23_BASE = Tegra20_Linux
--endif
--ifeq ($(BR2_PACKAGE_NVIDIA_TEGRA23_TEGRA3),y)
--NVIDIA_TEGRA23_SITE = http://developer.download.nvidia.com/mobile/tegra/l4t/r16.5.0/cardhu_release_armhf
--NVIDIA_TEGRA23_BASE = Tegra30_Linux
+ if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 930900c5ea..2b55449e14 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,8 +1,3 @@
+-# From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
+-sha1  7a95765e56b124758fcd7b609589e65b8870880b  xorg-server-1.14.7.tar.bz2
+-sha256  fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f  xorg-server-1.14.7.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
+-sha256  0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457  xorg-server-1.17.4.tar.bz2
+ # From https://lists.x.org/archives/xorg-announce/2020-August/003059.html
+ sha256  e219f2e0dfe455467939149d7cd2ee53b79b512cc1d2094ae4f5c9ed9ccd3571  xorg-server-1.20.9.tar.bz2
+ sha512  d9b5f93e1b9763a89187d8b272aa7d4ce9709641b8539f4536708af153310e5a4931bffd4229c51a3b0e3b12da7838750aa71b635751fb4c0bb27438cce4e5e6  xorg-server-1.20.9.tar.bz2
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8ccc04224d..e0059166b3 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = $(call qstrip,$(BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION))
++XSERVER_XORG_SERVER_VERSION = 1.20.9
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+@@ -127,12 +127,6 @@ else
+ XSERVER_XORG_SERVER_CONF_OPTS += --disable-dri --disable-glx
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX),y)
+-XSERVER_XORG_SERVER_CONF_OPTS += --enable-aiglx
+-else
+-XSERVER_XORG_SERVER_CONF_OPTS += --disable-aiglx
 -endif
 -
--include $(sort $(wildcard package/nvidia-tegra23/*/*.mk))
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index e642147b98..c4cf5c7b7b 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -417,7 +417,6 @@ def get_pkglist(npackages, package_list):
-                      "package/x11r7/x11r7.mk",
-                      "package/doc-asciidoc.mk",
-                      "package/pkg-.*.mk",
--                     "package/nvidia-tegra23/nvidia-tegra23.mk",
-                      "toolchain/toolchain-external/pkg-toolchain-external.mk",
-                      "toolchain/toolchain-external/toolchain-external.mk",
-                      "toolchain/toolchain.mk",
+ # Optional packages
+ ifeq ($(BR2_PACKAGE_TSLIB),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
 -- 
 2.27.0
