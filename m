@@ -1,106 +1,63 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 13:02:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.4
-Message-ID: <20200829110255.1024576-1-fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 13:24:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump to
+ version 12.4
+Message-ID: <20200829112408.1063698-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bug fix release: https://linuxcontainers.org/fr/lxc/news
-- Drop patch (already in version)
+- Fix CVE-2020-14349: It was found that PostgreSQL versions before 12.4,
+  before 11.9 and before 10.14 did not properly sanitize the search_path
+  during logical replication. An authenticated attacker could use this
+  flaw in an attack similar to CVE-2018-1058, in order to execute
+  arbitrary SQL command in the context of the user used for replication.
+- Fix CVE-2020-14350: It was found that some PostgreSQL extensions did
+  not use search_path safely in their installation script. An attacker
+  with sufficient privileges could use this flaw to trick an
+  administrator into executing a specially crafted script, during the
+  installation or update of such extension. This affects PostgreSQL
+  versions before 12.4, before 11.9, before 10.14, before 9.6.19, and
+  before 9.5.23.
+
+https://www.postgresql.org/docs/12/release-12-4.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...fail-if-__NR_signalfd-is-not-defined.patch | 54 -------------------
- package/lxc/lxc.hash                          |  2 +-
- package/lxc/lxc.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 56 deletions(-)
- delete mode 100644 package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch b/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
-deleted file mode 100644
-index c6e70e0a55..0000000000
---- a/package/lxc/0001-syscall-don-t-fail-if-__NR_signalfd-is-not-defined.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From 3341e204dc1e1da6ecbc1ffbe59fca33f23ca557 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 28 Jul 2020 12:31:31 +0200
--Subject: [PATCH] syscall: don't fail if __NR_signalfd is not defined
--
--lxc fails to build if __NR_signalfd is not defined since version 4.0.0
--and
--https://github.com/lxc/lxc/commit/bed09c9cc0bec7bbd2442fcce4a2a0f03994cb09
--
--However, some architectures don't define __NR_signalfd but only
--__NR_signalfd4. This is the case for example for nios2 or csky:
--https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/nios2/arch-syscall.h
--https://github.com/bminor/glibc/blob/f9ac84f92f151e07586c55e14ed628d493a5929d/sysdeps/unix/sysv/linux/csky/arch-syscall.h
--
--Fixes:
-- - http://autobuild.buildroot.org/results/75096a48d2dbda57459523db3ed0952e63f93535
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/lxc/lxc/commit/3341e204dc1e1da6ecbc1ffbe59fca33f23ca557]
-----
-- src/lxc/syscall_numbers.h  | 3 ---
-- src/lxc/syscall_wrappers.h | 2 ++
-- 2 files changed, 2 insertions(+), 3 deletions(-)
--
--diff --git a/src/lxc/syscall_numbers.h b/src/lxc/syscall_numbers.h
--index e2e7883786..72e4ffe460 100644
----- a/src/lxc/syscall_numbers.h
--+++ b/src/lxc/syscall_numbers.h
--@@ -228,9 +228,6 @@
-- 		#if _MIPS_SIM == _MIPS_SIM_ABI64	/* n64 */
-- 			#define __NR_signalfd 5276
-- 		#endif
---	#else
---		#define -1
---		#warning "__NR_signalfd not defined for your architecture"
-- 	#endif
-- #endif
-- 
--diff --git a/src/lxc/syscall_wrappers.h b/src/lxc/syscall_wrappers.h
--index 220ef65fde..6aaa437226 100644
----- a/src/lxc/syscall_wrappers.h
--+++ b/src/lxc/syscall_wrappers.h
--@@ -112,8 +112,10 @@ static inline int signalfd(int fd, const sigset_t *mask, int flags)
-- 	int retval;
-- 
-- 	retval = syscall(__NR_signalfd4, fd, mask, _NSIG / 8, flags);
--+#ifdef __NR_signalfd
-- 	if (errno == ENOSYS && flags == 0)
-- 		retval = syscall(__NR_signalfd, fd, mask, _NSIG / 8);
--+#endif
-- 
-- 	return retval;
-- }
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index 411947f165..ed4957c938 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  d56d91d772449c57e9a67b770dab8967e412051d8d6246ce56c63264671672e5  lxc-4.0.3.tar.gz
-+sha256  3c65a8ba20ed2b66c2075dc914aa632f76d0137af707b851b62b5555fed7d995  lxc-4.0.4.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index ad26580980..82b8793546 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ff3a76258e..4e410d187a 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.md5
+-md5  a30c023dd7088e44d73be71af2ef404a  postgresql-12.3.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.sha256
+-sha256  94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41  postgresql-12.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.md5
++md5  80ebbf0e55193b123760e5f8e48c6cff  postgresql-12.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.sha256
++sha256  bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc  postgresql-12.4.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c0bf199eb4..18c7b2ade4 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LXC_VERSION = 4.0.3
-+LXC_VERSION = 4.0.4
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+-POSTGRESQL_VERSION = 12.3
++POSTGRESQL_VERSION = 12.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
 2.28.0
