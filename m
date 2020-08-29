@@ -1,61 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:06:22 +0200
-Subject: [Buildroot] [git commit branch/next] package/libidn: bump to
- version 1.36
-Message-ID: <20200829205920.8B3DE8198B@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:05:20 +0200
+Subject: [Buildroot] [git commit branch/next] package/gsl: bump to version
+ 2.6
+Message-ID: <20200829205920.64A458198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e16680bbe4223a50fb7f79e2718c5784399060f
+commit: https://git.buildroot.net/buildroot/commit/?id=a7074155cf8ff3627b0feaf791aa3c9775694958
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Update indentation in hash file (two spaces)
 
-Extract from NEWS:
- - Fix unlikely memory leak in idna_to_unicode_4z4z().
- - Check codepoint validity in punycode_decode() and punycode_decode().
- - tld: Add U+00EF to .nl TLD table.
- - Indent code.
- - Translation fixes.
- - Update gnulib files.
- - API and ABI is backwards compatible with the previous version.
+http://git.savannah.gnu.org/cgit/gsl.git/tree/NEWS?h=release-2-6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libidn/libidn.hash | 8 ++++----
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gsl/gsl.hash | 4 ++--
+ package/gsl/gsl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index f5ba311e90..0255a63950 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256	f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e	libidn-1.35.tar.gz
-+sha256  14b67108344d81ba844631640df77c9071d9fb0659b080326ff5424e86b14038  libidn-1.36.tar.gz
- 
- # Hash for license files:
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYINGv3
--sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 601edcb57d..2df3437029 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
+diff --git a/package/gsl/gsl.hash b/package/gsl/gsl.hash
+index 8a979d6e8b..0d40a75497 100644
+--- a/package/gsl/gsl.hash
++++ b/package/gsl/gsl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 0460ad7c2542caaddc6729762952d345374784100223995eb14d614861f2258d  gsl-2.5.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  b782339fc7a38fe17689cb39966c4d821236c28018b6593ddb6fd59ee40786a8  gsl-2.6.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index d3c764787d..416955b72c 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBIDN_VERSION = 1.35
-+LIBIDN_VERSION = 1.36
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
+-GSL_VERSION = 2.5
++GSL_VERSION = 2.6
+ GSL_SITE = $(BR2_GNU_MIRROR)/gsl
+ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPL-3.0
