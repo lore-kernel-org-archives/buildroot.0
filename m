@@ -1,207 +1,142 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 09:30:09 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cryptsetup: add
- upstream patch to fix build against json-c >= 0.14.0
-Message-ID: <20200829072315.135A2838C2@busybox.osuosl.org>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Sat, 29 Aug 2020 09:32:01 +0200
+Subject: [Buildroot] [PATCH v3] package/easyframes: new package
+In-Reply-To: <CALFsTFUmB-vWcn+RHQjcSfCCJLtxJjLniuV=FGwdLrDf8-=iOA@mail.gmail.com>
+References: <20200820064356.3103584-1-horatiu.vultur@microchip.com>
+ <CALFsTFUmB-vWcn+RHQjcSfCCJLtxJjLniuV=FGwdLrDf8-=iOA@mail.gmail.com>
+Message-ID: <20200829073201.r2f3y66x7cd7bmgb@soft-dev3.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4c252e967cad3a2226a64ffcf6c4aeede682efc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+The 08/28/2020 21:44, Asaf Kahlon wrote:
+> 
+> Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/2ae/2aec06342f325c6d1f26376ef258f441b15098d5/
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...02-Add-support-for-upcoming-json-c-0.14.0.patch | 179 +++++++++++++++++++++
- 1 file changed, 179 insertions(+)
+Thanks for your comments. I have sent a new version now, where I removed
+the C++ dependency.
 
-diff --git a/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch b/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch
-new file mode 100644
-index 0000000000..6a73139038
---- /dev/null
-+++ b/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch
-@@ -0,0 +1,179 @@
-+From 604abec333a0efb44fd8bc610aa0b1151dd0f612 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
-+Date: Mon, 13 Apr 2020 11:48:17 +0200
-+Subject: [PATCH] Add support for upcoming json-c 0.14.0.
-+
-+  * TRUE/FALSE are not defined anymore.  1 and 0 are used instead.
-+  * json_object_get_uint64() and json_object_new_uint64() are part
-+    of the upstream API now.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/luks2/luks2_internal.h      |  4 +++-
-+ lib/luks2/luks2_json_metadata.c | 38 +++++++++++++++++----------------
-+ 2 files changed, 23 insertions(+), 19 deletions(-)
-+
-+diff --git a/lib/luks2/luks2_internal.h b/lib/luks2/luks2_internal.h
-+index b9fec6b5..939101d6 100644
-+--- a/lib/luks2/luks2_internal.h
-++++ b/lib/luks2/luks2_internal.h
-+@@ -58,9 +58,11 @@ json_object *LUKS2_get_segments_jobj(struct luks2_hdr *hdr);
-+ void hexprint_base64(struct crypt_device *cd, json_object *jobj,
-+ 		     const char *sep, const char *line_sep);
-+ 
-++#if !(defined JSON_C_VERSION_NUM && JSON_C_VERSION_NUM >= ((13 << 8) | 99))
-+ uint64_t json_object_get_uint64(json_object *jobj);
-+-uint32_t json_object_get_uint32(json_object *jobj);
-+ json_object *json_object_new_uint64(uint64_t value);
-++#endif
-++uint32_t json_object_get_uint32(json_object *jobj);
-+ 
-+ int json_object_object_add_by_uint(json_object *jobj, unsigned key, json_object *jobj_val);
-+ void json_object_object_del_by_uint(json_object *jobj, unsigned key);
-+diff --git a/lib/luks2/luks2_json_metadata.c b/lib/luks2/luks2_json_metadata.c
-+index 781280c2..712c2bbd 100644
-+--- a/lib/luks2/luks2_json_metadata.c
-++++ b/lib/luks2/luks2_json_metadata.c
-+@@ -234,13 +234,14 @@ static json_bool json_str_to_uint64(json_object *jobj, uint64_t *value)
-+ 	tmp = strtoull(json_object_get_string(jobj), &endptr, 10);
-+ 	if (*endptr || errno) {
-+ 		*value = 0;
-+-		return FALSE;
-++		return 0;
-+ 	}
-+ 
-+ 	*value = tmp;
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-++#if !(defined JSON_C_VERSION_NUM && JSON_C_VERSION_NUM >= ((13 << 8) | 99))
-+ uint64_t json_object_get_uint64(json_object *jobj)
-+ {
-+ 	uint64_t r;
-+@@ -262,6 +263,7 @@ json_object *json_object_new_uint64(uint64_t value)
-+ 	jobj = json_object_new_string(num);
-+ 	return jobj;
-+ }
-++#endif
-+ 
-+ /*
-+  * Validate helpers
-+@@ -273,9 +275,9 @@ static json_bool numbered(struct crypt_device *cd, const char *name, const char
-+ 	for (i = 0; key[i]; i++)
-+ 		if (!isdigit(key[i])) {
-+ 			log_dbg(cd, "%s \"%s\" is not in numbered form.", name, key);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ json_object *json_contains(struct crypt_device *cd, json_object *jobj, const char *name,
-+@@ -300,7 +302,7 @@ json_bool validate_json_uint32(json_object *jobj)
-+ 	errno = 0;
-+ 	tmp = json_object_get_int64(jobj);
-+ 
-+-	return (errno || tmp < 0 || tmp > UINT32_MAX) ? FALSE : TRUE;
-++	return (errno || tmp < 0 || tmp > UINT32_MAX) ? 0 : 1;
-+ }
-+ 
-+ static json_bool validate_keyslots_array(struct crypt_device *cd,
-+@@ -313,17 +315,17 @@ static json_bool validate_keyslots_array(struct crypt_device *cd,
-+ 		jobj = json_object_array_get_idx(jarr, i);
-+ 		if (!json_object_is_type(jobj, json_type_string)) {
-+ 			log_dbg(cd, "Illegal value type in keyslots array at index %d.", i);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!json_contains(cd, jobj_keys, "", "Keyslots section",
-+ 				   json_object_get_string(jobj), json_type_object))
-+-			return FALSE;
-++			return 0;
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static json_bool validate_segments_array(struct crypt_device *cd,
-+@@ -336,17 +338,17 @@ static json_bool validate_segments_array(struct crypt_device *cd,
-+ 		jobj = json_object_array_get_idx(jarr, i);
-+ 		if (!json_object_is_type(jobj, json_type_string)) {
-+ 			log_dbg(cd, "Illegal value type in segments array at index %d.", i);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!json_contains(cd, jobj_segments, "", "Segments section",
-+ 				   json_object_get_string(jobj), json_type_object))
-+-			return FALSE;
-++			return 0;
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static json_bool segment_has_digest(const char *segment_name, json_object *jobj_digests)
-+@@ -357,10 +359,10 @@ static json_bool segment_has_digest(const char *segment_name, json_object *jobj_
-+ 		UNUSED(key);
-+ 		json_object_object_get_ex(val, "segments", &jobj_segments);
-+ 		if (LUKS2_array_jobj(jobj_segments, segment_name))
-+-			return TRUE;
-++			return 1;
-+ 	}
-+ 
-+-	return FALSE;
-++	return 0;
-+ }
-+ 
-+ static json_bool validate_intervals(struct crypt_device *cd,
-+@@ -372,18 +374,18 @@ static json_bool validate_intervals(struct crypt_device *cd,
-+ 	while (i < length) {
-+ 		if (ix[i].offset < 2 * metadata_size) {
-+ 			log_dbg(cd, "Illegal area offset: %" PRIu64 ".", ix[i].offset);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!ix[i].length) {
-+ 			log_dbg(cd, "Area length must be greater than zero.");
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if ((ix[i].offset + ix[i].length) > keyslots_area_end) {
-+ 			log_dbg(cd, "Area [%" PRIu64 ", %" PRIu64 "] overflows binary keyslots area (ends at offset: %" PRIu64 ").",
-+ 				ix[i].offset, ix[i].offset + ix[i].length, keyslots_area_end);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		for (j = 0; j < length; j++) {
-+@@ -393,14 +395,14 @@ static json_bool validate_intervals(struct crypt_device *cd,
-+ 				log_dbg(cd, "Overlapping areas [%" PRIu64 ",%" PRIu64 "] and [%" PRIu64 ",%" PRIu64 "].",
-+ 					ix[i].offset, ix[i].offset + ix[i].length,
-+ 					ix[j].offset, ix[j].offset + ix[j].length);
-+-				return FALSE;
-++				return 0;
-+ 			}
-+ 		}
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static int LUKS2_keyslot_validate(struct crypt_device *cd, json_object *hdr_jobj, json_object *hdr_keyslot, const char *key)
-+-- 
-+2.20.1
-+
+> 
+> On Thu, Aug 20, 2020 at 9:44 AM Horatiu Vultur via buildroot
+> <buildroot@busybox.net> wrote:
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> >
+> > ---
+> > Changes v2 -> v3:
+> >   - add missing changelog
+> >
+> > Changes v1 -> v2:
+> >   - add missing comment in easyframes.hash
+> >   - add sha256 for COPYING
+> >   - remove zlib dependency
+> >   - change from using sha to use tag
+> > ---
+> >  DEVELOPERS                         |  3 +++
+> >  package/Config.in                  |  1 +
+> >  package/easyframes/Config.in       | 10 ++++++++++
+> >  package/easyframes/easyframes.hash |  3 +++
+> >  package/easyframes/easyframes.mk   | 15 +++++++++++++++
+> >  5 files changed, 32 insertions(+)
+> >  create mode 100644 package/easyframes/Config.in
+> >  create mode 100644 package/easyframes/easyframes.hash
+> >  create mode 100644 package/easyframes/easyframes.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 35840ec9a8..dd1ec8903c 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1109,6 +1109,9 @@ F:        package/gauche/
+> >  F:     package/gmrender-resurrect/
+> >  F:     package/squeezelite/
+> >
+> > +N:     Horatiu Vultur <horatiu.vultur@microchip.com>
+> > +F:     package/easyframes/
+> > +
+> >  N:     Ian Haylock <haylocki@yahoo.co.uk>
+> >  F:     package/python-rpi-gpio/
+> >
+> > diff --git a/package/Config.in b/package/Config.in
+> > index d7e79f4795..3965d523c6 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -2039,6 +2039,7 @@ menu "Networking applications"
+> >         source "package/dnsmasq/Config.in"
+> >         source "package/drbd-utils/Config.in"
+> >         source "package/dropbear/Config.in"
+> > +       source "package/easyframes/Config.in"
+> >         source "package/ebtables/Config.in"
+> >         source "package/ejabberd/Config.in"
+> >         source "package/ethtool/Config.in"
+> > diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
+> > new file mode 100644
+> > index 0000000000..eca9ff3a60
+> > --- /dev/null
+> > +++ b/package/easyframes/Config.in
+> > @@ -0,0 +1,10 @@
+> > +config BR2_PACKAGE_EASYFRAMES
+> > +       bool "easyframes"
+> > +       depends on BR2_INSTALL_LIBSTDCPP
+> In case the user doesn't have a toolchain with C++, you should add a
+> comment describing that need.
+> Something like:
+> comment "easyframes needs a toolchain w/ C++"
+>         depends on !BR2_INSTALL_LIBSTDCPP
+> 
+> In addition, I opened a PR for you in order to make the package fully
+> C++ independent, so if you want you can create a new tag with this
+> change and remove the BR2_INSTALL_LIBSTDCPP dependency at all.
+> 
+> > +       select BR2_PACKAGE_LIBPCAP
+> > +       help
+> > +         This is a small and simple command-line tool for network testing.
+> > +         The tool makes it simple to compose a frame, inject and express what
+> > +         and where frames are expected to be received.
+> > +
+> > +         https://github.com/microchip-ung/easyframes
+> > diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
+> > new file mode 100644
+> > index 0000000000..07c516fb6d
+> > --- /dev/null
+> > +++ b/package/easyframes/easyframes.hash
+> > @@ -0,0 +1,3 @@
+> > +# locally calculated
+> > +sha256 bd26de2de60e55ea092053c66cf4482f15ed6353961b175ddb376c46b536e86b easyframes-v0.2.tar.gz
+> > +sha256 24f37598e822a1411fb7164ce7eb3ef120aea8279016399abc282c2381ce3f57 COPYING
+> > diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
+> > new file mode 100644
+> > index 0000000000..218fe3b238
+> > --- /dev/null
+> > +++ b/package/easyframes/easyframes.mk
+> > @@ -0,0 +1,15 @@
+> > +################################################################################
+> > +#
+> > +# easyframes
+> > +#
+> > +################################################################################
+> > +
+> > +EASYFRAMES_VERSION = v0.2
+> > +EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
+> > +EASYFRAMES_INSTALL_STAGING = YES
+> > +EASYFRAMES_DEPENDENCIES = libpcap
+> > +
+> > +EASYFRAMES_LICENSE = MIT
+> > +EASYFRAMES_LICENSE_FILES = COPYING
+> > +
+> > +$(eval $(cmake-package))
+> > --
+> > 2.27.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> Regards,
+> Asaf.
+
+-- 
+/Horatiu
