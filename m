@@ -1,62 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 13:48:37 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/easyframes: new package
-In-Reply-To: <20200829072416.951156-1-horatiu.vultur@microchip.com>
-References: <20200829072416.951156-1-horatiu.vultur@microchip.com>
-Message-ID: <20200829134837.5ffbc3d0@windsurf.home>
+Date: Sat, 29 Aug 2020 13:50:52 +0200
+Subject: [Buildroot] [git commit branch/next] Config.in.legacy: adjust
+ location of gdb 8.1 legacy option
+Message-ID: <20200829114404.25D018219B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ed33cecb51dbc1aa6363e03bea99259b68a6f15f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 29 Aug 2020 09:24:16 +0200
-Horatiu Vultur via buildroot <buildroot@busybox.net> wrote:
+The gdb 8.1 option will have been removed from 2020.11, not 2020.08.
 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks, I've applied to next, with a few changes, see below.
-
-> diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
-> new file mode 100644
-> index 0000000000..f3a4ddbb34
-> --- /dev/null
-> +++ b/package/easyframes/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_EASYFRAMES
-> +	bool "easyframes"
-> +	select BR2_PACKAGE_LIBPCAP
-> +	help
-> +	  This is a small and simple command-line tool for network testing.
-> +	  The tool makes it simple to compose a frame, inject and express what
-> +	  and where frames are expected to be received.
-
-These lines were too long, so I wrapped them.
-
-> +################################################################################
-> +#
-> +# easyframes
-> +#
-> +################################################################################
-> +
-> +EASYFRAMES_VERSION = v0.3
-> +EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
-
-I changed this so that the version is just 0.3. Indeed, we want our
-_VERSION variable to not have any "v" prefix, so that its value can be
-matched against what release-monitoring.org is reporting for upstream
-projects.
-
-> +EASYFRAMES_INSTALL_STAGING = YES
-
-I dropped this line, since easyframes does not install a library.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f002d18df6..4234ed5b35 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,7 +144,7 @@ endif
+ 
+ ###############################################################################
+ 
+-comment "Legacy options removed in 2020.08"
++comment "Legacy options removed in 2020.11"
+ 
+ config BR2_GDB_VERSION_8_1
+ 	bool "gdb 8.1.x has been removed"
+@@ -153,6 +153,8 @@ config BR2_GDB_VERSION_8_1
+ 	  The 8.1.x version of gdb has been removed. Use a newer
+ 	  version instead.
+ 
++comment "Legacy options removed in 2020.08"
++
+ config BR2_PACKAGE_EFL_GIF
+ 	bool "efl evas gif loader is mandatory"
+ 	select BR2_LEGACY
