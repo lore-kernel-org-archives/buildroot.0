@@ -1,50 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:58:21 +0200
-Subject: [Buildroot] [git commit branch/next] package/gupnp: bump to version
- 1.2.4
-Message-ID: <20200829195247.1782D8149E@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 21:58:02 +0200
+Subject: [Buildroot] [git commit branch/next] package/i2pd: bump to version
+ 2.33.0
+Message-ID: <20200829195247.0A4D88149E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e62a61614eaf81870fc810d95d5838db49262179
+commit: https://git.buildroot.net/buildroot/commit/?id=e8535d1b1964be54b4bb55bef7c09371527fb7b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Extract from NEWS:
-- Fix subscription check on V6 link-local addresses
-- Add autofree function for GUPnPServiceProxyAction
+From https://github.com/PurpleI2P/i2pd/releases/tag/2.33.0:
+ - UDP tunnels through ECIES-X25519-AEAD-Ratchet
+ - Shared transient addresses
+ - ECIES-X25519-AEAD-Ratchet and multiple encryption keys through I2CP
+ - Pre-calculated x25519 ephemeral keys
+ - crypto.ratchet.inboundTags parameter
+ - Don't save invalid address to AddressBook
+ - Correct ECDSA signatures names in SAM
+ - New webconsole layout
+ - Shared routing path for datagram session
+ - Change datagram routing path if nothing comes back in 10 seconds
+ - Updated reseed servers list
+ - Don't connect through terminated SAM destination
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gupnp/gupnp.hash | 4 ++--
- package/gupnp/gupnp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/i2pd/i2pd.hash | 3 ++-
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
-index 6baf105318..60339ec9ca 100644
---- a/package/gupnp/gupnp.hash
-+++ b/package/gupnp/gupnp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.3.sha256sum:
--sha256  d447e54d88e4a8fab84ad1766070e9208e21166fc7e2ce95df6e33e49e8d29b1  gupnp-1.2.3.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/1.2/gupnp-1.2.4.sha256sum:
-+sha256  f7a0307ea51f5e44d1b832f493dd9045444a3a4e211ef85dfd9aa5dd6eaea7d1  gupnp-1.2.4.tar.xz
- 
- # Hash for license file:
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
-index 953beb2559..e90787eb84 100644
---- a/package/gupnp/gupnp.mk
-+++ b/package/gupnp/gupnp.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index d56c9c1b47..1a19ccf687 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
++sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
+ # Locally computed:
+-sha256  64229101411a9dda3237dc27939aa13ec90d4900aae499e59931063c36e8556b  i2pd-2.32.1.tar.gz
+ sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 736794866d..461f483d1f 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GUPNP_VERSION_MAJOR = 1.2
--GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).3
-+GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
- GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
- GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
- GUPNP_LICENSE = LGPL-2.0+
+-I2PD_VERSION = 2.32.1
++I2PD_VERSION = 2.33.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
