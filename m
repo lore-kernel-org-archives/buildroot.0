@@ -1,100 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 21:55:08 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.02.5
-Message-ID: <20200829194803.42A9F8121B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 21:46:26 +0200
+Subject: [Buildroot] [git commit branch/next] package/libblockdev: add
+ support for lvm plugin
+Message-ID: <20200829194942.2064481466@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55df8d4c859bb411ce5236c695ad8899f4b39e9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=05c46e723abd7ebb9dbcae472ac6904e9429b81b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/libblockdev/Config.in      | 9 +++++++++
+ package/libblockdev/libblockdev.mk | 8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 4ea7ed541a..b1a970839f 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 9f7f401dd3..732ac410b0 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -36,6 +36,15 @@ comment "filesystem plugin needs a toolchain w/ locale"
+ config BR2_PACKAGE_LIBBLOCKDEV_LOOP
+ 	bool "loop"
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.4</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.5</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.02.4.tar.gz">buildroot-2020.02.4.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.4.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.5.tar.gz">buildroot-2020.02.5.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.5.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02.4.tar.bz2">buildroot-2020.02.4.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.4.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.5.tar.bz2">buildroot-2020.02.5.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.5.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 92b97faab6..8986bafbee 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.5 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 august 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.5 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.4 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.5">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-August/290497.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.5.tar.bz2">2020.02.5 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++config BR2_PACKAGE_LIBBLOCKDEV_LVM2
++	bool "lvm2"
++	depends on BR2_ENABLE_LOCALE # parted
++	select BR2_PACKAGE_PARTED
++	select BR2_PACKAGE_LVM2
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++comment "lvm2 support needs a toolchain w/ locale"
++	depends on !BR2_ENABLE_LOCALE
++
+ endif
+ 
+ comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 9216fc9932..b0b0852e8d 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -22,7 +22,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-dmraid \
+ 	--without-escrow \
+ 	--without-kbd \
+-	--without-lvm \
+ 	--without-lvm_dbus \
+ 	--without-mdraid \
+ 	--without-mpath \
+@@ -55,4 +54,11 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-loop
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LVM2),y)
++LIBBLOCKDEV_DEPENDENCIES += lvm2 parted
++LIBBLOCKDEV_CONF_OPTS += --with-lvm
++else
++LIBBLOCKDEV_CONF_OPTS += --without-lvm
++endif
++
+ $(eval $(autotools-package))
