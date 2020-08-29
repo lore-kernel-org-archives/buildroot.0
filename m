@@ -1,45 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:14:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/udisks/Config.in: fix
- alphabetic ordering of selects
-Message-ID: <20200829210802.9AE2E87328@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:15:18 +0200
+Subject: [Buildroot] [git commit branch/next] package/udisks/udisks.mk: fix
+ alphabetic ordering of dependencies
+Message-ID: <20200829210802.A60DC8732F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa1fddc9cd6dbefeb373dc8af7c0b4bfa31bf679
+commit: https://git.buildroot.net/buildroot/commit/?id=4ec86b7440f8cc4070282d0c4091caba145d775f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 This patch makes the upcoming udisks2 version bump patch easier to
-read, and also fixes the Config.in, so it follows Buildroot's package
+read, and also fixes the udisks.mk, so it follows Buildroot's package
 guidelines.
+
+Host packages are placed on top of the dependency list, followed by
+target dependencies.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/udisks/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/udisks/udisks.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-index f4044b0d0d..efd3b619bf 100644
---- a/package/udisks/Config.in
-+++ b/package/udisks/Config.in
-@@ -13,12 +13,12 @@ config BR2_PACKAGE_UDISKS
- 	depends on !BR2_STATIC_LIBS # lvm2, spidermonkey
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
--	select BR2_PACKAGE_SG3_UTILS
--	select BR2_PACKAGE_POLKIT
--	select BR2_PACKAGE_PARTED
--	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_LIBATASMART
- 	select BR2_PACKAGE_LIBGUDEV
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_PARTED
-+	select BR2_PACKAGE_POLKIT
-+	select BR2_PACKAGE_SG3_UTILS
- 	help
- 	  The udisks project provides
+diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
+index fe8932a92e..c6119a8b80 100644
+--- a/package/udisks/udisks.mk
++++ b/package/udisks/udisks.mk
+@@ -12,16 +12,16 @@ UDISKS_LICENSE_FILES = COPYING
+ UDISKS_AUTORECONF = YES
+ 
+ UDISKS_DEPENDENCIES = \
+-	sg3_utils \
+ 	host-pkgconf \
+-	udev \
+ 	dbus \
+ 	dbus-glib \
+-	polkit \
+-	parted \
+-	lvm2 \
+ 	libatasmart \
+-	libgudev
++	libgudev \
++	lvm2 \
++	parted \
++	polkit \
++	sg3_utils \
++	udev
+ 
+ UDISKS_CONF_OPTS = --disable-remote-access --disable-man-pages
  
