@@ -1,64 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:51:40 +0200
-Subject: [Buildroot] [git commit] package/libblockdev: add support for part
+Date: Sat, 29 Aug 2020 21:57:13 +0200
+Subject: [Buildroot] [git commit] package/libblockdev: add support for swap
  plugin
-Message-ID: <20200902161638.E12A487655@busybox.osuosl.org>
+Message-ID: <20200902161638.ED55E85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=723b9a9d7dc715bdc372602731f9ecbe7c12a241
+commit: https://git.buildroot.net/buildroot/commit/?id=29db5b3aed2c49ca6eb5fcfde9ff7cbf224dc428
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libblockdev/Config.in      | 8 ++++++++
+ package/libblockdev/Config.in      | 5 +++++
  package/libblockdev/libblockdev.mk | 8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 26e23b3145..d15e624091 100644
+index d15e624091..3c501b7871 100644
 --- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -49,6 +49,14 @@ config BR2_PACKAGE_LIBBLOCKDEV_MDRAID
- 	bool "mdraid"
- 	select BR2_PACKAGE_LIBBYTESIZE
+@@ -57,6 +57,11 @@ config BR2_PACKAGE_LIBBLOCKDEV_PART
+ comment "part plugin needs a toolchain w/ locale"
+ 	depends on !BR2_ENABLE_LOCALE
  
-+config BR2_PACKAGE_LIBBLOCKDEV_PART
-+	bool "part"
-+	depends on BR2_ENABLE_LOCALE # parted
-+	select BR2_PACKAGE_PARTED
-+
-+comment "part plugin needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
++config BR2_PACKAGE_LIBBLOCKDEV_SWAP
++	bool "swap"
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
 +
  endif
  
  comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
 diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 3873554a45..d7ae03e359 100644
+index d7ae03e359..1b094555d2 100644
 --- a/package/libblockdev/libblockdev.mk
 +++ b/package/libblockdev/libblockdev.mk
-@@ -25,7 +25,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-lvm_dbus \
- 	--without-mpath \
- 	--without-nvdimm \
--	--without-part \
+@@ -28,7 +28,6 @@ LIBBLOCKDEV_CONF_OPTS = \
  	--without-python2 \
  	--without-python3 \
  	--without-s390 \
-@@ -67,4 +66,11 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-mdraid
+-	--without-swap \
+ 	--without-tools \
+ 	--without-vdo
+ 
+@@ -73,4 +72,11 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-part
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_PART),y)
-+LIBBLOCKDEV_DEPENDENCIES += parted
-+LIBBLOCKDEV_CONF_OPTS += --with-part
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_SWAP),y)
++LIBBLOCKDEV_DEPENDENCIES += util-linux
++LIBBLOCKDEV_CONF_OPTS += --with-swap
 +else
-+LIBBLOCKDEV_CONF_OPTS += --without-part
++LIBBLOCKDEV_CONF_OPTS += --without-swap
 +endif
 +
  $(eval $(autotools-package))
