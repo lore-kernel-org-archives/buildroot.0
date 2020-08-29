@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 29 Aug 2020 14:49:12 +0200
-Subject: [Buildroot] [git commit branch/next]
- docs/manual/adding-packages-golang.txt: update following go.mod integration
-Message-ID: <20200829124233.3FFA986CC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mender-artifact: drop
+ custom GOFLAGS
+Message-ID: <20200829124233.33A7686CCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a289fc8b69b71a4ab0585e23e2004c01db821e2e
+commit: https://git.buildroot.net/buildroot/commit/?id=92584815bace88b0c0548d7ab7796854c92aaa99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Now that we have switched to the go.mod integration, all Go packages
+are built with -mod=vendor, so there's no need to have custom GOFLAGS
+in mender-artifact.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-golang.txt | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ package/mender-artifact/mender-artifact.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index 8c467689be..3b34579200 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -76,15 +76,13 @@ optionally be defined, depending on the package's needs. Many of them
- are only useful in very specific cases, typical packages will
- therefore only use a few of them, or none.
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 67fdc44b9d..c81ec9ba53 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -31,14 +31,6 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
  
--* If your package need a custom +GOPATH+ to be compiled in, you can
--  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
--  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
--  specified, it defaults to +_gopath+.
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
+-# By default, go will attempt to download needed modules before building, which
+-# is not desirable. This behavior also causes permission issues when cleaning,
+-# as go downloads modules as read-only by default. Because mender-artifact
+-# includes the modules in the vendor directory, mod=vendor prevents the package
+-# from downloading the go modules during the build process and prevents
+-# permission issues when cleaning.
+-HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
 -
--* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
--  compiled relatively to the +GOPATH+. An example value is
--  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
--  defaults to a value infered from the +FOO_SITE+ variable.
-+* The package must specify its Go module name in the +FOO_GOMOD+
-+  variable. If not specified, it defaults to
-+  +URL-domain/1st-part-of-URL/2nd-part-of-URL+, e.g +FOO_GOMOD+ will
-+  take the value +github.com/bar/foo+ for a package that specifies
-+  +FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))+. The Go package
-+  infrastructure will automatically generate a minimal +go.mod+ file
-+  in the package source tree if it doesn't exist.
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
  
- * +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
-   +LDFLAGS+ or the +TAGS+ to the +go+ build command.
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
