@@ -1,74 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:55:59 +0200
-Subject: [Buildroot] [git commit] package/collectd: add nut support
-Message-ID: <20200902161636.329EC85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:06:14 +0200
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.19.3
+Message-ID: <20200902161639.67B5187655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5956b08878fe2a57eff159095803218b10797dd0
+commit: https://git.buildroot.net/buildroot/commit/?id=dd7eb9514b82b88bc5ae7d396858a6c361b640c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The NUT plugin has status "supported":
-https://collectd.org/wiki/index.php/Plugin:NUT
+https://www.lesbonscomptes.com/upmpdcli/releases.html#_2020_07_04_libupnpp_0_19_3
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/collectd/Config.in   | 11 +++++++++++
- package/collectd/collectd.mk |  4 +++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index cd5d876e80..a21f230294 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -364,6 +364,17 @@ config BR2_PACKAGE_COLLECTD_NTPD
- 	help
- 	  Queries an NTP server and extracts parameters.
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index fb510236a3..dde0d970cb 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
+-sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.3.tar.gz.sha256
++sha256  a16f35ef1ce3d687e9599422c09677c2c1591bfcf68e242931082d4561f66be4  libupnpp-0.19.3.tar.gz
  
-+config BR2_PACKAGE_COLLECTD_NUT
-+	bool "nut"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_NUT
-+	help
-+	  The NUT plugin collects uninterruptible power supply (UPS)
-+	  statistics using the Network UPS Tools (NUT).
-+
-+comment "nut needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_COLLECTD_OLSRD
- 	bool "olsrd"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 6d084dbe42..e74dafaa2e 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -18,7 +18,7 @@ COLLECTD_PLUGINS_DISABLE = \
- 	apple_sensors aquaero ascent barometer dbi dpdkstat email \
- 	gmond hddtemp intel_rdt ipmi java lpar \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
--	nut oracle perl pf pinba powerdns python routeros \
-+	oracle perl pf pinba powerdns python routeros \
- 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
- 	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
- 	write_mongodb xencpu xmms zfs_arc zone
-@@ -103,6 +103,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),--enable-notify_email,--disable-notify_email) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_NAGIOS),--enable-notify_nagios,--disable-notify_nagios) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NTPD),--enable-ntpd,--disable-ntpd) \
-+	$(if $(BR2_PACKAGE_COLLECTD_NUT),--enable-nut,--disable-nut) \
- 	$(if $(BR2_PACKAGE_COLLECTD_OLSRD),--enable-olsrd,--disable-olsrd) \
- 	$(if $(BR2_PACKAGE_COLLECTD_ONEWIRE),--enable-onewire,--disable-onewire) \
- 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),--enable-openldap,--disable-openldap) \
-@@ -168,6 +169,7 @@ COLLECTD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_COLLECTD_NETLINK),libmnl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NGINX),libcurl) \
- 	$(if $(BR2_PACKAGE_COLLECTD_NOTIFY_EMAIL),libesmtp) \
-+	$(if $(BR2_PACKAGE_COLLECTD_NUT),nut) \
- 	$(if $(BR2_PACKAGE_COLLECTD_ONEWIRE),owfs) \
- 	$(if $(BR2_PACKAGE_COLLECTD_OPENLDAP),openldap) \
- 	$(if $(BR2_PACKAGE_COLLECTD_PING),liboping) \
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index ef1816166e..a8db575984 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.19.2
++LIBUPNPP_VERSION = 0.19.3
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
