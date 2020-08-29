@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:51:55 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mosquitto:
+Date: Sat, 29 Aug 2020 19:51:51 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mosquitto:
  security bump to v1.6.12
-Message-ID: <20200829174502.74FA182D5B@busybox.osuosl.org>
+Message-ID: <20200829174507.4D97382D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5438fdb06344d5804be41b64d757a1f41ab9b4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4cb10e0f39404c0cb645846fdd2738cfac4768de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
 http://mosquitto.org/blog/2020/08/version-1-6-11-released/
@@ -43,7 +43,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  3 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index e05861eb4d..3beca0fdb9 100644
+index 1ed2d63520..42244524d2 100644
 --- a/package/domoticz/Config.in
 +++ b/package/domoticz/Config.in
 @@ -4,7 +4,7 @@ config BR2_PACKAGE_DOMOTICZ
