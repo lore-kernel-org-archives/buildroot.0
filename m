@@ -1,128 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 10:39:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] linux: workaround
- make-4.1 bug
-Message-ID: <20200829084438.CA2B47FAF0@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 10:44:00 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 7}.x series
+Message-ID: <20200829084438.E1A8D85EF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d3df069d512e039b4c498158a5e0415167ef21e
+commit: https://git.buildroot.net/buildroot/commit/?id=813178eb21314262986c9ea5ff76016ab6ae02c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-On Ubuntu 18.04, make-4.1 emits spurious, incorrect "entering/leaving"
-messages, which end up in the LINUX_VERSION_PROBED variable:
-
-    printf 'probed linux version: "%s"\n' "$(LINUX_VERSION_PROBED)"
-    probed linux version: "make[1]: Entering directory '/home/buildroot'
-    4.19.78-linux4sam-6.2
-    make[1]: Leaving directory '/home/buildroot/output/build/linux-linux4sam_6.2'"
-
-First, the messages are displayed even though we do explicitly pass
---no-print-directory -s.
-
-Second, the entering and leaving messages are not about the same
-directory!
-
-This *only* occurs in the following conditions:
-
-  - the user has the correct 0022 umask,
-  - top-level parallel is used (with or without PPD),
-  - initial -C is specified as well.
-
-    $ umask 0022
-    $ make -j16 -C $(pwd)
-    [...]
-    depmod: ERROR: Bad version passed make[1]:
-    [...]
-
-(yes, 'make[1]:' is the string depmod is trying, and fails, to parse as
-a version string).
-
-If any of the three conditions above is removed, the problem no longer
-occurs. Here's a table of the MAKEFLAGS:
-
-                |                   0002                         |          0022            |
-    ----+-------+------------------------------------------------+--------------------------+
-        | no-j  | --no-print-directory --                        |                          |
-    noC |       +------------------------------------------------+--------------------------+
-        | -j16  | -j --jobserver-fds=3,4 --no-print-directory -- | -j --jobserver-fds=3,4   |
-    ----+-------+------------------------------------------------+--------------------------+
-        | no-j  | --no-print-directory --                        | w                        |
-    -C  |       +------------------------------------------------+--------------------------+
-        | -j16  | -j --jobserver-fds=3,4 --no-print-directory -- | w -j --jobserver-fds=3,4 |
-    ----+-------+------------------------------------------------+--------------------------+
-
-    0002: umask == 0002
-    0022: umask == 0022
-
-    no-j: no -j flag
-    -j16: -j16 flag
-
-    noC: no -C flag
-    -C : -C /path/of/buildroot/
-
-Only the bottom-right-most case fails...
-
-This behaviour goes against what is documented:
-
-    https://www.gnu.org/software/make/manual/make.html#g_t_002dw-Option
-
-    5.7.4 The ???--print-directory??? Option
-    [...]
-    you do not need to specify this option because ???make??? does it for
-    you: ???-w??? is turned on automatically when you use the ???-C??? option,
-    and in sub-makes. make will not automatically turn on ???-w??? if you
-    also use ???-s???, which says to be silent, or if you use
-    ???--no-print-directory??? to explicitly disable it.
-
-So this exactly describes our situation; yet 'w' is added to MAKEFLAGS.
-
-Getting rid of the 'w' flag makes the build succeed again, so that's
-what we do here (bleark, icky)...
-
-Furthermore, the documented way to override MAKEFLAGS is to do so as a
-make parameter:
-
-    https://www.gnu.org/software/make/manual/make.html#Options_002fRecursion
-
-    5.7.3 Communicating Options to a Sub-make
-    [...]
-    If you do not want to pass the other flags down, you must change the
-    value of MAKEFLAGS, like this:
-
-        subsystem:
-            cd subdir && $(MAKE) MAKEFLAGS=
-
-However, doing so does not fix the issue. So we resort to pass the
-modified MAKEFLAGS via the environment (bleark, icky)...
-
-Fixes: #13141
-
-Reported-by: Laurent <laurent@neko-labs.eu>
-Reported-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3f6a40e9fae92b3fe476d82449ddd6851cea03da)
+(cherry picked from commit 3cf6d708e1d613068a20a8acc4f258aba35ec0eb)
+[Peter: drop 5.7.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index ae1edbeb55..c963f2f47f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -160,7 +160,8 @@ endif
+diff --git a/linux/Config.in b/linux/Config.in
+index 8598d656e3..cc6ce2831c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
--LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
-+# Filter out 'w' from MAKEFLAGS, to workaround a bug in make 4.1 (#13141)
-+LINUX_VERSION_PROBED = `MAKEFLAGS='$(filter-out w,$(MAKEFLAGS))' $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.60" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.61" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 0b7a447f8d..107f361826 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  add2ab2385c40fc9a3dfebe403e56da8500b633dc7dc42cf0c670c61d151a223  linux-5.4.60.tar.xz
++sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  97e689dd083d780bf7bacdc17c0a9ec9e9be118507dccedf4b77eef9666ce7fc  linux-4.4.233.tar.xz
+-sha256  2a6dcab0652ab181820d56b6014235a125cf933e0edf5bdbc038160fa9e7aca5  linux-4.9.233.tar.xz
+-sha256  3ea4d0221a071d58703cd346a8a6ef1582a32a8c4565a4919578817444d4fae0  linux-4.14.194.tar.xz
+-sha256  a4421dea5333beeaaef81312c6f415330b9e4fda6027f399a1c55f97d3da2114  linux-4.19.141.tar.xz
++sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
++sha256  756f8544d261e8117716c911261690e4fb5491e14c1f4612c83e0986453782e3  linux-4.9.234.tar.xz
++sha256  394f28798670240baacd9e2cce521fbd79f8da5e1fc191695b0e11381445a021  linux-4.14.195.tar.xz
++sha256  6912db1c242d72ce9c8d4ff71982ac935d97690822af5c1c6ec22412b31667a4  linux-4.19.142.tar.xz
+ # Locally computed
+ sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
+ sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 32c56256c3..7a8fa7e80d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -318,11 +318,11 @@ endchoice
  
- LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
- 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.233"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.233"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.194"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.141"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.60"	if BR2_KERNEL_HEADERS_5_4
++	default "4.4.234"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.234"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
