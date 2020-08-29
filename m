@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:57:26 +0200
-Subject: [Buildroot] [PATCH v3 10/13] package/libblockdev: add support
- for swap plugin
-In-Reply-To: <20200725230618.3640682-11-aduskett@gmail.com>
-References: <20200725230618.3640682-1-aduskett@gmail.com>
- <20200725230618.3640682-11-aduskett@gmail.com>
-Message-ID: <20200829215726.7961a52e@windsurf.home>
+Date: Sat, 29 Aug 2020 21:58:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp: bump to version 1.2.4
+In-Reply-To: <20200829183933.2791888-1-fontaine.fabrice@gmail.com>
+References: <20200829183933.2791888-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200829215852.56e8c717@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Jul 2020 16:06:15 -0700
-aduskett at gmail.com wrote:
+On Sat, 29 Aug 2020 20:39:33 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> Extract from NEWS:
+> - Fix subscription check on V6 link-local addresses
+> - Add autofree function for GUPnPServiceProxyAction
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Changes v1 -> v2:
->  - Add missing dependency on util-linux and also select util-linux and
->    util-linux-libblkdit in the Config.in file. (Thomas)
+>  package/gupnp/gupnp.hash | 4 ++--
+>  package/gupnp/gupnp.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to next, thanks.
 
