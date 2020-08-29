@@ -1,92 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 20:40:40 +0200
-Subject: [Buildroot] [PATCH v4 1/7] package/go: implement go modules
- integration
-In-Reply-To: <CA+h8R2od7W+QcUVLcdLFiKbaG8voDAbOBvEQDe3rnQF9uAtiyQ@mail.gmail.com>
-References: <20200813213220.260112-1-christian@paral.in>
- <20200829145955.6aedeae6@windsurf.home>
- <CA+h8R2od7W+QcUVLcdLFiKbaG8voDAbOBvEQDe3rnQF9uAtiyQ@mail.gmail.com>
-Message-ID: <20200829204040.11e80d7f@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Aug 2020 20:53:23 +0200
+Subject: [Buildroot] [PATCH v2 00/12] Add the support for Clang
+ cross-compiler
+In-Reply-To: <20190907094027.9537-1-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+Message-ID: <6b09950c-b36e-fdab-ff93-503445e7cddb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+ Hi Romain,
 
-On Sat, 29 Aug 2020 10:32:12 -0700
-Christian Stewart <christian@paral.in> wrote:
+ After almost a year, let's try to make some progress on this series :-)
 
-> GOMOD was not required before. If the go.mod exists (which happens in
-> many cases) then you can infer what GOMOD is from the first line of
-> the file. So GOMOD absolutely can be empty and was in some of my
-> buildroot_ext packages.
+On 07/09/2019 11:40, Romain Naour wrote:
+[snip]
+> Recently, I've tried to build an aarch64 Linux kernel (5.2.7) with
+> Clang and it worked under Qemu [3]. I also tested for x86_64 but we need
+> the upcomming llvm/clang version 9 to build the kernel [4].
 
-No, it cannot be empty, because pkg-golang.mk has something like this:
+ Since we waited long enough, this is now in Buildroot :-)
 
-$(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
-
-So, even if $$($(2)_SRC_DOMAIN), $$($(2)_SRC_VENDOR) and
-$$($(2)_SRC_SOFTWARE) are empty, the GOMOD will be equal to //.
-Obviously, that's a stupid and non-working GOMOD value, but it's still
-non-empty.
-
-> As you're now using it as part of the build targets, requiring it to
-> be set is, I guess, fine.
-
-It was already always set, as explained above.
-
-> The mechanism to copy in a go.mod file and/or a go.sum file is used in
-> some of my buildroot_ext packages. It's used in many Gentoo packages
-> as well, iirc. However, as the Buildroot mainline currently does not
-> use the Go compiler to download any dependencies (instead relying on a
-> "vendor" dir to exist in the source repository), this doesn't make any
-> difference yet in Buildroot.
-
-Yes, in principle I don't see a problem with adding support for that,
-but (1) it was not used anywhere and (2) it was not documented anywhere.
-
-> Thank you for the work to review, split, & cleanup, the attention to
-> detail in Buildroot is on the highest level.
-
-By splitting things up, it also help understand better what was going
-on.
-
-> > Are you sure this GOPATH is needed ? We're supposed to move away from
-> > GOPATH, but you're adding a new GOPATH location here, and in a build
-> > that has all our Go packages enabled, this
-> > $(HOST_DIR)/usr/share/go-path location doesn't even exist.
-> >
-> > Could you clarify ?  
+> This new version add the support of "asm-goto" which was the last
+> missing part to be able to build the Linux kernel on x86_64 [5].
+> But for theses tests, only the kernel was built with Clang.
 > 
-> Currently the Go compiler will use $GOPATH/pkg/{mod,sumdb} for the Go
-> modules cache. It probably did not create any in the mainline
-> Buildroot builds because there is no Go module activity in use yet
-> (all vendor based). However, a valid GOPATH does need to be set so
-> that the Go compiler can use it for the "pkg" cache dir if necessary.
+> While testing the x86_64 kernel and it's rootfs built with Clang under Qemu,
+> I had a runtime issue during the userspace boot process (Busybox's init).
+> While searching about the issue, I discover the lowRISC blog from Lu?s Marques
+> about the same issue and tested the patch he contributed to the Busybox project
+> (Thanks!).
 > 
-> So, GOPATH, while not used for lookups of packages under the "src" dir
-> anymore, is still used for a few other directories for Go.
+> So, this series is about to complete the integration of Clang as cross-compiler
+> by using a toolchain-wrapper and fixing some build system infrastructure
+> (cmake, meson) to use Clang instead of GCC.
+
+ I started integrating the series, but then I had some fundamental problems with
+the core patch itself. So I stopped and pushed my results to
+https://gitlab.com/arnout/buildroot branch clang-as-cross-compiler. I put my
+changes as squash patches rather than changing the original patches, so you can
+easily take over from there. Note that I haven't tested my rebased and modified
+branch (just a build test immediately after applying the modified patch), so
+there may still be some rebase f**up there.
+
+ I'll put my feedback in the individual patches.
+
+ Regards,
+ Arnout
+
 > 
-> There is a new variable in newer versions of Go to control this
-> separately from GOPATH, so we can add that and eventually fully remove
-> GOPATH (but not yet).
+> Add this new experimental option into "Advanced" menu since we are expecting
+> some build and runtime issues for number of packages (bootloaders, kernel).
 > 
-> GOMODCACHE="$GOPATH/pkg/mod"
-
-OK, thanks for the additional explanations.
-
-What are the next steps in terms of Go support ? Are there projects
-where the "vendor" dependencies are not included as part of the
-upstream project, and need to be downloaded by go at build time ? If
-so, do we want to support that ? How ? Do you have examples of
-prominent Go projects that are delivered like this ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> For now, Clang cross-compiler can only be use as internal toolchain,
+> so it is build from the source which take a long time...
+[snip]
