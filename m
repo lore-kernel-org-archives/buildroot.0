@@ -1,98 +1,78 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat, 29 Aug 2020 15:06:10 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/mosquitto: security bump to
- v1.6.12
-Message-ID: <20200829130610.169904-1-titouan.christophe@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 15:09:11 +0200
+Subject: [Buildroot] [PATCH] fs/cpio/init: unbreak ttyname_r() on glibc
+ after dropping /dev/console exec
+Message-ID: <20200829130911.19760-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mosquitto 1.6.11 is a bugfix release, read the whole announcement on
-http://mosquitto.org/blog/2020/08/version-1-6-11-released/
+Commit 98a6f1fc02e41 (fs/cpio: make initramfs init script survive 'console='
+kernel argument) dropped the explicit /dev/console execs for fd 0,1,2, as
+they fail when booted with console= and aren't really needed as the kernel
+will setup fd 0,1,2 from /dev/console before executing the initramfs anyway.
 
-Mosquitto 1.6.12 is a security and bugfix release, read
-http://mosquitto.org/blog/2020/08/version-1-6-12-released/
+Not doing this unfortunately confuses glibc's ttyname_r(3) implementation
+(used by E.G.  busybox/coreutils 'tty'), causing it to fail with ENOENT as
+it does a fstat on fd 0 and tries to match up st_ino / st_dev against the
+entries in /dev (since glibc 2.26):
 
-From the 1.6.11 changelog of the client library:
-mosquitto_loop_start() now sets a thread name on Linux, FreeBSD, NetBSD,
-and OpenBSD. Closes #1777.
-This is done with pthread_setname_np; so mosquitto now requires
-BR2_TOOLCHAIN_HAS_THREADS_NPTL when built with threading support.
+ commit 15e9a4f378c8607c2ae1aa465436af4321db0e23
+ Author: Christian Brauner <christian.brauner@canonical.com>
+ Date:   Fri Jan 27 15:59:59 2017 +0100
 
-2 reverse dependencies use the threaded API, but they already
-depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL:
-* domoticz [1] (we add a comment for mosquitto)
-* shairport-sync [2]
+    linux ttyname and ttyname_r: do not return wrong results
 
-[1] https://github.com/domoticz/domoticz/blob/2020.1/main/mosquitto_helper.cpp#L344
-[2] https://github.com/mikebrady/shairport-sync/blob/3.3.6/mqtt.c#L227-L229
+    If a link (say /proc/self/fd/0) pointing to a device, say /dev/pts/2, in a
+    parent mount namespace is passed to ttyname, and a /dev/pts/2 exists (in a
+    different devpts) in the current namespace, then it returns /dev/pts/2.
+    But /dev/pts/2 is NOT the current tty, it is a different file and device.
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+    Detect this case and return ENODEV.  Userspace can choose to take this as a hint
+    that the fd points to a tty device but to act on the fd rather than the link.
+
+    Signed-off-by: Serge Hallyn <serge@hallyn.com>
+    Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+
+The reason it fails is that we manually mount devtmpfs on /dev in /init, so
+the /dev/console used by the kernel (in rootfs) is not the same file as
+/dev/console at runtime (in devtmpfs).
+
+Notice: Once logged in, tty does work correctly.  Presumably login reopens
+stdin/stdout/stderr.
+
+To fix this, re-add the exec of /dev/console for fd 0,1,2, but only do so if
+possible.  Because of the above mentioned shell behaviour (specified by
+POSIX [0]), perform this check in a subshell.
+
+[0] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_20_01
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1->v2:
-* Conditionally depend on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-* Add patch to support building on platforms without pthread
+ fs/cpio/init | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Changes v2->v3:
-* Bump to newer version 1.6.12
-* Drop patch that was released upstream
-* Don't add custom option BR2_PACKAGE_MOSQUITTO_WITH_THREADING
----
- package/domoticz/Config.in       | 2 +-
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 5 +++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index a2ad9f1b07..c6b2834d9d 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	bool "domoticz"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # sleep_for
- 	# pthread_condattr_setclock
--	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mosquitto
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_LUA_5_3
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 482962490e..13f0c8de23 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-1.6.10.tar.gz.asc
--sha256  92d1807717f0f6d57d1ac1207ffdb952e8377e916c7b0bb4718f745239774232  mosquitto-1.6.10.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-1.6.12.tar.gz.asc
-+sha256  548d73d19fb787dd0530334e398fd256ef3a581181678488a741a995c4f007fb  mosquitto-1.6.12.tar.gz
- 
- # License files
- sha256  cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index cdd515e1a4..5734dd45c5 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.6.10
-+MOSQUITTO_VERSION = 1.6.12
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
-@@ -41,7 +41,8 @@ else
- MOSQUITTO_MAKE_OPTS += WITH_ADNS=no
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+# threaded API uses pthread_setname_np
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
- MOSQUITTO_MAKE_OPTS += WITH_THREADING=yes
- else
- MOSQUITTO_MAKE_OPTS += WITH_THREADING=no
+diff --git a/fs/cpio/init b/fs/cpio/init
+index b0af18b67a..f74ef7e15f 100755
+--- a/fs/cpio/init
++++ b/fs/cpio/init
+@@ -1,4 +1,15 @@
+ #!/bin/sh
+ # devtmpfs does not get automounted for initramfs
+ /bin/mount -t devtmpfs devtmpfs /dev
++
++# use the /dev/console device node from devtmpfs if possible to not
++# confuse glibc's ttyname_r().
++# This may fail (E.G. booted with console=), and errors from exec will
++# terminate the shell, so use a subshell for the test
++if (exec 0</dev/console) 2>/dev/null; then
++    exec 0</dev/console
++    exec 1>/dev/console
++    exec 2>/dev/console
++fi
++
+ exec /sbin/init "$@"
 -- 
-2.25.3
+2.20.1
