@@ -1,76 +1,154 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 09:56:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
- 4.5.0
-Message-ID: <20200829075621.984037-1-fontaine.fabrice@gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 29 Aug 2020 09:59:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: new package
+Message-ID: <20200829075901.19860-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wolfSSL version 4.5.0 contains 6 vulnerability fixes: 2 fixes for TLS 1.3,
-2 side channel attack mitigations, 1 fix for a potential private key leak
-in a specific use case, 1 fix for DTLS including those 3 CVEs:
-
-- Fix CVE-2020-12457: An issue was discovered in wolfSSL before 4.5.0.
-  It mishandles the change_cipher_spec (CCS) message processing logic
-  for TLS 1.3. If an attacker sends ChangeCipherSpec messages in a
-  crafted way involving more than one in a row, the server becomes stuck
-  in the ProcessReply() loop, i.e., a denial of service.
-- Fix CVE-2020-15309: An issue was discovered in wolfSSL before 4.5.0,
-  when single precision is not employed. Local attackers can conduct a
-  cache-timing attack against public key operations. These attackers may
-  already have obtained sensitive information if the affected system has
-  been used for private key operations (e.g., signing with a private
-  key).
-- Fix CVE-2020-24585: An issue was discovered in the DTLS handshake
-  implementation in wolfSSL before 4.5.0. Clear DTLS application_data
-  messages in epoch 0 do not produce an out-of-order error. Instead,
-  these messages are returned to the application.
-
-Also update hash of LICENSING as well as WOLF_LICENSE due to later
-verbage update with
-https://github.com/wolfSSL/wolfssl/commit/970391319beb023680eccd0e447e76834dbb4808
-
-https://www.wolfssl.com/docs/security-vulnerabilities/
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- package/wolfssl/wolfssl.hash | 4 ++--
- package/wolfssl/wolfssl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                             |  1 +
+ .../0001-Cross-compilation-fixes.patch        | 13 +++++++
+ package/makedumpfile/0002-gcc10-fixes.patch   | 35 +++++++++++++++++++
+ package/makedumpfile/Config.in                | 11 ++++++
+ package/makedumpfile/makedumpfile.hash        |  3 ++
+ package/makedumpfile/makedumpfile.mk          | 23 ++++++++++++
+ 6 files changed, 86 insertions(+)
+ create mode 100644 package/makedumpfile/0001-Cross-compilation-fixes.patch
+ create mode 100644 package/makedumpfile/0002-gcc10-fixes.patch
+ create mode 100644 package/makedumpfile/Config.in
+ create mode 100644 package/makedumpfile/makedumpfile.hash
+ create mode 100644 package/makedumpfile/makedumpfile.mk
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 4a1aeebe7d..0ee55276dc 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
-+sha256  7de62300ce14daa0051bfefc7c4d6302f96cabc768b6ae49eda77523b118250c  wolfssl-4.5.0-stable.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-+sha256  b23c1da1f85d699d3288d73c952b4cd02760d23dc1ddc1b221cbb8be82387189  LICENSING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index e3062c39b5..5400b35fa5 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 4.4.0-stable
-+WOLFSSL_VERSION = 4.5.0-stable
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
- WOLFSSL_INSTALL_STAGING = YES
- 
--WOLFSSL_LICENSE = GPL-2.0
-+WOLFSSL_LICENSE = GPL-2.0+
- WOLFSSL_LICENSE_FILES = COPYING LICENSING
- 
- WOLFSSL_DEPENDENCIES = host-pkgconf
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..10cb1f94d1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2374,6 +2374,7 @@ menu "System tools"
+ 	source "package/kvmtool/Config.in"
+ 	source "package/libostree/Config.in"
+ 	source "package/lxc/Config.in"
++	source "package/makedumpfile/Config.in"
+ 	source "package/mender/Config.in"
+ 	source "package/mender-grubenv/Config.in"
+ 	source "package/mfoc/Config.in"
+diff --git a/package/makedumpfile/0001-Cross-compilation-fixes.patch b/package/makedumpfile/0001-Cross-compilation-fixes.patch
+new file mode 100644
+index 0000000000..ebe495d89d
+--- /dev/null
++++ b/package/makedumpfile/0001-Cross-compilation-fixes.patch
+@@ -0,0 +1,13 @@
++Index: makedumpfile-1.6.7/Makefile
++===================================================================
++--- makedumpfile-1.6.7.orig/Makefile
+++++ makedumpfile-1.6.7/Makefile
++@@ -8,7 +8,7 @@ ifeq ($(strip $CC),)
++ CC	= gcc
++ endif
++ 
++-CFLAGS_BASE := $(CFLAGS) -g -O2 -Wall -D_FILE_OFFSET_BITS=64 \
+++CFLAGS_BASE := $(EXTRA_CFLAGS) -g -O2 -Wall -D_FILE_OFFSET_BITS=64 \
++ 		-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
++ CFLAGS      := $(CFLAGS_BASE) -DVERSION='"$(VERSION)"' -DRELEASE_DATE='"$(DATE)"'
++ CFLAGS_ARCH := $(CFLAGS_BASE)
+diff --git a/package/makedumpfile/0002-gcc10-fixes.patch b/package/makedumpfile/0002-gcc10-fixes.patch
+new file mode 100644
+index 0000000000..10c4bf72c7
+--- /dev/null
++++ b/package/makedumpfile/0002-gcc10-fixes.patch
+@@ -0,0 +1,35 @@
++--- a/makedumpfile.h	2020-08-28 20:08:00.308241301 +0200
+++++ b/makedumpfile.h	2020-08-28 20:08:10.484310117 +0200
++@@ -1262,7 +1262,9 @@
++ 	mdf_pfn_t		end_pfn;
++ 	off_t			offset_eraseinfo;
++ 	unsigned long		size_eraseinfo;
++-} splitting_info_t;
+++};
+++
+++typedef struct splitting_info splitting_info_t;
++ 
++ struct parallel_info {
++ 	int			fd_memory;
++@@ -1275,7 +1277,9 @@
++ #ifdef USELZO
++ 	lzo_bytep		wrkmem;
++ #endif
++-} parallel_info_t;
+++};
+++
+++typedef struct parallel_info parallel_info_t;
++ 
++ struct ppc64_vmemmap {
++ 	unsigned long		phys;
++@@ -2006,8 +2010,8 @@
++ };
++ 
++ #define CRASH_RESERVED_MEM_NR   8
++-struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
++-int crash_reserved_mem_nr;
+++extern struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
+++extern int crash_reserved_mem_nr;
++ 
++ unsigned long read_vmcoreinfo_symbol(char *str_symbol);
++ int readmem(int type_addr, unsigned long long addr, void *bufptr, size_t size);
+diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
+new file mode 100644
+index 0000000000..6751282ea6
+--- /dev/null
++++ b/package/makedumpfile/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MAKEDUMPFILE
++	bool "makedumpfile"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_LZO
++	select BR2_PACKAGE_XZ
++	help
++	  Makes a small dumpfile of kdump.
+diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
+new file mode 100644
+index 0000000000..6cf882e3e5
+--- /dev/null
++++ b/package/makedumpfile/makedumpfile.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  e702fbdf62b4cd829a76e46f3e24eb3fc7501918b85ebdcd8baef4f53d6ee2c8  makedumpfile-1.6.7.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+new file mode 100644
+index 0000000000..b240944eaf
+--- /dev/null
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# makedumpfile
++#
++################################################################################
++
++MAKEDUMPFILE_VERSION = 1.6.7
++MAKEDUMPFILE_SITE = https://github.com/makedumpfile/makedumpfile/releases/download/Released-$(subst .,-,$(MAKEDUMPFILE_VERSION))
++MAKEDUMPFILE_DEPENDENCIES = zlib xz lzo
++MAKEDUMPFILE_LICENSE = GPL-2.0
++MAKEDUMPFILE_LICENSE_FILES = COPYING
++
++define MAKEDUMPFILE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC)" \
++		EXTRA_CFLAGS="$(TARGET_CFLAGS)" TARGET=$(BR2_ARCH) USELZO=on LINKTYPE=dynamic
++endef
++
++define MAKEDUMPFILE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) install \
++		DESTDIR="$(TARGET_DIR)"
++endef
++
++$(eval $(generic-package))
 -- 
 2.28.0
