@@ -1,61 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:57:13 +0200
+Date: Sat, 29 Aug 2020 21:44:37 +0200
 Subject: [Buildroot] [git commit branch/next] package/libblockdev: add
- support for swap plugin
-Message-ID: <20200829194942.6BAFB81153@busybox.osuosl.org>
+ support for fs plugin
+Message-ID: <20200829194941.E8C6185EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29db5b3aed2c49ca6eb5fcfde9ff7cbf224dc428
+commit: https://git.buildroot.net/buildroot/commit/?id=445813d8cce5c86d9350de9ac677b6ba8e40446f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libblockdev/Config.in      | 5 +++++
+ package/libblockdev/Config.in      | 8 ++++++++
  package/libblockdev/libblockdev.mk | 8 +++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index d15e624091..3c501b7871 100644
+index f7a220603c..8ef7247262 100644
 --- a/package/libblockdev/Config.in
 +++ b/package/libblockdev/Config.in
-@@ -57,6 +57,11 @@ config BR2_PACKAGE_LIBBLOCKDEV_PART
- comment "part plugin needs a toolchain w/ locale"
- 	depends on !BR2_ENABLE_LOCALE
+@@ -25,6 +25,14 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
+ 	select BR2_PACKAGE_CRYPTSETUP
  
-+config BR2_PACKAGE_LIBBLOCKDEV_SWAP
-+	bool "swap"
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++config BR2_PACKAGE_LIBBLOCKDEV_FS
++	bool "filesystem"
++	depends on BR2_ENABLE_LOCALE # parted
++	select BR2_PACKAGE_PARTED
++
++comment "filesystem plugin needs a toolchain w/ locale"
++	depends on !BR2_ENABLE_LOCALE
 +
  endif
  
  comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
 diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index d7ae03e359..1b094555d2 100644
+index 67d9ab4483..2b111df82b 100644
 --- a/package/libblockdev/libblockdev.mk
 +++ b/package/libblockdev/libblockdev.mk
-@@ -28,7 +28,6 @@ LIBBLOCKDEV_CONF_OPTS = \
- 	--without-python2 \
- 	--without-python3 \
- 	--without-s390 \
--	--without-swap \
- 	--without-tools \
- 	--without-vdo
- 
-@@ -73,4 +72,11 @@ else
- LIBBLOCKDEV_CONF_OPTS += --without-part
+@@ -21,7 +21,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-dm \
+ 	--without-dmraid \
+ 	--without-escrow \
+-	--without-fs \
+ 	--without-kbd \
+ 	--without-loop \
+ 	--without-lvm \
+@@ -44,4 +43,11 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-crypto
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_SWAP),y)
-+LIBBLOCKDEV_DEPENDENCIES += util-linux
-+LIBBLOCKDEV_CONF_OPTS += --with-swap
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_FS),y)
++LIBBLOCKDEV_DEPENDENCIES += parted
++LIBBLOCKDEV_CONF_OPTS += --with-fs
 +else
-+LIBBLOCKDEV_CONF_OPTS += --without-swap
++LIBBLOCKDEV_CONF_OPTS += --without-fs
 +endif
 +
  $(eval $(autotools-package))
