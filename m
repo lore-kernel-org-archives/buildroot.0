@@ -1,227 +1,226 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:10:09 +0200
-Subject: [Buildroot] [git commit branch/next] package/libcap: bump to
- version 2.42
-Message-ID: <20200829210526.DB21381845@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Aug 2020 23:13:24 +0200
+Subject: [Buildroot] [PATCH v2 10/12] core: allow to use Clang as
+ cross-compiler
+In-Reply-To: <20190907094027.9537-11-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+ <20190907094027.9537-11-romain.naour@smile.fr>
+Message-ID: <8ea81063-792b-1512-5501-87f5888dec22@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=241e3bdea8b68b3ce78b1b76db29019fdcbb7b05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+ So, this is the one I don't like...
 
-- Drop first patch (already in version:
-  https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=22f2e207f7824d231aab4de973e547f006e3ea3c)
-- Drop second patch (already in version:
-  https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=786b64b72b5ba3d4b6195f40c0096932d2c72b57)
-- Drop third patch (not needed since
-  https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit?id=f1c3ac995d02d4f17b9d15656ab6d58f4c87435a)
-- Update indentation in hash file (two spaces)
+On 07/09/2019 11:40, Romain Naour wrote:
+> Add this new experimental option into "Advanced" menu since
+> we are expecting some build and runtime issues for number of
+> packages (bootloaders, kernel).
+> 
+> Add host-clang as dependency in toolchain virtual package
+> in order to be sure that the clang cross-compiler is built
+> before generating Buildroot.cmake file from an
+> TOOLCHAIN_CMAKE_INSTALL_FILES hook (defined in cmake package).
+> Buildroot.cmake can be used by a cmake package as soon as
+> the toolchain package is installed.
+> 
+> Install the GCC external toolchain before executing
+> realpath command by adding an explicit dependency on
+> toolchain-external. Without this dependency, host-clang
+> may be build before toolchain-external when
+> BR2_USER_HOST_CLANG_AS_CROSS_COMPILER=y, so the realpath
+> fail to set GCC_INSTALL_PREFIX leading to
+> "crtbegin.o no such file or directory" error while linking
+> applications.
+> 
+> Only Glibc toolchain has been tested.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-build-system-fixes-for-cross-compilation.patch | 53 ----------------------
- ...t-install-into-install-shared-install-sta.patch | 48 --------------------
- ..._file.c-fix-build-with-old-kernel-headers.patch | 51 ---------------------
- package/libcap/libcap.hash                         |  4 +-
- package/libcap/libcap.mk                           |  2 +-
- 5 files changed, 3 insertions(+), 155 deletions(-)
+ As far as I understand, the *only* reason we still need GCC is for libgcc and
+libstdc++ (and for building glibc). The intention is to build all packages with
+clang instead of gcc.
 
-diff --git a/package/libcap/0001-build-system-fixes-for-cross-compilation.patch b/package/libcap/0001-build-system-fixes-for-cross-compilation.patch
-deleted file mode 100644
-index de2409085e..0000000000
---- a/package/libcap/0001-build-system-fixes-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From d8d70559a279706c206761dfaf665d2197934123 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Sun, 6 Mar 2016 22:52:02 +0100
--Subject: [PATCH] build-system: fixes for cross-compilation
--
--Avoid the libcap buildsys forcing CC/CFLAGS/LDFLAGS/AR/RANLIB
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[yann.morin.1998 at free.fr: dont chmod +x the shared lib]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff --git a/Make.Rules b/Make.Rules
--index 8347b26..8a07a3f 100644
----- a/Make.Rules
--+++ b/Make.Rules
--@@ -48,26 +48,26 @@ MINOR=25
-- KERNEL_HEADERS := $(topdir)/libcap/include/uapi
-- IPATH += -fPIC -I$(KERNEL_HEADERS) -I$(topdir)/libcap/include
-- 
---CC := gcc
---CFLAGS := -O2 -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
---BUILD_CC := $(CC)
---BUILD_CFLAGS := $(CFLAGS) $(IPATH)
---AR := ar
---RANLIB := ranlib
--+CC ?= gcc
--+CFLAGS ?= -O2 -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--+BUILD_CC ?= $(CC)
--+BUILD_CFLAGS ?= $(CFLAGS) $(IPATH)
--+AR ?= ar
--+RANLIB ?= ranlib
-- DEBUG = -g #-DDEBUG
-- WARNINGS=-Wall -Wwrite-strings \
--         -Wpointer-arith -Wcast-qual -Wcast-align \
--         -Wstrict-prototypes -Wmissing-prototypes \
--         -Wnested-externs -Winline -Wshadow
-- LD=$(CC) -Wl,-x -shared
---LDFLAGS := #-g
--+LDFLAGS ?= #-g
-- BUILD_GPERF := $(shell which gperf >/dev/null 2>/dev/null && echo yes)
-- 
-- SYSTEM_HEADERS = /usr/include
-- INCS=$(topdir)/libcap/include/sys/capability.h
-- LDFLAGS += -L$(topdir)/libcap
-- CFLAGS += -Dlinux $(WARNINGS) $(DEBUG)
---PAM_CAP := $(shell if [ -f /usr/include/security/pam_modules.h ]; then echo yes ; else echo no ; fi)
--+PAM_CAP = no
-- INDENT := $(shell if [ -n "$$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
-- DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
-- 
---- 
--1.9.1
--
-diff --git a/package/libcap/0002-libcap-split-install-into-install-shared-install-sta.patch b/package/libcap/0002-libcap-split-install-into-install-shared-install-sta.patch
-deleted file mode 100644
-index a8579b7660..0000000000
---- a/package/libcap/0002-libcap-split-install-into-install-shared-install-sta.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From af21635665ab568f3333ff9fe8b474f4950e5acb Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 6 Mar 2016 22:53:24 +0100
--Subject: [PATCH] libcap: split install into install-shared/install-static
--
--In order to support static only builds, split the install target into
--install-shared and install-static targets.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[yann.morin.1998 at free.fr: install the .pc file in the common rule]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff --git a/libcap/Makefile b/libcap/Makefile
--index d189777..44ddb27 100644
----- a/libcap/Makefile
--+++ b/libcap/Makefile
--@@ -62,19 +62,25 @@ $(MINLIBNAME): $(OBJS)
-- cap_text.o: cap_text.c $(USE_GPERF_OUTPUT) $(INCLS)
-- 	$(CC) $(CFLAGS) $(IPATH) $(INCLUDE_GPERF_OUTPUT) -c $< -o $@
-- 
---install: all
--+install: install-shared install-static
--+
--+install-common:
-- 	mkdir -p -m 0755 $(FAKEROOT)$(INCDIR)/sys
-- 	install -m 0644 include/sys/capability.h $(FAKEROOT)$(INCDIR)/sys
--+	mkdir -p -m 0755 $(FAKEROOT)$(PKGCONFIGDIR)
--+	install -m 0644 libcap.pc $(FAKEROOT)$(PKGCONFIGDIR)/libcap.pc
--+
--+install-static: $(STALIBNAME) install-common
-- 	mkdir -p -m 0755 $(FAKEROOT)$(LIBDIR)
-- 	install -m 0644 $(STALIBNAME) $(FAKEROOT)$(LIBDIR)/$(STALIBNAME)
--+
--+install-shared: $(MINLIBNAME) install-common
-- 	install -m 0644 $(MINLIBNAME) $(FAKEROOT)$(LIBDIR)/$(MINLIBNAME)
-- 	ln -sf $(MINLIBNAME) $(FAKEROOT)$(LIBDIR)/$(MAJLIBNAME)
-- 	ln -sf $(MAJLIBNAME) $(FAKEROOT)$(LIBDIR)/$(LIBNAME)
-- ifeq ($(FAKEROOT),)
-- 	-/sbin/ldconfig
-- endif
---	mkdir -p -m 0755 $(FAKEROOT)$(PKGCONFIGDIR)
---	install -m 0644 libcap.pc $(FAKEROOT)$(PKGCONFIGDIR)/libcap.pc
-- 
-- clean:
-- 	$(LOCALCLEAN)
---- 
--1.9.1
--
-diff --git a/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch b/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
-deleted file mode 100644
-index 02cc228b1d..0000000000
---- a/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From ace694e9574eb38e07cfe0db235434eb40003f47 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 14 Mar 2016 22:39:15 +0100
--Subject: [PATCH] libcap/cap_file.c: fix build with old kernel headers
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- libcap/cap_file.c | 27 +++++++++++++++++++++++++++
-- 1 file changed, 27 insertions(+)
--
--diff --git a/libcap/cap_file.c b/libcap/cap_file.c
--index 40756ea..e3d54dd 100644
----- a/libcap/cap_file.c
--+++ b/libcap/cap_file.c
--@@ -23,6 +23,33 @@ extern int fsetxattr(int, const char *, const void *, size_t, int);
-- extern int removexattr(const char *, const char *);
-- extern int fremovexattr(int, const char *);
-- 
--+
--+/*
--+ * Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
--+ * <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
--+ * XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
--+ * <linux/xattr.h>.
--+ *
--+ * In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
--+ * the XATTR_NAME_CAPS definition was moved to the kernel-only part of
--+ * <linux/xattr.h>. It's only in kernel 3.0 (commit
--+ * 1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
--+ * fixed to expose XATTR_NAME_CAPS and the related definitions to
--+ * userspace.
--+ *
--+ * In order to cope with kernels < 3.0, we define here the appropriate
--+ * values, which we assume haven't changed over history.
--+ */
--+#ifndef XATTR_CAPS_SUFFIX
--+#define XATTR_CAPS_SUFFIX "capability"
--+#endif
--+#ifndef XATTR_SECURITY_PREFIX
--+#define XATTR_SECURITY_PREFIX "security."
--+#endif
--+#ifndef XATTR_NAME_CAPS
--+#define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
--+#endif
--+
-- #include "libcap.h"
-- 
-- #ifdef VFS_CAP_U32
---- 
--2.6.4
--
-diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
-index cbef0dc86d..19044cab01 100644
---- a/package/libcap/libcap.hash
-+++ b/package/libcap/libcap.hash
-@@ -1,5 +1,5 @@
- # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
--sha256	dac1792d0118bee6aae6ba7fb93ff1602c6a9bda812fd63916eee1435b9c486a  libcap-2.27.tar.xz
-+sha256  3605a9cb60076547ea9f64989e0ba576da9508e4653e8dc40ae54c0d6f443dfd  libcap-2.42.tar.xz
- 
- # Hash for license file:
--sha256	088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
-+sha256  088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 4919a4adca..08c1bc9deb 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCAP_VERSION = 2.27
-+LIBCAP_VERSION = 2.42
- LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
- LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
- LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
+ Therefore, I think it would be better to really treat clang as part of the
+internal toolchain. That means:
+
+- In the Config.in, we put it as an option of the internal toolchain. Before the
+GCC version, you select clang or GCC. If clang is chosen, we choose a fixed
+version of GCC (e.g. our current default).
+
+- In the build, we replace host-gcc-final with host-clang as the
+toolchain-buildroot dependency.
+
+ I think that that approach, combined with completely replacing the gcc symlinks
+with links to clang, will end up being simpler and more elegant than this patch.
+And of course, more user friendly.
+
+ There are two caveats:
+- we no longer have an "escape clause" that allows us to build packages with GCC
+if they really don't work with clang (except for glibc, but that's part of the
+toolchain);
+- it might be impossible to build libstdc++ as part of host-gcc-initial, so we
+may still need a host-gcc-final stage (or maybe a specific host-gcc-libstdc++)
+to build only libstdc++. But I do believe it's possible to build only libstdc++
+by simply setting _SUBDIR to libstdc++-v3.
+
+ So it would mean that to use clang as a cross-compiler, you always have to use
+an internal toolchain. Later, of course, we should extend this with supporting
+clang as an external toolchain as well.
+
+ Also (but again, can be done later), we should revisit the
+BR2_TOOLCHAIN_GCC_AT_LEAST_ options. That's actually the toughest one... *Most*
+of them are related to the C++ support. Again in most cases, this is provided by
+libstdc++ (most language extensions are to the standard library and not to the
+core language), but in some cases it may actually depend on the compiler itself.
+For the case where it's libstdc++ that is the limitation, we can simply set the
+appropriate BR2_TOOLCHAIN_GCC_AT_LEAST_ from clang. For the other cases, we'll
+have to add a BR2_TOOLCHAIN_CLANG option, and modify the packages to
+BR2_TOOLCHAIN_GCC_AT_LEAST_... || BR2_TOOLCHAIN_CLANG. Except of course that
+nobody will notice that it actually works with clang and an older libstdc++, so
+that will probably never happen :-). More importantly, though, we can set
+!BR2_TOOLCHAIN_CLANG for packages that really don't want clang. And I do prefer
+that over falling back to GCC for those packages.
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+> ---
+> v2: fix typo TOOLCHAIN_{BUILDROOT,EXTERNAL}_DEPENDENCIES in toolchain-external.mk
+>     Install the GCC external toolchain before executing realpath command.
+>     Move host-clang dependency to toolchain virtual package since host-clang now
+>     depends on external-toolchain.
+>     Add Glibc toolchain dependency
+> ---
+>  Config.in                        | 23 +++++++++++++++++++++++
+>  package/Makefile.in              | 13 ++++++++++---
+>  package/clang/clang.mk           |  7 +++++++
+>  toolchain/toolchain/toolchain.mk |  7 +++++++
+>  4 files changed, 47 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index a6e280b885..dc2e5f7320 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -711,6 +711,29 @@ config BR2_REPRODUCIBLE
+>  	  This is labeled as an experimental feature, as not all
+>  	  packages behave properly to ensure reproducibility.
+>  
+> +config BR2_USER_HOST_CLANG_AS_CROSS_COMPILER
+> +	bool "Use Clang as cross-compiler (experimental)"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_USE_WCHAR # std::wstring
+
+ Again, I doubt that most of these limitations apply.
+
+> +	select BR2_PACKAGE_HOST_CLANG
+> +	help
+> +	  This option will force Buildroot to use Clang as cross-compiler
+> +	  instead of GCC. A GCC toolchain (internal or external) is still
+> +	  needed to build with Clang.
+> +
+> +	  This is labeled as an experimental feature, since we are
+> +	  expecting some build and runtime issues for number of packages
+> +	  (bootloaders, kernel).
+> +
+> +	  Note: Only Glibc toolchain has been tested.
+> +
+>  endmenu
+>  
+>  comment "Security Hardening Options"
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 0a7899c852..aebf4edd1b 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -200,9 +200,6 @@ endif
+>  # Define TARGET_xx variables for all common binutils/gcc
+>  TARGET_AR       = $(TARGET_CROSS)ar
+>  TARGET_AS       = $(TARGET_CROSS)as
+> -TARGET_CC       = $(TARGET_CROSS)gcc
+> -TARGET_CPP      = $(TARGET_CROSS)cpp
+> -TARGET_CXX      = $(TARGET_CROSS)g++
+>  TARGET_FC       = $(TARGET_CROSS)gfortran
+>  TARGET_LD       = $(TARGET_CROSS)ld
+>  TARGET_NM       = $(TARGET_CROSS)nm
+> @@ -211,6 +208,16 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
+>  TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+>  TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+>  
+> +ifeq ($(BR2_USER_HOST_CLANG_AS_CROSS_COMPILER),y)
+> +TARGET_CC       = $(HOST_DIR)/bin/clang
+> +TARGET_CPP      = $(HOST_DIR)/bin/clang-cpp
+> +TARGET_CXX      = $(HOST_DIR)/bin/clang++
+> +else
+> +TARGET_CC       = $(TARGET_CROSS)gcc
+> +TARGET_CPP      = $(TARGET_CROSS)cpp
+> +TARGET_CXX      = $(TARGET_CROSS)g++
+> +endif
+
+ This stuff is also not needed if we simply overwrite gcc, cpp, g++ and other
+gcc-installed symlinks.
+
+> +
+>  ifeq ($(BR2_STRIP_strip),y)
+>  STRIP_STRIP_DEBUG := --strip-debug
+>  TARGET_STRIP = $(TARGET_CROSS)strip
+> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+> index 148df8e611..36703f5d8a 100644
+> --- a/package/clang/clang.mk
+> +++ b/package/clang/clang.mk
+> @@ -14,6 +14,11 @@ CLANG_LICENSE_FILES = LICENSE.TXT
+>  CLANG_SUPPORTS_IN_SOURCE_BUILD = NO
+>  CLANG_INSTALL_STAGING = YES
+>  
+> +# Allow host-clang to be build as part of the toolchain
+> +ifeq ($(BR2_USER_HOST_CLANG_AS_CROSS_COMPILER),y)
+> +HOST_CLANG_ADD_TOOLCHAIN_DEPENDENCY = NO
+
+ Since this is a host package, a toolchain dependency won't be added anyway.
+Note how host-gcc-{initial,final} don't have it either.
+
+
+ Regards,
+ Arnout
+
+> +endif
+> +
+>  HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
+>  CLANG_DEPENDENCIES = llvm host-clang
+>  
+> @@ -106,7 +111,9 @@ CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
+>  # Help host-clang to find our external toolchain, use a relative path from the clang
+>  # installation directory to the external toolchain installation directory in order to
+>  # not hardcode the toolchain absolute path.
+> +# Install the GCC external toolchain before executing realpath command.
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> +HOST_CLANG_DEPENDENCIES += toolchain-external
+>  HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
+>  endif
+>  
+> diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+> index 17fb62147e..d945e27aac 100644
+> --- a/toolchain/toolchain/toolchain.mk
+> +++ b/toolchain/toolchain/toolchain.mk
+> @@ -10,6 +10,13 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+>  TOOLCHAIN_DEPENDENCIES += toolchain-external
+>  endif
+>  
+> +# Make sure the clang cross-compiler is built before
+> +# generating Buildroot.cmake file from an
+> +# TOOLCHAIN_CMAKE_INSTALL_FILES hook.
+> +ifeq ($(BR2_USER_HOST_CLANG_AS_CROSS_COMPILER),y)
+> +TOOLCHAIN_DEPENDENCIES += host-clang
+> +endif
+> +
+>  TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+>  # Apply a hack that Rick Felker suggested[1] to avoid conflicts between libc
+> 
