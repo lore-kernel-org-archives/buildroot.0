@@ -1,58 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 22:17:54 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libidn: bump to version 1.36
-Message-ID: <20200829201754.2823090-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 29 Aug 2020 22:21:46 +0200
+Subject: [Buildroot] [PATCH v2 07/12] package/busybox: fix applets
+ runtime issue when building with clang cross-compiler
+In-Reply-To: <20190907094027.9537-8-romain.naour@smile.fr>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+ <20190907094027.9537-8-romain.naour@smile.fr>
+Message-ID: <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
 
-Extract from NEWS:
- - Fix unlikely memory leak in idna_to_unicode_4z4z().
- - Check codepoint validity in punycode_decode() and punycode_decode().
- - tld: Add U+00EF to .nl TLD table.
- - Indent code.
- - Translation fixes.
- - Update gnulib files.
- - API and ABI is backwards compatible with the previous version.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libidn/libidn.hash | 8 ++++----
- package/libidn/libidn.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On 07/09/2019 11:40, Romain Naour wrote:
+> Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
+> fixing a runtime issue (segfault) when busybox is compiled by Clang.
+> 
+> The patch disable the compiler optimizations for Clang/LLVM only.
+> 
+> Without this patch, busybox segfault with several applets
+> (login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
 
-diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
-index f5ba311e90..0255a63950 100644
---- a/package/libidn/libidn.hash
-+++ b/package/libidn/libidn.hash
-@@ -1,7 +1,7 @@
- # Locally computed:
--sha256	f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e	libidn-1.35.tar.gz
-+sha256  14b67108344d81ba844631640df77c9071d9fb0659b080326ff5424e86b14038  libidn-1.36.tar.gz
- 
- # Hash for license files:
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYINGv3
--sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSERv3
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 601edcb57d..2df3437029 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN_VERSION = 1.35
-+LIBIDN_VERSION = 1.36
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
--- 
-2.28.0
+ We should probably check if this patch is still needed with current busybox.
+
+ Regards,
+ Arnout
