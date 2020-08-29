@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 09:30:19 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/cryptsetup: add
+Date: Sat, 29 Aug 2020 09:30:09 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cryptsetup: add
  upstream patch to fix build against json-c >= 0.14.0
-Message-ID: <20200829072306.313D982297@busybox.osuosl.org>
+Message-ID: <20200829072315.135A2838C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf19044157b30298b45c5312cd0b282b7053afb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a4c252e967cad3a2226a64ffcf6c4aeede682efc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/2ae/2aec06342f325c6d1f26376ef258f441b15098d5/
