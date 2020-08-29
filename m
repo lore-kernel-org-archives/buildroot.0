@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:42:17 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] linux: run depmod only if
+Date: Sat, 29 Aug 2020 19:42:26 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] linux: run depmod only if
  modules directory exists
-Message-ID: <20200829173716.002F18182C@busybox.osuosl.org>
+Message-ID: <20200829173720.6CC8386A94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bc90b3d7878402a42840ab2beac20baff1264a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=332e245792a1f54a17e75c2bc3646ddd712d3a73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 If the modules directory that corresponds to the version of the kernel
 being built has been deleted, don't try to run depmod, which will
@@ -29,10 +29,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index bb4d511433..d51f06da0a 100644
+index c963f2f47f..010ed3497e 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -492,7 +492,8 @@ endef
+@@ -532,7 +532,8 @@ endef
  # Run depmod in a target-finalize hook, to encompass modules installed by
  # packages.
  define LINUX_RUN_DEPMOD
