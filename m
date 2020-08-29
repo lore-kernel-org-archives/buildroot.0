@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:42:43 +0200
-Subject: [Buildroot] [PATCH v3 04/13] package/libblockdev: add support
- for crypto plugin
-In-Reply-To: <20200725230618.3640682-5-aduskett@gmail.com>
-References: <20200725230618.3640682-1-aduskett@gmail.com>
- <20200725230618.3640682-5-aduskett@gmail.com>
-Message-ID: <20200829214243.219608e4@windsurf.home>
+Date: Sat, 29 Aug 2020 21:43:53 +0200
+Subject: [Buildroot] [PATCH] Revert "package/parted: disable on uclibc"
+In-Reply-To: <20200527095058.wdnaekjl46vzmrny@waldemar-brodkorb.de>
+References: <20200527095058.wdnaekjl46vzmrny@waldemar-brodkorb.de>
+Message-ID: <20200829214353.4d522418@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Jul 2020 16:06:09 -0700
-aduskett at gmail.com wrote:
+Hello,
 
-> From: Adam Duskett <Aduskett@gmail.com>
+On Wed, 27 May 2020 11:50:58 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
+
+> This reverts commit 25b1dc4613326b1b2674ab07484993991ab90886.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Only depend on and select the cryptsetup package.
->     The volume-key and libnss packages are only necessary if --with-escrow is
->     passed as a conf opt.
+> This is fixed in uClibc-ng 1.0.34.
 
-Applied to next, thanks.
+In fact, it was fixed in uClibc-ng 1.0.33, not 1.0.34.
+
+I was initially a bit puzzled because both Buildroot 2019.11 and
+Buildroot 2020.02 are using uClibc-ng 1.0.32, and parted was failing to
+build with a Buildroot 2019.11 toolchain, but not a 2020.02 toolchain.
+Turned out we had backported the fix in 2020.02 on top of uClibc-ng
+1.0.32.
+
+Anyway, I've applied your patch to next. Thanks!
 
 Thomas
 -- 
