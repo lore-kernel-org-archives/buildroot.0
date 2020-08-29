@@ -1,44 +1,118 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 23:10:53 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/ncmpc: bump to version 0.39
-Message-ID: <20200829211053.2902753-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Aug 2020 23:11:47 +0200
+Subject: [Buildroot] [git commit] package/uclibc: use HOSTCC_NOCCACHE as
+ kconfig HOSTCC
+Message-ID: <20200829210515.AE7B78527C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://raw.githubusercontent.com/MusicPlayerDaemon/ncmpc/v0.39/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=689fe66100b140666770ed864a820fe91239ce18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+uclibc is part of the toolchain, and as such does not have a dependency
+on it. As a consequence, it does not have a dependency on host-ccache,
+when this is needed.
+
+Usually, host-ccache is built before uclibc, as part of the dependency
+of gcc-initial, host-binutils, and a few other host packages that are
+built before uclibc.
+
+However, during top-level parallel builds, this ordering is only ever
+guaranteed at the beginning of the configure step, and not before.
+
+But for kconfig-packages, the moment we apply the configuration to
+prepare the .config file is a pseudo step that happens somewhere in
+limbo between the patch step and the configure step. As such, the
+build ordering that is otherwise guaranteed by the _DEPENDENCIES is not
+applicable yet.
+
+And so, with top-level parallel builds with ccache enabled, there is
+nothing that guarantees host-ccache to be built and installed by the
+time we are trying to generate uclibc's .config file, which can be quite
+early in the build process, and thus the build fails:
+
+    /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache /usr/bin/gcc /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/extra/config/conf.c  -c -o ../../extra/config/conf.o -Os -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'   -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'
+    /bin/sh: 1: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache: not found
+    make[2]: *** [Makefile:64: ../../extra/config/conf.o] Error 127
+    make[1]: *** [Makefile.in:475: extra/config/conf] Error 2
+    make[1]: Leaving directory '/home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34'
+    make: *** [package/uclibc/uclibc.mk:458: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/.stamp_dotconfig] Error 2
+    make: *** Waiting for unfinished jobs....
+
+The root cause is that uclibc sets;
+
+    UCLIBC_KCONFIG_OPTS = $(UCLIBC_MAKE_FLAGS) [...]
+
+with:
+
+    UCLIBC_MAKE_FLAGS = [...] HOSTCC="$(HOSTCC)"
+
+And then the kconfig-package infra calls to the configurators,
+menuconfig, xconfig et al, but also olddefconfig et al.. with:
+
+    [...] $($(1)_MAKE) [...] $(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) [...]
+
+with (note a latent bug in there, will be fixed in another patch):
+
+    PKG_KCONFIG_COMMON_OPTS = HOSTCC=$(HOSTCC_NOCCACHE)
+
+So, a HOSTCC as set by a package will always win onver the one set by
+the infra, which is exactly what we want.
+
+But in this case, uclibc sets HOSTCC so that it can build its host tools
+needed during the build, and in doing so uses the ccache-enabled host c
+compiler. Which might not yet be available for the kconfig-package infra
+to generate the .config file.
+
+We had a similar (non-)issue for the linux package, which was fixed in
+commit 71a31b2357 (linux: use HOSTCC_NOCCACHE as kconfig HOSTCC).
+
+But here, uclibc does not have the toolchain in its dependencies (as said
+earlier, uclibc *is* part of the toolchain).
+
+Since the host compiler is only used to build very few files to generate
+the simple executable needed to generate the .config file, doing without
+the ccache-enabled host compiler will be amply enough.
+
+So, we override HOSTCC in UCLIBC_KCONFIG_OPTS, to use the non-cached
+host compiler.
+
+Note that, in a first approximation, one would be tempted to change the
+ordering in the kconfig-package infra:
+
+        $($(1)_KCONFIG_OPTS) $(PKG_KCONFIG_COMMON_OPTS)
+
+so that the non-cached HOSTCC always wins over the cached one. But this
+would be incorrect, in cases where the package really needs to override
+HOSTCC; indeed we want the package-provided values to always win over
+the default ones providing by the infra.
+
+Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/ncmpc/ncmpc.hash | 2 +-
- package/ncmpc/ncmpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uclibc.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-index f31c15bd9e..a95358ec5f 100644
---- a/package/ncmpc/ncmpc.hash
-+++ b/package/ncmpc/ncmpc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  2bc1aa38aacd23131895cd9aa3abd9d1ca5700857034d9f35209e13e061e27a2  ncmpc-0.38.tar.xz
-+sha256  64ebe320c2fbe4dfbff4461ceae730001841d06d48c4882d69f320912a0f11a8  ncmpc-0.39.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 3ba4589672..daf81d29b2 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -31,8 +31,13 @@ endif
+ UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
+ UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
  
- # Hash for license file:
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index d4dfceae36..1742ad20fa 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).38
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).39
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = \
--- 
-2.28.0
++# UCLIBC_MAKE_FLAGS set HOSTCC to the default HOSTCC, which may be
++# wrapped with ccache. However, host-ccache may not already be built
++# and installed when we apply the configuration, so we override that
++# to use the non-ccached host compiler.
+ UCLIBC_KCONFIG_OPTS = \
+ 	$(UCLIBC_MAKE_FLAGS) \
++	HOSTCC="$(HOSTCC_NOCCACHE)" \
+ 	PREFIX=$(STAGING_DIR) \
+ 	DEVEL_PREFIX=/usr/ \
+ 	RUNTIME_PREFIX=$(STAGING_DIR)/
