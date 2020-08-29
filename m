@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:35:49 +0200
-Subject: [Buildroot] [git commit] package/docker-containerd: define
- <pkg>_GOMOD variable
-Message-ID: <20200902161637.DCA0A85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 14:49:12 +0200
+Subject: [Buildroot] [git commit] package/mender-artifact: drop custom
+ GOFLAGS
+Message-ID: <20200902161638.366B085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01c5e0ed72007433160d858a8c06cc84eafc120c
+commit: https://git.buildroot.net/buildroot/commit/?id=92584815bace88b0c0548d7ab7796854c92aaa99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In preparation for the go.mod integration, define the
-DOCKER_CONTAINERD_GOMOD variable.
+Now that we have switched to the go.mod integration, all Go packages
+are built with -mod=vendor, so there's no need to have custom GOFLAGS
+in mender-artifact.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-containerd/docker-containerd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/mender-artifact/mender-artifact.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 5a44489065..343d587907 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -10,6 +10,7 @@ DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 67fdc44b9d..c81ec9ba53 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -31,14 +31,6 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
  
- DOCKER_CONTAINERD_WORKSPACE = vendor
-+DOCKER_CONTAINERD_GOMOD = github.com/containerd/containerd
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
  
- DOCKER_CONTAINERD_LDFLAGS = \
- 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+-# By default, go will attempt to download needed modules before building, which
+-# is not desirable. This behavior also causes permission issues when cleaning,
+-# as go downloads modules as read-only by default. Because mender-artifact
+-# includes the modules in the vendor directory, mod=vendor prevents the package
+-# from downloading the go modules during the build process and prevents
+-# permission issues when cleaning.
+-HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
+-
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
