@@ -1,105 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 13:58:02 +0200
-Subject: [Buildroot] [git commit branch/next] package/wayland-utils: new
- package
-Message-ID: <20200829120021.E85A0824EE@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 14:13:12 +0200
+Subject: [Buildroot] [PATCH 5/5] package/gcc: switch to gcc 9.x as the
+ default
+In-Reply-To: <20200624215654.1ccffabd@windsurf> (Thomas Petazzoni's message of
+ "Wed, 24 Jun 2020 21:56:54 +0200")
+References: <20200608221347.2639059-1-romain.naour@gmail.com>
+ <20200608221347.2639059-5-romain.naour@gmail.com>
+ <20200624215654.1ccffabd@windsurf>
+Message-ID: <87r1rpiraf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce49a59ff7d064bc4493e21900841364c7aa4f66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-From [1] (for details see [2]):
+ > On Tue,  9 Jun 2020 00:13:47 +0200
+ > Romain Naour <romain.naour@gmail.com> wrote:
 
-This is first release of wayland-utils which only contains (for now)
-wayland-info, a utility for displaying information about the Wayland
-protocols supported by a Wayland compositor.
+ >> Even if gcc 8 is still maintained for some time (gcc 8.5 is pending),
+ >> switch to gcc 9.x since it has been released since 2019-05-03 and
+ >> gcc 10.x is available since 2020-05-07.
+ >> 
+ >> We have been having toolchains in the autobuilders with gcc
+ >> 9.x for a while, so the vast majority of the problems should have
+ >> already been solved.
+ >> 
+ >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ >> ---
+ >> package/gcc/Config.in.host | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-wayland-info is basically a standalone version of weston-info as found
-in weston repository.
+ > Applied to master, thanks.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-[2] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041520.html
+ > Following this, we should drop gcc 7.x support. However, one defconfig
+ > (roseapplepi) still uses gcc 7.x. I've notified Peter Korsgaard on IRC,
+ > and I am doing it here as well: if this defconfig is not updated to a
+ > newer kernel that builds with gcc >= 8.x, we will have to drop support
+ > for this defconfig.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/wayland-utils/Config.in          |  7 +++++++
- package/wayland-utils/wayland-utils.hash |  6 ++++++
- package/wayland-utils/wayland-utils.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+This has now been done (in next), so we can drop gcc 7.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5b783a7fe4..9b90367a81 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2073,6 +2073,7 @@ F:	package/quotatool/
- F:	package/racehound/
- F:	package/redir/
- F:	package/uredir/
-+F:	package/wayland-utils/
- 
- N:	Peter Thompson <peter.macleod.thompson@gmail.com>
- F:	package/sdl2_gfx/
-diff --git a/package/Config.in b/package/Config.in
-index f5cdf7c55a..a29bd7ab99 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1472,6 +1472,7 @@ menu "Graphics"
- 	source "package/waffle/Config.in"
- 	source "package/wayland/Config.in"
- 	source "package/wayland-protocols/Config.in"
-+	source "package/wayland-utils/Config.in"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
-diff --git a/package/wayland-utils/Config.in b/package/wayland-utils/Config.in
-new file mode 100644
-index 0000000000..3ff7f2efe9
---- /dev/null
-+++ b/package/wayland-utils/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_WAYLAND_UTILS
-+	bool "wayland-utils"
-+	depends on BR2_PACKAGE_WAYLAND # wayland-client, wayland-server
-+	help
-+	  Wayland utils (wayland-info).
-+
-+	  https://gitlab.freedesktop.org/ofourdan/wayland-utils
-diff --git a/package/wayland-utils/wayland-utils.hash b/package/wayland-utils/wayland-utils.hash
-new file mode 100644
-index 0000000000..00b6da4033
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.hash
-@@ -0,0 +1,6 @@
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
-+md5  714875aefb10e7f683cde24e58d033ad  wayland-utils-1.0.0.tar.xz
-+sha1  b5b8d498a892866d56ffbe862039d7c97acbe7bc  wayland-utils-1.0.0.tar.xz
-+sha256  64fecc4c58e87ae9b302901abe10c2e8af69c7503c221a96ecd0700e0aa268c0  wayland-utils-1.0.0.tar.xz
-+sha512  4c6f1822435b36b3acd361c0c54e56150e8a2697a9c4b2c20a149fcfaafe237e45807df3471884ddf594d89558001099e2d938e3f48988ba6950a0f1e3538db2  wayland-utils-1.0.0.tar.xz
-+sha256  1eba39c11640014a5841dd3017e5245fc31f47e1cf43a3287a286dd6a8de8a1a  COPYING
-diff --git a/package/wayland-utils/wayland-utils.mk b/package/wayland-utils/wayland-utils.mk
-new file mode 100644
-index 0000000000..9c4abe7b08
---- /dev/null
-+++ b/package/wayland-utils/wayland-utils.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# wayland-utils
-+#
-+################################################################################
-+
-+WAYLAND_UTILS_VERSION = 1.0.0
-+WAYLAND_UTILS_SITE = http://wayland.freedesktop.org/releases
-+WAYLAND_UTILS_SOURCE = wayland-utils-$(WAYLAND_UTILS_VERSION).tar.xz
-+WAYLAND_UTILS_LICENSE = MIT
-+WAYLAND_UTILS_LICENSE_FILES = COPYING
-+WAYLAND_UTILS_DEPENDENCIES = host-pkgconf wayland
-+
-+$(eval $(meson-package))
+-- 
+Bye, Peter Korsgaard
