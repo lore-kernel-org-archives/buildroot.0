@@ -1,130 +1,53 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 29 Aug 2020 10:46:01 +0300
-Subject: [Buildroot] [PATCH v4 1/1] package/easyframes: new package
-In-Reply-To: <20200829072416.951156-1-horatiu.vultur@microchip.com>
-References: <20200829072416.951156-1-horatiu.vultur@microchip.com>
-Message-ID: <CALFsTFXdYziXqPKhK+6aGXEKpSZMzsGKQuYPEB7sCOoHRUajJA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 09:51:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.6
+Message-ID: <20200829075124.962675-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fix CVE-2020-17498: In Wireshark 3.2.0 to 3.2.5, the Kafka protocol
+dissector could crash. This was addressed in
+epan/dissectors/packet-kafka.c by avoiding a double free during LZ4
+decompression.
 
-On Sat, Aug 29, 2020 at 10:25 AM Horatiu Vultur via buildroot
-<buildroot@busybox.net> wrote:
->
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
->
-> ---
-> Changes v3 -> v4:
->   - update the version
->   - remove C++ dependecy
->
-> Changes v2 -> v3:
->   - add missing changelog
->
-> Changes v1 -> v2:
->   - add missing comment in easyframes.hash
->   - add sha256 for COPYING
->   - remove zlib dependency
->   - change from using sha to use tag
-> ---
->  DEVELOPERS                         |  3 +++
->  package/Config.in                  |  1 +
->  package/easyframes/Config.in       |  9 +++++++++
->  package/easyframes/easyframes.hash |  3 +++
->  package/easyframes/easyframes.mk   | 15 +++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/easyframes/Config.in
->  create mode 100644 package/easyframes/easyframes.hash
->  create mode 100644 package/easyframes/easyframes.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3c3dcda859..96414f5b4b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1111,6 +1111,9 @@ F:        package/gauche/
->  F:     package/gmrender-resurrect/
->  F:     package/squeezelite/
->
-> +N:     Horatiu Vultur <horatiu.vultur@microchip.com>
-> +F:     package/easyframes/
-> +
->  N:     Ian Haylock <haylocki@yahoo.co.uk>
->  F:     package/python-rpi-gpio/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4795..3965d523c6 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2039,6 +2039,7 @@ menu "Networking applications"
->         source "package/dnsmasq/Config.in"
->         source "package/drbd-utils/Config.in"
->         source "package/dropbear/Config.in"
-> +       source "package/easyframes/Config.in"
->         source "package/ebtables/Config.in"
->         source "package/ejabberd/Config.in"
->         source "package/ethtool/Config.in"
-> diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
-> new file mode 100644
-> index 0000000000..f3a4ddbb34
-> --- /dev/null
-> +++ b/package/easyframes/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_EASYFRAMES
-> +       bool "easyframes"
-> +       select BR2_PACKAGE_LIBPCAP
-> +       help
-> +         This is a small and simple command-line tool for network testing.
-> +         The tool makes it simple to compose a frame, inject and express what
-> +         and where frames are expected to be received.
-Pay attention to the Config.in file conventions:
-http://nightly.buildroot.org/#writing-rules-config-in4 ("make
-check-package" validates that).
+https://www.wireshark.org/security/wnpa-sec-2020-10.html
 
-> +
-> +         https://github.com/microchip-ung/easyframes
-> diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
-> new file mode 100644
-> index 0000000000..a0b193ca6e
-> --- /dev/null
-> +++ b/package/easyframes/easyframes.hash
-> @@ -0,0 +1,3 @@
-> +# locally calculated
-> +sha256 3c0449b3129c29b5ecf67b689f1a75ffc65fde3c5f62811e2f0439ce4f4af392 easyframes-v0.3.tar.gz
-> +sha256 24f37598e822a1411fb7164ce7eb3ef120aea8279016399abc282c2381ce3f57 COPYING
-> diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
-> new file mode 100644
-> index 0000000000..b0ec1ae7e5
-> --- /dev/null
-> +++ b/package/easyframes/easyframes.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# easyframes
-> +#
-> +################################################################################
-> +
-> +EASYFRAMES_VERSION = v0.3
-> +EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
-> +EASYFRAMES_INSTALL_STAGING = YES
-Now I notice that the only file installed with this package is the 'ef binary.
-In this case, there's no need to install easyframes to the staging dir.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> +EASYFRAMES_DEPENDENCIES = libpcap
-> +
-> +EASYFRAMES_LICENSE = MIT
-> +EASYFRAMES_LICENSE_FILES = COPYING
-> +
-> +$(eval $(cmake-package))
-> --
-> 2.27.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-Regards,
-Asaf.
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index b74b69244d..c9f62ad1a8 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.5.txt
+-sha1  468c547ad13df805322e0979b348dcc602904017  wireshark-3.2.5.tar.xz
+-sha256  bd89052a5766cce08b1090df49628567e48cdd24bbaa47667c851bac6aaac940  wireshark-3.2.5.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.6.txt
++sha1  e8f3e6cb9072670c8bdbbff7e5fe3ccd5203d35e  wireshark-3.2.6.tar.xz
++sha256  ebb1eebe39bcecee02195dc328dd25f6862fc9e9dea4c2e29eae50537d5eb4f2  wireshark-3.2.6.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 638a8a249e..04e3e13ff1 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.2.5
++WIRESHARK_VERSION = 3.2.6
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+2.28.0
