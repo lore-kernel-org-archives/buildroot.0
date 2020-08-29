@@ -1,89 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 12:04:33 +0200
-Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.13
-In-Reply-To: <20200829095120.15263-1-peter@korsgaard.com>
-References: <20200829095120.15263-1-peter@korsgaard.com>
-Message-ID: <20200829100433.GD14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 12:24:31 +0200
+Subject: [Buildroot] [PATCH-2020.02.x] package/glibc: security bump for
+ additional post-2.30.x fixes
+In-Reply-To: <20200829093654.6594-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 29 Aug 2020 11:36:54 +0200")
+References: <20200829093654.6594-1-peter@korsgaard.com>
+Message-ID: <87zh6diwbk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peeter, All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 2020-08-29 11:51 +0200, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> CVE-2020-15810: HTTP(S) Request Smuggling
-> Due to incorrect data validation Squid is vulnerable to HTTP Request
-> Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
-> poisoning.
-> https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
-> 
-> CVE-2020-15811: HTTP(S) Request Splitting
-> Due to incorrect data validation Squid is vulnerable to HTTP Request
-> Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
-> poisoning.
-> https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
-> 
-> CVE-2020-24606: Denial of Service processing Cache Digest Response
-> Due to Improper Input Validation Squid is vulnerable to a Denial of Service
-> attack against the machine operating Squid.
-> https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes the following security issue:
+ > arm: CVE-2020-6096: Fix multiarch memcpy for negative length [BZ #25620]
+ > Unsigned branch instructions could be used for r2 to fix the wrong behavior
+ > when a negative length is passed to memcpy.
 
-Applied to master, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/squid/squid.hash | 8 ++++----
->  package/squid/squid.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-> index a3ef655185..b7e051960e 100644
-> --- a/package/squid/squid.hash
-> +++ b/package/squid/squid.hash
-> @@ -1,6 +1,6 @@
-> -# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
-> -md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
-> -sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
-> +# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
-> +md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
-> +sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
->  # Locally calculated
-> -sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
-> +sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index 6bce74b7d6..1ba375e547 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SQUID_VERSION = 4.12
-> +SQUID_VERSION = 4.13
->  SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
->  SQUID_SITE = http://www.squid-cache.org/Versions/v4
->  SQUID_LICENSE = GPL-2.0+
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
