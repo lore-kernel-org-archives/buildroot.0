@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:45:41 +0200
-Subject: [Buildroot] [PATCH v3 05/13] package/libblockdev: add support
- for fs plugin
-In-Reply-To: <20200725230618.3640682-6-aduskett@gmail.com>
+Date: Sat, 29 Aug 2020 21:46:52 +0200
+Subject: [Buildroot] [PATCH v3 06/13] package/libblockdev: add support
+ for loop plugin
+In-Reply-To: <20200725230618.3640682-7-aduskett@gmail.com>
 References: <20200725230618.3640682-1-aduskett@gmail.com>
- <20200725230618.3640682-6-aduskett@gmail.com>
-Message-ID: <20200829214541.10359c93@windsurf.home>
+ <20200725230618.3640682-7-aduskett@gmail.com>
+Message-ID: <20200829214652.2eb2ca3a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 25 Jul 2020 16:06:10 -0700
+On Sat, 25 Jul 2020 16:06:11 -0700
 aduskett at gmail.com wrote:
 
-> +config BR2_PACKAGE_LIBBLOCKDEV_FS
-> +	bool "filesystem"
-> +	depends on BR2_ENABLE_LOCALE # parted
-> +	select BR2_PACKAGE_PARTED
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libblockdev/Config.in      | 3 +++
+>  package/libblockdev/libblockdev.mk | 7 ++++++-
+>  2 files changed, 9 insertions(+), 1 deletion(-)
 
-You had forgotten that parted had a dependency on !uclibc. However, we
-had a patch sitting in patchwork to remove this dependency, so I
-applied it, and then applied this patch to next.
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
