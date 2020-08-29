@@ -1,57 +1,68 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Aug 2020 16:18:45 +0200
-Subject: [Buildroot] [git commit] util-linux: rename UTIL_LINUX_LIBS ->
- UTIL_LINUX_LINK_LIBS
-Message-ID: <20200902161639.CC4AB85EB9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 14:35:48 +0200
+Subject: [Buildroot] [git commit] package/go: add a HOST_GO_HOST_ENV variable
+Message-ID: <20200902161637.A894885EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77b41d18d719c6b399caff094088e08731b1bbcb
+commit: https://git.buildroot.net/buildroot/commit/?id=7c3e3cbcf215c56c378a912a6a6ca40edc61d7ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There was a private variable UTIL_LINUX_LIBS that is used by the
-util-linux package. With the addition of the util-linux-libs package,
-this is a bit confusing. Therefore, rename the variable to
-UTIL_LINUX_LINK_LIBS.
+package/go/go.mk provides a HOST_GO_TARGET_ENV which provides a useful
+set of environment variables needed to build target Go packages.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+For host packages, we simply have package/pkg-golang.mk defining
+GO_HOST_ENV to specify CFLAGS/LDFLAGS, but that's it: we don't pass an
+explicit path to the compiler, we don't pass GO111MODULE, GOCACHE,
+GOROOT, etc.
+
+This commit introduces a HOST_GO_HOST_ENV variable that provides the
+appropriate set of environment variables to use when building host
+golang packages.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/util-linux/util-linux.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/go/go.mk      | 12 ++++++++++++
+ package/pkg-golang.mk |  3 +--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 4fa7ae58e3..75b76957fc 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -33,7 +33,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	--disable-rpath \
- 	--disable-makeinstall-chown
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 72604a250b..9e9679ccd2 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -77,6 +77,18 @@ else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ HOST_GO_CGO_ENABLED = 1
+ endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
  
--UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
-+UTIL_LINUX_LINK_LIBS = $(TARGET_NLS_LIBS)
++# For the convenience of host golang packages
++HOST_GO_HOST_ENV = \
++	GO111MODULE=off \
++	GOARCH="" \
++	GOCACHE="$(HOST_GO_HOST_CACHE)" \
++	GOROOT="$(HOST_GO_ROOT)" \
++	CC="$(HOST_CCNOCCACHE)" \
++	CXX="$(HOST_CXXNOCCACHE)" \
++	CGO_CFLAGS="$(HOST_CFLAGS)" \
++	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
++	CGO_LDFLAGS="$(HOST_LDFLAGS)"
++
+ # The go build system is not compatible with ccache, so use
+ # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
+ HOST_GO_MAKE_ENV = \
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 2494ce028c..79c27b855f 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -35,8 +35,7 @@ GO_TARGET_ENV = \
+ 	$(GO_COMMON_ENV)
  
- HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+ GO_HOST_ENV = \
+-	CGO_CFLAGS="$(HOST_CFLAGS)" \
+-	CGO_LDFLAGS="$(HOST_LDFLAGS)" \
++	$(HOST_GO_HOST_ENV) \
+ 	$(GO_COMMON_ENV)
  
-@@ -90,8 +90,8 @@ endif
- # configure script. So we have to pass the proper LIBS value when
- # calling the configure script to make configure tests pass properly,
- # and then pass it again at build time.
--UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS)"
--UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS)"
-+UTIL_LINUX_CONF_ENV += LIBS="$(UTIL_LINUX_LINK_LIBS)"
-+UTIL_LINUX_MAKE_OPTS += LIBS="$(UTIL_LINUX_LINK_LIBS)"
- 
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- UTIL_LINUX_DEPENDENCIES += libselinux
-@@ -242,7 +242,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
- UTIL_LINUX_CONF_OPTS += --with-readline
--UTIL_LINUX_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
-+UTIL_LINUX_LINK_LIBS += $(if $(BR2_STATIC_LIBS),-lcurses)
- UTIL_LINUX_DEPENDENCIES += readline
- else
- UTIL_LINUX_CONF_OPTS += --without-readline
+ ################################################################################
