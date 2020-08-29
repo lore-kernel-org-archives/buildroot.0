@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 12:24:12 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/glibc: security
+Date: Sat, 29 Aug 2020 12:24:03 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/glibc: security
  bump for additional post-2.30.x fixes
-Message-ID: <20200829101712.E4D0183598@busybox.osuosl.org>
+Message-ID: <20200829101718.D820683947@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a86d8cfe742d452112cccdbcb20b2d596ab1cc8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cc3e09eba0023a9ad1255187ea9c4ac8744597ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
