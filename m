@@ -1,31 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 18:35:24 +0200
-Subject: [Buildroot] [PATCH] Makefile: use $(Q) instead of @ to silence
- target-finalize commands
-In-Reply-To: <20200829125638.15424-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 29 Aug 2020 14:56:38 +0200")
-References: <20200829125638.15424-1-yann.morin.1998@free.fr>
-Message-ID: <875z91if5f.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Aug 2020 18:35:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/systemd: disable cryptsetup for
+ host package
+In-Reply-To: <20200829135941.1862456-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Aug 2020 15:59:40 +0200")
+References: <20200829135941.1862456-1-fontaine.fabrice@gmail.com>
+Message-ID: <871rjpif4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > As 18f6c26118 just did to silence the file lists commands, switch to
- > using $(Q) instead of a plain @, to silence the commands.
+ > Build with cryptsetup and without libblkid will fail on:
+ > ../src/shared/dissect-image.c:1336:34: error: 'N_DEVICE_NODE_LIST_ATTEMPTS' undeclared (first use in this function)
+ >  1336 |         for (unsigned i = 0; i < N_DEVICE_NODE_LIST_ATTEMPTS; i++) {
+ >       |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- > Using $(Q) will allow to debug the commands with V=1.
+ > This bug has been reported upstream:
+ > https://github.com/systemd/systemd/pull/16901
+ > and is not an issue for the target variant as libblkid is select by
+ > BR2_PACKAGE_UTIL_LINUX_MOUNT
 
- > We keep @ for the calls to MESSAGE, though.
+ > As cryptsetup does not seem needed for host-systemd, just disable it
 
- > The commadns that are not currently silenced are left as-is, and they
- > can be converted to being silent in a followup patch, if need be,
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/67782c225c08387c1bbcbea9eee3ca12bc6577cd
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
