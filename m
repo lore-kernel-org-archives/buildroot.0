@@ -1,98 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 20:32:34 +0200
-Subject: [Buildroot] Buildroot 2020.05.2 released
-Message-ID: <87r1rpe20t.fsf@dell.be.48ers.dk>
+Date: Sat, 29 Aug 2020 20:34:43 +0200
+Subject: [Buildroot] [git commit] Update for 2020.05.2
+Message-ID: <20200829183018.4FED387168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=e11f38130b617267101ab74dae5354557c09a4e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1549e0b60751eab41e2d51899981d43d602275af)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-Buildroot 2020.05.2 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2020.05.2.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2020.05.2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.05.2 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2020.05.1 release.
-
-- Infrastructure: Ensure RPATH entries that may be needed for dlopen()
-  are not dropped by patchelf.
-
-  BR_VERSION_FULL/setlocalversion (used by make print-version
-  and /etc/os-release): Properly handle local git tags
-
-- Security fixes for apache, bind, chrony, dovecot, dropbear, gd,
-  gdk-pixbuf, ghostscript, glibc, grub2, hostapd, jasper, json-c,
-  libcurl, mongodb, mosquitto, openjpeg, perl, postgresql,
-  python-django, ruby, shadowsocks-libev, squid, systemd, trousers,
-  webkitgtk, wireshark, wolfssl, wpewebkit, xen, xlib_libX11,
-  xserver_xorg-server
-
-- Fixes for download/compilation/runtime/license issues in assimp,
-  at91bootstrap3, boost, busybox, capnproto, cegui, collectd, cpio,
-  cryptsetup, cups, cvs, dbus, docker-engine, domoticz,
-  dovecot-pigeonhole, efl, elixir, f2fs-tools, ffmpeg, gnuradio,
-  gst1-plugins-bad, gstreamer1-editing-services, ibm-sw-tpm2, iputils,
-  libcurl, libressl, libwebsockets, linux, live555, mesa3d, mosquitto,
-  mpv, nodejs, opencv, opencv3, openfpgaloader, patchelf, php,
-  postgresql, prosody, python-gunicorn, python-matplotlib, ripgrep,
-  rtl8188eu, rtl8821au, systemd, tpm2-abrmd, tpm2-tools, wpa_supplicant
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.2
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.05.1..
-
-    30  Fabrice Fontaine
-    21  Peter Korsgaard
-    19  Thomas Petazzoni
-    12  Bernd Kuhls
-     4  Angelo Compagnucci
-     4  Francois Perrad
-     4  Titouan Christophe
-     3  Adam Duskett
-     3  James Hilliard
-     3  Yann E. MORIN
-     2  Adrian Perez de Castro
-     2  Brandon Maier
-     2  Michael Nosthoff
-     2  Norbert Lange
-     2  Peter Seiderer
-     2  Vincent Fazio
-     1  Bartosz Bilas
-     1  Baruch Siach
-     1  Christian Stewart
-     1  Christopher Pelloux
-     1  Eugen Hristev
-     1  Frank Vanbever
-     1  Gwenhael Goavec-Merou
-     1  John Keeping
-     1  Michael Vetter
-     1  Paul Cercueil
-     1  Romain Naour
-     1  Sam Voss
-     1  Sergey Matyukevich
-     1  Stefan S?rensen
-     1  Thomas De Schampheleire
-     1  Yann Sionneau
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index c9457f469d..251d664d69 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -116,6 +116,40 @@
+ 	#13081: host-e2fsprogs attempts to create udev  rules.d on build host if not exists
+ 	#13101: BR audit2allow support
+ 
++2020.05.2, released August 29th, 2020
++
++	Important / security related fixes.
++
++	Infrastructure: Ensure RPATH entries that may be needed for
++	dlopen() are not dropped by patchelf.
++
++	BR_VERSION_FULL/setlocalversion (used by make print-version
++	and /etc/os-release): Properly handle local git tags
++
++	Updated/fixed packages: apache, assimp, at91bootstrap3, bind,
++	boost, busybox, capnproto, cegui, chrony, collectd, cpio,
++	cryptsetup, cups, cvs, dbus, docker-engine, domoticz, dovecot,
++	dovecot-pigeonhole, dropbear, efl, elixir, f2fs-tools, ffmpeg,
++	gd, gdk-pixbuf, ghostscript, glibc, gnuradio, grub2,
++	gst1-plugins-bad, gstreamer1-editing-services, hostapd,
++	ibm-sw-tpm2, iputils, jasper, json-c, libcurl, libressl,
++	libwebsockets, linux, live555, mesa3d, mongodb, mosquitto,
++	mpv, nodejs, opencv, opencv3, openfpgaloader, openjpeg,
++	patchelf, perl, php, postgresql, prosody, python-django,
++	python-gunicorn, python-matplotlib, ripgrep, rtl8188eu,
++	rtl8821au, ruby, shadowsocks-libev, squid, systemd,
++	tpm2-abrmd, tpm2-tools, trousers, uboot, webkitgtk, wireshark,
++	wolfssl, wpa_supplicant, wpewebkit, xen, xlib_libX11,
++	xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12876: nodejs fails to build when host-icu has been built before
++	#13111: python-gunicorn: missing dependency on python-setuptools
++	#13121: wpa_supplicant fails to build without libopenssl enabled
++	#13141: Target-finalize fail with "depmod: ERROR: Bad version passed"
++	#13156: package live555 new license
++
+ 2020.05.1, released July 25th, 2020
+ 
+ 	Important / security related fixes.
