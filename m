@@ -1,207 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 08:24:00 +0200
-Subject: [Buildroot] [PATCH-2020.02.x] package/cryptsetup: add upstream
- patch to fix build against json-c >= 0.14.0
-Message-ID: <20200829062400.31589-1-peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 08:41:01 +0200
+Subject: [Buildroot] [PATCH 1/1]
+ package/gstreamer1/gstreamer1-editing-services: disable introspection
+In-Reply-To: <20200820183210.775080-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 20 Aug 2020 20:32:10 +0200")
+References: <20200820183210.775080-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2lyj6o2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/2ae/2aec06342f325c6d1f26376ef258f441b15098d5/
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...d-support-for-upcoming-json-c-0.14.0.patch | 179 ++++++++++++++++++
- 1 file changed, 179 insertions(+)
- create mode 100644 package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch
+ > Disable introspection as it raises a build failure with autotools.
+ > It could be enabled after bumping to upcoming 1.18.x and switching to
+ > messon. We can't switch now as version 1.16.2 don't allow to disable
+ > examples/tools through meson
 
-diff --git a/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch b/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch
-new file mode 100644
-index 0000000000..6a73139038
---- /dev/null
-+++ b/package/cryptsetup/0002-Add-support-for-upcoming-json-c-0.14.0.patch
-@@ -0,0 +1,179 @@
-+From 604abec333a0efb44fd8bc610aa0b1151dd0f612 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
-+Date: Mon, 13 Apr 2020 11:48:17 +0200
-+Subject: [PATCH] Add support for upcoming json-c 0.14.0.
-+
-+  * TRUE/FALSE are not defined anymore.  1 and 0 are used instead.
-+  * json_object_get_uint64() and json_object_new_uint64() are part
-+    of the upstream API now.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/luks2/luks2_internal.h      |  4 +++-
-+ lib/luks2/luks2_json_metadata.c | 38 +++++++++++++++++----------------
-+ 2 files changed, 23 insertions(+), 19 deletions(-)
-+
-+diff --git a/lib/luks2/luks2_internal.h b/lib/luks2/luks2_internal.h
-+index b9fec6b5..939101d6 100644
-+--- a/lib/luks2/luks2_internal.h
-++++ b/lib/luks2/luks2_internal.h
-+@@ -58,9 +58,11 @@ json_object *LUKS2_get_segments_jobj(struct luks2_hdr *hdr);
-+ void hexprint_base64(struct crypt_device *cd, json_object *jobj,
-+ 		     const char *sep, const char *line_sep);
-+ 
-++#if !(defined JSON_C_VERSION_NUM && JSON_C_VERSION_NUM >= ((13 << 8) | 99))
-+ uint64_t json_object_get_uint64(json_object *jobj);
-+-uint32_t json_object_get_uint32(json_object *jobj);
-+ json_object *json_object_new_uint64(uint64_t value);
-++#endif
-++uint32_t json_object_get_uint32(json_object *jobj);
-+ 
-+ int json_object_object_add_by_uint(json_object *jobj, unsigned key, json_object *jobj_val);
-+ void json_object_object_del_by_uint(json_object *jobj, unsigned key);
-+diff --git a/lib/luks2/luks2_json_metadata.c b/lib/luks2/luks2_json_metadata.c
-+index 781280c2..712c2bbd 100644
-+--- a/lib/luks2/luks2_json_metadata.c
-++++ b/lib/luks2/luks2_json_metadata.c
-+@@ -234,13 +234,14 @@ static json_bool json_str_to_uint64(json_object *jobj, uint64_t *value)
-+ 	tmp = strtoull(json_object_get_string(jobj), &endptr, 10);
-+ 	if (*endptr || errno) {
-+ 		*value = 0;
-+-		return FALSE;
-++		return 0;
-+ 	}
-+ 
-+ 	*value = tmp;
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-++#if !(defined JSON_C_VERSION_NUM && JSON_C_VERSION_NUM >= ((13 << 8) | 99))
-+ uint64_t json_object_get_uint64(json_object *jobj)
-+ {
-+ 	uint64_t r;
-+@@ -262,6 +263,7 @@ json_object *json_object_new_uint64(uint64_t value)
-+ 	jobj = json_object_new_string(num);
-+ 	return jobj;
-+ }
-++#endif
-+ 
-+ /*
-+  * Validate helpers
-+@@ -273,9 +275,9 @@ static json_bool numbered(struct crypt_device *cd, const char *name, const char
-+ 	for (i = 0; key[i]; i++)
-+ 		if (!isdigit(key[i])) {
-+ 			log_dbg(cd, "%s \"%s\" is not in numbered form.", name, key);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ json_object *json_contains(struct crypt_device *cd, json_object *jobj, const char *name,
-+@@ -300,7 +302,7 @@ json_bool validate_json_uint32(json_object *jobj)
-+ 	errno = 0;
-+ 	tmp = json_object_get_int64(jobj);
-+ 
-+-	return (errno || tmp < 0 || tmp > UINT32_MAX) ? FALSE : TRUE;
-++	return (errno || tmp < 0 || tmp > UINT32_MAX) ? 0 : 1;
-+ }
-+ 
-+ static json_bool validate_keyslots_array(struct crypt_device *cd,
-+@@ -313,17 +315,17 @@ static json_bool validate_keyslots_array(struct crypt_device *cd,
-+ 		jobj = json_object_array_get_idx(jarr, i);
-+ 		if (!json_object_is_type(jobj, json_type_string)) {
-+ 			log_dbg(cd, "Illegal value type in keyslots array at index %d.", i);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!json_contains(cd, jobj_keys, "", "Keyslots section",
-+ 				   json_object_get_string(jobj), json_type_object))
-+-			return FALSE;
-++			return 0;
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static json_bool validate_segments_array(struct crypt_device *cd,
-+@@ -336,17 +338,17 @@ static json_bool validate_segments_array(struct crypt_device *cd,
-+ 		jobj = json_object_array_get_idx(jarr, i);
-+ 		if (!json_object_is_type(jobj, json_type_string)) {
-+ 			log_dbg(cd, "Illegal value type in segments array at index %d.", i);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!json_contains(cd, jobj_segments, "", "Segments section",
-+ 				   json_object_get_string(jobj), json_type_object))
-+-			return FALSE;
-++			return 0;
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static json_bool segment_has_digest(const char *segment_name, json_object *jobj_digests)
-+@@ -357,10 +359,10 @@ static json_bool segment_has_digest(const char *segment_name, json_object *jobj_
-+ 		UNUSED(key);
-+ 		json_object_object_get_ex(val, "segments", &jobj_segments);
-+ 		if (LUKS2_array_jobj(jobj_segments, segment_name))
-+-			return TRUE;
-++			return 1;
-+ 	}
-+ 
-+-	return FALSE;
-++	return 0;
-+ }
-+ 
-+ static json_bool validate_intervals(struct crypt_device *cd,
-+@@ -372,18 +374,18 @@ static json_bool validate_intervals(struct crypt_device *cd,
-+ 	while (i < length) {
-+ 		if (ix[i].offset < 2 * metadata_size) {
-+ 			log_dbg(cd, "Illegal area offset: %" PRIu64 ".", ix[i].offset);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if (!ix[i].length) {
-+ 			log_dbg(cd, "Area length must be greater than zero.");
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		if ((ix[i].offset + ix[i].length) > keyslots_area_end) {
-+ 			log_dbg(cd, "Area [%" PRIu64 ", %" PRIu64 "] overflows binary keyslots area (ends at offset: %" PRIu64 ").",
-+ 				ix[i].offset, ix[i].offset + ix[i].length, keyslots_area_end);
-+-			return FALSE;
-++			return 0;
-+ 		}
-+ 
-+ 		for (j = 0; j < length; j++) {
-+@@ -393,14 +395,14 @@ static json_bool validate_intervals(struct crypt_device *cd,
-+ 				log_dbg(cd, "Overlapping areas [%" PRIu64 ",%" PRIu64 "] and [%" PRIu64 ",%" PRIu64 "].",
-+ 					ix[i].offset, ix[i].offset + ix[i].length,
-+ 					ix[j].offset, ix[j].offset + ix[j].length);
-+-				return FALSE;
-++				return 0;
-+ 			}
-+ 		}
-+ 
-+ 		i++;
-+ 	}
-+ 
-+-	return TRUE;
-++	return 1;
-+ }
-+ 
-+ static int LUKS2_keyslot_validate(struct crypt_device *cd, json_object *hdr_jobj, json_object *hdr_keyslot, const char *key)
-+-- 
-+2.20.1
-+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/36eb875fba2847b32df05f31d8f8ca9f0ecde36f
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.05.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
