@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 18:35:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/systemd: disable cryptsetup for
- host package
-In-Reply-To: <20200829135941.1862456-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 29 Aug 2020 15:59:40 +0200")
+Date: Sat, 29 Aug 2020 18:35:56 +0200
+Subject: [Buildroot] [PATCH 2/2] package/systemd: disable audit for host
+ package
+In-Reply-To: <20200829135941.1862456-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Aug 2020 15:59:41 +0200")
 References: <20200829135941.1862456-1-fontaine.fabrice@gmail.com>
-Message-ID: <871rjpif4v.fsf@dell.be.48ers.dk>
+ <20200829135941.1862456-2-fontaine.fabrice@gmail.com>
+Message-ID: <87wo1hh0k3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Build with cryptsetup and without libblkid will fail on:
- > ../src/shared/dissect-image.c:1336:34: error: 'N_DEVICE_NODE_LIST_ATTEMPTS' undeclared (first use in this function)
- >  1336 |         for (unsigned i = 0; i < N_DEVICE_NODE_LIST_ATTEMPTS; i++) {
- >       |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+ > Disable audit for host package to avoid getting the following error if
+ > it is found on host:
 
- > This bug has been reported upstream:
- > https://github.com/systemd/systemd/pull/16901
- > and is not an issue for the target variant as libblkid is select by
- > BR2_PACKAGE_UTIL_LINUX_MOUNT
-
- > As cryptsetup does not seem needed for host-systemd, just disable it
+ > [84/662] Generating audit_type-list.txt with a meson_exe.py custom command
+ > In file included from <command-line>:32:
+ > ./../src/basic/missing_audit.h:7:10: fatal error: libaudit.h: No such file or directory
+ >     7 | #include <libaudit.h>
+ >       |          ^~~~~~~~~~~~
 
  > Fixes:
  >  - http://autobuild.buildroot.org/results/67782c225c08387c1bbcbea9eee3ca12bc6577cd
