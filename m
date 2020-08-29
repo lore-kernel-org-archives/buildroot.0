@@ -1,82 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:40:45 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] fs/cpio/init: unbreak
- ttyname_r() on glibc after dropping /dev/console exec
-Message-ID: <20200829173331.861C686F1F@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:39:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/postgresql: bump
+ version to 12.3
+Message-ID: <20200829173331.688B986F1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=797f9e40224c96327fe080a2597623ac2ceb7353
+commit: https://git.buildroot.net/buildroot/commit/?id=2e48ccc2b22cb201ab6af934284682e46f83925f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Commit 98a6f1fc02e41 (fs/cpio: make initramfs init script survive 'console='
-kernel argument) dropped the explicit /dev/console execs for fd 0,1,2, as
-they fail when booted with console= and aren't really needed as the kernel
-will setup fd 0,1,2 from /dev/console before executing the initramfs anyway.
+Changelog: https://www.postgresql.org/about/news/2038/
 
-Not doing this unfortunately confuses glibc's ttyname_r(3) implementation
-(used by E.G.  busybox/coreutils 'tty'), causing it to fail with ENOENT as
-it does a fstat on fd 0 and tries to match up st_ino / st_dev against the
-entries in /dev (since glibc 2.26):
+Fixes CVE-2020-10733 which is only relevant for Windows.
 
- commit 15e9a4f378c8607c2ae1aa465436af4321db0e23
- Author: Christian Brauner <christian.brauner@canonical.com>
- Date:   Fri Jan 27 15:59:59 2017 +0100
+Reformatted hashes.
 
-    linux ttyname and ttyname_r: do not return wrong results
-
-    If a link (say /proc/self/fd/0) pointing to a device, say /dev/pts/2, in a
-    parent mount namespace is passed to ttyname, and a /dev/pts/2 exists (in a
-    different devpts) in the current namespace, then it returns /dev/pts/2.
-    But /dev/pts/2 is NOT the current tty, it is a different file and device.
-
-    Detect this case and return ENODEV.  Userspace can choose to take this as a hint
-    that the fd points to a tty device but to act on the fd rather than the link.
-
-    Signed-off-by: Serge Hallyn <serge@hallyn.com>
-    Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-
-The reason it fails is that we manually mount devtmpfs on /dev in /init, so
-the /dev/console used by the kernel (in rootfs) is not the same file as
-/dev/console at runtime (in devtmpfs).
-
-Notice: Once logged in, tty does work correctly.  Presumably login reopens
-stdin/stdout/stderr.
-
-To fix this, re-add the exec of /dev/console for fd 0,1,2, but only do so if
-possible.  Because of the above mentioned shell behaviour (specified by
-POSIX [0]), perform this check in a subshell.
-
-[0] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_20_01
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b9026e83f9c7610526f045f2fc1135b45a26305f)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1fcf0e27b30ce34e2d3993302e2c6e44a5da08c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/cpio/init | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/postgresql/postgresql.hash | 10 +++++-----
+ package/postgresql/postgresql.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/cpio/init b/fs/cpio/init
-index b0af18b67a..f74ef7e15f 100755
---- a/fs/cpio/init
-+++ b/fs/cpio/init
-@@ -1,4 +1,15 @@
- #!/bin/sh
- # devtmpfs does not get automounted for initramfs
- /bin/mount -t devtmpfs devtmpfs /dev
-+
-+# use the /dev/console device node from devtmpfs if possible to not
-+# confuse glibc's ttyname_r().
-+# This may fail (E.G. booted with console=), and errors from exec will
-+# terminate the shell, so use a subshell for the test
-+if (exec 0</dev/console) 2>/dev/null; then
-+    exec 0</dev/console
-+    exec 1>/dev/console
-+    exec 2>/dev/console
-+fi
-+
- exec /sbin/init "$@"
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 7cb0c67d63..ff3a76258e 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2.md5
+-md5  a88ceea8ecf2741307f663e4539b58b7  postgresql-12.2.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2.sha256
+-sha256  ad1dcc4c4fc500786b745635a9e1eba950195ce20b8913f50345bb7d5369b5de  postgresql-12.2.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.md5
++md5  a30c023dd7088e44d73be71af2ef404a  postgresql-12.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.sha256
++sha256  94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41  postgresql-12.3.tar.bz2
+ 
+ # License file, Locally calculated
+-sha256	739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
++sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 378197d33b..c0bf199eb4 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 12.2
++POSTGRESQL_VERSION = 12.3
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
