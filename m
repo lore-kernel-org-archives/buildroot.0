@@ -1,50 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 13:52:02 +0200
-Subject: [Buildroot] [git commit] package/mender-artifact: do not download
- modules during the build process
-Message-ID: <20200902161637.7289685EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 14:34:15 +0200
+Subject: [Buildroot] [git commit] package/watchdog: drop AUTORECONF
+Message-ID: <20200902161637.9E6E585EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfe47f4f79f016370bd7ab30e0b049f4e8a37e5e
+commit: https://git.buildroot.net/buildroot/commit/?id=46080111af0fd3730048a15fc0b7f739ad39dd44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default, go will attempt to download needed modules before building, which
-is not desirable. This behavior also causes permission issues when cleaning,
-as go downloads modules as read-only by default. Because mender-artifact
-includes the modules in the vendor directory, mod=vendor prevents the package
-from downloading the go modules during the build process and prevents
-permission issues when cleaning.
+The upstream tarball provides an already generated configure script,
+which works fine, so there's no need to AUTORECONF.
 
-Fixes:
-http://autobuild.buildroot.net/results/d5bcaca73ae74fe8b0ebd39b6331564cd639fb66
-
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/watchdog/watchdog.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index c81ec9ba53..67fdc44b9d 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -31,6 +31,14 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+diff --git a/package/watchdog/watchdog.mk b/package/watchdog/watchdog.mk
+index b814fdc672..2699fb474f 100644
+--- a/package/watchdog/watchdog.mk
++++ b/package/watchdog/watchdog.mk
+@@ -6,7 +6,6 @@
  
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
- 
-+# By default, go will attempt to download needed modules before building, which
-+# is not desirable. This behavior also causes permission issues when cleaning,
-+# as go downloads modules as read-only by default. Because mender-artifact
-+# includes the modules in the vendor directory, mod=vendor prevents the package
-+# from downloading the go modules during the build process and prevents
-+# permission issues when cleaning.
-+HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
-+
- HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
- 
- HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
+ WATCHDOG_VERSION = 5.16
+ WATCHDOG_SITE = http://downloads.sourceforge.net/sourceforge/watchdog
+-WATCHDOG_AUTORECONF = YES
+ WATCHDOG_LICENSE = GPL-2.0+
+ WATCHDOG_LICENSE_FILES = COPYING
+ # By default installs binaries in /usr/sbin/, but we want them in
