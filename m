@@ -1,115 +1,146 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 22:37:20 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: use HOSTCC_NOCCACHE as kconfig
- HOSTCC
-Message-ID: <20200829203720.28230-1-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 29 Aug 2020 22:40:04 +0200
+Subject: [Buildroot] [PATCH/next 2/3] package/sofia-sip: bump version to
+ 1.13.1
+In-Reply-To: <20200829204005.2815997-1-bernd.kuhls@t-online.de>
+References: <20200829204005.2815997-1-bernd.kuhls@t-online.de>
+Message-ID: <20200829204005.2815997-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uclibc is part of the toolchain, and as such does not have a dependency
-on it. As a consequence, it does not have a dependency on host-ccache,
-when this is needed.
+Rebased patch 0001.
 
-Usually, host-ccache is built before uclibc, as part of the dependency
-of gcc-initial, hiot-binutils, and a few other host packages that are
-built before uclibc.
+Added patch 0002 previously used for the sofia-sip library which was
+bundled with the freeswitch source:
+https://git.buildroot.net/buildroot/commit/package/freeswitch?id=3c2e8b2b29a88c35c8a9867537d3ce3d0af85bc2
+The bundled library was removed in freeswitch-1.10.4.
 
-However, during top-level parallel builds, this ordering is only ever
-guaranteed at the beginning of the configure step, and not before.
+Switched upstream to freeswitch repo according to
+http://sofia-sip.sourceforge.net/
 
-But for kconfig-packages, the moment we apply the configuration to
-prepare the .config file is a pseudo step that happens somewhere in
-limbo between the patch step and the configure step. As such, the
-build ordering that is otherwise guaranteed by the _DEPENDENCIES is not
-applicable yet.
+"This repository is not currently maintained.
 
-And so, with top-level parallel builds with ccache enabled, there is
-nothing that guarantees host-ccache to be built and installed by the
-time we are trying to generate uclibc's .config file, which can be quite
-early in the build process, and thus the build fails:
+ The FreeSWITCH project hosts a currently maintained version of this
+ library at https://github.com/freeswitch/sofia-sip"
 
-    /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache /usr/bin/gcc /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/extra/config/conf.c  -c -o ../../extra/config/conf.o -Os -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'   -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'
-    /bin/sh: 1: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache: not found
-    make[2]: *** [Makefile:64: ../../extra/config/conf.o] Error 127
-    make[1]: *** [Makefile.in:475: extra/config/conf] Error 2
-    make[1]: Leaving directory '/home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34'
-    make: *** [package/uclibc/uclibc.mk:458: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/.stamp_dotconfig] Error 2
-    make: *** Waiting for unfinished jobs....
-
-The root cause is that uclibc sets;
-
-    UCLIBC_KCONFIG_OPTS = $(UCLIBC_MAKE_FLAGS) [...]
-
-with:
-
-    UCLIBC_MAKE_FLAGS = [...] HOSTCC="$(HOSTCC)"
-
-And then the kconfig-package infra calls to the configurators,
-menuconfig, xconfig et al, but also olddefconfig et al.. with:
-
-    [...] $($(1)_MAKE) [...] $(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) [...]
-
-with (note a latent bug in there, will be fixed in another patch):
-
-    PKG_KCONFIG_COMMON_OPTS = HOSTCC=$(HOSTCC_NOCCACHE)
-
-So, a HOSTCC as set by a package will always win onver the one set by
-the infra, which is exactly what we want.
-
-But in this case, uclibc sets HOSTCC so that it can build its host tools
-needed during the build, and in doing so uses the ccache-enabled host c
-compiler. Which might not yet be available for the kconfig-package infra
-to generate the .config file.
-
-We had a similar (non-)issue for the linux package, which was fixed in
-commit 71a31b2357 (linux: use HOSTCC_NOCCACHE as kconfig HOSTCC).
-
-But here, uclibc does not have the toolchain in its dependencies (as said
-earlier, uclibc *is* part of the toolchain).
-
-Since the host compiler is only used to build very few files to generate
-the simple executable needed to generate the .config file, doing without
-the ccache-enabled host compiler will be amply enough.
-
-So, we override HOSTCC in UCLIBC_KCONFIG_OPTS, to use the non-cached
-host compiler.
-
-Note that, in a first approximation, one would be tempted to change the
-ordering in the kconfig-package infra:
-
-        $($(1)_KCONFIG_OPTS) $(PKG_KCONFIG_COMMON_OPTS)
-
-so that the non-cached HOSTCC always wins over the cached one. But this
-would be incorrect, in cases where the package really needs to override
-HOSTCC; indeed we want the package-provided values to always win over
-the default ones providing by the infra.
-
-Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/uclibc/uclibc.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ ...reintroduce-soatag_local_sdp_str_ref.patch |  6 ++-
+ .../0002-sofia-sip-fix-s2tcase.c.patch        | 38 +++++++++++++++++++
+ package/sofia-sip/Config.in                   |  2 +-
+ package/sofia-sip/sofia-sip.hash              |  2 +-
+ package/sofia-sip/sofia-sip.mk                |  4 +-
+ 5 files changed, 47 insertions(+), 5 deletions(-)
+ create mode 100644 package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 3ba4589672..daf81d29b2 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -31,8 +31,13 @@ endif
- UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
- UCLIBC_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_UCLIBC_CONFIG_FRAGMENT_FILES))
+diff --git a/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch b/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
+index 2d52348617..57c0bfe250 100644
+--- a/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
++++ b/package/sofia-sip/0001-soa_tag.h-reintroduce-soatag_local_sdp_str_ref.patch
+@@ -4,6 +4,10 @@ Date: Thu, 24 Mar 2011 14:45:21 +0200
+ Subject: [PATCH] soa_tag.h: reintroduce soatag_local_sdp_str_ref
  
-+# UCLIBC_MAKE_FLAGS set HOSTCC to the default HOSTCC, which may be
-+# wrapped with ccache. However, host-ccache may not already be built
-+# and installed when we apply the configuration, so we override that
-+# to use the non-ccached host compiler.
- UCLIBC_KCONFIG_OPTS = \
- 	$(UCLIBC_MAKE_FLAGS) \
-+	HOSTCC="$(HOSTCC_NOCCACHE)" \
- 	PREFIX=$(STAGING_DIR) \
- 	DEVEL_PREFIX=/usr/ \
- 	RUNTIME_PREFIX=$(STAGING_DIR)/
+ Thanks to Erik Habicht <e.habicht@thiesen.com> for spotting it
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[rebased for sofia-sip 1.13.1-d10a3d268c, patch sent upstream
++ https://github.com/freeswitch/sofia-sip/pull/23]
+ ---
+  libsofia-sip-ua/soa/sofia-sip/soa_tag.h |    2 +-
+  1 files changed, 1 insertions(+), 1 deletions(-)
+@@ -12,7 +16,7 @@ diff --git a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h b/libsofia-sip-ua/soa/sofia
+ index 723ca02..d9448d6 100644
+ --- a/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
+ +++ b/libsofia-sip-ua/soa/sofia-sip/soa_tag.h
+-@@ -118,7 +118,7 @@ SOFIAPUBVAR tag_typedef_t soatag_local_sdp_ref;
++@@ -130,7 +130,7 @@ SOFIAPUBVAR tag_typedef_t soatag_local_sdp_ref;
+  SOFIAPUBVAR tag_typedef_t soatag_local_sdp_str;
+  #define SOATAG_LOCAL_SDP_STR_REF(x) \
+    soatag_local_sdp_str_ref, tag_str_vr(&(x))
+diff --git a/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch b/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch
+new file mode 100644
+index 0000000000..a2cc412843
+--- /dev/null
++++ b/package/sofia-sip/0002-sofia-sip-fix-s2tcase.c.patch
+@@ -0,0 +1,38 @@
++From d66a2e55daf223737c07c59b1be45a2d91212ef6 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 26 Jul 2020 13:47:16 +0200
++Subject: [PATCH] [sofia-sip] fix s2tcase.c
++
++Fixes build error with recent libcheck:
++https://github.com/freeswitch/sofia-sip/issues/22
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ s2check/s2tcase.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libs/sofia-sip/s2check/s2tcase.c b/libs/sofia-sip/s2check/s2tcase.c
++index 382aaa3ad7..d67694c2ce 100644
++--- a/s2check/s2tcase.c
+++++ b/s2check/s2tcase.c
++@@ -57,7 +57,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
++       if (strcmp(*patterns, "*")) {
++ 	printf("%s: selected\n", name);
++       }
++-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
+++      _tcase_add_test(tc, tf, name, signo, start, end);
++       return;
++     }
++   }
++@@ -67,7 +67,7 @@ void s2_tcase_add_test(TCase *tc, TFun tf, char const *name,
++       if (strcmp(*patterns, "*")) {
++ 	printf("%s: selected\n", name);
++       }
++-      _tcase_add_test(tc, tf, name, signo, 0, start, end);
+++      _tcase_add_test(tc, tf, name, signo, start, end);
++       return;
++     }
++   }
++-- 
++2.27.0
++
+diff --git a/package/sofia-sip/Config.in b/package/sofia-sip/Config.in
+index 24e2148ab9..2ad1940833 100644
+--- a/package/sofia-sip/Config.in
++++ b/package/sofia-sip/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_SOFIA_SIP
+ 	  client software for uses such as VoIP, IM, and many other
+ 	  real-time and person-to-person communication services.
+ 
+-	  http://sofia-sip.sourceforge.net/
++	  https://github.com/freeswitch/sofia-sip
+ 
+ comment "sofia-sip needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sofia-sip/sofia-sip.hash b/package/sofia-sip/sofia-sip.hash
+index 6e81ec878f..99b315e276 100644
+--- a/package/sofia-sip/sofia-sip.hash
++++ b/package/sofia-sip/sofia-sip.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  2b01bc2e1826e00d1f7f57d29a2854b15fd5fe24695e47a14a735d195dd37c81  sofia-sip-1.12.11.tar.gz
++sha256  4cf0de1aaa1e1737db5a8fe4104021a8e60a148a4534f92b5affdd9782e404aa  sofia-sip-1.13.1-d10a3d268c.tar.gz
+ sha256  e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  COPYING
+ sha256  b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  COPYRIGHTS
+diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
+index 831b9ea54d..54b48a7048 100644
+--- a/package/sofia-sip/sofia-sip.mk
++++ b/package/sofia-sip/sofia-sip.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SOFIA_SIP_VERSION = 1.12.11
+-SOFIA_SIP_SITE = http://downloads.sourceforge.net/project/sofia-sip/sofia-sip/$(SOFIA_SIP_VERSION)
++SOFIA_SIP_VERSION = 1.13.1-d10a3d268c
++SOFIA_SIP_SITE = https://files.freeswitch.org/downloads/libs
+ SOFIA_SIP_INSTALL_STAGING = YES
+ SOFIA_SIP_DEPENDENCIES = host-pkgconf
+ SOFIA_SIP_LICENSE = LGPL-2.1+
 -- 
-2.20.1
+2.27.0
