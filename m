@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:49:12 +0200
-Subject: [Buildroot] [git commit] docs/manual/adding-packages-golang.txt:
- update following go.mod integration
-Message-ID: <20200902161638.3EBD585EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 23:06:09 +0200
+Subject: [Buildroot] [git commit] package/libnpupnp: bump to version 4.0.10
+Message-ID: <20200902161639.5E5F685EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a289fc8b69b71a4ab0585e23e2004c01db821e2e
+commit: https://git.buildroot.net/buildroot/commit/?id=b23ef48790a2a54650b4cd66b3c06d23a813225a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+https://www.lesbonscomptes.com/upmpdcli/releases.html#_2020_07_20_libnpupnp_4_0_10
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-golang.txt | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index 8c467689be..3b34579200 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -76,15 +76,13 @@ optionally be defined, depending on the package's needs. Many of them
- are only useful in very specific cases, typical packages will
- therefore only use a few of them, or none.
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 41cc41955b..3bad603269 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.7.tar.gz.sha256
+-sha256  30f15caa67dc83f76b0976438165aa4704a50c7e3e5444c50bb8cbad874877ca  libnpupnp-4.0.7.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.10.tar.gz.sha256
++sha256  a682d0584d79acd5a4d551ae18efc83cb0765624da27fb0edcd47e3fb94418f9  libnpupnp-4.0.10.tar.gz
  
--* If your package need a custom +GOPATH+ to be compiled in, you can
--  use the +FOO_WORKSPACE+ variable. The +GOPATH+ being used will be
--  +<package-srcdir>/<FOO_WORKSPACE>+. If +FOO_WORKSPACE+ is not
--  specified, it defaults to +_gopath+.
--
--* +FOO_SRC_SUBDIR+ is the sub-directory where your source will be
--  compiled relatively to the +GOPATH+. An example value is
--  +github.com/bar/foo+. If +FOO_SRC_SUBDIR+ is not specified, it
--  defaults to a value infered from the +FOO_SITE+ variable.
-+* The package must specify its Go module name in the +FOO_GOMOD+
-+  variable. If not specified, it defaults to
-+  +URL-domain/1st-part-of-URL/2nd-part-of-URL+, e.g +FOO_GOMOD+ will
-+  take the value +github.com/bar/foo+ for a package that specifies
-+  +FOO_SITE = $(call github,bar,foo,$(FOO_VERSION))+. The Go package
-+  infrastructure will automatically generate a minimal +go.mod+ file
-+  in the package source tree if it doesn't exist.
+ # Hash for license file:
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index abd80ab63b..4575ad40f2 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- * +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
-   +LDFLAGS+ or the +TAGS+ to the +go+ build command.
+-LIBNPUPNP_VERSION = 4.0.7
++LIBNPUPNP_VERSION = 4.0.10
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
