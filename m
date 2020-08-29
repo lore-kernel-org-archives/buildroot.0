@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 15:02:30 +0200
-Subject: [Buildroot] [git commit] package/docker-cli: drop <pkg>_WORKSPACE
+Date: Sat, 29 Aug 2020 14:35:49 +0200
+Subject: [Buildroot] [git commit] package/docker-engine: define <pkg>_GOMOD
  variable
-Message-ID: <20200902161638.478ED85EB9@busybox.osuosl.org>
+Message-ID: <20200902161637.E697F85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6354edea04f4e8621310b66c2c320db72af8cfd7
+commit: https://git.buildroot.net/buildroot/commit/?id=edb06ecf3b378f191d5ba36ba872d8a627b2eb53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the go.mod integration, the <pkg>_WORKSPACE variable is useless,
-so drop it.
+In preparation for the go.mod integration, define the
+DOCKER_ENGINE_GOMOD variable.
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-cli/docker-cli.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/docker-engine/docker-engine.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 9ef1270137..fd96ff9f35 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -6,7 +6,6 @@
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 6bb382f5a7..992a3448a0 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -12,6 +12,7 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
  
- DOCKER_CLI_VERSION = 19.03.11
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
--DOCKER_CLI_WORKSPACE = gopath
+ DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
+ DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
++DOCKER_ENGINE_GOMOD = github.com/docker/docker
  
- DOCKER_CLI_LICENSE = Apache-2.0
- DOCKER_CLI_LICENSE_FILES = LICENSE
+ DOCKER_ENGINE_LDFLAGS = \
+ 	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
