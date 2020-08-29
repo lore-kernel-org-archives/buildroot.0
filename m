@@ -1,80 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 11:57:44 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wolfssl: security
- bump to version 4.5.0
-Message-ID: <20200829095055.8BE0F847AF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Aug 2020 12:03:45 +0200
+Subject: [Buildroot] [git commit] package/squid: security bump to version
+ 4.13
+Message-ID: <20200829095622.DA34281983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd67d6c08bf5fdf635fb6d9ad2a929b6ddda8ebd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=71ac106bb3b4759d5a050ecade9ba687a27801ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wolfSSL version 4.5.0 contains 6 vulnerability fixes: 2 fixes for TLS 1.3,
-2 side channel attack mitigations, 1 fix for a potential private key leak
-in a specific use case, 1 fix for DTLS including those 3 CVEs:
+Fixes the following security issues:
 
-- Fix CVE-2020-12457: An issue was discovered in wolfSSL before 4.5.0.
-  It mishandles the change_cipher_spec (CCS) message processing logic
-  for TLS 1.3. If an attacker sends ChangeCipherSpec messages in a
-  crafted way involving more than one in a row, the server becomes stuck
-  in the ProcessReply() loop, i.e., a denial of service.
-- Fix CVE-2020-15309: An issue was discovered in wolfSSL before 4.5.0,
-  when single precision is not employed. Local attackers can conduct a
-  cache-timing attack against public key operations. These attackers may
-  already have obtained sensitive information if the affected system has
-  been used for private key operations (e.g., signing with a private
-  key).
-- Fix CVE-2020-24585: An issue was discovered in the DTLS handshake
-  implementation in wolfSSL before 4.5.0. Clear DTLS application_data
-  messages in epoch 0 do not produce an out-of-order error. Instead,
-  these messages are returned to the application.
+CVE-2020-15810: HTTP(S) Request Smuggling
+Due to incorrect data validation Squid is vulnerable to HTTP Request
+Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
+poisoning.
+https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
 
-Also update hash of LICENSING as well as WOLF_LICENSE due to later
-verbage update with
-https://github.com/wolfSSL/wolfssl/commit/970391319beb023680eccd0e447e76834dbb4808
+CVE-2020-15811: HTTP(S) Request Splitting
+Due to incorrect data validation Squid is vulnerable to HTTP Request
+Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
+poisoning.
+https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
 
-https://www.wolfssl.com/docs/security-vulnerabilities/
+CVE-2020-24606: Denial of Service processing Cache Digest Response
+Due to Improper Input Validation Squid is vulnerable to a Denial of Service
+attack against the machine operating Squid.
+https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0ed8bf6d2b3314e5c66d134c2362560e384b25f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wolfssl/wolfssl.hash | 4 ++--
- package/wolfssl/wolfssl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 4a1aeebe7d..0ee55276dc 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a3ef655185..b7e051960e 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
 @@ -1,6 +1,6 @@
- # Locally computed:
--sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
-+sha256  7de62300ce14daa0051bfefc7c4d6302f96cabc768b6ae49eda77523b118250c  wolfssl-4.5.0-stable.tar.gz
- 
- # Hash for license files:
+-# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
+-md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
+-sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
++md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
++sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
+ # Locally calculated
+-sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
++sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-+sha256  b23c1da1f85d699d3288d73c952b4cd02760d23dc1ddc1b221cbb8be82387189  LICENSING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index e3062c39b5..5400b35fa5 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6bce74b7d6..1ba375e547 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WOLFSSL_VERSION = 4.4.0-stable
-+WOLFSSL_VERSION = 4.5.0-stable
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
- WOLFSSL_INSTALL_STAGING = YES
- 
--WOLFSSL_LICENSE = GPL-2.0
-+WOLFSSL_LICENSE = GPL-2.0+
- WOLFSSL_LICENSE_FILES = COPYING LICENSING
- 
- WOLFSSL_DEPENDENCIES = host-pkgconf
+-SQUID_VERSION = 4.12
++SQUID_VERSION = 4.13
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
