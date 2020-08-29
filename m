@@ -1,100 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 10:38:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to
- version 4.5.0
-In-Reply-To: <20200829075621.984037-1-fontaine.fabrice@gmail.com>
-References: <20200829075621.984037-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200829083817.GB14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 10:51:13 +0200
+Subject: [Buildroot] [PATCH v2] package/trousers: add upstream security
+ fix
+In-Reply-To: <20200824102516.29745-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 24 Aug 2020 12:25:16 +0200")
+References: <20200824102516.29745-1-peter@korsgaard.com>
+Message-ID: <87lfhxkf7i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 2020-08-29 09:56 +0200, Fabrice Fontaine spake thusly:
-> wolfSSL version 4.5.0 contains 6 vulnerability fixes: 2 fixes for TLS 1.3,
-> 2 side channel attack mitigations, 1 fix for a potential private key leak
-> in a specific use case, 1 fix for DTLS including those 3 CVEs:
-> 
-> - Fix CVE-2020-12457: An issue was discovered in wolfSSL before 4.5.0.
->   It mishandles the change_cipher_spec (CCS) message processing logic
->   for TLS 1.3. If an attacker sends ChangeCipherSpec messages in a
->   crafted way involving more than one in a row, the server becomes stuck
->   in the ProcessReply() loop, i.e., a denial of service.
-> - Fix CVE-2020-15309: An issue was discovered in wolfSSL before 4.5.0,
->   when single precision is not employed. Local attackers can conduct a
->   cache-timing attack against public key operations. These attackers may
->   already have obtained sensitive information if the affected system has
->   been used for private key operations (e.g., signing with a private
->   key).
-> - Fix CVE-2020-24585: An issue was discovered in the DTLS handshake
->   implementation in wolfSSL before 4.5.0. Clear DTLS application_data
->   messages in epoch 0 do not produce an out-of-order error. Instead,
->   these messages are returned to the application.
-> 
-> Also update hash of LICENSING as well as WOLF_LICENSE due to later
-> verbage update with
-> https://github.com/wolfSSL/wolfssl/commit/970391319beb023680eccd0e447e76834dbb4808
-> 
-> https://www.wolfssl.com/docs/security-vulnerabilities/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes the following security issues:
+ > CVE-2020-24332
+ > If the tcsd daemon is started with root privileges,
+ > the creation of the system.data file is prone to symlink attacks
 
-Applied to master, thanks.
+ > CVE-2020-24330
+ > If the tcsd daemon is started with root privileges,
+ > it fails to drop the root gid after it is no longer needed
 
-Regards,
-Yann E. MORIN.
+ > CVE-2020-24331
+ > If the tcsd daemon is started with root privileges,
+ > the tss user has read and write access to the /etc/tcsd.conf file
 
-> ---
->  package/wolfssl/wolfssl.hash | 4 ++--
->  package/wolfssl/wolfssl.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-> index 4a1aeebe7d..0ee55276dc 100644
-> --- a/package/wolfssl/wolfssl.hash
-> +++ b/package/wolfssl/wolfssl.hash
-> @@ -1,6 +1,6 @@
->  # Locally computed:
-> -sha256  7f854804c8ae0ca49cc77809e38e9a3b5a8c91ba7855ea928e6d6651b0d35f18  wolfssl-4.4.0-stable.tar.gz
-> +sha256  7de62300ce14daa0051bfefc7c4d6302f96cabc768b6ae49eda77523b118250c  wolfssl-4.5.0-stable.tar.gz
->  
->  # Hash for license files:
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> -sha256  74adaaef40b96c71378b6daa3feb8ccd4a1bfd9b76debf3f3f29cf3a0e86c9a0  LICENSING
-> +sha256  b23c1da1f85d699d3288d73c952b4cd02760d23dc1ddc1b221cbb8be82387189  LICENSING
-> diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-> index e3062c39b5..5400b35fa5 100644
-> --- a/package/wolfssl/wolfssl.mk
-> +++ b/package/wolfssl/wolfssl.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -WOLFSSL_VERSION = 4.4.0-stable
-> +WOLFSSL_VERSION = 4.5.0-stable
->  WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
->  WOLFSSL_INSTALL_STAGING = YES
->  
-> -WOLFSSL_LICENSE = GPL-2.0
-> +WOLFSSL_LICENSE = GPL-2.0+
->  WOLFSSL_LICENSE_FILES = COPYING LICENSING
->  
->  WOLFSSL_DEPENDENCIES = host-pkgconf
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > For details, see the advisory:
+ > https://www.openwall.com/lists/oss-security/2020/05/20/3
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ > - Add _IGNORE_CVES entry
+
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
