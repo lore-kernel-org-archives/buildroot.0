@@ -1,42 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 00:57:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hiredis: bump to version 1.0.0
-In-Reply-To: <20200830001347.3c9e2bf3@windsurf.home>
-References: <20200829213916.2909668-1-fontaine.fabrice@gmail.com>
- <20200830001347.3c9e2bf3@windsurf.home>
-Message-ID: <CAPi7W81K8AoaCdXTnhG_aEBSzYvjt2EXwRX_3b1-QnWsLAz3cg@mail.gmail.com>
+Date: Sun, 30 Aug 2020 01:03:26 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/subversion: bump to version
+ 1.14.0
+Message-ID: <20200829230326.3745827-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 30 ao?t 2020 ? 00:13, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sat, 29 Aug 2020 23:39:16 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > - Use cmake which is available since version 1.0.0 and
-> >   https://github.com/redis/hiredis/commit/ead586a2cb7de8a17073a96704a4200d63a380e5
-> > - Disable tests
-> > - Add openssl optional dependency
-> >
-> > https://github.com/redis/hiredis/blob/v1.0.0/CHANGELOG.md
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Thanks Fabrice. Quick question: did you test a bit of the reverse
-> dependencies of hiredis were still building fine after this update ?
-Yes, suricata, collectd and proftpd build fine.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+https://subversion.apache.org/docs/release-notes/1.14.html
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/subversion/subversion.hash | 4 ++--
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index f78990cbb3..da0fe91184 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.13.0.tar.bz2.sha512
+-sha512  36f390b412bf772bf894efc2aadc247f12ca30ac407e04f664c14411c3519e1bb242d1239f2f44cbcb86eafc7c413efc8eadbfe1d1e75118235a7b7adc6c85b2  subversion-1.13.0.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
++sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
+ 
+ # Locally calculated
+ sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 010329357c..83a359b966 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.13.0
++SUBVERSION_VERSION = 1.14.0
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+-- 
+2.28.0
