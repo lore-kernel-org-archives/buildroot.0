@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 14:35:49 +0200
-Subject: [Buildroot] [git commit branch/next] package/docker-cli: define
- <pkg>_GOMOD variable
-Message-ID: <20200829124232.E573C86CC7@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 14:49:12 +0200
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: drop
+ <pkg>_SRC_SUBDIR variable
+Message-ID: <20200829124233.1D27286CCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80bcd7ffa5a815334ead9c99c6b938c4d6b5a7b
+commit: https://git.buildroot.net/buildroot/commit/?id=cfcf745e10f354c419e305f3ac334764becdeff9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In preparation for the go.mod integration, define the DOCKER_CLI_GOMOD
-variable.
-
-We also use it as a handy shortcut when defining DOCKER_CLI_LDFLAGS.
+With the go.mod integration, the DOCKER_ENGINE_SRC_SUBDIR has become
+useless, drop it.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-cli/docker-cli.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/docker-engine/docker-engine.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 1466b0afbd..9ef1270137 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -15,10 +15,11 @@ DOCKER_CLI_DEPENDENCIES = host-pkgconf
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 992a3448a0..2119a883bc 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -11,7 +11,6 @@ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
  
- DOCKER_CLI_TAGS = autogen
- DOCKER_CLI_BUILD_TARGETS = cmd/docker
-+DOCKER_CLI_GOMOD = github.com/docker/cli
+ DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
+-DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
+ DOCKER_ENGINE_GOMOD = github.com/docker/docker
  
- DOCKER_CLI_LDFLAGS = \
--	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
--	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
-+	-X $(DOCKER_CLI_GOMOD)/cli.GitCommit=$(DOCKER_CLI_VERSION) \
-+	-X $(DOCKER_CLI_GOMOD)/cli.Version=$(DOCKER_CLI_VERSION)
- 
- ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
- DOCKER_CLI_LDFLAGS += -extldflags '-static'
+ DOCKER_ENGINE_LDFLAGS = \
