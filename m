@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 11:56:52 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/wireshark:
+Date: Sat, 29 Aug 2020 11:56:46 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark:
  security bump to version 3.2.6
-Message-ID: <20200829094922.A607E868A6@busybox.osuosl.org>
+Message-ID: <20200829094926.A318B868A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e03fb449502256e68e3c578f793cc2b77861dad6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=15389955aed80a023ad36136abe8d33b8fd5629f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fix CVE-2020-17498: In Wireshark 3.2.0 to 3.2.5, the Kafka protocol
 dissector could crash. This was addressed in
