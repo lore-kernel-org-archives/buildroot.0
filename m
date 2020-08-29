@@ -1,29 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 29 Aug 2020 22:21:46 +0200
-Subject: [Buildroot] [PATCH v2 07/12] package/busybox: fix applets
- runtime issue when building with clang cross-compiler
-In-Reply-To: <20190907094027.9537-8-romain.naour@smile.fr>
-References: <20190907094027.9537-1-romain.naour@smile.fr>
- <20190907094027.9537-8-romain.naour@smile.fr>
-Message-ID: <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 22:24:48 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libmatroska: bump to version
+ 1.6.2
+Message-ID: <20200829202448.2825994-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Extract from ChangeLog:
+ - In release 1.6.1 the version number in CMakeLists.txt wasn't
+   updated, affecting the installed cmake and pkgconfig files. The
+   version number has been bumped to 1.6.2 in all relevant files now.
+ - "KaxBlockAddIDValue" class: this class is no longer marked as
+   "mandatory" in order to coincide with the latest specification.
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmatroska/libmatroska.hash | 2 +-
+ package/libmatroska/libmatroska.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 07/09/2019 11:40, Romain Naour wrote:
-> Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
-> fixing a runtime issue (segfault) when busybox is compiled by Clang.
-> 
-> The patch disable the compiler optimizations for Clang/LLVM only.
-> 
-> Without this patch, busybox segfault with several applets
-> (login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
-
- We should probably check if this patch is still needed with current busybox.
-
- Regards,
- Arnout
+diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
+index 0ef5278e76..4c3d754f8f 100644
+--- a/package/libmatroska/libmatroska.hash
++++ b/package/libmatroska/libmatroska.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fec89cebd500807f7fd14b56c14733f11045fa2a21398ff6f6c5c0e3e01b4033  libmatroska-1.6.0.tar.xz
++sha256  bc4479aa8422ab07643df6a1fa5a19e4bed4badfd41ca77e081628620d1e1990  libmatroska-1.6.2.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 58f033ad8e..61222c2bf7 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMATROSKA_VERSION = 1.6.0
++LIBMATROSKA_VERSION = 1.6.2
+ LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.xz
+ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
+ LIBMATROSKA_INSTALL_STAGING = YES
+-- 
+2.28.0
