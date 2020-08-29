@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 29 Aug 2020 14:49:12 +0200
-Subject: [Buildroot] [git commit branch/next] package/mender-artifact: drop
- custom GOFLAGS
-Message-ID: <20200829124233.33A7686CCF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-proxy: drop
+ <pkg>_WORKSPACE variable
+Message-ID: <20200829124233.2721986CCD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92584815bace88b0c0548d7ab7796854c92aaa99
+commit: https://git.buildroot.net/buildroot/commit/?id=913fac5bb1c9e38bd38637ea0271a1c513529a67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that we have switched to the go.mod integration, all Go packages
-are built with -mod=vendor, so there's no need to have custom GOFLAGS
-in mender-artifact.
+With the go.mod integration, the <pkg>_WORKSPACE variable has become
+useless, drop it.
 
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/docker-proxy/docker-proxy.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 67fdc44b9d..c81ec9ba53 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -31,14 +31,6 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+index 8843266c30..6600b24ed9 100644
+--- a/package/docker-proxy/docker-proxy.mk
++++ b/package/docker-proxy/docker-proxy.mk
+@@ -12,8 +12,6 @@ DOCKER_PROXY_LICENSE_FILES = LICENSE
  
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ DOCKER_PROXY_DEPENDENCIES = host-pkgconf
  
--# By default, go will attempt to download needed modules before building, which
--# is not desirable. This behavior also causes permission issues when cleaning,
--# as go downloads modules as read-only by default. Because mender-artifact
--# includes the modules in the vendor directory, mod=vendor prevents the package
--# from downloading the go modules during the build process and prevents
--# permission issues when cleaning.
--HOST_MENDER_ARTIFACT_GO_ENV = GOFLAGS="-mod=vendor"
+-DOCKER_PROXY_WORKSPACE = gopath
 -
- HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ DOCKER_PROXY_BUILD_TARGETS = cmd/proxy
  
- HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
+ define DOCKER_PROXY_INSTALL_TARGET_CMDS
