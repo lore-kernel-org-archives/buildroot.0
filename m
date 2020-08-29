@@ -1,34 +1,25 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 16:10:02 +0200
-Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains: be
- less verbose
-Message-ID: <20200902161638.837167FEBA@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 15:47:46 +0200
+Subject: [Buildroot] [git commit]
+ support/testing/test/toolchain/test_external_bootlin: new test cases
+Message-ID: <20200902161638.79CD585EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1bf9bedd54cf850c0770bc60dd52dd265743ca2
+commit: https://git.buildroot.net/buildroot/commit/?id=efce79db65e76a8950438897a60cca1a4a30736a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop the debug-level print as noticed by Titouan.
+This commit adds the new test cases generated automatically by the
+bl-toolchains-gen script, to test the integration of the Bootlin
+toolchains.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- support/scripts/gen-bootlin-toolchains | 1 -
- 1 file changed, 1 deletion(-)
+ .../tests/toolchain/test_external_bootlin.py       | 2354 ++++++++++++++++++++
+ 1 file changed, 2354 insertions(+)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index a5e4b1a99b..ac1a19b3c0 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -378,7 +378,6 @@ def get_toolchains():
-         url = os.path.join(BASE_URL, arch, "available_toolchains")
-         page = requests.get(url).text
-         fnames = sorted(re.findall(r'<td><a href="(\w[^"]+)"', page))
--        print(fnames)
-         # This dict will allow us to keep only the latest version for
-         # each toolchain.
-         tmp = dict()
+Patch is too large, so refusing to show it
