@@ -1,108 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 30 Aug 2020 00:10:38 +0200
-Subject: [Buildroot] [git commit] package/meson-tools: new package
-Message-ID: <20200902161639.B832B85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 14:35:49 +0200
+Subject: [Buildroot] [git commit] package/go: re-integrate GO_COMMON_ENV
+ into HOST_GO_COMMON_ENV
+Message-ID: <20200902161637.C90B085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3370a48d517ba53be6e58e7f1a5b45257782b09
+commit: https://git.buildroot.net/buildroot/commit/?id=1a17e4ae996c4c6727a29f049892be5ae57d7e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add meson-tools for handling of amlogic boards boot firmware
-signature.
+There is no point in having some common Go env variables defined in
+pkg-golang.mk:GO_COMMON_ENV, and some in
+package/go/go.mk:HOST_GO_COMMON_ENV. Let's move all of them to
+package/go/go.mk:HOST_GO_COMMON_ENV.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                           |  3 +++
- package/Config.in.host               |  1 +
- package/meson-tools/Config.in.host   |  9 +++++++++
- package/meson-tools/meson-tools.hash |  3 +++
- package/meson-tools/meson-tools.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 42 insertions(+)
+ package/go/go.mk      |  7 ++++++-
+ package/pkg-golang.mk | 13 ++-----------
+ 2 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e717ccc937..b86e5f8169 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -634,6 +634,9 @@ N:	Cyril Bur <cyrilbur@gmail.com>
- F:	arch/Config.in.powerpc
- F:	package/kvm-unit-tests
+diff --git a/package/go/go.mk b/package/go/go.mk
+index af1548a65e..8dfd96c88a 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -16,9 +16,14 @@ HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
+ HOST_GO_ROOT = $(HOST_DIR)/lib/go
+ HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
  
-+N:	Dagg Stompler <daggs@gmx.com>
-+F:	package/meson-tools/
-+
- N:	Daniel J. Leach <dleach@belcan.com>
- F:	package/dacapo/
++# We pass an empty GOBIN, otherwise "go install: cannot install
++# cross-compiled binaries when GOBIN is set"
+ HOST_GO_COMMON_ENV = \
+ 	GO111MODULE=off \
+-	GOROOT="$(HOST_GO_ROOT)"
++	GOROOT="$(HOST_GO_ROOT)" \
++	PATH=$(BR_PATH) \
++	GOBIN= \
++	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
  
-diff --git a/package/Config.in.host b/package/Config.in.host
-index fb29622ccb..ec64d2feb3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -42,6 +42,7 @@ menu "Host utilities"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
- 	source "package/mender-artifact/Config.in.host"
-+	source "package/meson-tools/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
- 	source "package/mtd/Config.in.host"
-diff --git a/package/meson-tools/Config.in.host b/package/meson-tools/Config.in.host
-new file mode 100644
-index 0000000000..677b206b66
---- /dev/null
-+++ b/package/meson-tools/Config.in.host
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_HOST_MESON_TOOLS
-+	bool "host meson-tools"
-+	help
-+	  meson-tools is a collection of tools for use with the
-+	  Amlogic Meson family of ARM based SoCs. It allows management
-+	  of signatures which are required for booting amlogic based
-+	  boards with u-boot.
-+
-+	  https://github.com/afaerber/meson-tools
-diff --git a/package/meson-tools/meson-tools.hash b/package/meson-tools/meson-tools.hash
-new file mode 100644
-index 0000000000..7b2c0d2f7e
---- /dev/null
-+++ b/package/meson-tools/meson-tools.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  10d707b2f741df03ff5000f2a82c6f577036ce1cd34d9278b22b92cb616b6fce  meson-tools-0a02e2d34413f4bf9b15946352bc8c8ee13a5843.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
-new file mode 100644
-index 0000000000..037faf3e6b
---- /dev/null
-+++ b/package/meson-tools/meson-tools.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# meson-tools
-+#
-+################################################################################
-+
-+HOST_MESON_TOOLS_VERSION = 0a02e2d34413f4bf9b15946352bc8c8ee13a5843
-+HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
-+HOST_MESON_TOOLS_LICENSE = GPL-2.0+
-+HOST_MESON_TOOLS_LICENSE_FILES = COPYING
-+HOST_MESON_TOOLS_DEPENDENCIES = host-openssl
-+
-+HOST_MESON_TOOLS_PROGS = amlbootsig unamlbootsig amlinfo
-+
-+define HOST_MESON_TOOLS_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) \
-+		LDFLAGS="$(HOST_LDFLAGS) -lssl -lcrypto"
-+endef
-+
-+define HOST_MESON_TOOLS_INSTALL_CMDS
-+	$(foreach f,$(HOST_MESON_TOOLS_PROGS), \
-+		$(INSTALL) -D -m 0755 $(@D)/$(f) $(HOST_DIR)/bin/$(f)
-+	)
-+endef
-+
-+$(eval $(host-generic-package))
+ ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
+ 
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 79c27b855f..9904ddcc1a 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -23,20 +23,11 @@
+ 
+ GO_BIN = $(HOST_DIR)/bin/go
+ 
+-# We pass an empty GOBIN, otherwise "go install: cannot install
+-# cross-compiled binaries when GOBIN is set"
+-GO_COMMON_ENV = \
+-	PATH=$(BR_PATH) \
+-	GOBIN= \
+-	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
+-
+ GO_TARGET_ENV = \
+-	$(HOST_GO_TARGET_ENV) \
+-	$(GO_COMMON_ENV)
++	$(HOST_GO_TARGET_ENV)
+ 
+ GO_HOST_ENV = \
+-	$(HOST_GO_HOST_ENV) \
+-	$(GO_COMMON_ENV)
++	$(HOST_GO_HOST_ENV)
+ 
+ ################################################################################
+ # inner-golang-package -- defines how the configuration, compilation and
