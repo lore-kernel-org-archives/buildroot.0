@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:49:25 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/wolfssl: fix
+Date: Sat, 29 Aug 2020 19:49:31 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wolfssl: fix
  build with big endian
-Message-ID: <20200829174152.6186686E3B@busybox.osuosl.org>
+Message-ID: <20200829174212.CFA2382167@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=797d3cba39c1b4a8cc7a85d1902442a2de7c61a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9806ac3df095485a580df9b2558841b703d07521
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/21098180d386890025ed5cdd243bf5a9b444c5cf
