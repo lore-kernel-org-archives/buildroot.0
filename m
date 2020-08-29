@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 13:37:11 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/squid: security
+Date: Sat, 29 Aug 2020 13:36:56 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/squid: security
  bump to version 4.13
-Message-ID: <20200829112950.B3E8F82B49@busybox.osuosl.org>
+Message-ID: <20200829112954.9C2F482B49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37fcf4c346d748d2e3a913334de31ccb3bb46aac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a81e60cebd1ad052baefe3d86d9eb8bcf500e217
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issues:
 
