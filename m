@@ -1,45 +1,67 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Aug 2020 18:05:55 +0200
-Subject: [Buildroot] [git commit] packages/luainterpreter: remove
- target-finalize hack
-Message-ID: <20200902161639.EFC1585EB9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 21:20:33 +0200
+Subject: [Buildroot] [git commit] package/libblockdev: add support for
+ crypto plugin
+Message-ID: <20200902161638.A871485EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a3530c0085e8d0c6b90f1ada8f1ff8c6dfb8dae
+commit: https://git.buildroot.net/buildroot/commit/?id=c45cce332a93b45ed7a68eed210b9f4662d877b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use LUAINTERPRETER_TARGET_FINALIZE_HOOKS, now that it's suported by
-virtual packages.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Arnout: don't remove relevant comment]
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luainterpreter/luainterpreter.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/libblockdev/Config.in      | 11 +++++++++++
+ package/libblockdev/libblockdev.mk |  8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index 58d421b183..9d9f85a579 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -7,15 +7,11 @@
- LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 4e85b82ce2..f7a220603c 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -16,6 +16,17 @@ config BR2_PACKAGE_LIBBLOCKDEV
  
- # Lua packages often install documentation, clean that up globally
--# Since luainterpreter is a virtual package, we can't use
--# LUAINTERPRETER_TARGET_FINALIZE_HOOKS
--ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
- define LUAINTERPRETER_REMOVE_DOC
- 	rm -rf $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/doc
- endef
+ 	  https://github.com/storaged-project/libblockdev/
  
--TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
--endif
-+LUAINTERPRETER_TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
++if BR2_PACKAGE_LIBBLOCKDEV
++
++comment "plugins"
++
++config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
++	bool "crypto"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # cryptsetup -> json-c
++	select BR2_PACKAGE_CRYPTSETUP
++
++endif
++
+ comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV || BR2_STATIC_LIBS || \
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 221a698386..67d9ab4483 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -18,7 +18,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--with-loop \
+ 	--without-bcache \
+ 	--without-btrfs \
+-	--without-crypto \
+ 	--without-dm \
+ 	--without-dmraid \
+ 	--without-escrow \
+@@ -38,4 +37,11 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-tools \
+ 	--without-vdo
  
- $(eval $(virtual-package))
- $(eval $(host-virtual-package))
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_CRYPTO),y)
++LIBBLOCKDEV_DEPENDENCIES += cryptsetup
++LIBBLOCKDEV_CONF_OPTS += --with-crypto
++else
++LIBBLOCKDEV_CONF_OPTS += --without-crypto
++endif
++
+ $(eval $(autotools-package))
