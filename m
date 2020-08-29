@@ -1,210 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 23:56:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: add option to
- enable some features
-In-Reply-To: <20200721092631.40977-1-erwan.gautron@bertin.fr>
-References: <20200721092631.40977-1-erwan.gautron@bertin.fr>
-Message-ID: <20200829215657.GL14354@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 30 Aug 2020 00:10:38 +0200
+Subject: [Buildroot] [git commit branch/next] package/meson-tools: new
+ package
+Message-ID: <20200829220326.AA183872F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Erwan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d3370a48d517ba53be6e58e7f1a5b45257782b09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2020-07-21 11:26 +0200, Erwan Gautron spake thusly:
-> From: "GAUTRON, Erwan" <erwan.gautron@bertin.fr>
-> Openssl implements lot of algorithms that are not required in
-> some emdedded devices and cyphers known as weak.
-> Secure embedded systems shall disable unused algorithms (and weak algo)
-> in order to be certified.
-> This patch allows to select weak algorithms and mecanims to enable
-> such as md5
-> To ensure backward compatibility, all items are selected by default
+Add meson-tools for handling of amlogic boards boot firmware
+signature.
 
-While I certainly understand and appreciate the rationale, I think this
-is going a bit too far and is too granular.
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                           |  3 +++
+ package/Config.in.host               |  1 +
+ package/meson-tools/Config.in.host   |  9 +++++++++
+ package/meson-tools/meson-tools.hash |  3 +++
+ package/meson-tools/meson-tools.mk   | 26 ++++++++++++++++++++++++++
+ 5 files changed, 42 insertions(+)
 
-I would suggest that we just add a few categories, like:
-
-    config BR2_PACKAGE_LIBOPENSSL_LEGACY_CIPHERS
-        bool "enable legacy cipher suites"
-        help
-          Build support for the following legacy, weak cipher suites:
-            rc2
-            rc4
-            rc5
-            [etc... fill in as appropriate]
-
-    config BR2_PACKAGE_LIBOPENSSL_LEGACY_HASHES
-        bool "enable legacy hash algorithms"
-        help
-          Build support for legacy, weak hash alorithms:
-            md2
-            md4
-            md5
-            [etc... fill in as appropriate]
-
-    config BR2_PACKAGE_LIBOPENSSL_LEGACY_PROTOCOLS
-        bool "enable legacy protocols"
-        help
-          Build support for legacy protocols;
-            SSL 1.0
-            SSL 2.0
-            SSL 3.0
-            TLS 1.0
-            [etc... fill in as appropriate]
-
-And we would consider legacy any cipher suite, hash algorithm, or
-protocol that is deprecated by NIST (e.g. because they are forbidden in
-FIPS 140-2, or the soon-to-be-in-force FIPS 140-3).
-
-Finally, I would not add any option to disable "current" cipher suites,
-hash algorithms, or protocols; I would always have them built. This will
-help build devices that are future-proof, when the servers they talk to
-are upgraded to using new protocols and thus new cipher suites: devices
-in the fields will not need to be updated just for that.
-
-Also, see below for a few generic comments...
-
-> Signed-off-by: Erwan GAUTRON <erwan.gautron@bertin.fr>
-> ---
->  package/libopenssl/Config.in     | 147 +++++++++++++++++++++++++++++++
->  package/libopenssl/libopenssl.mk |  24 +++++
->  2 files changed, 171 insertions(+)
-> 
-> diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
-> index 8909e36b9e..c034408a96 100644
-> --- a/package/libopenssl/Config.in
-> +++ b/package/libopenssl/Config.in
-> @@ -44,4 +44,151 @@ config BR2_PACKAGE_LIBOPENSSL_ENGINES
->  	help
->  	  Install additional encryption engine libraries.
->  
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA
-> +	bool "enable CHACHA "
-> +	default y
-> +	help
-> +	  Enable CHACHA cipher.
-
-There is not point in providing a help text that just repeats the prompt
-of the option. Surely, the user expects to enable 'foo' when they select
-the 'foo' option, so a help text that just says so is useless.  And in
-this case, there is no need for such a helpt text indeed.
-
-But with the proposal I made above, that comment is now moot (but you'll
-know for your next patches! ;-) ).
-
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
-> +	bool "enable RC5"
-> +	default y
-> +	help
-> +	  Enable RC5 cipher.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2
-> +	bool "enable RC2"
-> +	default y
-> +	help
-> +	  Enable RC2 cipher.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4
-> +	bool "enable RC4"
-> +	default y
-> +	help
-> +	  Enable RC4 cipher.
-
-Also for the future: keep alphabetical ordering, so that items in a same
-category are ordered and easy to find.
-
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_MD2
-> +	bool "enable MD2"
-> +	default y
-> +	help
-> +	  Enable MD2 cipher.
-
-The MD2/4/5 are not ciphers, but hashes. Well, they are hash algorithms.
-Well, they are message-digest algorithms. Well, I am not a security
-pedant, but they are certainly not ciphers.
-
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL
-> +	bool "enable SSL"
-> +	default y
-> +	help
-> +	  Enable SSL mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL2
-> +	bool "enable SSL2"
-> +	default y
-> +	help
-> +	  Enable SSL2 mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3
-> +	bool "enable SSL3"
-> +	default y
-> +	help
-> +	  Enable SSL3 mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL
-> +	bool "enable WEAK_SSL"
-> +	default y
-> +	help
-> +	  Enable WEAK_SSL mode.
-
-WEAK_SSL is about weak ciphers; it's not a protocol, just the list of
-ciphers allowed.
-
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK
-> +	bool "enable mode PSK"
-> +	default y
-> +	help
-> +	  Enable PSK mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST
-> +	bool "enable mode CAST"
-> +	default y
-> +	help
-> +	  Enable CAST mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_UNSECURE
-> +	bool "enable unit test, debug, backtrace"
-> +	default y
-> +	help
-> +	  Enable unit-test crypto-mdebug-backtrace
-> +	  crypto-mdebug autoerrinit mode.
-> +
-> +config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
-> +	bool "enable dynamic engine"
-> +	default y
-> +	help
-> +	  Enable dynamic engine.
-> +
-> +
-
-Two empty consecutive lines is one too many.
-
-Running 'make check-package' would hint at this.
-
-> +config BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP
-> +	bool "enable compression"
-> +	default y
-> +	help
-> +	  Enable compression.
-> +
-> +
-
-Ditto empty lines.
-
-Would you care to respin your series in the direction I suggest above,
-please?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e717ccc937..b86e5f8169 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -634,6 +634,9 @@ N:	Cyril Bur <cyrilbur@gmail.com>
+ F:	arch/Config.in.powerpc
+ F:	package/kvm-unit-tests
+ 
++N:	Dagg Stompler <daggs@gmx.com>
++F:	package/meson-tools/
++
+ N:	Daniel J. Leach <dleach@belcan.com>
+ F:	package/dacapo/
+ 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index fb29622ccb..ec64d2feb3 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -42,6 +42,7 @@ menu "Host utilities"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
+ 	source "package/mender-artifact/Config.in.host"
++	source "package/meson-tools/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+ 	source "package/mtd/Config.in.host"
+diff --git a/package/meson-tools/Config.in.host b/package/meson-tools/Config.in.host
+new file mode 100644
+index 0000000000..677b206b66
+--- /dev/null
++++ b/package/meson-tools/Config.in.host
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_HOST_MESON_TOOLS
++	bool "host meson-tools"
++	help
++	  meson-tools is a collection of tools for use with the
++	  Amlogic Meson family of ARM based SoCs. It allows management
++	  of signatures which are required for booting amlogic based
++	  boards with u-boot.
++
++	  https://github.com/afaerber/meson-tools
+diff --git a/package/meson-tools/meson-tools.hash b/package/meson-tools/meson-tools.hash
+new file mode 100644
+index 0000000000..7b2c0d2f7e
+--- /dev/null
++++ b/package/meson-tools/meson-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  10d707b2f741df03ff5000f2a82c6f577036ce1cd34d9278b22b92cb616b6fce  meson-tools-0a02e2d34413f4bf9b15946352bc8c8ee13a5843.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/meson-tools/meson-tools.mk b/package/meson-tools/meson-tools.mk
+new file mode 100644
+index 0000000000..037faf3e6b
+--- /dev/null
++++ b/package/meson-tools/meson-tools.mk
+@@ -0,0 +1,26 @@
++################################################################################
++#
++# meson-tools
++#
++################################################################################
++
++HOST_MESON_TOOLS_VERSION = 0a02e2d34413f4bf9b15946352bc8c8ee13a5843
++HOST_MESON_TOOLS_SITE = $(call github,afaerber,meson-tools,$(HOST_MESON_TOOLS_VERSION))
++HOST_MESON_TOOLS_LICENSE = GPL-2.0+
++HOST_MESON_TOOLS_LICENSE_FILES = COPYING
++HOST_MESON_TOOLS_DEPENDENCIES = host-openssl
++
++HOST_MESON_TOOLS_PROGS = amlbootsig unamlbootsig amlinfo
++
++define HOST_MESON_TOOLS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS) \
++		LDFLAGS="$(HOST_LDFLAGS) -lssl -lcrypto"
++endef
++
++define HOST_MESON_TOOLS_INSTALL_CMDS
++	$(foreach f,$(HOST_MESON_TOOLS_PROGS), \
++		$(INSTALL) -D -m 0755 $(@D)/$(f) $(HOST_DIR)/bin/$(f)
++	)
++endef
++
++$(eval $(host-generic-package))
