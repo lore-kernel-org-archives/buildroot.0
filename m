@@ -1,66 +1,149 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 10:42:49 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 7}.x series
-Message-ID: <20200829084445.D2AAD815BD@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 10:39:05 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/trousers: add
+ upstream security fix
+Message-ID: <20200829084445.B9BEC815BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=135799c7bbdcb935b5be72108d5dd22b0d81828c
+commit: https://git.buildroot.net/buildroot/commit/?id=0ff4b3ab56cd39ca8103130a113df3a36c2e4a7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
+Fixes the following security issues:
+
+CVE-2020-24332
+If the tcsd daemon is started with root privileges,
+the creation of the system.data file is prone to symlink attacks
+
+CVE-2020-24330
+If the tcsd daemon is started with root privileges,
+it fails to drop the root gid after it is no longer needed
+
+CVE-2020-24331
+If the tcsd daemon is started with root privileges,
+the tss user has read and write access to the /etc/tcsd.conf file
+
+For details, see the advisory:
+https://www.openwall.com/lists/oss-security/2020/05/20/3
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3cf6d708e1d613068a20a8acc4f258aba35ec0eb)
-[Peter: drop 5.7.x bump]
+(cherry picked from commit e71be18354391055a0a21e06a78aaade25ea62d0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ ...tiple-security-issues-that-are-present-if.patch | 90 ++++++++++++++++++++++
+ package/trousers/trousers.mk                       |  3 +
+ 2 files changed, 93 insertions(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 23e7884e3d..b7bbbc1a3d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  62532fb257fe98a68601e4ca36bd3d34300b4f26f447bf495df4693442601ee8  linux-5.6.19.tar.xz
- sha256  1448334371fb52f511255726832464d33877a210a7350260fb18eb225ae211eb  linux-5.5.19.tar.xz
--sha256  add2ab2385c40fc9a3dfebe403e56da8500b633dc7dc42cf0c670c61d151a223  linux-5.4.60.tar.xz
-+sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  97e689dd083d780bf7bacdc17c0a9ec9e9be118507dccedf4b77eef9666ce7fc  linux-4.4.233.tar.xz
--sha256  2a6dcab0652ab181820d56b6014235a125cf933e0edf5bdbc038160fa9e7aca5  linux-4.9.233.tar.xz
--sha256  3ea4d0221a071d58703cd346a8a6ef1582a32a8c4565a4919578817444d4fae0  linux-4.14.194.tar.xz
--sha256  a4421dea5333beeaaef81312c6f415330b9e4fda6027f399a1c55f97d3da2114  linux-4.19.141.tar.xz
-+sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
-+sha256  756f8544d261e8117716c911261690e4fb5491e14c1f4612c83e0986453782e3  linux-4.9.234.tar.xz
-+sha256  394f28798670240baacd9e2cce521fbd79f8da5e1fc191695b0e11381445a021  linux-4.14.195.tar.xz
-+sha256  6912db1c242d72ce9c8d4ff71982ac935d97690822af5c1c6ec22412b31667a4  linux-4.19.142.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c48a3de89d..407a6b4518 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -334,11 +334,11 @@ endchoice
+diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+new file mode 100644
+index 0000000000..609245dad8
+--- /dev/null
++++ b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
+@@ -0,0 +1,90 @@
++From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
++From: Matthias Gerstner <mgerstner@suse.de>
++Date: Fri, 14 Aug 2020 22:14:36 -0700
++Subject: [PATCH] Correct multiple security issues that are present if the tcsd
++ is started by root instead of the tss user.
++
++Patch fixes the following 3 CVEs:
++
++CVE-2020-24332
++If the tcsd daemon is started with root privileges,
++the creation of the system.data file is prone to symlink attacks
++
++CVE-2020-24330
++If the tcsd daemon is started with root privileges,
++it fails to drop the root gid after it is no longer needed
++
++CVE-2020-24331
++If the tcsd daemon is started with root privileges,
++the tss user has read and write access to the /etc/tcsd.conf file
++
++Authored-by: Matthias Gerstner <mgerstner@suse.de>
++Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/tcs/ps/tcsps.c   |  2 +-
++ src/tcsd/svrside.c   |  1 +
++ src/tcsd/tcsd_conf.c | 10 +++++-----
++ 3 files changed, 7 insertions(+), 6 deletions(-)
++
++diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
++index e47154b..85d45a9 100644
++--- a/src/tcs/ps/tcsps.c
+++++ b/src/tcs/ps/tcsps.c
++@@ -72,7 +72,7 @@ get_file()
++ 	}
++ 
++ 	/* open and lock the file */
++-	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
+++	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
++ 	if (system_ps_fd < 0) {
++ 		LogError("system PS: open() of %s failed: %s",
++ 				tcsd_options.system_ps_file, strerror(errno));
++diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
++index 1ae1636..1c12ff3 100644
++--- a/src/tcsd/svrside.c
+++++ b/src/tcsd/svrside.c
++@@ -473,6 +473,7 @@ main(int argc, char **argv)
++ 		}
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
+++	setgid(pwd->pw_gid);
++ 	setuid(pwd->pw_uid);
++ #endif
++ #endif
++diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
++index a31503d..ea8ea13 100644
++--- a/src/tcsd/tcsd_conf.c
+++++ b/src/tcsd/tcsd_conf.c
++@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
++ #ifndef SOLARIS
++ 	struct group *grp;
++ 	struct passwd *pw;
++-	mode_t mode = (S_IRUSR|S_IWUSR);
+++	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
++ #endif /* SOLARIS */
++ 	TSS_RESULT result;
++ 
++@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
++ 	}
++ 
++ 	/* make sure user/group TSS owns the conf file */
++-	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
+++	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
++ 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
++-				TSS_USER_NAME, TSS_GROUP_NAME);
+++				"root", TSS_GROUP_NAME);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ 
++-	/* make sure only the tss user can manipulate the config file */
+++	/* make sure only the tss user can read (but not manipulate) the config file */
++ 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
++-		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
+++		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
++ 		return TCSERR(TSS_E_INTERNAL_ERROR);
++ 	}
++ #endif /* SOLARIS */
++-- 
++2.20.1
++
+diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
+index 1d5364959c..5e6161ce4d 100644
+--- a/package/trousers/trousers.mk
++++ b/package/trousers/trousers.mk
+@@ -13,6 +13,9 @@ TROUSERS_INSTALL_STAGING = YES
+ TROUSERS_AUTORECONF = YES
+ TROUSERS_DEPENDENCIES = host-pkgconf openssl
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.233"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.233"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.194"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.141"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.60"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.234"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.234"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.5.19"	if BR2_KERNEL_HEADERS_5_5
- 	default "5.6.19"	if BR2_KERNEL_HEADERS_5_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++# 0003-Correct-multiple-security-issues-that-are-present-if.patch
++TROUSERS_IGNORE_CVES += CVE-2020-24330 CVE-2020-24331 CVE-2020-24332
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TROUSERS_DEPENDENCIES += libiconv
+ endif
