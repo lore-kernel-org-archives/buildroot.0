@@ -1,47 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 29 Aug 2020 14:30:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: security bump to version
- 4.2.9
-Message-ID: <20200829123000.1247821-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 14:30:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/watchdog: new package
+Message-ID: <20200829122344.A1EA686A94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SERVER-47733 SymmetricEncryptorWindows shouldn?t pad when update is
-called
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ed6b7b857d446c9e60137f0e7e742f4bd8f99c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
+watchdog is a flexible watchdog daemon that improves on the already
+available Busybox watchdog daemon by providing more advanced features,
+like defining custom system status checks and executing repair scripts
+to react upon invariants that don't hold.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Due to "watchdog" being also provided by Busybox, we need to make that
+package/watchdog installs the watchdog binary in the same place as
+Busybox (i.e in /sbin), and need to add a dependency of Busybox on
+this new watchdog package.
+
+Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongodb/mongodb.hash | 2 +-
- package/mongodb/mongodb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in              |  1 +
+ package/busybox/busybox.mk     |  1 +
+ package/watchdog/Config.in     | 10 ++++++++++
+ package/watchdog/watchdog.hash |  3 +++
+ package/watchdog/watchdog.mk   | 16 ++++++++++++++++
+ 5 files changed, 31 insertions(+)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index 943ffda997..efbdf33e79 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
-+sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
- sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index fa111bef7b..d4af320105 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Config.in b/package/Config.in
+index a29bd7ab99..8b3b1dec6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2433,6 +2433,7 @@ menu "System tools"
+ 	source "package/tpm2-totp/Config.in"
+ 	source "package/unscd/Config.in"
+ 	source "package/util-linux/Config.in"
++	source "package/watchdog/Config.in"
+ 	source "package/xdg-dbus-proxy/Config.in"
+ 	source "package/xen/Config.in"
+ 	source "package/xvisor/Config.in"
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index e049bce81d..7862beb790 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -67,6 +67,7 @@ BUSYBOX_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_USBUTILS),usbutils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX),util-linux) \
+ 	$(if $(BR2_PACKAGE_VIM),vim) \
++	$(if $(BR2_PACKAGE_WATCHDOG),watchdog) \
+ 	$(if $(BR2_PACKAGE_WGET),wget) \
+ 	$(if $(BR2_PACKAGE_WHOIS),whois)
  
--MONGODB_VERSION = 4.2.8
-+MONGODB_VERSION = 4.2.9
- MONGODB_SITE = https://fastdl.mongodb.org/src
- MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
- 
--- 
-2.28.0
+diff --git a/package/watchdog/Config.in b/package/watchdog/Config.in
+new file mode 100644
+index 0000000000..bf485034d7
+--- /dev/null
++++ b/package/watchdog/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_WATCHDOG
++	bool "watchdog"
++	depends on BR2_USE_MMU
++	help
++	  Watchdog is a daemon that periodically pets a watchdog device
++	  if the configured system status checks pass. If they do not,
++	  the daemon may execute repair commands, shutdown the system or
++	  reboot it.
++
++	  https://sourceforge.net/projects/watchdog/
+diff --git a/package/watchdog/watchdog.hash b/package/watchdog/watchdog.hash
+new file mode 100644
+index 0000000000..7366c1b5e1
+--- /dev/null
++++ b/package/watchdog/watchdog.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  b8e7c070e1b72aee2663bdc13b5cc39f76c9232669cfbb1ac0adc7275a3b019d  watchdog-5.16.tar.gz
++sha256  af7f3f94e85080204b37f7c53717a2c94c6b54d7fa516ebd74e008cb4c0391bd  COPYING
+diff --git a/package/watchdog/watchdog.mk b/package/watchdog/watchdog.mk
+new file mode 100644
+index 0000000000..b814fdc672
+--- /dev/null
++++ b/package/watchdog/watchdog.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# watchdog
++#
++################################################################################
++
++WATCHDOG_VERSION = 5.16
++WATCHDOG_SITE = http://downloads.sourceforge.net/sourceforge/watchdog
++WATCHDOG_AUTORECONF = YES
++WATCHDOG_LICENSE = GPL-2.0+
++WATCHDOG_LICENSE_FILES = COPYING
++# By default installs binaries in /usr/sbin/, but we want them in
++# /sbin/ so that they fall at the same place as Busybox counterparts
++WATCHDOG_CONF_OPTS = --sbindir=/sbin
++
++$(eval $(autotools-package))
