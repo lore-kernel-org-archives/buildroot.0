@@ -1,93 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 12:04:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/easyframes: new package
-Message-ID: <20200829095659.EB62B83B5B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Aug 2020 12:04:33 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.13
+In-Reply-To: <20200829095120.15263-1-peter@korsgaard.com>
+References: <20200829095120.15263-1-peter@korsgaard.com>
+Message-ID: <20200829100433.GD14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=841c604748c7ccd40bd618af912998ec3b9cec69
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Peeter, All,
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                         |  3 +++
- package/Config.in                  |  1 +
- package/easyframes/Config.in       | 10 ++++++++++
- package/easyframes/easyframes.hash |  3 +++
- package/easyframes/easyframes.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
+On 2020-08-29 11:51 +0200, Peter Korsgaard spake thusly:
+> Fixes the following security issues:
+> 
+> CVE-2020-15810: HTTP(S) Request Smuggling
+> Due to incorrect data validation Squid is vulnerable to HTTP Request
+> Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
+> poisoning.
+> https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
+> 
+> CVE-2020-15811: HTTP(S) Request Splitting
+> Due to incorrect data validation Squid is vulnerable to HTTP Request
+> Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
+> poisoning.
+> https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
+> 
+> CVE-2020-24606: Denial of Service processing Cache Digest Response
+> Due to Improper Input Validation Squid is vulnerable to a Denial of Service
+> attack against the machine operating Squid.
+> https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f4980c72cb..5b783a7fe4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1110,6 +1110,9 @@ F:	package/gauche/
- F:	package/gmrender-resurrect/
- F:	package/squeezelite/
- 
-+N:	Horatiu Vultur <horatiu.vultur@microchip.com>
-+F:	package/easyframes/
-+
- N:	Ian Haylock <haylocki@yahoo.co.uk>
- F:	package/python-rpi-gpio/
- 
-diff --git a/package/Config.in b/package/Config.in
-index efa5e474c3..f5cdf7c55a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2046,6 +2046,7 @@ menu "Networking applications"
- 	source "package/dnsmasq/Config.in"
- 	source "package/drbd-utils/Config.in"
- 	source "package/dropbear/Config.in"
-+	source "package/easyframes/Config.in"
- 	source "package/ebtables/Config.in"
- 	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
-diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
-new file mode 100644
-index 0000000000..b2c45496b4
---- /dev/null
-+++ b/package/easyframes/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EASYFRAMES
-+	bool "easyframes"
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  This is a small and simple command-line tool for network
-+	  testing.  The tool makes it simple to compose a frame,
-+	  inject and express what and where frames are expected to be
-+	  received.
-+
-+	  https://github.com/microchip-ung/easyframes
-diff --git a/package/easyframes/easyframes.hash b/package/easyframes/easyframes.hash
-new file mode 100644
-index 0000000000..0f16e0caa1
---- /dev/null
-+++ b/package/easyframes/easyframes.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 3c0449b3129c29b5ecf67b689f1a75ffc65fde3c5f62811e2f0439ce4f4af392 easyframes-0.3.tar.gz
-+sha256 24f37598e822a1411fb7164ce7eb3ef120aea8279016399abc282c2381ce3f57 COPYING
-diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
-new file mode 100644
-index 0000000000..2c209433d2
---- /dev/null
-+++ b/package/easyframes/easyframes.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# easyframes
-+#
-+################################################################################
-+
-+EASYFRAMES_VERSION = 0.3
-+EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,v$(EASYFRAMES_VERSION))
-+EASYFRAMES_DEPENDENCIES = libpcap
-+EASYFRAMES_LICENSE = MIT
-+EASYFRAMES_LICENSE_FILES = COPYING
-+
-+$(eval $(cmake-package))
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/squid/squid.hash | 8 ++++----
+>  package/squid/squid.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+> index a3ef655185..b7e051960e 100644
+> --- a/package/squid/squid.hash
+> +++ b/package/squid/squid.hash
+> @@ -1,6 +1,6 @@
+> -# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
+> -md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
+> -sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
+> +# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
+> +md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
+> +sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
+>  # Locally calculated
+> -sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
+> +sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+> index 6bce74b7d6..1ba375e547 100644
+> --- a/package/squid/squid.mk
+> +++ b/package/squid/squid.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SQUID_VERSION = 4.12
+> +SQUID_VERSION = 4.13
+>  SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+>  SQUID_SITE = http://www.squid-cache.org/Versions/v4
+>  SQUID_LICENSE = GPL-2.0+
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
