@@ -1,62 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 23:14:25 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: use HOSTCC_NOCCACHE as
- kconfig HOSTCC
-In-Reply-To: <20200829230349.133ba05a@windsurf.home>
-References: <20200829203720.28230-1-yann.morin.1998@free.fr>
- <20200829230349.133ba05a@windsurf.home>
-Message-ID: <20200829211425.GK14354@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 23:14:42 +0200
+Subject: [Buildroot] [git commit branch/next] package/udisks/Config.in: fix
+ alphabetic ordering of selects
+Message-ID: <20200829210802.9AE2E87328@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fa1fddc9cd6dbefeb373dc8af7c0b4bfa31bf679
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2020-08-29 23:03 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 29 Aug 2020 22:37:20 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > uclibc is part of the toolchain, and as such does not have a dependency
-> > on it. As a consequence, it does not have a dependency on host-ccache,
-> > when this is needed.
-> > 
-> > Usually, host-ccache is built before uclibc, as part of the dependency
-> > of gcc-initial, hiot-binutils, and a few other host packages that are
-> hiot-binutils -> host-binutils
+This patch makes the upcoming udisks2 version bump patch easier to
+read, and also fixes the Config.in, so it follows Buildroot's package
+guidelines.
 
-Applied to master with this typo now fixed. thanks!
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/udisks/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> > built before uclibc.
-> > 
-> > However, during top-level parallel builds, this ordering is only ever
-> > guaranteed at the beginning of the configure step, and not before.
-> > 
-> > But for kconfig-packages, the moment we apply the configuration to
-> > prepare the .config file is a pseudo step that happens somewhere in
-> > limbo between the patch step and the configure step. As such, the
-> 
-> I like the "happens somewhere in limbo", that's a good description of
-> how the kconfig stuff works :-)
-
-Hehe! ;-)
-
-> > Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> Thanks for the great investigation!
-
-It took more time to write the commit log than to find the issue. ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/udisks/Config.in b/package/udisks/Config.in
+index f4044b0d0d..efd3b619bf 100644
+--- a/package/udisks/Config.in
++++ b/package/udisks/Config.in
+@@ -13,12 +13,12 @@ config BR2_PACKAGE_UDISKS
+ 	depends on !BR2_STATIC_LIBS # lvm2, spidermonkey
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+-	select BR2_PACKAGE_SG3_UTILS
+-	select BR2_PACKAGE_POLKIT
+-	select BR2_PACKAGE_PARTED
+-	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_LIBATASMART
+ 	select BR2_PACKAGE_LIBGUDEV
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_PARTED
++	select BR2_PACKAGE_POLKIT
++	select BR2_PACKAGE_SG3_UTILS
+ 	help
+ 	  The udisks project provides
+ 
