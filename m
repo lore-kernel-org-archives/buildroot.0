@@ -1,67 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:39:45 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/postgresql:
- security bump to version 12.4
-Message-ID: <20200829173331.7498286F1F@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:40:45 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] fs/cpio/init: unbreak
+ ttyname_r() on glibc after dropping /dev/console exec
+Message-ID: <20200829173331.861C686F1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8b1eac71b278b6de9e733222d472f64176806fa
+commit: https://git.buildroot.net/buildroot/commit/?id=797f9e40224c96327fe080a2597623ac2ceb7353
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-- Fix CVE-2020-14349: It was found that PostgreSQL versions before 12.4,
-  before 11.9 and before 10.14 did not properly sanitize the search_path
-  during logical replication. An authenticated attacker could use this
-  flaw in an attack similar to CVE-2018-1058, in order to execute
-  arbitrary SQL command in the context of the user used for replication.
-- Fix CVE-2020-14350: It was found that some PostgreSQL extensions did
-  not use search_path safely in their installation script. An attacker
-  with sufficient privileges could use this flaw to trick an
-  administrator into executing a specially crafted script, during the
-  installation or update of such extension. This affects PostgreSQL
-  versions before 12.4, before 11.9, before 10.14, before 9.6.19, and
-  before 9.5.23.
+Commit 98a6f1fc02e41 (fs/cpio: make initramfs init script survive 'console='
+kernel argument) dropped the explicit /dev/console execs for fd 0,1,2, as
+they fail when booted with console= and aren't really needed as the kernel
+will setup fd 0,1,2 from /dev/console before executing the initramfs anyway.
 
-https://www.postgresql.org/docs/12/release-12-4.html
+Not doing this unfortunately confuses glibc's ttyname_r(3) implementation
+(used by E.G.  busybox/coreutils 'tty'), causing it to fail with ENOENT as
+it does a fstat on fd 0 and tries to match up st_ino / st_dev against the
+entries in /dev (since glibc 2.26):
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ commit 15e9a4f378c8607c2ae1aa465436af4321db0e23
+ Author: Christian Brauner <christian.brauner@canonical.com>
+ Date:   Fri Jan 27 15:59:59 2017 +0100
+
+    linux ttyname and ttyname_r: do not return wrong results
+
+    If a link (say /proc/self/fd/0) pointing to a device, say /dev/pts/2, in a
+    parent mount namespace is passed to ttyname, and a /dev/pts/2 exists (in a
+    different devpts) in the current namespace, then it returns /dev/pts/2.
+    But /dev/pts/2 is NOT the current tty, it is a different file and device.
+
+    Detect this case and return ENODEV.  Userspace can choose to take this as a hint
+    that the fd points to a tty device but to act on the fd rather than the link.
+
+    Signed-off-by: Serge Hallyn <serge@hallyn.com>
+    Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+
+The reason it fails is that we manually mount devtmpfs on /dev in /init, so
+the /dev/console used by the kernel (in rootfs) is not the same file as
+/dev/console at runtime (in devtmpfs).
+
+Notice: Once logged in, tty does work correctly.  Presumably login reopens
+stdin/stdout/stderr.
+
+To fix this, re-add the exec of /dev/console for fd 0,1,2, but only do so if
+possible.  Because of the above mentioned shell behaviour (specified by
+POSIX [0]), perform this check in a subshell.
+
+[0] https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_20_01
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 35ebee6510a19f87aa007b9302bff8d29e1add21)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b9026e83f9c7610526f045f2fc1135b45a26305f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ fs/cpio/init | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ff3a76258e..4e410d187a 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.md5
--md5  a30c023dd7088e44d73be71af2ef404a  postgresql-12.3.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v12.3/postgresql-12.3.tar.bz2.sha256
--sha256  94ed64a6179048190695c86ec707cc25d016056ce10fc9d229267d9a8f1dcf41  postgresql-12.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.md5
-+md5  80ebbf0e55193b123760e5f8e48c6cff  postgresql-12.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.sha256
-+sha256  bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc  postgresql-12.4.tar.bz2
- 
- # License file, Locally calculated
- sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index c0bf199eb4..18c7b2ade4 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 12.3
-+POSTGRESQL_VERSION = 12.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/fs/cpio/init b/fs/cpio/init
+index b0af18b67a..f74ef7e15f 100755
+--- a/fs/cpio/init
++++ b/fs/cpio/init
+@@ -1,4 +1,15 @@
+ #!/bin/sh
+ # devtmpfs does not get automounted for initramfs
+ /bin/mount -t devtmpfs devtmpfs /dev
++
++# use the /dev/console device node from devtmpfs if possible to not
++# confuse glibc's ttyname_r().
++# This may fail (E.G. booted with console=), and errors from exec will
++# terminate the shell, so use a subshell for the test
++if (exec 0</dev/console) 2>/dev/null; then
++    exec 0</dev/console
++    exec 1>/dev/console
++    exec 2>/dev/console
++fi
++
+ exec /sbin/init "$@"
