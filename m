@@ -1,37 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 20:05:10 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/domoticz: drop
- SYNC4 from comment
-Message-ID: <20200829175808.D1CDE81556@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 29 Aug 2020 20:25:52 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/i2pd: bump to version 2.33.0
+Message-ID: <20200829182552.2695717-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc2152dbb6f6876e56cd5054d30111d0193d4c98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-Commit 8f5a9f597e35e6bc89dc938edbe753004d0201d1 forgot to drop SYNC4
-from comment
+From https://github.com/PurpleI2P/i2pd/releases/tag/2.33.0:
+ - UDP tunnels through ECIES-X25519-AEAD-Ratchet
+ - Shared transient addresses
+ - ECIES-X25519-AEAD-Ratchet and multiple encryption keys through I2CP
+ - Pre-calculated x25519 ephemeral keys
+ - crypto.ratchet.inboundTags parameter
+ - Don't save invalid address to AddressBook
+ - Correct ECDSA signatures names in SAM
+ - New webconsole layout
+ - Shared routing path for datagram session
+ - Change datagram routing path if nothing comes back in 10 seconds
+ - Updated reseed servers list
+ - Don't connect through terminated SAM destination
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c0126c38d6e7ade4aaae68f029697698479988c6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/i2pd/i2pd.hash | 3 ++-
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index 3beca0fdb9..0639718c23 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -29,7 +29,6 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index d56c9c1b47..1a19ccf687 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
++sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
+ # Locally computed:
+-sha256  64229101411a9dda3237dc27939aa13ec90d4900aae499e59931063c36e8556b  i2pd-2.32.1.tar.gz
+ sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 736794866d..461f483d1f 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 4.8, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-I2PD_VERSION = 2.32.1
++I2PD_VERSION = 2.33.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
+-- 
+2.28.0
