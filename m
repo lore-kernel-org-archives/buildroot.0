@@ -1,62 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Aug 2020 22:54:43 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.6
-Message-ID: <20200902161636.2027D85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 21:45:58 +0200
+Subject: [Buildroot] [git commit] package/libblockdev: add support for loop
+ plugin
+Message-ID: <20200902161638.C56DE85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5a1fe3d2909b054c861a4cad8930ffb72559e09
+commit: https://git.buildroot.net/buildroot/commit/?id=63759893f74a007b32bd56b25a2d4e18791a5e1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libblockdev/Config.in      | 3 +++
+ package/libblockdev/libblockdev.mk | 7 ++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 92b1db7741..27cee7388f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
+index 8ef7247262..9f7f401dd3 100644
+--- a/package/libblockdev/Config.in
++++ b/package/libblockdev/Config.in
+@@ -33,6 +33,9 @@ config BR2_PACKAGE_LIBBLOCKDEV_FS
+ comment "filesystem plugin needs a toolchain w/ locale"
+ 	depends on !BR2_ENABLE_LOCALE
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.1.5
-+MESA3D_HEADERS_VERSION = 20.1.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 8974fa3cc2..e589eaeaff 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000592.html
--sha256  fac1861e6e0bf1aec893f8d86dbfb9d8a0f426ff06b05256df10e3ad7e02c69b  mesa-20.1.5.tar.xz
--sha512  47796bf2cccfd054ff25f571747754e0ab9b42fe87644ea320b3d9497d63b3013e9b7e59ea0516bbd1a38b5594e0d185bf5a36230ea5c5974e7ff889cee2601e  mesa-20.1.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-August/000595.html
-+sha256  23bed40114b03ad640c95bfe72cc879ed2f941d0d481b77b5204a1fc567fa93c  mesa-20.1.6.tar.xz
-+sha512  5ef28334ecb7effaaf597ea3efe0406af62419e6fa629e835d843161ab8d83515626ec0f0495c4cc66af9e5669398ac96c16ca626e4965a9831e1704c995fb09  mesa-20.1.6.tar.xz
++config BR2_PACKAGE_LIBBLOCKDEV_LOOP
++	bool "loop"
++
+ endif
  
- # License
- sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 74c5818006..5f1ed5ebfb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ comment "libblockdev needs udev /dev management and a toolchain w/ wchar, threads, dynamic library"
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 2b111df82b..9216fc9932 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -22,7 +22,6 @@ LIBBLOCKDEV_CONF_OPTS = \
+ 	--without-dmraid \
+ 	--without-escrow \
+ 	--without-kbd \
+-	--without-loop \
+ 	--without-lvm \
+ 	--without-lvm_dbus \
+ 	--without-mdraid \
+@@ -50,4 +49,10 @@ else
+ LIBBLOCKDEV_CONF_OPTS += --without-fs
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.1.5
-+MESA3D_VERSION = 20.1.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
++ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_LOOP),y)
++LIBBLOCKDEV_CONF_OPTS += --with-loop
++else
++LIBBLOCKDEV_CONF_OPTS += --without-loop
++endif
++
+ $(eval $(autotools-package))
