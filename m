@@ -1,70 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 13:36:56 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/squid: security
- bump to version 4.13
-Message-ID: <20200829112954.9C2F482B49@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 29 Aug 2020 13:48:37 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/easyframes: new package
+In-Reply-To: <20200829072416.951156-1-horatiu.vultur@microchip.com>
+References: <20200829072416.951156-1-horatiu.vultur@microchip.com>
+Message-ID: <20200829134837.5ffbc3d0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a81e60cebd1ad052baefe3d86d9eb8bcf500e217
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hello,
 
-Fixes the following security issues:
+On Sat, 29 Aug 2020 09:24:16 +0200
+Horatiu Vultur via buildroot <buildroot@busybox.net> wrote:
 
-CVE-2020-15810: HTTP(S) Request Smuggling
-Due to incorrect data validation Squid is vulnerable to HTTP Request
-Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
-poisoning.
-https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-CVE-2020-15811: HTTP(S) Request Splitting
-Due to incorrect data validation Squid is vulnerable to HTTP Request
-Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
-poisoning.
-https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
+Thanks, I've applied to next, with a few changes, see below.
 
-CVE-2020-24606: Denial of Service processing Cache Digest Response
-Due to Improper Input Validation Squid is vulnerable to a Denial of Service
-attack against the machine operating Squid.
-https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
+> diff --git a/package/easyframes/Config.in b/package/easyframes/Config.in
+> new file mode 100644
+> index 0000000000..f3a4ddbb34
+> --- /dev/null
+> +++ b/package/easyframes/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_EASYFRAMES
+> +	bool "easyframes"
+> +	select BR2_PACKAGE_LIBPCAP
+> +	help
+> +	  This is a small and simple command-line tool for network testing.
+> +	  The tool makes it simple to compose a frame, inject and express what
+> +	  and where frames are expected to be received.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71ac106bb3b4759d5a050ecade9ba687a27801ff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+These lines were too long, so I wrapped them.
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index a3ef655185..b7e051960e 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
--md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
--sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
-+md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
-+sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
- # Locally calculated
--sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
-+sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 6bce74b7d6..1ba375e547 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQUID_VERSION = 4.12
-+SQUID_VERSION = 4.13
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+> +################################################################################
+> +#
+> +# easyframes
+> +#
+> +################################################################################
+> +
+> +EASYFRAMES_VERSION = v0.3
+> +EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,$(EASYFRAMES_VERSION))
+
+I changed this so that the version is just 0.3. Indeed, we want our
+_VERSION variable to not have any "v" prefix, so that its value can be
+matched against what release-monitoring.org is reporting for upstream
+projects.
+
+> +EASYFRAMES_INSTALL_STAGING = YES
+
+I dropped this line, since easyframes does not install a library.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
