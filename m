@@ -1,97 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 29 Aug 2020 11:50:23 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <20200827223956.7cb87050@windsurf.home>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200827223956.7cb87050@windsurf.home>
-Message-ID: <20200829095023.GC14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 29 Aug 2020 11:51:19 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.13
+Message-ID: <20200829095120.15263-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Adam. Angelo, All,
+Fixes the following security issues:
 
-On 2020-08-27 22:39 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 27 Aug 2020 10:34:31 -0700
-> Adam Duskett <aduskett@gmail.com> wrote:
-> > Angelo and I were discussing the state of patches today in regards to Buildroot.
-> > It seems like the project could benefit from a few more maintainers of
-> > the project.
-> > We both understand that this is a volunteer project and that we are
-> > all adults and have a life outside of the project, and as such, we
-> > can't expect instant reviews on every submitted patch. However, as the
-> > project continues to grow in popularity, more patches will continue to
-> > be offered at an ever-increasing rate. This popularity increase is
-> > excellent news for the project, but also comes at the cost of more
-> > time and effort in regards to the number of patches and fixes in the
-> > queue to review and test.
-> > 
-> > As such, we would both like to throw our hat in the ring to help
-> > maintain the project. We both don't have all the time in the world,
-> > but any amount of help on the project can help alleviate the primary
-> > maintainers.
-> 
-> I agree that we probably need to extend or change the current
-> maintainers team.
-> 
-> However, what is also true is that very little patches that are posted
-> get review from other contributors. And this is actually what is the
-> most important. When I see a patch series that has been looked at by 1
-> or 2 other people that I trust and who gave their Reviewed-by, I will
-> apply such a patch series very easily, without almost looking at it.
-> 
-> You can go have a look at
-> https://patchwork.ozlabs.org/project/buildroot/list/ and see how many
-> patches in the list have a Reviewed-by tag. Very few. This is
-> definitely something where everybody can help, and it is by doing such
-> reviews that the trust will increase with the current maintainers,
-> which is key for becoming a maintainer IMO.
-> 
-> What do you think ?
+CVE-2020-15810: HTTP(S) Request Smuggling
+Due to incorrect data validation Squid is vulnerable to HTTP Request
+Smuggling attacks against HTTP and HTTPS traffic.  This leads to cache
+poisoning.
+https://github.com/squid-cache/squid/security/advisories/GHSA-3365-q9qx-f98m
 
-I do agree with all of this, both the remarks from Adam and Angelo, and
-the feedback from Thomas.
+CVE-2020-15811: HTTP(S) Request Splitting
+Due to incorrect data validation Squid is vulnerable to HTTP Request
+Splitting attacks against HTTP and HTTPS traffic.  This leads to cache
+poisoning.
+https://github.com/squid-cache/squid/security/advisories/GHSA-c7p8-xqhm-49wv
 
-The burden is not in applying patches; this is the easy part.
+CVE-2020-24606: Denial of Service processing Cache Digest Response
+Due to Improper Input Validation Squid is vulnerable to a Denial of Service
+attack against the machine operating Squid.
+https://github.com/squid-cache/squid/security/advisories/GHSA-vvj7-xjgq-g2jg
 
-What really takes time is actually reviewing patches: understanding the
-problem, understanding how it is fixed, why it is fixed in such a way,
-and seeing how it fits in the overall big-picture across the whole
-project.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Then, requesting changes also takes time: explaining what has to be
-changed, why it has to be changed, and how it has to be changed also
-takes time.
-
-So, I would also like to emphasize that contributing is not only about
-sending patches; it is also about reviewing and testing the patches of
-others, and such contributions are dearly needed.
-
-When a patch is technically ready, the review can range from the laconic
-"reviewed-by", which means just that, up to complementing the commit log
-with additional details and explanations, which means that the problem
-and solution have been fully assessed.
-
-Now for a personal comment: my pet-peeve are commit logs that just
-describe the patch; I usually don't need that, except in very complex
-patches. What I really need is a commit log that explains the patch,
-that tells me the why, not the how.
-
-Of course, finding the right balance between "not enough details" and
-"too many details" is not trivial, and is an exercise in its own right.
-
-But again, I do appreciate that people are concerned enough about the
-project, and call on the maintainers.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index a3ef655185..b7e051960e 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.12.tar.xz.asc
+-md5  ad7a4a8a0031cae3435717a759173829  squid-4.12.tar.xz
+-sha1  316b8a343aa542b5e7469d33b9d726bee00679c6  squid-4.12.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
++md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
++sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
+ # Locally calculated
+-sha256  f42a03c8b3dc020722c88bf1a87da8cb0c087b2f66b41d8256c77ee1b527e317  squid-4.12.tar.xz
++sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 6bce74b7d6..1ba375e547 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.12
++SQUID_VERSION = 4.13
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
