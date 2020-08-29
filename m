@@ -1,76 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 29 Aug 2020 19:36:33 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] Makefile: use $(Q)
- instead of @ to silence target-finalize commands
-Message-ID: <20200829173331.514C381585@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 19:37:40 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mongodb: security
+ bump to version 4.2.9
+Message-ID: <20200829173331.5A68C81585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c406edde11f3bf57e8b90e88bba4ca9f7a702b8a
+commit: https://git.buildroot.net/buildroot/commit/?id=1f2dbb31df364ae51674a017cb3acfbcc6896d1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-As 18f6c26118 just did to silence the file lists commands, switch to
-using $(Q) instead of a plain @, to silence the commands.
+SERVER-47733 SymmetricEncryptorWindows shouldn???t pad when update is
+called
 
-Using $(Q) will allow to debug the commands with V=1.
+https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
 
-We keep @ for the calls to MESSAGE, though.
-
-The commands that are not currently silenced are left as-is, and they
-can be converted to being silent in a followup patch, if need be,
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5754d9c9b17189d05e7436143a46098fdfeae762)
+(cherry picked from commit f5919b6059c25e685a2ffc749f25c95e8edb96bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 79096fdc90..e3162cb43c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -800,9 +800,9 @@ endif
- # counterparts are appropriately setup as symlinks ones to the others.
- ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 943ffda997..efbdf33e79 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  e8880277e3910afd82c71ed61861d518f2040cbc062e00a26d53a3224284db8f  mongodb-src-r4.2.8.tar.gz
++sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index fa111bef7b..d4af320105 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
--		$(call MESSAGE,"Sanity check in overlay $(d)"); \
--		not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
-+	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		@$(call MESSAGE,"Sanity check in overlay $(d)")$(sep) \
-+		$(Q)not_merged_dirs="$$(support/scripts/check-merged-usr.sh $(d))"; \
- 		test -n "$$not_merged_dirs" && { \
- 			echo "ERROR: The overlay in $(d) is not" \
- 				"using a merged /usr for the following directories:" \
-@@ -812,9 +812,9 @@ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- 
- endif # merged /usr
- 
--	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
--		$(call MESSAGE,"Copying overlay $(d)"); \
--		$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
-+	$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
-+		@$(call MESSAGE,"Copying overlay $(d)")$(sep) \
-+		$(Q)$(call SYSTEM_RSYNC,$(d),$(TARGET_DIR))$(sep))
- 
- 	$(Q)$(if $(TARGET_DIR_FILES_LISTS), \
- 		cat $(TARGET_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list.txt
-@@ -823,9 +823,9 @@ endif # merged /usr
- 	$(Q)$(if $(STAGING_DIR_FILES_LISTS), \
- 		cat $(STAGING_DIR_FILES_LISTS)) > $(BUILD_DIR)/packages-file-list-staging.txt
- 
--	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
--		$(call MESSAGE,"Executing post-build script $(s)"); \
--		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+	$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		@$(call MESSAGE,"Executing post-build script $(s)")$(sep) \
-+		$(Q)$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
- 	touch $(TARGET_DIR)/usr
+-MONGODB_VERSION = 4.2.8
++MONGODB_VERSION = 4.2.9
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
  
