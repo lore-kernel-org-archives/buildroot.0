@@ -1,57 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 21:58:02 +0200
-Subject: [Buildroot] [git commit] package/i2pd: bump to version 2.33.0
-Message-ID: <20200902161639.0FDFD85EB9@busybox.osuosl.org>
+Date: Sat, 29 Aug 2020 22:57:17 +0200
+Subject: [Buildroot] [git commit] package/lftp: bump to version 4.9.2
+Message-ID: <20200902161639.4254885EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8535d1b1964be54b4bb55bef7c09371527fb7b2
+commit: https://git.buildroot.net/buildroot/commit/?id=8377683ff939c8c938d0e284bca37d3d90e395b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From https://github.com/PurpleI2P/i2pd/releases/tag/2.33.0:
- - UDP tunnels through ECIES-X25519-AEAD-Ratchet
- - Shared transient addresses
- - ECIES-X25519-AEAD-Ratchet and multiple encryption keys through I2CP
- - Pre-calculated x25519 ephemeral keys
- - crypto.ratchet.inboundTags parameter
- - Don't save invalid address to AddressBook
- - Correct ECDSA signatures names in SAM
- - New webconsole layout
- - Shared routing path for datagram session
- - Change datagram routing path if nothing comes back in 10 seconds
- - Updated reseed servers list
- - Don't connect through terminated SAM destination
+Update indentation in hash file (two spaces)
+
+Extract from NEWS:
+
+- mkdir: fixed exit code with -f option.
+- ftp: made ftp:use-pret setting tri-boolean.
+- get/mget/put/mput: don't try next files after error if cmd:fail-exit
+  is true.
+- get/mget: fixed -O option with remote URL and xfer:use-temp-file being
+  true.
+- mirror: disallow empty patterns; don't delete "..".
+- mirror: fixed --on-change with --reverse.
+- sftp: fixed a bug with truncated files when packets are reordered
+  (finally).
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/i2pd/i2pd.hash | 3 ++-
- package/i2pd/i2pd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/lftp/lftp.hash | 8 ++++----
+ package/lftp/lftp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
-index d56c9c1b47..1a19ccf687 100644
---- a/package/i2pd/i2pd.hash
-+++ b/package/i2pd/i2pd.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
-+sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
- # Locally computed:
--sha256  64229101411a9dda3237dc27939aa13ec90d4900aae499e59931063c36e8556b  i2pd-2.32.1.tar.gz
- sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 736794866d..461f483d1f 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
+diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
+index a2f60f95b0..e4c3305c03 100644
+--- a/package/lftp/lftp.hash
++++ b/package/lftp/lftp.hash
+@@ -1,7 +1,7 @@
+-# From http://lftp.yar.ru/ftp/lftp-4.9.1.md5sum
+-md5 3da57b1960b1416e89a532c54a67a936  lftp-4.9.1.tar.xz
++# From http://lftp.yar.ru/ftp/lftp-4.9.2.md5sum
++md5  b3a272ecb7a2b60e3827776f90ffb2f3  lftp-4.9.2.tar.xz
+ # Locally calculated after checking gpg signature
+-sha256 5969fcaefd102955dd882f3bcd8962198bc537224749ed92f206f415207a024b  lftp-4.9.1.tar.xz
++sha256  c517c4f4f9c39bd415d7313088a2b1e313b2d386867fe40b7692b83a20f0670d  lftp-4.9.2.tar.xz
+ 
+ # Hash for license file:
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 9c568da677..1348e137de 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--I2PD_VERSION = 2.32.1
-+I2PD_VERSION = 2.33.0
- I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
- I2PD_LICENSE = BSD-3-Clause
- I2PD_LICENSE_FILES = LICENSE
+-LFTP_VERSION = 4.9.1
++LFTP_VERSION = 4.9.2
+ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPL-3.0+
