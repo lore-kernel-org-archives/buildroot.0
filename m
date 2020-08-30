@@ -1,111 +1,67 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sun, 30 Aug 2020 11:00:51 +0200
-Subject: [Buildroot] [PATCH] package/mg: new package
-Message-ID: <20200830090050.889647-1-troglobit@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 30 Aug 2020 12:00:57 +0200
+Subject: [Buildroot] [PATCH/next 1/2] package/libcap: drop host-gperf
+ dependency
+Message-ID: <20200830100058.4180798-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mg is a small Emacs-like editor with no external dependencies except a
-standard C library.  It weighs in at 130 kiB and is one of a select few
-completely free (public domain) text editors suitable for small and
-embedded systems.
+host-gperf dependency was added in commit
+5d8926add5da1b0bdfb90a41f4d7f857864c5524 without any explanation in the
+commit message but gperf can be disabled through BUILD_GPERF since
+https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=3c22870c762f7925b5ff143d76f9affbade275ba
 
-This version is based on the OpenBSD Mg, but with more features, one of
-which being the no-ncurses/termcap support, which heavily reduces the
-impact on a resource constrained system.
+So use this variable and drop this unneeded dependency
 
-Upstream: https://github.com/troglobit/mg/
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/Config.in    |  1 +
- package/mg/Config.in | 18 ++++++++++++++++++
- package/mg/mg.hash   |  5 +++++
- package/mg/mg.mk     | 24 ++++++++++++++++++++++++
- 4 files changed, 48 insertions(+)
- create mode 100644 package/mg/Config.in
- create mode 100644 package/mg/mg.hash
- create mode 100644 package/mg/mg.mk
+ package/libcap/libcap.mk | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..db2563f789 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2431,6 +2431,7 @@ menu "Text editors and viewers"
- 	source "package/joe/Config.in"
- 	source "package/less/Config.in"
- 	source "package/mc/Config.in"
-+	source "package/mg/Config.in"
- 	source "package/most/Config.in"
- 	source "package/nano/Config.in"
- 	source "package/uemacs/Config.in"
-diff --git a/package/mg/Config.in b/package/mg/Config.in
-new file mode 100644
-index 0000000000..11e5bdb273
---- /dev/null
-+++ b/package/mg/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_MG
-+	bool "mg"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Emacs-like text editor (130 kiB)
-+
-+	  Mg is a MicroEMACS clone with the goal of being compatible
-+	  with GNU Emacs, because there should never be any reason to
-+	  learn more than one Emacs flavor.
-+
-+	  Unlike many other editors it does not require ncurses, only a
-+	  standard C library, making it suitable for really small and
-+	  embedded systems.
-+
-+	  This version is based on mg2a from OpenBSD, with more features
-+	  and, in particular, no requirement on ncurses or termcap.
-+
-+	  https://github.com/troglobit/mg/
-diff --git a/package/mg/mg.hash b/package/mg/mg.hash
-new file mode 100644
-index 0000000000..6b3c400faa
---- /dev/null
-+++ b/package/mg/mg.hash
-@@ -0,0 +1,5 @@
-+# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.6/
-+md5 6b79855d54770bcb23e5457ebde8296c  mg-3.4.tar.gz
-+# Locally computed:
-+sha256 1a620cf5b2dd4b00006d6c929ac8e2a70eeab5f807a0d6e5334b878aa182b713  mg-3.4.tar.gz
-+sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
-diff --git a/package/mg/mg.mk b/package/mg/mg.mk
-new file mode 100644
-index 0000000000..c8df6eddc6
---- /dev/null
-+++ b/package/mg/mg.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# mg2a
-+#
-+################################################################################
-+
-+MG_VERSION = 3.4
-+MG_SITE = https://github.com/troglobit/mg/releases/download/v$(MG_VERSION)
-+MG_LICENSE = Public Domain
-+MG_LICENSE_FILES = UNLICENSE
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+MG_DEPENDENCIES += ncurses
-+else
-+MG_CONF_OPTS += --without-curses
-+endif
-+
-+define MG_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/tutorial $(TARGET_DIR)/usr/share/doc/tutorial
-+	gzip -9 $(TARGET_DIR)/usr/share/doc/tutorial
-+	$(INSTALL) -m 0755 -D $(@D)/src/mg $(TARGET_DIR)/usr/bin/mg
-+endef
-+
-+$(eval $(autotools-package))
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 08c1bc9deb..208f8eade1 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -10,11 +10,9 @@ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
+ LIBCAP_LICENSE_FILES = License
+ 
+-LIBCAP_DEPENDENCIES = host-libcap host-gperf
++LIBCAP_DEPENDENCIES = host-libcap
+ LIBCAP_INSTALL_STAGING = YES
+ 
+-HOST_LIBCAP_DEPENDENCIES = host-gperf
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBCAP_MAKE_TARGET = libcap.a libcap.pc
+ LIBCAP_MAKE_INSTALL_TARGET = install-static
+@@ -28,7 +26,8 @@ endif
+ 
+ LIBCAP_MAKE_FLAGS = \
+ 	BUILD_CC="$(HOSTCC)" \
+-	BUILD_CFLAGS="$(HOST_CFLAGS)"
++	BUILD_CFLAGS="$(HOST_CFLAGS)" \
++	BUILD_GPERF=no
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP_TOOLS),y)
+ define LIBCAP_BUILD_TOOLS_CMDS
+@@ -62,12 +61,12 @@ endef
+ 
+ define HOST_LIBCAP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+-		RAISE_SETFCAP=no
++		BUILD_GPERF=no RAISE_SETFCAP=no
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
+-		RAISE_SETFCAP=no lib=lib install
++		BUILD_GPERF=no RAISE_SETFCAP=no lib=lib install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.25.1
+2.28.0
