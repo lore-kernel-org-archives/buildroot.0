@@ -1,279 +1,312 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 29 Aug 2020 23:06:49 +0200
-Subject: [Buildroot] [git commit] package/oprofile: bump to version 1.4.0
-Message-ID: <20200902161639.85D5685EB9@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 30 Aug 2020 16:18:44 +0200
+Subject: [Buildroot] [git commit] package/util-linux: build programs and
+ libraries in separate packages
+Message-ID: <20200902161639.C3B8985EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a488166831b76c912c3b8c17c0bdae5132b8c81
+commit: https://git.buildroot.net/buildroot/commit/?id=8bafc6dc8ad13000a58af980650ff59a78399ae2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop third patch (already in version) and so drop second patch and
-  autoreconf
-- Update indentation in hash file (two spaces)
+The different tools and libraries in util-linux have a lot of optional
+dependencies. When we want to support those optional dependencies, we
+can easily generate dependency cycles. For instance, findmount and lsblk
+need udev to work correctly, but eudev and systemd both depend libblkid,
+which comes from util-linux.
 
-https://oprofile.sourceforge.io/release-notes/oprofile-1.4.0
+Normal distros (e.g. Debian) solve this by first building a minimal
+package that has no dependencies at all, then build the packages that
+depend on util-linux, and finally rebuild util-linux with all bells and
+whistles. Solve it in Buildroot by means of the following changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+- Split util-linux into two packages:
+  - util-linux-libs, providing lib{blkid,fdisk,mount,smartcols,uuid}.
+  - util-linux, providing both the aforementioned libs and the programs.
+- Add a blind selection for util-linux-libs, i.e. it is indirectly
+  selected according to the util-linux options.
+- Make host and target util-linux have a build dependencies on the -libs
+  packages.
+- Make eudev and systemd have build dependencies on util-linux-libs.
+  This can be extended to other packages in the future but is not needed
+  right now because the configuration options are backward-compatible.
+- Make util-linux have an optional build dependency on the package that
+  provides libudev (either eudev or systemd), if it is selected.
+
+Installing util-linux overrides files installed by util-linux-libs but
+this is not a problem: it's allowed for a package to overwrite files
+from another package, as long as there is a dependency between the two.
+
+util-linux-libs has a Config.in symbol for the package as a whole, but
+not for the individual libraries: it simply reuses the symbols of the
+full package.
+
+The build dependency of util-linux on util-linux-libs ensures that
+util-linux overwrites the files installed by util-linux-libs and not
+vice versa. In practice this dependency shouldn't be needed: the only
+reason for util-linux-libs to be built is to break a circular
+dependency. In that case, there is already a transitive dependency of
+util-linux on util-linux-libs, so adding it explicitly is redundant.
+Still, better safe than sorry.
+
+host-util-linux-libs is not needed at the moment. It can be added if we
+have a dependency cycle problem later.
+
+With this approach we don't need to patch configuration files neither
+change packages other than eudev and systemd.
+
+Other packages that require util-linux libraries and whose libraries may
+be used by util-linux programs can be updated later. We also don't need
+to change any existing defconfig, since all configuration options are
+kept in the util-linux package.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=11811
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch |  36 -----
- ...ers-to-handle-the-binutils-2.34-api-chang.patch | 169 ---------------------
- package/oprofile/oprofile.hash                     |   8 +-
- package/oprofile/oprofile.mk                       |   5 +-
- 4 files changed, 5 insertions(+), 213 deletions(-)
+ package/eudev/Config.in                            |  1 +
+ package/eudev/eudev.mk                             |  3 +-
+ package/systemd/Config.in                          |  1 +
+ package/systemd/systemd.mk                         |  2 +-
+ package/util-linux/Config.in                       |  3 +
+ .../util-linux-libs/util-linux-libs.hash           |  1 +
+ .../util-linux/util-linux-libs/util-linux-libs.mk  | 86 ++++++++++++++++++++++
+ package/util-linux/util-linux.mk                   | 32 ++++++--
+ 8 files changed, 120 insertions(+), 9 deletions(-)
 
-diff --git a/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch b/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
-deleted file mode 100644
-index 98dcac6906..0000000000
---- a/package/oprofile/0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From ff172a49d1ca5708f45939b9b4f125cafba01db3 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Tue, 24 Mar 2020 22:50:32 +0100
--Subject: [PATCH] configure.ac: add foreign option to AM_INIT_AUTOMAKE
--
--oprofile doesn't provide the NEWS, AUTHORS and ChangeLog file, so
--autoreconf complains with:
--
--Makefile.am: error: required file './NEWS' not found
--Makefile.am: error: required file './AUTHORS' not found
--Makefile.am: error: required file './ChangeLog' not found
--
--Such errors can be avoided by passing the "foreign" option to
--AM_INIT_AUTOMAKE.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 00e30079..87afe2b7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -13,7 +13,7 @@ AC_PREREQ(2.13)
-- 
-- AC_INIT([OProfile], [1.3.0])
-- AC_CONFIG_SRCDIR([libop/op_config.h])
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- AC_CONFIG_HEADERS(config.h)
-- 
-- AC_CHECK_DECLS([basename], [], [], [[#include <libgen.h>]])
---- 
--2.25.1
--
-diff --git a/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch b/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
-deleted file mode 100644
-index cff5030e00..0000000000
---- a/package/oprofile/0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
-+++ /dev/null
-@@ -1,169 +0,0 @@
--From 377610414fb6cd7ac30e4485d9d6482fcf29aca6 Mon Sep 17 00:00:00 2001
--From: William Cohen <wcohen@redhat.com>
--Date: Wed, 18 Mar 2020 21:19:16 -0400
--Subject: [PATCH] Macro wrappers to handle the binutils 2.34 api changes
--
--Changes in binutils 2.34 API prevented oprofile from compiling with
--it.  This patch tests for the changes in the binutils API during
--configuration and selects the appropiate wrappers to allow oprofile to
--compile.  This allows oprofile to compile with both older and newer
--versions of binutils.
--
--Upstream: 377610414fb6cd7ac30e4485d9d6482fcf29aca6
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- configure.ac              | 20 ++++++++++++++++++++
-- libutil++/bfd_support.cpp | 11 ++++++-----
-- libutil/op_bfd_wrappers.h | 28 ++++++++++++++++++++++++++++
-- opjitconv/create_bfd.c    |  7 ++++---
-- 4 files changed, 58 insertions(+), 8 deletions(-)
-- create mode 100644 libutil/op_bfd_wrappers.h
--
--diff --git a/configure.ac b/configure.ac
--index ac2fd35e..df032a78 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -224,6 +224,26 @@ if test "$host_cpu" = "powerpc64le" -o "$host_cpu" = "powerpc64"; then
-- fi
-- AC_SUBST(PFM_LIB)
-- 
--+HAVE_BINUTILS_234='1'
--+AC_MSG_CHECKING([whether binutils 2.34 is being used])
--+rm -f test-for-BINUTILS
--+AC_LANG_CONFTEST(
--+	[AC_LANG_PROGRAM([[#include <bfd.h>]],
--+		[[asection * sect;
--+		bfd_size_type buildid_sect_size = bfd_section_size(sect);
--+		return 0;]])
--+	])
--+$CC conftest.$ac_ext $CFLAGS $LDFLAGS $LIBS $PERF_EVENT_FLAGS -o test-for-BINUTILS  > /dev/null 2>&1
--+if test -f test-for-BINUTILS; then
--+	echo "yes"
--+	HAVE_BINUTILS_234='1'
--+else
--+	echo "no"
--+	HAVE_BINUTILS_234='0'
--+fi
--+AC_DEFINE_UNQUOTED(HAVE_BINUTILS_234, $HAVE_BINUTILS_234, [Using binutils 2.34])
--+rm -f test-for-BINUTILS*
--+
-- AC_ARG_WITH(java,
-- [  --with-java=java-home        Path to Java home directory (default is "no"; "yes" will use /usr as Java home)],
-- JAVA_HOMEDIR=$with_java, [with_java=no])
--diff --git a/libutil++/bfd_support.cpp b/libutil++/bfd_support.cpp
--index fa904839..cd0f4f71 100644
----- a/libutil++/bfd_support.cpp
--+++ b/libutil++/bfd_support.cpp
--@@ -19,6 +19,7 @@
-- #include "locate_images.h"
-- #include "op_libiberty.h"
-- #include "op_exception.h"
--+#include "op_bfd_wrappers.h"
-- 
-- #include <unistd.h>
-- #include <errno.h>
--@@ -137,7 +138,7 @@ static bool get_build_id(bfd * ibfd, unsigned char * build_id)
-- 		}
-- 	}
-- 
---	bfd_size_type buildid_sect_size = bfd_section_size(ibfd, sect);
--+	bfd_size_type buildid_sect_size = op_bfd_section_size(ibfd, sect);
-- 	char * contents = (char *) xmalloc(buildid_sect_size);
-- 	errno = 0;
-- 	if (!bfd_get_section_contents(ibfd, sect,
--@@ -188,7 +189,7 @@ bool get_debug_link_info(bfd * ibfd, string & filename, unsigned long & crc32)
-- 	if (sect == NULL)
-- 		return false;
-- 	
---	bfd_size_type debuglink_size = bfd_section_size(ibfd, sect);  
--+	bfd_size_type debuglink_size = op_bfd_section_size(ibfd, sect);
-- 	char * contents = (char *) xmalloc(debuglink_size);
-- 	cverb << vbfd
-- 	      << ".gnu_debuglink section has size " << debuglink_size << endl;
--@@ -346,7 +347,7 @@ void fixup_linenr(bfd * abfd, asection * section, asymbol ** syms,
-- 	// first restrict the search on a sensible range of vma, 16 is
-- 	// an intuitive value based on epilog code look
-- 	size_t max_search = 16;
---	size_t section_size = bfd_section_size(abfd, section);
--+	size_t section_size = op_bfd_section_size(abfd, section);
-- 	if (pc + max_search > section_size)
-- 		max_search = section_size - pc;
-- 
--@@ -819,10 +820,10 @@ find_nearest_line(bfd_info const & b, op_bfd_symbol const & sym,
-- 	else
-- 		pc = (sym.value() + offset) - sym.filepos();
-- 
---	if ((bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
--+	if ((op_bfd_get_section_flags(abfd, section) & SEC_ALLOC) == 0)
-- 		goto fail;
-- 
---	if (pc >= bfd_section_size(abfd, section))
--+	if (pc >= op_bfd_section_size(abfd, section))
-- 		goto fail;
-- 
-- 	ret = bfd_find_nearest_line(abfd, section, syms, pc, &cfilename,
--diff --git a/libutil/op_bfd_wrappers.h b/libutil/op_bfd_wrappers.h
--new file mode 100644
--index 00000000..b229cc12
----- /dev/null
--+++ b/libutil/op_bfd_wrappers.h
--@@ -0,0 +1,28 @@
--+/**
--+ * @file op_bfd_wrappers.h
--+ * Wrappers to hide API changes in binutils 2.34
--+ *
--+ * @remark Copyright 2020 OProfile authors
--+ * @remark Read the file COPYING
--+ *
--+ * @author William Cohen
--+ */
--+
--+#ifndef OP_BFD_WRAPPERS_H
--+#define OP_BFD_WRAPPERS_H
--+
--+#if HAVE_BINUTILS_234
--+#define op_bfd_section_size(ibfd, sec) bfd_section_size(sec)
--+#define op_bfd_get_section_flags(abfd, sec) bfd_section_flags(sec)
--+#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(sec, flags)
--+#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(sec, vma)
--+#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(sec, size)
--+#else
--+#define op_bfd_section_size(ibfd, sec) bfd_section_size(ibfd, sec)
--+#define op_bfd_get_section_flags(abfd, sec) bfd_get_section_flags(abfd, sec)
--+#define op_bfd_set_section_flags(abfd, sec, flags) bfd_set_section_flags(abfd, sec, flags)
--+#define op_bfd_set_section_vma(abfd, sec, vma) bfd_set_section_vma(abfd, sec, vma)
--+#define op_bfd_set_section_size(abfd, sec, size) bfd_set_section_size(abfd, sec, size)
--+#endif
--+
--+#endif /* !OP_BFD_WRAPPERS_H */
--diff --git a/opjitconv/create_bfd.c b/opjitconv/create_bfd.c
--index 48db143b..da1e6d29 100644
----- a/opjitconv/create_bfd.c
--+++ b/opjitconv/create_bfd.c
--@@ -16,6 +16,7 @@
-- 
-- #include "opjitconv.h"
-- #include "op_libiberty.h"
--+#include "op_bfd_wrappers.h"
-- 
-- #include <bfd.h>
-- #include <assert.h>
--@@ -86,12 +87,12 @@ asection * create_section(bfd * abfd, char const * section_name,
-- 		bfd_perror("bfd_make_section");
-- 		goto error;
-- 	}
---	bfd_set_section_vma(abfd, section, vma);
---	if (bfd_set_section_size(abfd, section, size) == FALSE) {
--+	op_bfd_set_section_vma(abfd, section, vma);
--+	if (op_bfd_set_section_size(abfd, section, size) == FALSE) {
-- 		bfd_perror("bfd_set_section_size");
-- 		goto error;
-- 	}
---	if (bfd_set_section_flags(abfd, section, flags) == FALSE) {
--+	if (op_bfd_set_section_flags(abfd, section, flags) == FALSE) {
-- 		bfd_perror("bfd_set_section_flags");
-- 		goto error;
-- 	}
---- 
--2.25.1
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index d1d96c6232..7d005aa747 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.3.0/
--sha1	7daa0cca8587e399cb3df9eb817c6a39ffea2082	oprofile-1.3.0.tar.gz
--md5	bd998df5521ebedae31e71cd3fb6200b		oprofile-1.3.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.4.0/
-+sha1  d4d7634372d18de821b33650ad0ff7392e94c6e3  oprofile-1.4.0.tar.gz
-+md5  ac0ff685ec9735e30d6a4d19de0efed7  oprofile-1.4.0.tar.gz
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index b0ce76171a..0e5bd0cee9 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_UDEV_GENTOO_SCRIPTS if BR2_INIT_OPENRC
+ 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+ 	help
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index 8b677e76b6..9cf4361956 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -18,7 +18,8 @@ EUDEV_CONF_OPTS = \
+ 	--enable-kmod \
+ 	--enable-blkid
  
- # Hash for license file:
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index b9d7d9e608..50693ddd1e 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,13 +4,10 @@
+-EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
++# eudev requires only the util-linux libraries at build time
++EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux-libs kmod
+ EUDEV_PROVIDES = udev
+ 
+ ifeq ($(BR2_ROOTFS_MERGED_USR),)
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index f21c8d32dd..74029aff05 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -28,6 +28,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e356cb1add..e0e1dd1a3f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -15,7 +15,7 @@ SYSTEMD_DEPENDENCIES = \
+ 	host-gperf \
+ 	kmod \
+ 	libcap \
+-	util-linux \
++	util-linux-libs \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
+ SYSTEMD_PROVIDES = udev
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index aa3c1a5f76..1f33eb5514 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -9,6 +9,9 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
+ 
+ if BR2_PACKAGE_UTIL_LINUX
+ 
++config BR2_PACKAGE_UTIL_LINUX_LIBS
++	bool
++
+ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	bool "libblkid"
+ 	depends on BR2_USE_MMU # fork()
+diff --git a/package/util-linux/util-linux-libs/util-linux-libs.hash b/package/util-linux/util-linux-libs/util-linux-libs.hash
+new file mode 120000
+index 0000000000..dc1b2f866a
+--- /dev/null
++++ b/package/util-linux/util-linux-libs/util-linux-libs.hash
+@@ -0,0 +1 @@
++../util-linux.hash
+\ No newline at end of file
+diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
+new file mode 100644
+index 0000000000..a0ec153bfb
+--- /dev/null
++++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
+@@ -0,0 +1,86 @@
++################################################################################
++#
++# util-linux-libs
++#
++################################################################################
++
++# Please keep this file as similar as possible to util-linux.mk
++
++UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
++UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
++UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
++UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
++
++# README.licensing claims that some files are GPL-2.0 only, but this is not
++# true. Some files are GPL-3.0+ but only in tests and optionally in hwclock
++# (but we disable that option). rfkill uses an ISC-style license.
++UTIL_LINUX_LIBS_LICENSE = LGPL-2.1+ (libblkid, libfdisk, libmount), BSD-3-Clause (libuuid)
++UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
++	Documentation/licenses/COPYING.BSD-3-Clause \
++	Documentation/licenses/COPYING.LGPL-2.1-or-later
++
++UTIL_LINUX_LIBS_INSTALL_STAGING = YES
++UTIL_LINUX_LIBS_DEPENDENCIES = \
++	host-pkgconf \
++	$(TARGET_NLS_DEPENDENCIES)
++UTIL_LINUX_LIBS_CONF_OPTS += \
++	--disable-rpath \
++	--disable-makeinstall-chown
++
++UTIL_LINUX_LIBS_LINK_LIBS = $(TARGET_NLS_LIBS)
++
++# Prevent the installation from attempting to move shared libraries from
++# ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
++# the same when merged usr is in use.
++ifeq ($(BR2_ROOTFS_MERGED_USR),y)
++UTIL_LINUX_LIBS_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
++endif
++
++# systemd depends on util-linux-libs so we disable systemd support
++UTIL_LINUX_LIBS_CONF_OPTS += \
++	--without-systemd \
++	--with-systemdsystemunitdir=no
++
++# systemd/eudev depend on util-linux-libs so we disable udev support
++UTIL_LINUX_LIBS_CONF_OPTS += --without-udev
++
++# No libs use wchar
++UTIL_LINUX_LIBS_CONF_OPTS += --disable-widechar
++
++# No libs use ncurses
++UTIL_LINUX_LIBS_CONF_OPTS += --without-ncursesw --without-ncurses
++
++# Unfortunately, the util-linux does LIBS="" at the end of its
++# configure script. So we have to pass the proper LIBS value when
++# calling the configure script to make configure tests pass properly,
++# and then pass it again at build time.
++UTIL_LINUX_LIBS_CONF_ENV += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
++UTIL_LINUX_LIBS_MAKE_OPTS += LIBS="$(UTIL_LINUX_LIBS_LINK_LIBS)"
++
++# libmount optionally uses selinux
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT)$(BR2_PACKAGE_LIBSELINUX),yy)
++UTIL_LINUX_LIBS_DEPENDENCIES += libselinux
++UTIL_LINUX_LIBS_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_LIBS_CONF_OPTS += --without-selinux
++endif
++
++# Disable utilities
++UTIL_LINUX_LIBS_CONF_OPTS += \
++	--disable-all-programs \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),--enable-libblkid,--disable-libblkid) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBFDISK),--enable-libfdisk,--disable-libfdisk) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),--enable-libmount,--disable-libmount) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS),--enable-libsmartcols,--disable-libsmartcols) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),--enable-libuuid,--disable-libuuid)
++
++# libmount python bindings are separate, will be installed by full util-linux
++UTIL_LINUX_LIBS_CONF_OPTS += --without-python --disable-pylibmount
++
++# No libs use readline
++UTIL_LINUX_LIBS_CONF_OPTS += --without-readline
++
++# No libs use audit
++UTIL_LINUX_LIBS_CONF_OPTS += --without-audit
++
++$(eval $(autotools-package))
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 6c8f295eed..4fa7ae58e3 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -4,6 +4,9 @@
  #
  ################################################################################
  
--OPROFILE_VERSION = 1.3.0
-+OPROFILE_VERSION = 1.4.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
--# 0002-configure.ac-add-foreign-option-to-AM_INIT_AUTOMAKE.patch
--# 0003-Macro-wrappers-to-handle-the-binutils-2.34-api-chang.patch
--OPROFILE_AUTORECONF = YES
- OPROFILE_CONF_OPTS = \
- 	--disable-account-check \
- 	--enable-gui=no \
++# When making changes to this file, please check if
++# util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
++
+ UTIL_LINUX_VERSION_MAJOR = 2.35
+ UTIL_LINUX_VERSION_MINOR = 2
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).$(UTIL_LINUX_VERSION_MINOR)
+@@ -22,19 +25,16 @@ UTIL_LINUX_LICENSE_FILES = README.licensing \
+ 	Documentation/licenses/COPYING.LGPL-2.1-or-later
+ 
+ UTIL_LINUX_INSTALL_STAGING = YES
+-UTIL_LINUX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++UTIL_LINUX_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs) \
++	$(TARGET_NLS_DEPENDENCIES)
+ UTIL_LINUX_CONF_OPTS += \
+ 	--disable-rpath \
+ 	--disable-makeinstall-chown
+ 
+ UTIL_LINUX_LIBS = $(TARGET_NLS_LIBS)
+ 
+-# system depends on util-linux so we enable systemd support
+-# (which needs systemd to be installed)
+-UTIL_LINUX_CONF_OPTS += \
+-	--without-systemd \
+-	--with-systemdsystemunitdir=no
+-
+ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
+ 
+ # We also don't want the host-python dependency
+@@ -50,6 +50,20 @@ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ UTIL_LINUX_CONF_OPTS += --bindir=/usr/bin --sbindir=/usr/sbin --libdir=/usr/lib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++UTIL_LINUX_CONF_OPTS += --with-systemd --with-systemdsystemunitdir=/usr/lib/systemd/system
++UTIL_LINUX_DEPENDENCIES += systemd
++else
++UTIL_LINUX_CONF_OPTS += --without-systemd --with-systemdsystemunitdir=no
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++UTIL_LINUX_CONF_OPTS += --with-udev
++UTIL_LINUX_DEPENDENCIES += udev
++else
++UTIL_LINUX_CONF_OPTS += --without-udev
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ UTIL_LINUX_DEPENDENCIES += ncurses
+ ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+@@ -266,3 +280,7 @@ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_GETTY_SYMLINK
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
++
++# Must be included after the autotools-package call, to make sure all variables
++# are available
++include package/util-linux/util-linux-libs/util-linux-libs.mk
