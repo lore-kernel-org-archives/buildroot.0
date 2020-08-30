@@ -1,37 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Aug 2020 10:14:24 +0200
-Subject: [Buildroot] Buildroot 2020.02.5 released
-In-Reply-To: <87mu2ddye0.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 29 Aug 2020 21:51:03 +0200")
-References: <87mu2ddye0.fsf@dell.be.48ers.dk>
-Message-ID: <873644eejj.fsf@dell.be.48ers.dk>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Sun, 30 Aug 2020 10:38:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mrp: new package
+Message-ID: <20200830083845.1402501-1-horatiu.vultur@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ DEVELOPERS            |  1 +
+ package/Config.in     |  1 +
+ package/mrp/Config.in | 11 +++++++++++
+ package/mrp/mrp.hash  |  3 +++
+ package/mrp/mrp.mk    | 13 +++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/mrp/Config.in
+ create mode 100644 package/mrp/mrp.hash
+ create mode 100644 package/mrp/mrp.mk
 
- > Hi,
- > Buildroot is a simple tool for creating complete embedded Linux systems
- > (http://buildroot.org).
-
- > Buildroot 2020.02.5 is released - Go download it at:
-
- > http://buildroot.org/downloads/buildroot-2020.02.5.tar.gz
-
- > or
-
- > http://buildroot.org/downloads/buildroot-2020.02.5.tar.bz2
-
-As pointed out by Fran?ois Perrad, this is unfortunately broken for
-systemd builds without less :/
-
-It is now fixed on the 2020.02.x branch. Please pull those fixes if you
-are affected, or wait until next week when I will release 2020.02.6.
-
-Sorry.
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b86e5f8169..fb09775cc5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1120,6 +1120,7 @@ F:	package/squeezelite/
+ 
+ N:	Horatiu Vultur <horatiu.vultur@microchip.com>
+ F:	package/easyframes/
++F:	package/mrp/
+ 
+ N:	Ian Haylock <haylocki@yahoo.co.uk>
+ F:	package/python-rpi-gpio/
+diff --git a/package/Config.in b/package/Config.in
+index b1df81d7f1..0b9ffbad25 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2129,6 +2129,7 @@ menu "Networking applications"
+ 	source "package/mosh/Config.in"
+ 	source "package/mosquitto/Config.in"
+ 	source "package/mrouted/Config.in"
++	source "package/mrp/Config.in"
+ 	source "package/mtr/Config.in"
+ 	source "package/nbd/Config.in"
+ 	source "package/ncftp/Config.in"
+diff --git a/package/mrp/Config.in b/package/mrp/Config.in
+new file mode 100644
+index 0000000000..a175e42288
+--- /dev/null
++++ b/package/mrp/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MRP
++	bool "Media Redundancy Protocol"
++	select BR2_PACKAGE_LIBEV
++	select BR2_PACKAGE_LIBMNL
++	select BR2_PACKAGE_LIBNL
++	help
++	  This is the userspace application that configures the kernel
++	  to run MRP protocol. The userspace application is made of 2
++	  applications, one deamon and a client.
++
++	  https://github.com/microchip-ung/mrp
+diff --git a/package/mrp/mrp.hash b/package/mrp/mrp.hash
+new file mode 100644
+index 0000000000..8e416feb47
+--- /dev/null
++++ b/package/mrp/mrp.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256 1a6c76d058bb425a7ec8b69a65de797650961161ec016b51ac8a1965e1ac304f mrp-1.1.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE
+diff --git a/package/mrp/mrp.mk b/package/mrp/mrp.mk
+new file mode 100644
+index 0000000000..54efe54c55
+--- /dev/null
++++ b/package/mrp/mrp.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# mrp
++#
++################################################################################
++
++MRP_VERSION = 1.1
++MRP_SITE = $(call github,microchip-ung,mrp,v$(MRP_VERSION))
++MRP_DEPENDENCIES = libev libmnl libnl
++MRP_LICENSE = GPLv2
++MRP_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
-Bye, Peter Korsgaard
+2.27.0
