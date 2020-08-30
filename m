@@ -1,42 +1,99 @@
-From: Iulian Onofrei <iulian.onofrei@yahoo.com>
-Date: Mon, 31 Aug 2020 00:26:38 +0300
-Subject: [Buildroot] [PATCH 2/2] package/nvidia-driver: fix typos in comments
-In-Reply-To: <20200830212640.60919-1-iulian.onofrei@yahoo.com>
-References: <20200830123610.20164-1-iulian.onofrei@yahoo.com>
- <20200830212640.60919-1-iulian.onofrei@yahoo.com>
-Message-ID: <20200830212640.60919-2-iulian.onofrei@yahoo.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 30 Aug 2020 23:40:42 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/rtty: fix build with mbedtls but without zlib
+Message-ID: <20200830214042.1340329-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Iulian Onofrei <iulian.onofrei@yahoo.com>
----
- package/nvidia-driver/nvidia-driver.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+zlib is not mandatory with mbedtls, only optional, however as mbedtls
+does not provide a pkg-config file, we assume that if zlib is
+available, we must link with it to avoid a build failure when linking
+statically with a zlib-enabled mbedtls.
 
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index baf2ba2be5..44e34cb7b4 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -35,7 +35,7 @@ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
- # NVidia extensions (which is deemed bad now), while the former follows
- # the newly-introduced vendor-neutral "dispatching" API/ABI:
- #   https://github.com/aritger/linux-opengl-abi-proposal/blob/master/linux-opengl-abi-proposal.txt
--# However, this is not very usefull to us, as we don't support multiple
-+# However, this is not very useful to us, as we don't support multiple
- # GL providers at the same time on the system, which this proposal is
- # aimed at supporting.
- #
-@@ -84,7 +84,7 @@ endef
- # Those libraries are 'private' libraries requiring an agreement with
- # NVidia to develop code for those libs. There seems to be no restriction
- # on using those libraries (e.g. if the user has such an agreement, or
--# wants to run a third-party program developped under such an agreement).
-+# wants to run a third-party program developed under such an agreement).
- ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
- NVIDIA_DRIVER_LIBS += \
- 	libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
+This change was pushed upstream with
+https://github.com/zhaojh329/rtty/commit/7b8efe11dbafce97971dc130bf6cc1756f34ce07
+and is in buildroot since the bump to version 7.1.4 with commit
+0c80245ddbe78c8e443f98b9bbccac56331cdb26.
+However, this change will raise a build failure if ZLIB_LIBRARIES is
+used when zlib is not found. This patch is fixing this build failure.
+
+However, it should be noted that the compression support in mbedtls is
+only enabled if BR2_PACKAGE_MBEDTLS_COMPRESSION=y. So we can have a
+situation where mbedtls is enabled, zlib is enabled, but mbedtls is not
+using zlib and as a result, since version 7.1.4, rttyt will needlessly
+link with zlib in such a situation.
+
+The only sane way to fix this is to use pkg-config, but as mbedtls
+apparently doesn't provide any .pc file, we leave it as it is.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Extend commit message
+
+ ...xt-fix-build-with-mbedtls-but-withou.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+
+diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+new file mode 100644
+index 0000000000..b7275462af
+--- /dev/null
++++ b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+@@ -0,0 +1,47 @@
++From 0982308255dd3fd70e7b93aa88a8f3c5b9c1b845 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 30 Aug 2020 21:15:06 +0200
++Subject: [PATCH] src/CMakeLists.txt: fix build with mbedtls but without zlib
++
++Building with mbedtls but without zlib will result in the following
++build failure:
++
++-- Found MbedTLS: /home/peko/autobuild/instance-0/output-1/per-package/rtty/host/powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libmbedtls.so (found version "2.16.7")
++-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
++-- Select MbedTLS(PolarSSL) as the SSL backend
++CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
++Please set them or make sure they are set and tested correctly in the CMake files:
++ZLIB_LIBRARY
++    linked by target "rtty" in directory /home/peko/autobuild/instance-0/output-1/build/rtty-7.1.4/src
++
++-- Configuring incomplete, errors occurred!
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zhaojh329/rtty/pull/77]
++---
++ src/CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 10f6626..d09e848 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -77,7 +77,11 @@ else()
++     elseif(RTTY_USE_MBEDTLS)
++         set(SSL_NAME "MbedTLS(PolarSSL)")
++         set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
++-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+++        if(ZLIB_FOUND)
+++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+++        else()
+++            set(SSL_LIB ${MBEDTLS_LIBRARIES}) 
+++        endif()
++         set(RTTY_HAVE_MBEDTLS_CONFIG 1)
++     endif()
++ 
++-- 
++2.28.0
++
 -- 
-2.24.3 (Apple Git-128)
+2.28.0
