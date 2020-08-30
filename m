@@ -1,75 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 21:20:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtty: fix build with mbedtls but
- without zlib
-Message-ID: <20200830192029.1009973-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 30 Aug 2020 22:02:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rtty: fix build with mbedtls
+ but without zlib
+In-Reply-To: <20200830192029.1009973-1-fontaine.fabrice@gmail.com>
+References: <20200830192029.1009973-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200830220205.777024e2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
+On Sun, 30 Aug 2020 21:20:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...xt-fix-build-with-mbedtls-but-withou.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+> +-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+> ++        if(ZLIB_FOUND)
+> ++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
 
-diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-new file mode 100644
-index 0000000000..b7275462af
---- /dev/null
-+++ b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-@@ -0,0 +1,47 @@
-+From 0982308255dd3fd70e7b93aa88a8f3c5b9c1b845 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 30 Aug 2020 21:15:06 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build with mbedtls but without zlib
-+
-+Building with mbedtls but without zlib will result in the following
-+build failure:
-+
-+-- Found MbedTLS: /home/peko/autobuild/instance-0/output-1/per-package/rtty/host/powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libmbedtls.so (found version "2.16.7")
-+-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-+-- Select MbedTLS(PolarSSL) as the SSL backend
-+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
-+Please set them or make sure they are set and tested correctly in the CMake files:
-+ZLIB_LIBRARY
-+    linked by target "rtty" in directory /home/peko/autobuild/instance-0/output-1/build/rtty-7.1.4/src
-+
-+-- Configuring incomplete, errors occurred!
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zhaojh329/rtty/pull/77]
-+---
-+ src/CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 10f6626..d09e848 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -77,7 +77,11 @@ else()
-+     elseif(RTTY_USE_MBEDTLS)
-+         set(SSL_NAME "MbedTLS(PolarSSL)")
-+         set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
-+-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        if(ZLIB_FOUND)
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        else()
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES}) 
-++        endif()
-+         set(RTTY_HAVE_MBEDTLS_CONFIG 1)
-+     endif()
-+ 
-+-- 
-+2.28.0
-+
+Is there a reason why zlib is necessary for mbedtls support ?
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
