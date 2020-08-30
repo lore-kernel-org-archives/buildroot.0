@@ -1,136 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 10:08:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/menu-cache: fix build with gcc 10
-Message-ID: <20200830080856.3864083-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 30 Aug 2020 10:14:24 +0200
+Subject: [Buildroot] Buildroot 2020.02.5 released
+In-Reply-To: <87mu2ddye0.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 29 Aug 2020 21:51:03 +0200")
+References: <87mu2ddye0.fsf@dell.be.48ers.dk>
+Message-ID: <873644eejj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a97825f3c3e6245f8d1c2eb0cdb079f5dd6f1b47
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Support-gcc10-compilation.patch      | 109 ++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/menu-cache/0001-Support-gcc10-compilation.patch
+ > Hi,
+ > Buildroot is a simple tool for creating complete embedded Linux systems
+ > (http://buildroot.org).
 
-diff --git a/package/menu-cache/0001-Support-gcc10-compilation.patch b/package/menu-cache/0001-Support-gcc10-compilation.patch
-new file mode 100644
-index 0000000000..5ef5d17749
---- /dev/null
-+++ b/package/menu-cache/0001-Support-gcc10-compilation.patch
-@@ -0,0 +1,109 @@
-+From 1ce739649b4d66339a03fc0ec9ee7a2f7c141780 Mon Sep 17 00:00:00 2001
-+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
-+Date: Fri, 24 Jan 2020 13:33:00 +0900
-+Subject: [PATCH] Support gcc10 compilation
-+
-+gcc10 now defaults to -fno-common, and with gcc10 menu-cache compilation fails like
-+
-+/bin/ld: menu-merge.o:menu-cache-gen/menu-tags.h:167: multiple definition of `DirDirs'; main.o:menu-cache-gen/menu-tags.h:167: first defined here
-+/bin/ld: menu-merge.o:menu-cache-gen/menu-tags.h:164: multiple definition of `AppDirs'; main.o:menu-cache-gen/menu-tags.h:164: first defined here
-+/bin/ld: menu-merge.o:menu-cache-gen/menu-tags.h:52: multiple definition of `menuTag_Layout'; main.o:menu-cache-gen/menu-tags.h:52: first defined here
-+....
-+
-+This patch fixes compilation with gcc10: properly declaring variables in header with "extern", and also removing some unneeded variables in header files.
-+
-+[Retrieved from:
-+https://github.com/lxde/menu-cache/pull/19/commits/1ce739649b4d66339a03fc0ec9ee7a2f7c141780]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ menu-cache-gen/menu-tags.h | 55 ++++++++++++--------------------------
-+ 1 file changed, 17 insertions(+), 38 deletions(-)
-+
-+diff --git a/menu-cache-gen/menu-tags.h b/menu-cache-gen/menu-tags.h
-+index f3fd7d3..f71c0bc 100644
-+--- a/menu-cache-gen/menu-tags.h
-++++ b/menu-cache-gen/menu-tags.h
-+@@ -22,38 +22,17 @@
-+ #include <libfm/fm-extra.h>
-+ #include <menu-cache.h>
-+ 
-+-FmXmlFileTag menuTag_Menu;
-+-FmXmlFileTag menuTag_AppDir;
-+-FmXmlFileTag menuTag_DefaultAppDirs;
-+-FmXmlFileTag menuTag_DirectoryDir;
-+-FmXmlFileTag menuTag_DefaultDirectoryDirs;
-+-FmXmlFileTag menuTag_Include;
-+-FmXmlFileTag menuTag_Exclude;
-+-FmXmlFileTag menuTag_Filename;
-+-FmXmlFileTag menuTag_Or;
-+-FmXmlFileTag menuTag_And;
-+-FmXmlFileTag menuTag_Not;
-+-FmXmlFileTag menuTag_Category;
-+-FmXmlFileTag menuTag_MergeFile;
-+-FmXmlFileTag menuTag_MergeDir;
-+-FmXmlFileTag menuTag_DefaultMergeDirs;
-+-FmXmlFileTag menuTag_Directory;
-+-FmXmlFileTag menuTag_Name;
-+-FmXmlFileTag menuTag_Deleted;
-+-FmXmlFileTag menuTag_NotDeleted;
-+-FmXmlFileTag menuTag_OnlyUnallocated;
-+-FmXmlFileTag menuTag_NotOnlyUnallocated;
-+-FmXmlFileTag menuTag_All;
-+-FmXmlFileTag menuTag_LegacyDir;
-+-FmXmlFileTag menuTag_KDELegacyDirs;
-+-FmXmlFileTag menuTag_Move;
-+-FmXmlFileTag menuTag_Old;
-+-FmXmlFileTag menuTag_New;
-+-FmXmlFileTag menuTag_Layout;
-+-FmXmlFileTag menuTag_DefaultLayout;
-+-FmXmlFileTag menuTag_Menuname;
-+-FmXmlFileTag menuTag_Separator;
-+-FmXmlFileTag menuTag_Merge;
-++extern FmXmlFileTag menuTag_AppDir;
-++extern FmXmlFileTag menuTag_DirectoryDir;
-++extern FmXmlFileTag menuTag_Include;
-++extern FmXmlFileTag menuTag_Exclude;
-++extern FmXmlFileTag menuTag_Filename;
-++extern FmXmlFileTag menuTag_Or;
-++extern FmXmlFileTag menuTag_And;
-++extern FmXmlFileTag menuTag_Not;
-++extern FmXmlFileTag menuTag_Category;
-++extern FmXmlFileTag menuTag_All;
-++extern FmXmlFileTag menuTag_LegacyDir;
-+ 
-+ typedef enum {
-+     MERGE_NONE, /* starting value */
-+@@ -152,19 +131,19 @@ typedef struct {
-+ } MenuRule;
-+ 
-+ /* requested language(s) */
-+-char **languages;
-++extern char **languages;
-+ 
-+ /* list of menu files to monitor */
-+-GSList *MenuFiles;
-++extern GSList *MenuFiles;
-+ 
-+ /* list of menu dirs to monitor */
-+-GSList *MenuDirs;
-++extern GSList *MenuDirs;
-+ 
-+ /* list of available app dirs */
-+-GSList *AppDirs;
-++extern GSList *AppDirs;
-+ 
-+ /* list of available dir dirs */
-+-GSList *DirDirs;
-++extern GSList *DirDirs;
-+ 
-+ /* parse and merge menu files */
-+ MenuMenu *get_merged_menu(const char *file, FmXmlFile **xmlfile, GError **error);
-+@@ -177,7 +156,7 @@ gboolean save_menu_cache(MenuMenu *layout, const char *menuname, const char *fil
-+ void _free_layout_items(GList *data);
-+ 
-+ /* verbosity level */
-+-gint verbose;
-++extern gint verbose;
-+ 
-+ #define DBG if (verbose) g_debug
-+ #define VDBG if (verbose > 1) g_debug
+ > Buildroot 2020.02.5 is released - Go download it at:
+
+ > http://buildroot.org/downloads/buildroot-2020.02.5.tar.gz
+
+ > or
+
+ > http://buildroot.org/downloads/buildroot-2020.02.5.tar.bz2
+
+As pointed out by Fran?ois Perrad, this is unfortunately broken for
+systemd builds without less :/
+
+It is now fixed on the 2020.02.x branch. Please pull those fixes if you
+are affected, or wait until next week when I will release 2020.02.6.
+
+Sorry.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
