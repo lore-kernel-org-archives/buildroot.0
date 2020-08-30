@@ -1,60 +1,60 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Aug 2020 20:20:55 +0200
-Subject: [Buildroot] [git commit] package/stress-ng: add upstream patch to
- fix build failure for getresuid32
-Message-ID: <20200830181934.492BC817FF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 30 Aug 2020 20:34:06 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
+ version 1.14.0
+In-Reply-To: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
+References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
+Message-ID: <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=904c48ac07d98c23213b33b160a8836cd80eb981
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/f13/f13d85dfec371c38229bca988cd4bffa4cb97ae5/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...ysinval-fix-build-failure-for-getresuid32.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+On 21/08/2020 22:41, Fabrice Fontaine wrote:
+> Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
 
-diff --git a/package/stress-ng/0002-stress-sysinval-fix-build-failure-for-getresuid32.patch b/package/stress-ng/0002-stress-sysinval-fix-build-failure-for-getresuid32.patch
-new file mode 100644
-index 0000000000..9759e8c8ba
---- /dev/null
-+++ b/package/stress-ng/0002-stress-sysinval-fix-build-failure-for-getresuid32.patch
-@@ -0,0 +1,31 @@
-+From 0c132280f973969db597b9983d4fa240f22761c4 Mon Sep 17 00:00:00 2001
-+From: bybug <felxasus@gmail.com>
-+Date: Thu, 2 Jul 2020 05:08:12 +0300
-+Subject: [PATCH] stress-sysinval: fix build failure for getresuid32
-+
-+Fixing a build error for x86 architectures
-+
-+Signed-off-by: bybug <felxasus@gmail.com>
-+Signed-off-by: Colin Ian King <colin.king@canonical.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[downloaded from upstream commit
-+ https://github.com/ColinIanKing/stress-ng/commit/0c132280f973969db597b9983d4fa240f22761c4]
-+---
-+ stress-sysinval.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/stress-sysinval.c b/stress-sysinval.c
-+index e9108bb0..0a4f383b 100644
-+--- a/stress-sysinval.c
-++++ b/stress-sysinval.c
-+@@ -642,8 +642,8 @@ static const stress_syscall_arg_t stress_syscall_args[] = {
-+ 	{ SYS(getresuid), 3, { ARG_PTR_WR, ARG_PTR_WR, ARG_PTR_WR, 0, 0, 0 } },
-+ #endif
-+ #if DEFSYS(getresuid32)
-+-	{ SYS(getresuid), 3, { ARG_PTR, ARG_PTR, ARG_PTR, 0, 0, 0 } },
-+-	{ SYS(getresuid), 3, { ARG_PTR_WR, ARG_PTR_WR, ARG_PTR_WR, 0, 0, 0 } },
-++	{ SYS(getresuid32), 3, { ARG_PTR, ARG_PTR, ARG_PTR, 0, 0, 0 } },
-++	{ SYS(getresuid32), 3, { ARG_PTR_WR, ARG_PTR_WR, ARG_PTR_WR, 0, 0, 0 } },
-+ #endif
-+ #if DEFSYS(getrlimit)
-+ 	{ SYS(getrlimit), 2, { ARG_RND, ARG_PTR, 0, 0, 0, 0 } },
+ Again, although this bump indeed fixes those issues, it's a feature version
+bump so I'm not sure if it can be called "security bump".
+
+ In addition, the libupnp18 package exists because of API incompatibility with
+1.6. Are we sure that this problem doesn't repeat itself for 1.14?
+
+ Regards,
+ Arnout
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libupnp18/libupnp18.hash | 6 +++---
+>  package/libupnp18/libupnp18.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+> index ba9ce1bcdf..cd693ef0eb 100644
+> --- a/package/libupnp18/libupnp18.hash
+> +++ b/package/libupnp18/libupnp18.hash
+> @@ -1,5 +1,5 @@
+> -# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
+> -sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
+> +# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.14.0/libupnp-1.14.0.tar.bz2.sha1
+> +sha1  b14cff9ddd7cfe7f0e4bf552387122a31770f51f  libupnp-1.14.0.tar.bz2
+>  # Locally computed:
+> -sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
+> +sha256  ecb23d4291968c8a7bdd4eb16fc2250dbacc16b354345a13342d67f571d35ceb  libupnp-1.14.0.tar.bz2
+>  sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+> diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+> index f17a1a720d..fb6c548c47 100644
+> --- a/package/libupnp18/libupnp18.mk
+> +++ b/package/libupnp18/libupnp18.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBUPNP18_VERSION = 1.8.7
+> +LIBUPNP18_VERSION = 1.14.0
+>  LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+>  LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+>  LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+> 
