@@ -1,87 +1,156 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Sun, 30 Aug 2020 16:34:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/re2: new package
-In-Reply-To: <20200826233030.16bd2230@windsurf.home>
-References: <20200813144549.1262366-1-buildroot@heine.tech>
- <20200813144549.1262366-2-buildroot@heine.tech>
- <20200826233030.16bd2230@windsurf.home>
-Message-ID: <68c32e7f-fb83-764e-313c-d8a8263a069b@heine.tech>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sun, 30 Aug 2020 16:36:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: new package
+In-Reply-To: <20200829221711.3327c5ab@windsurf.home>
+References: <20200829075901.19860-1-egorenar-dev@posteo.net>
+ <20200829221711.3327c5ab@windsurf.home>
+Message-ID: <87mu2ckxo4.fsf@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On 26.08.20 23:30, Thomas Petazzoni wrote:
-> On Thu, 13 Aug 2020 16:45:48 +0200
-> Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+> For all new packages, we need an entry to be added to the DEVELOPERS
+> file so we know who is in charge of which package, and you will receive
+> e-mail notifications when this package fails to build or needs to be
+> updated.
+
+Fixed.
+
 >
->> RE2 is a fast, safe, thread-friendly alternative to backtracking
->> regular expression engines like those used in PCRE, Perl, and
->> Python. It is a C++ library.
->>
->> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
->> ---
->>   package/Config.in     |  1 +
->>   package/re2/Config.in | 12 ++++++++++++
->>   package/re2/re2.hash  |  3 +++
->>   package/re2/re2.mk    | 25 +++++++++++++++++++++++++
->>   4 files changed, 41 insertions(+)
->>   create mode 100644 package/re2/Config.in
->>   create mode 100644 package/re2/re2.hash
->>   create mode 100644 package/re2/re2.mk
-> It seems like there is an issue with this package:
+> We need all patches to have a description and Signed-off-by line, and
+> be generated using "git format-patch -N" when the upstream project uses
+> git.
 >
->    http://autobuild.buildroot.net/results/a98/a98d3203f68f0f929c544537244e7621e80ce0a1/build-end.log
-that's not good...
+
+Fixed.
+
+
+> It's not clear to me why you need this change though. I think the
+> intention of this code is that if you pass CFLAGS in the environment of
+> make and not as an option, it will do the right thing. Quick demo:
 >
-> Apparently, only a static version of libre2 gets installed, which is
-> built without -fPIC (makes sense for a static library). But then it
-> gets linked into a shared library, which booms as all the code in a
-> shared library must be compiled with -fPIC.
+> $ cat toto.mk 
+> CFLAGS_BASE := $(CFLAGS) -foobar
+> CFLAGS := $(CFLAGS_BASE) -barfoo
 >
-> Perhaps the issue is that we're not explicitly passing
-> -DBUILD_SHARED_LIBS=ON to host CMake packages in package/pkg-cmake.mk ?
+> all:
+> 	@echo $(CFLAGS)
 >
-> Could you have a look into this ?
+> $
+> $ make -f toto.mk CFLAGS=-baz
+> -baz
+> $ CFLAGS=-baz make -f toto.mk
+> -baz -foobar -barfoo
+>
+>
+
+Fixed. Thanks for pointing out.
+
+> Again, we need this to have a proper description and Signed-off-by.
+> Also, could you submit it upstream ?
+>
+
+The fix is already upstream but there is no release yet.
+Anyways, i took the official patch now.
 
 
-What I'm wondering: Should all host packages always be built as shared libs?
+> elfutils has plenty more dependencies that you need to replicate:
+>
+>         depends on BR2_USE_WCHAR
+>         depends on !BR2_STATIC_LIBS
+>         # Only glibc and uClibc implement the myriad of required GNUisms
+>         depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
+>
+
+Fixed.
+
+>
+> You need to add the upstream URL of the project in the Config.in help
+> text, look at other packages for example.
+>
+> Also, you need to add a comment about the Config.in dependencies. Look
+> at other packages for direction on how to do this. For example, in
+> package/elfutils/Config.in, we have:
+>
+> comment "elfutils needs a uClibc or glibc toolchain w/ wchar, dynamic library"
+>         depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+>                 || !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+>
+
+Fixed.
+
+> Your Config.in file also selects bzip2 and elfutils... so it seems odd
+> they are not needed at build time. Could you confirm this ?
+>
+> In any case, make sure you can run this:
+>
+> $ make clean
+> $ make makedumpfile
+>
+
+Done. It works.
 
 
- From the CMake Documentation [1] (which is a bit unclear) I assume that 
-as default
+> if that doesn't work, you forgot some build dependencies.
+>
+> Also, run:
+>
+> $ cat > snippet.cfg<<EOF
+> BR2_PACKAGE_MAKEDUMPFILE=y
+> EOF
+> $ ./utils/test-pkg -c snippet.cfg -p makedumpfile
+>
 
-CMake will build libs as static. So it might be a coincidence that all 
-existing host cmake packages
-
-built as shared as their default.
-
-When comparing to package/pkg-autotools.mk I see that for host packages
-
- ??? --enable-shared --disable-static
-
-is always set. So it would make sense to also add
-
- ?? -DBUILD_SHARED_LIBS=ON
-
-
-to cmake host build flags.
-
-
-
-I'm currently on vacation with no access to a proper machine for 
-building. So I would
-
-be able to take care of this further earliest next week.
+$ ./utils/test-pkg -c snippet.cfg -p makedumpfile
+                             br-arm-full [1/6]: FAILED
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: SKIPPED
+                      br-arm-full-static [5/6]: SKIPPED
+                            sourcery-arm [6/6]: OK
+6 builds, 3 skipped, 1 build failed, 0 legal-info failed
 
 
-Regards,
+/home/egorenar/br-test-pkg/br-arm-full/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D__arm     __ -U__x86_64__ -c -o ./arch/x86_64.o arch/x86_64.c
+ elf_info.c: In function ?get_elf64_phnum?:
+ elf_info.c:1050:23: error: ?PN_XNUM? undeclared (first use in this function)
+   if (ehdr->e_phnum == PN_XNUM) {
+                        ^
+ elf_info.c:1050:23: note: each undeclared identifier is reported only once for each function it appears in
+ /home/egorenar/br-test-pkg/br-arm-full/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -g -O2 -Wall -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D__arm     __ -U__x86_64__ -c -o ./arch/ia64.o arch/ia64.c
+ make[1]: *** [Makefile:90: elf_info.o] Error 1
 
-Michael
+
+Not sure what is going on, because PN_XNUM is defined in
+elfutils/libelf/elf.h
 
 
 
-[1] https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html
+> Could you instead pass TARGET_CONFIGURE_OPTS in the environment, like
+> this:
+>
+> 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+> 		TARGET=$(BR2_ARCH) USELZO=on LINKTYPE=dynamic
+>
+> TARGET=$(BR2_ARCH): did you check it builds with all CPU architectures
+> supported by Buildroot? In the above proposed test with test-pkg, I'd
+> suggest doing one run with the -a option to check with all toolchains
+> supported by Buildroot.
+>
+> Also, USELZO=on indicates that the LZO dependency, could you make it
+> optional? I.e, drop the select BR2_PACKAGE_LZO from Config.in, and in
+> the .mk file, do something like:
+>
+> ifeq ($(BR2_PACKAGE_LZO),y)
+> MAKEDUMPFILE_DEPENDENCIES += lzo
+> MAKEDUMPFILE_MAKE_OPTS += USELZO=on
+> endif
+
+
+Fixed.
+
+Regards
+Alex
