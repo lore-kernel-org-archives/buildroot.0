@@ -1,149 +1,125 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 30 Aug 2020 17:27:43 +0200
-Subject: [Buildroot] [PATCH] package/mg: new package
-In-Reply-To: <20200830090050.889647-1-troglobit@gmail.com>
-References: <20200830090050.889647-1-troglobit@gmail.com>
-Message-ID: <CAKcgs2wo8X9Z6Veso26QK8GAkKUPdA19TUarOvsmmMTdjXwaCQ@mail.gmail.com>
+Date: Sun, 30 Aug 2020 17:52:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mrp: new package
+In-Reply-To: <20200830083845.1402501-1-horatiu.vultur@microchip.com>
+References: <20200830083845.1402501-1-horatiu.vultur@microchip.com>
+Message-ID: <CAKcgs2w58TBPMAB5-V7wi3S5N-PLxwOGOy1DYFt47LWUmxPksA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joachim,
+Hello Horatiu,
 
 thanks for your contribution.
 Please find a few comments below.
 
-Le dim. 30 ao?t 2020 ? 11:01, Joachim Wiberg <troglobit@gmail.com> a ?crit :
+Le dim. 30 ao?t 2020 ? 10:39, Horatiu Vultur via buildroot
+<buildroot@busybox.net> a ?crit :
 >
-> Mg is a small Emacs-like editor with no external dependencies except a
-> standard C library.  It weighs in at 130 kiB and is one of a select few
-> completely free (public domain) text editors suitable for small and
-> embedded systems.
->
-> This version is based on the OpenBSD Mg, but with more features, one of
-> which being the no-ncurses/termcap support, which heavily reduces the
-> impact on a resource constrained system.
->
-> Upstream: https://github.com/troglobit/mg/
->
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > ---
->  package/Config.in    |  1 +
->  package/mg/Config.in | 18 ++++++++++++++++++
->  package/mg/mg.hash   |  5 +++++
->  package/mg/mg.mk     | 24 ++++++++++++++++++++++++
->  4 files changed, 48 insertions(+)
->  create mode 100644 package/mg/Config.in
->  create mode 100644 package/mg/mg.hash
->  create mode 100644 package/mg/mg.mk
+>  DEVELOPERS            |  1 +
+>  package/Config.in     |  1 +
+>  package/mrp/Config.in | 11 +++++++++++
+>  package/mrp/mrp.hash  |  3 +++
+>  package/mrp/mrp.mk    | 13 +++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/mrp/Config.in
+>  create mode 100644 package/mrp/mrp.hash
+>  create mode 100644 package/mrp/mrp.mk
 >
-You need to add an entry to the DEVELOPERS file with your name and
-package, so that you are identified as the maintainer for this
-package. Please take a look at the DEVELOPERS file.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index b86e5f8169..fb09775cc5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1120,6 +1120,7 @@ F:        package/squeezelite/
+>
+>  N:     Horatiu Vultur <horatiu.vultur@microchip.com>
+>  F:     package/easyframes/
+> +F:     package/mrp/
+This patch will not apply because the easyframes package is not in master yet.
+You need to rebase to master before sending your patch.
 
+>
+>  N:     Ian Haylock <haylocki@yahoo.co.uk>
+>  F:     package/python-rpi-gpio/
 > diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4795..db2563f789 100644
+> index b1df81d7f1..0b9ffbad25 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -2431,6 +2431,7 @@ menu "Text editors and viewers"
->         source "package/joe/Config.in"
->         source "package/less/Config.in"
->         source "package/mc/Config.in"
-> +       source "package/mg/Config.in"
->         source "package/most/Config.in"
->         source "package/nano/Config.in"
->         source "package/uemacs/Config.in"
-> diff --git a/package/mg/Config.in b/package/mg/Config.in
+> @@ -2129,6 +2129,7 @@ menu "Networking applications"
+>         source "package/mosh/Config.in"
+>         source "package/mosquitto/Config.in"
+>         source "package/mrouted/Config.in"
+> +       source "package/mrp/Config.in"
+>         source "package/mtr/Config.in"
+>         source "package/nbd/Config.in"
+>         source "package/ncftp/Config.in"
+> diff --git a/package/mrp/Config.in b/package/mrp/Config.in
 > new file mode 100644
-> index 0000000000..11e5bdb273
+> index 0000000000..a175e42288
 > --- /dev/null
-> +++ b/package/mg/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_MG
-> +       bool "mg"
-> +       depends on BR2_USE_MMU # fork()
+> +++ b/package/mrp/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_MRP
+> +       bool "Media Redundancy Protocol"
+> +       select BR2_PACKAGE_LIBEV
+> +       select BR2_PACKAGE_LIBMNL
+> +       select BR2_PACKAGE_LIBNL
+libnl needs threads so mrp inherits its dependency (depends on
+BR2_TOOLCHAIN_HAS_THREADS)
+
 > +       help
-> +         Emacs-like text editor (130 kiB)
+> +         This is the userspace application that configures the kernel
+> +         to run MRP protocol. The userspace application is made of 2
+> +         applications, one deamon and a client.
 > +
-> +         Mg is a MicroEMACS clone with the goal of being compatible
-> +         with GNU Emacs, because there should never be any reason to
-> +         learn more than one Emacs flavor.
-> +
-> +         Unlike many other editors it does not require ncurses, only a
-> +         standard C library, making it suitable for really small and
-> +         embedded systems.
-> +
-> +         This version is based on mg2a from OpenBSD, with more features
-> +         and, in particular, no requirement on ncurses or termcap.
-> +
-> +         https://github.com/troglobit/mg/
-> diff --git a/package/mg/mg.hash b/package/mg/mg.hash
+> +         https://github.com/microchip-ung/mrp
+> diff --git a/package/mrp/mrp.hash b/package/mrp/mrp.hash
 > new file mode 100644
-> index 0000000000..6b3c400faa
+> index 0000000000..8e416feb47
 > --- /dev/null
-> +++ b/package/mg/mg.hash
-> @@ -0,0 +1,5 @@
-> +# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.6/
-I assume you meant: "from:
-https://github.com/troglobit/mg/releases/download/v3.4/mg-3.4.tar.gz.md5"
+> +++ b/package/mrp/mrp.hash
+> @@ -0,0 +1,3 @@
+> +# locally calculated
+> +sha256 1a6c76d058bb425a7ec8b69a65de797650961161ec016b51ac8a1965e1ac304f mrp-1.1.tar.gz
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE
+In the lines above, the three fields need to be separated by two spaces.
 
-> +md5 6b79855d54770bcb23e5457ebde8296c  mg-3.4.tar.gz
-It should be two spaces after "md5"
-
-> +# Locally computed:
-> +sha256 1a620cf5b2dd4b00006d6c929ac8e2a70eeab5f807a0d6e5334b878aa182b713  mg-3.4.tar.gz
-> +sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
-For the two lines above, it should be two spaces after "sha256"
-
-> diff --git a/package/mg/mg.mk b/package/mg/mg.mk
+> diff --git a/package/mrp/mrp.mk b/package/mrp/mrp.mk
 > new file mode 100644
-> index 0000000000..c8df6eddc6
+> index 0000000000..54efe54c55
 > --- /dev/null
-> +++ b/package/mg/mg.mk
-> @@ -0,0 +1,24 @@
+> +++ b/package/mrp/mrp.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# mg2a
+> +# mrp
 > +#
 > +################################################################################
 > +
-> +MG_VERSION = 3.4
-> +MG_SITE = https://github.com/troglobit/mg/releases/download/v$(MG_VERSION)
-> +MG_LICENSE = Public Domain
-> +MG_LICENSE_FILES = UNLICENSE
-> +
-> +ifeq ($(BR2_PACKAGE_NCURSES),y)
-> +MG_DEPENDENCIES += ncurses
-We prefer to force the options, so you should have a "MG_CONF_OPTS =
---with-curses" here
+> +MRP_VERSION = 1.1
+> +MRP_SITE = $(call github,microchip-ung,mrp,v$(MRP_VERSION))
+> +MRP_DEPENDENCIES = libev libmnl libnl
+> +MRP_LICENSE = GPLv2
+I would say it is GPLv2+ ("or any later version"), but I can never
+tell to be honest
 
-> +else
-> +MG_CONF_OPTS += --without-curses
-> +endif
+> +MRP_LICENSE_FILES = LICENSE
 > +
-> +define MG_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -m 0755 -D $(@D)/tutorial $(TARGET_DIR)/usr/share/doc/tutorial
-> +       gzip -9 $(TARGET_DIR)/usr/share/doc/tutorial
-We prefer not to install documentation on the target to keep the
-footprint small. Can you please remove the two lines above?
-
-> +       $(INSTALL) -m 0755 -D $(@D)/src/mg $(TARGET_DIR)/usr/bin/mg
-> +endef
-> +
-> +$(eval $(autotools-package))
+> +$(eval $(cmake-package))
 > --
-> 2.25.1
+> 2.27.0
 >
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-One last comment: did you run the the test-pkg script to check for any
-potential issues with some architectures and build options?
+Did you run the "test-pkg" script to check for potential issues
+revealed by some architectures or build options?
 
-Can you please send a v2 with the fixes proposed above?
-
+Can you please send a v2 with the fixes mentioned above?
 thanks
 Gilles.
