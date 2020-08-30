@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 30 Aug 2020 18:11:41 +0200
-Subject: [Buildroot] [PATCH RFC 2/3] packages/luainterpreter: remove
- target-finalize hack
-In-Reply-To: <20191030132759.8643-3-unixmania@gmail.com>
+Date: Sun, 30 Aug 2020 18:12:34 +0200
+Subject: [Buildroot] [PATCH RFC 3/3] packages/{eudev,
+ systemd}: move commoun users to package/udev
+In-Reply-To: <20191030132759.8643-4-unixmania@gmail.com>
 References: <20191030132759.8643-1-unixmania@gmail.com>
- <20191030132759.8643-3-unixmania@gmail.com>
-Message-ID: <333b104c-4b02-e7eb-7d40-4f57f90a82ed@mind.be>
+ <20191030132759.8643-4-unixmania@gmail.com>
+Message-ID: <d8624165-9f11-fe1c-6889-7d6571392e6c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,40 +17,12 @@ To: buildroot@busybox.net
 On 30/10/2019 14:27, unixmania at gmail.com wrote:
 > From: Carlos Santos <unixmania@gmail.com>
 > 
-> Use LUAINTERPRETER_TARGET_FINALIZE_HOOKS, now that it's suported by
-> virtual packages.
+> Use UDEV_USERS, now that it's suported by virtual packages.
 > 
 > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
->  package/luainterpreter/luainterpreter.mk | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-> index 58d421b183..828b71e8d2 100644
-> --- a/package/luainterpreter/luainterpreter.mk
-> +++ b/package/luainterpreter/luainterpreter.mk
-> @@ -6,16 +6,11 @@
->  
->  LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
->  
-> -# Lua packages often install documentation, clean that up globally
 
- This comment was still relevant, so I kept that and applied to next, thanks.
+
+ Applied to next, thanks.
 
  Regards,
  Arnout
-
-> -# Since luainterpreter is a virtual package, we can't use
-> -# LUAINTERPRETER_TARGET_FINALIZE_HOOKS
-> -ifeq ($(BR2_PACKAGE_HAS_LUAINTERPRETER),y)
->  define LUAINTERPRETER_REMOVE_DOC
->  	rm -rf $(TARGET_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/doc
->  endef
->  
-> -TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
-> -endif
-> +LUAINTERPRETER_TARGET_FINALIZE_HOOKS += LUAINTERPRETER_REMOVE_DOC
->  
->  $(eval $(virtual-package))
->  $(eval $(host-virtual-package))
-> 
