@@ -1,83 +1,68 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 20:50:47 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
- version 1.14.0
-In-Reply-To: <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
-References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
- <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
-Message-ID: <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
+Date: Sun, 30 Aug 2020 21:07:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/am33x-cm3: fix build with gcc 10
+Message-ID: <20200830190725.982187-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 30 ao?t 2020 ? 20:34, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 21/08/2020 22:41, Fabrice Fontaine wrote:
-> > Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
->
->  Again, although this bump indeed fixes those issues, it's a feature version
-> bump so I'm not sure if it can be called "security bump".
->
->  In addition, the libupnp18 package exists because of API incompatibility with
-> 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
-There is indeed an API incompatibility between 1.8 and 1.14 related to
-CallStranger a.k.a. CVE-2020-12695: starting from 1.14, UpnpInit
-function has been removed as this function can't be fixed against
-CallStranger because this function takes an IP address and not an
-interface name.
-However, UpnpInit2 is available for more than 10 years and is used by
-most of the applications (i.e. mpd and vlc) with the exception of
-gmrender-resurrect (which is patched in this serie).
-As soon as libupnp 1.14 is available, I'm planning to update the
-applications that are still using the legacy libupnp 1.6.x version
-(i.e. igd2-for-linux and ushare) and drop this unsecure version.
-I would like to avoid adding a third version of libupnp (i.e. a
-libupnp114 package) as from a security perspective, all packages
-should use this version.
-Still, I agree that this is not only a "security bump" so I would
-advise to apply this serie to next and backport it to our LTS branches
-in a few months.
->
->  Regards,
->  Arnout
->
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/libupnp18/libupnp18.hash | 6 +++---
-> >  package/libupnp18/libupnp18.mk   | 2 +-
-> >  2 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
-> > index ba9ce1bcdf..cd693ef0eb 100644
-> > --- a/package/libupnp18/libupnp18.hash
-> > +++ b/package/libupnp18/libupnp18.hash
-> > @@ -1,5 +1,5 @@
-> > -# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
-> > -sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
-> > +# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.14.0/libupnp-1.14.0.tar.bz2.sha1
-> > +sha1  b14cff9ddd7cfe7f0e4bf552387122a31770f51f  libupnp-1.14.0.tar.bz2
-> >  # Locally computed:
-> > -sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
-> > +sha256  ecb23d4291968c8a7bdd4eb16fc2250dbacc16b354345a13342d67f571d35ceb  libupnp-1.14.0.tar.bz2
-> >  sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-> > diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-> > index f17a1a720d..fb6c548c47 100644
-> > --- a/package/libupnp18/libupnp18.mk
-> > +++ b/package/libupnp18/libupnp18.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -LIBUPNP18_VERSION = 1.8.7
-> > +LIBUPNP18_VERSION = 1.14.0
-> >  LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
-> >  LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
-> >  LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
-> >
-Best Regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/a991e6efa012df518ff1bb35017ad2c96c8feedc
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0004-Makefile-add-fno-builtin.patch       | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+
+diff --git a/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+new file mode 100644
+index 0000000000..7478bd45f3
+--- /dev/null
++++ b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+@@ -0,0 +1,41 @@
++From 25fc567ba8a0cd199e48bfa82863247d953784ea Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 30 Aug 2020 20:59:29 +0200
++Subject: [PATCH] Makefile: add -fno-builtin
++
++Build with gcc 10 fails on:
++
++/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: src/foundation/startup.o: in function `reset_handler':
++/srv/storage/autobuild/run/instance-2/output-1/build/am33x-cm3-11107db2f1e9e58ee75d4fe9cc38423c9a6e4365/src/foundation/startup.c:177: undefined reference to `memcpy'
++
++This is due to the fact that gcc 10 replaces the following statement by
++a memcpy call:
++
++*puldest++ = *pulsrc++;
++
++To fix this build failure, add -fno-builtin
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a991e6efa012df518ff1bb35017ad2c96c8feedc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index fe3d844..fa24d4b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
++ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
++ 	-Wempty-body -fno-strict-overflow -fno-stack-protector \
++-	-fno-pie -g -I$(INCLUDES) -O2
+++	-fno-pie -fno-builtin -g -I$(INCLUDES) -O2
++ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
++ 
++ EXECUTABLE=am335x-pm-firmware.elf
++-- 
++2.28.0
++
+-- 
+2.28.0
