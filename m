@@ -1,99 +1,109 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 23:40:42 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/rtty: fix build with mbedtls but without zlib
-Message-ID: <20200830214042.1340329-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Aug 2020 00:12:15 +0200
+Subject: [Buildroot] [PATCHv2] core: make it possible to check flake8 like
+ we check package
+Message-ID: <20200830221215.26034-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zlib is not mandatory with mbedtls, only optional, however as mbedtls
-does not provide a pkg-config file, we assume that if zlib is
-available, we must link with it to avoid a build failure when linking
-statically with a zlib-enabled mbedtls.
+Move the code to run check-flake8 into the Makefile, like we have for
+check-package, so that it is easy to run locally (and not wait for
+someone to report a failure from their Gitlab pipelines).
 
-This change was pushed upstream with
-https://github.com/zhaojh329/rtty/commit/7b8efe11dbafce97971dc130bf6cc1756f34ce07
-and is in buildroot since the bump to version 7.1.4 with commit
-0c80245ddbe78c8e443f98b9bbccac56331cdb26.
-However, this change will raise a build failure if ZLIB_LIBRARIES is
-used when zlib is not found. This patch is fixing this build failure.
+Compared to the existing check from gitlab-ci.yml, the Makefile check
+differs in this respect:
 
-However, it should be noted that the compression support in mbedtls is
-only enabled if BR2_PACKAGE_MBEDTLS_COMPRESSION=y. So we can have a
-situation where mbedtls is enabled, zlib is enabled, but mbedtls is not
-using zlib and as a result, since version 7.1.4, rttyt will needlessly
-link with zlib in such a situation.
+  - don't explicitly find *.py files: they are supposed to also be found
+    as a result of running 'file' on them;
 
-The only sane way to fix this is to use pkg-config, but as mbedtls
-apparently doesn't provide any .pc file, we leave it as it is.
+  - use git ls-tree instead of find: this is supopsedly faster as it
+    uses the index rather than readdir();
 
-Fixes:
- - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
+  - don't output the count of warnings or errors: the output is a single
+    integer, which is confusing when there are errors, and even more so
+    when there are no, when it is simply '0';
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - don't sort: the output is already stable and independent from the
+    locale;
+
+  - don't report the number of processed files: this information is
+    rather useless, and getting a hold of it would be more challenging
+    in this new code.
+
+Note: ideally, we would want to use --null, --zero, or similar options,
+with utilities that generates or parses a files listing.  While git
+ls-tree and xargs do support it, it becomes a little bit tricky to use
+the --print0 option of file, and then grep in that output (it is not
+undoable, but would requires replacing grep+cut with some sed trickery).
+Since we do not expect our scripts names to contain funky chars (like
+\n or a colon), we just hand-wave away that issue (and the old code was
+doing the same assumption too).
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Extend commit message
+Changes v1 -> v2:
+  - ue git ls-tree  (Peter)
+  - drop the dual find  (Peter)
+  - drop the final count  (Peter)
+  - extend commit log to explain deltas with old code
+---
+ Makefile                      | 9 ++++++++-
+ support/misc/gitlab-ci.yml.in | 9 +--------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
- ...xt-fix-build-with-mbedtls-but-withou.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-
-diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-new file mode 100644
-index 0000000000..b7275462af
---- /dev/null
-+++ b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-@@ -0,0 +1,47 @@
-+From 0982308255dd3fd70e7b93aa88a8f3c5b9c1b845 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 30 Aug 2020 21:15:06 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build with mbedtls but without zlib
+diff --git a/Makefile b/Makefile
+index cb1f5fb0b0..abb80db49f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -125,7 +125,7 @@ endif
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	print-version olddefconfig distclean manual manual-% check-package
++	print-version olddefconfig distclean manual manual-% check-package check-flake8
+ 
+ # Some global targets do not trigger a build, but are used to collect
+ # metadata, or do various checks. When such targets are triggered,
+@@ -1208,6 +1208,13 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
++check-flake8:
++	$(Q)git ls-tree -r --name-only HEAD \
++	|xargs file \
++	|grep 'Python script' \
++	|cut -d':' -f1 \
++	|xargs -- python3 -m flake8 --statistics --max-line-length=132
 +
-+Building with mbedtls but without zlib will result in the following
-+build failure:
-+
-+-- Found MbedTLS: /home/peko/autobuild/instance-0/output-1/per-package/rtty/host/powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libmbedtls.so (found version "2.16.7")
-+-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-+-- Select MbedTLS(PolarSSL) as the SSL backend
-+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
-+Please set them or make sure they are set and tested correctly in the CMake files:
-+ZLIB_LIBRARY
-+    linked by target "rtty" in directory /home/peko/autobuild/instance-0/output-1/build/rtty-7.1.4/src
-+
-+-- Configuring incomplete, errors occurred!
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zhaojh329/rtty/pull/77]
-+---
-+ src/CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 10f6626..d09e848 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -77,7 +77,11 @@ else()
-+     elseif(RTTY_USE_MBEDTLS)
-+         set(SSL_NAME "MbedTLS(PolarSSL)")
-+         set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
-+-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        if(ZLIB_FOUND)
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        else()
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES}) 
-++        endif()
-+         set(RTTY_HAVE_MBEDTLS_CONFIG 1)
-+     endif()
-+ 
-+-- 
-+2.28.0
-+
+ check-package:
+ 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
+ 		-exec ./utils/check-package {} +
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index dddebf09e9..0d058bdd91 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -19,15 +19,8 @@ check-DEVELOPERS:
+ 
+ check-flake8:
+     extends: .check_base
+-    before_script:
+-        # Help flake8 to find the Python files without .py extension.
+-        - find * -type f -name '*.py' > files.txt
+-        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+-        - sort -u files.txt | tee files.processed
+     script:
+-        - python3 -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+-    after_script:
+-        - wc -l files.processed
++        - make check-flake8
+ 
+ check-package:
+     extends: .check_base
 -- 
-2.28.0
+2.20.1
