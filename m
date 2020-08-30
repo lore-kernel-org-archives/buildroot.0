@@ -1,50 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 22:55:51 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/librsvg: bump to version
- 2.48.8
-In-Reply-To: <20200830221942.68c03eb0@windsurf.home>
-References: <20200830084138.4047798-1-fontaine.fabrice@gmail.com>
- <20200830221942.68c03eb0@windsurf.home>
-Message-ID: <CAPi7W83qVu+hzzwkhMVivwNgU9ZpxS8earbU1b14V2BiZzwEZg@mail.gmail.com>
+From: Alejandro <alejandro.gonzalez.correo@gmail.com>
+Date: Sun, 30 Aug 2020 22:59:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/watchdog: new package
+In-Reply-To: <20200829143536.6e7e0ce5@windsurf.home>
+References: <20200808214815.1358140-1-alejandro.gonzalez.correo@gmail.com>
+ <20200829143536.6e7e0ce5@windsurf.home>
+Message-ID: <CA+wirGpaEVKoF9_HBzaieTLwusVpBSY16XCM1wPwXqcwus25qg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 30 ao?t 2020 ? 22:19, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sun, 30 Aug 2020 10:41:38 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > - Add a dependency to host-rustc
-> > - libcroco is not a dependency since
-> >   https://gitlab.gnome.org/GNOME/librsvg/-/commit/03ce9bd7875ef2a91979bc4f7d6fa5188cfd785c
-> > - gtk3 is not a dependency since
-> >   https://gitlab.gnome.org/GNOME/librsvg/-/commit/522aeee0ca9b4ff3940bea2d13ebb77ec6c064a6
-> > - cairo script is mandatory since switch to rust
->
-> I remember we already tried to upgade librsvg to a version that was
-> written in Rust, and had to revert in commit
-> 4182346f4bbe03c6fa1dababeeaeae2dc5e8223f. Have things improved since
-> then ?
-I hope that the BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS variable
-added with commit 025b863e6facb7b219b82ee6ee7a7916c2c3c47e will allow
-us to bump librsvg this time.
-I'm just a little bit worried that host packages such as host-libgtk3,
-host-image-magick and midori could raise build failures on hosts that
-don't support rust.
-Should I add a dependency on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS to
-all the reverse dependencies of host-librsvg?
-It should be noted that keeping libcroco and a deprecated librsvg is
-not good for the security of our users.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+El s?b., 29 ago. 2020 a las 9:14, Asaf Kahlon (<asafka7@gmail.com>) escribi?:
+> Why does AUTORECONF is needed?
 
-Fabrice
+It is not. I added it by mistake, sorry about that!
+
+El s?b., 29 ago. 2020 a las 14:35, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+> Thanks, I've applied to next. I've handled the potential conflict with
+> Busybox, which also has a "watchdog" applet.
+> I've also addressed the comments from Asaf about the DEVELOPERS entry
+> and the AUTORECONF =3D YES, but I forgot to do that initially, so I did
+> follow-up commits for these.
+
+Thank you very much for the extra changes. Next time I add a package
+I will remember adding a DEVELOPERS entry :)
+
+Cheers!
