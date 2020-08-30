@@ -1,46 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 30 Aug 2020 01:03:26 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/subversion: bump to version
- 1.14.0
-Message-ID: <20200829230326.3745827-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 30 Aug 2020 08:22:17 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/busybox:
+ enable flags for use as systemd pager
+In-Reply-To: <20200828155253.1CA9A86539@busybox.osuosl.org>
+References: <20200828155253.1CA9A86539@busybox.osuosl.org>
+Message-ID: <CAB0FRsu08kyDTzNtSLgfNeb=nySwS2Mv4RPugV-pLD7aKfN9QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://subversion.apache.org/docs/release-notes/1.14.html
+Le ven. 28 ao?t 2020 ? 18:00, Peter Korsgaard <peter@korsgaard.com> a
+?crit :
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/subversion/subversion.hash | 4 ++--
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=9faba29108e74eb4acab21f5919dfab0288b23ac
+> branch:
+> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>
+> If the less package is not enable and systemd is enabled,
+> then configure the less applet to fully work with systemd.
+>
+> systemd sets the flags for less in an environment variable
+> and requires a few options for correct display.
+>
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit c2caf816e9296c4812f83f0a5d16e0e33a264b72)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/busybox/busybox.mk | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index b9d82ed71e..55aa9b0bb1 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -237,6 +237,18 @@ define BUSYBOX_SET_SELINUX
+>  endef
+>  endif
+>
+> +# enable relevant options to allow the Busybox less applet to be used
+> +# as a systemd pager
+> +ifeq ($(BR2_PACKAGE_SYSTEMD):$(BR2_PACKAGE_LESS),y:)
+> +define BUSYBOX_SET_LESS_FLAGS
+> +       $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_DASHCMD)
+>
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index f78990cbb3..da0fe91184 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
--# From https://www.apache.org/dist/subversion/subversion-1.13.0.tar.bz2.sha512
--sha512  36f390b412bf772bf894efc2aadc247f12ca30ac407e04f664c14411c3519e1bb242d1239f2f44cbcb86eafc7c413efc8eadbfe1d1e75118235a7b7adc6c85b2  subversion-1.13.0.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
-+sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
- 
- # Locally calculated
- sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 010329357c..83a359b966 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUBVERSION_VERSION = 1.13.0
-+SUBVERSION_VERSION = 1.14.0
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = https://downloads.apache.org/subversion
- SUBVERSION_LICENSE = Apache-2.0
--- 
-2.28.0
+the backport of this patch on the branch 2020.02.x breaks the build of
+busybox.
+on 2020.02.x, an additional parameter is required with the value :
+$(BUSYBOX_BUILD_CONFIG)
+
+note: the backport on 2020.05.x is OK
+
+Fran?ois
+
++       $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_RAW)
+> +       $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_TRUNCATE)
+> +       $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_FLAGS)
+> +       $(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_LESS_ENV)
+> +endef
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+>  define BUSYBOX_SET_INDIVIDUAL_BINARIES
+>         $(call
+> KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
+> @@ -338,6 +350,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+>         $(BUSYBOX_SET_INIT)
+>         $(BUSYBOX_SET_WATCHDOG)
+>         $(BUSYBOX_SET_SELINUX)
+> +       $(BUSYBOX_SET_LESS_FLAGS)
+>         $(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+>  endef
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200830/63925ecf/attachment.html>
