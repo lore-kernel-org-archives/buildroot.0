@@ -1,13 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2020 22:14:32 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
- version 1.14.0
-In-Reply-To: <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
- (Fabrice Fontaine's message of "Sun, 30 Aug 2020 20:50:47 +0200")
+Date: Mon, 31 Aug 2020 22:15:39 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gmrender-resurrect: add libupnp
+ 1.14.x support
+In-Reply-To: <20200821204139.3682940-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 21 Aug 2020 22:41:39 +0200")
 References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
- <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
- <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
-Message-ID: <87h7sibmjb.fsf@dell.be.48ers.dk>
+ <20200821204139.3682940-3-fontaine.fabrice@gmail.com>
+Message-ID: <87d036bmhg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,42 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Le dim. 30 ao?t 2020 ? 20:34, Arnout Vandecappelle <arnout@mind.be> a ?crit :
- >> 
- >> 
- >> 
- >> On 21/08/2020 22:41, Fabrice Fontaine wrote:
- >> > Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
- >> 
- >> Again, although this bump indeed fixes those issues, it's a feature version
- >> bump so I'm not sure if it can be called "security bump".
- >> 
- >> In addition, the libupnp18 package exists because of API incompatibility with
- >> 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
- > There is indeed an API incompatibility between 1.8 and 1.14 related to
- > CallStranger a.k.a. CVE-2020-12695: starting from 1.14, UpnpInit
- > function has been removed as this function can't be fixed against
- > CallStranger because this function takes an IP address and not an
- > interface name.
- > However, UpnpInit2 is available for more than 10 years and is used by
- > most of the applications (i.e. mpd and vlc) with the exception of
- > gmrender-resurrect (which is patched in this serie).
- > As soon as libupnp 1.14 is available, I'm planning to update the
- > applications that are still using the legacy libupnp 1.6.x version
- > (i.e. igd2-for-linux and ushare) and drop this unsecure version.
- > I would like to avoid adding a third version of libupnp (i.e. a
- > libupnp114 package) as from a security perspective, all packages
- > should use this version.
+ > Using libupnp 1.14.x is needed to fix CallStranger a.k.a. CVE-2020-12695
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-So we would end up with package/libupnp = 1.14.0? Sounds sensible.
+It would be good to add a link to the upstream PR (which also explains
+why you are doing those "unrelated" centos/fedora changes):
 
- > Still, I agree that this is not only a "security bump" so I would
- > advise to apply this serie to next and backport it to our LTS branches
- > in a few months.
-
-Ok. I was still hesitating if I should apply this for 2020.08, but I
-think you are right - Lets get 2020.08 out the door, merge next and let
-this stabilize a bit before backporting to 2020.08.x / 2020.02.x.
+https://github.com/hzeller/gmrender-resurrect/pull/214
 
 -- 
 Bye, Peter Korsgaard
