@@ -1,46 +1,68 @@
-From: Joachim Nilsson <troglobit@gmail.com>
-Date: Mon, 31 Aug 2020 21:53:22 +0200
-Subject: [Buildroot] [PATCH] package/mg: new package
-In-Reply-To: <20200830220658.1d134652@windsurf.home>
-Message-ID: <C5BG0UJH3751.24ZB7SQO3W52W@luthien>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 31 Aug 2020 21:57:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pixz: fix build with gcc 10
+Message-ID: <20200831195744.2044864-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun Aug 30, 2020 at 10:06 PM CEST, Thomas Petazzoni wrote:
-> Thanks for your contribution!
+Fixes:
+ - http://autobuild.buildroot.org/results/0c61743d4a022215317e57e35a00f0fa3d16ad62
 
-Thanks, and thank you for the review!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pixz/0001-fix-linkage.patch | 41 +++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/pixz/0001-fix-linkage.patch
 
-> On Sun, 30 Aug 2020 11:00:51 +0200 Joachim Wiberg <troglobit@gmail.com> wrote:
-> > +# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.6/
-> Is this a bad copy paste ?
-
-Indeed.
-
-> > +# mg2a
-> Should be just "mg"
-
-OK, fixing
-
-> > +ifeq ($(BR2_PACKAGE_NCURSES),y)
-> > +MG_DEPENDENCIES += ncurses
-> Could you add:
-> MG_CONF_OPTS += --with-curses
-> or whatever is needed to explicitly enable ncurses support ?
-
-It's auto-detected, but will do.
-
-> > +define MG_INSTALL_TARGET_CMDS
-> > +	$(INSTALL) -m 0755 -D $(@D)/tutorial $(TARGET_DIR)/usr/share/doc/tutorial
-> > +	gzip -9 $(TARGET_DIR)/usr/share/doc/tutorial
-> /usr/share/doc gets dropped from $(TARGET_DIR) during the
-> target-finalize step, so installing documentation there is not useful.
-
-Yeah I realized.  It's actually referenced from withing Mg using C-h t,
-should that be patched out then?
-
-Best regards
- /Joachim
+diff --git a/package/pixz/0001-fix-linkage.patch b/package/pixz/0001-fix-linkage.patch
+new file mode 100644
+index 0000000000..712c280ec2
+--- /dev/null
++++ b/package/pixz/0001-fix-linkage.patch
+@@ -0,0 +1,41 @@
++From f385e7be8adb620ca7eb89f84abe4d1df94c1029 Mon Sep 17 00:00:00 2001
++From: Dave Vasilevsky <dave@vasilevsky.ca>
++Date: Sat, 25 Apr 2020 19:16:05 -0400
++Subject: [PATCH] fix linkage
++
++[Retrieved from:
++https://github.com/vasi/pixz/commit/f385e7be8adb620ca7eb89f84abe4d1df94c1029]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/common.c | 2 +-
++ src/pixz.h   | 4 ++--
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/common.c b/src/common.c
++index 59d3273..5938633 100644
++--- a/src/common.c
+++++ b/src/common.c
++@@ -7,7 +7,7 @@
++ 
++ #pragma mark UTILS
++ 
++-FILE *gInFile = NULL;
+++FILE *gInFile = NULL, *gOutFile = NULL;
++ lzma_stream gStream = LZMA_STREAM_INIT;
++ 
++ 
++diff --git a/src/pixz.h b/src/pixz.h
++index 0fa60f2..0939a9a 100644
++--- a/src/pixz.h
+++++ b/src/pixz.h
++@@ -54,8 +54,8 @@ void pixz_read(bool verify, size_t nspecs, char **specs);
++ 
++ #pragma mark UTILS
++ 
++-FILE *gInFile, *gOutFile;
++-lzma_stream gStream;
+++extern FILE *gInFile, *gOutFile;
+++extern lzma_stream gStream;
++ 
++ extern lzma_index *gIndex;
++ 
+-- 
+2.28.0
