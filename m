@@ -1,97 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2020 15:20:24 +0200
-Subject: [Buildroot] [git commit] package/rtty: fix build with mbedtls but
- without zlib
-Message-ID: <20200831131327.63F1A875D1@busybox.osuosl.org>
+Date: Mon, 31 Aug 2020 15:18:01 +0200
+Subject: [Buildroot] [git commit] package/am33x-cm3: fix build with gcc 10
+Message-ID: <20200831131327.53486875CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=607215cd91ca524981e87b373fc812f49f667455
+commit: https://git.buildroot.net/buildroot/commit/?id=f1d95890292392459682d385fbadfec6bf743614
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-zlib is not mandatory with mbedtls, only optional, however as mbedtls
-does not provide a pkg-config file, we assume that if zlib is
-available, we must link with it to avoid a build failure when linking
-statically with a zlib-enabled mbedtls.
-
-This change was pushed upstream with
-https://github.com/zhaojh329/rtty/commit/7b8efe11dbafce97971dc130bf6cc1756f34ce07
-and is in buildroot since the bump to version 7.1.4 with commit
-0c80245ddbe78c8e443f98b9bbccac56331cdb26.
-However, this change will raise a build failure if ZLIB_LIBRARIES is
-used when zlib is not found. This patch is fixing this build failure.
-
-However, it should be noted that the compression support in mbedtls is
-only enabled if BR2_PACKAGE_MBEDTLS_COMPRESSION=y. So we can have a
-situation where mbedtls is enabled, zlib is enabled, but mbedtls is not
-using zlib and as a result, since version 7.1.4, rttyt will needlessly
-link with zlib in such a situation.
-
-The only sane way to fix this is to use pkg-config, but as mbedtls
-apparently doesn't provide any .pc file, we leave it as it is.
-
 Fixes:
- - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
+ - http://autobuild.buildroot.org/results/a991e6efa012df518ff1bb35017ad2c96c8feedc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sts.txt-fix-build-with-mbedtls-but-withou.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ .../am33x-cm3/0004-Makefile-add-fno-builtin.patch  | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+diff --git a/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
 new file mode 100644
-index 0000000000..b7275462af
+index 0000000000..7478bd45f3
 --- /dev/null
-+++ b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
-@@ -0,0 +1,47 @@
-+From 0982308255dd3fd70e7b93aa88a8f3c5b9c1b845 Mon Sep 17 00:00:00 2001
++++ b/package/am33x-cm3/0004-Makefile-add-fno-builtin.patch
+@@ -0,0 +1,41 @@
++From 25fc567ba8a0cd199e48bfa82863247d953784ea Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 30 Aug 2020 21:15:06 +0200
-+Subject: [PATCH] src/CMakeLists.txt: fix build with mbedtls but without zlib
++Date: Sun, 30 Aug 2020 20:59:29 +0200
++Subject: [PATCH] Makefile: add -fno-builtin
 +
-+Building with mbedtls but without zlib will result in the following
-+build failure:
++Build with gcc 10 fails on:
 +
-+-- Found MbedTLS: /home/peko/autobuild/instance-0/output-1/per-package/rtty/host/powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libmbedtls.so (found version "2.16.7")
-+-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
-+-- Select MbedTLS(PolarSSL) as the SSL backend
-+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
-+Please set them or make sure they are set and tested correctly in the CMake files:
-+ZLIB_LIBRARY
-+    linked by target "rtty" in directory /home/peko/autobuild/instance-0/output-1/build/rtty-7.1.4/src
++/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: src/foundation/startup.o: in function `reset_handler':
++/srv/storage/autobuild/run/instance-2/output-1/build/am33x-cm3-11107db2f1e9e58ee75d4fe9cc38423c9a6e4365/src/foundation/startup.c:177: undefined reference to `memcpy'
 +
-+-- Configuring incomplete, errors occurred!
++This is due to the fact that gcc 10 replaces the following statement by
++a memcpy call:
++
++*puldest++ = *pulsrc++;
++
++To fix this build failure, add -fno-builtin
 +
 +Fixes:
-+ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
++ - http://autobuild.buildroot.org/results/a991e6efa012df518ff1bb35017ad2c96c8feedc
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zhaojh329/rtty/pull/77]
 +---
-+ src/CMakeLists.txt | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 10f6626..d09e848 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -77,7 +77,11 @@ else()
-+     elseif(RTTY_USE_MBEDTLS)
-+         set(SSL_NAME "MbedTLS(PolarSSL)")
-+         set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
-+-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        if(ZLIB_FOUND)
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++        else()
-++            set(SSL_LIB ${MBEDTLS_LIBRARIES}) 
-++        endif()
-+         set(RTTY_HAVE_MBEDTLS_CONFIG 1)
-+     endif()
++diff --git a/Makefile b/Makefile
++index fe3d844..fa24d4b 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -17,7 +17,7 @@ CFLAGS =-march=armv7-m -mcpu=cortex-m3 -mthumb -nostdlib -Wall -Wundef \
++ 	-Werror-implicit-function-declaration -Wstrict-prototypes \
++ 	-Wdeclaration-after-statement -fno-delete-null-pointer-checks \
++ 	-Wempty-body -fno-strict-overflow -fno-stack-protector \
++-	-fno-pie -g -I$(INCLUDES) -O2
+++	-fno-pie -fno-builtin -g -I$(INCLUDES) -O2
++ LDFLAGS =-nostartfiles -fno-exceptions -Tfirmware.ld
 + 
++ EXECUTABLE=am335x-pm-firmware.elf
 +-- 
 +2.28.0
 +
