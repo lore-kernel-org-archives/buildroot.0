@@ -1,69 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2020 22:18:09 +0200
-Subject: [Buildroot] [git commit] package/pixz: fix build with gcc 10
-Message-ID: <20200831201229.5C4B281468@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 31 Aug 2020 22:20:40 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
+ version 1.14.0
+In-Reply-To: <87h7sibmjb.fsf@dell.be.48ers.dk>
+References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
+ <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
+ <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
+ <87h7sibmjb.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W81pMcWP57ieR+1c0nknUMez=mi6th5wDnZKBCP5Q_w_mA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc44e46da00fdddbbd3f8c3950fa62f2d216bbfc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le lun. 31 ao?t 2020 ? 22:14, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Le dim. 30 ao?t 2020 ? 20:34, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>  >>
+>  >>
+>  >>
+>  >> On 21/08/2020 22:41, Fabrice Fontaine wrote:
+>  >> > Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
+>  >>
+>  >> Again, although this bump indeed fixes those issues, it's a feature version
+>  >> bump so I'm not sure if it can be called "security bump".
+>  >>
+>  >> In addition, the libupnp18 package exists because of API incompatibility with
+>  >> 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
+>  > There is indeed an API incompatibility between 1.8 and 1.14 related to
+>  > CallStranger a.k.a. CVE-2020-12695: starting from 1.14, UpnpInit
+>  > function has been removed as this function can't be fixed against
+>  > CallStranger because this function takes an IP address and not an
+>  > interface name.
+>  > However, UpnpInit2 is available for more than 10 years and is used by
+>  > most of the applications (i.e. mpd and vlc) with the exception of
+>  > gmrender-resurrect (which is patched in this serie).
+>  > As soon as libupnp 1.14 is available, I'm planning to update the
+>  > applications that are still using the legacy libupnp 1.6.x version
+>  > (i.e. igd2-for-linux and ushare) and drop this unsecure version.
+>  > I would like to avoid adding a third version of libupnp (i.e. a
+>  > libupnp114 package) as from a security perspective, all packages
+>  > should use this version.
+>
+> So we would end up with package/libupnp = 1.14.0? Sounds sensible.
+Yes ideally, we should have package/libupnp = 1.14.0. Would it be
+acceptable/reasonable to bump libupnp from 1.6.x to 1.14.x and remove
+libupnp18?
+If this is acceptable, I'll send a v2 of this serie (with the drop of
+libupnp18 and the update of ushare/igd2-for-linux).
+>
+>  > Still, I agree that this is not only a "security bump" so I would
+>  > advise to apply this serie to next and backport it to our LTS branches
+>  > in a few months.
+>
+> Ok. I was still hesitating if I should apply this for 2020.08, but I
+> think you are right - Lets get 2020.08 out the door, merge next and let
+> this stabilize a bit before backporting to 2020.08.x / 2020.02.x.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-Fixes:
- - http://autobuild.buildroot.org/results/0c61743d4a022215317e57e35a00f0fa3d16ad62
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pixz/0001-fix-linkage.patch | 41 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/package/pixz/0001-fix-linkage.patch b/package/pixz/0001-fix-linkage.patch
-new file mode 100644
-index 0000000000..712c280ec2
---- /dev/null
-+++ b/package/pixz/0001-fix-linkage.patch
-@@ -0,0 +1,41 @@
-+From f385e7be8adb620ca7eb89f84abe4d1df94c1029 Mon Sep 17 00:00:00 2001
-+From: Dave Vasilevsky <dave@vasilevsky.ca>
-+Date: Sat, 25 Apr 2020 19:16:05 -0400
-+Subject: [PATCH] fix linkage
-+
-+[Retrieved from:
-+https://github.com/vasi/pixz/commit/f385e7be8adb620ca7eb89f84abe4d1df94c1029]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/common.c | 2 +-
-+ src/pixz.h   | 4 ++--
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/common.c b/src/common.c
-+index 59d3273..5938633 100644
-+--- a/src/common.c
-++++ b/src/common.c
-+@@ -7,7 +7,7 @@
-+ 
-+ #pragma mark UTILS
-+ 
-+-FILE *gInFile = NULL;
-++FILE *gInFile = NULL, *gOutFile = NULL;
-+ lzma_stream gStream = LZMA_STREAM_INIT;
-+ 
-+ 
-+diff --git a/src/pixz.h b/src/pixz.h
-+index 0fa60f2..0939a9a 100644
-+--- a/src/pixz.h
-++++ b/src/pixz.h
-+@@ -54,8 +54,8 @@ void pixz_read(bool verify, size_t nspecs, char **specs);
-+ 
-+ #pragma mark UTILS
-+ 
-+-FILE *gInFile, *gOutFile;
-+-lzma_stream gStream;
-++extern FILE *gInFile, *gOutFile;
-++extern lzma_stream gStream;
-+ 
-+ extern lzma_index *gIndex;
-+ 
+Fabrice
