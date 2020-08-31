@@ -1,53 +1,33 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 30 Sep 2020 23:05:59 +0200
-Subject: [Buildroot] [PATCH] package/gcc: drop leftovers from PowerPC
- conditional patching
-In-Reply-To: <20200924102219.3443175-1-thomas.petazzoni@bootlin.com>
-References: <20200924102219.3443175-1-thomas.petazzoni@bootlin.com>
-Message-ID: <3d467d45-7d9b-db82-8945-421b1eb4eff3@gmail.com>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Tue, 1 Sep 2020 00:14:30 +0800
+Subject: [Buildroot] [PATCH] libcap: disable GOLANG
+In-Reply-To: <873642deyy.fsf@dell.be.48ers.dk>
+References: <1f3d9456-9ca2-75f4-7e15-d851e65005ea@aliyun.com>
+ <873642deyy.fsf@dell.be.48ers.dk>
+Message-ID: <d1e0d62f-098d-4dbb-037a-8f827772dd1e@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch is for the next branch.
 
-Le 24/09/2020 ? 12:22, Thomas Petazzoni a ?crit?:
-> We used to have a conditional patch applied on PowerPC soft-float, but
-> this logic was dropped in commit
-> 0c82f3f63563c4d4d7e034d0e9e4ceb766d92322 ("package/gcc: remove powerpc
-> conditional patching logic"). However, we still have some related
-> leftovers in the calculation of the hashes for ccache, which can now
-> be dropped.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+Recently, the go infrastructure has changed, and libcap has been
+upgraded to 2.42. libcap introduced golang in 2.28, see:
 
-Acked-by: Romain Naour <romain.naour@gmail.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/Make.Rules?id=0615d996379dceedefcd65a114f93fefd81c208f
 
-Best regards,
-Romain
+When you compile host-go and then compile host-libcap, GOLANG will be
+automatically set to yes. Because libcap.mk lacks golang support,
+compilation will fail.
 
-> ---
->  package/gcc/gcc.mk | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index d9c4b4ef83..cc1dbbcf3a 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -279,11 +279,6 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
->  ifeq ($(BR2_xtensa),y)
->  HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_TAR)
->  endif
-> -ifeq ($(ARCH),powerpc)
-> -ifneq ($(BR2_SOFT_FLOAT),)
-> -HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
-> -endif
-> -endif
->  
->  # _CONF_OPTS contains some references to the absolute path of $(HOST_DIR)
->  # and a reference to the Buildroot git revision (BR2_VERSION_FULL),
-> 
+ > > libcap is a pure C library before 2.27, it lacks some environment
+ > > variables set in pkg-golang.mk.
+ >
+ > Can you be more specific? What exactly is this fixing? I don't see
+ > any related autobuilder errors?
+ >
+ > http://autobuild.buildroot.net/?reason=libcap-2.27
+ >
+ > And I don't see any reference to GOLANG in libcap-2.27?
