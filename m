@@ -1,58 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 30 Aug 2020 23:23:35 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download deps to
- vendor tree if not present
-Message-ID: <20200831062335.1105977-1-christian@paral.in>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Aug 2020 08:41:55 +0200
+Subject: [Buildroot] [git commit] package/nvidia-driver: fix typos in
+ comments
+Message-ID: <20200831063434.7BF8D86E55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NOTE: This patch is a RFC and is not intended for merging in its current state.
-It is a naiive implementation of the "go mod vendor" download step as a
-post-extract hook, for early testing and demonstration of the desired effect. I
-don't yet know what a final implementation might look like.
+commit: https://git.buildroot.net/buildroot/commit/?id=21fca042d942e5460fd384b9f6a1eef13a191160
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a new hook to POST_EXTRACT_HOOKS for Go packages which will create the
-"vendor" directory structure under $(@D)/vendor with Go package deps by running
-the "go mod vendor" command.
-
-This will download dependency sources and use $GOPATH/pkg as a caching
-directory for lookups and downloads.
-
-Go specifies commit hashes OR version tags in go.mod, and lists source code
-checksums in go.sum. The Go module system has a robust security model for
-preventing MITM attacks or changed Git tags on dependencies through this
-checksumming and explicitly-specified versioning approach.
-
-Reference: https://blog.golang.org/using-go-modules
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Iulian Onofrei <iulian.onofrei@yahoo.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-golang.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/nvidia-driver/nvidia-driver.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 2d80e99619..88eb89a68e 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -98,6 +98,16 @@ endef
- 
- $(2)_POST_EXTRACT_HOOKS += $(2)_APPLY_EXTRACT_GOMOD
- 
-+# WIP - download dependencies with the Go tool if vendor does not exist.
-+define $(2)_DOWNLOAD_GOMOD
-+	if [ ! -d $$(@D)/vendor ]; then \
-+		cd $$(@D); \
-+		go mod vendor; \
-+	fi
-+endef
-+
-+$(2)_POST_EXTRACT_HOOKS += $(2)_DOWNLOAD_GOMOD
-+
- # Build step. Only define it if not already defined by the package .mk
- # file.
- ifndef $(2)_BUILD_CMDS
--- 
-2.28.0
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index baf2ba2be5..44e34cb7b4 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -35,7 +35,7 @@ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
+ # NVidia extensions (which is deemed bad now), while the former follows
+ # the newly-introduced vendor-neutral "dispatching" API/ABI:
+ #   https://github.com/aritger/linux-opengl-abi-proposal/blob/master/linux-opengl-abi-proposal.txt
+-# However, this is not very usefull to us, as we don't support multiple
++# However, this is not very useful to us, as we don't support multiple
+ # GL providers at the same time on the system, which this proposal is
+ # aimed at supporting.
+ #
+@@ -84,7 +84,7 @@ endef
+ # Those libraries are 'private' libraries requiring an agreement with
+ # NVidia to develop code for those libs. There seems to be no restriction
+ # on using those libraries (e.g. if the user has such an agreement, or
+-# wants to run a third-party program developped under such an agreement).
++# wants to run a third-party program developed under such an agreement).
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
+ NVIDIA_DRIVER_LIBS += \
+ 	libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
