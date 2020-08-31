@@ -1,68 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2020 15:16:47 +0200
-Subject: [Buildroot] [git commit] package/docker-cli: fix version info since
- move to 19.03.x
-Message-ID: <20200831131327.4C7AE8182C@busybox.osuosl.org>
+Date: Mon, 31 Aug 2020 15:20:24 +0200
+Subject: [Buildroot] [git commit] package/rtty: fix build with mbedtls but
+ without zlib
+Message-ID: <20200831131327.63F1A875D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf27781bb1e87ff2d0beae3ce8dbb5564c5f398e
+commit: https://git.buildroot.net/buildroot/commit/?id=607215cd91ca524981e87b373fc812f49f667455
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream changed the variables used when outputting version / git commit
-info in docker version since:
+zlib is not mandatory with mbedtls, only optional, however as mbedtls
+does not provide a pkg-config file, we assume that if zlib is
+available, we must link with it to avoid a build failure when linking
+statically with a zlib-enabled mbedtls.
 
- commit 04b5f44230162de40741acaa0f94c7af6f2fa1d5
- Author: Ian Campbell <ijc@docker.com>
- Date:   Tue Jan 8 15:03:51 2019 +0000
+This change was pushed upstream with
+https://github.com/zhaojh329/rtty/commit/7b8efe11dbafce97971dc130bf6cc1756f34ce07
+and is in buildroot since the bump to version 7.1.4 with commit
+0c80245ddbe78c8e443f98b9bbccac56331cdb26.
+However, this change will raise a build failure if ZLIB_LIBRARIES is
+used when zlib is not found. This patch is fixing this build failure.
 
-    Move versioning variables to a separate package.
+However, it should be noted that the compression support in mbedtls is
+only enabled if BR2_PACKAGE_MBEDTLS_COMPRESSION=y. So we can have a
+situation where mbedtls is enabled, zlib is enabled, but mbedtls is not
+using zlib and as a result, since version 7.1.4, rttyt will needlessly
+link with zlib in such a situation.
 
-    This helps to avoid circular includes, by separating the pure data out from the
-    actual functionality in the cli subpackage, allowing other code which is
-    imported to access the data.
+The only sane way to fix this is to use pkg-config, but as mbedtls
+apparently doesn't provide any .pc file, we leave it as it is.
 
-    Signed-off-by: Ian Campbell <ijc@docker.com>
-    Upstream-commit: 20c19830a95455e8562551aad52c715ad0807cc6
-    Component: cli
+Fixes:
+ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
 
-Which is included in docker-cli 19.3.x - So adjust the _CLI_LDFLAGS to match
-to get proper docker version output:
-
-Client:
- Version:           19.03.11
- API version:       1.40
- Go version:        go1.13.14
- Git commit:        19.03.11
-
-vs:
-
-Client:
- Version:           unknown-version
- API version:       1.40
- Go version:        go1.13.14
- Git commit:        unknown-commit
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...sts.txt-fix-build-with-mbedtls-but-withou.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 1466b0afbd..766c984f0b 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -17,8 +17,8 @@ DOCKER_CLI_TAGS = autogen
- DOCKER_CLI_BUILD_TARGETS = cmd/docker
- 
- DOCKER_CLI_LDFLAGS = \
--	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
--	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
-+	-X github.com/docker/cli/cli/version.GitCommit=$(DOCKER_CLI_VERSION) \
-+	-X github.com/docker/cli/cli/version.Version=$(DOCKER_CLI_VERSION)
- 
- ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
- DOCKER_CLI_LDFLAGS += -extldflags '-static'
+diff --git a/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+new file mode 100644
+index 0000000000..b7275462af
+--- /dev/null
++++ b/package/rtty/0001-src-CMakeLists.txt-fix-build-with-mbedtls-but-withou.patch
+@@ -0,0 +1,47 @@
++From 0982308255dd3fd70e7b93aa88a8f3c5b9c1b845 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 30 Aug 2020 21:15:06 +0200
++Subject: [PATCH] src/CMakeLists.txt: fix build with mbedtls but without zlib
++
++Building with mbedtls but without zlib will result in the following
++build failure:
++
++-- Found MbedTLS: /home/peko/autobuild/instance-0/output-1/per-package/rtty/host/powerpc64-buildroot-linux-gnu/sysroot/usr/lib/libmbedtls.so (found version "2.16.7")
++-- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
++-- Select MbedTLS(PolarSSL) as the SSL backend
++CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
++Please set them or make sure they are set and tested correctly in the CMake files:
++ZLIB_LIBRARY
++    linked by target "rtty" in directory /home/peko/autobuild/instance-0/output-1/build/rtty-7.1.4/src
++
++-- Configuring incomplete, errors occurred!
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a0ebffe58bbf14cab74b7d2111d4d88a9c725273
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zhaojh329/rtty/pull/77]
++---
++ src/CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 10f6626..d09e848 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -77,7 +77,11 @@ else()
++     elseif(RTTY_USE_MBEDTLS)
++         set(SSL_NAME "MbedTLS(PolarSSL)")
++         set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
++-        set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+++        if(ZLIB_FOUND)
+++            set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+++        else()
+++            set(SSL_LIB ${MBEDTLS_LIBRARIES}) 
+++        endif()
++         set(RTTY_HAVE_MBEDTLS_CONFIG 1)
++     endif()
++ 
++-- 
++2.28.0
++
