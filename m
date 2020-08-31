@@ -1,91 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Aug 2020 21:52:01 +0200
-Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: include
- Branches workflow
-In-Reply-To: <2388ea60-a8cb-9685-b075-11b1a49be9ff@mind.be>
-References: <20200830155953.1650346-1-arnout@mind.be>
- <20200831124350.GP14354@scaer>
- <2388ea60-a8cb-9685-b075-11b1a49be9ff@mind.be>
-Message-ID: <20200831195201.GR14354@scaer>
+From: Joachim Nilsson <troglobit@gmail.com>
+Date: Mon, 31 Aug 2020 21:45:58 +0200
+Subject: [Buildroot] [PATCH] package/mg: new package
+In-Reply-To: <CAKcgs2wo8X9Z6Veso26QK8GAkKUPdA19TUarOvsmmMTdjXwaCQ@mail.gmail.com>
+Message-ID: <C5BFV6KD7OUC.1DRR2ATFRPA5P@luthien>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On Sun Aug 30, 2020 at 5:27 PM CEST, Gilles Talis wrote:
+> Hello Joachim,
 
-On 2020-08-31 14:58 +0200, Arnout Vandecappelle spake thusly:
->  Note that it's not the complicated conditions on the defconfig and test jobs
-> that are the issue. The warning is also issued for check-flake8... So I think
-> the workflow will still be needed (or alternatively, every job should have a
-> condition to run only on branches).
+Hi Gilles!
 
-Sorry, but I don't follow: if the jobs are only generated when we want
-them, then they no longer have conditions in the generated gitlab-ci.yml
-to begin with; that's the whole point of moving the conditional handling
-into the script.
+> thanks for your contribution.
+> Please find a few comments below.
 
-> On 31/08/2020 14:43, Yann E. MORIN wrote:
-> > I'd like to suggest an alternative: move all the conditions into the
-> > generating script, now that we do have a script that generates the
-> > pipeline description.
-[--SNIP--]
->  Also, I would like to move the "constant" bits back out to the top-level
-> gitlab-ci.yml, so the first page already shows the quick test results.
+Thank you for taking the time to review :)
 
-Sorry, but again they are not "constant". For example, check-flake8,
-check-package and check-DEVELOPERS are not run when one pushes a
-*_defconfig or *_test branch (or however they are named) to trigger the
-build of jsut that defconfig or just that runtime test.
+> Le dim. 30 ao?t 2020 ? 11:01, Joachim Wiberg <troglobit@gmail.com> a
+> You need to add an entry to the DEVELOPERS file with your name and
+> package, so that you are identified as the maintainer for this
+> package. Please take a look at the DEVELOPERS file.
 
-> > Having the conditions in the script will help handle such cases, by only
-> > ever emitting those jobs we actually want to run. This would allow for
-> > more flexibility than the limited micro-language used by gitlab-ci.yml.
-> > 
-> > Also, this will allow us to not care about the evolutions of that micro-
-> > language.
->  I think that's a great idea. However, that sounds like a bigger change which
-> probably shouldn't go into master. So I'd prefer to still merge my patch as well.
+Didn't know that was mandatory, fixing
 
-See an actual comment on that patch, below...
+> > +# From https://sourceforge.net/projects/joe-editor/files/JOE%20sources/joe-4.6/
+> I assume you meant: "from:
+> https://github.com/troglobit/mg/releases/download/v3.4/mg-3.4.tar.gz.md5"
 
-> >> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> >> index dddebf09e9..8a031898ef 100644
-> >> --- a/support/misc/gitlab-ci.yml.in
-> >> +++ b/support/misc/gitlab-ci.yml.in
-> >> @@ -1,6 +1,9 @@
-> >>  # Configuration for Gitlab-CI.
-> >>  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
-> >>  
-> >> +include:
-> >> +  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+Yeah, copy-paste error.  I actually managed to b0rk that whole file,
+sorry about that.
 
-Where does that file come from? How are we guaranteed that its content
-does not change and break our pipelines?
+> > +md5 6b79855d54770bcb23e5457ebde8296c  mg-3.4.tar.gz
+> It should be two spaces after "md5"
+> > +# Locally computed:
+> > +sha256 1a620cf5b2dd4b00006d6c929ac8e2a70eeab5f807a0d6e5334b878aa182b713  mg-3.4.tar.gz
+> > +sha256 7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  UNLICENSE
+> For the two lines above, it should be two spaces after "sha256"
 
-If that template is interesting, then we should carry it rather than
-depend on an external, un-managed entity...
+You mean after the hash, right?  The joe.hash and busybox.hash files don't have
+double spaces after the leading keyword (md5/sha256).
 
-Regards,
-Yann E. MORIN.
+> > +ifeq ($(BR2_PACKAGE_NCURSES),y)
+> > +MG_DEPENDENCIES += ncurses
+> We prefer to force the options, so you should have a "MG_CONF_OPTS =
+> --with-curses" here
 
-> >>  image: buildroot/base:20200814.2228
-> >>  
-> >>  .check_base:
-> >> -- 
-> >> 2.26.2
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
+Odd, but OK, fixing
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> > +define MG_INSTALL_TARGET_CMDS
+> > +       $(INSTALL) -m 0755 -D $(@D)/tutorial $(TARGET_DIR)/usr/share/doc/tutorial
+> > +       gzip -9 $(TARGET_DIR)/usr/share/doc/tutorial
+> We prefer not to install documentation on the target to keep the
+> footprint small. Can you please remove the two lines above?
+
+I realized the whole usr/share/doc directory is pruned from the target
+dir anyway.  The intention was to keep the built-in `C-h t` tutorial,
+but I guess the *quick* help will have to do.
+
+Thanks, fixing
+
+> One last comment: did you run the the test-pkg script to check for any
+> potential issues with some architectures and build options?
+
+Did not know about that, will try it out, thanks! :)
+
+> Can you please send a v2 with the fixes proposed above?
+
+Will do!
+
+Best regards
+ /Joachim
