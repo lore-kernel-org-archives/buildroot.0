@@ -1,100 +1,91 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 31 Aug 2020 21:22:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/graphite2: fix static install
-Message-ID: <20200831192215.1677034-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Aug 2020 21:52:01 +0200
+Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: include
+ Branches workflow
+In-Reply-To: <2388ea60-a8cb-9685-b075-11b1a49be9ff@mind.be>
+References: <20200830155953.1650346-1-arnout@mind.be>
+ <20200831124350.GP14354@scaer>
+ <2388ea60-a8cb-9685-b075-11b1a49be9ff@mind.be>
+Message-ID: <20200831195201.GR14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't install an incorrect libtool file when building a static library
-to fix the following build failure with harfbuzz:
+Arnout, All,
 
-arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
-make[5]: *** [main] Error 1
+On 2020-08-31 14:58 +0200, Arnout Vandecappelle spake thusly:
+>  Note that it's not the complicated conditions on the defconfig and test jobs
+> that are the issue. The warning is also issued for check-flake8... So I think
+> the workflow will still be needed (or alternatively, every job should have a
+> condition to run only on branches).
 
-Fixes:
- - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
+Sorry, but I don't follow: if the jobs are only generated when we want
+them, then they no longer have conditions in the generated gitlab-ci.yml
+to begin with; that's the whole point of moving the conditional handling
+into the script.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...l-a-libtool-file-with-static-library.patch | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+> On 31/08/2020 14:43, Yann E. MORIN wrote:
+> > I'd like to suggest an alternative: move all the conditions into the
+> > generating script, now that we do have a script that generates the
+> > pipeline description.
+[--SNIP--]
+>  Also, I would like to move the "constant" bits back out to the top-level
+> gitlab-ci.yml, so the first page already shows the quick test results.
 
-diff --git a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
-new file mode 100644
-index 0000000000..ac150622d5
---- /dev/null
-+++ b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
-@@ -0,0 +1,67 @@
-+From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 31 Aug 2020 20:56:43 +0200
-+Subject: [PATCH] don't install a libtool file with static library
-+
-+Static library is supported since version 1.3.11 and
-+https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
-+
-+However, graphite2 is still installing libgraphite2.la which contains
-+incorrect information (i.e. dlname set to libgraphite2.so and
-+old_library set to ''):
-+
-+dlname='libgraphite2.so'
-+
-+library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
-+
-+old_library=''
-+
-+dependency_libs=''
-+
-+This will result in the following build failure with any applications
-+using this file such as harfbuzz:
-+
-+arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
-+make[5]: *** [main] Error 1
-+
-+Instead of trying to fix this libtool file, just disable it when
-+building a static library as it is not needed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/silnrsi/graphite/pull/65]
-+---
-+ src/CMakeLists.txt | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index b6ac26bf..a7ace040 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-+         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
-+     endif ()
-+     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
-+-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
-++    if (BUILD_SHARED_LIBS)
-++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
-++    endif()
-+ endif()
-+ 
-+ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-+@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-+     include(Graphite)
-+     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
-+     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
-+-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
-++    if (BUILD_SHARED_LIBS)
-++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
-++    endif()
-+ endif()
-+ 
-+ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-+-- 
-+2.28.0
-+
+Sorry, but again they are not "constant". For example, check-flake8,
+check-package and check-DEVELOPERS are not run when one pushes a
+*_defconfig or *_test branch (or however they are named) to trigger the
+build of jsut that defconfig or just that runtime test.
+
+> > Having the conditions in the script will help handle such cases, by only
+> > ever emitting those jobs we actually want to run. This would allow for
+> > more flexibility than the limited micro-language used by gitlab-ci.yml.
+> > 
+> > Also, this will allow us to not care about the evolutions of that micro-
+> > language.
+>  I think that's a great idea. However, that sounds like a bigger change which
+> probably shouldn't go into master. So I'd prefer to still merge my patch as well.
+
+See an actual comment on that patch, below...
+
+> >> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+> >> index dddebf09e9..8a031898ef 100644
+> >> --- a/support/misc/gitlab-ci.yml.in
+> >> +++ b/support/misc/gitlab-ci.yml.in
+> >> @@ -1,6 +1,9 @@
+> >>  # Configuration for Gitlab-CI.
+> >>  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+> >>  
+> >> +include:
+> >> +  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+
+Where does that file come from? How are we guaranteed that its content
+does not change and break our pipelines?
+
+If that template is interesting, then we should carry it rather than
+depend on an external, un-managed entity...
+
+Regards,
+Yann E. MORIN.
+
+> >>  image: buildroot/base:20200814.2228
+> >>  
+> >>  .check_base:
+> >> -- 
+> >> 2.26.2
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> > 
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
