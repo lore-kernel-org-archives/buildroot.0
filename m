@@ -1,68 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 31 Aug 2020 22:07:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/trousers: fix build with gcc 10
-Message-ID: <20200831200727.2189407-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 31 Aug 2020 22:12:16 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
+ version 1.14.0
+In-Reply-To: <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 30 Aug 2020 20:34:06 +0200")
+References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
+ <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
+Message-ID: <87lfhubmn3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/701e82a8f63e8b78c2db12bdeff9086d6e121b36
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0004-trousers-resolve-build-failure.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/trousers/0004-trousers-resolve-build-failure.patch
+ > On 21/08/2020 22:41, Fabrice Fontaine wrote:
+ >> Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
 
-diff --git a/package/trousers/0004-trousers-resolve-build-failure.patch b/package/trousers/0004-trousers-resolve-build-failure.patch
-new file mode 100644
-index 0000000000..ea054ab2c5
---- /dev/null
-+++ b/package/trousers/0004-trousers-resolve-build-failure.patch
-@@ -0,0 +1,41 @@
-+From c9b8c4434f3b11bae4f7e72c3aec5b4f3459eecc Mon Sep 17 00:00:00 2001
-+From: Jerry Snitselaar <jsnitsel@redhat.com>
-+Date: Wed, 18 Mar 2020 14:10:35 -0700
-+Subject: [PATCH] trousers: resolve build failure
-+
-+The global variables tcsd_sa_chld and tcsd_sa_int in tcsd.h are
-+causing build failures in latest Fedora release:
-+
-+/usr/bin/ld: ../../src/tcs/libtcs.a(libtcs_a-tcsi_changeauth.o):/builddir/build/BUILD/trousers-0.3.13/src/tcs/../include/tcsd.h:169: multiple definition of `tcsd_sa_chld'; tcsd-svrside.o:/builddir/build/BUILD/trousers-0.3.13/src/tcsd/../../src/include/tcsd.h:169: first defined here
-+/usr/bin/ld: ../../src/tcs/libtcs.a(libtcs_a-tcsi_changeauth.o):/builddir/build/BUILD/trousers-0.3.13/src/tcs/../include/tcsd.h:168: multiple definition of `tcsd_sa_int'; tcsd-svrside.o:/builddir/build/BUILD/trousers-0.3.13/src/tcsd/../../src/include/tcsd.h:168: first defined here
-+
-+They are no longer used since 9b40e581470b ("Improved daemon's signal
-+handling") so just remove them.
-+
-+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
-+Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
-+[Retrieved from:
-+https://sourceforge.net/p/trousers/trousers/ci/c9b8c4434f3b11bae4f7e72c3aec5b4f3459eecc]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/include/tcsd.h | 6 ------
-+ 1 file changed, 6 deletions(-)
-+
-+diff --git a/src/include/tcsd.h b/src/include/tcsd.h
-+index 5b9462b..f5c286e 100644
-+--- a/src/include/tcsd.h
-++++ b/src/include/tcsd.h
-+@@ -164,10 +164,4 @@ TSS_RESULT tcsd_thread_create(int, char *);
-+ void	   *tcsd_thread_run(void *);
-+ void	   thread_signal_init();
-+ 
-+-/* signal handling */
-+-#ifndef __APPLE__
-+-struct sigaction tcsd_sa_int;
-+-struct sigaction tcsd_sa_chld;
-+-#endif
-+-
-+ #endif
-+-- 
-+2.28.0
-+
+ >  Again, although this bump indeed fixes those issues, it's a feature version
+ > bump so I'm not sure if it can be called "security bump".
+
+ >  In addition, the libupnp18 package exists because of API incompatibility with
+ > 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
+
+And calling it libupnp18 when it is provides 1.14.x is quite confusing
+:/
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
