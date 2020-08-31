@@ -1,7 +1,7 @@
 From: Alexander Egorenkov <egorenar-dev@posteo.net>
-Date: Mon, 31 Aug 2020 20:45:30 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/multipath-tools: new package
-Message-ID: <20200831184530.13957-1-egorenar-dev@posteo.net>
+Date: Mon, 31 Aug 2020 20:50:10 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/multipath-tools: new package
+Message-ID: <20200831185010.16556-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,7 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
+ DEVELOPERS                                    |  3 +
  package/Config.in                             |  1 +
  ...ath-use-pkg-config-to-get-path-to-he.patch | 59 +++++++++++++++++++
  ...bmpathpersist-depend-on-libmultipath.patch | 30 ++++++++++
@@ -19,7 +20,7 @@ Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
  package/multipath-tools/S60multipathd         | 47 +++++++++++++++
  package/multipath-tools/multipath-tools.hash  |  3 +
  package/multipath-tools/multipath-tools.mk    | 31 ++++++++++
- 9 files changed, 272 insertions(+)
+ 10 files changed, 275 insertions(+)
  create mode 100644 package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
  create mode 100644 package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
  create mode 100644 package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
@@ -29,6 +30,20 @@ Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
  create mode 100644 package/multipath-tools/multipath-tools.hash
  create mode 100644 package/multipath-tools/multipath-tools.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c3dcda859..21701ea17c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -137,6 +137,9 @@ F:	package/fastd/
+ F:	package/libuecc/
+ F:	package/putty/
+ 
++N:	Alexander Egorenkov <egorenar-dev@posteo.net>
++F:	package/multipath-tools/
++
+ N:	Alexander Kurz <akurz@blala.de>
+ F:	package/minimodem/
+ 
 diff --git a/package/Config.in b/package/Config.in
 index d7e79f4795..9044829696 100644
 --- a/package/Config.in
@@ -43,12 +58,12 @@ index d7e79f4795..9044829696 100644
  	source "package/numactl/Config.in"
 diff --git a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
 new file mode 100644
-index 0000000000..2797f1a0f1
+index 0000000000..e1ab73312d
 --- /dev/null
 +++ b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
 @@ -0,0 +1,59 @@
 +From f55b1a37e2c43b67e7fd7f6a39afe2b2316b7cf9 Mon Sep 17 00:00:00 2001
-+From: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
++From: Alexander Egorenkov <egorenar-dev@posteo.net>
 +Date: Mon, 31 Aug 2020 19:05:46 +0200
 +Subject: [PATCH 1/1] kpartx, libmultipath: use pkg-config to get path to
 + headers
@@ -56,7 +71,7 @@ index 0000000000..2797f1a0f1
 +Use pkg-config in Makefile to find path to devmapper and udev headers
 +to enable cross-compilation.
 +
-+Signed-off-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 +---
 + kpartx/Makefile       | 2 +-
 + libmultipath/Makefile | 8 ++++----
