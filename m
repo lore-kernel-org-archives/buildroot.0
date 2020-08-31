@@ -1,62 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Aug 2020 08:43:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/nvidia-driver: fix typos in
- comments
-In-Reply-To: <20200830212640.60919-2-iulian.onofrei@yahoo.com>
-References: <20200830123610.20164-1-iulian.onofrei@yahoo.com>
- <20200830212640.60919-1-iulian.onofrei@yahoo.com>
- <20200830212640.60919-2-iulian.onofrei@yahoo.com>
-Message-ID: <20200831064309.GM14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 31 Aug 2020 08:58:41 +0200
+Subject: [Buildroot] [PATCH] package/docker-cli: fix version info since move
+ to 19.03.x
+Message-ID: <20200831065842.9869-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Iulian, All,
+Upstream changed the variables used when outputting version / git commit
+info in docker version since:
 
-On 2020-08-31 00:26 +0300, Iulian Onofrei spake thusly:
-> Signed-off-by: Iulian Onofrei <iulian.onofrei@yahoo.com>
+ commit 04b5f44230162de40741acaa0f94c7af6f2fa1d5
+ Author: Ian Campbell <ijc@docker.com>
+ Date:   Tue Jan 8 15:03:51 2019 +0000
 
-Applied to master, thanks.
+    Move versioning variables to a separate package.
 
-Regards,
-Yann E. MORIN.
+    This helps to avoid circular includes, by separating the pure data out from the
+    actual functionality in the cli subpackage, allowing other code which is
+    imported to access the data.
 
-> ---
->  package/nvidia-driver/nvidia-driver.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-> index baf2ba2be5..44e34cb7b4 100644
-> --- a/package/nvidia-driver/nvidia-driver.mk
-> +++ b/package/nvidia-driver/nvidia-driver.mk
-> @@ -35,7 +35,7 @@ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
->  # NVidia extensions (which is deemed bad now), while the former follows
->  # the newly-introduced vendor-neutral "dispatching" API/ABI:
->  #   https://github.com/aritger/linux-opengl-abi-proposal/blob/master/linux-opengl-abi-proposal.txt
-> -# However, this is not very usefull to us, as we don't support multiple
-> +# However, this is not very useful to us, as we don't support multiple
->  # GL providers at the same time on the system, which this proposal is
->  # aimed at supporting.
->  #
-> @@ -84,7 +84,7 @@ endef
->  # Those libraries are 'private' libraries requiring an agreement with
->  # NVidia to develop code for those libs. There seems to be no restriction
->  # on using those libraries (e.g. if the user has such an agreement, or
-> -# wants to run a third-party program developped under such an agreement).
-> +# wants to run a third-party program developed under such an agreement).
->  ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
->  NVIDIA_DRIVER_LIBS += \
->  	libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
-> -- 
-> 2.24.3 (Apple Git-128)
-> 
+    Signed-off-by: Ian Campbell <ijc@docker.com>
+    Upstream-commit: 20c19830a95455e8562551aad52c715ad0807cc6
+    Component: cli
 
+Which is included in docker-cli 19.3.x - So adjust the _CLI_LDFLAGS to match
+to get proper docker version output:
+
+Client:
+ Version:           19.03.11
+ API version:       1.40
+ Go version:        go1.13.14
+ Git commit:        19.03.11
+
+vs:
+
+Client:
+ Version:           unknown-version
+ API version:       1.40
+ Go version:        go1.13.14
+ Git commit:        unknown-commit
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-cli/docker-cli.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 1466b0afbd..766c984f0b 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -17,8 +17,8 @@ DOCKER_CLI_TAGS = autogen
+ DOCKER_CLI_BUILD_TARGETS = cmd/docker
+ 
+ DOCKER_CLI_LDFLAGS = \
+-	-X github.com/docker/cli/cli.GitCommit=$(DOCKER_CLI_VERSION) \
+-	-X github.com/docker/cli/cli.Version=$(DOCKER_CLI_VERSION)
++	-X github.com/docker/cli/cli/version.GitCommit=$(DOCKER_CLI_VERSION) \
++	-X github.com/docker/cli/cli/version.Version=$(DOCKER_CLI_VERSION)
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
+ DOCKER_CLI_LDFLAGS += -extldflags '-static'
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
