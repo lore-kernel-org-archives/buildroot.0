@@ -1,59 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Aug 2020 22:13:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/avahi: fix building against
- gobject-introspection
-In-Reply-To: <20200814213721.62d58c25@windsurf.home>
-References: <20200813232351.1552307-1-aduskett@gmail.com>
- <20200814133934.26a33b17@windsurf.home>
- <CAFSsvmqhCPXYn9A8pXOy5bi2h35KJZ92r-EWms9Ra7yG2HW=xA@mail.gmail.com>
- <20200814213721.62d58c25@windsurf.home>
-Message-ID: <20200831201336.GS14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 31 Aug 2020 22:14:32 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
+ version 1.14.0
+In-Reply-To: <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
+ (Fabrice Fontaine's message of "Sun, 30 Aug 2020 20:50:47 +0200")
+References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
+ <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
+ <CAPi7W81om-PW5JrYCtD05NXrUXgDUEh-XAJyv4onO-vtSTjj3A@mail.gmail.com>
+Message-ID: <87h7sibmjb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2020-08-14 21:37 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 14 Aug 2020 12:27:46 -0700
-> Adam Duskett <aduskett@gmail.com> wrote:
-> 
-> > > This really isn't very neat. Isn't there a better solution?
-> > >  
-> > Maybe? But that's why the GIR_EXTRA_LABS_PATH macro exists, is for
-> > situations just like this.
-> 
-> It seems absolutely awful that within the build of a package this kind
-> of variable is needed. If it was to point to libraries installed by
-> other packages, why not. But here, the package build system itself is
-> not capable of finding its own libraries?
+ > Le dim. 30 ao?t 2020 ? 20:34, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+ >> 
+ >> 
+ >> 
+ >> On 21/08/2020 22:41, Fabrice Fontaine wrote:
+ >> > Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
+ >> 
+ >> Again, although this bump indeed fixes those issues, it's a feature version
+ >> bump so I'm not sure if it can be called "security bump".
+ >> 
+ >> In addition, the libupnp18 package exists because of API incompatibility with
+ >> 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
+ > There is indeed an API incompatibility between 1.8 and 1.14 related to
+ > CallStranger a.k.a. CVE-2020-12695: starting from 1.14, UpnpInit
+ > function has been removed as this function can't be fixed against
+ > CallStranger because this function takes an IP address and not an
+ > interface name.
+ > However, UpnpInit2 is available for more than 10 years and is used by
+ > most of the applications (i.e. mpd and vlc) with the exception of
+ > gmrender-resurrect (which is patched in this serie).
+ > As soon as libupnp 1.14 is available, I'm planning to update the
+ > applications that are still using the legacy libupnp 1.6.x version
+ > (i.e. igd2-for-linux and ushare) and drop this unsecure version.
+ > I would like to avoid adding a third version of libupnp (i.e. a
+ > libupnp114 package) as from a security perspective, all packages
+ > should use this version.
 
-Remember that this is GOI we are speaking of, here! ;-)
+So we would end up with package/libupnp = 1.14.0? Sounds sensible.
 
-More seriously, though, remember that this is also going through the
-wrappers, backed by qemu because this is executing foreign code...
+ > Still, I agree that this is not only a "security bump" so I would
+ > advise to apply this serie to next and backport it to our LTS branches
+ > in a few months.
 
-And again, GOI. Meh... ;-]
-
-Regards,
-Yann E. MORIN.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Ok. I was still hesitating if I should apply this for 2020.08, but I
+think you are right - Lets get 2020.08 out the door, merge next and let
+this stabilize a bit before backporting to 2020.08.x / 2020.02.x.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
