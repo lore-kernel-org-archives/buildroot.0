@@ -1,31 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 31 Aug 2020 22:12:16 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libupnp18: security bump to
- version 1.14.0
-In-Reply-To: <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be> (Arnout
- Vandecappelle's message of "Sun, 30 Aug 2020 20:34:06 +0200")
-References: <20200821204139.3682940-1-fontaine.fabrice@gmail.com>
- <ee168046-5a2e-537c-8df2-9c4fd00bb757@mind.be>
-Message-ID: <87lfhubmn3.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 31 Aug 2020 22:13:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/avahi: fix building against
+ gobject-introspection
+In-Reply-To: <20200814213721.62d58c25@windsurf.home>
+References: <20200813232351.1552307-1-aduskett@gmail.com>
+ <20200814133934.26a33b17@windsurf.home>
+ <CAFSsvmqhCPXYn9A8pXOy5bi2h35KJZ92r-EWms9Ra7yG2HW=xA@mail.gmail.com>
+ <20200814213721.62d58c25@windsurf.home>
+Message-ID: <20200831201336.GS14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Thomas, All,
 
- > On 21/08/2020 22:41, Fabrice Fontaine wrote:
- >> Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
+On 2020-08-14 21:37 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 14 Aug 2020 12:27:46 -0700
+> Adam Duskett <aduskett@gmail.com> wrote:
+> 
+> > > This really isn't very neat. Isn't there a better solution?
+> > >  
+> > Maybe? But that's why the GIR_EXTRA_LABS_PATH macro exists, is for
+> > situations just like this.
+> 
+> It seems absolutely awful that within the build of a package this kind
+> of variable is needed. If it was to point to libraries installed by
+> other packages, why not. But here, the package build system itself is
+> not capable of finding its own libraries?
 
- >  Again, although this bump indeed fixes those issues, it's a feature version
- > bump so I'm not sure if it can be called "security bump".
+Remember that this is GOI we are speaking of, here! ;-)
 
- >  In addition, the libupnp18 package exists because of API incompatibility with
- > 1.6. Are we sure that this problem doesn't repeat itself for 1.14?
+More seriously, though, remember that this is also going through the
+wrappers, backed by qemu because this is executing foreign code...
 
-And calling it libupnp18 when it is provides 1.14.x is quite confusing
-:/
+And again, GOI. Meh... ;-]
+
+Regards,
+Yann E. MORIN.
+
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
