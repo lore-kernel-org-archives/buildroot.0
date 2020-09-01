@@ -1,40 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Sep 2020 22:18:01 +0200
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xserver_xorg-server:
- remove unmaintained versions 1.14.7 & 1.17.4
-In-Reply-To: <20200829113403.122144-3-bernd.kuhls@t-online.de>
-References: <20200829113403.122144-1-bernd.kuhls@t-online.de>
- <20200829113403.122144-3-bernd.kuhls@t-online.de>
-Message-ID: <00ce695c-83b5-bf4e-220b-cae85233ad1b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Sep 2020 22:20:34 +0200
+Subject: [Buildroot] [git commit branch/next] package/docker-cli: fix
+ version ldflags
+Message-ID: <20200901201315.9D717821DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9a262b4054e2c25d6c6009948bb35a2f6f4e276a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The variables for the "docker version" output are located at
+$(DOCKER_CLI_GOMOD)/cli/version - correct the path to these in the ldflags to
+fix the following "unknown" lines in "docker version" output:
 
-On 29/08/2020 13:34, Bernd Kuhls wrote:
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index b91e6dbc69..45fb18540b 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,12 @@ endif
->  
->  comment "Legacy options removed in 2020.08"
->  
-> +config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
-> +	bool "X.org Enable AIGLX Extension"
-> +	select BR2_LEGACY
-> +	help
-> +	  AIGLX Extension was removed in X.org X server version 1.19.0
-> +
->  config BR2_PACKAGE_AMD_CATALYST
->  	bool "amd-catalyst"
->  	select BR2_LEGACY
+Client:
+ Version:           unknown-version
+ Git commit:        unknown-commit
+ Built:             unknown-buildtime
 
- There was also still a reference to BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_19 in
-Config.in.legacy, so I removed that.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/docker-cli/docker-cli.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index fd96ff9f35..8607425efa 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -17,8 +17,8 @@ DOCKER_CLI_BUILD_TARGETS = cmd/docker
+ DOCKER_CLI_GOMOD = github.com/docker/cli
+ 
+ DOCKER_CLI_LDFLAGS = \
+-	-X $(DOCKER_CLI_GOMOD)/cli.GitCommit=$(DOCKER_CLI_VERSION) \
+-	-X $(DOCKER_CLI_GOMOD)/cli.Version=$(DOCKER_CLI_VERSION)
++	-X $(DOCKER_CLI_GOMOD)/cli/version.GitCommit=$(DOCKER_CLI_VERSION) \
++	-X $(DOCKER_CLI_GOMOD)/cli/version.Version=$(DOCKER_CLI_VERSION)
+ 
+ ifeq ($(BR2_PACKAGE_DOCKER_CLI_STATIC),y)
+ DOCKER_CLI_LDFLAGS += -extldflags '-static'
