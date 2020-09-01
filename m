@@ -1,25 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2020 09:20:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ibm-sw-tpm2: fix build with gcc
- 10
-In-Reply-To: <20200831201539.2192014-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 31 Aug 2020 22:15:39 +0200")
-References: <20200831201539.2192014-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mu2a9d58.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Sep 2020 09:19:10 +0200
+Subject: [Buildroot] [git commit] package/graphite2: fix static install
+Message-ID: <20200901071247.C0FA580079@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dd2d4caf5603513cb618af9980604a792f3b4fe9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/8533d202fb29bf2a1677de37fc71f1a0fbd54722
+Don't install an incorrect libtool file when building a static library
+to fix the following build failure with harfbuzz:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
+make[5]: *** [main] Error 1
 
-Committed, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...nstall-a-libtool-file-with-static-library.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+
+diff --git a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+new file mode 100644
+index 0000000000..ac150622d5
+--- /dev/null
++++ b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+@@ -0,0 +1,67 @@
++From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 31 Aug 2020 20:56:43 +0200
++Subject: [PATCH] don't install a libtool file with static library
++
++Static library is supported since version 1.3.11 and
++https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
++
++However, graphite2 is still installing libgraphite2.la which contains
++incorrect information (i.e. dlname set to libgraphite2.so and
++old_library set to ''):
++
++dlname='libgraphite2.so'
++
++library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
++
++old_library=''
++
++dependency_libs=''
++
++This will result in the following build failure with any applications
++using this file such as harfbuzz:
++
++arm-linux-g++.br_real: error: /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so: No such file or directory
++make[5]: *** [main] Error 1
++
++Instead of trying to fix this libtool file, just disable it when
++building a static library as it is not needed
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/silnrsi/graphite/pull/65]
++---
++ src/CMakeLists.txt | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index b6ac26bf..a7ace040 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
++         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
++     endif ()
++     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
++-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+++    if (BUILD_SHARED_LIBS)
+++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+++    endif()
++ endif()
++ 
++ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
++@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
++     include(Graphite)
++     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
++     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
++-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+++    if (BUILD_SHARED_LIBS)
+++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+++    endif()
++ endif()
++ 
++ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
++-- 
++2.28.0
++
