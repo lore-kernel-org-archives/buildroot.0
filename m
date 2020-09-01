@@ -1,70 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2020 20:14:43 +0200
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 3.0.10
-Message-ID: <20200901180744.B3B8485DF7@busybox.osuosl.org>
+Date: Tue, 01 Sep 2020 20:39:47 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: use HOSTCC_NOCCACHE as
+ kconfig HOSTCC
+In-Reply-To: <20200829203720.28230-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 29 Aug 2020 22:37:20 +0200")
+References: <20200829203720.28230-1-yann.morin.1998@free.fr>
+Message-ID: <87eenl9w98.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaefa775ed7ec0062d21e3ac37f10e93b990ad5b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Fixes the following security issues:
+ > uclibc is part of the toolchain, and as such does not have a dependency
+ > on it. As a consequence, it does not have a dependency on host-ccache,
+ > when this is needed.
 
-CVE-2020-24583: Incorrect permissions on intermediate-level directories on Python 3.7+
-On Python 3.7+, FILE_UPLOAD_DIRECTORY_PERMISSIONS mode was not applied to
-intermediate-level directories created in the process of uploading files and
-to intermediate-level collected static directories when using the
-collectstatic management command.
+ > Usually, host-ccache is built before uclibc, as part of the dependency
+ > of gcc-initial, hiot-binutils, and a few other host packages that are
+ > built before uclibc.
 
-You should review and manually fix permissions on existing
-intermediate-level directories.
+ > However, during top-level parallel builds, this ordering is only ever
+ > guaranteed at the beginning of the configure step, and not before.
 
-CVE-2020-24584: Permission escalation in intermediate-level directories of
-the file system cache on Python 3.7+
-On Python 3.7+, the intermediate-level directories of the file system cache
-had the system???s standard umask rather than 0o077 (no group or others
-permissions).
+ > But for kconfig-packages, the moment we apply the configuration to
+ > prepare the .config file is a pseudo step that happens somewhere in
+ > limbo between the patch step and the configure step. As such, the
+ > build ordering that is otherwise guaranteed by the _DEPENDENCIES is not
+ > applicable yet.
 
-https://docs.djangoproject.com/en/dev/releases/3.0.10/
+ > And so, with top-level parallel builds with ccache enabled, there is
+ > nothing that guarantees host-ccache to be built and installed by the
+ > time we are trying to generate uclibc's .config file, which can be quite
+ > early in the build process, and thus the build fails:
 
-In addition, 3.0.8..10 contains a number of bugfixes.
+ >     /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache /usr/bin/gcc /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/extra/config/conf.c  -c -o ../../extra/config/conf.o -Os -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'   -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'
+ >     /bin/sh: 1: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache: not found
+ >     make[2]: *** [Makefile:64: ../../extra/config/conf.o] Error 127
+ >     make[1]: *** [Makefile.in:475: extra/config/conf] Error 2
+ >     make[1]: Leaving directory '/home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34'
+ >     make: *** [package/uclibc/uclibc.mk:458: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/.stamp_dotconfig] Error 2
+ >     make: *** Waiting for unfinished jobs....
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > The root cause is that uclibc sets;
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 9690401043..8aebe62161 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5	c3ac98d5503c671d316cf78ded3c9809  Django-3.0.7.tar.gz
--sha256	5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2  Django-3.0.7.tar.gz
-+md5	deec48e8713727e443a7cee6b54baaeb  Django-3.0.10.tar.gz
-+sha256	2d14be521c3ae24960e5e83d4575e156a8c479a75c935224b671b1c6e66eddaf  Django-3.0.10.tar.gz
- # Locally computed sha256 checksums
- sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index d76f6101e9..97bf75320d 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 3.0.7
-+PYTHON_DJANGO_VERSION = 3.0.10
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/74/ad/8a1bc5e0f8b740792c99c7bef5ecc043018e2b605a2fe1e2513fde586b72
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f4/09/d7c995b128bec61233cfea0e5fa40e442cae54c127b4b2b0881e1fdd0023
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+ >     UCLIBC_KCONFIG_OPTS = $(UCLIBC_MAKE_FLAGS) [...]
+
+ > with:
+
+ >     UCLIBC_MAKE_FLAGS = [...] HOSTCC="$(HOSTCC)"
+
+ > And then the kconfig-package infra calls to the configurators,
+ > menuconfig, xconfig et al, but also olddefconfig et al.. with:
+
+ >     [...] $($(1)_MAKE) [...] $(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) [...]
+
+ > with (note a latent bug in there, will be fixed in another patch):
+
+ >     PKG_KCONFIG_COMMON_OPTS = HOSTCC=$(HOSTCC_NOCCACHE)
+
+ > So, a HOSTCC as set by a package will always win onver the one set by
+ > the infra, which is exactly what we want.
+
+ > But in this case, uclibc sets HOSTCC so that it can build its host tools
+ > needed during the build, and in doing so uses the ccache-enabled host c
+ > compiler. Which might not yet be available for the kconfig-package infra
+ > to generate the .config file.
+
+ > We had a similar (non-)issue for the linux package, which was fixed in
+ > commit 71a31b2357 (linux: use HOSTCC_NOCCACHE as kconfig HOSTCC).
+
+ > But here, uclibc does not have the toolchain in its dependencies (as said
+ > earlier, uclibc *is* part of the toolchain).
+
+ > Since the host compiler is only used to build very few files to generate
+ > the simple executable needed to generate the .config file, doing without
+ > the ccache-enabled host compiler will be amply enough.
+
+ > So, we override HOSTCC in UCLIBC_KCONFIG_OPTS, to use the non-cached
+ > host compiler.
+
+ > Note that, in a first approximation, one would be tempted to change the
+ > ordering in the kconfig-package infra:
+
+ >         $($(1)_KCONFIG_OPTS) $(PKG_KCONFIG_COMMON_OPTS)
+
+ > so that the non-cached HOSTCC always wins over the cached one. But this
+ > would be incorrect, in cases where the package really needs to override
+ > HOSTCC; indeed we want the package-provided values to always win over
+ > the default ones providing by the infra.
+
+ > Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2020.02.x and 2020.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
