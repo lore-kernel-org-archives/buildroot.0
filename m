@@ -1,63 +1,79 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue,  1 Sep 2020 11:37:28 +0200
-Subject: [Buildroot] [PATCH] package/uhd: boost-thread needs a toolchain
- without bug 64735
-Message-ID: <20200901093729.544094-1-gwenj@trabucayre.com>
+Date: Tue, 1 Sep 2020 11:42:07 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-08-31
+In-Reply-To: <20200901071025.BD27486267@fraxinus.osuosl.org>
+References: <20200901071025.BD27486267@fraxinus.osuosl.org>
+Message-ID: <20200901114207.01340f13@x230_1.trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi,
 
-boost-thread needs std::current_exception since version 1.71.0 and
-https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
+On Tue, 01 Sep 2020 07:10:20 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-std::current_exception depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as a
-result, uhd fails to build on:
-In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/error.h:74:0,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/types/metadata.h:12,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/lib/types/metadata_c.cpp:8:
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::__cxx11::string boost::current_exception_diagnostic_information(bool)':
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:54:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
-                          ^
-In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/error.h:74:0,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/types/ranges.h:12,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/lib/types/ranges_c.cpp:8:
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::__cxx11::string boost::current_exception_diagnostic_information(bool)':
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:54:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
-
-So add a dependency to !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-
-Fix:
- - http://autobuild.buildroot.net/results/0cdbf01df174648cf0dfb34d9506eb80570e99c0/
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/uhd/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/uhd/Config.in b/package/uhd/Config.in
-index 21b10210ab..32cb4cf89d 100644
---- a/package/uhd/Config.in
-+++ b/package/uhd/Config.in
-@@ -3,10 +3,14 @@ comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
-+comment "uhd needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_UHD
- 	bool "uhd"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
--- 
-2.20.1
+> Hello,
+> 
+> Autobuild statistics for 2020-08-31
+> ===================================
+> 
+>       branch |  OK | NOK | TIM | TOT |
+>   2020.02.x  | 25  |  4  |  0  | 29  |
+>   2020.05.x  | 19  |  4  |  0  | 23  |
+>     master   | 150 | 36  |  0  | 186 |
+>      next    | 23  | 24  |  0  | 47  |
+> 
+[...]
+> 
+> Classification of failures by reason for next
+> ---------------------------------------------
+> 
+>               host-grpc-1.31.0 | 4 
+>                   assimp-5.0.1 | 2 
+>               keepalived-2.1.4 | 2 
+>                libglib2-2.64.4 | 2 
+>       spandsp-3.0.0-6ec23e5a7e | 2 
+>      dovecot-pigeonhole-0.5.11 | 1 
+>                 easyframes-0.3 | 1 
+>                  gnuplot-5.4.0 | 1 
+>               gr-osmosdr-0.2.0 | 1 
+>                    libcap-2.42 | 1 
+>                     mpv-0.29.1 | 1 
+>                   ndisc6-1.0.4 | 1 
+>                  opencv3-3.4.9 | 1 
+>    sofia-sip-1.13.1-d10a3d268c | 1 
+>                   uhd-3.15.0.0 | 1 
+>                        unknown | 1 
+>            wayland-utils-1.0.0 | 1 
+> 
+> 
+> Detail of failures for next
+> ---------------------------
+> 
+>     arch     |             reason             | OK? |                                       url                                       | orph?
+> -------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+[...]
+>   powerpc    |        gr-osmosdr-0.2.0        | NOK | http://autobuild.buildroot.net/results/ff3316109fda13337b0ce43da82aae7b71ef29d3 |     
+Fixed (in master branch) by https://git.busybox.net/buildroot/commit/?id=5209123494ccfb91ea802cc7675886c2ac800cc7
+[...]
+>     arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/0cdbf01df174648cf0dfb34d9506eb80570e99c0 |     
+missing depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 (boost-thread)
+patch send:
+http://patchwork.ozlabs.org/project/buildroot/patch/20200901093729.544094-1-gwenj at trabucayre.com/
+>    xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/088ac62605792566ceebc1d35cf47ba8abe99f8d |     
+>     arm      |      wayland-utils-1.0.0       | NOK | http://autobuild.buildroot.net/results/01116cfc31fc2e54c07541e5eb0ad99050d7cf03 |     
+> 
+> 
+Best regards,
+Gwen
+> 
+> -- 
+> http://autobuild.buildroot.net
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
