@@ -1,13 +1,16 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  1 Sep 2020 21:06:20 +0200
-Subject: [Buildroot] [PATCH v2] package/gobject-introspection: disable for
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Sep 2020 21:23:54 +0200
+Subject: [Buildroot] [git commit] package/gobject-introspection: disable for
  riscv32
-Message-ID: <20200901190620.3507-1-peter@korsgaard.com>
+Message-ID: <20200901192420.BD0ED87609@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c94a212390e33c122cf9db4c772caf8bf3804565
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 http://autobuild.buildroot.net/results/e32/e323f43952b3863cedfdae765b3fb10ec6b8d889/
@@ -24,10 +27,8 @@ BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS symbol they can depend on
 rather than having to propagate the dependencies.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes since v1:
-- Handle reverse dependencies / add BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
-
  package/gobject-introspection/Config.in  | 11 +++++++++--
  package/gstreamer1/gst1-python/Config.in |  4 ++--
  package/python-gobject/Config.in         |  4 ++--
@@ -106,5 +107,3 @@ index d7ed437e8b..1c9303b0ba 100644
 +	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
  	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
  		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.20.1
