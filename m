@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2020 20:28:58 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/uclibc: use
+Date: Tue, 1 Sep 2020 20:34:24 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/uclibc: use
  HOSTCC_NOCCACHE as kconfig HOSTCC
-Message-ID: <20200901183229.104CC847AF@busybox.osuosl.org>
+Message-ID: <20200901183233.1C7AC847AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77fd26d5622044074bb69a966dd10a929f5379dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=609ef2b110d4e83973699baef5d4c47de2ba764b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 uclibc is part of the toolchain, and as such does not have a dependency
 on it. As a consequence, it does not have a dependency on host-ccache,
@@ -101,7 +101,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 2af666c208..7df4461949 100644
+index 3ba4589672..daf81d29b2 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
 @@ -31,8 +31,13 @@ endif
