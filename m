@@ -1,101 +1,122 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2020 20:39:47 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: use HOSTCC_NOCCACHE as
- kconfig HOSTCC
-In-Reply-To: <20200829203720.28230-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 29 Aug 2020 22:37:20 +0200")
-References: <20200829203720.28230-1-yann.morin.1998@free.fr>
-Message-ID: <87eenl9w98.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Sep 2020 20:39:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/graphite2: fix static install
+In-Reply-To: <20200831192215.1677034-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 31 Aug 2020 21:22:15 +0200")
+References: <20200831192215.1677034-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a6y99w8x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > uclibc is part of the toolchain, and as such does not have a dependency
- > on it. As a consequence, it does not have a dependency on host-ccache,
- > when this is needed.
+ > Don't install an incorrect libtool file when building a static library
+ > to fix the following build failure with harfbuzz:
 
- > Usually, host-ccache is built before uclibc, as part of the dependency
- > of gcc-initial, hiot-binutils, and a few other host packages that are
- > built before uclibc.
+ > arm-linux-g++.br_real: error:
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so:
+ > No such file or directory
+ > make[5]: *** [main] Error 1
 
- > However, during top-level parallel builds, this ordering is only ever
- > guaranteed at the beginning of the configure step, and not before.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
 
- > But for kconfig-packages, the moment we apply the configuration to
- > prepare the .config file is a pseudo step that happens somewhere in
- > limbo between the patch step and the configure step. As such, the
- > build ordering that is otherwise guaranteed by the _DEPENDENCIES is not
- > applicable yet.
-
- > And so, with top-level parallel builds with ccache enabled, there is
- > nothing that guarantees host-ccache to be built and installed by the
- > time we are trying to generate uclibc's .config file, which can be quite
- > early in the build process, and thus the build fails:
-
- >     /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache /usr/bin/gcc /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/extra/config/conf.c  -c -o ../../extra/config/conf.o -Os -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'   -I/usr/include/ncursesw -DCURSES_LOC="<curses.h>"  -DNCURSES_WIDECHAR=1 -DLOCALE -DKBUILD_NO_NLS -DCONFIG_='""'
- >     /bin/sh: 1: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/per-package/uclibc/host/bin/ccache: not found
- >     make[2]: *** [Makefile:64: ../../extra/config/conf.o] Error 127
- >     make[1]: *** [Makefile.in:475: extra/config/conf] Error 2
- >     make[1]: Leaving directory '/home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34'
- >     make: *** [package/uclibc/uclibc.mk:458: /home/raphael/github/ftcommunity-TXT/buildroot-rootfs/output/build/uclibc-1.0.34/.stamp_dotconfig] Error 2
- >     make: *** Waiting for unfinished jobs....
-
- > The root cause is that uclibc sets;
-
- >     UCLIBC_KCONFIG_OPTS = $(UCLIBC_MAKE_FLAGS) [...]
-
- > with:
-
- >     UCLIBC_MAKE_FLAGS = [...] HOSTCC="$(HOSTCC)"
-
- > And then the kconfig-package infra calls to the configurators,
- > menuconfig, xconfig et al, but also olddefconfig et al.. with:
-
- >     [...] $($(1)_MAKE) [...] $(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) [...]
-
- > with (note a latent bug in there, will be fixed in another patch):
-
- >     PKG_KCONFIG_COMMON_OPTS = HOSTCC=$(HOSTCC_NOCCACHE)
-
- > So, a HOSTCC as set by a package will always win onver the one set by
- > the infra, which is exactly what we want.
-
- > But in this case, uclibc sets HOSTCC so that it can build its host tools
- > needed during the build, and in doing so uses the ccache-enabled host c
- > compiler. Which might not yet be available for the kconfig-package infra
- > to generate the .config file.
-
- > We had a similar (non-)issue for the linux package, which was fixed in
- > commit 71a31b2357 (linux: use HOSTCC_NOCCACHE as kconfig HOSTCC).
-
- > But here, uclibc does not have the toolchain in its dependencies (as said
- > earlier, uclibc *is* part of the toolchain).
-
- > Since the host compiler is only used to build very few files to generate
- > the simple executable needed to generate the .config file, doing without
- > the ccache-enabled host compiler will be amply enough.
-
- > So, we override HOSTCC in UCLIBC_KCONFIG_OPTS, to use the non-cached
- > host compiler.
-
- > Note that, in a first approximation, one would be tempted to change the
- > ordering in the kconfig-package infra:
-
- >         $($(1)_KCONFIG_OPTS) $(PKG_KCONFIG_COMMON_OPTS)
-
- > so that the non-cached HOSTCC always wins over the cached one. But this
- > would be incorrect, in cases where the package really needs to override
- > HOSTCC; indeed we want the package-provided values to always win over
- > the default ones providing by the infra.
-
- > Reported-by: Raphael Jacob <r.jacob2002@gmail.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
+
+ > ---
+ >  ...l-a-libtool-file-with-static-library.patch | 67 +++++++++++++++++++
+ >  1 file changed, 67 insertions(+)
+ >  create mode 100644 package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+
+ > diff --git
+ > a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+ > b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+ > new file mode 100644
+ > index 0000000000..ac150622d5
+ > --- /dev/null
+ > +++ b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
+ > @@ -0,0 +1,67 @@
+ > +From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
+ > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +Date: Mon, 31 Aug 2020 20:56:43 +0200
+ > +Subject: [PATCH] don't install a libtool file with static library
+ > +
+ > +Static library is supported since version 1.3.11 and
+ > +https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
+ > +
+ > +However, graphite2 is still installing libgraphite2.la which contains
+ > +incorrect information (i.e. dlname set to libgraphite2.so and
+ > +old_library set to ''):
+ > +
+ > +dlname='libgraphite2.so'
+ > +
+ > +library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
+ > +
+ > +old_library=''
+ > +
+ > +dependency_libs=''
+ > +
+ > +This will result in the following build failure with any applications
+ > +using this file such as harfbuzz:
+ > +
+ > +arm-linux-g++.br_real: error:
+ > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so:
+ > No such file or directory
+ > +make[5]: *** [main] Error 1
+ > +
+ > +Instead of trying to fix this libtool file, just disable it when
+ > +building a static library as it is not needed
+ > +
+ > +Fixes:
+ > + - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
+ > +
+ > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +[Upstream status: https://github.com/silnrsi/graphite/pull/65]
+ > +---
+ > + src/CMakeLists.txt | 8 ++++++--
+ > + 1 file changed, 6 insertions(+), 2 deletions(-)
+ > +
+ > +diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+ > +index b6ac26bf..a7ace040 100644
+ > +--- a/src/CMakeLists.txt
+ > ++++ b/src/CMakeLists.txt
+ > +@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+ > +         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
+ > +     endif ()
+ > +     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+ > +-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+ > ++    if (BUILD_SHARED_LIBS)
+ > ++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+ > ++    endif()
+ > + endif()
+ > + 
+ > + if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+ > +@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+ > +     include(Graphite)
+ > +     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
+ > +     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
+ > +-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+ > ++    if (BUILD_SHARED_LIBS)
+ > ++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
+ > ++    endif()
+ > + endif()
+ > + 
+ > + if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+ > +-- 
+ > +2.28.0
+ > +
+ > -- 
+ > 2.28.0
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
