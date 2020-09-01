@@ -1,52 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2020 21:38:01 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/paho-mqtt-c: bump
- to version 1.3.5
-Message-ID: <20200901193231.8165782D5B@busybox.osuosl.org>
+Date: Tue, 1 Sep 2020 21:35:45 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nvidia-driver:
+ fix typos in comments
+Message-ID: <20200901193237.5A1E481DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6e0be46a1854d470ac1bcc82855c55bcc2f29dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a1085fc208613351b04753c73aad495841cbdde5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This is a paho-mqtt-c maintainace release. It fixes some memory leaks as
-well as a potential deadlock:
-
-https://github.com/eclipse/paho.mqtt.c/milestone/8?closed=1
-
-Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 179e8390a76b10cadb6bd7debbb4de33b9dff78b)
+Signed-off-by: Iulian Onofrei <iulian.onofrei@yahoo.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 21fca042d942e5460fd384b9f6a1eef13a191160)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nvidia-driver/nvidia-driver.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index bbfa2da386..3c1a27084b 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  1ae9b657b693254ed0710350df3dcf5232d1f479409a52861b5e5bb5cc3da046  paho-mqtt-c-1.3.4.tar.gz
-+sha256  996eef9e498519da79108f58a887a34abc50cd76770b19b0300b27783706c71f  paho-mqtt-c-1.3.5.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index aa2a0b026e..8c8e9f0d58 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
+index baf2ba2be5..44e34cb7b4 100644
+--- a/package/nvidia-driver/nvidia-driver.mk
++++ b/package/nvidia-driver/nvidia-driver.mk
+@@ -35,7 +35,7 @@ NVIDIA_DRIVER_PROVIDES += libgl libegl libgles
+ # NVidia extensions (which is deemed bad now), while the former follows
+ # the newly-introduced vendor-neutral "dispatching" API/ABI:
+ #   https://github.com/aritger/linux-opengl-abi-proposal/blob/master/linux-opengl-abi-proposal.txt
+-# However, this is not very usefull to us, as we don't support multiple
++# However, this is not very useful to us, as we don't support multiple
+ # GL providers at the same time on the system, which this proposal is
+ # aimed at supporting.
  #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.4
-+PAHO_MQTT_C_VERSION = 1.3.5
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+@@ -84,7 +84,7 @@ endef
+ # Those libraries are 'private' libraries requiring an agreement with
+ # NVidia to develop code for those libs. There seems to be no restriction
+ # on using those libraries (e.g. if the user has such an agreement, or
+-# wants to run a third-party program developped under such an agreement).
++# wants to run a third-party program developed under such an agreement).
+ ifeq ($(BR2_PACKAGE_NVIDIA_DRIVER_PRIVATE_LIBS),y)
+ NVIDIA_DRIVER_LIBS += \
+ 	libnvidia-ifr.so.$(NVIDIA_DRIVER_VERSION) \
