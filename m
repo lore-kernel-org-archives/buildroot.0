@@ -1,40 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  1 Sep 2020 16:12:49 +0200
-Subject: [Buildroot] [PATCH] package/gobject-introspection: disable for
- riscv32
-Message-ID: <20200901141249.23158-1-peter@korsgaard.com>
+Date: Tue,  1 Sep 2020 16:22:22 +0200
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 3.0.10
+Message-ID: <20200901142222.13132-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/e32/e323f43952b3863cedfdae765b3fb10ec6b8d889/
-http://autobuild.buildroot.net/results/53e/53e7b82baa9edb342cd110717d6b8ac82d5d933c/
+Fixes the following security issues:
 
-And many more.
+CVE-2020-24583: Incorrect permissions on intermediate-level directories on Python 3.7+
+On Python 3.7+, FILE_UPLOAD_DIRECTORY_PERMISSIONS mode was not applied to
+intermediate-level directories created in the process of uploading files and
+to intermediate-level collected static directories when using the
+collectstatic management command.
 
-qemu-user 5.0.0 for riscv32 segfaults when running the g-i qemu wrapper, so
-disable gobject-introspection.  There are no autobuilder failures for next,
-so it looks to be fixed in qemu 5.1.0.
+You should review and manually fix permissions on existing
+intermediate-level directories.
+
+CVE-2020-24584: Permission escalation in intermediate-level directories of
+the file system cache on Python 3.7+
+On Python 3.7+, the intermediate-level directories of the file system cache
+had the system?s standard umask rather than 0o077 (no group or others
+permissions).
+
+https://docs.djangoproject.com/en/dev/releases/3.0.10/
+
+In addition, 3.0.8..10 contains a number of bugfixes.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gobject-introspection/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
-index e312852cf2..95a73980da 100644
---- a/package/gobject-introspection/Config.in
-+++ b/package/gobject-introspection/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
- 	bool "gobject-introspection"
- 	depends on BR2_USE_MMU # python3, libglib2
- 	depends on BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
-+	depends on !BR2_RISCV_32 # qemu-riscv32 segfaults in qemu-5.0.0
- 	# While gcc 4.8 might be compatible with gobject-introspection,
- 	# The autobuilders use some toolchains from codesourcery which
- 	# have gcc 4.8 and a very old version of glibc, which will cause
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 9690401043..8aebe62161 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	c3ac98d5503c671d316cf78ded3c9809  Django-3.0.7.tar.gz
+-sha256	5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2  Django-3.0.7.tar.gz
++md5	deec48e8713727e443a7cee6b54baaeb  Django-3.0.10.tar.gz
++sha256	2d14be521c3ae24960e5e83d4575e156a8c479a75c935224b671b1c6e66eddaf  Django-3.0.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index d76f6101e9..97bf75320d 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 3.0.7
++PYTHON_DJANGO_VERSION = 3.0.10
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/74/ad/8a1bc5e0f8b740792c99c7bef5ecc043018e2b605a2fe1e2513fde586b72
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f4/09/d7c995b128bec61233cfea0e5fa40e442cae54c127b4b2b0881e1fdd0023
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
 2.20.1
