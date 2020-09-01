@@ -1,40 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 01 Sep 2020 16:02:43 +0000
-Subject: [Buildroot] [Bug 13171] make qt5base error
-In-Reply-To: <bug-13171-163@https.bugs.busybox.net/>
-References: <bug-13171-163@https.bugs.busybox.net/>
-Message-ID: <bug-13171-163-0nRMoA1h9Q@https.bugs.busybox.net/>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Tue, 01 Sep 2020 19:15:42 +0200
+Subject: [Buildroot] [PATCH 2/4] package/python-pluggy: new package
+In-Reply-To: <20200827230333.5b750a9c@windsurf.home>
+References: <20200429224225.2454330-1-m.niestroj@grinn-global.com>
+ <20200429224225.2454330-3-m.niestroj@grinn-global.com>
+ <20200827230333.5b750a9c@windsurf.home>
+Message-ID: <87o8mpju4h.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13171
+Hi Thomas,
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to jack from comment #0)
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Sorry, no picture (of the failure) attached...
+> Hello Marcin,
+>
+> On Thu, 30 Apr 2020 00:42:23 +0200
+> Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+>
+>> new file mode 100644
+>> index 0000000000..620983fe84
+>> --- /dev/null
+>> +++ b/package/python-pluggy/Config.in
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_PYTHON_PLUGGY
+>> +	bool "python-pluggy"
+>> +	select BR2_PACKAGE_PYTHON_IMPORTLIB_METADATA # runtime
+>
+> I don't see this option existing in Buildroot, and your patch 1/4 in
+> this series was adding the python-packaging package.
 
-Could you provide a .config or defconfig file of the failing buildroot
-configuration (on which host system)? Could you provide the failure message
-(and some lines around) simple by copying the message?
+I missed that importlib-metadata package was added (most probably)
+automatically by scanpypi script. It looks like we don't need this
+package when using python 3.8.
 
-Do you mean the following change to configure (removing the double quotes):
+I'll send v2 of this patch series with that line removed.
 
-     if [ "$OPT_VERBOSE" = yes ]; then
-         # Show the output of make
--        (cd "$outpath/qmake"; "$MAKE") || exit 2
-+        (cd "$outpath/qmake"; $MAKE) || exit 2
-     else
-         # Hide the output of make
+>
+> Am I missing something here ?
 
-If this is fixing your problem, this would mean that 'MAKE' is not single
-command in your case...
+Thanks for spotting that, that was my mistake.
 
-Could you provide an link to your 'research' results?
+>
+> Thanks!
+>
+> Thomas
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Marcin Niestr?j
