@@ -1,63 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Sep 2020 21:44:15 +0200
-Subject: [Buildroot] [git commit branch/next] package/uhd: propagate
- toolchain bug 64735 dependency from boost-thread
-Message-ID: <20200901193956.DBDE983786@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Sep 2020 21:50:13 +0200
+Subject: [Buildroot] [PATCH] package/uhd: boost-thread needs a toolchain
+ without bug 64735
+In-Reply-To: <20200901093729.544094-1-gwenj@trabucayre.com>
+References: <20200901093729.544094-1-gwenj@trabucayre.com>
+Message-ID: <d5ea5639-99d2-9f41-ad16-cdd5d19cf7f6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd706575bc17b7ae19e2914089f190e9062c7270
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-boost-thread needs std::current_exception since version 1.71.0 and
-https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
 
-std::current_exception depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 as a
-result, uhd fails to build on:
-In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/error.h:74:0,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/types/metadata.h:12,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/lib/types/metadata_c.cpp:8:
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::__cxx11::string boost::current_exception_diagnostic_information(bool)':
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:54:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
-                          ^
-In file included from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/error.h:74:0,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/include/uhd/types/ranges.h:12,
-                 from /home/buildroot/autobuild/run/instance-2/output-1/build/uhd-3.15.0.0/host/lib/types/ranges_c.cpp:8:
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp: In function 'std::__cxx11::string boost::current_exception_diagnostic_information(bool)':
-/home/buildroot/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/boost/exception/diagnostic_information.hpp:54:26: error: 'current_exception' is not a member of 'std'
-         else if (auto* p=std::current_exception().__cxa_exception_type())
+On 01/09/2020 11:37, Gwenhael Goavec-Merou wrote:
+> boost-thread needs std::current_exception since version 1.71.0 and
+> https://github.com/boostorg/exception/commit/386f5507cb8ec99c03ca535bea4f8bd61e0de910
 
-So add a dependency to !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ I was a bit confused about the subject line, because it talks about
+boost-thread and the change is in uhd... It took me some time to understand that
+this was simply propagating the existing dependency. So I've changed the subject
+line to "package/uhd: propagate toolchain bug 64735 dependency from boost-thread".
 
-Fix:
- - http://autobuild.buildroot.net/results/0cdbf01df174648cf0dfb34d9506eb80570e99c0/
+ Also, I tried to apply to master and that failed obviously. In the future,
+please use `--subject-prefix=PATCH/next` to make it clear it applies to next,
+not master.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/uhd/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ Applied to next, thanks.
 
-diff --git a/package/uhd/Config.in b/package/uhd/Config.in
-index 21b10210ab..32cb4cf89d 100644
---- a/package/uhd/Config.in
-+++ b/package/uhd/Config.in
-@@ -3,10 +3,14 @@ comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
-+comment "uhd needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- config BR2_PACKAGE_UHD
- 	bool "uhd"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # use fork()
- 	depends on BR2_USE_WCHAR # boost
+ Regards,
+ Arnout
