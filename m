@@ -1,122 +1,164 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Sep 2020 22:36:23 +0200
-Subject: [Buildroot] [PATCHv2] core: make it possible to check flake8
- like we check package
-In-Reply-To: <20200830221215.26034-1-yann.morin.1998@free.fr>
-References: <20200830221215.26034-1-yann.morin.1998@free.fr>
-Message-ID: <6a085553-3514-d58f-1749-43e09bc39b59@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Sep 2020 22:38:36 +0200
+Subject: [Buildroot] [git commit] Update for 2020.08
+Message-ID: <20200901203633.71A94875AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2766f346195dec29b53bc09f6038193998ea3693
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                    | 12 ++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 18 ++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 44 insertions(+), 14 deletions(-)
 
-On 31/08/2020 00:12, Yann E. MORIN wrote:
-> Move the code to run check-flake8 into the Makefile, like we have for
-> check-package, so that it is easy to run locally (and not wait for
-> someone to report a failure from their Gitlab pipelines).
-> 
-> Compared to the existing check from gitlab-ci.yml, the Makefile check
-> differs in this respect:
-> 
->   - don't explicitly find *.py files: they are supposed to also be found
->     as a result of running 'file' on them;
-> 
->   - use git ls-tree instead of find: this is supopsedly faster as it
->     uses the index rather than readdir();
-> 
->   - don't output the count of warnings or errors: the output is a single
->     integer, which is confusing when there are errors, and even more so
->     when there are no, when it is simply '0';
-> 
->   - don't sort: the output is already stable and independent from the
->     locale;
-> 
->   - don't report the number of processed files: this information is
->     rather useless, and getting a hold of it would be more challenging
->     in this new code.
-> 
-> Note: ideally, we would want to use --null, --zero, or similar options,
-> with utilities that generates or parses a files listing.  While git
-> ls-tree and xargs do support it, it becomes a little bit tricky to use
-> the --print0 option of file, and then grep in that output (it is not
-> undoable, but would requires replacing grep+cut with some sed trickery).
-> Since we do not expect our scripts names to contain funky chars (like
-> \n or a colon), we just hand-wave away that issue (and the old code was
-> doing the same assumption too).
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-
- Applied to next, thanks.
-
-> 
-> ---
-> Changes v1 -> v2:
->   - ue git ls-tree  (Peter)
->   - drop the dual find  (Peter)
->   - drop the final count  (Peter)
->   - extend commit log to explain deltas with old code
-> ---
->  Makefile                      | 9 ++++++++-
->  support/misc/gitlab-ci.yml.in | 9 +--------
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index cb1f5fb0b0..abb80db49f 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -125,7 +125,7 @@ endif
->  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
->  	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
-> -	print-version olddefconfig distclean manual manual-% check-package
-> +	print-version olddefconfig distclean manual manual-% check-package check-flake8
->  
->  # Some global targets do not trigger a build, but are used to collect
->  # metadata, or do various checks. When such targets are triggered,
-> @@ -1208,6 +1208,13 @@ release:
->  print-version:
->  	@echo $(BR2_VERSION_FULL)
->  
-> +check-flake8:
-> +	$(Q)git ls-tree -r --name-only HEAD \
-> +	|xargs file \
-
- We normally put a space after a pipe so I added that.
-
- Regards,
- Arnout
-
-> +	|grep 'Python script' \
-> +	|cut -d':' -f1 \
-> +	|xargs -- python3 -m flake8 --statistics --max-line-length=132
-> +
->  check-package:
->  	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
->  		-exec ./utils/check-package {} +
-> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index dddebf09e9..0d058bdd91 100644
-> --- a/support/misc/gitlab-ci.yml.in
-> +++ b/support/misc/gitlab-ci.yml.in
-> @@ -19,15 +19,8 @@ check-DEVELOPERS:
->  
->  check-flake8:
->      extends: .check_base
-> -    before_script:
-> -        # Help flake8 to find the Python files without .py extension.
-> -        - find * -type f -name '*.py' > files.txt
-> -        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-> -        - sort -u files.txt | tee files.processed
->      script:
-> -        - python3 -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
-> -    after_script:
-> -        - wc -l files.processed
-> +        - make check-flake8
->  
->  check-package:
->      extends: .check_base
-> 
+diff --git a/CHANGES b/CHANGES
+index 9014ef7b02..fc51a0d0c9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,15 @@
++2020.08, released September 1st, 2020
++
++	Various fixes.
++
++	Updated/fixed packages: am33x-cm3, avahi, bluez-tools,
++	busybox, chocolate-doom, collectd, dhcp, docker-cli, domoticz,
++	gobject-introspection, graphite2, haproxy, ibm-sw-tpm2,
++	imagemagick, libeXosip2, libressl, lxc, mbedtls, menu-cache,
++	mongodb, mosquitto, nvidia-driver, paho-mqtt-c, pixz,
++	postgresql, python-django, rtty, squid, stress-ng, systemd,
++	trousers, uclibc, wireshark, wolfssl, zbar
++
+ 2020.08-rc3, released August 28th, 2020
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index cb1f5fb0b0..a6b99d0868 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.08-rc3
++export BR2_VERSION := 2020.08
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1598649000
++BR2_VERSION_EPOCH = 1598992000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index b1a970839f..b6a409b8c8 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,40 +42,40 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2020.05.2</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2020.08</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.05.2.tar.gz">buildroot-2020.05.2.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05.2.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.tar.gz">buildroot-2020.08.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.05.2.tar.bz2">buildroot-2020.05.2.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.05.2.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.tar.bz2">buildroot-2020.08.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest release candidate: <b>2020.08-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2020.08-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 8986bafbee..2b4a79013a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,24 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.08 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 September 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2020.08 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.08.tar.bz2">2020.08 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index bbb66a5c24..53f6012f6e 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.02'
++RELEASE='2020.08'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
