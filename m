@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Sep 2020 20:34:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/graphite2: fix
+Date: Tue, 1 Sep 2020 20:35:00 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/graphite2: fix
  static install
-Message-ID: <20200901183233.3988B87662@busybox.osuosl.org>
+Message-ID: <20200901183229.28B69847AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d912c6003adc2144fd28591d0c182058fdee9929
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f1930002b01c4cf6e31e1b22d045eecfcb31f90b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Don't install an incorrect libtool file when building a static library
 to fix the following build failure with harfbuzz:
