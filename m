@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2020 20:39:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/graphite2: fix static install
-In-Reply-To: <20200831192215.1677034-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 31 Aug 2020 21:22:15 +0200")
-References: <20200831192215.1677034-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6y99w8x.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Sep 2020 20:40:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/graphite2: security bump to
+ version 1.3.14
+In-Reply-To: <20200829172541.2421772-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 29 Aug 2020 19:25:41 +0200")
+References: <20200829172541.2421772-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z8x9w8i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,110 +14,52 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Don't install an incorrect libtool file when building a static library
- > to fix the following build failure with harfbuzz:
+ > - Switch site to github, here is an extract of
+ >   https://sourceforge.net/projects/silgraphite:
+ >   "This project has been deprecated. Graphite2, a new version of the
+ >   Graphite engine, is available at: https://github.com/silnrsi/graphite
+ >   with its own bug tracker."
+ > - graphite2 can be built statically since version 1.3.11 and
+ >   https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
+ > - Update indentation in hash file (two spaces)
 
- > arm-linux-g++.br_real: error:
- > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so:
- > No such file or directory
- > make[5]: *** [main] Error 1
+ > Extract from ChangeLog:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
+ > 1.3.14
+ >     . Bug fixes
+ >     . Allow features to be hidden (for aliases)
+ >     . Move to python3
+ >     . Rename doc files from .txt to .asc
+
+ > 1.3.13
+ >     . Resolve minor spacing issue in rtl non-overlap kerning
+ >     . python3 for graphite.py
+ >     . Better fuzzing
+ >     . Better building on windows
+
+ > 1.3.12
+ >     . Graphite no longer does dumb rendering for fonts with no smarts
+ >     . Segment caching code removed. Anything attempting to use the segment cache gets given a regular face instead
+ >     . Add libfuzzer support
+ >     . Builds now require C++11
+ >     . Improvements to Windows 64 bit builds
+ >     . Support different versions of python including 32 bit and python 3
+ >     . Various minor bug fixes
+
+ > 1.3.11
+ >     . Fixes due to security review
+ >     . Minor collision avoidance fixes
+ >     . Fix LZ4 decompressor against high compression
+
+ > The fixes due to security review are a little bit vague, a quick search
+ > on github seems to indicate that those issues could be related to
+ > segcache which has been removed since version 1.3.12:
+ > https://github.com/silnrsi/graphite/search?q=security&type=Issues
+ > https://github.com/silnrsi/graphite/commit/b0f77e4a9dc50a888f74e904000a2486b2fc5527
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.05.x, thanks.
-
- > ---
- >  ...l-a-libtool-file-with-static-library.patch | 67 +++++++++++++++++++
- >  1 file changed, 67 insertions(+)
- >  create mode 100644 package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
-
- > diff --git
- > a/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
- > b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
- > new file mode 100644
- > index 0000000000..ac150622d5
- > --- /dev/null
- > +++ b/package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch
- > @@ -0,0 +1,67 @@
- > +From 3edb88b55c0870989778c670d555aa159a2c3abc Mon Sep 17 00:00:00 2001
- > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +Date: Mon, 31 Aug 2020 20:56:43 +0200
- > +Subject: [PATCH] don't install a libtool file with static library
- > +
- > +Static library is supported since version 1.3.11 and
- > +https://github.com/silnrsi/graphite/commit/2f143c04da5caa43ddf4dba437b2f2bc26bf4238
- > +
- > +However, graphite2 is still installing libgraphite2.la which contains
- > +incorrect information (i.e. dlname set to libgraphite2.so and
- > +old_library set to ''):
- > +
- > +dlname='libgraphite2.so'
- > +
- > +library_names='libgraphite2.so.3.2.1 libgraphite2.so.3 libgraphite2.so'
- > +
- > +old_library=''
- > +
- > +dependency_libs=''
- > +
- > +This will result in the following build failure with any applications
- > +using this file such as harfbuzz:
- > +
- > +arm-linux-g++.br_real: error:
- > /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgraphite2.so:
- > No such file or directory
- > +make[5]: *** [main] Error 1
- > +
- > +Instead of trying to fix this libtool file, just disable it when
- > +building a static library as it is not needed
- > +
- > +Fixes:
- > + - http://autobuild.buildroot.org/results/9ebe1d11e80755d59190ef2aae82bbba5cc45e44
- > +
- > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +[Upstream status: https://github.com/silnrsi/graphite/pull/65]
- > +---
- > + src/CMakeLists.txt | 8 ++++++--
- > + 1 file changed, 6 insertions(+), 2 deletions(-)
- > +
- > +diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
- > +index b6ac26bf..a7ace040 100644
- > +--- a/src/CMakeLists.txt
- > ++++ b/src/CMakeLists.txt
- > +@@ -131,7 +131,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
- > +         nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
- > +     endif ()
- > +     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
- > +-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
- > ++    if (BUILD_SHARED_LIBS)
- > ++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
- > ++    endif()
- > + endif()
- > + 
- > + if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
- > +@@ -146,7 +148,9 @@ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
- > +     include(Graphite)
- > +     nolib_test(stdc++ $<TARGET_SONAME_FILE:graphite2>)
- > +     set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
- > +-    CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
- > ++    if (BUILD_SHARED_LIBS)
- > ++        CREATE_LIBTOOL_FILE(graphite2 "/lib${LIB_SUFFIX}")
- > ++    endif()
- > + endif()
- > + 
- > + if  (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
- > +-- 
- > +2.28.0
- > +
- > -- 
- > 2.28.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
