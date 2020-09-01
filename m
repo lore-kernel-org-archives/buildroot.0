@@ -1,148 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  1 Sep 2020 08:47:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: fix build with gcc 10
-Message-ID: <20200901064756.2377247-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Sep 2020 08:52:42 +0200
+Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: include
+ Branches workflow
+In-Reply-To: <20200831195201.GR14354@scaer>
+References: <20200830155953.1650346-1-arnout@mind.be>
+ <20200831124350.GP14354@scaer> <2388ea60-a8cb-9685-b075-11b1a49be9ff@mind.be>
+ <20200831195201.GR14354@scaer>
+Message-ID: <5b8d9396-564b-ab80-9b4a-11b0df51d26c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/82df44b20ba4ecfb8cf7d077247b3262647a572d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...e-ISC-DHCP-does-not-build-with-gcc10.patch | 121 ++++++++++++++++++
- 1 file changed, 121 insertions(+)
- create mode 100644 package/dhcp/0001-WIP-Resolve-ISC-DHCP-does-not-build-with-gcc10.patch
 
-diff --git a/package/dhcp/0001-WIP-Resolve-ISC-DHCP-does-not-build-with-gcc10.patch b/package/dhcp/0001-WIP-Resolve-ISC-DHCP-does-not-build-with-gcc10.patch
-new file mode 100644
-index 0000000000..ad244267fe
---- /dev/null
-+++ b/package/dhcp/0001-WIP-Resolve-ISC-DHCP-does-not-build-with-gcc10.patch
-@@ -0,0 +1,121 @@
-+From 129b7e402bd6e7278854e5a8935fce460552b5f4 Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Thu, 30 Jul 2020 10:01:36 -0400
-+Subject: [PATCH] [#117] Fixed gcc 10 compilation issues
-+
-+client/dhclient.c
-+relay/dhcrelay.c
-+    extern'ed local_port,remote_port
-+
-+common/discover.c
-+    init local_port,remote_port to 0
-+
-+server/mdb.c
-+    extern'ed dhcp_type_host
-+
-+server/mdb6.c
-+    create_prefix6() - eliminated memcpy string overflow error
-+
-+[Retrieved from:
-+https://gitlab.isc.org/isc-projects/dhcp/-/merge_requests/60/diffs?commit_id=129b7e402bd6e7278854e5a8935fce460552b5f4]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ RELNOTES          | 5 +++++
-+ client/dhclient.c | 5 +++--
-+ common/discover.c | 4 ++--
-+ relay/dhcrelay.c  | 4 ++--
-+ server/mdb.c      | 2 +-
-+ server/mdb6.c     | 2 +-
-+ 6 files changed, 14 insertions(+), 8 deletions(-)
-+
-+diff --git a/RELNOTES b/RELNOTES
-+index 9d0a0414..6919dba7 100644
-+--- a/RELNOTES
-++++ b/RELNOTES
-+@@ -103,6 +103,11 @@ ISC DHCP is open source software maintained by Internet Systems
-+ Consortium.  This product includes cryptographic software written
-+ by Eric Young (eay at cryptsoft.com).
-+ 
-++		Changes since 4.4.2 (Bug Fixes)
-++
-++- Minor corrections to allow compilation under gcc 10.
-++  [Gitlab #117]
-++
-+ 		Changes since 4.4.2b1 (Bug Fixes)
-+ 
-+ - Added a clarification on DHCPINFORMs and server authority to
-+diff --git a/client/dhclient.c b/client/dhclient.c
-+index 189e5270..7a7837cb 100644
-+--- a/client/dhclient.c
-++++ b/client/dhclient.c
-+@@ -83,8 +83,9 @@ static const char message [] = "Internet Systems Consortium DHCP Client";
-+ static const char url [] = "For info, please visit https://www.isc.org/software/dhcp/";
-+ #endif /* UNIT_TEST */
-+ 
-+-u_int16_t local_port = 0;
-+-u_int16_t remote_port = 0;
-++extern u_int16_t local_port;
-++extern u_int16_t remote_port;
-++
-+ #if defined(DHCPv6) && defined(DHCP4o6)
-+ int dhcp4o6_state = -1; /* -1 = stopped, 0 = polling, 1 = started */
-+ #endif
-+diff --git a/common/discover.c b/common/discover.c
-+index ca4f4d55..22f09767 100644
-+--- a/common/discover.c
-++++ b/common/discover.c
-+@@ -45,8 +45,8 @@ struct interface_info *fallback_interface = 0;
-+ 
-+ int interfaces_invalidated;
-+ int quiet_interface_discovery;
-+-u_int16_t local_port;
-+-u_int16_t remote_port;
-++u_int16_t local_port = 0;
-++u_int16_t remote_port = 0;
-+ u_int16_t relay_port = 0;
-+ int dhcpv4_over_dhcpv6 = 0;
-+ int (*dhcp_interface_setup_hook) (struct interface_info *, struct iaddr *);
-+diff --git a/relay/dhcrelay.c b/relay/dhcrelay.c
-+index 883d5058..7211e3bb 100644
-+--- a/relay/dhcrelay.c
-++++ b/relay/dhcrelay.c
-+@@ -95,8 +95,8 @@ enum { forward_and_append,	/* Forward and append our own relay option. */
-+        forward_untouched,	/* Forward without changes. */
-+        discard } agent_relay_mode = forward_and_replace;
-+ 
-+-u_int16_t local_port;
-+-u_int16_t remote_port;
-++extern u_int16_t local_port;
-++extern u_int16_t remote_port;
-+ 
-+ /* Relay agent server list. */
-+ struct server_list {
-+diff --git a/server/mdb.c b/server/mdb.c
-+index ff8a707f..8266d764 100644
-+--- a/server/mdb.c
-++++ b/server/mdb.c
-+@@ -67,7 +67,7 @@ static host_id_info_t *host_id_info = NULL;
-+ 
-+ int numclasseswritten;
-+ 
-+-omapi_object_type_t *dhcp_type_host;
-++extern omapi_object_type_t *dhcp_type_host;
-+ 
-+ isc_result_t enter_class(cd, dynamicp, commit)
-+ 	struct class *cd;
-+diff --git a/server/mdb6.c b/server/mdb6.c
-+index da7baf6e..ebe01e56 100644
-+--- a/server/mdb6.c
-++++ b/server/mdb6.c
-+@@ -1945,7 +1945,7 @@ create_prefix6(struct ipv6_pool *pool, struct iasubopt **pref,
-+ 		}
-+ 		new_ds.data = new_ds.buffer->data;
-+ 		memcpy(new_ds.buffer->data, ds.data, ds.len);
-+-		memcpy(new_ds.buffer->data + ds.len, &tmp, sizeof(tmp));
-++		memcpy(&new_ds.buffer->data[0] + ds.len, &tmp, sizeof(tmp));
-+ 		data_string_forget(&ds, MDL);
-+ 		data_string_copy(&ds, &new_ds, MDL);
-+ 		data_string_forget(&new_ds, MDL);
-+-- 
-+GitLab
-+
--- 
-2.28.0
+On 31/08/2020 21:52, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2020-08-31 14:58 +0200, Arnout Vandecappelle spake thusly:
+>>  Note that it's not the complicated conditions on the defconfig and test jobs
+>> that are the issue. The warning is also issued for check-flake8... So I think
+>> the workflow will still be needed (or alternatively, every job should have a
+>> condition to run only on branches).
+> 
+> Sorry, but I don't follow: if the jobs are only generated when we want
+> them, then they no longer have conditions in the generated gitlab-ci.yml
+> to begin with; that's the whole point of moving the conditional handling
+> into the script.
+
+ Ah, OK, I thought it was just about generating the defconfig and tests parts.
+My bad.
+
+>> On 31/08/2020 14:43, Yann E. MORIN wrote:
+[snip]
+
+> 
+> See an actual comment on that patch, below...
+> 
+>>>> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+>>>> index dddebf09e9..8a031898ef 100644
+>>>> --- a/support/misc/gitlab-ci.yml.in
+>>>> +++ b/support/misc/gitlab-ci.yml.in
+>>>> @@ -1,6 +1,9 @@
+>>>>  # Configuration for Gitlab-CI.
+>>>>  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+>>>>  
+>>>> +include:
+>>>> +  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+> 
+> Where does that file come from? How are we guaranteed that its content
+> does not change and break our pipelines?
+> 
+> If that template is interesting, then we should carry it rather than
+> depend on an external, un-managed entity...
+
+ It is part of the gitlab installation. That means that indeed it is not under
+our control, but neither is the rest of gitlab (e.g., the part that generates
+those warnings :-). In other words: it's about as reliable as the rules clauses
+we have now.
+
+ Note that the workflow file is indeed very simple, and we could simply
+instantiate it here.
+
+ Again, though, in order to expedite the 2020.08 release, I propose to apply
+this simple patch to master, and soon after merge your series that makes it
+script-based - possibly backporting it to the stable branches, though I don't
+really think that is needed.
+
+ Regards,
+ Arnout
