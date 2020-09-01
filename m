@@ -1,42 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Sep 2020 20:14:52 +0200
-Subject: [Buildroot] [PATCH] package/python-django: security bump to
- version 3.0.10
-In-Reply-To: <20200901142222.13132-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 1 Sep 2020 16:22:22 +0200")
-References: <20200901142222.13132-1-peter@korsgaard.com>
-Message-ID: <87imcx9xer.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  1 Sep 2020 20:15:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to version
+ 2.16.8
+Message-ID: <20200901181503.2390512-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Fix a "Local side channel attack on classical CBC decryption in (D)TLS"
+a.k.a. CVE-2020-16150:
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-1
 
- > Fixes the following security issues:
- > CVE-2020-24583: Incorrect permissions on intermediate-level directories on Python 3.7+
- > On Python 3.7+, FILE_UPLOAD_DIRECTORY_PERMISSIONS mode was not applied to
- > intermediate-level directories created in the process of uploading files and
- > to intermediate-level collected static directories when using the
- > collectstatic management command.
+as well as a "Local side channel attack on RSA and static
+Diffie-Hellman" (no CVE):
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-2
 
- > You should review and manually fix permissions on existing
- > intermediate-level directories.
+Also change MBEDTLS_SITE and retrieve hash provided by upstream
 
- > CVE-2020-24584: Permission escalation in intermediate-level directories of
- > the file system cache on Python 3.7+
- > On Python 3.7+, the intermediate-level directories of the file system cache
- > had the system?s standard umask rather than 0o077 (no group or others
- > permissions).
+https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8
 
- > https://docs.djangoproject.com/en/dev/releases/3.0.10/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mbedtls/mbedtls.hash | 3 ++-
+ package/mbedtls/mbedtls.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
- > In addition, 3.0.8..10 contains a number of bugfixes.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index b75a8fa80c..0082eee4a2 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,3 +1,4 @@
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8:
++sha256  fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430  mbedtls-2.16.8.tar.gz
+ # Locally calculated
+-sha256  4786b7d1676f5e4d248f3a7f2d28446876d64962634f060ff21b92c690cfbe86  mbedtls-2.16.7.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 4ae8291c11..5094434e6c 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MBEDTLS_VERSION = 2.16.7
+-MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,mbedtls-$(MBEDTLS_VERSION))
++MBEDTLS_VERSION = 2.16.8
++MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ 	-DENABLE_TESTING=OFF
 -- 
-Bye, Peter Korsgaard
+2.28.0
