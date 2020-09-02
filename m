@@ -1,43 +1,49 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  2 Sep 2020 17:08:15 +0200
-Subject: [Buildroot] [PATCH 3/6] package/lua-compat53: bump to version 0.8
+Date: Wed,  2 Sep 2020 17:08:16 +0200
+Subject: [Buildroot] [PATCH 4/6] package/lua-std-normalize: bump to version
+ 2.0.3
 In-Reply-To: <20200902150818.874743-1-francois.perrad@gadz.org>
 References: <20200902150818.874743-1-francois.perrad@gadz.org>
-Message-ID: <20200902150818.874743-3-francois.perrad@gadz.org>
+Message-ID: <20200902150818.874743-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+diff LICENSE.md:
+- Copyright (C) 2002-2018 normalize authors
++ Copyright (C) 2002-2020 normalize authors
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-compat53/lua-compat53.hash | 4 ++--
- package/lua-compat53/lua-compat53.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua-std-normalize/lua-std-normalize.hash | 6 +++---
+ package/lua-std-normalize/lua-std-normalize.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-compat53/lua-compat53.hash b/package/lua-compat53/lua-compat53.hash
-index b40596f86..07783820c 100644
---- a/package/lua-compat53/lua-compat53.hash
-+++ b/package/lua-compat53/lua-compat53.hash
+diff --git a/package/lua-std-normalize/lua-std-normalize.hash b/package/lua-std-normalize/lua-std-normalize.hash
+index 7c11f4914..84cdfca42 100644
+--- a/package/lua-std-normalize/lua-std-normalize.hash
++++ b/package/lua-std-normalize/lua-std-normalize.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 cb5fdca362780a30405c4134310ea78627a092b0ee8445a52456f2fceeeaea4e  compat53-0.7-1.src.rock
--sha256 1b24f475812c979684fb3469f6faccbdc7c33c9d39421728aa0d78deda5a89a5  lua-compat-5.3-0.7/LICENSE
-+sha256 e513e75ba0ef4923a1ec0d4f0beb5972a11cc9bd7ac1b0953b5e4f037b259c92  compat53-0.8-1.src.rock
-+sha256 1b24f475812c979684fb3469f6faccbdc7c33c9d39421728aa0d78deda5a89a5  lua-compat-5.3-0.8/LICENSE
-diff --git a/package/lua-compat53/lua-compat53.mk b/package/lua-compat53/lua-compat53.mk
-index 13e24391b..0e8f1c360 100644
---- a/package/lua-compat53/lua-compat53.mk
-+++ b/package/lua-compat53/lua-compat53.mk
+-# Locally calculated
+-sha256 50baac6fbcbc6bbe72b63ce0871ec36176d75c04dccc6e368590ba6ef107c67a  std.normalize-2.0.2-1.src.rock
+-sha256 a6a0a0ddc04f7437806a52cbd637c819144df7626a2e8a496cd3a2e20c8effb3  normalize-2.0.2/LICENSE.md
++# computed by luarocks/buildroot
++sha256 3a040b6ca43297367c527e12c1aab37acab86289f9415ffb130544c48b17f802  std.normalize-2.0.3-1.src.rock
++sha256 9c9094f0cea86c2c62b893e59a78d5eaed69df0d7da24e122ef9753baeef0f04  normalize-2.0.3/LICENSE.md
+diff --git a/package/lua-std-normalize/lua-std-normalize.mk b/package/lua-std-normalize/lua-std-normalize.mk
+index d3a58aa0d..0eb215bf8 100644
+--- a/package/lua-std-normalize/lua-std-normalize.mk
++++ b/package/lua-std-normalize/lua-std-normalize.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_COMPAT53_VERSION_UPSTREAM = 0.7
-+LUA_COMPAT53_VERSION_UPSTREAM = 0.8
- LUA_COMPAT53_VERSION = $(LUA_COMPAT53_VERSION_UPSTREAM)-1
- LUA_COMPAT53_NAME_UPSTREAM = compat53
- LUA_COMPAT53_SUBDIR = lua-compat-5.3-$(LUA_COMPAT53_VERSION_UPSTREAM)
+-LUA_STD_NORMALIZE_VERSION_UPSTREAM = 2.0.2
++LUA_STD_NORMALIZE_VERSION_UPSTREAM = 2.0.3
+ LUA_STD_NORMALIZE_VERSION = $(LUA_STD_NORMALIZE_VERSION_UPSTREAM)-1
+ LUA_STD_NORMALIZE_NAME_UPSTREAM = std.normalize
+ LUA_STD_NORMALIZE_SUBDIR = normalize-$(LUA_STD_NORMALIZE_VERSION_UPSTREAM)
 -- 
 2.25.1
