@@ -1,50 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:32 -0000
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump version to 3.9.3
-Message-ID: <20200902161632.E96CC8752B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: bump version to 565f95d
+Message-ID: <20200902161633.22E6587655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca1604388a86d73c548c6e65eadd13f424685838
+commit: https://git.buildroot.net/buildroot/commit/?id=2fda470a32fa73065293cc1d1843c5b8275869df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- add support for new qcam feature option
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index 5492ace8fb..25ab30489f 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 907764de63..676d3ac739 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  6995be9d707ba3bcbe7a79bad894484561ee686f68b6523943ada7c0f6607e86  libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb.tar.gz
++sha256  55b7d7e5d8c70b2586b31544e6c4891a994c4e69c18d0ebd760e87b75277c348  libcamera-565f95d64ff92e8712e8090988180c343dd3bcb5.tar.gz
  
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.9.2"
-+	bool "3.9.3"
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index a39e9f1c3e..0de155f109 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -51,7 +51,7 @@ endif
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = 96fab38e02792a109c0d35ca2154e95a7b4c8fcb
++LIBCAMERA_VERSION = 565f95d64ff92e8712e8090988180c343dd3bcb5
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+@@ -61,10 +61,13 @@ LIBCAMERA_DEPENDENCIES += gstreamer1 gst1-plugins-base
+ endif
  
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 5741b829f5..6671a4ac70 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
-+sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
- sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
++LIBCAMERA_CONF_OPTS += -Dqcam=enabled
+ LIBCAMERA_DEPENDENCIES += qt5base
+ ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+ LIBCAMERA_DEPENDENCIES += qt5tools
+ endif
++else
++LIBCAMERA_CONF_OPTS += -Dqcam=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TIFF),y)
