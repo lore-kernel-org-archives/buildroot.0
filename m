@@ -1,47 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Sep 2020 22:46:38 +0200
-Subject: [Buildroot] [PATCH v2 1/4] configs/rockpro64: new defconfig
-In-Reply-To: <20200829093506.25260-2-sunil@amarulasolutions.com>
-References: <20200829093506.25260-1-sunil@amarulasolutions.com>
- <20200829093506.25260-2-sunil@amarulasolutions.com>
-Message-ID: <532ab3ec-2bc5-aa1c-5097-5f360f4584e8@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 2 Sep 2020 22:55:40 +0200
+Subject: [Buildroot] [git commit] package/cups: Add lp user as default cups
+ user
+Message-ID: <20200902205835.88158821FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=608c12c044438cb7640cd5e9c9bd31946ecb729b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This patch is a backport from the rockchip tree.
 
-On 29/08/2020 11:35, Suniel Mahesh wrote:
-[snip]
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_LATEST_VERSION=y
+Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+Date:   Tue Nov 13 18:25:34 2018 +0800
 
- Please always use a fixed version (i.e. CUSTOM_VERSION with 2020.07 as the
-version number).
+    package: cups: Add lp user as default cups user
 
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON=y
+    Change-Id: Ic7434fe0a7b41b86b5b8b097fa29dd9718e29aa5
+    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
 
- This is a blind option, after running a config it will be reset to no. It is
-set by some of the other options that require python packages.
+User lp is necessary for running the cups spooler.
+Groups lpadmin grants administrative privileges to users.
 
- Just to be sure: you really do need python to build U-Boot in this config?
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/cups/cups.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-
- I've made those two fixes in all four patches and applied to master, thanks.
-
- Regards,
- Arnout
-
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 2712e535b1..abf59fc599 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -22,6 +22,9 @@ CUPS_CONF_OPTS = \
+ 	--disable-gssapi \
+ 	--disable-pam \
+ 	--libdir=/usr/lib \
++	--with-cups-user=lp \
++	--with-cups-group=lp \
++	--with-system-groups="lpadmin sys root" \
+ 	--without-rcdir
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+@@ -77,4 +80,11 @@ define CUPS_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S81cupsd
+ endef
+ 
++# lp user is needed to run cups spooler
++# lpadmin group membership grants administrative privileges
++define CUPS_USERS
++	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
++	- - lpadmin -1 * - - - Printers admin group.
++endef
++
+ $(eval $(autotools-package))
