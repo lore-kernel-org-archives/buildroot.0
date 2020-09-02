@@ -1,58 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:32 -0000
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.6.11
-Message-ID: <20200902161633.0F199814F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump version to 3.9.3
+Message-ID: <20200902161632.E96CC8752B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=137327e97705859b2dadfe872abb320d51bff268
+commit: https://git.buildroot.net/buildroot/commit/?id=ca1604388a86d73c548c6e65eadd13f424685838
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted license hash.
-
-Quoting release notes:
-https://lists.x.org/archives/xorg-announce/2020-August/003053.html
-"This release fixes a regression introduced by the security patches in
- 1.6.10.
- See https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues/116 for
- details."
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 9 +++++----
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index d383615457..b77f98dfb1 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,5 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-July/003052.html
--sha256  af48626989b8515c994777896bd7b7ba2bd5b1ef4e1efaee0a55d8852bbe6226  libX11-1.6.10.tar.bz2
--sha512  ad384d8896fbe587f7fd99b0d3cc56fac6e2facbab52fa99174200d06b19dd163a483c998acf3834b3a4a3aa4de0dbbe13919a1c80e6797afe467c7075b403ff  libX11-1.6.10.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003053.html
-+sha256  b1cc4b802058be7e3fb438ee2490f66fcc52ac3b2a14f47a22cbf77638e33606  libX11-1.6.11.tar.bz2
-+sha512  2cb4e215c1e3ccb327e02586844f8c426068536a0f472a39f12191feace607f61a6a08586f03758248199678c2f6897a984b0f1222bc0d68fd2e02702f4ce0bf  libX11-1.6.11.tar.bz2
-+
- # Locally computed
--sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-+sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index bfc1c4166e..b0132efd31 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 5492ace8fb..25ab30489f 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
  
--XLIB_LIBX11_VERSION = 1.6.10
-+XLIB_LIBX11_VERSION = 1.6.11
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.9.2"
++	bool "3.9.3"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -51,7 +51,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.9.2" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.9.3" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	default "custom"	if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_TARBALL
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 5741b829f5..6671a4ac70 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6cf37df482024f3770fe1880f768a675beda16323a90e702860d9e5478105b3f  at91bootstrap3-v3.9.2.tar.gz
++sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
+ sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
