@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  2 Sep 2020 17:08:34 +0200
-Subject: [Buildroot] [PATCH 3/7] package/perl-libwww-perl: bump to version
- 6.47
+Date: Wed,  2 Sep 2020 17:08:35 +0200
+Subject: [Buildroot] [PATCH 4/7] package/perl-mail-dkim: bump to version
+ 1.20200824
 In-Reply-To: <20200902150838.874797-1-francois.perrad@gadz.org>
 References: <20200902150838.874797-1-francois.perrad@gadz.org>
-Message-ID: <20200902150838.874797-3-francois.perrad@gadz.org>
+Message-ID: <20200902150838.874797-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
+ package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index 4da54439f..e519f7966 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
+index 99ba275d7..e94adfc6e 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.hash
++++ b/package/perl-mail-dkim/perl-mail-dkim.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  334212e7f6dabf95a77b333c7cf8fbe4  libwww-perl-6.46.tar.gz
--sha256  7a713375d0e02ad8238a5d58340ade10466fe209f752fd62fd182c173c4423c4  libwww-perl-6.46.tar.gz
-+md5  fe42c3f99fd8d1438d383f820c89d9bd  libwww-perl-6.47.tar.gz
-+sha256  3029d6efc2099c4175bf976d0db7fbab9771ada631010c809cb4664230898f53  libwww-perl-6.47.tar.gz
+-md5  f911799d8b9418ea1299323587ad7319  Mail-DKIM-1.20200708.tar.gz
+-sha256  d9d21f4f9960a174d45f9660ab5d52db667b9af57182ff4e4d7fc33316a51e54  Mail-DKIM-1.20200708.tar.gz
++md5  9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
++sha256  871d329830acb4840423aa59036622fb2ee394efc1d09316dcc32ae94454e916  Mail-DKIM-1.20200824.tar.gz
  
  # computed by scancpan
- sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 487ac116d..01428f91e 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+ sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
+index 5d45f0335..e67bf5ee1 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.mk
++++ b/package/perl-mail-dkim/perl-mail-dkim.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.46
-+PERL_LIBWWW_PERL_VERSION = 6.47
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-PERL_MAIL_DKIM_VERSION = 1.20200708
++PERL_MAIL_DKIM_VERSION = 1.20200824
+ PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
+ PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
+ PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
 -- 
 2.25.1
