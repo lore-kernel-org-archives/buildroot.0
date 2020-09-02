@@ -1,48 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 02 Sep 2020 16:24:34 -0000
-Subject: [Buildroot] [git commit] package/gensio: bump to version 2.1.4
-Message-ID: <20200902161635.3CEDE85EB9@busybox.osuosl.org>
+Date: Wed, 02 Sep 2020 16:24:35 -0000
+Subject: [Buildroot] [git commit] package/xen: bump version to 4.14.0
+Message-ID: <20200902161634.5656C85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e63410165ced1b7db867eae613f9b3b70350d146
+commit: https://git.buildroot.net/buildroot/commit/?id=514bbb8520493f69a59dcbfe2ea7f8083d3e5a58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Bump the Xen package to the latest release. We can also remove a patch
+to change the CFLAGS as it is no longer required.
+
+The hash of the license file is changed, as ZPL-2.0 is no longer
+listed as one of the licenses of 3rd party code imported into Xen.
+
+Signed-off-by: Alistair Francis <alistair@alistair23.me>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gensio/gensio.hash | 6 +++---
- package/gensio/gensio.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...nclude-linux-limits.h-for-XATTR_SIZE_MAX.patch} |  0
+ ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ----------------------
+ package/xen/xen.hash                               |  4 +--
+ package/xen/xen.mk                                 |  2 +-
+ 4 files changed, 3 insertions(+), 39 deletions(-)
 
-diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
-index 067c9d39cc..b83f21abd0 100644
---- a/package/gensio/gensio.hash
-+++ b/package/gensio/gensio.hash
-@@ -1,7 +1,7 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  1281387def2b137f762ce4a8869fbb4f  gensio-2.1.1.tar.gz
--sha1  4fb43270449e1f2312be87e56aff8173d285e3f1  gensio-2.1.1.tar.gz
-+md5  e2547078bd73d62abda343515f1368ee  gensio-2.1.4.tar.gz
-+sha1  f8c0e787fad22a71b10f1d8eefea83617f489bdb  gensio-2.1.4.tar.gz
- # Locally computed:
--sha256  e81df2c55d8830ac4f3c28eda54c3f690c4b62e186ea3879815b101a4902a703  gensio-2.1.1.tar.gz
-+sha256  1f5a29aabfb35886893cfda5cd78192db67e96de796dbf9758dbecd4077a3fd8  gensio-2.1.4.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
- sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
-diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
-index 7cdd340b14..89b7be9cdc 100644
---- a/package/gensio/gensio.mk
-+++ b/package/gensio/gensio.mk
+diff --git a/package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch b/package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
+similarity index 100%
+rename from package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
+rename to package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
+diff --git a/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
+deleted file mode 100644
+index fb316739b4..0000000000
+--- a/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 8aea14bbd20b04b8fffaf35138ebdcbd39e433a3 Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 29 Oct 2016 16:35:26 +0200
+-Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
+-
+-When CFLAGS are passed from the environment, the first-level make
+-invocation will append -D__OBJECT_FILE__ to it, then call a second
+-make invocation, that will have those new CFLAGS in its environment,
+-but will also append -D__OBJECT_FILE__ to those.
+-
+-Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
+-
+-Just undefine it before defining it again, as a *workaround* to this
+-issue.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- xen/Rules.mk | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/xen/Rules.mk b/xen/Rules.mk
+-index 3090ea7828..d535bf9e2f 100644
+---- a/xen/Rules.mk
+-+++ b/xen/Rules.mk
+-@@ -61,7 +61,7 @@ CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
+- $(call cc-option-add,CFLAGS,CC,-Wvla)
+- CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
+- CFLAGS-$(CONFIG_DEBUG_INFO) += -g
+--CFLAGS += '-D__OBJECT_FILE__="$@"'
+-+CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
+- 
+- ifneq ($(clang),y)
+- # Clang doesn't understand this command line argument, and doesn't appear to
+--- 
+-2.22.0
+-
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index ab5f9d9083..709eeb3d45 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
+-sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
++sha256  06839f68ea7620669dbe8b67861213223cc2a7d02ced61b56e5249c50e87f035  xen-4.14.0.tar.gz
++sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 15742b5127..a30e80e5e7 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GENSIO_VERSION = 2.1.1
-+GENSIO_VERSION = 2.1.4
- GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
- GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+-XEN_VERSION = 4.13.1
++XEN_VERSION = 4.14.0
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
