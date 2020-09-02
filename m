@@ -1,54 +1,140 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:36 -0000
-Subject: [Buildroot] [git commit] package/qemu: bump to version 5.1.0
-Message-ID: <20200902161634.9447085EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/guile: bump to version 3.0.4
+Message-ID: <20200902161633.BED8085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52f188140cd28e90103edf67db6c2cabb979f5d6
+commit: https://git.buildroot.net/buildroot/commit/?id=84b9f07b87a302294cabd9c2d9e5b26373a78a31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release 5.1.0 brought new changes like :
-- New architecture support for AVR CPUs
-- New ARMv8.2 TTS2UXN architecture feature support
-- Parameter 'mem' of the '-numa' option is not supported anymore.
+Remove patch that is no longer needed as of upstream commit
+1c33be992e8120abd20add8021e4d91d226f5b6a which removed the old VM.
 
-See:
-https://wiki.qemu.org/ChangeLog/5.1
-https://www.qemu.org/2020/08/11/qemu-5-1-0/
+We need to add an exclusion rule for guile modules to check-bin-arch
+as they appear as valid ELF binaries but with an architecture of
+"None".
 
-Build results available at : https://gitlab.com/jugurthaB/buildroot/-/pipelines/177823315.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Thomas:
+ - bump to 3.0.4
+ - rework how check-bin-arch excludes checking the Guile .go files]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qemu/qemu.hash | 2 +-
- package/qemu/qemu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../guile/0003-workaround-ice-ssa-corruption.patch | 64 ----------------------
+ package/guile/guile.hash                           |  2 +-
+ package/guile/guile.mk                             |  2 +-
+ support/scripts/check-bin-arch                     |  3 +
+ 4 files changed, 5 insertions(+), 66 deletions(-)
 
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 7199d433cf..317c0b1a4e 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 2f13a92a0fa5c8b69ff0796b59b86b080bbb92ebad5d301a7724dd06b5e78cb6  qemu-5.0.0.tar.xz
-+sha256 c9174eb5933d9eb5e61f541cd6d1184cd3118dfe4c5c4955bc1bdc4d390fa4e5  qemu-5.1.0.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index c2872a2748..69850ec938 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+diff --git a/package/guile/0003-workaround-ice-ssa-corruption.patch b/package/guile/0003-workaround-ice-ssa-corruption.patch
+deleted file mode 100644
+index 54f3158a91..0000000000
+--- a/package/guile/0003-workaround-ice-ssa-corruption.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-libguile/vm-i-system.c: workaround ice ssa corruption while compiling with option -g -O
+-
+-While compiling with option -g -O, there was a ssa corruption:
+-..
+-Unable to coalesce ssa_names 48 and 3476 which are marked as MUST COALESCE.
+-sp_48(ab) and  sp_3476(ab)
+-guile-2.0.11/libguile/vm-engine.c: In function 'vm_debug_engine':
+-guile-2.0.11/libguile/vm.c:673:19: internal compiler error: SSA corruption
+- #define VM_NAME   vm_debug_engine
+-                   ^
+-guile-2.0.11/libguile/vm-engine.c:39:1: note: in expansion of macro 'VM_NAME'
+- VM_NAME (SCM vm, SCM program, SCM *argv, int nargs)
+- ^
+-Please submit a full bug report,
+-with preprocessed source if appropriate.
+-See <http://gcc.gnu.org/bugs.html> for instructions.
+-...
+-
+-Tweak libguile/vm-i-system.c to add boundary value check to workaround it.
+-
+-Upstream-Status: Pending
+-
+-Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+-
+-Fixes Buildroot autobuilder failures on AArch64.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- libguile/vm-i-system.c | 20 ++++++++++++++++----
+- 1 file changed, 16 insertions(+), 4 deletions(-)
+-
+-diff --git a/libguile/vm-i-system.c b/libguile/vm-i-system.c
+---- a/libguile/vm-i-system.c
+-+++ b/libguile/vm-i-system.c
+-@@ -625,10 +625,22 @@ VM_DEFINE_INSTRUCTION (47, bind_optionals_shuffle, "bind-optionals/shuffle", 6,
+-   /* now shuffle up, from walk to ntotal */
+-   {
+-     scm_t_ptrdiff nshuf = sp - walk + 1, i;
+--    sp = (fp - 1) + ntotal + nshuf;
+--    CHECK_OVERFLOW ();
+--    for (i = 0; i < nshuf; i++)
+--      sp[-i] = walk[nshuf-i-1];
+-+    /* check the value of nshuf to workaround ice ssa corruption */
+-+    /* while compiling with -O -g */
+-+    if (nshuf > 0)
+-+    {
+-+      sp = (fp - 1) + ntotal + nshuf;
+-+      CHECK_OVERFLOW ();
+-+      for (i = 0; i < nshuf; i++)
+-+        sp[-i] = walk[nshuf-i-1];
+-+    }
+-+    else
+-+    {
+-+      sp = (fp - 1) + ntotal + nshuf;
+-+      CHECK_OVERFLOW ();
+-+      for (i = 0; i < nshuf; i++)
+-+        sp[-i] = walk[nshuf-i-1];
+-+    }
+-   }
+-   /* and fill optionals & keyword args with SCM_UNDEFINED */
+-   while (walk <= (fp - 1) + ntotal)
+--- 
+-1.9.1
+-
+diff --git a/package/guile/guile.hash b/package/guile/guile.hash
+index 47ac009757..a163f59fce 100644
+--- a/package/guile/guile.hash
++++ b/package/guile/guile.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  e8442566256e1be14e51fc18839cd799b966bc5b16c6a1d7a7c35155a8619d82  guile-2.0.14.tar.xz
++sha256  6b7947dc2e3d115983846a268b8f5753c12fd5547e42fbf2b97d75a3b79f0d31  guile-3.0.4.tar.xz
+ # Locally computed
+ sha256  b51c6f20e6d029cb5b3e5bf235ac562c9a188c5bdc4ffcdc663897772d6e0260  LICENSE
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 4992861071..5750b85f49 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 5.0.0
-+QEMU_VERSION = 5.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+-GUILE_VERSION = 2.0.14
++GUILE_VERSION = 3.0.4
+ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
+diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+index 3449bd1aeb..27cc59bca0 100755
+--- a/support/scripts/check-bin-arch
++++ b/support/scripts/check-bin-arch
+@@ -25,6 +25,9 @@ declare -a IGNORES=(
+ 	# it for a different architecture (e.g. i386 grub on x86_64).
+ 	"/lib/grub"
+ 	"/usr/lib/grub"
++
++	# Guile modules are ELF files, with a "None" machine
++	"/usr/lib/guile"
+ )
+ 
+ while getopts p:l:r:a:i: OPT ; do
