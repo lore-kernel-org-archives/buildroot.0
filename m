@@ -1,136 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Sep 2020 23:33:26 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix flake8 errors in
- cve-checker and pkg-stats
-In-Reply-To: <20200902233031.45790630@gmx.net>
-References: <20200902212157.15518-1-yann.morin.1998@free.fr>
- <20200902233031.45790630@gmx.net>
-Message-ID: <20200902213326.GW14354@scaer>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 2 Sep 2020 14:35:06 -0700
+Subject: [Buildroot] [PATCH] manual: board support: add more of our
+ expectations
+In-Reply-To: <20200902213255.2419536-1-arnout@mind.be>
+References: <20200902213255.2419536-1-arnout@mind.be>
+Message-ID: <CAFSsvmrheabk7vyLSWkVTxN=1NfDSPmP=7WRV0ppDe66-HU_RA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+All;
 
-On 2020-09-02 23:30 +0200, Peter Seiderer spake thusly:
-> On Wed,  2 Sep 2020 23:21:57 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > Note that one is silenced, rather than fixed: we indeed need to import
-> > after we add the local dorectory to the modules search path.
-> 
-> s/dorectory/directory/ ?
+reviewed-by: Adam Duskett <aduskett@gmail.com>
 
-Dih... Ondeed. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Peter
-> 
-> 
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> >  support/scripts/cve-checker | 8 ++++++--
-> >  support/scripts/pkg-stats   | 8 +++-----
-> >  2 files changed, 9 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-> > index 2bfe2d8543..998ea5b8af 100755
-> > --- a/support/scripts/cve-checker
-> > +++ b/support/scripts/cve-checker
-> > @@ -24,6 +24,7 @@ import json
-> >  import sys
-> >  import cve as cvecheck
-> >
-> > +
-> >  class Package:
-> >      def __init__(self, name, version, ignored_cves):
-> >          self.name = name
-> > @@ -31,6 +32,7 @@ class Package:
-> >          self.cves = list()
-> >          self.ignored_cves = ignored_cves
-> >
-> > +
-> >  def check_package_cves(nvd_path, packages):
-> >      if not os.path.isdir(nvd_path):
-> >          os.makedirs(nvd_path)
-> > @@ -41,6 +43,7 @@ def check_package_cves(nvd_path, packages):
-> >              if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves) == cve.CVE_AFFECTS:
-> >                  pkg.cves.append(cve.identifier)
-> >
-> > +
-> >  html_header = """
-> >  <head>
-> >  <script src=\"https://www.kryogenix.org/code/browser/sorttable/sorttable.js\"></script>
-> > @@ -140,7 +143,7 @@ def dump_json(packages, date, output):
-> >              "cves": pkg.cves,
-> >          } for pkg in packages
-> >      }
-> > -     # The actual structure to dump, add date to it
-> > +    # The actual structure to dump, add date to it
-> >      final = {'packages': pkgs,
-> >               'date': str(date)}
-> >      with open(output, 'w') as f:
-> > @@ -160,7 +163,7 @@ def parse_args():
-> >      output.add_argument('--json', dest='json', type=resolvepath,
-> >                          help='JSON output file')
-> >      parser.add_argument('--nvd-path', dest='nvd_path',
-> > -                        help='Path to the local NVD database',type=resolvepath,
-> > +                        help='Path to the local NVD database', type=resolvepath,
-> >                          required=True)
-> >      args = parser.parse_args()
-> >      if not args.html and not args.json:
-> > @@ -189,4 +192,5 @@ def __main__():
-> >          print("Write JSON")
-> >          dump_json(packages, date, args.json)
-> >
-> > +
-> >  __main__()
-> > diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> > index fceb28839b..503cc45c16 100755
-> > --- a/support/scripts/pkg-stats
-> > +++ b/support/scripts/pkg-stats
-> > @@ -25,15 +25,12 @@ import os
-> >  from collections import defaultdict
-> >  import re
-> >  import subprocess
-> > -import requests  # NVD database download
-> >  import json
-> > -import time
-> >  import sys
-> >
-> >  sys.path.append('utils/')
-> >  from getdeveloperlib import parse_developers  # noqa: E402
-> > -
-> > -import cve as cvecheck
-> > +import cve as cvecheck  # noqa: E402
-> >
-> >
-> >  INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
-> > @@ -538,9 +535,10 @@ def check_package_cves(nvd_path, packages):
-> >          for pkg_name in cve.pkg_names:
-> >              if pkg_name in packages:
-> >                  pkg = packages[pkg_name]
-> > -                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS :
-> > +                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS:
-> >                      pkg.cves.append(cve.identifier)
-> >
-> > +
-> >  def calculate_stats(packages):
-> >      stats = defaultdict(int)
-> >      stats['packages'] = len(packages)
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Wed, Sep 2, 2020 at 2:32 PM Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>
+> The manual has a section on adding board support to upstream buildroot,
+> but it fails to mention some of the things we expect. Add more of them.
+>
+> - Internal toolchain.
+> - Beautify defconfig file.
+> - Fixed versions for components.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  docs/manual/adding-board-support.txt | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+> index f6d74ae1f4..9937f77f7f 100644
+> --- a/docs/manual/adding-board-support.txt
+> +++ b/docs/manual/adding-board-support.txt
+> @@ -10,9 +10,9 @@ that is known to work. You are welcome to add support for other boards
+>  to Buildroot too.
+>
+>  To do so, you need to create a normal Buildroot configuration that
+> -builds a basic system for the hardware: toolchain, kernel, bootloader,
+> -filesystem and a simple BusyBox-only userspace. No specific package
+> -should be selected: the configuration should be as minimal as
+> +builds a basic system for the hardware: (internal) toolchain, kernel,
+> +bootloader, filesystem and a simple BusyBox-only userspace. No specific
+> +package should be selected: the configuration should be as minimal as
+>  possible, and should only build a working basic BusyBox system for the
+>  target platform. You can of course use more complicated configurations
+>  for your internal projects, but the Buildroot project will only
+> @@ -22,7 +22,17 @@ selections are highly application-specific.
+>  Once you have a known working configuration, run +make
+>  savedefconfig+. This will generate a minimal +defconfig+ file at the
+>  root of the Buildroot source tree. Move this file into the +configs/+
+> -directory, and rename it +<boardname>_defconfig+.
+> +directory, and rename it +<boardname>_defconfig+. If the configuration
+> +is a bit more complicated, it is nice to manually reformat it and
+> +separate it into sections, with a comment before each section. Typical
+> +sections are Architecture, Toolchain options (typically just linux
+> +headers version), Firmware, Bootloader, Kernel, Filesystem.
+> +
+> +Always use fixed versions or commit hashes for the different
+> +components, not the "latest" version. For example, set
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y and
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE to the kernel version you tested
+> +with.
+>
+>  It is recommended to use as much as possible upstream versions of the
+>  Linux kernel and bootloaders, and to use as much as possible default
+> --
+> 2.26.2
+>
