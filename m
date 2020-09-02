@@ -1,53 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:34 -0000
-Subject: [Buildroot] [git commit]
- support/testing/tests/toolchain/test_external: support non-ELF toolchains
-Message-ID: <20200902161634.AF95E85EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-more-itertools: bump to
+ version 8.4.0
+Message-ID: <20200902161635.1F8C085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=679a1ba24bdf63ca83b203d6d81e11b4cb57184f
+commit: https://git.buildroot.net/buildroot/commit/?id=610aab652e501cd950074cd053e3fab3ec3e7760
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The TestExternalToolchain() base class implement a test checking if
-the ELF interpreter that is advertised by Busybox really exists in the
-rootfs. Of course, this only makes sense with ELF toolchains. Until
-now, only ELF toolchains were tested, but we are going to use
-TestExternalToolchain() with non-ELF toolchains as well, so let's make
-this conditional.
-
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998 at free.fr: strip() lines during readlines()]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/toolchain/test_external.py | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ package/python-more-itertools/python-more-itertools.hash | 4 ++--
+ package/python-more-itertools/python-more-itertools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/testing/tests/toolchain/test_external.py b/support/testing/tests/toolchain/test_external.py
-index 881d2b00db..db62a84391 100644
---- a/support/testing/tests/toolchain/test_external.py
-+++ b/support/testing/tests/toolchain/test_external.py
-@@ -26,11 +26,15 @@ class TestExternalToolchain(infra.basetest.BRTest):
-             path = os.path.join(self.builddir, "target", d)
-             self.assertFalse(has_broken_links(path))
+diff --git a/package/python-more-itertools/python-more-itertools.hash b/package/python-more-itertools/python-more-itertools.hash
+index 1b4ffef2b6..189498ec5e 100644
+--- a/package/python-more-itertools/python-more-itertools.hash
++++ b/package/python-more-itertools/python-more-itertools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/more-itertools/json
+-md5  55e7e0a5eabc5a57bc8353c65c6f9965  more-itertools-8.2.0.tar.gz
+-sha256  b1ddb932186d8a6ac451e1d95844b382f55e12686d51ca0c68b6f61f2ab7a507  more-itertools-8.2.0.tar.gz
++md5  0912041c05148ed079984cff69af2e99  more-itertools-8.4.0.tar.gz
++sha256  68c70cc7167bdf5c7c9d8f6954a7837089c6a36bf565383919bb595efb8a17e5  more-itertools-8.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46  LICENSE
+diff --git a/package/python-more-itertools/python-more-itertools.mk b/package/python-more-itertools/python-more-itertools.mk
+index 334ef5e13a..ef21f4d27d 100644
+--- a/package/python-more-itertools/python-more-itertools.mk
++++ b/package/python-more-itertools/python-more-itertools.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--        interp = infra.get_elf_prog_interpreter(self.builddir,
--                                                self.toolchain_prefix,
--                                                "bin/busybox")
--        interp_path = os.path.join(self.builddir, "target", interp[1:])
--        self.assertTrue(os.path.exists(interp_path))
-+        with open(os.path.join(self.builddir, ".config"), 'r') as configf:
-+            configlines = [l.strip() for l in configf.readlines()]
-+
-+        if "BR2_BINFMT_ELF=y" in configlines:
-+            interp = infra.get_elf_prog_interpreter(self.builddir,
-+                                                    self.toolchain_prefix,
-+                                                    "bin/busybox")
-+            interp_path = os.path.join(self.builddir, "target", interp[1:])
-+            self.assertTrue(os.path.exists(interp_path))
- 
- 
- class TestExternalToolchainSourceryArmv4(TestExternalToolchain):
+-PYTHON_MORE_ITERTOOLS_VERSION = 8.2.0
++PYTHON_MORE_ITERTOOLS_VERSION = 8.4.0
+ PYTHON_MORE_ITERTOOLS_SOURCE = more-itertools-$(PYTHON_MORE_ITERTOOLS_VERSION).tar.gz
+-PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/a0/47/6ff6d07d84c67e3462c50fa33bf649cda859a8773b53dc73842e84455c05
++PYTHON_MORE_ITERTOOLS_SITE = https://files.pythonhosted.org/packages/67/4a/16cb3acf64709eb0164e49ba463a42dc45366995848c4f0cf770f57b8120
+ PYTHON_MORE_ITERTOOLS_SETUP_TYPE = setuptools
+ PYTHON_MORE_ITERTOOLS_LICENSE = MIT
+ PYTHON_MORE_ITERTOOLS_LICENSE_FILES = LICENSE
