@@ -1,497 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:32 -0000
-Subject: [Buildroot] [git commit] package/busybox: bump version to 1.32.0
-Message-ID: <20200902161633.2F9618752B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gnuplot: bump version to 5.4.0
+Message-ID: <20200902161632.E6685814F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03fa0f119c5843391f6a1093ca12df4763ca40d4
+commit: https://git.buildroot.net/buildroot/commit/?id=263da09323e83bb3d6552b70b739523b66459df8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Dropped patches accepted upstream, refresh 2nd patch.
+0001-configure-add-without-demo-option: adapt patch to 5.4.0 version
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ags-strip-non-l-arguments-returned-by-pkg.patch |   4 +-
- ...-date-Use-64-prefix-syscall-if-we-have-to.patch |  61 ----------
- ...-time-Use-64-prefix-syscall-if-we-have-to.patch |  50 --------
- ...runsv-Use-64-prefix-syscall-if-we-have-to.patch |  50 --------
- ...all-wrappers-around-clock_gettime-closes-.patch | 134 ---------------------
- .../busybox/0007-Remove-stime-function-calls.patch |  97 ---------------
- package/busybox/busybox.hash                       |   4 +-
- package/busybox/busybox.mk                         |   2 +-
- 8 files changed, 6 insertions(+), 396 deletions(-)
+ .../0001-configure-add-without-demo-option.patch   | 34 ++++++++++++----------
+ package/gnuplot/gnuplot.hash                       |  8 ++---
+ package/gnuplot/gnuplot.mk                         |  2 +-
+ 3 files changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-index 8375ae0531..84435442c9 100644
---- a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-+++ b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
-@@ -5,7 +5,9 @@ Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
+diff --git a/package/gnuplot/0001-configure-add-without-demo-option.patch b/package/gnuplot/0001-configure-add-without-demo-option.patch
+index a50e6c2c1b..a557e279bc 100644
+--- a/package/gnuplot/0001-configure-add-without-demo-option.patch
++++ b/package/gnuplot/0001-configure-add-without-demo-option.patch
+@@ -3,14 +3,16 @@ Add options to enable/disable docs and demos
+ Originally written by Anthony Viallard
+ <viallard@syscom-instruments.com>.
  
+-[Vincent: adapt patch to 5.0.5 version]
+-
  Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [yann.morin.1998 at free.fr: refresh for 1.29.0]
-+[petr.vorel at gmail.com: refresh for 1.32.0]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
- ---
-  Makefile.flags | 4 +++-
-  1 file changed, 3 insertions(+), 1 deletion(-)
-@@ -14,7 +16,7 @@ diff --git a/Makefile.flags b/Makefile.flags
- index 307afa7..885e323 100644
- --- a/Makefile.flags
- +++ b/Makefile.flags
--@@ -153,7 +153,9 @@ ifeq ($(CONFIG_SELINUX),y)
-+@@ -176,7 +176,9 @@ ifeq ($(CONFIG_SELINUX),y)
-  SELINUX_PC_MODULES = libselinux libsepol
-  $(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
-  CPPFLAGS += $(SELINUX_CFLAGS)
-diff --git a/package/busybox/0003-date-Use-64-prefix-syscall-if-we-have-to.patch b/package/busybox/0003-date-Use-64-prefix-syscall-if-we-have-to.patch
-deleted file mode 100644
-index 2b89584f00..0000000000
---- a/package/busybox/0003-date-Use-64-prefix-syscall-if-we-have-to.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 29ba834ed7d968de0460f7fd87156d43d8120d8f Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Wed, 18 Sep 2019 09:28:49 -0700
--Subject: [PATCH] date: Use 64 prefix syscall if we have to
--
--Some 32-bit architectures no longer have the 32-bit time_t syscalls.
--Instead they have suffixed syscalls that returns a 64-bit time_t. If
--the architecture doesn't have the non-suffixed syscall and is using a
--64-bit time_t let's use the suffixed syscall instead.
--
--This fixes build issues when building for RISC-V 32-bit with 5.1+ kernel
--headers.
--
--If an architecture only supports the suffixed syscalls, but is still
--using a 32-bit time_t fall back to the libc call.
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--
--(cherry picked from commit b7b7452f292f03eefafa6fd1da9bcfc933dee15a)
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- coreutils/date.c | 11 +++++++++--
-- 1 file changed, 9 insertions(+), 2 deletions(-)
--
--diff --git a/coreutils/date.c b/coreutils/date.c
--index 3414d38ae..1e0a675ca 100644
----- a/coreutils/date.c
--+++ b/coreutils/date.c
--@@ -36,7 +36,7 @@
-- //config:# defaults to "no": stat's nanosecond field is a bit non-portable
-- //config:config FEATURE_DATE_NANO
-- //config:	bool "Support %[num]N nanosecond format specifier"
---//config:	default n  # syscall(__NR_clock_gettime)
--+//config:	default n  # syscall(__NR_clock_gettime) or syscall(__NR_clock_gettime64)
-- //config:	depends on DATE
-- //config:	select PLATFORM_LINUX
-- //config:	help
--@@ -271,10 +271,17 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-- 		 */
-- #endif
-- 	} else {
---#if ENABLE_FEATURE_DATE_NANO
--+#if ENABLE_FEATURE_DATE_NANO && defined(__NR_clock_gettime)
-- 		/* libc has incredibly messy way of doing this,
-- 		 * typically requiring -lrt. We just skip all this mess */
-- 		syscall(__NR_clock_gettime, CLOCK_REALTIME, &ts);
--+#elif ENABLE_FEATURE_DATE_NANO && __TIMESIZE == 64
--+		/* Let's only support the 64 suffix syscalls for 64-bit time_t.
--+		 * This simplifies the code for us as we don't need to convert
--+		 * between 64-bit and 32-bit. We also don't have a way to
--+		 * report overflow errors here.
--+		 */
--+		syscall(__NR_clock_gettime64, CLOCK_REALTIME, &ts);
-- #else
-- 		time(&ts.tv_sec);
-- #endif
---- 
--2.18.2
--
-diff --git a/package/busybox/0004-time-Use-64-prefix-syscall-if-we-have-to.patch b/package/busybox/0004-time-Use-64-prefix-syscall-if-we-have-to.patch
-deleted file mode 100644
-index 4481a82bac..0000000000
---- a/package/busybox/0004-time-Use-64-prefix-syscall-if-we-have-to.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 88732c5593e16ef6177f6e6110132ed69b06d2eb Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Wed, 18 Sep 2019 09:28:50 -0700
--Subject: [PATCH] time: Use 64 prefix syscall if we have to
--
--Some 32-bit architectures no longer have the 32-bit time_t syscalls.
--Instead they have suffixed syscalls that returns a 64-bit time_t. If
--the architecture doesn't have the non-suffixed syscall and is using a
--64-bit time_t let's use the suffixed syscall instead.
--
--This fixes build issues when building for RISC-V 32-bit with 5.1+ kernel
--headers.
--
--If an architecture only supports the suffixed syscalls, but is still
--using a 32-bit time_t report a compilation error. This avoids us have to
--deal with converting between 64-bit and 32-bit values. There are
--currently no architectures where this is the case.
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--
--(cherry picked from commit 902d3992922fc8db8495d5fb30a4581711b60c62)
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- libbb/time.c | 7 +++++++
-- 1 file changed, 7 insertions(+)
--
--diff --git a/libbb/time.c b/libbb/time.c
--index f9b8da0b3..821f9a24b 100644
----- a/libbb/time.c
--+++ b/libbb/time.c
--@@ -257,7 +257,14 @@ char* FAST_FUNC strftime_YYYYMMDDHHMMSS(char *buf, unsigned len, time_t *tp)
--  * typically requiring -lrt. We just skip all this mess */
-- static void get_mono(struct timespec *ts)
-- {
--+#if defined(__NR_clock_gettime)
-- 	if (syscall(__NR_clock_gettime, CLOCK_MONOTONIC, ts))
--+#elif __TIMESIZE == 64
--+	if (syscall(__NR_clock_gettime64, CLOCK_MONOTONIC, ts))
--+#else
--+# error "We currently don't support architectures without " \
--+	"the __NR_clock_gettime syscall and 32-bit time_t"
--+#endif
-- 		bb_error_msg_and_die("clock_gettime(MONOTONIC) failed");
-- }
-- unsigned long long FAST_FUNC monotonic_ns(void)
---- 
--2.18.2
--
-diff --git a/package/busybox/0005-runsv-Use-64-prefix-syscall-if-we-have-to.patch b/package/busybox/0005-runsv-Use-64-prefix-syscall-if-we-have-to.patch
-deleted file mode 100644
-index 0d25a6e72e..0000000000
---- a/package/busybox/0005-runsv-Use-64-prefix-syscall-if-we-have-to.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 8f4b588eb9737c2c0d1b199c7e609d880e0858a8 Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Wed, 18 Sep 2019 09:28:51 -0700
--Subject: [PATCH] runsv: Use 64 prefix syscall if we have to
--
--Some 32-bit architectures no longer have the 32-bit time_t syscalls.
--Instead they have suffixed syscalls that returns a 64-bit time_t. If
--the architecture doesn't have the non-suffixed syscall and is using a
--64-bit time_t let's use the suffixed syscall instead.
--
--This fixes build issues when building for RISC-V 32-bit with 5.1+ kernel
--headers.
--
--If an architecture only supports the suffixed syscalls, but is still
--using a 32-bit time_t report a compilation error. This avoids us have to
--deal with converting between 64-bit and 32-bit values. There are
--currently no architectures where this is the case.
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--
--(cherry picked from commit ad27d44ebe950335616f37e36863469dc181b455)
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- runit/runsv.c | 7 +++++++
-- 1 file changed, 7 insertions(+)
--
--diff --git a/runit/runsv.c b/runit/runsv.c
--index ccc762d78..737909b0e 100644
----- a/runit/runsv.c
--+++ b/runit/runsv.c
--@@ -55,7 +55,14 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--  * typically requiring -lrt. We just skip all this mess */
-- static void gettimeofday_ns(struct timespec *ts)
-- {
--+#if defined(__NR_clock_gettime)
-- 	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
--+#elif __TIMESIZE == 64
--+	syscall(__NR_clock_gettime64, CLOCK_REALTIME, ts);
--+#else
--+# error "We currently don't support architectures without " \
--+	"the __NR_clock_gettime syscall and 32-bit time_t"
--+#endif
-- }
-- #else
-- static void gettimeofday_ns(struct timespec *ts)
---- 
--2.18.2
--
-diff --git a/package/busybox/0006-Remove-syscall-wrappers-around-clock_gettime-closes-.patch b/package/busybox/0006-Remove-syscall-wrappers-around-clock_gettime-closes-.patch
-deleted file mode 100644
-index 9d95d683f3..0000000000
---- a/package/busybox/0006-Remove-syscall-wrappers-around-clock_gettime-closes-.patch
-+++ /dev/null
-@@ -1,134 +0,0 @@
--From 07375fc6fd5912f34a36a097dc679f6e0af23f8a Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Thu, 24 Oct 2019 16:26:55 +0200
--Subject: [PATCH] Remove syscall wrappers around clock_gettime, closes 12091
--
--12091 "Direct use of __NR_clock_gettime is not time64-safe".
--
--function                                             old     new   delta
--runsv_main                                          1698    1712     +14
--startservice                                         378     383      +5
--get_mono                                              31      25      -6
--date_main                                            932     926      -6
--gettimeofday_ns                                       17       -     -17
--------------------------------------------------------------------------------
--(add/remove: 0/1 grow/shrink: 2/2 up/down: 19/-29)            Total: -10 bytes
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--
--(cherry picked from commit be5a505d771a77c640acc35ceaa470c80e62f954)
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- Makefile.flags   |  6 ++++--
-- coreutils/date.c | 16 +++-------------
-- libbb/time.c     | 11 +----------
-- runit/runsv.c    | 11 +----------
-- 4 files changed, 9 insertions(+), 35 deletions(-)
--
--diff --git a/Makefile.flags b/Makefile.flags
--index 6f6142cc5..bea464753 100644
----- a/Makefile.flags
--+++ b/Makefile.flags
--@@ -129,10 +129,12 @@ endif
-- # fall back to using a temp file:
-- CRYPT_AVAILABLE := $(shell echo 'int main(void){return 0;}' >crypttest.c; $(CC) $(CFLAGS) -lcrypt -o /dev/null crypttest.c >/dev/null 2>&1 && echo "y"; rm crypttest.c)
-- ifeq ($(CRYPT_AVAILABLE),y)
---LDLIBS += m crypt
--+LDLIBS += m rt crypt
-- else
---LDLIBS += m
--+LDLIBS += m rt
-- endif
--+# libm may be needed for dc, awk, ntpd
--+# librt may be needed for clock_gettime()
-- 
-- # libpam may use libpthread, libdl and/or libaudit.
-- # On some platforms that requires an explicit -lpthread, -ldl, -laudit.
--diff --git a/coreutils/date.c b/coreutils/date.c
--index 1e0a675ca..e479c23a2 100644
----- a/coreutils/date.c
--+++ b/coreutils/date.c
--@@ -33,10 +33,9 @@
-- //config:	Enable option (-I) to output an ISO-8601 compliant
-- //config:	date/time string.
-- //config:
---//config:# defaults to "no": stat's nanosecond field is a bit non-portable
-- //config:config FEATURE_DATE_NANO
-- //config:	bool "Support %[num]N nanosecond format specifier"
---//config:	default n  # syscall(__NR_clock_gettime) or syscall(__NR_clock_gettime64)
--+//config:	default n # stat's nanosecond field is a bit non-portable
-- //config:	depends on DATE
-- //config:	select PLATFORM_LINUX
-- //config:	help
--@@ -271,17 +270,8 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-- 		 */
-- #endif
-- 	} else {
---#if ENABLE_FEATURE_DATE_NANO && defined(__NR_clock_gettime)
---		/* libc has incredibly messy way of doing this,
---		 * typically requiring -lrt. We just skip all this mess */
---		syscall(__NR_clock_gettime, CLOCK_REALTIME, &ts);
---#elif ENABLE_FEATURE_DATE_NANO && __TIMESIZE == 64
---		/* Let's only support the 64 suffix syscalls for 64-bit time_t.
---		 * This simplifies the code for us as we don't need to convert
---		 * between 64-bit and 32-bit. We also don't have a way to
---		 * report overflow errors here.
---		 */
---		syscall(__NR_clock_gettime64, CLOCK_REALTIME, &ts);
--+#if ENABLE_FEATURE_DATE_NANO
--+		clock_gettime(CLOCK_REALTIME, &ts);
-- #else
-- 		time(&ts.tv_sec);
-- #endif
--diff --git a/libbb/time.c b/libbb/time.c
--index 821f9a24b..1077bfa4f 100644
----- a/libbb/time.c
--+++ b/libbb/time.c
--@@ -253,18 +253,9 @@ char* FAST_FUNC strftime_YYYYMMDDHHMMSS(char *buf, unsigned len, time_t *tp)
-- #define CLOCK_MONOTONIC 1
-- #endif
-- 
---/* libc has incredibly messy way of doing this,
--- * typically requiring -lrt. We just skip all this mess */
-- static void get_mono(struct timespec *ts)
-- {
---#if defined(__NR_clock_gettime)
---	if (syscall(__NR_clock_gettime, CLOCK_MONOTONIC, ts))
---#elif __TIMESIZE == 64
---	if (syscall(__NR_clock_gettime64, CLOCK_MONOTONIC, ts))
---#else
---# error "We currently don't support architectures without " \
---	"the __NR_clock_gettime syscall and 32-bit time_t"
---#endif
--+	if (clock_gettime(CLOCK_MONOTONIC, ts))
-- 		bb_error_msg_and_die("clock_gettime(MONOTONIC) failed");
-- }
-- unsigned long long FAST_FUNC monotonic_ns(void)
--diff --git a/runit/runsv.c b/runit/runsv.c
--index 737909b0e..36d85101e 100644
----- a/runit/runsv.c
--+++ b/runit/runsv.c
--@@ -51,18 +51,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- #if ENABLE_MONOTONIC_SYSCALL
-- #include <sys/syscall.h>
-- 
---/* libc has incredibly messy way of doing this,
--- * typically requiring -lrt. We just skip all this mess */
-- static void gettimeofday_ns(struct timespec *ts)
-- {
---#if defined(__NR_clock_gettime)
---	syscall(__NR_clock_gettime, CLOCK_REALTIME, ts);
---#elif __TIMESIZE == 64
---	syscall(__NR_clock_gettime64, CLOCK_REALTIME, ts);
---#else
---# error "We currently don't support architectures without " \
---	"the __NR_clock_gettime syscall and 32-bit time_t"
---#endif
--+	clock_gettime(CLOCK_REALTIME, ts);
-- }
-- #else
-- static void gettimeofday_ns(struct timespec *ts)
---- 
--2.18.2
--
-diff --git a/package/busybox/0007-Remove-stime-function-calls.patch b/package/busybox/0007-Remove-stime-function-calls.patch
-deleted file mode 100644
-index 58e1ced3de..0000000000
---- a/package/busybox/0007-Remove-stime-function-calls.patch
-+++ /dev/null
-@@ -1,97 +0,0 @@
--From 59102e499ac25c4311246d2b9417b3e5830cf851 Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Tue, 19 Nov 2019 13:06:40 +0100
--Subject: [PATCH] Remove stime() function calls
--
--stime() has been deprecated in glibc 2.31 and replaced with
--clock_settime(). Let's replace the stime() function calls with
--clock_settime() in preperation.
--
--function                                             old     new   delta
--rdate_main                                           197     224     +27
--clock_settime                                          -      27     +27
--date_main                                            926     941     +15
--stime                                                 37       -     -37
--------------------------------------------------------------------------------
--(add/remove: 2/2 grow/shrink: 2/0 up/down: 69/-37)             Total: 32 bytes
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--
--(cherry picked from commit d3539be8f27b8cbfdfee460fe08299158f08bcd9)
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
-----
-- coreutils/date.c         | 6 +++++-
-- libbb/missing_syscalls.c | 8 --------
-- util-linux/rdate.c       | 8 ++++++--
-- 3 files changed, 11 insertions(+), 11 deletions(-)
--
--diff --git a/coreutils/date.c b/coreutils/date.c
--index e479c23a2..77a7d1368 100644
----- a/coreutils/date.c
--+++ b/coreutils/date.c
--@@ -276,6 +276,9 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-- 		time(&ts.tv_sec);
-- #endif
-- 	}
--+#if !ENABLE_FEATURE_DATE_NANO
--+	ts.tv_nsec = 0;
--+#endif
-- 	localtime_r(&ts.tv_sec, &tm_time);
-- 
-- 	/* If date string is given, update tm_time, and maybe set date */
--@@ -298,9 +301,10 @@ int date_main(int argc UNUSED_PARAM, char **argv)
-- 		if (date_str[0] != '@')
-- 			tm_time.tm_isdst = -1;
-- 		ts.tv_sec = validate_tm_time(date_str, &tm_time);
--+		ts.tv_nsec = 0;
-- 
-- 		/* if setting time, set it */
---		if ((opt & OPT_SET) && stime(&ts.tv_sec) < 0) {
--+		if ((opt & OPT_SET) && clock_settime(CLOCK_REALTIME, &ts) < 0) {
-- 			bb_perror_msg("can't set date");
-- 		}
-- 	}
--diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
--index 87cf59b3d..dc40d9155 100644
----- a/libbb/missing_syscalls.c
--+++ b/libbb/missing_syscalls.c
--@@ -15,14 +15,6 @@ pid_t getsid(pid_t pid)
-- 	return syscall(__NR_getsid, pid);
-- }
-- 
---int stime(const time_t *t)
---{
---	struct timeval tv;
---	tv.tv_sec = *t;
---	tv.tv_usec = 0;
---	return settimeofday(&tv, NULL);
---}
---
-- int sethostname(const char *name, size_t len)
-- {
-- 	return syscall(__NR_sethostname, name, len);
--diff --git a/util-linux/rdate.c b/util-linux/rdate.c
--index 70f829e7f..878375d78 100644
----- a/util-linux/rdate.c
--+++ b/util-linux/rdate.c
--@@ -95,9 +95,13 @@ int rdate_main(int argc UNUSED_PARAM, char **argv)
-- 	if (!(flags & 2)) { /* no -p (-s may be present) */
-- 		if (time(NULL) == remote_time)
-- 			bb_error_msg("current time matches remote time");
---		else
---			if (stime(&remote_time) < 0)
--+		else {
--+			struct timespec ts;
--+			ts.tv_sec = remote_time;
--+			ts.tv_nsec = 0;
--+			if (clock_settime(CLOCK_REALTIME, &ts) < 0)
-- 				bb_perror_msg_and_die("can't set time of day");
--+		}
-- 	}
-- 
-- 	if (flags != 1) /* not lone -s */
---- 
--2.18.2
--
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index e5b05ae731..cf744ffcda 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,4 +1,4 @@
--# From https://busybox.net/downloads/busybox-1.31.1.tar.bz2.sha256
--sha256 d0f940a72f648943c1f2211e0e3117387c31d765137d92bd8284a3fb9752a998  busybox-1.31.1.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.32.0.tar.bz2.sha256
-+sha256 c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689  busybox-1.32.0.tar.bz2
++[Vincent: adapt patch to 5.0.5 version]
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++[Michael: adapt patch to 5.4.0 version]
++Signed-off-by: Michael Fischer <mf@go-sys.de>
+ 
+---- a/configure.ac	2019-11-27 23:52:29.000000000 +0100
+-+++ b/configure.ac	2020-02-13 10:24:50.801842269 +0100
+-@@ -755,6 +755,16 @@ if test "$with_cwdrc" = yes; then
++diff -Naur a/configure.ac b/configure.ac
++--- a/configure.ac	2020-07-12 02:29:47.000000000 +0200
+++++ b/configure.ac	2020-08-06 14:21:17.918756893 +0200
++@@ -713,6 +713,17 @@
+                 [ Define if you want to read .gnuplot from current directory (SECURITY RISK!).])
+  fi
+  
+@@ -24,10 +26,11 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ +AC_ARG_ENABLE(demo,dnl
+ +[  --disable-demo    do not build demo files])
+ +
+- dnl Disable experimental support for nonlinear axes
+- AC_ARG_WITH(nonlinear-axes,dnl
+- [  --without-nonlinear-axes     disable support for nonlinear axes])
+-@@ -1236,6 +1246,24 @@ if test -n "${DIST_CONTACT}"; then
+++
++ dnl Sort help/subtopic tables by row or column
++ AC_ARG_WITH(row-help,dnl
++ [  --with-row-help         format help and subtopic tables by row (default)
++@@ -1095,6 +1106,24 @@
+    AC_DEFINE_UNQUOTED([DIST_CONTACT],["$DIST_CONTACT"],[Contact address for modified and binary distributed gnuplot versions])
+  fi
+  
+@@ -52,14 +55,15 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+  dnl Substitute variables
+  AC_SUBST(PACKAGE)
+  AC_SUBST(VERSION_MAJOR)
+---- a/Makefile.am	2019-11-19 22:57:18.000000000 +0100
+-+++ b/Makefile.am	2020-02-13 10:17:55.753012739 +0100
++diff -Naur a/Makefile.am b/Makefile.am
++--- a/Makefile.am	2020-03-31 19:28:16.000000000 +0200
+++++ b/Makefile.am	2020-08-06 14:34:12.995097799 +0200
+ @@ -1,7 +1,7 @@
+  ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+  AUTOMAKE_OPTIONS = foreign
+  
+--SUBDIRS = config m4 term src docs man demo tutorial share
+-+SUBDIRS = config m4 term src $(DOCSUBDIR) man $(DEMOSUBDIR) tutorial share
++-SUBDIRS = config m4 term src docs man demo share
+++SUBDIRS = config m4 term src $(DOCSUBDIR) man $(DEMOSUBDIR) share
+  
+- EXTRA_DIST = BUGS Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+- Makefile.maint PATCHLEVEL PGPKEYS README RELEASE_NOTES \
++ EXTRA_DIST = BUGS Copyright FAQ.pdf INSTALL INSTALL.gnu \
++ PATCHLEVEL PGPKEYS README RELEASE_NOTES \
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index ef80a29d3d..260b78314e 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.2.8/
+-md5 2df8767c7399bee57a96296d46b4d5fb  gnuplot-5.2.8.tar.gz
+-sha1 dc018b1e0a31b770d4635958badff13498babc4d  gnuplot-5.2.8.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.0/
++md5 ac586178f3b031dea82cd3890cefb21b  gnuplot-5.4.0.tar.gz
++sha1 b4660dff7d047a453c55fd77faba11f63bb2d5ed  gnuplot-5.4.0.tar.gz
  # Locally computed
- sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7a1a506963..e049bce81d 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
+-sha256  60a6764ccf404a1668c140f11cc1f699290ab70daa1151bb58fed6139a28ac37  gnuplot-5.2.8.tar.gz
++sha256  eb4082f03a399fd1e9e2b380cf7a4f785e77023d8dcc7e17570c1b5570a49c47  gnuplot-5.4.0.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index 694b6cb886..ef9ef2ac67 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUSYBOX_VERSION = 1.31.1
-+BUSYBOX_VERSION = 1.32.0
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0
+-GNUPLOT_VERSION = 5.2.8
++GNUPLOT_VERSION = 5.4.0
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
