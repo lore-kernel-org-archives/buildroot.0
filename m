@@ -1,40 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:31 -0000
-Subject: [Buildroot] [git commit] package/lua-sdl2: disable temporarily with
- Lua 5.4
-Message-ID: <20200902161633.9096F87655@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.0
+Message-ID: <20200902161632.DBD2587655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=567a8a7f1f29b826d64a4f985e8643b343f0b69c
+commit: https://git.buildroot.net/buildroot/commit/?id=8813b3c499a02a8cde2f1f42294586b0a729eb2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+For details see [1], [2] and [3].
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041529.html
+[2] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041545.html
+[3] https://lists.freedesktop.org/archives/wayland-devel/2020-August/041578.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-sdl2/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
-index 65f9e7ff41..d0c1b91eb1 100644
---- a/package/lua-sdl2/Config.in
-+++ b/package/lua-sdl2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUA_SDL2
- 	bool "lua-sdl2"
- 	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_SDL2
- 	help
- 	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2,
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_LUA_SDL2
- 
- 	  https://github.com/Tangent128/luasdl2
- 
--comment "lua-sdl2 needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "lua-sdl2 needs a toolchain w/ dynamic library, Lua <= 5.3"
-+	depends on BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
+Patch is too large, so refusing to show it
