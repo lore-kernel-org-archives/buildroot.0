@@ -1,79 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:35 -0000
-Subject: [Buildroot] [git commit] package/libbacktrace: new package
-Message-ID: <20200902161634.8BDED85EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/redir: new package
+Message-ID: <20200902161634.627F385EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a30cf5c135f51c0cf6c62699d5f93b3abffa2c65
+commit: https://git.buildroot.net/buildroot/commit/?id=6121dc01d8e8ac5eecaa7668b1db84cb02d72c7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A C library that may be linked into a C/C++ program to produce
-symbolic backtraces.
-
-Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                      |  1 +
- package/libbacktrace/Config.in         |  7 +++++++
- package/libbacktrace/libbacktrace.hash |  3 +++
- package/libbacktrace/libbacktrace.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/redir/Config.in  |  7 +++++++
+ package/redir/redir.hash |  4 ++++
+ package/redir/redir.mk   | 17 +++++++++++++++++
+ 5 files changed, 30 insertions(+)
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 42fa5a4956..9a161c8036 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2061,6 +2061,7 @@ F:	package/python-gpiozero/
+ F:	package/qt5/
+ F:	package/quotatool/
+ F:	package/racehound/
++F:	package/redir/
+ 
+ N:	Peter Thompson <peter.macleod.thompson@gmail.com>
+ F:	package/sdl2_gfx/
 diff --git a/package/Config.in b/package/Config.in
-index d8d9b7617f..b5285a66a2 100644
+index 7936cb8105..f122983724 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1833,6 +1833,7 @@ menu "Other"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libavl/Config.in"
- 	source "package/libb64/Config.in"
-+	source "package/libbacktrace/Config.in"
- 	source "package/libbsd/Config.in"
- 	source "package/libcap/Config.in"
- 	source "package/libcap-ng/Config.in"
-diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
+@@ -2181,6 +2181,7 @@ endif
+ 	source "package/rabbitmq-server/Config.in"
+ 	source "package/radvd/Config.in"
+ 	source "package/reaver/Config.in"
++	source "package/redir/Config.in"
+ 	source "package/rp-pppoe/Config.in"
+ 	source "package/rpcbind/Config.in"
+ 	source "package/rsh-redone/Config.in"
+diff --git a/package/redir/Config.in b/package/redir/Config.in
 new file mode 100644
-index 0000000000..0f940dd588
+index 0000000000..6e51c64218
 --- /dev/null
-+++ b/package/libbacktrace/Config.in
++++ b/package/redir/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBBACKTRACE
-+	bool "libbacktrace"
++config BR2_PACKAGE_REDIR
++	bool "redir"
++	depends on BR2_USE_MMU # fork()
 +	help
-+	  A C library that may be linked into a C/C++ program to
-+	  produce symbolic backtraces
++	  This is a TCP port redirector for UNIX.
 +
-+	  https://github.com/ianlancetaylor/libbacktrace
-diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
++	  https://github.com/troglobit/redir
+diff --git a/package/redir/redir.hash b/package/redir/redir.hash
 new file mode 100644
-index 0000000000..ecd530a33b
+index 0000000000..8cc19f6ac6
 --- /dev/null
-+++ b/package/libbacktrace/libbacktrace.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
-+sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
-diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
++++ b/package/redir/redir.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/troglobit/redir/releases/download/v3.3/redir-3.3.tar.xz.md5
++md5  b452e1ca6faded7bab9c76dd61d9d983  redir-3.3.tar.xz
++# License files
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/redir/redir.mk b/package/redir/redir.mk
 new file mode 100644
-index 0000000000..8f812228e3
+index 0000000000..ea02d43a12
 --- /dev/null
-+++ b/package/libbacktrace/libbacktrace.mk
-@@ -0,0 +1,13 @@
++++ b/package/redir/redir.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# libbacktrace
++# redir
 +#
 +################################################################################
 +
-+LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
-+LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
-+LIBBACKTRACE_LICENSE = BSD-3C-like
-+LIBBACKTRACE_LICENSE_FILES = LICENSE
-+LIBBACKTRACE_INSTALL_STAGING = YES
++REDIR_VERSION = 3.3
++REDIR_SOURCE = redir-$(REDIR_VERSION).tar.xz
++REDIR_SITE = https://github.com/troglobit/redir/releases/download/v$(REDIR_VERSION)
++REDIR_LICENSE = GPL-2.0+
++REDIR_LICENSE_FILES = COPYING
++REDIR_CONF_OPTS = \
++	--disable-compat \
++	--enable-shaper \
++	--enable-ftp
 +
 +$(eval $(autotools-package))
