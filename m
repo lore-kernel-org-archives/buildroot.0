@@ -1,52 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:33 -0000
-Subject: [Buildroot] [git commit] package/python-hiredis: bump to version
- 1.1.0
-Message-ID: <20200902161634.09BA085EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-bsdiff4: new package
+Message-ID: <20200902161633.D349985EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e55791981a909eb609574ab1a321e208c4fde05
+commit: https://git.buildroot.net/buildroot/commit/?id=ce75149eb58b7990f1a7a86c2f172140cc5663b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Binary diff and patch using the BSDIFF4-format.
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-hiredis/python-hiredis.hash | 8 ++++----
- package/python-hiredis/python-hiredis.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/Config.in                          |  1 +
+ package/python-bsdiff4/Config.in           |  8 ++++++++
+ package/python-bsdiff4/python-bsdiff4.hash |  5 +++++
+ package/python-bsdiff4/python-bsdiff4.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
-index 1a013bb3a2..091532dd2a 100644
---- a/package/python-hiredis/python-hiredis.hash
-+++ b/package/python-hiredis/python-hiredis.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/hiredis/json
--md5	ad421ea848734c7be5c10689caa2a6f1  hiredis-1.0.1.tar.gz
--sha256	aa59dd63bb3f736de4fc2d080114429d5d369dfb3265f771778e8349d67a97a4  hiredis-1.0.1.tar.gz
-+md5  430294afb3ebb37ebc7cc05bf3e5a389  hiredis-1.1.0.tar.gz
-+sha256  996021ef33e0f50b97ff2d6b5f422a0fe5577de21a8873b58a779a5ddd1c3132  hiredis-1.1.0.tar.gz
- # Locally computed sha256 checksums
--sha256	70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
--sha256	dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-+sha256  70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
-+sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
-diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
-index 435918feb6..7d871d1f03 100644
---- a/package/python-hiredis/python-hiredis.mk
-+++ b/package/python-hiredis/python-hiredis.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_HIREDIS_VERSION = 1.0.1
-+PYTHON_HIREDIS_VERSION = 1.1.0
- PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
--PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/7f/5c/62e5c6b811b4dcef4125b4a01f76db82c496d79299dd67053b8f9c0732c0
-+PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/3d/9f/abc69e73055f73d42ddf9c46b3e01a08b9e74b579b8fc413cbd31112a749
- PYTHON_HIREDIS_SETUP_TYPE = setuptools
- PYTHON_HIREDIS_LICENSE = BSD-3-Clause
- PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..7936cb8105 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -895,6 +895,7 @@ menu "External python modules"
+ 	source "package/python-bluezero/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-brotli/Config.in"
++	source "package/python-bsdiff4/Config.in"
+ 	source "package/python-bunch/Config.in"
+ 	source "package/python-cached-property/Config.in"
+ 	source "package/python-can/Config.in"
+diff --git a/package/python-bsdiff4/Config.in b/package/python-bsdiff4/Config.in
+new file mode 100644
+index 0000000000..a383cda0f5
+--- /dev/null
++++ b/package/python-bsdiff4/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_BSDIFF4
++	bool "python-bsdiff4"
++	select BR2_PACKAGE_PYTHON_BZIP2 if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_BZIP2 if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  binary diff and patch using the BSDIFF4-format.
++
++	  https://github.com/ilanschnell/bsdiff4
+diff --git a/package/python-bsdiff4/python-bsdiff4.hash b/package/python-bsdiff4/python-bsdiff4.hash
+new file mode 100644
+index 0000000000..e64e817f9c
+--- /dev/null
++++ b/package/python-bsdiff4/python-bsdiff4.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/bsdiff4/json
++md5	a0d047e91429ce67a3b0231facf41169  bsdiff4-1.2.0.tar.gz
++sha256	3c2f7f5504f41a54d238b54b00b4544d0eb4276179edabf02b9d00415a03cc9d  bsdiff4-1.2.0.tar.gz
++# Locally computed sha256
++sha256	c6c921c90383f1c43beb53c49a652d28309a410a7c394c729fd8870271451cf0  LICENSE
+diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
+new file mode 100644
+index 0000000000..7bc607b2d6
+--- /dev/null
++++ b/package/python-bsdiff4/python-bsdiff4.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-bsdiff4
++#
++################################################################################
++
++PYTHON_BSDIFF4_VERSION = 1.2.0
++PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
++PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/9b/ca/06cd939630ca78125c36489f92b52918980cbcfee2dcc0969411eb5ae8a8
++PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
++PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
++PYTHON_BSDIFF4_SETUP_TYPE = distutils
++
++$(eval $(python-package))
