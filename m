@@ -1,19 +1,19 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 2 Sep 2020 22:40:41 +0200
-Subject: [Buildroot] [git commit] configs/rockpro64: new defconfig
-Message-ID: <20200902203328.BAF568780B@busybox.osuosl.org>
+Date: Wed, 2 Sep 2020 22:40:52 +0200
+Subject: [Buildroot] [git commit] configs/nanopi_m4: new defconfig
+Message-ID: <20200902203328.C0EA07F9DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4293ce6e3b236b8b52ad0b1567604f6d9e30d709
+commit: https://git.buildroot.net/buildroot/commit/?id=a855cd8a719cbc41567e83680265dd8e74e2371c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A defconfig for the rockpro64 was added in
-59e1077b4ebe79622a454b0a8a840e4349a0440d, but then removed
-in 10f49213b7e2837ae6ed63fc16fbdaa954ecd87f because an ARM32
+A defconfig for the friendlyarm nanopi-m4 was added in
+493c3979a4def978a1137cf8543bf0de50d2615e, but then removed
+in a24bd8936f57a590f810e14d7828cf1bddce580e because an ARM32
 compiler was needed to build ATF, and this was not supported
 back then.
 
@@ -22,68 +22,64 @@ defconfig can be re-introduced.
 
 Following new changes are introduced in comparision with the
 older changeset:
-
-    - renamed defconfig from pine64_rockpro64 to rockpro64
-    - updated readme
-    - using a GPT partition layout
-    - update defconfig to build ATF
-    - bump u-boot to 2020.07
-    - bump linux to 5.8.2
+        - readme updated
+        - GPT partition layout
+        - update defconfig to build ATF
+        - bump u-boot to 2020.07
+        - bump linux to 5.8.2
 
 Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
 Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 [Arnout: fixate U-Boot version; remove blind BR2_TARGET_UBOOT_NEEDS_PYTHON]
 ---
- DEVELOPERS                           |  2 ++
- board/pine64/rockpro64/extlinux.conf |  4 +++
- board/pine64/rockpro64/genimage.cfg  | 39 +++++++++++++++++++++++
- board/pine64/rockpro64/post-build.sh |  5 +++
- board/pine64/rockpro64/readme.txt    | 60 ++++++++++++++++++++++++++++++++++++
- configs/rockpro64_defconfig          | 53 +++++++++++++++++++++++++++++++
- 6 files changed, 163 insertions(+)
+ DEVELOPERS                                |  2 ++
+ board/friendlyarm/nanopi-m4/extlinux.conf |  4 +++
+ board/friendlyarm/nanopi-m4/genimage.cfg  | 39 +++++++++++++++++++++++
+ board/friendlyarm/nanopi-m4/post-build.sh |  5 +++
+ board/friendlyarm/nanopi-m4/readme.txt    | 45 ++++++++++++++++++++++++++
+ configs/nanopi_m4_defconfig               | 53 +++++++++++++++++++++++++++++++
+ 6 files changed, 148 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 192eab8de9..9ea49d8a11 100644
+index dfe44a7042..d8cf58ee77 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2451,6 +2451,7 @@ F:	package/powertop/
+@@ -2451,11 +2451,13 @@ F:	package/powertop/
  
  N:	Suniel Mahesh <sunil@amarulasolutions.com>
  F:	board/firefly/
-+F:	board/pine64/rockpro64
++F:	board/friendlyarm/nanopi-m4
+ F:	board/orangepi/orangepi-rk3399
+ F:	board/pine64/rockpro64
  F:	board/radxa/rockpi-4
  F:	board/radxa/rockpi-n8
  F:	board/radxa/rockpi-n10
-@@ -2458,6 +2459,7 @@ F:	configs/roc_pc_rk3399_defconfig
++F: 	configs/nanopi_m4_defconfig
+ F:	configs/orangepi_rk3399_defconfig
+ F:	configs/roc_pc_rk3399_defconfig
  F:	configs/rock_pi_4_defconfig
- F:	configs/rock_pi_n8_defconfig
- F:	configs/rock_pi_n10_defconfig
-+F:	configs/rockpro64_defconfig
- F:	package/arm-gnu-a-toolchain/
- 
- N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
-diff --git a/board/pine64/rockpro64/extlinux.conf b/board/pine64/rockpro64/extlinux.conf
+diff --git a/board/friendlyarm/nanopi-m4/extlinux.conf b/board/friendlyarm/nanopi-m4/extlinux.conf
 new file mode 100644
-index 0000000000..ea081a1f0b
+index 0000000000..fb24f09eb1
 --- /dev/null
-+++ b/board/pine64/rockpro64/extlinux.conf
++++ b/board/friendlyarm/nanopi-m4/extlinux.conf
 @@ -0,0 +1,4 @@
-+label RK3399_ROCKPRO64 linux
++label RK3399_NANOPI_M4 linux
 +  kernel /Image
-+  devicetree /rk3399-rockpro64.dtb
-+  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p4 rw rootwait
-diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
++  devicetree /rk3399-nanopi-m4.dtb
++  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk1p4 rw rootwait
+diff --git a/board/friendlyarm/nanopi-m4/genimage.cfg b/board/friendlyarm/nanopi-m4/genimage.cfg
 new file mode 100644
-index 0000000000..0ba25c0eef
+index 0000000000..f14d493a9b
 --- /dev/null
-+++ b/board/pine64/rockpro64/genimage.cfg
++++ b/board/friendlyarm/nanopi-m4/genimage.cfg
 @@ -0,0 +1,39 @@
 +image boot.vfat {
 +	vfat {
 +		files = {
 +			"Image",
-+			"rk3399-rockpro64.dtb",
++			"rk3399-nanopi-m4.dtb",
 +			"extlinux"
 +		}
 +	}
@@ -118,30 +114,29 @@ index 0000000000..0ba25c0eef
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/pine64/rockpro64/post-build.sh b/board/pine64/rockpro64/post-build.sh
+diff --git a/board/friendlyarm/nanopi-m4/post-build.sh b/board/friendlyarm/nanopi-m4/post-build.sh
 new file mode 100755
 index 0000000000..ba29375c05
 --- /dev/null
-+++ b/board/pine64/rockpro64/post-build.sh
++++ b/board/friendlyarm/nanopi-m4/post-build.sh
 @@ -0,0 +1,5 @@
 +#!/bin/sh
 +
 +BOARD_DIR="$(dirname $0)"
 +
 +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-diff --git a/board/pine64/rockpro64/readme.txt b/board/pine64/rockpro64/readme.txt
+diff --git a/board/friendlyarm/nanopi-m4/readme.txt b/board/friendlyarm/nanopi-m4/readme.txt
 new file mode 100644
-index 0000000000..de86970104
+index 0000000000..4a606cf97a
 --- /dev/null
-+++ b/board/pine64/rockpro64/readme.txt
-@@ -0,0 +1,60 @@
-+PINE64 ROCKPro64
-+================
-+https://www.pine64.org/rockpro64/
++++ b/board/friendlyarm/nanopi-m4/readme.txt
+@@ -0,0 +1,45 @@
++FriendlyARM NANOPI-M4
++=====================
 +
 +Build:
-+======
-+  $ make rockpro64_defconfig
++
++  $ make nanopi_m4_defconfig
 +  $ make
 +
 +Files created in output directory
@@ -154,7 +149,7 @@ index 0000000000..de86970104
 +????????? extlinux
 +????????? idbloader.img
 +????????? Image
-+????????? rk3399-rockpro64.dtb
++????????? rk3399-nanopi-m4.dtb
 +????????? rootfs.ext2
 +????????? rootfs.ext4 -> rootfs.ext2
 +????????? rootfs.tar
@@ -169,37 +164,23 @@ index 0000000000..de86970104
 +
 +sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
 +
-+Where X is your SD card device.
++Where X is your SD card device
 +
-+Booting:
-+========
-+RockPro64 has a 40-pin PI-2 GPIO Bus.
++Serial console
++--------------
 +
-+Connect a jumper between pin 23 and pin 25 for SD card boot.
-+
-+Serial console:
-+---------------
-+The pin layout for serial console on PI-2 GPIO Bus is as follows:
-+
-+pin 6:  gnd
-+pin 8:  tx
-+pin 10: rx
-+
-+Initially connect pin 6 and pin 8(transmit). Apply power to RockPro64, once the
-+power is on then connect pin 10(receive).
-+
-+Baudrate for this board is 1500000.
++Baudrate for this board is 1500000
 +
 +Login:
 +------
 +Enter 'root' as login user, and the prompt is ready.
 +
-+https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/rockpro64.html
-diff --git a/configs/rockpro64_defconfig b/configs/rockpro64_defconfig
++https://wiki.amarulasolutions.com/bsp/rockchip/rk3399/nanopi_m4.html
+diff --git a/configs/nanopi_m4_defconfig b/configs/nanopi_m4_defconfig
 new file mode 100644
-index 0000000000..5086320cbc
+index 0000000000..9c3f58f200
 --- /dev/null
-+++ b/configs/rockpro64_defconfig
++++ b/configs/nanopi_m4_defconfig
 @@ -0,0 +1,53 @@
 +# Architecture
 +BR2_aarch64=y
@@ -223,7 +204,7 @@ index 0000000000..5086320cbc
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-m4-rk3399"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
@@ -239,12 +220,12 @@ index 0000000000..5086320cbc
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rockpro64"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopi-m4"
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="rockpro64"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to ROCKPRO64"
++BR2_TARGET_GENERIC_HOSTNAME="nanopi-m4"
++BR2_TARGET_GENERIC_ISSUE="Welcome to NANOPI-M4"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -252,5 +233,5 @@ index 0000000000..5086320cbc
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rockpro64/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rockpro64/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-m4/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-m4/post-build.sh"
