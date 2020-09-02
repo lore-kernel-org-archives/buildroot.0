@@ -1,266 +1,176 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 02 Sep 2020 16:24:37 -0000
-Subject: [Buildroot] [git commit] package/lua: add 5.4.0 version
-Message-ID: <20200902161633.5D2A28752B@busybox.osuosl.org>
+Date: Wed, 02 Sep 2020 16:24:38 -0000
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.55.1
+Message-ID: <20200902161635.01C6385EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5ea243b56aa88b011fe423adde6e682b2423e22
+commit: https://git.buildroot.net/buildroot/commit/?id=49493d4cae420f62b282785ba5d08518020b34d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Drop fix rpath match pattern patch which is now upstream.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua/5.4.0/0001-root-path.patch           | 17 ++++++
- package/lua/5.4.0/0002-shared-libs-for-lua.patch | 78 ++++++++++++++++++++++++
- package/lua/5.4.0/0011-linenoise.patch           | 25 ++++++++
- package/lua/Config.in                            |  6 +-
- package/lua/lua.hash                             |  3 +
- package/lua/lua.mk                               | 10 ++-
- package/luainterpreter/Config.in                 |  4 ++
- package/pkg-luarocks.mk                          |  3 +
- 8 files changed, 142 insertions(+), 4 deletions(-)
+ .../0003-backends-fix-rpath-match-pattern.patch    | 123 ---------------------
+ package/meson/meson.hash                           |   4 +-
+ package/meson/meson.mk                             |   2 +-
+ 3 files changed, 3 insertions(+), 126 deletions(-)
 
-diff --git a/package/lua/5.4.0/0001-root-path.patch b/package/lua/5.4.0/0001-root-path.patch
-new file mode 100644
-index 0000000000..588fecb12d
---- /dev/null
-+++ b/package/lua/5.4.0/0001-root-path.patch
-@@ -0,0 +1,17 @@
-+Adjust installation location to /usr.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/luaconf.h
-+===================================================================
-+--- a/src/luaconf.h
-++++ b/src/luaconf.h
-+@@ -227,7 +227,7 @@
-+ 
-+ #else			/* }{ */
-+ 
-+-#define LUA_ROOT	"/usr/local/"
-++#define LUA_ROOT	"/usr/"
-+ #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
-+ #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
-+ 
-diff --git a/package/lua/5.4.0/0002-shared-libs-for-lua.patch b/package/lua/5.4.0/0002-shared-libs-for-lua.patch
-new file mode 100644
-index 0000000000..4ff2044298
---- /dev/null
-+++ b/package/lua/5.4.0/0002-shared-libs-for-lua.patch
-@@ -0,0 +1,78 @@
-+Add the compilation of a shared library.
-+Compile the lua binary with the shared library.
-+And install the shared library.
-+The variable BUILDMODE allows to switch between static and dynamic mode.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -42,6 +42,7 @@
-+ TO_BIN= lua luac
-+ TO_INC= lua.h luaconf.h lualib.h lauxlib.h lua.hpp
-+ TO_LIB= liblua.a
-++TO_SOLIB = liblua.so.$(R)
-+ TO_MAN= lua.1 luac.1
-+ 
-+ # Lua version and release.
-+@@ -57,6 +58,8 @@
-+ install: dummy
-+ 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD)
-+ 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
-++	test -f src/$(TO_SOLIB) && cd src && $(INSTALL_EXEC) $(TO_SOLIB) $(INSTALL_LIB) || :
-++	test -f src/$(TO_SOLIB) && ln -sf $(TO_SOLIB) $(INSTALL_LIB)/liblua.so || :
-+ 	cd src && $(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
-+ 	cd src && $(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
-+ 	cd doc && $(INSTALL_DATA) $(TO_MAN) $(INSTALL_MAN)
-+Index: b/src/Makefile
-+===================================================================
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -33,6 +33,7 @@
-+ PLATS= guess aix bsd c89 freebsd generic linux linux-readline macosx mingw posix solaris
-+ 
-+ LUA_A=	liblua.a
-++LUA_SO=	liblua.so
-+ CORE_O=	lapi.o lcode.o lctype.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
-+ LIB_O=	lauxlib.o lbaselib.o lcorolib.o ldblib.o liolib.o lmathlib.o loadlib.o loslib.o lstrlib.o ltablib.o lutf8lib.o linit.o
-+ BASE_O= $(CORE_O) $(LIB_O) $(MYOBJS)
-+@@ -44,8 +45,13 @@
-+ LUAC_O=	luac.o
-+ 
-+ ALL_O= $(BASE_O) $(LUA_O) $(LUAC_O)
-++ifneq (dynamic,$(BUILDMODE))
-+ ALL_T= $(LUA_A) $(LUA_T) $(LUAC_T)
-++else
-++ALL_T= $(LUA_A) $(LUA_SO) $(LUA_T) $(LUAC_T)
-++endif
-+ ALL_A= $(LUA_A)
-++ALL_SO= $(LUA_SO)
-+ 
-+ # Targets start here.
-+ default: $(PLAT)
-+@@ -56,12 +62,23 @@
-+ 
-+ a:	$(ALL_A)
-+ 
-++so:	$(ALL_SO)
-++
-+ $(LUA_A): $(BASE_O)
-+ 	$(AR) $@ $(BASE_O)
-+ 	$(RANLIB) $@
-+ 
-++$(LUA_SO): $(CORE_O) $(LIB_O)
-++	$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
-++	ln -fs $@.$(PKG_VERSION) $@
-++
-++ifneq (dynamic,$(BUILDMODE))
-+ $(LUA_T): $(LUA_O) $(LUA_A)
-+ 	$(CC) -o $@ $(LDFLAGS) $(LUA_O) $(LUA_A) $(LIBS)
-++else
-++$(LUA_T): $(LUA_O) $(LUA_SO)
-++	$(CC) -o $@ -L. $(LDFLAGS) $(LUA_O) -llua $(LIBS)
-++endif
-+ 
-+ $(LUAC_T): $(LUAC_O) $(LUA_A)
-+ 	$(CC) -o $@ $(LDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-diff --git a/package/lua/5.4.0/0011-linenoise.patch b/package/lua/5.4.0/0011-linenoise.patch
-new file mode 100644
-index 0000000000..e842e5b1ef
---- /dev/null
-+++ b/package/lua/5.4.0/0011-linenoise.patch
-@@ -0,0 +1,25 @@
-+Add support of linenoise (replace readline)
-+
-+see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/src/lua.c
-+===================================================================
-+--- a/src/lua.c
-++++ b/src/lua.c
-+@@ -401,6 +401,14 @@
-+ #define lua_saveline(L,line)	((void)L, add_history(line))
-+ #define lua_freeline(L,b)	((void)L, free(b))
-+ 
-++#elif defined(LUA_USE_LINENOISE)
-++
-++#include <linenoise.h>
-++#define lua_initreadline(L)	((void)L)
-++#define lua_readline(L,b,p)	((void)L, ((b)=linenoise(p)) != NULL)
-++#define lua_saveline(L,line)	((void)L, linenoiseHistoryAdd(line))
-++#define lua_freeline(L,b)	((void)L, free(b))
-++
-+ #else				/* }{ */
-+ 
-+ #define lua_initreadline(L)  ((void)L)
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index d6ddc708e7..5d4cee5d5b 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -26,9 +26,13 @@ config BR2_PACKAGE_LUA_5_3
- 	bool "Lua 5.3.x"
- 	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_3
- 
-+config BR2_PACKAGE_LUA_5_4
-+	bool "Lua 5.4.x"
-+	select BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_4
-+
- endchoice
- 
--if BR2_PACKAGE_LUA_5_3
-+if BR2_PACKAGE_LUA_5_3 || BR2_PACKAGE_LUA_5_4
- config BR2_PACKAGE_LUA_32BITS
- 	bool "Use 32 bit numbers"
- 	default y if !BR2_ARCH_IS_64
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index 3e7812b7dc..ab72480e55 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -1,4 +1,7 @@
- # Hashes from: http://www.lua.org/ftp/
-+md5 dbf155764e5d433fc55ae80ea7060b60           lua-5.4.0.tar.gz
-+sha1 8cdbffa8a214a23d190d7c45f38c19518ae62e89  lua-5.4.0.tar.gz
-+
- md5 4f4b4f323fd3514a68e0ab3da8ce3455           lua-5.3.5.tar.gz
- sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
- 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index ce75af6b02..ee604b6121 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -4,7 +4,9 @@
+diff --git a/package/meson/0003-backends-fix-rpath-match-pattern.patch b/package/meson/0003-backends-fix-rpath-match-pattern.patch
+deleted file mode 100644
+index f4477b59d2..0000000000
+--- a/package/meson/0003-backends-fix-rpath-match-pattern.patch
++++ /dev/null
+@@ -1,123 +0,0 @@
+-From 1ce4258c219fe08b6d6eaa6aa944f27d91d054cb Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Sat, 18 Jul 2020 17:01:33 -0600
+-Subject: [PATCH] backends: fix rpath match pattern
+-
+-Since -Wl,-rpath= is not the only valid rpath ldflags syntax we
+-need to try and match all valid rpath ldflags.
+-
+-In addition we should prevent -Wl,--just-symbols from being used to
+-set rpath due to inconsistent compiler support.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-[james.hilliard1 at gmail.com: backport from upstream commit
+-1ce4258c219fe08b6d6eaa6aa944f27d91d054cb]
+----
+- mesonbuild/backend/backends.py | 30 ++++++++++++++++++++++++--
+- run_unittests.py               | 39 +++++++++++++++++++++++-----------
+- 2 files changed, 55 insertions(+), 14 deletions(-)
+-
+-diff --git a/mesonbuild/backend/backends.py b/mesonbuild/backend/backends.py
+-index cfd3a397f..e053f67e6 100644
+---- a/mesonbuild/backend/backends.py
+-+++ b/mesonbuild/backend/backends.py
+-@@ -14,6 +14,7 @@
+- 
+- from collections import OrderedDict
+- from functools import lru_cache
+-+from pathlib import Path
+- import enum
+- import json
+- import os
+-@@ -455,10 +456,35 @@ class Backend:
+-                 args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
+-             except Exception:
+-                 pass
+-+        # Match rpath formats:
+-+        # -Wl,-rpath=
+-+        # -Wl,-rpath,
+-+        rpath_regex = re.compile(r'-Wl,-rpath[=,]([^,]+)')
+-+        # Match solaris style compat runpath formats:
+-+        # -Wl,-R
+-+        # -Wl,-R,
+-+        runpath_regex = re.compile(r'-Wl,-R[,]?([^,]+)')
+-+        # Match symbols formats:
+-+        # -Wl,--just-symbols=
+-+        # -Wl,--just-symbols,
+-+        symbols_regex = re.compile(r'-Wl,--just-symbols[=,]([^,]+)')
+-         for arg in args:
+--            if arg.startswith('-Wl,-rpath='):
+--                for dir in arg.replace('-Wl,-rpath=','').split(':'):
+-+            rpath_match = rpath_regex.match(arg)
+-+            if rpath_match:
+-+                for dir in rpath_match.group(1).split(':'):
+-                     dirs.add(dir)
+-+            runpath_match = runpath_regex.match(arg)
+-+            if runpath_match:
+-+                for dir in runpath_match.group(1).split(':'):
+-+                    # The symbols arg is an rpath if the path is a directory
+-+                    if Path(dir).is_dir():
+-+                        dirs.add(dir)
+-+            symbols_match = symbols_regex.match(arg)
+-+            if symbols_match:
+-+                for dir in symbols_match.group(1).split(':'):
+-+                    # Prevent usage of --just-symbols to specify rpath
+-+                    if Path(dir).is_dir():
+-+                        raise MesonException('Invalid arg for --just-symbols, {} is a directory.'.format(dir))
+-         return dirs
+- 
+-     def rpaths_for_bundled_shared_libraries(self, target, exclude_system=True):
+-diff --git a/run_unittests.py b/run_unittests.py
+-index b5294b9f8..73131c75b 100755
+---- a/run_unittests.py
+-+++ b/run_unittests.py
+-@@ -6473,19 +6473,34 @@ class LinuxlikeTests(BasePlatformTests):
+-         self.init(yonder_dir)
+-         self.build()
+-         self.install(use_destdir=False)
+--        self.new_builddir()
+- 
+--        # Build an app that uses that installed library.
+--        # Supply the rpath to the installed library via LDFLAGS
+--        # (as systems like buildroot and guix are wont to do)
+--        # and verify install preserves that rpath.
+--        env = {'LDFLAGS': '-Wl,-rpath=' + yonder_libdir,
+--               'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
+--        self.init(testdir, override_envvars=env)
+--        self.build()
+--        self.install(use_destdir=False)
+--        got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
+--        self.assertEqual(got_rpath, yonder_libdir)
+-+        # Since rpath has multiple valid formats we need to
+-+        # test that they are all properly used.
+-+        rpath_formats = [
+-+            ('-Wl,-rpath=', False),
+-+            ('-Wl,-rpath,', False),
+-+            ('-Wl,--just-symbols=', True),
+-+            ('-Wl,--just-symbols,', True),
+-+            ('-Wl,-R', False),
+-+            ('-Wl,-R,', False)
+-+        ]
+-+        for rpath_format, exception in rpath_formats:
+-+            # Build an app that uses that installed library.
+-+            # Supply the rpath to the installed library via LDFLAGS
+-+            # (as systems like buildroot and guix are wont to do)
+-+            # and verify install preserves that rpath.
+-+            self.new_builddir()
+-+            env = {'LDFLAGS': rpath_format + yonder_libdir,
+-+                   'PKG_CONFIG_PATH': os.path.join(yonder_libdir, 'pkgconfig')}
+-+            if exception:
+-+                with self.assertRaises(subprocess.CalledProcessError):
+-+                    self.init(testdir, override_envvars=env)
+-+                break
+-+            self.init(testdir, override_envvars=env)
+-+            self.build()
+-+            self.install(use_destdir=False)
+-+            got_rpath = get_rpath(os.path.join(yonder_prefix, 'bin/rpathified'))
+-+            self.assertEqual(got_rpath, yonder_libdir, rpath_format)
+- 
+-     @skip_if_not_base_option('b_sanitize')
+-     def test_pch_with_address_sanitizer(self):
+--- 
+-2.25.1
+-
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index c88ea8e904..331e50c038 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.55.0/meson-0.55.0.tar.gz.asc
+-sha256  0a1ae2bfe2ae14ac47593537f93290fb79e9b775c55b4c53c282bc3ca3745b35  meson-0.55.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.55.1/meson-0.55.1.tar.gz.asc
++sha256  3b5741f884e04928bdfa1947467ff06afa6c98e623c25cef75adf71ca39ce080  meson-0.55.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index f698226a45..8633a2f717 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_4),y)
-+LUA_VERSION = 5.4.0
-+else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.5
- else
- LUA_VERSION = 5.1.5
-@@ -12,7 +14,7 @@ endif
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- LUA_LICENSE = MIT
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
- LUA_LICENSE_FILES = doc/readme.html
- else
- LUA_LICENSE_FILES = COPYRIGHT
-@@ -22,7 +24,9 @@ LUA_PROVIDES = luainterpreter
- 
- LUA_CFLAGS = -Wall -fPIC -DLUA_USE_POSIX
- 
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_4),y)
-+LUA_CFLAGS += -DLUA_COMPAT_5_3
-+else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_CFLAGS += -DLUA_COMPAT_5_2
- endif
- 
-diff --git a/package/luainterpreter/Config.in b/package/luainterpreter/Config.in
-index d35b35ff31..873fb345b9 100644
---- a/package/luainterpreter/Config.in
-+++ b/package/luainterpreter/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION
- 	string
- 	default "5.1" if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	default "5.3" if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_3
-+	default "5.4" if BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_4
- 
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- 	bool
-@@ -16,6 +17,9 @@ config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
- config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_3
- 	bool
- 
-+config BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_4
-+	bool
-+
- config BR2_PACKAGE_PROVIDES_HOST_LUAINTERPRETER
- 	string
- 	default "host-lua"
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index 603c0851b4..81a6cf208a 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -23,6 +23,9 @@ HOST_LUAROCKS_CFLAGS = $(HOST_CFLAGS) -fPIC
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
- HOST_LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
-+else ifeq ($(BR2_PACKAGE_LUA_5_4),y)
-+LUAROCKS_CFLAGS += -DLUA_COMPAT_5_3
-+HOST_LUAROCKS_CFLAGS += -DLUA_COMPAT_5_3
- endif
- 
- ################################################################################
+-MESON_VERSION = 0.55.0
++MESON_VERSION = 0.55.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
