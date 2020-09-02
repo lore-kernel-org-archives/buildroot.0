@@ -1,55 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:33 -0000
-Subject: [Buildroot] [git commit] package/python-wtforms: bump to version
- 2.3.3
-Message-ID: <20200902161634.132E085EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uredir: new package
+Message-ID: <20200902161634.78B1085EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3e6c5c6607bbb35ceff83c3ceceeb23d7837631
+commit: https://git.buildroot.net/buildroot/commit/?id=0d752c79473e98254f06476f191f0d800939ce82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add docs/license.rst to PYTHON_WTFORMS_LICENSE_FILES
-
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wtforms/python-wtforms.hash | 4 ++--
- package/python-wtforms/python-wtforms.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/uredir/Config.in   |  9 +++++++++
+ package/uredir/uredir.hash |  4 ++++
+ package/uredir/uredir.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
-diff --git a/package/python-wtforms/python-wtforms.hash b/package/python-wtforms/python-wtforms.hash
-index 431a20cea1..ed9bfd1a23 100644
---- a/package/python-wtforms/python-wtforms.hash
-+++ b/package/python-wtforms/python-wtforms.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/wtforms/json
--md5  bff06943e59671581af07f80d14bda5f  WTForms-2.3.1.tar.gz
--sha256  861a13b3ae521d6700dac3b2771970bd354a63ba7043ecc3a82b5288596a1972  WTForms-2.3.1.tar.gz
-+md5  2b6ea167a71c6becf20f0934417fd06c  WTForms-2.3.3.tar.gz
-+sha256  81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c  WTForms-2.3.3.tar.gz
- # Locally computed sha256 checksums
- sha256  cf40d60ff34f6b2b68a53d220f8b66567b5ac8dd1119b37b62fd15e9518fe59b  LICENSE.rst
- sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
-diff --git a/package/python-wtforms/python-wtforms.mk b/package/python-wtforms/python-wtforms.mk
-index c47bd0b748..23280a6fe5 100644
---- a/package/python-wtforms/python-wtforms.mk
-+++ b/package/python-wtforms/python-wtforms.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 516e259831..eb6df1ae7e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2063,6 +2063,7 @@ F:	package/qt5/
+ F:	package/quotatool/
+ F:	package/racehound/
+ F:	package/redir/
++F:	package/uredir/
  
--PYTHON_WTFORMS_VERSION = 2.3.1
-+PYTHON_WTFORMS_VERSION = 2.3.3
- PYTHON_WTFORMS_SOURCE = WTForms-$(PYTHON_WTFORMS_VERSION).tar.gz
--PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/68/7a/4ce1636e03a25585f3e1436179232a66c25e53ef17f01b4384d16ace6d61
-+PYTHON_WTFORMS_SITE = https://files.pythonhosted.org/packages/dd/3f/f25d26b1c66896e2876124a12cd8be8f606abf4e1890a20f3ca04e4a1555
- PYTHON_WTFORMS_SETUP_TYPE = setuptools
- PYTHON_WTFORMS_LICENSE = BSD-3-Clause
--PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst
-+PYTHON_WTFORMS_LICENSE_FILES = LICENSE.rst docs/license.rst
- 
- $(eval $(python-package))
+ N:	Peter Thompson <peter.macleod.thompson@gmail.com>
+ F:	package/sdl2_gfx/
+diff --git a/package/Config.in b/package/Config.in
+index 6bd2699354..d8d9b7617f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2235,6 +2235,7 @@ endif
+ 	source "package/uhttpd/Config.in"
+ 	source "package/ulogd/Config.in"
+ 	source "package/unbound/Config.in"
++	source "package/uredir/Config.in"
+ 	source "package/ushare/Config.in"
+ 	source "package/ussp-push/Config.in"
+ 	source "package/vde2/Config.in"
+diff --git a/package/uredir/Config.in b/package/uredir/Config.in
+new file mode 100644
+index 0000000000..99206cfe47
+--- /dev/null
++++ b/package/uredir/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_UREDIR
++	bool "uredir"
++	select BR2_PACKAGE_LIBUEV
++	help
++	  A small Linux daemon to redirect UDP connections. It can be
++	  used to forward connections on small and embedded systems that
++	  do not have (or want to use) iptables.
++
++	  https://github.com/troglobit/uredir
+diff --git a/package/uredir/uredir.hash b/package/uredir/uredir.hash
+new file mode 100644
+index 0000000000..00c816c2dd
+--- /dev/null
++++ b/package/uredir/uredir.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/troglobit/uredir/releases/download/v3.3/uredir-3.3.tar.gz.md5
++md5  a42ee27e84de2e08e35ee733508bb6ea  uredir-3.3.tar.gz
++# License files
++sha256  e4b8fd3375ce44e5e03be199724a8785510ea5fa58ed92a7a34fd0ccbd35db10  LICENSE
+diff --git a/package/uredir/uredir.mk b/package/uredir/uredir.mk
+new file mode 100644
+index 0000000000..6ca394730e
+--- /dev/null
++++ b/package/uredir/uredir.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# uredir
++#
++################################################################################
++
++UREDIR_VERSION = 3.3
++UREDIR_SOURCE = uredir-$(UREDIR_VERSION).tar.gz
++UREDIR_SITE = https://github.com/troglobit/uredir/releases/download/v$(UREDIR_VERSION)
++UREDIR_LICENSE = ISC
++UREDIR_LICENSE_FILES = LICENSE
++UREDIR_DEPENDENCIES = host-pkgconf libuev
++
++$(eval $(autotools-package))
