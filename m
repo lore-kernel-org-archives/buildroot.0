@@ -1,54 +1,47 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  2 Sep 2020 17:08:32 +0200
-Subject: [Buildroot] [PATCH 1/7] package/perl-html-parser: bump to version
- 3.75
-Message-ID: <20200902150838.874797-1-francois.perrad@gadz.org>
+Date: Wed,  2 Sep 2020 17:08:33 +0200
+Subject: [Buildroot] [PATCH 2/7] package/perl-http-entity-parser: bump to
+ version 0.24
+In-Reply-To: <20200902150838.874797-1-francois.perrad@gadz.org>
+References: <20200902150838.874797-1-francois.perrad@gadz.org>
+Message-ID: <20200902150838.874797-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-now, license has its own file
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-html-parser/perl-html-parser.hash | 6 +++---
- package/perl-html-parser/perl-html-parser.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/perl-http-entity-parser/perl-http-entity-parser.hash | 4 ++--
+ package/perl-http-entity-parser/perl-http-entity-parser.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
-index f06ec034b..021ef26c6 100644
---- a/package/perl-html-parser/perl-html-parser.hash
-+++ b/package/perl-html-parser/perl-html-parser.hash
+diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.hash b/package/perl-http-entity-parser/perl-http-entity-parser.hash
+index 700aa86b9..882bf0a3d 100644
+--- a/package/perl-http-entity-parser/perl-http-entity-parser.hash
++++ b/package/perl-http-entity-parser/perl-http-entity-parser.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    eb7505e5f626913350df9dd4a03d54a8 HTML-Parser-3.72.tar.gz
--sha256 ec28c7e1d9e67c45eca197077f7cdc41ead1bb4c538c7f02a3296a4bb92f608b HTML-Parser-3.72.tar.gz
-+md5  65bf65aa8b34b35443e094010f991406  HTML-Parser-3.75.tar.gz
-+sha256  ac6b5e25a8df7af54885201e91c45fb9ab6744c08cedc1a38fcc7d95d21193a9  HTML-Parser-3.75.tar.gz
+-md5  c03e68f03c55c360a3030c458c46d9dd  HTTP-Entity-Parser-0.23.tar.gz
+-sha256  15e671914ebd865d5396802ef2100a9db2218372983a63f4761c897c73e3c46f  HTTP-Entity-Parser-0.23.tar.gz
++md5  b5ead58775c2f151f2174651807fdf2d  HTTP-Entity-Parser-0.24.tar.gz
++sha256  f68e0fc87150cb9241ac23d7226fc2a35324d2e8990830c1e2a7203244f1e612  HTTP-Entity-Parser-0.24.tar.gz
  
  # computed by scancpan
--sha256 663867028ae22c6f2fabab11238f65f1bf8dd789233b844bead5f6d22220d160 README
-+sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
-diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
-index 6e5a81bb7..93e4f6745 100644
---- a/package/perl-html-parser/perl-html-parser.mk
-+++ b/package/perl-html-parser/perl-html-parser.mk
-@@ -4,11 +4,11 @@
+ sha256  79c2a066104e71602785fd815c5aea6f7db78c19451d68521380083f9c2a8805  LICENSE
+diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+index 1712b3cbc..0b09ea41c 100644
+--- a/package/perl-http-entity-parser/perl-http-entity-parser.mk
++++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTML_PARSER_VERSION = 3.72
-+PERL_HTML_PARSER_VERSION = 3.75
- PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
--PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
- PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
--PERL_HTML_PARSER_LICENSE_FILES = README
-+PERL_HTML_PARSER_LICENSE_FILES = LICENSE
- PERL_HTML_PARSER_DISTNAME = HTML-Parser
- 
- $(eval $(perl-package))
+-PERL_HTTP_ENTITY_PARSER_VERSION = 0.23
++PERL_HTTP_ENTITY_PARSER_VERSION = 0.24
+ PERL_HTTP_ENTITY_PARSER_SOURCE = HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
+ PERL_HTTP_ENTITY_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+ PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
 -- 
 2.25.1
