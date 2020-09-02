@@ -1,104 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:33 -0000
-Subject: [Buildroot] [git commit] package/stress-ng: bump version to 0.11.17
-Message-ID: <20200902161633.B15BD85EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuev: new package
+Message-ID: <20200902161634.6D60585EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5b849acb0f05de06c5aa327c33f7ca4ea5204f6
+commit: https://git.buildroot.net/buildroot/commit/?id=5a7bc8decdb913ca263ac54fc963d84bdb0b49dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumps stress-ng version to 0.11.17.
-
-This version includes the patch that fixes musl build at commit
-03416938871388243d28621f4b59ce532231f11c, and also fixes a
-"Invalid syntax in conditional" build error in a Makefile.
-
-Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-stress-ng.h-suppress-kernel-sysinfo.h.patch | 49 ----------------------
- package/stress-ng/stress-ng.hash                   |  2 +-
- package/stress-ng/stress-ng.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 51 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/libuev/Config.in   |  6 ++++++
+ package/libuev/libuev.hash |  4 ++++
+ package/libuev/libuev.mk   | 15 +++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch b/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
-deleted file mode 100644
-index cc8b1a1b67..0000000000
---- a/package/stress-ng/0001-stress-ng.h-suppress-kernel-sysinfo.h.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 8c223daf10319f15570a74ed83a1d655fdbd4a7b Mon Sep 17 00:00:00 2001
--Message-Id: <8c223daf10319f15570a74ed83a1d655fdbd4a7b.1592540443.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 19 Jun 2020 07:10:24 +0300
--Subject: [PATCH] stress-ng.h: suppress kernel sysinfo.h
--
--The kernel sysinfo.h (indirectly included from genetlink.h) defines
--struct sysinfo. This collides with musl libc definition of the same
--struct.
--
--Fixes this build issue:
--
--In file included from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/kernel.h:5,
--                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/netlink.h:5,
--                 from .../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/genetlink.h:6,
--                 from stress-ng.h:464,
--                 from stress-access.c:25:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/linux/sysinfo.h:8:8: error: redefinition of ???struct sysinfo???
-- struct sysinfo {
--        ^~~~~~~
--In file included from stress-ng.h:389,
--                 from stress-access.c:25:
--.../arm-buildroot-linux-musleabihf/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
-- struct sysinfo {
--        ^~~~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://github.com/ColinIanKing/stress-ng/pull/69
--
-- stress-ng.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/stress-ng.h b/stress-ng.h
--index 1a662938c1d9..e8aa0efe7527 100644
----- a/stress-ng.h
--+++ b/stress-ng.h
--@@ -387,6 +387,8 @@
-- 
-- #if defined(HAVE_SYS_SYSINFO_H)
-- #include <sys/sysinfo.h>
--+/* Suppress kernel sysinfo to avoid collision with musl */
--+#define _LINUX_SYSINFO_H
-- #endif
-- 
-- #if defined(HAVE_SYS_SYSMACROS_H)
---- 
--2.27.0
--
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 9993c759ba..5250a22475 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b21436fdbd9dc482a3fd95ae27cccf0097d0f226361ea3785215f7a4ad50136b  stress-ng-0.11.14.tar.xz
-+sha256  860291dd3a18b985b3483190a627bbede2b5c52113766c1921001b3fb4b83af0  stress-ng-0.11.17.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 61bc07d60a..57464e9bbf 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.11.14
-+STRESS_NG_VERSION = 0.11.17
- STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9a161c8036..516e259831 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2054,6 +2054,7 @@ F:	package/gstreamer1/gst1-validate/
+ F:	package/gstreamer1/gstreamer1-editing-services/
+ F:	package/iwd/
+ F:	package/libevdev/
++F:	package/libuev/
+ F:	package/log4cplus/
+ F:	package/postgresql/
+ F:	package/python-colorzero/
+diff --git a/package/Config.in b/package/Config.in
+index f122983724..6bd2699354 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1738,6 +1738,7 @@ menu "Networking"
+ 	source "package/libtirpc/Config.in"
+ 	source "package/libtorrent/Config.in"
+ 	source "package/libtorrent-rasterbar/Config.in"
++	source "package/libuev/Config.in"
+ 	source "package/libuhttpd/Config.in"
+ 	source "package/libupnp/Config.in"
+ 	source "package/libupnp18/Config.in"
+diff --git a/package/libuev/Config.in b/package/libuev/Config.in
+new file mode 100644
+index 0000000000..bb50099cee
+--- /dev/null
++++ b/package/libuev/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBUEV
++	bool "libuev"
++	help
++	  Simple event loop for Linux.
++
++	  https://github.com/troglobit/libuev
+diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
+new file mode 100644
+index 0000000000..fece0e9b65
+--- /dev/null
++++ b/package/libuev/libuev.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/troglobit/libuev/releases/download/v2.3.1/libuev-2.3.1.tar.xz.md5
++md5  ec601f69f69477858fa023a75da23793  libuev-2.3.1.tar.xz
++# License files
++sha256  3c2bf3fdd85687242ba6f2b02b6ce5176aba15b5e1a2ccb8b608439197ec4641  LICENSE
+diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
+new file mode 100644
+index 0000000000..c7b73b4221
+--- /dev/null
++++ b/package/libuev/libuev.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libuev
++#
++################################################################################
++
++LIBUEV_VERSION = 2.3.1
++LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
++LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
++LIBUEV_LICENSE = MIT
++LIBUEV_LICENSE_FILES = LICENSE
++LIBUEV_INSTALL_STAGING = YES
++LIBUEV_CONF_OPTS = --disable-examples
++
++$(eval $(autotools-package))
