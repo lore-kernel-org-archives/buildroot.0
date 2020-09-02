@@ -1,63 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:34 -0000
-Subject: [Buildroot] [git commit] package/lua-cqueues: disable temporarily
- with Lua 5.4
-Message-ID: <20200902161633.7DE677FEBA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lualogging: bump to version 1.4.0
+Message-ID: <20200902161634.4DA5885EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9131770c390d2a7eb195062f919a9373ef4dd3b2
+commit: https://git.buildroot.net/buildroot/commit/?id=2c2e5355c9de87203dcca536b2c0e4ba04dc2ad5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also take into account its lua-http reverse dependency.
+diff of the COPYRIGHT file that explains the license file hash change:
+- Copyright (c) 2004-2013 Kepler Project.
++ Copyright (c) 2004-2020 Kepler Project.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-cqueues/Config.in | 5 +++--
- package/lua-http/Config.in    | 5 +++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/lualogging/Config.in       | 2 +-
+ package/lualogging/lualogging.hash | 4 ++--
+ package/lualogging/lualogging.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lua-cqueues/Config.in b/package/lua-cqueues/Config.in
-index 60f022848b..c319fbdf4d 100644
---- a/package/lua-cqueues/Config.in
-+++ b/package/lua-cqueues/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUA_CQUEUES
- 	bool "lua-cqueues"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Continuation Queues: Embeddable asynchronous networking,
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_LUA_CQUEUES
+diff --git a/package/lualogging/Config.in b/package/lualogging/Config.in
+index a1ed775fb1..79e352a752 100644
+--- a/package/lualogging/Config.in
++++ b/package/lualogging/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LUALOGGING
+ 	  supports, through the use of appenders, console, file, rolling
+ 	  file, email, socket and SQL outputs.
  
- 	  http://25thandclement.com/~william/projects/cqueues.html
+-	  https://github.com/Neopallium/lualogging
++	  https://github.com/keplerproject/lualogging
+diff --git a/package/lualogging/lualogging.hash b/package/lualogging/lualogging.hash
+index e2ba5df3a8..6cd82ab2ec 100644
+--- a/package/lualogging/lualogging.hash
++++ b/package/lualogging/lualogging.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 6ca3827c4903814626b96011e17ad99b42ecfa983b605aa75bf58f17e90ed58d  lualogging-1.3.0-1.src.rock
+-sha256 4e86086c032a006ce1289565cc9d9afff26b5117891cd26ffa15aa866bd28ee5  lualogging/COPYRIGHT
++sha256 54501b7b84c28fa0c0d310ebfceb6e30be3396bd8aa9caaef7ddfbb0ac0976bc  lualogging-1.4.0-1.src.rock
++sha256 895d1a80efc5fc60236b70c4bf60bdec409c56c75b4ebe4c2da9cb20a1a11908  lualogging/COPYRIGHT
+diff --git a/package/lualogging/lualogging.mk b/package/lualogging/lualogging.mk
+index 3444a29886..26df9e3314 100644
+--- a/package/lualogging/lualogging.mk
++++ b/package/lualogging/lualogging.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "lua-cqueues needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "lua-cqueues needs a toolchain w/ threads, Lua <= 5.3"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
-diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
-index 8eefd481b5..76eff7f299 100644
---- a/package/lua-http/Config.in
-+++ b/package/lua-http/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LUA_HTTP
- 	bool "lua-http"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
-+	depends on !BR2_PACKAGE_LUA_5_4 # lua-cqueues
- 	select BR2_PACKAGE_LPEG # runtime
- 	select BR2_PACKAGE_LUA_BASEXX # runtime
- 	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
-@@ -15,5 +16,5 @@ config BR2_PACKAGE_LUA_HTTP
- 
- 	  https://daurnimator.github.io/lua-http/
- 
--comment "lua-http needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "lua-http needs a toolchain w/ threads, Lua <= 5.3"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
+-LUALOGGING_VERSION = 1.3.0-1
++LUALOGGING_VERSION = 1.4.0-1
+ LUALOGGING_SUBDIR = lualogging
+ LUALOGGING_LICENSE = MIT
+ LUALOGGING_LICENSE_FILES = $(LUALOGGING_SUBDIR)/COPYRIGHT
