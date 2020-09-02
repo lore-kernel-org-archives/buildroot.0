@@ -1,41 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:33 -0000
-Subject: [Buildroot] [git commit] package/luv: disable temporarily with Lua
- 5.4
-Message-ID: <20200902161633.999EA8752B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use aiohttp for
+ upstream URL checking
+Message-ID: <20200902161633.E80A885EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f547f2a7e06a8e37c769b11dc0959acdfded2f9e
+commit: https://git.buildroot.net/buildroot/commit/?id=c8ba6aa13380b894c1dab2599e8d5e5474ba39c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This commit reworks the code that checks if the upstream URL of each
+package (specified by its Config.in file) using the aiohttp
+module. This makes the implementation much more elegant, and avoids
+the problematic multiprocessing Pool which is causing issues in some
+situations.
+
+Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luv/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 46 +++++++++++++++++++++++++---------------------
+ 1 file changed, 25 insertions(+), 21 deletions(-)
 
-diff --git a/package/luv/Config.in b/package/luv/Config.in
-index 434cb3b459..3be204cab3 100644
---- a/package/luv/Config.in
-+++ b/package/luv/Config.in
-@@ -4,13 +4,14 @@ config BR2_PACKAGE_LUV
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
-+	depends on !BR2_PACKAGE_LUA_5_4
- 	select BR2_PACKAGE_LIBUV
- 	help
- 	  libuv bindings for LuaJIT and Lua.
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 3423c44815..70e7fa7a0c 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -25,14 +25,13 @@ import os
+ from collections import defaultdict
+ import re
+ import subprocess
+-import requests  # URL checking
++import requests  # NVD database download
+ import json
+ import ijson
+ import distutils.version
+ import time
+ import gzip
+ import sys
+-from multiprocessing import Pool
  
- 	  https://github.com/luvit/luv
+ sys.path.append('utils/')
+ from getdeveloperlib import parse_developers  # noqa: E402
+@@ -499,26 +498,30 @@ def package_init_make_info():
+             Package.all_ignored_cves[pkgvar] = value.split()
  
--comment "luv needs a toolchain w/ NPTL, dynamic library"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+comment "luv needs a toolchain w/ NPTL, dynamic library, Lua <= 5.3"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+-def check_url_status_worker(url, url_status):
+-    if url_status[0] == 'ok':
+-        try:
+-            url_status_code = requests.head(url, timeout=30).status_code
+-            if url_status_code >= 400:
+-                return ("error", "invalid {}".format(url_status_code))
+-        except requests.exceptions.RequestException:
+-            return ("error", "invalid (err)")
+-        return ("ok", "valid")
+-    return url_status
++async def check_url_status(session, pkg, retry=True):
++    try:
++        async with session.get(pkg.url) as resp:
++            if resp.status >= 400:
++                pkg.status['url'] = ("error", "invalid {}".format(resp.status))
++                return
++    except (aiohttp.ClientError, asyncio.TimeoutError):
++        if retry:
++            return await check_url_status(session, pkg, retry=False)
++        else:
++            pkg.status['url'] = ("error", "invalid (err)")
++            return
+ 
++    pkg.status['url'] = ("ok", "valid")
+ 
+-def check_package_urls(packages):
+-    pool = Pool(processes=64)
+-    for pkg in packages:
+-        pkg.url_worker = pool.apply_async(check_url_status_worker, (pkg.url, pkg.status['url']))
+-    for pkg in packages:
+-        pkg.status['url'] = pkg.url_worker.get(timeout=3600)
+-        del pkg.url_worker
+-    pool.terminate()
++
++async def check_package_urls(packages):
++    tasks = []
++    connector = aiohttp.TCPConnector(limit_per_host=5)
++    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
++        packages = [p for p in packages if p.status['url'][0] == 'ok']
++        for pkg in packages:
++            tasks.append(check_url_status(sess, pkg))
++        await asyncio.wait(tasks)
+ 
+ 
+ def check_package_latest_version_set_status(pkg, status, version, identifier):
+@@ -1068,7 +1071,8 @@ def __main__():
+         pkg.set_url()
+         pkg.set_developers(developers)
+     print("Checking URL status")
+-    check_package_urls(packages)
++    loop = asyncio.get_event_loop()
++    loop.run_until_complete(check_package_urls(packages))
+     print("Getting latest versions ...")
+     loop = asyncio.get_event_loop()
+     loop.run_until_complete(check_package_latest_version(packages))
