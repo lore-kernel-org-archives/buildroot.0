@@ -1,249 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:34 -0000
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use aiohttp for
- latest version retrieval
-Message-ID: <20200902161633.DEE2C85EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/re2: new package
+Message-ID: <20200902161634.9E4EC85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d28b2bc481dcb60382af194b9b868d3bccf46bd6
+commit: https://git.buildroot.net/buildroot/commit/?id=4410ed7a1f519aa8217702f0defb2caf6cb01fbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit reworks the code that retrieves the latest upstream
-version of each package from release-monitoring.org using the aiohttp
-module. This makes the implementation much more elegant, and avoids
-the problematic multiprocessing Pool which is causing issues in some
-situations.
+RE2 is a fast, safe, thread-friendly alternative to backtracking
+regular expression engines like those used in PCRE, Perl, and
+Python. It is a C++ library.
 
-Since we're now using some async functionality, the script is Python
-3.x only, so the shebang is changed to make this clear.
-
-Suggested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 148 +++++++++++++++++++++++++---------------------
- 1 file changed, 81 insertions(+), 67 deletions(-)
+ package/Config.in     |  1 +
+ package/re2/Config.in | 14 ++++++++++++++
+ package/re2/re2.hash  |  3 +++
+ package/re2/re2.mk    | 17 +++++++++++++++++
+ 4 files changed, 35 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index ec4d538758..3423c44815 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- 
- # Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- #
-@@ -16,7 +16,9 @@
- # along with this program; if not, write to the Free Software
- # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- 
-+import aiohttp
- import argparse
-+import asyncio
- import datetime
- import fnmatch
- import os
-@@ -26,13 +28,10 @@ import subprocess
- import requests  # URL checking
- import json
- import ijson
--import certifi
- import distutils.version
- import time
- import gzip
- import sys
--from urllib3 import HTTPSConnectionPool
--from urllib3.exceptions import HTTPError
- from multiprocessing import Pool
- 
- sys.path.append('utils/')
-@@ -54,10 +53,6 @@ CVE_AFFECTS = 1
- CVE_DOESNT_AFFECT = 2
- CVE_UNKNOWN = 3
- 
--# Used to make multiple requests to the same host. It is global
--# because it's used by sub-processes.
--http_pool = None
--
- 
- class Defconfig:
-     def __init__(self, name, path):
-@@ -526,54 +521,88 @@ def check_package_urls(packages):
-     pool.terminate()
- 
- 
--def release_monitoring_get_latest_version_by_distro(pool, name):
--    try:
--        req = pool.request('GET', "/api/project/Buildroot/%s" % name)
--    except HTTPError:
--        return (RM_API_STATUS_ERROR, None, None)
--
--    if req.status != 200:
--        return (RM_API_STATUS_NOT_FOUND, None, None)
-+def check_package_latest_version_set_status(pkg, status, version, identifier):
-+    pkg.latest_version = {
-+        "status": status,
-+        "version": version,
-+        "id": identifier,
-+    }
- 
--    data = json.loads(req.data)
-+    if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
-+        pkg.status['version'] = ('warning', "Release Monitoring API error")
-+    elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
-+        pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
- 
--    if 'version' in data:
--        return (RM_API_STATUS_FOUND_BY_DISTRO, data['version'], data['id'])
-+    if pkg.latest_version['version'] is None:
-+        pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
-+    elif pkg.latest_version['version'] != pkg.current_version:
-+        pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
-     else:
--        return (RM_API_STATUS_FOUND_BY_DISTRO, None, data['id'])
-+        pkg.status['version'] = ('ok', 'up-to-date')
- 
- 
--def release_monitoring_get_latest_version_by_guess(pool, name):
-+async def check_package_get_latest_version_by_distro(session, pkg, retry=True):
-+    url = "https://release-monitoring.org//api/project/Buildroot/%s" % pkg.name
-     try:
--        req = pool.request('GET', "/api/projects/?pattern=%s" % name)
--    except HTTPError:
--        return (RM_API_STATUS_ERROR, None, None)
-+        async with session.get(url) as resp:
-+            if resp.status != 200:
-+                return False
- 
--    if req.status != 200:
--        return (RM_API_STATUS_NOT_FOUND, None, None)
-+            data = await resp.json()
-+            version = data['version'] if 'version' in data else None
-+            check_package_latest_version_set_status(pkg,
-+                                                    RM_API_STATUS_FOUND_BY_DISTRO,
-+                                                    version,
-+                                                    data['id'])
-+            return True
+diff --git a/package/Config.in b/package/Config.in
+index b5285a66a2..81ee3273f8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1945,6 +1945,7 @@ menu "Text and terminal handling"
+ 	source "package/pcre/Config.in"
+ 	source "package/pcre2/Config.in"
+ 	source "package/popt/Config.in"
++	source "package/re2/Config.in"
+ 	source "package/readline/Config.in"
+ 	source "package/slang/Config.in"
+ 	source "package/tclap/Config.in"
+diff --git a/package/re2/Config.in b/package/re2/Config.in
+new file mode 100644
+index 0000000000..004185a4b6
+--- /dev/null
++++ b/package/re2/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_RE2
++	bool "re2"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # needs C++11
++	help
++	  RE2 is a fast, safe, thread-friendly alternative
++	  to backtracking regular expression engines like
++	  those used in PCRE, Perl, and Python.
++	  It is a C++ library.
 +
-+    except (aiohttp.ClientError, asyncio.TimeoutError):
-+        if retry:
-+            return await check_package_get_latest_version_by_distro(session, pkg, retry=False)
-+        else:
-+            return False
- 
--    data = json.loads(req.data)
- 
--    projects = data['projects']
--    projects.sort(key=lambda x: x['id'])
-+async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
-+    url = "https://release-monitoring.org/api/projects/?pattern=%s" % pkg.name
-+    try:
-+        async with session.get(url) as resp:
-+            if resp.status != 200:
-+                return False
++	  https://github.com/google/re2
 +
-+            data = await resp.json()
-+            # filter projects that have the right name and a version defined
-+            projects = [p for p in data['projects'] if p['name'] == pkg.name and 'version' in p]
-+            projects.sort(key=lambda x: x['id'])
++comment "re2 needs a toolchain w/ C++, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+new file mode 100644
+index 0000000000..b8a80513b7
+--- /dev/null
++++ b/package/re2/re2.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  6f4c8514249cd65b9e85d3e6f4c35595809a63ad71c5d93083e4d1dcdf9e0cd6  re2-2020-08-01.tar.gz
++sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+new file mode 100644
+index 0000000000..0a3c204661
+--- /dev/null
++++ b/package/re2/re2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# re2
++#
++################################################################################
 +
-+            if len(projects) > 0:
-+                check_package_latest_version_set_status(pkg,
-+                                                        RM_API_STATUS_FOUND_BY_DISTRO,
-+                                                        projects[0]['version'],
-+                                                        projects[0]['id'])
-+                return True
++RE2_VERSION = 2020-08-01
++RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
++RE2_LICENSE = BSD-3-Clause
++RE2_LICENSE_FILES = LICENSE
++RE2_INSTALL_STAGING = YES
 +
-+    except (aiohttp.ClientError, asyncio.TimeoutError):
-+        if retry:
-+            return await check_package_get_latest_version_by_guess(session, pkg, retry=False)
-+        else:
-+            return False
- 
--    for p in projects:
--        if p['name'] == name and 'version' in p:
--            return (RM_API_STATUS_FOUND_BY_PATTERN, p['version'], p['id'])
- 
--    return (RM_API_STATUS_NOT_FOUND, None, None)
-+async def check_package_latest_version_get(session, pkg):
- 
-+    if await check_package_get_latest_version_by_distro(session, pkg):
-+        return
- 
--def check_package_latest_version_worker(name):
--    """Wrapper to try both by name then by guess"""
--    print(name)
--    res = release_monitoring_get_latest_version_by_distro(http_pool, name)
--    if res[0] == RM_API_STATUS_NOT_FOUND:
--        res = release_monitoring_get_latest_version_by_guess(http_pool, name)
--    return res
-+    if await check_package_get_latest_version_by_guess(session, pkg):
-+        return
- 
-+    check_package_latest_version_set_status(pkg,
-+                                            RM_API_STATUS_NOT_FOUND,
-+                                            None, None)
- 
--def check_package_latest_version(packages):
++RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
++HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
 +
-+async def check_package_latest_version(packages):
-     """
-     Fills in the .latest_version field of all Package objects
- 
-@@ -587,33 +616,17 @@ def check_package_latest_version(packages):
-     - id: string containing the id of the project corresponding to this
-       package, as known by release-monitoring.org
-     """
--    global http_pool
--    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
--                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
--                                    timeout=30)
--    worker_pool = Pool(processes=64)
--    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
--    for pkg, r in zip(packages, results):
--        pkg.latest_version = dict(zip(['status', 'version', 'id'], r))
--
--        if not pkg.has_valid_infra:
--            pkg.status['version'] = ("na", "no valid package infra")
--            continue
--
--        if pkg.latest_version['status'] == RM_API_STATUS_ERROR:
--            pkg.status['version'] = ('warning', "Release Monitoring API error")
--        elif pkg.latest_version['status'] == RM_API_STATUS_NOT_FOUND:
--            pkg.status['version'] = ('warning', "Package not found on Release Monitoring")
- 
--        if pkg.latest_version['version'] is None:
--            pkg.status['version'] = ('warning', "No upstream version available on Release Monitoring")
--        elif pkg.latest_version['version'] != pkg.current_version:
--            pkg.status['version'] = ('error', "The newer version {} is available upstream".format(pkg.latest_version['version']))
--        else:
--            pkg.status['version'] = ('ok', 'up-to-date')
-+    for pkg in [p for p in packages if not p.has_valid_infra]:
-+        pkg.status['version'] = ("na", "no valid package infra")
- 
--    worker_pool.terminate()
--    del http_pool
-+    tasks = []
-+    connector = aiohttp.TCPConnector(limit_per_host=5)
-+    async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
-+        packages = [p for p in packages if p.has_valid_infra]
-+        for pkg in packages:
-+            tasks.append(check_package_latest_version_get(sess, pkg))
-+        await asyncio.wait(tasks)
- 
- 
- def check_package_cves(nvd_path, packages):
-@@ -1057,7 +1070,8 @@ def __main__():
-     print("Checking URL status")
-     check_package_urls(packages)
-     print("Getting latest versions ...")
--    check_package_latest_version(packages)
-+    loop = asyncio.get_event_loop()
-+    loop.run_until_complete(check_package_latest_version(packages))
-     if args.nvd_path:
-         print("Checking packages CVEs")
-         check_package_cves(args.nvd_path, {p.name: p for p in packages})
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
