@@ -1,59 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:32 -0000
-Subject: [Buildroot] [git commit] package/libcamera: bump version to 565f95d
-Message-ID: <20200902161633.22E6587655@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/prosody: disable temporarily with
+ Lua 5.4
+Message-ID: <20200902161633.A3BE087655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fda470a32fa73065293cc1d1843c5b8275869df
+commit: https://git.buildroot.net/buildroot/commit/?id=1704786b423cb89562c15b2ec373f1fa8df28bfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- add support for new qcam feature option
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/prosody/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 907764de63..676d3ac739 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  6995be9d707ba3bcbe7a79bad894484561ee686f68b6523943ada7c0f6607e86  libcamera-96fab38e02792a109c0d35ca2154e95a7b4c8fcb.tar.gz
-+sha256  55b7d7e5d8c70b2586b31544e6c4891a994c4e69c18d0ebd760e87b75277c348  libcamera-565f95d64ff92e8712e8090988180c343dd3bcb5.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index a39e9f1c3e..0de155f109 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 96fab38e02792a109c0d35ca2154e95a7b4c8fcb
-+LIBCAMERA_VERSION = 565f95d64ff92e8712e8090988180c343dd3bcb5
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
-@@ -61,10 +61,13 @@ LIBCAMERA_DEPENDENCIES += gstreamer1 gst1-plugins-base
- endif
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
-+LIBCAMERA_CONF_OPTS += -Dqcam=enabled
- LIBCAMERA_DEPENDENCIES += qt5base
- ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
- LIBCAMERA_DEPENDENCIES += qt5tools
- endif
-+else
-+LIBCAMERA_CONF_OPTS += -Dqcam=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
+diff --git a/package/prosody/Config.in b/package/prosody/Config.in
+index 4b7ea94256..d57da00a94 100644
+--- a/package/prosody/Config.in
++++ b/package/prosody/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PROSODY
+ 	bool "prosody"
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUA_5_4
+ 	depends on !BR2_STATIC_LIBS # luaexpat, luasec, luasocket, luafilesystem
+ 	select BR2_PACKAGE_LUABITOP if !BR2_PACKAGE_LUAJIT # runtime
+ 	select BR2_PACKAGE_LUAEXPAT # runtime
+@@ -20,3 +21,6 @@ config BR2_PACKAGE_PROSODY
+ comment "prosody needs the lua interpreter, dynamic library"
+ 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
++
++comment "prosody needs a Lua <= 5.3"
++	depends on BR2_PACKAGE_LUA_5_4
