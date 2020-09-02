@@ -1,35 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:31 -0000
-Subject: [Buildroot] [git commit] package/lua-messagepack: add support of
+Subject: [Buildroot] [git commit] package/lua-sdl2: disable temporarily with
  Lua 5.4
-Message-ID: <20200902161633.689C28752B@busybox.osuosl.org>
+Message-ID: <20200902161633.9096F87655@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c0fd3cd64ff17208499352e584a6b31f32baa1d
+commit: https://git.buildroot.net/buildroot/commit/?id=567a8a7f1f29b826d64a4f985e8643b343f0b69c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We need to use lua-MessagePack-lua53 for both Lua 5.3 and Lua 5.4.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua-messagepack/lua-messagepack.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lua-sdl2/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
-index f393a8d028..33d460b4fc 100644
---- a/package/lua-messagepack/lua-messagepack.mk
-+++ b/package/lua-messagepack/lua-messagepack.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/lua-sdl2/Config.in b/package/lua-sdl2/Config.in
+index 65f9e7ff41..d0c1b91eb1 100644
+--- a/package/lua-sdl2/Config.in
++++ b/package/lua-sdl2/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LUA_SDL2
+ 	bool "lua-sdl2"
+ 	depends on !BR2_STATIC_LIBS
++	depends on !BR2_PACKAGE_LUA_5_4
+ 	select BR2_PACKAGE_SDL2
+ 	help
+ 	  Lua-SDL2 is a pure C binding of SDL2 to Lua 5.1, Lua 5.2,
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LUA_SDL2
  
- LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.5.2
- LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
--ifeq ($(BR2_PACKAGE_LUA_5_3),y)
-+ifeq ($(BR2_PACKAGE_LUA_5_3)$(BR2_PACKAGE_LUA_5_4),y)
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack-lua53
- else
- LUA_MESSAGEPACK_NAME_UPSTREAM = lua-MessagePack
+ 	  https://github.com/Tangent128/luasdl2
+ 
+-comment "lua-sdl2 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "lua-sdl2 needs a toolchain w/ dynamic library, Lua <= 5.3"
++	depends on BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
