@@ -1,90 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:33 -0000
-Subject: [Buildroot] [git commit] package/libuev: new package
-Message-ID: <20200902161634.6D60585EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lua-cqueues: bump to version
+ 20200726
+Message-ID: <20200902161634.40ABC85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a7bc8decdb913ca263ac54fc963d84bdb0b49dd
+commit: https://git.buildroot.net/buildroot/commit/?id=edaac8021d6465c91f9ea4a3a104929766ec5d39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+supports Lua 5.4
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/libuev/Config.in   |  6 ++++++
- package/libuev/libuev.hash |  4 ++++
- package/libuev/libuev.mk   | 15 +++++++++++++++
- 5 files changed, 27 insertions(+)
+ package/lua-cqueues/Config.in        | 5 ++---
+ package/lua-cqueues/lua-cqueues.hash | 2 +-
+ package/lua-cqueues/lua-cqueues.mk   | 2 +-
+ package/lua-http/Config.in           | 5 ++---
+ 4 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9a161c8036..516e259831 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2054,6 +2054,7 @@ F:	package/gstreamer1/gst1-validate/
- F:	package/gstreamer1/gstreamer1-editing-services/
- F:	package/iwd/
- F:	package/libevdev/
-+F:	package/libuev/
- F:	package/log4cplus/
- F:	package/postgresql/
- F:	package/python-colorzero/
-diff --git a/package/Config.in b/package/Config.in
-index f122983724..6bd2699354 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1738,6 +1738,7 @@ menu "Networking"
- 	source "package/libtirpc/Config.in"
- 	source "package/libtorrent/Config.in"
- 	source "package/libtorrent-rasterbar/Config.in"
-+	source "package/libuev/Config.in"
- 	source "package/libuhttpd/Config.in"
- 	source "package/libupnp/Config.in"
- 	source "package/libupnp18/Config.in"
-diff --git a/package/libuev/Config.in b/package/libuev/Config.in
-new file mode 100644
-index 0000000000..bb50099cee
---- /dev/null
-+++ b/package/libuev/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBUEV
-+	bool "libuev"
-+	help
-+	  Simple event loop for Linux.
-+
-+	  https://github.com/troglobit/libuev
-diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
-new file mode 100644
-index 0000000000..fece0e9b65
---- /dev/null
-+++ b/package/libuev/libuev.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/troglobit/libuev/releases/download/v2.3.1/libuev-2.3.1.tar.xz.md5
-+md5  ec601f69f69477858fa023a75da23793  libuev-2.3.1.tar.xz
-+# License files
-+sha256  3c2bf3fdd85687242ba6f2b02b6ce5176aba15b5e1a2ccb8b608439197ec4641  LICENSE
-diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
-new file mode 100644
-index 0000000000..c7b73b4221
---- /dev/null
-+++ b/package/libuev/libuev.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# libuev
-+#
-+################################################################################
-+
-+LIBUEV_VERSION = 2.3.1
-+LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
-+LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
-+LIBUEV_LICENSE = MIT
-+LIBUEV_LICENSE_FILES = LICENSE
-+LIBUEV_INSTALL_STAGING = YES
-+LIBUEV_CONF_OPTS = --disable-examples
-+
-+$(eval $(autotools-package))
+diff --git a/package/lua-cqueues/Config.in b/package/lua-cqueues/Config.in
+index c319fbdf4d..60f022848b 100644
+--- a/package/lua-cqueues/Config.in
++++ b/package/lua-cqueues/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LUA_CQUEUES
+ 	bool "lua-cqueues"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_PACKAGE_LUA_5_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Continuation Queues: Embeddable asynchronous networking,
+@@ -9,5 +8,5 @@ config BR2_PACKAGE_LUA_CQUEUES
+ 
+ 	  http://25thandclement.com/~william/projects/cqueues.html
+ 
+-comment "lua-cqueues needs a toolchain w/ threads, Lua <= 5.3"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
++comment "lua-cqueues needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lua-cqueues/lua-cqueues.hash b/package/lua-cqueues/lua-cqueues.hash
+index e12cdc642c..5803a60d50 100644
+--- a/package/lua-cqueues/lua-cqueues.hash
++++ b/package/lua-cqueues/lua-cqueues.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  45b4a0105c096eee5840b69e8e0078eb7b5d61a23aeca30db710f1caac3ec399  lua-cqueues-20200603.tar.gz
++sha256  9e112edd246da5cfca264314b70325a0b63665cb87a00e45ee3ae4f194000d52  lua-cqueues-20200726.tar.gz
+ sha256  5f4b1f94047790eadf8fd0f9a8e3bd2895bea4c9a2c0f8bf7cd8c8e57caa5219  LICENSE
+diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
+index bfa1df7447..6d842eca97 100644
+--- a/package/lua-cqueues/lua-cqueues.mk
++++ b/package/lua-cqueues/lua-cqueues.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CQUEUES_VERSION = 20200603
++LUA_CQUEUES_VERSION = 20200726
+ LUA_CQUEUES_SITE = $(call github,wahern,cqueues,rel-$(LUA_CQUEUES_VERSION))
+ LUA_CQUEUES_LICENSE = MIT
+ LUA_CQUEUES_LICENSE_FILES = LICENSE
+diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
+index 76eff7f299..8eefd481b5 100644
+--- a/package/lua-http/Config.in
++++ b/package/lua-http/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LUA_HTTP
+ 	bool "lua-http"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS    # luaossl & lua-cqueues
+-	depends on !BR2_PACKAGE_LUA_5_4 # lua-cqueues
+ 	select BR2_PACKAGE_LPEG # runtime
+ 	select BR2_PACKAGE_LUA_BASEXX # runtime
+ 	select BR2_PACKAGE_LUA_BINARYHEAP # runtime
+@@ -16,5 +15,5 @@ config BR2_PACKAGE_LUA_HTTP
+ 
+ 	  https://daurnimator.github.io/lua-http/
+ 
+-comment "lua-http needs a toolchain w/ threads, Lua <= 5.3"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PACKAGE_LUA_5_4
++comment "lua-http needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
