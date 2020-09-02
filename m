@@ -1,97 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 02 Sep 2020 16:24:35 -0000
-Subject: [Buildroot] [git commit] package/xen: bump version to 4.14.0
-Message-ID: <20200902161634.5656C85EB9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbacktrace: new package
+Message-ID: <20200902161634.8BDED85EB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=514bbb8520493f69a59dcbfe2ea7f8083d3e5a58
+commit: https://git.buildroot.net/buildroot/commit/?id=a30cf5c135f51c0cf6c62699d5f93b3abffa2c65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the Xen package to the latest release. We can also remove a patch
-to change the CFLAGS as it is no longer required.
+A C library that may be linked into a C/C++ program to produce
+symbolic backtraces.
 
-The hash of the license file is changed, as ZPL-2.0 is no longer
-listed as one of the licenses of 3rd party code imported into Xen.
-
-Signed-off-by: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Avi Shukron <avraham.shukron@gmail.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...nclude-linux-limits.h-for-XATTR_SIZE_MAX.patch} |  0
- ...mk-fix-build-with-CFLAGS-from-environment.patch | 36 ----------------------
- package/xen/xen.hash                               |  4 +--
- package/xen/xen.mk                                 |  2 +-
- 4 files changed, 3 insertions(+), 39 deletions(-)
+ package/Config.in                      |  1 +
+ package/libbacktrace/Config.in         |  7 +++++++
+ package/libbacktrace/libbacktrace.hash |  3 +++
+ package/libbacktrace/libbacktrace.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
 
-diff --git a/package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch b/package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
-similarity index 100%
-rename from package/xen/0002-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
-rename to package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch
-diff --git a/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch b/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
-deleted file mode 100644
-index fb316739b4..0000000000
---- a/package/xen/0001-xen-Rules.mk-fix-build-with-CFLAGS-from-environment.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 8aea14bbd20b04b8fffaf35138ebdcbd39e433a3 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Sat, 29 Oct 2016 16:35:26 +0200
--Subject: [PATCH] xen/Rules.mk: fix build with CFLAGS from environment
--
--When CFLAGS are passed from the environment, the first-level make
--invocation will append -D__OBJECT_FILE__ to it, then call a second
--make invocation, that will have those new CFLAGS in its environment,
--but will also append -D__OBJECT_FILE__ to those.
--
--Then, the compiler fails because __OBEJECT_FILE__ is defined twice.
--
--Just undefine it before defining it again, as a *workaround* to this
--issue.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- xen/Rules.mk | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/xen/Rules.mk b/xen/Rules.mk
--index 3090ea7828..d535bf9e2f 100644
----- a/xen/Rules.mk
--+++ b/xen/Rules.mk
--@@ -61,7 +61,7 @@ CFLAGS += -Werror -Wredundant-decls -Wno-pointer-arith
-- $(call cc-option-add,CFLAGS,CC,-Wvla)
-- CFLAGS += -pipe -D__XEN__ -include $(BASEDIR)/include/xen/config.h
-- CFLAGS-$(CONFIG_DEBUG_INFO) += -g
---CFLAGS += '-D__OBJECT_FILE__="$@"'
--+CFLAGS += -U__OBJECT_FILE__ '-D__OBJECT_FILE__="$@"'
-- 
-- ifneq ($(clang),y)
-- # Clang doesn't understand this command line argument, and doesn't appear to
---- 
--2.22.0
--
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index ab5f9d9083..709eeb3d45 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b97ce363e55b12c992063f4466c43cba0a6386ceb7a747b4dc670311f337ef01  xen-4.13.1.tar.gz
--sha256  36b91794c6d4a678137c70c41e384c03b552c7efba82c0d73e6be842e41ab3d3  COPYING
-+sha256  06839f68ea7620669dbe8b67861213223cc2a7d02ced61b56e5249c50e87f035  xen-4.14.0.tar.gz
-+sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 15742b5127..a30e80e5e7 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XEN_VERSION = 4.13.1
-+XEN_VERSION = 4.14.0
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index d8d9b7617f..b5285a66a2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1833,6 +1833,7 @@ menu "Other"
+ 	source "package/libatomic_ops/Config.in"
+ 	source "package/libavl/Config.in"
+ 	source "package/libb64/Config.in"
++	source "package/libbacktrace/Config.in"
+ 	source "package/libbsd/Config.in"
+ 	source "package/libcap/Config.in"
+ 	source "package/libcap-ng/Config.in"
+diff --git a/package/libbacktrace/Config.in b/package/libbacktrace/Config.in
+new file mode 100644
+index 0000000000..0f940dd588
+--- /dev/null
++++ b/package/libbacktrace/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBBACKTRACE
++	bool "libbacktrace"
++	help
++	  A C library that may be linked into a C/C++ program to
++	  produce symbolic backtraces
++
++	  https://github.com/ianlancetaylor/libbacktrace
+diff --git a/package/libbacktrace/libbacktrace.hash b/package/libbacktrace/libbacktrace.hash
+new file mode 100644
+index 0000000000..ecd530a33b
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 13072c499c76866c188beaf3d50f3dddbf2c27ed9fd72b33d1b857acd33b1cb5  libbacktrace-9b7f216e867916594d81e8b6118f092ac3fcf704.tar.gz
++sha256 ef8a9b3247488f8901ca60de9b17b745d7bd67e5ec1e622f80d62364572200d8  LICENSE
+diff --git a/package/libbacktrace/libbacktrace.mk b/package/libbacktrace/libbacktrace.mk
+new file mode 100644
+index 0000000000..8f812228e3
+--- /dev/null
++++ b/package/libbacktrace/libbacktrace.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libbacktrace
++#
++################################################################################
++
++LIBBACKTRACE_VERSION = 9b7f216e867916594d81e8b6118f092ac3fcf704
++LIBBACKTRACE_SITE = $(call github,ianlancetaylor,libbacktrace,$(LIBBACKTRACE_VERSION))
++LIBBACKTRACE_LICENSE = BSD-3C-like
++LIBBACKTRACE_LICENSE_FILES = LICENSE
++LIBBACKTRACE_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
