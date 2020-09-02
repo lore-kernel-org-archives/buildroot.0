@@ -1,46 +1,54 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Wed, 2 Sep 2020 13:11:03 -0700
-Subject: [Buildroot] More maintainers
-In-Reply-To: <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200827223956.7cb87050@windsurf.home> <20200829095023.GC14354@scaer>
- <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
- <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
-Message-ID: <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Wed,  2 Sep 2020 22:14:30 +0200
+Subject: [Buildroot] [PATCH] package/libzip: add patch from upstream to fix
+ build
+Message-ID: <20200902201431.2197792-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout;
+Cherry-pick a patch from upstream project that fixes the build.
 
-On Wed, Sep 2, 2020 at 1:08 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 02/09/2020 19:53, Adam Duskett wrote:
-> > I have seen many patches reviewed by not only myself but other's for months.
->
->  True. However, please consider that maybe the maintainers don't intentionally
-> ignore those patches. Even though in absolute terms maybe a lot of patches have
-> been reviewed, in relative terms it's not exactly great. Currently, for example,
-> 15 out of 400 patches in patchwork have a Reviewed-by tag. They simply slipped
-> through the cracks, because we tend to look at most recent patches first.
->
-This ignores my other point which still stands. The maintainers
-historically always want to also
-review the patches individually, and thus demand the last word on all
-submitted patches.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .../0002-Include-limits.h-for-INT_MAX.patch   | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/libzip/0002-Include-limits.h-for-INT_MAX.patch
 
-This process makes it pointless for anybody but maintainers to review
-patches because the
-reviewers feel outright ignored.
-
-
->  Regards,
->  Arnout
->
-> > If the current maintainers want to have the last word, then there is
-> > no incentive for
-> > non-maintainers to review patches, as it is seen as a waste of time.
+diff --git a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+new file mode 100644
+index 0000000000..e1d728158e
+--- /dev/null
++++ b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+@@ -0,0 +1,27 @@
++From fd89e242d16128dedef08f47d99ae56aa19b0591 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=C3=98rjan=20Malde?= <red@foxi.me>
++Date: Wed, 15 Jul 2020 12:16:16 +0200
++Subject: [PATCH] Include limits.h for INT_MAX
++
++[Retrieved from:
++https://github.com/pcercuei/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591]
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++---
++ lib/zip_crypto_openssl.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/zip_crypto_openssl.c b/lib/zip_crypto_openssl.c
++index 1cb00479..60f92758 100644
++--- a/lib/zip_crypto_openssl.c
+++++ b/lib/zip_crypto_openssl.c
++@@ -38,6 +38,7 @@
++ #include "zip_crypto.h"
++ 
++ #include <openssl/rand.h>
+++#include <limits.h>
++ 
++ #if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++ #define USE_OPENSSL_1_0_API
++-- 
++2.28.0
++
+-- 
+2.28.0
