@@ -1,78 +1,98 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 3 Sep 2020 11:51:57 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
- deps to vendor tree if not present
-In-Reply-To: <20200903135714.68ed2e22@windsurf.home>
-References: <20200831062335.1105977-1-christian@paral.in>
- <20200831070800.GN14354@scaer>
- <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
- <20200903135714.68ed2e22@windsurf.home>
-Message-ID: <CA+h8R2pRmhGSc3LsqLNVsYG=rLcD000g7FPtJiZ9_tVTvjrCJg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Sep 2020 20:51:04 +0200
+Subject: [Buildroot] [git commit] package/netopeer2: fix patch
+Message-ID: <20200903184433.A8A66815E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Sam,
+commit: https://git.buildroot.net/buildroot/commit/?id=d45108f91244476f8aef9d0e5660f2475a43c231
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks much for looking into this, and I'm excited at the idea of
-splitting vendor into a separate tarball.
+Patch cannot be applied to bumped version anymore. So recreate on top of
+current version.
 
-In my mind the optimal approach would be to leverage the Go module
-system to produce a tarball with associated hash for every Go module
-that's imported by any of the selected Build targets, and vendor
-specifically those, excluding all else.
+Also change the patch numbering from 0003 -> 0001 since the others are
+dropped due to version bump.
 
-I can write the Go code to do this & prototype a proof of concept if
-this is the way we are interested in going. It would be IMO
-appropriate because every Go module is checksummed, will produce a
-guaranteed identical output tarball that we can add to the hash file,
-and the vendor tree would only contain the necessary packages for the
-build targets flagged by the buildroot config.
+Fixes:
+http://autobuild.buildroot.net/results/ec58bc318e0e2fd46c16814a4011a4847090e696/
 
-On Thu, Sep 3, 2020 at 4:57 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> > I took a look at `go mod`, it seems to share a similar mechanism with
-> > cargo which allows us to pass local paths for dependencies. My
-> > proposition is to put the responsibility of whomever is adding a
-> > proprietary application, which has mixed dependencies, to instead
-> > split any proprietary modules into selectable options in buildroot,
-> > and use the standard depends mechanism. To enforce this, we could
-> > investigate using license-coalescing options of the package managers
-> > to find any proprietary dependencies and fail if they're found to be
-> > pointing to upstream URLs (and would be captured) with an error
-> > message clearly describing our intentions.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...EATURE-support-using-current-user-for-SR-mo.patch} | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
-This fits well with what I'm describing above. The Go code to produce
-/ extract the tarballs for the dependency modules and the module
-metadata could also be used to produce the license check and legal
-output. In fact, we could even generate the upstream URLs from this,
-and all other metadata desired (even authors information and a
-dependency chart).
-
-> Question: for the dependencies, instead of having a single tarball for
-> all of them, would there be a way of having separate tarballs for each
-> dependency that gets pulled by "go mod" or "cargo" ? If so, then we
-> could perhaps be able to teach the package which parts of the package
-> are proprietary (including the proprietary dependencies) and which
-> parts are open-source and under which license.
-
-See above.
-
-> Note that as a first step, I am personally perfectly fine with what you
-> are proposing. The above question is really just a question, not a
-> request to implement something like that.
-
-To me those two are the same, heh.
-
-> I think we have a good opportunity to try to solve this problem for
-> both Cargo and Go at the same time, so that we at least see if there's
-> a reasonably similar solution that can be used.
-
-Since our host-go infrastructure is now up to par, we can integrate
-the tool I'm describing above as a host-go package with no external
-dependencies since it would only use the Go stdlib.
-
-Best regards,
-Christian Stewart
+diff --git a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+similarity index 85%
+rename from package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+rename to package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+index 45257b2ff4..76c71d0ff9 100644
+--- a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
++++ b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+@@ -1,4 +1,4 @@
+-From 36ee1f33bceb0c2a7899e28d75c0d05408b561f1 Mon Sep 17 00:00:00 2001
++From 4a950257fa353e27ef1bd753bca4d0279f41bc77 Mon Sep 17 00:00:00 2001
+ From: Michal Vasko <mvasko@cesnet.cz>
+ Date: Mon, 24 Aug 2020 13:47:40 +0200
+ Subject: [PATCH] scripts FEATURE support using current user for SR modules
+@@ -7,18 +7,13 @@ Mostly for special cases user/group configuration
+ when the user/group cannot be retrieved normally.
+ 
+ Fixes #701
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+-[patch taken from upstream:
+-https://github.com/CESNET/netopeer2/commit/12a82701e10651fbdedb1524b27edf3bb2377488]
+-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ ---
+  CMakeLists.txt   | 10 +++++-----
+  scripts/setup.sh | 23 +++++++++++++++++++----
+  2 files changed, 24 insertions(+), 9 deletions(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 2d4175e..95e7e61 100755
++index 77aea1f..8fd6b43 100755
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+ @@ -68,19 +68,19 @@ if(NOT MODULES_OWNER)
+@@ -47,7 +42,7 @@ index 2d4175e..95e7e61 100755
+  # set prefix for the PID file
+  if(NOT PIDFILE_PREFIX)
+ diff --git a/scripts/setup.sh b/scripts/setup.sh
+-index 7175bc4..b5d1406 100755
++index 9591a49..b7c7ba4 100755
+ --- a/scripts/setup.sh
+ +++ b/scripts/setup.sh
+ @@ -1,7 +1,8 @@
+@@ -61,11 +56,11 @@ index 7175bc4..b5d1406 100755
+      echo "Required environment variables not defined!"
+      exit 1
+  fi
+-@@ -33,7 +34,14 @@ MODULES=(
++@@ -37,7 +38,14 @@ MODULES=(
+  
+  # functions
+  INSTALL_MODULE() {
+--    $SYSREPOCTL -a -i $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
++-    "$SYSREPOCTL" -a -i $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
+ +    CMD="'$SYSREPOCTL' -a -i $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
+ +    if [ ! -z ${OWNER} ]; then
+ +        CMD="$CMD -o '$OWNER'"
+@@ -77,11 +72,11 @@ index 7175bc4..b5d1406 100755
+      local rc=$?
+      if [ $rc -ne 0 ]; then
+          exit $rc
+-@@ -41,7 +49,14 @@ INSTALL_MODULE() {
++@@ -45,7 +53,14 @@ INSTALL_MODULE() {
+  }
+  
+  UPDATE_MODULE() {
+--    $SYSREPOCTL -a -U $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
++-    "$SYSREPOCTL" -a -U $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
+ +    CMD="'$SYSREPOCTL' -a -U $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
+ +    if [ ! -z ${OWNER} ]; then
+ +        CMD="$CMD -o '$OWNER'"
