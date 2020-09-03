@@ -1,111 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 20:48:12 +0200
-Subject: [Buildroot] [git commit] support/scripts: fix flake8 errors in
- cve-checker and pkg-stats
-Message-ID: <20200903184023.148F387034@busybox.osuosl.org>
+Date: Thu, 3 Sep 2020 20:50:15 +0200
+Subject: [Buildroot] [PATCH 2/4] odroidc2_atf: new Package
+In-Reply-To: <20200717164643.4702-2-daggs@gmx.com>
+References: <20200717164643.4702-1-daggs@gmx.com>
+ <20200717164643.4702-2-daggs@gmx.com>
+Message-ID: <20200903205015.250c7dc3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=843334bf4f63bc485ed050f510c8d528159362f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Dagg,
 
-Note that one is silenced, rather than fixed: we indeed need to import
-after we add the local directory to the modules search path.
+On Fri, 17 Jul 2020 19:46:41 +0300
+Dagg Stompler <daggs@gmx.com> wrote:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/cve-checker | 8 ++++++--
- support/scripts/pkg-stats   | 8 +++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+> introduce a package that holds the ATF for AmLogic's Odroid C2 boards
+> 
+> Signed-off-by: Dagg Stompler <daggs@gmx.com>
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-index 2bfe2d8543..998ea5b8af 100755
---- a/support/scripts/cve-checker
-+++ b/support/scripts/cve-checker
-@@ -24,6 +24,7 @@ import json
- import sys
- import cve as cvecheck
- 
-+
- class Package:
-     def __init__(self, name, version, ignored_cves):
-         self.name = name
-@@ -31,6 +32,7 @@ class Package:
-         self.cves = list()
-         self.ignored_cves = ignored_cves
- 
-+
- def check_package_cves(nvd_path, packages):
-     if not os.path.isdir(nvd_path):
-         os.makedirs(nvd_path)
-@@ -41,6 +43,7 @@ def check_package_cves(nvd_path, packages):
-             if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves) == cve.CVE_AFFECTS:
-                 pkg.cves.append(cve.identifier)
- 
-+
- html_header = """
- <head>
- <script src=\"https://www.kryogenix.org/code/browser/sorttable/sorttable.js\"></script>
-@@ -140,7 +143,7 @@ def dump_json(packages, date, output):
-             "cves": pkg.cves,
-         } for pkg in packages
-     }
--     # The actual structure to dump, add date to it
-+    # The actual structure to dump, add date to it
-     final = {'packages': pkgs,
-              'date': str(date)}
-     with open(output, 'w') as f:
-@@ -160,7 +163,7 @@ def parse_args():
-     output.add_argument('--json', dest='json', type=resolvepath,
-                         help='JSON output file')
-     parser.add_argument('--nvd-path', dest='nvd_path',
--                        help='Path to the local NVD database',type=resolvepath,
-+                        help='Path to the local NVD database', type=resolvepath,
-                         required=True)
-     args = parser.parse_args()
-     if not args.html and not args.json:
-@@ -189,4 +192,5 @@ def __main__():
-         print("Write JSON")
-         dump_json(packages, date, args.json)
- 
-+
- __main__()
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index fceb28839b..503cc45c16 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -25,15 +25,12 @@ import os
- from collections import defaultdict
- import re
- import subprocess
--import requests  # NVD database download
- import json
--import time
- import sys
- 
- sys.path.append('utils/')
- from getdeveloperlib import parse_developers  # noqa: E402
--
--import cve as cvecheck
-+import cve as cvecheck  # noqa: E402
- 
- 
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
-@@ -538,9 +535,10 @@ def check_package_cves(nvd_path, packages):
-         for pkg_name in cve.pkg_names:
-             if pkg_name in packages:
-                 pkg = packages[pkg_name]
--                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS :
-+                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS:
-                     pkg.cves.append(cve.identifier)
- 
-+
- def calculate_stats(packages):
-     stats = defaultdict(int)
-     stats['packages'] = len(packages)
+So I applied this patch, but after doing significant rework:
+
+ - Instead of using your own custom repository, I used the Hardkernel
+   U-Boot repository as a source.
+
+ - I changed to a target package instead of a host package. I agree it
+   builds a host tool, but it also installs a bunch of firmware files
+   for the target, and that felt more "important" to me than the host
+   tool. Of course, this can be a never-ending discussion, as it's
+   difficult to draw the line.
+
+ - Renamed to odroidc2-firmware.
+
+See the final commit at:
+
+  https://git.buildroot.org/buildroot/commit/?id=f0de62b7066c58a88207f0edf98ae49a23649421
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
