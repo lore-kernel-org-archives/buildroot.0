@@ -1,49 +1,120 @@
-From: Avraham Shukron <avraham.shukron@gmail.com>
-Date: Thu, 3 Sep 2020 18:44:27 +0300
-Subject: [Buildroot] More maintainers
-In-Reply-To: <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200827223956.7cb87050@windsurf.home> <20200829095023.GC14354@scaer>
- <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
- <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
- <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
-Message-ID: <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu,  3 Sep 2020 17:57:27 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/uclibc: bump version to 1.0.35
+Message-ID: <20200903155728.19448-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 3, 2020, 01:20 Christian Stewart <christian@paral.in> wrote:
+Drop patch from this release.
 
-> Discoverability is a problem right now, there's too many patches and
-> no way to subscribe to a given series for further updates (similar to
-> Pull Requests on GitHub), unless the submitter happens to add you to
-> the CC list - which, by the way, usually happens if you add a review.
->
-> Today, probably the best approach is to hunt through the backlog
-> (sorted by reviewed-by priority order) and cherry-pick some of these
-> series into downstream, more "experimental" repositories. Then, once
-> they've been tested there, you can submit a Reviewed-By back upstream
-> to indicate that it was useful and worth merging more urgently.
->
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...ude-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch | 68 -------------------
+ package/uclibc/uclibc.hash                    |  4 +-
+ package/uclibc/uclibc.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 71 deletions(-)
+ delete mode 100644 package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
 
-For what it's worth I think that the mail-based contribution process is
-part of the problem.
-With a decent Git server like GitHub/GitLab patches could be reviewed more
-easily.
-A CI pipeline could run tests that will give immediate feedback for any
-pull request.
-More importantly, it'll dramatically reduce the barrier for new and young
-contributors.
-
-Buildroot is all about using simple and familiar tools like make and
-Kconfig, and I personally think that this principle should also be applied
-to the contribution process and right now buildroot is one of the last
-active open source projects using the mailing list approach.
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200903/c57da135/attachment.html>
+diff --git a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
+deleted file mode 100644
+index cc8b9d9c0b..0000000000
+--- a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From aad6cdbcff0f5411a09ac524637fea62652786a3 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 8 May 2020 18:39:45 +0200
+-Subject: [PATCH] mips: Do not include hi and lo in __SYSCALL_CLOBBERS for R6
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-From [1]
+-"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
+-available to be present in the clobber list anymore, resulting in build failure
+-for mips*r6 targets in form of:
+-...
+-.../sysdep.h:146:2: error: the register ?lo? cannot be clobbered in ?asm? for the current target
+-  146 |  __asm__ volatile (      \
+-      |  ^~~~~~~
+-
+-This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
+-This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
+-targets that won't include those registers."
+-
+-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-Cc: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libc/sysdeps/linux/mips/bits/syscalls.h | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/libc/sysdeps/linux/mips/bits/syscalls.h b/libc/sysdeps/linux/mips/bits/syscalls.h
+-index b8f80597e..13728ac55 100644
+---- a/libc/sysdeps/linux/mips/bits/syscalls.h
+-+++ b/libc/sysdeps/linux/mips/bits/syscalls.h
+-@@ -270,8 +270,13 @@
+- 	_sys_result;							\
+- })
+- 
+--#define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+--	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#if __mips_isa_rev >= 6
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "memory"
+-+#else
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#endif
+- 
+- #else /* N32 || N64 */
+- 
+-@@ -327,8 +332,13 @@
+- 	_sys_result;							\
+- })
+- 
+--#define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+--	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#if __mips_isa_rev >= 6
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "memory"
+-+#else
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#endif
+- 
+- #endif
+- 
+--- 
+-2.25.4
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index e54f127690..aea2802bac 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.34/uClibc-ng-1.0.34.tar.xz.sha256
+-sha256  e6776229eee8d3f5a1cd29fb4286630e3cb9e97dded4e8f4a3a9bb4fa8c0d5e3  uClibc-ng-1.0.34.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.35/uClibc-ng-1.0.35.tar.xz.sha256
++sha256  4d0ee138f037017695a66b556b70f77a0eab8a238819bcb60af890b7b3382a2b  uClibc-ng-1.0.35.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index daf81d29b2..0b5e45bcf4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.34
++UCLIBC_VERSION = 1.0.35
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.28.0
