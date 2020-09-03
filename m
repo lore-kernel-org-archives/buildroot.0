@@ -1,127 +1,118 @@
-From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-Date: Thu,  3 Sep 2020 13:01:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bison: bump to 3.7.1
-Message-ID: <20200903110112.1752588-1-thomas.claveirole@green-communications.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Sep 2020 13:57:14 +0200
+Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
+ deps to vendor tree if not present
+In-Reply-To: <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
+References: <20200831062335.1105977-1-christian@paral.in>
+ <20200831070800.GN14354@scaer>
+ <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
+Message-ID: <20200903135714.68ed2e22@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-	https://lists.gnu.org/archive/html/info-gnu/2020-08/msg00000.html
+Hello,
 
-Tested using utils/test-pkg with toolchain br-arm-full on the
-following reverse-dependencies: bash at dtc host-dtc.  Also tested
-using a custom toolchain and configuration on: conntrack-tools
-iproute2 libnl libpcap libtasn1.
+On Thu, 3 Sep 2020 05:52:56 -0500
+Sam Voss <sam.voss@gmail.com> wrote:
 
-Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
----
- ...0001-src-make-path-to-m4-relocatable.patch | 70 -------------------
- package/bison/bison.hash                      |  2 +-
- package/bison/bison.mk                        |  2 +-
- 3 files changed, 2 insertions(+), 72 deletions(-)
- delete mode 100644 package/bison/0001-src-make-path-to-m4-relocatable.patch
+> > My proposal was that we introduce per-package managers download
+> > backends, which would typically do something like the following
+> > (pseudo-code):
+> >
+> >     #!/usr/bin/env bash
+> >     # This file is support/fownload/go
+> >
+> >     # Parse options:
+> >     actual_site_method="$(get_option '--actual-site-method')"
+> >
+> >     # Call actual download helper:
+> >     "${0%/*}/${actual_site_method}" "${@}" -o "${temp_tarball}"
+> >
+> >     # Populate the vendor:
+> >     tar xf "${temp_tarball}" -C "${temp_directory}"
+> >     cd "${temp_directory}/${package_name_version}"
+> >     go mod vendor
+> >     cd ..
+> >     tar czf "${final_tarball}" "${package_name_version}"
+> >
+> > (of course, the details would be a bit more complex, and would require
+> > that we pass the actual site method vi the download infra, but the idea
+> > is there)
+> >
+> > What's your opinion on this?  
+> 
+> As we spoke about plenty on the IRC, I'm sure you know my opinion on
+> this but I figure I mention it anyway: I believe we should split these
+> recursive-requirements from the base tar. This should allow
+> Proprietary applications and TPIP requirements to be captured while
+> maintaining separation between them.
 
-diff --git a/package/bison/0001-src-make-path-to-m4-relocatable.patch b/package/bison/0001-src-make-path-to-m4-relocatable.patch
-deleted file mode 100644
-index f40c39c558..0000000000
---- a/package/bison/0001-src-make-path-to-m4-relocatable.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From 50c8a3af1661c3950b9743d673fd46872860aa08 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Mon, 18 May 2020 07:53:20 +0200
--Subject: [PATCH] src: make path to m4 relocatable
--
--Commit a4ede8f85b0c9a254fcb01e5888cee1983095669 ("package: make bison
--a relocatable package") made Bison relocatable, but in fact it still
--contains one absolute reference: the M4 variable, which points to the
--M4 program. Let's fix that by using relocate().
--
--We don't use relocate2() to store the temporary buffer and re-use it,
--because m4path() is only called once.
--
--Upstream: submitted to the bison-patches at gnu.org mailing list
--https://lists.gnu.org/archive/html/bison-patches/2020-05/msg00078.html
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/files.c  | 7 +++++++
-- src/files.h  | 3 +++
-- src/output.c | 2 +-
-- 3 files changed, 11 insertions(+), 1 deletion(-)
--
--diff --git a/src/files.c b/src/files.c
--index 71c10e34..b8b43230 100644
----- a/src/files.c
--+++ b/src/files.c
--@@ -421,6 +421,13 @@ pkgdatadir (void)
--     }
-- }
-- 
--+char const *
--+m4path (void)
--+{
--+  char const *m4 = getenv("M4");
--+  return m4 ? m4 : relocate(M4);
--+}
--+
-- void
-- output_file_names_free (void)
-- {
--diff --git a/src/files.h b/src/files.h
--index 00814ad0..64b6f8b5 100644
----- a/src/files.h
--+++ b/src/files.h
--@@ -64,6 +64,9 @@ extern char *all_but_ext;
-- /* Where our data files are installed.  */
-- char const *pkgdatadir (void);
-- 
--+/* Where the m4 program is installed.  */
--+char const *m4path (void);
--+
-- void compute_output_file_names (void);
-- void output_file_names_free (void);
-- 
--diff --git a/src/output.c b/src/output.c
--index 1871fd75..ebe75095 100644
----- a/src/output.c
--+++ b/src/output.c
--@@ -682,7 +682,7 @@ static void
-- output_skeleton (void)
-- {
--   /* Compute the names of the package data dir and skeleton files.  */
---  char const *m4 = (m4 = getenv ("M4")) ? m4 : M4;
--+  char const *m4 = m4path ();
--   char const *datadir = pkgdatadir ();
--   char *skeldir = xpath_join (datadir, "skeletons");
--   char *m4sugar = xpath_join (datadir, "m4sugar/m4sugar.m4");
---- 
--2.26.2
--
-diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-index 9c3f32b4b4..123b6100c4 100644
---- a/package/bison/bison.hash
-+++ b/package/bison/bison.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  8b13473b31ca7fcf65e5e8a74224368ffd5df19275602a9c9567ba393f18577d  bison-3.6.4.tar.xz
-+sha256  55c215521a13982a9bee68cd42eed51a65713f96c530a739a57de4438ac1bb69  bison-3.7.1.tar.xz
- # License files, locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index b73e9163ad..45364e3cd5 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BISON_VERSION = 3.6.4
-+BISON_VERSION = 3.7.1
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPL-3.0+
+For those tuning in: TPIP stands for (I believe) "Third Party
+Intellectual Property".
+
+I think I agree with the idea of splitting into two tarballs the
+package source code itself from the source code of all its dependencies.
+
+> Now, to your point about "well, what if the repository has proprietary
+> dependencies?".
+
+That was indeed my question as well.
+
+> I think this is still a valid point, especially when
+> looking at the case you mentioned of "proprietary app with commingled
+> TPIP+proprietary requirements", but I believe we should be able to
+> handle this at a buildroot level fairly reasonably.
+> 
+> I took a look at `go mod`, it seems to share a similar mechanism with
+> cargo which allows us to pass local paths for dependencies. My
+> proposition is to put the responsibility of whomever is adding a
+> proprietary application, which has mixed dependencies, to instead
+> split any proprietary modules into selectable options in buildroot,
+> and use the standard depends mechanism. To enforce this, we could
+> investigate using license-coalescing options of the package managers
+> to find any proprietary dependencies and fail if they're found to be
+> pointing to upstream URLs (and would be captured) with an error
+> message clearly describing our intentions.
+
+This feels like a reasonable approach to me.
+
+Question: for the dependencies, instead of having a single tarball for
+all of them, would there be a way of having separate tarballs for each
+dependency that gets pulled by "go mod" or "cargo" ? If so, then we
+could perhaps be able to teach the package which parts of the package
+are proprietary (including the proprietary dependencies) and which
+parts are open-source and under which license.
+
+Note that as a first step, I am personally perfectly fine with what you
+are proposing. The above question is really just a question, not a
+request to implement something like that.
+
+> In my (so far unshared) patchset, my solution to do this agrees with
+> your suggestion above, by adding download-backend support for these
+> package managers. I leveraged the implementation suggested previously
+> by patrick[1] to use the cargo-dl step to then create two tarballs:
+> 
+> <package>-<ver>.tar.gz   <- we're all familiar with
+> <package>-<ver>-vendor.tar.gz <- the TPIP portion
+> 
+> The reasons for splitting are shared above. I believe that patchset is
+> a good initial direction, and I think those interested in this
+> patchset who are unfamiliar with that one should give it a review.
+
+Could you submit your patch series ? Did you fix the issues that we
+pointed out in the review of Patrick's series ?
+
+I think we have a good opportunity to try to solve this problem for
+both Cargo and Go at the same time, so that we at least see if there's
+a reasonably similar solution that can be used.
+
+Best regards,
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
