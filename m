@@ -1,98 +1,147 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Sep 2020 20:51:04 +0200
-Subject: [Buildroot] [git commit] package/netopeer2: fix patch
-Message-ID: <20200903184433.A8A66815E6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Sep 2020 20:53:15 +0200
+Subject: [Buildroot] [PATCH 3/4] board/odroidc2: add board
+In-Reply-To: <20200717164643.4702-3-daggs@gmx.com>
+References: <20200717164643.4702-1-daggs@gmx.com>
+ <20200717164643.4702-3-daggs@gmx.com>
+Message-ID: <20200903205315.1ed8cb72@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d45108f91244476f8aef9d0e5660f2475a43c231
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Dagg,
 
-Patch cannot be applied to bumped version anymore. So recreate on top of
-current version.
+On Fri, 17 Jul 2020 19:46:42 +0300
+Dagg Stompler <daggs@gmx.com> wrote:
 
-Also change the patch numbering from 0003 -> 0001 since the others are
-dropped due to version bump.
+> re add the odroidc2 board to buildroot.
+>  - uses latest uboot.
+>  - uses kernel 5.6
 
-Fixes:
-http://autobuild.buildroot.net/results/ec58bc318e0e2fd46c16814a4011a4847090e696/
+This patch and the next one should have been one single patch. And in
+fact you're using Linux 5.7, not 5.6.
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...EATURE-support-using-current-user-for-SR-mo.patch} | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+> diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
+> new file mode 100644
+> index 0000000000..a36b924b08
+> --- /dev/null
+> +++ b/board/hardkernel/odroidc2/genimage.cfg
+> @@ -0,0 +1,33 @@
+> +image boot.vfat {
+> +	vfat {
+> +		files = {
+> +			"Image",
+> +			"meson-gxbb-odroidc2.dtb",
+> +			"boot.scr"
+> +		}
+> +	}
+> +	size = 64M
+> +}
+> +
+> +image sdcard.img {
+> +	hdimage {
+> +	}
 
-diff --git a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-similarity index 85%
-rename from package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-rename to package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-index 45257b2ff4..76c71d0ff9 100644
---- a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-+++ b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-@@ -1,4 +1,4 @@
--From 36ee1f33bceb0c2a7899e28d75c0d05408b561f1 Mon Sep 17 00:00:00 2001
-+From 4a950257fa353e27ef1bd753bca4d0279f41bc77 Mon Sep 17 00:00:00 2001
- From: Michal Vasko <mvasko@cesnet.cz>
- Date: Mon, 24 Aug 2020 13:47:40 +0200
- Subject: [PATCH] scripts FEATURE support using current user for SR modules
-@@ -7,18 +7,13 @@ Mostly for special cases user/group configuration
- when the user/group cannot be retrieved normally.
- 
- Fixes #701
--
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
--[patch taken from upstream:
--https://github.com/CESNET/netopeer2/commit/12a82701e10651fbdedb1524b27edf3bb2377488]
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- ---
-  CMakeLists.txt   | 10 +++++-----
-  scripts/setup.sh | 23 +++++++++++++++++++----
-  2 files changed, 24 insertions(+), 9 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 2d4175e..95e7e61 100755
-+index 77aea1f..8fd6b43 100755
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
- @@ -68,19 +68,19 @@ if(NOT MODULES_OWNER)
-@@ -47,7 +42,7 @@ index 2d4175e..95e7e61 100755
-  # set prefix for the PID file
-  if(NOT PIDFILE_PREFIX)
- diff --git a/scripts/setup.sh b/scripts/setup.sh
--index 7175bc4..b5d1406 100755
-+index 9591a49..b7c7ba4 100755
- --- a/scripts/setup.sh
- +++ b/scripts/setup.sh
- @@ -1,7 +1,8 @@
-@@ -61,11 +56,11 @@ index 7175bc4..b5d1406 100755
-      echo "Required environment variables not defined!"
-      exit 1
-  fi
--@@ -33,7 +34,14 @@ MODULES=(
-+@@ -37,7 +38,14 @@ MODULES=(
-  
-  # functions
-  INSTALL_MODULE() {
---    $SYSREPOCTL -a -i $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-+-    "$SYSREPOCTL" -a -i $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
- +    CMD="'$SYSREPOCTL' -a -i $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
- +    if [ ! -z ${OWNER} ]; then
- +        CMD="$CMD -o '$OWNER'"
-@@ -77,11 +72,11 @@ index 7175bc4..b5d1406 100755
-      local rc=$?
-      if [ $rc -ne 0 ]; then
-          exit $rc
--@@ -41,7 +49,14 @@ INSTALL_MODULE() {
-+@@ -45,7 +53,14 @@ INSTALL_MODULE() {
-  }
-  
-  UPDATE_MODULE() {
---    $SYSREPOCTL -a -U $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-+-    "$SYSREPOCTL" -a -U $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
- +    CMD="'$SYSREPOCTL' -a -U $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
- +    if [ ! -z ${OWNER} ]; then
- +        CMD="$CMD -o '$OWNER'"
+I've added here an entry to flash the bl1.bin.hardkernel into the
+sdcard.img file instead of doing it manually in the post-image script.
+
+> +
+> +	partition u-boot {
+> +		in-partition-table = "no"
+> +		image = "uboot-odc2.img"
+> +		offset = 49664
+> +	}
+> +
+> +	partition boot {
+> +		partition-type = 0xC
+> +		bootable = "true"
+> +		image = "boot.vfat"
+> +	}
+> +
+> +	partition rootfs {
+> +		partition-type = 0x83
+> +		image = "rootfs.ext4"
+> +		size = 512M
+> +	}
+> +}
+> diff --git a/board/hardkernel/odroidc2/post-build.sh b/board/hardkernel/odroidc2/post-build.sh
+> new file mode 100755
+> index 0000000000..745fb2a724
+> --- /dev/null
+> +++ b/board/hardkernel/odroidc2/post-build.sh
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh
+> +# post-build.sh for Odroid C2 taken from CubieBoard's post-build.sh
+> +# 2013, Carlo Caione <carlo.caione@gmail.com>
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +MKIMAGE=$HOST_DIR/bin/mkimage
+> +
+> +${MKIMAGE} -A arm64 -O linux -T script -C none -n "Boot script" -d "${BOARD_DIR}/boot.cmd" ${BINARIES_DIR}/boot.scr
+
+This was not useful, as this is already done by:
+
+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
+
+so I've dropped the post-build script entirely.
+
+> diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
+> new file mode 100755
+> index 0000000000..3783a65a1c
+> --- /dev/null
+> +++ b/board/hardkernel/odroidc2/post-image.sh
+> @@ -0,0 +1,29 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +SIGNED_UBOOT_IMG="${BINARIES_DIR}/uboot-odc2.img"
+> +ODRODIDC2_ATF_FOLDER="${HOST_DIR}/usr/share/odroidc2_atf"
+> +IM_FILE="${ODRODIDC2_ATF_FOLDER}/bl1.bin.hardkernel"
+> +
+> +${HOST_DIR}/bin/fip_create --bl30 ${ODRODIDC2_ATF_FOLDER}/bl30.bin --bl301 ${ODRODIDC2_ATF_FOLDER}/bl301.bin --bl31 ${ODRODIDC2_ATF_FOLDER}/bl31.bin --bl33 ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/fip.bin
+> +${HOST_DIR}/bin/fip_create --dump ${BINARIES_DIR}/fip.bin
+> +cat ${ODRODIDC2_ATF_FOLDER}/bl2.package ${BINARIES_DIR}/fip.bin > ${BINARIES_DIR}/boot_new.bin
+> +${HOST_DIR}/bin/amlbootsig ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
+> +
+> +dd if=${BINARIES_DIR}/u-boot.img of=${SIGNED_UBOOT_IMG} bs=512 skip=96
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage                           \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+
+I've simplified this by using support/scripts/genimage.sh.
+
+> +dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
+> +dd if=${IM_FILE} of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
+
+This was no longer needed as bl1.bin.hardkernel is now taken care of by
+genimage directly.
+
+> +rm -rf ${BINARIES_DIR}/fip.bin ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
+
+It's not necessary to clean things up this way.
+
+Overall, this allowed to simplify the post-image script quite a bit.
+
+See the final commit at:
+
+  https://git.buildroot.org/buildroot/commit/?id=c8ee85ecd91c0b36be8694224b80846a276a849e
+
+Could you check if it works for you, on the hardware platform ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
