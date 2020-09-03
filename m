@@ -1,125 +1,269 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 14:52:31 +0200
-Subject: [Buildroot] [git commit] package/odroidc2-firmware: new package
-Message-ID: <20200903183904.3D53487A17@busybox.osuosl.org>
+Date: Thu, 3 Sep 2020 20:46:07 +0200
+Subject: [Buildroot] [git commit] configs/odroidc2: new defconfig
+Message-ID: <20200903183904.48565812F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0de62b7066c58a88207f0edf98ae49a23649421
+commit: https://git.buildroot.net/buildroot/commit/?id=c8ee85ecd91c0b36be8694224b80846a276a849e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The AmLogic Odroid C2 boards use an ATF version for which the source
-code is not available. The mainline U-Boot documentation at
-doc/board/amlogic/odroid-c2.rst details how to build a bootable U-Boot
-image for this platform: it requires fetching the ATF binary files
-from https://github.com/hardkernel/u-boot.git as well as a tool called
-fip_create from the same repository.
-
-This commit therefore implements a simple Buildroot package that
-retrieves this repository, installs the firmware files, and
-builds/installs the host fip_create utility.
-
-This package really installs target images (firmware files) and one
-host utility, so we had to take an arbitrary decision on whether it
-should be a target package or a host package, and we've chosen to make
-it a target package.
 
 Signed-off-by: Dagg Stompler <daggs@gmx.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/odroidc2-firmware/Config.in              | 11 +++++++++
- package/odroidc2-firmware/odroidc2-firmware.hash |  2 ++
- package/odroidc2-firmware/odroidc2-firmware.mk   | 31 ++++++++++++++++++++++++
- 5 files changed, 46 insertions(+)
+ DEVELOPERS                                         |  2 +
+ board/hardkernel/odroidc2/boot.cmd                 | 11 ++++
+ board/hardkernel/odroidc2/genimage.cfg             | 39 +++++++++++++
+ board/hardkernel/odroidc2/post-image.sh            | 21 +++++++
+ board/hardkernel/odroidc2/readme.txt               | 64 ++++++++++++++++++++++
+ .../odroidc2/rootfs_overlay/etc/init.d/S09modload  | 23 ++++++++
+ configs/odroidc2_defconfig                         | 37 +++++++++++++
+ 7 files changed, 197 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 21301fb333..8c3f47cdb7 100644
+index 8c3f47cdb7..8faaf890c0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -636,6 +636,7 @@ F:	package/kvm-unit-tests
+@@ -635,6 +635,8 @@ F:	arch/Config.in.powerpc
+ F:	package/kvm-unit-tests
  
  N:	Dagg Stompler <daggs@gmx.com>
++F:	board/odroidc2/
++F:	configs/odroidc2_defconfig
  F:	package/meson-tools/
-+F:	package/odroidc2-firmware/
+ F:	package/odroidc2-firmware/
  
- N:	Daniel J. Leach <dleach@belcan.com>
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index e625241da1..8c2726b4ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -400,6 +400,7 @@ menu "Firmware"
- 	source "package/b43-firmware/Config.in"
- 	source "package/linux-firmware/Config.in"
- 	source "package/murata-cyw-fw/Config.in"
-+	source "package/odroidc2-firmware/Config.in"
- 	source "package/rpi-bt-firmware/Config.in"
- 	source "package/rpi-firmware/Config.in"
- 	source "package/rpi-wifi-firmware/Config.in"
-diff --git a/package/odroidc2-firmware/Config.in b/package/odroidc2-firmware/Config.in
+diff --git a/board/hardkernel/odroidc2/boot.cmd b/board/hardkernel/odroidc2/boot.cmd
 new file mode 100644
-index 0000000000..d55003af34
+index 0000000000..d800a6d44b
 --- /dev/null
-+++ b/package/odroidc2-firmware/Config.in
++++ b/board/hardkernel/odroidc2/boot.cmd
 @@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ODROIDC2_FIRMWARE
-+	bool "odroidc2-firmware"
-+	help
-+	  This package extracts from
-+	  https://github.com/hardkernel/u-boot/tree/odroidc2-v2015.01
-+	  the pre-built firmware files, as well as the host tool
-+	  fip_create that are needed to create bootable images for the
-+	  Odroid C2 platform. See doc/board/amlogic/odroid-c2.rst in
-+	  upstream U-Boot for more details.
++setenv kernel_filename "Image"
++setenv fdt_filename "meson-gxbb-odroidc2.dtb"
++setenv bootargs "console=ttyAML0,115200n8 earlyprintk root=/dev/mmcblk1p2 rootwait rw"
 +
-+	  https://github.com/hardkernel/u-boot/tree/odroidc2-v2015.01
-diff --git a/package/odroidc2-firmware/odroidc2-firmware.hash b/package/odroidc2-firmware/odroidc2-firmware.hash
++echo > Loading Kernel...
++fatload mmc 0:1 ${kernel_addr_r} ${kernel_filename}
++echo > Loading FDT...
++fatload mmc 0:1 ${fdt_addr_r} ${fdt_filename}
++
++echo > Booting System...
++booti ${kernel_addr_r} - ${fdt_addr_r}
+diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
 new file mode 100644
-index 0000000000..67d046e8de
+index 0000000000..c9306b0639
 --- /dev/null
-+++ b/package/odroidc2-firmware/odroidc2-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  a2fba4c6d9332ecc5f04283f370d5c275f35d6cb62dba1f685d011269bacb6d0  odroidc2-firmware-s905_6.0.1_v5.5.tar.gz
-diff --git a/package/odroidc2-firmware/odroidc2-firmware.mk b/package/odroidc2-firmware/odroidc2-firmware.mk
++++ b/board/hardkernel/odroidc2/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"meson-gxbb-odroidc2.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition bl1 {
++		in-partition-table = "no"
++		image = "bl1.bin.hardkernel"
++		offset = 0
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "uboot-odc2.img"
++		offset = 49664
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
+new file mode 100755
+index 0000000000..eb6fd4f09a
+--- /dev/null
++++ b/board/hardkernel/odroidc2/post-image.sh
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++
++${HOST_DIR}/bin/fip_create \
++	--bl30 ${BINARIES_DIR}/bl30.bin \
++	--bl301 ${BINARIES_DIR}/bl301.bin \
++	--bl31 ${BINARIES_DIR}/bl31.bin \
++	--bl33 ${BINARIES_DIR}/u-boot.bin \
++	${BINARIES_DIR}/fip.bin
++
++${HOST_DIR}/bin/fip_create --dump ${BINARIES_DIR}/fip.bin
++
++cat ${BINARIES_DIR}/bl2.package ${BINARIES_DIR}/fip.bin \
++	> ${BINARIES_DIR}/boot_new.bin
++
++${HOST_DIR}/bin/amlbootsig ${BINARIES_DIR}/boot_new.bin ${BINARIES_DIR}/u-boot.img
++
++dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/uboot-odc2.img bs=512 skip=96
++
++support/scripts/genimage.sh -c ${BOARD_DIR}/genimage.cfg
+diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
 new file mode 100644
-index 0000000000..acd5ce237f
+index 0000000000..24847827af
 --- /dev/null
-+++ b/package/odroidc2-firmware/odroidc2-firmware.mk
-@@ -0,0 +1,31 @@
-+################################################################################
++++ b/board/hardkernel/odroidc2/readme.txt
+@@ -0,0 +1,64 @@
++ODROID-C2
++
++Intro
++=====
++To be able to use ODROID-C2 board with the images generated by
++Buildroot, you have to prepare the SDCard or eMMC.
++
++How to build it
++===============
++
++  $ make odroidc2_defconfig
++
++Then you can edit the build options using
++
++  $ make menuconfig
++
++Compile all and build rootfs image:
++
++  $ make
++
++Note: you will need to have access to the network, since Buildroot will
++download the packages' sources.
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- bl1.bin.hardkernel
++    +-- bl2.package
++    +-- bl301.bin
++    +-- bl30.bin
++    +-- bl31.bin
++    +-- boot_new.bin
++    +-- boot.scr                   [1]
++    +-- boot.vfat
++    +-- fip.bin
++    +-- Image                      [2]
++    +-- meson-gxbb-odroidc2.dtb
++    +-- rootfs.ext2
++    +-- rootfs.ext4
++    +-- rootfs.tar
++    +-- sdcard.img
++    +-- u-boot.bin
++    +-- u-boot.img
++    +-- uboot-odc2.img             [3]
++
++[1] This is the ODROID-C2 configuration file used in u-boot.
++[2] This is the ODROID-C2 kernel image file which will be booted.
++[3] This is the ODROID-C2 signed u-boot image which will be used.
++
++How to write the SD card or eMMC
++================================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card or eMMC with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Insert the SDcard into your ODROID-C2, and power it up. Your new system
++should come up now.
+diff --git a/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload b/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload
+new file mode 100755
+index 0000000000..8d694a7331
+--- /dev/null
++++ b/board/hardkernel/odroidc2/rootfs_overlay/etc/init.d/S09modload
+@@ -0,0 +1,23 @@
++#!/bin/sh
 +#
-+# odroidc2-firmware
-+#
-+################################################################################
 +
-+ODROIDC2_FIRMWARE_VERSION = s905_6.0.1_v5.5
-+ODROIDC2_FIRMWARE_SITE = $(call github,hardkernel,u-boot,$(ODROIDC2_FIRMWARE_VERSION))
-+ODROIDC2_FIRMWARE_INSTALL_IMAGES = YES
++load_drivers()
++{
++	echo "Loading needed modules..."
++	for file in $(echo "dwmac_generic dwmac-meson8b meson_dw_hdmi meson_gxbb_wdt"); do
++		modprobe ${file}
++	done
++}
 +
-+define ODROIDC2_FIRMWARE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) \
-+		-C $(@D)/tools/fip_create/
-+endef
++case "$1" in
++	start)
++		load_drivers
++		;;
++	stop)
++		;;
++	restart|reload)
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		exit 1
++esac
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+new file mode 100644
+index 0000000000..bb85431891
+--- /dev/null
++++ b/configs/odroidc2_defconfig
+@@ -0,0 +1,37 @@
++# Architecture
++BR2_aarch64=y
 +
-+ODROIDC2_FIRMWARE_FILES = \
-+	fip/gxb/bl301.bin \
-+	fip/gxb/bl30.bin \
-+	fip/gxb/bl31.bin \
-+	fip/gxb/bl2.package \
-+	sd_fuse/bl1.bin.hardkernel
++# System
++BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAML0"
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_OVERLAY="board/hardkernel/odroidc2/rootfs_overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
 +
-+define ODROIDC2_FIRMWARE_INSTALL_IMAGES_CMDS
-+	$(foreach f,$(ODROIDC2_FIRMWARE_FILES), \
-+		$(INSTALL) -D -m 0644 $(@D)/$(f) $(BINARIES_DIR)/$(notdir $(f))
-+	)
-+	$(INSTALL) -D -m0755 $(@D)/tools/fip_create/fip_create \
-+		$(HOST_DIR)/bin/fip_create
-+endef
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-odroidc2"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +
-+$(eval $(generic-package))
++# U-Boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
++BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
++BR2_TARGET_UBOOT_CUSTOM_VERSION="2020.07"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
++
++# Firmware
++BR2_PACKAGE_ODROIDC2_FIRMWARE=y
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MESON_TOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
