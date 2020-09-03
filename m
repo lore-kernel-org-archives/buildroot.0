@@ -1,14 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 15:58:10 +0200
+Date: Thu, 3 Sep 2020 16:02:05 +0200
 Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
  deps to vendor tree if not present
-In-Reply-To: <CAH=K+6mTVOJ97E78HLH16mTVDksnLc+2oVxNi2fqdCseuiuy8Q@mail.gmail.com>
+In-Reply-To: <20200903132852.GZ14354@scaer>
 References: <20200831062335.1105977-1-christian@paral.in>
  <20200831070800.GN14354@scaer>
  <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
- <20200903135714.68ed2e22@windsurf.home>
- <CAH=K+6mTVOJ97E78HLH16mTVDksnLc+2oVxNi2fqdCseuiuy8Q@mail.gmail.com>
-Message-ID: <20200903155810.22861b0b@windsurf.home>
+ <20200903132852.GZ14354@scaer>
+Message-ID: <20200903160205.7e67bbe7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,42 +16,73 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 3 Sep 2020 08:01:27 -0500
-Sam Voss <sam.voss@collins.com> wrote:
+On Thu, 3 Sep 2020 15:28:52 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> > Question: for the dependencies, instead of having a single tarball for
-> > all of them, would there be a way of having separate tarballs for each
-> > dependency that gets pulled by "go mod" or "cargo" ? If so, then we
-> > could perhaps be able to teach the package which parts of the package
-> > are proprietary (including the proprietary dependencies) and which
-> > parts are open-source and under which license.  
+> And as I explained on IRC (which I am going to repeat here so that it is
+> archived in the list archives, or for all to see as well), I believe
+> this dichotomy between main and vendored archives is incorrect.
 > 
-> I don't exactly know, but to your point I know it pulls them into
-> correctly-named folders, however no version string attached:
+> What I understand is that, for proprietary applications, you do not want
+> to provide the main tarball, but since those package managers make it so
+> easy to depend on external, FLOSS components, you want to be able to
+> provide those vendored FLOSS stuff to be compliant, without providing
+> the code for your proprietary blurb.
 > 
-> VENDOR/ws2_32-sys/Cargo.toml
-
-So potentially we could tarball independently each dependency, perhaps
-in a tarball named:
-
-<pkgname>-<pkgversion>-<dependencyname>.tar.gz
-
-where <dependencyname> here would be "ws2_32-sys".
-
-The question is then how we can associate the licenses to each
-dependency. Again, I don't think it's worth tackling at this moment.
-
-> > Could you submit your patch series ? Did you fix the issues that we
-> > pointed out in the review of Patrick's series ?  
+> Consider for example that your company develops two proprietary
+> packages, foo and bar, which have the following dependencies, which will
+> ultimately be vendored in those packages (names totally made up;
+> licenses between brakcets; CORP means proprietary package):
 > 
-> I did not change Patrick's series at all, built a new change-set on
-> top of it. I will have to go back and integrate them together, and I
-> can take a look at the issues with him in the meantime.
+>   - foo [CORP] depends on libssl [MIT]
+> 
+>   - bar [CORP] depends on foo and libhttp [MIT]
 
-Yes, if you can re-integrate your improvements within the patches from
-Patrick and submit an updated series, it would be great.
+In this case, Sam's suggestion is that "foo" should be packaged as a
+proper Buildroot package, and the "bar" package should use "foo" from
+the "foo" Buildroot package, rather than using the language-specific
+vendoring/module system to retrieve it.
 
-Thanks,
+In other words, Sam's suggestion is that if you have proprietary /
+non-redistributable bits of code used as dependencies in your Go/Rust
+application, you should go and create Buildroot packages for these bits.
+
+> So if you have a separate archive for bar's vendoring, it will include
+> your foo proprietary package, and in the case of 'bar', the separation
+> of archive will not help you properly separate the "TPIP" that you would
+> have to distribute to be complaint.
+
+See above. It was also covered in Sam's proposal.
+
+> > I took a look at `go mod`, it seems to share a similar mechanism with
+> > cargo which allows us to pass local paths for dependencies. My
+> > proposition is to put the responsibility of whomever is adding a
+> > proprietary application, which has mixed dependencies, to instead
+> > split any proprietary modules into selectable options in buildroot,
+> > and use the standard depends mechanism.  
+> 
+> This is doomed to not work, because it relies on process. And since this
+> is not enforce by the tool (more on that below), people will not realise
+> that they have proprietary dependencies down to the n-th level.
+
+What alternative do you suggest ?
+
+> > To enforce this, we could
+> > investigate using license-coalescing options of the package managers
+> > to find any proprietary dependencies and fail if they're found to be
+> > pointing to upstream URLs (and would be captured) with an error
+> > message clearly describing our intentions.  
+> 
+> But that could also be a totally valid setup, where one would not care
+> about that situation, if one builds a device for their own use, and that
+> is never ever distributed; those people would not care about the
+> licensing of their dependency hell.
+
+Again, what do you suggest ?
+
+I agree it's not ideal, but it is relatively reasonable, and in the
+absence of other clear solution and proposal, we're likely to opt for a
+"relatively reasonable" solution, even if not ideal.
 
 Thomas
 -- 
