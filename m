@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 23:26:48 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/makedumpfile: new package
-In-Reply-To: <20200831111226.15764-1-egorenar-dev@posteo.net>
-References: <20200831111226.15764-1-egorenar-dev@posteo.net>
-Message-ID: <20200903232648.6be84338@windsurf.home>
+Date: Thu, 3 Sep 2020 23:42:34 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/multipath-tools: new package
+In-Reply-To: <20200831185010.16556-1-egorenar-dev@posteo.net>
+References: <20200831185010.16556-1-egorenar-dev@posteo.net>
+Message-ID: <20200903234234.2f4d6793@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,96 +12,122 @@ To: buildroot@busybox.net
 
 Hello Aleksander,
 
-On Mon, 31 Aug 2020 13:12:26 +0200
+On Mon, 31 Aug 2020 20:50:10 +0200
 Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
 
 > Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-> ---
->  DEVELOPERS                                    |   3 +
->  package/Config.in                             |   1 +
->  ...move-duplicated-variable-definitions.patch | 103 ++++++++++++++++++
->  package/makedumpfile/Config.in                |  18 +++
->  package/makedumpfile/makedumpfile.hash        |   3 +
->  package/makedumpfile/makedumpfile.mk          |  28 +++++
->  6 files changed, 156 insertions(+)
->  create mode 100644 package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
->  create mode 100644 package/makedumpfile/Config.in
->  create mode 100644 package/makedumpfile/makedumpfile.hash
->  create mode 100644 package/makedumpfile/makedumpfile.mk
 
-Thanks for this new iteration. The patch now looks good, with a small
-exception below. However, the main issue is that it doesn't build. The
-following configuration:
+Here as well, the patch looks mostly good (see below the minor
+comments), but the main issue is that it doesn't build.
 
-BR2_arm=y
+The following defconfig:
+
+BR2_x86_64=y
+BR2_x86_core2=y
 BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
 BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2020.02.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2020.02.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
 BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
 # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_INIT_NONE=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
 BR2_SYSTEM_BIN_SH_NONE=y
 # BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_MAKEDUMPFILE=y
+BR2_PACKAGE_MULTIPATH_TOOLS=y
 # BR2_TARGET_ROOTFS_TAR is not set
 
-fails with:
+fails to build because multipath-tools is unconditionally build with
+-fstack-protector.
 
-elf_info.c: In function ?get_elf64_phnum?:
-elf_info.c:1050:23: error: ?PN_XNUM? undeclared (first use in this function)
-  if (ehdr->e_phnum == PN_XNUM) {
-                       ^
-elf_info.c:1050:23: note: each undeclared identifier is reported only once for each function it appears in
-make[1]: *** [Makefile:90: elf_info.o] Error 1
+I've disabled that by passing STACKPROT= as a make option, which allows
+to get passed that. But then it fails with:
 
-PN_XNUM is defined in libelf/elf.h in the elfutils code base, but it
-seems like this header file is only installed if elfutils is built with
---enable-install-elfh. However, I am not sure what would be the impact
-of installing elf.h. Indeed, the kernel headers also have an elf.h file
-in usr/include/linux/elf.h.
+parser.c: In function ?set_value?:
+parser.c:375:4: error: ?strncat? specified bound 1 equals source length [-Werror=stringop-overflow=]
+    strncat(alloc, " ", 1);
+    ^~~~~~~~~~~~~~~~~~~~~~
 
-Could you have a look into this ?
+Could you test this package a bit better by using ./utils/test-pkg ?
 
-> diff --git a/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch b/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
+> diff --git a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
 > new file mode 100644
-> index 0000000000..0255de796e
+> index 0000000000..e1ab73312d
 > --- /dev/null
-> +++ b/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
-> @@ -0,0 +1,103 @@
-> +From 399f2c9a3acd5bd913e50a4dde52dee6527b297e Mon Sep 17 00:00:00 2001
-> +From: Kairui Song <kasong@redhat.com>
-> +Date: Wed, 29 Jan 2020 13:37:13 +0800
-> +Subject: [PATCH 1/1] [PATCH] Remove duplicated variable definitions
+> +++ b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
+> @@ -0,0 +1,59 @@
+> +From f55b1a37e2c43b67e7fd7f6a39afe2b2316b7cf9 Mon Sep 17 00:00:00 2001
+> +From: Alexander Egorenkov <egorenar-dev@posteo.net>
+> +Date: Mon, 31 Aug 2020 19:05:46 +0200
+> +Subject: [PATCH 1/1] kpartx, libmultipath: use pkg-config to get path to
 
-[PATCH 1/1] shouldn't be there, it should be just [PATCH]. This is
-verified by "make check-package" in Buildroot.
+Patches should be generated with "git format-patch -N", so that we have
+[PATCH] instead of [PATCH 1/1].
 
-> +When building on Fedora 32 (with GCC 10), following error is observed:
-> +
-> +/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2010: multiple definition of
-> + `crash_reserved_mem_nr'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2010: first defined here
-> +/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2009: multiple definition of
-> + `crash_reserved_mem'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2009: first defined here
-> +/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1278: multiple definition of
-> + `parallel_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1278: first defined here
-> +/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1265: multiple definition of
-> + `splitting_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1265: first defined here
-> +...
-> +collect2: error: ld returned 1 exit status
-> +make: *** [Makefile:97: makedumpfile] Error 1
-> +
-> +These variables are wrongly defined multiple times. So remove the
-> +duplicated definitions.
-> +
-> +Signed-off-by: Kairui Song <kasong@redhat.com>
-> +Signed-off-by: Kazuhito Hagio <k-hagio-ab@nec.com>
+> diff --git a/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch b/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+> new file mode 100644
+> index 0000000000..236d2b7116
+> --- /dev/null
+> +++ b/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+> @@ -0,0 +1,30 @@
+> +From 48f537b9fef4f9db761466b8951fb63243f06602 Mon Sep 17 00:00:00 2001
+> +From: Christian Hesse <mail@eworm.de>
+> +Date: Wed, 6 May 2020 09:35:47 +0200
+> +Subject: [PATCH 1/1] libmpathpersist: depend on libmultipath
 
-Minor nit: we need you to add your own Signed-off-by, right after the
-other Signed-off-by that are already there.
+Ditto.
+
+> +
+> +Without this the build fails with:
+> +
+> +/usr/bin/ld: cannot find -lmultipath
+> +
+> +Signed-off-by: Christian Hesse <mail@eworm.de>
+
+We need you to add your Signed-off-by on all patches you've imported.
+
+> diff --git a/package/multipath-tools/Config.in b/package/multipath-tools/Config.in
+> new file mode 100644
+> index 0000000000..74bfe74964
+> --- /dev/null
+> +++ b/package/multipath-tools/Config.in
+> @@ -0,0 +1,30 @@
+> +comment "multipath-tools needs a uClibc or glibc toolchain"
+
+	w/ threads, dynamic library
+
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +
+> +config BR2_PACKAGE_MULTIPATH_TOOLS
+> +	bool "multipath-tools"
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on !BR2_TOOLCHAIN_USES_MUSL
+> +	depends on BR2_USE_MMU
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HAS_UDEV
+> +	select BR2_PACKAGE_JSON_C
+> +	select BR2_PACKAGE_LIBURCU
+> +	select BR2_PACKAGE_LIBAIO
+> +	select BR2_PACKAGE_LVM2
+> +	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+> +	select BR2_PACKAGE_READLINE
+> +	help
+> +	  This package provides the following binaries to drive the Device Mapper
+> +	  multipathing driver:  
+> +	    * multipath - Device mapper target autoconfig.
+> +	    * multipathd - Multipath daemon.
+> +	    * mpathpersist - Manages SCSI persistent reservations on dm multipath devices.
+> +	    * kpartx - Create device maps from partition tables.
+
+Some lines are too long. Please run "make check-package" and ensure you
+don't have any warning.
 
 Thanks!
 
