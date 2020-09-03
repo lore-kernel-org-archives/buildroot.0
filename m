@@ -1,27 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 3 Sep 2020 12:03:03 -0700
-Subject: [Buildroot] Package for .net core runtime
-In-Reply-To: <CAOiXNkC6HVz2WzOF74KmjnnPoc8RqJZcSECYiZC_oizqUrvcCw@mail.gmail.com>
-References: <CAOiXNkC6HVz2WzOF74KmjnnPoc8RqJZcSECYiZC_oizqUrvcCw@mail.gmail.com>
-Message-ID: <CA+h8R2ovLgMjovNB7cWZEHTFQ0mAyetN2t46rh5DVnHry48uMw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Sep 2020 21:02:40 +0200
+Subject: [Buildroot] [git commit] package/spandsp: needs jpeg support in
+ tiff package
+Message-ID: <20200903185518.C6EC3877EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Andrey,
+commit: https://git.buildroot.net/buildroot/commit/?id=4205289f9f8c7efcf83cad802af8bfe26fc7cdd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Sep 3, 2020 at 2:27 AM Andrey Nechypurenko <andreynech@gmail.com> wrote:
-> I have posted a patch for .net core runtime package some time weeks ago:
-> http://lists.busybox.net/pipermail/buildroot/2020-August/289607.html
->
-> Since I did not receive any response yet, I am wondering if there is
-> in general an interest in integrating it?
+Since upstream commit https://github.com/freeswitch/spandsp/commit/
+be0bce3dbc4b33f92e8da985900104b857259d02#diff-67e997bcfdac55191033d57a16d1408aR550,
+jpeg support is needed in the fiff package.
 
-That's such a clean  & simple package that I really do hope it gets merged.
+This issue appeared with the bump of spandsp to 3.0 in commit
+36c983bfa543de89ab8c9374a860d2fdf8a2fb87.
 
-I'll try to test it out.
+Fixes:
+http://autobuild.buildroot.net/results/f5e/f5efa4aeef661670403111074b9397da47167d07/
 
-Best regards,
-Christian Stewart
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/spandsp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/spandsp/Config.in b/package/spandsp/Config.in
+index da0ca50fa2..c64eee8acd 100644
+--- a/package/spandsp/Config.in
++++ b/package/spandsp/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SPANDSP
+ 	bool "spandsp"
+ 	select BR2_PACKAGE_TIFF
++	select BR2_PACKAGE_TIFF_JPEG
+ 	help
+ 	  Spandsp is a library of many DSP functions for telephony.
+ 	  These range from simple modules, such as DTMF detection, to
