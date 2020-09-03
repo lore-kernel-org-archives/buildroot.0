@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 22:47:14 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/libcap: drop host-gperf
- dependency
-In-Reply-To: <20200830100058.4180798-1-fontaine.fabrice@gmail.com>
-References: <20200830100058.4180798-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200903224714.45ad0042@windsurf.home>
+Date: Thu, 3 Sep 2020 22:47:49 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/kismet: fix build with gcc >= 9
+In-Reply-To: <20200826233530.455941a8@windsurf.home>
+References: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
+ <20200826233530.455941a8@windsurf.home>
+Message-ID: <20200903224749.641a211e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +14,68 @@ To: buildroot@busybox.net
 
 Hello Fabrice,
 
-On Sun, 30 Aug 2020 12:00:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Do you have some further research/feedback on the below questions ?
 
-> host-gperf dependency was added in commit
-> 5d8926add5da1b0bdfb90a41f4d7f857864c5524 without any explanation in the
-> commit message but gperf can be disabled through BUILD_GPERF since
-> https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=3c22870c762f7925b5ff143d76f9affbade275ba
-> 
-> So use this variable and drop this unneeded dependency
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Thanks for looking into this. I agree that BUILD_GPERF=no will avoid
-the host-gperf dependency, however I'm a bit confused how this works in
-libcap and whether it has any drawback.
-
-When gperf is detected, it will be used to generate some C code that
-contains a hash function:
-
-ifeq ($(BUILD_GPERF),yes)
-USE_GPERF_OUTPUT = $(GPERF_OUTPUT)
-INCLUDE_GPERF_OUTPUT = -DINCLUDE_GPERF_OUTPUT='"$(GPERF_OUTPUT)"'
-endif
-
-$(GPERF_OUTPUT): cap_names.list.h
-        perl -e 'print "struct __cap_token_s { const char *name; int index; };\n%{\nconst struct __cap_token_s *__cap_lookup_name(const char *, size_t);\n%}\n%%\n"; while ($$l = <>) { $$l =~ s/[\{\"]//g; $$l =~ s/\}.*// ; print $$l; }' < $< | gperf --ignore-case --language=ANSI-C --readonly --null-strings --global-table --hash-function-name=__cap_hash_name --lookup-function-name="__cap_lookup_name" -c -t -m20 $(INDENT) > $@
-        sed -e 's/unsigned int len/size_t len/' -i $@
-
-cap_text.o: cap_text.c $(USE_GPERF_OUTPUT) $(INCLS)
-        $(CC) $(CFLAGS) $(IPATH) $(INCLUDE_GPERF_OUTPUT) -c $< -o $@
-
-Then in cap_text.c, this gets used like this:
-
-#ifdef INCLUDE_GPERF_OUTPUT
-/* we need to include it after #define _GNU_SOURCE is set */
-#include INCLUDE_GPERF_OUTPUT
-#endif
-
-So the gperf-generated source file, if it exists is included. But I
-don't see any conditional code that makes use of it when available.
-
-Am I missing something? I wanted to understand the impact of not having
-gperf. Perhaps not having a hash function makes libcap significantly
-slower ?
-
-Initially, I was expected libcap to have a pre-generated version of the
-file, and having gperf available would only allow to re-generate the
-file, but that doesn't seem to be what's happening.
-
-Do you understand a bit better what is going on here ?
-
-Thanks,
+Thanks!
 
 Thomas
+
+On Wed, 26 Aug 2020 23:35:30 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> On Mon, 24 Aug 2020 20:21:21 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> 
+> > Adding -std=c++11 fix the build and can be removed as soon as kismet is
+> > bumped to latest version as the offending code has been removed. It
+> > should be noted that kismet builds fine with gcc 8 so it remains unclear
+> > why this build failure is raised only with gcc >= 9 (build failure
+> > confirmed with gcc 9 and 10)  
+> 
+> Meh, this looks weird :/
+> 
+> bits/socket.h defines the field like this:
+> 
+> #if __glibc_c99_flexarr_available
+>     __extension__ unsigned char __cmsg_data __flexarr; /* Ancillary data.  */
+> #endif
+> 
+> and __glibc_c99_flexarr_available is defined as follows:
+> 
+> /* Support for flexible arrays.
+>    Headers that should use flexible arrays only if they're "real"
+>    (e.g. only if they won't affect sizeof()) should test
+>    #if __glibc_c99_flexarr_available.  */
+> #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+> # define __flexarr      []
+> # define __glibc_c99_flexarr_available 1
+> #elif __GNUC_PREREQ (2,97)
+> /* GCC 2.97 supports C99 flexible array members as an extension,
+>    even when in C89 mode or compiling C++ (any version).  */
+> # define __flexarr      []
+> # define __glibc_c99_flexarr_available 1
+> #elif defined __GNUC__
+> /* Pre-2.97 GCC did not support C99 flexible arrays but did have
+>    an equivalent extension with slightly different notation.  */
+> # define __flexarr      [0]
+> # define __glibc_c99_flexarr_available 1
+> #else
+> /* Some other non-C99 compiler.  Approximate with [1].  */
+> # define __flexarr      [1]
+> # define __glibc_c99_flexarr_available 0
+> #endif
+> 
+> Some it's really unclear how -std=c++11 can fix the issue.
+> 
+> Could you have a look at which of those #if case we fall into in the
+> different cases (between gcc 8.x and gcc 9.x, with/without -std=c++11) ?
+> 
+> Thanks!
+> 
+> Thomas
+
+
+
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
