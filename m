@@ -1,82 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 22:47:49 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/kismet: fix build with gcc >= 9
-In-Reply-To: <20200826233530.455941a8@windsurf.home>
-References: <20200824182121.1929324-1-fontaine.fabrice@gmail.com>
- <20200826233530.455941a8@windsurf.home>
-Message-ID: <20200903224749.641a211e@windsurf.home>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Thu, 03 Sep 2020 22:52:58 +0200
+Subject: [Buildroot] [PATCH] package/libzip: add patch from upstream to
+ fix build
+In-Reply-To: <20200903221649.630985a2@windsurf.home>
+References: <20200902201431.2197792-1-paul@crapouillou.net>
+ <20200903221649.630985a2@windsurf.home>
+Message-ID: <AOO3GQ.FY23C476LQ1Z@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
 
-Do you have some further research/feedback on the below questions ?
 
-Thanks!
+Le jeu. 3 sept. 2020 ? 22:16, Thomas Petazzoni 
+<thomas.petazzoni@bootlin.com> a ?crit :
+> On Wed,  2 Sep 2020 22:14:30 +0200
+> Paul Cercueil <paul@crapouillou.net> wrote:
+> 
+>>  Cherry-pick a patch from upstream project that fixes the build.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> 
+> Which build issue is this fixing ? What toolchain/C library ? Since
+> when is this happening ? Do we need to backport this fix to our stable
+> branches ? Do we have autobuilder failures for this ?
 
-Thomas
+Buildroot toolchain, GCC 10, uClibc-ng. Doesn't build because it uses 
+INT_MAX without including <limits.h>.
 
-On Wed, 26 Aug 2020 23:35:30 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Backport the change to the next 2020.08 point release, I think. About 
+autobuilder failures, I didn't see any. It failed locally.
 
-> On Mon, 24 Aug 2020 20:21:21 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 > 
-> > Adding -std=c++11 fix the build and can be removed as soon as kismet is
-> > bumped to latest version as the offending code has been removed. It
-> > should be noted that kismet builds fine with gcc 8 so it remains unclear
-> > why this build failure is raised only with gcc >= 9 (build failure
-> > confirmed with gcc 9 and 10)  
+>>  diff --git a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch 
+>> b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+>>  new file mode 100644
+>>  index 0000000000..e1d728158e
+>>  --- /dev/null
+>>  +++ b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+>>  @@ -0,0 +1,27 @@
+>>  +From fd89e242d16128dedef08f47d99ae56aa19b0591 Mon Sep 17 00:00:00 
+>> 2001
+>>  +From: =?UTF-8?q?=C3=98rjan=20Malde?= <red@foxi.me>
+>>  +Date: Wed, 15 Jul 2020 12:16:16 +0200
+>>  +Subject: [PATCH] Include limits.h for INT_MAX
+>>  +
+>>  +[Retrieved from:
+>>  
+>> +https://github.com/pcercuei/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591]
 > 
-> Meh, this looks weird :/
-> 
-> bits/socket.h defines the field like this:
-> 
-> #if __glibc_c99_flexarr_available
->     __extension__ unsigned char __cmsg_data __flexarr; /* Ancillary data.  */
-> #endif
-> 
-> and __glibc_c99_flexarr_available is defined as follows:
-> 
-> /* Support for flexible arrays.
->    Headers that should use flexible arrays only if they're "real"
->    (e.g. only if they won't affect sizeof()) should test
->    #if __glibc_c99_flexarr_available.  */
-> #if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
-> # define __flexarr      []
-> # define __glibc_c99_flexarr_available 1
-> #elif __GNUC_PREREQ (2,97)
-> /* GCC 2.97 supports C99 flexible array members as an extension,
->    even when in C89 mode or compiling C++ (any version).  */
-> # define __flexarr      []
-> # define __glibc_c99_flexarr_available 1
-> #elif defined __GNUC__
-> /* Pre-2.97 GCC did not support C99 flexible arrays but did have
->    an equivalent extension with slightly different notation.  */
-> # define __flexarr      [0]
-> # define __glibc_c99_flexarr_available 1
-> #else
-> /* Some other non-C99 compiler.  Approximate with [1].  */
-> # define __flexarr      [1]
-> # define __glibc_c99_flexarr_available 0
-> #endif
-> 
-> Some it's really unclear how -std=c++11 can fix the issue.
-> 
-> Could you have a look at which of those #if case we fall into in the
-> different cases (between gcc 8.x and gcc 9.x, with/without -std=c++11) ?
-> 
-> Thanks!
-> 
+> This URL gives me a 404.
+
+I forked the upstream project just to notice afterwards that they 
+already had a fix, so I deleted my project.
+The real URL is s/pcercuei/nih-at/, so:
+https://github.com/nih-at/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591
+
+-Paul
+
 > Thomas
-
-
-
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
