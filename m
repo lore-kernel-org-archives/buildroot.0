@@ -1,153 +1,278 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 3 Sep 2020 12:40:23 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
- deps to vendor tree if not present
-In-Reply-To: <20200903191841.GC14354@scaer>
-References: <20200831062335.1105977-1-christian@paral.in>
- <20200831070800.GN14354@scaer>
- <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
- <20200903132852.GZ14354@scaer> <20200903160205.7e67bbe7@windsurf.home>
- <20200903151221.GA14354@scaer> <20200903181334.1a25642b@windsurf.home>
- <20200903191841.GC14354@scaer>
-Message-ID: <CA+h8R2rNmRJUor9CDjyNzsgGPCmpE3XPjtkFdjzCeMGYenWKxA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Sep 2020 21:47:55 +0200
+Subject: [Buildroot] [git commit] package/iputils: add config options to
+ select which binaries to build/install
+Message-ID: <20200903193957.3EC35875FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=95b0078cc089b48be8973b9507599cc836397869
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Sep 3, 2020 at 12:19 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Something the go/cargo/npm/composer/... folkds would have to answer. And
-> if at all, I;d like that we get a consistent behaviour across all those
-> package managers that have vendoring of dependencies. Indeed, it would
-> be very disapointing to have one support it and nto the others. I.e. if
-> we can't do separate tarball for one of them, we should not do for the
-> others...
+By default, the iputils build script might build binaries which are
+useless for certain applications, like tftpd or ninfod. Those binaries
+will add to the target filesystem size unless a post-build script removes
+them manually, which is cumbersome and doesn't shorten build times.
 
-I do not see in any way how this would not be possible, even for npm,
-you can quite easily query the package dependency graph and set things
-up properly.
+In particular, in a certain aarch64 Buildroot project with musl selected
+as a C library, this patch allowed to shrink the full iputils package from
+219 KiB (if every option is selected) to 63 KiB (with only the ping
+binary selected) - a 71.2% relative size decrease.
 
-> For example, let's say that Joe Developer Jr. in BIG CORP copies some
-> LGPL-licensed code into their proprietary project, as a bundled library.
->
-> This is totally legit: the proprietary parts are not tainted (I hate
-> that word, but have not better for now) by the LGPL stuff. Yet, they
-> have to redistribute the LGPL stuff.
->
-> Buildroot currently offers noway for them to do that.
+Moreover, upstream recently introduced a commit that disabled tftpd from
+building by default, like rarpd. In the current state of things, this change
+will introduce inconveniences for Buildroot users which prefer to use the
+tftpd implementation provided by this package. With this patch, however, that
+decision and similar future ones won't be a concern, because they will
+have complete control of what binaries are built.
 
-In what world would a Buildroot package ever be added as an in-tree
-package with a proprietary library *copied into the source code tree*
-??
+These changes add Kconfig options which let the user select what
+binaries are built with ease.
 
-> Vendoring is the same as bundling, except it happens at download time on
-> our side, not on the upstream developper's machine.
+Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/iputils/Config.in  |  67 ++++++++++++++++++++++++
+ package/iputils/iputils.mk | 126 ++++++++++++++++++++++++++++++---------------
+ 2 files changed, 152 insertions(+), 41 deletions(-)
 
-We're enforcing hash checks on these bundles. The format may not
-always be the same across versions. Storing the source code before
-it's extracted into a vendor tree is the only way to be sure that the
-hashes won't change between iterations of the package manager. It's
-also the only way to redistribute the source code packages for the
-libraries independently from the proprietary part, maintaining the
-hashes. It's the only way to deduplicate downloads of identical
-package versions, to do LICENSE checks on dependencies, etc etc etc.
-
-I don't see an alternative option here. Just running the package
-manager and compressing the result is less convincing than writing
-some code to properly understand each dependency.
-
-> > >   - at extract step, how do you know that you have to also extract the
-> > >     archive with the vendor stuff? Probably easy by looking if said
-> > >     archive exists. But then, if each dependency is stored in its own
-> > >     archive, how do you know which to extract?
-
- - Extract the main package
- - Check the package.json or go.mod or cargo or whatever
- - Extract the relevant stuff into a format the package manager understands
- - Run the package manager from the language to assemble the "vendor"
-tree in the source dir (maybe same step).
-
-> > You would parse the go.mod file I suppose, but that doesn't give you
-> > indirect dependencies. Perhaps some Go tool can help with that ? But
-> > indeed, that's a good question.
-
-?? go.mod handles indirect dependencies.
-
-> And what about cargo? npm? php composer? Others? (what, there are
-> others? ;-] )
-
-package.lock yarn.lock. Require it.
-
-> > Note that storing each dependency as a separate tarball was an idea I
-> > have thrown on the table, not something that was proposed by Sam.
->
-> Yes, but one or many, it does not change much...
-
-It changes a lot! As described above.
-
-> > > And then, if two deps at
-> > >     different levels have a depednency on another package, but at
-> > >     different versions?
-> > I am not following you on this one.
->
->   - foo vendors libssl version 42.27
->   - foo vendors libhttp version 1.2.3
->     - libhttp 1.2.3 vendors libssl 666.777
->
-> What version of libssl do we extract where?
->
-> I do not want to have to repeat the vendoring logic in Buildroot.
-
-Why repeat it? Re-use it from the programming language! Not everything
-has to be in bash.
-
-> Also, I do not want that we have various level of vendoring support for
-> the various package managers.
-
-OK, so we implement it across the board, which language would not be
-able to support this?
-
-> > >   - when you generate the legal-info/ directory, how do you know what to
-> > >     put in there for that package? You are back to the problem above,
-> > >     plus you would also want to ignore those vendored deps that are not
-> > >     redistributable, although we have no way in Buildroot to describe
-> > >     that either....
-
-Use the license field in the package.json or wherever the specifiers
-exist, and if they aren't there, detect common LICENSE file names, if
-you can't find anything, fail.
-
-Go has a few very robust license detector packages. (if desired).
-
-> So, if we jut concentrate on how we can help people do exactly that:
-> filter out the bits they do not want to redistribute?
->
-> One solution would be to have packages provide some legal-inf hooks,
-> something like (e.g.: only keep files which names match the regexp):
->
->     FOO_LEGAL_INFO_FILTER_REGEXP = ^vendor/FLOSS/
->
-> Or whatever, that would be applied at the time the legal-info is
-> generated.
-
-How does this solve the problem? If I need to give the source tarballs
-away for dependencies, and it's all mixed into one massive tarball,
-you can't separate things out and keep the hashes the same
-
-I thought the requirement was that you would be able to send someone
-the buildroot "dl" directory and be able to perform a build without
-network fetches.
-
-> Paint me unconvinced.
-
-What's the alternative?
-
-> Regards,
-> Yann E. MORIN.
-
-
-best regards,
-Christian Stewart
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index b5d9141a7d..0d4a4ba3f8 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -7,3 +7,70 @@ config BR2_PACKAGE_IPUTILS
+ 	  etc.
+ 
+ 	  https://github.com/iputils/iputils
++
++if BR2_PACKAGE_IPUTILS
++
++config BR2_PACKAGE_IPUTILS_ARPING
++	bool "arping"
++	default y
++	help
++	  Installs arping.
++
++config BR2_PACKAGE_IPUTILS_CLOCKDIFF
++	bool "clockdiff"
++	default y
++	help
++	  Installs clockdiff.
++
++config BR2_PACKAGE_IPUTILS_PING
++	bool "ping"
++	default y
++	help
++	  Installs ping.
++
++config BR2_PACKAGE_IPUTILS_RARPD
++	bool "rarpd"
++	help
++	  Installs rarpd.
++
++config BR2_PACKAGE_IPUTILS_RDISC
++	bool "rdisc"
++	default y
++	help
++	  Installs rdisc.
++
++config BR2_PACKAGE_IPUTILS_RDISC_SERVER
++	bool "rdisc (server code)"
++	default y
++	depends on BR2_PACKAGE_IPUTILS_RDISC
++	help
++	  Builds rdisc with server code.
++
++config BR2_PACKAGE_IPUTILS_TFTPD
++	bool "tftpd"
++	help
++	  Installs tftpd.
++
++config BR2_PACKAGE_IPUTILS_TRACEPATH
++	bool "tracepath"
++	default y
++	help
++	  Installs tracepath.
++
++config BR2_PACKAGE_IPUTILS_TRACEROUTE6
++	bool "traceroute6"
++	default y
++	help
++	  Installs traceroute6.
++
++config BR2_PACKAGE_IPUTILS_NINFOD
++	bool "ninfod"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ninfod requires <pthread.h>
++	help
++	  Installs ninfod.
++
++comment "ninfod needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++endif
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 9cc51d1541..e10c0636c9 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -17,8 +17,74 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
++# Selectively build binaries
++IPUTILS_CONF_OPTS += \
++	-DBUILD_CLOCKDIFF=$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),true,false) \
++	-DBUILD_RARPD=$(if $(BR2_PACKAGE_IPUTILS_RARPD),true,false) \
++	-DBUILD_RDISC=$(if $(BR2_PACKAGE_IPUTILS_RDISC),true,false) \
++	-DBUILD_RDISC_SERVER=$(if $(BR2_PACKAGE_IPUTILS_RDISC_SERVER),true,false) \
++	-DBUILD_TRACEPATH=$(if $(BR2_PACKAGE_IPUTILS_TRACEPATH),true,false) \
++	-DBUILD_TRACEROUTE6=$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),true,false) \
++	-DBUILD_NINFOD=$(if $(BR2_PACKAGE_IPUTILS_NINFOD),true,false)
++
++#
++# arping
++#
++ifeq ($(BR2_PACKAGE_IPUTILS_ARPING),y)
++IPUTILS_CONF_OPTS += -DBUILD_ARPING=true
++
++# move some binaries to the same location as where Busybox installs
++# the corresponding applets, so that we have a single version of the
++# tools (from iputils)
++define IPUTILS_MOVE_ARPING_BINARY
++	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
++endef
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_ARPING_BINARY
++
++else
++IPUTILS_CONF_OPTS += -DBUILD_ARPING=false
++endif
++
++#
++# ping
++#
++ifeq ($(BR2_PACKAGE_IPUTILS_PING),y)
++IPUTILS_CONF_OPTS += -DBUILD_PING=true
++
++# same reason to move the ping binary as for arping
++ifeq ($(BR2_ROOTFS_MERGED_USR),)
++define IPUTILS_MOVE_PING_BINARY
++	mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping
++endef
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_PING_BINARY
++endif
++
++# upstream requires distros to create symlink
++define IPUTILS_CREATE_PING6_SYMLINK
++	ln -sf $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
++endef
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
++
++else
++IPUTILS_CONF_OPTS += -DBUILD_PING=false
++endif
++
++#
++# tftpd
++#
++ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
+ IPUTILS_CONF_OPTS += -DBUILD_TFTPD=true
+ 
++define IPUTILS_MOVE_TFTPD_BINARY
++	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
++endef
++IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_TFTPD_BINARY
++
++else
++IPUTILS_CONF_OPTS += -DBUILD_TFTPD=false
++endif
++
++# Handle libraries
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ IPUTILS_CONF_OPTS += -DUSE_CAP=true
+ IPUTILS_DEPENDENCIES += libcap
+@@ -37,63 +103,41 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ IPUTILS_DEPENDENCIES += systemd
+ endif
+ 
+-# ninfod requires <pthread.h>
+-ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-IPUTILS_NINFOD = n
+-endif
+-
+-ifeq ($(IPUTILS_NINFOD),n)
+-IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+-else
+-IPUTILS_CONF_OPTS += -DBUILD_NINFOD=true
+-endif
+-
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ IPUTILS_CONF_OPTS += -DUSE_GETTEXT=true
+ else
+ IPUTILS_CONF_OPTS += -DUSE_GETTEXT=false
+ endif
+ 
+-IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
+-
+ # XSL Stylesheets for DocBook 5 not packaged for buildroot
+ IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
+ 
+-# move iputils binaries to the same location as where Busybox installs
+-# the corresponding applets, so that we have a single version of the
+-# tools (from iputils)
+-define IPUTILS_MOVE_BINARIES
+-	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
+-	$(if $(BR2_ROOTFS_MERGED_USR),,\
+-		mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping)
+-	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
+-endef
+-IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
+-
+-# upstream requires distros to create symlink
+-define IPUTILS_CREATE_PING6_SYMLINK
+-	ln -sf ping $(TARGET_DIR)/bin/ping6
+-endef
+-IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+-
+ # handle permissions ourselves
+ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+ ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+ define IPUTILS_PERMISSIONS
+-	/usr/sbin/arping      f 755 0 0 - - - - -
+-	/usr/bin/clockdiff    f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
+-	/bin/ping             f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
+-	/usr/bin/traceroute6  f 755 0 0 - - - - -
+-	|xattr cap_net_raw+p
++	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
++		/usr/sbin/arping      f 755 0 0 - - - - -,)
++	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),\
++		/usr/bin/clockdiff    f 755 0 0 - - - - -
++		|xattr cap_net_raw+p,)
++	$(if $(BR2_PACKAGE_IPUTILS_PING),\
++		/bin/ping             f 755 0 0 - - - - -
++		|xattr cap_net_raw+p,)
++	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),\
++		/usr/bin/traceroute6  f 755 0 0 - - - - -
++		|xattr cap_net_raw+p,)
+ endef
+ else
+ define IPUTILS_PERMISSIONS
+-	/usr/sbin/arping      f  755 0 0 - - - - -
+-	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+-	/bin/ping             f 4755 0 0 - - - - -
+-	/usr/bin/traceroute6  f 4755 0 0 - - - - -
++	$(if $(BR2_PACKAGE_IPUTILS_ARPING),\
++		/usr/sbin/arping      f  755 0 0 - - - - -,)
++	$(if $(BR2_PACKAGE_IPUTILS_CLOCKDIFF),\
++		/usr/bin/clockdiff    f 4755 0 0 - - - - -,)
++	$(if $(BR2_PACKAGE_IPUTILS_PING),\
++		/bin/ping             f 4755 0 0 - - - - -,)
++	$(if $(BR2_PACKAGE_IPUTILS_TRACEROUTE6),\
++		/usr/bin/traceroute6  f 4755 0 0 - - - - -,)
+ endef
+ endif
+ 
