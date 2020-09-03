@@ -1,53 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 3 Sep 2020 21:24:43 +0200
-Subject: [Buildroot] [git commit] package/perl-type-tiny: bump to version
- 1.010005
-Message-ID: <20200903191701.3EC7187A66@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-mail-dkim: bump to version
+ 1.20200824
+Message-ID: <20200903191701.27A777FB32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=616b093428a23a0a1590728e87a58b47bb7ecd32
+commit: https://git.buildroot.net/buildroot/commit/?id=eaed10e4020fcd60b36febcad3c308740b0d24d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/perl-type-tiny/perl-type-tiny.hash | 5 ++---
- package/perl-type-tiny/perl-type-tiny.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
+ package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index 20974d2f0d..c4c64a62b5 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
-@@ -1,7 +1,6 @@
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
+index 99ba275d7a..e94adfc6ed 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.hash
++++ b/package/perl-mail-dkim/perl-mail-dkim.hash
+@@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  9d2d5ab2c5d6d2f98138ab14c5f529e3  Type-Tiny-1.010001.tar.gz
--sha256  f378663f62aaa7cf87f47b90f0951356d26a08468027da26962387998a6b1aae  Type-Tiny-1.010001.tar.gz
-+md5  d20a07df0704e92c9c9beb72c5fdf153  Type-Tiny-1.010005.tar.gz
-+sha256  e01becf614849ff8a869614c46ac2706b18da8e35ed80277d8475d8c88ca9173  Type-Tiny-1.010005.tar.gz
+-md5  f911799d8b9418ea1299323587ad7319  Mail-DKIM-1.20200708.tar.gz
+-sha256  d9d21f4f9960a174d45f9660ab5d52db667b9af57182ff4e4d7fc33316a51e54  Mail-DKIM-1.20200708.tar.gz
++md5  9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
++sha256  871d329830acb4840423aa59036622fb2ee394efc1d09316dcc32ae94454e916  Mail-DKIM-1.20200824.tar.gz
  
  # computed by scancpan
--sha256  8c466d4e49afea63822407988a7b7c77be0178bc398fe088fadffb5202c44a4a  COPYRIGHT
- sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 9c89eb5daf..5d9758269c 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
-@@ -4,11 +4,11 @@
+ sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
+diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
+index 5d45f0335e..e67bf5ee18 100644
+--- a/package/perl-mail-dkim/perl-mail-dkim.mk
++++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.010001
-+PERL_TYPE_TINY_VERSION = 1.010005
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
--PERL_TYPE_TINY_LICENSE_FILES = COPYRIGHT LICENSE
-+PERL_TYPE_TINY_LICENSE_FILES = LICENSE
- PERL_TYPE_TINY_DISTNAME = Type-Tiny
- 
- $(eval $(perl-package))
+-PERL_MAIL_DKIM_VERSION = 1.20200708
++PERL_MAIL_DKIM_VERSION = 1.20200824
+ PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
+ PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
+ PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
