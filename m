@@ -1,137 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 23:47:39 +0200
-Subject: [Buildroot] [git commit] configs/qemu_riscv32_virt: use Linux 5.4
- kernel
-Message-ID: <20200903214031.1992584F31@busybox.osuosl.org>
+Date: Thu, 3 Sep 2020 23:55:15 +0200
+Subject: [Buildroot] [PATCH] qemu_riscv32_virt: Update to mainline glibc
+ and kernel 5.4
+In-Reply-To: <20200831232051.2303515-1-alistair.francis@wdc.com>
+References: <20200831232051.2303515-1-alistair.francis@wdc.com>
+Message-ID: <20200903235515.7b95e485@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acc1330d4a838193eb276e02e6642cf297c0e9c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 31 Aug 2020 16:20:51 -0700
+Alistair Francis <alistair.francis@wdc.com> wrote:
 
-Now that RISC-V 32-bit (RV32) support has been merged into mainline
-glibc, we can use the Linux 5.4 kernel.
+> Now that RISC-V 32-bit (RV32) support has been merged into mainilne
+> glibc we can us upstream glibc and the 5.4 kernel.
+> 
+> This patch removes the old files for the RV32 glibc fork and replaces
+> them with new files for the latest SHA from upstream glibc. We also need
+> to update the kernel as RV32 requires a 5.4+ kernel.
+> 
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  ...ert-riscv-Use-latest-system-call-ABI.patch | 66 -------------------
+>  board/qemu/riscv32-virt/readme.txt            |  2 +-
+>  configs/qemu_riscv32_virt_defconfig           |  7 +-
+>  ...001-riscv-Do-not-use-__has_include__.patch | 28 --------
+>  .../glibc.hash                                |  2 +-
+>  package/glibc/glibc.mk                        |  6 +-
+>  6 files changed, 9 insertions(+), 102 deletions(-)
+>  delete mode 100644 board/qemu/riscv32-virt/patches/linux/0001-Revert-riscv-Use-latest-system-call-ABI.patch
+>  delete mode 100644 package/glibc/06983fe52cfe8e4779035c27e8cc5d2caab31531/0001-riscv-Do-not-use-__has_include__.patch
+>  rename package/glibc/{06983fe52cfe8e4779035c27e8cc5d2caab31531 => 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99}/glibc.hash (69%)
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...1-Revert-riscv-Use-latest-system-call-ABI.patch | 66 ----------------------
- board/qemu/riscv32-virt/readme.txt                 |  2 +-
- configs/qemu_riscv32_virt_defconfig                |  7 +--
- 3 files changed, 4 insertions(+), 71 deletions(-)
+Even though I understand they are related, I split the patch into two,
+one for the glibc update, one for the defconfig change. Both applied.
+Thanks!
 
-diff --git a/board/qemu/riscv32-virt/patches/linux/0001-Revert-riscv-Use-latest-system-call-ABI.patch b/board/qemu/riscv32-virt/patches/linux/0001-Revert-riscv-Use-latest-system-call-ABI.patch
-deleted file mode 100644
-index e0dfaa1501..0000000000
---- a/board/qemu/riscv32-virt/patches/linux/0001-Revert-riscv-Use-latest-system-call-ABI.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From 15f62343916fcb3cae82e618da28eaa82bc8c007 Mon Sep 17 00:00:00 2001
--From: Alistair Francis <alistair.francis@wdc.com>
--Date: Tue, 16 Apr 2019 09:03:41 -0700
--Subject: [PATCH] Revert "riscv: Use latest system call ABI"
--
--This reverts commit d4c08b9776b392e20efc6198ebe1bc8ec1911d9b.
--
--The latest RISC-V 32bit glibc submission doesn't work with this patch,
--so let's revert it. This revert can be reverted when the glibc
--submission is updated to work on the 5.1 kernel.
--
--Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-----
-- arch/riscv/Kconfig                   | 1 +
-- arch/riscv/include/uapi/asm/unistd.h | 5 ++++-
-- arch/riscv/kernel/vdso/Makefile      | 2 --
-- 3 files changed, 5 insertions(+), 3 deletions(-)
--
--diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
--index eb56c82d8aa1..43dd2680c696 100644
----- a/arch/riscv/Kconfig
--+++ b/arch/riscv/Kconfig
--@@ -11,6 +11,7 @@ config 32BIT
-- 
-- config RISCV
-- 	def_bool y
--+	select ARCH_32BIT_OFF_T if !64BIT
-- 	# even on 32-bit, physical (and DMA) addresses are > 32-bits
-- 	select PHYS_ADDR_T_64BIT
-- 	select OF
--diff --git a/arch/riscv/include/uapi/asm/unistd.h b/arch/riscv/include/uapi/asm/unistd.h
--index 0e2eeeb1fd27..486a288b454c 100644
----- a/arch/riscv/include/uapi/asm/unistd.h
--+++ b/arch/riscv/include/uapi/asm/unistd.h
--@@ -17,8 +17,11 @@
-- 
-- #ifdef __LP64__
-- #define __ARCH_WANT_NEW_STAT
---#define __ARCH_WANT_SET_GET_RLIMIT
-- #endif /* __LP64__ */
--+#define __ARCH_WANT_SET_GET_RLIMIT
--+#ifndef __LP64__
--+#define __ARCH_WANT_TIME32_SYSCALLS
--+#endif
-- 
-- #include <asm-generic/unistd.h>
-- 
--diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
--index fec62b24df89..eed1c137f618 100644
----- a/arch/riscv/kernel/vdso/Makefile
--+++ b/arch/riscv/kernel/vdso/Makefile
--@@ -2,11 +2,9 @@
-- 
-- # Symbols present in the vdso
-- vdso-syms  = rt_sigreturn
---ifdef CONFIG_64BIT
-- vdso-syms += gettimeofday
-- vdso-syms += clock_gettime
-- vdso-syms += clock_getres
---endif
-- vdso-syms += getcpu
-- vdso-syms += flush_icache
-- 
---- 
--2.21.0
--
-diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index 6a848270bd..32b4333512 100644
---- a/board/qemu/riscv32-virt/readme.txt
-+++ b/board/qemu/riscv32-virt/readme.txt
-@@ -1,5 +1,5 @@
- Run Linux in emulation with:
- 
--  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
-+  qemu-system-riscv32 -M virt -bios output/images/fw_jump.elf -kernel output/images/Image -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic # qemu_riscv32_virt_defconfig
- 
- The login prompt will appear in the terminal that started Qemu.
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 166c41f1f0..5447342dd9 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -5,7 +5,6 @@ BR2_RISCV_32=y
- # System
- BR2_SYSTEM_DHCP="eth0"
- BR2_TARGET_GENERIC_GETTY=y
--BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches/"
- 
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
-@@ -14,13 +13,13 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- 
--# Linux headers same as kernel, a 5.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-+# Linux headers same as kernel, a 5.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.61"
- BR2_LINUX_KERNEL_DEFCONFIG="rv32"
- BR2_LINUX_KERNEL_IMAGE=y
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
