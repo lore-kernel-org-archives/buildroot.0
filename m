@@ -1,128 +1,170 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Sep 2020 20:54:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netopeer2: fix patch
-In-Reply-To: <20200903084956.23337-1-heiko.thiery@gmail.com>
-References: <20200903084956.23337-1-heiko.thiery@gmail.com>
-Message-ID: <20200903185456.GB14354@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 3 Sep 2020 20:54:48 +0200
+Subject: [Buildroot] [git commit] package/hiredis: bump to version 1.0.0
+Message-ID: <20200903184814.02366842C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=dfb0567f6e6a38512309d33daf93566541001d49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-03 10:49 +0200, Heiko Thiery spake thusly:
-> Patch cannot be applied to bumped version anymore. So recreate on top of
-> current version.
+- Use cmake which is available since version 1.0.0 and
+  https://github.com/redis/hiredis/commit/ead586a2cb7de8a17073a96704a4200d63a380e5
+- Disable tests
+- Add openssl optional dependency
 
-Initially, I was a bit puzzled why that patch slipped trhough during a
-version bump. But then I remembered we just merged next into master, so
-I looked and indeed we bumped the version in ext, and added the patch in
-master.
+https://github.com/redis/hiredis/blob/v1.0.0/CHANGELOG.md
 
-So the merge introduced the issue. Next time, a cmall blurb to explain
-that would be nice. ;-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-CMakeLists.txt-do-not-force-SHARED.patch  | 47 ++++++++++++++++
+ package/hiredis/hiredis.hash                       |  2 +-
+ package/hiredis/hiredis.mk                         | 65 +++-------------------
+ 3 files changed, 57 insertions(+), 57 deletions(-)
 
-Applied to master, now. Thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Also change the patch numbering from 0003 -> 0001 since the others are
-> dropped due to version bump.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/ec58bc318e0e2fd46c16814a4011a4847090e696/
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  ...upport-using-current-user-for-SR-mo.patch} | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
->  rename package/netopeer2/{0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch => 0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch} (85%)
-> 
-> diff --git a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> similarity index 85%
-> rename from package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> rename to package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> index 45257b2ff4..76c71d0ff9 100644
-> --- a/package/netopeer2/0003-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> +++ b/package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
-> @@ -1,4 +1,4 @@
-> -From 36ee1f33bceb0c2a7899e28d75c0d05408b561f1 Mon Sep 17 00:00:00 2001
-> +From 4a950257fa353e27ef1bd753bca4d0279f41bc77 Mon Sep 17 00:00:00 2001
->  From: Michal Vasko <mvasko@cesnet.cz>
->  Date: Mon, 24 Aug 2020 13:47:40 +0200
->  Subject: [PATCH] scripts FEATURE support using current user for SR modules
-> @@ -7,18 +7,13 @@ Mostly for special cases user/group configuration
->  when the user/group cannot be retrieved normally.
->  
->  Fixes #701
-> -
-> -Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> -[patch taken from upstream:
-> -https://github.com/CESNET/netopeer2/commit/12a82701e10651fbdedb1524b27edf3bb2377488]
-> -Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->  ---
->   CMakeLists.txt   | 10 +++++-----
->   scripts/setup.sh | 23 +++++++++++++++++++----
->   2 files changed, 24 insertions(+), 9 deletions(-)
->  
->  diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 2d4175e..95e7e61 100755
-> +index 77aea1f..8fd6b43 100755
->  --- a/CMakeLists.txt
->  +++ b/CMakeLists.txt
->  @@ -68,19 +68,19 @@ if(NOT MODULES_OWNER)
-> @@ -47,7 +42,7 @@ index 2d4175e..95e7e61 100755
->   # set prefix for the PID file
->   if(NOT PIDFILE_PREFIX)
->  diff --git a/scripts/setup.sh b/scripts/setup.sh
-> -index 7175bc4..b5d1406 100755
-> +index 9591a49..b7c7ba4 100755
->  --- a/scripts/setup.sh
->  +++ b/scripts/setup.sh
->  @@ -1,7 +1,8 @@
-> @@ -61,11 +56,11 @@ index 7175bc4..b5d1406 100755
->       echo "Required environment variables not defined!"
->       exit 1
->   fi
-> -@@ -33,7 +34,14 @@ MODULES=(
-> +@@ -37,7 +38,14 @@ MODULES=(
->   
->   # functions
->   INSTALL_MODULE() {
-> --    $SYSREPOCTL -a -i $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-> +-    "$SYSREPOCTL" -a -i $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
->  +    CMD="'$SYSREPOCTL' -a -i $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
->  +    if [ ! -z ${OWNER} ]; then
->  +        CMD="$CMD -o '$OWNER'"
-> @@ -77,11 +72,11 @@ index 7175bc4..b5d1406 100755
->       local rc=$?
->       if [ $rc -ne 0 ]; then
->           exit $rc
-> -@@ -41,7 +49,14 @@ INSTALL_MODULE() {
-> +@@ -45,7 +53,14 @@ INSTALL_MODULE() {
->   }
->   
->   UPDATE_MODULE() {
-> --    $SYSREPOCTL -a -U $MODDIR/$1 -s $MODDIR -p $PERMS -o $OWNER -g $GROUP -v2
-> +-    "$SYSREPOCTL" -a -U $MODDIR/$1 -s "$MODDIR" -p "$PERMS" -o "$OWNER" -g "$GROUP" -v2
->  +    CMD="'$SYSREPOCTL' -a -U $MODDIR/$1 -s '$MODDIR' -p '$PERMS' -v2"
->  +    if [ ! -z ${OWNER} ]; then
->  +        CMD="$CMD -o '$OWNER'"
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/hiredis/0001-CMakeLists.txt-do-not-force-SHARED.patch b/package/hiredis/0001-CMakeLists.txt-do-not-force-SHARED.patch
+new file mode 100644
+index 0000000000..b7fdb87910
+--- /dev/null
++++ b/package/hiredis/0001-CMakeLists.txt-do-not-force-SHARED.patch
+@@ -0,0 +1,47 @@
++From 0ce382c275b087e866517c003e565f8cc4855bdd Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 29 Aug 2020 23:19:26 +0200
++Subject: [PATCH] CMakeLists.txt: do not force SHARED
++
++Allow the user to build static libraries by removing SHARED from
++ADD_LIBRARY calls.
++
++Here is an extract of
++https://cmake.org/cmake/help/latest/command/add_library.html:
++
++"If no type is given explicitly the type is STATIC or SHARED based on
++whether the current value of the variable BUILD_SHARED_LIBS is ON."
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: probably not upstreamable as is because it will
++conflict with https://github.com/redis/hiredis/pull/851. So, this patch
++will probably have to be reworked for 1.0.x]
++---
++ CMakeLists.txt | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 1beccc6..fed79fd 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -40,7 +40,7 @@ IF(WIN32)
++     ADD_COMPILE_DEFINITIONS(_CRT_SECURE_NO_WARNINGS WIN32_LEAN_AND_MEAN)
++ ENDIF()
++ 
++-ADD_LIBRARY(hiredis SHARED ${hiredis_sources})
+++ADD_LIBRARY(hiredis ${hiredis_sources})
++ 
++ SET_TARGET_PROPERTIES(hiredis
++     PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE
++@@ -97,7 +97,7 @@ IF(ENABLE_SSL)
++     FIND_PACKAGE(OpenSSL REQUIRED)
++     SET(hiredis_ssl_sources
++         ssl.c)
++-    ADD_LIBRARY(hiredis_ssl SHARED
+++    ADD_LIBRARY(hiredis_ssl
++             ${hiredis_ssl_sources})
++ 
++     IF (APPLE)
++-- 
++2.28.0
++
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+index 2d50ce0f54..fc01d1f60d 100644
+--- a/package/hiredis/hiredis.hash
++++ b/package/hiredis/hiredis.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  2663b2aed9fd430507e30fc5e63274ee40cdd1a296026e22eafd7d99b01c8913  hiredis-0.14.1.tar.gz
++sha256  2a0b5fe5119ec973a0c1966bfc4bd7ed39dbce1cb6d749064af9121fe971936f  hiredis-1.0.0.tar.gz
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  COPYING
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index 230fb2d187..f1f4c49dab 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,66 +4,19 @@
+ #
+ ################################################################################
+ 
+-HIREDIS_VERSION_MAJOR = 0.14
+-HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).1
++HIREDIS_VERSION_MAJOR = 1.0
++HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).0
+ HIREDIS_SITE = $(call github,redis,hiredis,v$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3-Clause
+ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_INSTALL_STAGING = YES
++HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
+ 
+-HIREDIS_MAKE_OPTS = \
+-	$(TARGET_CONFIGURE_OPTS) \
+-	PREFIX=/usr
+-
+-HIREDIS_TARGETS = hiredis.pc
+-ifeq ($(BR2_STATIC_LIBS),y)
+-HIREDIS_TARGETS += static
+-else ifeq ($(BR2_SHARED_LIBS),y)
+-HIREDIS_TARGETS += dynamic
+-else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-HIREDIS_TARGETS += dynamic static
+-endif
+-
+-define HIREDIS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(HIREDIS_MAKE_OPTS) -C $(@D) \
+-		$(HIREDIS_TARGETS)
+-endef
+-
+-HIREDIS_INCLUDE_DIR = $(STAGING_DIR)/usr/include/hiredis
+-
+-ifeq ($(BR2_SHARED_LIBS),)
+-define HIREDIS_INSTALL_STAGING_STATIC_LIB
+-	$(INSTALL) -D -m 0755 $(@D)/libhiredis.a \
+-		$(STAGING_DIR)/usr/lib/libhiredis.a
+-endef
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
++HIREDIS_DEPENDENCIES += openssl
++else
++HIREDIS_CONF_OPTS += -DENABLE_SSL=OFF
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),)
+-define HIREDIS_INSTALL_STAGING_SHARED_LIB
+-	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
+-		$(STAGING_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
+-	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(STAGING_DIR)/usr/lib/libhiredis.so
+-endef
+-define HIREDIS_INSTALL_TARGET_SHARED_LIB
+-	$(INSTALL) -D -m 0755 $(@D)/libhiredis.so \
+-		$(TARGET_DIR)/usr/lib/libhiredis.so.$(HIREDIS_VERSION_MAJOR)
+-	ln -sf libhiredis.so.$(HIREDIS_VERSION_MAJOR) $(TARGET_DIR)/usr/lib/libhiredis.so
+-endef
+-endif
+-
+-# Do not call make install as this target will build shared and static libraries
+-define HIREDIS_INSTALL_STAGING_CMDS
+-	mkdir -p $(HIREDIS_INCLUDE_DIR)
+-	cp -dpfr $(@D)/hiredis.h $(@D)/async.h $(@D)/read.h $(@D)/sds.h \
+-		$(@D)/alloc.h $(@D)/adapters $(HIREDIS_INCLUDE_DIR)
+-	$(INSTALL) -D -m 0644 $(@D)/hiredis.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/hiredis.pc
+-	$(HIREDIS_INSTALL_STAGING_STATIC_LIB)
+-	$(HIREDIS_INSTALL_STAGING_SHARED_LIB)
+-endef
+-
+-define HIREDIS_INSTALL_TARGET_CMDS
+-	$(HIREDIS_INSTALL_TARGET_SHARED_LIB)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
