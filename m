@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 21:01:20 +0200
-Subject: [Buildroot] [PATCH] package/alsa-utils: fix install if
- directories exist
-In-Reply-To: <20200903133533.2505458-1-john@metanate.com>
-References: <20200903133533.2505458-1-john@metanate.com>
-Message-ID: <20200903210120.0f4642ba@windsurf.home>
+Date: Thu, 3 Sep 2020 21:02:27 +0200
+Subject: [Buildroot] [git commit] package/wolfssl: disable examples and tests
+Message-ID: <20200903185430.A805882108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  3 Sep 2020 14:35:33 +0100
-John Keeping <john@metanate.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a33de882eb23ddab1035718fe236199dfe23e5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> "mkdir" (without "-p") fails if the target directory exists, which means
-> that if alsa-utils is being reinstalled or if other files have
-> previously been installed in the alsa-state.d or alsa-restore.d
-> directories the installation will fail.
-> 
-> Switch to "$(INSTALL) -d" which allows us to be explicit about the
-> permissions and handles the case of a pre-existing directory correctly.
-> 
-> Signed-off-by: John Keeping <john@metanate.com>
-> ---
->  package/alsa-utils/alsa-utils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Examples and tests are not needed especially because of them fails on
+some architectures because it wrongly tries to use wc_Sha256FinalRaw:
 
-Applied to master, thanks.
+  CCLD     tests/unit.test
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/9.2.1/../../../../aarch64-none-linux-gnu/bin/ld: tests/tests_unit_test-api.o: in function `test_wc_Sha256FinalRaw':
+/tmp/instance-0/output-1/build/wolfssl-4.5.0-stable/tests/api.c:6504: undefined reference to `wc_Sha256FinalRaw'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/d5b6f97f7510874fe28c675e599be08cb8a78c7b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wolfssl/wolfssl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 5400b35fa5..e2833144fb 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -17,6 +17,8 @@ WOLFSSL_DEPENDENCIES = host-pkgconf
+ # script, so we need autoreconf
+ WOLFSSL_AUTORECONF = YES
+ 
++WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
++
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ WOLFSSL_CONF_OPTS += --enable-all
+ else
