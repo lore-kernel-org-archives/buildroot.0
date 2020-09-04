@@ -1,51 +1,81 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  4 Sep 2020 01:15:56 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-scapy: bump to version 2.4.4
-In-Reply-To: <20200903221557.91239-1-asafka7@gmail.com>
-References: <20200903221557.91239-1-asafka7@gmail.com>
-Message-ID: <20200903221557.91239-2-asafka7@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 04 Sep 2020 07:42:48 +0300
+Subject: [Buildroot] [PATCH 1/7] package/perl-html-parser: bump to
+ version 3.75
+In-Reply-To: <20200903192538.GD14354@scaer>
+References: <20200902150838.874797-1-francois.perrad@gadz.org>
+ <20200903192538.GD14354@scaer>
+Message-ID: <87v9gu2lvb.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And use two space for hash file indentation.
+Hi Yann
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-scapy/python-scapy.hash | 6 +++---
- package/python-scapy/python-scapy.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Thu, Sep 03 2020, Yann E. MORIN wrote:
+> On 2020-09-02 17:08 +0200, Francois Perrad spake thusly:
+>> now, license has its own file
+>> 
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Whole series of 7 patches applied to master, thanks!
 
-diff --git a/package/python-scapy/python-scapy.hash b/package/python-scapy/python-scapy.hash
-index df7eeb8eab..8618e54f4b 100644
---- a/package/python-scapy/python-scapy.hash
-+++ b/package/python-scapy/python-scapy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/scapy/json
--md5	469ae6f5615799a5de3f3b4eb217b18d  scapy-2.4.3.tar.gz
--sha256	e2f8d11f6a941c14a789ae8b236b27bd634681f1b29b5e893861e284d234f6b0  scapy-2.4.3.tar.gz
-+md5  01e52ff5d1f04364e17fc2d42872282e  scapy-2.4.4.tar.gz
-+sha256  ecfd7a14cd9c3ef0eb08d28d5bb71d97219edff1454ccbdff229f676b27900ee  scapy-2.4.4.tar.gz
- # Locally computed sha256 checksums
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/python-scapy/python-scapy.mk b/package/python-scapy/python-scapy.mk
-index f6cf2a07b3..3d9a4e1914 100644
---- a/package/python-scapy/python-scapy.mk
-+++ b/package/python-scapy/python-scapy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SCAPY_VERSION = 2.4.3
-+PYTHON_SCAPY_VERSION = 2.4.4
- PYTHON_SCAPY_SOURCE = scapy-$(PYTHON_SCAPY_VERSION).tar.gz
--PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/52/e7/464079606a9cf97ad04936c52a5324d14dae36215f9319bf3faa46a7907d
-+PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/c6/8f/438d4d0bab4c8e22906a7401dd082b4c0f914daf2bbdc7e7e8390d81a5c3
- PYTHON_SCAPY_SETUP_TYPE = setuptools
- PYTHON_SCAPY_LICENSE = GPL-2.0
- PYTHON_SCAPY_LICENSE_FILES = LICENSE
+Patch 5/7 in this series ("package/perl-net-dns: bump to version 1.26")
+is not in master as of commit acc1330d4a838 ("configs/qemu_riscv32_virt:
+use Linux 5.4 kernel").
+
+baruch
+
+>> ---
+>>  package/perl-html-parser/perl-html-parser.hash | 6 +++---
+>>  package/perl-html-parser/perl-html-parser.mk   | 6 +++---
+>>  2 files changed, 6 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
+>> index f06ec034b..021ef26c6 100644
+>> --- a/package/perl-html-parser/perl-html-parser.hash
+>> +++ b/package/perl-html-parser/perl-html-parser.hash
+>> @@ -1,6 +1,6 @@
+>>  # retrieved by scancpan from http://cpan.metacpan.org/
+>> -md5    eb7505e5f626913350df9dd4a03d54a8 HTML-Parser-3.72.tar.gz
+>> -sha256 ec28c7e1d9e67c45eca197077f7cdc41ead1bb4c538c7f02a3296a4bb92f608b HTML-Parser-3.72.tar.gz
+>> +md5  65bf65aa8b34b35443e094010f991406  HTML-Parser-3.75.tar.gz
+>> +sha256  ac6b5e25a8df7af54885201e91c45fb9ab6744c08cedc1a38fcc7d95d21193a9  HTML-Parser-3.75.tar.gz
+>>  
+>>  # computed by scancpan
+>> -sha256 663867028ae22c6f2fabab11238f65f1bf8dd789233b844bead5f6d22220d160 README
+>> +sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
+>> diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+>> index 6e5a81bb7..93e4f6745 100644
+>> --- a/package/perl-html-parser/perl-html-parser.mk
+>> +++ b/package/perl-html-parser/perl-html-parser.mk
+>> @@ -4,11 +4,11 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -PERL_HTML_PARSER_VERSION = 3.72
+>> +PERL_HTML_PARSER_VERSION = 3.75
+>>  PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+>> -PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
+>> +PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
+>>  PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+>> -PERL_HTML_PARSER_LICENSE_FILES = README
+>> +PERL_HTML_PARSER_LICENSE_FILES = LICENSE
+>>  PERL_HTML_PARSER_DISTNAME = HTML-Parser
+>>  
+>>  $(eval $(perl-package))
+>> -- 
+>> 2.25.1
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-2.26.2
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
