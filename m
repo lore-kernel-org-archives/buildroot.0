@@ -1,46 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 11:05:41 +0200
-Subject: [Buildroot] [PATCH v2] package/mg: new package
-In-Reply-To: <20200901053858.156993-1-troglobit@gmail.com>
-References: <20200901053858.156993-1-troglobit@gmail.com>
-Message-ID: <20200904110541.71a494b9@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 04 Sep 2020 11:49:06 +0200
+Subject: [Buildroot] Backport fix for systemd to 2020.02.x
+In-Reply-To: <CA+fik51zZu=eWbpP-WGwAysVUef7nLDuFFW_fotsSy=OyFNzVA@mail.gmail.com>
+ (Brandon Maier's message of "Tue, 1 Sep 2020 17:56:40 -0500")
+References: <CA+fik51zZu=eWbpP-WGwAysVUef7nLDuFFW_fotsSy=OyFNzVA@mail.gmail.com>
+Message-ID: <87sgbxna7h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  1 Sep 2020 07:38:59 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+>>>>> "Brandon" == Brandon Maier <brandon.maier@rockwellcollins.com> writes:
 
-> Mg is a small Emacs-like editor with no external dependencies except a
-> standard C library.  It weighs in at 130 kiB and is one of a select few
-> completely free (public domain) text editors suitable for small and
-> embedded systems.
-> 
-> This version is based on the OpenBSD Mg, but with more features, one of
-> which being the no-ncurses/termcap support, which heavily reduces the
-> impact on a resource constrained system.
-> 
-> Upstream: https://github.com/troglobit/mg/
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - mg2a -> mg in mg.mk comment (suggested by Thomas Pettazoni)
->   - Fix copy-paste in mg.hash comment (suggested by Gilles Talis)
->   - Add mg to my DEVELOPERS entry (suggested by Gilles)
->   - Update my last name in DEVELOPERS
->   - Drop install+gzip of tutorial (Gilles and Thomas)
->   - Simplify mg.mk, standard install target is sufficient
->   - Add `--with-curses` to MG_CONF_OPTS (Gilles and Thomas)
->   - Run test-pkg, 5/6 OK (cortex m4 SKIPPED) (Gilles)
+ > Hi, on the master branch, commit  65b637 ("package/systemd: move preset-all
+ > HOOK to fakeroot stage") fixes the systemd package so that the "systemctl
+ > preset-all" runs after ROOFS_OVERLAY and POST_BUILD_SCRIPT, and picks up on
+ > preset and service files installed by them. Could that commit be added to
+ > 2020.02.x as well?
 
-Applied to master, thanks.
+Thanks for the heads up, cherry picked for 2020.02.x and 2020.05.x.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
