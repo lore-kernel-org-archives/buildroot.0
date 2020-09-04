@@ -1,205 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 3 Sep 2020 23:55:55 +0200
-Subject: [Buildroot] [git commit] package/graphicsmagick: new package
-Message-ID: <20200904070222.DA768875C8@busybox.osuosl.org>
+Date: Fri, 4 Sep 2020 09:11:24 +0200
+Subject: [Buildroot] [git commit] package/uclibc: bump version to 1.0.35
+Message-ID: <20200904070325.A68DE87783@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eee7910eb778e7791bd9ee24aaa95be9812dfed
+commit: https://git.buildroot.net/buildroot/commit/?id=b63d1c5786f45623e7981af50e6eb283512fa7c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GraphicsMagick is the swiss army knife of image processing.
-It provides a robust and efficient collection of tools
-and libraries which support reading, writing,
-and manipulating an image in over 89 major formats
-including important formats like DPX, GIF, JPEG, JPEG-2000,
-PNG, PDF, PNM, TIFF, and WebP.
+Drop patch from this release.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |   1 +
- package/Config.in                          |   1 +
- package/graphicsmagick/Config.in           |  17 +++++
- package/graphicsmagick/graphicsmagick.hash |   3 +
- package/graphicsmagick/graphicsmagick.mk   | 113 +++++++++++++++++++++++++++++
- 5 files changed, 135 insertions(+)
+ ...-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch | 68 ----------------------
+ package/uclibc/uclibc.hash                         |  4 +-
+ package/uclibc/uclibc.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 71 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 06b2b2f6a6..ee17e53011 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1061,6 +1061,7 @@ N:	Grzegorz Blach <grzegorz@blach.pl>
- F:	fs/f2fs/
- F:	package/bluez5_utils-headers/
- F:	package/f2fs-tools/
-+F:	package/graphicsmagick/
- F:	package/pigpio/
- F:	package/python-aioblescan/
- F:	package/python-bluezero/
-diff --git a/package/Config.in b/package/Config.in
-index bbbd2a3642..87e7f4274a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -309,6 +309,7 @@ comment "Graphic libraries"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
-+	source "package/graphicsmagick/Config.in"
- 	source "package/imagemagick/Config.in"
- 	source "package/linux-fusion/Config.in"
- 	source "package/lite/Config.in"
-diff --git a/package/graphicsmagick/Config.in b/package/graphicsmagick/Config.in
-new file mode 100644
-index 0000000000..1e47d67396
---- /dev/null
-+++ b/package/graphicsmagick/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_GRAPHICSMAGICK
-+	bool "graphicsmagick"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  GraphicsMagick is the swiss army knife of image processing.
-+	  It provides a robust and efficient collection of tools
-+	  and libraries which support reading, writing,
-+	  and manipulating an image in over 89 major formats
-+	  including important formats like DPX, GIF, JPEG, JPEG-2000,
-+	  PNG, PDF, PNM, TIFF, and WebP.
-+
-+	  http://www.graphicsmagick.org/
-+
-+comment "graphicsmagick needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
-new file mode 100644
-index 0000000000..cb91ff0d03
---- /dev/null
-+++ b/package/graphicsmagick/graphicsmagick.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  188a8d6108fea87a0208723e8d206ec1d4d7299022be8ce5d0a9720509250250  GraphicsMagick-1.3.35.tar.xz
-+sha256  1d28851631892098e0bf8653fd4e89f3524184d136391b54c664e89251ca3a9a  Copyright.txt
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-new file mode 100644
-index 0000000000..782dd1431e
---- /dev/null
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -0,0 +1,113 @@
-+################################################################################
-+#
-+# graphicsmagick
-+#
-+################################################################################
-+
-+GRAPHICSMAGICK_VERSION = 1.3.35
-+GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
-+GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
-+GRAPHICSMAGICK_LICENSE = MIT
-+GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
-+
-+GRAPHICSMAGICK_INSTALL_STAGING = YES
-+GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
-+
-+ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
-+GRAPHICSMAGICK_CONFIG_SCRIPTS += GraphicsMagick++-config
-+endif
-+
-+GRAPHICSMAGICK_CONF_OPTS = \
-+	--disable-openmp \
-+	--without-dps \
-+	--without-fpx \
-+	--without-jbig \
-+	--without-perl \
-+	--without-trio \
-+	--without-webp \
-+	--without-wmf \
-+	--without-x \
-+	--with-gs-font-dir=/usr/share/fonts/gs
-+
-+GRAPHICSMAGICK_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-ttf
-+GRAPHICSMAGICK_CONF_ENV += ac_cv_path_freetype_config=$(STAGING_DIR)/usr/bin/freetype-config
-+GRAPHICSMAGICK_DEPENDENCIES += freetype
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-ttf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-jpeg
-+GRAPHICSMAGICK_DEPENDENCIES += jpeg
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-jp2
-+GRAPHICSMAGICK_DEPENDENCIES += openjpeg
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-jp2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LCMS2),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-lcms2
-+GRAPHICSMAGICK_DEPENDENCIES += lcms2
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-lcms2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-png
-+GRAPHICSMAGICK_DEPENDENCIES += libpng
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-xml
-+GRAPHICSMAGICK_CONF_ENV += ac_cv_path_xml2_config=$(STAGING_DIR)/usr/bin/xml2-config
-+GRAPHICSMAGICK_DEPENDENCIES += libxml2
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-xml
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-tiff
-+GRAPHICSMAGICK_DEPENDENCIES += tiff
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-lzma
-+GRAPHICSMAGICK_DEPENDENCIES += xz
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-lzma
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-zlib
-+GRAPHICSMAGICK_DEPENDENCIES += zlib
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-bzlib
-+GRAPHICSMAGICK_DEPENDENCIES += bzip2
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-bzlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-zstd
-+GRAPHICSMAGICK_DEPENDENCIES += zstd
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-zstd
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch b/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
+deleted file mode 100644
+index cc8b9d9c0b..0000000000
+--- a/package/uclibc/0001-mips-Do-not-include-hi-and-lo-in-__SYSCALL_CLOBBERS-.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From aad6cdbcff0f5411a09ac524637fea62652786a3 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 8 May 2020 18:39:45 +0200
+-Subject: [PATCH] mips: Do not include hi and lo in __SYSCALL_CLOBBERS for R6
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-From [1]
+-"GCC 10 (PR 91233) won't silently allow registers that are not architecturally
+-available to be present in the clobber list anymore, resulting in build failure
+-for mips*r6 targets in form of:
+-...
+-.../sysdep.h:146:2: error: the register ???lo??? cannot be clobbered in ???asm??? for the current target
+-  146 |  __asm__ volatile (      \
+-      |  ^~~~~~~
+-
+-This is because base R6 ISA doesn't define hi and lo registers w/o DSP extension.
+-This patch provides the alternative definitions of __SYSCALL_CLOBBERS for r6
+-targets that won't include those registers."
+-
+-[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-Cc: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libc/sysdeps/linux/mips/bits/syscalls.h | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/libc/sysdeps/linux/mips/bits/syscalls.h b/libc/sysdeps/linux/mips/bits/syscalls.h
+-index b8f80597e..13728ac55 100644
+---- a/libc/sysdeps/linux/mips/bits/syscalls.h
+-+++ b/libc/sysdeps/linux/mips/bits/syscalls.h
+-@@ -270,8 +270,13 @@
+- 	_sys_result;							\
+- })
+- 
+--#define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+--	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#if __mips_isa_rev >= 6
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "memory"
+-+#else
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#endif
+- 
+- #else /* N32 || N64 */
+- 
+-@@ -327,8 +332,13 @@
+- 	_sys_result;							\
+- })
+- 
+--#define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+--	"$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#if __mips_isa_rev >= 6
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "memory"
+-+#else
+-+# define __SYSCALL_CLOBBERS "$1", "$3", "$10", "$11", "$12", "$13", \
+-+	 "$14", "$15", "$24", "$25", "hi", "lo", "memory"
+-+#endif
+- 
+- #endif
+- 
+--- 
+-2.25.4
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index e54f127690..aea2802bac 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.34/uClibc-ng-1.0.34.tar.xz.sha256
+-sha256  e6776229eee8d3f5a1cd29fb4286630e3cb9e97dded4e8f4a3a9bb4fa8c0d5e3  uClibc-ng-1.0.34.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.35/uClibc-ng-1.0.35.tar.xz.sha256
++sha256  4d0ee138f037017695a66b556b70f77a0eab8a238819bcb60af890b7b3382a2b  uClibc-ng-1.0.35.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index daf81d29b2..0b5e45bcf4 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.34
++UCLIBC_VERSION = 1.0.35
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
