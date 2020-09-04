@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 17:18:43 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: fix path to
- board/hardkernel/odroidc2/
-Message-ID: <20200904151052.C534D87BD2@busybox.osuosl.org>
+Date: Fri, 4 Sep 2020 17:19:16 +0200
+Subject: [Buildroot] [git commit] package/refpolicy: ensure
+ REFPOLICY_EXTRA_MODULES_DIRS is empty when it should be
+Message-ID: <20200904151224.786A787A1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ade35976d4455727fe021e881bf095c94f75491
+commit: https://git.buildroot.net/buildroot/commit/?id=a326b6ecb0c8710fe1064606b20818b558fcf529
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When both BR2_REFPOLICY_EXTRA_MODULES_DIRS and
+PACKAGES_SELINUX_EXTRA_MODULES_DIRS are empty, we expect
+REFPOLICY_EXTRA_MODULES_DIRS to also be empty. However, due to spaces,
+this is not the case. This commit adds a $(strip ...) call to ensure
+it is the case.
+
+Thanks to this, the check on whether REFPOLICY_EXTRA_MODULES_DIRS is
+empty later on will really work as it should.
+
+Reported-by: Antoine T??nart <antoine.tenart@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/refpolicy/refpolicy.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d306c5f025..3f9a0687c6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -635,7 +635,7 @@ F:	arch/Config.in.powerpc
- F:	package/kvm-unit-tests
- 
- N:	Dagg Stompler <daggs@gmx.com>
--F:	board/odroidc2/
-+F:	board/hardkernel/odroidc2/
- F:	configs/odroidc2_defconfig
- F:	package/meson-tools/
- F:	package/odroidc2-firmware/
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index edfbb3542c..e1924f3c2d 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -42,8 +42,9 @@ ifeq ($(BR2_PACKAGE_REFPOLICY_UPSTREAM_VERSION),y)
+ # Allow to provide out-of-tree SELinux modules in addition to the ones
+ # in the refpolicy.
+ REFPOLICY_EXTRA_MODULES_DIRS = \
+-	$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS)) \
+-	$(PACKAGES_SELINUX_EXTRA_MODULES_DIRS)
++	$(strip \
++		$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS)) \
++		$(PACKAGES_SELINUX_EXTRA_MODULES_DIRS))
+ $(foreach dir,$(REFPOLICY_EXTRA_MODULES_DIRS),\
+ 	$(if $(wildcard $(dir)),,\
+ 		$(error BR2_REFPOLICY_EXTRA_MODULES_DIRS contains nonexistent directory $(dir))))
