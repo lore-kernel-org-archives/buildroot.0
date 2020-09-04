@@ -1,69 +1,46 @@
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Fri, 4 Sep 2020 11:04:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dotnet-runtime: add dotnet core
- runtime package
-In-Reply-To: <20200904094853.51a68bf0@windsurf.home>
-References: <20200819130612.46440-1-andreynech@gmail.com>
- <CAEyMn7Zb1G7niRkSzokNs+WUBvfCFYiJ9o_0=bew_TPpPivGBQ@mail.gmail.com>
- <20200904094853.51a68bf0@windsurf.home>
-Message-ID: <CAOiXNkAuXC-ntUmWPC_GBQxrZ=Ezvn1kO7383W3E6ey5BV-Vng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Sep 2020 11:05:41 +0200
+Subject: [Buildroot] [PATCH v2] package/mg: new package
+In-Reply-To: <20200901053858.156993-1-troglobit@gmail.com>
+References: <20200901053858.156993-1-troglobit@gmail.com>
+Message-ID: <20200904110541.71a494b9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you guys for the comments!
-Will work on it next days and provide the new version for review.
+On Tue,  1 Sep 2020 07:38:59 +0200
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-On Fri, 4 Sep 2020 at 09:48, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Heiko, hello Andrey,
->
-> On Fri, 4 Sep 2020 09:34:22 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> > > diff --git a/package/dotnet-runtime/Config.in b/package/dotnet-runtime/Config.in
-> > > new file mode 100644
-> > > index 0000000000..deb3289c94
-> > > --- /dev/null
-> > > +++ b/package/dotnet-runtime/Config.in
-> > > @@ -0,0 +1,15 @@
-> > > +comment "dotnet-runtime needs a toolchain w/ glibc or musl and threads"
-> > > +       depends on !BR2_TOOLCHAIN_USES_GLIBC && !BR2_TOOLCHAIN_USES_MUSL
-> > > +
-> > > +config BR2_PACKAGE_DOTNET_RUNTIME
-> > > +       bool "dotnet-runtime"
-> > > +       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
-> > > +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> > > +       depends on BR2_PACKAGE_LIBZLIB
->
-> This should be BR2_PACKAGE_ZLIB, unless you really need the LIBZLIB
-> variant (I don't know if the original zlib and zlib-ng are ABI
-> compatible).
->
-> > > +       depends on BR2_PACKAGE_OPENSSL
-> > > +       depends on BR2_PACKAGE_LIBCURL
-> > > +       depends on BR2_PACKAGE_ICU
-> >
-> > Not clear for me if we should select the dependent packages?
->
-> Yes, we should. However, I'm trying to understand: the .NET Core
-> runtime is provided binary only. Is it linked against external shared
-> libraries (zlib, openssl, curl, icu) ?
->
-> > > +       help
-> > > +         .NET Core 3.1 Runtime (v3.1.7) - Linux ARM32 binaries
-> >
-> > Isn't it also x86 and arm64?
->
-> So we should probably have a BR2_PACKAGE_DOTNET_RUNTIME_ARCH_SUPPORTS
-> hidden config boolean, which is used to show the package and its
-> Config.in comment only on supported architectures ?
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Mg is a small Emacs-like editor with no external dependencies except a
+> standard C library.  It weighs in at 130 kiB and is one of a select few
+> completely free (public domain) text editors suitable for small and
+> embedded systems.
+> 
+> This version is based on the OpenBSD Mg, but with more features, one of
+> which being the no-ncurses/termcap support, which heavily reduces the
+> impact on a resource constrained system.
+> 
+> Upstream: https://github.com/troglobit/mg/
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - mg2a -> mg in mg.mk comment (suggested by Thomas Pettazoni)
+>   - Fix copy-paste in mg.hash comment (suggested by Gilles Talis)
+>   - Add mg to my DEVELOPERS entry (suggested by Gilles)
+>   - Update my last name in DEVELOPERS
+>   - Drop install+gzip of tutorial (Gilles and Thomas)
+>   - Simplify mg.mk, standard install target is sufficient
+>   - Add `--with-curses` to MG_CONF_OPTS (Gilles and Thomas)
+>   - Run test-pkg, 5/6 OK (cortex m4 SKIPPED) (Gilles)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
