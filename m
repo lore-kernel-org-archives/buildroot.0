@@ -1,56 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  4 Sep 2020 12:24:15 +0200
-Subject: [Buildroot] [PATCH] package/gnupg2: security bump to version 2.2.23
-Message-ID: <20200904102415.31489-1-peter@korsgaard.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Fri,  4 Sep 2020 13:35:01 +0200
+Subject: [Buildroot] [PATCH] package/libnss: install certutil tool on target
+Message-ID: <20200904113501.22230-1-julien.floret@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+certutil is a command-line utility for managing keys and certificate in
+both NSS databases and other NSS tokens.
 
-CVE-2020-25125: Importing an OpenPGP key having a preference list for AEAD
-algorithms will lead to an array overflow and thus often to a crash or other
-undefined behaviour (affected: 2.2.21 / 2.2.22)
-
-For more details, see the announcement:
-https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Floret <julien.floret@6wind.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libnss/libnss.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 470681cda9..ac78385f7a 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000446.html
--sha1  4af4c6fe5f9dd7d866243f715b32775500468943  gnupg-2.2.21.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
-+sha1   bd949b4af7426e4afc13667d678503063c6aa4b5 gnupg-2.2.23.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.21.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.23.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  61e83278fb5fa7336658a8b73ab26f379d41275bb1c7c6e694dd9f9a6e8e76ec  gnupg-2.2.21.tar.bz2
-+sha256  10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c  gnupg-2.2.23.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index e77c84d41e..af13a8d6c9 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.21
-+GNUPG2_VERSION = 2.2.23
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index f28e16a40670..d0b2d51772bd 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -105,6 +105,8 @@ define LIBNSS_INSTALL_TARGET_CMDS
+ 		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
+ 	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnss/nss.pc.in \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
++	$(INSTALL) -D -m 755 $(@D)/$(LIBNSS_DISTDIR)/bin/certutil \
++		$(TARGET_DIR)/usr/bin/certutil
+ 	$(SED) 's/@VERSION@/$(LIBNSS_VERSION)/g;' \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
+ endef
 -- 
-2.20.1
+2.25.1
