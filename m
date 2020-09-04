@@ -1,74 +1,56 @@
-From: Nicolas Carrier <nicolas.carrier@orolia.com>
-Date: Fri, 04 Sep 2020 08:39:58 +0200
-Subject: [Buildroot] [PATCH v4 1/2] package/bmap-tools: new package
-In-Reply-To: <20200903204403.72304c2d@windsurf.home>
-References: <20191105125039.1443-1-nicolas.carrier@orolia.com>
- <20200903204403.72304c2d@windsurf.home>
-Message-ID: <b58dcdbb343c25cc252ef9249dcd86c7f2aaba50.camel@orolia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  4 Sep 2020 12:24:15 +0200
+Subject: [Buildroot] [PATCH] package/gnupg2: security bump to version 2.2.23
+Message-ID: <20200904102415.31489-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-Thank you very much for the notice, I'll take a look, this patch is
-starting to get quite old :)
+Fixes the following security issues:
 
-I missed Romain's comments, because the mails for patches I have been
-working on, are drowned into the rest of the ML's messages.
-It's really by luck that I noticed this one :)
+CVE-2020-25125: Importing an OpenPGP key having a preference list for AEAD
+algorithms will lead to an array overflow and thus often to a crash or other
+undefined behaviour (affected: 2.2.21 / 2.2.22)
 
-I'll try to configure some filtering in by email client, but is there
-some setup option to get only emails for patch series I'm working on?
-The Ml's volume is way to high for me to follow the pace :/
+For more details, see the announcement:
+https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-
-On Thu, 2020-09-03 at 20:44 +0200, Thomas Petazzoni wrote:
-> CAUTION: This email originated from outside of the organization.
-> Do not click links or open attachments unless you recognize the
-> sender and know the content is safe.
-> 
-> Hello Nicolas,
-> 
-> On Tue, 5 Nov 2019 12:51:09 +0000
-> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
-> 
-> > I need bmap-tools on the target since it's what our flashing /
-> > upgrade procudure
-> > uses to speed up the process (flashing ~8GB disk images full of
-> > zeroes).
-> > 
-> > Changes v3 -v4:
-> >   - added the upstream URL to the package's help
-> > 
-> > Changes v2 -> v3:
-> >   - double-checked that setuptools is required by bmap-tools at
-> > runtime too
-> >   - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in
-> > the .hash too)
-> >   - changed license name from GPLv2 to GPL-2.0
-> > 
-> > Changes v1 -> v2:
-> >   - no change
-> > 
-> > ---
-> > 
-> > Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
-> 
-> This patch series received some significant review and comments from
-> Romain Naour, but you haven't posted a v5. I've marked the v4 as
-> Changes Requested, which means that if you don't send a v5, we will
-> unfortunately forget about this contribution.
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 470681cda9..ac78385f7a 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000446.html
+-sha1  4af4c6fe5f9dd7d866243f715b32775500468943  gnupg-2.2.21.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
++sha1   bd949b4af7426e4afc13667d678503063c6aa4b5 gnupg-2.2.23.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.21.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.23.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  61e83278fb5fa7336658a8b73ab26f379d41275bb1c7c6e694dd9f9a6e8e76ec  gnupg-2.2.21.tar.bz2
++sha256  10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c  gnupg-2.2.23.tar.bz2
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index e77c84d41e..af13a8d6c9 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.21
++GNUPG2_VERSION = 2.2.23
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
 -- 
-Nicolas CARRIER | SW Scrum Master |  
-nicolas.carrier at orolia.com
+2.20.1
