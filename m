@@ -1,43 +1,48 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Fri, 4 Sep 2020 13:55:17 +0100
-Subject: [Buildroot] [PATCH 2/3] package/libcamera: Update requirements
- for C++17
-In-Reply-To: <20200904145105.6cf2e0c1@windsurf.home>
-References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
- <20200904095148.844292-3-kieran.bingham@ideasonboard.com>
- <20200904145105.6cf2e0c1@windsurf.home>
-Message-ID: <dac2b203-377a-44fb-85ab-4b9ed9cc7b34@ideasonboard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Sep 2020 14:56:38 +0200
+Subject: [Buildroot] [PATCH 00/15] Improve SELinux support
+In-Reply-To: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
+Message-ID: <20200904145638.466a5b30@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Antoine,
 
-On 04/09/2020 13:51, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri,  4 Sep 2020 10:51:46 +0100
-> Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
-> 
->> The libcamera project has moved to C++17. Update the toolchain
->> requirements accordingly.
->>
->> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> 
-> Is this fixing some specific autobuilder failure ? If so, do you have a
-> reference ?
+On Fri, 31 Jul 2020 12:10:25 +0200
+Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-No, that's a pre-requisite for patch 3/3.
+> Antoine Tenart (15):
+>   package/e2fsprogs: set xattrs for the root dir as well
+>   fs/common.mk: set SELinux file security contexts
+>   fs/common.mk: move down ROOTFS_REPRODUCIBLE for consistency
+>   package/refpolicy: smaller monolithic policy
+>   package/refpolicy: allow packages to select SELinux modules
+>   package/systemd: select SELinux modules
+>   package/dbus: select SELinux module
+>   package/util-linux: select SELinux module
+>   package/e2fsprogs: select SELinux module
+>   package/refpolicy: allow providing user defined modules
+>   package/refpolicy: allow selecting additional modules
+>   package/refpolicy: allow to provide a custom refpolicy
+>   package/refpolicy: allow packages to provide their own SELinux modules
+>   package/refpolicy: fix the configure, build and install steps
+>   docs/manual: add a section about SELinux
 
-libcamera is now built with C++17 as a minimum requirement.
+Thanks for this work! Since there was positive feedback from Adam, and
+no other feedback, and the patch series was there for more than a
+month, I applied it.
 
-> Thanks!
-> 
-> Thomas
+I did quite a few changes in some of the patches. I will reply
+individually to those patches. For the other patches, if I'm not making
+any comments, it means I applied them as-is, or with changes that are
+so small and trivial that they are not worth mentioning.
 
+Thomas
 -- 
-Regards
---
-Kieran
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
