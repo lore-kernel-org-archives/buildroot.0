@@ -1,137 +1,204 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 04 Sep 2020 23:10:21 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- (Angelo Compagnucci's message of "Fri, 4 Sep 2020 21:36:25 +0200")
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200827223956.7cb87050@windsurf.home> <20200829095023.GC14354@scaer>
- <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
- <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
- <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
- <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <20200903182409.6b337059@windsurf.home>
- <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
-Message-ID: <87blilmeo2.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 4 Sep 2020 23:26:10 +0200
+Subject: [Buildroot] [PATCH] pycompile: fix .pyc original source file
+ paths
+In-Reply-To: <20200904112908.21686-1-julien.floret@6wind.com>
+References: <20200904112908.21686-1-julien.floret@6wind.com>
+Message-ID: <20200904212610.GP14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+Julien, All,
 
-Hi,
+On 2020-09-04 13:29 +0200, Julien Floret spake thusly:
+> When generating a .pyc file, the original .py source file path is
+> encoded in it. It is used for various purposes: traceback generation,
+> .pyc file comparison with its .py source, and code inspection.
+> 
+> By default, the source path used when invoking compileall is encoded in
+> the .pyc file. Since we use paths relative to TARGET_DIR, we end up with
+> paths that are only valid when relative to '/' encoded in the installed
+> .pyc files on the target.
+> 
+> This breaks code inspection at runtime since the original source path
+> will be invalid unless the code is executed from '/'.
 
- > I think it was clear I was referring to the way we manage patches via
- > ML/patchwork.
- > Doing a "git push" or "repo upload" to open a review request is
- > perfectly fine on my side.
+Thanks for the good description of the problem, I think I mostly understood
+it, so let me rephrase just in case:
 
-Ehh, ok. I still don't see the big advantage of git push vs git
-send-email, but ok.
+  - we have e.g.: /path/to/Buildroot/output/target/usr/lib/python3.5/foo.py
 
+  - when pre-compiled it generates foo.pyc, which contains a reference
+    to 'usr/lib/python3.5/foo.py' verbatim.
 
- >> > But it's not the point here. 419 patches are waiting to be reviewed,
- >> > action must be taken.
- >> 
- >> Agreed, please help review patches.
+Right? Or did I forget a leading '/' missing in the verbatim?
 
- > I do what I can, you do what you can, others do what they can, we
- > anyway have this big number of patches piling up.
- > I still think we should improve the workflow or we can continue to not
- > seeing the problem and hope someone will hop in sooner or later.
- > But this is only my pov.
+> Rework the script to call py_compile.compile() with pertinent options.
 
-I think it is unrealistic to think that review bandwidth won't always be
-an issue. Given the meta nature (a build system of buildsystems) of
-Buildroot, no automation will ever be a substitute for real human
-review.
+You did provide a good description of the problem, so you should not
+stop there. It would have been even btter if you had also provided a
+good explanations of how you are fixing it! ;-)
 
+Do not just _describe_ the patch, _explain_ it. For example:
 
+    The issues stems from the fact that py_compile.compile() will default
+    to store the path as we pass it, so we override that by explicitly
+    passing the path at it is on the target.
 
- > I think that having an extensive CI that runs on each commit would
- > only benefit the work of the reviewers and the project as a whole.
+    We can't do that with compileall.compile_dir(), so instead we
+    do the recursion and call py_compile.compile() on fitting files
+    ourselves.
 
- >> > If you move to github/gitlab you can test each one of the patches even
- >> > before starting a review and mark as change requested without human
- >> > intervention.
- >> 
- >> And why wouldn't you be able to do the same with the email based setup
- >> today? With tools like snowpatch (https://github.com/ruscur/snowpatch) or
- >> some basic scripting around the patchwork REST API nicely allows you to
- >> run (command line :P) tools whenever new patches are posted.
+(this is a mostly made up explanations; adapt or rewrite appropriately)
 
- > Honestly, we can do that, but you really want to setup and maintain a
- > complex infrastructure like that when we have gitlab with all the
- > features we need?
+Also, see some comments in-line below.
 
-The complicated part is the actual CI logic. The interaction with
-patchwork and email seems to me to be quite small effort (and largely
-done already with snowpatch), and for running it, the difference between
-gitlab with gitlab runners that we maintain ourselves or something like
-this seems pretty small.
+> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+> ---
+[--SNIP--]
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> index 9192a7016a78..bfb82eac2750 100644
+> --- a/support/scripts/pycompile.py
+> +++ b/support/scripts/pycompile.py
+> @@ -9,61 +9,45 @@ Inspired from:
+>  from __future__ import print_function
+>  import sys
+>  import py_compile
+> -import compileall
+>  import argparse
+> +import os
+> +import re
+>  
+>  
+> -def check_for_errors(comparison):
+> -    '''Wrap comparison operator with code checking for PyCompileError.
+> -    If PyCompileError was raised, re-raise it again to abort execution,
+> -    otherwise perform comparison as expected.
+> -    '''
+> -    def operator(self, other):
+> -        exc_type, value, traceback = sys.exc_info()
+> -        if exc_type is not None and issubclass(exc_type,
+> -                                               py_compile.PyCompileError):
+> -            print("Cannot compile %s" % value.file)
+> -            raise value
+> -
+> -        return comparison(self, other)
+> -
+> -    return operator
+> +def is_importable_py_file(fpath):
+> +    if not fpath.endswith('.py'):
+> +        return False
+> +    if not (fpath.startswith('/usr/lib') or fpath.startswith('/usr/share')):
 
+Actually, some people are building out of /usr/share/buildroot for
+example, so this would effectively ignore all .py files that were
+installed, and none would be compiled.
 
- > Probably finding some sponsorship to hack the system, but again, why
- > disregard the sponsorship of gitlab that offers the full package for
- > free to OSS projects?
+However, you know that the CWD is $(TARGET_DIR) because that's were we
+cd into before running the script. So maybe you want to change this
+condition to (to be tested):
 
-I am not sure what you are getting at. We already use gitlab (+ our
-runners) for defconfig and runtime tests. The only thing we are not
-using is the pull request webui.
+    if not fpath.startswith(os.getcwd()):
+        return False
 
+> +        return False
+> +    return re.match(r'^[_A-Za-z][_A-Za-z0-9]+\.py$', os.path.basename(fpath))
+>  
+>  
+> -class ReportProblem(int):
+> -    '''Class that pretends to be an int() object but implements all of its
+> -    comparison operators such that it'd detect being called in
+> -    PyCompileError handling context and abort execution
+> -    '''
+> -    VALUE = 1
 
- >> The big problem is coming up with good automation and feedback that
- >> helps. check-package, test-pkg and our runtime tests are quite basic,
- >> but already a good start. Please help improving them.
+You should also explain why you get rid of the ReportProblem class, and
+all the error handling that is currently in place.
 
- > They are not good because we don't care about continuous integration
- > on each review request.
- > If we do, it will be natural to invest time to setup all the best
- > checking rules we came up with, due to the fact that rules run on each
- > review request and we know the value of that.
+> +def main():
 
-check-package runs every time a maintainer applies a patch, and is often
-used by contributors, so I doubt that is really the reason - I rather
-think it is because it is quite a difficult problem.
+I like that you introduce a main(), thanks! :-)
 
-This is also why we build random configurations in the autobuilder
-rather than E.G. running specific tests for each package as the number
-of variables are simply too big.
+However, this is mixing code-style reformatting and actual code fixups,
+which makes it a bit more difficult to analyse and review.
 
+Could you please split it into two patches;
 
- >> Anyway, lets keep it constructive here and improve the tooling we have
- >> around the existing workflow rather some wild ideas of changing
- >> everything which is not going to fly.
+  - code cleanups to introduce main()
 
- > Yeah, I know and it's sad it's not going to fly. We don't have the
- > workforce to do reviews, let's hope someone improve the tooling we
- > have.
+  - code fixups to properly store the .py path
 
- > I'm still of the idea that moving to a modern ready-made and
- > hassle-free CI/CD environment would only benefit the project as a
- > whole, spare some time on the maintainers and rise the contribution
- > quality.
+Otherwise, I think this looks nice, thanks!
 
-Yes, and I would like a pony ;)
+Regards,
+Yann E. MORIN.
 
-How would such CI setup work exactly. Lets take a random patch from
-patchwork, E.G.:
-
-https://patchwork.ozlabs.org/project/buildroot/patch/20200825000246.4035-1-joseph.kogut at gmail.com/
-
-What should the CI exactly do to make human review unneeded? Sure, we
-can come up with some more style checks like in check-package, but those
-issues are NOT the reason why we have a bunch of pending patches.
-
-
-So yes, lets please discuss concrete improvements to the automation
-checks we already have or ways to get more people to help review rather
-than yet another discussion about the merits of pull requests versus
-emails.
+> +    parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
+> +    parser.add_argument("target", metavar='DIRECTORY',
+> +                        help='Directory to scan')
+>  
+> -    def __new__(cls, *args, **kwargs):
+> -        return int.__new__(cls, ReportProblem.VALUE, **kwargs)
+> +    args = parser.parse_args()
+>  
+> -    @check_for_errors
+> -    def __lt__(self, other):
+> -        return ReportProblem.VALUE < other
+> +    try:
+>  
+> -    @check_for_errors
+> -    def __eq__(self, other):
+> -        return ReportProblem.VALUE == other
+> +        for root, _, files in os.walk(args.target):
+> +            for f in files:
+> +                f = os.path.join(root, f)
+> +                if os.path.islink(f) or os.access(f, os.X_OK):
+> +                    continue
+> +                target = os.path.join('/', os.path.relpath(f, args.target))
+> +                if not is_importable_py_file(target):
+> +                    continue
+>  
+> -    def __ge__(self, other):
+> -        return not self < other
+> +                py_compile.compile(f, cfile=f + 'c', dfile=target, doraise=True)
+>  
+> -    def __gt__(self, other):
+> -        return not self < other and not self == other
+> +    except Exception as e:
+> +        print('error: %s' % e, file=sys.stderr)
+> +        return 1
+>  
+> -    def __ne__(self, other):
+> -        return not self == other
+> +    return 0
+>  
+>  
+> -parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
+> -parser.add_argument("target", metavar='DIRECTORY',
+> -                    help='Directory to scan')
+> -parser.add_argument("--force", action='store_true',
+> -                    help="Force compilation even if alread compiled")
+> -
+> -args = parser.parse_args()
+> -
+> -compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
+> +if __name__ == '__main__':
+> +    sys.exit(main())
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
