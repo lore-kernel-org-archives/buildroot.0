@@ -1,32 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 17:21:19 +0200
-Subject: [Buildroot] [PATCH v2] package/libzip: add patch from upstream
- to fix build
-In-Reply-To: <20200904141839.29071-1-paul@crapouillou.net>
-References: <20200904141839.29071-1-paul@crapouillou.net>
-Message-ID: <20200904172119.7d25a9e8@windsurf.home>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Fri,  4 Sep 2020 17:26:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: disable zstd for
+ host-systemd
+Message-ID: <20200904152633.198288-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  4 Sep 2020 16:18:39 +0200
-Paul Cercueil <paul@crapouillou.net> wrote:
+systemd 246 added support for zstd compression of large fields in
+journal files [1]. Since zstd is only used at runtime, we don't
+need it to enable its support in host-systemd.
 
-> Cherry-pick a patch from upstream project that fixes the build when used
-> with a uClibc based toolchain.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[1] https://github.com/systemd/systemd/blob/v246/NEWS#L323-L331
 
-Could you provide a reasonably minimal defconfig that exhibits the
-issue? I'm not able to reproduce. libzip alone, or libzip + openssl
-builds fine here with a uClibc pre-built toolchain.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/systemd/systemd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index c132f36663..d72cb58693 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -700,7 +700,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dkernel-install=false \
+ 	-Dsystemd-analyze=false \
+ 	-Dlibcryptsetup=false \
+-	-Daudit=false
++	-Daudit=false \
++	-Dzstd=false
+ 
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.3
