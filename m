@@ -1,79 +1,135 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 17:10:09 +0200
-Subject: [Buildroot] [PATCH 10/15] package/refpolicy: allow providing
- user defined modules
-In-Reply-To: <159923161720.787733.8676024574486485062@kwain>
-References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <20200731101040.1723047-11-antoine.tenart@bootlin.com>
- <20200904150532.4288260b@windsurf.home>
- <159923161720.787733.8676024574486485062@kwain>
-Message-ID: <20200904171009.0b75a8e4@windsurf.home>
+Date: Fri,  4 Sep 2020 17:15:02 +0200
+Subject: [Buildroot] [PATCH] package/libcap: fix build of host variant on
+ systems without static libc
+Message-ID: <20200904151503.991741-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since the bump to 2.42 in 241e3bdea8b68b3ce78b1b76db29019fdcbb7b05,
+the host variant of libcap fails to build on systems that don't have
+the static variant of the C library installed. Indeed, libcap tries to
+build test programs statically, which fails with:
 
-On Fri, 04 Sep 2020 17:00:17 +0200
-Antoine Tenart <antoine.tenart@bootlin.com> wrote:
+/usr/bin/ld: cannot find -lc
+collect2: error: ld returned 1 exit status
 
-> If there are no extra modules provided by BR2_REFPOLICY_EXTRA_MODULES_DIRS
-> nor PACKAGES_SELINUX_EXTRA_MODULES_DIRS, REFPOLICY_EXTRA_MODULES_DIRS
-> would still be different than an empty string as it is now a list.
+This commit fixes that by:
 
-There is no such thing as a "list" in make. Everything is string, and
-space-separated words in a string can somehow be manipulated as a list.
+ (1) Adding a patch, submitted upstream, which makes the
+     tests/Makefile obey the same DYNAMIC variable as the one used by
+     progs/Makefile.
 
-> As a result, REFPOLICY_COPY_EXTRA_MODULES will always be called and
-> the 'buildroot/metadata.xml' file will be installed. This would break
-> the build.
-> 
-> But using:
-> 
-> ifneq ($(qstrip,$(REFPOLICY_EXTRA_MODULES_DIRS)),)
+ (2) Explicitly enable DYNAMIC in libcap.mk. It might seems strange to
+     unconditionally enable it, but in fact what DYNAMIC=yes does is
+     to disable the use of --static. So in practice in Buildroot, this
+     means that the libcap build system will rely on the LDFLAGS
+     passed by Buildroot to decide if static or dynamic linking should
+     be done, which is good.
 
-But indeed, there will always be a space in
-REFPOLICY_EXTRA_MODULES_DIRS. So I guess the most logical change to do
-is:
+Fixes:
 
-REFPOLICY_EXTRA_MODULES_DIRS = \
-	$(strip \
-		$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS)) \
-		$(PACKAGES_SELINUX_EXTRA_MODULES_DIRS))
+  http://autobuild.buildroot.net/results/5ddca8a9d1e2c6353b628fbe8d65b440bfd4c440/
 
-The below snippet of Makefile illustrates that:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...on-t-build-statically-if-DYNAMIC-yes.patch | 58 +++++++++++++++++++
+ package/libcap/libcap.mk                      |  6 +-
+ 2 files changed, 63 insertions(+), 1 deletion(-)
+ create mode 100644 package/libcap/0001-tests-don-t-build-statically-if-DYNAMIC-yes.patch
 
-# Strip quotes and then whitespaces
-qstrip = $(strip $(subst ",,$(1)))
-#"))
-
-BR2_REFPOLICY_EXTRA_MODULES_DIRS = ""
-PACKAGES_SELINUX_EXTRA_MODULES_DIRS =
-
-REFPOLICY_EXTRA_MODULES_DIRS = \
-	$(strip \
-		$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS)) \
-		$(PACKAGES_SELINUX_EXTRA_MODULES_DIRS))
-
-all:
-ifneq ($(REFPOLICY_EXTRA_MODULES_DIRS),)
-	@echo "REFPOLICY_EXTRA_MODULES_DIRS is not empty"
-else
-	@echo "REFPOLICY_EXTRA_MODULES_DIRS is empty"
-endif
-
-
-> would also not work as REFPOLICY_EXTRA_MODULES_DIRS would be expanded
-> too early, and PACKAGES_SELINUX_EXTRA_MODULES_DIRS might not already
-> contain all the packages selinux's custom modules.
-
-I'm not sure it's related to being expanded "too early". All those
-variables are recursively expanded, i.e expanded at time of use.
-
-Thomas
+diff --git a/package/libcap/0001-tests-don-t-build-statically-if-DYNAMIC-yes.patch b/package/libcap/0001-tests-don-t-build-statically-if-DYNAMIC-yes.patch
+new file mode 100644
+index 0000000000..3483826899
+--- /dev/null
++++ b/package/libcap/0001-tests-don-t-build-statically-if-DYNAMIC-yes.patch
+@@ -0,0 +1,58 @@
++From 8c11d901010265e4214f29eeded27f64746d90d9 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 4 Sep 2020 16:55:30 +0200
++Subject: [PATCH] tests: don't build statically if DYNAMIC=yes
++
++This takes the same approach as the one used in progs/Makefile.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ tests/Makefile | 12 ++++++++----
++ 1 file changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/tests/Makefile b/tests/Makefile
++index 0c86ee8..5a01f78 100644
++--- a/tests/Makefile
+++++ b/tests/Makefile
++@@ -5,6 +5,10 @@ topdir=$(shell pwd)/..
++ include ../Make.Rules
++ #
++ 
+++ifneq ($(DYNAMIC),yes)
+++LDFLAGS += --static
+++endif
+++
++ DEPS=../libcap/libcap.a ../libcap/libpsx.a
++ 
++ all: psx_test libcap_psx_test libcap_launch_test
++@@ -28,23 +32,23 @@ run_libcap_psx_test: libcap_psx_test
++ 	./libcap_psx_test
++ 
++ libcap_psx_test: libcap_psx_test.c $(DEPS)
++-	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create --static
+++	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create $(LDFLAGS)
++ 
++ run_libcap_launch_test: libcap_launch_test libcap_psx_launch_test noop
++ 	sudo ./libcap_launch_test
++ 	sudo ./libcap_psx_launch_test
++ 
++ libcap_launch_test: libcap_launch_test.c $(DEPS)
++-	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) --static
+++	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LDFLAGS)
++ 
++ # this varies only slightly from the above insofar as it currently
++ # only links in the pthreads fork support. TODO() we need to change
++ # the source to do something interesting with pthreads.
++ libcap_psx_launch_test: libcap_launch_test.c $(DEPS)
++-	$(CC) $(CFLAGS) $(IPATH) -DWITH_PTHREADS $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create --static
+++	$(CC) $(CFLAGS) $(IPATH) -DWITH_PTHREADS $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create $(LDFLAGS)
++ 
++ noop: noop.c
++-	$(CC) $(CFLAGS) $< -o $@ --static
+++	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
++ 
++ clean:
++ 	rm -f psx_test libcap_psx_test libcap_launch_test *~
++-- 
++2.26.2
++
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 08c1bc9deb..6a35076f6e 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -26,9 +26,12 @@ LIBCAP_MAKE_TARGET = all
+ LIBCAP_MAKE_INSTALL_TARGET = install
+ endif
+ 
++# DYNAMIC=yes doesn't really mean "dynamic", it means "don't pass
++# --static". So we let the default Buildroot LDFLAGS do their job.
+ LIBCAP_MAKE_FLAGS = \
+ 	BUILD_CC="$(HOSTCC)" \
+-	BUILD_CFLAGS="$(HOST_CFLAGS)"
++	BUILD_CFLAGS="$(HOST_CFLAGS)" \
++	DYNAMIC=yes
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP_TOOLS),y)
+ define LIBCAP_BUILD_TOOLS_CMDS
+@@ -62,6 +65,7 @@ endef
+ 
+ define HOST_LIBCAP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
++		DYNAMIC=yes \
+ 		RAISE_SETFCAP=no
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
