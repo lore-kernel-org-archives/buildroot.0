@@ -1,72 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 15:09:09 +0200
-Subject: [Buildroot] [PATCH 15/15] docs/manual: add a section about
- SELinux
-In-Reply-To: <20200731101040.1723047-16-antoine.tenart@bootlin.com>
-References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <20200731101040.1723047-16-antoine.tenart@bootlin.com>
-Message-ID: <20200904150909.3b3fbff0@windsurf.home>
+Date: Fri, 4 Sep 2020 15:43:35 +0200
+Subject: [Buildroot] [git commit] package/libselinux: enable kernel selinux
+ support for erofs images
+Message-ID: <20200904133609.0086086F35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Antoine,
+commit: https://git.buildroot.net/buildroot/commit/?id=2be469e3b944e79029ca3d0b97fd7f027b1b5de5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Jul 2020 12:10:40 +0200
-Antoine Tenart <antoine.tenart@bootlin.com> wrote:
+If BR2_TARGET_ROOTFS_EROFS is selected, enable the following kernel options:
+  - CONFIG_EROFS_FS_XATTR
+  - CONFIG_EROFS_FS_SECURITY
 
-> +== Using +SELinux+ in Buildroot
-> +
-> +https://selinuxproject.org[SELinux] is a Linux kernel security module enforcing
-> +access control policies. In addition to the traditional file permissions and
-> +access control lists, +SELinux+ allows to write rules for users or processes to
-> +access specific functions of resources (files, sockets...).
-> +
-> ++SELinux+ has three modes of operating: +Enforcing+, +Permissive+ and
-> ++Disabled+.  If not +Disabled+, the kernel will apply the policy and
-> +non-authorized actions will be denied in +Enforcing+ mode or logged and reported
-> +in +Permissive+ mode.  +Permissive+ mode is often used for troubleshooting
-> +SELinux issues. In Buildroot this is controlled by the
-> ++BR2_PACKAGE_REFPOLICY_POLICY_STATE_*+ configuration options.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libselinux/libselinux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I reformatted this paragraph a bit, and pointed to SELinux kernel
-options as suggested by Adam.
-
-> +By default in Buildroot the +SELinux+ policy is provided by the upstream
-> +https://github.com/SELinuxProject/refpolicy[refpolicy] project, enabled with
-> ++BR2_PACKAGE_REFPOLICY+.
-> +
-> +[[enabling-selinux]]
-> +=== Enabling SELinux support
-> +
-> +To have proper support for +SELinux+ in a Buildroot generated system, the
-> +following configuration needs to be enabled:
-> +
-> +* +BR2_PACKAGE_REFPOLICY+
-> +* +BR2_PACKAGE_POLICYCOREUTILS+
-
-policycoreutils is not mandatory. However, libselinux is, so I've
-replaced BR2_PACKAGE_POLICYCOREUTILS by BR2_PACKAGE_LIBSELINUX.
-
-> +The Linux kernel configuration must also enable +SELinux+ support with
-> ++CONFIG_SECURITY_SELINUX+, +CONFIG_LSM+ (or using the +lsm+ kernel
-> +parameter) and extended attributes in filesystems (+CONFIG_EXT2_FS_XATTR+ for
-> ++ext2+, +CONFIG_SQUASHFS_XATTR+ for +squashfs+, etc...).
-
-I've dropped this paragraph since kernel options are taken care of, and
-the extended attributes support will be taken care of by the patch
-series from Adam.
-
-Final commit:
-
-  https://git.buildroot.org/buildroot/commit/?id=c38c1cde0d8b3e58643407edef7eb0e06a70b8de
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index 521dbaaba8..b8f9c3b55a 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -112,6 +112,9 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK)
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SELINUX)
+ 	$(call KCONFIG_SET_OPT,CONFIG_LSM,"selinux")
++	$(if $(BR2_TARGET_ROOTFS_EROFS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_EROFS_FS_XATTR)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_EROFS_FS_SECURITY))
+ endef
+ 
+ $(eval $(generic-package))
