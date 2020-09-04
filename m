@@ -1,67 +1,59 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Fri,  4 Sep 2020 15:01:29 +0100
-Subject: [Buildroot] [PATCH v2] package/libcamera: bump version to e59713c6
-Message-ID: <20200904140129.938216-1-kieran.bingham@ideasonboard.com>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Fri,  4 Sep 2020 16:18:39 +0200
+Subject: [Buildroot] [PATCH v2] package/libzip: add patch from upstream to
+ fix build
+Message-ID: <20200904141839.29071-1-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libcamera project has moved to C++17, therefore also update the
-toolchain requirements accordingly.
+Cherry-pick a patch from upstream project that fixes the build when used
+with a uClibc based toolchain.
 
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- package/libcamera/Config.in      | 6 +++---
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 1ea747d1c57e..262ea49a0ead 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -2,7 +2,7 @@ menuconfig BR2_PACKAGE_LIBCAMERA
- 	bool "libcamera"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_WCHAR # gnutls
- 	# Invalid packing size of ControlValue struct on m68k
-@@ -65,6 +65,6 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC
- 
- endif # BR2_PACKAGE_LIBCAMERA
- 
--comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 5"
-+comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 676d3ac73907..bc9122315166 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  55b7d7e5d8c70b2586b31544e6c4891a994c4e69c18d0ebd760e87b75277c348  libcamera-565f95d64ff92e8712e8090988180c343dd3bcb5.tar.gz
-+sha256	a7800b54584dee321874610ef70b1b7690c79d8340c5b134ea35176657681e29  libcamera-e59713c68678f3eb6b6ebe97cabdc88c7042567f.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 4a4bc4ea90aa..e6cd71420774 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 565f95d64ff92e8712e8090988180c343dd3bcb5
-+LIBCAMERA_VERSION = e59713c68678f3eb6b6ebe97cabdc88c7042567f
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
+Notes:
+    v2: Update commit URL
+
+ .../0002-Include-limits.h-for-INT_MAX.patch   | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+
+diff --git a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+new file mode 100644
+index 0000000000..c488f05289
+--- /dev/null
++++ b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
+@@ -0,0 +1,27 @@
++From fd89e242d16128dedef08f47d99ae56aa19b0591 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=C3=98rjan=20Malde?= <red@foxi.me>
++Date: Wed, 15 Jul 2020 12:16:16 +0200
++Subject: [PATCH] Include limits.h for INT_MAX
++
++[Retrieved from:
++https://github.com/nih-at/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591]
++Signed-off-by: Paul Cercueil <paul@crapouillou.net>
++---
++ lib/zip_crypto_openssl.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/zip_crypto_openssl.c b/lib/zip_crypto_openssl.c
++index 1cb00479..60f92758 100644
++--- a/lib/zip_crypto_openssl.c
+++++ b/lib/zip_crypto_openssl.c
++@@ -38,6 +38,7 @@
++ #include "zip_crypto.h"
++ 
++ #include <openssl/rand.h>
+++#include <limits.h>
++ 
++ #if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
++ #define USE_OPENSSL_1_0_API
++-- 
++2.28.0
++
 -- 
-2.25.1
+2.28.0
