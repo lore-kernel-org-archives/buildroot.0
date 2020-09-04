@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Sep 2020 11:48:47 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/systemd: move
+Date: Fri, 4 Sep 2020 11:48:35 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: move
  preset-all HOOK to fakeroot stage
-Message-ID: <20200904094116.2D7E981333@busybox.osuosl.org>
+Message-ID: <20200904094136.AF70C87D07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50beb0a42de6d7f9f5d588d9eb5988e1b7d1db90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e99e884e1018fe8b9fc7b25c9726eddd1153ddd0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 User can drop in more systemd units or presets
 in an rootfs overlay, which will be copied over *after*
@@ -28,10 +28,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 45b5e31a3a..732958d65e 100644
+index d9ebd5db7f..2908caef61 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -561,7 +561,7 @@ endef
+@@ -498,7 +498,7 @@ endef
  define SYSTEMD_PRESET_ALL
  	$(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
  endef
