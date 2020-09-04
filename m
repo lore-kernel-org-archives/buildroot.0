@@ -1,43 +1,74 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Fri,  4 Sep 2020 10:51:47 +0100
-Subject: [Buildroot] [PATCH 3/3] package/libcamera: bump version to e59713c6
-In-Reply-To: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
-References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
-Message-ID: <20200904095148.844292-4-kieran.bingham@ideasonboard.com>
+From: Nicolas Carrier <nicolas.carrier@orolia.com>
+Date: Fri, 04 Sep 2020 08:39:58 +0200
+Subject: [Buildroot] [PATCH v4 1/2] package/bmap-tools: new package
+In-Reply-To: <20200903204403.72304c2d@windsurf.home>
+References: <20191105125039.1443-1-nicolas.carrier@orolia.com>
+ <20200903204403.72304c2d@windsurf.home>
+Message-ID: <b58dcdbb343c25cc252ef9249dcd86c7f2aaba50.camel@orolia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
----
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Thomas,
+Thank you very much for the notice, I'll take a look, this patch is
+starting to get quite old :)
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 676d3ac73907..bc9122315166 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,4 +1,4 @@
--sha256  55b7d7e5d8c70b2586b31544e6c4891a994c4e69c18d0ebd760e87b75277c348  libcamera-565f95d64ff92e8712e8090988180c343dd3bcb5.tar.gz
-+sha256	a7800b54584dee321874610ef70b1b7690c79d8340c5b134ea35176657681e29  libcamera-e59713c68678f3eb6b6ebe97cabdc88c7042567f.tar.gz
- 
- # license files
- sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 4a4bc4ea90aa..e6cd71420774 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = 565f95d64ff92e8712e8090988180c343dd3bcb5
-+LIBCAMERA_VERSION = e59713c68678f3eb6b6ebe97cabdc88c7042567f
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = \
- 	host-openssl \
+I missed Romain's comments, because the mails for patches I have been
+working on, are drowned into the rest of the ML's messages.
+It's really by luck that I noticed this one :)
+
+I'll try to configure some filtering in by email client, but is there
+some setup option to get only emails for patch series I'm working on?
+The Ml's volume is way to high for me to follow the pace :/
+
+
+
+On Thu, 2020-09-03 at 20:44 +0200, Thomas Petazzoni wrote:
+> CAUTION: This email originated from outside of the organization.
+> Do not click links or open attachments unless you recognize the
+> sender and know the content is safe.
+> 
+> Hello Nicolas,
+> 
+> On Tue, 5 Nov 2019 12:51:09 +0000
+> Nicolas Carrier <nicolas.carrier@orolia.com> wrote:
+> 
+> > I need bmap-tools on the target since it's what our flashing /
+> > upgrade procudure
+> > uses to speed up the process (flashing ~8GB disk images full of
+> > zeroes).
+> > 
+> > Changes v3 -v4:
+> >   - added the upstream URL to the package's help
+> > 
+> > Changes v2 -> v3:
+> >   - double-checked that setuptools is required by bmap-tools at
+> > runtime too
+> >   - moved the "v" from BMAP_TOOLS_VERSION to BMAP_TOOLS_SITE (in
+> > the .hash too)
+> >   - changed license name from GPLv2 to GPL-2.0
+> > 
+> > Changes v1 -> v2:
+> >   - no change
+> > 
+> > ---
+> > 
+> > Signed-off-by: Nicolas Carrier <nicolas.carrier@orolia.com>
+> 
+> This patch series received some significant review and comments from
+> Romain Naour, but you haven't posted a v5. I've marked the v4 as
+> Changes Requested, which means that if you don't send a v5, we will
+> unfortunately forget about this contribution.
+> 
+> Thanks!
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 -- 
-2.25.1
+Nicolas CARRIER | SW Scrum Master |  
+nicolas.carrier at orolia.com
