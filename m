@@ -1,50 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 4 Sep 2020 15:56:21 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libcamera: Update requirements
- for C++17
-In-Reply-To: <dac2b203-377a-44fb-85ab-4b9ed9cc7b34@ideasonboard.com>
-References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
- <20200904095148.844292-3-kieran.bingham@ideasonboard.com>
- <20200904145105.6cf2e0c1@windsurf.home>
- <dac2b203-377a-44fb-85ab-4b9ed9cc7b34@ideasonboard.com>
-Message-ID: <20200904135621.GJ14354@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 4 Sep 2020 15:57:24 +0200
+Subject: [Buildroot] [git commit] package/usb_modeswitch: fix parallel
+ install
+Message-ID: <20200904134926.6294C8396F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kieran, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=345c68f04fe60f31b2610d88c89dcccfba960623
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-04 13:55 +0100, Kieran Bingham spake thusly:
-> On 04/09/2020 13:51, Thomas Petazzoni wrote:
-> > On Fri,  4 Sep 2020 10:51:46 +0100
-> > Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
-> > 
-> >> The libcamera project has moved to C++17. Update the toolchain
-> >> requirements accordingly.
-> >>
-> >> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> > 
-> > Is this fixing some specific autobuilder failure ? If so, do you have a
-> > reference ?
-> 
-> No, that's a pre-requisite for patch 3/3.
-> libcamera is now built with C++17 as a minimum requirement.
+Extract from bug report:
 
-So the C++17 requirement comes with the version bump. In this case, it
-should be a single patch: bump and add new requirements.
+"In usb_modeswitch Makefile dispatcher-script, dispatcher-dynlink and
+dispatcher-statlink are .PHONY targets. The result is that sources are
+compiled also when install targets are called.
+USB_MODESWITCH_INSTALL_TARGET_CMDS calls $(MAKE) which is a call to
+parallel make eg. make -j9. So the install phase can install empty
+usb_modeswitch binary (happened once) if the compiler have just cleared
+the binary and install command installs it before compiler writes the
+binary. USB_MODESWITCH_INSTALL_TARGET_CMDS should call $(MAKE1)."
 
-Otherwise, if we end up not applying, or reverting patch 3, then C++17
-requirement is superfluous on its own.
+Instead of disabling parellel install, use install-common target instead
+of install-{dyn,stat}link targets. Indeed, the dynamic or static
+usb_modeswitch_dispatcher binary will be built by
+all-with-{dyn,stat}link-dispatcher targets, there is no need to rebuild
+it during the install step
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=12911
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/usb_modeswitch/usb_modeswitch.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 7e9ed422b6..064e1960b0 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -17,12 +17,11 @@ USB_MODESWITCH_BUILD_TARGETS = all
+ USB_MODESWITCH_INSTALL_TARGETS = install-script
+ else
+ USB_MODESWITCH_DEPENDENCIES += jimtcl
++USB_MODESWITCH_INSTALL_TARGETS = install-common
+ ifeq ($(BR2_STATIC_LIBS),y)
+ USB_MODESWITCH_BUILD_TARGETS = all-with-statlink-dispatcher
+-USB_MODESWITCH_INSTALL_TARGETS = install-statlink
+ else
+ USB_MODESWITCH_BUILD_TARGETS = all-with-dynlink-dispatcher
+-USB_MODESWITCH_INSTALL_TARGETS = install-dynlink
+ endif
+ endif
+ 
