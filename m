@@ -1,113 +1,109 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Fri,  4 Sep 2020 16:33:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-opcua-asyncio : new package
+Date: Fri,  4 Sep 2020 16:33:00 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-aiofiles : new package
 In-Reply-To: <20200904143301.6657-1-jugurtha.belkalem@smile.fr>
 References: <20200904143301.6657-1-jugurtha.belkalem@smile.fr>
-Message-ID: <20200904143301.6657-3-jugurtha.belkalem@smile.fr>
+Message-ID: <20200904143301.6657-2-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-opcua-asyncio is an asyncio-based asynchronous OPC UA client
-based on python-opcua, removing hacks for support of
-python < 3.6. 
-Asynchronous programming allows for simpler code (e.g. less need
-for locks) and potentially performance gains.
+Ordinary local file IO is blocking, and cannot easily and
+portably made asynchronous.
+This means doing file IO may interfere with asyncio applications,
+which shouldn?t block the executing thread. aiofiles helps
+with this y introducing asynchronous versions of files
+that support delegating operations to a separate thread pool.
 
 More information is available at :
-https://github.com/FreeOpcUa/opcua-asyncio.
+https://pypi.org/project/aiofiles.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
-
 Package has been tested with check-package:
-$ ./utils/check-package package/python-opcua-asyncio/*
-31 lines processed
+$ ./utils/check-package package/python-aiofiles/*
+27 lines processed
 0 warnings generated
-	
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/python-opcua-asyncio/Config.in                 | 14 ++++++++++++++
- package/python-opcua-asyncio/python-opcua-asyncio.hash |  3 +++
- package/python-opcua-asyncio/python-opcua-asyncio.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
- create mode 100644 package/python-opcua-asyncio/Config.in
- create mode 100644 package/python-opcua-asyncio/python-opcua-asyncio.hash
- create mode 100644 package/python-opcua-asyncio/python-opcua-asyncio.mk
+
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-aiofiles/Config.in            |  8 ++++++++
+ package/python-aiofiles/python-aiofiles.hash |  5 +++++
+ package/python-aiofiles/python-aiofiles.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-aiofiles/Config.in
+ create mode 100644 package/python-aiofiles/python-aiofiles.hash
+ create mode 100644 package/python-aiofiles/python-aiofiles.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5f66576b6f..7a289c1e46 100644
+index d306c5f025..5f66576b6f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1422,6 +1422,7 @@ N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
- F:	package/python-aiofiles/
+@@ -1419,6 +1419,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
+ 
+ N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
++F:	package/python-aiofiles/
  F:	package/python-cycler/
  F:	package/python-matplotlib/
-+F:	package/python-opcua-asyncio/
  
- N:	Juha Rantanen <juha@codercoded.com>
- F:	package/acsccid/
 diff --git a/package/Config.in b/package/Config.in
-index f99fa83cd9..7a351a6ccb 100644
+index 3b6ced8f0f..f99fa83cd9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1048,6 +1048,7 @@ menu "External python modules"
- 	source "package/python-nfc/Config.in"
- 	source "package/python-numpy/Config.in"
- 	source "package/python-oauthlib/Config.in"
-+	source "package/python-opcua-asyncio/Config.in"
- 	source "package/python-packaging/Config.in"
- 	source "package/python-paho-mqtt/Config.in"
- 	source "package/python-pam/Config.in"
-diff --git a/package/python-opcua-asyncio/Config.in b/package/python-opcua-asyncio/Config.in
+@@ -856,6 +856,7 @@ menu "External python modules"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aioconsole/Config.in"
+ 	source "package/python-aiodns/Config.in"
++	source "package/python-aiofiles/Config.in"
+ 	source "package/python-aiohttp/Config.in"
+ 	source "package/python-aiohttp-cors/Config.in"
+ 	source "package/python-aiohttp-debugtoolbar/Config.in"
+diff --git a/package/python-aiofiles/Config.in b/package/python-aiofiles/Config.in
 new file mode 100644
-index 0000000000..6dee004b9b
+index 0000000000..9cc3d7fe59
 --- /dev/null
-+++ b/package/python-opcua-asyncio/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
-+	bool "python-opcua-asyncio"
++++ b/package/python-aiofiles/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_AIOFILES
++	bool "python-aiofiles"
 +	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_DATEUTIL #runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ #runtime
-+	select BR2_PACKAGE_PYTHON_LXML #runtime
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY #runtime
-+	select BR2_PACKAGE_PYTHON_AIOFILES #runtime
 +	help
-+	  opcua-asyncio is an asyncio-based asynchronous
-+	  OPC UA client based on python-opcua, removing
-+	  hacks for support of python < 3.6.
++	  aiofiles aims to  handle local disk files in
++	  asyncio applications.
 +
-+	  https://github.com/FreeOpcUa/opcua-asyncio
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.hash b/package/python-opcua-asyncio/python-opcua-asyncio.hash
++	  https://pypi.org/project/aiofiles
+diff --git a/package/python-aiofiles/python-aiofiles.hash b/package/python-aiofiles/python-aiofiles.hash
 new file mode 100644
-index 0000000000..2754c19059
+index 0000000000..3c3e8565a3
 --- /dev/null
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  e5fab37a92162351fe40cab43df09db8a2e9f8b8a2a8f13ed680aa6f6d687ec3  opcua-asyncio-0.8.4.tar.gz
-+sha256  89480768826f408daea1f3caff0509c2cc9606e10f6bb0ccfd12a3d604842c35  COPYING
-diff --git a/package/python-opcua-asyncio/python-opcua-asyncio.mk b/package/python-opcua-asyncio/python-opcua-asyncio.mk
++++ b/package/python-aiofiles/python-aiofiles.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiofiles/json
++md5  2243eff06072115e8afe8907677ca51d  aiofiles-0.5.0.tar.gz
++sha256  98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af  aiofiles-0.5.0.tar.gz
++# Locally computed sha256 checksums
++sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-aiofiles/python-aiofiles.mk b/package/python-aiofiles/python-aiofiles.mk
 new file mode 100644
-index 0000000000..febde48ba5
+index 0000000000..28f41e3967
 --- /dev/null
-+++ b/package/python-opcua-asyncio/python-opcua-asyncio.mk
++++ b/package/python-aiofiles/python-aiofiles.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-opcua-asyncio
++# python-aiofiles
 +#
 +################################################################################
 +
-+PYTHON_OPCUA_ASYNCIO_VERSION = 0.8.4
-+PYTHON_OPCUA_ASYNCIO_SOURCE = opcua-asyncio-$(PYTHON_OPCUA_ASYNCIO_VERSION).tar.gz
-+PYTHON_OPCUA_ASYNCIO_SITE = $(call github,FreeOpcUa,opcua-asyncio,$(PYTHON_OPCUA_ASYNCIO_VERSION))
-+PYTHON_OPCUA_ASYNCIO_SETUP_TYPE = setuptools
-+PYTHON_OPCUA_ASYNCIO_LICENSE = LGPL-3.0
-+PYTHON_OPCUA_ASYNCIO_LICENSE_FILES = COPYING
++PYTHON_AIOFILES_VERSION = 0.5.0
++PYTHON_AIOFILES_SOURCE = aiofiles-$(PYTHON_AIOFILES_VERSION).tar.gz
++PYTHON_AIOFILES_SITE = https://files.pythonhosted.org/packages/2b/64/437053d6a4ba3b3eea1044131a25b458489320cb9609e19ac17261e4dc9b
++PYTHON_AIOFILES_SETUP_TYPE = setuptools
++PYTHON_AIOFILES_LICENSE = Apache-2.0
++PYTHON_AIOFILES_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
