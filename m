@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 15:43:49 +0200
+Date: Fri, 4 Sep 2020 15:43:54 +0200
 Subject: [Buildroot] [git commit] package/libselinux: enable kernel selinux
- support for jffs2 images
-Message-ID: <20200904133609.41EEA86F35@busybox.osuosl.org>
+ support for ubifs images
+Message-ID: <20200904133609.5BBD787609@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7720ca37b715a8fb124b4e8f45451c8189d9cc61
+commit: https://git.buildroot.net/buildroot/commit/?id=3ab421080cfc6157c6cdf2d8c4c6443119760297
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If BR2_TARGET_ROOTFS_JFFS2 is selected, enable the following kernel options:
-  - CONFIG_JFS_SECURITY
+If BR2_TARGET_ROOTFS_UBIFS is selected, enable the following kernel options:
+  - CONFIG_UBIFS_FS_XATTR
+  - CONFIG_UBIFS_FS_SECURITY
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libselinux/libselinux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libselinux/libselinux.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index c16dcdf1d0..3dee922214 100644
+index f2c2922122..c96b5a4431 100644
 --- a/package/libselinux/libselinux.mk
 +++ b/package/libselinux/libselinux.mk
-@@ -125,6 +125,8 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
- 	$(if $(BR2_TARGET_ROOTFS_F2FS),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_F2FS_FS_XATTR)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_F2FS_FS_SECURITY))
-+	$(if $(BR2_TARGET_ROOTFS_JFFS2),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_JFS_SECURITY))
+@@ -129,6 +129,9 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_JFS_SECURITY))
+ 	$(if $(BR2_TARGET_ROOTFS_SQUASHFS),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_SQUASHFS_XATTR))
++	$(if $(BR2_TARGET_ROOTFS_UBIFS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_UBIFS_FS_XATTR)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_UBIFS_FS_SECURITY))
  endef
  
  $(eval $(generic-package))
