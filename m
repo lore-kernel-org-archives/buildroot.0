@@ -1,92 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 10:51:38 +0200
-Subject: [Buildroot] [git commit] package/refpolicy: smaller monolithic
- policy
-Message-ID: <20200904123951.9010E87D62@busybox.osuosl.org>
+Date: Fri, 4 Sep 2020 10:31:55 +0200
+Subject: [Buildroot] [git commit] package/e2fsprogs: set xattrs for the root
+ dir as well
+Message-ID: <20200904123951.830FD87D66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11a7a0af2a3f8b3e4c8c903522f501a90c09ba8d
+commit: https://git.buildroot.net/buildroot/commit/?id=fde2d3b5244de2220e686a2370dc38d2df265c39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The refpolicy is configured to use a monolithic build, compiling all the
-available modules (whether they're 'base' or 'modules' ones) in the
-binary policy. The result is a quite big SELinux policy, with a lot more
-rules than what would be needed in a Buildroot image.
-
-Refactor the refpolicy build configuration to enable less modules by
-default. To achieve this, all the modules marked as being part of the
-'base' policy are kept but all the modules marked as being only
-'modules' are disabled. Then a static list of modules (in addition to
-the already selected 'base' ones) are enabled. The result is a much
-smaller refpolicy: tests showed a reduction of the binary policy from
-2.4M to 249K (~90% smaller).
-
-This minimal set of SELinux modules should allow to boot a system in
-enforcing mode in the future. It currently does not work, not because
-extra modules are needed, but because of required changes within the
-selected modules.
-
-This patch would break backward compatibility as the refpolicy will no
-longer have all the modules provided by the project, but only those
-selected. This should not be an issue as this configuration was not
-suitable directly for a real system. Modifications had to be done. If we
-still find out later that this is an issue for someone, we'll have the
-ability to mimic what was done previously thanks to other mechanisms
-(such as providing the upstream policy as a "custom" policy location).
+The mke2fs binary copies the xattrs of the source directory when
+creating an image, but this logic did not include the root directory of
+the resulting image. A patch was sent upstream to fix this. Include the
+patch in Buildroot to allow creating SELinux ready images at build time.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/refpolicy/refpolicy.mk | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ ...e-set-xattrs-to-the-root-directory-as-wel.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 9346649b2c..0ce83d2cbd 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -29,6 +29,33 @@ REFPOLICY_POLICY_VERSION = $(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION)
- REFPOLICY_POLICY_STATE = \
- 	$(call qstrip,$(BR2_PACKAGE_REFPOLICY_POLICY_STATE))
- 
-+REFPOLICY_MODULES = \
-+	application \
-+	authlogin \
-+	getty \
-+	init \
-+	libraries \
-+	locallogin \
-+	logging \
-+	miscfiles \
-+	modutils \
-+	mount \
-+	selinuxutil \
-+	storage \
-+	sysadm \
-+	sysnetwork \
-+	unconfined \
-+	userdomain
+diff --git a/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch b/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch
+new file mode 100644
+index 0000000000..2e9c3ccef0
+--- /dev/null
++++ b/package/e2fsprogs/0001-create_inode-set-xattrs-to-the-root-directory-as-wel.patch
+@@ -0,0 +1,46 @@
++From 1826d8965057bd84517156a4b75c81bdfdae9ebc Mon Sep 17 00:00:00 2001
++From: Antoine Tenart <antoine.tenart@bootlin.com>
++Date: Wed, 1 Jul 2020 10:06:03 +0200
++Subject: [PATCH] create_inode: set xattrs to the root directory as well
 +
-+# In the context of a monolithic policy enabling a piece of the policy as
-+# 'base' or 'module' is equivalent, so we enable them as 'base'.
-+define REFPOLICY_CONFIGURE_MODULES
-+	$(SED) "s/ = module/ = no/g" $(@D)/policy/modules.conf
-+	$(foreach m,$(REFPOLICY_MODULES),
-+		$(SED) "/^$(m) =/c\$(m) = base" $(@D)/policy/modules.conf
-+	)
-+endef
++populate_fs do copy the xattrs for all files and directories, but the
++root directory is skipped and as a result its extended attributes aren't
++set. This is an issue when using mkfs to build a full system image that
++can be used with SElinux in enforcing mode without making any runtime
++fix at first boot.
 +
- ifeq ($(BR2_INIT_SYSTEMD),y)
- define REFPOLICY_CONFIGURE_SYSTEMD
- 	$(SED) "/SYSTEMD/c\SYSTEMD = y" $(@D)/build.conf
-@@ -45,6 +72,7 @@ endef
- 
- define REFPOLICY_BUILD_CMDS
- 	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) bare conf
-+	$(REFPOLICY_CONFIGURE_MODULES)
- endef
- 
- define REFPOLICY_INSTALL_STAGING_CMDS
++This patch adds logic to set the root directory's extended attributes.
++
++[Uspstream status: sent to the mailing list and has a Reviewed-by tag,
++https://lore.kernel.org/linux-ext4/20200717100846.497546-1-antoine.tenart at bootlin.com/]
++
++Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
++---
++ misc/create_inode.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/misc/create_inode.c b/misc/create_inode.c
++index e8d1df6b55a5..fe66faf1b53d 100644
++--- a/misc/create_inode.c
+++++ b/misc/create_inode.c
++@@ -1050,9 +1050,17 @@ errcode_t populate_fs2(ext2_filsys fs, ext2_ino_t parent_ino,
++ 	file_info.path_max_len = 255;
++ 	file_info.path = calloc(file_info.path_max_len, 1);
++ 
+++	retval = set_inode_xattr(fs, root, source_dir);
+++	if (retval) {
+++		com_err(__func__, retval,
+++			_("while copying xattrs on root directory"));
+++		goto out;
+++	}
+++
++ 	retval = __populate_fs(fs, parent_ino, source_dir, root, &hdlinks,
++ 			       &file_info, fs_callbacks);
++ 
+++out:
++ 	free(file_info.path);
++ 	free(hdlinks.hdl);
++ 	return retval;
++-- 
++2.26.2
++
