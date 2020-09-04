@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 14:58:57 +0200
-Subject: [Buildroot] [PATCH 02/15] fs/common.mk: set SELinux file
- security contexts
-In-Reply-To: <20200731101040.1723047-3-antoine.tenart@bootlin.com>
+Date: Fri, 4 Sep 2020 15:05:32 +0200
+Subject: [Buildroot] [PATCH 10/15] package/refpolicy: allow providing
+ user defined modules
+In-Reply-To: <20200731101040.1723047-11-antoine.tenart@bootlin.com>
 References: <20200731101040.1723047-1-antoine.tenart@bootlin.com>
- <20200731101040.1723047-3-antoine.tenart@bootlin.com>
-Message-ID: <20200904145857.10506bf6@windsurf.home>
+ <20200731101040.1723047-11-antoine.tenart@bootlin.com>
+Message-ID: <20200904150532.4288260b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +14,107 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 31 Jul 2020 12:10:27 +0200
+On Fri, 31 Jul 2020 12:10:35 +0200
 Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-> +ifeq ($(BR2_PACKAGE_REFPOLICY)$(BR2_PACKAGE_POLICYCOREUTILS),yy)
+> +config BR2_REFPOLICY_EXTRA_MODULES_DIRS
+> +	string "Extra modules directories"
+> +	help
+> +	  Specify directories containing SELinux modules that will be build
+> +	  in the SELinux policy. The modules will be automatically enabled in
+> +	  the policy.
+> +
+> +	  Each of those directories must contain the SELinux policy .fc, .if
+> +	  and .te files directly at the top-level, with no sub-directories.
 
-In fact, BR2_PACKAGE_POLICYCOREUTILS=y is not at all a requirement for
-a working SELinux system. While host-policycoreutils is needed to have
-the setfiles utility that you use below, having policycoreutils on the
-target is not needed. So I've simplified this condition to:
+I've slightly tweaked the help text here:
 
-ifeq ($(BR2_PACKAGE_REFPOLICY),y)
++config BR2_REFPOLICY_EXTRA_MODULES_DIRS
++       string "Extra modules directories"
++       help
++         Specify a space-separated list of directories containing
++         SELinux modules that will be built into the SELinux
++         policy. The modules will be automatically enabled in the
++         policy.
++
++         Each of those directories must contain the SELinux policy
++         .fc, .if and .te files directly at the top-level, with no
++         sub-directories. Also, you cannot have several modules with
++         the same name in different directories.
 
-> +define ROOTFS_SELINUX
-> +	$(HOST_DIR)/sbin/setfiles -m -r $(TARGET_DIR) \
-> +		-c $(TARGET_DIR)/etc/selinux/targeted/policy/policy.$(BR2_PACKAGE_LIBSEPOL_POLICY_VERSION) \
-> +		$(TARGET_DIR)/etc/selinux/targeted/contexts/files/file_contexts \
-> +		$(TARGET_DIR)
+Also, I think your lines were too long, causing "make check-package"
+warnings.
+
+> -	$(PACKAGES_SELINUX_MODULES)
+> +	$(PACKAGES_SELINUX_MODULES) \
+> +	$(foreach d,$(call qstrip,$(REFPOLICY_EXTRA_MODULES)),\
+> +		$(basename $(notdir $(wildcard $(d)/*.te))))
+> +
+> +# Allow to provide out-of-tree SELinux modules in addition to the ones in the
+> +# refpolicy.
+> +REFPOLICY_EXTRA_MODULES = $(BR2_REFPOLICY_EXTRA_MODULES_DIRS)
+
+It was a bit silly to not do the qstrip here once for all, and use that
+everywhere else. Also, the variable name REFPOLICY_EXTRA_MODULES wasn't
+so good, since it really contains a list of directories, not a list of
+modules.
+
+So I've changed that to:
+
+REFPOLICY_EXTRA_MODULES_DIRS = $(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS))
+
+I've moved it a bit further up so that the REFPOLICY_MODULES variable
+can use it:
+
+-       $(PACKAGES_SELINUX_MODULES)
++       $(PACKAGES_SELINUX_MODULES) \
++       $(foreach d,$(REFPOLICY_EXTRA_MODULES_DIRS),\
++               $(basename $(notdir $(wildcard $(d)/*.te))))
+
+> +$(foreach dir,$(call qstrip,$(BR2_REFPOLICY_EXTRA_MODULES_DIRS)),\
+
+I've used REFPOLICY_EXTRA_MODULES_DIRS here as well.
+
+> +	$(if $(wildcard $(dir)),,\
+> +		$(error BR2_REFPOLICY_EXTRA_MODULES_DIRS contains nonexistent directory $(dir))))
+> +
+> +define REFPOLICY_COPY_MODULES
+> +	mkdir -p $(@D)/policy/modules/buildroot
+> +	rsync -au $(addsuffix /*,$(call qstrip,$(REFPOLICY_EXTRA_MODULES))) \
+
+And here as well.
+
+> +		$(@D)/policy/modules/buildroot/
+> +	if [ ! -f $(@D)/policy/modules/buildroot/metadata.xml ]; then \
+> +		echo "<summary>Buildroot extra modules</summary>" > \
+> +			$(@D)/policy/modules/buildroot/metadata.xml; \
+> +	fi
 > +endef
-> +ROOTFS_COMMON_DEPENDENCIES += refpolicy host-policycoreutils
 
-While it doesn't hurt, I don't think it makes sense to have "refpolicy"
-in the dependencies here. Indeed, all this rootfs creation logic
-happens after all packages have been built. Due to the
-BR2_PACKAGE_REFPOLICY=y condition above, we know refpolicy is enabled,
-and therefore it has already been built prior to the rootfs being
-generated.
+I've enclosed this REFPOLICY_COPY_MODULES macro definition in a:
 
-The ROOTFS_xyz_DEPENDENCIES are mainly useful for dependencies on host
-tools that are needed to generate the root filesystem. Which is the
-case here with host-policycoreutils. So I've simplified to:
+ifneq ($(REFPOLICY_EXTRA_MODULES_DIRS),)
+...
+endif 
 
-ROOTFS_COMMON_DEPENDENCIES += host-policycoreutils
+condition.
 
-Applied with those changes. Thanks!
+>  # In the context of a monolithic policy enabling a piece of the policy as
+>  # 'base' or 'module' is equivalent, so we enable them as 'base'.
+> @@ -72,6 +91,8 @@ define REFPOLICY_CONFIGURE_CMDS
+>  endef
+>  
+>  define REFPOLICY_BUILD_CMDS
+> +	$(if $(call qstrip,$(REFPOLICY_EXTRA_MODULES)),\
+> +		$(REFPOLICY_COPY_MODULES))
+
+So that we don't need a condition here.
+
+Final commit looks like this:
+
+  https://git.buildroot.org/buildroot/commit/?id=1e2e3cc9519ab0fd6ed5411fe88cce14b4b7a2a9
+
+Thanks!
 
 Thomas
 -- 
