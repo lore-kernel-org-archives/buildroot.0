@@ -1,19 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 4 Sep 2020 15:43:41 +0200
+Date: Fri, 4 Sep 2020 15:43:51 +0200
 Subject: [Buildroot] [git commit] package/libselinux: enable kernel selinux
- support for ext3 images
-Message-ID: <20200904133609.1F92D86F35@busybox.osuosl.org>
+ support for squashfs images
+Message-ID: <20200904133609.4FC6186F35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ccabaa405a09fe88e6442cebcb5f87ba9154624
+commit: https://git.buildroot.net/buildroot/commit/?id=c962a341df242e44948d1bc2a93fe4bff9c2e3fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If BR2_TARGET_ROOTFS_EXT2_3 is selected, enable the following kernel options:
-  - CONFIG_EXT3_FS_SECURITY
+If BR2_TARGET_ROOTFS_SQUASHFS is selected, enable the following kernel options:
+  - CONFIG_SQUASHFS_XATTR
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -22,15 +22,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index 77efe2d8e0..525f4fe9a2 100644
+index 3dee922214..f2c2922122 100644
 --- a/package/libselinux/libselinux.mk
 +++ b/package/libselinux/libselinux.mk
-@@ -118,6 +118,8 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
- 	$(if $(BR2_TARGET_ROOTFS_EXT2),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_EXT2_FS_XATTR)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_EXT2_FS_SECURITY))
-+	$(if $(BR2_TARGET_ROOTFS_EXT2_3),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_EXT3_FS_SECURITY))
+@@ -127,6 +127,8 @@ define LIBSELINUX_LINUX_CONFIG_FIXUPS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_F2FS_FS_SECURITY))
+ 	$(if $(BR2_TARGET_ROOTFS_JFFS2),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_JFS_SECURITY))
++	$(if $(BR2_TARGET_ROOTFS_SQUASHFS),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_SQUASHFS_XATTR))
  endef
  
  $(eval $(generic-package))
