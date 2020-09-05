@@ -1,70 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 14:29:32 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libcamera:
- Prevent builds on m68k
-Message-ID: <20200905123344.E78D38028C@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 14:36:36 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/gnupg2: security
+ bump to version 2.2.23
+Message-ID: <20200905123345.081D7826D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d68375b9cc872cade39b01f3dd14c5fa2e3ec65
+commit: https://git.buildroot.net/buildroot/commit/?id=7a28d2914c8df7ce23959d7641788d9a6bc29e54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The ControlValue structure is currently defined with a 16-bit hole
-(causing unaligned access to the numElements_ field, though that's a
-separate topic).
+Fixes the following security issues:
 
-This structure has a static assertion to ensure that its size does not
-change without due care, as it forms part of our ABI and is used in
-Serialisation between the pipeline handlers and IPA components.
+CVE-2020-25125: Importing an OpenPGP key having a preference list for AEAD
+algorithms will lead to an array overflow and thus often to a crash or other
+undefined behaviour (affected: 2.2.21 / 2.2.22)
 
-The m68k architecture is the only target which fails this assertion,
-which is likely because it can pack the structure more efficiently,
-producing a different binary size.
+For more details, see the announcement:
+https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
 
-This is likely an area we will tackle before stabilising our ABI, but
-until then, disable m68k builds as libcamera is not expected to be
-supported on this target.
-
-Fixes;
-  - http://autobuild.buildroot.net/results/9dce26e94299a2c61bba60cbc7803926e2f85e29/
-
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-[yann.morin.1998 at free.fr, suggestions from Thomas:
-  - introduce BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
-  - propagate that to the comment
-  - add autobuilder reference
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 66526e3518e01a3fe16dede165c7890d194b7816)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 918a9fb455aeda08a04d87fdd4bb36e688594d91)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcamera/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index 960d78b82e..39741e4412 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -1,5 +1,12 @@
-+config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
-+	bool
-+	default y
-+	# Invalid packing size of ControlValue struct on m68k
-+	depends on BR2_m68k
-+
- menuconfig BR2_PACKAGE_LIBCAMERA
- 	bool "libcamera"
-+	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
-@@ -64,5 +71,6 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC
- endif # BR2_PACKAGE_LIBCAMERA
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 470681cda9..ac78385f7a 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000446.html
+-sha1  4af4c6fe5f9dd7d866243f715b32775500468943  gnupg-2.2.21.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
++sha1   bd949b4af7426e4afc13667d678503063c6aa4b5 gnupg-2.2.23.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.21.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.23.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  61e83278fb5fa7336658a8b73ab26f379d41275bb1c7c6e694dd9f9a6e8e76ec  gnupg-2.2.21.tar.bz2
++sha256  10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c  gnupg-2.2.23.tar.bz2
+ sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index e77c84d41e..af13a8d6c9 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 5"
-+	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-GNUPG2_VERSION = 2.2.21
++GNUPG2_VERSION = 2.2.23
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
