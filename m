@@ -1,63 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 14:54:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mg: fix build with gcc 10
-Message-ID: <20200905125444.568775-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Sep 2020 15:06:04 +0200
+Subject: [Buildroot] More maintainers: a live discussion ?
+In-Reply-To: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+Message-ID: <20200905150604.180f008c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/aacc02abf41e120e0d0b22faa38642e6d149d73f
+Hello all,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...0001-src-def.h-fix-build-with-gcc-10.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
+I've added in Cc I hope all the people who expressed their opinion at
+some point in this thread.
 
-diff --git a/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch b/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..7823d5b6c5
---- /dev/null
-+++ b/package/mg/0001-src-def.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,36 @@
-+From 29c83c917bd4f5d0c37ff0ab5da1a85762bd5530 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Sep 2020 14:50:20 +0200
-+Subject: [PATCH] src/def.h: fix build with gcc 10
-+
-+Define hlp as extern to avoid the following build failure with gcc 10
-+(which defaults to -fno-common):
-+
-+  CCLD     mg
-+/home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: mg-bell.o:(.bss+0x0): multiple definition of `hlp'; mg-basic.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/aacc02abf41e120e0d0b22faa38642e6d149d73f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/troglobit/mg/pull/7]
-+---
-+ src/def.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/def.h b/src/def.h
-+index e4c049c..cd59725 100644
-+--- a/src/def.h
-++++ b/src/def.h
-+@@ -650,7 +650,7 @@ int		 excline(char *);
-+ char		*skipwhite(char *);
-+ 
-+ /* help.c X */
-+-const char	*hlp;
-++extern const char	*hlp;
-+ int		 desckey(int, int);
-+ int		 wallchart(int, int);
-+ int		 help_help(int, int);
-+-- 
-+2.28.0
-+
+Overall my feeling is that we've reached a point where the e-mail
+discussion is no longer making much useful progress, so what I would
+like to propose is to have a live discussion about the topics that have
+been raised: the need for more maintainers, the e-mail vs. pull-request
+workflow, CI improvements, etc.
+
+A live discussion would allow everybody to share his point of view, and
+hopefully understand better the point of view of others. We could draw
+from this discussion a series of conclusions and things to improve in
+Buildroot.
+
+It is clear from the discussion that many of us care about the
+Buildroot project future, so let's try to work together.
+
+For the sake of defining a suitable date for this live discussion, I've
+opened a poll at:
+
+  https://framadate.org/83o5hNwszaihEXOBZHZmJ89A/admin
+
+It would be nice if the interested parties could fill in their
+availability.
+
+Thanks in advance for your participation!
+
+Thomas
+
+On Thu, 27 Aug 2020 10:34:31 -0700
+Adam Duskett <aduskett@gmail.com> wrote:
+
+> Hello;
+> 
+> Angelo and I were discussing the state of patches today in regards to Buildroot.
+> It seems like the project could benefit from a few more maintainers of
+> the project.
+> We both understand that this is a volunteer project and that we are
+> all adults and have a life outside of the project, and as such, we
+> can't expect instant reviews on every submitted patch. However, as the
+> project continues to grow in popularity, more patches will continue to
+> be offered at an ever-increasing rate. This popularity increase is
+> excellent news for the project, but also comes at the cost of more
+> time and effort in regards to the number of patches and fixes in the
+> queue to review and test.
+> 
+> As such, we would both like to throw our hat in the ring to help
+> maintain the project. We both don't have all the time in the world,
+> but any amount of help on the project can help alleviate the primary
+> maintainers.
+> 
+> Let me know what you think.
+> 
+> Adam
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
