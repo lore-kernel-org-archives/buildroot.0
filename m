@@ -1,120 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 22:58:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/graphicsmagick: fix CVE-2020-12672
-Message-ID: <20200905205810.1642301-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Sep 2020 23:03:28 +0200
+Subject: [Buildroot] [git commit] package/gnutls: security bump to version
+ 3.6.15
+Message-ID: <20200905205539.5552E875AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GraphicsMagick through 1.3.35 has a heap-based buffer overflow in
-ReadMNGImage in coders/png.c.
+commit: https://git.buildroot.net/buildroot/commit/?id=fb3b23220bc7fb3cb8cf87b31a250cca6f0d42b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+libgnutls: Fixed "no_renegotiation" alert handling at incorrect timing.
+The server sending a "no_renegotiation" alert in an unexpected timing,
+followed by an invalid second handshake was able to cause a TLS 1.3
+client to crash via a null-pointer dereference. The crash happens in the
+application's error handling path, where the gnutls_deinit function is
+called after detecting a handshake failure (#1071).
+[GNUTLS-SA-2020-09-04, CVSS: medium]
+
+https://lists.gnupg.org/pipermail/gnutls-help/2020-September/004669.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ix-small-heap-overwrite-or-assertion.patch | 78 +++++++++++++++++++
- package/graphicsmagick/graphicsmagick.mk      |  3 +
- 2 files changed, 81 insertions(+)
- create mode 100644 package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch b/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
-new file mode 100644
-index 0000000000..6fac7d0302
---- /dev/null
-+++ b/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
-@@ -0,0 +1,78 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1590851896 18000
-+#      Sat May 30 10:18:16 2020 -0500
-+# Node ID 50395430a37188d0d197e71bd85ed6dd0f649ee3
-+# Parent  4917a4242fc0a12f2f6baa10f1c5a9b3e68c20dd
-+MNG: Fix small heap overwrite or assertion if magnifying and image to be magnified has rows or columns == 1.
-+
-+[Retrieved (and updated to remove ChangeLog and version changes) from:
-+https://sourceforge.net/p/graphicsmagick/code/ci/50395430a37188d0d197e71bd85ed6dd0f649ee3]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -r 4917a4242fc0 -r 50395430a371 coders/png.c
-+--- a/coders/png.c	Fri May 01 13:49:13 2020 -0500
-++++ b/coders/png.c	Sat May 30 10:18:16 2020 -0500
-+@@ -5304,7 +5304,7 @@
-+               if (logging)
-+                 (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-+                                       "MAGN chunk (%lu bytes): "
-+-                                      "First_magnified_object_id=%u, Last_magnified_object_id=%u, "
-++                                      "First_magnified_object_id=%u, Las t_magnified_object_id=%u, "
-+                                       "MB=%u, ML=%u, MR=%u, MT=%u, MX=%u, MY=%u, "
-+                                       "X_method=%u, Y_method=%u",
-+                                       length,
-+@@ -5679,6 +5679,8 @@
-+           /*
-+             If magnifying and a supported method is requested then
-+             magnify the image.
-++
-++            http://www.libpng.org/pub/mng/spec/mng-1.0-20010209-pdg.html#mng-MAGN
-+           */
-+           if (((mng_info->magn_methx > 0) && (mng_info->magn_methx <= 5)) &&
-+               ((mng_info->magn_methy > 0) && (mng_info->magn_methy <= 5)))
-+@@ -5689,7 +5691,28 @@
-+ 
-+               if (logging)
-+                 (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-+-                                      "  Processing MNG MAGN chunk");
-++                                      "  Processing MNG MAGN chunk: MB=%u, ML=%u,"
-++                                      " MR=%u, MT=%u, MX=%u, MY=%u,"
-++                                      " X_method=%u, Y_method=%u",
-++                                      mng_info->magn_mb,mng_info->magn_ml,
-++                                      mng_info->magn_mr,mng_info->magn_mt,
-++                                      mng_info->magn_mx,mng_info->magn_my,
-++                                      mng_info->magn_methx,
-++                                      mng_info->magn_methy);
-++
-++              /*
-++                If the image width is 1, then X magnification is done
-++                by simple pixel replication.
-++              */
-++              if (image->columns == 1)
-++                  mng_info->magn_methx = 1;
-++
-++              /*
-++                If the image height is 1, then Y magnification is done
-++                by simple pixel replication.
-++              */
-++              if (image->rows == 1)
-++                  mng_info->magn_methy = 1;
-+ 
-+               if (mng_info->magn_methx == 1)
-+                 {
-+@@ -5734,12 +5757,10 @@
-+                   Image
-+                     *large_image;
-+ 
-+-                  int
-+-                    yy;
-+-
-+                   long
-+                     m,
-+-                    y;
-++                    y,
-++                    yy;
-+ 
-+                   register long
-+                     x;
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 782dd1431e..436df709e7 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -13,6 +13,9 @@ GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
- GRAPHICSMAGICK_INSTALL_STAGING = YES
- GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 6a4203f3a2..c360a56f93 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.14.tar.xz.sig
+-sha256  5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63  gnutls-3.6.14.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz.sig
++sha256  0ea8c3283de8d8335d7ae338ef27c53a916f15f382753b174c18b45ffd481558  gnutls-3.6.15.tar.xz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 34878e97b4..9f53150004 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# 0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2020-12672
-+
- ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
- GRAPHICSMAGICK_CONFIG_SCRIPTS += GraphicsMagick++-config
- endif
--- 
-2.28.0
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library)
