@@ -1,67 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:02:56 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cups: Add udev
- rules to assign usb printers group to lp
-Message-ID: <20200905082732.700C3813DC@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:22:05 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wolfssl: disable
+ examples and tests
+Message-ID: <20200905082732.A2D7F813DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1af27f63589bc2dd4af94aa9b171311ad58eb25
+commit: https://git.buildroot.net/buildroot/commit/?id=c27723190e96e67e0aa751b110245fc7e295f600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This patch is based on patch from the rockchip tree:
+Examples and tests are not needed especially because of them fails on
+some architectures because it wrongly tries to use wc_Sha256FinalRaw:
 
-commit c8a337593660f27379c30248a11bf08dc8712113
-Author: Jeffy Chen <jeffy.chen@rock-chips.com>
-Date:   Tue Nov 13 18:59:43 2018 +0800
+  CCLD     tests/unit.test
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/9.2.1/../../../../aarch64-none-linux-gnu/bin/ld: tests/tests_unit_test-api.o: in function `test_wc_Sha256FinalRaw':
+/tmp/instance-0/output-1/build/wolfssl-4.5.0-stable/tests/api.c:6504: undefined reference to `wc_Sha256FinalRaw'
 
-    package: cups: Add udev rules to assign usb printers' group to lp
+Fixes:
+ - http://autobuild.buildroot.org/results/d5b6f97f7510874fe28c675e599be08cb8a78c7b
 
-    Change-Id: Ieae17deaa7d3623e1f0e1cc826871f1719d98d88
-    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
-
-but removes a hardcoded device usb vendor/id and keps only the usb
-printer class.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9c47056c0cb25be7bc23db82ae90ea879f320cc9)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5a33de882eb23ddab1035718fe236199dfe23e5a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/70-usb-printers.rules | 3 +++
- package/cups/cups.mk               | 9 +++++++++
- 2 files changed, 12 insertions(+)
+ package/wolfssl/wolfssl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cups/70-usb-printers.rules b/package/cups/70-usb-printers.rules
-new file mode 100644
-index 0000000000..67e7f5e938
---- /dev/null
-+++ b/package/cups/70-usb-printers.rules
-@@ -0,0 +1,3 @@
-+# Allow USB printers in the lp group
-+# Match rules converted from usblp.c driver's usblp_ids
-+ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="07", ATTR{bInterfaceSubClass}=="01", GROUP="lp"
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 656beb7bc2..ad61c195cf 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -75,6 +75,15 @@ else
- CUPS_CONF_OPTS += --disable-avahi
- endif
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 5400b35fa5..e2833144fb 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -17,6 +17,8 @@ WOLFSSL_DEPENDENCIES = host-pkgconf
+ # script, so we need autoreconf
+ WOLFSSL_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+define CUPS_INSTALL_UDEV_RULES
-+	$(INSTALL) -D -m 0644 package/cups/70-usb-printers.rules \
-+		$(TARGET_DIR)/lib/udev/rules.d/70-usb-printers.rules
-+endef
++WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
 +
-+CUPS_POST_INSTALL_TARGET_HOOKS += CUPS_INSTALL_UDEV_RULES
-+endif
-+
- define CUPS_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
- 		$(TARGET_DIR)/etc/init.d/S81cupsd
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ WOLFSSL_CONF_OPTS += --enable-all
+ else
