@@ -1,60 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 14:23:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/usb_modeswitch:
- fix parallel install
-Message-ID: <20200905122925.F2AE382A17@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 14:25:41 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/systemd: disable
+ zstd for host-systemd
+Message-ID: <20200905123344.DA38D8028C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c8ec92a392db958ef0962f2c012665ccf7e1840
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=95b43db6e94e5c7c236e58a6f00edb0333a2256d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Extract from bug report:
+systemd 246 added support for zstd compression of large fields in
+journal files [1]. Since zstd is only used at runtime, we don't
+need it to enable its support in host-systemd.
 
-"In usb_modeswitch Makefile dispatcher-script, dispatcher-dynlink and
-dispatcher-statlink are .PHONY targets. The result is that sources are
-compiled also when install targets are called.
-USB_MODESWITCH_INSTALL_TARGET_CMDS calls $(MAKE) which is a call to
-parallel make eg. make -j9. So the install phase can install empty
-usb_modeswitch binary (happened once) if the compiler have just cleared
-the binary and install command installs it before compiler writes the
-binary. USB_MODESWITCH_INSTALL_TARGET_CMDS should call $(MAKE1)."
+[1] https://github.com/systemd/systemd/blob/v246/NEWS#L323-L331
 
-Instead of disabling parellel install, use install-common target instead
-of install-{dyn,stat}link targets. Indeed, the dynamic or static
-usb_modeswitch_dispatcher binary will be built by
-all-with-{dyn,stat}link-dispatcher targets, there is no need to rebuild
-it during the install step
-
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=12911
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 345c68f04fe60f31b2610d88c89dcccfba960623)
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f5b89563d7e1c507b565676bbce72c06830ae74f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usb_modeswitch/usb_modeswitch.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/systemd/systemd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
-index 7e9ed422b6..064e1960b0 100644
---- a/package/usb_modeswitch/usb_modeswitch.mk
-+++ b/package/usb_modeswitch/usb_modeswitch.mk
-@@ -17,12 +17,11 @@ USB_MODESWITCH_BUILD_TARGETS = all
- USB_MODESWITCH_INSTALL_TARGETS = install-script
- else
- USB_MODESWITCH_DEPENDENCIES += jimtcl
-+USB_MODESWITCH_INSTALL_TARGETS = install-common
- ifeq ($(BR2_STATIC_LIBS),y)
- USB_MODESWITCH_BUILD_TARGETS = all-with-statlink-dispatcher
--USB_MODESWITCH_INSTALL_TARGETS = install-statlink
- else
- USB_MODESWITCH_BUILD_TARGETS = all-with-dynlink-dispatcher
--USB_MODESWITCH_INSTALL_TARGETS = install-dynlink
- endif
- endif
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 81fa2bd0f0..65541f6b1f 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -701,7 +701,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dkernel-install=false \
+ 	-Dsystemd-analyze=false \
+ 	-Dlibcryptsetup=false \
+-	-Daudit=false
++	-Daudit=false \
++	-Dzstd=false
  
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
