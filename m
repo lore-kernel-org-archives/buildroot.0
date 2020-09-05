@@ -1,61 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:02:54 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cups: Add lp user
- as default cups user
-Message-ID: <20200905082732.657D98013F@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:18:01 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/alsa-utils: fix
+ install if directories exist
+Message-ID: <20200905082732.96146813DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3437f849b9d53b3281d582e5b57ec927ce9ad1e6
+commit: https://git.buildroot.net/buildroot/commit/?id=2256837ec39199ef502243eae625db21607a9639
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This patch is a backport from the rockchip tree.
+"mkdir" (without "-p") fails if the target directory exists, which means
+that if alsa-utils is being reinstalled or if other files have
+previously been installed in the alsa-state.d or alsa-restore.d
+directories the installation will fail.
 
-Author: Jeffy Chen <jeffy.chen@rock-chips.com>
-Date:   Tue Nov 13 18:25:34 2018 +0800
+Switch to "$(INSTALL) -d" which allows us to be explicit about the
+permissions and handles the case of a pre-existing directory correctly.
 
-    package: cups: Add lp user as default cups user
-
-    Change-Id: Ic7434fe0a7b41b86b5b8b097fa29dd9718e29aa5
-    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
-
-User lp is necessary for running the cups spooler.
-Groups lpadmin grants administrative privileges to users.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 608c12c044438cb7640cd5e9c9bd31946ecb729b)
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a421da99a716b236081e1aa9c0ef7f327b42818d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cups/cups.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/alsa-utils/alsa-utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 53b0e2ab08..656beb7bc2 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -22,6 +22,9 @@ CUPS_CONF_OPTS = \
- 	--disable-gssapi \
- 	--disable-pam \
- 	--libdir=/usr/lib \
-+	--with-cups-user=lp \
-+	--with-cups-group=lp \
-+	--with-system-groups="lpadmin sys root" \
- 	--without-rcdir
- CUPS_CONFIG_SCRIPTS = cups-config
- CUPS_DEPENDENCIES = \
-@@ -77,4 +80,11 @@ define CUPS_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S81cupsd
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index 2cd3c4a333..7af46e2393 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -90,10 +90,10 @@ define ALSA_UTILS_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
+ 	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d/buildroot-enable.conf
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d/buildroot-enable.conf;
  endef
- 
-+# lp user is needed to run cups spooler
-+# lpadmin group membership grants administrative privileges
-+define CUPS_USERS
-+	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
-+	- - lpadmin -1 * - - - Printers admin group.
-+endef
-+
- $(eval $(autotools-package))
