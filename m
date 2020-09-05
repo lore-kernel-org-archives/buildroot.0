@@ -1,34 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 09:43:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
- version 2.16.8
-In-Reply-To: <20200901181503.2390512-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 1 Sep 2020 20:15:03 +0200")
-References: <20200901181503.2390512-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn70lldf.fsf@dell.be.48ers.dk>
+Date: Sat, 5 Sep 2020 09:38:05 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/busybox: fix
+ avahi-autoipd error message
+Message-ID: <20200905073705.AA978875CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bced9e9109d7fe54a76cea61f0d98a0d4dbb2dc1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > Fix a "Local side channel attack on classical CBC decryption in (D)TLS"
- > a.k.a. CVE-2020-16150:
- > https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-1
+When using a combination of udhcpc and avahi-autoipd in case of receiving IP
+from a DHCP server, the following message can be seen:
+"Failed to kill daemon: No such file or directory".
+Add a check for a running avahi-autoipd to fix this issue.
 
- > as well as a "Local side channel attack on RSA and static
- > Diffie-Hellman" (no CVE):
- > https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-2
+Signed-off-by: Lukasz Tekieli <tekieli.lukasz@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3c5ca644ef8dbcccbc40fc3fc56b74bc54782ae4)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/udhcpc.script | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > Also change MBEDTLS_SITE and retrieve hash provided by upstream
-
- > https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x and 2020.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index 711963f974..0196351cd5 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -42,19 +42,19 @@ case "$1" in
+ 		rm -f $TMPFILE
+ 
+ 		if [ -x /usr/sbin/avahi-autoipd ]; then
+-			/usr/sbin/avahi-autoipd -k $interface
++			/usr/sbin/avahi-autoipd -c $interface && /usr/sbin/avahi-autoipd -k $interface
+ 		fi
+ 		;;
+ 
+ 	leasefail|nak)
+ 		if [ -x /usr/sbin/avahi-autoipd ]; then
+-			/usr/sbin/avahi-autoipd -wD $interface --no-chroot
++			/usr/sbin/avahi-autoipd -c $interface || /usr/sbin/avahi-autoipd -wD $interface --no-chroot
+ 		fi
+ 		;;
+ 
+ 	renew|bound)
+ 		if [ -x /usr/sbin/avahi-autoipd ]; then
+-			/usr/sbin/avahi-autoipd -k $interface
++			/usr/sbin/avahi-autoipd -c $interface && /usr/sbin/avahi-autoipd -k $interface
+ 		fi
+ 		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+ 		if [ -n "$ipv6" ] ; then
