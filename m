@@ -1,157 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:13:27 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/cups: security
- bump to version 2.3.3
-Message-ID: <20200905082724.054FC83487@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:02:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/cups: Add lp user
+ as default cups user
+Message-ID: <20200905082723.DCFB683487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d87aedea1fff6005598a1b0353a279570e5942b
+commit: https://git.buildroot.net/buildroot/commit/?id=c8fc3a668becfc930d15b31f65755903cf9ce7ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes the following security issues:
+This patch is a backport from the rockchip tree.
 
-CVE-2019-8842: The `ippReadIO` function may under-read an extension field
+Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+Date:   Tue Nov 13 18:25:34 2018 +0800
 
-CVE-2020-3898: heap based buffer overflow in libcups's ppdFindOption() in
-ppd-mark.c
+    package: cups: Add lp user as default cups user
+
+    Change-Id: Ic7434fe0a7b41b86b5b8b097fa29dd9718e29aa5
+    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+
+User lp is necessary for running the cups spooler.
+Groups lpadmin grants administrative privileges to users.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b4a6cbc21ef04238e493bd20fc83ebee15e94e6)
-[Mention security fixes]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 608c12c044438cb7640cd5e9c9bd31946ecb729b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch |  8 +++++---
- package/cups/0002-Do-not-use-genstrings.patch              | 14 ++++++++------
- package/cups/0004-Remove-PIE-flags-from-the-build.patch    |  8 +++++---
- package/cups/cups.hash                                     |  2 +-
- package/cups/cups.mk                                       |  2 +-
- 5 files changed, 20 insertions(+), 14 deletions(-)
+ package/cups/cups.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-index b1ab7cbace..7fcf7133c8 100644
---- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-+++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
-@@ -6,15 +6,17 @@ Subject: [PATCH] Remove man from BUILDDIRS in configure
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- [Fabrice: updated for 2.3.0]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Michael: updated for 2.3.3]
-+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
- ---
-  config-scripts/cups-common.m4 | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
--index fbba715..77d0f5c 100644
-+index a460a73..d427acb 100644
- --- a/config-scripts/cups-common.m4
- +++ b/config-scripts/cups-common.m4
--@@ -446,7 +446,7 @@ AC_ARG_WITH(components, [  --with-components       set components to build:
-+@@ -434,7 +434,7 @@ LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
-  
-  case "$COMPONENTS" in
-  	all)
-@@ -24,5 +26,5 @@ index fbba715..77d0f5c 100644
-  
-  	core)
- -- 
--2.8.1
-+2.17.1
- 
-diff --git a/package/cups/0002-Do-not-use-genstrings.patch b/package/cups/0002-Do-not-use-genstrings.patch
-index b3566b8b15..c7d6735b5f 100644
---- a/package/cups/0002-Do-not-use-genstrings.patch
-+++ b/package/cups/0002-Do-not-use-genstrings.patch
-@@ -16,23 +16,25 @@ genstrings call.]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- [Fabrice: updated for 2.3.0]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Michael: updated for 2.3.3]
-+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
- ---
-  ppdc/Makefile | 2 --
-  1 file changed, 2 deletions(-)
- 
- diff --git a/ppdc/Makefile b/ppdc/Makefile
--index 68bf6b2..d57a0c9 100644
-+index 32e2e0b..7b18879 100644
- --- a/ppdc/Makefile
- +++ b/ppdc/Makefile
--@@ -242,8 +242,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
--	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
--		libcupsppdc.a $(LINKCUPSSTATIC)
--	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
-+@@ -186,8 +186,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
-+ 	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
-+ 		libcupsppdc.a $(LINKCUPSSTATIC)
-+ 	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
- -	echo Generating localization strings...
- -	./genstrings >sample.c
-  
-  
-  #
- -- 
--2.6.4
-+2.17.1
- 
-diff --git a/package/cups/0004-Remove-PIE-flags-from-the-build.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-index 8401e133e9..c2765dff09 100644
---- a/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-+++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
-@@ -13,15 +13,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
- [Fabrice: updated for 2.3.0]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Michael: updated for 2.3.3]
-+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
- ---
-  Makedefs.in | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/Makedefs.in b/Makedefs.in
--index 3afef0a..299b297 100644
-+index 5f1d32f..d669ea8 100644
- --- a/Makedefs.in
- +++ b/Makedefs.in
--@@ -148,7 +148,7 @@ IPPFIND_BIN	=	@IPPFIND_BIN@
-+@@ -155,7 +155,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
-  			$(ONDEMANDFLAGS) $(OPTIONS)
-  ALL_DSOFLAGS	=	-L../cups @ARCHFLAGS@ @RELROFLAGS@ $(DSOFLAGS) $(OPTIM)
-  ALL_LDFLAGS	=	-L../cups @LDARCHFLAGS@ @RELROFLAGS@ $(LDFLAGS)  \
-@@ -31,5 +33,5 @@ index 3afef0a..299b297 100644
-  ARFLAGS		=	@ARFLAGS@
-  BACKLIBS	=	@BACKLIBS@
- -- 
--2.7.4
-+2.17.1
- 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index 8f037c6420..2eb289e209 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256 1bca9d89507e3f68cbc84482fe46ae8d5333af5bc2b9061347b2007182ac77ce  cups-2.3.1-source.tar.gz
-+sha256 261fd948bce8647b6d5cb2a1784f0c24cc52b5c4e827b71d726020bcc502f3ee  cups-2.3.3-source.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
- sha256 a5d616e6322a9cb1a971e18765025edfca4f3cd9c0eafc32d6d2eb4b8c8787b5  NOTICE
 diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index ad61c195cf..2f4385671c 100644
+index 53b0e2ab08..656beb7bc2 100644
 --- a/package/cups/cups.mk
 +++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -22,6 +22,9 @@ CUPS_CONF_OPTS = \
+ 	--disable-gssapi \
+ 	--disable-pam \
+ 	--libdir=/usr/lib \
++	--with-cups-user=lp \
++	--with-cups-group=lp \
++	--with-system-groups="lpadmin sys root" \
+ 	--without-rcdir
+ CUPS_CONFIG_SCRIPTS = cups-config
+ CUPS_DEPENDENCIES = \
+@@ -77,4 +80,11 @@ define CUPS_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S81cupsd
+ endef
  
--CUPS_VERSION = 2.3.1
-+CUPS_VERSION = 2.3.3
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
++# lp user is needed to run cups spooler
++# lpadmin group membership grants administrative privileges
++define CUPS_USERS
++	lp -1 lp -1 * /var/spool/lpd /bin/false - lp
++	- - lpadmin -1 * - - - Printers admin group.
++endef
++
+ $(eval $(autotools-package))
