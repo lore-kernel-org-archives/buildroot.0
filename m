@@ -1,60 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 09:42:47 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
- bump to version 2.16.8
-Message-ID: <20200905073713.696AE86F7C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Sep 2020 09:51:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnuplot: Add patch to fix
+ 'undefined reference to gp_read_history'
+In-Reply-To: <20200903133014.19824-1-mf@go-sys.de>
+References: <20200903133014.19824-1-mf@go-sys.de>
+Message-ID: <20200905075158.GU14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23a36164400cd09bbb962d23062247cef0efaac1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Micheal, All,
 
-Fix a "Local side channel attack on classical CBC decryption in (D)TLS"
-a.k.a. CVE-2020-16150:
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-1
+On 2020-09-03 15:30 +0200, Michael Fischer spake thusly:
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-as well as a "Local side channel attack on RSA and static
-Diffie-Hellman" (no CVE):
-https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2020-09-2
+Thanks for this patch.
 
-Also change MBEDTLS_SITE and retrieve hash provided by upstream
+This is fixing autobuilder failures, so a reference to at least one
+would have been good:
 
-https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8
+    Fixes:
+        http://autobuild.buildroot.org/results/095/0956bc50b9823374254a2032d7897d48aff2d1fa/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 61bb1370d0c9e86e1b2036bca89000b4296545a4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mbedtls/mbedtls.hash | 3 ++-
- package/mbedtls/mbedtls.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+> ---
+>  package/gnuplot/0002-without-history.patch | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>  create mode 100644 package/gnuplot/0002-without-history.patch
+> 
+> diff --git a/package/gnuplot/0002-without-history.patch b/package/gnuplot/0002-without-history.patch
+> new file mode 100644
+> index 0000000000..2ce144eabd
+> --- /dev/null
+> +++ b/package/gnuplot/0002-without-history.patch
+> @@ -0,0 +1,18 @@
+> +Patch to solve the 'undefined reference to gp_read_history'
+> +
+> +Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index b75a8fa80c..0082eee4a2 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,3 +1,4 @@
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8:
-+sha256  fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430  mbedtls-2.16.8.tar.gz
- # Locally calculated
--sha256  4786b7d1676f5e4d248f3a7f2d28446876d64962634f060ff21b92c690cfbe86  mbedtls-2.16.7.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 4ae8291c11..5094434e6c 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MBEDTLS_VERSION = 2.16.7
--MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,mbedtls-$(MBEDTLS_VERSION))
-+MBEDTLS_VERSION = 2.16.8
-+MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
- 	-DENABLE_TESTING=OFF
+Since gnuplot uses git, we need that patch to be git-formatted:
+
+    https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+
+(Yes I know the existing patch does not conform to that requirement, but
+that is a old patch, from before we started enforcing any coding style.)
+
+Also, did you send that patch upstream? If so, it would be super nice
+that you include the URL to the bug-report, or mailing post, so that we
+eventually bump gnuplot, we can get rid of that patch.
+
+Care to rework and respin, please?
+
+Regards,
+Yann E. MORIN.
+
+> +diff -Naur a/src/history.c b/src/history.c
+> +--- a/src/history.c	2020-09-03 14:48:47.875493026 +0200
+> ++++ b/src/history.c	2020-09-03 14:50:39.493972218 +0200
+> +@@ -91,7 +91,9 @@
+> + void
+> + read_history(char *filename)
+> + {
+> ++#ifdef GNUPLOT_HISTORY
+> +     gp_read_history(filename);
+> ++#endif	
+> + }
+> + 
+> + 
+> -- 
+> 2.28.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
