@@ -1,48 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 21:35:11 +0200
-Subject: [Buildroot] [git commit] Update for 2020.02.6
-Message-ID: <20200905192708.8E2ED88186@busybox.osuosl.org>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 05 Sep 2020 21:41:09 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/makedumpfile: new package
+In-Reply-To: <20200905212209.1e476db9@windsurf.home>
+References: <20200831111226.15764-1-egorenar-dev@posteo.net>
+ <20200903232648.6be84338@windsurf.home> <87y2louth0.fsf@posteo.net>
+ <87v9gsus6t.fsf@posteo.net> <20200905212209.1e476db9@windsurf.home>
+Message-ID: <87mu24ui3u.fsf@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=721fdb0239d2f6c2d28ab927ce98917c83bb280f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Indeed, I hadn't noticed that glibc and musl define PN_XNUM, but not
+> uClibc. Good catch.
+>
+> I guess the simplest then is to do what OpenSuse is doing:
+> https://build.opensuse.org/package/view_file/Kernel:kdump/makedumpfile/makedumpfile-PN_XNUM.patch?expand=1.
+> I had already seen it, found it not a great solution, but it's indeed
+> the simplest.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b120226e0ef58e2665bfefd21bdd31a9adf1acb6)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Yeah, i also saw that patch.
+Added.
 
-diff --git a/CHANGES b/CHANGES
-index fc51a0d0c9..715bbaa79f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -393,6 +393,22 @@
- 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
- 	#12811: bootstrap stuck and no login prompt
- 
-+2020.02.6, released September 5th, 2020
-+
-+	Important / security related fixes.
-+
-+	Fix a 2020.02.5 build regression in busybox when systemd (and
-+	not less) are enabled because of missing infrastructure.
-+
-+	Updated/fixed packages: alsa-utils, avahi, busybox, cups,
-+	docker-cli, graphite2, imagemagick, libeXosip2, mbedtls,
-+	nvidia-driver, paho-mqtt-c, python-django, systemd, uclibc,
-+	usb_modeswitch, wolfssl
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12911: usb_modeswitch installation race condition
-+
- 2020.02.5, released August 29th, 2020
- 
- 	Important / security related fixes.
+Sending the next version of the package.
+
+Thanks for feedback
+Regards
+Alex
