@@ -1,85 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Sep 2020 09:51:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuplot: Add patch to fix
- 'undefined reference to gp_read_history'
-In-Reply-To: <20200903133014.19824-1-mf@go-sys.de>
-References: <20200903133014.19824-1-mf@go-sys.de>
-Message-ID: <20200905075158.GU14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 Sep 2020 10:04:47 +0200
+Subject: [Buildroot] [PATCH v3 5/7] package/cups: Add lp user as default
+ cups user
+In-Reply-To: <416a4f85-4556-85e9-a7e4-94d669fee4b9@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 2 Sep 2020 23:06:54 +0200")
+References: <20200624204347.797088-1-angelo@amarulasolutions.com>
+ <20200624204347.797088-6-angelo@amarulasolutions.com>
+ <416a4f85-4556-85e9-a7e4-94d669fee4b9@mind.be>
+Message-ID: <87lfholkdc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micheal, All,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 2020-09-03 15:30 +0200, Michael Fischer spake thusly:
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
+ > On 24/06/2020 22:43, Angelo Compagnucci wrote:
+ >> This patch is a backport from the rockchip tree.
+ >> 
+ >> Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+ >> Date:   Tue Nov 13 18:25:34 2018 +0800
+ >> 
+ >> package: cups: Add lp user as default cups user
+ >> 
+ >> Change-Id: Ic7434fe0a7b41b86b5b8b097fa29dd9718e29aa5
+ >> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+ >> 
+ >> User lp is necessary for running the cups spooler.
+ >> Groups lpadmin grants administrative privileges to users.
+ >> 
+ >> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Thanks for this patch.
-
-This is fixing autobuilder failures, so a reference to at least one
-would have been good:
-
-    Fixes:
-        http://autobuild.buildroot.org/results/095/0956bc50b9823374254a2032d7897d48aff2d1fa/
-
-> ---
->  package/gnuplot/0002-without-history.patch | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/gnuplot/0002-without-history.patch
-> 
-> diff --git a/package/gnuplot/0002-without-history.patch b/package/gnuplot/0002-without-history.patch
-> new file mode 100644
-> index 0000000000..2ce144eabd
-> --- /dev/null
-> +++ b/package/gnuplot/0002-without-history.patch
-> @@ -0,0 +1,18 @@
-> +Patch to solve the 'undefined reference to gp_read_history'
-> +
-> +Signed-off-by: Michael Fischer <mf@go-sys.de>
-
-Since gnuplot uses git, we need that patch to be git-formatted:
-
-    https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-
-(Yes I know the existing patch does not conform to that requirement, but
-that is a old patch, from before we started enforcing any coding style.)
-
-Also, did you send that patch upstream? If so, it would be super nice
-that you include the URL to the bug-report, or mailing post, so that we
-eventually bump gnuplot, we can get rid of that patch.
-
-Care to rework and respin, please?
-
-Regards,
-Yann E. MORIN.
-
-> +diff -Naur a/src/history.c b/src/history.c
-> +--- a/src/history.c	2020-09-03 14:48:47.875493026 +0200
-> ++++ b/src/history.c	2020-09-03 14:50:39.493972218 +0200
-> +@@ -91,7 +91,9 @@
-> + void
-> + read_history(char *filename)
-> + {
-> ++#ifdef GNUPLOT_HISTORY
-> +     gp_read_history(filename);
-> ++#endif	
-> + }
-> + 
-> + 
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
