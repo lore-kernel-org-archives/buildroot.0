@@ -1,94 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Sep 2020 21:30:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/matchbox: fix build with gcc 10
-In-Reply-To: <20200905122611.522633-1-fontaine.fabrice@gmail.com>
-References: <20200905122611.522633-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200905193031.GX14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 5 Sep 2020 21:35:11 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.02.6
+Message-ID: <20200905192708.A06EC817D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=666503c7de6f38bda6fabdcda6e03cc7a5ca748f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-05 14:26 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/3f552248869d9842b3db8b71c1ca0b030b1a64ba
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0002-src-Fix-build-with-gcc-10.patch      | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/matchbox/0002-src-Fix-build-with-gcc-10.patch
-> 
-> diff --git a/package/matchbox/0002-src-Fix-build-with-gcc-10.patch b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
-> new file mode 100644
-> index 0000000000..1556c6be24
-> --- /dev/null
-> +++ b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
-> @@ -0,0 +1,47 @@
-> +From 844f61069896fe3f549ab425d731c061028f697c Mon Sep 17 00:00:00 2001
-> +From: Adrian Bunk <bunk@stusta.de>
-> +Date: Tue, 12 May 2020 09:44:05 +0300
-> +Subject: src: Fix build with gcc 10
-> +
-> +gcc 10 enables -fno-common by default which fails without these typedefs
-> +
-> +Signed-off-by: Adrian Bunk <bunk@stusta.de>
-> +Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
-> +
-> +[Retrieved from:
-> +http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-window-manager/commit/?id=844f61069896fe3f549ab425d731c061028f697c]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/mbtheme.h | 2 +-
-> + src/structs.h | 2 +-
-> + 2 files changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/src/mbtheme.h b/src/mbtheme.h
-> +index aa9a7c5..ad03bde 100644
-> +--- a/src/mbtheme.h
-> ++++ b/src/mbtheme.h
-> +@@ -46,7 +46,7 @@ typedef struct _mb_theme_param
-> + 
-> + } MBThemeParam;
-> + 
-> +-enum {
-> ++typedef enum {
-> +   LAYER_GRADIENT_HORIZ = 1,
-> +   LAYER_GRADIENT_VERT,
-> +   LAYER_LABEL,
-> +diff --git a/src/structs.h b/src/structs.h
-> +index 24985e7..8f53e72 100644
-> +--- a/src/structs.h
-> ++++ b/src/structs.h
-> +@@ -148,7 +148,7 @@
-> + 
-> + /* Atoms, if you change these check ewmh_init() first */
-> + 
-> +-enum {
-> ++typedef enum {
-> +   WM_STATE = 0,
-> +   WM_CHANGE_STATE,
-> +   WM_PROTOCOLS,
-> +-- 
-> +cgit v1.2.2-1-g5e49
-> +
-> -- 
-> 2.28.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/docs/website/download.html b/docs/website/download.html
+index b6a409b8c8..ac7c287199 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.5</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.6</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.6.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.02.5.tar.gz">buildroot-2020.02.5.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.5.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.6.tar.gz">buildroot-2020.02.6.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.6.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.6.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.02.5.tar.bz2">buildroot-2020.02.5.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.5.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.6.tar.bz2">buildroot-2020.02.6.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.6.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 7f91d4f39f..c6b2e65d8b 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.02.6 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 September 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.02.6 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.02.5 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.6">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-September/291322.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.02.6.tar.bz2">2020.02.6 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
