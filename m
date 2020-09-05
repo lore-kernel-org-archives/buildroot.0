@@ -1,95 +1,137 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Sep 2020 22:40:00 +0200
-Subject: [Buildroot] [git commit] package/python-crayons : new package
-Message-ID: <20200905204727.BC32087149@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 5 Sep 2020 22:55:11 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <20200905223835.1e68d658@windsurf.home>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <20200829095023.GC14354@scaer>
+ <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+ <20200905211650.0a229191@windsurf.home>
+ <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
+ <20200905223835.1e68d658@windsurf.home>
+Message-ID: <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceb090fd6e8eae389f80d08f00599076a0553a6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Il giorno sab 5 set 2020 alle ore 22:38 Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> ha scritto:
+>
+> Hello Angelo,
+>
+> On Sat, 5 Sep 2020 22:10:51 +0200
+> Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+>
+> > Honestly, I can't see a CI here or we have a big misunderstanding: CI
+> > runs on review requests, not on the committed code.
+>
+> As I've explained, we simply can't do that in Buildroot: running just
+> our current CI tests requires several hours of CPU time.
+>
+> > Simple:
+> >
+> > * A Developer opens a review request: the author only is notified, the
+> > CI starts running.
+> > * Commit has style problems, the author only is notified, red flag
+> > * Commit message has grammar/syntax errors, the author only is
+> > notified, red flag
+> > * Commit doesn't have a minimal defconfig to build on all
+> > architectures where it is supported: the author only is notified, red
+> > flag
+>
+> I'm not sure what you mean here. You would require all commits to come
+> with a snippet of configuration that allows the commit to be build
+> tested ?
 
-This module is really simple, it gives you
-colored strings for terminal usage.
+Yes, exactly.
+>
+> > * Commit compiles on some architectures and not on others: the author
+> > only is notified, red flag
+>
+> There is no such thing as "Commit compiles" in the context of
+> Buildroot. Packages have optional dependencies, we have 3 C libraries,
+> we have 15 CPU architectures. How are you going to test all of those
+> combinations, for all patches that are submitted ?
+>
+> If you have a magic solution for this, I'm interested!
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/python-crayons/Config.in           |  8 ++++++++
- package/python-crayons/python-crayons.hash |  5 +++++
- package/python-crayons/python-crayons.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+Well, I'm completely sure of that.
+Anyway, in the context of doing buildable and testable review
+requests, the developer should attach to the commit a minimal
+defconfig and minimal testing.
+That minimal defconfig and that testing are chosen by the developer to
+enhance confidence that the request is working.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f28c6b4235..4806c14fd6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1422,6 +1422,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/python-crayons/
- F:	package/python-cycler/
- F:	package/python-matplotlib/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 92acf7c9e4..7a23c92f0f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -923,6 +923,7 @@ menu "External python modules"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-constantly/Config.in"
- 	source "package/python-couchdb/Config.in"
-+	source "package/python-crayons/Config.in"
- 	source "package/python-crc16/Config.in"
- 	source "package/python-crcmod/Config.in"
- 	source "package/python-crontab/Config.in"
-diff --git a/package/python-crayons/Config.in b/package/python-crayons/Config.in
-new file mode 100644
-index 0000000000..10f3ece009
---- /dev/null
-+++ b/package/python-crayons/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CRAYONS
-+	bool "python-crayons"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  This module is really simple, it gives you
-+	  colored strings for terminal usage.
-+
-+	  https://pypi.org/project/crayons
-diff --git a/package/python-crayons/python-crayons.hash b/package/python-crayons/python-crayons.hash
-new file mode 100644
-index 0000000000..e3d6632169
---- /dev/null
-+++ b/package/python-crayons/python-crayons.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/crayons/json
-+md5  88a79c854ce54bcbb8376d18a448d627  crayons-0.4.0.tar.gz
-+sha256  bd33b7547800f2cfbd26b38431f9e64b487a7de74a947b0fafc89b45a601813f  crayons-0.4.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  7deeb137f78337fd1e2e3966a7896821c6ebff244200d009d3f4157246b5a457  LICENSE
-diff --git a/package/python-crayons/python-crayons.mk b/package/python-crayons/python-crayons.mk
-new file mode 100644
-index 0000000000..33562d097b
---- /dev/null
-+++ b/package/python-crayons/python-crayons.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-crayons
-+#
-+################################################################################
-+
-+PYTHON_CRAYONS_VERSION = 0.4.0
-+PYTHON_CRAYONS_SOURCE = crayons-$(PYTHON_CRAYONS_VERSION).tar.gz
-+PYTHON_CRAYONS_SITE = https://files.pythonhosted.org/packages/b8/6b/12a1dea724c82f1c19f410365d3e25356625b48e8009a7c3c9ec4c42488d
-+PYTHON_CRAYONS_LICENSE = MIT
-+PYTHON_CRAYONS_LICENSE_FILES = LICENSE
-+PYTHON_CRAYONS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+> > * Commit doesn't have a runtime test attached: the author only is
+> > notified, red flag
+>
+> How would a runtime test be "attached" to a commit?
+>
+> > * Commit has testing but testing fails, the author only is notified, red flag
+>
+> What does "Commit has testing" means ?
+>
+> > Imho, this is how a CI should work.
+>
+> See above all questions that are raised.
+>
+> In all what you have described, the difficult point is not e-mail vs.
+> Github/Gitlab, it is to define and implement the CI jobs/tests that you
+> are describing.
+>
+> > That way, the autobuild could be even superfluous because each commit
+> > was already tested by CI. Yes, autobuild could catch some more
+> > intricate problems, but it can run less frequently.
+>
+> See above: "commit compiles" is not something that can be answered
+> within a bounded time in the context of Buildroot.
+>
+> I think you are confusing the type of CI that can be done on an
+> application or library, where indeed it is possible for every commit to
+> run the build on all supported platforms, run the unit tests, and have
+> good confidence that all combinations have been tested.
+>
+> In the context of Buildroot, saying "a commit is good" requires
+> building thousands of different configurations: number of CPU
+> architectures * number of GCC versions * number of binutils versions *
+> number of C libraries * number of optional dependencies of the package
+> * number of optional dependencies of all dependencies of the package.
+
+I'm not confusing, really, and from what I learned on Computer
+Science, that type of testing you're saying here is not even possile.
+
+What I'm saying here is that we should and must enforce a minimal "it
+compiles" verification and "it runs" verification.
+
+Recent history says that we had packages with a service never started
+because the init script was wrong, we should avoid that.
+
+Doing postmortem autopsy with autobuild is not going to raise the
+review requests quality or lower the pressure on the maintainers.
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
