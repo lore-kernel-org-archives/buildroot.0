@@ -1,53 +1,60 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Sat, 05 Sep 2020 00:58:40 +0200
-Subject: [Buildroot] [PATCH v2] package/libzip: add patch from upstream
- to fix build
-In-Reply-To: <20200904172119.7d25a9e8@windsurf.home>
-References: <20200904141839.29071-1-paul@crapouillou.net>
- <20200904172119.7d25a9e8@windsurf.home>
-Message-ID: <S5P5GQ.E0W9FQH76M6J2@crapouillou.net>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 4 Sep 2020 21:52:53 -0700
+Subject: [Buildroot] More maintainers
+In-Reply-To: <87blilmeo2.fsf@dell.be.48ers.dk>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <20200827223956.7cb87050@windsurf.home> <20200829095023.GC14354@scaer>
+ <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Le ven. 4 sept. 2020 ? 17:21, Thomas Petazzoni 
-<thomas.petazzoni@bootlin.com> a ?crit :
-> On Fri,  4 Sep 2020 16:18:39 +0200
-> Paul Cercueil <paul@crapouillou.net> wrote:
-> 
->>  Cherry-pick a patch from upstream project that fixes the build when 
->> used
->>  with a uClibc based toolchain.
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> Could you provide a reasonably minimal defconfig that exhibits the
-> issue? I'm not able to reproduce. libzip alone, or libzip + openssl
-> builds fine here with a uClibc pre-built toolchain.
+Hi Peter,
 
 
-BR2_mipsel=y
-BR2_mips_xburst=y
-# BR2_MIPS_SOFT_FLOAT is not set
-BR2_OPTIMIZE_2=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_PTHREAD_DEBUG=y
-BR2_BINUTILS_VERSION_2_34_X=y
-BR2_GCC_VERSION_10_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_GCC_ENABLE_LTO=y
-BR2_TARGET_OPTIMIZATION="-pipe"
-BR2_TARGET_GENERIC_PASSWD_SHA512=y
-BR2_ROOTFS_MERGED_USR=y
-BR2_SYSTEM_ENABLE_NLS=y
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_LIBZIP=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_LIBRESSL=y
+On Fri, Sep 4, 2020 at 2:10 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> I think it is unrealistic to think that review bandwidth won't always be
+> an issue. Given the meta nature (a build system of buildsystems) of
+> Buildroot, no automation will ever be a substitute for real human
+> review.
 
-Cheers,
--Paul
+"No robotic pilot can ever beat a human!"
+
+I think you're right about architectural changes, there's probably
+some maintenance tasks that could be fully automated (at least for
+approval) with some rules. The most simple example would be upgrades:
+auto bump version + hash -> e2e test in Docker container -> manual
+review period of 2-3 days -> merge. If any issue in this process, open
+a bug report w/ the results.
+
+This is how tools like "Dependabot" and "Greenkeeper" work today for
+other projects. We could opt-in packages for automated bump testing -
+for docker-engine it would be fine for example.
+
+> So yes, lets please discuss concrete improvements to the automation
+> checks we already have or ways to get more people to help review rather
+> than yet another discussion about the merits of pull requests versus
+> emails.
+
+One thing I'm working on right now is automated testing on
+cross-compile targets - like Odroid, Raspberry Pi, etc, with network
+boot + watchdog of course.
+
+Probably with a very extensive test matrix, it could be possible to
+allow very small patches to be merged automatically to "next" with a
+qualifying # of reviewed-by?
+
+Best regards,
+Christian
