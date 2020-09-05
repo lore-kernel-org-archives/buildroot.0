@@ -1,65 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Sep 2020 23:25:59 +0200
-Subject: [Buildroot] [PATCH 3/3] package/python-stegano : new package
-In-Reply-To: <20200901143731.2916-4-jugurtha.belkalem@smile.fr>
-References: <20200901143731.2916-1-jugurtha.belkalem@smile.fr>
- <20200901143731.2916-4-jugurtha.belkalem@smile.fr>
-Message-ID: <20200905232559.53e7b9a9@windsurf.home>
+Date: Sat, 5 Sep 2020 23:27:08 +0200
+Subject: [Buildroot] [git commit] package/hiredis: ssl needs threads
+Message-ID: <20200905211900.0C5457F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jugurtha,
+commit: https://git.buildroot.net/buildroot/commit/?id=36ea6e64a365cdba55f87dde77497374a16a4a7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  1 Sep 2020 16:37:31 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+ssl support which has been added in version 1.0.0 needs threads:
 
-> Steganography is the art and science of writing hidden
-> messages in such a way that no one , apart from the sender
-> and intended recipient , suspects the existence of the message,
-> a form of security through obscurity.
-> Steganography is often used with cryptography.
-> 
-> More about python-stegano is available at :
-> https://pypi.org/project/stegano/.
-> 
-> Stegano can be tested :
-> $ python3
-> >>> from stegano import lsb
-> >>> secret = lsb.hide("./image.png", "Hello World")
-> >>> secret.save("./image-with-steganography.png")  
-> To get back text :
-> >>> clear_message = lsb.reveal("./image-with-steganography")  
+/home/buildroot/autobuild/instance-3/output-1/build/hiredis-1.0.0/ssl.c:42:10: fatal error: pthread.h: No such file or directory
+ #include <pthread.h>
+          ^~~~~~~~~~~
 
-Not a strict requirement, but since you have a simple test case, what
-about adding a runtime test in support/testing/ ?
+Fixes:
+ - http://autobuild.buildroot.org/results/80ac7500055d167e5ec9a964046de7cca4b4f9f5
 
-> diff --git a/package/python-stegano/Config.in b/package/python-stegano/Config.in
-> new file mode 100644
-> index 0000000000..b0b209c5f8
-> --- /dev/null
-> +++ b/package/python-stegano/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_PYTHON_STEGANO
-> +	bool "python-stegano"
-> +	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_JPEG #runtime
-> +	select BR2_PACKAGE_LIBXML2 #runtime
-> +	select BR2_PACKAGE_OPENJPEG #runtime
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hiredis/hiredis.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you give more details about the dependency on those 3 libraries?
-Is it because python-pillow must be built with openjpeg support and
-jpeg support? Or is it just because in your situation, you were using
-jpg pictures?
-
-What about the libxml2 dependency?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index f1f4c49dab..27a26661cf 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -12,7 +12,7 @@ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_INSTALL_STAGING = YES
+ HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
+ HIREDIS_DEPENDENCIES += openssl
+ else
