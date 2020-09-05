@@ -1,86 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Sep 2020 15:16:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apparmor: fix per-package build
- with apache
-In-Reply-To: <20200905125058.GV14354@scaer>
-References: <20200901201046.2757475-1-fontaine.fabrice@gmail.com>
- <20200905125058.GV14354@scaer>
-Message-ID: <20200905151615.358f20e8@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 15:54:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/easyframes: fix static build with
+ pcap
+Message-ID: <20200905135422.655429-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - autobuild.buildroot.org/results/99062bfc8c21c32bc835acae675aede7c9cf0c90
 
-On Sat, 5 Sep 2020 14:50:58 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...Lists.txt-fix-static-build-with-pcap.patch | 57 +++++++++++++++++++
+ package/easyframes/easyframes.mk              |  2 +-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
 
-> So, it is calling libtool from apache's host dir, and consequently, it
-> is calling gcc from apache's host dir, and uses include paths that point
-> to apache's sysroot.
-> 
-> This is no good.
-> 
-> In theory, we would want to fix apxs so we can only use path to the
-> current package's sysroot. This could probably be achievable, because:
-> 
->   - apxs is a perl script, so we could either sed it to replace paths,
->     but this is not noce, or we could fix it to introduce a variable
->     that contains the base directory to look from;
-> 
->   - there is a config_vars.mk file that contains hard-coded paths, which
->     we could probably modify to also include a base directory to look
->     from. For example, we could introduce "APXS_BASE_DIR = blabla", and
->     then, right before the condifure step of dependant packages, fixup
->     that file to inject the correct PPD base directory.
-> 
-> This would not be very different from the fixups we apply to the meson's
-> cross-compilation.conf configuration file, but there we do have an edge,
-> in that this is done by an infra.
-> 
-> However, for this apxs configs_var.mk, it is not so trivial, because
-> this is not part of an infra, and we do not have a way for packages to
-> export a hook that other packages would have to run automatically.
-> 
-> We could probably have the apache package provide this as a set of
-> macros:
-> 
->     define APACHE_APXS_FIXUPS
->         $(SED) blablaba $(STAGING_DIR)/usr/build/config_vars.mk
->     endef
-> 
-> and then packages would do something like:
-> 
->     APPARMOR_PRE_CONFIGURE_HOOKS += APACHE_APXS_FIXUPS
-> 
-> But:
-> 
->  1. this is not so clean, because of the cross-package reference,
-> 
->  2. we so far have only two packages using apxs, and that is probably
->     too-big a hammer to introduce this generic tweaking...
-> 
-> So, I am still a bit undecided whether to apply this quick workaround
-> your patch is, or to require a full-blown, complete and correct fix...
-> 
-> Thomas, Peter, Arnout, thoughts?
-
-We're already fixing a similar issue in the apache package as follows:
-
-ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-define APACHE_FIXUP_APR_LIBTOOL
-	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apache/@g" \
-		$(STAGING_DIR)/usr/build-1/libtool
-endef
-APACHE_POST_CONFIGURE_HOOKS += APACHE_FIXUP_APR_LIBTOOL
-endif
-
-Any reason not to do the same here ?
-
-Thomas
+diff --git a/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch b/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
+new file mode 100644
+index 0000000000..3f13613e9d
+--- /dev/null
++++ b/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
+@@ -0,0 +1,57 @@
++From 89ad9c143825b13d028c2f1713d55e83135d5c0f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 15:38:33 +0200
++Subject: [PATCH] CMakesLists.txt: fix static build with pcap
++
++Use pkg-config to find the dependencies of pcap such as libnl otherwise
++a static-only build will fail on:
++
++[100%] Linking C executable ef
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcap.a(pcap-linux.o): in function `nl80211_init':
++pcap-linux.c:(.text+0x460): undefined reference to `nl_socket_alloc'
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: pcap-linux.c:(.text+0x498): undefined reference to `genl_connect'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/99062bfc8c21c32bc835acae675aede7c9cf0c90
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/microchip-ung/easyframes/pull/2]
++---
++ CMakeLists.txt | 20 ++++++++++++++------
++ 1 file changed, 14 insertions(+), 6 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a62a950..5be128c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -7,13 +7,21 @@ include_directories(src)
++ 
++ 
++ set(_LIBPCAP "")
++-FIND_PATH(PCAP_INCLUDE_DIR NAMES pcap/pcap.h)
++-FIND_LIBRARY(PCAP_LIBRARY NAMES pcap)
++-
++-if (PCAP_LIBRARY)
+++find_package(PkgConfig)
+++pkg_check_modules(PCAP libpcap)
+++if (PCAP_FOUND)
++     add_definitions(-DHAS_LIBPCAP)
++-    include_directories(${PCAP_INCLUDE_DIR})
++-    set(_LIBPCAP ${PCAP_LIBRARY})
+++    include_directories(${PCAP_INCLUDE_DIRS})
+++    set(_LIBPCAP ${PCAP_LIBRARIES})
+++else()
+++    FIND_PATH(PCAP_INCLUDE_DIR NAMES pcap/pcap.h)
+++    FIND_LIBRARY(PCAP_LIBRARY NAMES pcap)
+++
+++    if (PCAP_LIBRARY)
+++        add_definitions(-DHAS_LIBPCAP)
+++        include_directories(${PCAP_INCLUDE_DIR})
+++        set(_LIBPCAP ${PCAP_LIBRARY})
+++    endif()
++ endif()
++ 
++ add_library(libef STATIC
++-- 
++2.28.0
++
+diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
+index 2c209433d2..1821ce703c 100644
+--- a/package/easyframes/easyframes.mk
++++ b/package/easyframes/easyframes.mk
+@@ -6,7 +6,7 @@
+ 
+ EASYFRAMES_VERSION = 0.3
+ EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,v$(EASYFRAMES_VERSION))
+-EASYFRAMES_DEPENDENCIES = libpcap
++EASYFRAMES_DEPENDENCIES = host-pkgconf libpcap
+ EASYFRAMES_LICENSE = MIT
+ EASYFRAMES_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
