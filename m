@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 14:27:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd: disable zstd for
- host-systemd
-In-Reply-To: <20200904152633.198288-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Fri, 4 Sep 2020 17:26:33 +0200")
-References: <20200904152633.198288-1-titouan.christophe@railnova.eu>
-Message-ID: <87k0x8jtmt.fsf@dell.be.48ers.dk>
+Date: Sat, 05 Sep 2020 14:31:41 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libcamera: Prevent builds on
+ m68k
+In-Reply-To: <20200904095148.844292-2-kieran.bingham@ideasonboard.com> (Kieran
+ Bingham's message of "Fri, 4 Sep 2020 10:51:45 +0100")
+References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
+ <20200904095148.844292-2-kieran.bingham@ideasonboard.com>
+Message-ID: <87ft7wjtg2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+>>>>> "Kieran" == Kieran Bingham <kieran.bingham@ideasonboard.com> writes:
 
- > systemd 246 added support for zstd compression of large fields in
- > journal files [1]. Since zstd is only used at runtime, we don't
- > need it to enable its support in host-systemd.
+ > The ControlValue structure is currently defined with a 16-bit hole
+ > (causing unaligned access to the numElements_ field, though that's a
+ > separate topic).
 
- > [1] https://github.com/systemd/systemd/blob/v246/NEWS#L323-L331
+ > This structure has a static assertion to ensure that its size does not
+ > change without due care, as it forms part of our ABI and is used in
+ > Serialisation between the pipeline handlers and IPA componenents.
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > The m68k architecture is the only target which fails this assertion,
+ > which is likely because it can pack the structure more efficiently,
+ > producing a different binary size.
+
+ > This is likely an area we will tackle before stabilising our ABI, but
+ > until then, disable m68k builds as libcamera is not expected to be
+ > supported on this target.
+
+ > Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
 Committed to 2020.08.x, thanks.
 
