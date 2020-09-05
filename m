@@ -1,28 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 10:16:04 +0200
-Subject: [Buildroot] [PATCH] manual: board support: add more of our
- expectations
-In-Reply-To: <20200902213255.2419536-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 2 Sep 2020 23:32:55 +0200")
-References: <20200902213255.2419536-1-arnout@mind.be>
-Message-ID: <878sdoljuj.fsf@dell.be.48ers.dk>
+Date: Sat, 05 Sep 2020 10:18:30 +0200
+Subject: [Buildroot] [PATCH] package/alsa-utils: fix install if
+ directories exist
+In-Reply-To: <20200903133533.2505458-1-john@metanate.com> (John Keeping's
+ message of "Thu, 3 Sep 2020 14:35:33 +0100")
+References: <20200903133533.2505458-1-john@metanate.com>
+Message-ID: <874kocljqh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > The manual has a section on adding board support to upstream buildroot,
- > but it fails to mention some of the things we expect. Add more of them.
+ > "mkdir" (without "-p") fails if the target directory exists, which means
+ > that if alsa-utils is being reinstalled or if other files have
+ > previously been installed in the alsa-state.d or alsa-restore.d
+ > directories the installation will fail.
 
- > - Internal toolchain.
- > - Beautify defconfig file.
- > - Fixed versions for components.
+ > Switch to "$(INSTALL) -d" which allows us to be explicit about the
+ > permissions and handles the case of a pre-existing directory correctly.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Adam Duskett <Aduskett@gmail.com>
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
