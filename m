@@ -1,262 +1,84 @@
-From: Alexander Egorenkov <egorenar-dev@posteo.net>
-Date: Sat,  5 Sep 2020 21:47:49 +0200
-Subject: [Buildroot] [PATCH v4 1/1] package/makedumpfile: new package
-Message-ID: <20200905194749.20109-1-egorenar-dev@posteo.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Sep 2020 21:58:37 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/multipath-tools: new package
+In-Reply-To: <20200905192015.1346-1-egorenar-dev@posteo.net>
+References: <20200905192015.1346-1-egorenar-dev@posteo.net>
+Message-ID: <20200905215837.1851ab18@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
----
- DEVELOPERS                                    |   3 +
- package/Config.in                             |   1 +
- ...move-duplicated-variable-definitions.patch | 104 ++++++++++++++++++
- ...0002-PATCH-Define-PN_XNUM-if-missing.patch |  25 +++++
- package/makedumpfile/Config.in                |  18 +++
- package/makedumpfile/makedumpfile.hash        |   3 +
- package/makedumpfile/makedumpfile.mk          |  28 +++++
- 7 files changed, 182 insertions(+)
- create mode 100644 package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
- create mode 100644 package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch
- create mode 100644 package/makedumpfile/Config.in
- create mode 100644 package/makedumpfile/makedumpfile.hash
- create mode 100644 package/makedumpfile/makedumpfile.mk
+Hello Aleksander,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f9a0687c6..f28c6b4235 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -142,6 +142,9 @@ F:	package/fastd/
- F:	package/libuecc/
- F:	package/putty/
- 
-+N:	Alexander Egorenkov <egorenar-dev@posteo.net>
-+F:	package/makedumpfile/
-+
- N:	Alexander Kurz <akurz@blala.de>
- F:	package/minimodem/
- 
-diff --git a/package/Config.in b/package/Config.in
-index ffabd20944..92acf7c9e4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2388,6 +2388,7 @@ menu "System tools"
- 	source "package/kvmtool/Config.in"
- 	source "package/libostree/Config.in"
- 	source "package/lxc/Config.in"
-+	source "package/makedumpfile/Config.in"
- 	source "package/mender/Config.in"
- 	source "package/mender-grubenv/Config.in"
- 	source "package/mfoc/Config.in"
-diff --git a/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch b/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
-new file mode 100644
-index 0000000000..aab4f70f06
---- /dev/null
-+++ b/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
-@@ -0,0 +1,104 @@
-+From 399f2c9a3acd5bd913e50a4dde52dee6527b297e Mon Sep 17 00:00:00 2001
-+From: Kairui Song <kasong@redhat.com>
-+Date: Wed, 29 Jan 2020 13:37:13 +0800
-+Subject: [PATCH] Remove duplicated variable definitions
-+
-+When building on Fedora 32 (with GCC 10), following error is observed:
-+
-+/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2010: multiple definition of
-+ `crash_reserved_mem_nr'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2010: first defined here
-+/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2009: multiple definition of
-+ `crash_reserved_mem'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2009: first defined here
-+/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1278: multiple definition of
-+ `parallel_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1278: first defined here
-+/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1265: multiple definition of
-+ `splitting_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1265: first defined here
-+...
-+collect2: error: ld returned 1 exit status
-+make: *** [Makefile:97: makedumpfile] Error 1
-+
-+These variables are wrongly defined multiple times. So remove the
-+duplicated definitions.
-+
-+Signed-off-by: Kairui Song <kasong@redhat.com>
-+Signed-off-by: Kazuhito Hagio <k-hagio-ab@nec.com>
-+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-+---
-+ makedumpfile.c | 8 ++++----
-+ makedumpfile.h | 8 ++++----
-+ 2 files changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/makedumpfile.c b/makedumpfile.c
-+index e290fbd..ae7336a 100644
-+--- a/makedumpfile.c
-++++ b/makedumpfile.c
-+@@ -10954,7 +10954,7 @@ check_param_for_reassembling_dumpfile(int argc, char *argv[])
-+ 		return FALSE;
-+ 
-+ 	if ((info->splitting_info
-+-	    = malloc(sizeof(splitting_info_t) * info->num_dumpfile))
-++	    = malloc(sizeof(struct splitting_info) * info->num_dumpfile))
-+ 	    == NULL) {
-+ 		MSG("Can't allocate memory for splitting_info.\n");
-+ 		return FALSE;
-+@@ -11042,7 +11042,7 @@ check_param_for_creating_dumpfile(int argc, char *argv[])
-+ 			return FALSE;
-+ 		}
-+ 		if ((info->splitting_info
-+-		    = malloc(sizeof(splitting_info_t) * info->num_dumpfile))
-++		    = malloc(sizeof(struct splitting_info) * info->num_dumpfile))
-+ 		    == NULL) {
-+ 			MSG("Can't allocate memory for splitting_info.\n");
-+ 			return FALSE;
-+@@ -11077,13 +11077,13 @@ check_param_for_creating_dumpfile(int argc, char *argv[])
-+ 
-+ 	if (info->num_threads) {
-+ 		if ((info->parallel_info =
-+-		     malloc(sizeof(parallel_info_t) * info->num_threads))
-++		     malloc(sizeof(struct parallel_info) * info->num_threads))
-+ 		    == NULL) {
-+ 			MSG("Can't allocate memory for parallel_info.\n");
-+ 			return FALSE;
-+ 		}
-+ 
-+-		memset(info->parallel_info, 0, sizeof(parallel_info_t)
-++		memset(info->parallel_info, 0, sizeof(struct parallel_info)
-+ 							* info->num_threads);
-+ 	}
-+ 
-+diff --git a/makedumpfile.h b/makedumpfile.h
-+index 68d9691..7217407 100644
-+--- a/makedumpfile.h
-++++ b/makedumpfile.h
-+@@ -1262,7 +1262,7 @@ struct splitting_info {
-+ 	mdf_pfn_t		end_pfn;
-+ 	off_t			offset_eraseinfo;
-+ 	unsigned long		size_eraseinfo;
-+-} splitting_info_t;
-++};
-+ 
-+ struct parallel_info {
-+ 	int			fd_memory;
-+@@ -1275,7 +1275,7 @@ struct parallel_info {
-+ #ifdef USELZO
-+ 	lzo_bytep		wrkmem;
-+ #endif
-+-} parallel_info_t;
-++};
-+ 
-+ struct ppc64_vmemmap {
-+ 	unsigned long		phys;
-+@@ -2006,8 +2006,8 @@ struct memory_range {
-+ };
-+ 
-+ #define CRASH_RESERVED_MEM_NR   8
-+-struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
-+-int crash_reserved_mem_nr;
-++extern struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
-++extern int crash_reserved_mem_nr;
-+ 
-+ unsigned long read_vmcoreinfo_symbol(char *str_symbol);
-+ int readmem(int type_addr, unsigned long long addr, void *bufptr, size_t size);
-+-- 
-+2.28.0
-+
-diff --git a/package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch b/package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch
-new file mode 100644
-index 0000000000..162e893cbe
---- /dev/null
-+++ b/package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch
-@@ -0,0 +1,25 @@
-+From: Petr Tesarik <ptesarik@suse.com>
-+Subject: [PATCH] Define PN_XNUM if missing
-+Upstream: never, build fix for old distros
-+
-+Older elfutils did not define this constant.
-+
-+Signed-off-by: Petr Tesarik <ptesarik@suse.com>
-+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-+---
-+ elf_info.h |    4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+--- a/elf_info.h
-++++ b/elf_info.h
-+@@ -19,6 +19,10 @@
-+ #include <elf.h>
-+ #include <sys/types.h>
-+ 
-++#ifndef PN_XNUM
-++#define PN_XNUM		0xffff
-++#endif
-++
-+ #define KEXEC_CORE_NOTE_NAME "CORE"
-+ #define KEXEC_CORE_NOTE_NAME_BYTES sizeof(KEXEC_CORE_NOTE_NAME)
-+ 
-diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
-new file mode 100644
-index 0000000000..8ae8579cea
---- /dev/null
-+++ b/package/makedumpfile/Config.in
-@@ -0,0 +1,18 @@
-+comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+
-+config BR2_PACKAGE_MAKEDUMPFILE
-+	bool "makedumpfile"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_XZ
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Makes a small dumpfile of kdump.
-+
-+	  https://github.com/makedumpfile/makedumpfile
-diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
-new file mode 100644
-index 0000000000..2ecfc5b1c5
---- /dev/null
-+++ b/package/makedumpfile/makedumpfile.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  cd3642dfe780d446f2dc328736bb2070007032718f5628262d5f59baf03619a4  makedumpfile-1.6.7.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-new file mode 100644
-index 0000000000..1876e1158a
---- /dev/null
-+++ b/package/makedumpfile/makedumpfile.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# makedumpfile
-+#
-+################################################################################
-+
-+MAKEDUMPFILE_VERSION = 1.6.7
-+MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,Released-$(subst .,-,$(MAKEDUMPFILE_VERSION)))
-+MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
-+MAKEDUMPFILE_LICENSE = GPL-2.0
-+MAKEDUMPFILE_LICENSE_FILES = COPYING
-+
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+MAKEDUMPFILE_DEPENDENCIES += lzo
-+MAKEDUMPFILE_MAKE_OPTS += USELZO=on
-+endif
-+
-+define MAKEDUMPFILE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		TARGET=$(BR2_ARCH) LINKTYPE=dynamic
-+endef
-+
-+define MAKEDUMPFILE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-+		DESTDIR="$(TARGET_DIR)"
-+endef
-+
-+$(eval $(generic-package))
+On Sat,  5 Sep 2020 21:20:15 +0200
+Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+
+> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+
+Thanks for this new iteration. Unfortunately, it still doesn't build
+here :-/
+
+I get:
+
+uxsock.c:20:10: fatal error: systemd/sd-daemon.h: No such file or directory
+ #include <systemd/sd-daemon.h>
+          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+This is due to how SYSTEMD is detected:
+
+ifndef SYSTEMD
+        ifeq ($(shell pkg-config --modversion libsystemd >/dev/null 2>&1 && echo 1), 1)
+                SYSTEMD = $(shell pkg-config --modversion libsystemd)
+        else
+                ifeq ($(shell systemctl --version >/dev/null 2>&1 && echo 1), 1)
+                        SYSTEMD = $(shell systemctl --version 2> /dev/null | \
+                                sed -n 's/systemd \([0-9]*\).*/\1/p')
+                endif
+        endif
+endif
+
+Indeed, if systemd is found using pkg-config, then it falls back to
+using systemctl.. and since my Fedora uses systemd, the multipath-tools
+build system thinks it should enable systemd support.. but I don't have
+systemd enabled in my Buildroot configuration.
+
+And the problem is that there is no way to explicitly disable SYSTEMD
+support...
+
+Also, there are two other things that we should pass explicitly. If you
+look at the Makefile, it does this:
+
+ifndef LIB
+        ifeq ($(shell test -d /lib64 && echo 1),1)
+                LIB=lib64
+        else
+                LIB=lib
+        endif
+endif
+
+ifndef RUN
+        ifeq ($(shell test -L /var/run -o ! -d /var/run && echo 1),1)
+                RUN=run
+        else
+                RUN=var/run
+        endif
+endif
+
+So for LIB and RUN, it looks at what exists on the build machine...
+which doesn't make sense when cross-compiling. So I think we want t
+pass LIB=lib and RUN=run explicitly.
+
+Could you have a look at the systemd ? Just build a Buildroot
+configuration without systemd, on a build machine that uses systemd,
+and you'll get the failure.
+
+Thanks!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
