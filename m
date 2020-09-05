@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 10:32:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix build with gcc 10
-In-Reply-To: <20200904091841.4e702692@windsurf.home> (Thomas Petazzoni's
- message of "Fri, 4 Sep 2020 09:18:41 +0200")
-References: <20200901210017.3471351-1-fontaine.fabrice@gmail.com>
- <20200904091841.4e702692@windsurf.home>
-Message-ID: <87sgbwk4iu.fsf@dell.be.48ers.dk>
+Date: Sat, 5 Sep 2020 10:22:17 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/wolfssl: disable
+ examples and tests
+Message-ID: <20200905082712.BA049814C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4f7ff5039728118deb6c89e21db45c2ff26a5dc6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > On Tue,  1 Sep 2020 23:00:17 +0200
- > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Examples and tests are not needed especially because of them fails on
+some architectures because it wrongly tries to use wc_Sha256FinalRaw:
 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/8754bb4f7d749f999d5f8ddfec587470ceec4476
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- >> ---
- >> .../minidlna/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++
- >> 1 file changed, 49 insertions(+)
- >> create mode 100644 package/minidlna/0001-fix-build-with-gcc-10.patch
+  CCLD     tests/unit.test
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/9.2.1/../../../../aarch64-none-linux-gnu/bin/ld: tests/tests_unit_test-api.o: in function `test_wc_Sha256FinalRaw':
+/tmp/instance-0/output-1/build/wolfssl-4.5.0-stable/tests/api.c:6504: undefined reference to `wc_Sha256FinalRaw'
 
- > Applied to master, thanks. I suppose this fix was submitted upstream as
- > well?
+Fixes:
+ - http://autobuild.buildroot.org/results/d5b6f97f7510874fe28c675e599be08cb8a78c7b
 
-Committed to 2020.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5a33de882eb23ddab1035718fe236199dfe23e5a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wolfssl/wolfssl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If I am not mistaken, minidlna is pretty much dead upsteam.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 5400b35fa5..e2833144fb 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -17,6 +17,8 @@ WOLFSSL_DEPENDENCIES = host-pkgconf
+ # script, so we need autoreconf
+ WOLFSSL_AUTORECONF = YES
+ 
++WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
++
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ WOLFSSL_CONF_OPTS += --enable-all
+ else
