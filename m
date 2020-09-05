@@ -1,13 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 10:04:47 +0200
-Subject: [Buildroot] [PATCH v3 5/7] package/cups: Add lp user as default
- cups user
-In-Reply-To: <416a4f85-4556-85e9-a7e4-94d669fee4b9@mind.be> (Arnout
- Vandecappelle's message of "Wed, 2 Sep 2020 23:06:54 +0200")
+Date: Sat, 05 Sep 2020 10:05:04 +0200
+Subject: [Buildroot] [PATCH v3 6/7] package/cups: Add udev rules to
+ assign usb printers group to lp
+In-Reply-To: <10360a87-048a-bf0f-b0b8-83041601aec8@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 2 Sep 2020 23:07:05 +0200")
 References: <20200624204347.797088-1-angelo@amarulasolutions.com>
- <20200624204347.797088-6-angelo@amarulasolutions.com>
- <416a4f85-4556-85e9-a7e4-94d669fee4b9@mind.be>
-Message-ID: <87lfholkdc.fsf@dell.be.48ers.dk>
+ <20200624204347.797088-7-angelo@amarulasolutions.com>
+ <10360a87-048a-bf0f-b0b8-83041601aec8@mind.be>
+Message-ID: <87h7sclkcv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +17,24 @@ To: buildroot@busybox.net
 >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
  > On 24/06/2020 22:43, Angelo Compagnucci wrote:
- >> This patch is a backport from the rockchip tree.
+ >> This patch is based on patch from the rockchip tree:
  >> 
+ >> commit c8a337593660f27379c30248a11bf08dc8712113
  >> Author: Jeffy Chen <jeffy.chen@rock-chips.com>
- >> Date:   Tue Nov 13 18:25:34 2018 +0800
+ >> Date:   Tue Nov 13 18:59:43 2018 +0800
  >> 
- >> package: cups: Add lp user as default cups user
+ >> package: cups: Add udev rules to assign usb printers' group to lp
  >> 
- >> Change-Id: Ic7434fe0a7b41b86b5b8b097fa29dd9718e29aa5
+ >> Change-Id: Ieae17deaa7d3623e1f0e1cc826871f1719d98d88
  >> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
  >> 
- >> User lp is necessary for running the cups spooler.
- >> Groups lpadmin grants administrative privileges to users.
+ >> but removes a hardcoded device usb vendor/id and keps only the usb
+ >> printer class.
  >> 
  >> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ >> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+Committed to 2020.02.x, 2020.08.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
