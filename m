@@ -1,60 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 14:36:36 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/gnupg2: security
- bump to version 2.2.23
-Message-ID: <20200905123345.081D7826D1@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 14:24:24 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/usb_modeswitch:
+ fix parallel install
+Message-ID: <20200905123344.CF057826D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a28d2914c8df7ce23959d7641788d9a6bc29e54
+commit: https://git.buildroot.net/buildroot/commit/?id=df85268572fa94c6673f95e3c390273bf0ec17a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes the following security issues:
+Extract from bug report:
 
-CVE-2020-25125: Importing an OpenPGP key having a preference list for AEAD
-algorithms will lead to an array overflow and thus often to a crash or other
-undefined behaviour (affected: 2.2.21 / 2.2.22)
+"In usb_modeswitch Makefile dispatcher-script, dispatcher-dynlink and
+dispatcher-statlink are .PHONY targets. The result is that sources are
+compiled also when install targets are called.
+USB_MODESWITCH_INSTALL_TARGET_CMDS calls $(MAKE) which is a call to
+parallel make eg. make -j9. So the install phase can install empty
+usb_modeswitch binary (happened once) if the compiler have just cleared
+the binary and install command installs it before compiler writes the
+binary. USB_MODESWITCH_INSTALL_TARGET_CMDS should call $(MAKE1)."
 
-For more details, see the announcement:
-https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
+Instead of disabling parellel install, use install-common target instead
+of install-{dyn,stat}link targets. Indeed, the dynamic or static
+usb_modeswitch_dispatcher binary will be built by
+all-with-{dyn,stat}link-dispatcher targets, there is no need to rebuild
+it during the install step
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 918a9fb455aeda08a04d87fdd4bb36e688594d91)
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=12911
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 345c68f04fe60f31b2610d88c89dcccfba960623)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/usb_modeswitch/usb_modeswitch.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 470681cda9..ac78385f7a 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000446.html
--sha1  4af4c6fe5f9dd7d866243f715b32775500468943  gnupg-2.2.21.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
-+sha1   bd949b4af7426e4afc13667d678503063c6aa4b5 gnupg-2.2.23.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.21.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.23.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  61e83278fb5fa7336658a8b73ab26f379d41275bb1c7c6e694dd9f9a6e8e76ec  gnupg-2.2.21.tar.bz2
-+sha256  10b55e49d78b3e49f1edb58d7541ecbdad92ddaeeb885b6f486ed23d1cd1da5c  gnupg-2.2.23.tar.bz2
- sha256  bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index e77c84d41e..af13a8d6c9 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 7e9ed422b6..064e1960b0 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -17,12 +17,11 @@ USB_MODESWITCH_BUILD_TARGETS = all
+ USB_MODESWITCH_INSTALL_TARGETS = install-script
+ else
+ USB_MODESWITCH_DEPENDENCIES += jimtcl
++USB_MODESWITCH_INSTALL_TARGETS = install-common
+ ifeq ($(BR2_STATIC_LIBS),y)
+ USB_MODESWITCH_BUILD_TARGETS = all-with-statlink-dispatcher
+-USB_MODESWITCH_INSTALL_TARGETS = install-statlink
+ else
+ USB_MODESWITCH_BUILD_TARGETS = all-with-dynlink-dispatcher
+-USB_MODESWITCH_INSTALL_TARGETS = install-dynlink
+ endif
+ endif
  
--GNUPG2_VERSION = 2.2.21
-+GNUPG2_VERSION = 2.2.23
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
