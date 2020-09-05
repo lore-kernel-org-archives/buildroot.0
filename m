@@ -1,39 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 14:31:41 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libcamera: Prevent builds on
- m68k
-In-Reply-To: <20200904095148.844292-2-kieran.bingham@ideasonboard.com> (Kieran
- Bingham's message of "Fri, 4 Sep 2020 10:51:45 +0100")
-References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
- <20200904095148.844292-2-kieran.bingham@ideasonboard.com>
-Message-ID: <87ft7wjtg2.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 14:35:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netperf: fix build with gcc 10
+Message-ID: <20200905123518.530182-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kieran" == Kieran Bingham <kieran.bingham@ideasonboard.com> writes:
+Fixes:
+ - http://autobuild.buildroot.org/results/547d9a803375cce93b8e3e7a59243190b71c7688
 
- > The ControlValue structure is currently defined with a 16-bit hole
- > (causing unaligned access to the numElements_ field, though that's a
- > separate topic).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...st_omni.c-fix-compilation-with-GCC10.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
 
- > This structure has a static assertion to ensure that its size does not
- > change without due care, as it forms part of our ABI and is used in
- > Serialisation between the pipeline handlers and IPA componenents.
-
- > The m68k architecture is the only target which fails this assertion,
- > which is likely because it can pack the structure more efficiently,
- > producing a different binary size.
-
- > This is likely an area we will tackle before stabilising our ABI, but
- > until then, disable m68k builds as libcamera is not expected to be
- > supported on this target.
-
- > Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-
-Committed to 2020.08.x, thanks.
-
+diff --git a/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
+new file mode 100644
+index 0000000000..261dfe9a0e
+--- /dev/null
++++ b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
+@@ -0,0 +1,42 @@
++From b2fd0f324002d0cf52ae905b2a469bf1067f182a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 14:30:20 +0200
++Subject: [PATCH] src/nettest_omni.c: fix compilation with GCC10
++
++GCC10 defaults to -fno-common, which breaks compilation when there are
++multiple definitions of implicit "extern" variables. Remove the extra
++definitions.
++
++Fix #42
++
++Signed-off-by: Tony Ambardar <itugrok@yahoo.com>
++[Retrieved from:
++https://github.com/openwrt/packages/blob/master/net/netperf/patches/010-gcc10_multiple_definition_fix.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/HewlettPackard/netperf/pull/48]
++---
++ src/nettest_omni.c | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/src/nettest_omni.c b/src/nettest_omni.c
++index 852eeb1..862088a 100644
++--- a/src/nettest_omni.c
+++++ b/src/nettest_omni.c
++@@ -458,14 +458,6 @@ static int client_port_max = 65535;
++ 
++  /* different options for the sockets				*/
++ 
++-int
++-  loc_nodelay,		/* don't/do use NODELAY	locally		*/
++-  rem_nodelay,		/* don't/do use NODELAY remotely	*/
++-  loc_sndavoid,		/* avoid send copies locally		*/
++-  loc_rcvavoid,		/* avoid recv copies locally		*/
++-  rem_sndavoid,		/* avoid send copies remotely		*/
++-  rem_rcvavoid; 	/* avoid recv_copies remotely		*/
++-
++ extern int
++   loc_tcpcork,
++   rem_tcpcork,
++-- 
++2.28.0
++
 -- 
-Bye, Peter Korsgaard
+2.28.0
