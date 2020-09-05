@@ -1,59 +1,120 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 21:10:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.6
-Message-ID: <20200905190322.6606F88128@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Sep 2020 21:16:50 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <20200827223956.7cb87050@windsurf.home>
+ <20200829095023.GC14354@scaer>
+ <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+Message-ID: <20200905211650.0a229191@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b120226e0ef58e2665bfefd21bdd31a9adf1acb6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hello Adam,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 16 ++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+Thanks for your participation in this discussion.
 
-diff --git a/CHANGES b/CHANGES
-index 54f8e403ed..370becaf20 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,19 @@
-+2020.02.6, released September 5th, 2020
-+
-+	Important / security related fixes.
-+
-+	Fix a 2020.02.5 build regression in busybox when systemd (and
-+	not less) are enabled because of missing infrastructure.
-+
-+	Updated/fixed packages: alsa-utils, avahi, busybox, cups,
-+	docker-cli, graphite2, imagemagick, libeXosip2, mbedtls,
-+	nvidia-driver, paho-mqtt-c, python-django, systemd, uclibc,
-+	usb_modeswitch, wolfssl
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12911: usb_modeswitch installation race condition
-+
- 2020.02.5, released August 29th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 53608d4b99..1778ae8671 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.5
-+export BR2_VERSION := 2020.02.6
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1598727000
-+BR2_VERSION_EPOCH = 1599333000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+On Sat, 5 Sep 2020 09:20:30 -0700
+Adam Duskett <aduskett@gmail.com> wrote:
+
+> >  >> So yes, lets please discuss concrete improvements to the automation
+> >  >> checks we already have or ways to get more people to help review rather
+> >  >> than yet another discussion about the merits of pull requests versus
+> >  >> emails.  
+> >  
+> 
+> Commit 9faba29108e74eb4acab21f5919dfab0288b23ac broke systemd with
+> busybox in the stock Buildroot configuration.
+> 
+> An incredibly simple test:
+> Download the tarball
+> select systemd
+> make
+> 
+> Not only was this incredibly embarrassing yesterday when I was showing a
+> client how to update Buildroot, but it could have been prevented with a basic
+> CI/CD test.
+
+It is indeed embarrassing, but your statement that it "would have been
+prevented with basic CI/CD test" is not completely correct.
+
+Indeed:
+
+ (1) We are already doing CI/CD: all runtime tests and all defconfigs
+     are built/executed regularly on Gitlab CI. We currently do that
+     once a week, and it also happens whenever a tag is pushed. For
+     example, the 2020.05.2 tag was tested by Gitlab CI, and we have a
+     number of failures:
+
+     https://gitlab.com/buildroot.org/buildroot/-/pipelines/183457594/failures
+
+     So: CI is *already* happening.
+
+ (2) Unfortunately, the CPU effort needed to build all our defconfigs
+     and run all our runtime tests is very significant, and therefore,
+     it is not possible to run all this CI testing on each and every
+     commit, and even less so on each and every patch series/pull
+     request that is being submitted.
+
+Several of you are calling for more CI, and that's obviously very good.
+But what would be even better is to define more precisely which
+additional CI you're talking about that: (a) we're not already doing
+and (b) is reasonably possible to do.
+
+Could you describe that ?
+
+> I don't have to mention how much guff I would have received from
+> the maintainers if I had submitted a patch like that without a simple
+> test.
+
+I agree that you've received some pretty strong feedback on some of
+your patches. But I don't think we should confuse two different
+situations.
+
+Commit 9faba29108e74eb4acab21f5919dfab0288b23ac in the 2020.02.x branch
+is a backport of c2caf816e9296c4812f83f0a5d16e0e33a264b72 in master.
+The commit in master works fine, and what was missed is that when
+backporting, the KCONFIG_ENABLE_OPT calls should have been adjusted.
+That is indeed a mistake. However, Peter is the only person backporting
+*all* patches to stable/LTS branches, so he is obviously doing that as
+best as he can, and relies on autobuilder testing.
+
+To me, this is a bit different than a new package being submitted,
+which in its basic configuration, doesn't even build with our default C
+library. There is an obvious expectation from us as maintainers, that
+experienced contributors will submit new packages that have been tested
+with our default C library.
+
+Your recent libblockdev submission had this issue, for example. And
+even though it was not great, I hope you noticed that I fixed the
+issues myself, in order to make progress with the series and not
+require another iteration.
+
+> I have had several small patches in the past sit for months if not
+> almost years before being applied. Including an OpenJDK bump that
+> took over 3 months.
+
+If there are obviously simple patch that are ready to be applied,
+please let us know. I've very often applied patches within minutes
+after someone points me on IRC or by e-mail to a particular patch.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
