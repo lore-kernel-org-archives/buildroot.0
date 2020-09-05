@@ -1,65 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 21:23:18 +0200
-Subject: [Buildroot] Buildroot 2020.02.6 released
-Message-ID: <87tuwchvtl.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Sep 2020 21:20:03 +0200
+Subject: [Buildroot] [git commit] package/matchbox: fix build with gcc 10
+Message-ID: <20200905191811.9622F8812A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=8414e31138ef202d26f685d533e70d57225b94ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Fixes:
+ - http://autobuild.buildroot.org/results/3f552248869d9842b3db8b71c1ca0b030b1a64ba
 
-Buildroot 2020.02.6 is released - Go download it at:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../matchbox/0002-src-Fix-build-with-gcc-10.patch  | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-http://buildroot.org/downloads/buildroot-2020.02.6.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2020.02.6.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.02.6 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2020.02.5 release. The 2020.02.x series is
-supported until April 2021.
-
-- Fix a 2020.02.5 build regression in busybox when systemd (and
-  not less) are enabled because of missing infrastructure.
-
-- Security fixes for cups, graphite2, imagemagick, mbedtls,
-  python-django
-
-- Fixes for download/compilation/runtime/license issues in alsa-utils,
-  avahi, busybox, cups, docker-cli, paho-mqtt-c, systemd, uclibc,
-  usb_modeswitch, wolfssl
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.6
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.02.5..
-
-     7  Fabrice Fontaine
-     4  Peter Korsgaard
-     4  Yann E. MORIN
-     3  Angelo Compagnucci
-     2  Iulian Onofrei
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  John Keeping
-     1  Julien Grossholtz
-     1  Lukasz Tekieli
-     1  Norbert Lange
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/matchbox/0002-src-Fix-build-with-gcc-10.patch b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..1556c6be24
+--- /dev/null
++++ b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
+@@ -0,0 +1,47 @@
++From 844f61069896fe3f549ab425d731c061028f697c Mon Sep 17 00:00:00 2001
++From: Adrian Bunk <bunk@stusta.de>
++Date: Tue, 12 May 2020 09:44:05 +0300
++Subject: src: Fix build with gcc 10
++
++gcc 10 enables -fno-common by default which fails without these typedefs
++
++Signed-off-by: Adrian Bunk <bunk@stusta.de>
++Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
++
++[Retrieved from:
++http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-window-manager/commit/?id=844f61069896fe3f549ab425d731c061028f697c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/mbtheme.h | 2 +-
++ src/structs.h | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/mbtheme.h b/src/mbtheme.h
++index aa9a7c5..ad03bde 100644
++--- a/src/mbtheme.h
+++++ b/src/mbtheme.h
++@@ -46,7 +46,7 @@ typedef struct _mb_theme_param
++ 
++ } MBThemeParam;
++ 
++-enum {
+++typedef enum {
++   LAYER_GRADIENT_HORIZ = 1,
++   LAYER_GRADIENT_VERT,
++   LAYER_LABEL,
++diff --git a/src/structs.h b/src/structs.h
++index 24985e7..8f53e72 100644
++--- a/src/structs.h
+++++ b/src/structs.h
++@@ -148,7 +148,7 @@
++ 
++ /* Atoms, if you change these check ewmh_init() first */
++ 
++-enum {
+++typedef enum {
++   WM_STATE = 0,
++   WM_CHANGE_STATE,
++   WM_PROTOCOLS,
++-- 
++cgit v1.2.2-1-g5e49
++
