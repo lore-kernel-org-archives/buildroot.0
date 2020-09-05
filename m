@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 14:24:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/usb_modeswitch:
+Date: Sat, 5 Sep 2020 14:23:53 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/usb_modeswitch:
  fix parallel install
-Message-ID: <20200905122918.D500188129@busybox.osuosl.org>
+Message-ID: <20200905122925.F2AE382A17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56f5b50e8393c4a3347c4ac8fc68cd06310e3887
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1c8ec92a392db958ef0962f2c012665ccf7e1840
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Extract from bug report:
 
