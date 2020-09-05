@@ -1,47 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:17:57 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/alsa-utils: fix
- install if directories exist
-Message-ID: <20200905082724.22EC880AEB@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:14:37 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] manual: board support:
+ add more of our expectations
+Message-ID: <20200905082724.1313780AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=faed27194c9cda9ab6ac1b03d7428ef212355496
+commit: https://git.buildroot.net/buildroot/commit/?id=cc04ce007eebefbd36e1c097a4a7deb924c9474b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-"mkdir" (without "-p") fails if the target directory exists, which means
-that if alsa-utils is being reinstalled or if other files have
-previously been installed in the alsa-state.d or alsa-restore.d
-directories the installation will fail.
+The manual has a section on adding board support to upstream buildroot,
+but it fails to mention some of the things we expect. Add more of them.
 
-Switch to "$(INSTALL) -d" which allows us to be explicit about the
-permissions and handles the case of a pre-existing directory correctly.
+- Internal toolchain.
+- Beautify defconfig file.
+- Fixed versions for components.
 
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a421da99a716b236081e1aa9c0ef7f327b42818d)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Adam Duskett <aduskett@gmail.com>
+[yann.morin.1998 at free.fr:
+  - use +monospace+ for the variables
+  - use _italic_ for sections in defconfig
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit af6cffb64e3ba5e766bbf534f75cc6736f063e71)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-utils/alsa-utils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-board-support.txt | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 7afa36d503..646f897943 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -90,10 +90,10 @@ define ALSA_UTILS_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service
- 	$(INSTALL) -D -m 0644 $(@D)/alsactl/alsa-state.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service
--	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d
- 	printf '[Install]\nWantedBy=multi-user.target\n' \
- 		>$(TARGET_DIR)/usr/lib/systemd/system/alsa-restore.service.d/buildroot-enable.conf
--	mkdir $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d
- 	printf '[Install]\nWantedBy=multi-user.target\n' \
- 		>$(TARGET_DIR)/usr/lib/systemd/system/alsa-state.service.d/buildroot-enable.conf;
- endef
+diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
+index f6d74ae1f4..33ed709535 100644
+--- a/docs/manual/adding-board-support.txt
++++ b/docs/manual/adding-board-support.txt
+@@ -10,9 +10,9 @@ that is known to work. You are welcome to add support for other boards
+ to Buildroot too.
+ 
+ To do so, you need to create a normal Buildroot configuration that
+-builds a basic system for the hardware: toolchain, kernel, bootloader,
+-filesystem and a simple BusyBox-only userspace. No specific package
+-should be selected: the configuration should be as minimal as
++builds a basic system for the hardware: (internal) toolchain, kernel,
++bootloader, filesystem and a simple BusyBox-only userspace. No specific
++package should be selected: the configuration should be as minimal as
+ possible, and should only build a working basic BusyBox system for the
+ target platform. You can of course use more complicated configurations
+ for your internal projects, but the Buildroot project will only
+@@ -22,7 +22,17 @@ selections are highly application-specific.
+ Once you have a known working configuration, run +make
+ savedefconfig+. This will generate a minimal +defconfig+ file at the
+ root of the Buildroot source tree. Move this file into the +configs/+
+-directory, and rename it +<boardname>_defconfig+.
++directory, and rename it +<boardname>_defconfig+. If the configuration
++is a bit more complicated, it is nice to manually reformat it and
++separate it into sections, with a comment before each section. Typical
++sections are _Architecture_, _Toolchain options_ (typically just linux
++headers version), _Firmware_, _Bootloader_, _Kernel_, and _Filesystem_.
++
++Always use fixed versions or commit hashes for the different
++components, not the "latest" version. For example, set
+++BR2_LINUX_KERNEL_CUSTOM_VERSION=y+ and
+++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE+ to the kernel version you tested
++with.
+ 
+ It is recommended to use as much as possible upstream versions of the
+ Linux kernel and bootloaders, and to use as much as possible default
