@@ -1,49 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 21:17:44 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <20200905185901.soojmefslfebjtty@falbala.internal.home.lespocky.de>
- (Alexander Dahl's message of "Sat, 5 Sep 2020 20:59:02 +0200")
-References: <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
- <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <20200903182409.6b337059@windsurf.home>
- <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- <87blilmeo2.fsf@dell.be.48ers.dk>
- <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
- <877dt8n2o7.fsf@dell.be.48ers.dk>
- <20200905185901.soojmefslfebjtty@falbala.internal.home.lespocky.de>
-Message-ID: <87y2lohw2v.fsf@dell.be.48ers.dk>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 05 Sep 2020 21:18:22 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/multipath-tools: new package
+In-Reply-To: <20200903234234.2f4d6793@windsurf.home>
+References: <20200831185010.16556-1-egorenar-dev@posteo.net>
+ <20200903234234.2f4d6793@windsurf.home>
+Message-ID: <87pn70uj5t.fsf@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
- > Hei hei,
- > On Sat, Sep 05, 2020 at 08:44:08AM +0200, Peter Korsgaard wrote:
- >> But sure, we could do the basics, E.G. check-package and perhaps even
- >> building a basic config. That could cover basic issues and would have
- >> the advantage that the contributor gets fast feedback. It naturally also
- >> means quite a bit more mails on the list (E.G. to send a reviewed-by or
- >> any issues found).
+> I've disabled that by passing STACKPROT= as a make option, which allows
+> to get passed that. But then it fails with:
+>
+> parser.c: In function ?set_value?:
+> parser.c:375:4: error: ?strncat? specified bound 1 equals source length [-Werror=stringop-overflow=]
+>     strncat(alloc, " ", 1);
+>     ^~~~~~~~~~~~~~~~~~~~~~
+>
+> Could you test this package a bit better by using ./utils/test-pkg ?
 
- > The number of mail could be kept low, if only problems or failures are
- > sent by mail.  Reporting each success would be too much, wouldn't it?
- > I think that's how most bots on the Linux kernel lists currently
- > behave, screaming when things fail, but stay silent if everything is
- > okay?
+Done.
 
-Yes, that is certainly possible. This would mean that the bot would be
-used to give early feedback to contributors whenever a (style) mistake
-was made, rather than only when a maintainer would look at the patch and
-try to apply it - But it wouldn't really help getting patches applied
-faster.
+>
+> Patches should be generated with "git format-patch -N", so that we have
+> [PATCH] instead of [PATCH 1/1].
+>
 
-But even so it might be useful to do.
+Fixed.
 
--- 
-Bye, Peter Korsgaard
+>
+> Ditto.
+>
+
+Fixed.
+
+>
+> We need you to add your Signed-off-by on all patches you've imported.
+>
+
+Fixed.
+
+>
+> 	w/ threads, dynamic library
+>
+
+Fixed.
+
+> Some lines are too long. Please run "make check-package" and ensure you
+> don't have any warning.
+>
+
+Fixed.
+
+
+Thank you for feedback and patience
+Regards
+Alex
