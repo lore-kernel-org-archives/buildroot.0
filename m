@@ -1,9 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 14:17:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lcdproc: fix build with gcc 10
-In-Reply-To: <20200905121753.423958-1-fontaine.fabrice@gmail.com>
-References: <20200905121753.423958-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200905121753.423958-2-fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 14:26:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/matchbox: fix build with gcc 10
+Message-ID: <20200905122611.522633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,65 +9,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/67367f43cf8b2cc74e9a4f51f9d685ef058d5745
+ - http://autobuild.buildroot.org/results/3f552248869d9842b3db8b71c1ca0b030b1a64ba
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0003-Fixcompilation-with-GCC-10-x.patch   | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch
+ .../0002-src-Fix-build-with-gcc-10.patch      | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/matchbox/0002-src-Fix-build-with-gcc-10.patch
 
-diff --git a/package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch b/package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch
+diff --git a/package/matchbox/0002-src-Fix-build-with-gcc-10.patch b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..c8a3dc20a3
+index 0000000000..1556c6be24
 --- /dev/null
-+++ b/package/lcdproc/0003-Fixcompilation-with-GCC-10-x.patch
-@@ -0,0 +1,46 @@
-+From 084126b03f29b33ab3e657c66e8c6a439f27f8e1 Mon Sep 17 00:00:00 2001
-+From: Harald Geyer <harald@ccbib.org>
-+Date: Mon, 10 Feb 2020 13:15:10 +0100
-+Subject: [PATCH] Fix compilation with GCC >= 10.x
++++ b/package/matchbox/0002-src-Fix-build-with-gcc-10.patch
+@@ -0,0 +1,47 @@
++From 844f61069896fe3f549ab425d731c061028f697c Mon Sep 17 00:00:00 2001
++From: Adrian Bunk <bunk@stusta.de>
++Date: Tue, 12 May 2020 09:44:05 +0300
++Subject: src: Fix build with gcc 10
 +
-+Starting with GCC >= 10.x, -fno-common is used as default
-+instead of -fcommon. This patch fixes the compilation.
++gcc 10 enables -fno-common by default which fails without these typedefs
 +
-+Closes: #148
-+
-+Suggested-by: Conrad Kostecki <conrad@kostecki.com>
-+Signed-off-by: Harald Geyer <harald@ccbib.org>
++Signed-off-by: Adrian Bunk <bunk@stusta.de>
++Signed-off-by: Richard Purdie <richard.purdie@linuxfoundation.org>
 +
 +[Retrieved from:
-+https://github.com/lcdproc/lcdproc/commit/084126b03f29b33ab3e657c66e8c6a439f27f8e1]
++http://git.yoctoproject.org/cgit/cgit.cgi/matchbox-window-manager/commit/?id=844f61069896fe3f549ab425d731c061028f697c]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ clients/lcdproc/iface.c | 1 +
-+ clients/lcdproc/iface.h | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
++ src/mbtheme.h | 2 +-
++ src/structs.h | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/clients/lcdproc/iface.c b/clients/lcdproc/iface.c
-+index 40e50cb7..1ac355bd 100644
-+--- a/clients/lcdproc/iface.c
-++++ b/clients/lcdproc/iface.c
-+@@ -32,6 +32,7 @@
-+ #define UNSET_INT -1
-+ #define UNSET_STR "\01"
++diff --git a/src/mbtheme.h b/src/mbtheme.h
++index aa9a7c5..ad03bde 100644
++--- a/src/mbtheme.h
+++++ b/src/mbtheme.h
++@@ -46,7 +46,7 @@ typedef struct _mb_theme_param
 + 
-++IfaceInfo iface[MAX_INTERFACES];
++ } MBThemeParam;
 + 
-+ static int iface_count = 0;	/* number of interfaces */
-+ static char unit_label[10] = "B";	/* default unit label is Bytes */
-+diff --git a/clients/lcdproc/iface.h b/clients/lcdproc/iface.h
-+index cc6dbaaf..c1bd6b5b 100644
-+--- a/clients/lcdproc/iface.h
-++++ b/clients/lcdproc/iface.h
-+@@ -18,7 +18,7 @@
-+ /** max number of interfaces in multi-interface mode */
-+ #define MAX_INTERFACES 3
++-enum {
+++typedef enum {
++   LAYER_GRADIENT_HORIZ = 1,
++   LAYER_GRADIENT_VERT,
++   LAYER_LABEL,
++diff --git a/src/structs.h b/src/structs.h
++index 24985e7..8f53e72 100644
++--- a/src/structs.h
+++++ b/src/structs.h
++@@ -148,7 +148,7 @@
 + 
-+-IfaceInfo iface[MAX_INTERFACES];	/* interface info */
-++extern IfaceInfo iface[MAX_INTERFACES];	/* interface info */
++ /* Atoms, if you change these check ewmh_init() first */
 + 
-+ /** Update screen content */
-+ int iface_screen(int rep, int display, int *flags_ptr);
++-enum {
+++typedef enum {
++   WM_STATE = 0,
++   WM_CHANGE_STATE,
++   WM_PROTOCOLS,
++-- 
++cgit v1.2.2-1-g5e49
++
 -- 
 2.28.0
