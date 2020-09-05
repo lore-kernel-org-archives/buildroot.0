@@ -1,49 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Sep 2020 23:22:04 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python-piexif : new package
-In-Reply-To: <20200901143731.2916-3-jugurtha.belkalem@smile.fr>
+Date: Sat, 5 Sep 2020 23:25:59 +0200
+Subject: [Buildroot] [PATCH 3/3] package/python-stegano : new package
+In-Reply-To: <20200901143731.2916-4-jugurtha.belkalem@smile.fr>
 References: <20200901143731.2916-1-jugurtha.belkalem@smile.fr>
- <20200901143731.2916-3-jugurtha.belkalem@smile.fr>
-Message-ID: <20200905232204.35d56f14@windsurf.home>
+ <20200901143731.2916-4-jugurtha.belkalem@smile.fr>
+Message-ID: <20200905232559.53e7b9a9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  1 Sep 2020 16:37:30 +0200
+Hello Jugurtha,
+
+On Tue,  1 Sep 2020 16:37:31 +0200
 Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-> diff --git a/package/python-piexif/Config.in b/package/python-piexif/Config.in
+> Steganography is the art and science of writing hidden
+> messages in such a way that no one , apart from the sender
+> and intended recipient , suspects the existence of the message,
+> a form of security through obscurity.
+> Steganography is often used with cryptography.
+> 
+> More about python-stegano is available at :
+> https://pypi.org/project/stegano/.
+> 
+> Stegano can be tested :
+> $ python3
+> >>> from stegano import lsb
+> >>> secret = lsb.hide("./image.png", "Hello World")
+> >>> secret.save("./image-with-steganography.png")  
+> To get back text :
+> >>> clear_message = lsb.reveal("./image-with-steganography")  
+
+Not a strict requirement, but since you have a simple test case, what
+about adding a runtime test in support/testing/ ?
+
+> diff --git a/package/python-stegano/Config.in b/package/python-stegano/Config.in
 > new file mode 100644
-> index 0000000000..aad42cbaeb
+> index 0000000000..b0b209c5f8
 > --- /dev/null
-> +++ b/package/python-piexif/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_PIEXIF
-> +	bool "python-piexif"
+> +++ b/package/python-stegano/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_PYTHON_STEGANO
+> +	bool "python-stegano"
 > +	depends on BR2_PACKAGE_PYTHON3
-> +	select BR2_PACKAGE_PYTHON_PILLOW
+> +	select BR2_PACKAGE_JPEG #runtime
+> +	select BR2_PACKAGE_LIBXML2 #runtime
+> +	select BR2_PACKAGE_OPENJPEG #runtime
 
-Looking at the code, I didn't really see where pillow is mandatory.
-Apparently, you can pass images opened to pillow, but you don't have
-to. So I dropped this "select". Of course, if that's incorrect, let me
-know, and we can fix it.
+Could you give more details about the dependency on those 3 libraries?
+Is it because python-pillow must be built with openjpeg support and
+jpeg support? Or is it just because in your situation, you were using
+jpg pictures?
 
-> +	help
-> +	  To simplify exif manipulations with Python.
-> +	  Writing, reading, and more? Piexif is pure Python.
-> +	  To everywhere with Python.
+What about the libxml2 dependency?
 
-This description (from their github) is not super useful, I've instead
-taken the description from their documentation, which is a bit more
-sensible.
-
-> +sha256	c9d2e27b56e1c47bb99ffac43d61077019dc54015d5e34d0e84411cce3d1bbde  LICENSE.txt
-
-This hash was incorrect and didn't match the actual license file.
-
-I fixed those issues, and applied. Thanks!
+Best regards,
 
 Thomas
 -- 
