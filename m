@@ -1,71 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:14:49 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] manual: board support:
- add more of our expectations
-Message-ID: <20200905082732.8C584813DC@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:02:47 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/cups: Add udev
+ rules to assign usb printers group to lp
+Message-ID: <20200905082723.E879283487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86b650fc0a6bce9c2dd82f7dd21300274dc40416
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e748bdc292b8c57e124118cd39154f89c9aaa137
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-The manual has a section on adding board support to upstream buildroot,
-but it fails to mention some of the things we expect. Add more of them.
+This patch is based on patch from the rockchip tree:
 
-- Internal toolchain.
-- Beautify defconfig file.
-- Fixed versions for components.
+commit c8a337593660f27379c30248a11bf08dc8712113
+Author: Jeffy Chen <jeffy.chen@rock-chips.com>
+Date:   Tue Nov 13 18:59:43 2018 +0800
 
+    package: cups: Add udev rules to assign usb printers' group to lp
+
+    Change-Id: Ieae17deaa7d3623e1f0e1cc826871f1719d98d88
+    Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+
+but removes a hardcoded device usb vendor/id and keps only the usb
+printer class.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - use +monospace+ for the variables
-  - use _italic_ for sections in defconfig
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit af6cffb64e3ba5e766bbf534f75cc6736f063e71)
+(cherry picked from commit 9c47056c0cb25be7bc23db82ae90ea879f320cc9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-board-support.txt | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ package/cups/70-usb-printers.rules | 3 +++
+ package/cups/cups.mk               | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index f6d74ae1f4..33ed709535 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -10,9 +10,9 @@ that is known to work. You are welcome to add support for other boards
- to Buildroot too.
+diff --git a/package/cups/70-usb-printers.rules b/package/cups/70-usb-printers.rules
+new file mode 100644
+index 0000000000..67e7f5e938
+--- /dev/null
++++ b/package/cups/70-usb-printers.rules
+@@ -0,0 +1,3 @@
++# Allow USB printers in the lp group
++# Match rules converted from usblp.c driver's usblp_ids
++ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="07", ATTR{bInterfaceSubClass}=="01", GROUP="lp"
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 656beb7bc2..ad61c195cf 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -75,6 +75,15 @@ else
+ CUPS_CONF_OPTS += --disable-avahi
+ endif
  
- To do so, you need to create a normal Buildroot configuration that
--builds a basic system for the hardware: toolchain, kernel, bootloader,
--filesystem and a simple BusyBox-only userspace. No specific package
--should be selected: the configuration should be as minimal as
-+builds a basic system for the hardware: (internal) toolchain, kernel,
-+bootloader, filesystem and a simple BusyBox-only userspace. No specific
-+package should be selected: the configuration should be as minimal as
- possible, and should only build a working basic BusyBox system for the
- target platform. You can of course use more complicated configurations
- for your internal projects, but the Buildroot project will only
-@@ -22,7 +22,17 @@ selections are highly application-specific.
- Once you have a known working configuration, run +make
- savedefconfig+. This will generate a minimal +defconfig+ file at the
- root of the Buildroot source tree. Move this file into the +configs/+
--directory, and rename it +<boardname>_defconfig+.
-+directory, and rename it +<boardname>_defconfig+. If the configuration
-+is a bit more complicated, it is nice to manually reformat it and
-+separate it into sections, with a comment before each section. Typical
-+sections are _Architecture_, _Toolchain options_ (typically just linux
-+headers version), _Firmware_, _Bootloader_, _Kernel_, and _Filesystem_.
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++define CUPS_INSTALL_UDEV_RULES
++	$(INSTALL) -D -m 0644 package/cups/70-usb-printers.rules \
++		$(TARGET_DIR)/lib/udev/rules.d/70-usb-printers.rules
++endef
 +
-+Always use fixed versions or commit hashes for the different
-+components, not the "latest" version. For example, set
-++BR2_LINUX_KERNEL_CUSTOM_VERSION=y+ and
-++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE+ to the kernel version you tested
-+with.
- 
- It is recommended to use as much as possible upstream versions of the
- Linux kernel and bootloaders, and to use as much as possible default
++CUPS_POST_INSTALL_TARGET_HOOKS += CUPS_INSTALL_UDEV_RULES
++endif
++
+ define CUPS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/cups/S81cupsd \
+ 		$(TARGET_DIR)/etc/init.d/S81cupsd
