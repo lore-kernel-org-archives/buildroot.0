@@ -1,48 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Sep 2020 21:22:09 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/makedumpfile: new package
-In-Reply-To: <87v9gsus6t.fsf@posteo.net>
-References: <20200831111226.15764-1-egorenar-dev@posteo.net>
- <20200903232648.6be84338@windsurf.home> <87y2louth0.fsf@posteo.net>
- <87v9gsus6t.fsf@posteo.net>
-Message-ID: <20200905212209.1e476db9@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 Sep 2020 21:23:18 +0200
+Subject: [Buildroot] Buildroot 2020.02.6 released
+Message-ID: <87tuwchvtl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Sat, 05 Sep 2020 18:03:22 +0200
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-> > Hmm, i checked the usr/include/linux/elf.h and it defines
-> > PN_XNUM but makedumpfile doesn't include this one and takes the one from
-> > glibc which is much bigger but doesn't contain this define,
-> > unfortunately. One option would be to patch makedumpfile and define
-> > PN_XNUM if it not yet defined, not sure whether this the way you want to
-> > go ? At least we wouldn't possibly break any other packages. What do you
-> > think ?
-> > This is just stupid, why would elfutils override glibc's elf.h, sigh.
-> 
-> I checked glibc and it defines the PN_XNUM constant, it seems that
-> uClibc doesn't. Another possible solution would be to make makedumpfile
-> depend on glibc, what do you think ? That would mean no uClibc support
-> for this package.
+Buildroot 2020.02.6 is released - Go download it at:
 
-Indeed, I hadn't noticed that glibc and musl define PN_XNUM, but not
-uClibc. Good catch.
+http://buildroot.org/downloads/buildroot-2020.02.6.tar.gz
 
-I guess the simplest then is to do what OpenSuse is doing:
-https://build.opensuse.org/package/view_file/Kernel:kdump/makedumpfile/makedumpfile-PN_XNUM.patch?expand=1.
-I had already seen it, found it not a great solution, but it's indeed
-the simplest.
+or
 
-Best regards,
+http://buildroot.org/downloads/buildroot-2020.02.6.tar.bz2
 
-Thomas
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.6 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.5 release. The 2020.02.x series is
+supported until April 2021.
+
+- Fix a 2020.02.5 build regression in busybox when systemd (and
+  not less) are enabled because of missing infrastructure.
+
+- Security fixes for cups, graphite2, imagemagick, mbedtls,
+  python-django
+
+- Fixes for download/compilation/runtime/license issues in alsa-utils,
+  avahi, busybox, cups, docker-cli, paho-mqtt-c, systemd, uclibc,
+  usb_modeswitch, wolfssl
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.6
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.5..
+
+     7  Fabrice Fontaine
+     4  Peter Korsgaard
+     4  Yann E. MORIN
+     3  Angelo Compagnucci
+     2  Iulian Onofrei
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  John Keeping
+     1  Julien Grossholtz
+     1  Lukasz Tekieli
+     1  Norbert Lange
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
