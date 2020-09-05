@@ -1,63 +1,57 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 23:47:36 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/apparmor: fix per-package build with apache
-Message-ID: <20200905214736.2035306-1-fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 23:52:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hiredis: fix build with gcc 4.8
+Message-ID: <20200905215222.2066726-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Per-package build of apparmor with apache fails on:
-
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apparmor/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/apxs  -c mod_apparmor.c -L/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apparmor/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/lib -lapparmor
-
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/build-1/libtool --silent --mode=compile /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/bin/x86_64-linux-gcc -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2    -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/include  -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/include/apr-1   -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/include/apr-1 -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../../../x86_64-buildroot-linux-musl/sysroot/usr/include  -c -o mod_apparmor.lo mod_apparmor.c && touch mod_apparmor.slo
-mod_apparmor.c:28:10: fatal error: sys/apparmor.h: No such file or directory
- #include <sys/apparmor.h>
-          ^~~~~~~~~~~~~~~~
-
-The issue is that sys/appamor.h is not installed in the apache
-per-package directory which is mangled by
-APACHE_FIX_STAGING_APACHE_CONFIG, i.e.
-/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/include
-
-So implement the same workaround made on apache to replace those wrong
-apache paths by apparmor paths in apxs binary and its configuration file
-(i.e. config_vars.mk) as suggested by Thomas Petazzoni and Yann E. Morin
-during review of the first iteration of this patch
+This patch is needed to fix a build failure with hiredis 1.0.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/ef1fcd57e0c09a2806bf2272bb21df6d3300b45b
+ - http://autobuild.buildroot.org/results/f7aa90d6d6750fb8bf46334513df09360a8c1c7f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin and Thomas Petazzoni):
- - Patch apxs and config_vars.mk
+ .../0003-Explicitly-set-c99-in-CMake.patch    | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/hiredis/0003-Explicitly-set-c99-in-CMake.patch
 
- package/apparmor/apparmor.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index f667966082..51820999eb 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -53,6 +53,15 @@ ifeq ($(BR2_PACKAGE_APACHE),y)
- APPARMOR_DEPENDENCIES += apache
- APPARMOR_TOOLS += changehat/mod_apparmor
- APPARMOR_MAKE_OPTS += APXS=$(STAGING_DIR)/usr/bin/apxs
+diff --git a/package/hiredis/0003-Explicitly-set-c99-in-CMake.patch b/package/hiredis/0003-Explicitly-set-c99-in-CMake.patch
+new file mode 100644
+index 0000000000..7e6ef8bca4
+--- /dev/null
++++ b/package/hiredis/0003-Explicitly-set-c99-in-CMake.patch
+@@ -0,0 +1,28 @@
++From 13a35bdb64615e381c5e1151cdd4e78bba71a6db Mon Sep 17 00:00:00 2001
++From: michael-grunder <michael.grunder@gmail.com>
++Date: Fri, 28 Aug 2020 12:35:01 -0700
++Subject: [PATCH] Explicitly set c99 in CMake
 +
-+ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
-+define APPARMOR_FIXUP_APXS
-+	$(SED) "s@$(PER_PACKAGE_DIR)/[^/]\+/@$(PER_PACKAGE_DIR)/apparmor/@g" \
-+		$(STAGING_DIR)/usr/bin/apxs \
-+		$(STAGING_DIR)/usr/build/config_vars.mk
-+endef
-+APPARMOR_POST_CONFIGURE_HOOKS += APPARMOR_FIXUP_APXS
-+endif
- endif
- 
- define APPARMOR_BUILD_CMDS
++See #869
++
++[Retrieved from:
++https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 1beccc69a..4cbd438d7 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -22,6 +22,9 @@ MESSAGE("Detected version: ${VERSION}")
++ 
++ PROJECT(hiredis VERSION "${VERSION}")
++ 
+++# Hiredis requires C99
+++SET(CMAKE_C_STANDARD 99)
+++
++ SET(ENABLE_EXAMPLES OFF CACHE BOOL "Enable building hiredis examples")
++ 
++ SET(hiredis_sources
 -- 
 2.28.0
