@@ -1,71 +1,157 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 10:14:37 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] manual: board support:
- add more of our expectations
-Message-ID: <20200905082724.1313780AEB@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 10:13:27 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/cups: security
+ bump to version 2.3.3
+Message-ID: <20200905082724.054FC83487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc04ce007eebefbd36e1c097a4a7deb924c9474b
+commit: https://git.buildroot.net/buildroot/commit/?id=8d87aedea1fff6005598a1b0353a279570e5942b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-The manual has a section on adding board support to upstream buildroot,
-but it fails to mention some of the things we expect. Add more of them.
+Fixes the following security issues:
 
-- Internal toolchain.
-- Beautify defconfig file.
-- Fixed versions for components.
+CVE-2019-8842: The `ippReadIO` function may under-read an extension field
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
-[yann.morin.1998 at free.fr:
-  - use +monospace+ for the variables
-  - use _italic_ for sections in defconfig
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit af6cffb64e3ba5e766bbf534f75cc6736f063e71)
+CVE-2020-3898: heap based buffer overflow in libcups's ppdFindOption() in
+ppd-mark.c
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9b4a6cbc21ef04238e493bd20fc83ebee15e94e6)
+[Mention security fixes]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-board-support.txt | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ .../cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch |  8 +++++---
+ package/cups/0002-Do-not-use-genstrings.patch              | 14 ++++++++------
+ package/cups/0004-Remove-PIE-flags-from-the-build.patch    |  8 +++++---
+ package/cups/cups.hash                                     |  2 +-
+ package/cups/cups.mk                                       |  2 +-
+ 5 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index f6d74ae1f4..33ed709535 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -10,9 +10,9 @@ that is known to work. You are welcome to add support for other boards
- to Buildroot too.
+diff --git a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+index b1ab7cbace..7fcf7133c8 100644
+--- a/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
++++ b/package/cups/0001-Remove-man-from-BUILDDIRS-in-configure.patch
+@@ -6,15 +6,17 @@ Subject: [PATCH] Remove man from BUILDDIRS in configure
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  config-scripts/cups-common.m4 | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
- To do so, you need to create a normal Buildroot configuration that
--builds a basic system for the hardware: toolchain, kernel, bootloader,
--filesystem and a simple BusyBox-only userspace. No specific package
--should be selected: the configuration should be as minimal as
-+builds a basic system for the hardware: (internal) toolchain, kernel,
-+bootloader, filesystem and a simple BusyBox-only userspace. No specific
-+package should be selected: the configuration should be as minimal as
- possible, and should only build a working basic BusyBox system for the
- target platform. You can of course use more complicated configurations
- for your internal projects, but the Buildroot project will only
-@@ -22,7 +22,17 @@ selections are highly application-specific.
- Once you have a known working configuration, run +make
- savedefconfig+. This will generate a minimal +defconfig+ file at the
- root of the Buildroot source tree. Move this file into the +configs/+
--directory, and rename it +<boardname>_defconfig+.
-+directory, and rename it +<boardname>_defconfig+. If the configuration
-+is a bit more complicated, it is nice to manually reformat it and
-+separate it into sections, with a comment before each section. Typical
-+sections are _Architecture_, _Toolchain options_ (typically just linux
-+headers version), _Firmware_, _Bootloader_, _Kernel_, and _Filesystem_.
-+
-+Always use fixed versions or commit hashes for the different
-+components, not the "latest" version. For example, set
-++BR2_LINUX_KERNEL_CUSTOM_VERSION=y+ and
-++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE+ to the kernel version you tested
-+with.
+ diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
+-index fbba715..77d0f5c 100644
++index a460a73..d427acb 100644
+ --- a/config-scripts/cups-common.m4
+ +++ b/config-scripts/cups-common.m4
+-@@ -446,7 +446,7 @@ AC_ARG_WITH(components, [  --with-components       set components to build:
++@@ -434,7 +434,7 @@ LIBHEADERSPRIV="\$(COREHEADERSPRIV) \$(DRIVERHEADERSPRIV)"
+  
+  case "$COMPONENTS" in
+  	all)
+@@ -24,5 +26,5 @@ index fbba715..77d0f5c 100644
+  
+  	core)
+ -- 
+-2.8.1
++2.17.1
  
- It is recommended to use as much as possible upstream versions of the
- Linux kernel and bootloaders, and to use as much as possible default
+diff --git a/package/cups/0002-Do-not-use-genstrings.patch b/package/cups/0002-Do-not-use-genstrings.patch
+index b3566b8b15..c7d6735b5f 100644
+--- a/package/cups/0002-Do-not-use-genstrings.patch
++++ b/package/cups/0002-Do-not-use-genstrings.patch
+@@ -16,23 +16,25 @@ genstrings call.]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  ppdc/Makefile | 2 --
+  1 file changed, 2 deletions(-)
+ 
+ diff --git a/ppdc/Makefile b/ppdc/Makefile
+-index 68bf6b2..d57a0c9 100644
++index 32e2e0b..7b18879 100644
+ --- a/ppdc/Makefile
+ +++ b/ppdc/Makefile
+-@@ -242,8 +242,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
+-	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
+-		libcupsppdc.a $(LINKCUPSSTATIC)
+-	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
++@@ -186,8 +186,6 @@ genstrings:		genstrings.o libcupsppdc.a ../cups/$(LIBCUPSSTATIC) \
++ 	$(LD_CXX) $(ARCHFLAGS) $(ALL_LDFLAGS) -o genstrings genstrings.o \
++ 		libcupsppdc.a $(LINKCUPSSTATIC)
++ 	$(CODE_SIGN) -s "$(CODE_SIGN_IDENTITY)" $@
+ -	echo Generating localization strings...
+ -	./genstrings >sample.c
+  
+  
+  #
+ -- 
+-2.6.4
++2.17.1
+ 
+diff --git a/package/cups/0004-Remove-PIE-flags-from-the-build.patch b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+index 8401e133e9..c2765dff09 100644
+--- a/package/cups/0004-Remove-PIE-flags-from-the-build.patch
++++ b/package/cups/0004-Remove-PIE-flags-from-the-build.patch
+@@ -13,15 +13,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+ [Fabrice: updated for 2.3.0]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Michael: updated for 2.3.3]
++Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+ ---
+  Makedefs.in | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/Makedefs.in b/Makedefs.in
+-index 3afef0a..299b297 100644
++index 5f1d32f..d669ea8 100644
+ --- a/Makedefs.in
+ +++ b/Makedefs.in
+-@@ -148,7 +148,7 @@ IPPFIND_BIN	=	@IPPFIND_BIN@
++@@ -155,7 +155,7 @@ ALL_CXXFLAGS	=	-I.. -D_CUPS_SOURCE $(CXXFLAGS) \
+  			$(ONDEMANDFLAGS) $(OPTIONS)
+  ALL_DSOFLAGS	=	-L../cups @ARCHFLAGS@ @RELROFLAGS@ $(DSOFLAGS) $(OPTIM)
+  ALL_LDFLAGS	=	-L../cups @LDARCHFLAGS@ @RELROFLAGS@ $(LDFLAGS)  \
+@@ -31,5 +33,5 @@ index 3afef0a..299b297 100644
+  ARFLAGS		=	@ARFLAGS@
+  BACKLIBS	=	@BACKLIBS@
+ -- 
+-2.7.4
++2.17.1
+ 
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 8f037c6420..2eb289e209 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256 1bca9d89507e3f68cbc84482fe46ae8d5333af5bc2b9061347b2007182ac77ce  cups-2.3.1-source.tar.gz
++sha256 261fd948bce8647b6d5cb2a1784f0c24cc52b5c4e827b71d726020bcc502f3ee  cups-2.3.3-source.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+ sha256 a5d616e6322a9cb1a971e18765025edfca4f3cd9c0eafc32d6d2eb4b8c8787b5  NOTICE
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index ad61c195cf..2f4385671c 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.3.1
++CUPS_VERSION = 2.3.3
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
