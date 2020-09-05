@@ -1,51 +1,59 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Sat, 5 Sep 2020 20:59:02 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <877dt8n2o7.fsf@dell.be.48ers.dk>
-References: <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
- <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <20200903182409.6b337059@windsurf.home>
- <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- <87blilmeo2.fsf@dell.be.48ers.dk>
- <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
- <877dt8n2o7.fsf@dell.be.48ers.dk>
-Message-ID: <20200905185901.soojmefslfebjtty@falbala.internal.home.lespocky.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 5 Sep 2020 21:10:33 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.6
+Message-ID: <20200905190322.6606F88128@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+commit: https://git.buildroot.net/buildroot/commit/?id=b120226e0ef58e2665bfefd21bdd31a9adf1acb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-On Sat, Sep 05, 2020 at 08:44:08AM +0200, Peter Korsgaard wrote:
-> But sure, we could do the basics, E.G. check-package and perhaps even
-> building a basic config. That could cover basic issues and would have
-> the advantage that the contributor gets fast feedback. It naturally also
-> means quite a bit more mails on the list (E.G. to send a reviewed-by or
-> any issues found).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 16 ++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-The number of mail could be kept low, if only problems or failures are
-sent by mail.  Reporting each success would be too much, wouldn't it?
-I think that's how most bots on the Linux kernel lists currently
-behave, screaming when things fail, but stay silent if everything is
-okay?
-
-Greets
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200905/a3cdec77/attachment.asc>
+diff --git a/CHANGES b/CHANGES
+index 54f8e403ed..370becaf20 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,19 @@
++2020.02.6, released September 5th, 2020
++
++	Important / security related fixes.
++
++	Fix a 2020.02.5 build regression in busybox when systemd (and
++	not less) are enabled because of missing infrastructure.
++
++	Updated/fixed packages: alsa-utils, avahi, busybox, cups,
++	docker-cli, graphite2, imagemagick, libeXosip2, mbedtls,
++	nvidia-driver, paho-mqtt-c, python-django, systemd, uclibc,
++	usb_modeswitch, wolfssl
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12911: usb_modeswitch installation race condition
++
+ 2020.02.5, released August 29th, 2020
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 53608d4b99..1778ae8671 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.02.5
++export BR2_VERSION := 2020.02.6
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1598727000
++BR2_VERSION_EPOCH = 1599333000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
