@@ -1,86 +1,39 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 12:59:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hiredis: fix build without C++
-Message-ID: <20200905105913.50960-1-fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 13:07:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hiredis: ssl needs threads
+Message-ID: <20200905110703.84566-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is needed to fix a build failure with hiredis 1.0.0
+ssl support which has been added in version 1.0.0 needs threads:
+
+/home/buildroot/autobuild/instance-3/output-1/build/hiredis-1.0.0/ssl.c:42:10: fatal error: pthread.h: No such file or directory
+ #include <pthread.h>
+          ^~~~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/830ec3398cd29b9fc5cde06a225ef531d7a9d850
+ - http://autobuild.buildroot.org/results/80ac7500055d167e5ec9a964046de7cca4b4f9f5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-allow-building-without-a-C-compiler.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/hiredis/0002-CMakeLists.txt-allow-building-without-a-C-compiler.patch
+ package/hiredis/hiredis.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/hiredis/0002-CMakeLists.txt-allow-building-without-a-C-compiler.patch b/package/hiredis/0002-CMakeLists.txt-allow-building-without-a-C-compiler.patch
-new file mode 100644
-index 0000000000..08a9ef9854
---- /dev/null
-+++ b/package/hiredis/0002-CMakeLists.txt-allow-building-without-a-C-compiler.patch
-@@ -0,0 +1,57 @@
-+From bb4a8937411a9e6ac2e5c12c0e7eeaa7dab251ba Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Sep 2020 12:54:21 +0200
-+Subject: [PATCH] CMakeLists.txt: allow building without a C++ compiler
-+
-+Define hiredis as a C project (and use a single PROJECT statement) to
-+avoid the following build failure if a C++ compiler is not found:
-+
-+CMake Error at CMakeLists.txt:3 (PROJECT):
-+  The CMAKE_CXX_COMPILER:
-+
-+    /srv/storage/autobuild/run/instance-1/output-1/host/bin/arm-linux-g++
-+
-+  is not a full path to an existing compiler tool.
-+
-+  Tell CMake where to find the compiler by setting either the environment
-+  variable "CXX" or the CMake cache entry CMAKE_CXX_COMPILER to the full path
-+  to the compiler, or to the compiler name if it is in the PATH.
-+
-+The only cpp source file is examples/example-qt.cpp which is never
-+compiled with cmake buildsystem. This file is compiled only with the
-+Makefile buildsystem so perhaps it should be removed. If it is added to
-+the cmake buildsystem, a call to enable_language(CXX) will have to be
-+added.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/830ec3398cd29b9fc5cde06a225ef531d7a9d850
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/redis/hiredis/pull/872]
-+---
-+ CMakeLists.txt | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 4cbd438..9d65b7f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,6 +1,5 @@
-+ CMAKE_MINIMUM_REQUIRED(VERSION 3.4.0)
-+ INCLUDE(GNUInstallDirs)
-+-PROJECT(hiredis)
-+ 
-+ OPTION(ENABLE_SSL "Build hiredis_ssl for SSL support" OFF)
-+ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
-+@@ -20,7 +19,7 @@ getVersionBit(HIREDIS_SONAME)
-+ SET(VERSION "${HIREDIS_MAJOR}.${HIREDIS_MINOR}.${HIREDIS_PATCH}")
-+ MESSAGE("Detected version: ${VERSION}")
-+ 
-+-PROJECT(hiredis VERSION "${VERSION}")
-++PROJECT(hiredis LANGUAGES "C" VERSION "${VERSION}")
-+ 
-+ # Hiredis requires C99
-+ SET(CMAKE_C_STANDARD 99)
-+-- 
-+2.28.0
-+
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index f1f4c49dab..27a26661cf 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -12,7 +12,7 @@ HIREDIS_LICENSE_FILES = COPYING
+ HIREDIS_INSTALL_STAGING = YES
+ HIREDIS_CONF_OPTS = -DDISABLE_TESTS=ON
+ 
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
++ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
+ HIREDIS_DEPENDENCIES += openssl
+ else
 -- 
 2.28.0
