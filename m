@@ -1,106 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Sep 2020 22:18:50 +0200
-Subject: [Buildroot] [PATCH 1/1] Config.in: -fstack-protector-all needs
- PIE
-In-Reply-To: <20191029095736.16586-1-fontaine.fabrice@gmail.com>
-References: <20191029095736.16586-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200905201850.GY14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  5 Sep 2020 22:19:56 +0200
+Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop 5.7 headers
+Message-ID: <20200905201958.17725-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+The 5.7.x series is now EOL, so drop it.
 
-Sorry for coming back so late on that patch...
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                     | 7 +++++++
+ linux/linux.hash                     | 1 -
+ package/linux-headers/Config.in.host | 5 -----
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-It is true that the patch was tested-by Matt, but I was not entirely
-convinced (call it gut-feeling or whatever), and was always a bit uneasy
-with this patch, because there are so many other packages thanjpeg-turbo
-that build correctly with SSP-all and without PIC/PIE. SO I always
-skipped it when looking at the patch backlog...
-
-Recent events made me look more in details.
-
-On 2019-10-29 10:57 +0100, Fabrice Fontaine spake thusly:
-> jpeg-turbo fails to build with BR2_SSP_ALL on:
-> 
-> /data/buildroot/buildroot-test/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-linux-gnu/7.3.1/../../../../aarch64_be-linux-gnu/bin/ld: ../CMakeFiles/simd.dir/jsimd_none.c.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against external symbol `__stack_chk_guard@@GLIBC_2.17' can not be used when making a shared object; recompile with -fPIC
-> 
-> Fix this issue by selecting BR2_PIC_PIE (if possible) with BR2_SSP_ALL
-
-So, since commit 37f3d09d46a7 (package/jpeg-turbo: force PIC for shared
-libraries), the issue no longer happens...
-
-Indeed, jpeg-turbo is slightly broken in this respect: it has some code
-to deal with CMAKE_POSITION_INDEPENDENT_CODE, but only if it is already
-set; it never tries to set it when building shared libs, whether SSP is
-enabled or not.
-
-So it's jpeg-turbo's build system that is at fault here, SSP-all does
-not require that *everything* be build with PIC/PIE.
-
-Indeed, BR2_PIC_PIE is the option that decides whether *everything* is
-build with PIC/PIE, and most notably that executables be build with PIE.
-This is orthogonal to whether SSP is enabled or not (although they both
-are security features, and are often enabler together).
-
-Of course, I'm no expert in the field, so anyone is welcome to correct
-me if the above is wrong.
-
-So now I've marked that patch as rejected.
-
-Sorry it took so long, I should realy have overcome my angst with that
-patch way earlier, and spend those two-hours-or-so doing the diging of
-that information, and doing various tests...
-
-Regards,
-Yann E. MORIN.
-
-> Fixes:
->  - http://autobuild.buildroot.net/results/51459f3f26aa2e2a038ee717548266aaec05bafc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Config.in b/Config.in
-> index 010b0774e3..3efa171405 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -751,11 +751,18 @@ config BR2_SSP_STRONG
->  
->  config BR2_SSP_ALL
->  	bool "-fstack-protector-all"
-> +	depends on BR2_SHARED_LIBS
-> +	depends on BR2_TOOLCHAIN_SUPPORTS_PIE
-> +	select BR2_PIC_PIE
->  	help
->  	  Like -fstack-protector except that all functions are
->  	  protected. This option might have a significant performance
->  	  impact on the compiled binaries.
->  
-> +comment "-fstack-protector-all needs a toolchain w/ PIE"
-> +	depends on BR2_SHARED_LIBS
-> +	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
-> +
->  endchoice
->  
->  config BR2_SSP_OPTION
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 022f6a7493..d4f2dcfdea 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2020.11"
+ 
++config BR2_KERNEL_HEADERS_5_7
++	bool "kernel headers version 5.7.x are no longer supported"
++	select BR2_LEGACY
++	help
++	  Version 5.7.x of the Linux kernel headers are no longer
++	  maintained upstream and are now removed.
++
+ config BR2_PACKAGE_TINYHTTPD
+ 	bool "tinyhttpd package removed"
+ 	select BR2_LEGACY
+diff --git a/linux/linux.hash b/linux/linux.hash
+index d9f51e0dcc..f5d7591da7 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  7b0bf5029c94df72d1244b6b77e79e376cff2817a782c3ac50767a4121fd17fe  linux-5.8.7.tar.xz
+-sha256  419c6248b9ae4dfead4599787aecbfd202e88bc4124523adfa6dd2d642b99fe7  linux-5.7.19.tar.xz
+ sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index a70a0f2b6b..bbe377ab18 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -55,10 +55,6 @@ config BR2_KERNEL_HEADERS_5_4
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+-config BR2_KERNEL_HEADERS_5_7
+-	bool "Linux 5.7.x kernel headers"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+-
+ config BR2_KERNEL_HEADERS_5_8
+ 	bool "Linux 5.8.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+@@ -347,7 +343,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.7.19"	if BR2_KERNEL_HEADERS_5_7
+ 	default "5.8.7"		if BR2_KERNEL_HEADERS_5_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
