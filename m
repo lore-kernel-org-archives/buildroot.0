@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 05 Sep 2020 10:27:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: disable examples and
- tests
-In-Reply-To: <20200902204310.3909104-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 2 Sep 2020 22:43:10 +0200")
-References: <20200902204310.3909104-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wo18k4qe.fsf@dell.be.48ers.dk>
+Date: Sat, 05 Sep 2020 10:32:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix build with gcc 10
+In-Reply-To: <20200904091841.4e702692@windsurf.home> (Thomas Petazzoni's
+ message of "Fri, 4 Sep 2020 09:18:41 +0200")
+References: <20200901210017.3471351-1-fontaine.fabrice@gmail.com>
+ <20200904091841.4e702692@windsurf.home>
+Message-ID: <87sgbwk4iu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Examples and tests are not needed especially because of them fails on
- > some architectures because it wrongly tries to use wc_Sha256FinalRaw:
+ > On Tue,  1 Sep 2020 23:00:17 +0200
+ > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
- >   CCLD     tests/unit.test
- > /tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/9.2.1/../../../../aarch64-none-linux-gnu/bin/ld: tests/tests_unit_test-api.o: in function `test_wc_Sha256FinalRaw':
- > /tmp/instance-0/output-1/build/wolfssl-4.5.0-stable/tests/api.c:6504: undefined reference to `wc_Sha256FinalRaw'
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/8754bb4f7d749f999d5f8ddfec587470ceec4476
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> ---
+ >> .../minidlna/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++
+ >> 1 file changed, 49 insertions(+)
+ >> create mode 100644 package/minidlna/0001-fix-build-with-gcc-10.patch
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d5b6f97f7510874fe28c675e599be08cb8a78c7b
+ > Applied to master, thanks. I suppose this fix was submitted upstream as
+ > well?
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Committed to 2020.08.x, thanks.
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+If I am not mistaken, minidlna is pretty much dead upsteam.
 
 -- 
 Bye, Peter Korsgaard
