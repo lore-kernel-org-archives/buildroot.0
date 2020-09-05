@@ -1,111 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  5 Sep 2020 17:33:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/flashrom: bump to version 1.2
-Message-ID: <20200905153350.993065-1-fontaine.fabrice@gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 05 Sep 2020 17:35:39 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/makedumpfile: new package
+In-Reply-To: <20200903232648.6be84338@windsurf.home>
+References: <20200831111226.15764-1-egorenar-dev@posteo.net>
+ <20200903232648.6be84338@windsurf.home>
+Message-ID: <87y2louth0.fsf@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (not needed since
-  https://github.com/flashrom/flashrom/commit/e0ceedf76d48757a05f22860e7ddd03e430c2252)
-- CONFIG_ENABLE_LIBUSB0_PROGRAMMERS has been dropped since
-  https://github.com/flashrom/flashrom/commit/b221cd7048f9cde1fe789e686a0e0adaf9a688b3
-- arc platform is supported since
-  https://github.com/flashrom/flashrom/commit/34d07f00b2990bec4a2ce12852acd42c08ddf217
-- Update indentation in hash file (two spaces)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/flashrom/0001-spi.patch | 25 -------------------------
- package/flashrom/Config.in      |  1 +
- package/flashrom/flashrom.hash  |  6 +++---
- package/flashrom/flashrom.mk    |  9 +--------
- 4 files changed, 5 insertions(+), 36 deletions(-)
- delete mode 100644 package/flashrom/0001-spi.patch
 
-diff --git a/package/flashrom/0001-spi.patch b/package/flashrom/0001-spi.patch
-deleted file mode 100644
-index 22ffcb54dc..0000000000
---- a/package/flashrom/0001-spi.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--linux_spi: add missing include
--
--Some defines (e.g. _IOC_SIZEBITS) are defined in linux/ioctl.h,
--so it must be included before it is used, by SPI_IOC_MESSAGE
--from linux/spi/spidev.h
--
--Fixes build errors with the musl C library, as seen in these
--Buildroot autobuilder failures:
--
--    http://autobuild.buildroot.org/results/2a3/2a3744007c630c267575a638ebcd83a4b97644f5/build-end.log
--    http://autobuild.buildroot.org/results/3de/3de936d9be79e151e66af15193084d82a0f2c04a/build-end.log
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff -durN flashrom-0.9.8.orig/linux_spi.c flashrom-0.9.8/linux_spi.c
----- flashrom-0.9.8.orig/linux_spi.c	2015-10-28 19:42:38.480285847 +0100
--+++ flashrom-0.9.8/linux_spi.c	2015-10-28 19:43:15.492994613 +0100
--@@ -27,6 +27,7 @@
-- #include <ctype.h>
-- #include <unistd.h>
-- #include <linux/types.h>
--+#include <linux/ioctl.h>
-- #include <linux/spi/spidev.h>
-- #include <sys/ioctl.h>
-- #include "flash.h"
-diff --git a/package/flashrom/Config.in b/package/flashrom/Config.in
-index c333c29730..182a3f454a 100644
---- a/package/flashrom/Config.in
-+++ b/package/flashrom/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_FLASHROM_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_arc
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_m68k
-diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
-index 6622758a55..97df4fe9a4 100644
---- a/package/flashrom/flashrom.hash
-+++ b/package/flashrom/flashrom.hash
-@@ -1,4 +1,4 @@
- # Locally computed after checking pgp signature
--# https://download.flashrom.org/releases/flashrom-v1.1.tar.bz2.asc
--sha256 aeada9c70c22421217c669356180c0deddd0b60876e63d2224e3260b90c14e19  flashrom-v1.1.tar.bz2
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+# https://download.flashrom.org/releases/flashrom-v1.2.tar.bz2.asc
-+sha256  e1f8d95881f5a4365dfe58776ce821dfcee0f138f75d0f44f8a3cd032d9ea42b  flashrom-v1.2.tar.bz2
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 6b9e6dde94..5554082bca 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+> elf_info.c: In function ?get_elf64_phnum?:
+> elf_info.c:1050:23: error: ?PN_XNUM? undeclared (first use in this function)
+>   if (ehdr->e_phnum == PN_XNUM) {
+>                        ^
+> elf_info.c:1050:23: note: each undeclared identifier is reported only once for each function it appears in
+> make[1]: *** [Makefile:90: elf_info.o] Error 1
+>
+> PN_XNUM is defined in libelf/elf.h in the elfutils code base, but it
+> seems like this header file is only installed if elfutils is built with
+> --enable-install-elfh. However, I am not sure what would be the impact
+> of installing elf.h. Indeed, the kernel headers also have an elf.h file
+> in usr/include/linux/elf.h.
+>
+> Could you have a look into this ?
+
+Hmm, i checked the usr/include/linux/elf.h and it defines
+PN_XNUM but makedumpfile doesn't include this one and takes the one from
+glibc which is much bigger but doesn't contain this define,
+unfortunately. One option would be to patch makedumpfile and define
+PN_XNUM if it not yet defined, not sure whether this the way you want to
+go ? At least we wouldn't possibly break any other packages. What do you
+think ?
+This is just stupid, why would elfutils override glibc's elf.h, sigh.
  
--FLASHROM_VERSION = 1.1
-+FLASHROM_VERSION = 1.2
- FLASHROM_SOURCE = flashrom-v$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = https://download.flashrom.org/releases
- FLASHROM_LICENSE = GPL-2.0+
-@@ -28,13 +28,6 @@ else
- FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB1_PROGRAMMERS=no
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
--FLASHROM_DEPENDENCIES += host-pkgconf libusb-compat
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB0_PROGRAMMERS=yes
--else
--FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBUSB0_PROGRAMMERS=no
--endif
--
- ifeq ($(BR2_PACKAGE_PCIUTILS),y)
- FLASHROM_DEPENDENCIES += pciutils
- FLASHROM_MAKE_OPTS += CONFIG_ENABLE_LIBPCI_PROGRAMMERS=yes
--- 
-2.28.0
+Thanks for feedback
+Regards
+Alex
