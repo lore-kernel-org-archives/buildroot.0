@@ -1,58 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Sep 2020 09:35:57 +0200
-Subject: [Buildroot] [PATCH] package/libnss: install certutil tool on
- target
-In-Reply-To: <20200904113501.22230-1-julien.floret@6wind.com>
-References: <20200904113501.22230-1-julien.floret@6wind.com>
-Message-ID: <20200905073557.GT14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 Sep 2020 09:41:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/busybox: fix avahi-autoipd
+ error message
+In-Reply-To: <87pn76bmye.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 31 Aug 2020 22:05:29 +0200")
+References: <20200723171918.12763-1-tekieli.lukasz@gmail.com>
+ <87pn76bmye.fsf@dell.be.48ers.dk>
+Message-ID: <87y2lollg2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On 2020-09-04 13:35 +0200, Julien Floret spake thusly:
-> certutil is a command-line utility for managing keys and certificate in
-> both NSS databases and other NSS tokens.
-> 
-> Signed-off-by: Julien Floret <julien.floret@6wind.com>
+>>>>> "Lukasz" == Lukasz Tekieli <tekieli.lukasz@gmail.com> writes:
+ >> When using a combination of udhcpc and avahi-autoipd in case of receiving IP
+ >> from a DHCP server, the following message can be seen:
+ >> "Failed to kill daemon: No such file or directory".
+ >> Add a check for a running avahi-autoipd to fix this issue.
 
-Applied to master, thanks.
+ >> Signed-off-by: Lukasz Tekieli <tekieli.lukasz@gmail.com>
+ >> ---
+ >> package/busybox/udhcpc.script | 6 +++---
+ >> 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
+ >> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+ >> index 711963f974..0196351cd5 100755
+ >> --- a/package/busybox/udhcpc.script
+ >> +++ b/package/busybox/udhcpc.script
+ >> @@ -42,19 +42,19 @@ case "$1" in
+ >> rm -f $TMPFILE
+ 
+ >> if [ -x /usr/sbin/avahi-autoipd ]; then
+ >> -			/usr/sbin/avahi-autoipd -k $interface
+ >> +			/usr/sbin/avahi-autoipd -c $interface && /usr/sbin/avahi-autoipd -k $interface
 
-> ---
->  package/libnss/libnss.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index f28e16a40670..d0b2d51772bd 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -105,6 +105,8 @@ define LIBNSS_INSTALL_TARGET_CMDS
->  		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
->  	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnss/nss.pc.in \
->  		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
-> +	$(INSTALL) -D -m 755 $(@D)/$(LIBNSS_DISTDIR)/bin/certutil \
-> +		$(TARGET_DIR)/usr/bin/certutil
->  	$(SED) 's/@VERSION@/$(LIBNSS_VERSION)/g;' \
->  		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
->  endef
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Longer term this should really move to an
+ > /usr/share/udhcpc/default.script.d/avahi-autoipd file, but OK - That can
+ > be done later.
+
+ > Committed, thanks.
+
+Committed to 2020.02.x and 2020.05.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
