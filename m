@@ -1,58 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 5 Sep 2020 14:34:41 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libzip: add patch
- from upstream to fix build
-Message-ID: <20200905123344.F1B638028C@busybox.osuosl.org>
+Date: Sat, 5 Sep 2020 14:29:32 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libcamera:
+ Prevent builds on m68k
+Message-ID: <20200905123344.E78D38028C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=927ee70ed1ea35a2b901005a2a069d9b2ea1027a
+commit: https://git.buildroot.net/buildroot/commit/?id=2d68375b9cc872cade39b01f3dd14c5fa2e3ec65
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Cherry-pick a patch from upstream project that fixes the build when used
-with a uClibc based toolchain.
+The ControlValue structure is currently defined with a 16-bit hole
+(causing unaligned access to the numElements_ field, though that's a
+separate topic).
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+This structure has a static assertion to ensure that its size does not
+change without due care, as it forms part of our ABI and is used in
+Serialisation between the pipeline handlers and IPA components.
+
+The m68k architecture is the only target which fails this assertion,
+which is likely because it can pack the structure more efficiently,
+producing a different binary size.
+
+This is likely an area we will tackle before stabilising our ABI, but
+until then, disable m68k builds as libcamera is not expected to be
+supported on this target.
+
+Fixes;
+  - http://autobuild.buildroot.net/results/9dce26e94299a2c61bba60cbc7803926e2f85e29/
+
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+[yann.morin.1998 at free.fr, suggestions from Thomas:
+  - introduce BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+  - propagate that to the comment
+  - add autobuilder reference
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0e3febb75fe234b2f3a3a2fb11a99eeff1814a36)
+(cherry picked from commit 66526e3518e01a3fe16dede165c7890d194b7816)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libzip/0002-Include-limits.h-for-INT_MAX.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/libcamera/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libzip/0002-Include-limits.h-for-INT_MAX.patch b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
-new file mode 100644
-index 0000000000..c488f05289
---- /dev/null
-+++ b/package/libzip/0002-Include-limits.h-for-INT_MAX.patch
-@@ -0,0 +1,27 @@
-+From fd89e242d16128dedef08f47d99ae56aa19b0591 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=C3=98rjan=20Malde?= <red@foxi.me>
-+Date: Wed, 15 Jul 2020 12:16:16 +0200
-+Subject: [PATCH] Include limits.h for INT_MAX
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 960d78b82e..39741e4412 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -1,5 +1,12 @@
++config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
++	bool
++	default y
++	# Invalid packing size of ControlValue struct on m68k
++	depends on BR2_m68k
 +
-+[Retrieved from:
-+https://github.com/nih-at/libzip/commit/fd89e242d16128dedef08f47d99ae56aa19b0591]
-+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-+---
-+ lib/zip_crypto_openssl.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/lib/zip_crypto_openssl.c b/lib/zip_crypto_openssl.c
-+index 1cb00479..60f92758 100644
-+--- a/lib/zip_crypto_openssl.c
-++++ b/lib/zip_crypto_openssl.c
-+@@ -38,6 +38,7 @@
-+ #include "zip_crypto.h"
-+ 
-+ #include <openssl/rand.h>
-++#include <limits.h>
-+ 
-+ #if OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-+ #define USE_OPENSSL_1_0_API
-+-- 
-+2.28.0
-+
+ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	bool "libcamera"
++	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
+@@ -64,5 +71,6 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC
+ endif # BR2_PACKAGE_LIBCAMERA
+ 
+ comment "libcamera needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 5"
++	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
