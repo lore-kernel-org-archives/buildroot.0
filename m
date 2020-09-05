@@ -1,76 +1,44 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 5 Sep 2020 11:32:28 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-09-03
-In-Reply-To: <20200904070920.A74CC40135@themis.gorgu.net>
-References: <20200904070920.A74CC40135@themis.gorgu.net>
-Message-ID: <CAB0FRsuzue0h6G7-Y_zUZWxCvTS-qt9LOyM-DgJ2c1rLfekphA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 5 Sep 2020 12:04:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix build with gcc 10
+In-Reply-To: <87sgbwk4iu.fsf@dell.be.48ers.dk>
+References: <20200901210017.3471351-1-fontaine.fabrice@gmail.com>
+ <20200904091841.4e702692@windsurf.home> <87sgbwk4iu.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W80ehyPZ02tQDy=+jtqcvEz_Ym_YNVS=TWkTcMbyX_MsYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 4 sept. 2020 ? 09:09, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
-
-> Hello,
+Le sam. 5 sept. 2020 ? 10:32, Peter Korsgaard <peter@korsgaard.com> a ?crit :
 >
-> Autobuilder failures
-> ====================
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 >
-> Below is a list of build failures reported by the Buildroot
-> autobuilders in relation to packages or CPU
-> architectures you are in charge of. Please help us
-> improving the quality of Buildroot by investigating
-> those build failures and sending patches to fix
-> them.Thanks!
+>  > On Tue,  1 Sep 2020 23:00:17 +0200
+>  > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
-> Results for the '2020.05.x' branch
-> ----------------------------------
+>  >> Fixes:
+>  >> - http://autobuild.buildroot.org/results/8754bb4f7d749f999d5f8ddfec587470ceec4476
+>  >>
+>  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  >> ---
+>  >> .../minidlna/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++
+>  >> 1 file changed, 49 insertions(+)
+>  >> create mode 100644 package/minidlna/0001-fix-build-with-gcc-10.patch
 >
-> Build failures related to your packages:
+>  > Applied to master, thanks. I suppose this fix was submitted upstream as
+>  > well?
 >
->     arch     |             reason             |
->            url
+> Committed to 2020.08.x, thanks.
 >
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->    mipsel    |        luabitop-1.0.2-1        |
-> http://autobuild.buildroot.net/results/23f66439bb1d77cf6926eefba8defe847e27022f
->     mips     |        luabitop-1.0.2-1        |
-> http://autobuild.buildroot.net/results/390bcd6940a06d8a3c55e0ce6aad53882a511e6e
->
->
-This issue is fixed in master by the commit : package/prosody: luabitop is
-only needed with Lua 5.1
-https://git.busybox.net/buildroot/commit/package/prosody?id=8bd7239ca32f20102aad19dbb3ca647182edbf92
-
-This issue was introduced with the commit : package/prosody: don't depend
-on !lua 5.3
-https://git.busybox.net/buildroot/commit/package/prosody?h=2020.05.x&id=98645393ed3611985e6703d1f5ee34eb1cd330ce
-because luabitop couldn't be build with Lua 5.3
-
-Fran?ois
-
-
-> Results for the 'master' branch
-> -------------------------------
->
-> Build failures related to your packages:
->
->     arch     |             reason             |
->            url
->
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->     arm      |          luajit-2.1.2          |
-> http://autobuild.buildroot.net/results/5be7b15226f43d9154332c6305151fa4f7e43bd4
->     arm      |          luajit-2.1.2          |
-> http://autobuild.buildroot.net/results/ee1e40be6aee4f714d5a6f9c5fa31f4bffe01cc6
->
+> If I am not mistaken, minidlna is pretty much dead upsteam.
+Indeed, minidlna is dead.
+However, as requested by Thomas, I created a ticket here:
+https://sourceforge.net/p/minidlna/patches/183.
 >
 > --
-> http://autobuild.buildroot.net
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200905/88a9e72f/attachment.html>
+> Bye, Peter Korsgaard
+Best Regards,
+
+Fabrice
