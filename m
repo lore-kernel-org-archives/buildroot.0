@@ -1,137 +1,120 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 5 Sep 2020 22:55:11 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <20200905223835.1e68d658@windsurf.home>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200829095023.GC14354@scaer>
- <CAFSsvmrUXjQBJ5XDu2NZayp5AWttbf_DomgVOB0iaKcHuzbCBw@mail.gmail.com>
- <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
- <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
- <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <20200903182409.6b337059@windsurf.home>
- <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- <87blilmeo2.fsf@dell.be.48ers.dk>
- <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
- <877dt8n2o7.fsf@dell.be.48ers.dk>
- <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
- <20200905211650.0a229191@windsurf.home>
- <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
- <20200905223835.1e68d658@windsurf.home>
-Message-ID: <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  5 Sep 2020 22:58:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/graphicsmagick: fix CVE-2020-12672
+Message-ID: <20200905205810.1642301-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il giorno sab 5 set 2020 alle ore 22:38 Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> ha scritto:
->
-> Hello Angelo,
->
-> On Sat, 5 Sep 2020 22:10:51 +0200
-> Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
->
-> > Honestly, I can't see a CI here or we have a big misunderstanding: CI
-> > runs on review requests, not on the committed code.
->
-> As I've explained, we simply can't do that in Buildroot: running just
-> our current CI tests requires several hours of CPU time.
->
-> > Simple:
-> >
-> > * A Developer opens a review request: the author only is notified, the
-> > CI starts running.
-> > * Commit has style problems, the author only is notified, red flag
-> > * Commit message has grammar/syntax errors, the author only is
-> > notified, red flag
-> > * Commit doesn't have a minimal defconfig to build on all
-> > architectures where it is supported: the author only is notified, red
-> > flag
->
-> I'm not sure what you mean here. You would require all commits to come
-> with a snippet of configuration that allows the commit to be build
-> tested ?
+GraphicsMagick through 1.3.35 has a heap-based buffer overflow in
+ReadMNGImage in coders/png.c.
 
-Yes, exactly.
->
-> > * Commit compiles on some architectures and not on others: the author
-> > only is notified, red flag
->
-> There is no such thing as "Commit compiles" in the context of
-> Buildroot. Packages have optional dependencies, we have 3 C libraries,
-> we have 15 CPU architectures. How are you going to test all of those
-> combinations, for all patches that are submitted ?
->
-> If you have a magic solution for this, I'm interested!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ix-small-heap-overwrite-or-assertion.patch | 78 +++++++++++++++++++
+ package/graphicsmagick/graphicsmagick.mk      |  3 +
+ 2 files changed, 81 insertions(+)
+ create mode 100644 package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
 
-Well, I'm completely sure of that.
-Anyway, in the context of doing buildable and testable review
-requests, the developer should attach to the commit a minimal
-defconfig and minimal testing.
-That minimal defconfig and that testing are chosen by the developer to
-enhance confidence that the request is working.
-
-> > * Commit doesn't have a runtime test attached: the author only is
-> > notified, red flag
->
-> How would a runtime test be "attached" to a commit?
->
-> > * Commit has testing but testing fails, the author only is notified, red flag
->
-> What does "Commit has testing" means ?
->
-> > Imho, this is how a CI should work.
->
-> See above all questions that are raised.
->
-> In all what you have described, the difficult point is not e-mail vs.
-> Github/Gitlab, it is to define and implement the CI jobs/tests that you
-> are describing.
->
-> > That way, the autobuild could be even superfluous because each commit
-> > was already tested by CI. Yes, autobuild could catch some more
-> > intricate problems, but it can run less frequently.
->
-> See above: "commit compiles" is not something that can be answered
-> within a bounded time in the context of Buildroot.
->
-> I think you are confusing the type of CI that can be done on an
-> application or library, where indeed it is possible for every commit to
-> run the build on all supported platforms, run the unit tests, and have
-> good confidence that all combinations have been tested.
->
-> In the context of Buildroot, saying "a commit is good" requires
-> building thousands of different configurations: number of CPU
-> architectures * number of GCC versions * number of binutils versions *
-> number of C libraries * number of optional dependencies of the package
-> * number of optional dependencies of all dependencies of the package.
-
-I'm not confusing, really, and from what I learned on Computer
-Science, that type of testing you're saying here is not even possile.
-
-What I'm saying here is that we should and must enforce a minimal "it
-compiles" verification and "it runs" verification.
-
-Recent history says that we had packages with a service never started
-because the init script was wrong, we should avoid that.
-
-Doing postmortem autopsy with autobuild is not going to raise the
-review requests quality or lower the pressure on the maintainers.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
+diff --git a/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch b/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
+new file mode 100644
+index 0000000000..6fac7d0302
+--- /dev/null
++++ b/package/graphicsmagick/0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
+@@ -0,0 +1,78 @@
++# HG changeset patch
++# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
++# Date 1590851896 18000
++#      Sat May 30 10:18:16 2020 -0500
++# Node ID 50395430a37188d0d197e71bd85ed6dd0f649ee3
++# Parent  4917a4242fc0a12f2f6baa10f1c5a9b3e68c20dd
++MNG: Fix small heap overwrite or assertion if magnifying and image to be magnified has rows or columns == 1.
++
++[Retrieved (and updated to remove ChangeLog and version changes) from:
++https://sourceforge.net/p/graphicsmagick/code/ci/50395430a37188d0d197e71bd85ed6dd0f649ee3]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -r 4917a4242fc0 -r 50395430a371 coders/png.c
++--- a/coders/png.c	Fri May 01 13:49:13 2020 -0500
+++++ b/coders/png.c	Sat May 30 10:18:16 2020 -0500
++@@ -5304,7 +5304,7 @@
++               if (logging)
++                 (void) LogMagickEvent(CoderEvent,GetMagickModule(),
++                                       "MAGN chunk (%lu bytes): "
++-                                      "First_magnified_object_id=%u, Last_magnified_object_id=%u, "
+++                                      "First_magnified_object_id=%u, Las t_magnified_object_id=%u, "
++                                       "MB=%u, ML=%u, MR=%u, MT=%u, MX=%u, MY=%u, "
++                                       "X_method=%u, Y_method=%u",
++                                       length,
++@@ -5679,6 +5679,8 @@
++           /*
++             If magnifying and a supported method is requested then
++             magnify the image.
+++
+++            http://www.libpng.org/pub/mng/spec/mng-1.0-20010209-pdg.html#mng-MAGN
++           */
++           if (((mng_info->magn_methx > 0) && (mng_info->magn_methx <= 5)) &&
++               ((mng_info->magn_methy > 0) && (mng_info->magn_methy <= 5)))
++@@ -5689,7 +5691,28 @@
++ 
++               if (logging)
++                 (void) LogMagickEvent(CoderEvent,GetMagickModule(),
++-                                      "  Processing MNG MAGN chunk");
+++                                      "  Processing MNG MAGN chunk: MB=%u, ML=%u,"
+++                                      " MR=%u, MT=%u, MX=%u, MY=%u,"
+++                                      " X_method=%u, Y_method=%u",
+++                                      mng_info->magn_mb,mng_info->magn_ml,
+++                                      mng_info->magn_mr,mng_info->magn_mt,
+++                                      mng_info->magn_mx,mng_info->magn_my,
+++                                      mng_info->magn_methx,
+++                                      mng_info->magn_methy);
+++
+++              /*
+++                If the image width is 1, then X magnification is done
+++                by simple pixel replication.
+++              */
+++              if (image->columns == 1)
+++                  mng_info->magn_methx = 1;
+++
+++              /*
+++                If the image height is 1, then Y magnification is done
+++                by simple pixel replication.
+++              */
+++              if (image->rows == 1)
+++                  mng_info->magn_methy = 1;
++ 
++               if (mng_info->magn_methx == 1)
++                 {
++@@ -5734,12 +5757,10 @@
++                   Image
++                     *large_image;
++ 
++-                  int
++-                    yy;
++-
++                   long
++                     m,
++-                    y;
+++                    y,
+++                    yy;
++ 
++                   register long
++                     x;
+diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+index 782dd1431e..436df709e7 100644
+--- a/package/graphicsmagick/graphicsmagick.mk
++++ b/package/graphicsmagick/graphicsmagick.mk
+@@ -13,6 +13,9 @@ GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
+ GRAPHICSMAGICK_INSTALL_STAGING = YES
+ GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
+ 
++# 0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
++GRAPHICSMAGICK_IGNORE_CVES += CVE-2020-12672
++
+ ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+ GRAPHICSMAGICK_CONFIG_SCRIPTS += GraphicsMagick++-config
+ endif
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+2.28.0
