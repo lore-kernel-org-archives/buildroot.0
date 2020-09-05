@@ -1,36 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 5 Sep 2020 09:35:28 +0200
-Subject: [Buildroot] [git commit] package/libnss: install certutil tool on
- target
-Message-ID: <20200905072727.7013185DF7@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 05 Sep 2020 09:35:42 +0200
+Subject: [Buildroot] [PATCH] package/gnupg2: security bump to version
+ 2.2.23
+In-Reply-To: <20200904102415.31489-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 4 Sep 2020 12:24:15 +0200")
+References: <20200904102415.31489-1-peter@korsgaard.com>
+Message-ID: <87363wn0a9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d27b5c7b7214608c8f9c54b2723dac4422d41948
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-certutil is a command-line utility for managing keys and certificate in
-both NSS databases and other NSS tokens.
+ > Fixes the following security issues:
+ > CVE-2020-25125: Importing an OpenPGP key having a preference list for AEAD
+ > algorithms will lead to an array overflow and thus often to a crash or other
+ > undefined behaviour (affected: 2.2.21 / 2.2.22)
 
-Signed-off-by: Julien Floret <julien.floret@6wind.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libnss/libnss.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > For more details, see the announcement:
+ > https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000448.html
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index f28e16a406..d0b2d51772 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -105,6 +105,8 @@ define LIBNSS_INSTALL_TARGET_CMDS
- 		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
- 	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnss/nss.pc.in \
- 		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
-+	$(INSTALL) -D -m 755 $(@D)/$(LIBNSS_DISTDIR)/bin/certutil \
-+		$(TARGET_DIR)/usr/bin/certutil
- 	$(SED) 's/@VERSION@/$(LIBNSS_VERSION)/g;' \
- 		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
- endef
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
