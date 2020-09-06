@@ -1,97 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2020 09:54:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop 5.7 headers
-In-Reply-To: <20200905201958.17725-1-peter@korsgaard.com>
-References: <20200905201958.17725-1-peter@korsgaard.com>
-Message-ID: <20200906075434.GI14354@scaer>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 6 Sep 2020 09:58:53 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <87imcric55.fsf@dell.be.48ers.dk>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+ <20200905211650.0a229191@windsurf.home>
+ <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
+ <20200905223835.1e68d658@windsurf.home>
+ <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
+ <20200905230431.34bcd9ea@windsurf.home>
+ <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
+ <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
+ <87imcric55.fsf@dell.be.48ers.dk>
+Message-ID: <CAGm1_ktS7BTH0wJnVqu0naPjdw0+Yzd+gD-evhBH2dFT2T97xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi,
 
-On 2020-09-05 22:19 +0200, Peter Korsgaard spake thusly:
-> The 5.7.x series is now EOL, so drop it.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Sun, Sep 6, 2020 at 9:43 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+>
+> Hi,
+>
+> Thanks for the constructive input!
+>
+>  > Basic things that could be done with CI/CD that don't take much CPU power and
+>  > would reduce the time spent on each patch:
+>
+>  >  - Running check-pkg automatically
+>
+> I guess you mean check-package?
+>
+>
+>  >  - Running basic grammar and spelling checks
+>
+> I don't know how easy that is to do, given that commit messages often
+> quote code and/or command output. We can certainly extend check-package
+> to run the commit message through aspell. What open source utilities are
+> available for grammar checks?
 
-Both patches applied to master, thanks.
+I am using codespell: https://github.com/codespell-project/codespell
+
+>
+>  >  - Checking if all recursive dependencies of new packages have been added in
+>  >    new Config.in files.
+>
+> That IMHO very fast becomes complicated with optional dependencies and
+> patches to existing packages rather than a completely new package, but
+> if you have a good idea?
+>
+>
+>  > If you want to get complicated a reduction of CPU time/resources could
+>  > also be done with:
+>  >   - Having prebuilt docker images or tarballs that have a partially
+>  > complete build
+>
+> I am not sure how realistic that is given that master (or next) is a
+> moving target and we would want to test against the current situation?
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  Config.in.legacy                     | 7 +++++++
->  linux/linux.hash                     | 1 -
->  package/linux-headers/Config.in.host | 5 -----
->  3 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 022f6a7493..d4f2dcfdea 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,13 @@ endif
->  
->  comment "Legacy options removed in 2020.11"
->  
-> +config BR2_KERNEL_HEADERS_5_7
-> +	bool "kernel headers version 5.7.x are no longer supported"
-> +	select BR2_LEGACY
-> +	help
-> +	  Version 5.7.x of the Linux kernel headers are no longer
-> +	  maintained upstream and are now removed.
-> +
->  config BR2_PACKAGE_TINYHTTPD
->  	bool "tinyhttpd package removed"
->  	select BR2_LEGACY
-> diff --git a/linux/linux.hash b/linux/linux.hash
-> index d9f51e0dcc..f5d7591da7 100644
-> --- a/linux/linux.hash
-> +++ b/linux/linux.hash
-> @@ -1,6 +1,5 @@
->  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
->  sha256  7b0bf5029c94df72d1244b6b77e79e376cff2817a782c3ac50767a4121fd17fe  linux-5.8.7.tar.xz
-> -sha256  419c6248b9ae4dfead4599787aecbfd202e88bc4124523adfa6dd2d642b99fe7  linux-5.7.19.tar.xz
->  sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
->  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
->  sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index a70a0f2b6b..bbe377ab18 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -55,10 +55,6 @@ config BR2_KERNEL_HEADERS_5_4
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
->  	select BR2_KERNEL_HEADERS_LATEST
->  
-> -config BR2_KERNEL_HEADERS_5_7
-> -	bool "Linux 5.7.x kernel headers"
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-> -
->  config BR2_KERNEL_HEADERS_5_8
->  	bool "Linux 5.8.x kernel headers"
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
-> @@ -347,7 +343,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
->  	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
->  	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
->  	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
-> -	default "5.7.19"	if BR2_KERNEL_HEADERS_5_7
->  	default "5.8.7"		if BR2_KERNEL_HEADERS_5_8
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
->  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Yegor
