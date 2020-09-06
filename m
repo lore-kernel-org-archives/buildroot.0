@@ -1,92 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 Sep 2020 14:42:46 +0200
-Subject: [Buildroot] [git commit] package/python-pluggy: new package
-Message-ID: <20200906123833.A35828104D@busybox.osuosl.org>
+Date: Sun, 6 Sep 2020 14:43:28 +0200
+Subject: [Buildroot] [git commit] package/python-iniconfig: new package
+Message-ID: <20200906123833.B2F458104D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abce8e3c43ee893f5496f8746101a8355354ea80
+commit: https://git.buildroot.net/buildroot/commit/?id=3ede26031514eccad2e4e26355c4dd93d6af6f95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pluggy/Config.in          |  7 +++++++
- package/python-pluggy/python-pluggy.hash |  5 +++++
- package/python-pluggy/python-pluggy.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-iniconfig/Config.in             |  6 ++++++
+ package/python-iniconfig/python-iniconfig.hash |  5 +++++
+ package/python-iniconfig/python-iniconfig.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ca76b1be0..98abde4aea 100644
+index 98abde4aea..34f545b6cf 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1626,6 +1626,7 @@ F:	package/murata-cyw-fw/
+@@ -1625,6 +1625,7 @@ F:	package/luaossl/
+ F:	package/murata-cyw-fw/
  F:	package/netdata/
  F:	package/python-ansicolors/
++F:	package/python-iniconfig/
  F:	package/python-packaging/
-+F:	package/python-pluggy/
+ F:	package/python-pluggy/
  F:	package/rs485conf/
- F:	package/turbolua/
- F:	support/testing/tests/package/test_netdata.py
 diff --git a/package/Config.in b/package/Config.in
-index 164248e608..65e8e103b8 100644
+index 65e8e103b8..928405df61 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1065,6 +1065,7 @@ menu "External python modules"
- 	source "package/python-pigpio/Config.in"
- 	source "package/python-pillow/Config.in"
- 	source "package/python-pip/Config.in"
-+	source "package/python-pluggy/Config.in"
- 	source "package/python-ply/Config.in"
- 	source "package/python-portend/Config.in"
- 	source "package/python-posix-ipc/Config.in"
-diff --git a/package/python-pluggy/Config.in b/package/python-pluggy/Config.in
+@@ -993,6 +993,7 @@ menu "External python modules"
+ 	source "package/python-incremental/Config.in"
+ 	source "package/python-inflection/Config.in"
+ 	source "package/python-influxdb/Config.in"
++	source "package/python-iniconfig/Config.in"
+ 	source "package/python-iniparse/Config.in"
+ 	source "package/python-iowait/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+diff --git a/package/python-iniconfig/Config.in b/package/python-iniconfig/Config.in
 new file mode 100644
-index 0000000000..7179bc427c
+index 0000000000..a288da8a64
 --- /dev/null
-+++ b/package/python-pluggy/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PLUGGY
-+	bool "python-pluggy"
-+	depends on BR2_PACKAGE_PYTHON3
++++ b/package/python-iniconfig/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_INICONFIG
++	bool "python-iniconfig"
 +	help
-+	  plugin and hook calling mechanisms for python.
++	  iniconfig: brain-dead simple config-ini parsing.
 +
-+	  https://github.com/pytest-dev/pluggy
-diff --git a/package/python-pluggy/python-pluggy.hash b/package/python-pluggy/python-pluggy.hash
++	  http://github.com/RonnyPfannschmidt/iniconfig
+diff --git a/package/python-iniconfig/python-iniconfig.hash b/package/python-iniconfig/python-iniconfig.hash
 new file mode 100644
-index 0000000000..24e207bfad
+index 0000000000..708c0553ac
 --- /dev/null
-+++ b/package/python-pluggy/python-pluggy.hash
++++ b/package/python-iniconfig/python-iniconfig.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pluggy/json
-+md5  7f610e28b8b34487336b585a3dfb803d  pluggy-0.13.1.tar.gz
-+sha256  15b2acde666561e1298d71b523007ed7364de07029219b604cf808bfa1c765b0  pluggy-0.13.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/iniconfig/json
++md5  464179a74789d033b170101f6aa38c2a  iniconfig-1.0.1.tar.gz
++sha256  e5f92f89355a67de0595932a6c6c02ab4afddc6fcdc0bfc5becd0d60884d3f69  iniconfig-1.0.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  d6b65e6c213a5d0b577911d34d6e5949b9f59d76c238c5071a2f3fc16cfb2606  LICENSE
-diff --git a/package/python-pluggy/python-pluggy.mk b/package/python-pluggy/python-pluggy.mk
++sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
+diff --git a/package/python-iniconfig/python-iniconfig.mk b/package/python-iniconfig/python-iniconfig.mk
 new file mode 100644
-index 0000000000..03cdecf4b9
+index 0000000000..57f31c4194
 --- /dev/null
-+++ b/package/python-pluggy/python-pluggy.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-iniconfig/python-iniconfig.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pluggy
++# python-iniconfig
 +#
 +################################################################################
 +
-+PYTHON_PLUGGY_VERSION = 0.13.1
-+PYTHON_PLUGGY_SOURCE = pluggy-$(PYTHON_PLUGGY_VERSION).tar.gz
-+PYTHON_PLUGGY_SITE = https://files.pythonhosted.org/packages/f8/04/7a8542bed4b16a65c2714bf76cf5a0b026157da7f75e87cc88774aa10b14
-+PYTHON_PLUGGY_SETUP_TYPE = setuptools
-+PYTHON_PLUGGY_LICENSE = MIT
-+PYTHON_PLUGGY_LICENSE_FILES = LICENSE
-+PYTHON_PLUGGY_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_INICONFIG_VERSION = 1.0.1
++PYTHON_INICONFIG_SOURCE = iniconfig-$(PYTHON_INICONFIG_VERSION).tar.gz
++PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/aa/6e/60dafce419de21f2f3f29319114808cac9f49b6c15117a419737a4ce3813
++PYTHON_INICONFIG_SETUP_TYPE = setuptools
++PYTHON_INICONFIG_LICENSE = MIT
++PYTHON_INICONFIG_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
