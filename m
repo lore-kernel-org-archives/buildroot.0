@@ -1,44 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 Sep 2020 14:37:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: fix
- xlib_libXfont2 dependency
-In-Reply-To: <20200905145323.1096973-1-bernd.kuhls@t-online.de>
-References: <20200905145323.1096973-1-bernd.kuhls@t-online.de>
-Message-ID: <20200906143709.1a4b42ac@windsurf.home>
+Date: Sun, 6 Sep 2020 14:37:34 +0200
+Subject: [Buildroot] [git commit] package/easyframes: fix static build with
+ pcap
+Message-ID: <20200906122923.9D54883774@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Sep 2020 16:53:23 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c9c1877c00de6b53795bad19e0b627ff66a327
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The dependency to xlib_libXfont2 was mistakenly removed in
-> https://git.buildroot.net/buildroot/commit/?id=e6dc4f1857eed27a19abd57fae7428bea38b69e5
-> 
-> Add it back again to fix build errors detected by the autobuilders and
-> remove handling of xlib_libXfont as well because only older versions of
-> xserver_xorg-server needed it.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f72/f72cc9b30e55e2c665de7a00482a1c3ba702118c/
-> http://autobuild.buildroot.net/results/9dd/9dd99e633dee8f11e7b2b973d4a72e51a2812ec9/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xserver_xorg-server/Config.in              | 1 +
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 9 +--------
->  2 files changed, 2 insertions(+), 8 deletions(-)
+Fixes:
+ - autobuild.buildroot.org/results/99062bfc8c21c32bc835acae675aede7c9cf0c90
 
-Applied to master, thanks. It is very, very good that the commit log
-contains the details of since when the issue is occurring, and why.
-Thanks for that!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...MakesLists.txt-fix-static-build-with-pcap.patch | 57 ++++++++++++++++++++++
+ package/easyframes/easyframes.mk                   |  2 +-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch b/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
+new file mode 100644
+index 0000000000..3f13613e9d
+--- /dev/null
++++ b/package/easyframes/0001-CMakesLists.txt-fix-static-build-with-pcap.patch
+@@ -0,0 +1,57 @@
++From 89ad9c143825b13d028c2f1713d55e83135d5c0f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 15:38:33 +0200
++Subject: [PATCH] CMakesLists.txt: fix static build with pcap
++
++Use pkg-config to find the dependencies of pcap such as libnl otherwise
++a static-only build will fail on:
++
++[100%] Linking C executable ef
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcap.a(pcap-linux.o): in function `nl80211_init':
++pcap-linux.c:(.text+0x460): undefined reference to `nl_socket_alloc'
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: pcap-linux.c:(.text+0x498): undefined reference to `genl_connect'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/99062bfc8c21c32bc835acae675aede7c9cf0c90
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/microchip-ung/easyframes/pull/2]
++---
++ CMakeLists.txt | 20 ++++++++++++++------
++ 1 file changed, 14 insertions(+), 6 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a62a950..5be128c 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -7,13 +7,21 @@ include_directories(src)
++ 
++ 
++ set(_LIBPCAP "")
++-FIND_PATH(PCAP_INCLUDE_DIR NAMES pcap/pcap.h)
++-FIND_LIBRARY(PCAP_LIBRARY NAMES pcap)
++-
++-if (PCAP_LIBRARY)
+++find_package(PkgConfig)
+++pkg_check_modules(PCAP libpcap)
+++if (PCAP_FOUND)
++     add_definitions(-DHAS_LIBPCAP)
++-    include_directories(${PCAP_INCLUDE_DIR})
++-    set(_LIBPCAP ${PCAP_LIBRARY})
+++    include_directories(${PCAP_INCLUDE_DIRS})
+++    set(_LIBPCAP ${PCAP_LIBRARIES})
+++else()
+++    FIND_PATH(PCAP_INCLUDE_DIR NAMES pcap/pcap.h)
+++    FIND_LIBRARY(PCAP_LIBRARY NAMES pcap)
+++
+++    if (PCAP_LIBRARY)
+++        add_definitions(-DHAS_LIBPCAP)
+++        include_directories(${PCAP_INCLUDE_DIR})
+++        set(_LIBPCAP ${PCAP_LIBRARY})
+++    endif()
++ endif()
++ 
++ add_library(libef STATIC
++-- 
++2.28.0
++
+diff --git a/package/easyframes/easyframes.mk b/package/easyframes/easyframes.mk
+index 2c209433d2..1821ce703c 100644
+--- a/package/easyframes/easyframes.mk
++++ b/package/easyframes/easyframes.mk
+@@ -6,7 +6,7 @@
+ 
+ EASYFRAMES_VERSION = 0.3
+ EASYFRAMES_SITE = $(call github,microchip-ung,easyframes,v$(EASYFRAMES_VERSION))
+-EASYFRAMES_DEPENDENCIES = libpcap
++EASYFRAMES_DEPENDENCIES = host-pkgconf libpcap
+ EASYFRAMES_LICENSE = MIT
+ EASYFRAMES_LICENSE_FILES = COPYING
+ 
