@@ -1,90 +1,248 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 06 Sep 2020 16:09:25 +0300
-Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to
- version 0.20.0
-In-Reply-To: <20200906125351.2869468-1-fontaine.fabrice@gmail.com>
-References: <20200906125351.2869468-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8mj127u.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Sep 2020 15:16:35 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/zeek: new package
+Message-ID: <20200906131635.2872307-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+The Zeek Network Security Monitor
 
-On Sun, Sep 06 2020, Fabrice Fontaine wrote:
-> - Fix CVE-2020-15503: LibRaw before 0.20-RC1 lacks a thumbnail size
->   range check. This affects decoders/unpack_thumb.cpp,
->   postprocessing/mem_image.cpp, and utils/thumb_utils.cpp. For example,
->   malloc(sizeof(libraw_processed_image_t)+T.tlength) occurs without
->   validating T.tlength.
->
-> - zlib is an optional dependency since
->   https://github.com/LibRaw/LibRaw/commit/b63f017b063edb5e7091e3952ee20cb4d002edbe
->
-> Also update indentation in hash file (two spaces) as well as README.md
-> hash, no license changes:
->  - https://github.com/LibRaw/LibRaw/commit/d1975cb0e055d2bfe58c9d845c9a3e57c346a2f9
->  - https://github.com/LibRaw/LibRaw/commit/d38361b76e1a405a25b11165a1ee5495fc899246
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Zeek is a powerful network analysis framework that is much different
+from the typical IDS you may know. (Zeek is the new name for the
+long-established Bro system.)
 
-You might want to add this patch as well:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Bump to version 3.2.0
+ - Drop second and third patches (already in version)
+ - Update ZEEK_SITE
+ - Update indentation in hash file (two spaces)
+ - Update third party licences
 
-  http://patchwork.ozlabs.org/project/buildroot/patch/20200827213657.257570-1-fontaine.fabrice at gmail.com/
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...rdinator.hpp-check-for-RUSAGE_THREAD.patch | 31 +++++++
+ package/zeek/Config.in                        | 44 ++++++++++
+ package/zeek/zeek.hash                        |  6 ++
+ package/zeek/zeek.mk                          | 80 +++++++++++++++++++
+ 6 files changed, 163 insertions(+)
+ create mode 100644 package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
+ create mode 100644 package/zeek/Config.in
+ create mode 100644 package/zeek/zeek.hash
+ create mode 100644 package/zeek/zeek.mk
 
-Looks like it fell between the cracks last time.
-
-baruch
-
-> ---
->  package/libraw/libraw.hash | 8 ++++----
->  package/libraw/libraw.mk   | 9 ++++++++-
->  2 files changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-> index 3337396f5f..e8117cd1f1 100644
-> --- a/package/libraw/libraw.hash
-> +++ b/package/libraw/libraw.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256	40a262d7cc71702711a0faec106118ee004f86c86cc228281d12d16da03e02f5	LibRaw-0.19.5.tar.gz
-> -sha256	eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449	LICENSE.LGPL
-> -sha256	0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f	LICENSE.CDDL
-> -sha256	ed971b7f1f57fd8e7d28419ff7749cfe0f296e701687756e798a69555fd76646	README.md
-> +sha256  1f0a383da2ce9f409087facd28261decbf6be72cc90c78cd003b0766e4d694a3  LibRaw-0.20.0.tar.gz
-> +sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
-> +sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
-> +sha256  313415f7f48f6cd3cc78856626aab4bbe97dbb1e9a11db9c25396ca8d0e76cd9  README.md
-> diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-> index e786b844a9..e33674e6f5 100644
-> --- a/package/libraw/libraw.mk
-> +++ b/package/libraw/libraw.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBRAW_VERSION = 0.19.5
-> +LIBRAW_VERSION = 0.20.0
->  LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
->  LIBRAW_SITE = http://www.libraw.org/data
->  LIBRAW_INSTALL_STAGING = YES
-> @@ -41,4 +41,11 @@ else
->  LIBRAW_CONF_OPTS += --disable-lcms
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_ZLIB),y)
-> +LIBRAW_CONF_OPTS += --enable-zlib
-> +LIBRAW_DEPENDENCIES += zlib
-> +else
-> +LIBRAW_CONF_OPTS += --disable-zlib
-> +endif
-> +
->  $(eval $(autotools-package))
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ca76b1be0..71fab997ad 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -922,6 +922,7 @@ F:	package/tinycbor/
+ F:	package/tinydtls/
+ F:	package/tinymembench/
+ F:	package/whois/
++F:	package/zeek/
+ 
+ N:	Fabrice Goucem <fabrice.goucem@oss.nxp.com>
+ F:	board/freescale/imx6ullevk/
+diff --git a/package/Config.in b/package/Config.in
+index 164248e608..ba8c04a77f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2270,6 +2270,7 @@ endif
+ 	source "package/xinetd/Config.in"
+ 	source "package/xl2tp/Config.in"
+ 	source "package/xtables-addons/Config.in"
++	source "package/zeek/Config.in"
+ 	source "package/znc/Config.in"
+ 
+ endmenu
+diff --git a/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch b/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
+new file mode 100644
+index 0000000000..4b431a5a56
+--- /dev/null
++++ b/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
+@@ -0,0 +1,31 @@
++From af299e7ef8650be6b05152e91ca7a2a6fac3eb14 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 31 Jan 2020 16:46:48 +0100
++Subject: [PATCH] profiled_coordinator.hpp: check for RUSAGE_THREAD
++
++RUSAGE_THREAD is not defined on uclibc, so use RUSAGE_SELF if
++RUSAGE_THREAD is undefined
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/actor-framework/actor-framework/commit/af299e7ef8650be6b05152e91ca7a2a6fac3eb14]
++---
++ auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/libcaf_core/caf/scheduler/profiled_coordinator.hpp b/libcaf_core/caf/scheduler/profiled_coordinator.hpp
++index 3e091321f..7d7b8bad2 100644
++--- a/auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp
+++++ b/auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp
++@@ -113,7 +113,11 @@ class profiled_coordinator : public coordinator<Policy> {
++       m.mem = 0;
++ #else
++       ::rusage ru;
+++#ifdef RUSAGE_THREAD
++       ::getrusage(RUSAGE_THREAD, &ru);
+++#else
+++      ::getrusage(RUSAGE_SELF, &ru);
+++#endif
++       m.usr = to_usec(ru.ru_utime);
++       m.sys = to_usec(ru.ru_stime);
++       m.mem = ru.ru_maxrss;
+diff --git a/package/zeek/Config.in b/package/zeek/Config.in
+new file mode 100644
+index 0000000000..13c62252a9
+--- /dev/null
++++ b/package/zeek/Config.in
+@@ -0,0 +1,44 @@
++config BR2_PACKAGE_ZEEK
++	bool "zeek"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
++	help
++	  The Zeek Network Security Monitor
++
++	  Zeek is a powerful network analysis framework that is much
++	  different from the typical IDS you may know. (Zeek is the new
++	  name for the long-established Bro system.)
++
++	  https://www.zeek.org
++
++if BR2_PACKAGE_ZEEK
++
++config BR2_PACKAGE_ZEEK_ZEEKCTL
++	bool "zeekctl"
++	select BR2_PACKAGE_BASH # runtime
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_CURSES if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_CURSES if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_HASHLIB if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  Tool for managing Zeek deployments
++
++endif
++
++comment "zeek needs a toolchain w/ C++, wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/zeek/zeek.hash b/package/zeek/zeek.hash
+new file mode 100644
+index 0000000000..00fd696355
+--- /dev/null
++++ b/package/zeek/zeek.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256  af3ee5635140a54d305667983d38ea28f36457c9f2f8727e90ea3ef00b22c44f  zeek-3.2.0.tar.gz
++
++# Hash for license files:
++sha256  690b4eee9a01fe94edd5710a0bc026df96bb3b2403d26dc923921ec0116908b2  COPYING
++sha256  f191fefe3f28a32e51499f57d700595946055518e00261ac398279639d5a5bea  COPYING.3rdparty
+diff --git a/package/zeek/zeek.mk b/package/zeek/zeek.mk
+new file mode 100644
+index 0000000000..757f258f65
+--- /dev/null
++++ b/package/zeek/zeek.mk
+@@ -0,0 +1,80 @@
++################################################################################
++#
++# zeek
++#
++################################################################################
++
++ZEEK_VERSION = 3.2.0
++ZEEK_SITE = https://download.zeek.org
++ZEEK_LICENSE = \
++	BSD-3-Clause (zeek, C++ Actor Framework, ConvertUTF.c, CardinalityCounter.cc, pybind11), \
++	Public Domain (sqlite), \
++	MIT (doctest, libkqueue, RapidJSON, tsl-ordered-map, bro_inet_ntop.c), \
++	LGPL-3.0+ (Multifast Project), \
++	BSD-2-Clause (event.h), \
++	BSD-4-Clause (Patricia.c, strsep.c, bsd-getopt-long.c), \
++	Apache-2.0 (highwayhash, folly), \
++	MPL-2.0 (mozilla-ca-list.zeek)
++ZEEK_LICENSE_FILES = COPYING COPYING.3rdparty
++ZEEK_SUPPORTS_IN_SOURCE_BUILD = NO
++ZEEK_DEPENDENCIES = \
++	host-bison \
++	host-flex \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_PYTHON),host-python,host-python3) \
++	host-zeek \
++	$(if $(BR2_PACKAGE_LIBKRB5),libkrb5) \
++	$(if $(BR2_PACKAGE_LIBMAXMINDDB),libmaxminddb) \
++	libpcap \
++	openssl \
++	$(if $(BR2_PACKAGE_ROCKSDB),rocksdb) \
++	zlib
++
++ZEEK_CONF_OPTS = \
++	-DBIFCL_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/bifcl/bifcl \
++	-DBINPAC_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/binpac/src/binpac \
++	-DBROKER_DISABLE_DOCS=ON \
++	-DBROKER_DISABLE_TESTS=ON \
++	-DINSTALL_AUX_TOOLS=ON \
++	-DZEEK_ETC_INSTALL_DIR=/etc
++
++HOST_ZEEK_MAKE_OPTS = binpac bifcl
++# Don't install host-zeek. We just need to build binpac and bifcl.
++# Therefore only run 'true' and do nothing, not even the default action.
++HOST_ZEEK_INSTALL_CMDS = true
++
++define ZEEK_FIX_PYTHON_PATH
++	$(SED) 's, at PYTHON_EXECUTABLE@,/usr/bin/python,' \
++		$(@D)/auxil/zeekctl/ZeekControl/ssh_runner.py
++endef
++
++ZEEK_POST_CONFIGURE_HOOKS += ZEEK_FIX_PYTHON_PATH
++
++ifeq ($(BR2_PACKAGE_JEMALLOC),y)
++ZEEK_DEPENDENCIES += jemalloc
++ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=ON
++else
++ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_ZEEK_ZEEKCTL),y)
++ZEEK_DEPENDENCIES += \
++	host-swig \
++	$(if $(BR2_PACKAGE_PYTHON),python,python3)
++ZEEK_CONF_OPTS += \
++	-DDISABLE_PYTHON_BINDINGS=OFF \
++	-DINSTALL_ZEEKCTL=ON \
++	-DPY_MOD_INSTALL_DIR=/usr/lib/zeekctl
++else
++ZEEK_CONF_OPTS += \
++	-DDISABLE_PYTHON_BINDINGS=ON \
++	-DINSTALL_ZEEKCTL=OFF
++endif
++
++ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
++ZEEK_DEPENDENCIES += musl-fts
++ZEEK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.28.0
