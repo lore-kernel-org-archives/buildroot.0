@@ -1,67 +1,97 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Sep 2020 22:12:27 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-05
-In-Reply-To: <20200906123329.GN14354@scaer> (Yann E. MORIN's message of "Sun, 
- 6 Sep 2020 14:33:29 +0200")
-References: <20200906070725.EBCC820464@silver.osuosl.org>
- <20200906123329.GN14354@scaer>
-Message-ID: <87eeneis0k.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  6 Sep 2020 22:12:22 +0200
+Subject: [Buildroot] [PATCH 03/10] gitlab-ci: handle the defconfig build
+ conditions in script
+In-Reply-To: <cover.1599423132.git.yann.morin.1998@free.fr>
+References: <cover.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <1f090850bcbbad6d3d8482949f54cebc9a129346.1599423132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Note that we do not propagate the existing comment, because it is
+partially wrong; instead we just keep the per-condition comments.
 
- > All,
- > On 2020-09-06 07:07 -0000, Thomas Petazzoni spake thusly:
- >> Classification of failures by reason for master
- >> mips     |          systemd-246           | NOK | http://autobuild.buildroot.net/results/229866ea234097b5d6c6104bf040f47fd22ffacc |     
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ support/misc/gitlab-ci.yml.in          |  9 -------
+ support/scripts/generate-gitlab-ci-yml | 34 ++++++++++++++++++++++----
+ 2 files changed, 29 insertions(+), 14 deletions(-)
 
- > So this is a reproducible build issue:
-
- >   - systemd #defines PROJECT_FILE (&__FILE__[STRLEN(RELATIVE_SOURCE_PATH) + 1])
- >     in an attempt to report only the basename of the files in messages;
-
- >   - so it has a static assert that __FILE__ is indeed longer that
- >     RELATIVE_SOURCE_PATH, otherwise the above would be an out-of-bound
- >     access;
-
- >   - RELATIVE_SOURCE_PATH is set by the systemd's meson.build, and
- >     contains the path of the sources relative to build directory; in
- >     Buildroot, if I understand systemd's code correctly, this will
- >     always be '.' .
-
- >   - but Buildroot, when BR2_REPRODUCIBLE=y, #defines __FILE__="" (i.e.
- >     an empty string, so that binaries do not embed local paths, and are
- >     thus bit-for-bit reproducible (except for other non-reproducibility
- >     causes).
-
-Funky!
-
- > As such, when Buildroot tries to do a reproducible build, the length of
- > __FILE__ will always be shorter than the length of RELATIVE_SOURCE_PATH + 1,
- > the former always being 0, while the latter being 2.
-
- > So we have a few avenues:
-
- >   - talk with upstream so they stop using __FILE__ altogether
-
- >   - talk to upstream so they optionally not use __FILE__
-
- >   - patch systemd ourselves and live for ever after with that patch
-
- >   - change our toolchain wrapper to use an arbitrarily long __FILE__
-
- > I've looked at Debian and Fedora, and they do not have a patch to get
- > rid of that.
-
-Is that because they use the -ffile-prefix-map (introduced in gcc 8)?
-
-An alternative to option 4 could be do only do it for systemd &&
-reproducible && gcc < 8, E.G. add -D__FILE__="reproducible"
-
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index f00c764aaf..7f2ae32725 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -67,15 +67,6 @@ check-package:
+ 
+ .defconfig:
+     extends: .defconfig_base
+-    # Running the defconfigs for every push is too much, so limit to
+-    # explicit triggers through the API.
+-    rules:
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-defconfigs, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
+     before_script:
+         - DEFCONFIG_NAME=${CI_JOB_NAME}
+ 
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index b076b01d05..ed56a516a7 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -7,11 +7,7 @@ main() {
+ 
+     preamble "${template}"
+ 
+-    (
+-        cd configs
+-        LC_ALL=C ls -1 *_defconfig
+-    ) \
+-    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
++    gen_defconfigs
+ 
+     ./support/testing/run-tests -l 2>&1 \
+     | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
+@@ -30,4 +26,32 @@ preamble() {
+ _EOF_
+ }
+ 
++gen_defconfigs() {
++    local -a defconfigs
++    local build_defconfigs cfg
++
++    defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
++
++    build_defconfigs=false
++    if [ -n "${CI_COMMIT_TAG}" ]; then
++        # For tags, create a pipeline.
++        build_defconfigs=true
++    fi
++    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
++        # For pipeline created by using a trigger token.
++        build_defconfigs=true
++    fi
++    case "${CI_COMMIT_REF_NAME}" in
++        # For the branch or tag name named *-defconfigs, create a pipeline.
++        (*-defconfigs) build_defconfigs=true;;
++    esac
++
++    for cfg in "${defconfigs[@]}"; do
++        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
++        if ${build_defconfigs}; then
++            printf '%s: { extends: .defconfig }\n' "${cfg}"
++        fi
++    done
++}
++
+ main "${@}"
 -- 
-Bye, Peter Korsgaard
+2.20.1
