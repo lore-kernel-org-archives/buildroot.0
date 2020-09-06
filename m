@@ -1,102 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 Sep 2020 20:50:41 +0200
-Subject: [Buildroot] [git commit] package/python-aiofiles: new package
-Message-ID: <20200906184340.81FFC8758B@busybox.osuosl.org>
+Date: Sun, 6 Sep 2020 20:52:44 +0200
+Subject: [Buildroot] [git commit] package/libraw: drop unrecognized options
+Message-ID: <20200906184432.DCBCB821F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5fd75a29c56f6aa1795aafb74fbe647964d0c6
+commit: https://git.buildroot.net/buildroot/commit/?id=68480c9bf03cc65f332fd001f72bcc2068e7ba97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ordinary local file IO is blocking, and cannot easily and
-portably made asynchronous.
-This means doing file IO may interfere with asyncio applications,
-which shouldn???t block the executing thread. aiofiles helps
-with this y introducing asynchronous versions of files
-that support delegating operations to a separate thread pool.
+demosaic packs have been removed since version 0.19.0 and
+https://github.com/LibRaw/LibRaw/commit/b85690eb4881d613dd48068ee82f98ac246690b8
 
-More information is available at :
-https://pypi.org/project/aiofiles.
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-aiofiles/Config.in            |  8 ++++++++
- package/python-aiofiles/python-aiofiles.hash |  5 +++++
- package/python-aiofiles/python-aiofiles.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/libraw/libraw.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c012679600..93cccef70d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1424,6 +1424,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/python-aiofiles/
- F:	package/python-crayons/
- F:	package/python-cycler/
- F:	package/python-matplotlib/
-diff --git a/package/Config.in b/package/Config.in
-index e5019e3ed6..9d5124e838 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -856,6 +856,7 @@ menu "External python modules"
- 	source "package/python-aiocoap/Config.in"
- 	source "package/python-aioconsole/Config.in"
- 	source "package/python-aiodns/Config.in"
-+	source "package/python-aiofiles/Config.in"
- 	source "package/python-aiohttp/Config.in"
- 	source "package/python-aiohttp-cors/Config.in"
- 	source "package/python-aiohttp-debugtoolbar/Config.in"
-diff --git a/package/python-aiofiles/Config.in b/package/python-aiofiles/Config.in
-new file mode 100644
-index 0000000000..9cc3d7fe59
---- /dev/null
-+++ b/package/python-aiofiles/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AIOFILES
-+	bool "python-aiofiles"
-+	depends on BR2_PACKAGE_PYTHON3
-+	help
-+	  aiofiles aims to  handle local disk files in
-+	  asyncio applications.
-+
-+	  https://pypi.org/project/aiofiles
-diff --git a/package/python-aiofiles/python-aiofiles.hash b/package/python-aiofiles/python-aiofiles.hash
-new file mode 100644
-index 0000000000..3c3e8565a3
---- /dev/null
-+++ b/package/python-aiofiles/python-aiofiles.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiofiles/json
-+md5  2243eff06072115e8afe8907677ca51d  aiofiles-0.5.0.tar.gz
-+sha256  98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af  aiofiles-0.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
-diff --git a/package/python-aiofiles/python-aiofiles.mk b/package/python-aiofiles/python-aiofiles.mk
-new file mode 100644
-index 0000000000..28f41e3967
---- /dev/null
-+++ b/package/python-aiofiles/python-aiofiles.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiofiles
-+#
-+################################################################################
-+
-+PYTHON_AIOFILES_VERSION = 0.5.0
-+PYTHON_AIOFILES_SOURCE = aiofiles-$(PYTHON_AIOFILES_VERSION).tar.gz
-+PYTHON_AIOFILES_SITE = https://files.pythonhosted.org/packages/2b/64/437053d6a4ba3b3eea1044131a25b458489320cb9609e19ac17261e4dc9b
-+PYTHON_AIOFILES_SETUP_TYPE = setuptools
-+PYTHON_AIOFILES_LICENSE = Apache-2.0
-+PYTHON_AIOFILES_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 9a647f8d54..e786b844a9 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -10,9 +10,7 @@ LIBRAW_SITE = http://www.libraw.org/data
+ LIBRAW_INSTALL_STAGING = YES
+ LIBRAW_CONF_OPTS += \
+ 	--disable-examples \
+-	--disable-openmp \
+-	--disable-demosaic-pack-gpl2 \
+-	--disable-demosaic-pack-gpl3
++	--disable-openmp
+ LIBRAW_LICENSE = LGPL-2.1 or CDDL-1.0
+ LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README.md
+ LIBRAW_DEPENDENCIES = host-pkgconf
