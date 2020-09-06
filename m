@@ -1,53 +1,83 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  6 Sep 2020 23:01:29 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.1
-Message-ID: <20200906210129.27614-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Sep 2020 23:04:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/memcached: fix build with gcc 10
+Message-ID: <20200906210402.396929-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Fixes:
+ - http://autobuild.buildroot.org/results/ba8dcdece193b91845a30cd31d3574674ec30068
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...ash-fix-build-failure-against-gcc-10.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 8c0bc520c1..dad9f875fd 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041578.html
--md5  b518dae7f603040872739216971ee97b  libinput-1.16.0.tar.xz
--sha1  e9216dcc3e3d87d37371335380d15d2dc333e157  libinput-1.16.0.tar.xz
--sha256  83f6d0c94e5e0dd87094ce73f0edb631919617d24a60ee0ab9bd9197411d76e8  libinput-1.16.0.tar.xz
--sha512  0c932a88f2a1d23ebef0d58c0cdbfb558e9e3d990fca15b21f5b9011bdd1bc2da81aad374fcdb8f4590f6ee2fc45e668e0583371ceb354437e585240e687aac6  libinput-1.16.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
-+md5  51454993fcc576f4480aba8c1c3232ac  libinput-1.16.1.tar.xz
-+sha1  7f5df6d17e9a06b6a28ce9eea0a11cf8555b63dd  libinput-1.16.1.tar.xz
-+sha256  7ba7d1aeedd15168bb21d17e9e628aa1c27957963a423a3fea3938a501758539  libinput-1.16.1.tar.xz
-+sha512  86b2d563c2cff2b3d3cae3acdd399030cc785cc9859a06357a99565ef51f95122a8427c8c0883121fb0760613460a29c8cd8c7a7e3ac68115c10330b3b75cbe0  libinput-1.16.1.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index c4fff60cae..3c6873d7fd 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.16.0
-+LIBINPUT_VERSION = 1.16.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+diff --git a/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..564b191c1b
+--- /dev/null
++++ b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,56 @@
++From 0447ae4cbbebb87d3f28bb92f7e219a47263b889 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Thu, 23 Jan 2020 22:16:36 +0000
++Subject: [PATCH] hash: fix build failure against gcc-10
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++gcc  -g -O2 -pthread -pthread -Wall -Werror -pedantic -Wmissing-prototypes \
++  -Wmissing-declarations -Wredundant-decls   -o memcached ... -levent
++ld: memcached-hash.o:memcached/hash.h:5:
++  multiple definition of `hash'; memcached-memcached.o:memcached/hash.h:5: first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Reported-by: Brian Evans
++Bug: https://bugs.gentoo.org/706196
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++[Retrieved from:
++https://github.com/memcached/memcached/commit/0447ae4cbbebb87d3f28bb92f7e219a47263b889]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ hash.c | 2 ++
++ hash.h | 2 +-
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/hash.c b/hash.c
++index a0c30369f..b5ff28ae4 100644
++--- a/hash.c
+++++ b/hash.c
++@@ -4,6 +4,8 @@
++ #include "jenkins_hash.h"
++ #include "murmur3_hash.h"
++ 
+++hash_func hash;
+++
++ int hash_init(enum hashfunc_type type) {
++     switch(type) {
++         case JENKINS_HASH:
++diff --git a/hash.h b/hash.h
++index 059d1e2a6..3b2a98478 100644
++--- a/hash.h
+++++ b/hash.h
++@@ -2,7 +2,7 @@
++ #define    HASH_H
++ 
++ typedef uint32_t (*hash_func)(const void *key, size_t length);
++-hash_func hash;
+++extern hash_func hash;
++ 
++ enum hashfunc_type {
++     JENKINS_HASH=0, MURMUR3_HASH
 -- 
 2.28.0
