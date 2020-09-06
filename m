@@ -1,60 +1,75 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2020 22:26:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3-requests: fix version
-In-Reply-To: <20200906201643.27411-1-fontaine.fabrice@gmail.com>
-References: <20200906201643.27411-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200906202641.GP14354@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Sep 2020 22:35:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/olsr: fix build with bison 3.7.1
+Message-ID: <20200906203519.48776-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fixes:
+ - http://autobuild.buildroot.org/results/174f64f5663e655eb97994b903293c07c70268fe
 
-On 2020-09-06 22:16 +0200, Fabrice Fontaine spake thusly:
-> Commit a01bf684ea0d6eed9755bb4bf43986720ede722e forgot to update
-> PYTHON3_REQUESTS_VERSION
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ecf4abdd15bb267b77bd1f5097dc7e0b35c38dd7
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...1-olsrd-migrate-to-using-bison-3.7.1.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python3-requests/python3-requests.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
-> index e2bb00eab2..cd6a7e1260 100644
-> --- a/package/python3-requests/python3-requests.mk
-> +++ b/package/python3-requests/python3-requests.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  # Please keep in sync with package/python-requests/python-requests.mk
-> -PYTHON3_REQUESTS_VERSION = 2.23.0
-> +PYTHON3_REQUESTS_VERSION = 2.24.0
->  PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
->  PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
->  PYTHON3_REQUESTS_SETUP_TYPE = setuptools
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
+new file mode 100644
+index 0000000000..c29ecfc5d4
+--- /dev/null
++++ b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
+@@ -0,0 +1,48 @@
++From f31eec323ae65124474664f8a0444f7c035556dd Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 6 Sep 2020 22:31:12 +0200
++Subject: [PATCH] olsrd: migrate to using bison 3.7.1
++
++With the upgrade to bison 3.7.1 (openwrt commit 1cf842d) building
++olsrd was failing.  Now, instead of the contents of header files
++being directly inserted into the generated source files, they are
++instead included with a #include directive.
++
++The local.mk has, until now, done some magic with *-tmp files,
++which is not longer necessary and even causes builds to fail.
++
++src/cfgparser/oparse.c:265:10: fatal error: oparse.h-tmp: No such file or directory
++ #include "oparse.h-tmp"
++
++Suggested-by: Jo-Philipp Wich <jo@mein.io>
++Signed-off-by: Perry Melange <isprotejesvalkata@gmail.com>
++[Retrieved from:
++https://github.com/openwrt-routing/packages/commit/5cc8e058850acbc22fe92c5e2b24863efc577971]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OLSR/olsrd/pull/87]
++---
++ src/cfgparser/local.mk | 8 ++------
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/src/cfgparser/local.mk b/src/cfgparser/local.mk
++index e767abfc..56e594e4 100644
++--- a/src/cfgparser/local.mk
+++++ b/src/cfgparser/local.mk
++@@ -74,12 +74,8 @@ $(C)oparse.c: $(C)oparse.y $(C)olsrd_conf.h $(C)Makefile
++ ifeq ($(VERBOSE),0)
++ 	@echo "[BISON] $@"
++ endif
++-	$(MAKECMDPREFIX)$(BISON) -d -o "$@-tmp" "$<"
++-	$(MAKECMDPREFIX)sed	-e 's/register //' \
++-		-e '/^#line/s/$(call quote,$@-tmp)/$(call quote,$@)/' \
++-		< "$@-tmp" >"$@"
++-	$(MAKECMDPREFIX)mv "$(subst .c,.h,$@-tmp)" "$(subst .c,.h,$@)"
++-	$(MAKECMDPREFIX)$(RM) "$@-tmp" "$(subst .c,.h,$@-tmp)"
+++	$(MAKECMDPREFIX)$(BISON) -d -o "$@" "$<"
+++	$(MAKECMDPREFIX)sed -e 's/register //' "$@" > "$@.o" && mv "$@.o" "$@"
++ 
++ $(C)oparse.o: CFLAGS := $(filter-out -Wunreachable-code,$(CFLAGS))
++ 
++-- 
++2.28.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
