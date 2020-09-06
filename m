@@ -1,248 +1,423 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Sep 2020 15:16:35 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/zeek: new package
-Message-ID: <20200906131635.2872307-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 6 Sep 2020 14:50:06 +0200
+Subject: [Buildroot] [git commit] package/multipath-tools: new package
+Message-ID: <20200906142057.780AE87520@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Zeek Network Security Monitor
+commit: https://git.buildroot.net/buildroot/commit/?id=3e34bd5f64ce7a3961deb1ebc7b929647b7fe989
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Zeek is a powerful network analysis framework that is much different
-from the typical IDS you may know. (Zeek is the new name for the
-long-established Bro system.)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
- - Bump to version 3.2.0
- - Drop second and third patches (already in version)
- - Update ZEEK_SITE
- - Update indentation in hash file (two spaces)
- - Update third party licences
-
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...rdinator.hpp-check-for-RUSAGE_THREAD.patch | 31 +++++++
- package/zeek/Config.in                        | 44 ++++++++++
- package/zeek/zeek.hash                        |  6 ++
- package/zeek/zeek.mk                          | 80 +++++++++++++++++++
- 6 files changed, 163 insertions(+)
- create mode 100644 package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
- create mode 100644 package/zeek/Config.in
- create mode 100644 package/zeek/zeek.hash
- create mode 100644 package/zeek/zeek.mk
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...ultipath-use-pkg-config-to-get-path-to-he.patch | 59 ++++++++++++++++++++++
+ ...02-libmpathpersist-depend-on-libmultipath.patch | 31 ++++++++++++
+ .../0003-fix-boolean-value-with-json-c-0.14.patch  | 41 +++++++++++++++
+ ...ath-tools-Makefile-add-install-dependency.patch | 34 +++++++++++++
+ ...c-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch | 35 +++++++++++++
+ package/multipath-tools/Config.in                  | 32 ++++++++++++
+ package/multipath-tools/S60multipathd              | 47 +++++++++++++++++
+ package/multipath-tools/multipath-tools.hash       |  3 ++
+ package/multipath-tools/multipath-tools.mk         | 34 +++++++++++++
+ 11 files changed, 318 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1ca76b1be0..71fab997ad 100644
+index d7efc87ea4..b2d69cfc52 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -922,6 +922,7 @@ F:	package/tinycbor/
- F:	package/tinydtls/
- F:	package/tinymembench/
- F:	package/whois/
-+F:	package/zeek/
+@@ -144,6 +144,7 @@ F:	package/putty/
  
- N:	Fabrice Goucem <fabrice.goucem@oss.nxp.com>
- F:	board/freescale/imx6ullevk/
+ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
+ F:	package/makedumpfile/
++F:	package/multipath-tools/
+ 
+ N:	Alexander Kurz <akurz@blala.de>
+ F:	package/minimodem/
 diff --git a/package/Config.in b/package/Config.in
-index 164248e608..ba8c04a77f 100644
+index 90d7908eab..9ee53aba47 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2270,6 +2270,7 @@ endif
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
-+	source "package/zeek/Config.in"
- 	source "package/znc/Config.in"
- 
- endmenu
-diff --git a/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch b/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
+@@ -2398,6 +2398,7 @@ menu "System tools"
+ 	source "package/mender-grubenv/Config.in"
+ 	source "package/mfoc/Config.in"
+ 	source "package/monit/Config.in"
++	source "package/multipath-tools/Config.in"
+ 	source "package/ncdu/Config.in"
+ 	source "package/netifrc/Config.in"
+ 	source "package/numactl/Config.in"
+diff --git a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
 new file mode 100644
-index 0000000000..4b431a5a56
+index 0000000000..43cf165f7b
 --- /dev/null
-+++ b/package/zeek/0001-profiled_coordinator.hpp-check-for-RUSAGE_THREAD.patch
-@@ -0,0 +1,31 @@
-+From af299e7ef8650be6b05152e91ca7a2a6fac3eb14 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 31 Jan 2020 16:46:48 +0100
-+Subject: [PATCH] profiled_coordinator.hpp: check for RUSAGE_THREAD
++++ b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
+@@ -0,0 +1,59 @@
++From f55b1a37e2c43b67e7fd7f6a39afe2b2316b7cf9 Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar-dev@posteo.net>
++Date: Mon, 31 Aug 2020 19:05:46 +0200
++Subject: [PATCH] kpartx, libmultipath: use pkg-config to get path to
++ headers
 +
-+RUSAGE_THREAD is not defined on uclibc, so use RUSAGE_SELF if
-+RUSAGE_THREAD is undefined
++Use pkg-config in Makefile to find path to devmapper and udev headers
++to enable cross-compilation.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/actor-framework/actor-framework/commit/af299e7ef8650be6b05152e91ca7a2a6fac3eb14]
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 +---
-+ auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp | 4 ++++
++ kpartx/Makefile       | 2 +-
++ libmultipath/Makefile | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/kpartx/Makefile b/kpartx/Makefile
++index 2906a984..29573890 100644
++--- a/kpartx/Makefile
+++++ b/kpartx/Makefile
++@@ -8,7 +8,7 @@ LDFLAGS += $(BIN_LDFLAGS)
++ 
++ LIBDEPS += -ldevmapper
++ 
++-ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_task_set_cookie,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_COOKIE
++ endif
++ 
++diff --git a/libmultipath/Makefile b/libmultipath/Makefile
++index e5651e49..51ad0193 100644
++--- a/libmultipath/Makefile
+++++ b/libmultipath/Makefile
++@@ -20,19 +20,19 @@ ifdef SYSTEMD
++ 	endif
++ endif
++ 
++-ifneq ($(call check_func,dm_task_no_flush,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_task_no_flush,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
++ endif
++ 
++-ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_task_set_cookie,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_COOKIE
++ endif
++ 
++-ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,/usr/include/libudev.h),0)
+++ifneq ($(call check_func,udev_monitor_set_receive_buffer_size,$(shell $(PKG_CONFIG) --variable=includedir libudev)/libudev.h),0)
++ 	CFLAGS += -DLIBUDEV_API_RECVBUF
++ endif
++ 
++-ifneq ($(call check_func,dm_task_deferred_remove,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_task_deferred_remove,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_DEFERRED
++ endif
++ 
++-- 
++2.28.0
++
+diff --git a/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch b/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+new file mode 100644
+index 0000000000..cdd4081224
+--- /dev/null
++++ b/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+@@ -0,0 +1,31 @@
++From 48f537b9fef4f9db761466b8951fb63243f06602 Mon Sep 17 00:00:00 2001
++From: Christian Hesse <mail@eworm.de>
++Date: Wed, 6 May 2020 09:35:47 +0200
++Subject: [PATCH] libmpathpersist: depend on libmultipath
++
++Without this the build fails with:
++
++/usr/bin/ld: cannot find -lmultipath
++
++Signed-off-by: Christian Hesse <mail@eworm.de>
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 1dee3680..ba1d73ba 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -28,7 +28,7 @@ all:	$(BUILDDIRS)
++ $(BUILDDIRS):
++ 	$(MAKE) -C $@
++ 
++-multipath multipathd mpathpersist: libmultipath
+++libmpathpersist multipath multipathd mpathpersist: libmultipath
++ mpathpersist:  libmpathpersist
++ 
++ $(BUILDDIRS.clean):
++-- 
++2.28.0
++
+diff --git a/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch b/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
+new file mode 100644
+index 0000000000..5154eb4297
+--- /dev/null
++++ b/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
+@@ -0,0 +1,41 @@
++From 82129852d74785267f95ef598ac483ff9af38a55 Mon Sep 17 00:00:00 2001
++From: "mail at eworm.de" <mail@eworm.de>
++Date: Sat, 25 Apr 2020 21:11:13 +0200
++Subject: [PATCH] fix boolean value with json-c 0.14
++
++Upstream json-c removed the TRUE and FALSE defines in commit
++0992aac61f8b087efd7094e9ac2b84fa9c040fcd.
++
++[mwilck]: Use stdbool.h, and keep the log message unchanged.
++
++Signed-off-by: Christian Hesse <mail@eworm.de>
++Signed-off-by: Martin Wilck <mwilck@suse.com>
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ libdmmp/libdmmp_private.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/libdmmp/libdmmp_private.h b/libdmmp/libdmmp_private.h
++index ac85b63f..b1a6ddea 100644
++--- a/libdmmp/libdmmp_private.h
+++++ b/libdmmp/libdmmp_private.h
++@@ -30,6 +30,7 @@
++ #include <stdint.h>
++ #include <string.h>
++ #include <assert.h>
+++#include <stdbool.h>
++ #include <json.h>
++ 
++ #include "libdmmp/libdmmp.h"
++@@ -82,7 +83,7 @@ static out_type func_name(struct dmmp_context *ctx, const char *var_name) { \
++ do { \
++ 	json_type j_type = json_type_null; \
++ 	json_object *j_obj_tmp = NULL; \
++-	if (json_object_object_get_ex(j_obj, key, &j_obj_tmp) != TRUE) { \
+++	if (json_object_object_get_ex(j_obj, key, &j_obj_tmp) != true) { \
++ 		_error(ctx, "Invalid JSON output from multipathd IPC: " \
++ 		       "key '%s' not found", key); \
++ 		rc = DMMP_ERR_IPC_ERROR; \
++-- 
++2.28.0
++
+diff --git a/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch b/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch
+new file mode 100644
+index 0000000000..43bb305856
+--- /dev/null
++++ b/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch
+@@ -0,0 +1,34 @@
++From ec2b935d2af33651f34de8bd6e428156005c2e3d Mon Sep 17 00:00:00 2001
++From: Martin Wilck <mwilck@suse.com>
++Date: Tue, 12 May 2020 22:13:51 +0200
++Subject: [PATCH] multipath-tools Makefile: add install dependency
++
++$(libdir) must exist before running "make install" on prioritizer, checker,
++and foreign libraries.
++
++Cc: Christian Hesse <mail@eworm.de>
++
++Signed-off-by: Martin Wilck <mwilck@suse.com>
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ Makefile | 4 ++++
 + 1 file changed, 4 insertions(+)
 +
-+diff --git a/libcaf_core/caf/scheduler/profiled_coordinator.hpp b/libcaf_core/caf/scheduler/profiled_coordinator.hpp
-+index 3e091321f..7d7b8bad2 100644
-+--- a/auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp
-++++ b/auxil/broker/caf/libcaf_core/caf/scheduler/profiled_coordinator.hpp
-+@@ -113,7 +113,11 @@ class profiled_coordinator : public coordinator<Policy> {
-+       m.mem = 0;
-+ #else
-+       ::rusage ru;
-++#ifdef RUSAGE_THREAD
-+       ::getrusage(RUSAGE_THREAD, &ru);
-++#else
-++      ::getrusage(RUSAGE_SELF, &ru);
-++#endif
-+       m.usr = to_usec(ru.ru_utime);
-+       m.sys = to_usec(ru.ru_stime);
-+       m.mem = ru.ru_maxrss;
-diff --git a/package/zeek/Config.in b/package/zeek/Config.in
++diff --git a/Makefile b/Makefile
++index fec3b73b..8bcaba66 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -32,6 +32,10 @@ libmultipath libdmmp: libmpathcmd
++ libmpathpersist multipath multipathd: libmultipath
++ mpathpersist multipathd:  libmpathpersist
++ 
+++libmultipath/checkers.install \
+++	libmultipath/prioritizers.install \
+++	libmultipath/foreign.install: libmultipath.install
+++
++ $(BUILDDIRS.clean):
++ 	$(MAKE) -C ${@:.clean=} clean
++ 
++-- 
++2.28.0
++
+diff --git a/package/multipath-tools/0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch b/package/multipath-tools/0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch
 new file mode 100644
-index 0000000000..13c62252a9
+index 0000000000..133094a7f7
 --- /dev/null
-+++ b/package/zeek/Config.in
-@@ -0,0 +1,44 @@
-+config BR2_PACKAGE_ZEEK
-+	bool "zeek"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INSTALL_LIBSTDCPP
++++ b/package/multipath-tools/0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch
+@@ -0,0 +1,35 @@
++From 8370da992c752e4238de7a8b02ce0e179353c959 Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar-dev@posteo.net>
++Date: Sun, 6 Sep 2020 10:37:41 +0200
++Subject: [PATCH] Makefile.inc: Enable systemd if ENABLE_SYSTEMD is defined
++
++systemd is disabled by default, to activate it set ENABLE_SYSTEMD.
++
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ Makefile.inc | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/Makefile.inc b/Makefile.inc
++index d4d1e0dd..32bc1846 100644
++--- a/Makefile.inc
+++++ b/Makefile.inc
++@@ -35,6 +35,7 @@ ifndef RUN
++ 	endif
++ endif
++ 
+++ifdef ENABLE_SYSTEMD
++ ifndef SYSTEMD
++ 	ifeq ($(shell pkg-config --modversion libsystemd >/dev/null 2>&1 && echo 1), 1)
++ 		SYSTEMD = $(shell pkg-config --modversion libsystemd)
++@@ -45,6 +46,7 @@ ifndef SYSTEMD
++ 		endif
++ 	endif
++ endif
+++endif
++ 
++ ifndef SYSTEMDPATH
++ 	SYSTEMDPATH=usr/lib
++-- 
++2.28.0
++
+diff --git a/package/multipath-tools/Config.in b/package/multipath-tools/Config.in
+new file mode 100644
+index 0000000000..fc4b01b2ac
+--- /dev/null
++++ b/package/multipath-tools/Config.in
+@@ -0,0 +1,32 @@
++comment "multipath-tools needs udev and a uClibc or glibc toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
++
++config BR2_PACKAGE_MULTIPATH_TOOLS
++	bool "multipath-tools"
 +	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_USE_MMU
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_LIBURCU
++	select BR2_PACKAGE_LIBAIO
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_LVM2_STANDARD_INSTALL
++	select BR2_PACKAGE_READLINE
 +	help
-+	  The Zeek Network Security Monitor
++	  This package provides the following binaries to drive
++	  the Device Mapper multipathing driver:
++	    * multipath - Device mapper target autoconfig.
++	    * multipathd - Multipath daemon.
++	    * mpathpersist - Manages SCSI persistent reservations on
++	      dm multipath devices.
++	    * kpartx - Create device maps from partition tables.
 +
-+	  Zeek is a powerful network analysis framework that is much
-+	  different from the typical IDS you may know. (Zeek is the new
-+	  name for the long-established Bro system.)
++	  https://github.com/openSUSE/multipath-tools
+diff --git a/package/multipath-tools/S60multipathd b/package/multipath-tools/S60multipathd
+new file mode 100644
+index 0000000000..ff995e9378
+--- /dev/null
++++ b/package/multipath-tools/S60multipathd
+@@ -0,0 +1,47 @@
++#!/bin/sh
 +
-+	  https://www.zeek.org
++DAEMON="multipathd"
++PIDFILE="/var/run/$DAEMON.pid"
 +
-+if BR2_PACKAGE_ZEEK
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 +
-+config BR2_PACKAGE_ZEEK_ZEEKCTL
-+	bool "zeekctl"
-+	select BR2_PACKAGE_BASH # runtime
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
-+	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_CURSES if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_CURSES if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_HASHLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_SQLITE if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SQLITE if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
-+	help
-+	  Tool for managing Zeek deployments
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
 +
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+new file mode 100644
+index 0000000000..7eaf246094
+--- /dev/null
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  ccd73bf67621161d9e42d1a770c3a7efff6e252433e8b8ed5f64a88cb5e7151d  multipath-tools-0.8.4.tar.gz
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+new file mode 100644
+index 0000000000..60ca90b700
+--- /dev/null
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# multipath-tools
++#
++################################################################################
++
++MULTIPATH_TOOLS_VERSION = 0.8.4
++MULTIPATH_TOOLS_SITE = $(call github,openSUSE,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
++MULTIPATH_TOOLS_LICENSE = LGPL-2.0
++MULTIPATH_TOOLS_LICENSE_FILES = COPYING
++MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
++MULTIPATH_TOOLS_MAKE_OPTS = LIB="lib" RUN="run" OPTFLAGS="" STACKPROT=""
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++MULTIPATH_TOOLS_DEPENDENCIES += systemd
++MULTIPATH_TOOLS_MAKE_OPTS += ENABLE_SYSTEMD=1
 +endif
 +
-+comment "zeek needs a toolchain w/ C++, wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/zeek/zeek.hash b/package/zeek/zeek.hash
-new file mode 100644
-index 0000000000..00fd696355
---- /dev/null
-+++ b/package/zeek/zeek.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256  af3ee5635140a54d305667983d38ea28f36457c9f2f8727e90ea3ef00b22c44f  zeek-3.2.0.tar.gz
-+
-+# Hash for license files:
-+sha256  690b4eee9a01fe94edd5710a0bc026df96bb3b2403d26dc923921ec0116908b2  COPYING
-+sha256  f191fefe3f28a32e51499f57d700595946055518e00261ac398279639d5a5bea  COPYING.3rdparty
-diff --git a/package/zeek/zeek.mk b/package/zeek/zeek.mk
-new file mode 100644
-index 0000000000..757f258f65
---- /dev/null
-+++ b/package/zeek/zeek.mk
-@@ -0,0 +1,80 @@
-+################################################################################
-+#
-+# zeek
-+#
-+################################################################################
-+
-+ZEEK_VERSION = 3.2.0
-+ZEEK_SITE = https://download.zeek.org
-+ZEEK_LICENSE = \
-+	BSD-3-Clause (zeek, C++ Actor Framework, ConvertUTF.c, CardinalityCounter.cc, pybind11), \
-+	Public Domain (sqlite), \
-+	MIT (doctest, libkqueue, RapidJSON, tsl-ordered-map, bro_inet_ntop.c), \
-+	LGPL-3.0+ (Multifast Project), \
-+	BSD-2-Clause (event.h), \
-+	BSD-4-Clause (Patricia.c, strsep.c, bsd-getopt-long.c), \
-+	Apache-2.0 (highwayhash, folly), \
-+	MPL-2.0 (mozilla-ca-list.zeek)
-+ZEEK_LICENSE_FILES = COPYING COPYING.3rdparty
-+ZEEK_SUPPORTS_IN_SOURCE_BUILD = NO
-+ZEEK_DEPENDENCIES = \
-+	host-bison \
-+	host-flex \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_PYTHON),host-python,host-python3) \
-+	host-zeek \
-+	$(if $(BR2_PACKAGE_LIBKRB5),libkrb5) \
-+	$(if $(BR2_PACKAGE_LIBMAXMINDDB),libmaxminddb) \
-+	libpcap \
-+	openssl \
-+	$(if $(BR2_PACKAGE_ROCKSDB),rocksdb) \
-+	zlib
-+
-+ZEEK_CONF_OPTS = \
-+	-DBIFCL_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/bifcl/bifcl \
-+	-DBINPAC_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/binpac/src/binpac \
-+	-DBROKER_DISABLE_DOCS=ON \
-+	-DBROKER_DISABLE_TESTS=ON \
-+	-DINSTALL_AUX_TOOLS=ON \
-+	-DZEEK_ETC_INSTALL_DIR=/etc
-+
-+HOST_ZEEK_MAKE_OPTS = binpac bifcl
-+# Don't install host-zeek. We just need to build binpac and bifcl.
-+# Therefore only run 'true' and do nothing, not even the default action.
-+HOST_ZEEK_INSTALL_CMDS = true
-+
-+define ZEEK_FIX_PYTHON_PATH
-+	$(SED) 's, at PYTHON_EXECUTABLE@,/usr/bin/python,' \
-+		$(@D)/auxil/zeekctl/ZeekControl/ssh_runner.py
++define MULTIPATH_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(MULTIPATH_TOOLS_MAKE_OPTS)
 +endef
 +
-+ZEEK_POST_CONFIGURE_HOOKS += ZEEK_FIX_PYTHON_PATH
++define MULTIPATH_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
++		$(MULTIPATH_TOOLS_MAKE_OPTS) DESTDIR="$(TARGET_DIR)"
++endef
 +
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+ZEEK_DEPENDENCIES += jemalloc
-+ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=ON
-+else
-+ZEEK_CONF_OPTS += -DENABLE_JEMALLOC=OFF
-+endif
++define MULTIPATH_TOOLS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/multipath-tools/S60multipathd \
++		$(TARGET_DIR)/etc/init.d/S60multipathd
++endef
 +
-+ifeq ($(BR2_PACKAGE_ZEEK_ZEEKCTL),y)
-+ZEEK_DEPENDENCIES += \
-+	host-swig \
-+	$(if $(BR2_PACKAGE_PYTHON),python,python3)
-+ZEEK_CONF_OPTS += \
-+	-DDISABLE_PYTHON_BINDINGS=OFF \
-+	-DINSTALL_ZEEKCTL=ON \
-+	-DPY_MOD_INSTALL_DIR=/usr/lib/zeekctl
-+else
-+ZEEK_CONF_OPTS += \
-+	-DDISABLE_PYTHON_BINDINGS=ON \
-+	-DINSTALL_ZEEKCTL=OFF
-+endif
-+
-+ifneq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-+ZEEK_DEPENDENCIES += musl-fts
-+ZEEK_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-lfts
-+endif
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
--- 
-2.28.0
++$(eval $(generic-package))
