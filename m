@@ -1,72 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Sep 2020 09:43:02 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
- (Adam Duskett's message of "Sat, 5 Sep 2020 15:25:19 -0700")
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
- <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
- <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
- <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <20200903182409.6b337059@windsurf.home>
- <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- <87blilmeo2.fsf@dell.be.48ers.dk>
- <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
- <877dt8n2o7.fsf@dell.be.48ers.dk>
- <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
- <20200905211650.0a229191@windsurf.home>
- <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
- <20200905223835.1e68d658@windsurf.home>
- <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
- <20200905230431.34bcd9ea@windsurf.home>
- <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
- <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
-Message-ID: <87imcric55.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Sep 2020 09:41:43 +0200
+Subject: [Buildroot] [git commit] package/mongrel2: fix build with gcc 10
+Message-ID: <20200906074138.00C6D821F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=95235737eb519ff28ab78bd01700a512cd85219e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+ - http://autobuild.buildroot.org/results/858488774503c6cc6a5489bc1e080562f5fc6461
 
-Thanks for the constructive input!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...definition-error-when-building-with-gcc10.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
- > Basic things that could be done with CI/CD that don't take much CPU power and
- > would reduce the time spent on each patch:
-
- >  - Running check-pkg automatically
-
-I guess you mean check-package?
-
-
- >  - Running basic grammar and spelling checks
-
-I don't know how easy that is to do, given that commit messages often
-quote code and/or command output. We can certainly extend check-package
-to run the commit message through aspell. What open source utilities are
-available for grammar checks?
-
-
- >  - Checking if all recursive dependencies of new packages have been added in
- >    new Config.in files.
-
-That IMHO very fast becomes complicated with optional dependencies and
-patches to existing packages rather than a completely new package, but
-if you have a good idea?
-
-
- > If you want to get complicated a reduction of CPU time/resources could
- > also be done with:
- >   - Having prebuilt docker images or tarballs that have a partially
- > complete build
-
-I am not sure how realistic that is given that master (or next) is a
-moving target and we would want to test against the current situation?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch b/package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch
+new file mode 100644
+index 0000000000..e1b5788494
+--- /dev/null
++++ b/package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch
+@@ -0,0 +1,25 @@
++From c51815b10c39c6e802bd1b56549f1d479b480fcc Mon Sep 17 00:00:00 2001
++From: Andrew Sun <adsun701@gmail.com>
++Date: Sat, 18 Jul 2020 09:11:11 -0400
++Subject: [PATCH] fix multiple definition error when building with gcc10
++
++[Retrieved from:
++https://github.com/mongrel2/mongrel2/pull/343/commits/c51815b10c39c6e802bd1b56549f1d479b480fcc]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/unixy.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/unixy.h b/src/unixy.h
++index 045e7c28..4225220c 100644
++--- a/src/unixy.h
+++++ b/src/unixy.h
++@@ -38,7 +38,7 @@
++ #include <bstring.h>
++ #include <unistd.h>
++ 
++-char *m2program;
+++extern char *m2program;
++ 
++ int Unixy_chroot(bstring path);
++ 
