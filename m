@@ -1,170 +1,102 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 6 Sep 2020 19:39:58 +0200
-Subject: [Buildroot] OpenSSH login problem
-In-Reply-To: <CA+h8R2pjvm7Wr_hkS2wtqhzqESmgqTtxivkdTLdEr07ngJLTbQ@mail.gmail.com>
-References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
- <52-5f356200-5-2c492440@36238474>
- <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
- <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
- <20200816220620.65159d1d@windsurf.home>
- <CA+h8R2qO01wwrEJdTx2puEbDv6mv31YxyAjG5nCn6hosPAW_aQ@mail.gmail.com>
- <CA+h8R2pjvm7Wr_hkS2wtqhzqESmgqTtxivkdTLdEr07ngJLTbQ@mail.gmail.com>
-Message-ID: <20200906193958.2b4199a4@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 6 Sep 2020 20:50:41 +0200
+Subject: [Buildroot] [git commit] package/python-aiofiles: new package
+Message-ID: <20200906184340.81FFC8758B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian, *,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a5fd75a29c56f6aa1795aafb74fbe647964d0c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 5 Sep 2020 19:33:23 -0700, Christian Stewart <christian@paral.in> wrote:
+Ordinary local file IO is blocking, and cannot easily and
+portably made asynchronous.
+This means doing file IO may interfere with asyncio applications,
+which shouldn???t block the executing thread. aiofiles helps
+with this y introducing asynchronous versions of files
+that support delegating operations to a separate thread pool.
 
-> Hi all,
->
-> Finally got around to running this test.
->
-> I previously tested an Odroid XU4 with GCC 10 and latest binutils, and
-> it worked.
->
-> Now with a test against GCC 9 on a Odroid HC2, it's not working (ssh
-> exits immediately after successful auth).
->
-> Testing against OpenSSH 8.3p1 now and figuring out exactly why this is
-> happening, if it's the GCC version or what.
+More information is available at :
+https://pypi.org/project/aiofiles.
 
-Tested on RPi3, the following defconfig works (buildroot-git-d1c3f077e24a41f004945f94aceb6f059c58e423,
-linux-5.4.51):
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-aiofiles/Config.in            |  8 ++++++++
+ package/python-aiofiles/python-aiofiles.hash |  5 +++++
+ package/python-aiofiles/python-aiofiles.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_STRACE=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_OPENSSH=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-
-And the following defconfig fails (linux-4.19.126):
-
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-rpi-cm3"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_STRACE=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_OPENSSH=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-
-The differences are:
-
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-
-and
-
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,676fd5a6f2a9b365da0e0371ef11acbb74cb69d5)/linux-676fd5a6f2a9b365da0e0371ef11acbb74cb69d5.tar.gz"
-
-
-The last lines of sshd failure strace are:
-
-468   write(2, "Accepted none for root from 192."..., 59 <unfinished ...>
-490   clock_gettime(CLOCK_BOOTTIME, {tv_sec=306, tv_nsec=379381706}) = 0
-490   clock_nanosleep_time64(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=24656548290918313},  <unfinished ...>) = ?
-490   +++ killed by SIGSYS +++
-468   <... write resumed>)              = 59
-468   --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=490, si_uid=1000, si_status=SIGSYS, si_utime=7, si_stime=2} ---
-468   write(2, "debug1: monitor_child_preauth: r"..., 82) = 82
-468   read(5, "", 4)                    = 0
-468   write(2, "debug1: do_cleanup\r\n", 20) = 20
-468   write(2, "debug1: Killing privsep child 49"..., 35) = 35
-468   kill(490, SIGKILL)                = 0
-468   exit_group(255)                   = ?
-468   +++ exited with 255 +++
-
-
-In the failing case __NR_clock_nanosleep_time64 is not defined, so
-SC_ALLOW(__NR_clock_nanosleep_time64) in openssh-8.3p1/sandbox-seccomp-filter.c
-is not set...., but the strace output shows clock_nanosleep_time64() is called
-(and aborted with SIGSYS)...
-
-Regards,
-Peter
-
->
-> On Mon, Aug 17, 2020 at 2:36 PM Christian Stewart <christian@paral.in> wrote:
-> > On Sun, Aug 16, 2020 at 1:06 PM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > > On Sun, 16 Aug 2020 12:59:02 -0700
-> > > Christian Stewart <christian@paral.in> wrote:
-> > >
-> > > > FWIW I actually had the same, was trying to test an odroid XU4 and the
-> > > > SSH server was immediately closing the connection. I double-checked
-> > > > that openssh was at the latest version & I was on the latest buildroot
-> > > > master as well, and assumed at the time it must have had something to
-> > > > do with the kernel bump I was testing.
-> > > >
-> > > > Now I'm thinking maybe this was causing it. Will test again later today.
-> > >
-> > > Could you try applying:
-> > >
-> > >  https://github.com/openssh/openssh-portable/commit/beee0ef61866cb567b9abc23bd850f922e59e3f0
-> > >  https://github.com/openssh/openssh-portable/commit/69298ebfc2c066acee5d187eac8ce9f38c796630
-> > >
-> > > and see if it helps ?
->
-> Have not tried these yet but I think they are included in 8.3 anyway.
->
-> > == Test 1: pi3 w/ gcc 10 glibc binutils 2.34
-> >
-> > PASS
->
-> Strangely this one worked.
->
-> Best regards,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c012679600..93cccef70d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1424,6 +1424,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
+ 
+ N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
++F:	package/python-aiofiles/
+ F:	package/python-crayons/
+ F:	package/python-cycler/
+ F:	package/python-matplotlib/
+diff --git a/package/Config.in b/package/Config.in
+index e5019e3ed6..9d5124e838 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -856,6 +856,7 @@ menu "External python modules"
+ 	source "package/python-aiocoap/Config.in"
+ 	source "package/python-aioconsole/Config.in"
+ 	source "package/python-aiodns/Config.in"
++	source "package/python-aiofiles/Config.in"
+ 	source "package/python-aiohttp/Config.in"
+ 	source "package/python-aiohttp-cors/Config.in"
+ 	source "package/python-aiohttp-debugtoolbar/Config.in"
+diff --git a/package/python-aiofiles/Config.in b/package/python-aiofiles/Config.in
+new file mode 100644
+index 0000000000..9cc3d7fe59
+--- /dev/null
++++ b/package/python-aiofiles/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_AIOFILES
++	bool "python-aiofiles"
++	depends on BR2_PACKAGE_PYTHON3
++	help
++	  aiofiles aims to  handle local disk files in
++	  asyncio applications.
++
++	  https://pypi.org/project/aiofiles
+diff --git a/package/python-aiofiles/python-aiofiles.hash b/package/python-aiofiles/python-aiofiles.hash
+new file mode 100644
+index 0000000000..3c3e8565a3
+--- /dev/null
++++ b/package/python-aiofiles/python-aiofiles.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiofiles/json
++md5  2243eff06072115e8afe8907677ca51d  aiofiles-0.5.0.tar.gz
++sha256  98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af  aiofiles-0.5.0.tar.gz
++# Locally computed sha256 checksums
++sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-aiofiles/python-aiofiles.mk b/package/python-aiofiles/python-aiofiles.mk
+new file mode 100644
+index 0000000000..28f41e3967
+--- /dev/null
++++ b/package/python-aiofiles/python-aiofiles.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aiofiles
++#
++################################################################################
++
++PYTHON_AIOFILES_VERSION = 0.5.0
++PYTHON_AIOFILES_SOURCE = aiofiles-$(PYTHON_AIOFILES_VERSION).tar.gz
++PYTHON_AIOFILES_SITE = https://files.pythonhosted.org/packages/2b/64/437053d6a4ba3b3eea1044131a25b458489320cb9609e19ac17261e4dc9b
++PYTHON_AIOFILES_SETUP_TYPE = setuptools
++PYTHON_AIOFILES_LICENSE = Apache-2.0
++PYTHON_AIOFILES_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
