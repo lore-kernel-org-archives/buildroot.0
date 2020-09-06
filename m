@@ -1,93 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2020 09:41:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netperf: fix build with gcc 10
-In-Reply-To: <20200905123518.530182-1-fontaine.fabrice@gmail.com>
-References: <20200905123518.530182-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200906074104.GG14354@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 Sep 2020 09:43:02 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
+ (Adam Duskett's message of "Sat, 5 Sep 2020 15:25:19 -0700")
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+ <20200905211650.0a229191@windsurf.home>
+ <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
+ <20200905223835.1e68d658@windsurf.home>
+ <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
+ <20200905230431.34bcd9ea@windsurf.home>
+ <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
+ <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
+Message-ID: <87imcric55.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Adam" == Adam Duskett <aduskett@gmail.com> writes:
 
-On 2020-09-05 14:35 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/547d9a803375cce93b8e3e7a59243190b71c7688
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Hi,
 
-Applied to master, thanks.
+Thanks for the constructive input!
 
-Regards,
-Yann E. MORIN.
+ > Basic things that could be done with CI/CD that don't take much CPU power and
+ > would reduce the time spent on each patch:
 
-> ---
->  ...st_omni.c-fix-compilation-with-GCC10.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
-> 
-> diff --git a/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
-> new file mode 100644
-> index 0000000000..261dfe9a0e
-> --- /dev/null
-> +++ b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
-> @@ -0,0 +1,42 @@
-> +From b2fd0f324002d0cf52ae905b2a469bf1067f182a Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 5 Sep 2020 14:30:20 +0200
-> +Subject: [PATCH] src/nettest_omni.c: fix compilation with GCC10
-> +
-> +GCC10 defaults to -fno-common, which breaks compilation when there are
-> +multiple definitions of implicit "extern" variables. Remove the extra
-> +definitions.
-> +
-> +Fix #42
-> +
-> +Signed-off-by: Tony Ambardar <itugrok@yahoo.com>
-> +[Retrieved from:
-> +https://github.com/openwrt/packages/blob/master/net/netperf/patches/010-gcc10_multiple_definition_fix.patch]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/HewlettPackard/netperf/pull/48]
-> +---
-> + src/nettest_omni.c | 8 --------
-> + 1 file changed, 8 deletions(-)
-> +
-> +diff --git a/src/nettest_omni.c b/src/nettest_omni.c
-> +index 852eeb1..862088a 100644
-> +--- a/src/nettest_omni.c
-> ++++ b/src/nettest_omni.c
-> +@@ -458,14 +458,6 @@ static int client_port_max = 65535;
-> + 
-> +  /* different options for the sockets				*/
-> + 
-> +-int
-> +-  loc_nodelay,		/* don't/do use NODELAY	locally		*/
-> +-  rem_nodelay,		/* don't/do use NODELAY remotely	*/
-> +-  loc_sndavoid,		/* avoid send copies locally		*/
-> +-  loc_rcvavoid,		/* avoid recv copies locally		*/
-> +-  rem_sndavoid,		/* avoid send copies remotely		*/
-> +-  rem_rcvavoid; 	/* avoid recv_copies remotely		*/
-> +-
-> + extern int
-> +   loc_tcpcork,
-> +   rem_tcpcork,
-> +-- 
-> +2.28.0
-> +
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ >  - Running check-pkg automatically
+
+I guess you mean check-package?
+
+
+ >  - Running basic grammar and spelling checks
+
+I don't know how easy that is to do, given that commit messages often
+quote code and/or command output. We can certainly extend check-package
+to run the commit message through aspell. What open source utilities are
+available for grammar checks?
+
+
+ >  - Checking if all recursive dependencies of new packages have been added in
+ >    new Config.in files.
+
+That IMHO very fast becomes complicated with optional dependencies and
+patches to existing packages rather than a completely new package, but
+if you have a good idea?
+
+
+ > If you want to get complicated a reduction of CPU time/resources could
+ > also be done with:
+ >   - Having prebuilt docker images or tarballs that have a partially
+ > complete build
+
+I am not sure how realistic that is given that master (or next) is a
+moving target and we would want to test against the current situation?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
