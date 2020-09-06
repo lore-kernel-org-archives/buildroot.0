@@ -1,116 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2020 22:12:27 +0200
-Subject: [Buildroot] [PATCH 08/10] gitlab-ci: handle the basic tests in
+Date: Sun,  6 Sep 2020 22:12:28 +0200
+Subject: [Buildroot] [PATCH 09/10] gitlab-ci: move before-script before
  script
 In-Reply-To: <cover.1599423132.git.yann.morin.1998@free.fr>
 References: <cover.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <e589d6f44672bbee11d96cd575ef02e8719da229.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <0933dd627e38379a58002fed9fb62b136ebabaf4.1599423132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Note that those tests were so far ignored only when requesting a single
-defconfig build, or a single runtime test build; everything else
-was trigerring thoses tests.
-
-However, it feels more natural that they are also ignored when all
-defconfigs build. or all runtime tests, are explictly requested.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/misc/gitlab-ci.yml.in          | 15 +++------------
- support/scripts/generate-gitlab-ci-yml | 21 +++++++++++++++++++--
- 2 files changed, 22 insertions(+), 14 deletions(-)
+ support/misc/gitlab-ci.yml.in | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 0f93d272be..c4a37464f6 100644
+index c4a37464f6..fcfff5c6aa 100644
 --- a/support/misc/gitlab-ci.yml.in
 +++ b/support/misc/gitlab-ci.yml.in
-@@ -1,24 +1,15 @@
--.check_base:
--    rules:
--        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
--          when: never
--        - when: always
--
--check-DEVELOPERS:
--    extends: .check_base
-+.check-DEVELOPERS_base:
-     # get-developers should print just "No action specified"; if it prints
-     # anything else, it's a parse error.
-     # The initial ! is removed by YAML so we need to quote it.
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
--check-flake8:
--    extends: .check_base
-+.check-flake8_base:
-     script:
-         - make check-flake8
- 
--check-package:
--    extends: .check_base
-+.check-package_base:
-     script:
+@@ -14,6 +14,8 @@
          - make check-package
  
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 51e1625faa..f8b533f2c3 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -7,6 +7,7 @@ main() {
+ .defconfig_check:
++    before_script:
++        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
+@@ -23,10 +25,10 @@
+         expire_in: 2 weeks
+         paths:
+             - .config
+-    before_script:
+-        - DEFCONFIG_NAME=$(echo ${CI_JOB_NAME} | sed -e 's,_check$,,g')
  
-     preamble "${template}"
+ .defconfig_base:
++    before_script:
++        - DEFCONFIG_NAME=${CI_JOB_NAME}
+     script:
+         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
+         - make ${DEFCONFIG_NAME}
+@@ -55,10 +57,10 @@
+             - output/build/packages-file-list.txt
+             - output/build/*/.config
+             - runtime-test.log
+-    before_script:
+-        - DEFCONFIG_NAME=${CI_JOB_NAME}
  
-+    gen_basics
-     gen_defconfigs
-     gen_tests
- }
-@@ -23,6 +24,22 @@ preamble() {
- _EOF_
- }
- 
-+gen_basics() {
-+    local tst
-+
-+    # Skip basic tests when explicitly building defconfigs or runtime tests
-+    case "${CI_COMMIT_REF_NAME}" in
-+        (*-defconfigs)      return;;
-+        (*-*_defconfig)     return;;
-+        (*-runtime-tests)   return;;
-+        (*-tests.*)         return;;
-+    esac
-+
-+    for tst in DEVELOPERS flake8 package; do
-+        printf 'check-%s: { extends: .check-%s_base }\n' "${tst}" "${tst}"
-+    done
-+}
-+
- gen_defconfigs() {
-     local -a defconfigs
-     local build_defconfigs cfg
-@@ -51,7 +68,7 @@ gen_defconfigs() {
- 
-     for cfg in "${defconfigs[@]}"; do
-         if ${build_defconfigs}; then
--            printf '%s: { extends: .defconfig }\n' "${cfg}"
-+            printf '%s: { extends: .defconfig_base }\n' "${cfg}"
-         else
-             printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
-         fi
-@@ -88,7 +105,7 @@ gen_tests() {
-     esac
- 
-     if ${run_tests}; then
--        printf '%s: { extends: .runtime_test }\n' "${tests[@]}"
-+        printf '%s: { extends: .runtime_test_base }\n' "${tests[@]}"
-     fi
- }
+ .runtime_test_base:
++    before_script:
++        - TEST_CASE_NAME=${CI_JOB_NAME}
+     # Keep build directories so the rootfs can be an artifact of the job. The
+     # runner will clean up those files for us.
+     # Multiply every emulator timeout by 10 to avoid sporadic failures in
+@@ -73,6 +75,4 @@
+             - test-output/*.log
+             - test-output/*/.config
+             - test-output/*/images/*
+-    before_script:
+-        - TEST_CASE_NAME=${CI_JOB_NAME}
  
 -- 
 2.20.1
