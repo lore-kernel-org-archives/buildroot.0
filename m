@@ -1,101 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 Sep 2020 14:44:16 +0200
-Subject: [Buildroot] [git commit] package/python-pytest: new package
-Message-ID: <20200906123833.C25468104D@busybox.osuosl.org>
+Date: Sun, 6 Sep 2020 14:40:16 +0200
+Subject: [Buildroot] [git commit] package/zeromq: add support for openpgm 5.3
+Message-ID: <20200906123833.7A83587038@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e53efebf8537f5a4473cbcd1e47d705cfaa81098
+commit: https://git.buildroot.net/buildroot/commit/?id=25e78ed2dea434f5eaa52eea3adade35fb442eb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pytest/Config.in          | 16 ++++++++++++++++
- package/python-pytest/python-pytest.hash |  5 +++++
- package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
- 5 files changed, 38 insertions(+)
+ ...nfigure.ac-fix-build-with-openpgm-5-3-128.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 34f545b6cf..c85dd355d4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1628,6 +1628,7 @@ F:	package/python-ansicolors/
- F:	package/python-iniconfig/
- F:	package/python-packaging/
- F:	package/python-pluggy/
-+F:	package/python-pytest/
- F:	package/rs485conf/
- F:	package/turbolua/
- F:	support/testing/tests/package/test_netdata.py
-diff --git a/package/Config.in b/package/Config.in
-index 928405df61..90d7908eab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1121,6 +1121,7 @@ menu "External python modules"
- 	source "package/python-pysocks/Config.in"
- 	source "package/python-pytablereader/Config.in"
- 	source "package/python-pytablewriter/Config.in"
-+	source "package/python-pytest/Config.in"
- 	source "package/python-pytrie/Config.in"
- 	source "package/python-pytz/Config.in"
- 	source "package/python-pyudev/Config.in"
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+diff --git a/package/zeromq/0002-configure.ac-fix-build-with-openpgm-5-3-128.patch b/package/zeromq/0002-configure.ac-fix-build-with-openpgm-5-3-128.patch
 new file mode 100644
-index 0000000000..ad57547a1b
+index 0000000000..89ef555714
 --- /dev/null
-+++ b/package/python-pytest/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PYTHON_PYTEST
-+	bool "python-pytest"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_INICONFIG # runtime
-+	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
-+	select BR2_PACKAGE_PYTHON_PLUGGY # runtime
-+	select BR2_PACKAGE_PYTHON_PY # runtime
-+	select BR2_PACKAGE_PYTHON_TOML # runtime
-+	help
-+	  pytest is a framework that makes building simple and scalable
-+	  tests easy. Tests are expressive and readable???no boilerplate
-+	  code required.
++++ b/package/zeromq/0002-configure.ac-fix-build-with-openpgm-5-3-128.patch
+@@ -0,0 +1,41 @@
++From 883d432c29fe5b81b2b4a6809610c60083571fb4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 2 Sep 2020 07:54:36 +0200
++Subject: [PATCH] configure.ac: fix build with openpgm-5-3-128
 +
-+	  https://docs.pytest.org/en/latest/
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-new file mode 100644
-index 0000000000..6f3532a590
---- /dev/null
-+++ b/package/python-pytest/python-pytest.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pytest/json
-+md5	c3e7c811b2b74c60bb5fb951229ebce9  pytest-6.0.1.tar.gz
-+sha256	85228d75db9f45e06e57ef9bf4429267f81ac7c0d742cc9ed63d09886a9fe6f4  pytest-6.0.1.tar.gz
-+# Locally computer sha256
-+sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-new file mode 100644
-index 0000000000..c17d579f8c
---- /dev/null
-+++ b/package/python-pytest/python-pytest.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pytest
-+#
-+################################################################################
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/zeromq/libzmq/pull/4027]
++---
++ configure.ac | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
 +
-+PYTHON_PYTEST_VERSION = 6.0.1
-+PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/20/4c/d7b19b8661be78461fff0392e33943784340424921578fe1bf300ef59831
-+PYTHON_PYTEST_SETUP_TYPE = setuptools
-+PYTHON_PYTEST_LICENSE = MIT
-+PYTHON_PYTEST_LICENSE_FILES = LICENSE
-+PYTHON_PYTEST_DEPENDENCIES = host-python-setuptools-scm
++diff --git a/configure.ac b/configure.ac
++index e7193423..49b5d69c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -649,13 +649,18 @@ AC_ARG_WITH([pgm], [AS_HELP_STRING([--with-pgm],
++ 
++ # conditionally require pgm package
++ if test "x$with_pgm_ext" != "xno"; then
++-    PKG_CHECK_MODULES([pgm], [openpgm-5.2 >= 5.2], [
+++    PKG_CHECK_MODULES([pgm], [openpgm-5.3 >= 5.3], [
++         have_pgm_library="yes"
++-        PKGCFG_NAMES_PRIVATE="$PKGCFG_NAMES_PRIVATE openpgm-5.2 >= 5.2"
+++        PKGCFG_NAMES_PRIVATE="$PKGCFG_NAMES_PRIVATE openpgm-5.3 >= 5.3"
++     ], [
++-        PKG_CHECK_MODULES([pgm], [openpgm-5.1 >= 5.1], [
+++        PKG_CHECK_MODULES([pgm], [openpgm-5.2 >= 5.2], [
++             have_pgm_library="yes"
++-            PKGCFG_NAMES_PRIVATE="$PKGCFG_NAMES_PRIVATE openpgm-5.1 >= 5.1"
+++            PKGCFG_NAMES_PRIVATE="$PKGCFG_NAMES_PRIVATE openpgm-5.2 >= 5.2"
+++        ], [
+++            PKG_CHECK_MODULES([pgm], [openpgm-5.1 >= 5.1], [
+++                have_pgm_library="yes"
+++                PKGCFG_NAMES_PRIVATE="$PKGCFG_NAMES_PRIVATE openpgm-5.1 >= 5.1"
+++            ])
++         ])
++     ])
++ fi
++-- 
++2.28.0
 +
-+$(eval $(python-package))
