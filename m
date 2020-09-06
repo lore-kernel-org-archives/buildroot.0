@@ -1,83 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Sep 2020 23:04:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/memcached: fix build with gcc 10
-Message-ID: <20200906210402.396929-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 6 Sep 2020 16:22:15 -0700
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to go 1.14.8
+In-Reply-To: <20200906143302.38f5a5bd@windsurf.home>
+References: <20200906055710.754782-1-christian@paral.in>
+ <20200906143302.38f5a5bd@windsurf.home>
+Message-ID: <CA+h8R2rKrawRbA8bdqL68FhwuUwD1ExnvPEv92fY0XvVwx_1Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ba8dcdece193b91845a30cd31d3574674ec30068
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ash-fix-build-failure-against-gcc-10.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
+On Sun, Sep 6, 2020 at 5:33 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Christian Stewart <christian@paral.in> wrote:
+>
+> > Go 1.14 is a major release of Go.
+>
+> Not sure why you posted this additional series, in addition to:
+>
+> Subject: [Buildroot] [RFC PATCH v1 1/1] package/go: bump to go 1.15.1
 
-diff --git a/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
-new file mode 100644
-index 0000000000..564b191c1b
---- /dev/null
-+++ b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
-@@ -0,0 +1,56 @@
-+From 0447ae4cbbebb87d3f28bb92f7e219a47263b889 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Thu, 23 Jan 2020 22:16:36 +0000
-+Subject: [PATCH] hash: fix build failure against gcc-10
-+
-+On gcc-10 (and gcc-9 -fno-common) build fails as:
-+
-+```
-+gcc  -g -O2 -pthread -pthread -Wall -Werror -pedantic -Wmissing-prototypes \
-+  -Wmissing-declarations -Wredundant-decls   -o memcached ... -levent
-+ld: memcached-hash.o:memcached/hash.h:5:
-+  multiple definition of `hash'; memcached-memcached.o:memcached/hash.h:5: first defined here
-+```
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Reported-by: Brian Evans
-+Bug: https://bugs.gentoo.org/706196
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+[Retrieved from:
-+https://github.com/memcached/memcached/commit/0447ae4cbbebb87d3f28bb92f7e219a47263b889]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ hash.c | 2 ++
-+ hash.h | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/hash.c b/hash.c
-+index a0c30369f..b5ff28ae4 100644
-+--- a/hash.c
-++++ b/hash.c
-+@@ -4,6 +4,8 @@
-+ #include "jenkins_hash.h"
-+ #include "murmur3_hash.h"
-+ 
-++hash_func hash;
-++
-+ int hash_init(enum hashfunc_type type) {
-+     switch(type) {
-+         case JENKINS_HASH:
-+diff --git a/hash.h b/hash.h
-+index 059d1e2a6..3b2a98478 100644
-+--- a/hash.h
-++++ b/hash.h
-+@@ -2,7 +2,7 @@
-+ #define    HASH_H
-+ 
-+ typedef uint32_t (*hash_func)(const void *key, size_t length);
-+-hash_func hash;
-++extern hash_func hash;
-+ 
-+ enum hashfunc_type {
-+     JENKINS_HASH=0, MURMUR3_HASH
--- 
-2.28.0
+I submitted two versions: 1.14.x (for master) and 1.15.x (for next),
+given that 1.14 is still maintained and we usually upgrade by 1 major
+version at a time.
+
+However, upgrading everything to 1.15.x is also fine, so let's do that.
+
+Best regards,
+Christian
