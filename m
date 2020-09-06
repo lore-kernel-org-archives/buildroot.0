@@ -1,40 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 6 Sep 2020 21:00:22 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-aiofiles : new package
-In-Reply-To: <20200904143301.6657-2-jugurtha.belkalem@smile.fr>
-References: <20200904143301.6657-1-jugurtha.belkalem@smile.fr>
- <20200904143301.6657-2-jugurtha.belkalem@smile.fr>
-Message-ID: <20200906210022.4f59c096@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  6 Sep 2020 21:38:31 +0200
+Subject: [Buildroot] [PATCH] config/odroidc2: fix uboot version
+Message-ID: <20200906193831.27631-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  4 Sep 2020 16:33:00 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+The custom UBoot version was not correctly specified, causing the latest
+one to be selected instead:
 
-> Ordinary local file IO is blocking, and cannot easily and
-> portably made asynchronous.
-> This means doing file IO may interfere with asyncio applications,
-> which shouldn?t block the executing thread. aiofiles helps
-> with this y introducing asynchronous versions of files
-> that support delegating operations to a separate thread pool.
-> 
-> More information is available at :
-> https://pypi.org/project/aiofiles.
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> ---
-> Package has been tested with check-package:
-> $ ./utils/check-package package/python-aiofiles/*
-> 27 lines processed
-> 0 warnings generated
+    /home/ymorin/dev/buildroot/buildroot/configs/odroidc2_defconfig:25:warning:
+    symbol value '"2020.07"' invalid for BR2_TARGET_UBOOT_CUSTOM_VERSION
 
-Applied to master, thanks.
+Fixes:
+    https://gitlab.com/ymorin/buildroot/-/jobs/723411844
 
-Thomas
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Dagg Stompler <daggs@gmx.com>
+---
+ configs/odroidc2_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index bb85431891..c15df8f252 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -22,7 +22,8 @@ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
+ BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT=y
+ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
