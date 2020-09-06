@@ -1,71 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2020 22:12:21 +0200
-Subject: [Buildroot] [PATCH 02/10] gitlab-ci: share the image version with
- the child
+Date: Sun,  6 Sep 2020 22:12:24 +0200
+Subject: [Buildroot] [PATCH 05/10] gitlab-ci: handle the run-time tests
+ conditions in script
 In-Reply-To: <cover.1599423132.git.yann.morin.1998@free.fr>
 References: <cover.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <7d1c9b27dece827cbfb97424cc8b2c1d4fba495a.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <85feac31927121c21fb135ec3c40b7897eed20d5.1599423132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the image name and version are duplicated in the main
-pipeline and the generated, child pipeline.
-
-This is a condition for a future gaffe, so let's use the image from the
-main pipeline when generating the child one.
+Note that we do not propagate the existing comment, because it is
+partially wrong; instead we just keep the per-condition comments.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/misc/gitlab-ci.yml.in          |  5 -----
- support/scripts/generate-gitlab-ci-yml | 14 +++++++++++++-
- 2 files changed, 13 insertions(+), 6 deletions(-)
+ support/misc/gitlab-ci.yml.in          |  9 -------
+ support/scripts/generate-gitlab-ci-yml | 33 ++++++++++++++++++++++----
+ 2 files changed, 29 insertions(+), 13 deletions(-)
 
 diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 0d058bdd91..f00c764aaf 100644
+index 7f2ae32725..c6c4d35a0c 100644
 --- a/support/misc/gitlab-ci.yml.in
 +++ b/support/misc/gitlab-ci.yml.in
-@@ -1,8 +1,3 @@
--# Configuration for Gitlab-CI.
--# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
--
--image: buildroot/base:20200814.2228
--
- .check_base:
-     rules:
-         - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
+@@ -96,15 +96,6 @@ one-defconfig:
+ 
+ .runtime_test:
+     extends: .runtime_test_base
+-    # Running the runtime tests for every push is too much, so limit to
+-    # explicit triggers through the API.
+-    rules:
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-runtime-tests, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
+     before_script:
+         - TEST_CASE_NAME=${CI_JOB_NAME}
+ 
 diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 51f7de21dd..b076b01d05 100755
+index 23db376944..525ea8ccab 100755
 --- a/support/scripts/generate-gitlab-ci-yml
 +++ b/support/scripts/generate-gitlab-ci-yml
-@@ -5,7 +5,7 @@ set -o pipefail
- main() {
-     local template="${1}"
+@@ -8,10 +8,7 @@ main() {
+     preamble "${template}"
  
--    cat "${template}"
-+    preamble "${template}"
- 
-     (
-         cd configs
-@@ -18,4 +18,16 @@ main() {
-     | LC_ALL=C sort
+     gen_defconfigs
+-
+-    ./support/testing/run-tests -l 2>&1 \
+-    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
+-    | LC_ALL=C sort
++    gen_tests
  }
  
-+preamble() {
-+    local template="${1}"
+ preamble() {
+@@ -55,4 +52,32 @@ gen_defconfigs() {
+     done
+ }
+ 
++gen_tests() {
++    local -a tests
++    local run_tests tst
 +
-+    cat - "${template}" <<-_EOF_
-+	# This file is generated; do not edit!
-+	# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
++    tests=( $(./support/testing/run-tests -l 2>&1 \
++              |sed -r -e '/^test_run \((.*)\).*/!d; s//\1/'\
++              |LC_ALL=C sort)
++          )
 +
-+	image: ${CI_JOB_IMAGE}
++    run_tests=false
++    if [ -n "${CI_COMMIT_TAG}" ]; then
++        # For tags, create a pipeline.
++        run_tests=true
++    fi
++    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
++        # For pipeline created by using a trigger token.
++        run_tests=true
++    fi
++    case "${CI_COMMIT_REF_NAME}" in
++        # For the branch or tag name named *-runtime-tests, create a pipeline.
++        (*-runtime-tests) run_tests=true;;
++    esac
 +
-+_EOF_
++    if ${run_tests}; then
++        printf '%s: { extends: .runtime_test }\n' "${tests[@]}"
++    fi
 +}
 +
  main "${@}"
