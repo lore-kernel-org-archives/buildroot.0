@@ -1,60 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2020 22:12:20 +0200
-Subject: [Buildroot] [PATCH 01/10] gitlab-ci: introduce main() in generating
- script
-In-Reply-To: <cover.1599423132.git.yann.morin.1998@free.fr>
-References: <cover.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <3d0d3e130163e34e050edcc9899e2f32fe21a4d2.1599423132.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 06 Sep 2020 22:12:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-09-05
+In-Reply-To: <20200906123329.GN14354@scaer> (Yann E. MORIN's message of "Sun, 
+ 6 Sep 2020 14:33:29 +0200")
+References: <20200906070725.EBCC820464@silver.osuosl.org>
+ <20200906123329.GN14354@scaer>
+Message-ID: <87eeneis0k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script is currently very crude, but we're going to extend it, at
-which point it will be nicer to have functions, local variables, et al.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Introduce a main() in preparation of those future evolutions.
+ > All,
+ > On 2020-09-06 07:07 -0000, Thomas Petazzoni spake thusly:
+ >> Classification of failures by reason for master
+ >> mips     |          systemd-246           | NOK | http://autobuild.buildroot.net/results/229866ea234097b5d6c6104bf040f47fd22ffacc |     
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/scripts/generate-gitlab-ci-yml | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ > So this is a reproducible build issue:
 
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 5cef1146e2..51f7de21dd 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -2,16 +2,20 @@
- set -e
- set -o pipefail
- 
--input="${1}"
-+main() {
-+    local template="${1}"
- 
--cat "${input}"
-+    cat "${template}"
- 
--(
--    cd configs
--    LC_ALL=C ls -1 *_defconfig
--) \
-+    (
-+        cd configs
-+        LC_ALL=C ls -1 *_defconfig
-+    ) \
-     | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
- 
--./support/testing/run-tests -l 2>&1 \
-+    ./support/testing/run-tests -l 2>&1 \
-     | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
-     | LC_ALL=C sort
-+}
-+
-+main "${@}"
+ >   - systemd #defines PROJECT_FILE (&__FILE__[STRLEN(RELATIVE_SOURCE_PATH) + 1])
+ >     in an attempt to report only the basename of the files in messages;
+
+ >   - so it has a static assert that __FILE__ is indeed longer that
+ >     RELATIVE_SOURCE_PATH, otherwise the above would be an out-of-bound
+ >     access;
+
+ >   - RELATIVE_SOURCE_PATH is set by the systemd's meson.build, and
+ >     contains the path of the sources relative to build directory; in
+ >     Buildroot, if I understand systemd's code correctly, this will
+ >     always be '.' .
+
+ >   - but Buildroot, when BR2_REPRODUCIBLE=y, #defines __FILE__="" (i.e.
+ >     an empty string, so that binaries do not embed local paths, and are
+ >     thus bit-for-bit reproducible (except for other non-reproducibility
+ >     causes).
+
+Funky!
+
+ > As such, when Buildroot tries to do a reproducible build, the length of
+ > __FILE__ will always be shorter than the length of RELATIVE_SOURCE_PATH + 1,
+ > the former always being 0, while the latter being 2.
+
+ > So we have a few avenues:
+
+ >   - talk with upstream so they stop using __FILE__ altogether
+
+ >   - talk to upstream so they optionally not use __FILE__
+
+ >   - patch systemd ourselves and live for ever after with that patch
+
+ >   - change our toolchain wrapper to use an arbitrarily long __FILE__
+
+ > I've looked at Debian and Fedora, and they do not have a patch to get
+ > rid of that.
+
+Is that because they use the -ffile-prefix-map (introduced in gcc 8)?
+
+An alternative to option 4 could be do only do it for systemd &&
+reproducible && gcc < 8, E.G. add -D__FILE__="reproducible"
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
