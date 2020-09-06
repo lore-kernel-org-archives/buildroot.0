@@ -1,75 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Sep 2020 22:35:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/olsr: fix build with bison 3.7.1
-Message-ID: <20200906203519.48776-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  6 Sep 2020 23:01:29 +0200
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.1
+Message-ID: <20200906210129.27614-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/174f64f5663e655eb97994b903293c07c70268fe
+For details see [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...1-olsrd-migrate-to-using-bison-3.7.1.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
-new file mode 100644
-index 0000000000..c29ecfc5d4
---- /dev/null
-+++ b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
-@@ -0,0 +1,48 @@
-+From f31eec323ae65124474664f8a0444f7c035556dd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 6 Sep 2020 22:31:12 +0200
-+Subject: [PATCH] olsrd: migrate to using bison 3.7.1
-+
-+With the upgrade to bison 3.7.1 (openwrt commit 1cf842d) building
-+olsrd was failing.  Now, instead of the contents of header files
-+being directly inserted into the generated source files, they are
-+instead included with a #include directive.
-+
-+The local.mk has, until now, done some magic with *-tmp files,
-+which is not longer necessary and even causes builds to fail.
-+
-+src/cfgparser/oparse.c:265:10: fatal error: oparse.h-tmp: No such file or directory
-+ #include "oparse.h-tmp"
-+
-+Suggested-by: Jo-Philipp Wich <jo@mein.io>
-+Signed-off-by: Perry Melange <isprotejesvalkata@gmail.com>
-+[Retrieved from:
-+https://github.com/openwrt-routing/packages/commit/5cc8e058850acbc22fe92c5e2b24863efc577971]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OLSR/olsrd/pull/87]
-+---
-+ src/cfgparser/local.mk | 8 ++------
-+ 1 file changed, 2 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/cfgparser/local.mk b/src/cfgparser/local.mk
-+index e767abfc..56e594e4 100644
-+--- a/src/cfgparser/local.mk
-++++ b/src/cfgparser/local.mk
-+@@ -74,12 +74,8 @@ $(C)oparse.c: $(C)oparse.y $(C)olsrd_conf.h $(C)Makefile
-+ ifeq ($(VERBOSE),0)
-+ 	@echo "[BISON] $@"
-+ endif
-+-	$(MAKECMDPREFIX)$(BISON) -d -o "$@-tmp" "$<"
-+-	$(MAKECMDPREFIX)sed	-e 's/register //' \
-+-		-e '/^#line/s/$(call quote,$@-tmp)/$(call quote,$@)/' \
-+-		< "$@-tmp" >"$@"
-+-	$(MAKECMDPREFIX)mv "$(subst .c,.h,$@-tmp)" "$(subst .c,.h,$@)"
-+-	$(MAKECMDPREFIX)$(RM) "$@-tmp" "$(subst .c,.h,$@-tmp)"
-++	$(MAKECMDPREFIX)$(BISON) -d -o "$@" "$<"
-++	$(MAKECMDPREFIX)sed -e 's/register //' "$@" > "$@.o" && mv "$@.o" "$@"
-+ 
-+ $(C)oparse.o: CFLAGS := $(filter-out -Wunreachable-code,$(CFLAGS))
-+ 
-+-- 
-+2.28.0
-+
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 8c0bc520c1..dad9f875fd 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041578.html
+-md5  b518dae7f603040872739216971ee97b  libinput-1.16.0.tar.xz
+-sha1  e9216dcc3e3d87d37371335380d15d2dc333e157  libinput-1.16.0.tar.xz
+-sha256  83f6d0c94e5e0dd87094ce73f0edb631919617d24a60ee0ab9bd9197411d76e8  libinput-1.16.0.tar.xz
+-sha512  0c932a88f2a1d23ebef0d58c0cdbfb558e9e3d990fca15b21f5b9011bdd1bc2da81aad374fcdb8f4590f6ee2fc45e668e0583371ceb354437e585240e687aac6  libinput-1.16.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
++md5  51454993fcc576f4480aba8c1c3232ac  libinput-1.16.1.tar.xz
++sha1  7f5df6d17e9a06b6a28ce9eea0a11cf8555b63dd  libinput-1.16.1.tar.xz
++sha256  7ba7d1aeedd15168bb21d17e9e628aa1c27957963a423a3fea3938a501758539  libinput-1.16.1.tar.xz
++sha512  86b2d563c2cff2b3d3cae3acdd399030cc785cc9859a06357a99565ef51f95122a8427c8c0883121fb0760613460a29c8cd8c7a7e3ac68115c10330b3b75cbe0  libinput-1.16.1.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index c4fff60cae..3c6873d7fd 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.16.0
++LIBINPUT_VERSION = 1.16.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
 2.28.0
