@@ -1,41 +1,105 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Sep 2020 21:38:31 +0200
-Subject: [Buildroot] [PATCH] config/odroidc2: fix uboot version
-Message-ID: <20200906193831.27631-1-yann.morin.1998@free.fr>
+Date: Sun,  6 Sep 2020 22:12:26 +0200
+Subject: [Buildroot] [PATCH 00/10] gitlab-ci: handle all conditional jobs in
+ the generating script (branch yem/gitlab-ci-cond)
+Message-ID: <cover.1599423132.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The custom UBoot version was not correctly specified, causing the latest
-one to be selected instead:
+Hello All!
 
-    /home/ymorin/dev/buildroot/buildroot/configs/odroidc2_defconfig:25:warning:
-    symbol value '"2020.07"' invalid for BR2_TARGET_UBOOT_CUSTOM_VERSION
+The grammar in gitlab-CI yaml, to specify conditions under which jobs
+should be spawned or not, is not very nice to handle.
 
-Fixes:
-    https://gitlab.com/ymorin/buildroot/-/jobs/723411844
+Take adavantage of the fact that we are now generating the pipeline
+description from a script, to decide in that script exactly what jobs
+should be spawned.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Dagg Stompler <daggs@gmx.com>
----
- configs/odroidc2_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This is both more usual, to use a classic scripting language (shell for
+now, but could be whatever in the future), and more versatile (we can
+more easilt express conditions than in the limited gitlab-CI YAML).
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index bb85431891..c15df8f252 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -22,7 +22,8 @@ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
- BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
--BR2_TARGET_UBOOT_CUSTOM_VERSION="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
+Here are examples of resulting pipelines, with child pipelines created
+under the various expected conditions:
+
+Arbitrary branch, only run the basic tests:
+    git push gitlab
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186557459
+
+Maintenance branch, run the basic checks, and check the defconfigs:
+    git push gitlab HEAD:toto.no.x
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186556538
+
+Tag, run all the tests:
+    git tag FOO-YEM
+    git push gitlab FOO-YEM
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186559009
+
+Build all defconfigs:
+    git push gitlab HEAD:FOO-defconfigs
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186551495
+
+Build one defconfig:
+    git push gitlab HEAD:FOO-warp7_defconfig
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186530844
+
+Build all runtime tests:
+    git push gitlab HEAD:FOO-runtime-tests
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186554657
+
+Build one runtime test:
+    git push gitlab HEAD:FOO-tests.package.test_openssh
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186530918
+
+Notes:
+  - 'gitlab' is my git remote pointing to gitlab,
+  - some pipelines were canceled to not exhaust my job limit
+  - there were too many jobs in the tag, so it exceed the limits of my
+    free account...
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 97d431c181268716b38cd5a63eb0e8b78b003b3b
+
+  package/mrp: new package (2020-09-06 16:38:02 +0200)
+
+
+are available in the git repository at:
+
+  https://git.busybox.net/~ymorin/git/buildroot
+
+for you to fetch changes up to c1ea91abce5dbf7068615b247ff77dd7f8ec8fbb
+
+  gitlab-ci: only check defconfigs for known branches (2020-09-06 21:59:52 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (10):
+      gitlab-ci: introduce main() in generating script
+      gitlab-ci: share the image version with the child
+      gitlab-ci: handle the defconfig build conditions in script
+      gitlab-ci: defconfig_check is included in defconfig build
+      gitlab-ci: handle the run-time tests conditions in script
+      gitlab-ci: handle single defconfig in script
+      gitlab-ci: handle single runtime test in script
+      gitlab-ci: handle the basic tests in script
+      gitlab-ci: move before-script before script
+      gitlab-ci: only check defconfigs for known branches
+
+ support/misc/gitlab-ci.yml.in          |  70 +++----------------
+ support/scripts/generate-gitlab-ci-yml | 118 ++++++++++++++++++++++++++++++---
+ 2 files changed, 117 insertions(+), 71 deletions(-)
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
