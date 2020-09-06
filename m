@@ -1,49 +1,44 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat,  5 Sep 2020 22:57:10 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/go: bump to go 1.15.1
-In-Reply-To: <20200906055710.754782-1-christian@paral.in>
-References: <20200906055710.754782-1-christian@paral.in>
-Message-ID: <20200906055710.754782-2-christian@paral.in>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 06 Sep 2020 09:34:07 +0300
+Subject: [Buildroot] package/strace --enable-mpers=no
+In-Reply-To: <CAEyMn7a8hML1-mFD11YMWoZ7VM+YHLNJQyBJEpg5x2jJx2qXRw@mail.gmail.com>
+References: <CAEyMn7a8hML1-mFD11YMWoZ7VM+YHLNJQyBJEpg5x2jJx2qXRw@mail.gmail.com>
+Message-ID: <87k0x72z34.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Go 1.14, 1.15 are major releases of Go.
+Hi Heiko,
 
-Read the Release Notes for more information:
+On Sun, Sep 06 2020, Heiko Thiery wrote:
+> I faced an issue when building strace for aarch64 on my host where a
+> 32bit arm toolchain is installed. As discussed with Brandon on IRC
+> strace seems to find the 32bit toolchain because of the
+> --enable-mpers=check option and fails with that.
+>
+> Do you think it makes sense to set --enable-mpers=no since buildroot
+> does not support multi personality toolchains?
+>
+> [1] https://pastebin.com/8uaFHgyP
+> [2] https://pastebin.com/GeSYYvnB
 
- - https://golang.org/doc/go1.14
- - https://golang.org/doc/go1.15
+I never really got around to fully understand strace mpers handling. I
+have been bitten by mpers in the past (commit fc0d31caeedb).
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Buildroot built strace might run on external executable binaries. If
+this functionality is useful, I don't think we should just disable it.
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index f58449d079..5e8ab36123 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	197333e97290e9ea8796f738d61019dcba1c377c2f3961fd6a114918ecc7ab06  go1.13.14.src.tar.gz
-+sha256	d3743752a421881b5cc007c76b4b68becc3ad053e61275567edab1c99e154d30  go1.15.1.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 74e5298e66..adf939c839 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.13.14
-+GO_VERSION = 1.15.1
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Why didn't the autobuilders catch this failure?
+
+James' autobuilder does show a different mpers related build failure:
+
+  http://autobuild.buildroot.net/?reason=strace-5.7
+
+baruch
+
 -- 
-2.28.0
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
