@@ -1,67 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Sep 2020 14:33:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-05
-In-Reply-To: <20200906070725.EBCC820464@silver.osuosl.org>
-References: <20200906070725.EBCC820464@silver.osuosl.org>
-Message-ID: <20200906123329.GN14354@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  6 Sep 2020 14:33:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix netlink with musl
+Message-ID: <20200906123329.2832081-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Fixes:
+ - http://autobuild.buildroot.org/results/cd4d75888b5259b028132dd224be34f69bcbb702
 
-On 2020-09-06 07:07 -0000, Thomas Petazzoni spake thusly:
-> Classification of failures by reason for master
->     mips     |          systemd-246           | NOK | http://autobuild.buildroot.net/results/229866ea234097b5d6c6104bf040f47fd22ffacc |     
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-src-netlink.c-remove-REG_NOERROR.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch
 
-So this is a reproducible build issue:
-
-  - systemd #defines PROJECT_FILE (&__FILE__[STRLEN(RELATIVE_SOURCE_PATH) + 1])
-    in an attempt to report only the basename of the files in messages;
-
-  - so it has a static assert that __FILE__ is indeed longer that
-    RELATIVE_SOURCE_PATH, otherwise the above would be an out-of-bound
-    access;
-
-  - RELATIVE_SOURCE_PATH is set by the systemd's meson.build, and
-    contains the path of the sources relative to build directory; in
-    Buildroot, if I understand systemd's code correctly, this will
-    always be '.' .
-
-  - but Buildroot, when BR2_REPRODUCIBLE=y, #defines __FILE__="" (i.e.
-    an empty string, so that binaries do not embed local paths, and are
-    thus bit-for-bit reproducible (except for other non-reproducibility
-    causes).
-
-As such, when Buildroot tries to do a reproducible build, the length of
-__FILE__ will always be shorter than the length of RELATIVE_SOURCE_PATH + 1,
-the former always being 0, while the latter being 2.
-
-So we have a few avenues:
-
-  - talk with upstream so they stop using __FILE__ altogether
-
-  - talk to upstream so they optionally not use __FILE__
-
-  - patch systemd ourselves and live for ever after with that patch
-
-  - change our toolchain wrapper to use an arbitrarily long __FILE__
-
-I've looked at Debian and Fedora, and they do not have a patch to get
-rid of that.
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch b/package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch
+new file mode 100644
+index 0000000000..14af0d763c
+--- /dev/null
++++ b/package/collectd/0001-src-netlink.c-remove-REG_NOERROR.patch
+@@ -0,0 +1,43 @@
++From 5e600ae2ad370ddbb759e84ce55a7dfaa9a0bdd7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 6 Sep 2020 14:17:23 +0200
++Subject: [PATCH] src/netlink.c: remove REG_NOERROR
++
++REG_NOERROR is used since version 5.12.0 and
++https://github.com/collectd/collectd/commit/f7fd32e5209e188db7985a42054252fc4cbfe7c1
++
++However, REG_NOERROR is not defined by musl, even GNU regex do not
++mention REG_NOERROR, so just remove it to avoid the following build
++failure:
++
++src/netlink.c: In function 'check_ignorelist':
++src/netlink.c:243:51: error: 'REG_NOERROR' undeclared (first use in this function); did you mean 'REG_NOTBOL'?
++       if (regexec(i->rdevice, dev, 0, NULL, 0) != REG_NOERROR)
++                                                   ^~~~~~~~~~~
++                                                   REG_NOTBOL
++
++Fixes:
++ - http://autobuild.buildroot.org/results/cd4d75888b5259b028132dd224be34f69bcbb702
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/collectd/collectd/pull/3569]
++---
++ src/netlink.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/netlink.c b/src/netlink.c
++index 7a5da762..fac2fb1e 100644
++--- a/src/netlink.c
+++++ b/src/netlink.c
++@@ -240,7 +240,7 @@ static int check_ignorelist(const char *dev, const char *type,
++   for (ir_ignorelist_t *i = ir_ignorelist_head; i != NULL; i = i->next) {
++ #if HAVE_REGEX_H
++     if (i->rdevice != NULL) {
++-      if (regexec(i->rdevice, dev, 0, NULL, 0) != REG_NOERROR)
+++      if (regexec(i->rdevice, dev, 0, NULL, 0))
++         continue;
++     } else
++ #endif
++-- 
++2.28.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
