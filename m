@@ -1,45 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:31:32 +0200
-Subject: [Buildroot] [git commit] package/strace: bump to version 5.8
-Message-ID: <20200907192557.BE00386B2C@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:33:20 +0200
+Subject: [Buildroot] [git commit] package/olsr: fix build with bison 3.7.1
+Message-ID: <20200907192557.CE553814BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b56750d574c01e489b01f205a21e5059b88e466
+commit: https://git.buildroot.net/buildroot/commit/?id=458a9d3f737b8f34b3d673e594f17591b3fd0a8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/174f64f5663e655eb97994b903293c07c70268fe
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-olsrd-migrate-to-using-bison-3.7.1.patch  | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 0337558244..b090442b68 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.7/strace-5.7.tar.xz.asc
--sha256  b284b59f9bcd95b9728cea5bd5c0edc5ebe360af73dc76fbf6334f11c777ccd8  strace-5.7.tar.xz
-+# https://strace.io/files/5.8/strace-5.8.tar.xz.asc
-+sha256  df4a669f7fff9cc302784085bd4b72fab216a426a3f72c892b28a537b71e7aa9  strace-5.8.tar.xz
- sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index ec88690f24..8403e09cbd 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRACE_VERSION = 5.7
-+STRACE_VERSION = 5.8
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+diff --git a/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
+new file mode 100644
+index 0000000000..c29ecfc5d4
+--- /dev/null
++++ b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
+@@ -0,0 +1,48 @@
++From f31eec323ae65124474664f8a0444f7c035556dd Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 6 Sep 2020 22:31:12 +0200
++Subject: [PATCH] olsrd: migrate to using bison 3.7.1
++
++With the upgrade to bison 3.7.1 (openwrt commit 1cf842d) building
++olsrd was failing.  Now, instead of the contents of header files
++being directly inserted into the generated source files, they are
++instead included with a #include directive.
++
++The local.mk has, until now, done some magic with *-tmp files,
++which is not longer necessary and even causes builds to fail.
++
++src/cfgparser/oparse.c:265:10: fatal error: oparse.h-tmp: No such file or directory
++ #include "oparse.h-tmp"
++
++Suggested-by: Jo-Philipp Wich <jo@mein.io>
++Signed-off-by: Perry Melange <isprotejesvalkata@gmail.com>
++[Retrieved from:
++https://github.com/openwrt-routing/packages/commit/5cc8e058850acbc22fe92c5e2b24863efc577971]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OLSR/olsrd/pull/87]
++---
++ src/cfgparser/local.mk | 8 ++------
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/src/cfgparser/local.mk b/src/cfgparser/local.mk
++index e767abfc..56e594e4 100644
++--- a/src/cfgparser/local.mk
+++++ b/src/cfgparser/local.mk
++@@ -74,12 +74,8 @@ $(C)oparse.c: $(C)oparse.y $(C)olsrd_conf.h $(C)Makefile
++ ifeq ($(VERBOSE),0)
++ 	@echo "[BISON] $@"
++ endif
++-	$(MAKECMDPREFIX)$(BISON) -d -o "$@-tmp" "$<"
++-	$(MAKECMDPREFIX)sed	-e 's/register //' \
++-		-e '/^#line/s/$(call quote,$@-tmp)/$(call quote,$@)/' \
++-		< "$@-tmp" >"$@"
++-	$(MAKECMDPREFIX)mv "$(subst .c,.h,$@-tmp)" "$(subst .c,.h,$@)"
++-	$(MAKECMDPREFIX)$(RM) "$@-tmp" "$(subst .c,.h,$@-tmp)"
+++	$(MAKECMDPREFIX)$(BISON) -d -o "$@" "$<"
+++	$(MAKECMDPREFIX)sed -e 's/register //' "$@" > "$@.o" && mv "$@.o" "$@"
++ 
++ $(C)oparse.o: CFLAGS := $(filter-out -Wunreachable-code,$(CFLAGS))
++ 
++-- 
++2.28.0
++
