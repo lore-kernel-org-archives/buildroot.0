@@ -1,103 +1,70 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 07 Sep 2020 16:43:42 +0200
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH_1/2=5D_package/re2=3A_new_package?=
-Message-ID: <d85-5f564700-5-4ec33a00@2159074>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 7 Sep 2020 17:02:20 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <CAGm1_ktS7BTH0wJnVqu0naPjdw0+Yzd+gD-evhBH2dFT2T97xQ@mail.gmail.com>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <638a9bc4-197f-931e-0795-2605ff734291@mind.be>
+ <CAFSsvmqGG-KvDnquq5dmGDJkhwqdKaJe8ndpYpLK=dPfuSREYA@mail.gmail.com>
+ <CA+h8R2qe_DvM2c2EvUraAWgP_84LaXN98TPi_cJjG6+wOHytQQ@mail.gmail.com>
+ <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <20200903182409.6b337059@windsurf.home>
+ <CA+TH9V=Czc80jT1jExNC+XUrqHz5mz+oFNvORcfjotCVXrO0KQ@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+ <20200905211650.0a229191@windsurf.home>
+ <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
+ <20200905223835.1e68d658@windsurf.home>
+ <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
+ <20200905230431.34bcd9ea@windsurf.home>
+ <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
+ <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
+ <87imcric55.fsf@dell.be.48ers.dk>
+ <CAGm1_ktS7BTH0wJnVqu0naPjdw0+Yzd+gD-evhBH2dFT2T97xQ@mail.gmail.com>
+Message-ID: <CAEyMn7b0mjx+Vee9vtr2CzvYDYBgA5Spo3-paH_1pKGENczaHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi all,
 
-I'm back from vacation so I had a look at the pkg-cmake.mk.
+regarding to this discussion I also have two infos I would like to
+share with you:
 
-On Sunday, August 30, 2020 16:34 CEST, Michael Nosthoff <buildroot@heine.tech> wrote: 
+[1] "As GitLab has grown over the years, we?re incredibly humbled by
+the number of users who choose to use our free platform. As the
+adoption of our free product has scaled, so have the underlying costs
+to support it. As we are committed to continue to support the free
+product for the larger community, we need to implement further CI/CD
+limits on GitLab.com. This change is only applicable to free
+GitLab.com users?current GitLab.com paid tiers and all self-managed
+GitLab tiers will remain unchanged."
 
-> >
-> > Perhaps the issue is that we're not explicitly passing
-> > -DBUILD_SHARED_LIBS=ON to host CMake packages in package/pkg-cmake.mk ?
-> >
-> > Could you have a look into this ?
-> 
-> 
-> What I'm wondering: Should all host packages always be built as shared libs?
-> 
-> 
->  From the CMake Documentation [1] (which is a bit unclear) I assume that 
-> as default
-> CMake will build libs as static. So it might be a coincidence that all 
-> existing host cmake packages
-> built as shared as their default.
-> 
-> When comparing to package/pkg-autotools.mk I see that for host packages
-> 
->  ??? --enable-shared --disable-static
-> 
-> is always set. So it would make sense to also add
-> 
->  ?? -DBUILD_SHARED_LIBS=ON
-> 
-> 
-> to cmake host build flags.
-> 
+Does the buildroot gitlab is affected by this change? Or is buildroot
+a member of the GitLab for Open Source program [2]?
 
+The other thing is a talk about "New Tools Improve Patch Submission,
+Review, and Other Processes" by Frank Rowand, Sony on the upcoming
+Open Source Summit:
 
-I did a check on what might happen when we add -DBUILD_SHARED_LIBS to package/pkg-cmake.mk for host packages.
+"The Linux kernel patch submission, review, and acceptance process has
+long been email based. There have been both benefits and problems
+resulting from being email based. Some new tools appear to reduce or
+remove some of the problems. This presentation will describe the new
+tools, how to use them, and how they solve problems for submitters,
+reviewers, and maintainers. Any open source project whose contribution
+process uses email may be interested in considering these new tools."
 
-In Summary: a few packages change their output. Most stay stable. (see at the end for details)
+Maybe there are interesting new tools available that can be
+used/adopted to buildroot as well.
 
-Builds that change their output from .a to .so: host-clang, host-grpc, host-flatcc, host-libabseil-cpp, host-lld, host-pugixml
-builds that break: host-doxygen
+-- 
+Heiko
 
-So for doxygen that is not good. They mix add_library calls which explicitly set STATIC and one that sets nothing. 
-So this creates a .so but when it should be linked a .a is needed because the lib to be linked is static.
-If we change the default doxygen would need an explicit -DBUILD_SHARED_LIBS=OFF Flag.
-
-What I'm not sure about is the output of clang. Should this be built as a shared lib? For llvm this is explicitly set to static in the .mk.
-For clang this is not done for host builds. Is this maybe an oversight?
-
-So what do you think? Is this something we should go forward on or should I just change the re2 package?
-
-Regards,
-Michael
-
-
-Detailed overview per package:
-
-How is -DBUILD_SHARED_LIBS set and/or handled currently on the host packages?
-
-host-cdrkit always uses ADD_LIBRARY with STATIC flag
-host-clang not set explicitly for host, so it might change from STATIC to SHARED here. Is this intentional or an oversight (compared to llvm)? [1]
-host-doxygen adds most libs with STATIC but not all -> breaks on linking
-host-fatcat Does not build libs
-host-flatbuffers uses its own FLATBUFFERS_BUILD_SHAREDLIB, host .mk build sets it to OFF
-host-flatcc has no preference, CMakeList.txt states explicitly that it honors BUILD_SHARED_LIBS
-host-grpc honors the flag, .mk sets nothing
-host-json-c Builds static and shared by default, setting flag doesn't change that
-host-kodi-jsonschemabuilder only builds executable
-host-kodi-texturepacker only builds executable
-host-libabseil-cpp honors the flag, .mk sets nothing
-host-libnetconf2 always uses ADD_LIBRARY with SHARED flag [2]
-host-libyang Builds SHARED when ENABLE_STATIC is not set, which is the case [3]
-host-libzip builds as shared as default
-host-lld honors the flag, .mk sets nothing
-host-llvm set to OFF by BR .mk file [4]
-host-lzo .mk sets -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
-host-mariadb ignores DBUILD_SHARED_LIBS
-host-mfgtools .mk defines its own build step (and builds shared lib)
-host-ninja only build executable
-host-pugixml honors -DBUILD_SHARED_LIBS
-host-sysrepo sets shared as default [5]
-host-thrift Sets to ON when not on windows [6]
-host-waylandpp Defaults to OFF but doesn't build libs for host (-DBUILD_LIBRARIES=OFF) [7]
-
-
-[1] https://git.busybox.net/buildroot/tree/package/clang/clang.mk#n36
-[2] https://github.com/CESNET/libnetconf2/blob/master/CMakeLists.txt#L117
-[3] https://github.com/CESNET/libyang/blob/master/CMakeLists.txt#L204
-[4] https://git.busybox.net/buildroot/tree/package/llvm/llvm.mk#n75
-[5] https://github.com/sysrepo/sysrepo/blob/master/CMakeLists.txt#L187
-[6] https://github.com/apache/thrift/blob/master/build/cmake/DefineOptions.cmake#L135
-[7] https://github.com/NilsBrause/waylandpp/blob/master/CMakeLists.txt#L44
+[1] https://about.gitlab.com/pricing/faq-consumption-cicd/
+[2] https://about.gitlab.com/solutions/open-source/
