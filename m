@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 22:48:10 +0200
-Subject: [Buildroot] [git commit] config/odroidc2: fix uboot version
-Message-ID: <20200907204122.A886688662@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 22:47:18 +0200
+Subject: [Buildroot] [git commit] package/re2: build host as shared libs
+Message-ID: <20200907204122.955C0813FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac747204685552bce0efe1d4227f13dc70d53458
+commit: https://git.buildroot.net/buildroot/commit/?id=559aa508643014f80830f4ca223496ff383cf8b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The custom UBoot version was not correctly specified, causing the latest
-one to be selected instead:
-
-    /home/ymorin/dev/buildroot/buildroot/configs/odroidc2_defconfig:25:warning:
-    symbol value '"2020.07"' invalid for BR2_TARGET_UBOOT_CUSTOM_VERSION
+host-grpc needs re2 as shared lib.
+Set this via cmake config flag.
 
 Fixes:
-    https://gitlab.com/ymorin/buildroot/-/jobs/723411844
+http://autobuild.buildroot.net/results/a98/a98d3203f68f0f929c544537244e7621e80ce0a1
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/odroidc2_defconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/re2/re2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index bb85431891..c15df8f252 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -22,7 +22,8 @@ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
- BR2_TARGET_UBOOT_BOARDNAME="odroid-c2"
--BR2_TARGET_UBOOT_CUSTOM_VERSION="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT=y
- BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/hardkernel/odroidc2/boot.cmd"
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 0a3c204661..0c3bf4e844 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -11,7 +11,7 @@ RE2_LICENSE_FILES = LICENSE
+ RE2_INSTALL_STAGING = YES
+ 
+ RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
+-HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
++HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
