@@ -1,40 +1,53 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Mon,  7 Sep 2020 13:41:09 +0200
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2020.6
-Message-ID: <20200907114109.511497-1-marcus.folkesson@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Sep 2020 13:30:33 +0000
+Subject: [Buildroot] [Bug 13181] New: libopenssl package enables Cryptodev
+ engine even if BR2_PACKAGE_LIBOPENSSL_ENGINES is disabled
+Message-ID: <bug-13181-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=13181
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 2ebc560d83..e5483a539c 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5877396ea092f5b6701c17bd20280746cad20f55a94c760dbeba0fa115818c05  libostree-2020.3.tar.xz
-+sha256  865d4818820d128a2e505380358275bb964984348b3d0685b6455099e4736972  libostree-2020.6.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 57d9e98d72..e387f99856 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSTREE_VERSION = 2020.3
-+LIBOSTREE_VERSION = 2020.6
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+            Bug ID: 13181
+           Summary: libopenssl package enables Cryptodev engine even if
+                    BR2_PACKAGE_LIBOPENSSL_ENGINES is disabled
+           Product: buildroot
+           Version: 2020.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bradley.gamble at ncipher.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+OpenSSL builds a number of seperate engines that provide cryptographic API and
+hardware offload support. This is currently configured from Buildroot via the
+BR2_PACKAGE_LIBOPENSSL_ENGINES option.
+
+Previously disabling this option would remove these engines from the completed
+filesystem, disabling their use. However, recent versions of OpenSSL build the
+devcrypto engine in to libcrypto as default, rather than as a dynamic library.
+This can lead to Cryptodev being used even if it was not intended.
+
+The libopenssl.mk file currently checks if BR2_PACKAGE_HAS_CRYPTODEV is set and
+will enable the Cryptodev engine via the "enable-devcryptoeng" configure flag
+if true. This is a manual override as all the other engines can be specified in
+a similar manner (ie enable-afalgeng) but Buildroot seems to imply that
+enabling the Cryptodev Package should also force OpenSSL to use it (which is
+incorrect).
+
+OpenSSL's Cryptodev engine should either be overridden by the additional
+engines option (disabling it if BR2_PACKAGE_LIBOPENSSL_ENGINES is not set) or
+should be a manual override due to it's ability to be built statically in to
+libcrypto.
+
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
