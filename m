@@ -1,90 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Sep 2020 23:24:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-09-03
-In-Reply-To: <CAB0FRsuzue0h6G7-Y_zUZWxCvTS-qt9LOyM-DgJ2c1rLfekphA@mail.gmail.com>
-References: <20200904070920.A74CC40135@themis.gorgu.net>
- <CAB0FRsuzue0h6G7-Y_zUZWxCvTS-qt9LOyM-DgJ2c1rLfekphA@mail.gmail.com>
-Message-ID: <c8ae2391-a225-4129-343e-e74bd761dfec@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Sep 2020 23:32:09 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/librsvg: bump to version
+ 2.48.8
+In-Reply-To: <CAPi7W83qVu+hzzwkhMVivwNgU9ZpxS8earbU1b14V2BiZzwEZg@mail.gmail.com>
+References: <20200830084138.4047798-1-fontaine.fabrice@gmail.com>
+ <20200830221942.68c03eb0@windsurf.home>
+ <CAPi7W83qVu+hzzwkhMVivwNgU9ZpxS8earbU1b14V2BiZzwEZg@mail.gmail.com>
+Message-ID: <20200907233209.2a380ca9@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, 30 Aug 2020 22:55:51 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
+> I hope that the BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS variable
+> added with commit 025b863e6facb7b219b82ee6ee7a7916c2c3c47e will allow
+> us to bump librsvg this time.
+> I'm just a little bit worried that host packages such as host-libgtk3,
+> host-image-magick and midori could raise build failures on hosts that
+> don't support rust.
+> Should I add a dependency on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS to
+> all the reverse dependencies of host-librsvg?
 
-On 05/09/2020 11:32, Fran?ois Perrad wrote:
-> 
-> 
-> Le?ven. 4 sept. 2020 ??09:09, Thomas Petazzoni <thomas.petazzoni@bootlin.com
-> <mailto:thomas.petazzoni@bootlin.com>> a ?crit?:
-> 
->     Hello,
-> 
->     Autobuilder failures
->     ====================
-> 
->     Below is a list of build failures reported by the Buildroot
->     autobuilders in relation to packages or CPU
->     architectures you are in charge of. Please help us
->     improving the quality of Buildroot by investigating
->     those build failures and sending patches to fix
->     them.Thanks!
-> 
->     Results for the '2020.05.x' branch
->     ----------------------------------
-> 
->     Build failures related to your packages:
-> 
->     ? ? arch? ? ?|? ? ? ? ? ? ?reason? ? ? ? ? ? ?|? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
->     ? ? ? ? ?url? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
->     -------------+--------------------------------+---------------------------------------------------------------------------------
->     ? ?mipsel? ? |? ? ? ? luabitop-1.0.2-1? ? ? ? |
->     http://autobuild.buildroot.net/results/23f66439bb1d77cf6926eefba8defe847e27022f
->     ? ? mips? ? ?|? ? ? ? luabitop-1.0.2-1? ? ? ? |
->     http://autobuild.buildroot.net/results/390bcd6940a06d8a3c55e0ce6aad53882a511e6e
-> 
-> 
-> This issue is fixed in master by the commit : package/prosody: luabitop is only
-> needed with Lua 5.1
-> https://git.busybox.net/buildroot/commit/package/prosody?id=8bd7239ca32f20102aad19dbb3ca647182edbf92
+Yes, you need to add a dependency on
+BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS to all reverse dependencies of
+host-librsvg, and of course recursively.
 
- If you want to signal a backport that is needed, please put Peter in Cc
-otherwise he might miss it.
+> It should be noted that keeping libcroco and a deprecated librsvg is
+> not good for the security of our users.
 
- Regards,
- Arnout
+Yes, agreed.
 
-> 
-> This issue was introduced with the commit : package/prosody: don't depend on
-> !lua 5.3
-> https://git.busybox.net/buildroot/commit/package/prosody?h=2020.05.x&id=98645393ed3611985e6703d1f5ee34eb1cd330ce
-> because luabitop couldn't be build with Lua 5.3
-> 
-> Fran?ois
-> 
-> 
->     Results for the 'master' branch
->     -------------------------------
-> 
->     Build failures related to your packages:
-> 
->     ? ? arch? ? ?|? ? ? ? ? ? ?reason? ? ? ? ? ? ?|? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
->     ? ? ? ? ?url? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
->     -------------+--------------------------------+---------------------------------------------------------------------------------
->     ? ? arm? ? ? |? ? ? ? ? luajit-2.1.2? ? ? ? ? |
->     http://autobuild.buildroot.net/results/5be7b15226f43d9154332c6305151fa4f7e43bd4
->     ? ? arm? ? ? |? ? ? ? ? luajit-2.1.2? ? ? ? ? |
->     http://autobuild.buildroot.net/results/ee1e40be6aee4f714d5a6f9c5fa31f4bffe01cc6
-> 
-> 
->     -- 
->     http://autobuild.buildroot.net
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Also, after applying your patch, I built just "make host-librsvg" and
+it failed with:
+
+configure: error: Package requirements (	cairo >= 1.16.0               	cairo-png >= 1.16.0           	cairo-gobject >= 1.16.0       	freetype2 >= 20.0.14       	gdk-pixbuf-2.0 >= 2.20 	gio-2.0 >= 2.24.0               	glib-2.0 >= 2.50.0             	harfbuzz >= 2.0.0         	libxml-2.0 >= 2.9.0         	pangocairo >= 1.38.0          	pangoft2 >= 1.38.0	       ) were not met:
+
+Package 'cairo-gobject', required by 'virtual:world', not found
+
+So host-cairo would need to depend on host-libglib2? It would be
+annoying to make this a mandatory dependency :-/
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
