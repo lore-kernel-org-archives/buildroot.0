@@ -1,40 +1,61 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  7 Sep 2020 08:41:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.21.25
-Message-ID: <20200907064143.178375-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Sep 2020 08:51:57 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-opcua-asyncio : new
+ package
+In-Reply-To: <20200904143301.6657-3-jugurtha.belkalem@smile.fr>
+References: <20200904143301.6657-1-jugurtha.belkalem@smile.fr>
+ <20200904143301.6657-3-jugurtha.belkalem@smile.fr>
+Message-ID: <20200907085157.13c404d0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index b78bc93bb9..0381430778 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  84632a7e82e672b3a6d71651a75d05fb7acd62645c33e3f3af5a1067cfa64cd6  mpd-0.21.24.tar.xz
-+sha256  20a0ad01bf327b2dbeb6ae8e1af952cb0de83d2d63fab0fa4b7183a74765c201  mpd-0.21.25.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 65f9c6f2e0..a5825fffe0 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).24
-+MPD_VERSION = $(MPD_VERSION_MAJOR).25
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+Thanks, I've applied to master, with a few changes. See below.
+
+On Fri,  4 Sep 2020 16:33:01 +0200
+Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+
+> diff --git a/package/python-opcua-asyncio/Config.in b/package/python-opcua-asyncio/Config.in
+> new file mode 100644
+> index 0000000000..6dee004b9b
+> --- /dev/null
+> +++ b/package/python-opcua-asyncio/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
+> +	bool "python-opcua-asyncio"
+> +	depends on BR2_PACKAGE_PYTHON3
+> +	select BR2_PACKAGE_PYTHON_DATEUTIL #runtime
+> +	select BR2_PACKAGE_PYTHON_PYTZ #runtime
+> +	select BR2_PACKAGE_PYTHON_LXML #runtime
+> +	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY #runtime
+> +	select BR2_PACKAGE_PYTHON_AIOFILES #runtime
+
+In general, we like to have such lists alphabetically sorted. Also we
+usually have a space after the # that marks the start of a comment.
+
+> +sha256  e5fab37a92162351fe40cab43df09db8a2e9f8b8a2a8f13ed680aa6f6d687ec3  opcua-asyncio-0.8.4.tar.gz
+> +sha256  89480768826f408daea1f3caff0509c2cc9606e10f6bb0ccfd12a3d604842c35  COPYING
+
+This license file hash was incorrect. Did you test "make legal-info"
+with this package enabled ?
+
+> +PYTHON_OPCUA_ASYNCIO_VERSION = 0.8.4
+> +PYTHON_OPCUA_ASYNCIO_SOURCE = opcua-asyncio-$(PYTHON_OPCUA_ASYNCIO_VERSION).tar.gz
+> +PYTHON_OPCUA_ASYNCIO_SITE = $(call github,FreeOpcUa,opcua-asyncio,$(PYTHON_OPCUA_ASYNCIO_VERSION))
+> +PYTHON_OPCUA_ASYNCIO_SETUP_TYPE = setuptools
+> +PYTHON_OPCUA_ASYNCIO_LICENSE = LGPL-3.0
+
+The license really is LGPL-3.0+, as indicated in the setup.py file, so
+I fixed that as well.
+
+Thanks a lot!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
