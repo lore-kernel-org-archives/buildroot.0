@@ -1,43 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 22:50:55 +0200
-Subject: [Buildroot] [git commit] package/ccache: bump to version 3.7.11
-Message-ID: <20200907205936.888A088183@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 23:10:00 +0200
+Subject: [Buildroot] [PATCH] package/htop: bump to version 3.0.1
+In-Reply-To: <20200907193759.1503418-1-francois.perrad@gadz.org>
+References: <20200907193759.1503418-1-francois.perrad@gadz.org>
+Message-ID: <20200907231000.19456dd1@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8519994cde7d6b677b050ab941a77960e16b62f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  7 Sep 2020 21:37:58 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> patches are now useless
+> - https://github.com/hishamhm/htop/pull/770
+> 	MakeHeader.py: Fix for non-utf8 environments
+> - https://github.com/hishamhm/htop/pull/981
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 5d9dfdb46e..4058ada347 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  0c9566d8eafaec2c5e5c0d9a91e921c858fcf349284a105ab524407b9b54ed28  ccache-3.7.10.tar.xz
-+sha256  8d450208099a4d202bd7df87caaec81baee20ce9dd62da91e9ea7b95a9072f68  ccache-3.7.11.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index fd6e741303..732ecf45fb 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CCACHE_VERSION = 3.7.10
-+CCACHE_VERSION = 3.7.11
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+Links to pull requests are not very useful: pull requests do not
+indicate that the code has been merged upstream. Instead, I've replaced
+with the references to the upstream commits.
+
+> -sha256  d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57  htop-2.2.0.tar.gz
+> -sha256  70466e76443cb5b68144d9fcedca9584e7bfdb6c50859daa5a0290ea27c58aad  COPYING
+> +sha256  8465164bc085f5f1813e1d3f6c4b9b56bf4c95cc12226a5367e65794949b01ca  htop-3.0.1.tar.gz
+> +sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
+
+You forgot to explain the license change in the commit log.
+
+> diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+> index dc84e3270..8818f3423 100644
+> --- a/package/htop/htop.mk
+> +++ b/package/htop/htop.mk
+> @@ -4,11 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -HTOP_VERSION = 2.2.0
+> -HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
+> +HTOP_VERSION = 3.0.1
+> +HTOP_SITE = https://github.com/htop-dev/htop/archive/$(HTOP_VERSION)
+
+In fact, the project has tarballs available at
+https://bintray.com/htop/source/htop, and they have the configure
+script generated, which makes the additional of AUTORECONF = YES not
+necessary.
+
+I fixed those different issues, and applied. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
