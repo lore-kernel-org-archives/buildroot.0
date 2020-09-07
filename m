@@ -1,33 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 10:02:23 +0200
-Subject: [Buildroot] More maintainers: a live discussion ?
-In-Reply-To: <20200905150604.180f008c@windsurf.home>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <20200905150604.180f008c@windsurf.home>
-Message-ID: <20200907100223.1eae0c3c@windsurf.home>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Mon, 7 Sep 2020 11:47:59 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-09-06
+In-Reply-To: <20200907070901.69C16870AE@hemlock.osuosl.org>
+References: <20200907070901.69C16870AE@hemlock.osuosl.org>
+Message-ID: <45c5b4b3-a11a-1ec3-2f7b-c8abf229b06f@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 5 Sep 2020 15:06:04 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On 07/09/2020 09:08, Thomas Petazzoni wrote:>
+libgit2 | CVE-2014-9390    |
+https://security-tracker.debian.org/tracker/CVE-2014-9390
+So libgit2 is affected by a 6 year old security vulnerability that has
+been fixed before the package was actually introduced in buildroot...
 
-> For the sake of defining a suitable date for this live discussion, I've
-> opened a poll at:
-> 
->   https://framadate.org/83o5hNwszaihEXOBZHZmJ89A/admin
-
-I have sent a separate e-mail, but here is another one for those who
-are in Cc. The discussion will take place on September 10th, at 9:00 PM
-UTC+2. Use a Chromium web browser, and connect to
-https://meet.bootlin.com/buildroot-maintenance.
-
-Thanks for your participation !
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This apparently comes directly from the nvd database, do i wait for it
+to be fixed, or should i add it to LIBGIT2_IGNORE_CVES ? The manual
+doesn't say anything about this case.
