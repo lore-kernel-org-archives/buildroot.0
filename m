@@ -1,28 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 22:42:23 +0200
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2020.6
-In-Reply-To: <20200907114109.511497-1-marcus.folkesson@gmail.com>
-References: <20200907114109.511497-1-marcus.folkesson@gmail.com>
-Message-ID: <20200907224223.457feee7@windsurf.hq.k.grp>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Sep 2020 20:45:12 +0000
+Subject: [Buildroot] [Bug 13181] libopenssl package enables Cryptodev engine
+ even if BR2_PACKAGE_LIBOPENSSL_ENGINES is disabled
+In-Reply-To: <bug-13181-163@https.bugs.busybox.net/>
+References: <bug-13181-163@https.bugs.busybox.net/>
+Message-ID: <bug-13181-163-4wZwpNEnbz@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Sep 2020 13:41:09 +0200
-Marcus Folkesson <marcus.folkesson@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=13181
 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  package/libostree/libostree.hash | 2 +-
->  package/libostree/libostree.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Thanks for your bug report.
 
-Applied to master, thanks.
+It is pretty common in Buildroot to enable an optional feature in a package
+(here OpenSSL) if the dependencies needed for that feature (here cryptodev) are
+available.
 
-Thomas
+Do you have a practical situation where one cryptodev implementation
+(BR2_PACKAGE_CRYPTODEV_LINUX or BR2_PACKAGE_OCF_LINUX) is enabled, but for some
+reason OpenSSL cannot / should not use cryptodev ?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
