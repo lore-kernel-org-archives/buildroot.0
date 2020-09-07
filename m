@@ -1,84 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:34:41 +0200
-Subject: [Buildroot] [git commit] package/memcached: fix build with gcc 10
-Message-ID: <20200907202955.486D481DB7@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:35:21 +0200
+Subject: [Buildroot] [git commit] package/mpd: bump to version 0.21.25
+Message-ID: <20200907202955.52FF681355@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4d124b91c5e972fb3071d0418d2225c8116dd6f
+commit: https://git.buildroot.net/buildroot/commit/?id=0d648e02ca7943b5aff36540260398a2bcb62ab6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/ba8dcdece193b91845a30cd31d3574674ec30068
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...003-hash-fix-build-failure-against-gcc-10.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
-new file mode 100644
-index 0000000000..564b191c1b
---- /dev/null
-+++ b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
-@@ -0,0 +1,56 @@
-+From 0447ae4cbbebb87d3f28bb92f7e219a47263b889 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Thu, 23 Jan 2020 22:16:36 +0000
-+Subject: [PATCH] hash: fix build failure against gcc-10
-+
-+On gcc-10 (and gcc-9 -fno-common) build fails as:
-+
-+```
-+gcc  -g -O2 -pthread -pthread -Wall -Werror -pedantic -Wmissing-prototypes \
-+  -Wmissing-declarations -Wredundant-decls   -o memcached ... -levent
-+ld: memcached-hash.o:memcached/hash.h:5:
-+  multiple definition of `hash'; memcached-memcached.o:memcached/hash.h:5: first defined here
-+```
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+Reported-by: Brian Evans
-+Bug: https://bugs.gentoo.org/706196
-+Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
-+[Retrieved from:
-+https://github.com/memcached/memcached/commit/0447ae4cbbebb87d3f28bb92f7e219a47263b889]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ hash.c | 2 ++
-+ hash.h | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/hash.c b/hash.c
-+index a0c30369f..b5ff28ae4 100644
-+--- a/hash.c
-++++ b/hash.c
-+@@ -4,6 +4,8 @@
-+ #include "jenkins_hash.h"
-+ #include "murmur3_hash.h"
-+ 
-++hash_func hash;
-++
-+ int hash_init(enum hashfunc_type type) {
-+     switch(type) {
-+         case JENKINS_HASH:
-+diff --git a/hash.h b/hash.h
-+index 059d1e2a6..3b2a98478 100644
-+--- a/hash.h
-++++ b/hash.h
-+@@ -2,7 +2,7 @@
-+ #define    HASH_H
-+ 
-+ typedef uint32_t (*hash_func)(const void *key, size_t length);
-+-hash_func hash;
-++extern hash_func hash;
-+ 
-+ enum hashfunc_type {
-+     JENKINS_HASH=0, MURMUR3_HASH
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index b78bc93bb9..0381430778 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  84632a7e82e672b3a6d71651a75d05fb7acd62645c33e3f3af5a1067cfa64cd6  mpd-0.21.24.tar.xz
++sha256  20a0ad01bf327b2dbeb6ae8e1af952cb0de83d2d63fab0fa4b7183a74765c201  mpd-0.21.25.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 65f9c6f2e0..a5825fffe0 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.21
+-MPD_VERSION = $(MPD_VERSION_MAJOR).24
++MPD_VERSION = $(MPD_VERSION_MAJOR).25
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
