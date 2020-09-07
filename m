@@ -1,76 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:33:20 +0200
-Subject: [Buildroot] [git commit] package/olsr: fix build with bison 3.7.1
-Message-ID: <20200907192557.CE553814BE@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:34:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/memcached: fix build with gcc 10
+In-Reply-To: <20200906210402.396929-1-fontaine.fabrice@gmail.com>
+References: <20200906210402.396929-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200907213449.59463b23@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=458a9d3f737b8f34b3d673e594f17591b3fd0a8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun,  6 Sep 2020 23:04:02 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/174f64f5663e655eb97994b903293c07c70268fe
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ba8dcdece193b91845a30cd31d3574674ec30068
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ash-fix-build-failure-against-gcc-10.patch | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-olsrd-migrate-to-using-bison-3.7.1.patch  | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
-new file mode 100644
-index 0000000000..c29ecfc5d4
---- /dev/null
-+++ b/package/olsr/0001-olsrd-migrate-to-using-bison-3.7.1.patch
-@@ -0,0 +1,48 @@
-+From f31eec323ae65124474664f8a0444f7c035556dd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 6 Sep 2020 22:31:12 +0200
-+Subject: [PATCH] olsrd: migrate to using bison 3.7.1
-+
-+With the upgrade to bison 3.7.1 (openwrt commit 1cf842d) building
-+olsrd was failing.  Now, instead of the contents of header files
-+being directly inserted into the generated source files, they are
-+instead included with a #include directive.
-+
-+The local.mk has, until now, done some magic with *-tmp files,
-+which is not longer necessary and even causes builds to fail.
-+
-+src/cfgparser/oparse.c:265:10: fatal error: oparse.h-tmp: No such file or directory
-+ #include "oparse.h-tmp"
-+
-+Suggested-by: Jo-Philipp Wich <jo@mein.io>
-+Signed-off-by: Perry Melange <isprotejesvalkata@gmail.com>
-+[Retrieved from:
-+https://github.com/openwrt-routing/packages/commit/5cc8e058850acbc22fe92c5e2b24863efc577971]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/OLSR/olsrd/pull/87]
-+---
-+ src/cfgparser/local.mk | 8 ++------
-+ 1 file changed, 2 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/cfgparser/local.mk b/src/cfgparser/local.mk
-+index e767abfc..56e594e4 100644
-+--- a/src/cfgparser/local.mk
-++++ b/src/cfgparser/local.mk
-+@@ -74,12 +74,8 @@ $(C)oparse.c: $(C)oparse.y $(C)olsrd_conf.h $(C)Makefile
-+ ifeq ($(VERBOSE),0)
-+ 	@echo "[BISON] $@"
-+ endif
-+-	$(MAKECMDPREFIX)$(BISON) -d -o "$@-tmp" "$<"
-+-	$(MAKECMDPREFIX)sed	-e 's/register //' \
-+-		-e '/^#line/s/$(call quote,$@-tmp)/$(call quote,$@)/' \
-+-		< "$@-tmp" >"$@"
-+-	$(MAKECMDPREFIX)mv "$(subst .c,.h,$@-tmp)" "$(subst .c,.h,$@)"
-+-	$(MAKECMDPREFIX)$(RM) "$@-tmp" "$(subst .c,.h,$@-tmp)"
-++	$(MAKECMDPREFIX)$(BISON) -d -o "$@" "$<"
-++	$(MAKECMDPREFIX)sed -e 's/register //' "$@" > "$@.o" && mv "$@.o" "$@"
-+ 
-+ $(C)oparse.o: CFLAGS := $(filter-out -Wunreachable-code,$(CFLAGS))
-+ 
-+-- 
-+2.28.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
