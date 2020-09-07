@@ -1,33 +1,40 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 6 Sep 2020 16:22:15 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to go 1.14.8
-In-Reply-To: <20200906143302.38f5a5bd@windsurf.home>
-References: <20200906055710.754782-1-christian@paral.in>
- <20200906143302.38f5a5bd@windsurf.home>
-Message-ID: <CA+h8R2rKrawRbA8bdqL68FhwuUwD1ExnvPEv92fY0XvVwx_1Ug@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Sep 2020 08:49:56 +0200
+Subject: [Buildroot] [git commit] package/python-opcua-asyncio: sort selects
+ alphabetically
+Message-ID: <20200907064159.90CBE82DB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=1ae3c887a9911cbc2671fb24ee71bdaa6468b4fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Sep 6, 2020 at 5:33 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Christian Stewart <christian@paral.in> wrote:
->
-> > Go 1.14 is a major release of Go.
->
-> Not sure why you posted this additional series, in addition to:
->
-> Subject: [Buildroot] [RFC PATCH v1 1/1] package/go: bump to go 1.15.1
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-opcua-asyncio/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I submitted two versions: 1.14.x (for master) and 1.15.x (for next),
-given that 1.14 is still maintained and we usually upgrade by 1 major
-version at a time.
-
-However, upgrading everything to 1.15.x is also fine, so let's do that.
-
-Best regards,
-Christian
+diff --git a/package/python-opcua-asyncio/Config.in b/package/python-opcua-asyncio/Config.in
+index 6dee004b9b..3700e00e1d 100644
+--- a/package/python-opcua-asyncio/Config.in
++++ b/package/python-opcua-asyncio/Config.in
+@@ -1,11 +1,11 @@
+ config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
+ 	bool "python-opcua-asyncio"
+ 	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_DATEUTIL #runtime
+-	select BR2_PACKAGE_PYTHON_PYTZ #runtime
+-	select BR2_PACKAGE_PYTHON_LXML #runtime
+-	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY #runtime
+-	select BR2_PACKAGE_PYTHON_AIOFILES #runtime
++	select BR2_PACKAGE_PYTHON_AIOFILES # runtime
++	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
++	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
++	select BR2_PACKAGE_PYTHON_LXML # runtime
++	select BR2_PACKAGE_PYTHON_PYTZ # runtime
+ 	help
+ 	  opcua-asyncio is an asyncio-based asynchronous
+ 	  OPC UA client based on python-opcua, removing
