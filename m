@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 22:41:31 +0200
-Subject: [Buildroot] [PATCH] package/pigpio: add sysv and systemd init
- scripts
-In-Reply-To: <20200907093429.11808-1-grzegorz@blach.pl>
-References: <20200907093429.11808-1-grzegorz@blach.pl>
-Message-ID: <20200907224131.246e3598@windsurf.hq.k.grp>
+Date: Mon, 7 Sep 2020 22:42:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/brotli: security update to
+ version 1.0.9
+In-Reply-To: <20200907103432.836767-1-aperez@igalia.com>
+References: <20200907103432.836767-1-aperez@igalia.com>
+Message-ID: <20200907224220.3aa3a887@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon,  7 Sep 2020 13:34:32 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-On Mon,  7 Sep 2020 11:34:26 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+> Contains fixes for overflows when input chunks are larger than 2 GiB,
+> an uninitialized data access, and minor correctness and performance
+> improvements. There does not seem to be any CVEs filed, but there is
+> a security notice in the release notes at:
+> 
+>   https://github.com/google/brotli/releases/tag/v1.0.9
+> 
+> Patch "0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch"
+> is rebased against the latest upstream changes.
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  ...g-BUILD_SHARED_LIBS-to-choose-static.patch | 92 ++++++++-----------
+>  package/brotli/brotli.hash                    |  2 +-
+>  package/brotli/brotli.mk                      |  2 +-
+>  3 files changed, 41 insertions(+), 55 deletions(-)
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-
-I've applied, thanks, with one change.
-
-> +define PIGPIO_INSTALL_INIT_SYSTEMD
-> +        $(INSTALL) -D -m 644 package/pigpio/pigpio.service \
-> +                $(TARGET_DIR)/usr/lib/systemd/system/pigpio.service
-> +        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +        ln -fs ../../../../usr/lib/systemd/system/pigpio.service \
-> +                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pigpio.service
-
-The mkdir and ln are no longer needed, the systemd package is now
-running:
-
-        $(HOST_DIR)/bin/systemctl --root=$(TARGET_DIR) preset-all
-
-at the end of the build, which creates all those symlinks. So I dropped
-this mkdir/ln when applying.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
