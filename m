@@ -1,120 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  7 Sep 2020 20:50:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/easyframes: fix build with musl and
- gcc 4.8
-Message-ID: <20200907185002.284189-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon,  7 Sep 2020 21:01:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strace: bump to version 5.8
+Message-ID: <20200907190111.4428-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/32007293e04e6c661108639d1589fe078f254ecd
- - http://autobuild.buildroot.org/results/1804e8b68f715de1011750cec2ed5d3d3f7964c8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- .../0002-Fix-different-compiling-issues.patch | 91 +++++++++++++++++++
- 1 file changed, 91 insertions(+)
- create mode 100644 package/easyframes/0002-Fix-different-compiling-issues.patch
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/easyframes/0002-Fix-different-compiling-issues.patch b/package/easyframes/0002-Fix-different-compiling-issues.patch
-new file mode 100644
-index 0000000000..e4d16a73a5
---- /dev/null
-+++ b/package/easyframes/0002-Fix-different-compiling-issues.patch
-@@ -0,0 +1,91 @@
-+From d3d179c3c39ec10ec636b325325ad8e18ae9542f Mon Sep 17 00:00:00 2001
-+From: Horatiu Vultur <horatiu.vultur@microchip.com>
-+Date: Tue, 1 Sep 2020 13:03:47 +0200
-+Subject: [PATCH] Fix different compiling issues
-+
-+[Retrieved from:
-+https://github.com/microchip-ung/easyframes/commit/d3d179c3c39ec10ec636b325325ad8e18ae9542f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/ef-exec.c        | 4 ++--
-+ src/ef-parse-bytes.c | 8 ++++++--
-+ src/ef.h             | 4 ++--
-+ 3 files changed, 10 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/ef-exec.c b/src/ef-exec.c
-+index 3d184a0..824164e 100644
-+--- a/src/ef-exec.c
-++++ b/src/ef-exec.c
-+@@ -108,7 +108,7 @@ int ring_wait_for_init(tpacket_ring *ring) {
-+ 
-+ 
-+ int raw_socket(cmd_socket_t *cmd_socket) {
-+-    int s, res, val, ifidx;
-++    int s, res, val, ifidx, i;
-+     struct sockaddr_ll sa = {};
-+     struct packet_mreq mr = {};
-+ 
-+@@ -194,7 +194,7 @@ int raw_socket(cmd_socket_t *cmd_socket) {
-+     //
-+     // TODO: This does not seem to be needed, if we uses a RX ring buffer
-+     // instead (atleast that seems to work for libpcap)
-+-    for (int i = 0; i < 10000; ++i) {
-++    for (i = 0; i < 10000; ++i) {
-+         struct msghdr msg = { 0 };
-+         int res = recvmsg(s, &msg, MSG_DONTWAIT);
-+         if (res < 0)
-+diff --git a/src/ef-parse-bytes.c b/src/ef-parse-bytes.c
-+index 1dd590f..1785f45 100644
-+--- a/src/ef-parse-bytes.c
-++++ b/src/ef-parse-bytes.c
-+@@ -2,6 +2,7 @@
-+ #include <errno.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <endian.h>
-+ #include <arpa/inet.h>
-+ 
-+ struct start_with {
-+@@ -212,7 +213,9 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+     for (s = data_begin; *s; ++s) {
-+         int match_found = 0;
-+         for (i = 0; i < sizeof(has_chars)/sizeof(has_chars[0]); ++i) {
-+-            for (const char *set_i = has_chars[i].char_set; *set_i; ++set_i) {
-++            const char *set_i;
-++
-++            for (set_i = has_chars[i].char_set; *set_i; ++set_i) {
-+                 if (*s == *set_i) {
-+                     has_mask |= has_chars[i].mask;
-+                     match_found = 1;
-+@@ -313,6 +316,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+                ((has_mask & ~(HAS_HEX_COL)) == 0) && (has_mask & HAS_COLON)) {
-+         // This will be treated as a mac-address
-+         uint8_t m[6] = {};
-++        const char *x;
-+ 
-+         // We want to be able to write something like this (like we RFC2373
-+         // specifies for IPv6):
-+@@ -334,7 +338,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+ 
-+         //po("line: %d data_begin: %s\n", __LINE__, data_begin);
-+ 
-+-        for (const char *x = data_begin; *x; ++x) {
-++        for (x = data_begin; *x; ++x) {
-+             int colon = 0;
-+             int val = 0;
-+ 
-+diff --git a/src/ef.h b/src/ef.h
-+index 8926c25..f4c1629 100644
-+--- a/src/ef.h
-++++ b/src/ef.h
-+@@ -59,8 +59,8 @@ void bl_check(buf_list_t *b);
-+ void bl_reset(buf_list_t *b);
-+ void bset_value(buf_t *b, uint8_t v);
-+ 
-+-inline void bl_init(buf_list_t *b) { bl_reset(b); }
-+-inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
-++static inline void bl_init(buf_list_t *b) { bl_reset(b); }
-++static inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
-+ 
-+ int bl_printf_append(buf_list_t *b, const char *format, ...)
-+     __attribute__ ((format (printf, 2, 3)));
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 0337558244..b090442b68 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.7/strace-5.7.tar.xz.asc
+-sha256  b284b59f9bcd95b9728cea5bd5c0edc5ebe360af73dc76fbf6334f11c777ccd8  strace-5.7.tar.xz
++# https://strace.io/files/5.8/strace-5.8.tar.xz.asc
++sha256  df4a669f7fff9cc302784085bd4b72fab216a426a3f72c892b28a537b71e7aa9  strace-5.8.tar.xz
+ sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index ec88690f24..8403e09cbd 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 5.7
++STRACE_VERSION = 5.8
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
-2.28.0
+2.20.1
