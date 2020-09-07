@@ -1,40 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 08:49:56 +0200
-Subject: [Buildroot] [git commit] package/python-opcua-asyncio: sort selects
- alphabetically
-Message-ID: <20200907064159.90CBE82DB3@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon,  7 Sep 2020 08:41:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpd: bump to version 0.21.25
+Message-ID: <20200907064143.178375-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ae3c887a9911cbc2671fb24ee71bdaa6468b4fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/python-opcua-asyncio/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-opcua-asyncio/Config.in b/package/python-opcua-asyncio/Config.in
-index 6dee004b9b..3700e00e1d 100644
---- a/package/python-opcua-asyncio/Config.in
-+++ b/package/python-opcua-asyncio/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
- 	bool "python-opcua-asyncio"
- 	depends on BR2_PACKAGE_PYTHON3
--	select BR2_PACKAGE_PYTHON_DATEUTIL #runtime
--	select BR2_PACKAGE_PYTHON_PYTZ #runtime
--	select BR2_PACKAGE_PYTHON_LXML #runtime
--	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY #runtime
--	select BR2_PACKAGE_PYTHON_AIOFILES #runtime
-+	select BR2_PACKAGE_PYTHON_AIOFILES # runtime
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_DATEUTIL # runtime
-+	select BR2_PACKAGE_PYTHON_LXML # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
- 	help
- 	  opcua-asyncio is an asyncio-based asynchronous
- 	  OPC UA client based on python-opcua, removing
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index b78bc93bb9..0381430778 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  84632a7e82e672b3a6d71651a75d05fb7acd62645c33e3f3af5a1067cfa64cd6  mpd-0.21.24.tar.xz
++sha256  20a0ad01bf327b2dbeb6ae8e1af952cb0de83d2d63fab0fa4b7183a74765c201  mpd-0.21.25.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 65f9c6f2e0..a5825fffe0 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.21
+-MPD_VERSION = $(MPD_VERSION_MAJOR).24
++MPD_VERSION = $(MPD_VERSION_MAJOR).25
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
+-- 
+2.28.0
