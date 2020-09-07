@@ -1,121 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:19:54 +0200
-Subject: [Buildroot] [git commit] package/easyframes: fix build with musl
- and gcc 4.8
-Message-ID: <20200907191136.47923815F5@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:22:54 +0200
+Subject: [Buildroot] [git commit] package/ltp-testsuite: fix build with
+ uclibc
+Message-ID: <20200907191443.ABB118134F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad323054b06774ab48f7681d6c79c83f00ead3b
+commit: https://git.buildroot.net/buildroot/commit/?id=951571a7995c08b4561653c554a291aeb42de0de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix a build failure with ltp-testsuite in version 20200515
+
 Fixes:
- - http://autobuild.buildroot.org/results/32007293e04e6c661108639d1589fe078f254ecd
- - http://autobuild.buildroot.org/results/1804e8b68f715de1011750cec2ed5d3d3f7964c8
+ - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-Fix-different-compiling-issues.patch      | 91 ++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
+ .../0001-fanotify.h-fix-build-with-uclibc.patch    | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/easyframes/0002-Fix-different-compiling-issues.patch b/package/easyframes/0002-Fix-different-compiling-issues.patch
+diff --git a/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
 new file mode 100644
-index 0000000000..e4d16a73a5
+index 0000000000..5531756970
 --- /dev/null
-+++ b/package/easyframes/0002-Fix-different-compiling-issues.patch
-@@ -0,0 +1,91 @@
-+From d3d179c3c39ec10ec636b325325ad8e18ae9542f Mon Sep 17 00:00:00 2001
-+From: Horatiu Vultur <horatiu.vultur@microchip.com>
-+Date: Tue, 1 Sep 2020 13:03:47 +0200
-+Subject: [PATCH] Fix different compiling issues
++++ b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+@@ -0,0 +1,41 @@
++From cb11e718ce04261cb6ff4c09442b949da33b8797 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 17:55:45 +0200
++Subject: [PATCH] fanotify.h: fix build with uclibc
 +
-+[Retrieved from:
-+https://github.com/microchip-ung/easyframes/commit/d3d179c3c39ec10ec636b325325ad8e18ae9542f]
++MAX_HANDLE_SZ is used since version 20200515 and
++https://github.com/linux-test-project/ltp/commit/d20a3e8f9a794e0659277acfa9fbcf7454ba4631
++
++However, it is not defined by uclibc, so define it if needed to avoid
++the following build failure:
++
++fanotify.h:171:11: error: 'MAX_HANDLE_SZ' undeclared here (not in a function)
++  171 |  char buf[MAX_HANDLE_SZ];
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
++[Retrieved from:
++https://github.com/linux-test-project/ltp/commit/cb11e718ce04261cb6ff4c09442b949da33b8797]
 +---
-+ src/ef-exec.c        | 4 ++--
-+ src/ef-parse-bytes.c | 8 ++++++--
-+ src/ef.h             | 4 ++--
-+ 3 files changed, 10 insertions(+), 6 deletions(-)
++ testcases/kernel/syscalls/fanotify/fanotify.h | 5 +++++
++ 1 file changed, 5 insertions(+)
 +
-+diff --git a/src/ef-exec.c b/src/ef-exec.c
-+index 3d184a0..824164e 100644
-+--- a/src/ef-exec.c
-++++ b/src/ef-exec.c
-+@@ -108,7 +108,7 @@ int ring_wait_for_init(tpacket_ring *ring) {
++diff --git a/testcases/kernel/syscalls/fanotify/fanotify.h b/testcases/kernel/syscalls/fanotify/fanotify.h
++index a9a431ca2f..d271578e97 100644
++--- a/testcases/kernel/syscalls/fanotify/fanotify.h
+++++ b/testcases/kernel/syscalls/fanotify/fanotify.h
++@@ -139,6 +139,11 @@ struct fanotify_event_info_fid {
++ #endif /* HAVE_STRUCT_FANOTIFY_EVENT_INFO_FID_FSID___VAL */
 + 
-+ 
-+ int raw_socket(cmd_socket_t *cmd_socket) {
-+-    int s, res, val, ifidx;
-++    int s, res, val, ifidx, i;
-+     struct sockaddr_ll sa = {};
-+     struct packet_mreq mr = {};
-+ 
-+@@ -194,7 +194,7 @@ int raw_socket(cmd_socket_t *cmd_socket) {
-+     //
-+     // TODO: This does not seem to be needed, if we uses a RX ring buffer
-+     // instead (atleast that seems to work for libpcap)
-+-    for (int i = 0; i < 10000; ++i) {
-++    for (i = 0; i < 10000; ++i) {
-+         struct msghdr msg = { 0 };
-+         int res = recvmsg(s, &msg, MSG_DONTWAIT);
-+         if (res < 0)
-+diff --git a/src/ef-parse-bytes.c b/src/ef-parse-bytes.c
-+index 1dd590f..1785f45 100644
-+--- a/src/ef-parse-bytes.c
-++++ b/src/ef-parse-bytes.c
-+@@ -2,6 +2,7 @@
-+ #include <errno.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-++#include <endian.h>
-+ #include <arpa/inet.h>
-+ 
-+ struct start_with {
-+@@ -212,7 +213,9 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+     for (s = data_begin; *s; ++s) {
-+         int match_found = 0;
-+         for (i = 0; i < sizeof(has_chars)/sizeof(has_chars[0]); ++i) {
-+-            for (const char *set_i = has_chars[i].char_set; *set_i; ++set_i) {
-++            const char *set_i;
++ #ifdef HAVE_NAME_TO_HANDLE_AT
 ++
-++            for (set_i = has_chars[i].char_set; *set_i; ++set_i) {
-+                 if (*s == *set_i) {
-+                     has_mask |= has_chars[i].mask;
-+                     match_found = 1;
-+@@ -313,6 +316,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+                ((has_mask & ~(HAS_HEX_COL)) == 0) && (has_mask & HAS_COLON)) {
-+         // This will be treated as a mac-address
-+         uint8_t m[6] = {};
-++        const char *x;
-+ 
-+         // We want to be able to write something like this (like we RFC2373
-+         // specifies for IPv6):
-+@@ -334,7 +338,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
-+ 
-+         //po("line: %d data_begin: %s\n", __LINE__, data_begin);
-+ 
-+-        for (const char *x = data_begin; *x; ++x) {
-++        for (x = data_begin; *x; ++x) {
-+             int colon = 0;
-+             int val = 0;
-+ 
-+diff --git a/src/ef.h b/src/ef.h
-+index 8926c25..f4c1629 100644
-+--- a/src/ef.h
-++++ b/src/ef.h
-+@@ -59,8 +59,8 @@ void bl_check(buf_list_t *b);
-+ void bl_reset(buf_list_t *b);
-+ void bset_value(buf_t *b, uint8_t v);
-+ 
-+-inline void bl_init(buf_list_t *b) { bl_reset(b); }
-+-inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
-++static inline void bl_init(buf_list_t *b) { bl_reset(b); }
-++static inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
-+ 
-+ int bl_printf_append(buf_list_t *b, const char *format, ...)
-+     __attribute__ ((format (printf, 2, 3)));
+++#ifndef MAX_HANDLE_SZ
+++#define MAX_HANDLE_SZ		128
+++#endif
+++
++ /*
++  * Helper function used to obtain fsid and file_handle for a given path.
++  * Used by test files correlated to FAN_REPORT_FID functionality.
