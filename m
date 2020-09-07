@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 23:15:14 +0200
-Subject: [Buildroot] [git commit] package/mongrel2: enable parallel build
-Message-ID: <20200907210710.E17288875D@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 23:15:11 +0200
+Subject: [Buildroot] [git commit] package/jo: bump to version 1.4
+Message-ID: <20200907210710.D45667F9D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7e7a5f71ec2598f9258b8d9790b98faf4247027
+commit: https://git.buildroot.net/buildroot/commit/?id=a68fae11d9a25fd86c37ab9b09eadbd5df0100dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Parallel build is fixed since version 1.9.2 and
-https://github.com/mongrel2/mongrel2/commit/375d2de08934807f7171c413f785a9a23db712d0
+Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongrel2/mongrel2.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/jo/jo.hash | 4 ++--
+ package/jo/jo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index a35a87248e..9a7f64a738 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -29,12 +29,12 @@ MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
- endif
+diff --git a/package/jo/jo.hash b/package/jo/jo.hash
+index 8190a15e2f..8f1cc8fcd9 100644
+--- a/package/jo/jo.hash
++++ b/package/jo/jo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 de25c95671a3b392c6bcaba0b15d48eb8e2435508008c29477982d2d2f5ade64  jo-1.3.tar.gz
+-sha256 41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
++sha256  24c64d2eb863900947f58f32b502c95fec8f086105fd31151b91f54b7b5256a2  jo-1.4.tar.gz
++sha256  41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
+diff --git a/package/jo/jo.mk b/package/jo/jo.mk
+index 5eb013245e..24b499f345 100644
+--- a/package/jo/jo.mk
++++ b/package/jo/jo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define MONGREL2_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		PREFIX=/usr all
- endef
- 
- define MONGREL2_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		PREFIX=/usr DESTDIR=$(TARGET_DIR) install
- endef
- 
+-JO_VERSION = 1.3
++JO_VERSION = 1.4
+ JO_SITE = https://github.com/jpmens/jo/releases/download/$(JO_VERSION)
+ JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
+ JO_LICENSE_FILES = COPYING
