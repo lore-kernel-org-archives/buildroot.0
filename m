@@ -1,56 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  7 Sep 2020 19:51:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kbd: bump to version 2.3.0
-Message-ID: <20200907175130.129970-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 7 Sep 2020 19:58:57 +0200
+Subject: [Buildroot] package/strace --enable-mpers=no
+In-Reply-To: <87k0x72z34.fsf@tarshish>
+References: <CAEyMn7a8hML1-mFD11YMWoZ7VM+YHLNJQyBJEpg5x2jJx2qXRw@mail.gmail.com>
+ <87k0x72z34.fsf@tarshish>
+Message-ID: <CAEyMn7bJqaJAg9OLbCmYxY4rQkMxRqA5uMAWJanZeuPHjBoQog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash of COPYING and add CREDITS to license files as most of the
-original COPYING content moved to CREDITS and COPYING now contains
-GPL-2.0+ text since version 2.0.90 and
-https://github.com/legionus/kbd/commit/1304c0c11c2281c942ea07cee6fd1e820a8ba6ba
+Hi Baruch,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/kbd/kbd.hash | 5 +++--
- package/kbd/kbd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Am So., 6. Sept. 2020 um 08:34 Uhr schrieb Baruch Siach <baruch@tkos.co.il>:
+>
+> Hi Heiko,
+>
+> On Sun, Sep 06 2020, Heiko Thiery wrote:
+> > I faced an issue when building strace for aarch64 on my host where a
+> > 32bit arm toolchain is installed. As discussed with Brandon on IRC
+> > strace seems to find the 32bit toolchain because of the
+> > --enable-mpers=check option and fails with that.
+> >
+> > Do you think it makes sense to set --enable-mpers=no since buildroot
+> > does not support multi personality toolchains?
+> >
+> > [1] https://pastebin.com/8uaFHgyP
+> > [2] https://pastebin.com/GeSYYvnB
+>
+> I never really got around to fully understand strace mpers handling. I
+> have been bitten by mpers in the past (commit fc0d31caeedb).
 
-diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
-index cf29c59860..66ffaeb05b 100644
---- a/package/kbd/kbd.hash
-+++ b/package/kbd/kbd.hash
-@@ -1,3 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
--sha256  5fd90af6beb225a9bb9b9fb414c090fba53c9a55793e172f508cd43652e59a88  kbd-2.0.4.tar.xz
--sha256  8682bd7a7fe88bad31bf94ee9795c73fd4bc27bfcd50fb135f36dd8762c52035  COPYING
-+sha256  685056143cb8effd0a1d44b5c391eb50d80dcfd014b1a4d6e2650a28d61cb82a  kbd-2.3.0.tar.xz
-+sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
-+sha256  5a16340fe773f422144b436df90319114a2884933c56e9be6fad642e59be5e1f  CREDITS
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index c32d82a3e9..928b5ffed1 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KBD_VERSION = 2.0.4
-+KBD_VERSION = 2.3.0
- KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
- KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
- KBD_CONF_OPTS = \
-@@ -14,7 +14,7 @@ KBD_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	host-pkgconf
- KBD_LICENSE = GPL-2.0+
--KBD_LICENSE_FILES = COPYING
-+KBD_LICENSE_FILES = COPYING CREDITS
- 
- KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
- 
+I also do not fully understand the mpers but I would like to
+understand a little bit more.
+
+> Buildroot built strace might run on external executable binaries. If
+> this functionality is useful, I don't think we should just disable it.
+>
+> Why didn't the autobuilders catch this failure?
+
+As far as I can see from the strace configure.ac [1]. In case the
+target arch is aarch64 they try to figure out if there are additional
+compilers available in the PATH.
+For the autobuilders there seems to be no other crosscompilers be
+installed host wide. In my case the build server has an arm32 compiler
+installed so the configure.ac will
+find the corresponding CC. But the host wide kernel headers do not
+match. That is what I understand from the comment from Levin (strace
+maintainer) [2].
+
+
+>
+> James' autobuilder does show a different mpers related build failure:
+>
+>   http://autobuild.buildroot.net/?reason=strace-5.7
+
+D="" \
+READELF="/tmp/instance-1/output-1/host/bin/aarch64_be-linux-gnu-readelf" \
+CC="arm-linux-gnueabihf-gcc" \
+CFLAGS="-DHAVE_CONFIG_H   -I./linux/aarch64 -I./linux/aarch64
+-I./linux -I./linux -I. -I.      -DMPERS_IS_m32" \
+CPP="/tmp/instance-1/output-1/host/bin/aarch64_be-linux-gnu-cpp" \
+CPPFLAGS="-DHAVE_CONFIG_H   -I./linux/aarch64 -I./linux/aarch64
+-I./linux -I./linux -I. -I.      -DIN_MPERS -DMPERS_IS_m32" \
+./mpers.sh m32 "-std=gnu99 " $f || exit; \
+
+The issue on James' autobuilder seems to be similar, because the CC is
+also set differently than the target one.
+
+[1] https://github.com/strace/strace/blob/master/configure.ac#L791
+[2] https://github.com/strace/strace/issues/150
+
 -- 
-2.28.0
+Heiko
