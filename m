@@ -1,45 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 23:15:11 +0200
-Subject: [Buildroot] [git commit] package/jo: bump to version 1.4
-Message-ID: <20200907210710.D45667F9D6@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 7 Sep 2020 23:24:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-09-03
+In-Reply-To: <CAB0FRsuzue0h6G7-Y_zUZWxCvTS-qt9LOyM-DgJ2c1rLfekphA@mail.gmail.com>
+References: <20200904070920.A74CC40135@themis.gorgu.net>
+ <CAB0FRsuzue0h6G7-Y_zUZWxCvTS-qt9LOyM-DgJ2c1rLfekphA@mail.gmail.com>
+Message-ID: <c8ae2391-a225-4129-343e-e74bd761dfec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a68fae11d9a25fd86c37ab9b09eadbd5df0100dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/jo/jo.hash | 4 ++--
- package/jo/jo.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 05/09/2020 11:32, Fran?ois Perrad wrote:
+> 
+> 
+> Le?ven. 4 sept. 2020 ??09:09, Thomas Petazzoni <thomas.petazzoni@bootlin.com
+> <mailto:thomas.petazzoni@bootlin.com>> a ?crit?:
+> 
+>     Hello,
+> 
+>     Autobuilder failures
+>     ====================
+> 
+>     Below is a list of build failures reported by the Buildroot
+>     autobuilders in relation to packages or CPU
+>     architectures you are in charge of. Please help us
+>     improving the quality of Buildroot by investigating
+>     those build failures and sending patches to fix
+>     them.Thanks!
+> 
+>     Results for the '2020.05.x' branch
+>     ----------------------------------
+> 
+>     Build failures related to your packages:
+> 
+>     ? ? arch? ? ?|? ? ? ? ? ? ?reason? ? ? ? ? ? ?|? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+>     ? ? ? ? ?url? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+>     -------------+--------------------------------+---------------------------------------------------------------------------------
+>     ? ?mipsel? ? |? ? ? ? luabitop-1.0.2-1? ? ? ? |
+>     http://autobuild.buildroot.net/results/23f66439bb1d77cf6926eefba8defe847e27022f
+>     ? ? mips? ? ?|? ? ? ? luabitop-1.0.2-1? ? ? ? |
+>     http://autobuild.buildroot.net/results/390bcd6940a06d8a3c55e0ce6aad53882a511e6e
+> 
+> 
+> This issue is fixed in master by the commit : package/prosody: luabitop is only
+> needed with Lua 5.1
+> https://git.busybox.net/buildroot/commit/package/prosody?id=8bd7239ca32f20102aad19dbb3ca647182edbf92
 
-diff --git a/package/jo/jo.hash b/package/jo/jo.hash
-index 8190a15e2f..8f1cc8fcd9 100644
---- a/package/jo/jo.hash
-+++ b/package/jo/jo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 de25c95671a3b392c6bcaba0b15d48eb8e2435508008c29477982d2d2f5ade64  jo-1.3.tar.gz
--sha256 41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
-+sha256  24c64d2eb863900947f58f32b502c95fec8f086105fd31151b91f54b7b5256a2  jo-1.4.tar.gz
-+sha256  41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
-diff --git a/package/jo/jo.mk b/package/jo/jo.mk
-index 5eb013245e..24b499f345 100644
---- a/package/jo/jo.mk
-+++ b/package/jo/jo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JO_VERSION = 1.3
-+JO_VERSION = 1.4
- JO_SITE = https://github.com/jpmens/jo/releases/download/$(JO_VERSION)
- JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
- JO_LICENSE_FILES = COPYING
+ If you want to signal a backport that is needed, please put Peter in Cc
+otherwise he might miss it.
+
+ Regards,
+ Arnout
+
+> 
+> This issue was introduced with the commit : package/prosody: don't depend on
+> !lua 5.3
+> https://git.busybox.net/buildroot/commit/package/prosody?h=2020.05.x&id=98645393ed3611985e6703d1f5ee34eb1cd330ce
+> because luabitop couldn't be build with Lua 5.3
+> 
+> Fran?ois
+> 
+> 
+>     Results for the 'master' branch
+>     -------------------------------
+> 
+>     Build failures related to your packages:
+> 
+>     ? ? arch? ? ?|? ? ? ? ? ? ?reason? ? ? ? ? ? ?|? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+>     ? ? ? ? ?url? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
+>     -------------+--------------------------------+---------------------------------------------------------------------------------
+>     ? ? arm? ? ? |? ? ? ? ? luajit-2.1.2? ? ? ? ? |
+>     http://autobuild.buildroot.net/results/5be7b15226f43d9154332c6305151fa4f7e43bd4
+>     ? ? arm? ? ? |? ? ? ? ? luajit-2.1.2? ? ? ? ? |
+>     http://autobuild.buildroot.net/results/ee1e40be6aee4f714d5a6f9c5fa31f4bffe01cc6
+> 
+> 
+>     -- 
+>     http://autobuild.buildroot.net
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
