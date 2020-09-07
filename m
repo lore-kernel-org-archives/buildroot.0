@@ -1,26 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:31:21 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: fix the
- target in systemd service
-In-Reply-To: <20200907161755.1457941-1-francois.perrad@gadz.org>
-References: <20200907161755.1457941-1-francois.perrad@gadz.org>
-Message-ID: <20200907213121.160e7441@windsurf.hq.k.grp>
+Date: Mon, 7 Sep 2020 21:32:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/strace: bump to version 5.8
+In-Reply-To: <20200907190111.4428-1-heiko.thiery@gmail.com>
+References: <20200907190111.4428-1-heiko.thiery@gmail.com>
+Message-ID: <20200907213221.115fb85e@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  7 Sep 2020 18:17:55 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Mon,  7 Sep 2020 21:01:12 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> graphical is equivalent to the sysvinit runlevel 5
-> multi-user is equivalent to a runlevel between 2 and 4
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/x11r7/xserver_xorg-server/xorg.service | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/strace/strace.hash | 4 ++--
+>  package/strace/strace.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
