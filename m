@@ -1,58 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:30:33 +0200
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2020.08.1
-Message-ID: <20200907192226.004907FA0C@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:30:29 +0200
+Subject: [Buildroot] [git commit] package/kbd: bump to version 2.3.0
+Message-ID: <20200907192225.E9DDC81561@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4069d930f04a99ae1d3dee46614053f4fba8ddf8
+commit: https://git.buildroot.net/buildroot/commit/?id=cae5944904c832a941c6ac885bc7971d49be5fe9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Update hash of COPYING and add CREDITS to license files as most of the
+original COPYING content moved to CREDITS and COPYING now contains
+GPL-2.0+ text since version 2.0.90 and
+https://github.com/legionus/kbd/commit/1304c0c11c2281c942ea07cee6fd1e820a8ba6ba
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/kbd/kbd.hash | 5 +++--
+ package/kbd/kbd.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index bf27481e51..9948a249a0 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
+index cf29c59860..66ffaeb05b 100644
+--- a/package/kbd/kbd.hash
++++ b/package/kbd/kbd.hash
+@@ -1,3 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
+-sha256  5fd90af6beb225a9bb9b9fb414c090fba53c9a55793e172f508cd43652e59a88  kbd-2.0.4.tar.xz
+-sha256  8682bd7a7fe88bad31bf94ee9795c73fd4bc27bfcd50fb135f36dd8762c52035  COPYING
++sha256  685056143cb8effd0a1d44b5c391eb50d80dcfd014b1a4d6e2650a28d61cb82a  kbd-2.3.0.tar.xz
++sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
++sha256  5a16340fe773f422144b436df90319114a2884933c56e9be6fad642e59be5e1f  CREDITS
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index c32d82a3e9..928b5ffed1 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2020.07.0"
-+	bool "2020.08.1"
+-KBD_VERSION = 2.0.4
++KBD_VERSION = 2.3.0
+ KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
+ KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
+ KBD_CONF_OPTS = \
+@@ -14,7 +14,7 @@ KBD_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-pkgconf
+ KBD_LICENSE = GPL-2.0+
+-KBD_LICENSE_FILES = COPYING
++KBD_LICENSE_FILES = COPYING CREDITS
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
+ KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
  
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2020.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2020.08.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 17992be7f9..4bccdf9e03 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2020.07.0.tar.bz2.md5
--md5  49f3fba08743d44e84e8d68ed776f05d  barebox-2020.07.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2020.08.1.tar.bz2.md5
-+md5  d57031878390cb267f6641aedffcda9f  barebox-2020.08.1.tar.bz2
- 
- # Locally calculated
--sha256  1956620acc39b5c9b035635ff0b1da2c1b72b791612ef55a72e6272a903fbc4c  barebox-2020.07.0.tar.bz2
-+sha256  8e6d413f1083ae0974b11a381369a3bac83e798a99830a1de128c950fef047e6  barebox-2020.08.1.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
