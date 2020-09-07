@@ -1,56 +1,70 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon,  7 Sep 2020 20:13:59 +0200
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.08.1
-Message-ID: <20200907181359.480602-1-b.bilas@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  7 Sep 2020 20:29:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with uclibc
+Message-ID: <20200907182922.133312-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Fix a build failure with ltp-testsuite in version 20200515
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index bf27481e51..9948a249a0 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2020.07.0"
-+	bool "2020.08.1"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2020.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2020.08.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 17992be7f9..4bccdf9e03 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2020.07.0.tar.bz2.md5
--md5  49f3fba08743d44e84e8d68ed776f05d  barebox-2020.07.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2020.08.1.tar.bz2.md5
-+md5  d57031878390cb267f6641aedffcda9f  barebox-2020.08.1.tar.bz2
- 
- # Locally calculated
--sha256  1956620acc39b5c9b035635ff0b1da2c1b72b791612ef55a72e6272a903fbc4c  barebox-2020.07.0.tar.bz2
-+sha256  8e6d413f1083ae0974b11a381369a3bac83e798a99830a1de128c950fef047e6  barebox-2020.08.1.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+Fixes:
+ - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-fanotify.h-fix-build-with-uclibc.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+
+diff --git a/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+new file mode 100644
+index 0000000000..5531756970
+--- /dev/null
++++ b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+@@ -0,0 +1,41 @@
++From cb11e718ce04261cb6ff4c09442b949da33b8797 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 17:55:45 +0200
++Subject: [PATCH] fanotify.h: fix build with uclibc
++
++MAX_HANDLE_SZ is used since version 20200515 and
++https://github.com/linux-test-project/ltp/commit/d20a3e8f9a794e0659277acfa9fbcf7454ba4631
++
++However, it is not defined by uclibc, so define it if needed to avoid
++the following build failure:
++
++fanotify.h:171:11: error: 'MAX_HANDLE_SZ' undeclared here (not in a function)
++  171 |  char buf[MAX_HANDLE_SZ];
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
++[Retrieved from:
++https://github.com/linux-test-project/ltp/commit/cb11e718ce04261cb6ff4c09442b949da33b8797]
++---
++ testcases/kernel/syscalls/fanotify/fanotify.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/testcases/kernel/syscalls/fanotify/fanotify.h b/testcases/kernel/syscalls/fanotify/fanotify.h
++index a9a431ca2f..d271578e97 100644
++--- a/testcases/kernel/syscalls/fanotify/fanotify.h
+++++ b/testcases/kernel/syscalls/fanotify/fanotify.h
++@@ -139,6 +139,11 @@ struct fanotify_event_info_fid {
++ #endif /* HAVE_STRUCT_FANOTIFY_EVENT_INFO_FID_FSID___VAL */
++ 
++ #ifdef HAVE_NAME_TO_HANDLE_AT
+++
+++#ifndef MAX_HANDLE_SZ
+++#define MAX_HANDLE_SZ		128
+++#endif
+++
++ /*
++  * Helper function used to obtain fsid and file_handle for a given path.
++  * Used by test files correlated to FAN_REPORT_FID functionality.
 -- 
 2.28.0
