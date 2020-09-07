@@ -1,47 +1,86 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 7 Sep 2020 20:35:03 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <53-5f565880-11-65fee200@257788444>
-References: <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <53-5f565880-11-65fee200@257788444>
-Message-ID: <20200907183501.tcrsoqn7esu3nxb3@falbala.internal.home.lespocky.de>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 7 Sep 2020 20:44:13 +0200
+Subject: [Buildroot] package/strace --enable-mpers=no
+In-Reply-To: <CAEyMn7bJqaJAg9OLbCmYxY4rQkMxRqA5uMAWJanZeuPHjBoQog@mail.gmail.com>
+References: <CAEyMn7a8hML1-mFD11YMWoZ7VM+YHLNJQyBJEpg5x2jJx2qXRw@mail.gmail.com>
+ <87k0x72z34.fsf@tarshish>
+ <CAEyMn7bJqaJAg9OLbCmYxY4rQkMxRqA5uMAWJanZeuPHjBoQog@mail.gmail.com>
+Message-ID: <CAEyMn7bLV5cc2nz-pPhN+v0UxLibCvuWCXM7ww7bjO2TUDYTjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Hi,
 
-just want to add a note on the mailing list archive aspect ?
+Am Mo., 7. Sept. 2020 um 19:58 Uhr schrieb Heiko Thiery
+<heiko.thiery@gmail.com>:
+>
+> Hi Baruch,
+>
+> Am So., 6. Sept. 2020 um 08:34 Uhr schrieb Baruch Siach <baruch@tkos.co.il>:
+> >
+> > Hi Heiko,
+> >
+> > On Sun, Sep 06 2020, Heiko Thiery wrote:
+> > > I faced an issue when building strace for aarch64 on my host where a
+> > > 32bit arm toolchain is installed. As discussed with Brandon on IRC
+> > > strace seems to find the 32bit toolchain because of the
+> > > --enable-mpers=check option and fails with that.
+> > >
+> > > Do you think it makes sense to set --enable-mpers=no since buildroot
+> > > does not support multi personality toolchains?
+> > >
+> > > [1] https://pastebin.com/8uaFHgyP
+> > > [2] https://pastebin.com/GeSYYvnB
+> >
+> > I never really got around to fully understand strace mpers handling. I
+> > have been bitten by mpers in the past (commit fc0d31caeedb).
+>
+> I also do not fully understand the mpers but I would like to
+> understand a little bit more.
+>
+> > Buildroot built strace might run on external executable binaries. If
+> > this functionality is useful, I don't think we should just disable it.
+> >
+> > Why didn't the autobuilders catch this failure?
+>
+> As far as I can see from the strace configure.ac [1]. In case the
+> target arch is aarch64 they try to figure out if there are additional
+> compilers available in the PATH.
+> For the autobuilders there seems to be no other crosscompilers be
+> installed host wide. In my case the build server has an arm32 compiler
+> installed so the configure.ac will
+> find the corresponding CC. But the host wide kernel headers do not
+> match. That is what I understand from the comment from Levin (strace
+> maintainer) [2].
+>
+>
+> >
+> > James' autobuilder does show a different mpers related build failure:
+> >
+> >   http://autobuild.buildroot.net/?reason=strace-5.7
+>
+> D="" \
+> READELF="/tmp/instance-1/output-1/host/bin/aarch64_be-linux-gnu-readelf" \
+> CC="arm-linux-gnueabihf-gcc" \
+> CFLAGS="-DHAVE_CONFIG_H   -I./linux/aarch64 -I./linux/aarch64
+> -I./linux -I./linux -I. -I.      -DMPERS_IS_m32" \
+> CPP="/tmp/instance-1/output-1/host/bin/aarch64_be-linux-gnu-cpp" \
+> CPPFLAGS="-DHAVE_CONFIG_H   -I./linux/aarch64 -I./linux/aarch64
+> -I./linux -I./linux -I. -I.      -DIN_MPERS -DMPERS_IS_m32" \
+> ./mpers.sh m32 "-std=gnu99 " $f || exit; \
+>
+> The issue on James' autobuilder seems to be similar, because the CC is
+> also set differently than the target one.
+>
+> [1] https://github.com/strace/strace/blob/master/configure.ac#L791
+> [2] https://github.com/strace/strace/issues/150
+>
 
-On Mon, Sep 07, 2020 at 05:57:20PM +0200, Michael Nosthoff via buildroot wrote:
-> Searchability of the ML. The kernel has this lore system which
-> offers a text search. From what I know BR doesn't offer that. So
-> what is the normal way to search the ML archive? Google Foo?
+By the way, bumping the strace package to 5.8 does not solve the
+problem. Nethertheless I will send the bump patch soon.
 
-The software behind lore.kernel.org is called public-inbox:
-
-https://public-inbox.org/design_notes.html
-
-That's free software. Some weeks ago someone from pengutronix asked
-kernel.org if they would archive the mailing lists for barebox and/or
-ptxdist, too. The answer was more or less: ?please do it yourself.? So
-if buildroot wants to go that way, it probably has to set up
-public-inbox by themselves.
-
-Greets
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200907/3e3979b2/attachment.asc>
+> --
+> Heiko
