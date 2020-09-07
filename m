@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 22:47:18 +0200
-Subject: [Buildroot] [git commit] package/re2: build host as shared libs
-Message-ID: <20200907204122.955C0813FF@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 22:47:41 +0200
+Subject: [Buildroot] [git commit] package/lua-lyaml: bump to version 6.2.6
+Message-ID: <20200907204122.9FC1D813FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=559aa508643014f80830f4ca223496ff383cf8b0
+commit: https://git.buildroot.net/buildroot/commit/?id=2acfc3f4220bfc6dfbb3def47f08296e4ac7867b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-grpc needs re2 as shared lib.
-Set this via cmake config flag.
-
-Fixes:
-http://autobuild.buildroot.net/results/a98/a98d3203f68f0f929c544537244e7621e80ce0a1
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/re2/re2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lua-lyaml/lua-lyaml.hash | 2 +-
+ package/lua-lyaml/lua-lyaml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 0a3c204661..0c3bf4e844 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
-@@ -11,7 +11,7 @@ RE2_LICENSE_FILES = LICENSE
- RE2_INSTALL_STAGING = YES
+diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
+index 1881944252..07184e9e45 100644
+--- a/package/lua-lyaml/lua-lyaml.hash
++++ b/package/lua-lyaml/lua-lyaml.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 16bbc8e3bf1ad3cf29bdefc24cd136959481ec03bd52da94c3c1f6fa5ae299ce  lua-lyaml-6.2.5.tar.gz
++sha256 2c52104e75331e4729e5895168fb8f24769db0b84c68696159e6b6a8908b62d2  lua-lyaml-6.2.6.tar.gz
+ sha256 81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
+diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
+index b16faeae6c..a818ce716c 100644
+--- a/package/lua-lyaml/lua-lyaml.mk
++++ b/package/lua-lyaml/lua-lyaml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
--HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF
-+HOST_RE2_CONF_OPTS += -DRE2_BUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+-LUA_LYAML_VERSION = 6.2.5
++LUA_LYAML_VERSION = 6.2.6
+ LUA_LYAML_NAME_UPSTREAM = lyaml
+ LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
+ LUA_LYAML_LICENSE = MIT
