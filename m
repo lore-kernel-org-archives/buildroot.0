@@ -1,58 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:30:29 +0200
-Subject: [Buildroot] [git commit] package/kbd: bump to version 2.3.0
-Message-ID: <20200907192225.E9DDC81561@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:30:43 +0200
+Subject: [Buildroot] [git commit] package/mraa: fix build with gcc 10
+Message-ID: <20200907192226.0D9287FA0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cae5944904c832a941c6ac885bc7971d49be5fe9
+commit: https://git.buildroot.net/buildroot/commit/?id=fd5376a39d079cc5aa26d67788a0c32d234f2f96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of COPYING and add CREDITS to license files as most of the
-original COPYING content moved to CREDITS and COPYING now contains
-GPL-2.0+ text since version 2.0.90 and
-https://github.com/legionus/kbd/commit/1304c0c11c2281c942ea07cee6fd1e820a8ba6ba
+Fixes:
+ - http://autobuild.buildroot.org/results/7701c317e300f0b06d258aed2a3bda866e740f48
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kbd/kbd.hash | 5 +++--
- package/kbd/kbd.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...include-Declare-gVERSION-global-as-extern.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
-index cf29c59860..66ffaeb05b 100644
---- a/package/kbd/kbd.hash
-+++ b/package/kbd/kbd.hash
-@@ -1,3 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
--sha256  5fd90af6beb225a9bb9b9fb414c090fba53c9a55793e172f508cd43652e59a88  kbd-2.0.4.tar.xz
--sha256  8682bd7a7fe88bad31bf94ee9795c73fd4bc27bfcd50fb135f36dd8762c52035  COPYING
-+sha256  685056143cb8effd0a1d44b5c391eb50d80dcfd014b1a4d6e2650a28d61cb82a  kbd-2.3.0.tar.xz
-+sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
-+sha256  5a16340fe773f422144b436df90319114a2884933c56e9be6fad642e59be5e1f  CREDITS
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index c32d82a3e9..928b5ffed1 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KBD_VERSION = 2.0.4
-+KBD_VERSION = 2.3.0
- KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
- KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
- KBD_CONF_OPTS = \
-@@ -14,7 +14,7 @@ KBD_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
- 	host-pkgconf
- KBD_LICENSE = GPL-2.0+
--KBD_LICENSE_FILES = COPYING
-+KBD_LICENSE_FILES = COPYING CREDITS
- 
- KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
- 
+diff --git a/package/mraa/0002-include-Declare-gVERSION-global-as-extern.patch b/package/mraa/0002-include-Declare-gVERSION-global-as-extern.patch
+new file mode 100644
+index 0000000000..b3a1f5a03a
+--- /dev/null
++++ b/package/mraa/0002-include-Declare-gVERSION-global-as-extern.patch
+@@ -0,0 +1,29 @@
++From dbb5961f106ec42cd70689d933674c9c37aedfe1 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Bj=C3=B6rn=20Esser?= <besser82@fedoraproject.org>
++Date: Mon, 13 Apr 2020 20:12:11 +0200
++Subject: [PATCH] include: Declare gVERSION global as 'extern'.
++
++Fixes build with '-fno-common'.
++
++[Retrieved from:
++https://github.com/eclipse/mraa/pull/1012/commits/dbb5961f106ec42cd70689d933674c9c37aedfe1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmaail.com>
++---
++ include/version.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/version.h b/include/version.h
++index 47366ef6f..3a567a1d5 100644
++--- a/include/version.h
+++++ b/include/version.h
++@@ -11,8 +11,8 @@
++ extern "C" {
++ #endif
++ 
++-const char* gVERSION;
++-const char* gVERSION_SHORT;
+++extern const char* gVERSION;
+++extern const char* gVERSION_SHORT;
++ 
++ #ifdef __cplusplus
++ }
