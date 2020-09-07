@@ -1,154 +1,191 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 23:44:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/alac: new package
-In-Reply-To: <20200727152720.8427-1-marc.chalain@gmail.com>
-References: <20200727152720.8427-1-marc.chalain@gmail.com>
-Message-ID: <20200907234438.5aca1015@windsurf.hq.k.grp>
+Date: Mon, 7 Sep 2020 23:48:12 +0200
+Subject: [Buildroot] [git commit] package/htpdate: new package
+Message-ID: <20200907214022.9B88B83652@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5d730282b82a390c0f20194f5afd099859ae5bb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 27 Jul 2020 17:27:20 +0200
-Marc Chalain <marc.chalain@gmail.com> wrote:
+Adding htpdate, a time syncronization software based on http.
 
-> From: Marc Chalain <marc.chalain@smile.fr>
-> 
-> The Apple Lossless Audio Codec (ALAC) is an audio codec developed by Apple and supported on iPhone, iPad, most iPods, Mac and iTunes. ALAC is a data compression method which reduces the size of audio files with no loss of information. A decoded ALAC stream is bit-for-bit identical to the original uncompressed audio file.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                      |  1 +
+ package/Config.in               |  1 +
+ package/htpdate/Config.in       |  8 +++++++
+ package/htpdate/S43htpdate      | 51 +++++++++++++++++++++++++++++++++++++++++
+ package/htpdate/htpdate.hash    |  3 +++
+ package/htpdate/htpdate.mk      | 35 ++++++++++++++++++++++++++++
+ package/htpdate/htpdate.service | 13 +++++++++++
+ 7 files changed, 112 insertions(+)
 
-This commit log should be wrapped at 72 columns.
-
-> diff --git a/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> new file mode 100644
-> index 0000000000..580a18d3a6
-> --- /dev/null
-> +++ b/package/alac/0001-reorder-library-and-objects-to-link-all-symbols.patch
-> @@ -0,0 +1,26 @@
-> +convert-utility: reorder library and objects to link all symbols
-> +
-> +Signed-off-by: Marc Chalain <marc.chalain@smile.fr>
-
-Since upstream is using Git, we would like to have a patch generated
-with "git format-patch -N".
-
-> diff --git a/package/alac/Config.in b/package/alac/Config.in
-> new file mode 100644
-> index 0000000000..2f1d4a1077
-> --- /dev/null
-> +++ b/package/alac/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_ALAC
-> +	bool "Apple Lossless Audio Codec"
-
-Just:
-
-	bool "alac"
-
-> +	help
-> +	  Alac is an audio codec developed by Apple and
-> +	  supported on iPhone, iPad, most iPods, Mac and
-> +	  iTunes. ALAC is a data compression method which
-> +	  reduces the size of audio files with no loss
-> +	  of information. A decoded ALAC stream is bit-for-bit
-> +	  identical to the original uncompressed audio file
-> +
-> +	  https://macosforge.github.io/alac/
-> +
-> +
-> +config BR2_PACKAGE_ALAC_CONVERT
-> +	bool "binary converter"
-> +	depends on BR2_PACKAGE_ALAC
-
-We prefer:
-
-if BR2_PACKAGE_ALAC
-
-config ...
-
-endif
-
-Also, the prompt should be "alacconvert", and the option should have a
-help text.
-
-> diff --git a/package/alac/alac.hash b/package/alac/alac.hash
-> new file mode 100644
-> index 0000000000..9477916558
-> --- /dev/null
-> +++ b/package/alac/alac.hash
-> @@ -0,0 +1,2 @@
-
-Please add a comment:
-
-# Locally calculated
-
-> +sha256 98635ece42fb1c3fceb75eaa4b5164d866e09f0195b3e7ec4085f1123c5e272f  alac-c38887c5c5e64a4b31108733bd79ca9b2496d987.tar.gz
-> +sha256 a337314dd82d26791112c1e5a85725b2eb92f5b7e6f9102fa4eaa2903f77518f  LICENSE
-> diff --git a/package/alac/alac.mk b/package/alac/alac.mk
-> new file mode 100644
-> index 0000000000..64227eaa2e
-> --- /dev/null
-> +++ b/package/alac/alac.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# alac
-> +#
-> +################################################################################
-> +
-> +ALAC_VERSION = c38887c5c5e64a4b31108733bd79ca9b2496d987
-> +ALAC_SITE =$(call github,macosforge,alac,$(ALAC_VERSION))
-> +ALAC_LICENSE = APACHE
-
-This is not a valid SPDX identifier.
-
-> +ALAC_LICENSE_FILES = LICENSE
-> +ALAC_INSTALL_STAGING = YES
-> +
-> +ALAC_MAKE_OPTS =  CC=$(TARGET_CXX)
-
-You should use $(TARGET_CONFIGURE_OPTS) instead.
-
-> +ifeq ($(BR2_PACKAGE_ALAC_CONVERT),y)
-> +define ALACCONVERT_BUILD_CMDS
-> +	$(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/convert-utility
-> +endef
-> +define ALAC_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/convert-utility/alacconvert $(TARGET_DIR)/usr/bin
-
-You should use a full destination path here.
-
-> +endef
-
-> +endif
-> +
-> +define ALAC_BUILD_CMDS
-> +	$(MAKE) $(ALAC_MAKE_OPTS) -C $(@D)/codec
-> +	$(ALACCONVERT_BUILD_CMDS)
-> +endef
-
-Perhaps for the build, you could do:
-
-ALAC_MAKE_TARGETS = codec
-
-ifeq ($(BR2_PACKAGE_ALAC_CONVERT),y)
-ALAC_MAKE_TARGETS += convert-utility
-...
-endif
-
-define ALAC_BUILD_CMDS
-	$(foreach t,$(ALAC_MAKE_TARGETS), \
-		$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-			-C $(@D)/$(t)
-	)
-endef
-		
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 93a86811ba..b1e60e505f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -217,6 +217,7 @@ F:	package/cups/
+ F:	package/cups-filters/
+ F:	package/fail2ban/
+ F:	package/grep/
++F:	package/htpdate/
+ F:	package/i2c-tools/
+ F:	package/jq/
+ F:	package/libapparmor/
+diff --git a/package/Config.in b/package/Config.in
+index 02213310a8..5afa7eec06 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2082,6 +2082,7 @@ menu "Networking applications"
+ 	source "package/hiawatha/Config.in"
+ 	source "package/hostapd/Config.in"
+ 	source "package/hplip/Config.in"
++	source "package/htpdate/Config.in"
+ 	source "package/httping/Config.in"
+ 	source "package/i2pd/Config.in"
+ 	source "package/ibrdtn-tools/Config.in"
+diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
+new file mode 100644
+index 0000000000..42c10c308b
+--- /dev/null
++++ b/package/htpdate/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HTPDATE
++	bool "htpdate"
++	depends on BR2_USE_MMU # fork()
++	help
++	  The HTTP Time Protocol (HTP) is used to synchronize a
++	  computer's time with web servers as reference time source.
++
++	  https://github.com/angeloc/htpdate
+diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
+new file mode 100644
+index 0000000000..75f9a995ff
+--- /dev/null
++++ b/package/htpdate/S43htpdate
+@@ -0,0 +1,51 @@
++#!/bin/sh
++
++DAEMON="htpdate"
++PIDFILE="/var/run/$DAEMON.pid"
++
++HTPDATE_ARGS="-a -s -t https://google.com"
++test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" \
++		-- -D -i "$PIDFILE" $HTPDATE_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
+new file mode 100644
+index 0000000000..282bcbe7ed
+--- /dev/null
++++ b/package/htpdate/htpdate.hash
+@@ -0,0 +1,3 @@
++# Locally calculated:
++sha256 08aee5132b0c73ba01485b907d037fd676d0ad89d2736bbf117ec5c5035b513a  htpdate-1.2.4.tar.gz
++sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
+diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
+new file mode 100644
+index 0000000000..99d3adafcd
+--- /dev/null
++++ b/package/htpdate/htpdate.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# htpdate
++#
++################################################################################
++
++HTPDATE_VERSION = 1.2.4
++HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
++HTPDATE_LICENSE = GPL-2.0+
++HTPDATE_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
++HTPDATE_DEPENDENCIES += openssl
++endif
++
++define HTPDATE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HTPDATE_BUILD_OPTS)
++endef
++
++define HTPDATE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define HTPDATE_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/htpdate/S43htpdate \
++		$(TARGET_DIR)/etc/init.d/S43htpdate
++endef
++
++define HTPDATE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/htpdate/htpdate.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/htpdate.service
++endef
++
++$(eval $(generic-package))
+diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+new file mode 100644
+index 0000000000..0c77550813
+--- /dev/null
++++ b/package/htpdate/htpdate.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=htpdate daemon
++After=network.target
++
++[Service]
++Type=forking
++PIDFile=/var/run/htpdate
++Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
++EnvironmentFile=-/etc/default/htpdate
++ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate $HTPDATE_ARGS
++
++[Install]
++WantedBy=multi-user.target
