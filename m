@@ -1,120 +1,40 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon,  7 Sep 2020 11:34:26 +0200
-Subject: [Buildroot] [PATCH] package/pigpio: add sysv and systemd init
- scripts
-Message-ID: <20200907093429.11808-1-grzegorz@blach.pl>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Mon,  7 Sep 2020 13:41:09 +0200
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2020.6
+Message-ID: <20200907114109.511497-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 ---
-Changes v1 -> v2:
-  - S50pigpio modeled after S01syslogd from busybox package.
----
- package/pigpio/S50pigpio      | 50 +++++++++++++++++++++++++++++++++++
- package/pigpio/pigpio.mk      | 13 +++++++++
- package/pigpio/pigpio.service | 10 +++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 package/pigpio/S50pigpio
- create mode 100644 package/pigpio/pigpio.service
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pigpio/S50pigpio b/package/pigpio/S50pigpio
-new file mode 100644
-index 0000000000..8b7b6815c8
---- /dev/null
-+++ b/package/pigpio/S50pigpio
-@@ -0,0 +1,50 @@
-+#!/bin/sh
-+
-+DAEMON="pigpiod"
-+PIDFILE="/var/run/pigpio.pid"
-+
-+PIGPIOD_ARGS=""
-+
-+[ -r "/etc/default/pigpio" ] && . "/etc/default/pigpio"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	start-stop-daemon -S -q -x "/usr/bin/$DAEMON" -- $PIGPIOD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 9075274de1..a86533a59e 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -38,4 +38,17 @@ define PIGPIO_INSTALL_STAGING_CMDS
- 	ln -sf libpigpiod_if2.so.1 $(STAGING_DIR)/usr/lib/libpigpiod_if2.so
- endef
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 2ebc560d83..e5483a539c 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5877396ea092f5b6701c17bd20280746cad20f55a94c760dbeba0fa115818c05  libostree-2020.3.tar.xz
++sha256  865d4818820d128a2e505380358275bb964984348b3d0685b6455099e4736972  libostree-2020.6.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 57d9e98d72..e387f99856 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define PIGPIO_INSTALL_INIT_SYSV
-+        $(INSTALL) -D -m 755 package/pigpio/S50pigpio \
-+                $(TARGET_DIR)/etc/init.d/S50pigpio
-+endef
-+
-+define PIGPIO_INSTALL_INIT_SYSTEMD
-+        $(INSTALL) -D -m 644 package/pigpio/pigpio.service \
-+                $(TARGET_DIR)/usr/lib/systemd/system/pigpio.service
-+        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+        ln -fs ../../../../usr/lib/systemd/system/pigpio.service \
-+                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/pigpio.service
-+endef
-+
- $(eval $(generic-package))
-diff --git a/package/pigpio/pigpio.service b/package/pigpio/pigpio.service
-new file mode 100644
-index 0000000000..135624cc43
---- /dev/null
-+++ b/package/pigpio/pigpio.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Pigpio daemon
-+After=network.target
-+
-+[Service]
-+EnvironmentFile=-/etc/default/pigpio
-+ExecStart=/usr/bin/pigpiod -g $PIGPIOD_ARGS
-+
-+[Install]
-+WantedBy=multi-user.target
+-LIBOSTREE_VERSION = 2020.3
++LIBOSTREE_VERSION = 2020.6
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
 -- 
-2.24.3 (Apple Git-128)
+2.27.0
