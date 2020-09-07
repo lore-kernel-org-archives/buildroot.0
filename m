@@ -1,70 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  7 Sep 2020 20:29:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with uclibc
-Message-ID: <20200907182922.133312-1-fontaine.fabrice@gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 7 Sep 2020 20:35:03 +0200
+Subject: [Buildroot] More maintainers
+In-Reply-To: <53-5f565880-11-65fee200@257788444>
+References: <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
+ <53-5f565880-11-65fee200@257788444>
+Message-ID: <20200907183501.tcrsoqn7esu3nxb3@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a build failure with ltp-testsuite in version 20200515
+Hei hei,
 
-Fixes:
- - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
+just want to add a note on the mailing list archive aspect ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...001-fanotify.h-fix-build-with-uclibc.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+On Mon, Sep 07, 2020 at 05:57:20PM +0200, Michael Nosthoff via buildroot wrote:
+> Searchability of the ML. The kernel has this lore system which
+> offers a text search. From what I know BR doesn't offer that. So
+> what is the normal way to search the ML archive? Google Foo?
 
-diff --git a/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
-new file mode 100644
-index 0000000000..5531756970
---- /dev/null
-+++ b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
-@@ -0,0 +1,41 @@
-+From cb11e718ce04261cb6ff4c09442b949da33b8797 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 5 Sep 2020 17:55:45 +0200
-+Subject: [PATCH] fanotify.h: fix build with uclibc
-+
-+MAX_HANDLE_SZ is used since version 20200515 and
-+https://github.com/linux-test-project/ltp/commit/d20a3e8f9a794e0659277acfa9fbcf7454ba4631
-+
-+However, it is not defined by uclibc, so define it if needed to avoid
-+the following build failure:
-+
-+fanotify.h:171:11: error: 'MAX_HANDLE_SZ' undeclared here (not in a function)
-+  171 |  char buf[MAX_HANDLE_SZ];
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-+[Retrieved from:
-+https://github.com/linux-test-project/ltp/commit/cb11e718ce04261cb6ff4c09442b949da33b8797]
-+---
-+ testcases/kernel/syscalls/fanotify/fanotify.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/testcases/kernel/syscalls/fanotify/fanotify.h b/testcases/kernel/syscalls/fanotify/fanotify.h
-+index a9a431ca2f..d271578e97 100644
-+--- a/testcases/kernel/syscalls/fanotify/fanotify.h
-++++ b/testcases/kernel/syscalls/fanotify/fanotify.h
-+@@ -139,6 +139,11 @@ struct fanotify_event_info_fid {
-+ #endif /* HAVE_STRUCT_FANOTIFY_EVENT_INFO_FID_FSID___VAL */
-+ 
-+ #ifdef HAVE_NAME_TO_HANDLE_AT
-++
-++#ifndef MAX_HANDLE_SZ
-++#define MAX_HANDLE_SZ		128
-++#endif
-++
-+ /*
-+  * Helper function used to obtain fsid and file_handle for a given path.
-+  * Used by test files correlated to FAN_REPORT_FID functionality.
+The software behind lore.kernel.org is called public-inbox:
+
+https://public-inbox.org/design_notes.html
+
+That's free software. Some weeks ago someone from pengutronix asked
+kernel.org if they would archive the mailing lists for barebox and/or
+ptxdist, too. The answer was more or less: ?please do it yourself.? So
+if buildroot wants to go that way, it probably has to set up
+public-inbox by themselves.
+
+Greets
+Alex
+
 -- 
-2.28.0
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200907/3e3979b2/attachment.asc>
