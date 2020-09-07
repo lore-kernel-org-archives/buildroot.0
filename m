@@ -1,54 +1,121 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 21:19:15 +0200
-Subject: [Buildroot] [git commit] package/wayland-utils: needs
- wayland-protocols
-Message-ID: <20200907191109.86BFD8756F@busybox.osuosl.org>
+Date: Mon, 7 Sep 2020 21:19:54 +0200
+Subject: [Buildroot] [git commit] package/easyframes: fix build with musl
+ and gcc 4.8
+Message-ID: <20200907191136.47923815F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a85c7e0b38760d9daf98a2fad298a44e2a986869
+commit: https://git.buildroot.net/buildroot/commit/?id=4ad323054b06774ab48f7681d6c79c83f00ead3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wayland-utils needs wayland-protocols:
-
-Run-time dependency wayland-protocols found: NO (tried pkgconfig)
-
-../output-1/build/wayland-utils-1.0.0/wayland-info/meson.build:4:0: ERROR: Dependency "wayland-protocols" not found, tried pkgconfig
-
 Fixes:
- - http://autobuild.buildroot.org/results/ea4daeb94c25232e3b4a34c1da72bf9bbd5f3cce
+ - http://autobuild.buildroot.org/results/32007293e04e6c661108639d1589fe078f254ecd
+ - http://autobuild.buildroot.org/results/1804e8b68f715de1011750cec2ed5d3d3f7964c8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wayland-utils/Config.in        | 1 +
- package/wayland-utils/wayland-utils.mk | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ .../0002-Fix-different-compiling-issues.patch      | 91 ++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/package/wayland-utils/Config.in b/package/wayland-utils/Config.in
-index 3ff7f2efe9..d7842e6142 100644
---- a/package/wayland-utils/Config.in
-+++ b/package/wayland-utils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_WAYLAND_UTILS
- 	bool "wayland-utils"
- 	depends on BR2_PACKAGE_WAYLAND # wayland-client, wayland-server
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	help
- 	  Wayland utils (wayland-info).
- 
-diff --git a/package/wayland-utils/wayland-utils.mk b/package/wayland-utils/wayland-utils.mk
-index 9c4abe7b08..5269454b7e 100644
---- a/package/wayland-utils/wayland-utils.mk
-+++ b/package/wayland-utils/wayland-utils.mk
-@@ -9,6 +9,6 @@ WAYLAND_UTILS_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_UTILS_SOURCE = wayland-utils-$(WAYLAND_UTILS_VERSION).tar.xz
- WAYLAND_UTILS_LICENSE = MIT
- WAYLAND_UTILS_LICENSE_FILES = COPYING
--WAYLAND_UTILS_DEPENDENCIES = host-pkgconf wayland
-+WAYLAND_UTILS_DEPENDENCIES = host-pkgconf wayland wayland-protocols
- 
- $(eval $(meson-package))
+diff --git a/package/easyframes/0002-Fix-different-compiling-issues.patch b/package/easyframes/0002-Fix-different-compiling-issues.patch
+new file mode 100644
+index 0000000000..e4d16a73a5
+--- /dev/null
++++ b/package/easyframes/0002-Fix-different-compiling-issues.patch
+@@ -0,0 +1,91 @@
++From d3d179c3c39ec10ec636b325325ad8e18ae9542f Mon Sep 17 00:00:00 2001
++From: Horatiu Vultur <horatiu.vultur@microchip.com>
++Date: Tue, 1 Sep 2020 13:03:47 +0200
++Subject: [PATCH] Fix different compiling issues
++
++[Retrieved from:
++https://github.com/microchip-ung/easyframes/commit/d3d179c3c39ec10ec636b325325ad8e18ae9542f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/ef-exec.c        | 4 ++--
++ src/ef-parse-bytes.c | 8 ++++++--
++ src/ef.h             | 4 ++--
++ 3 files changed, 10 insertions(+), 6 deletions(-)
++
++diff --git a/src/ef-exec.c b/src/ef-exec.c
++index 3d184a0..824164e 100644
++--- a/src/ef-exec.c
+++++ b/src/ef-exec.c
++@@ -108,7 +108,7 @@ int ring_wait_for_init(tpacket_ring *ring) {
++ 
++ 
++ int raw_socket(cmd_socket_t *cmd_socket) {
++-    int s, res, val, ifidx;
+++    int s, res, val, ifidx, i;
++     struct sockaddr_ll sa = {};
++     struct packet_mreq mr = {};
++ 
++@@ -194,7 +194,7 @@ int raw_socket(cmd_socket_t *cmd_socket) {
++     //
++     // TODO: This does not seem to be needed, if we uses a RX ring buffer
++     // instead (atleast that seems to work for libpcap)
++-    for (int i = 0; i < 10000; ++i) {
+++    for (i = 0; i < 10000; ++i) {
++         struct msghdr msg = { 0 };
++         int res = recvmsg(s, &msg, MSG_DONTWAIT);
++         if (res < 0)
++diff --git a/src/ef-parse-bytes.c b/src/ef-parse-bytes.c
++index 1dd590f..1785f45 100644
++--- a/src/ef-parse-bytes.c
+++++ b/src/ef-parse-bytes.c
++@@ -2,6 +2,7 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <endian.h>
++ #include <arpa/inet.h>
++ 
++ struct start_with {
++@@ -212,7 +213,9 @@ buf_t *parse_bytes(const char *s, int bytes) {
++     for (s = data_begin; *s; ++s) {
++         int match_found = 0;
++         for (i = 0; i < sizeof(has_chars)/sizeof(has_chars[0]); ++i) {
++-            for (const char *set_i = has_chars[i].char_set; *set_i; ++set_i) {
+++            const char *set_i;
+++
+++            for (set_i = has_chars[i].char_set; *set_i; ++set_i) {
++                 if (*s == *set_i) {
++                     has_mask |= has_chars[i].mask;
++                     match_found = 1;
++@@ -313,6 +316,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
++                ((has_mask & ~(HAS_HEX_COL)) == 0) && (has_mask & HAS_COLON)) {
++         // This will be treated as a mac-address
++         uint8_t m[6] = {};
+++        const char *x;
++ 
++         // We want to be able to write something like this (like we RFC2373
++         // specifies for IPv6):
++@@ -334,7 +338,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
++ 
++         //po("line: %d data_begin: %s\n", __LINE__, data_begin);
++ 
++-        for (const char *x = data_begin; *x; ++x) {
+++        for (x = data_begin; *x; ++x) {
++             int colon = 0;
++             int val = 0;
++ 
++diff --git a/src/ef.h b/src/ef.h
++index 8926c25..f4c1629 100644
++--- a/src/ef.h
+++++ b/src/ef.h
++@@ -59,8 +59,8 @@ void bl_check(buf_list_t *b);
++ void bl_reset(buf_list_t *b);
++ void bset_value(buf_t *b, uint8_t v);
++ 
++-inline void bl_init(buf_list_t *b) { bl_reset(b); }
++-inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
+++static inline void bl_init(buf_list_t *b) { bl_reset(b); }
+++static inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
++ 
++ int bl_printf_append(buf_list_t *b, const char *format, ...)
++     __attribute__ ((format (printf, 2, 3)));
