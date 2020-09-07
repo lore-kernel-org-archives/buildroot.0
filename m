@@ -1,56 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Sep 2020 20:48:49 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-09-06
-In-Reply-To: <87v9gpa5sr.fsf@posteo.net>
-References: <notmuch-sha1-49b8b2482171f546326fa9fe8d30bb8818be6e39>
- <87v9gpa5sr.fsf@posteo.net>
-Message-ID: <20200907204849.7fdb07f3@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  7 Sep 2020 20:50:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/easyframes: fix build with musl and
+ gcc 4.8
+Message-ID: <20200907185002.284189-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Aleksander,
+Fixes:
+ - http://autobuild.buildroot.org/results/32007293e04e6c661108639d1589fe078f254ecd
+ - http://autobuild.buildroot.org/results/1804e8b68f715de1011750cec2ed5d3d3f7964c8
 
-On Mon, 07 Sep 2020 18:51:48 +0200
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-Fix-different-compiling-issues.patch | 91 +++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100644 package/easyframes/0002-Fix-different-compiling-issues.patch
 
-> >     arch     |             reason             |                                       url                                      
-> > -------------+--------------------------------+---------------------------------------------------------------------------------
-> >    mipsel    |       makedumpfile-1.6.7       | http://autobuild.buildroot.net/results/a8dacb1cc74e181c6b19b7fb4731899805bc47aa
-> >     sh4      |       makedumpfile-1.6.7       | http://autobuild.buildroot.net/results/0e20c17bd604ee1168cc379061c120a2d8263e5f
-> >   nds32le    |       makedumpfile-1.6.7       | http://autobuild.buildroot.net/results/000f622085b5b54c1b7f59d0c41ce1480c28b68e
->
-> wasn't it fixed by commit
-> 
-> commit 34b3a071a0b038870379244a2c2264d8802e41a3
-> Author: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Date:   Sun Sep 6 10:00:28 2020 +0200
-> 
->     package/makedumpfile: add BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
-
-All those build results were generated *before* the commit you mention.
-If you take the build result URL, for example:
-
-  http://autobuild.buildroot.net/results/a8dacb1cc74e181c6b19b7fb4731899805bc47aa
-
-Then you can see a file called "gitid" which shows at which Buildroot
-commit this build was done. In this case:
-3d0c31633d170406ffd1678d56b7ca34aac0ee68, which predates when the
-makedumpfile fix was committed.
-
-The builds of our autobuilders are done 24/7, and each morning
-(European time) we send an e-mail which notifies developers of the
-builds that occurred during the past day (i.e between midnight and
-midnight, European time). Therefore, it is possible to be notified of
-build failures that have already been fixed in the mean time.
-
-Best regards,
-
-Thomas
+diff --git a/package/easyframes/0002-Fix-different-compiling-issues.patch b/package/easyframes/0002-Fix-different-compiling-issues.patch
+new file mode 100644
+index 0000000000..e4d16a73a5
+--- /dev/null
++++ b/package/easyframes/0002-Fix-different-compiling-issues.patch
+@@ -0,0 +1,91 @@
++From d3d179c3c39ec10ec636b325325ad8e18ae9542f Mon Sep 17 00:00:00 2001
++From: Horatiu Vultur <horatiu.vultur@microchip.com>
++Date: Tue, 1 Sep 2020 13:03:47 +0200
++Subject: [PATCH] Fix different compiling issues
++
++[Retrieved from:
++https://github.com/microchip-ung/easyframes/commit/d3d179c3c39ec10ec636b325325ad8e18ae9542f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/ef-exec.c        | 4 ++--
++ src/ef-parse-bytes.c | 8 ++++++--
++ src/ef.h             | 4 ++--
++ 3 files changed, 10 insertions(+), 6 deletions(-)
++
++diff --git a/src/ef-exec.c b/src/ef-exec.c
++index 3d184a0..824164e 100644
++--- a/src/ef-exec.c
+++++ b/src/ef-exec.c
++@@ -108,7 +108,7 @@ int ring_wait_for_init(tpacket_ring *ring) {
++ 
++ 
++ int raw_socket(cmd_socket_t *cmd_socket) {
++-    int s, res, val, ifidx;
+++    int s, res, val, ifidx, i;
++     struct sockaddr_ll sa = {};
++     struct packet_mreq mr = {};
++ 
++@@ -194,7 +194,7 @@ int raw_socket(cmd_socket_t *cmd_socket) {
++     //
++     // TODO: This does not seem to be needed, if we uses a RX ring buffer
++     // instead (atleast that seems to work for libpcap)
++-    for (int i = 0; i < 10000; ++i) {
+++    for (i = 0; i < 10000; ++i) {
++         struct msghdr msg = { 0 };
++         int res = recvmsg(s, &msg, MSG_DONTWAIT);
++         if (res < 0)
++diff --git a/src/ef-parse-bytes.c b/src/ef-parse-bytes.c
++index 1dd590f..1785f45 100644
++--- a/src/ef-parse-bytes.c
+++++ b/src/ef-parse-bytes.c
++@@ -2,6 +2,7 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <endian.h>
++ #include <arpa/inet.h>
++ 
++ struct start_with {
++@@ -212,7 +213,9 @@ buf_t *parse_bytes(const char *s, int bytes) {
++     for (s = data_begin; *s; ++s) {
++         int match_found = 0;
++         for (i = 0; i < sizeof(has_chars)/sizeof(has_chars[0]); ++i) {
++-            for (const char *set_i = has_chars[i].char_set; *set_i; ++set_i) {
+++            const char *set_i;
+++
+++            for (set_i = has_chars[i].char_set; *set_i; ++set_i) {
++                 if (*s == *set_i) {
++                     has_mask |= has_chars[i].mask;
++                     match_found = 1;
++@@ -313,6 +316,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
++                ((has_mask & ~(HAS_HEX_COL)) == 0) && (has_mask & HAS_COLON)) {
++         // This will be treated as a mac-address
++         uint8_t m[6] = {};
+++        const char *x;
++ 
++         // We want to be able to write something like this (like we RFC2373
++         // specifies for IPv6):
++@@ -334,7 +338,7 @@ buf_t *parse_bytes(const char *s, int bytes) {
++ 
++         //po("line: %d data_begin: %s\n", __LINE__, data_begin);
++ 
++-        for (const char *x = data_begin; *x; ++x) {
+++        for (x = data_begin; *x; ++x) {
++             int colon = 0;
++             int val = 0;
++ 
++diff --git a/src/ef.h b/src/ef.h
++index 8926c25..f4c1629 100644
++--- a/src/ef.h
+++++ b/src/ef.h
++@@ -59,8 +59,8 @@ void bl_check(buf_list_t *b);
++ void bl_reset(buf_list_t *b);
++ void bset_value(buf_t *b, uint8_t v);
++ 
++-inline void bl_init(buf_list_t *b) { bl_reset(b); }
++-inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
+++static inline void bl_init(buf_list_t *b) { bl_reset(b); }
+++static inline void bl_destroy(buf_list_t *b) { bl_reset(b); }
++ 
++ int bl_printf_append(buf_list_t *b, const char *format, ...)
++     __attribute__ ((format (printf, 2, 3)));
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
