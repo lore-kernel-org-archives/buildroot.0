@@ -1,148 +1,69 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue,  8 Sep 2020 15:24:31 -0700
-Subject: [Buildroot] [PATCH] package/sentry-native: new package
-Message-ID: <20200908222431.1047587-1-joseph.kogut@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 00:27:47 +0200
+Subject: [Buildroot] [PATCH 2020.02.x v2 1/4] package/systemd: bump
+ version to 244.4
+In-Reply-To: <20200908221256.126984-1-brandon.maier@rockwellcollins.com>
+References: <20200908221256.126984-1-brandon.maier@rockwellcollins.com>
+Message-ID: <20200908222747.GI14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-sentry.h-include-ucontext.h.patch    | 28 +++++++++++++++++++
- package/sentry-native/Config.in               | 25 +++++++++++++++++
- package/sentry-native/sentry-native.hash      |  3 ++
- package/sentry-native/sentry-native.mk        | 18 ++++++++++++
- 6 files changed, 76 insertions(+)
- create mode 100644 package/sentry-native/0001-sentry.h-include-ucontext.h.patch
- create mode 100644 package/sentry-native/Config.in
- create mode 100644 package/sentry-native/sentry-native.hash
- create mode 100644 package/sentry-native/sentry-native.mk
+Brandon, All,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3c3dcda859..342eefc368 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1392,6 +1392,7 @@ F:	package/python-schedule/
- F:	package/python-sentry-sdk/
- F:	package/python-websockets/
- F:	package/python-xlib/
-+F:	package/sentry-native/
- F:	package/unclutter-xfixes/
- 
- N:	Joshua Henderson <joshua.henderson@microchip.com>
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..365d274c57 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -129,6 +129,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/ramspeed/Config.in"
- 	source "package/rt-tests/Config.in"
- 	source "package/spidev_test/Config.in"
-+	source "package/sentry-native/Config.in"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/stress-ng/Config.in"
-diff --git a/package/sentry-native/0001-sentry.h-include-ucontext.h.patch b/package/sentry-native/0001-sentry.h-include-ucontext.h.patch
-new file mode 100644
-index 0000000000..b4a427072c
---- /dev/null
-+++ b/package/sentry-native/0001-sentry.h-include-ucontext.h.patch
-@@ -0,0 +1,28 @@
-+From 6a3b7b28f34c91c72d8b849903d93de2997b82f1 Mon Sep 17 00:00:00 2001
-+From: Joseph Kogut <joseph.kogut@gmail.com>
-+Date: Tue, 8 Sep 2020 11:40:01 -0700
-+Subject: [PATCH] sentry.h: include ucontext.h
-+
-+This is included by signal.h in newer versions of GCC, but results in an
-+unknown type name error in older versions.
-+
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ include/sentry.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/include/sentry.h b/include/sentry.h
-+index 25754d9..a55cc00 100644
-+--- a/include/sentry.h
-++++ b/include/sentry.h
-+@@ -78,6 +78,7 @@ extern "C" {
-+ #    include <wtypes.h>
-+ #else
-+ #    include <signal.h>
-++#    include <ucontext.h>
-+ #endif
-+ 
-+ /**
-+-- 
-+2.28.0
-+
-diff --git a/package/sentry-native/Config.in b/package/sentry-native/Config.in
-new file mode 100644
-index 0000000000..a65aca5155
---- /dev/null
-+++ b/package/sentry-native/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_SENTRY_NATIVE
-+	bool "sentry-native"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	select BR2_PACKAGE_GOOGLE_BREAKPAD
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  The Sentry Native SDK is an error and crash
-+	  reporting client for native applications,
-+	  optimized for C and C++.
-+
-+	  https://github.com/getsentry/sentry-native
-+
-+comment "sentry-native needs a glibc toolchain with w/ wchar, thread, C++, gcc >= 4.8"
-+	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/sentry-native/sentry-native.hash b/package/sentry-native/sentry-native.hash
-new file mode 100644
-index 0000000000..dffc7aeca3
---- /dev/null
-+++ b/package/sentry-native/sentry-native.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256  a7d04fe9b9175c30a58ce20ae23b510595045a66884a447dd21ff2d0c749751b  sentry-native-0.4.1.tar.gz
-+sha256  5ef07a3d95f1f779c1597c0fbaecbb7ba242128ff0587ed1e3214c7ac6154523  LICENSE
-diff --git a/package/sentry-native/sentry-native.mk b/package/sentry-native/sentry-native.mk
-new file mode 100644
-index 0000000000..aaaeee1e43
---- /dev/null
-+++ b/package/sentry-native/sentry-native.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# sentry-native
-+#
-+################################################################################
-+
-+SENTRY_NATIVE_VERSION = 0.4.1
-+SENTRY_NATIVE_SITE = $(call github,getsentry,sentry-native,$(SENTRY_NATIVE_VERSION))
-+SENTRY_NATIVE_INSTALL_TARGET = NO
-+SENTRY_NATIVE_INSTALL_STAGING = YES
-+SENTRY_NATIVE_LICENSE = MIT
-+SENTRY_NATIVE_LICENSE_FILES = LICENSE
-+SENTRY_NATIVE_DEPENDENCIES = libcurl google-breakpad linux-syscall-support
-+
-+# Use the built system breakpad client instead of bundling
-+SENTRY_NATIVE_CONF_OPTS += -DSENTRY_BREAKPAD_SYSTEM=ON
-+
-+$(eval $(cmake-package))
+On 2020-09-08 17:12 -0500, Brandon Maier spake thusly:
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+> ---
+> v2:
+> - No change
+
+You forgot to carry my:
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+(No need to resend now, Patchwork will grab that one.)
+
+Regards,
+Yann E. MORIN.
+
+>  package/systemd/systemd.hash | 2 +-
+>  package/systemd/systemd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 4ab514d673..3f6f4b4db6 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,5 +1,5 @@
+>  # sha256 locally computed
+> -sha256	e6b463733da5eb37075352a64112d030b8612935a54e5b3468279a4f15a4cec4	systemd-244.3.tar.gz
+> +sha256	6f01276f45369d56ea5ced713e63a22acbb9142862eb719246a77a4b3f5699ee	systemd-244.4.tar.gz
+>  sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+>  sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+>  sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 2908caef61..e0a4679955 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SYSTEMD_VERSION = 244.3
+> +SYSTEMD_VERSION = 244.4
+>  SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+>  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+>  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+> -- 
+> 2.28.0
+> 
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
