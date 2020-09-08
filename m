@@ -1,51 +1,55 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 8 Sep 2020 23:26:43 +0300
-Subject: [Buildroot] [PATCH] package/cog: add a variant with WebKitGTK
-In-Reply-To: <20200907162156.1458163-1-francois.perrad@gadz.org>
-References: <20200907162156.1458163-1-francois.perrad@gadz.org>
-Message-ID: <20200908232643.GD95366@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 22:31:51 +0200
+Subject: [Buildroot] [git commit] package/kbd: needs gcc 4.9
+Message-ID: <20200908202358.72C8A88932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Francois,
+commit: https://git.buildroot.net/buildroot/commit/?id=ffba905653b306d7f143e24c2e6eb4a6d6d69a0b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 07 Sep 2020 18:21:56 +0200 Francois Perrad <fperrad@gmail.com> wrote:
+kbd uses _Generic since version 2.2.90 and
+https://github.com/legionus/kbd/commit/da5feb8fd90c3a0df9d505d4604c629d051d3d7d
 
-> wayland is useful only with wpewebkit.
-> BR2_PACKAGE_WAYLAND is already selected by BR2_PACKAGE_WPEWEBKIT.
-> backend options BR2_PACKAGE_COG_PLATFORM_* depend on BR2_PACKAGE_WPEWEBKIT.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/cog/Config.in | 11 +++++++----
->  package/cog/cog.mk    | 10 +++++++++-
->  2 files changed, 16 insertions(+), 5 deletions(-)
+However, _Generic is not available until gcc 4.9:
+https://gcc.gnu.org/wiki/C11Status
 
-Let me put on my ?WPE/Cog developer hat? for a moment and let you know about
-the roadmap for Cog: The WebKitGTK support will be eventually disappearing,
-and Cog will be WPE-only, because the WebKitGTK support has been a bit of a
-burden to maintain and has been broken a few times (and went unnoticed).
+As a result, build with gcc 4.8 fails on:
 
-We are have in the back burner a big refactoring which will bring in support
-for multiple web views to Cog (mainly) and a number of other improvements.
-The development branch [1] where the work is progressing already removes the
-WebKitGTK support, as a matter of fact.
+setleds.c:352:3: warning: implicit declaration of function '_Generic' [-Wimplicit-function-declaration]
+   ndefflags = BITMASK_SET(BITMASK_UNSET(odefflags, ndef), nval);
+   ^
+setleds.c:22:2: error: expected expression before 'unsigned'
+  unsigned char: (unsigned char)(~(x)) \
+  ^
 
-Therefore I think adding support in Buildroot to compile Cog using WebKitGTK
-is dead end, and in my opinion it would be better to not merge this patch.
+Fixes:
+ - http://autobuild.buildroot.org/results/b74ecdda44543da1d47fa2c027fb046a3ca1e2d1
 
-Regards,
-?Adri?n
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: propagate the MMU dependency to the comment]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-[1] https://github.com/Igalia/cog/commits/devel/multiple-views
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200908/c46e1508/attachment.asc>
+ package/kbd/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/kbd/Config.in b/package/kbd/Config.in
+index 6cf2fc0dc6..27cadf1af2 100644
+--- a/package/kbd/Config.in
++++ b/package/kbd/Config.in
+@@ -2,7 +2,12 @@ config BR2_PACKAGE_KBD
+ 	bool "kbd"
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Generic
+ 	help
+ 	  Keytable files and keyboard utilities.
+ 
+ 	  http://kernel.org/pub/linux/utils/kbd/
++
++comment "kbd needs a toolchain w/ gcc >= 4.9"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
