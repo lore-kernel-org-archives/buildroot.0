@@ -1,57 +1,36 @@
 From: Damien Le Moal <Damien.LeMoal@wdc.com>
-Date: Tue, 8 Sep 2020 07:42:34 +0000
-Subject: [Buildroot] [PATCH 1/5] toolchain/buildroot: allow uclibc-ng
- for riscv
+Date: Tue, 8 Sep 2020 07:43:43 +0000
+Subject: [Buildroot] [PATCH 4/5] package make: build nommu builds as
+ linux
 References: <20200908050744.425303-1-damien.lemoal@wdc.com>
- <20200908050744.425303-2-damien.lemoal@wdc.com>
- <20200908090405.4e7a2bcc@windsurf.hq.k.grp>
-Message-ID: <CY4PR04MB3751360ECC39A61183D2B984E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
+ <20200908050744.425303-5-damien.lemoal@wdc.com>
+ <20200908090651.6cf90841@windsurf.hq.k.grp>
+Message-ID: <CY4PR04MB37519C6BD1725C32E9C1C9E9E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020/09/08 16:04, Thomas Petazzoni wrote:
-> Hello Damien,
-> 
-> On Tue,  8 Sep 2020 14:07:40 +0900
+On 2020/09/08 16:07, Thomas Petazzoni wrote:
+> On Tue,  8 Sep 2020 14:07:43 +0900
 > Damien Le Moal <damien.lemoal@wdc.com> wrote:
 > 
->> uclibcb supports RISC-V architecture since version 1.0.31. Allow its
->> selection for that architecture.
+>> From: Christoph Hellwig <hch@lst.de>
 >>
+>> Using *-uclinux-* seems like an only partially followed convention.
+>> And at least for RISC-V gcc doesn't know about uclinux tuples, so
+>> switch back to the normal Linux one for now.
+>>
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
 >> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 > 
-> In fact, we had already enabled support for uClibc-ng for RISC-V 64 in
-> commit bd9810e176273914eca1208bcba23f0de9e446b3, but we had to revert
-> in e7d631c0df1698b4edc94f148e7247869430e108 because uClibc-ng does not
-> implement the __riscv_flush_icache() function, which is needed, as some
-> GCC builtins emit calls to that function.
-> 
-> I have reported this issue to upstream uClibc-ng:
-> 
->   https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html
+> I believe this is going to break support for ARM noMMU, where the
+> TARGET_OS part of the tuple is really uclinux. So I guess we should
+> simply make this conditional.
 
-This has been implemented already:
+OK. I can do that and change the name for riscv arch only.
 
-commit 8b1f6b2e08ed3c15484c2ca0c3f0a45125c559c1
-Author: Waldemar Brodkorb <wbx@openadk.org>
-Date:   Mon Aug 17 15:44:58 2020 +0200
-
-    riscv64: add __riscv_flush_icache
-
-    Always use the systemcall as uClibc-ng has no vdso support.
-    Tested with libffi and python in qemu-system-riscv64.
-
-This is part of uclibc version 1.0.35.
-
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
 
 
 -- 
