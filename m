@@ -1,35 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Sep 2020 09:48:19 +0200
-Subject: [Buildroot] [PATCH next] package/uhubctl: bump to version 2.2.0
-In-Reply-To: <73c54402e688998f5a2a811cb3613a41bc164302.1590640751.git.baruch@tkos.co.il>
-References: <73c54402e688998f5a2a811cb3613a41bc164302.1590640751.git.baruch@tkos.co.il>
-Message-ID: <20200908094819.32822d2a@windsurf.hq.k.grp>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 09:50:20 +0200
+Subject: [Buildroot] [git commit] package/strace: disable mpers support
+Message-ID: <20200908074218.31BDA86C46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 May 2020 07:39:11 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bae614258259289671c4b6e46564bbb88c972b26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Force GIT_VERSION to avoid git version logic that takes the Buildroot
-> git commit id.
-> 
-> Update LICENSE hash; copyright year update.
-> 
-> Format hashes file with two space delimiters.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/uhubctl/uhubctl.hash | 4 ++--
->  package/uhubctl/uhubctl.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On aarch64 With the config option "--enable-mpers=check" the configure.ac
+script searchs for a 32bit compiler. When a matching compiler is found
+in the PATH some compatiblity checks are done. This can fail when the
+available kernel headers on host and buildroot target does not match.
 
-Applied to master, thanks.
+Since buildroot does not support 32bit binaries when building for 64bit
+architecture (no -m32 option) we can disable this option unconditionally.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+When disabling unconditionally also the configuration for toolchain using
+MUSL can be removed.
+
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/strace/strace.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 8403e09cbd..50e6d90a87 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -9,15 +9,7 @@ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
+ STRACE_LICENSE_FILES = COPYING LGPL-2.1-or-later
+-STRACE_CONF_OPTS = --enable-mpers=check
+-
+-# strace bundle some kernel headers to build libmpers, this mixes userspace
+-# headers and kernel headers which break the build with musl.
+-# The stddef.h from gcc is used instead of the one from musl.
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-STRACE_CONF_OPTS += st_cv_m32_mpers=no \
+-	st_cv_mx32_mpers=no
+-endif
++STRACE_CONF_OPTS = --enable-mpers=no
+ 
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ STRACE_DEPENDENCIES += libunwind
