@@ -1,44 +1,102 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue,  8 Sep 2020 17:01:20 -0500
-Subject: [Buildroot] [PATCH 1/1] docs/manual: Add section about contributing
- to release branches
-Message-ID: <20200908220119.90236-1-brandon.maier@rockwellcollins.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 9 Sep 2020 00:02:54 +0200
+Subject: [Buildroot] [PATCH 10/10] gitlab-ci: only check defconfigs for
+ known branches
+In-Reply-To: <c1ea91abce5dbf7068615b247ff77dd7f8ec8fbb.1599423132.git.yann.morin.1998@free.fr>
+References: <cover.1599423132.git.yann.morin.1998@free.fr>
+ <c1ea91abce5dbf7068615b247ff77dd7f8ec8fbb.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <75adc5b2-e652-e270-413e-1721acb6420e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
----
- docs/manual/contribute.txt | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
+> Currently, the check of defconfigs is run for all branches, even those
+> that are pushed only to run runtime tests. This is very inconvenient.
+> 
+> In fact, we only want to check the defconfigs on standard branches, that
+> is master, next, and the maintenance branches.
+> 
+> This will also decrease drastically the number gitlab-ci minutes used
+> when one pushes their repo to gitlab.com, where the number of CI minutes
+> are now going to be pretty severely restricted.
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 11d8811b44..2b3d7e7302 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -371,6 +371,21 @@ in the following cases:
- * whenever you feel it will help presenting your work, your choices,
-   the review process, etc.
- 
-+==== Patches for release branches
-+
-+When fixing bugs on a release branch, bugs should be fixed on the master
-+branch first. Then the release branch maintainer can backport the fixes
-+to applicable release branches. But some bugs may apply only to a
-+specific release, for example because it is using an older version of a
-+package. In that case, add the branch name to the patch's subject
-+prefix. This can be done with the +git format-patch+ flag
-++--subject-prefix+.
-+
-+---------------------
-+$ git format-patch --subject-prefix "PATCH 2020.02.x" \
-+    -M -s -o outgoing origin/2020.02.x
-+---------------------
-+
- ==== Patch revision changelog
- 
- When improvements are requested, the new revision of each commit
--- 
-2.28.0
+Note, some qemu defconfig can be runtime tested. But ok it's not part of the
+runtime testing infrastructure.
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  support/scripts/generate-gitlab-ci-yml | 29 ++++++++++++++------------
+>  1 file changed, 16 insertions(+), 13 deletions(-)
+> 
+> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+> index f8b533f2c3..30222f1a04 100755
+> --- a/support/scripts/generate-gitlab-ci-yml
+> +++ b/support/scripts/generate-gitlab-ci-yml
+> @@ -42,37 +42,40 @@ gen_basics() {
+>  
+>  gen_defconfigs() {
+>      local -a defconfigs
+> -    local build_defconfigs cfg
+> +    local template cfg ext
+>  
+>      defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
+>  
+> -    build_defconfigs=false
+>      if [ -n "${CI_COMMIT_TAG}" ]; then
+>          # For tags, create a pipeline.
+> -        build_defconfigs=true
+> +        template=base
+>      fi
+>      if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
+>          # For pipeline created by using a trigger token.
+> -        build_defconfigs=true
+> +        template=base
+>      fi
+>      case "${CI_COMMIT_REF_NAME}" in
+> +        # For master, next, and maintenance branches, only check the defconfigs
+> +        (master|next|????.??.x)
+> +            template=check
+> +            ext=_check
+> +        ;;
+>          # For the branch or tag name named *-defconfigs, create a pipeline.
+>          (*-defconfigs)
+> -            build_defconfigs=true
+> +            template=base
+>          ;;
+>          (*-*_defconfig)
+>              defconfigs=( "${CI_COMMIT_REF_NAME##*-}" )
+> -            build_defconfigs=true
+> +            template=base
+>          ;;
+>      esac
+>  
+> -    for cfg in "${defconfigs[@]}"; do
+> -        if ${build_defconfigs}; then
+> -            printf '%s: { extends: .defconfig_base }\n' "${cfg}"
+> -        else
+> -            printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+> -        fi
+> -    done
+> +    if [ -n "${template}" ]; then
+> +        for cfg in "${defconfigs[@]}"; do
+> +            printf '%s%s: { extends: .defconfig_%s }\n' \
+> +                   "${cfg}" "${ext}" "${template}"
+> +        done
+> +    fi
+>  }
+>  
+>  gen_tests() {
+> 
