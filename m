@@ -1,74 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  8 Sep 2020 07:23:52 +0200
-Subject: [Buildroot] [PATCH] lua-gd: bump to version
- 2ce8e478a8591afd71e607506bc8c64b161bbd30
-Message-ID: <20200908052352.1735787-1-francois.perrad@gadz.org>
+From: Damien Le Moal <Damien.LeMoal@wdc.com>
+Date: Tue, 8 Sep 2020 06:00:45 +0000
+Subject: [Buildroot] [PATCH 3/5] package/elf2flt: add RISC-V support
+References: <20200908051624.425573-1-damien.lemoal@wdc.com>
+ <20200908051624.425573-4-damien.lemoal@wdc.com>
+ <20200908053821.GA13505@lst.de>
+Message-ID: <CY4PR04MB3751C5B1065442D7E488D49CE7290@CY4PR04MB3751.namprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-drop gdlib-config
+On 2020/09/08 14:38, Christoph Hellwig wrote:
+> On Tue, Sep 08, 2020 at 02:16:22PM +0900, Damien Le Moal wrote:
+>> From: Christoph Hellwig <hch@lst.de>
+>>
+>> Enable selecting elf2flt for RISC-V no MMU builds ad add support for it.
+>>
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> 
+> Cn we try to upstream the elf2flt changes first?  Sorry, I should have
+> probably done that long time ago..
+> 
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua-gd/lua-gd.hash |  2 +-
- package/lua-gd/lua-gd.mk   | 24 ++++++++++++++++++++++--
- 2 files changed, 23 insertions(+), 3 deletions(-)
+Yes. Will send that out too. Same for the uClibc build fixes (currently, static
+builds with gcc10 are totally broken though).
 
-diff --git a/package/lua-gd/lua-gd.hash b/package/lua-gd/lua-gd.hash
-index d1bab37bc..512573b47 100644
---- a/package/lua-gd/lua-gd.hash
-+++ b/package/lua-gd/lua-gd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  114f273a64da6ccbf6e0555757b952f84ab8c134416dd7aae1aeb666ca0e964d  lua-gd-e60b13b7977bb3424d7044976ccba5d42c256934.tar.gz
-+sha256  928fa036b37595d773db1999c9ff43195c4290f0722298fa5b0c3e619c678525  lua-gd-2ce8e478a8591afd71e607506bc8c64b161bbd30.tar.gz
- sha256  b0ca41d88ddb0ca785436d37b08b8f413055755eb6bfd3ea0a6ff3214303aa43  COPYING
-diff --git a/package/lua-gd/lua-gd.mk b/package/lua-gd/lua-gd.mk
-index e9a51a167..099df31f7 100644
---- a/package/lua-gd/lua-gd.mk
-+++ b/package/lua-gd/lua-gd.mk
-@@ -4,17 +4,37 @@
- #
- ################################################################################
- 
--LUA_GD_VERSION = e60b13b7977bb3424d7044976ccba5d42c256934
-+LUA_GD_VERSION = 2ce8e478a8591afd71e607506bc8c64b161bbd30
- LUA_GD_SITE = $(call github,ittner,lua-gd,$(LUA_GD_VERSION))
- LUA_GD_LICENSE = MIT
- LUA_GD_LICENSE_FILES = COPYING
- LUA_GD_DEPENDENCIES = luainterpreter gd
- 
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+LUA_GD_FEATURES += -DGD_FONTCONFIG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+LUA_GD_FEATURES += -DGD_FREETYPE
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LUA_GD_FEATURES += -DGD_JPEG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LUA_GD_FEATURES += -DGD_PNG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
-+LUA_GD_FEATURES += -DGD_XPM
-+endif
-+
- # VERSION follows the scheme described on https://ittner.github.io/lua-gd/manual.html#intro,
- # the current version of the binding is 3.
- define LUA_GD_BUILD_CMDS
- 	$(MAKE) -C $(@D) gd.so \
--		GDLIBCONFIG="$(STAGING_DIR)/usr/bin/gdlib-config" \
-+		GDFEATURES="$(LUA_GD_FEATURES)" \
- 		CC=$(TARGET_CC) \
- 		CFLAGS="$(TARGET_CFLAGS) -fPIC -DVERSION=\\\"$(GD_VERSION)r3\\\"" \
- 		LFLAGS="-shared -lgd"
+
 -- 
-2.25.1
+Damien Le Moal
+Western Digital Research
