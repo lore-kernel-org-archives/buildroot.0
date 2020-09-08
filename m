@@ -1,82 +1,148 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue,  8 Sep 2020 17:12:56 -0500
-Subject: [Buildroot] [PATCH 2020.02.x v2 4/4] package/systemd: Backport fix
- for makefs
-In-Reply-To: <20200908221256.126984-1-brandon.maier@rockwellcollins.com>
-References: <20200908221256.126984-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20200908221256.126984-4-brandon.maier@rockwellcollins.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue,  8 Sep 2020 15:24:31 -0700
+Subject: [Buildroot] [PATCH] package/sentry-native: new package
+Message-ID: <20200908222431.1047587-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The systemd fstab option "x-systemd.makefs" will fail to work, and throw
-an error that it can't find a device named "" (an empty string).
-Backport this fix from systemd v245.
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-v2:
-- Add "backport from" and SoB
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ .../0001-sentry.h-include-ucontext.h.patch    | 28 +++++++++++++++++++
+ package/sentry-native/Config.in               | 25 +++++++++++++++++
+ package/sentry-native/sentry-native.hash      |  3 ++
+ package/sentry-native/sentry-native.mk        | 18 ++++++++++++
+ 6 files changed, 76 insertions(+)
+ create mode 100644 package/sentry-native/0001-sentry.h-include-ucontext.h.patch
+ create mode 100644 package/sentry-native/Config.in
+ create mode 100644 package/sentry-native/sentry-native.hash
+ create mode 100644 package/sentry-native/sentry-native.mk
 
- ...0004-makefs-strdup-arguments-to-mkfs.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch
-
-diff --git a/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch b/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c3dcda859..342eefc368 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1392,6 +1392,7 @@ F:	package/python-schedule/
+ F:	package/python-sentry-sdk/
+ F:	package/python-websockets/
+ F:	package/python-xlib/
++F:	package/sentry-native/
+ F:	package/unclutter-xfixes/
+ 
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+diff --git a/package/Config.in b/package/Config.in
+index d7e79f4795..365d274c57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -129,6 +129,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/ramspeed/Config.in"
+ 	source "package/rt-tests/Config.in"
+ 	source "package/spidev_test/Config.in"
++	source "package/sentry-native/Config.in"
+ 	source "package/strace/Config.in"
+ 	source "package/stress/Config.in"
+ 	source "package/stress-ng/Config.in"
+diff --git a/package/sentry-native/0001-sentry.h-include-ucontext.h.patch b/package/sentry-native/0001-sentry.h-include-ucontext.h.patch
 new file mode 100644
-index 0000000000..140d741f63
+index 0000000000..b4a427072c
 --- /dev/null
-+++ b/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch
-@@ -0,0 +1,48 @@
-+From c315b79fb43a4d921a533ba0c2cb303324887993 Mon Sep 17 00:00:00 2001
-+From: Oliver Giles <ohw.giles@gmail.com>
-+Date: Thu, 13 Feb 2020 08:55:57 +0200
-+Subject: [PATCH] makefs: strdup arguments to mkfs
++++ b/package/sentry-native/0001-sentry.h-include-ucontext.h.patch
+@@ -0,0 +1,28 @@
++From 6a3b7b28f34c91c72d8b849903d93de2997b82f1 Mon Sep 17 00:00:00 2001
++From: Joseph Kogut <joseph.kogut@gmail.com>
++Date: Tue, 8 Sep 2020 11:40:01 -0700
++Subject: [PATCH] sentry.h: include ucontext.h
 +
-+Don't pass values from argv[] directly to child process forked using
-+safe_fork, because it clears argv[]. strdup them first.
++This is included by signal.h in newer versions of GCC, but results in an
++unknown type name error in older versions.
 +
-+[Brandon: backport from https://github.com/systemd/systemd/commit/c315b79fb43a4d921a533ba0c2cb303324887993]
-+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
++Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 +---
-+ src/partition/makefs.c | 13 +++++++++----
-+ 1 file changed, 9 insertions(+), 4 deletions(-)
++ include/sentry.h | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/src/partition/makefs.c b/src/partition/makefs.c
-+index 951989cbb6..d73d67c4e8 100644
-+--- a/src/partition/makefs.c
-++++ b/src/partition/makefs.c
-+@@ -41,8 +41,7 @@ static int makefs(const char *type, const char *device) {
-+ }
++diff --git a/include/sentry.h b/include/sentry.h
++index 25754d9..a55cc00 100644
++--- a/include/sentry.h
+++++ b/include/sentry.h
++@@ -78,6 +78,7 @@ extern "C" {
++ #    include <wtypes.h>
++ #else
++ #    include <signal.h>
+++#    include <ucontext.h>
++ #endif
 + 
-+ static int run(int argc, char *argv[]) {
-+-        const char *device, *type;
-+-        _cleanup_free_ char *detected = NULL;
-++        _cleanup_free_ char *device = NULL, *type = NULL, *detected = NULL;
-+         struct stat st;
-+         int r;
-+ 
-+@@ -52,8 +51,14 @@ static int run(int argc, char *argv[]) {
-+                 return log_error_errno(SYNTHETIC_ERRNO(EINVAL),
-+                                        "This program expects two arguments.");
-+ 
-+-        type = argv[1];
-+-        device = argv[2];
-++        /* type and device must be copied because makefs calls safe_fork, which clears argv[] */
-++        type = strdup(argv[1]);
-++        if (!type)
-++                return -ENOMEM;
-++
-++        device = strdup(argv[2]);
-++        if (!device)
-++                return -ENOMEM;
-+ 
-+         if (stat(device, &st) < 0)
-+                 return log_error_errno(errno, "Failed to stat \"%s\": %m", device);
++ /**
 +-- 
-+2.23.0
++2.28.0
 +
+diff --git a/package/sentry-native/Config.in b/package/sentry-native/Config.in
+new file mode 100644
+index 0000000000..a65aca5155
+--- /dev/null
++++ b/package/sentry-native/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_SENTRY_NATIVE
++	bool "sentry-native"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	select BR2_PACKAGE_GOOGLE_BREAKPAD
++	select BR2_PACKAGE_LIBCURL
++	help
++	  The Sentry Native SDK is an error and crash
++	  reporting client for native applications,
++	  optimized for C and C++.
++
++	  https://github.com/getsentry/sentry-native
++
++comment "sentry-native needs a glibc toolchain with w/ wchar, thread, C++, gcc >= 4.8"
++	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_USES_GLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/sentry-native/sentry-native.hash b/package/sentry-native/sentry-native.hash
+new file mode 100644
+index 0000000000..dffc7aeca3
+--- /dev/null
++++ b/package/sentry-native/sentry-native.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  a7d04fe9b9175c30a58ce20ae23b510595045a66884a447dd21ff2d0c749751b  sentry-native-0.4.1.tar.gz
++sha256  5ef07a3d95f1f779c1597c0fbaecbb7ba242128ff0587ed1e3214c7ac6154523  LICENSE
+diff --git a/package/sentry-native/sentry-native.mk b/package/sentry-native/sentry-native.mk
+new file mode 100644
+index 0000000000..aaaeee1e43
+--- /dev/null
++++ b/package/sentry-native/sentry-native.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# sentry-native
++#
++################################################################################
++
++SENTRY_NATIVE_VERSION = 0.4.1
++SENTRY_NATIVE_SITE = $(call github,getsentry,sentry-native,$(SENTRY_NATIVE_VERSION))
++SENTRY_NATIVE_INSTALL_TARGET = NO
++SENTRY_NATIVE_INSTALL_STAGING = YES
++SENTRY_NATIVE_LICENSE = MIT
++SENTRY_NATIVE_LICENSE_FILES = LICENSE
++SENTRY_NATIVE_DEPENDENCIES = libcurl google-breakpad linux-syscall-support
++
++# Use the built system breakpad client instead of bundling
++SENTRY_NATIVE_CONF_OPTS += -DSENTRY_BREAKPAD_SYSTEM=ON
++
++$(eval $(cmake-package))
 -- 
 2.28.0
