@@ -1,74 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Sep 2020 16:53:06 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: backport static linking
- fixes
-In-Reply-To: <20200908144837.169026-1-petr.vorel@gmail.com>
-References: <20200908144837.169026-1-petr.vorel@gmail.com>
-Message-ID: <20200908165306.577fd1b8@windsurf.hq.k.grp>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue,  8 Sep 2020 16:53:46 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: reenable riscv64
+Message-ID: <20200908145346.198693-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue,  8 Sep 2020 16:48:37 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+Missing __riscv_flush_icache() (reason for the revert) was implemented
+in 1.0.35 in commit 8b1f6b2e0 "riscv64: add __riscv_flush_icache".
 
-> Reported-by: Waldemar Brodkorb <wbx@openadk.org>
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi,
-> 
-> not sure if the second commit, which changes Rules.mak does not require
-> also some change on our side (it shouldn't, but better ask).
+Revert "Revert "toolchain/toolchain-buildroot: enable uclibc for riscv64""
+This reverts commit e7d631c0df1698b4edc94f148e7247869430e108.
 
-The commit log should ideally have a link to the autobuilder failures
-that this is fixing (we have some I believe).
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/uclibc/Config.in                |  1 +
+ toolchain/toolchain-buildroot/Config.in | 13 +++++++------
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-> diff --git a/package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch b/package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch
-> new file mode 100644
-> index 0000000000..be18b32f79
-> --- /dev/null
-> +++ b/package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch
-> @@ -0,0 +1,43 @@
-> +From e80384786d7b7f895c97f2447d4b91af8eb5f0f4 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@openadk.org>
-> +Date: Wed, 2 Sep 2020 09:45:17 +0200
-> +Subject: [PATCH 1/2] Revert "Fix static linking with GCC-10"
-
-Could you generate the patches with "git format-patch -N". This is
-pointed out by "make check-package".
-
-> +
-> +This reverts commit 5b58a1ebd89a4f05778441814e81817c82193fa3.
-> +
-> +This breaks all static builds earlier to gcc 10 :(
-> +Bad testing on my side.
-
-We need you to sign-off on the patches.
-
-Same comment for the second patch of course.
-
-> +diff --git a/Rules.mak b/Rules.mak
-> +index f270b7bee..55e88d462 100644
-> +--- a/Rules.mak
-> ++++ b/Rules.mak
-> +@@ -288,7 +288,7 @@ OPTIMIZATION += $(CFLAG_-fstrict-aliasing)
-> + 
-> + # Why -funsigned-char: I hunted a bug related to incorrect
-> + # sign extension of 'char' type for 10 hours straight. Not fun.
-> +-CPU_CFLAGS-y := -funsigned-char -fno-builtin
-> ++CPU_CFLAGS-y := -funsigned-char -fno-builtin -fcommon
-
-Obviously, this is papering over the problem a bit, but OK, if that's
-the upstream fix for the moment, let's go with it.
-
-Thanks!
-
-Thomas
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index de2885bc92..f4d4f06462 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -101,6 +101,7 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "mips"	   if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	default "or1k"     if BR2_or1k
+ 	default "powerpc"  if BR2_powerpc
++	default "riscv64"  if BR2_RISCV_64
+ 	default "sh"	   if BR2_sh
+ 	default "sparc"	   if BR2_sparc
+ 	default "xtensa"   if BR2_xtensa
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 418d5cb387..068f91c875 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -27,12 +27,13 @@ choice
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	bool "uClibc-ng"
+-	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle   || BR2_arceb  || \
+-		   BR2_arm     || BR2_armeb    || \
+-		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+-		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+-		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
++	depends on BR2_aarch64 || BR2_aarch64_be || BR2_arcle      || BR2_arceb    || \
++		   BR2_arm     || BR2_armeb      || \
++		   BR2_i386    || BR2_m68k       || BR2_microblaze || \
++		   BR2_mips    || BR2_mipsel     || BR2_mips64     || BR2_mips64el || \
++		   BR2_or1k    || BR2_powerpc    || BR2_RISCV_64   || \
++		   BR2_sh2a    || BR2_sh4	 || BR2_sh4eb      || BR2_sparc    || \
++		   BR2_xtensa  || BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  This option selects uClibc-ng as the C library for the
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0.rc0
