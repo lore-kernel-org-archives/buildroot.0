@@ -1,45 +1,55 @@
 From: Robin Jarry <robin.jarry@6wind.com>
-Date: Tue,  8 Sep 2020 10:10:22 +0200
-Subject: [Buildroot] [PATCH v2 0/4] pycompile: fix .pyc source paths +
- improvements
-In-Reply-To: <20200904112908.21686-1-julien.floret@6wind.com>
+Date: Tue,  8 Sep 2020 10:10:23 +0200
+Subject: [Buildroot] [PATCH v2 1/4] pycompile: add main entry point
+In-Reply-To: <20200908081026.4701-1-robin.jarry@6wind.com>
 References: <20200904112908.21686-1-julien.floret@6wind.com>
-Message-ID: <20200908081026.4701-1-robin.jarry@6wind.com>
+ <20200908081026.4701-1-robin.jarry@6wind.com>
+Message-ID: <20200908081026.4701-2-robin.jarry@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Only run code when the script is executed directly (not imported).
+Factorize command description by using the script's __doc__ variable.
+Fix typo in --force help message.
 
-This series is about fixing the original .py source paths encoded into
-.pyc files. It comes with small improvements on pycompile.py as well.
+Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+---
+ support/scripts/pycompile.py | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-The first version of the patch was actually not working at all... No
-.pyc file was compiled. We did not see it because
-BR2_PACKAGE_PYTHON*_PYC_ONLY were not selected and therefore, the .pyc
-files were generated automatically at runtime.
-
-This v2 should work properly.
-
-Robin Jarry (4):
-  pycompile: add main entry point
-  pycompile: sort imports
-  pycompile: fix .pyc original source file paths
-  pycompile: add --verbose option
-
- package/python/python.mk     |   6 +-
- package/python3/python3.mk   |   6 +-
- support/scripts/pycompile.py | 158 +++++++++++++++++++++--------------
- 3 files changed, 104 insertions(+), 66 deletions(-)
-
-Differences with v1:
-
-  * split in multiple commits
-  * fixed the script itself
-  * sorted imports at the top of the file
-  * added new --verbose option
-
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index 9192a7016a78..fb1a12b2b782 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -58,12 +58,19 @@ class ReportProblem(int):
+         return not self == other
+ 
+ 
+-parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
+-parser.add_argument("target", metavar='DIRECTORY',
+-                    help='Directory to scan')
+-parser.add_argument("--force", action='store_true',
+-                    help="Force compilation even if alread compiled")
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("target", metavar="TARGET",
++                        help="Directory to scan")
++    parser.add_argument("--force", action="store_true",
++                        help="Force compilation even if already compiled")
+ 
+-args = parser.parse_args()
++    args = parser.parse_args()
+ 
+-compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
++    compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
++
++    return 0
++
++
++if __name__ == "__main__":
++    sys.exit(main())
 -- 
 2.28.0
