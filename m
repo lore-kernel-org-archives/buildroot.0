@@ -1,62 +1,43 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue, 08 Sep 2020 15:16:00 +0200
-Subject: [Buildroot] [PATCH 2/2] fs/jffs2: copy xattrs
-In-Reply-To: <20200908112057.6e2c3caf@windsurf.hq.k.grp>
-References: <20200908085106.3197433-1-antoine.tenart@bootlin.com>
- <20200908085106.3197433-2-antoine.tenart@bootlin.com>
- <20200908112057.6e2c3caf@windsurf.hq.k.grp>
-Message-ID: <159957095983.787733.6620860921535228877@kwain>
+From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Tue,  8 Sep 2020 15:30:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: bump to version
+ fabe598
+Message-ID: <20200908133051.13321-1-alejandro.gonzalez.correo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This version fixes building with 5.9 kernels.
 
-Quoting Thomas Petazzoni (2020-09-08 11:20:57)
-> On Tue,  8 Sep 2020 10:51:06 +0200
-> Antoine Tenart <antoine.tenart@bootlin.com> wrote:
-> 
-> > This patch sets the --with-xattr option when generating an image with
-> > mkfs.jffs2 if BR2_PACKAGE_REFPOLICY is selected, so that SELinux
-> > security contexts will be kept and available in jffs2 images.
-> > 
-> > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
-> > ---
-> >  fs/jffs2/jffs2.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
-> > index 2adbc2320e38..ac00a522cc28 100644
-> > --- a/fs/jffs2/jffs2.mk
-> > +++ b/fs/jffs2/jffs2.mk
-> > @@ -35,6 +35,10 @@ JFFS2_OPTS += -n
-> >  SUMTOOL_OPTS += -n
-> >  endif
-> >  
-> > +ifeq ($(BR2_PACKAGE_REFPOLICY),y)
-> > +JFFS2_OPTS += --with-xattr
-> > +endif
-> 
-> I'm not sure this condition should be on BR2_PACKAGE_REFPOLICY. Since
-> libselinux.mk is in charge of enabling xattr support in the Linux
-> kernel filesystem drivers, I'm tempted to say that we should be
-> consistent and use BR2_PACKAGE_LIBSELINUX=y as a condition here as well;
-> 
-> What do you think?
+Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+---
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I think you're right. Without BR2_PACKAGE_REFPOLICY we won't have
-SELinux security contexts set when making the image, but that doesn't
-mean SELinux couldn't be used later on. So I agree having the check on
-BR2_PACKAGE_LIBSELINUX would be better (and it's also nice to have the
-same check everywhere to improve consistency).
-
-Thanks!
-
-Antoine
-
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index 53f64e6830..1cbc2e8597 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 d67a4a306a0d449298af2448f8f324bf79ec9d41411eef0c92ed764b6d505eee cryptodev-linux-f2927e313b6a74408d17d152abb21aa59d113b46.tar.gz
++sha256 0e2d30cf440a55e1125c815f0df229350192cfddbb38e6571e97de19069c97c6 cryptodev-linux-fabe5989a3dc9fba0cd0a40b612247cdde351c01.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index 3d5d640b8a..5b882b284e 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = f2927e313b6a74408d17d152abb21aa59d113b46
++CRYPTODEV_LINUX_VERSION = fabe5989a3dc9fba0cd0a40b612247cdde351c01
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
 -- 
-Antoine T?nart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
