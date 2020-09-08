@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Sep 2020 08:54:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/strace: disable mpers support
-In-Reply-To: <20200907225655.GU14354@scaer>
-References: <20200907202410.12228-1-heiko.thiery@gmail.com>
- <20200907225655.GU14354@scaer>
-Message-ID: <20200908085449.35e7ec6f@windsurf.hq.k.grp>
+Date: Tue, 8 Sep 2020 09:04:05 +0200
+Subject: [Buildroot] [PATCH 1/5] toolchain/buildroot: allow uclibc-ng
+ for riscv
+In-Reply-To: <20200908050744.425303-2-damien.lemoal@wdc.com>
+References: <20200908050744.425303-1-damien.lemoal@wdc.com>
+ <20200908050744.425303-2-damien.lemoal@wdc.com>
+Message-ID: <20200908090405.4e7a2bcc@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 8 Sep 2020 00:56:55 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hello Damien,
 
-> > script searchs for a 32bit compiler. When a matching compiler is found
-> > in the PATH some compatiblity checks are done. This can fail when the
-> > available kernel headers on host and buildroot target does not match.
-> > 
-> > Since buildroot does not support 32bit binaries when building for 64bit
-> > architecture (no -m32 option) we can disable this option unconditionally.  
+On Tue,  8 Sep 2020 14:07:40 +0900
+Damien Le Moal <damien.lemoal@wdc.com> wrote:
+
+> uclibcb supports RISC-V architecture since version 1.0.31. Allow its
+> selection for that architecture.
 > 
-> ... but indeed, mpers is not about personalities at all; it is about
-> multi-bitness systems. Buildroot does not support building a userland
-> for multi-bitness systems.
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 
-Absolutely.
+In fact, we had already enabled support for uClibc-ng for RISC-V 64 in
+commit bd9810e176273914eca1208bcba23f0de9e446b3, but we had to revert
+in e7d631c0df1698b4edc94f148e7247869430e108 because uClibc-ng does not
+implement the __riscv_flush_icache() function, which is needed, as some
+GCC builtins emit calls to that function.
 
-> However, some systems may very well run a 64-bit kernel with a 32-bit
-> userland. In that case, strace should be able to interpret the syscalls
-> made by the process and the replies sent by the kernel, and those are
-> done in the bitness of the process, not of the kernel.
-> 
-> So, we always want an strace that is of the same bitness as the
-> userland. And so I indeed think we do not need this ill-named
-> multi-personality support of strace.
-> 
-> Note that some people may however run such multi-bitness systems. But in
-> that case, they had to build two userlands, a 32-bit one and a 64-bit
-> one, and somehow aggregate the two after the fact. In that case, they
-> would bear the responsibility to carry an strace for each bitness.
+I have reported this issue to upstream uClibc-ng:
 
-So, is this an Acked-by for this patch ? :-)
+  https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html
+
+Best regards,
 
 Thomas
 -- 
