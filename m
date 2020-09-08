@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 8 Sep 2020 23:08:02 +0200
-Subject: [Buildroot] [PATCH 03/10] gitlab-ci: handle the defconfig build
- conditions in script
-In-Reply-To: <1f090850bcbbad6d3d8482949f54cebc9a129346.1599423132.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 23:08:41 +0200
+Subject: [Buildroot] [PATCH 04/10] gitlab-ci: defconfig_check is
+ included in defconfig build
+In-Reply-To: <606d7c2515e5996c417bca7827b7b061fcce1634.1599423132.git.yann.morin.1998@free.fr>
 References: <cover.1599423132.git.yann.morin.1998@free.fr>
- <1f090850bcbbad6d3d8482949f54cebc9a129346.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <1560becc-7ab0-75f9-008c-091d949ba309@gmail.com>
+ <606d7c2515e5996c417bca7827b7b061fcce1634.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <29732ddd-5f41-50af-b4d0-465d8baf32a1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,99 +13,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
-> Note that we do not propagate the existing comment, because it is
-> partially wrong; instead we just keep the per-condition comments.
+> When we build the defconfigs, we already check they are correct, so
+> there is no need to run the correctness check explicitly.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Romain Naour <romain.naour@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  support/misc/gitlab-ci.yml.in          |  9 -------
->  support/scripts/generate-gitlab-ci-yml | 34 ++++++++++++++++++++++----
->  2 files changed, 29 insertions(+), 14 deletions(-)
-> 
-> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index f00c764aaf..7f2ae32725 100644
-> --- a/support/misc/gitlab-ci.yml.in
-> +++ b/support/misc/gitlab-ci.yml.in
-> @@ -67,15 +67,6 @@ check-package:
->  
->  .defconfig:
->      extends: .defconfig_base
-> -    # Running the defconfigs for every push is too much, so limit to
-> -    # explicit triggers through the API.
-> -    rules:
-> -        # For tags, create a pipeline.
-> -        - if: '$CI_COMMIT_TAG'
-> -        # For pipeline created by using a trigger token.
-> -        - if: '$CI_PIPELINE_TRIGGERED'
-> -        # For the branch or tag name named *-defconfigs, create a pipeline.
-> -        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
->      before_script:
->          - DEFCONFIG_NAME=${CI_JOB_NAME}
->  
-> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-> index b076b01d05..ed56a516a7 100755
-> --- a/support/scripts/generate-gitlab-ci-yml
-> +++ b/support/scripts/generate-gitlab-ci-yml
-> @@ -7,11 +7,7 @@ main() {
->  
->      preamble "${template}"
->  
-> -    (
-> -        cd configs
-> -        LC_ALL=C ls -1 *_defconfig
-> -    ) \
-> -    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
-> +    gen_defconfigs
->  
->      ./support/testing/run-tests -l 2>&1 \
->      | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
-> @@ -30,4 +26,32 @@ preamble() {
->  _EOF_
->  }
->  
-> +gen_defconfigs() {
-> +    local -a defconfigs
-> +    local build_defconfigs cfg
-> +
-> +    defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
-> +
-> +    build_defconfigs=false
-> +    if [ -n "${CI_COMMIT_TAG}" ]; then
-> +        # For tags, create a pipeline.
-> +        build_defconfigs=true
-> +    fi
-> +    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
-> +        # For pipeline created by using a trigger token.
-> +        build_defconfigs=true
-> +    fi
-> +    case "${CI_COMMIT_REF_NAME}" in
-> +        # For the branch or tag name named *-defconfigs, create a pipeline.
-> +        (*-defconfigs) build_defconfigs=true;;
-> +    esac
-> +
-> +    for cfg in "${defconfigs[@]}"; do
-> +        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
-> +        if ${build_defconfigs}; then
-> +            printf '%s: { extends: .defconfig }\n' "${cfg}"
-> +        fi
 
-Indeed since the defconfig_check was introduced, defconfig_check jobs and
-defconfig jobs is created in the same pipeline when a tag or a branch named
-*-defconfigs is pushed in gitlab...
-
-Hopefully this is fixed by the following patch of this series.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Acked-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
 
-> +    done
-> +}
-> +
->  main "${@}"
+> ---
+>  support/scripts/generate-gitlab-ci-yml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+> index ed56a516a7..23db376944 100755
+> --- a/support/scripts/generate-gitlab-ci-yml
+> +++ b/support/scripts/generate-gitlab-ci-yml
+> @@ -47,9 +47,10 @@ gen_defconfigs() {
+>      esac
+>  
+>      for cfg in "${defconfigs[@]}"; do
+> -        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+>          if ${build_defconfigs}; then
+>              printf '%s: { extends: .defconfig }\n' "${cfg}"
+> +        else
+> +            printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+>          fi
+>      done
+>  }
 > 
