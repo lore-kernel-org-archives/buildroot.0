@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 8 Sep 2020 23:19:14 +0200
-Subject: [Buildroot] [PATCH 06/10] gitlab-ci: handle single defconfig in
- script
-In-Reply-To: <f5bf5253a396aecaec1b712d7c20fb3a9d7d52c0.1599423132.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 23:23:39 +0200
+Subject: [Buildroot] [PATCH 07/10] gitlab-ci: handle single runtime test
+ in script
+In-Reply-To: <b85e6cd7a8b2d6c6f023246823f5e929b0bfcbb3.1599423132.git.yann.morin.1998@free.fr>
 References: <cover.1599423132.git.yann.morin.1998@free.fr>
- <f5bf5253a396aecaec1b712d7c20fb3a9d7d52c0.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <91a3602f-22a0-6f00-b2b9-494257b7ca35@gmail.com>
+ <b85e6cd7a8b2d6c6f023246823f5e929b0bfcbb3.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <48ef611a-4df3-0b5b-53e1-ac9d605cc29c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,54 +23,48 @@ Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Best regards,
 Romain
 
-
 > ---
->  support/misc/gitlab-ci.yml.in          | 11 -----------
->  support/scripts/generate-gitlab-ci-yml |  8 +++++++-
->  2 files changed, 7 insertions(+), 12 deletions(-)
+>  support/misc/gitlab-ci.yml.in          | 9 ---------
+>  support/scripts/generate-gitlab-ci-yml | 8 +++++++-
+>  2 files changed, 7 insertions(+), 10 deletions(-)
 > 
 > diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index c6c4d35a0c..8a94b872f3 100644
+> index 8a94b872f3..0f93d272be 100644
 > --- a/support/misc/gitlab-ci.yml.in
 > +++ b/support/misc/gitlab-ci.yml.in
-> @@ -64,20 +64,9 @@ check-package:
->              - output/build/packages-file-list.txt
->              - output/build/*/.config
->              - runtime-test.log
+> @@ -82,15 +82,6 @@ check-package:
+>              - test-output/*.log
+>              - test-output/*/.config
+>              - test-output/*/images/*
 > -
-> -.defconfig:
-> -    extends: .defconfig_base
+> -.runtime_test:
+> -    extends: .runtime_test_base
 >      before_script:
->          - DEFCONFIG_NAME=${CI_JOB_NAME}
+>          - TEST_CASE_NAME=${CI_JOB_NAME}
 >  
-> -one-defconfig:
-> -    extends: .defconfig_base
+> -one-runtime_test:
+> -    extends: .runtime_test_base
 > -    rules:
-> -        # For the branch or tag name named *-*_defconfigs, create a pipeline.
-> -        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/'
+> -        - if: '$CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
 > -    before_script:
-> -        - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
-> -
->  .runtime_test_base:
->      # Keep build directories so the rootfs can be an artifact of the job. The
->      # runner will clean up those files for us.
+> -        - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
 > diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-> index 525ea8ccab..52bec05a53 100755
+> index 52bec05a53..51e1625faa 100755
 > --- a/support/scripts/generate-gitlab-ci-yml
 > +++ b/support/scripts/generate-gitlab-ci-yml
-> @@ -40,7 +40,13 @@ gen_defconfigs() {
+> @@ -78,7 +78,13 @@ gen_tests() {
 >      fi
 >      case "${CI_COMMIT_REF_NAME}" in
->          # For the branch or tag name named *-defconfigs, create a pipeline.
-> -        (*-defconfigs) build_defconfigs=true;;
-> +        (*-defconfigs)
-> +            build_defconfigs=true
+>          # For the branch or tag name named *-runtime-tests, create a pipeline.
+> -        (*-runtime-tests) run_tests=true;;
+> +        (*-runtime-tests)
+> +            run_tests=true
 > +        ;;
-> +        (*-*_defconfig)
-> +            defconfigs=( "${CI_COMMIT_REF_NAME##*-}" )
-> +            build_defconfigs=true
+> +        (*-tests.*)
+> +            tests=( "${CI_COMMIT_REF_NAME##*-}" )
+> +            run_tests=true
 > +        ;;
 >      esac
 >  
->      for cfg in "${defconfigs[@]}"; do
+>      if ${run_tests}; then
 > 
