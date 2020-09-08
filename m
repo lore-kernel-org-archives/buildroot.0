@@ -1,53 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Sep 2020 23:09:29 +0200
-Subject: [Buildroot] [git commit] configs/stm32mp157: remove extra
- metadata_csum mkfs option
-Message-ID: <20200908210440.7C5B38893B@busybox.osuosl.org>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Tue,  8 Sep 2020 16:13:10 -0500
+Subject: [Buildroot] [PATCH 2020.02.x 1/4] package/systemd: bump version to
+ 244.4
+Message-ID: <20200908211313.107946-1-brandon.maier@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=238909285433bf60bdc7ced28c7b2d3a94daa9c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since commit [1] in U-Boot upstrea, there is no necessity to pass extra
-metadata_csum option due to changed env location in U-Boot so we can
-drop it completely.
-
-[1] 76db1681da52342ca9f4fb7e6787bd83cc82f429:
-stm32mp1: use a specific SD/eMMC partition for U-Boot enviromnent
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-[yann.morin.1998 at free.fr: 76db1681d referecnes a U-Boot commit]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 ---
- configs/stm32mp157a_dk1_defconfig | 1 -
- configs/stm32mp157c_dk2_defconfig | 1 -
- 2 files changed, 2 deletions(-)
+ package/systemd/systemd.hash | 2 +-
+ package/systemd/systemd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index be5ea7581f..f172539c02 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 86e1551a30..49cfb0733c 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 4ab514d673..3f6f4b4db6 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256	e6b463733da5eb37075352a64112d030b8612935a54e5b3468279a4f15a4cec4	systemd-244.3.tar.gz
++sha256	6f01276f45369d56ea5ced713e63a22acbb9142862eb719246a77a4b3f5699ee	systemd-244.4.tar.gz
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
+ sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 2908caef61..e0a4679955 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSTEMD_VERSION = 244.3
++SYSTEMD_VERSION = 244.4
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+-- 
+2.28.0
