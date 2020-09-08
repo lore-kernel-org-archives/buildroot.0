@@ -1,70 +1,97 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 8 Sep 2020 23:23:39 +0200
-Subject: [Buildroot] [PATCH 07/10] gitlab-ci: handle single runtime test
- in script
-In-Reply-To: <b85e6cd7a8b2d6c6f023246823f5e929b0bfcbb3.1599423132.git.yann.morin.1998@free.fr>
-References: <cover.1599423132.git.yann.morin.1998@free.fr>
- <b85e6cd7a8b2d6c6f023246823f5e929b0bfcbb3.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <48ef611a-4df3-0b5b-53e1-ac9d605cc29c@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 23:28:34 +0200
+Subject: [Buildroot] [PATCH 2020.02.x 3/4] package/systemd: Backport fix
+ for network-generator
+In-Reply-To: <20200908211313.107946-3-brandon.maier@rockwellcollins.com>
+References: <20200908211313.107946-1-brandon.maier@rockwellcollins.com>
+ <20200908211313.107946-3-brandon.maier@rockwellcollins.com>
+Message-ID: <20200908212834.GB14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+Brandon, All,
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
+On 2020-09-08 16:13 -0500, Brandon Maier spake thusly:
+> The systemd-network-generator.service will fail to parse the bootarg "ip=xxx"
+> if it's missing the (optional) hostname field. Backport this fix from
+> systemd v245.
+> 
+> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 > ---
->  support/misc/gitlab-ci.yml.in          | 9 ---------
->  support/scripts/generate-gitlab-ci-yml | 8 +++++++-
->  2 files changed, 7 insertions(+), 10 deletions(-)
+>  ...twork-generator-allow-empty-hostname.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/systemd/0003-network-generator-allow-empty-hostname.patch
 > 
-> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index 8a94b872f3..0f93d272be 100644
-> --- a/support/misc/gitlab-ci.yml.in
-> +++ b/support/misc/gitlab-ci.yml.in
-> @@ -82,15 +82,6 @@ check-package:
->              - test-output/*.log
->              - test-output/*/.config
->              - test-output/*/images/*
-> -
-> -.runtime_test:
-> -    extends: .runtime_test_base
->      before_script:
->          - TEST_CASE_NAME=${CI_JOB_NAME}
->  
-> -one-runtime_test:
-> -    extends: .runtime_test_base
-> -    rules:
-> -        - if: '$CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
-> -    before_script:
-> -        - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
-> diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-> index 52bec05a53..51e1625faa 100755
-> --- a/support/scripts/generate-gitlab-ci-yml
-> +++ b/support/scripts/generate-gitlab-ci-yml
-> @@ -78,7 +78,13 @@ gen_tests() {
->      fi
->      case "${CI_COMMIT_REF_NAME}" in
->          # For the branch or tag name named *-runtime-tests, create a pipeline.
-> -        (*-runtime-tests) run_tests=true;;
-> +        (*-runtime-tests)
-> +            run_tests=true
-> +        ;;
-> +        (*-tests.*)
-> +            tests=( "${CI_COMMIT_REF_NAME##*-}" )
-> +            run_tests=true
-> +        ;;
->      esac
->  
->      if ${run_tests}; then
+> diff --git a/package/systemd/0003-network-generator-allow-empty-hostname.patch b/package/systemd/0003-network-generator-allow-empty-hostname.patch
+> new file mode 100644
+> index 0000000000..37eb91bfaf
+> --- /dev/null
+> +++ b/package/systemd/0003-network-generator-allow-empty-hostname.patch
+> @@ -0,0 +1,41 @@
+> +From 21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db Mon Sep 17 00:00:00 2001
+> +From: Yu Watanabe <watanabe.yu+github@gmail.com>
+> +Date: Thu, 12 Dec 2019 19:01:21 +0900
+> +Subject: [PATCH 1/1] network-generator: allow empty hostname
+> +
+> +Fixes #14319.
+
+Please adda pointer to the upstream commit that you are backporting, and
+please add your own SoB line:
+
+    [Brandon: backport from https://github.com/systemd/systemd/commit/21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db]
+    Signed-off-by: Your NAME <your@email>
+
+Ditto your second patch.
+
+Regards,
+Yann E. MORIN.
+
+> +---
+> + src/network/generator/network-generator.c | 10 ++++++----
+> + 1 file changed, 6 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/src/network/generator/network-generator.c b/src/network/generator/network-generator.c
+> +index 81afa95307..bed1e42697 100644
+> +--- a/src/network/generator/network-generator.c
+> ++++ b/src/network/generator/network-generator.c
+> +@@ -574,7 +574,7 @@ static int parse_netmask_or_prefixlen(int family, const char **value, unsigned c
+> + 
+> + static int parse_cmdline_ip_address(Context *context, int family, const char *value) {
+> +         union in_addr_union addr = {}, peer = {}, gateway = {};
+> +-        const char *hostname, *ifname, *dhcp_type, *dns, *p;
+> ++        const char *hostname = NULL, *ifname, *dhcp_type, *dns, *p;
+> +         unsigned char prefixlen;
+> +         int r;
+> + 
+> +@@ -599,9 +599,11 @@ static int parse_cmdline_ip_address(Context *context, int family, const char *va
+> +         if (!p)
+> +                 return -EINVAL;
+> + 
+> +-        hostname = strndupa(value, p - value);
+> +-        if (!hostname_is_valid(hostname, false))
+> +-                return -EINVAL;
+> ++        if (p != value) {
+> ++                hostname = strndupa(value, p - value);
+> ++                if (!hostname_is_valid(hostname, false))
+> ++                        return -EINVAL;
+> ++        }
+> + 
+> +         value = p + 1;
+> + 
+> +-- 
+> +2.23.0
+> +
+> -- 
+> 2.28.0
 > 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
