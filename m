@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 8 Sep 2020 22:57:16 +0200
-Subject: [Buildroot] [PATCH 02/10] gitlab-ci: share the image version
- with the child
-In-Reply-To: <7d1c9b27dece827cbfb97424cc8b2c1d4fba495a.1599423132.git.yann.morin.1998@free.fr>
+Date: Tue, 8 Sep 2020 23:08:02 +0200
+Subject: [Buildroot] [PATCH 03/10] gitlab-ci: handle the defconfig build
+ conditions in script
+In-Reply-To: <1f090850bcbbad6d3d8482949f54cebc9a129346.1599423132.git.yann.morin.1998@free.fr>
 References: <cover.1599423132.git.yann.morin.1998@free.fr>
- <7d1c9b27dece827cbfb97424cc8b2c1d4fba495a.1599423132.git.yann.morin.1998@free.fr>
-Message-ID: <543c2f9c-76da-d210-9c27-8b3872b56b3d@gmail.com>
+ <1f090850bcbbad6d3d8482949f54cebc9a129346.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <1560becc-7ab0-75f9-008c-091d949ba309@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,62 +13,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
-> Currently, the image name and version are duplicated in the main
-> pipeline and the generated, child pipeline.
-> 
-> This is a condition for a future gaffe, so let's use the image from the
-> main pipeline when generating the child one.
+> Note that we do not propagate the existing comment, because it is
+> partially wrong; instead we just keep the per-condition comments.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Romain Naour <romain.naour@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  support/misc/gitlab-ci.yml.in          |  5 -----
->  support/scripts/generate-gitlab-ci-yml | 14 +++++++++++++-
->  2 files changed, 13 insertions(+), 6 deletions(-)
+>  support/misc/gitlab-ci.yml.in          |  9 -------
+>  support/scripts/generate-gitlab-ci-yml | 34 ++++++++++++++++++++++----
+>  2 files changed, 29 insertions(+), 14 deletions(-)
 > 
 > diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index 0d058bdd91..f00c764aaf 100644
+> index f00c764aaf..7f2ae32725 100644
 > --- a/support/misc/gitlab-ci.yml.in
 > +++ b/support/misc/gitlab-ci.yml.in
-> @@ -1,8 +1,3 @@
-> -# Configuration for Gitlab-CI.
-> -# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
-> -
-> -image: buildroot/base:20200814.2228
-> -
->  .check_base:
->      rules:
->          - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
+> @@ -67,15 +67,6 @@ check-package:
+>  
+>  .defconfig:
+>      extends: .defconfig_base
+> -    # Running the defconfigs for every push is too much, so limit to
+> -    # explicit triggers through the API.
+> -    rules:
+> -        # For tags, create a pipeline.
+> -        - if: '$CI_COMMIT_TAG'
+> -        # For pipeline created by using a trigger token.
+> -        - if: '$CI_PIPELINE_TRIGGERED'
+> -        # For the branch or tag name named *-defconfigs, create a pipeline.
+> -        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
+>      before_script:
+>          - DEFCONFIG_NAME=${CI_JOB_NAME}
+>  
 > diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-> index 51f7de21dd..b076b01d05 100755
+> index b076b01d05..ed56a516a7 100755
 > --- a/support/scripts/generate-gitlab-ci-yml
 > +++ b/support/scripts/generate-gitlab-ci-yml
-> @@ -5,7 +5,7 @@ set -o pipefail
->  main() {
->      local template="${1}"
+> @@ -7,11 +7,7 @@ main() {
 >  
-> -    cat "${template}"
-> +    preamble "${template}"
+>      preamble "${template}"
 >  
->      (
->          cd configs
-> @@ -18,4 +18,16 @@ main() {
->      | LC_ALL=C sort
+> -    (
+> -        cd configs
+> -        LC_ALL=C ls -1 *_defconfig
+> -    ) \
+> -    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
+> +    gen_defconfigs
+>  
+>      ./support/testing/run-tests -l 2>&1 \
+>      | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
+> @@ -30,4 +26,32 @@ preamble() {
+>  _EOF_
 >  }
 >  
-> +preamble() {
-> +    local template="${1}"
+> +gen_defconfigs() {
+> +    local -a defconfigs
+> +    local build_defconfigs cfg
 > +
-> +    cat - "${template}" <<-_EOF_
-> +	# This file is generated; do not edit!
-> +	# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+> +    defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
 > +
-> +	image: ${CI_JOB_IMAGE}
+> +    build_defconfigs=false
+> +    if [ -n "${CI_COMMIT_TAG}" ]; then
+> +        # For tags, create a pipeline.
+> +        build_defconfigs=true
+> +    fi
+> +    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
+> +        # For pipeline created by using a trigger token.
+> +        build_defconfigs=true
+> +    fi
+> +    case "${CI_COMMIT_REF_NAME}" in
+> +        # For the branch or tag name named *-defconfigs, create a pipeline.
+> +        (*-defconfigs) build_defconfigs=true;;
+> +    esac
+> +
+> +    for cfg in "${defconfigs[@]}"; do
+> +        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+> +        if ${build_defconfigs}; then
+> +            printf '%s: { extends: .defconfig }\n' "${cfg}"
+> +        fi
 
-Note: This script must be run inside a gitlab runner where ${CI_JOB_IMAGE}, if
-it used locally (for testing) this variable is not defined.
+Indeed since the defconfig_check was introduced, defconfig_check jobs and
+defconfig jobs is created in the same pipeline when a tag or a branch named
+*-defconfigs is pushed in gitlab...
+
+Hopefully this is fixed by the following patch of this series.
 
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
@@ -76,8 +104,7 @@ Best regards,
 Romain
 
 
-> +
-> +_EOF_
+> +    done
 > +}
 > +
 >  main "${@}"
