@@ -1,107 +1,59 @@
-From: Michael Fischer <mf@go-sys.de>
-Date: Tue, 8 Sep 2020 07:39:33 +0000
-Subject: [Buildroot] [PATCH 1/1] package/gnuplot: Add patch to fix
- 'undefined reference to gp_read_history'
-In-Reply-To: <20200905075158.GU14354@scaer>
-References: <20200903133014.19824-1-mf@go-sys.de>,
- <20200905075158.GU14354@scaer>
-Message-ID: <0b4c6e5541dd4629b212eb90c10de744@go-sys.de>
+From: Damien Le Moal <Damien.LeMoal@wdc.com>
+Date: Tue, 8 Sep 2020 07:42:34 +0000
+Subject: [Buildroot] [PATCH 1/5] toolchain/buildroot: allow uclibc-ng
+ for riscv
+References: <20200908050744.425303-1-damien.lemoal@wdc.com>
+ <20200908050744.425303-2-damien.lemoal@wdc.com>
+ <20200908090405.4e7a2bcc@windsurf.hq.k.grp>
+Message-ID: <CY4PR04MB3751360ECC39A61183D2B984E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2020/09/08 16:04, Thomas Petazzoni wrote:
+> Hello Damien,
+> 
+> On Tue,  8 Sep 2020 14:07:40 +0900
+> Damien Le Moal <damien.lemoal@wdc.com> wrote:
+> 
+>> uclibcb supports RISC-V architecture since version 1.0.31. Allow its
+>> selection for that architecture.
+>>
+>> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> 
+> In fact, we had already enabled support for uClibc-ng for RISC-V 64 in
+> commit bd9810e176273914eca1208bcba23f0de9e446b3, but we had to revert
+> in e7d631c0df1698b4edc94f148e7247869430e108 because uClibc-ng does not
+> implement the __riscv_flush_icache() function, which is needed, as some
+> GCC builtins emit calls to that function.
+> 
+> I have reported this issue to upstream uClibc-ng:
+> 
+>   https://mailman.uclibc-ng.org/pipermail/devel/2020-August/002022.html
 
-I'm on vacation this week.
-So it takes a while.
+This has been implemented already:
 
-Regards
-Michael.
+commit 8b1f6b2e08ed3c15484c2ca0c3f0a45125c559c1
+Author: Waldemar Brodkorb <wbx@openadk.org>
+Date:   Mon Aug 17 15:44:58 2020 +0200
 
+    riscv64: add __riscv_flush_icache
 
--------- Urspr?ngliche Nachricht --------
-Von: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Datum: 05.09.20 09:52 (GMT+01:00)
-An: Michael Fischer <mf@go-sys.de>
-Cc: buildroot at busybox.net
-Betreff: Re: [Buildroot] [PATCH 1/1] package/gnuplot: Add patch to fix 'undefined reference to gp_read_history'
+    Always use the systemcall as uClibc-ng has no vdso support.
+    Tested with libffi and python in qemu-system-riscv64.
 
-Micheal, All,
-
-On 2020-09-03 15:30 +0200, Michael Fischer spake thusly:
-> Signed-off-by: Michael Fischer <mf@go-sys.de>
-
-Thanks for this patch.
-
-This is fixing autobuilder failures, so a reference to at least one
-would have been good:
-
-    Fixes:
-        http://autobuild.buildroot.org/results/095/0956bc50b9823374254a2032d7897d48aff2d1fa/
-
-> ---
->  package/gnuplot/0002-without-history.patch | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->  create mode 100644 package/gnuplot/0002-without-history.patch
->
-> diff --git a/package/gnuplot/0002-without-history.patch b/package/gnuplot/0002-without-history.patch
-> new file mode 100644
-> index 0000000000..2ce144eabd
-> --- /dev/null
-> +++ b/package/gnuplot/0002-without-history.patch
-> @@ -0,0 +1,18 @@
-> +Patch to solve the 'undefined reference to gp_read_history'
-> +
-> +Signed-off-by: Michael Fischer <mf@go-sys.de>
-
-Since gnuplot uses git, we need that patch to be git-formatted:
-
-    https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
-
-(Yes I know the existing patch does not conform to that requirement, but
-that is a old patch, from before we started enforcing any coding style.)
-
-Also, did you send that patch upstream? If so, it would be super nice
-that you include the URL to the bug-report, or mailing post, so that we
-eventually bump gnuplot, we can get rid of that patch.
-
-Care to rework and respin, please?
-
-Regards,
-Yann E. MORIN.
-
-> +diff -Naur a/src/history.c b/src/history.c
-> +--- a/src/history.c  2020-09-03 14:48:47.875493026 +0200
-> ++++ b/src/history.c  2020-09-03 14:50:39.493972218 +0200
-> +@@ -91,7 +91,9 @@
-> + void
-> + read_history(char *filename)
-> + {
-> ++#ifdef GNUPLOT_HISTORY
-> +     gp_read_history(filename);
-> ++#endif
-> + }
-> +
-> +
-> --
-> 2.28.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+This is part of uclibc version 1.0.35.
 
 
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200908/21c704d9/attachment.html>
+
+-- 
+Damien Le Moal
+Western Digital Research
