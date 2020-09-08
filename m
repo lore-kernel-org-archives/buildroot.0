@@ -1,1331 +1,422 @@
-From: Damien Le Moal <damien.lemoal@wdc.com>
-Date: Tue,  8 Sep 2020 20:33:24 +0900
-Subject: [Buildroot] [PATCH v2 6/6] board: Add configuration for Kendryte
- K210 boards
-In-Reply-To: <20200908113324.1022230-1-damien.lemoal@wdc.com>
-References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
-Message-ID: <20200908113324.1022230-7-damien.lemoal@wdc.com>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Tue, 8 Sep 2020 13:36:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mongrel2: bump to version 1.12.2
+In-Reply-To: <CAPi7W83JjksJ=Rw_115Y3=ZnnpR_E_XA5esWogVjvNcg0HhETg@mail.gmail.com>
+References: <20200907214155.842865-1-fontaine.fabrice@gmail.com>
+ <CAKAx1cgiNRj4RuJSCiGGs4QP1ZLfOjn2fqkH1-oVQcmaruLm+Q@mail.gmail.com>
+ <CAPi7W83JjksJ=Rw_115Y3=ZnnpR_E_XA5esWogVjvNcg0HhETg@mail.gmail.com>
+Message-ID: <CAKAx1cjxgRHYwc11xL6M-Vomm4y-h6A+hiuXH7aj5C619TR+Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for RISC-V boards based on the Kendryte K210 dual-core SoC.
-This SoC has very little memory (8MB of SRAM) and does not have an MMU
-supported by Linux.
+Hello Fabrice,
 
-To support boards based on this SoC, this patch provides the following:
-- The kendryte_k210_defconfig buildroot configuration file defining a
-  no-MMU uClibc build with Linux kernel 5.8. As support for the SD card
-  on these boards is still lacking in Linux, the rootfs image is built
-  as a cpio initramfs embedded directly in the kernel.
-- The board/kendryte/k210/busybox.config minimal busybox configuration
-  file. This file results in a rootfs image that is about 300KB smaller
-  than the default busybox-minimal.config configuration, which saves
-  memory at runtime given that the initramfs is loaded entirely in
-  memory as part of the kernel.
-  resulting in a tiny rootfs
+On Tue, Sep 8, 2020 at 1:29 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Hello Lionel,
+>
+> Le mar. 8 sept. 2020 ? 08:51, Lionel Orry <lionel.orry@gmail.com> a ?crit :
+> >
+> > Hello,
+> >
+> > On Mon, Sep 7, 2020 at 11:42 PM Fabrice Fontaine
+> > <fontaine.fabrice@gmail.com> wrote:
+> > >
+> > > - Refresh second patch
+> > > - Drop third patch (already in version)
+> > > - An external mbedtls can be used since version 1.12.0 and
+> > >   https://github.com/mongrel2/mongrel2/commit/5be7fc9c90fd5c8caa233770b7e2cdff67b4bae2
+> > >   so use it with an upstream patch and drop
+> > >   MONGREL2_POST_CONFIGURE_HOOKS
+> >
+> >
+> > This looks awesome. Would be nice to also add a comment about the
+> > /dev/urandom patch as well.
+> The commit message already contains a comment about this patch:
+> "so use it with an upstream patch and drop MONGREL2_POST_CONFIGURE_HOOKS"
+> Do you think we should extend this commit message?
+> We could add a comment that this patch allows mongrel2 to be built
+> with a mbedtls library that does not enable HAVEGE random generator
+> (but this is already written in the patch message).
 
-The kernel configuration used is the default upstream nommu_k210
-defconfig present in the kernel since version 5.8. The kernel also
-provides the device tree.
+My bad, I overlooked your comment. Looks good to me.
 
-Finally, to avoid "no memory" errors when using the default busybox
-initialization script and init process, the rootfs overlay directory
-board/kendryte/k210/rootfs_overlay provides an init script similar to
-fs/cpio/init which exec a shell as a last operation instead of executing
-busybox init process.
+> > I don't have time anymore to maintain this package actually, and it's
+> > been a very long time since I last played
+> > with our beloved buildroot. Fabrice, maybe you would agree to become
+> > the mongrel2 package maintainer?
+> I agree.
 
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
- board/kendryte/k210/README.txt          |   28 +
- board/kendryte/k210/busybox.config      | 1178 +++++++++++++++++++++++
- board/kendryte/k210/rootfs_overlay/init |   24 +
- configs/kendryte_k210_defconfig         |   24 +
- 4 files changed, 1254 insertions(+)
- create mode 100644 board/kendryte/k210/README.txt
- create mode 100644 board/kendryte/k210/busybox.config
- create mode 100755 board/kendryte/k210/rootfs_overlay/init
- create mode 100644 configs/kendryte_k210_defconfig
+Great news! I let you submit another patch to update the MAINTAINERS file.
+And thank you very much for taking care of mongrel2!
 
-diff --git a/board/kendryte/k210/README.txt b/board/kendryte/k210/README.txt
-new file mode 100644
-index 0000000000..91863ca1da
---- /dev/null
-+++ b/board/kendryte/k210/README.txt
-@@ -0,0 +1,28 @@
-+This is the Buildroot support for RISC-V Kendryte K210 SoC based boards.
-+Different variants of such boards are available from Sipeed (MAIX Dock,
-+Maixduino, Maix Go and Dan Dock) but the build procedure is similar for all of
-+them.
-+
-+Steps to create a bootable image for a K210 board:
-+
-+1) Configuration
-+  make kendryte_k210_defconfig
-+2) Build
-+  make
-+3) Boot the board
-+  The bootable image file loader.bin can be found in output/image. Flash this
-+  file onto the board ROM using the kflash.py utility:
-+
-+  sudo python3 kflash.py -p /dev/ttyUSB0 -b 1500000 -t loader.bin
-+
-+  The code for kflash.py is available on github at:
-+
-+  https://github.com/sipeed/kflash.py
-+
-+Note:
-+
-+The current Linux support for the K210 is limited and devices such as GPIO or
-+SD card are not yet supported. As a result, this build procedure creates the
-+bootable image file by embedding the root filesystem image directly in the
-+kernel as a cpio initramfs image. Given the limited amount of memory of the
-+K210 (8MB of SDRAM), large root file system image will not work.
-diff --git a/board/kendryte/k210/busybox.config b/board/kendryte/k210/busybox.config
-new file mode 100644
-index 0000000000..89d7c4491d
---- /dev/null
-+++ b/board/kendryte/k210/busybox.config
-@@ -0,0 +1,1178 @@
-+#
-+# Automatically generated make config: don't edit
-+# Busybox version: 1.32.0
-+# Tue Sep  8 09:22:07 2020
-+#
-+CONFIG_HAVE_DOT_CONFIG=y
-+
-+#
-+# Settings
-+#
-+# CONFIG_DESKTOP is not set
-+# CONFIG_EXTRA_COMPAT is not set
-+# CONFIG_FEDORA_COMPAT is not set
-+# CONFIG_INCLUDE_SUSv2 is not set
-+# CONFIG_LONG_OPTS is not set
-+# CONFIG_SHOW_USAGE is not set
-+# CONFIG_FEATURE_VERBOSE_USAGE is not set
-+# CONFIG_FEATURE_COMPRESS_USAGE is not set
-+CONFIG_LFS=y
-+# CONFIG_PAM is not set
-+CONFIG_FEATURE_DEVPTS=y
-+CONFIG_FEATURE_UTMP=y
-+CONFIG_FEATURE_WTMP=y
-+# CONFIG_FEATURE_PIDFILE is not set
-+CONFIG_PID_FILE_PATH=""
-+CONFIG_BUSYBOX=y
-+CONFIG_FEATURE_SHOW_SCRIPT=y
-+CONFIG_FEATURE_INSTALLER=y
-+# CONFIG_INSTALL_NO_USR is not set
-+CONFIG_FEATURE_SUID=y
-+# CONFIG_FEATURE_SUID_CONFIG is not set
-+# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
-+CONFIG_FEATURE_PREFER_APPLETS=y
-+CONFIG_BUSYBOX_EXEC_PATH=""
-+# CONFIG_SELINUX is not set
-+# CONFIG_FEATURE_CLEAN_UP is not set
-+# CONFIG_FEATURE_SYSLOG_INFO is not set
-+# CONFIG_FEATURE_SYSLOG is not set
-+CONFIG_PLATFORM_LINUX=y
-+
-+#
-+# Build Options
-+#
-+CONFIG_STATIC=y
-+# CONFIG_PIE is not set
-+CONFIG_NOMMU=y
-+# CONFIG_BUILD_LIBBUSYBOX is not set
-+# CONFIG_FEATURE_LIBBUSYBOX_STATIC is not set
-+# CONFIG_FEATURE_INDIVIDUAL is not set
-+# CONFIG_FEATURE_SHARED_BUSYBOX is not set
-+CONFIG_CROSS_COMPILER_PREFIX=""
-+CONFIG_SYSROOT=""
-+CONFIG_EXTRA_CFLAGS="-Os -fPIC"
-+CONFIG_EXTRA_LDFLAGS="-Os -static -Wl,-elf2flt=-r"
-+CONFIG_EXTRA_LDLIBS=""
-+# CONFIG_USE_PORTABLE_CODE is not set
-+# CONFIG_STACK_OPTIMIZATION_386 is not set
-+
-+#
-+# Installation Options ("make install" behavior)
-+#
-+CONFIG_INSTALL_APPLET_SYMLINKS=y
-+# CONFIG_INSTALL_APPLET_HARDLINKS is not set
-+# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
-+# CONFIG_INSTALL_APPLET_DONT is not set
-+# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
-+# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
-+# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
-+CONFIG_PREFIX="./_install"
-+
-+#
-+# Debugging Options
-+#
-+# CONFIG_DEBUG is not set
-+# CONFIG_DEBUG_PESSIMIZE is not set
-+# CONFIG_DEBUG_SANITIZE is not set
-+# CONFIG_UNIT_TEST is not set
-+# CONFIG_WERROR is not set
-+# CONFIG_WARN_SIMPLE_MSG is not set
-+CONFIG_NO_DEBUG_LIB=y
-+# CONFIG_DMALLOC is not set
-+# CONFIG_EFENCE is not set
-+
-+#
-+# Library Tuning
-+#
-+# CONFIG_FEATURE_USE_BSS_TAIL is not set
-+# CONFIG_FLOAT_DURATION is not set
-+# CONFIG_FEATURE_RTMINMAX is not set
-+# CONFIG_FEATURE_RTMINMAX_USE_LIBC_DEFINITIONS is not set
-+# CONFIG_FEATURE_BUFFERS_USE_MALLOC is not set
-+CONFIG_FEATURE_BUFFERS_GO_ON_STACK=y
-+# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
-+CONFIG_PASSWORD_MINLEN=6
-+CONFIG_MD5_SMALL=1
-+CONFIG_SHA3_SMALL=1
-+CONFIG_FEATURE_FAST_TOP=y
-+# CONFIG_FEATURE_ETC_NETWORKS is not set
-+# CONFIG_FEATURE_ETC_SERVICES is not set
-+CONFIG_FEATURE_EDITING=y
-+CONFIG_FEATURE_EDITING_MAX_LEN=1024
-+CONFIG_FEATURE_EDITING_VI=y
-+CONFIG_FEATURE_EDITING_HISTORY=999
-+# CONFIG_FEATURE_EDITING_SAVEHISTORY is not set
-+# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
-+# CONFIG_FEATURE_REVERSE_SEARCH is not set
-+# CONFIG_FEATURE_TAB_COMPLETION is not set
-+# CONFIG_FEATURE_USERNAME_COMPLETION is not set
-+CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
-+# CONFIG_FEATURE_EDITING_WINCH is not set
-+# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
-+# CONFIG_LOCALE_SUPPORT is not set
-+# CONFIG_UNICODE_SUPPORT is not set
-+# CONFIG_UNICODE_USING_LOCALE is not set
-+# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
-+CONFIG_SUBST_WCHAR=0
-+CONFIG_LAST_SUPPORTED_WCHAR=0
-+# CONFIG_UNICODE_COMBINING_WCHARS is not set
-+# CONFIG_UNICODE_WIDE_WCHARS is not set
-+# CONFIG_UNICODE_BIDI_SUPPORT is not set
-+# CONFIG_UNICODE_NEUTRAL_TABLE is not set
-+# CONFIG_UNICODE_PRESERVE_BROKEN is not set
-+CONFIG_FEATURE_NON_POSIX_CP=y
-+# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
-+CONFIG_FEATURE_USE_SENDFILE=y
-+CONFIG_FEATURE_COPYBUF_KB=4
-+CONFIG_FEATURE_SKIP_ROOTFS=y
-+CONFIG_MONOTONIC_SYSCALL=y
-+CONFIG_IOCTL_HEX2STR_ERROR=y
-+# CONFIG_FEATURE_HWIB is not set
-+
-+#
-+# Applets
-+#
-+
-+#
-+# Archival Utilities
-+#
-+# CONFIG_FEATURE_SEAMLESS_XZ is not set
-+# CONFIG_FEATURE_SEAMLESS_LZMA is not set
-+# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
-+# CONFIG_FEATURE_SEAMLESS_GZ is not set
-+# CONFIG_FEATURE_SEAMLESS_Z is not set
-+# CONFIG_AR is not set
-+# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
-+# CONFIG_FEATURE_AR_CREATE is not set
-+# CONFIG_UNCOMPRESS is not set
-+# CONFIG_GUNZIP is not set
-+# CONFIG_ZCAT is not set
-+# CONFIG_FEATURE_GUNZIP_LONG_OPTIONS is not set
-+# CONFIG_BUNZIP2 is not set
-+# CONFIG_BZCAT is not set
-+# CONFIG_UNLZMA is not set
-+# CONFIG_LZCAT is not set
-+# CONFIG_LZMA is not set
-+# CONFIG_UNXZ is not set
-+# CONFIG_XZCAT is not set
-+# CONFIG_XZ is not set
-+# CONFIG_BZIP2 is not set
-+CONFIG_BZIP2_SMALL=0
-+# CONFIG_FEATURE_BZIP2_DECOMPRESS is not set
-+# CONFIG_CPIO is not set
-+# CONFIG_FEATURE_CPIO_O is not set
-+# CONFIG_FEATURE_CPIO_P is not set
-+# CONFIG_DPKG is not set
-+# CONFIG_DPKG_DEB is not set
-+# CONFIG_GZIP is not set
-+# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
-+CONFIG_GZIP_FAST=0
-+# CONFIG_FEATURE_GZIP_LEVELS is not set
-+# CONFIG_FEATURE_GZIP_DECOMPRESS is not set
-+# CONFIG_LZOP is not set
-+# CONFIG_UNLZOP is not set
-+# CONFIG_LZOPCAT is not set
-+# CONFIG_LZOP_COMPR_HIGH is not set
-+# CONFIG_RPM is not set
-+# CONFIG_RPM2CPIO is not set
-+# CONFIG_TAR is not set
-+# CONFIG_FEATURE_TAR_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_TAR_CREATE is not set
-+# CONFIG_FEATURE_TAR_AUTODETECT is not set
-+# CONFIG_FEATURE_TAR_FROM is not set
-+# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
-+# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
-+# CONFIG_FEATURE_TAR_GNU_EXTENSIONS is not set
-+# CONFIG_FEATURE_TAR_TO_COMMAND is not set
-+# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
-+# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
-+# CONFIG_FEATURE_TAR_SELINUX is not set
-+# CONFIG_UNZIP is not set
-+# CONFIG_FEATURE_UNZIP_CDF is not set
-+# CONFIG_FEATURE_UNZIP_BZIP2 is not set
-+# CONFIG_FEATURE_UNZIP_LZMA is not set
-+# CONFIG_FEATURE_UNZIP_XZ is not set
-+# CONFIG_FEATURE_LZMA_FAST is not set
-+
-+#
-+# Coreutils
-+#
-+CONFIG_BASENAME=y
-+CONFIG_CAT=y
-+CONFIG_FEATURE_CATN=y
-+CONFIG_FEATURE_CATV=y
-+CONFIG_CHGRP=y
-+CONFIG_CHMOD=y
-+CONFIG_CHOWN=y
-+# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
-+CONFIG_CHROOT=y
-+# CONFIG_CKSUM is not set
-+# CONFIG_COMM is not set
-+CONFIG_CP=y
-+# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_CP_REFLINK is not set
-+# CONFIG_CUT is not set
-+CONFIG_DATE=y
-+CONFIG_FEATURE_DATE_ISOFMT=y
-+# CONFIG_FEATURE_DATE_NANO is not set
-+CONFIG_FEATURE_DATE_COMPAT=y
-+# CONFIG_DD is not set
-+# CONFIG_FEATURE_DD_SIGNAL_HANDLING is not set
-+# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
-+# CONFIG_FEATURE_DD_IBS_OBS is not set
-+# CONFIG_FEATURE_DD_STATUS is not set
-+# CONFIG_DF is not set
-+# CONFIG_FEATURE_DF_FANCY is not set
-+CONFIG_DIRNAME=y
-+# CONFIG_DOS2UNIX is not set
-+# CONFIG_UNIX2DOS is not set
-+# CONFIG_DU is not set
-+# CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K is not set
-+CONFIG_ECHO=y
-+CONFIG_FEATURE_FANCY_ECHO=y
-+CONFIG_ENV=y
-+# CONFIG_EXPAND is not set
-+# CONFIG_UNEXPAND is not set
-+CONFIG_EXPR=y
-+CONFIG_EXPR_MATH_SUPPORT_64=y
-+# CONFIG_FACTOR is not set
-+CONFIG_FALSE=y
-+# CONFIG_FOLD is not set
-+CONFIG_HEAD=y
-+CONFIG_FEATURE_FANCY_HEAD=y
-+CONFIG_HOSTID=y
-+CONFIG_ID=y
-+# CONFIG_GROUPS is not set
-+# CONFIG_INSTALL is not set
-+# CONFIG_FEATURE_INSTALL_LONG_OPTIONS is not set
-+CONFIG_LINK=y
-+CONFIG_LN=y
-+# CONFIG_LOGNAME is not set
-+CONFIG_LS=y
-+CONFIG_FEATURE_LS_FILETYPES=y
-+CONFIG_FEATURE_LS_FOLLOWLINKS=y
-+CONFIG_FEATURE_LS_RECURSIVE=y
-+CONFIG_FEATURE_LS_WIDTH=y
-+CONFIG_FEATURE_LS_SORTFILES=y
-+CONFIG_FEATURE_LS_TIMESTAMPS=y
-+CONFIG_FEATURE_LS_USERNAME=y
-+# CONFIG_FEATURE_LS_COLOR is not set
-+# CONFIG_FEATURE_LS_COLOR_IS_DEFAULT is not set
-+# CONFIG_MD5SUM is not set
-+# CONFIG_SHA1SUM is not set
-+# CONFIG_SHA256SUM is not set
-+# CONFIG_SHA512SUM is not set
-+# CONFIG_SHA3SUM is not set
-+# CONFIG_FEATURE_MD5_SHA1_SUM_CHECK is not set
-+CONFIG_MKDIR=y
-+# CONFIG_MKFIFO is not set
-+CONFIG_MKNOD=y
-+# CONFIG_MKTEMP is not set
-+CONFIG_MV=y
-+# CONFIG_NICE is not set
-+# CONFIG_NL is not set
-+# CONFIG_NOHUP is not set
-+# CONFIG_NPROC is not set
-+# CONFIG_OD is not set
-+# CONFIG_PASTE is not set
-+CONFIG_PRINTENV=y
-+CONFIG_PRINTF=y
-+CONFIG_PWD=y
-+CONFIG_READLINK=y
-+CONFIG_FEATURE_READLINK_FOLLOW=y
-+CONFIG_REALPATH=y
-+CONFIG_RM=y
-+CONFIG_RMDIR=y
-+CONFIG_SEQ=y
-+# CONFIG_SHRED is not set
-+# CONFIG_SHUF is not set
-+CONFIG_SLEEP=y
-+CONFIG_FEATURE_FANCY_SLEEP=y
-+# CONFIG_SORT is not set
-+# CONFIG_FEATURE_SORT_BIG is not set
-+# CONFIG_FEATURE_SORT_OPTIMIZE_MEMORY is not set
-+# CONFIG_SPLIT is not set
-+# CONFIG_FEATURE_SPLIT_FANCY is not set
-+# CONFIG_STAT is not set
-+# CONFIG_FEATURE_STAT_FORMAT is not set
-+# CONFIG_FEATURE_STAT_FILESYSTEM is not set
-+CONFIG_STTY=y
-+# CONFIG_SUM is not set
-+# CONFIG_SYNC is not set
-+# CONFIG_FEATURE_SYNC_FANCY is not set
-+# CONFIG_FSYNC is not set
-+# CONFIG_TAC is not set
-+CONFIG_TAIL=y
-+CONFIG_FEATURE_FANCY_TAIL=y
-+CONFIG_TEE=y
-+CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
-+CONFIG_TEST=y
-+CONFIG_TEST1=y
-+CONFIG_TEST2=y
-+CONFIG_FEATURE_TEST_64=y
-+# CONFIG_TIMEOUT is not set
-+CONFIG_TOUCH=y
-+# CONFIG_FEATURE_TOUCH_NODEREF is not set
-+CONFIG_FEATURE_TOUCH_SUSV3=y
-+# CONFIG_TR is not set
-+# CONFIG_FEATURE_TR_CLASSES is not set
-+# CONFIG_FEATURE_TR_EQUIV is not set
-+CONFIG_TRUE=y
-+# CONFIG_TRUNCATE is not set
-+CONFIG_TTY=y
-+CONFIG_UNAME=y
-+CONFIG_UNAME_OSNAME="GNU/Linux"
-+CONFIG_BB_ARCH=y
-+CONFIG_UNIQ=y
-+CONFIG_UNLINK=y
-+CONFIG_USLEEP=y
-+# CONFIG_UUDECODE is not set
-+# CONFIG_BASE64 is not set
-+# CONFIG_UUENCODE is not set
-+CONFIG_WC=y
-+# CONFIG_FEATURE_WC_LARGE is not set
-+# CONFIG_WHOAMI is not set
-+CONFIG_WHO=y
-+CONFIG_W=y
-+CONFIG_USERS=y
-+CONFIG_YES=y
-+
-+#
-+# Common options
-+#
-+CONFIG_FEATURE_VERBOSE=y
-+
-+#
-+# Common options for cp and mv
-+#
-+CONFIG_FEATURE_PRESERVE_HARDLINKS=y
-+
-+#
-+# Common options for df, du, ls
-+#
-+CONFIG_FEATURE_HUMAN_READABLE=y
-+
-+#
-+# Console Utilities
-+#
-+# CONFIG_CHVT is not set
-+CONFIG_CLEAR=y
-+# CONFIG_DEALLOCVT is not set
-+# CONFIG_DUMPKMAP is not set
-+# CONFIG_FGCONSOLE is not set
-+# CONFIG_KBD_MODE is not set
-+# CONFIG_LOADFONT is not set
-+# CONFIG_SETFONT is not set
-+# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
-+CONFIG_DEFAULT_SETFONT_DIR=""
-+# CONFIG_FEATURE_LOADFONT_PSF2 is not set
-+# CONFIG_FEATURE_LOADFONT_RAW is not set
-+# CONFIG_LOADKMAP is not set
-+# CONFIG_OPENVT is not set
-+# CONFIG_RESET is not set
-+# CONFIG_RESIZE is not set
-+# CONFIG_FEATURE_RESIZE_PRINT is not set
-+# CONFIG_SETCONSOLE is not set
-+# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
-+# CONFIG_SETKEYCODES is not set
-+# CONFIG_SETLOGCONS is not set
-+# CONFIG_SHOWKEY is not set
-+
-+#
-+# Debian Utilities
-+#
-+# CONFIG_PIPE_PROGRESS is not set
-+# CONFIG_RUN_PARTS is not set
-+# CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
-+# CONFIG_START_STOP_DAEMON is not set
-+# CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_START_STOP_DAEMON_FANCY is not set
-+# CONFIG_WHICH is not set
-+
-+#
-+# klibc-utils
-+#
-+# CONFIG_MINIPS is not set
-+# CONFIG_NUKE is not set
-+# CONFIG_RESUME is not set
-+# CONFIG_RUN_INIT is not set
-+
-+#
-+# Editors
-+#
-+# CONFIG_AWK is not set
-+# CONFIG_FEATURE_AWK_LIBM is not set
-+# CONFIG_FEATURE_AWK_GNU_EXTENSIONS is not set
-+# CONFIG_CMP is not set
-+# CONFIG_DIFF is not set
-+# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_DIFF_DIR is not set
-+# CONFIG_ED is not set
-+# CONFIG_PATCH is not set
-+# CONFIG_SED is not set
-+CONFIG_VI=y
-+CONFIG_FEATURE_VI_MAX_LEN=4096
-+# CONFIG_FEATURE_VI_8BIT is not set
-+CONFIG_FEATURE_VI_COLON=y
-+CONFIG_FEATURE_VI_YANKMARK=y
-+CONFIG_FEATURE_VI_SEARCH=y
-+# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
-+CONFIG_FEATURE_VI_USE_SIGNALS=y
-+CONFIG_FEATURE_VI_DOT_CMD=y
-+CONFIG_FEATURE_VI_READONLY=y
-+CONFIG_FEATURE_VI_SETOPTS=y
-+CONFIG_FEATURE_VI_SET=y
-+CONFIG_FEATURE_VI_WIN_RESIZE=y
-+CONFIG_FEATURE_VI_ASK_TERMINAL=y
-+CONFIG_FEATURE_VI_UNDO=y
-+CONFIG_FEATURE_VI_UNDO_QUEUE=y
-+CONFIG_FEATURE_VI_UNDO_QUEUE_MAX=256
-+CONFIG_FEATURE_ALLOW_EXEC=y
-+
-+#
-+# Finding Utilities
-+#
-+# CONFIG_FIND is not set
-+# CONFIG_FEATURE_FIND_PRINT0 is not set
-+# CONFIG_FEATURE_FIND_MTIME is not set
-+# CONFIG_FEATURE_FIND_MMIN is not set
-+# CONFIG_FEATURE_FIND_PERM is not set
-+# CONFIG_FEATURE_FIND_TYPE is not set
-+# CONFIG_FEATURE_FIND_EXECUTABLE is not set
-+# CONFIG_FEATURE_FIND_XDEV is not set
-+# CONFIG_FEATURE_FIND_MAXDEPTH is not set
-+# CONFIG_FEATURE_FIND_NEWER is not set
-+# CONFIG_FEATURE_FIND_INUM is not set
-+# CONFIG_FEATURE_FIND_EXEC is not set
-+# CONFIG_FEATURE_FIND_EXEC_PLUS is not set
-+# CONFIG_FEATURE_FIND_USER is not set
-+# CONFIG_FEATURE_FIND_GROUP is not set
-+# CONFIG_FEATURE_FIND_NOT is not set
-+# CONFIG_FEATURE_FIND_DEPTH is not set
-+# CONFIG_FEATURE_FIND_PAREN is not set
-+# CONFIG_FEATURE_FIND_SIZE is not set
-+# CONFIG_FEATURE_FIND_PRUNE is not set
-+# CONFIG_FEATURE_FIND_QUIT is not set
-+# CONFIG_FEATURE_FIND_DELETE is not set
-+# CONFIG_FEATURE_FIND_EMPTY is not set
-+# CONFIG_FEATURE_FIND_PATH is not set
-+# CONFIG_FEATURE_FIND_REGEX is not set
-+# CONFIG_FEATURE_FIND_CONTEXT is not set
-+# CONFIG_FEATURE_FIND_LINKS is not set
-+# CONFIG_GREP is not set
-+# CONFIG_EGREP is not set
-+# CONFIG_FGREP is not set
-+# CONFIG_FEATURE_GREP_CONTEXT is not set
-+# CONFIG_XARGS is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_QUOTES is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_REPL_STR is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_PARALLEL is not set
-+# CONFIG_FEATURE_XARGS_SUPPORT_ARGS_FILE is not set
-+
-+#
-+# Init Utilities
-+#
-+# CONFIG_BOOTCHARTD is not set
-+# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
-+# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
-+# CONFIG_HALT is not set
-+# CONFIG_POWEROFF is not set
-+CONFIG_REBOOT=y
-+CONFIG_FEATURE_WAIT_FOR_INIT=y
-+# CONFIG_FEATURE_CALL_TELINIT is not set
-+CONFIG_TELINIT_PATH=""
-+# CONFIG_INIT is not set
-+# CONFIG_LINUXRC is not set
-+# CONFIG_FEATURE_USE_INITTAB is not set
-+# CONFIG_FEATURE_KILL_REMOVED is not set
-+CONFIG_FEATURE_KILL_DELAY=0
-+# CONFIG_FEATURE_INIT_SCTTY is not set
-+# CONFIG_FEATURE_INIT_SYSLOG is not set
-+# CONFIG_FEATURE_INIT_QUIET is not set
-+# CONFIG_FEATURE_INIT_COREDUMPS is not set
-+CONFIG_INIT_TERMINAL_TYPE=""
-+# CONFIG_FEATURE_INIT_MODIFY_CMDLINE is not set
-+
-+#
-+# Login/Password Management Utilities
-+#
-+# CONFIG_FEATURE_SHADOWPASSWDS is not set
-+# CONFIG_USE_BB_PWD_GRP is not set
-+# CONFIG_USE_BB_SHADOW is not set
-+# CONFIG_USE_BB_CRYPT is not set
-+# CONFIG_USE_BB_CRYPT_SHA is not set
-+# CONFIG_ADDGROUP is not set
-+# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
-+# CONFIG_ADD_SHELL is not set
-+# CONFIG_REMOVE_SHELL is not set
-+# CONFIG_ADDUSER is not set
-+# CONFIG_FEATURE_CHECK_NAMES is not set
-+CONFIG_LAST_ID=0
-+CONFIG_FIRST_SYSTEM_ID=0
-+CONFIG_LAST_SYSTEM_ID=0
-+# CONFIG_CHPASSWD is not set
-+CONFIG_FEATURE_DEFAULT_PASSWD_ALGO=""
-+# CONFIG_CRYPTPW is not set
-+# CONFIG_MKPASSWD is not set
-+# CONFIG_DELUSER is not set
-+# CONFIG_DELGROUP is not set
-+# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
-+# CONFIG_GETTY is not set
-+# CONFIG_LOGIN is not set
-+# CONFIG_LOGIN_SESSION_AS_CHILD is not set
-+# CONFIG_LOGIN_SCRIPTS is not set
-+# CONFIG_FEATURE_NOLOGIN is not set
-+# CONFIG_FEATURE_SECURETTY is not set
-+# CONFIG_PASSWD is not set
-+# CONFIG_FEATURE_PASSWD_WEAK_CHECK is not set
-+# CONFIG_SU is not set
-+# CONFIG_FEATURE_SU_SYSLOG is not set
-+# CONFIG_FEATURE_SU_CHECKS_SHELLS is not set
-+# CONFIG_FEATURE_SU_BLANK_PW_NEEDS_SECURE_TTY is not set
-+# CONFIG_SULOGIN is not set
-+# CONFIG_VLOCK is not set
-+
-+#
-+# Linux Ext2 FS Progs
-+#
-+# CONFIG_CHATTR is not set
-+# CONFIG_FSCK is not set
-+# CONFIG_LSATTR is not set
-+# CONFIG_TUNE2FS is not set
-+
-+#
-+# Linux Module Utilities
-+#
-+# CONFIG_MODPROBE_SMALL is not set
-+# CONFIG_DEPMOD is not set
-+# CONFIG_INSMOD is not set
-+# CONFIG_LSMOD is not set
-+# CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT is not set
-+# CONFIG_MODINFO is not set
-+# CONFIG_MODPROBE is not set
-+# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
-+# CONFIG_RMMOD is not set
-+
-+#
-+# Options common to multiple modutils
-+#
-+# CONFIG_FEATURE_CMDLINE_MODULE_OPTIONS is not set
-+# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
-+# CONFIG_FEATURE_2_4_MODULES is not set
-+# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
-+# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
-+# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
-+# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
-+# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
-+# CONFIG_FEATURE_CHECK_TAINTED_MODULE is not set
-+# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
-+# CONFIG_FEATURE_MODUTILS_ALIAS is not set
-+# CONFIG_FEATURE_MODUTILS_SYMBOLS is not set
-+CONFIG_DEFAULT_MODULES_DIR=""
-+CONFIG_DEFAULT_DEPMOD_FILE=""
-+
-+#
-+# Linux System Utilities
-+#
-+# CONFIG_ACPID is not set
-+# CONFIG_FEATURE_ACPID_COMPAT is not set
-+# CONFIG_BLKDISCARD is not set
-+# CONFIG_BLKID is not set
-+# CONFIG_FEATURE_BLKID_TYPE is not set
-+# CONFIG_BLOCKDEV is not set
-+# CONFIG_CAL is not set
-+# CONFIG_CHRT is not set
-+CONFIG_DMESG=y
-+# CONFIG_FEATURE_DMESG_PRETTY is not set
-+# CONFIG_EJECT is not set
-+# CONFIG_FEATURE_EJECT_SCSI is not set
-+# CONFIG_FALLOCATE is not set
-+# CONFIG_FATATTR is not set
-+# CONFIG_FBSET is not set
-+# CONFIG_FEATURE_FBSET_FANCY is not set
-+# CONFIG_FEATURE_FBSET_READMODE is not set
-+# CONFIG_FDFORMAT is not set
-+# CONFIG_FDISK is not set
-+# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
-+# CONFIG_FEATURE_FDISK_WRITABLE is not set
-+# CONFIG_FEATURE_AIX_LABEL is not set
-+# CONFIG_FEATURE_SGI_LABEL is not set
-+# CONFIG_FEATURE_SUN_LABEL is not set
-+# CONFIG_FEATURE_OSF_LABEL is not set
-+# CONFIG_FEATURE_GPT_LABEL is not set
-+# CONFIG_FEATURE_FDISK_ADVANCED is not set
-+# CONFIG_FINDFS is not set
-+# CONFIG_FLOCK is not set
-+# CONFIG_FDFLUSH is not set
-+# CONFIG_FREERAMDISK is not set
-+# CONFIG_FSCK_MINIX is not set
-+# CONFIG_FSFREEZE is not set
-+# CONFIG_FSTRIM is not set
-+# CONFIG_GETOPT is not set
-+# CONFIG_FEATURE_GETOPT_LONG is not set
-+# CONFIG_HEXDUMP is not set
-+# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
-+# CONFIG_HD is not set
-+# CONFIG_XXD is not set
-+# CONFIG_HWCLOCK is not set
-+# CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS is not set
-+# CONFIG_IONICE is not set
-+# CONFIG_IPCRM is not set
-+# CONFIG_IPCS is not set
-+# CONFIG_LAST is not set
-+# CONFIG_FEATURE_LAST_FANCY is not set
-+# CONFIG_LOSETUP is not set
-+# CONFIG_LSPCI is not set
-+# CONFIG_LSUSB is not set
-+# CONFIG_MDEV is not set
-+# CONFIG_FEATURE_MDEV_CONF is not set
-+# CONFIG_FEATURE_MDEV_RENAME is not set
-+# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
-+# CONFIG_FEATURE_MDEV_EXEC is not set
-+# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
-+# CONFIG_FEATURE_MDEV_DAEMON is not set
-+# CONFIG_MESG is not set
-+# CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP is not set
-+# CONFIG_MKE2FS is not set
-+# CONFIG_MKFS_EXT2 is not set
-+# CONFIG_MKFS_MINIX is not set
-+# CONFIG_FEATURE_MINIX2 is not set
-+# CONFIG_MKFS_REISER is not set
-+# CONFIG_MKDOSFS is not set
-+# CONFIG_MKFS_VFAT is not set
-+# CONFIG_MKSWAP is not set
-+# CONFIG_FEATURE_MKSWAP_UUID is not set
-+CONFIG_MORE=y
-+CONFIG_MOUNT=y
-+# CONFIG_FEATURE_MOUNT_FAKE is not set
-+# CONFIG_FEATURE_MOUNT_VERBOSE is not set
-+# CONFIG_FEATURE_MOUNT_HELPERS is not set
-+# CONFIG_FEATURE_MOUNT_LABEL is not set
-+# CONFIG_FEATURE_MOUNT_NFS is not set
-+# CONFIG_FEATURE_MOUNT_CIFS is not set
-+# CONFIG_FEATURE_MOUNT_FLAGS is not set
-+# CONFIG_FEATURE_MOUNT_FSTAB is not set
-+# CONFIG_FEATURE_MOUNT_OTHERTAB is not set
-+# CONFIG_MOUNTPOINT is not set
-+# CONFIG_NOLOGIN is not set
-+# CONFIG_NOLOGIN_DEPENDENCIES is not set
-+# CONFIG_NSENTER is not set
-+# CONFIG_PIVOT_ROOT is not set
-+# CONFIG_RDATE is not set
-+# CONFIG_RDEV is not set
-+# CONFIG_READPROFILE is not set
-+# CONFIG_RENICE is not set
-+# CONFIG_REV is not set
-+# CONFIG_RTCWAKE is not set
-+# CONFIG_SCRIPT is not set
-+# CONFIG_SCRIPTREPLAY is not set
-+# CONFIG_SETARCH is not set
-+# CONFIG_LINUX32 is not set
-+# CONFIG_LINUX64 is not set
-+# CONFIG_SETPRIV is not set
-+# CONFIG_FEATURE_SETPRIV_DUMP is not set
-+# CONFIG_FEATURE_SETPRIV_CAPABILITIES is not set
-+# CONFIG_FEATURE_SETPRIV_CAPABILITY_NAMES is not set
-+# CONFIG_SETSID is not set
-+# CONFIG_SWAPON is not set
-+# CONFIG_FEATURE_SWAPON_DISCARD is not set
-+# CONFIG_FEATURE_SWAPON_PRI is not set
-+# CONFIG_SWAPOFF is not set
-+# CONFIG_FEATURE_SWAPONOFF_LABEL is not set
-+# CONFIG_SWITCH_ROOT is not set
-+# CONFIG_TASKSET is not set
-+# CONFIG_FEATURE_TASKSET_FANCY is not set
-+# CONFIG_FEATURE_TASKSET_CPULIST is not set
-+# CONFIG_UEVENT is not set
-+CONFIG_UMOUNT=y
-+CONFIG_FEATURE_UMOUNT_ALL=y
-+# CONFIG_UNSHARE is not set
-+# CONFIG_WALL is not set
-+
-+#
-+# Common options for mount/umount
-+#
-+# CONFIG_FEATURE_MOUNT_LOOP is not set
-+# CONFIG_FEATURE_MOUNT_LOOP_CREATE is not set
-+# CONFIG_FEATURE_MTAB_SUPPORT is not set
-+# CONFIG_VOLUMEID is not set
-+# CONFIG_FEATURE_VOLUMEID_BCACHE is not set
-+# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
-+# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
-+# CONFIG_FEATURE_VOLUMEID_EXFAT is not set
-+# CONFIG_FEATURE_VOLUMEID_EXT is not set
-+# CONFIG_FEATURE_VOLUMEID_F2FS is not set
-+# CONFIG_FEATURE_VOLUMEID_FAT is not set
-+# CONFIG_FEATURE_VOLUMEID_HFS is not set
-+# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
-+# CONFIG_FEATURE_VOLUMEID_JFS is not set
-+# CONFIG_FEATURE_VOLUMEID_LFS is not set
-+# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
-+# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
-+# CONFIG_FEATURE_VOLUMEID_LUKS is not set
-+# CONFIG_FEATURE_VOLUMEID_MINIX is not set
-+# CONFIG_FEATURE_VOLUMEID_NILFS is not set
-+# CONFIG_FEATURE_VOLUMEID_NTFS is not set
-+# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
-+# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
-+# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
-+# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
-+# CONFIG_FEATURE_VOLUMEID_SYSV is not set
-+# CONFIG_FEATURE_VOLUMEID_UBIFS is not set
-+# CONFIG_FEATURE_VOLUMEID_UDF is not set
-+# CONFIG_FEATURE_VOLUMEID_XFS is not set
-+
-+#
-+# Miscellaneous Utilities
-+#
-+# CONFIG_ADJTIMEX is not set
-+# CONFIG_BBCONFIG is not set
-+# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
-+# CONFIG_BC is not set
-+# CONFIG_DC is not set
-+# CONFIG_FEATURE_DC_BIG is not set
-+# CONFIG_FEATURE_DC_LIBM is not set
-+# CONFIG_FEATURE_BC_INTERACTIVE is not set
-+# CONFIG_FEATURE_BC_LONG_OPTIONS is not set
-+# CONFIG_BEEP is not set
-+CONFIG_FEATURE_BEEP_FREQ=0
-+CONFIG_FEATURE_BEEP_LENGTH_MS=0
-+# CONFIG_CHAT is not set
-+# CONFIG_FEATURE_CHAT_NOFAIL is not set
-+# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
-+# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
-+# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
-+# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
-+# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
-+# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
-+# CONFIG_CONSPY is not set
-+# CONFIG_CROND is not set
-+# CONFIG_FEATURE_CROND_D is not set
-+# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
-+# CONFIG_FEATURE_CROND_SPECIAL_TIMES is not set
-+CONFIG_FEATURE_CROND_DIR=""
-+# CONFIG_CRONTAB is not set
-+# CONFIG_DEVFSD is not set
-+# CONFIG_DEVFSD_MODLOAD is not set
-+# CONFIG_DEVFSD_FG_NP is not set
-+# CONFIG_DEVFSD_VERBOSE is not set
-+# CONFIG_FEATURE_DEVFS is not set
-+# CONFIG_DEVMEM is not set
-+# CONFIG_FBSPLASH is not set
-+# CONFIG_FLASHCP is not set
-+# CONFIG_FLASH_ERASEALL is not set
-+# CONFIG_FLASH_LOCK is not set
-+# CONFIG_FLASH_UNLOCK is not set
-+# CONFIG_HDPARM is not set
-+# CONFIG_FEATURE_HDPARM_GET_IDENTITY is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
-+# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
-+# CONFIG_HEXEDIT is not set
-+# CONFIG_I2CGET is not set
-+# CONFIG_I2CSET is not set
-+# CONFIG_I2CDUMP is not set
-+# CONFIG_I2CDETECT is not set
-+# CONFIG_I2CTRANSFER is not set
-+# CONFIG_INOTIFYD is not set
-+# CONFIG_LESS is not set
-+CONFIG_FEATURE_LESS_MAXLINES=0
-+# CONFIG_FEATURE_LESS_BRACKETS is not set
-+# CONFIG_FEATURE_LESS_FLAGS is not set
-+# CONFIG_FEATURE_LESS_TRUNCATE is not set
-+# CONFIG_FEATURE_LESS_MARKS is not set
-+# CONFIG_FEATURE_LESS_REGEXP is not set
-+# CONFIG_FEATURE_LESS_WINCH is not set
-+# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
-+# CONFIG_FEATURE_LESS_DASHCMD is not set
-+# CONFIG_FEATURE_LESS_LINENUMS is not set
-+# CONFIG_FEATURE_LESS_RAW is not set
-+# CONFIG_FEATURE_LESS_ENV is not set
-+# CONFIG_LSSCSI is not set
-+# CONFIG_MAKEDEVS is not set
-+# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
-+# CONFIG_FEATURE_MAKEDEVS_TABLE is not set
-+# CONFIG_MAN is not set
-+# CONFIG_MICROCOM is not set
-+# CONFIG_MIM is not set
-+# CONFIG_MT is not set
-+# CONFIG_NANDWRITE is not set
-+# CONFIG_NANDDUMP is not set
-+# CONFIG_PARTPROBE is not set
-+# CONFIG_RAIDAUTORUN is not set
-+# CONFIG_READAHEAD is not set
-+# CONFIG_RFKILL is not set
-+# CONFIG_RUNLEVEL is not set
-+# CONFIG_RX is not set
-+# CONFIG_SETFATTR is not set
-+CONFIG_SETSERIAL=y
-+# CONFIG_STRINGS is not set
-+# CONFIG_TIME is not set
-+# CONFIG_TS is not set
-+# CONFIG_TTYSIZE is not set
-+# CONFIG_UBIRENAME is not set
-+# CONFIG_UBIATTACH is not set
-+# CONFIG_UBIDETACH is not set
-+# CONFIG_UBIMKVOL is not set
-+# CONFIG_UBIRMVOL is not set
-+# CONFIG_UBIRSVOL is not set
-+# CONFIG_UBIUPDATEVOL is not set
-+# CONFIG_VOLNAME is not set
-+# CONFIG_WATCHDOG is not set
-+
-+#
-+# Networking Utilities
-+#
-+# CONFIG_FEATURE_IPV6 is not set
-+# CONFIG_FEATURE_UNIX_LOCAL is not set
-+# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
-+# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
-+# CONFIG_FEATURE_TLS_SHA1 is not set
-+# CONFIG_ARP is not set
-+# CONFIG_ARPING is not set
-+# CONFIG_BRCTL is not set
-+# CONFIG_FEATURE_BRCTL_FANCY is not set
-+# CONFIG_FEATURE_BRCTL_SHOW is not set
-+# CONFIG_DNSD is not set
-+# CONFIG_ETHER_WAKE is not set
-+# CONFIG_FTPD is not set
-+# CONFIG_FEATURE_FTPD_WRITE is not set
-+# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
-+# CONFIG_FEATURE_FTPD_AUTHENTICATION is not set
-+# CONFIG_FTPGET is not set
-+# CONFIG_FTPPUT is not set
-+# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
-+# CONFIG_HOSTNAME is not set
-+# CONFIG_DNSDOMAINNAME is not set
-+# CONFIG_HTTPD is not set
-+# CONFIG_FEATURE_HTTPD_RANGES is not set
-+# CONFIG_FEATURE_HTTPD_SETUID is not set
-+# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
-+# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
-+# CONFIG_FEATURE_HTTPD_CGI is not set
-+# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
-+# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
-+# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
-+# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
-+# CONFIG_FEATURE_HTTPD_PROXY is not set
-+# CONFIG_FEATURE_HTTPD_GZIP is not set
-+# CONFIG_IFCONFIG is not set
-+# CONFIG_FEATURE_IFCONFIG_STATUS is not set
-+# CONFIG_FEATURE_IFCONFIG_SLIP is not set
-+# CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ is not set
-+# CONFIG_FEATURE_IFCONFIG_HW is not set
-+# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
-+# CONFIG_IFENSLAVE is not set
-+# CONFIG_IFPLUGD is not set
-+# CONFIG_IFUP is not set
-+# CONFIG_IFDOWN is not set
-+CONFIG_IFUPDOWN_IFSTATE_PATH=""
-+# CONFIG_FEATURE_IFUPDOWN_IP is not set
-+# CONFIG_FEATURE_IFUPDOWN_IPV4 is not set
-+# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
-+# CONFIG_FEATURE_IFUPDOWN_MAPPING is not set
-+# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
-+# CONFIG_INETD is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME is not set
-+# CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN is not set
-+# CONFIG_FEATURE_INETD_RPC is not set
-+# CONFIG_IP is not set
-+# CONFIG_IPADDR is not set
-+# CONFIG_IPLINK is not set
-+# CONFIG_IPROUTE is not set
-+# CONFIG_IPTUNNEL is not set
-+# CONFIG_IPRULE is not set
-+# CONFIG_IPNEIGH is not set
-+# CONFIG_FEATURE_IP_ADDRESS is not set
-+# CONFIG_FEATURE_IP_LINK is not set
-+# CONFIG_FEATURE_IP_ROUTE is not set
-+CONFIG_FEATURE_IP_ROUTE_DIR=""
-+# CONFIG_FEATURE_IP_TUNNEL is not set
-+# CONFIG_FEATURE_IP_RULE is not set
-+# CONFIG_FEATURE_IP_NEIGH is not set
-+# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
-+# CONFIG_IPCALC is not set
-+# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_IPCALC_FANCY is not set
-+# CONFIG_FAKEIDENTD is not set
-+# CONFIG_NAMEIF is not set
-+# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
-+# CONFIG_NBDCLIENT is not set
-+# CONFIG_NC is not set
-+# CONFIG_NETCAT is not set
-+# CONFIG_NC_SERVER is not set
-+# CONFIG_NC_EXTRA is not set
-+# CONFIG_NC_110_COMPAT is not set
-+# CONFIG_NETSTAT is not set
-+# CONFIG_FEATURE_NETSTAT_WIDE is not set
-+# CONFIG_FEATURE_NETSTAT_PRG is not set
-+# CONFIG_NSLOOKUP is not set
-+# CONFIG_FEATURE_NSLOOKUP_BIG is not set
-+# CONFIG_FEATURE_NSLOOKUP_LONG_OPTIONS is not set
-+# CONFIG_NTPD is not set
-+# CONFIG_FEATURE_NTPD_SERVER is not set
-+# CONFIG_FEATURE_NTPD_CONF is not set
-+# CONFIG_FEATURE_NTP_AUTH is not set
-+# CONFIG_PING is not set
-+# CONFIG_PING6 is not set
-+# CONFIG_FEATURE_FANCY_PING is not set
-+# CONFIG_PSCAN is not set
-+# CONFIG_ROUTE is not set
-+# CONFIG_SLATTACH is not set
-+# CONFIG_SSL_CLIENT is not set
-+# CONFIG_TC is not set
-+# CONFIG_FEATURE_TC_INGRESS is not set
-+# CONFIG_TCPSVD is not set
-+# CONFIG_UDPSVD is not set
-+# CONFIG_TELNET is not set
-+# CONFIG_FEATURE_TELNET_TTYPE is not set
-+# CONFIG_FEATURE_TELNET_AUTOLOGIN is not set
-+# CONFIG_FEATURE_TELNET_WIDTH is not set
-+# CONFIG_TELNETD is not set
-+# CONFIG_FEATURE_TELNETD_STANDALONE is not set
-+# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
-+# CONFIG_TFTP is not set
-+# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
-+# CONFIG_FEATURE_TFTP_HPA_COMPAT is not set
-+# CONFIG_TFTPD is not set
-+# CONFIG_FEATURE_TFTP_GET is not set
-+# CONFIG_FEATURE_TFTP_PUT is not set
-+# CONFIG_FEATURE_TFTP_BLOCKSIZE is not set
-+# CONFIG_TFTP_DEBUG is not set
-+# CONFIG_TLS is not set
-+# CONFIG_TRACEROUTE is not set
-+# CONFIG_TRACEROUTE6 is not set
-+# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
-+# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
-+# CONFIG_TUNCTL is not set
-+# CONFIG_FEATURE_TUNCTL_UG is not set
-+# CONFIG_VCONFIG is not set
-+# CONFIG_WGET is not set
-+# CONFIG_FEATURE_WGET_LONG_OPTIONS is not set
-+# CONFIG_FEATURE_WGET_STATUSBAR is not set
-+# CONFIG_FEATURE_WGET_AUTHENTICATION is not set
-+# CONFIG_FEATURE_WGET_TIMEOUT is not set
-+# CONFIG_FEATURE_WGET_HTTPS is not set
-+# CONFIG_FEATURE_WGET_OPENSSL is not set
-+# CONFIG_WHOIS is not set
-+# CONFIG_ZCIP is not set
-+# CONFIG_UDHCPD is not set
-+# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
-+# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
-+CONFIG_DHCPD_LEASES_FILE=""
-+# CONFIG_DUMPLEASES is not set
-+# CONFIG_DHCPRELAY is not set
-+# CONFIG_UDHCPC is not set
-+# CONFIG_FEATURE_UDHCPC_ARPING is not set
-+# CONFIG_FEATURE_UDHCPC_SANITIZEOPT is not set
-+CONFIG_UDHCPC_DEFAULT_SCRIPT=""
-+# CONFIG_UDHCPC6 is not set
-+# CONFIG_FEATURE_UDHCPC6_RFC3646 is not set
-+# CONFIG_FEATURE_UDHCPC6_RFC4704 is not set
-+# CONFIG_FEATURE_UDHCPC6_RFC4833 is not set
-+# CONFIG_FEATURE_UDHCPC6_RFC5970 is not set
-+# CONFIG_FEATURE_UDHCP_PORT is not set
-+CONFIG_UDHCP_DEBUG=0
-+CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=0
-+# CONFIG_FEATURE_UDHCP_RFC3397 is not set
-+# CONFIG_FEATURE_UDHCP_8021Q is not set
-+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS=""
-+
-+#
-+# Print Utilities
-+#
-+# CONFIG_LPD is not set
-+# CONFIG_LPR is not set
-+# CONFIG_LPQ is not set
-+
-+#
-+# Mail Utilities
-+#
-+# CONFIG_MAKEMIME is not set
-+# CONFIG_POPMAILDIR is not set
-+# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
-+# CONFIG_REFORMIME is not set
-+# CONFIG_FEATURE_REFORMIME_COMPAT is not set
-+# CONFIG_SENDMAIL is not set
-+CONFIG_FEATURE_MIME_CHARSET=""
-+
-+#
-+# Process Utilities
-+#
-+# CONFIG_FREE is not set
-+# CONFIG_FUSER is not set
-+# CONFIG_IOSTAT is not set
-+CONFIG_KILL=y
-+CONFIG_KILLALL=y
-+# CONFIG_KILLALL5 is not set
-+# CONFIG_LSOF is not set
-+# CONFIG_MPSTAT is not set
-+# CONFIG_NMETER is not set
-+# CONFIG_PGREP is not set
-+# CONFIG_PKILL is not set
-+# CONFIG_PIDOF is not set
-+# CONFIG_FEATURE_PIDOF_SINGLE is not set
-+# CONFIG_FEATURE_PIDOF_OMIT is not set
-+# CONFIG_PMAP is not set
-+# CONFIG_POWERTOP is not set
-+# CONFIG_FEATURE_POWERTOP_INTERACTIVE is not set
-+CONFIG_PS=y
-+CONFIG_FEATURE_PS_WIDE=y
-+CONFIG_FEATURE_PS_LONG=y
-+# CONFIG_FEATURE_PS_TIME is not set
-+# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
-+# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
-+CONFIG_PSTREE=y
-+# CONFIG_PWDX is not set
-+# CONFIG_SMEMCAP is not set
-+# CONFIG_BB_SYSCTL is not set
-+# CONFIG_TOP is not set
-+# CONFIG_FEATURE_TOP_INTERACTIVE is not set
-+# CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE is not set
-+# CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS is not set
-+# CONFIG_FEATURE_TOP_SMP_CPU is not set
-+# CONFIG_FEATURE_TOP_DECIMALS is not set
-+# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
-+# CONFIG_FEATURE_TOPMEM is not set
-+# CONFIG_UPTIME is not set
-+# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
-+# CONFIG_WATCH is not set
-+# CONFIG_FEATURE_SHOW_THREADS is not set
-+
-+#
-+# Runit Utilities
-+#
-+# CONFIG_CHPST is not set
-+# CONFIG_SETUIDGID is not set
-+# CONFIG_ENVUIDGID is not set
-+# CONFIG_ENVDIR is not set
-+# CONFIG_SOFTLIMIT is not set
-+# CONFIG_RUNSV is not set
-+# CONFIG_RUNSVDIR is not set
-+# CONFIG_FEATURE_RUNSVDIR_LOG is not set
-+# CONFIG_SV is not set
-+CONFIG_SV_DEFAULT_SERVICE_DIR=""
-+# CONFIG_SVC is not set
-+# CONFIG_SVOK is not set
-+# CONFIG_SVLOGD is not set
-+# CONFIG_CHCON is not set
-+# CONFIG_GETENFORCE is not set
-+# CONFIG_GETSEBOOL is not set
-+# CONFIG_LOAD_POLICY is not set
-+# CONFIG_MATCHPATHCON is not set
-+# CONFIG_RUNCON is not set
-+# CONFIG_SELINUXENABLED is not set
-+# CONFIG_SESTATUS is not set
-+# CONFIG_SETENFORCE is not set
-+# CONFIG_SETFILES is not set
-+# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
-+# CONFIG_RESTORECON is not set
-+# CONFIG_SETSEBOOL is not set
-+
-+#
-+# Shells
-+#
-+# CONFIG_SH_IS_ASH is not set
-+CONFIG_SH_IS_HUSH=y
-+# CONFIG_SH_IS_NONE is not set
-+# CONFIG_BASH_IS_ASH is not set
-+CONFIG_BASH_IS_HUSH=y
-+# CONFIG_BASH_IS_NONE is not set
-+# CONFIG_SHELL_ASH is not set
-+# CONFIG_ASH is not set
-+# CONFIG_ASH_OPTIMIZE_FOR_SIZE is not set
-+# CONFIG_ASH_INTERNAL_GLOB is not set
-+# CONFIG_ASH_BASH_COMPAT is not set
-+# CONFIG_ASH_BASH_SOURCE_CURDIR is not set
-+# CONFIG_ASH_BASH_NOT_FOUND_HOOK is not set
-+# CONFIG_ASH_JOB_CONTROL is not set
-+# CONFIG_ASH_ALIAS is not set
-+# CONFIG_ASH_RANDOM_SUPPORT is not set
-+# CONFIG_ASH_EXPAND_PRMT is not set
-+# CONFIG_ASH_IDLE_TIMEOUT is not set
-+# CONFIG_ASH_MAIL is not set
-+# CONFIG_ASH_ECHO is not set
-+# CONFIG_ASH_PRINTF is not set
-+# CONFIG_ASH_TEST is not set
-+# CONFIG_ASH_HELP is not set
-+# CONFIG_ASH_GETOPTS is not set
-+# CONFIG_ASH_CMDCMD is not set
-+# CONFIG_CTTYHACK is not set
-+CONFIG_HUSH=y
-+CONFIG_SHELL_HUSH=y
-+CONFIG_HUSH_BASH_COMPAT=y
-+CONFIG_HUSH_BRACE_EXPANSION=y
-+CONFIG_HUSH_LINENO_VAR=y
-+# CONFIG_HUSH_BASH_SOURCE_CURDIR is not set
-+CONFIG_HUSH_INTERACTIVE=y
-+# CONFIG_HUSH_SAVEHISTORY is not set
-+CONFIG_HUSH_JOB=y
-+CONFIG_HUSH_TICK=y
-+CONFIG_HUSH_IF=y
-+CONFIG_HUSH_LOOPS=y
-+CONFIG_HUSH_CASE=y
-+CONFIG_HUSH_FUNCTIONS=y
-+CONFIG_HUSH_LOCAL=y
-+CONFIG_HUSH_RANDOM_SUPPORT=y
-+CONFIG_HUSH_MODE_X=y
-+CONFIG_HUSH_ECHO=y
-+CONFIG_HUSH_PRINTF=y
-+CONFIG_HUSH_TEST=y
-+CONFIG_HUSH_HELP=y
-+CONFIG_HUSH_EXPORT=y
-+CONFIG_HUSH_EXPORT_N=y
-+CONFIG_HUSH_READONLY=y
-+CONFIG_HUSH_KILL=y
-+CONFIG_HUSH_WAIT=y
-+CONFIG_HUSH_COMMAND=y
-+CONFIG_HUSH_TRAP=y
-+CONFIG_HUSH_TYPE=y
-+CONFIG_HUSH_TIMES=y
-+CONFIG_HUSH_READ=y
-+CONFIG_HUSH_SET=y
-+CONFIG_HUSH_UNSET=y
-+CONFIG_HUSH_ULIMIT=y
-+CONFIG_HUSH_UMASK=y
-+CONFIG_HUSH_GETOPTS=y
-+# CONFIG_HUSH_MEMLEAK is not set
-+
-+#
-+# Options common to all shells
-+#
-+CONFIG_FEATURE_SH_MATH=y
-+CONFIG_FEATURE_SH_MATH_64=y
-+CONFIG_FEATURE_SH_MATH_BASE=y
-+# CONFIG_FEATURE_SH_EXTRA_QUIET is not set
-+# CONFIG_FEATURE_SH_STANDALONE is not set
-+# CONFIG_FEATURE_SH_NOFORK is not set
-+# CONFIG_FEATURE_SH_READ_FRAC is not set
-+# CONFIG_FEATURE_SH_HISTFILESIZE is not set
-+# CONFIG_FEATURE_SH_EMBEDDED_SCRIPTS is not set
-+
-+#
-+# System Logging Utilities
-+#
-+# CONFIG_KLOGD is not set
-+# CONFIG_FEATURE_KLOGD_KLOGCTL is not set
-+# CONFIG_LOGGER is not set
-+# CONFIG_LOGREAD is not set
-+# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
-+# CONFIG_SYSLOGD is not set
-+# CONFIG_FEATURE_ROTATE_LOGFILE is not set
-+# CONFIG_FEATURE_REMOTE_LOG is not set
-+# CONFIG_FEATURE_SYSLOGD_DUP is not set
-+# CONFIG_FEATURE_SYSLOGD_CFG is not set
-+# CONFIG_FEATURE_SYSLOGD_PRECISE_TIMESTAMPS is not set
-+CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=0
-+# CONFIG_FEATURE_IPC_SYSLOG is not set
-+CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
-+# CONFIG_FEATURE_KMSG_SYSLOG is not set
-diff --git a/board/kendryte/k210/rootfs_overlay/init b/board/kendryte/k210/rootfs_overlay/init
-new file mode 100755
-index 0000000000..36fdefb1b4
---- /dev/null
-+++ b/board/kendryte/k210/rootfs_overlay/init
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+
-+# devtmpfs does not get automounted for initramfs
-+/bin/mount -t devtmpfs devtmpfs /dev
-+
-+# Same for proc
-+/bin/mount -t proc proc /proc
-+
-+# use the /dev/console device node from devtmpfs if possible to not
-+# confuse glibc's ttyname_r().
-+# This may fail (E.G. booted with console=), and errors from exec will
-+# terminate the shell, so use a subshell for the test
-+if (exec 0</dev/console) 2>/dev/null; then
-+    exec 0</dev/console
-+    exec 1>/dev/console
-+    exec 2>/dev/console
-+fi
-+
-+echo ""
-+echo "+---------------------------+"
-+echo "| Kendryte K210 NOMMU Linux |"
-+echo "+---------------------------+"
-+
-+exec /bin/sh
-diff --git a/configs/kendryte_k210_defconfig b/configs/kendryte_k210_defconfig
-new file mode 100644
-index 0000000000..8d85f01828
---- /dev/null
-+++ b/configs/kendryte_k210_defconfig
-@@ -0,0 +1,24 @@
-+BR2_riscv=y
-+# BR2_COMPILER_PARANOID_UNSAFE_PATH is not set
-+# BR2_UCLIBC_INSTALL_UTILS is not set
-+BR2_GCC_ENABLE_LTO=y
-+BR2_PACKAGE_HOST_ELF2FLT=y
-+# BR2_USE_MMU is not set
-+BR2_INIT_NONE=y
-+BR2_ROOTFS_MERGED_USR=y
-+BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
-+BR2_ROOTFS_OVERLAY="board/kendryte/k210/rootfs_overlay"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8"
-+BR2_LINUX_KERNEL_DEFCONFIG="nommu_k210"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_NAME="loader.bin"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="kendryte/k210"
-+BR2_PACKAGE_BUSYBOX_CONFIG="board/kendryte/k210/busybox.config"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+# BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+# BR2_TARGET_ROOTFS_TAR is not set
--- 
-2.26.2
+I don't have the time nor the proper environment to test your patch,
+so I can't formally acknowledge it.
+I hope someone can have a look at it?
+
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > ---
+> > >  ...-Fix-Makefiles-for-cross-compilation.patch |  41 ++++---
+> > >  ...03-Rename-symbol-to-prevent-conflict.patch |  45 -------
+> > >  ...tion-error-when-building-with-gcc10.patch} |   0
+> > >  .../0004-Support-urandom-inside-chroot.patch  | 113 ++++++++++++++++++
+> > >  package/mongrel2/Config.in                    |   1 +
+> > >  package/mongrel2/mongrel2.hash                |   5 +-
+> > >  package/mongrel2/mongrel2.mk                  |  21 +---
+> > >  7 files changed, 143 insertions(+), 83 deletions(-)
+> > >  delete mode 100644 package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
+> > >  rename package/mongrel2/{0004-fix-multiple-definition-error-when-building-with-gcc10.patch => 0003-fix-multiple-definition-error-when-building-with-gcc10.patch} (100%)
+> > >  create mode 100644 package/mongrel2/0004-Support-urandom-inside-chroot.patch
+> > >
+> > > diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+> > > index 730d8ebfc0..1961f128ed 100644
+> > > --- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+> > > +++ b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
+> > > @@ -1,7 +1,7 @@
+> > >  From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
+> > >  From: Lionel Orry <lionel.orry@gmail.com>
+> > >  Date: Wed, 27 Mar 2013 15:56:56 +0100
+> > > -Subject: [PATCH 1/1] Fix Makefiles for cross-compilation
+> > > +Subject: [PATCH] Fix Makefiles for cross-compilation
+> > >
+> > >  The CFLAGS handling in mongrel2 is really messy and it is hard to make
+> > >  it behave correctly with cross-compiling environments. This patch
+> > > @@ -10,6 +10,8 @@ restricts the Makefiles syntax to GNU Make, but help cross-compiling.
+> > >  This is not meant to be applied upstream.
+> > >
+> > >  Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> > > +[Fabrice: refresh for 1.12.2]
+> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > >  ---
+> > >   Makefile                      | 2 +-
+> > >   tools/config_modules/Makefile | 2 +-
+> > > @@ -19,57 +21,58 @@ Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
+> > >   5 files changed, 5 insertions(+), 5 deletions(-)
+> > >
+> > >  diff --git a/Makefile b/Makefile
+> > > -index 6dce4a6..d48e05e 100644
+> > > +index 4e89c33..2f549a8 100644
+> > >  --- a/Makefile
+> > >  +++ b/Makefile
+> > > -@@ -1,4 +1,4 @@
+> > > --CFLAGS=-g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
+> > > -+override CFLAGS += -g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
+> > > - LIBS=-lzmq -ldl -lsqlite3 $(OPTLIBS)
+> > > +@@ -1,5 +1,5 @@
+> > > + CFLAGS?=-g -O2
+> > > +-CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+> > > ++override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
+> > > + CFLAGS += ${OPTFLAGS}
+> > > + LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
+> > >   PREFIX?=/usr/local
+> > > -
+> > >  diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
+> > > -index 398490c..53f2255 100644
+> > > +index c2680d1..ada3169 100644
+> > >  --- a/tools/config_modules/Makefile
+> > >  +++ b/tools/config_modules/Makefile
+> > >  @@ -1,5 +1,5 @@
+> > >   PREFIX?=/usr/local
+> > > --CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> > > -+override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> > > +-CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> > > ++override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
+> > >   LDFLAGS=$(OPTLIBS)
+> > >
+> > >   MONGO_SRC = mongo-c-driver/src/bson.c \
+> > >  diff --git a/tools/filters/Makefile b/tools/filters/Makefile
+> > > -index f9f4556..6077b79 100644
+> > > +index 6505ad5..a968ef6 100644
+> > >  --- a/tools/filters/Makefile
+> > >  +++ b/tools/filters/Makefile
+> > >  @@ -1,5 +1,5 @@
+> > >   PREFIX?=/usr/local
+> > > --CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> > > -+ override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> > > +-CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> > > ++override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
+> > >   LDFLAGS=$(OPTLIBS)
+> > >
+> > > - all: null.so
+> > > + all: null.so rewrite.so sendfile.so
+> > >  diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
+> > > -index b50d8a0..ba378c5 100644
+> > > +index b50d8a0..cc00062 100644
+> > >  --- a/tools/m2sh/Makefile
+> > >  +++ b/tools/m2sh/Makefile
+> > >  @@ -1,4 +1,4 @@
+> > >  -CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+> > > -+override CFLAGS += -DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+> > > ++override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
+> > >   LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
+> > >
+> > >   PREFIX?=/usr/local
+> > >  diff --git a/tools/procer/Makefile b/tools/procer/Makefile
+> > > -index d0d7de0..629b2e9 100644
+> > > +index bb9aa31..d377f7f 100644
+> > >  --- a/tools/procer/Makefile
+> > >  +++ b/tools/procer/Makefile
+> > >  @@ -1,4 +1,4 @@
+> > >  -CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+> > > -+override CFLAGS += -DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+> > > ++override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
+> > >   PREFIX?=/usr/local
+> > >   LIBS?=-lzmq
+> > >   SOURCES=$(wildcard *.c)
+> > >  --
+> > > -1.8.1.4
+> > > +2.27.0
+> > >
+> > > diff --git a/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch b/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
+> > > deleted file mode 100644
+> > > index 83698164fd..0000000000
+> > > --- a/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
+> > > +++ /dev/null
+> > > @@ -1,45 +0,0 @@
+> > > -From 8d0bc79f38913b1a55e7d151b32bbc9462c24b47 Mon Sep 17 00:00:00 2001
+> > > -From: Jason Miller <jason@jasom.org>
+> > > -Date: Fri, 14 Aug 2015 19:03:09 -0700
+> > > -Subject: [PATCH] Rename symbol to prevent conflict
+> > > -
+> > > -One of the standard headers defines max_align_t on some versions of linux.
+> > > -
+> > > -[Backported from upstream commit
+> > > -https://github.com/mongrel2/mongrel2/commit/563bac8c59b9b32205164d237cf1ec0cb48d189f.]
+> > > -
+> > > -Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> > > ----
+> > > - src/mem/align.h  | 2 +-
+> > > - src/mem/halloc.c | 2 +-
+> > > - 2 files changed, 2 insertions(+), 2 deletions(-)
+> > > -
+> > > -diff --git a/src/mem/align.h b/src/mem/align.h
+> > > -index 4c6e183..03a4999 100644
+> > > ---- a/src/mem/align.h
+> > > -+++ b/src/mem/align.h
+> > > -@@ -30,7 +30,7 @@ union max_align
+> > > -       void (*q)(void);
+> > > - };
+> > > -
+> > > --typedef union max_align max_align_t;
+> > > -+typedef union max_align h_max_align_t;
+> > > -
+> > > - #endif
+> > > -
+> > > -diff --git a/src/mem/halloc.c b/src/mem/halloc.c
+> > > -index b097d1f..40d0c09 100644
+> > > ---- a/src/mem/halloc.c
+> > > -+++ b/src/mem/halloc.c
+> > > -@@ -34,7 +34,7 @@ typedef struct hblock
+> > > - #endif
+> > > -       hlist_item_t  siblings; /* 2 pointers */
+> > > -       hlist_head_t  children; /* 1 pointer  */
+> > > --      max_align_t   data[1];  /* not allocated, see below */
+> > > -+      h_max_align_t   data[1];  /* not allocated, see below */
+> > > -
+> > > - } hblock_t;
+> > > -
+> > > ---
+> > > -2.1.4
+> > > -
+> > > diff --git a/package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch b/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
+> > > similarity index 100%
+> > > rename from package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch
+> > > rename to package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
+> > > diff --git a/package/mongrel2/0004-Support-urandom-inside-chroot.patch b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
+> > > new file mode 100644
+> > > index 0000000000..468ddb83fe
+> > > --- /dev/null
+> > > +++ b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
+> > > @@ -0,0 +1,113 @@
+> > > +From 330e8c8352eb0ed3c178ac6e0102403c0a835492 Mon Sep 17 00:00:00 2001
+> > > +From: Jason Miller <jason@milr.com>
+> > > +Date: Thu, 5 Jul 2018 20:53:51 -0700
+> > > +Subject: [PATCH] Support urandom inside chroot
+> > > +
+> > > +This adds a new default entropy function that uses a /dev/urandom stream
+> > > +opened before the chroot.  If initializing that fails, it fallsback on
+> > > +HAVEGE only if HAVEGE is supported by the mbedTLS.
+> > > +
+> > > +This should remove the hard requirement on HAVEGE
+> > > +
+> > > +resolves #326
+> > > +resolves #327
+> > > +
+> > > +[Upstream status: https://github.com/mongrel2/mongrel2/pull/328]
+> > > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > +---
+> > > + src/mongrel2.c |  7 -------
+> > > + src/server.c   | 36 +++++++++++++++++++++++-------------
+> > > + 2 files changed, 23 insertions(+), 20 deletions(-)
+> > > +
+> > > +diff --git a/src/mongrel2.c b/src/mongrel2.c
+> > > +index da632d95..48ece8a5 100644
+> > > +--- a/src/mongrel2.c
+> > > ++++ b/src/mongrel2.c
+> > > +@@ -404,13 +404,6 @@ void taskmain(int argc, char **argv)
+> > > +     rc = attempt_chroot_drop(srv);
+> > > +     check(rc == 0, "Major failure in chroot/droppriv, aborting.");
+> > > +
+> > > +-    // set up rng after chroot
+> > > +-    // TODO: once mbedtls is updated, we can move this back into Server_create
+> > > +-    if(srv->use_ssl) {
+> > > +-        rc = Server_init_rng(srv);
+> > > +-        check(rc == 0, "Failed to initialize rng for server %s", bdata(srv->uuid));
+> > > +-    }
+> > > +-
+> > > +     final_setup();
+> > > +
+> > > +     taskcreate(tickertask, NULL, TICKER_TASK_STACK);
+> > > +diff --git a/src/server.c b/src/server.c
+> > > +index 45761db4..e44e199b 100644
+> > > +--- a/src/server.c
+> > > ++++ b/src/server.c
+> > > +@@ -149,35 +149,45 @@ static int Server_load_ciphers(Server *srv, bstring ssl_ciphers_val)
+> > > +     return -1;
+> > > + }
+> > > +
+> > > ++static int urandom_entropy_func(void *data, unsigned char *output, size_t len)
+> > > ++{
+> > > ++    FILE* urandom = (FILE *)data;
+> > > ++    size_t rc = fread(output, 1, len, urandom);
+> > > ++
+> > > ++    if (rc != len) return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
+> > > ++
+> > > ++    return 0;
+> > > ++}
+> > > ++
+> > > + int Server_init_rng(Server *srv)
+> > > + {
+> > > +     int rc;
+> > > +-    unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
+> > > +     void *ctx = NULL;
+> > > +
+> > > +-    mbedtls_entropy_init( &srv->entropy );
+> > > ++    FILE *urandom = fopen("/dev/urandom","r");
+> > > +
+> > > +-    // test the entropy source
+> > > +-    rc = mbedtls_entropy_func(&srv->entropy, buf, MBEDTLS_ENTROPY_BLOCK_SIZE);
+> > > +-
+> > > +-    if(rc == 0) {
+> > > ++    if(urandom != NULL) {
+> > > +         ctx = calloc(sizeof(mbedtls_ctr_drbg_context), 1);
+> > > +
+> > > +         mbedtls_ctr_drbg_init((mbedtls_ctr_drbg_context *)ctx);
+> > > +         rc = mbedtls_ctr_drbg_seed((mbedtls_ctr_drbg_context *)ctx,
+> > > +-            mbedtls_entropy_func, &srv->entropy, NULL, 0);
+> > > ++            urandom_entropy_func, urandom, NULL, 0);
+> > > +         check(rc == 0, "Init rng failed: ctr_drbg_init returned %d\n", rc);
+> > > +
+> > > +         srv->rng_func = mbedtls_ctr_drbg_random;
+> > > +         srv->rng_ctx = ctx;
+> > > +     } else {
+> > > +-        log_warn("entropy source unavailable. falling back to havege rng");
+> > > +
+> > > ++#if defined(MBEDTLS_HAVEGE_C)
+> > > ++        log_warn("entropy source unavailable. falling back to havege rng");
+> > > +         ctx = calloc(sizeof(mbedtls_havege_state), 1);
+> > > +         mbedtls_havege_init((mbedtls_havege_state *)ctx);
+> > > +-
+> > > +         srv->rng_func = mbedtls_havege_random;
+> > > +         srv->rng_ctx = ctx;
+> > > ++#else
+> > > ++        log_err("Unable to initialize urandom entropy source, and mbedTLS compiled without HAVEGE");
+> > > ++        goto error;
+> > > ++#endif
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +@@ -278,10 +288,10 @@ Server *Server_create(bstring uuid, bstring default_host,
+> > > +
+> > > +     // TODO: once mbedtls supports opening urandom early and keeping it open,
+> > > +     //   put the rng initialization back here (before chroot)
+> > > +-    //if(use_ssl) {
+> > > +-    //    rc = Server_init_rng(srv);
+> > > +-    //    check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
+> > > +-    //}
+> > > ++    if(use_ssl) {
+> > > ++        rc = Server_init_rng(srv);
+> > > ++        check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
+> > > ++    }
+> > > +
+> > > +     if(blength(chroot) > 0) {
+> > > +         srv->chroot = bstrcpy(chroot); check_mem(srv->chroot);
+> > > diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+> > > index a9b09b786c..60fee6f96d 100644
+> > > --- a/package/mongrel2/Config.in
+> > > +++ b/package/mongrel2/Config.in
+> > > @@ -18,6 +18,7 @@ config BR2_PACKAGE_MONGREL2
+> > >         depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> > >         depends on !BR2_STATIC_LIBS # uses dlopen()
+> > >         depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+> > > +       select BR2_PACKAGE_MBEDTLS
+> > >         select BR2_PACKAGE_SQLITE
+> > >         select BR2_PACKAGE_ZEROMQ
+> > >         help
+> > > diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
+> > > index b1db917c57..ea3a1cb426 100644
+> > > --- a/package/mongrel2/mongrel2.hash
+> > > +++ b/package/mongrel2/mongrel2.hash
+> > > @@ -1,3 +1,6 @@
+> > > +# From https://mongrel2.org
+> > > +sha1  6f81fa747a1e198d1a655c3677b6de686a5a51f7  mongrel2-v1.12.2.tar.bz2
+> > > +
+> > >  # Locally computed
+> > > -sha256  543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
+> > > +sha256  3bffeae198c37a1efc9c12f77d5f1eb61cdf62b35d661babc2527dd030aa7d8f  mongrel2-v1.12.2.tar.bz2
+> > >  sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
+> > > diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+> > > index 9a7f64a738..cbe7e3fb91 100644
+> > > --- a/package/mongrel2/mongrel2.mk
+> > > +++ b/package/mongrel2/mongrel2.mk
+> > > @@ -4,29 +4,14 @@
+> > >  #
+> > >  ################################################################################
+> > >
+> > > -MONGREL2_VERSION = 1.9.2
+> > > +MONGREL2_VERSION = 1.12.2
+> > >  MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
+> > >  # Do not use the github helper here, the generated tarball is *NOT* the same
+> > >  # as the one uploaded by upstream for the release.
+> > > -MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/$(MONGREL2_VERSION)
+> > > +MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
+> > >  MONGREL2_LICENSE = BSD-3-Clause
+> > >  MONGREL2_LICENSE_FILES = LICENSE
+> > > -MONGREL2_DEPENDENCIES = sqlite zeromq
+> > > -
+> > > -define MONGREL2_POLARSSL_DISABLE_ASM
+> > > -       $(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/src/polarssl/include/polarssl/config.h
+> > > -endef
+> > > -
+> > > -# ARM in thumb mode breaks debugging with asm optimizations
+> > > -# Microblaze asm optimizations are broken in general
+> > > -# MIPS R6 asm is not yet supported
+> > > -ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
+> > > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
+> > > -else ifeq ($(BR2_microblaze),y)
+> > > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
+> > > -else ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
+> > > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
+> > > -endif
+> > > +MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
+> > >
+> > >  define MONGREL2_BUILD_CMDS
+> > >         $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> > > --
+> > > 2.28.0
+> > >
+> >
+> > Thanks again,
+> >
+> > Lionel
+> Best Regards,
+>
+> Fabrice
+
+Best regards,
+Lionel
