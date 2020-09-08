@@ -1,53 +1,41 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue,  8 Sep 2020 20:30:54 +0200
-Subject: [Buildroot] [PATCH v2] configs/stm32mp157: remove extra
- metadata_csum mkfs option
-Message-ID: <20200908183054.413318-1-b.bilas@grinn-global.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  8 Sep 2020 20:41:16 +0200
+Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.5
+Message-ID: <20200908184116.1750845-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit [1] there is no necessity to pass extra
-metadata_csum option due to changed env location
-in U-Boot so we can drop it completely.
-
-[1] 76db1681da52342ca9f4fb7e6787bd83cc82f429:
-stm32mp1: use a specific SD/eMMC partition for U-Boot enviromnent
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- v1 -> v2:
-  - missing SoB
+ package/iptables/iptables.hash | 2 +-
+ package/iptables/iptables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- configs/stm32mp157a_dk1_defconfig | 1 -
- configs/stm32mp157c_dk2_defconfig | 1 -
- 2 files changed, 2 deletions(-)
-
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index be5ea7581f..f172539c02 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 86e1551a30..49cfb0733c 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
--BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index 2811daf5e..725770543 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
+@@ -1,4 +1,4 @@
+ # From https://netfilter.org/projects/iptables/downloads.html
+-sha256  993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c  iptables-1.8.4.tar.bz2
++sha256  d457d74512e63aa3f50336e0597d4023c0e3c6845594d38532efb6ebcb294309  iptables-1.8.5.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 4dc7a174a..442639f15 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPTABLES_VERSION = 1.8.4
++IPTABLES_VERSION = 1.8.5
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
 -- 
-2.28.0
+2.25.1
