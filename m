@@ -1,120 +1,48 @@
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Tue, 8 Sep 2020 20:21:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mrp: Add init script
-Message-ID: <20200908182118.2612943-1-horatiu.vultur@microchip.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue,  8 Sep 2020 20:27:58 +0200
+Subject: [Buildroot] [PATCH] configs/stm32mp157: remove extra metadata_csum
+ mkfs option
+Message-ID: <20200908182758.412179-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add init script and systemd unit for MRP because it is using a
-daemon.
+Since commit [1] there is no necessity to pass extra
+metadata_csum option due to changed env location
+in U-Boot so we can drop it completely.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+[1] 76db1681da52342ca9f4fb7e6787bd83cc82f429:
+stm32mp1: use a specific SD/eMMC partition for U-Boot enviromnent
 ---
- package/mrp/S65mrp      | 55 +++++++++++++++++++++++++++++++++++++++++
- package/mrp/mrp.mk      | 10 ++++++++
- package/mrp/mrp.service | 10 ++++++++
- 3 files changed, 75 insertions(+)
- create mode 100644 package/mrp/S65mrp
- create mode 100644 package/mrp/mrp.service
+ configs/stm32mp157a_dk1_defconfig | 1 -
+ configs/stm32mp157c_dk2_defconfig | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/package/mrp/S65mrp b/package/mrp/S65mrp
-new file mode 100644
-index 0000000000..0ce1f80f81
---- /dev/null
-+++ b/package/mrp/S65mrp
-@@ -0,0 +1,55 @@
-+#!/bin/sh
-+#
-+# Start mrp
-+#
-+
-+DAEMON="mrp_server"
-+
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/mrp_server" ] && . "/etc/default/mrp_server"
-+
-+start() {
-+	printf "Starting mrp daemon: "
-+	start-stop-daemon -S -b -q -m -p $PIDFILE \
-+		-x /usr/bin/$DAEMON
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return $status
-+}
-+
-+stop() {
-+	printf "Stopping mrp daemon: "
-+	start-stop-daemon -K -q -p $PIDFILE
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return $status
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	stop
-+	start
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/mrp/mrp.mk b/package/mrp/mrp.mk
-index 4d8a1fc92a..7e31e442ce 100644
---- a/package/mrp/mrp.mk
-+++ b/package/mrp/mrp.mk
-@@ -10,4 +10,14 @@ MRP_DEPENDENCIES = libev libmnl libnl
- MRP_LICENSE = GPL-2.0
- MRP_LICENSE_FILES = LICENSE
- 
-+define MRP_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 755 -D $(MRP_PKGDIR)/S65mrp \
-+		$(TARGET_DIR)/etc/init.d/S65mrp
-+endef
-+
-+define MRP_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(MRP_PKGDIR)/mrp.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/mrp.service
-+endef
-+
- $(eval $(cmake-package))
-diff --git a/package/mrp/mrp.service b/package/mrp/mrp.service
-new file mode 100644
-index 0000000000..05006a70aa
---- /dev/null
-+++ b/package/mrp/mrp.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Media Redundancy Protocol
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/bin/mrp
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index be5ea7581f..f172539c02 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+-BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index 86e1551a30..49cfb0733c 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -15,7 +15,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+-BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O ^metadata_csum"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
-2.27.0
+2.28.0
