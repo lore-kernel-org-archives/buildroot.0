@@ -1,32 +1,51 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue,  8 Sep 2020 12:23:36 -0700
-Subject: [Buildroot] [PATCH 3/3] package/python-sentry-sdk: update homepage
- URL
-In-Reply-To: <20200908192336.155428-1-joseph.kogut@gmail.com>
-References: <20200908192336.155428-1-joseph.kogut@gmail.com>
-Message-ID: <20200908192336.155428-3-joseph.kogut@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  8 Sep 2020 21:45:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kbd: needs gcc 4.9
+Message-ID: <20200908194545.75939-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/python-sentry-sdk/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kbd uses _Generic since version 2.2.90 and
+https://github.com/legionus/kbd/commit/da5feb8fd90c3a0df9d505d4604c629d051d3d7d
 
-diff --git a/package/python-sentry-sdk/Config.in b/package/python-sentry-sdk/Config.in
-index 62b8100bdb..e8e88bac18 100644
---- a/package/python-sentry-sdk/Config.in
-+++ b/package/python-sentry-sdk/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_PYTHON_SENTRY_SDK
- 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+However, _Generic is not available until gcc 4.9:
+https://gcc.gnu.org/wiki/C11Status
+
+As a result, build with gcc 4.8 fails on:
+
+setleds.c:352:3: warning: implicit declaration of function '_Generic' [-Wimplicit-function-declaration]
+   ndefflags = BITMASK_SET(BITMASK_UNSET(odefflags, ndef), nval);
+   ^
+setleds.c:22:2: error: expected expression before 'unsigned'
+  unsigned char: (unsigned char)(~(x)) \
+  ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b74ecdda44543da1d47fa2c027fb046a3ca1e2d1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kbd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/kbd/Config.in b/package/kbd/Config.in
+index 6cf2fc0dc6..0099bc750c 100644
+--- a/package/kbd/Config.in
++++ b/package/kbd/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_KBD
+ 	bool "kbd"
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Generic
  	help
--	  Python client for Sentry (https://getsentry.com).
-+	  Python client for Sentry (https://sentry.io).
+ 	  Keytable files and keyboard utilities.
  
- 	  https://github.com/getsentry/sentry-python
+ 	  http://kernel.org/pub/linux/utils/kbd/
++
++comment "kbd needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 -- 
 2.28.0
