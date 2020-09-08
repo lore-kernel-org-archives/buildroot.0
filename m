@@ -1,73 +1,120 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue,  8 Sep 2020 17:51:40 +0200
-Subject: [Buildroot] [PATCH 2/4] support/testing: add the SELinuxExt4 test
-In-Reply-To: <20200908155142.1385820-1-antoine.tenart@bootlin.com>
-References: <20200908155142.1385820-1-antoine.tenart@bootlin.com>
-Message-ID: <20200908155142.1385820-3-antoine.tenart@bootlin.com>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Tue, 8 Sep 2020 20:21:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mrp: Add init script
+Message-ID: <20200908182118.2612943-1-horatiu.vultur@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds a test called 'SELinuxExt4'. This test will build an SELinux
-enabled image using the in-tree qemu_x86_64_selinux_defconfig, boot the
-image, and perform a few runtime tests to check SELinux related
-capabilities.
+Add init script and systemd unit for MRP because it is using a
+daemon.
 
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- support/testing/tests/boot/test_selinux.py | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 support/testing/tests/boot/test_selinux.py
+ package/mrp/S65mrp      | 55 +++++++++++++++++++++++++++++++++++++++++
+ package/mrp/mrp.mk      | 10 ++++++++
+ package/mrp/mrp.service | 10 ++++++++
+ 3 files changed, 75 insertions(+)
+ create mode 100644 package/mrp/S65mrp
+ create mode 100644 package/mrp/mrp.service
 
-diff --git a/support/testing/tests/boot/test_selinux.py b/support/testing/tests/boot/test_selinux.py
+diff --git a/package/mrp/S65mrp b/package/mrp/S65mrp
 new file mode 100644
-index 000000000000..7b67feed83b5
+index 0000000000..0ce1f80f81
 --- /dev/null
-+++ b/support/testing/tests/boot/test_selinux.py
-@@ -0,0 +1,42 @@
-+import os
++++ b/package/mrp/S65mrp
+@@ -0,0 +1,55 @@
++#!/bin/sh
++#
++# Start mrp
++#
 +
-+import infra.basetest
++DAEMON="mrp_server"
 +
++PIDFILE="/var/run/$DAEMON.pid"
 +
-+class TestSELinux(infra.basetest.BRTest):
-+    # Use the available Qemu x86_64 SELinux defconfig.
-+    with open(infra.filepath("../../configs/qemu_x86_64_selinux_defconfig")) as f:
-+        config = f.read()
++# shellcheck source=/dev/null
++[ -r "/etc/default/mrp_server" ] && . "/etc/default/mrp_server"
 +
-+    def wait_boot(self):
-+        # The complete boot with systemd takes more time than what the default multipler permits
-+        self.emulator.timeout_multiplier *= 10
-+        self.emulator.login()
++start() {
++	printf "Starting mrp daemon: "
++	start-stop-daemon -S -b -q -m -p $PIDFILE \
++		-x /usr/bin/$DAEMON
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
 +
-+    def run_tests(self):
-+        # Test the reported SELinux mode.
-+        out, ret = self.emulator.run("getenforce")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "Permissive")
++stop() {
++	printf "Stopping mrp daemon: "
++	start-stop-daemon -K -q -p $PIDFILE
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return $status
++}
 +
-+        # Check the extended arguments are correctly set.
-+        out, ret = self.emulator.run("ls -dZ /")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0].split()[0], "system_u:object_r:root_t")
++case "$1" in
++  start)
++	start
++	;;
++  stop)
++	stop
++	;;
++  restart|reload)
++	stop
++	start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
 +
-+        # Check init's attributes.
-+        out, ret = self.emulator.run("cat /proc/1/attr/current")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "system_u:system_r:init_t\0")
++exit $?
+diff --git a/package/mrp/mrp.mk b/package/mrp/mrp.mk
+index 4d8a1fc92a..7e31e442ce 100644
+--- a/package/mrp/mrp.mk
++++ b/package/mrp/mrp.mk
+@@ -10,4 +10,14 @@ MRP_DEPENDENCIES = libev libmnl libnl
+ MRP_LICENSE = GPL-2.0
+ MRP_LICENSE_FILES = LICENSE
+ 
++define MRP_INSTALL_INIT_SYSV
++	$(INSTALL) -m 755 -D $(MRP_PKGDIR)/S65mrp \
++		$(TARGET_DIR)/etc/init.d/S65mrp
++endef
 +
-+class TestSELinuxExt4(TestSELinux):
-+    def test_run(self):
-+        kernel = os.path.join(self.builddir, "images", "bzImage")
-+        rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
++define MRP_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 $(MRP_PKGDIR)/mrp.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mrp.service
++endef
 +
-+        self.emulator.boot(arch="x86_64", kernel=kernel,
-+                           kernel_cmdline=["root=/dev/vda", "console=ttyS0", "security=selinux"],
-+                           options=["-drive", "file={},if=virtio,format=raw".format(rootfs)])
+ $(eval $(cmake-package))
+diff --git a/package/mrp/mrp.service b/package/mrp/mrp.service
+new file mode 100644
+index 0000000000..05006a70aa
+--- /dev/null
++++ b/package/mrp/mrp.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Media Redundancy Protocol
++After=network.target
 +
-+        self.wait_boot()
-+        self.run_tests()
++[Service]
++ExecStart=/usr/bin/mrp
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
 -- 
-2.26.2
+2.27.0
