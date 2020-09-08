@@ -1,403 +1,153 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 8 Sep 2020 13:28:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongrel2: bump to version 1.12.2
-In-Reply-To: <CAKAx1cgiNRj4RuJSCiGGs4QP1ZLfOjn2fqkH1-oVQcmaruLm+Q@mail.gmail.com>
-References: <20200907214155.842865-1-fontaine.fabrice@gmail.com>
- <CAKAx1cgiNRj4RuJSCiGGs4QP1ZLfOjn2fqkH1-oVQcmaruLm+Q@mail.gmail.com>
-Message-ID: <CAPi7W83JjksJ=Rw_115Y3=ZnnpR_E_XA5esWogVjvNcg0HhETg@mail.gmail.com>
+From: Damien Le Moal <damien.lemoal@wdc.com>
+Date: Tue,  8 Sep 2020 20:33:18 +0900
+Subject: [Buildroot] [PATCH v2 0/6] Add support for Kendryte K210 RISC-V
+ boards
+Message-ID: <20200908113324.1022230-1-damien.lemoal@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Lionel,
+This patch series adds support for building bootable images for RISC-V
+boards based on the Kendryte K210 SoC which is supported by the Linux
+kernel since version 5.8.0. This SoC has no MMU supported by Linux and
+requires uClibc flatbin binaries as gcc does not yet support FDPIC
+executables for RISC-V.
 
-Le mar. 8 sept. 2020 ? 08:51, Lionel Orry <lionel.orry@gmail.com> a ?crit :
->
-> Hello,
->
-> On Mon, Sep 7, 2020 at 11:42 PM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > - Refresh second patch
-> > - Drop third patch (already in version)
-> > - An external mbedtls can be used since version 1.12.0 and
-> >   https://github.com/mongrel2/mongrel2/commit/5be7fc9c90fd5c8caa233770b7e2cdff67b4bae2
-> >   so use it with an upstream patch and drop
-> >   MONGREL2_POST_CONFIGURE_HOOKS
->
->
-> This looks awesome. Would be nice to also add a comment about the
-> /dev/urandom patch as well.
-The commit message already contains a comment about this patch:
-"so use it with an upstream patch and drop MONGREL2_POST_CONFIGURE_HOOKS"
-Do you think we should extend this commit message?
-We could add a comment that this patch allows mongrel2 to be built
-with a mbedtls library that does not enable HAVEGE random generator
-(but this is already written in the patch message).
-> I don't have time anymore to maintain this package actually, and it's
-> been a very long time since I last played
-> with our beloved buildroot. Fabrice, maybe you would agree to become
-> the mongrel2 package maintainer?
-I agree.
->
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...-Fix-Makefiles-for-cross-compilation.patch |  41 ++++---
-> >  ...03-Rename-symbol-to-prevent-conflict.patch |  45 -------
-> >  ...tion-error-when-building-with-gcc10.patch} |   0
-> >  .../0004-Support-urandom-inside-chroot.patch  | 113 ++++++++++++++++++
-> >  package/mongrel2/Config.in                    |   1 +
-> >  package/mongrel2/mongrel2.hash                |   5 +-
-> >  package/mongrel2/mongrel2.mk                  |  21 +---
-> >  7 files changed, 143 insertions(+), 83 deletions(-)
-> >  delete mode 100644 package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
-> >  rename package/mongrel2/{0004-fix-multiple-definition-error-when-building-with-gcc10.patch => 0003-fix-multiple-definition-error-when-building-with-gcc10.patch} (100%)
-> >  create mode 100644 package/mongrel2/0004-Support-urandom-inside-chroot.patch
-> >
-> > diff --git a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-> > index 730d8ebfc0..1961f128ed 100644
-> > --- a/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-> > +++ b/package/mongrel2/0002-Fix-Makefiles-for-cross-compilation.patch
-> > @@ -1,7 +1,7 @@
-> >  From 298356c44a7df2b34c4e307c531d2010e2cb4b79 Mon Sep 17 00:00:00 2001
-> >  From: Lionel Orry <lionel.orry@gmail.com>
-> >  Date: Wed, 27 Mar 2013 15:56:56 +0100
-> > -Subject: [PATCH 1/1] Fix Makefiles for cross-compilation
-> > +Subject: [PATCH] Fix Makefiles for cross-compilation
-> >
-> >  The CFLAGS handling in mongrel2 is really messy and it is hard to make
-> >  it behave correctly with cross-compiling environments. This patch
-> > @@ -10,6 +10,8 @@ restricts the Makefiles syntax to GNU Make, but help cross-compiling.
-> >  This is not meant to be applied upstream.
-> >
-> >  Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-> > +[Fabrice: refresh for 1.12.2]
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >  ---
-> >   Makefile                      | 2 +-
-> >   tools/config_modules/Makefile | 2 +-
-> > @@ -19,57 +21,58 @@ Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-> >   5 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> >  diff --git a/Makefile b/Makefile
-> > -index 6dce4a6..d48e05e 100644
-> > +index 4e89c33..2f549a8 100644
-> >  --- a/Makefile
-> >  +++ b/Makefile
-> > -@@ -1,4 +1,4 @@
-> > --CFLAGS=-g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
-> > -+override CFLAGS += -g -O2 -Wall -Wextra -Isrc -Isrc/polarssl/include -pthread -rdynamic -DNDEBUG $(OPTFLAGS) -D_FILE_OFFSET_BITS=64
-> > - LIBS=-lzmq -ldl -lsqlite3 $(OPTLIBS)
-> > +@@ -1,5 +1,5 @@
-> > + CFLAGS?=-g -O2
-> > +-CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
-> > ++override CFLAGS += -Wall -Wextra -Wno-implicit-fallthrough -Wno-unused-const-variable -I./src -DNDEBUG -D_FILE_OFFSET_BITS=64 -pthread
-> > + CFLAGS += ${OPTFLAGS}
-> > + LIBS+=-lzmq -ldl -lsqlite3 -lmbedtls -lmbedx509 -lmbedcrypto
-> >   PREFIX?=/usr/local
-> > -
-> >  diff --git a/tools/config_modules/Makefile b/tools/config_modules/Makefile
-> > -index 398490c..53f2255 100644
-> > +index c2680d1..ada3169 100644
-> >  --- a/tools/config_modules/Makefile
-> >  +++ b/tools/config_modules/Makefile
-> >  @@ -1,5 +1,5 @@
-> >   PREFIX?=/usr/local
-> > --CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-> > -+override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-> > +-CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-> > ++override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -fPIC -shared -nostartfiles -L../../build
-> >   LDFLAGS=$(OPTLIBS)
-> >
-> >   MONGO_SRC = mongo-c-driver/src/bson.c \
-> >  diff --git a/tools/filters/Makefile b/tools/filters/Makefile
-> > -index f9f4556..6077b79 100644
-> > +index 6505ad5..a968ef6 100644
-> >  --- a/tools/filters/Makefile
-> >  +++ b/tools/filters/Makefile
-> >  @@ -1,5 +1,5 @@
-> >   PREFIX?=/usr/local
-> > --CFLAGS=-I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-> > -+ override CFLAGS += -I../../src -I../../src/polarssl/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-> > +-CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-> > ++override CFLAGS=-I../../src -I../../src/mbedtls/include $(OPTFLAGS) -g -fPIC -shared -nostartfiles -L../../build
-> >   LDFLAGS=$(OPTLIBS)
-> >
-> > - all: null.so
-> > + all: null.so rewrite.so sendfile.so
-> >  diff --git a/tools/m2sh/Makefile b/tools/m2sh/Makefile
-> > -index b50d8a0..ba378c5 100644
-> > +index b50d8a0..cc00062 100644
-> >  --- a/tools/m2sh/Makefile
-> >  +++ b/tools/m2sh/Makefile
-> >  @@ -1,4 +1,4 @@
-> >  -CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-> > -+override CFLAGS += -DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-> > ++override CFLAGS=-DNDEBUG -DNO_LINENOS -pthread -g -I../../src -Isrc -Wall $(OPTFLAGS)
-> >   LIBS=-lzmq -lsqlite3 ../../build/libm2.a $(OPTLIBS)
-> >
-> >   PREFIX?=/usr/local
-> >  diff --git a/tools/procer/Makefile b/tools/procer/Makefile
-> > -index d0d7de0..629b2e9 100644
-> > +index bb9aa31..d377f7f 100644
-> >  --- a/tools/procer/Makefile
-> >  +++ b/tools/procer/Makefile
-> >  @@ -1,4 +1,4 @@
-> >  -CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-> > -+override CFLAGS += -DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-> > ++override CFLAGS=-DNDEBUG -pthread -g -I../../src -Wall $(OPTFLAGS)
-> >   PREFIX?=/usr/local
-> >   LIBS?=-lzmq
-> >   SOURCES=$(wildcard *.c)
-> >  --
-> > -1.8.1.4
-> > +2.27.0
-> >
-> > diff --git a/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch b/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
-> > deleted file mode 100644
-> > index 83698164fd..0000000000
-> > --- a/package/mongrel2/0003-Rename-symbol-to-prevent-conflict.patch
-> > +++ /dev/null
-> > @@ -1,45 +0,0 @@
-> > -From 8d0bc79f38913b1a55e7d151b32bbc9462c24b47 Mon Sep 17 00:00:00 2001
-> > -From: Jason Miller <jason@jasom.org>
-> > -Date: Fri, 14 Aug 2015 19:03:09 -0700
-> > -Subject: [PATCH] Rename symbol to prevent conflict
-> > -
-> > -One of the standard headers defines max_align_t on some versions of linux.
-> > -
-> > -[Backported from upstream commit
-> > -https://github.com/mongrel2/mongrel2/commit/563bac8c59b9b32205164d237cf1ec0cb48d189f.]
-> > -
-> > -Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> > ----
-> > - src/mem/align.h  | 2 +-
-> > - src/mem/halloc.c | 2 +-
-> > - 2 files changed, 2 insertions(+), 2 deletions(-)
-> > -
-> > -diff --git a/src/mem/align.h b/src/mem/align.h
-> > -index 4c6e183..03a4999 100644
-> > ---- a/src/mem/align.h
-> > -+++ b/src/mem/align.h
-> > -@@ -30,7 +30,7 @@ union max_align
-> > -       void (*q)(void);
-> > - };
-> > -
-> > --typedef union max_align max_align_t;
-> > -+typedef union max_align h_max_align_t;
-> > -
-> > - #endif
-> > -
-> > -diff --git a/src/mem/halloc.c b/src/mem/halloc.c
-> > -index b097d1f..40d0c09 100644
-> > ---- a/src/mem/halloc.c
-> > -+++ b/src/mem/halloc.c
-> > -@@ -34,7 +34,7 @@ typedef struct hblock
-> > - #endif
-> > -       hlist_item_t  siblings; /* 2 pointers */
-> > -       hlist_head_t  children; /* 1 pointer  */
-> > --      max_align_t   data[1];  /* not allocated, see below */
-> > -+      h_max_align_t   data[1];  /* not allocated, see below */
-> > -
-> > - } hblock_t;
-> > -
-> > ---
-> > -2.1.4
-> > -
-> > diff --git a/package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch b/package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
-> > similarity index 100%
-> > rename from package/mongrel2/0004-fix-multiple-definition-error-when-building-with-gcc10.patch
-> > rename to package/mongrel2/0003-fix-multiple-definition-error-when-building-with-gcc10.patch
-> > diff --git a/package/mongrel2/0004-Support-urandom-inside-chroot.patch b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
-> > new file mode 100644
-> > index 0000000000..468ddb83fe
-> > --- /dev/null
-> > +++ b/package/mongrel2/0004-Support-urandom-inside-chroot.patch
-> > @@ -0,0 +1,113 @@
-> > +From 330e8c8352eb0ed3c178ac6e0102403c0a835492 Mon Sep 17 00:00:00 2001
-> > +From: Jason Miller <jason@milr.com>
-> > +Date: Thu, 5 Jul 2018 20:53:51 -0700
-> > +Subject: [PATCH] Support urandom inside chroot
-> > +
-> > +This adds a new default entropy function that uses a /dev/urandom stream
-> > +opened before the chroot.  If initializing that fails, it fallsback on
-> > +HAVEGE only if HAVEGE is supported by the mbedTLS.
-> > +
-> > +This should remove the hard requirement on HAVEGE
-> > +
-> > +resolves #326
-> > +resolves #327
-> > +
-> > +[Upstream status: https://github.com/mongrel2/mongrel2/pull/328]
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +---
-> > + src/mongrel2.c |  7 -------
-> > + src/server.c   | 36 +++++++++++++++++++++++-------------
-> > + 2 files changed, 23 insertions(+), 20 deletions(-)
-> > +
-> > +diff --git a/src/mongrel2.c b/src/mongrel2.c
-> > +index da632d95..48ece8a5 100644
-> > +--- a/src/mongrel2.c
-> > ++++ b/src/mongrel2.c
-> > +@@ -404,13 +404,6 @@ void taskmain(int argc, char **argv)
-> > +     rc = attempt_chroot_drop(srv);
-> > +     check(rc == 0, "Major failure in chroot/droppriv, aborting.");
-> > +
-> > +-    // set up rng after chroot
-> > +-    // TODO: once mbedtls is updated, we can move this back into Server_create
-> > +-    if(srv->use_ssl) {
-> > +-        rc = Server_init_rng(srv);
-> > +-        check(rc == 0, "Failed to initialize rng for server %s", bdata(srv->uuid));
-> > +-    }
-> > +-
-> > +     final_setup();
-> > +
-> > +     taskcreate(tickertask, NULL, TICKER_TASK_STACK);
-> > +diff --git a/src/server.c b/src/server.c
-> > +index 45761db4..e44e199b 100644
-> > +--- a/src/server.c
-> > ++++ b/src/server.c
-> > +@@ -149,35 +149,45 @@ static int Server_load_ciphers(Server *srv, bstring ssl_ciphers_val)
-> > +     return -1;
-> > + }
-> > +
-> > ++static int urandom_entropy_func(void *data, unsigned char *output, size_t len)
-> > ++{
-> > ++    FILE* urandom = (FILE *)data;
-> > ++    size_t rc = fread(output, 1, len, urandom);
-> > ++
-> > ++    if (rc != len) return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
-> > ++
-> > ++    return 0;
-> > ++}
-> > ++
-> > + int Server_init_rng(Server *srv)
-> > + {
-> > +     int rc;
-> > +-    unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
-> > +     void *ctx = NULL;
-> > +
-> > +-    mbedtls_entropy_init( &srv->entropy );
-> > ++    FILE *urandom = fopen("/dev/urandom","r");
-> > +
-> > +-    // test the entropy source
-> > +-    rc = mbedtls_entropy_func(&srv->entropy, buf, MBEDTLS_ENTROPY_BLOCK_SIZE);
-> > +-
-> > +-    if(rc == 0) {
-> > ++    if(urandom != NULL) {
-> > +         ctx = calloc(sizeof(mbedtls_ctr_drbg_context), 1);
-> > +
-> > +         mbedtls_ctr_drbg_init((mbedtls_ctr_drbg_context *)ctx);
-> > +         rc = mbedtls_ctr_drbg_seed((mbedtls_ctr_drbg_context *)ctx,
-> > +-            mbedtls_entropy_func, &srv->entropy, NULL, 0);
-> > ++            urandom_entropy_func, urandom, NULL, 0);
-> > +         check(rc == 0, "Init rng failed: ctr_drbg_init returned %d\n", rc);
-> > +
-> > +         srv->rng_func = mbedtls_ctr_drbg_random;
-> > +         srv->rng_ctx = ctx;
-> > +     } else {
-> > +-        log_warn("entropy source unavailable. falling back to havege rng");
-> > +
-> > ++#if defined(MBEDTLS_HAVEGE_C)
-> > ++        log_warn("entropy source unavailable. falling back to havege rng");
-> > +         ctx = calloc(sizeof(mbedtls_havege_state), 1);
-> > +         mbedtls_havege_init((mbedtls_havege_state *)ctx);
-> > +-
-> > +         srv->rng_func = mbedtls_havege_random;
-> > +         srv->rng_ctx = ctx;
-> > ++#else
-> > ++        log_err("Unable to initialize urandom entropy source, and mbedTLS compiled without HAVEGE");
-> > ++        goto error;
-> > ++#endif
-> > +     }
-> > +
-> > +     return 0;
-> > +@@ -278,10 +288,10 @@ Server *Server_create(bstring uuid, bstring default_host,
-> > +
-> > +     // TODO: once mbedtls supports opening urandom early and keeping it open,
-> > +     //   put the rng initialization back here (before chroot)
-> > +-    //if(use_ssl) {
-> > +-    //    rc = Server_init_rng(srv);
-> > +-    //    check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
-> > +-    //}
-> > ++    if(use_ssl) {
-> > ++        rc = Server_init_rng(srv);
-> > ++        check(rc == 0, "Failed to initialize rng for server %s", bdata(uuid));
-> > ++    }
-> > +
-> > +     if(blength(chroot) > 0) {
-> > +         srv->chroot = bstrcpy(chroot); check_mem(srv->chroot);
-> > diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-> > index a9b09b786c..60fee6f96d 100644
-> > --- a/package/mongrel2/Config.in
-> > +++ b/package/mongrel2/Config.in
-> > @@ -18,6 +18,7 @@ config BR2_PACKAGE_MONGREL2
-> >         depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-> >         depends on !BR2_STATIC_LIBS # uses dlopen()
-> >         depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
-> > +       select BR2_PACKAGE_MBEDTLS
-> >         select BR2_PACKAGE_SQLITE
-> >         select BR2_PACKAGE_ZEROMQ
-> >         help
-> > diff --git a/package/mongrel2/mongrel2.hash b/package/mongrel2/mongrel2.hash
-> > index b1db917c57..ea3a1cb426 100644
-> > --- a/package/mongrel2/mongrel2.hash
-> > +++ b/package/mongrel2/mongrel2.hash
-> > @@ -1,3 +1,6 @@
-> > +# From https://mongrel2.org
-> > +sha1  6f81fa747a1e198d1a655c3677b6de686a5a51f7  mongrel2-v1.12.2.tar.bz2
-> > +
-> >  # Locally computed
-> > -sha256  543553c3082f2b992649a975f6cb7324ae2aea93af05288ea4f2c1262a7f63b2  mongrel2-v1.9.2.tar.bz2
-> > +sha256  3bffeae198c37a1efc9c12f77d5f1eb61cdf62b35d661babc2527dd030aa7d8f  mongrel2-v1.12.2.tar.bz2
-> >  sha256  eb6e2a2baa637d06f6aa762886fbc8939934eb5fdb0b3a5b3882f2a61e9a4357  LICENSE
-> > diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-> > index 9a7f64a738..cbe7e3fb91 100644
-> > --- a/package/mongrel2/mongrel2.mk
-> > +++ b/package/mongrel2/mongrel2.mk
-> > @@ -4,29 +4,14 @@
-> >  #
-> >  ################################################################################
-> >
-> > -MONGREL2_VERSION = 1.9.2
-> > +MONGREL2_VERSION = 1.12.2
-> >  MONGREL2_SOURCE = mongrel2-v$(MONGREL2_VERSION).tar.bz2
-> >  # Do not use the github helper here, the generated tarball is *NOT* the same
-> >  # as the one uploaded by upstream for the release.
-> > -MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/$(MONGREL2_VERSION)
-> > +MONGREL2_SITE = https://github.com/mongrel2/mongrel2/releases/download/v$(MONGREL2_VERSION)
-> >  MONGREL2_LICENSE = BSD-3-Clause
-> >  MONGREL2_LICENSE_FILES = LICENSE
-> > -MONGREL2_DEPENDENCIES = sqlite zeromq
-> > -
-> > -define MONGREL2_POLARSSL_DISABLE_ASM
-> > -       $(SED) '/^#define POLARSSL_HAVE_ASM/d' $(@D)/src/polarssl/include/polarssl/config.h
-> > -endef
-> > -
-> > -# ARM in thumb mode breaks debugging with asm optimizations
-> > -# Microblaze asm optimizations are broken in general
-> > -# MIPS R6 asm is not yet supported
-> > -ifeq ($(BR2_ENABLE_DEBUG)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_ARM_INSTRUCTIONS_THUMB2),yy)
-> > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-> > -else ifeq ($(BR2_microblaze),y)
-> > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-> > -else ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-> > -MONGREL2_POST_CONFIGURE_HOOKS += MONGREL2_POLARSSL_DISABLE_ASM
-> > -endif
-> > +MONGREL2_DEPENDENCIES = mbedtls sqlite zeromq
-> >
-> >  define MONGREL2_BUILD_CMDS
-> >         $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-> > --
-> > 2.28.0
-> >
->
-> Thanks again,
->
-> Lionel
-Best Regards,
+The first four patches adjust buildroot configuration to allow building
+uClibc static no-MMU libraries for RISC-V. The last and fifth patch adds
+buildroot defconfig for the Kendryte K210 as well as uClibc and busybox
+configuration.
 
-Fabrice
+Building is as simple as:
+make kendryte_k210_defconfig
+make
+
+Which generate the output/image/loader.bin bootable image.
+
+The result using a SiPeed Dan Dock board is:
+
+[    0.000000] Linux version 5.8.0 (damien at localhost.localdomain) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2020.08-332-g6a6dcd0c4b) 9.3.0, GNU ld (GNU Binutils) 2.32) #6 SMP Tue Sep 8 20:21:30 JST 2020
+[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '')
+[    0.000000] printk: bootconsole [sifive0] enabled
+[    0.000000] Zone ranges:
+[    0.000000]   DMA32    [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fffff]
+[    0.000000] riscv: ISA extensions acdfim
+[    0.000000] riscv: ELF capabilities acdfim
+[    0.000000] percpu: max_distance=0x18000 too large for vmalloc space 0x0
+[    0.000000] percpu: Embedded 12 pages/cpu s18336 r0 d30816 u49152
+[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2020
+[    0.000000] Kernel command line: earlycon console=ttySIF0
+[    0.000000] Dentry cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.000000] Sorting __ex_table...
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 6328K/8192K available (939K kernel code, 119K rwdata, 169K rodata, 289K init, 97K bss, 1864K reserved, 0K cma-reserved)
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 64 local interrupts mapped
+[    0.000000] plic: interrupt-controller at c000000: mapped 65 interrupts with 2 handlers for 4 contexts.
+[    0.000000] riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [0]
+[    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
+[    0.000014] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
+[    0.008242] Console: colour dummy device 80x25
+[    0.012480] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
+[    0.022682] pid_max: default: 4096 minimum: 301
+[    0.027300] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.034416] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
+[    0.044878] rcu: Hierarchical SRCU implementation.
+[    0.049777] smp: Bringing up secondary CPUs ...
+[    0.055056] smp: Brought up 1 node, 2 CPUs
+[    0.059453] devtmpfs: initialized
+[    0.065614] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.074637] futex hash table entries: 16 (order: -2, 1024 bytes, linear)
+[    0.084149] Kendryte K210 SoC sysctl
+[    0.097621] clocksource: Switched to clocksource riscv_clocksource
+[    0.229791] workingset: timestamp_bits=62 max_order=11 bucket_order=0
+[    0.237036] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 0) is a SiFive UART v0
+[    0.245617] printk: console [ttySIF0] enabled
+[    0.245617] printk: console [ttySIF0] enabled
+[    0.254118] printk: bootconsole [sifive0] disabled
+[    0.254118] printk: bootconsole [sifive0] disabled
+[    0.266224] random: get_random_bytes called from 0x000000008004e75c with crng_init=0
+[    0.274702] Freeing unused kernel memory: 288K
+[    0.278417] This architecture does not have kernel memory protection.
+[    0.284857] Run /init as init process
+
++---------------------------+
+| Kendryte K210 NOMMU Linux |
++---------------------------+
+
+/ # cat /proc/cpuinfo
+processor	: 0
+hart		: 0
+isa		: rv64imafdc
+uarch		: kendryte,k210
+
+processor	: 1
+hart		: 1
+isa		: rv64imafdc
+uarch		: kendryte,k210
+
+/ #
+
+These patches are also available at
+git at github.com:damien-lemoal/buildroot.git
+(https://github.com/damien-lemoal/buildroot)
+
+Changes from v1:
+* Replace uclinux with linux in toolchain tuple name only for RISC-V
+  (patch 4).
+* Moved uclibc patches under package/uclibc (new patch 5)
+* Simplified board specific support (patch 6):
+  - Dropped board specific uclibc configuration. Usinf default
+    uclibc.config now.
+  - Removed board specific device table
+  - Removed fakeroot.sh script
+  - Reworked rootfs overlay init script to be similar to fs/cpio/init
+  - Added the README.txt file to document builds
+
+Christoph Hellwig (2):
+  package/elf2flt: add RISC-V support
+  package make: build RISC-V nommu builds as linux
+
+Damien Le Moal (4):
+  toolchain/buildroot: allow uclibc-ng for riscv
+  arch/config: Make RISC-V MMU optional
+  package/uclibc: fix compilation errors
+  board: Add configuration for Kendryte K210 boards
+
+ arch/Config.in                                |    2 +-
+ board/kendryte/k210/README.txt                |   28 +
+ board/kendryte/k210/busybox.config            | 1178 +++++++++++++++++
+ board/kendryte/k210/rootfs_overlay/init       |   24 +
+ configs/kendryte_k210_defconfig               |   24 +
+ package/Makefile.in                           |    7 +-
+ .../0002-elf2flt-add-riscv-support.patch      |  302 +++++
+ package/elf2flt/Config.in.host                |    2 +-
+ ...evert-Fix-static-linking-with-GCC-10.patch |   43 +
+ ...0002-fix-static-builds-with-gcc-10.x.patch |   25 +
+ ...-utils-getconf-Fix-compilation-error.patch |  103 ++
+ .../0004-librt-avoid-compilation-error.patch  |   42 +
+ package/uclibc/Config.in                      |    2 +
+ toolchain/toolchain-buildroot/Config.in       |    4 +-
+ 14 files changed, 1782 insertions(+), 4 deletions(-)
+ create mode 100644 board/kendryte/k210/README.txt
+ create mode 100644 board/kendryte/k210/busybox.config
+ create mode 100755 board/kendryte/k210/rootfs_overlay/init
+ create mode 100644 configs/kendryte_k210_defconfig
+ create mode 100644 package/elf2flt/0002-elf2flt-add-riscv-support.patch
+ create mode 100644 package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch
+ create mode 100644 package/uclibc/0002-fix-static-builds-with-gcc-10.x.patch
+ create mode 100644 package/uclibc/0003-utils-getconf-Fix-compilation-error.patch
+ create mode 100644 package/uclibc/0004-librt-avoid-compilation-error.patch
+
+-- 
+2.26.2
