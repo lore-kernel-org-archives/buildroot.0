@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Sep 2020 23:12:36 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/go: security bump
+Date: Tue, 8 Sep 2020 23:12:30 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/go: security bump
  to version 1.13.15
-Message-ID: <20200908210416.33CB181EC8@busybox.osuosl.org>
+Message-ID: <20200908210421.1840088524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=806928f0d9c7e77a6123e255a1fe834e129056c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5d346223433cb34a47374642c6364df611daaa32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes the following security issue:
 
