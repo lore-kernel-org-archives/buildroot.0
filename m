@@ -1,76 +1,116 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Sep 2020 22:33:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kbd: needs gcc 4.9
-In-Reply-To: <20200908194545.75939-1-fontaine.fabrice@gmail.com>
-References: <20200908194545.75939-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200908203306.GZ14354@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 8 Sep 2020 22:47:18 +0200
+Subject: [Buildroot] [PATCH 00/10] gitlab-ci: handle all conditional
+ jobs in the generating script (branch yem/gitlab-ci-cond)
+In-Reply-To: <cover.1599423132.git.yann.morin.1998@free.fr>
+References: <cover.1599423132.git.yann.morin.1998@free.fr>
+Message-ID: <c586aee9-0ea1-afb6-4634-b34908f00a57@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Yann,
 
-On 2020-09-08 21:45 +0200, Fabrice Fontaine spake thusly:
-> kbd uses _Generic since version 2.2.90 and
-> https://github.com/legionus/kbd/commit/da5feb8fd90c3a0df9d505d4604c629d051d3d7d
+Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
+> Hello All!
 > 
-> However, _Generic is not available until gcc 4.9:
-> https://gcc.gnu.org/wiki/C11Status
+> The grammar in gitlab-CI yaml, to specify conditions under which jobs
+> should be spawned or not, is not very nice to handle.
 > 
-> As a result, build with gcc 4.8 fails on:
+> Take adavantage of the fact that we are now generating the pipeline
+> description from a script, to decide in that script exactly what jobs
+> should be spawned.
 > 
-> setleds.c:352:3: warning: implicit declaration of function '_Generic' [-Wimplicit-function-declaration]
->    ndefflags = BITMASK_SET(BITMASK_UNSET(odefflags, ndef), nval);
->    ^
-> setleds.c:22:2: error: expected expression before 'unsigned'
->   unsigned char: (unsigned char)(~(x)) \
->   ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b74ecdda44543da1d47fa2c027fb046a3ca1e2d1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/kbd/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/kbd/Config.in b/package/kbd/Config.in
-> index 6cf2fc0dc6..0099bc750c 100644
-> --- a/package/kbd/Config.in
-> +++ b/package/kbd/Config.in
-> @@ -2,7 +2,11 @@ config BR2_PACKAGE_KBD
->  	bool "kbd"
->  	# Uses fork()
->  	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Generic
->  	help
->  	  Keytable files and keyboard utilities.
->  
->  	  http://kernel.org/pub/linux/utils/kbd/
-> +
-> +comment "kbd needs a toolchain w/ gcc >= 4.9"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> This is both more usual, to use a classic scripting language (shell for
+> now, but could be whatever in the future), and more versatile (we can
+> more easilt express conditions than in the limited gitlab-CI YAML).
 
-You forgot the MMU dependency in the comment, so I added it and pushed
-to master, thanks!
+On one hand, it's a pity to workaround the gitlab-ci Yaml and not take the
+opportunity to practice this specific language...
+But on the other hand the language is not still stable over the time (see the
+only/except keyword deprecation we used until recently).
+Also the generate-gitlab-ci-yml after this series doesn't seem too complex :)
 
-Regards,
-Yann E. MORIN.
+Maybe we can complete the manual about defconfigs testing in gitlab.
+runtime-tests in gitlab is already described in the manual.
 
-> -- 
-> 2.28.0
+Best regards,
+Romain
+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Here are examples of resulting pipelines, with child pipelines created
+> under the various expected conditions:
+> 
+> Arbitrary branch, only run the basic tests:
+>     git push gitlab
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186557459
+> 
+> Maintenance branch, run the basic checks, and check the defconfigs:
+>     git push gitlab HEAD:toto.no.x
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186556538
+> 
+> Tag, run all the tests:
+>     git tag FOO-YEM
+>     git push gitlab FOO-YEM
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186559009
+> 
+> Build all defconfigs:
+>     git push gitlab HEAD:FOO-defconfigs
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186551495
+> 
+> Build one defconfig:
+>     git push gitlab HEAD:FOO-warp7_defconfig
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186530844
+> 
+> Build all runtime tests:
+>     git push gitlab HEAD:FOO-runtime-tests
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186554657
+> 
+> Build one runtime test:
+>     git push gitlab HEAD:FOO-tests.package.test_openssh
+>     https://gitlab.com/ymorin/buildroot/-/pipelines/186530918
+> 
+> Notes:
+>   - 'gitlab' is my git remote pointing to gitlab,
+>   - some pipelines were canceled to not exhaust my job limit
+>   - there were too many jobs in the tag, so it exceed the limits of my
+>     free account...
+> 
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+> 
+> The following changes since commit 97d431c181268716b38cd5a63eb0e8b78b003b3b
+> 
+>   package/mrp: new package (2020-09-06 16:38:02 +0200)
+> 
+> 
+> are available in the git repository at:
+> 
+>   https://git.busybox.net/~ymorin/git/buildroot
+> 
+> for you to fetch changes up to c1ea91abce5dbf7068615b247ff77dd7f8ec8fbb
+> 
+>   gitlab-ci: only check defconfigs for known branches (2020-09-06 21:59:52 +0200)
+> 
+> 
+> ----------------------------------------------------------------
+> Yann E. MORIN (10):
+>       gitlab-ci: introduce main() in generating script
+>       gitlab-ci: share the image version with the child
+>       gitlab-ci: handle the defconfig build conditions in script
+>       gitlab-ci: defconfig_check is included in defconfig build
+>       gitlab-ci: handle the run-time tests conditions in script
+>       gitlab-ci: handle single defconfig in script
+>       gitlab-ci: handle single runtime test in script
+>       gitlab-ci: handle the basic tests in script
+>       gitlab-ci: move before-script before script
+>       gitlab-ci: only check defconfigs for known branches
+> 
+>  support/misc/gitlab-ci.yml.in          |  70 +++----------------
+>  support/scripts/generate-gitlab-ci-yml | 118 ++++++++++++++++++++++++++++++---
+>  2 files changed, 117 insertions(+), 71 deletions(-)
+> 
