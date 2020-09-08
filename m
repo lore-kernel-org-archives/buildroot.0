@@ -1,153 +1,52 @@
 From: Damien Le Moal <damien.lemoal@wdc.com>
-Date: Tue,  8 Sep 2020 20:33:18 +0900
-Subject: [Buildroot] [PATCH v2 0/6] Add support for Kendryte K210 RISC-V
- boards
-Message-ID: <20200908113324.1022230-1-damien.lemoal@wdc.com>
+Date: Tue,  8 Sep 2020 20:33:19 +0900
+Subject: [Buildroot] [PATCH v2 1/6] toolchain/buildroot: allow uclibc-ng for
+ riscv
+In-Reply-To: <20200908113324.1022230-1-damien.lemoal@wdc.com>
+References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
+Message-ID: <20200908113324.1022230-2-damien.lemoal@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series adds support for building bootable images for RISC-V
-boards based on the Kendryte K210 SoC which is supported by the Linux
-kernel since version 5.8.0. This SoC has no MMU supported by Linux and
-requires uClibc flatbin binaries as gcc does not yet support FDPIC
-executables for RISC-V.
+uclibcb supports RISC-V architecture since version 1.0.31. Allow its
+selection for that architecture.
 
-The first four patches adjust buildroot configuration to allow building
-uClibc static no-MMU libraries for RISC-V. The last and fifth patch adds
-buildroot defconfig for the Kendryte K210 as well as uClibc and busybox
-configuration.
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+---
+ package/uclibc/Config.in                | 2 ++
+ toolchain/toolchain-buildroot/Config.in | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Building is as simple as:
-make kendryte_k210_defconfig
-make
-
-Which generate the output/image/loader.bin bootable image.
-
-The result using a SiPeed Dan Dock board is:
-
-[    0.000000] Linux version 5.8.0 (damien at localhost.localdomain) (riscv64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2020.08-332-g6a6dcd0c4b) 9.3.0, GNU ld (GNU Binutils) 2.32) #6 SMP Tue Sep 8 20:21:30 JST 2020
-[    0.000000] earlycon: sifive0 at MMIO 0x0000000038000000 (options '')
-[    0.000000] printk: bootconsole [sifive0] enabled
-[    0.000000] Zone ranges:
-[    0.000000]   DMA32    [mem 0x0000000080000000-0x00000000807fffff]
-[    0.000000]   Normal   empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000080000000-0x00000000807fffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x00000000807fffff]
-[    0.000000] riscv: ISA extensions acdfim
-[    0.000000] riscv: ELF capabilities acdfim
-[    0.000000] percpu: max_distance=0x18000 too large for vmalloc space 0x0
-[    0.000000] percpu: Embedded 12 pages/cpu s18336 r0 d30816 u49152
-[    0.000000] Built 1 zonelists, mobility grouping off.  Total pages: 2020
-[    0.000000] Kernel command line: earlycon console=ttySIF0
-[    0.000000] Dentry cache hash table entries: 1024 (order: 1, 8192 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-[    0.000000] Sorting __ex_table...
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Memory: 6328K/8192K available (939K kernel code, 119K rwdata, 169K rodata, 289K init, 97K bss, 1864K reserved, 0K cma-reserved)
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-[    0.000000] riscv-intc: 64 local interrupts mapped
-[    0.000000] plic: interrupt-controller at c000000: mapped 65 interrupts with 2 handlers for 4 contexts.
-[    0.000000] riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [0]
-[    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x3990be68b, max_idle_ns: 881590404272 ns
-[    0.000014] sched_clock: 64 bits at 7MHz, resolution 128ns, wraps every 4398046511054ns
-[    0.008242] Console: colour dummy device 80x25
-[    0.012480] Calibrating delay loop (skipped), value calculated using timer frequency.. 15.60 BogoMIPS (lpj=31200)
-[    0.022682] pid_max: default: 4096 minimum: 301
-[    0.027300] Mount-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-[    0.034416] Mountpoint-cache hash table entries: 512 (order: 0, 4096 bytes, linear)
-[    0.044878] rcu: Hierarchical SRCU implementation.
-[    0.049777] smp: Bringing up secondary CPUs ...
-[    0.055056] smp: Brought up 1 node, 2 CPUs
-[    0.059453] devtmpfs: initialized
-[    0.065614] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-[    0.074637] futex hash table entries: 16 (order: -2, 1024 bytes, linear)
-[    0.084149] Kendryte K210 SoC sysctl
-[    0.097621] clocksource: Switched to clocksource riscv_clocksource
-[    0.229791] workingset: timestamp_bits=62 max_order=11 bucket_order=0
-[    0.237036] 38000000.serial: ttySIF0 at MMIO 0x38000000 (irq = 1, base_baud = 0) is a SiFive UART v0
-[    0.245617] printk: console [ttySIF0] enabled
-[    0.245617] printk: console [ttySIF0] enabled
-[    0.254118] printk: bootconsole [sifive0] disabled
-[    0.254118] printk: bootconsole [sifive0] disabled
-[    0.266224] random: get_random_bytes called from 0x000000008004e75c with crng_init=0
-[    0.274702] Freeing unused kernel memory: 288K
-[    0.278417] This architecture does not have kernel memory protection.
-[    0.284857] Run /init as init process
-
-+---------------------------+
-| Kendryte K210 NOMMU Linux |
-+---------------------------+
-
-/ # cat /proc/cpuinfo
-processor	: 0
-hart		: 0
-isa		: rv64imafdc
-uarch		: kendryte,k210
-
-processor	: 1
-hart		: 1
-isa		: rv64imafdc
-uarch		: kendryte,k210
-
-/ #
-
-These patches are also available at
-git at github.com:damien-lemoal/buildroot.git
-(https://github.com/damien-lemoal/buildroot)
-
-Changes from v1:
-* Replace uclinux with linux in toolchain tuple name only for RISC-V
-  (patch 4).
-* Moved uclibc patches under package/uclibc (new patch 5)
-* Simplified board specific support (patch 6):
-  - Dropped board specific uclibc configuration. Usinf default
-    uclibc.config now.
-  - Removed board specific device table
-  - Removed fakeroot.sh script
-  - Reworked rootfs overlay init script to be similar to fs/cpio/init
-  - Added the README.txt file to document builds
-
-Christoph Hellwig (2):
-  package/elf2flt: add RISC-V support
-  package make: build RISC-V nommu builds as linux
-
-Damien Le Moal (4):
-  toolchain/buildroot: allow uclibc-ng for riscv
-  arch/config: Make RISC-V MMU optional
-  package/uclibc: fix compilation errors
-  board: Add configuration for Kendryte K210 boards
-
- arch/Config.in                                |    2 +-
- board/kendryte/k210/README.txt                |   28 +
- board/kendryte/k210/busybox.config            | 1178 +++++++++++++++++
- board/kendryte/k210/rootfs_overlay/init       |   24 +
- configs/kendryte_k210_defconfig               |   24 +
- package/Makefile.in                           |    7 +-
- .../0002-elf2flt-add-riscv-support.patch      |  302 +++++
- package/elf2flt/Config.in.host                |    2 +-
- ...evert-Fix-static-linking-with-GCC-10.patch |   43 +
- ...0002-fix-static-builds-with-gcc-10.x.patch |   25 +
- ...-utils-getconf-Fix-compilation-error.patch |  103 ++
- .../0004-librt-avoid-compilation-error.patch  |   42 +
- package/uclibc/Config.in                      |    2 +
- toolchain/toolchain-buildroot/Config.in       |    4 +-
- 14 files changed, 1782 insertions(+), 4 deletions(-)
- create mode 100644 board/kendryte/k210/README.txt
- create mode 100644 board/kendryte/k210/busybox.config
- create mode 100755 board/kendryte/k210/rootfs_overlay/init
- create mode 100644 configs/kendryte_k210_defconfig
- create mode 100644 package/elf2flt/0002-elf2flt-add-riscv-support.patch
- create mode 100644 package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch
- create mode 100644 package/uclibc/0002-fix-static-builds-with-gcc-10.x.patch
- create mode 100644 package/uclibc/0003-utils-getconf-Fix-compilation-error.patch
- create mode 100644 package/uclibc/0004-librt-avoid-compilation-error.patch
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index de2885bc92..35b1cb8e2f 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -106,6 +106,8 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "xtensa"   if BR2_xtensa
+ 	default "i386"	   if BR2_i386
+ 	default "x86_64"   if BR2_x86_64
++	default "riscv64"  if BR2_riscv && BR2_ARCH_IS_64
++	default "riscv32"  if BR2_riscv && !BR2_ARCH_IS_6
+ 
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 418d5cb387..49f67c7348 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -32,7 +32,9 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+-		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
++		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64  || \
++		   BR2_riscv
++
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  This option selects uClibc-ng as the C library for the
 -- 
 2.26.2
