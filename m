@@ -1,40 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 8 Sep 2020 09:46:22 +0200
-Subject: [Buildroot] [PATCH 1/5] toolchain/buildroot: allow uclibc-ng
- for riscv
-In-Reply-To: <CY4PR04MB3751360ECC39A61183D2B984E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
-References: <20200908050744.425303-1-damien.lemoal@wdc.com>
- <20200908050744.425303-2-damien.lemoal@wdc.com>
- <20200908090405.4e7a2bcc@windsurf.hq.k.grp>
- <CY4PR04MB3751360ECC39A61183D2B984E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
-Message-ID: <20200908094622.7b05465c@windsurf.hq.k.grp>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 08 Sep 2020 10:46:58 +0300
+Subject: [Buildroot] [PATCH 1/1] package/strace: disable mpers support
+In-Reply-To: <20200908073601.GV14354@scaer>
+References: <20200907202410.12228-1-heiko.thiery@gmail.com>
+ <20200907225655.GU14354@scaer> <20200908085449.35e7ec6f@windsurf.hq.k.grp>
+ <20200908073601.GV14354@scaer>
+Message-ID: <87363szp59.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 8 Sep 2020 07:42:34 +0000
-Damien Le Moal <Damien.LeMoal@wdc.com> wrote:
+Hi Yann
 
-> This has been implemented already:
-> 
-> commit 8b1f6b2e08ed3c15484c2ca0c3f0a45125c559c1
-> Author: Waldemar Brodkorb <wbx@openadk.org>
-> Date:   Mon Aug 17 15:44:58 2020 +0200
-> 
->     riscv64: add __riscv_flush_icache
-> 
->     Always use the systemcall as uClibc-ng has no vdso support.
->     Tested with libffi and python in qemu-system-riscv64.
-> 
-> This is part of uclibc version 1.0.35.
+On Tue, Sep 08 2020, Yann E. MORIN wrote:
+> On 2020-09-08 08:54 +0200, Thomas Petazzoni spake thusly:
+>> On Tue, 8 Sep 2020 00:56:55 +0200
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+>> > However, some systems may very well run a 64-bit kernel with a 32-bit
+>> > userland. In that case, strace should be able to interpret the syscalls
+>> > made by the process and the replies sent by the kernel, and those are
+>> > done in the bitness of the process, not of the kernel.
+>> > 
+>> > So, we always want an strace that is of the same bitness as the
+>> > userland. And so I indeed think we do not need this ill-named
+>> > multi-personality support of strace.
+>> > 
+>> > Note that some people may however run such multi-bitness systems. But in
+>> > that case, they had to build two userlands, a 32-bit one and a 64-bit
+>> > one, and somehow aggregate the two after the fact. In that case, they
+>> > would bear the responsibility to carry an strace for each bitness.
+>> 
+>> So, is this an Acked-by for this patch ? :-)
+>
+> It would, but I'd still like to have some feedback from Baruch, who had
+> initial added of the mpers option, so may have further explanations to
+> provide.
 
-My bad, I didn't follow that uClibc-ng has implemented, as I haven't
-received any feedback to my e-mail. Good to know. Thanks!
+I only touched mpers (commit fc0d31caeedba) to fix build failure I
+(re)introduced in a previous commit (10883729419). strace enables mpers
+by default. I am fine with removing mpers support entirely.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
