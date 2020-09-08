@@ -1,8 +1,8 @@
 From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue,  8 Sep 2020 20:27:58 +0200
-Subject: [Buildroot] [PATCH] configs/stm32mp157: remove extra metadata_csum
- mkfs option
-Message-ID: <20200908182758.412179-1-b.bilas@grinn-global.com>
+Date: Tue,  8 Sep 2020 20:30:54 +0200
+Subject: [Buildroot] [PATCH v2] configs/stm32mp157: remove extra
+ metadata_csum mkfs option
+Message-ID: <20200908183054.413318-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,12 @@ in U-Boot so we can drop it completely.
 
 [1] 76db1681da52342ca9f4fb7e6787bd83cc82f429:
 stm32mp1: use a specific SD/eMMC partition for U-Boot enviromnent
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
+ v1 -> v2:
+  - missing SoB
+
  configs/stm32mp157a_dk1_defconfig | 1 -
  configs/stm32mp157c_dk2_defconfig | 1 -
  2 files changed, 2 deletions(-)
