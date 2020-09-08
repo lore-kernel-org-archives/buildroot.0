@@ -1,41 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  8 Sep 2020 20:41:16 +0200
-Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.5
-Message-ID: <20200908184116.1750845-1-francois.perrad@gadz.org>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue,  8 Sep 2020 12:23:35 -0700
+Subject: [Buildroot] [PATCH 2/3] package/python-sentry-sdk: fix select
+ ordering
+In-Reply-To: <20200908192336.155428-1-joseph.kogut@gmail.com>
+References: <20200908192336.155428-1-joseph.kogut@gmail.com>
+Message-ID: <20200908192336.155428-2-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/iptables/iptables.hash | 2 +-
- package/iptables/iptables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-sentry-sdk/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 2811daf5e..725770543 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
-@@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256  993a3a5490a544c2cbf2ef15cf7e7ed21af1845baf228318d5c36ef8827e157c  iptables-1.8.4.tar.bz2
-+sha256  d457d74512e63aa3f50336e0597d4023c0e3c6845594d38532efb6ebcb294309  iptables-1.8.5.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 4dc7a174a..442639f15 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-sentry-sdk/Config.in b/package/python-sentry-sdk/Config.in
+index 5bddabe282..62b8100bdb 100644
+--- a/package/python-sentry-sdk/Config.in
++++ b/package/python-sentry-sdk/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_SENTRY_SDK
+ 	bool "python-sentry-sdk"
+-	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+ 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
+ 	help
+ 	  Python client for Sentry (https://getsentry.com).
  
--IPTABLES_VERSION = 1.8.4
-+IPTABLES_VERSION = 1.8.5
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.28.0
