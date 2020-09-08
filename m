@@ -1,67 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 00:38:41 +0200
-Subject: [Buildroot] [git commit] docs/manual: Add section about
- contributing to maintenance branches
-Message-ID: <20200908223158.97F7486E50@busybox.osuosl.org>
+From: Damien Le Moal <Damien.LeMoal@wdc.com>
+Date: Tue, 8 Sep 2020 23:16:43 +0000
+Subject: [Buildroot] [PATCH 5/5] Add support for Kendryte K210 based
+ RISC-V boards
+References: <20200908051624.425573-1-damien.lemoal@wdc.com>
+ <20200908051624.425573-6-damien.lemoal@wdc.com>
+ <20200908091728.6351079d@windsurf.hq.k.grp>
+ <CY4PR04MB3751463068ACC779C758B3CDE7290@CY4PR04MB3751.namprd04.prod.outlook.com>
+ <20200908110714.6979f5c8@windsurf.hq.k.grp>
+ <CY4PR04MB3751D91DFA061C4587F51EAFE7290@CY4PR04MB3751.namprd04.prod.outlook.com>
+ <20200908130806.0aa9df67@windsurf.hq.k.grp> <20200908122138.GB31727@lst.de>
+Message-ID: <CY4PR04MB3751B9486519A94E4C3CED26E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76ed69499d63ffb1e9167d36d794ebda6b17cd1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2020/09/08 21:21, Christoph Hellwig wrote:
+> On Tue, Sep 08, 2020 at 01:08:06PM +0200, Thomas Petazzoni wrote:
+>> Sounds good to me, I'm fine with a custom Busybox config file for the
+>> time being. Perhaps justify that in the commit log so we have a trace
+>> somewhere of why we accepted a custom Busybox config file.
+> 
+> Maybe give the busybox config a more generic name like initramfs-only
+> to document the purpose?
+> 
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - s/release branch/maintenance branch/
-  - extend the master-then-backport section
-  - slight eye-candy on the rest
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- docs/manual/contribute.txt | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+Yes, good idea. Will do that in addition to the commit message rewrite.
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 11d8811b44..14ecdbd66c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -371,6 +371,37 @@ in the following cases:
- * whenever you feel it will help presenting your work, your choices,
-   the review process, etc.
- 
-+==== Patches for maintenance branches
-+
-+When fixing bugs on a maintenance branch, bugs should be fixed on the
-+master branch first. The commit log for such a patch may then contain a
-+post-commit note specifying what branches are affected:
-+
-+----
-+package/foo: fix stuff
-+
-+Signed-off-by: Your Real Name <your@email.address>
-+---
-+Backport to: 2020.02.x, 2020.05.x
-+(2020.08.x not affected as the version was bumped)
-+----
-+
-+Those changes will then be backported by a maintainer to the affected
-+branches.
-+
-+However, some bugs may apply only to a specific release, for example
-+because it is using an older version of a package. In that case, patches
-+should be based off the maintenance branch, and the patch subject prefix
-+must include the maintenance branch name (for example "[PATCH 2020.02.x]").
-+This can be done with the +git format-patch+ flag +--subject-prefix+:
-+
-+---------------------
-+$ git format-patch --subject-prefix "PATCH 2020.02.x" \
-+    -M -s -o outgoing origin/2020.02.x
-+---------------------
-+
-+Then send the patches with +git send-email+, as described above.
-+
- ==== Patch revision changelog
- 
- When improvements are requested, the new revision of each commit
+-- 
+Damien Le Moal
+Western Digital Research
