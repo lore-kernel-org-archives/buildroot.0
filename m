@@ -1,36 +1,62 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 08 Sep 2020 13:11:40 +0000
-Subject: [Buildroot] [Bug 13186] nvidia driver fail to build with 5.6 kernel
-In-Reply-To: <bug-13186-163@https.bugs.busybox.net/>
-References: <bug-13186-163@https.bugs.busybox.net/>
-Message-ID: <bug-13186-163-3AnOgiEI0E@https.bugs.busybox.net/>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Tue, 08 Sep 2020 15:16:00 +0200
+Subject: [Buildroot] [PATCH 2/2] fs/jffs2: copy xattrs
+In-Reply-To: <20200908112057.6e2c3caf@windsurf.hq.k.grp>
+References: <20200908085106.3197433-1-antoine.tenart@bootlin.com>
+ <20200908085106.3197433-2-antoine.tenart@bootlin.com>
+ <20200908112057.6e2c3caf@windsurf.hq.k.grp>
+Message-ID: <159957095983.787733.6620860921535228877@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13186
+Hi Thomas,
 
---- Comment #1 from Vincent Fazio <vfazio@xes-inc.com> ---
-(In reply to Dr I J Ormshaw from comment #0)
+Quoting Thomas Petazzoni (2020-09-08 11:20:57)
+> On Tue,  8 Sep 2020 10:51:06 +0200
+> Antoine Tenart <antoine.tenart@bootlin.com> wrote:
+> 
+> > This patch sets the --with-xattr option when generating an image with
+> > mkfs.jffs2 if BR2_PACKAGE_REFPOLICY is selected, so that SELinux
+> > security contexts will be kept and available in jffs2 images.
+> > 
+> > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> > ---
+> >  fs/jffs2/jffs2.mk | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/fs/jffs2/jffs2.mk b/fs/jffs2/jffs2.mk
+> > index 2adbc2320e38..ac00a522cc28 100644
+> > --- a/fs/jffs2/jffs2.mk
+> > +++ b/fs/jffs2/jffs2.mk
+> > @@ -35,6 +35,10 @@ JFFS2_OPTS += -n
+> >  SUMTOOL_OPTS += -n
+> >  endif
+> >  
+> > +ifeq ($(BR2_PACKAGE_REFPOLICY),y)
+> > +JFFS2_OPTS += --with-xattr
+> > +endif
+> 
+> I'm not sure this condition should be on BR2_PACKAGE_REFPOLICY. Since
+> libselinux.mk is in charge of enabling xattr support in the Linux
+> kernel filesystem drivers, I'm tempted to say that we should be
+> consistent and use BR2_PACKAGE_LIBSELINUX=y as a condition here as well;
+> 
+> What do you think?
 
-Note that we do have pending patches for this driver:
+I think you're right. Without BR2_PACKAGE_REFPOLICY we won't have
+SELinux security contexts set when making the image, but that doesn't
+mean SELinux couldn't be used later on. So I agree having the check on
+BR2_PACKAGE_LIBSELINUX would be better (and it's also nice to have the
+same check everywhere to improve consistency).
 
-A simple bump to 390.132 should work for 5.6
+Thanks!
 
-http://patchwork.ozlabs.org/project/buildroot/list/?series=159815 (should be
-bumped to 390.138 for additional fixes)
-
-https://download.nvidia.com/XFree86/Linux-x86_64/390.138/README/index.html
-
-
-There is also a series to bump to the 4xx driver branch but needs some work
-
-http://patchwork.ozlabs.org/project/buildroot/list/?series=176379&state=*
-
-So it's on the list of "things to do"
+Antoine
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Antoine T?nart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
