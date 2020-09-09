@@ -1,28 +1,43 @@
-From: Christian Stewart <christian@paral.in>
-Date: Wed, 9 Sep 2020 00:33:06 -0700
-Subject: [Buildroot] [go] backport go-module patch series to 2020.08.x?
-In-Reply-To: <87k0x35sdh.fsf@dell.be.48ers.dk>
-References: <CA+h8R2rS323vadTNps=byzPQngRV3r-iQVK5ejy8-jD7E6wWdw@mail.gmail.com>
- <87o8mf5tn5.fsf@dell.be.48ers.dk>
- <CA+h8R2qXVRH_2c-zfi5YKAksTgqyWoh207doFqaFy0X_M8vyyg@mail.gmail.com>
- <87k0x35sdh.fsf@dell.be.48ers.dk>
-Message-ID: <CA+h8R2pv+-ibEUFQoG1driWejuDxECumjKuNj+GUNy4985ZkcQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 09:24:20 +0200
+Subject: [Buildroot] [git commit] gitlab-ci: defconfig_check is included in
+ defconfig build
+Message-ID: <20200909073014.0C11980E3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc8ee069d268a67c29822f6b2913ce165458e7e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, Sep 9, 2020 at 12:19 AM Peter Korsgaard <peter@korsgaard.com> wrote:
-> yes, but doesn't really explain why it is _NEEDED_ for 2020.08, right?
-> Also notice that 2020.08 uses go 1.13.15.
+When we build the defconfigs, we already check they are correct, so
+there is no need to run the correctness check explicitly.
 
-That's a good point, Go 1.13 is an "archived version" - shouldn't the
-older branches be on at least 1.14?
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Acked-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/generate-gitlab-ci-yml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Not sure what the policy is on this, or if Go is still releasing 1.13.x patches.
-
-Best regards,
-Christian
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index ed56a516a7..23db376944 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -47,9 +47,10 @@ gen_defconfigs() {
+     esac
+ 
+     for cfg in "${defconfigs[@]}"; do
+-        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+         if ${build_defconfigs}; then
+             printf '%s: { extends: .defconfig }\n' "${cfg}"
++        else
++            printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
+         fi
+     done
+ }
