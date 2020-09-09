@@ -1,92 +1,80 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed,  9 Sep 2020 02:52:14 +0200
-Subject: [Buildroot] [PATCH 2/2] package/iwd: bump to 1.9
-In-Reply-To: <20200909005214.888612-1-m.niestroj@grinn-global.com>
-References: <20200909005214.888612-1-m.niestroj@grinn-global.com>
-Message-ID: <20200909005214.888612-2-m.niestroj@grinn-global.com>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 8 Sep 2020 18:39:47 -0700
+Subject: [Buildroot] OpenSSH login problem
+In-Reply-To: <20200906193958.2b4199a4@gmx.net>
+References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
+ <52-5f356200-5-2c492440@36238474>
+ <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
+ <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
+ <20200816220620.65159d1d@windsurf.home>
+ <CA+h8R2qO01wwrEJdTx2puEbDv6mv31YxyAjG5nCn6hosPAW_aQ@mail.gmail.com>
+ <CA+h8R2pjvm7Wr_hkS2wtqhzqESmgqTtxivkdTLdEr07ngJLTbQ@mail.gmail.com>
+ <20200906193958.2b4199a4@gmx.net>
+Message-ID: <CA+h8R2pdJExc9v7AeGAfvon1sVY-G2iYk7EzjdZFBLBRd9ApVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also drop mainlined patch.
+Hi all,
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- ...0001-src-p2p.c-fix-build-with-uclibc.patch | 38 -------------------
- package/iwd/iwd.hash                          |  2 +-
- package/iwd/iwd.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
+Unfortunately I'm still seeing this with GCC 9 and OpenSSH 8.3p1
+against a Odroid HC2 with kernel 5.8 + kernel-headers 5.8, using glibc
+2.31.
 
-diff --git a/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
-deleted file mode 100644
-index 34c525f907..0000000000
---- a/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 7d29d294c7138460dc400df8d051d7f334d149cf Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 20 Jun 2020 15:13:17 +0200
--Subject: [PATCH] src/p2p.c: fix build with uclibc
--
--explicit_bzero is used in src/p2p.c since commit
--1675c765a3d66f3c626a1581a7bf514e1859b064 but src/missing.h is not
--included, as a result build with uclibc fails on:
--
--/home/naourr/work/instance-0/output-1/per-package/iwd/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: src/p2p.o: in function `p2p_connection_reset':
--p2p.c:(.text+0x2cf4): undefined reference to `explicit_bzero'
--/home/naourr/work/instance-0/output-1/per-package/iwd/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: p2p.c:(.text+0x2cfc): undefined reference to `explicit_bzero'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/8bbf7e1d0929d0883c0c2445990f62f5a1d54163
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/EXR3JZJXIVITX2ZSQRE6GEXGN6P3KUTC]
-----
-- src/p2p.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/p2p.c b/src/p2p.c
--index dc78b887..a759df5c 100644
----- a/src/p2p.c
--+++ b/src/p2p.c
--@@ -37,6 +37,7 @@
-- 
-- #include "linux/nl80211.h"
-- 
--+#include "src/missing.h"
-- #include "src/iwd.h"
-- #include "src/wiphy.h"
-- #include "src/scan.h"
---- 
--2.26.2
--
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 10c9dde983..16e01ed473 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  14b39fc8b2bf170e75cc3d0c08b666dbcfeaee73384485cb6eaf463da8963aa4  iwd-1.8.tar.gz
-+sha256  e4178a105021ef1b7b7c23cbc6f8e45cbab3bb0830da588b406ff4a281e9f948  iwd-1.9.tar.gz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index bba787c07f..58d332dc07 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IWD_VERSION = 1.8
-+IWD_VERSION = 1.9
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
--- 
-2.28.0
+On Sun, Sep 6, 2020 at 10:40 AM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Christian, *,
+>
+> On Sat, 5 Sep 2020 19:33:23 -0700, Christian Stewart <christian@paral.in> wrote:
+>
+> > Hi all,
+> >
+> > Finally got around to running this test.
+> >
+> > I previously tested an Odroid XU4 with GCC 10 and latest binutils, and
+> > it worked.
+> >
+> > Now with a test against GCC 9 on a Odroid HC2, it's not working (ssh
+> > exits immediately after successful auth).
+> >
+> > Testing against OpenSSH 8.3p1 now and figuring out exactly why this is
+> > happening, if it's the GCC version or what.
+>
+> Tested on RPi3, the following defconfig works (buildroot-git-d1c3f077e24a41f004945f94aceb6f059c58e423,
+> linux-5.4.51):
+
+[snip]
+
+> And the following defconfig fails (linux-4.19.126):
+
+[snip]
+
+> The last lines of sshd failure strace are:
+>
+> 468   write(2, "Accepted none for root from 192."..., 59 <unfinished ...>
+> 490   clock_gettime(CLOCK_BOOTTIME, {tv_sec=306, tv_nsec=379381706}) = 0
+> 490   clock_nanosleep_time64(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=24656548290918313},  <unfinished ...>) = ?
+> 490   +++ killed by SIGSYS +++
+> 468   <... write resumed>)              = 59
+> 468   --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=490, si_uid=1000, si_status=SIGSYS, si_utime=7, si_stime=2} ---
+> 468   write(2, "debug1: monitor_child_preauth: r"..., 82) = 82
+> 468   read(5, "", 4)                    = 0
+> 468   write(2, "debug1: do_cleanup\r\n", 20) = 20
+> 468   write(2, "debug1: Killing privsep child 49"..., 35) = 35
+> 468   kill(490, SIGKILL)                = 0
+> 468   exit_group(255)                   = ?
+> 468   +++ exited with 255 +++
+>
+>
+> In the failing case __NR_clock_nanosleep_time64 is not defined, so
+> SC_ALLOW(__NR_clock_nanosleep_time64) in openssh-8.3p1/sandbox-seccomp-filter.c
+> is not set...., but the strace output shows clock_nanosleep_time64() is called
+> (and aborted with SIGSYS)...
+
+Thanks for checking on this. Is there any known fix anywhere yet? I'll
+do some searching.
+
+Thanks,
+Christian
