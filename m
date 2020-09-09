@@ -1,120 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 22:47:26 +0200
-Subject: [Buildroot] [PATCH v2 4/4] pycompile: add --verbose option
-In-Reply-To: <20200908081026.4701-5-robin.jarry@6wind.com>
-References: <20200908081026.4701-1-robin.jarry@6wind.com>
- <20200908081026.4701-5-robin.jarry@6wind.com>
-Message-ID: <20200909204726.GT14354@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 9 Sep 2020 22:43:11 +0200
+Subject: [Buildroot] [git commit] package/neardal: fix build with gcc 10
+Message-ID: <20200909204311.DBD1B88FD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Robin, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a85ae8b297fd0526f57fe99d73087dd840ea6219
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-08 10:10 +0200, Robin Jarry spake thusly:
-> Add a new option that prints the (runtime) path of compiled .py files
-> when VERBOSE=1 is set.
+Fixes:
+ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
 
-I said in my reply to the cover letter that I had something to say about
-that patch, but in fact no; it's pretty OK.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0001-lib-neardal.h-fix-build-with-gcc-10.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-Just do not forget to switch to using str.format() instead of using the
-old-style % formatting. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
-> ---
->  package/python/python.mk     |  1 +
->  package/python3/python3.mk   |  1 +
->  support/scripts/pycompile.py | 11 +++++++++--
->  3 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 7000658330e8..50e77db74628 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -263,6 +263,7 @@ define PYTHON_CREATE_PYC_FILES
->  	$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR) \
->  		$(TOPDIR)/support/scripts/pycompile.py \
->  		$(if $(BR2_REPRODUCIBLE),--force) \
-> +		$(if $(VERBOSE),--verbose) \
->  		$(TARGET_DIR) \
->  		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
->  endef
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index e8c200b2081e..1ef757c6b66f 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -280,6 +280,7 @@ define PYTHON3_CREATE_PYC_FILES
->  	$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
->  		$(TOPDIR)/support/scripts/pycompile.py \
->  		$(if $(BR2_REPRODUCIBLE),--force) \
-> +		$(if $(VERBOSE),--verbose) \
->  		$(TARGET_DIR) \
->  		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
->  endef
-> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-> index c60d4e13f3b4..cb2ba7f5016e 100644
-> --- a/support/scripts/pycompile.py
-> +++ b/support/scripts/pycompile.py
-> @@ -16,7 +16,7 @@ import struct
->  import sys
->  
->  
-> -def compile_one(host_path, target_root, force=False):
-> +def compile_one(host_path, target_root, force=False, verbose=False):
->      """
->      Compile a .py file into a .pyc file located next to it.
->  
-> @@ -26,6 +26,8 @@ def compile_one(host_path, target_root, force=False):
->          Absolute path of the target dir (i.e. the future /).
->      :arg force:
->          Recompile even if already up-to-date.
-> +    :arg verbose:
-> +        Print compiled file paths.
->      """
->      if os.path.islink(host_path):
->          return  # only compile real files
-> @@ -49,6 +51,8 @@ def compile_one(host_path, target_root, force=False):
->      # determine the runtime path of the file (i.e.: relative path to target
->      # root dir prepended with "/").
->      runtime_path = os.path.join("/", os.path.relpath(host_path, target_root))
-> +    if verbose:
-> +        print("  PYC  %s" % (runtime_path,))
->  
->      # will raise an error if the file cannot be compiled
->      py_compile.compile(host_path, cfile=host_path + "c",
-> @@ -63,6 +67,8 @@ def main():
->                          help="Folder located inside TARGET to scan and compile")
->      parser.add_argument("--force", action="store_true",
->                          help="Force compilation even if already compiled")
-> +    parser.add_argument("--verbose", action="store_true",
-> +                        help="Print compiled files")
->  
->      args = parser.parse_args()
->  
-> @@ -83,7 +89,8 @@ def main():
->                  parser.error("PATH: not inside TARGET dir: %r" % d)
->              for parent, _, files in os.walk(d):
->                  for f in files:
-> -                    compile_one(os.path.join(parent, f), args.target, args.force)
-> +                    compile_one(os.path.join(parent, f), args.target,
-> +                                args.force, args.verbose)
->  
->      except Exception as e:
->          print("error: %s" % e, file=sys.stderr)
-> -- 
-> 2.28.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..c9c4555022
+--- /dev/null
++++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 9 Sep 2020 19:14:52 +0200
++Subject: [PATCH] lib/neardal.h: fix build with gcc 10
++
++Define neardal_output_cb as extern to avoid the following build failure
++with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/connectivity/neardal/pull/10]
++---
++ lib/neardal.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/neardal.h b/lib/neardal.h
++index d1cd18b..3e83595 100644
++--- a/lib/neardal.h
+++++ b/lib/neardal.h
++@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
++ 
++ void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
++ 	__attribute__((format(printf, 3, 4)));
++-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
+++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
++ 
++ #ifdef __cplusplus
++ }
++-- 
++2.28.0
++
