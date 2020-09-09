@@ -1,35 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 22:11:01 +0200
-Subject: [Buildroot] Running Weston on stm32mp157c-dk2
-In-Reply-To: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
-References: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
-Message-ID: <20200909221101.327887ca@windsurf.hq.k.grp>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed,  9 Sep 2020 22:29:52 +0200
+Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 1.0.0
+Message-ID: <20200909202952.9738-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andrey,
+For details see [1].
 
-On Wed, 9 Sep 2020 18:08:08 +0200
-Andrey Nechypurenko <andreynech@gmail.com> wrote:
+- disable enable-xkbregistry (as suggested by documentation [2] and
+  to avoid libxml2 dependency)
 
-> I am just wondering if anybody tried and managed to run Weston on
-> stm32mp157c-dk2 using Buildroot? If yes, I would appreciate any
-> details on what should be done for it.
-> 
-> My attempts lead me to the point where the following output comes from
-> weston-launch:
-> 
-> # openvt -c 3 -v weston-launch -- --log=weston.log
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041596.html
+[2] https://github.com/xkbcommon/libxkbcommon/blob/master/PACKAGING
 
-Which OpenGL implementation are you trying to use? The proprietary
-blobs from Vivante, or the open-source Etnaviv implementation? I don't
-know if the latter was tested on STM32MP157.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libxkbcommon/libxkbcommon.hash | 8 +++-----
+ package/libxkbcommon/libxkbcommon.mk   | 7 +++++--
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-Thomas
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 5d4c3af10a..1edc73736f 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041133.html
+-md5 2d9ad3a46b317138b5e72a91cf105451  libxkbcommon-0.10.0.tar.xz
+-sha1 d8f956f4bc5382d5d8e0e4dd590c4f090e0e985a  libxkbcommon-0.10.0.tar.xz
+-sha256 57c3630cdc38fb4734cd57fa349e92244f5ae3862813e533cedbd86721a0b6f2  libxkbcommon-0.10.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041596.html
++sha256  41411ad253b99f59978b4c7b369ba0979b2301c0499a105a399445a56eb7621f  libxkbcommon-1.0.0.tar.xz
+ 
+ # License file:
+-sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
++sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 3923d69c8d..6bd0f9b207 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,14 +4,17 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 0.10.0
++LIBXKBCOMMON_VERSION = 1.0.0
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
+ LIBXKBCOMMON_LICENSE_FILES = LICENSE
+ LIBXKBCOMMON_INSTALL_STAGING = YES
+ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+-LIBXKBCOMMON_CONF_OPTS = -Denable-docs=false -Denable-wayland=false
++LIBXKBCOMMON_CONF_OPTS = \
++	-Denable-docs=false \
++	-Denable-wayland=false \
++	-Denable-xkbregistry=false
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
