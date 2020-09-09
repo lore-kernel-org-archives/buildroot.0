@@ -1,54 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Sep 2020 22:42:38 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/boost: bump to version 1.74.0
-In-Reply-To: <20200909165909.550d0175@windsurf.hq.k.grp>
-References: <20200909093240.2178664-1-fido_max@inbox.ru>
- <20200909155600.6cf8450e@windsurf.hq.k.grp>
- <199e6a77-7ebc-eb1c-4482-206f1429c5d0@green-communications.fr>
- <20200909165909.550d0175@windsurf.hq.k.grp>
-Message-ID: <e3eda71c-7fcf-a321-323d-6fa5926b00ab@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 22:42:43 +0200
+Subject: [Buildroot] [PATCH] libcap: disable GOLANG
+In-Reply-To: <d1e0d62f-098d-4dbb-037a-8f827772dd1e@aliyun.com>
+References: <1f3d9456-9ca2-75f4-7e15-d851e65005ea@aliyun.com>
+ <873642deyy.fsf@dell.be.48ers.dk>
+ <d1e0d62f-098d-4dbb-037a-8f827772dd1e@aliyun.com>
+Message-ID: <20200909204243.GS14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tian Yuanhao, All,
 
+On 2020-09-01 00:14 +0800, Tian Yuanhao via buildroot spake thusly:
+> This patch is for the next branch.
+> 
+> Recently, the go infrastructure has changed, and libcap has been
+> upgraded to 2.42. libcap introduced golang in 2.28, see:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/Make.Rules?id=0615d996379dceedefcd65a114f93fefd81c208f
+> 
+> When you compile host-go and then compile host-libcap, GOLANG will be
+> automatically set to yes. Because libcap.mk lacks golang support,
+> compilation will fail.
 
-On 09/09/2020 16:59, Thomas Petazzoni wrote:
-> Hello Nicolas,
-> 
-> On Wed, 9 Sep 2020 16:27:14 +0200
-> Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
-> 
->>> We don't have any failures of boost 1.73.0 with gcc 10 in our
->>> autobuilders. Could you give more details about a specific
->>> configuration that fails to build?  
->>
->> boost::bimap is a header-only library, it cannot fail to build, only its
->> reverse dependencies may fail. the release notes? also mention other
->> header-only boost libraries "and more" are affected by the non-standard
->> std::allocator usage.
->>
->> C++20 isn't the default in GCC 10 and it's highly probable that there
->> are no package in buildroot that requires both boost and C++20.
->> Especially since C++20 was finally approved this very Saturday.
->>
->> This is more about future proofing than fixing existing bugs.
->>
->> [0] https://www.boost.org/users/history/version_1_74_0.html
-> 
-> Thanks a lot for this explanation, it now makes complete sense. I think
-> we should include exactly what you have described here in the commit
-> log.
+I've taken those explanations and used them as the new commit log, and
+applied the patch.
 
- I did exactly that and applied to master, thanks!
+However, the patch was mangled: TABs were replaced by spaces, so I had
+to fix that too.
 
- Regards,
- Arnout
+Applied to master, thanks!
 
+Regards,
+Yann E. MORIN.
+
+> > > libcap is a pure C library before 2.27, it lacks some environment
+> > > variables set in pkg-golang.mk.
+> >
+> > Can you be more specific? What exactly is this fixing? I don't see
+> > any related autobuilder errors?
+> >
+> > http://autobuild.buildroot.net/?reason=libcap-2.27
+> >
+> > And I don't see any reference to GOLANG in libcap-2.27?
 > 
-> Thanks!
-> 
-> Thomas
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
