@@ -1,157 +1,62 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 9 Sep 2020 20:21:16 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi*: bump kernel version
- to 9a1dd17 (5.4.61)
-In-Reply-To: <20200909092900.897598-1-m.niestroj@grinn-global.com>
-References: <20200909092900.897598-1-m.niestroj@grinn-global.com>
-Message-ID: <20200909202116.1a778c25@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  9 Sep 2020 20:21:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/neardal: fix build with gcc 10
+Message-ID: <20200909182116.666068-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+Fixes:
+ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
 
-thanks for your patch, was about to submit a similar one (only one upstream
-commit earlier), but did not yet finish testing, mind to add the
-rpi-firmware/rpi-userland bumps (to keep up-to-date with the kernel)?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-lib-neardal.h-fix-build-with-gcc-10.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
 
-Regards,
-Peter
-
-
-On Wed,  9 Sep 2020 11:29:00 +0200, Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
-
-> Now based on 5.4.61 (from 5.4.51)
->
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  configs/raspberrypi0_defconfig       | 2 +-
->  configs/raspberrypi0w_defconfig      | 2 +-
->  configs/raspberrypi2_defconfig       | 2 +-
->  configs/raspberrypi3_64_defconfig    | 2 +-
->  configs/raspberrypi3_defconfig       | 2 +-
->  configs/raspberrypi3_qt5we_defconfig | 2 +-
->  configs/raspberrypi4_64_defconfig    | 2 +-
->  configs/raspberrypi4_defconfig       | 2 +-
->  configs/raspberrypi_defconfig        | 2 +-
->  9 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-> index e4a704f2f6..d61eb4f1f1 100644
-> --- a/configs/raspberrypi0_defconfig
-> +++ b/configs/raspberrypi0_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B from the kernel sources: the zero is the same
-> diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-> index d5670b19bd..bdee6575a0 100644
-> --- a/configs/raspberrypi0w_defconfig
-> +++ b/configs/raspberrypi0w_defconfig
-> @@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-> diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-> index 375cb86763..af88da27ae 100644
-> --- a/configs/raspberrypi2_defconfig
-> +++ b/configs/raspberrypi2_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-> index 9f9a145908..1f3ca14d60 100644
-> --- a/configs/raspberrypi3_64_defconfig
-> +++ b/configs/raspberrypi3_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index 1a1e7b3dd8..c2d08c81ff 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-> index cbcbf64460..06a9a87ce1 100644
-> --- a/configs/raspberrypi3_qt5we_defconfig
-> +++ b/configs/raspberrypi3_qt5we_defconfig
-> @@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-> index f2b08f96a8..0e17d3de4d 100644
-> --- a/configs/raspberrypi4_64_defconfig
-> +++ b/configs/raspberrypi4_64_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-> index 879ed0c1cc..230d0a982a 100644
-> --- a/configs/raspberrypi4_defconfig
-> +++ b/configs/raspberrypi4_defconfig
-> @@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
->
->  # Build the DTB from the kernel sources
-> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-> index 558c04ca6d..ae7eb10321 100644
-> --- a/configs/raspberrypi_defconfig
-> +++ b/configs/raspberrypi_defconfig
-> @@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
->
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
->
->  # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
+diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..c9c4555022
+--- /dev/null
++++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 9 Sep 2020 19:14:52 +0200
++Subject: [PATCH] lib/neardal.h: fix build with gcc 10
++
++Define neardal_output_cb as extern to avoid the following build failure
++with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/connectivity/neardal/pull/10]
++---
++ lib/neardal.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/neardal.h b/lib/neardal.h
++index d1cd18b..3e83595 100644
++--- a/lib/neardal.h
+++++ b/lib/neardal.h
++@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
++ 
++ void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
++ 	__attribute__((format(printf, 3, 4)));
++-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
+++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
++ 
++ #ifdef __cplusplus
++ }
++-- 
++2.28.0
++
+-- 
+2.28.0
