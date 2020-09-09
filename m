@@ -1,59 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2020 22:30:26 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/gnutls: security
- bump to version 3.6.15
-Message-ID: <20200909203533.5204F813DC@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 22:37:59 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/netperf: fix
+ build with gcc 10
+Message-ID: <20200909203533.6DC7587037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e620565ac8abaae73d79ca16c93eccc54ad7c13d
+commit: https://git.buildroot.net/buildroot/commit/?id=0acdc59a3f2f388dcf26752dd4f5b44697a39654
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-libgnutls: Fixed "no_renegotiation" alert handling at incorrect timing.
-The server sending a "no_renegotiation" alert in an unexpected timing,
-followed by an invalid second handshake was able to cause a TLS 1.3
-client to crash via a null-pointer dereference. The crash happens in the
-application's error handling path, where the gnutls_deinit function is
-called after detecting a handshake failure (#1071).
-[GNUTLS-SA-2020-09-04, CVSS: medium]
-
-https://lists.gnupg.org/pipermail/gnutls-help/2020-September/004669.html
+Fixes:
+ - http://autobuild.buildroot.org/results/547d9a803375cce93b8e3e7a59243190b71c7688
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fb3b23220bc7fb3cb8cf87b31a250cca6f0d42b1)
+(cherry picked from commit 29cb5d4eed4c8eabb450ca01753f761f0ccf6ffb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...nettest_omni.c-fix-compilation-with-GCC10.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 6a4203f3a2..c360a56f93 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.14.tar.xz.sig
--sha256  5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63  gnutls-3.6.14.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz.sig
-+sha256  0ea8c3283de8d8335d7ae338ef27c53a916f15f382753b174c18b45ffd481558  gnutls-3.6.15.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 34878e97b4..9f53150004 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+diff --git a/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
+new file mode 100644
+index 0000000000..261dfe9a0e
+--- /dev/null
++++ b/package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch
+@@ -0,0 +1,42 @@
++From b2fd0f324002d0cf52ae905b2a469bf1067f182a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 5 Sep 2020 14:30:20 +0200
++Subject: [PATCH] src/nettest_omni.c: fix compilation with GCC10
++
++GCC10 defaults to -fno-common, which breaks compilation when there are
++multiple definitions of implicit "extern" variables. Remove the extra
++definitions.
++
++Fix #42
++
++Signed-off-by: Tony Ambardar <itugrok@yahoo.com>
++[Retrieved from:
++https://github.com/openwrt/packages/blob/master/net/netperf/patches/010-gcc10_multiple_definition_fix.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/HewlettPackard/netperf/pull/48]
++---
++ src/nettest_omni.c | 8 --------
++ 1 file changed, 8 deletions(-)
++
++diff --git a/src/nettest_omni.c b/src/nettest_omni.c
++index 852eeb1..862088a 100644
++--- a/src/nettest_omni.c
+++++ b/src/nettest_omni.c
++@@ -458,14 +458,6 @@ static int client_port_max = 65535;
++ 
++  /* different options for the sockets				*/
++ 
++-int
++-  loc_nodelay,		/* don't/do use NODELAY	locally		*/
++-  rem_nodelay,		/* don't/do use NODELAY remotely	*/
++-  loc_sndavoid,		/* avoid send copies locally		*/
++-  loc_rcvavoid,		/* avoid recv copies locally		*/
++-  rem_sndavoid,		/* avoid send copies remotely		*/
++-  rem_rcvavoid; 	/* avoid recv_copies remotely		*/
++-
++ extern int
++   loc_tcpcork,
++   rem_tcpcork,
++-- 
++2.28.0
++
