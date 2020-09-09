@@ -1,72 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 23:20:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: fix build for
- powerpc target
-In-Reply-To: <20200909164104.6246-1-egorenar-dev@posteo.net>
-References: <20200909164104.6246-1-egorenar-dev@posteo.net>
-Message-ID: <20200909232048.107b5922@windsurf.hq.k.grp>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Wed, 9 Sep 2020 16:32:08 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-09-06
+In-Reply-To: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
+References: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
+Message-ID: <CAMQcK5KyWBPOW7s9BD7xaE5nd15SzEARFf8sDm9aYq=E6bqVbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander,
+Hello,
 
-On Wed,  9 Sep 2020 18:41:04 +0200
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
+It appears that there may be an issue with how the CVE scanning script
+is working with buildroot as it is detecting that there is a CVE
+vulnerability with resiprocate package when the version which is in
+buildroot 1.12.0 includes this CVE fix as described in the debian
+security tracker and in the nvd.nist.gov website:
 
-> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+https://nvd.nist.gov/vuln/detail/CVE-2017-9454
 
-Is there an autobuilder failure for this? If so, there should be a link
-to it in your commit log. See for example this commit log:
+Does the automated script not handle the minor version such as "beta"
+or "alpha" which is present in some of the versions listed in the
+nvd.nist.gov website?
 
-  https://git.buildroot.org/buildroot/commit/?id=a85ae8b297fd0526f57fe99d73087dd840ea6219
+I'm not familiar with the scripts and don't have time to dig into it
+but I feel like there is something missing here as I don't believe the
+right fix to is put the IGNORE_CVE for this one in the package.
 
-> diff --git a/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
-> new file mode 100644
-> index 0000000000..ba75463ec4
-> --- /dev/null
-> +++ b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
-> @@ -0,0 +1,28 @@
-> +From 18acea4df1d02f0275606fa4e73292d7759bdf15 Mon Sep 17 00:00:00 2001
-> +From: Alexander Egorenkov <egorenar-dev@posteo.net>
-> +Date: Wed, 9 Sep 2020 18:35:05 +0200
-> +Subject: [PATCH] Makefile: fix ARCH for TARGET powerpc
-> +
-> +TARGET 'ppc' and 'powerpc' shall result in ARCH 'powerpc32'.
-> +
-> +Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+Thanks,
+-Ryan
 
-I'm not sure the best solution here is to patch makedumpfile. Indeed,
-Buildroot's makedumpfile.mk is passing TARGET=$(BR2_ARCH), but there is
-nothing that "forces" makedumpfile to understand the BR2_ARCH values.
-
-So instead, I think we should have some logic in makedumpfile.mk that
-calculates the correct TARGET values depending on the CPU architecture.
-Something along the lines of:
-
-ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-MAKEDUMPFILE_TARGET = ...
-else ifeq ($(BR2_arm)$(BR2_armeb),y)
-MAKEDUMPFILE_TARGET = ...
-else ifeq ...
-...
-endif
-
-Perhaps if for some architectures the BR2_ARCH value is OK, you could
-finish this if sequence by:
-
-else
-MAKEDUMPFILE_TARGET = $(BR2_ARCH)
-endif
-
-and then of course, pass TARGET=$(MAKEDUMPFILE_TARGET)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Mon, Sep 7, 2020 at 2:10 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Packages with CVEs
+> ==================
+>
+> This is the list of packages for which a known CVE is affecting
+> them, which means a security vulnerability exists for
+> those packages.
+>
+>              name              |       CVE        |                             link
+> -------------------------------+------------------+--------------------------------------------------------------
+>                    resiprocate | CVE-2017-9454    | https://security-tracker.debian.org/tracker/CVE-2017-9454
+>
+> --
+> http://autobuild.buildroot.net
