@@ -1,52 +1,42 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Wed, 9 Sep 2020 16:32:08 -0500
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 10 Sep 2020 00:33:25 +0300
 Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-09-06
-In-Reply-To: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
-References: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
-Message-ID: <CAMQcK5KyWBPOW7s9BD7xaE5nd15SzEARFf8sDm9aYq=E6bqVbA@mail.gmail.com>
+ 2020-09-08
+In-Reply-To: <notmuch-sha1-e4c258f95060550a2667c952e19ca6e5d08e16c1>
+References: <notmuch-sha1-e4c258f95060550a2667c952e19ca6e5d08e16c1>
+Message-ID: <20200910003325.GC205787@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, 09 Sep 2020 07:07:08 +0000 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-It appears that there may be an issue with how the CVE scanning script
-is working with buildroot as it is detecting that there is a CVE
-vulnerability with resiprocate package when the version which is in
-buildroot 1.12.0 includes this CVE fix as described in the debian
-security tracker and in the nvd.nist.gov website:
+> Build failures related to your packages:
+> 
+>     arch     |             reason             |                                       url                                      
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>     arm      |         wlroots-0.11.0         | http://autobuild.buildroot.net/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e
 
-https://nvd.nist.gov/vuln/detail/CVE-2017-9454
+This is caused due to not having libxcb-util-errors, which turns out comes
+from a separate library and not as part of the libxcb-util package. There
+is no x11r7/xcb-util-errors in Buildroot.
 
-Does the automated script not handle the minor version such as "beta"
-or "alpha" which is present in some of the versions listed in the
-nvd.nist.gov website?
+Given that the libxcb-util-errors is optional and only used by wlroots to
+improve reporting/logging of XCB errors but otherwise functionality is not
+affected, I think the quickest solution is to always disable its usage with
+the corresponding Meson option?I will submit a patch momentarily.
 
-I'm not familiar with the scripts and don't have time to dig into it
-but I feel like there is something missing here as I don't believe the
-right fix to is put the IGNORE_CVE for this one in the package.
+The other option is to add a Buildroot package for libxcb-util-errors, let
+me know if you think that would be a better option.
 
-Thanks,
--Ryan
-
-On Mon, Sep 7, 2020 at 2:10 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Packages with CVEs
-> ==================
->
-> This is the list of packages for which a known CVE is affecting
-> them, which means a security vulnerability exists for
-> those packages.
->
->              name              |       CVE        |                             link
-> -------------------------------+------------------+--------------------------------------------------------------
->                    resiprocate | CVE-2017-9454    | https://security-tracker.debian.org/tracker/CVE-2017-9454
->
-> --
-> http://autobuild.buildroot.net
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200910/1c93e763/attachment.asc>
