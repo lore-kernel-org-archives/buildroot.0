@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2020 22:31:15 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gnutls: security
+Date: Wed, 9 Sep 2020 22:30:58 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/gnutls: security
  bump to version 3.6.15
-Message-ID: <20200909203522.54FD688524@busybox.osuosl.org>
+Message-ID: <20200909203528.45B1B88524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41b5fbd62103eebd962186b8604f649a621a495d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d5c04f55fbb10399c8cb7b49d15c614ac3dd19a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 libgnutls: Fixed "no_renegotiation" alert handling at incorrect timing.
 The server sending a "no_renegotiation" alert in an unexpected timing,
