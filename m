@@ -1,97 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 09:24:58 +0200
-Subject: [Buildroot] [git commit] gitlab-ci: handle the run-time tests
- conditions in script
-Message-ID: <20200909073014.18CC580E3F@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 09:39:33 +0200
+Subject: [Buildroot] [PATCH 00/10] gitlab-ci: handle all conditional
+ jobs in the generating script (branch yem/gitlab-ci-cond)
+In-Reply-To: <c586aee9-0ea1-afb6-4634-b34908f00a57@gmail.com>
+References: <cover.1599423132.git.yann.morin.1998@free.fr>
+ <c586aee9-0ea1-afb6-4634-b34908f00a57@gmail.com>
+Message-ID: <20200909073933.GO14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f307d88774447e04958104bfd9860e6b72227408
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-Note that we do not propagate the existing comment, because it is
-partially wrong; instead we just keep the per-condition comments.
+On 2020-09-08 22:47 +0200, Romain Naour spake thusly:
+> Le 06/09/2020 ? 22:12, Yann E. MORIN a ?crit?:
+> > Hello All!
+> > 
+> > The grammar in gitlab-CI yaml, to specify conditions under which jobs
+> > should be spawned or not, is not very nice to handle.
+> > 
+> > Take adavantage of the fact that we are now generating the pipeline
+> > description from a script, to decide in that script exactly what jobs
+> > should be spawned.
+> > 
+> > This is both more usual, to use a classic scripting language (shell for
+> > now, but could be whatever in the future), and more versatile (we can
+> > more easilt express conditions than in the limited gitlab-CI YAML).
+> 
+> On one hand, it's a pity to workaround the gitlab-ci Yaml and not take the
+> opportunity to practice this specific language...
+> But on the other hand the language is not still stable over the time (see the
+> only/except keyword deprecation we used until recently).
+> Also the generate-gitlab-ci-yml after this series doesn't seem too complex :)
+> 
+> Maybe we can complete the manual about defconfigs testing in gitlab.
+> runtime-tests in gitlab is already described in the manual.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/misc/gitlab-ci.yml.in          |  9 ---------
- support/scripts/generate-gitlab-ci-yml | 33 +++++++++++++++++++++++++++++----
- 2 files changed, 29 insertions(+), 13 deletions(-)
+Thanks for the review. Series applied to master now.
 
-diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 7f2ae32725..c6c4d35a0c 100644
---- a/support/misc/gitlab-ci.yml.in
-+++ b/support/misc/gitlab-ci.yml.in
-@@ -96,15 +96,6 @@ one-defconfig:
- 
- .runtime_test:
-     extends: .runtime_test_base
--    # Running the runtime tests for every push is too much, so limit to
--    # explicit triggers through the API.
--    rules:
--        # For tags, create a pipeline.
--        - if: '$CI_COMMIT_TAG'
--        # For pipeline created by using a trigger token.
--        - if: '$CI_PIPELINE_TRIGGERED'
--        # For the branch or tag name named *-runtime-tests, create a pipeline.
--        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
-     before_script:
-         - TEST_CASE_NAME=${CI_JOB_NAME}
- 
-diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 23db376944..21963b2975 100755
---- a/support/scripts/generate-gitlab-ci-yml
-+++ b/support/scripts/generate-gitlab-ci-yml
-@@ -8,10 +8,7 @@ main() {
-     preamble "${template}"
- 
-     gen_defconfigs
--
--    ./support/testing/run-tests -l 2>&1 \
--    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
--    | LC_ALL=C sort
-+    gen_tests
- }
- 
- preamble() {
-@@ -55,4 +52,32 @@ gen_defconfigs() {
-     done
- }
- 
-+gen_tests() {
-+    local -a tests
-+    local run_tests tst
-+
-+    tests=( $(./support/testing/run-tests -l 2>&1 \
-+              | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/'\
-+              | LC_ALL=C sort)
-+          )
-+
-+    run_tests=false
-+    if [ -n "${CI_COMMIT_TAG}" ]; then
-+        # For tags, create a pipeline.
-+        run_tests=true
-+    fi
-+    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
-+        # For pipeline created by using a trigger token.
-+        run_tests=true
-+    fi
-+    case "${CI_COMMIT_REF_NAME}" in
-+        # For the branch or tag name named *-runtime-tests, create a pipeline.
-+        (*-runtime-tests) run_tests=true;;
-+    esac
-+
-+    if ${run_tests}; then
-+        printf '%s: { extends: .runtime_test }\n' "${tests[@]}"
-+    fi
-+}
-+
- main "${@}"
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
