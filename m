@@ -1,38 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 23:41:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wlroots: always disable
- xcb-errors
-In-Reply-To: <20200909213756.1945855-1-aperez@igalia.com>
-References: <20200909213756.1945855-1-aperez@igalia.com>
-Message-ID: <20200909234149.426fe79c@windsurf.hq.k.grp>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 23:41:12 +0200
+Subject: [Buildroot] [git commit] package/libxml-parser-perl: use the
+ compiler as "LD"
+Message-ID: <20200909213342.1CC0488921@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Sep 2020 00:37:56 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=43a26d7fe420625da93ec93543f1610dbc2f43c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Stop trying to enable the xcb-errors Meson option and always disable it:
-> there is no xcb-util-errors package in Buildroot. The build recipe was
-> wrongly assuming that the XCB errors library would be installed as part
-> of the xcb-util package, which is not the case.
-> 
-> Fixes the following autobuilder failure:
-> 
->   http://autobuild.buildroot.net/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e/
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Since commit efa95b19aeab6bdcd7d5a620e199c2c32cf2516b
+("package/libxml-parser-perl: make host build use correct compiler"),
+we pass $(HOST_CONFIGURE_OPTS) when building host-libxml-parser-perl,
+in order to use the correct host compiler.
 
-Fabrice posted the same patch no longer before you:
+However, this means that LD="$(HOSTLD)" is passed. However, the
+host-libxml-parser-perl passes compiler arguments to LD, so it really
+assumes that LD is gcc, not ld. For example, it tries to pass
+-mtune=generic.
 
-  https://patchwork.ozlabs.org/project/buildroot/patch/20200909210022.2822148-1-fontaine.fabrice at gmail.com/
+So, let's tell host-libxml-parser-perl that LD is "$(HOSTCC)".
 
-Thanks!
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/2ed2e5ccefe9047c597f84d5880de2e8de2bdd94/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libxml-parser-perl/libxml-parser-perl.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 100c49633c..37cef2e418 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -12,9 +12,14 @@ LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
+ LIBXML_PARSER_PERL_LICENSE_FILES = README
+ LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+ 
++HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS = \
++	$(HOST_CONFIGURE_OPTS) \
++	LD="$(HOSTCC)"
++
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+ 	(cd $(@D) ; \
+-		$(HOST_CONFIGURE_OPTS) $(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
++		$(HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS) \
++			$(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
+ 			PREFIX=$(HOST_DIR) \
+ 			EXPATLIBPATH=$(HOST_DIR)/lib \
+ 			EXPATINCPATH=$(HOST_DIR)/include \
+@@ -25,7 +30,7 @@ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+ endef
+ 
+ define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++	$(HOST_MAKE_ENV) $(MAKE) $(HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
