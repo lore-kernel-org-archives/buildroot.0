@@ -1,22 +1,19 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 09:25:52 +0200
-Subject: [Buildroot] [git commit] gitlab-ci: handle the basic tests in script
-Message-ID: <20200909073014.3888B80E3F@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 09:24:58 +0200
+Subject: [Buildroot] [git commit] gitlab-ci: handle the run-time tests
+ conditions in script
+Message-ID: <20200909073014.18CC580E3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bc09ae38fa428cbf4e14d4211e677323660a0c4
+commit: https://git.buildroot.net/buildroot/commit/?id=f307d88774447e04958104bfd9860e6b72227408
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Note that those tests were so far ignored only when requesting a single
-defconfig build, or a single runtime test build; everything else
-was trigerring thoses tests.
-
-However, it feels more natural that they are also ignored when all
-defconfigs build. or all runtime tests, are explictly requested.
+Note that we do not propagate the existing comment, because it is
+partially wrong; instead we just keep the per-condition comments.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Romain Naour <romain.naour@gmail.com>
@@ -25,92 +22,76 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/misc/gitlab-ci.yml.in          | 15 +++------------
- support/scripts/generate-gitlab-ci-yml | 21 +++++++++++++++++++--
- 2 files changed, 22 insertions(+), 14 deletions(-)
+ support/misc/gitlab-ci.yml.in          |  9 ---------
+ support/scripts/generate-gitlab-ci-yml | 33 +++++++++++++++++++++++++++++----
+ 2 files changed, 29 insertions(+), 13 deletions(-)
 
 diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-index 0f93d272be..c4a37464f6 100644
+index 7f2ae32725..c6c4d35a0c 100644
 --- a/support/misc/gitlab-ci.yml.in
 +++ b/support/misc/gitlab-ci.yml.in
-@@ -1,24 +1,15 @@
--.check_base:
+@@ -96,15 +96,6 @@ one-defconfig:
+ 
+ .runtime_test:
+     extends: .runtime_test_base
+-    # Running the runtime tests for every push is too much, so limit to
+-    # explicit triggers through the API.
 -    rules:
--        - if: '$CI_COMMIT_REF_NAME =~ /^.*-.*_defconfig$/ || $CI_COMMIT_REF_NAME =~ /^.*-tests\..*$/'
--          when: never
--        - when: always
--
--check-DEVELOPERS:
--    extends: .check_base
-+.check-DEVELOPERS_base:
-     # get-developers should print just "No action specified"; if it prints
-     # anything else, it's a parse error.
-     # The initial ! is removed by YAML so we need to quote it.
-     script:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
--check-flake8:
--    extends: .check_base
-+.check-flake8_base:
-     script:
-         - make check-flake8
- 
--check-package:
--    extends: .check_base
-+.check-package_base:
-     script:
-         - make check-package
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-runtime-tests, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-runtime-tests$/'
+     before_script:
+         - TEST_CASE_NAME=${CI_JOB_NAME}
  
 diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 25fecf3715..263d0c6d43 100755
+index 23db376944..21963b2975 100755
 --- a/support/scripts/generate-gitlab-ci-yml
 +++ b/support/scripts/generate-gitlab-ci-yml
-@@ -7,6 +7,7 @@ main() {
- 
+@@ -8,10 +8,7 @@ main() {
      preamble "${template}"
  
-+    gen_basics
      gen_defconfigs
-     gen_tests
- }
-@@ -23,6 +24,22 @@ preamble() {
- _EOF_
+-
+-    ./support/testing/run-tests -l 2>&1 \
+-    | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
+-    | LC_ALL=C sort
++    gen_tests
  }
  
-+gen_basics() {
-+    local tst
+ preamble() {
+@@ -55,4 +52,32 @@ gen_defconfigs() {
+     done
+ }
+ 
++gen_tests() {
++    local -a tests
++    local run_tests tst
 +
-+    # Skip basic tests when explicitly building defconfigs or runtime tests
++    tests=( $(./support/testing/run-tests -l 2>&1 \
++              | sed -r -e '/^test_run \((.*)\).*/!d; s//\1/'\
++              | LC_ALL=C sort)
++          )
++
++    run_tests=false
++    if [ -n "${CI_COMMIT_TAG}" ]; then
++        # For tags, create a pipeline.
++        run_tests=true
++    fi
++    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
++        # For pipeline created by using a trigger token.
++        run_tests=true
++    fi
 +    case "${CI_COMMIT_REF_NAME}" in
-+        (*-defconfigs)      return;;
-+        (*-*_defconfig)     return;;
-+        (*-runtime-tests)   return;;
-+        (*-tests.*)         return;;
++        # For the branch or tag name named *-runtime-tests, create a pipeline.
++        (*-runtime-tests) run_tests=true;;
 +    esac
 +
-+    for tst in DEVELOPERS flake8 package; do
-+        printf 'check-%s: { extends: .check-%s_base }\n' "${tst}" "${tst}"
-+    done
++    if ${run_tests}; then
++        printf '%s: { extends: .runtime_test }\n' "${tests[@]}"
++    fi
 +}
 +
- gen_defconfigs() {
-     local -a defconfigs
-     local build_defconfigs cfg
-@@ -51,7 +68,7 @@ gen_defconfigs() {
- 
-     for cfg in "${defconfigs[@]}"; do
-         if ${build_defconfigs}; then
--            printf '%s: { extends: .defconfig }\n' "${cfg}"
-+            printf '%s: { extends: .defconfig_base }\n' "${cfg}"
-         else
-             printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
-         fi
-@@ -88,7 +105,7 @@ gen_tests() {
-     esac
- 
-     if ${run_tests}; then
--        printf '%s: { extends: .runtime_test }\n' "${tests[@]}"
-+        printf '%s: { extends: .runtime_test_base }\n' "${tests[@]}"
-     fi
- }
- 
+ main "${@}"
