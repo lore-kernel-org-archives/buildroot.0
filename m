@@ -1,46 +1,50 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed,  9 Sep 2020 17:14:35 +0200
-Subject: [Buildroot] [PATCH] package/pango: bump to version 1.46.1
-Message-ID: <20200909151435.1874506-1-francois.perrad@gadz.org>
+From: Andrey Nechypurenko <andreynech@gmail.com>
+Date: Wed, 9 Sep 2020 18:08:08 +0200
+Subject: [Buildroot] Running Weston on stm32mp157c-dk2
+Message-ID: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/pango/pango.hash | 8 +++++---
- package/pango/pango.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Hi Folks,
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 1cd19d3cf..95999bcf8 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,3 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.44/pango-1.44.6.sha256sum
--sha256	3e1e41ba838737e200611ff001e3b304c2ca4cdbba63d200a20db0b0ddc0f86c	pango-1.44.6.tar.xz
--sha256	d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5	COPYING
-+# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.1.sha256sum
-+sha256  fe516b10711bbb6fd75011d66dd08fabfce18f7931aed7415136d53c4aadf1c5  pango-1.46.1.tar.xz
-+
-+# Locally computed
-+sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 1b12c09b2..9d2d88ec0 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PANGO_VERSION_MAJOR = 1.44
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).6
-+PANGO_VERSION_MAJOR = 1.46
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
--- 
-2.25.1
+I am just wondering if anybody tried and managed to run Weston on
+stm32mp157c-dk2 using Buildroot? If yes, I would appreciate any
+details on what should be done for it.
+
+My attempts lead me to the point where the following output comes from
+weston-launch:
+
+# openvt -c 3 -v weston-launch -- --log=weston.log
+
+# cat weston.log
+Date: 2000-01-01 UTC
+[05:08:08.782] weston 8.0.0
+               https://wayland.freedesktop.org
+               Bug reports to:
+https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 8.0.0
+[05:08:08.783] Command line: /usr/bin/weston --log=weston.log
+[05:08:08.783] OS: Linux, 5.4.26, #1 SMP PREEMPT Thu Aug 27 17:02:16
+CEST 2020, armv7l
+[05:08:08.784] Using config file '/root/.config/weston.ini'
+[05:08:08.784] Output repaint window is 100 ms maximum.
+[05:08:08.785] Loading module '/usr/lib/libweston-8/drm-backend.so'
+[05:08:08.789] initializing drm backend
+[05:08:08.793] using /dev/dri/card0
+[05:08:08.793] DRM: supports universal planes
+[05:08:08.793] DRM: supports atomic modesetting
+[05:08:08.793] DRM: supports picture aspect ratio
+[05:08:08.793] Loading module '/usr/lib/libweston-8/gl-renderer.so'
+[05:08:08.806] failed to initialize egl
+[05:08:08.806] fatal: failed to create compositor backend
+
+Since there is /dev/dri/card0 I assume that the kernel recognized the
+hardware. Also, there is /usr/lib/libweston-8/gl-renderer.so , so
+probably Weston & Co. is also compiled correctly. But something is
+obviously missing and I have no idea what it might be.
+
+Best regards,
+Andrey.
