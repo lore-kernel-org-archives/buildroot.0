@@ -1,8 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  9 Sep 2020 12:25:54 +0200
-Subject: [Buildroot] [PATCH 2020.08.x] package/linux-headers: the latest
+Date: Wed,  9 Sep 2020 12:26:10 +0200
+Subject: [Buildroot] [PATCH 2020.05.x] package/linux-headers: the latest
  headers are 5.7
-Message-ID: <20200909102554.839122-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200909102610.839245-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -39,18 +39,21 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index a04866d8cb..833b81f79f 100644
+index 407a6b4518..5c4b7c28f4 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -53,11 +53,11 @@ config BR2_KERNEL_HEADERS_4_19
+@@ -53,7 +53,6 @@ config BR2_KERNEL_HEADERS_4_19
  config BR2_KERNEL_HEADERS_5_4
  	bool "Linux 5.4.x kernel headers"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
 -	select BR2_KERNEL_HEADERS_LATEST
  
- config BR2_KERNEL_HEADERS_5_7
- 	bool "Linux 5.7.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+ config BR2_KERNEL_HEADERS_5_5
+ 	bool "Linux 5.5.x kernel headers"
+@@ -62,6 +61,7 @@ config BR2_KERNEL_HEADERS_5_5
+ config BR2_KERNEL_HEADERS_5_6
+ 	bool "Linux 5.6.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
 +	select BR2_KERNEL_HEADERS_LATEST
  
  config BR2_KERNEL_HEADERS_VERSION
