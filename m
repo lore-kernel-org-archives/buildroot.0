@@ -1,39 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 08:14:24 +0200
-Subject: [Buildroot] More maintainers
-In-Reply-To: <20200907183501.tcrsoqn7esu3nxb3@falbala.internal.home.lespocky.de>
- (Alexander Dahl's message of "Mon, 7 Sep 2020 20:35:03 +0200")
-References: <CAJX3zAuYgzv6_d2Fb8wUrHwPnyg0FEmNSfkiJkQ=zyqEqXKcrA@mail.gmail.com>
- <53-5f565880-11-65fee200@257788444>
- <20200907183501.tcrsoqn7esu3nxb3@falbala.internal.home.lespocky.de>
-Message-ID: <87a6xz79z3.fsf@dell.be.48ers.dk>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed,  9 Sep 2020 09:16:18 +0300
+Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.74.0
+Message-ID: <20200909061618.2053427-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
+bimap broken with C++20 GCC 10 due to allocator changes
+https://github.com/boostorg/bimap/issues/23
 
- > Hei hei,
- > just want to add a note on the mailing list archive aspect ?
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/boost/boost.hash | 4 ++--
+ package/boost/boost.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > On Mon, Sep 07, 2020 at 05:57:20PM +0200, Michael Nosthoff via buildroot wrote:
- >> Searchability of the ML. The kernel has this lore system which
- >> offers a text search. From what I know BR doesn't offer that. So
- >> what is the normal way to search the ML archive? Google Foo?
-
- > The software behind lore.kernel.org is called public-inbox:
-
- > https://public-inbox.org/design_notes.html
-
- > That's free software. Some weeks ago someone from pengutronix asked
- > kernel.org if they would archive the mailing lists for barebox and/or
- > ptxdist, too. The answer was more or less: ?please do it yourself.? So
- > if buildroot wants to go that way, it probably has to set up
- > public-inbox by themselves.
-
-Thanks. Maybe this is something we could request to osuosl?
-
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index c94699aa67..d11232f5a9 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From https://www.boost.org/users/history/version_1_73_0.html
+-sha256  4eb3b8d442b426dc35346235c8733b5ae35ba431690e38c6a8263dce9fcbb402  boost_1_73_0.tar.bz2
++# From https://www.boost.org/users/history/version_1_74_0.html
++sha256  83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1  boost_1_74_0.tar.bz2
+ 
+ # Locally computed
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 323802488d..82fe42d6b2 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.73.0
++BOOST_VERSION = 1.74.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.27.0
