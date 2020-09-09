@@ -1,47 +1,58 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed,  9 Sep 2020 12:22:35 +0200
-Subject: [Buildroot] [PATCH] package/python-packaging: bump to version 20.4
-Message-ID: <20200909102235.899266-1-m.niestroj@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  9 Sep 2020 12:25:38 +0200
+Subject: [Buildroot] [PATCH master] package/linux-headers: the latest
+ headers are 5.8
+Message-ID: <20200909102539.838996-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/python-packaging/python-packaging.hash | 4 ++--
- package/python-packaging/python-packaging.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+In commit c2009e9f757fe759c74406f1025967b7b8e77f0a
+("package/linux-headers: license files hashes only valid for latest
+version"), we introduced BR2_KERNEL_HEADERS_LATEST, which should only
+be set for the most recent kernel headers versions.
 
-diff --git a/package/python-packaging/python-packaging.hash b/package/python-packaging/python-packaging.hash
-index 112bc695f6..aafb16c1b0 100644
---- a/package/python-packaging/python-packaging.hash
-+++ b/package/python-packaging/python-packaging.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/packaging/json
--md5  19e0d1f82a9007b448650ccfeffd0a26  packaging-20.3.tar.gz
--sha256  3c292b474fda1671ec57d46d739d072bfd495a4f51ad01a055121d81e952b7a3  packaging-20.3.tar.gz
-+md5  3208229da731c5d8e29d4d8941e75005  packaging-20.4.tar.gz
-+sha256  4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8  packaging-20.4.tar.gz
- # Locally computed sha256 checksums
- sha256  cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48  LICENSE
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.APACHE
-diff --git a/package/python-packaging/python-packaging.mk b/package/python-packaging/python-packaging.mk
-index bd5177e8e5..62a9d68cbb 100644
---- a/package/python-packaging/python-packaging.mk
-+++ b/package/python-packaging/python-packaging.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Indeed, the COPYING file of Linux has changed before/after Linux 5.6,
+causing its hash file to be different. Since linux-headers uses
+linux/linux.hash as the hash file, and this hash file contains the
+COPYING hash of Linux >= 5.6, we cannot use that hash for Linux
+versions older than 5.6.
+
+When newer versions of the headers than 5.4 were added, this
+BR2_KERNEL_HEADERS_LATEST was not moved as it should have been. We fix
+this, which fixes a legal-info failure happening when Linux kernel
+headers 5.4 are used:
+
+>>> linux-headers 5.4.63 Patching
+>>> linux-headers 5.4.63 Collecting legal info
+ERROR: COPYING has wrong sha256 hash:
+ERROR: expected: fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0
+ERROR: got     : ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c1e169988b..0d92dfada7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -53,11 +53,11 @@ config BR2_KERNEL_HEADERS_4_19
+ config BR2_KERNEL_HEADERS_5_4
+ 	bool "Linux 5.4.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+-	select BR2_KERNEL_HEADERS_LATEST
  
--PYTHON_PACKAGING_VERSION = 20.3
-+PYTHON_PACKAGING_VERSION = 20.4
- PYTHON_PACKAGING_SOURCE = packaging-$(PYTHON_PACKAGING_VERSION).tar.gz
--PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/65/37/83e3f492eb52d771e2820e88105f605335553fe10422cba9d256faeb1702
-+PYTHON_PACKAGING_SITE = https://files.pythonhosted.org/packages/55/fd/fc1aca9cf51ed2f2c11748fa797370027babd82f87829c7a8e6dbe720145
- PYTHON_PACKAGING_SETUP_TYPE = setuptools
- PYTHON_PACKAGING_LICENSE = Apache-2.0 or BSD-2-Clause
- PYTHON_PACKAGING_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+ config BR2_KERNEL_HEADERS_5_8
+ 	bool "Linux 5.8.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
++	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
 -- 
-2.28.0
+2.26.2
