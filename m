@@ -1,47 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 16:59:09 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/boost: bump to version 1.74.0
-In-Reply-To: <199e6a77-7ebc-eb1c-4482-206f1429c5d0@green-communications.fr>
-References: <20200909093240.2178664-1-fido_max@inbox.ru>
- <20200909155600.6cf8450e@windsurf.hq.k.grp>
- <199e6a77-7ebc-eb1c-4482-206f1429c5d0@green-communications.fr>
-Message-ID: <20200909165909.550d0175@windsurf.hq.k.grp>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  9 Sep 2020 17:14:21 +0200
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 2.6.8
+Message-ID: <20200909151421.1874448-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+diff COPING:
+-Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
+-Copyright ? 2019  Facebook, Inc.
++Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
++Copyright ? 2018,2019,2020  Ebrahim Byagowi
++Copyright ? 2019,2020  Facebook, Inc.
 
-On Wed, 9 Sep 2020 16:27:14 +0200
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/harfbuzz/Config.in     | 2 +-
+ package/harfbuzz/harfbuzz.hash | 6 ++----
+ package/harfbuzz/harfbuzz.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-> > We don't have any failures of boost 1.73.0 with gcc 10 in our
-> > autobuilders. Could you give more details about a specific
-> > configuration that fails to build?  
-> 
-> boost::bimap is a header-only library, it cannot fail to build, only its
-> reverse dependencies may fail. the release notes? also mention other
-> header-only boost libraries "and more" are affected by the non-standard
-> std::allocator usage.
-> 
-> C++20 isn't the default in GCC 10 and it's highly probable that there
-> are no package in buildroot that requires both boost and C++20.
-> Especially since C++20 was finally approved this very Saturday.
-> 
-> This is more about future proofing than fixing existing bugs.
-> 
-> [0] https://www.boost.org/users/history/version_1_74_0.html
-
-Thanks a lot for this explanation, it now makes complete sense. I think
-we should include exactly what you have described here in the commit
-log.
-
-Thanks!
-
-Thomas
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+index e8f407bb8..27fa102e1 100644
+--- a/package/harfbuzz/Config.in
++++ b/package/harfbuzz/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HARFBUZZ
+ 	help
+ 	  HarfBuzz is an OpenType text shaping engine
+ 
+-	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
++	  https://harfbuzz.github.io/
+ 
+ 	  Harfbuzz can make optional use of cairo, freetype,
+ 	  glib2 and icu packages if they are selected.
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index ba54f477a..660e19efc 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,5 +1,3 @@
+-# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.6.4.tar.xz.sha256
+-sha256 9413b8d96132d699687ef914ebb8c50440efc87b3f775d25856d7ec347c03c12  harfbuzz-2.6.4.tar.xz
+-
+ # Locally computed
+-sha256 1b32b6e2fea50440c128c5ba482f7691367c46fd0cd573b80fc863bf07964cea  COPYING
++sha256  6648a571a27f186e47094121f0095e1b809e918b3037c630c7f38ffad86e3035  harfbuzz-2.6.8.tar.xz
++sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 3006b5ab9..c7bb8f934 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 2.6.4
+-HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
++HARFBUZZ_VERSION = 2.6.8
++HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ HARFBUZZ_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
