@@ -1,93 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Sep 2020 21:46:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iptables: fix static build
-Message-ID: <20200909194619.1308235-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 21:20:40 +0200
+Subject: [Buildroot] [git commit] support/scripts/pycompile: sort imports
+Message-ID: <20200909194133.3A86A8189C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static build of iptables 1.8.5 fails on:
+commit: https://git.buildroot.net/buildroot/commit/?id=4c77dca5503a40148ffbc177e5edd4cc6d093a0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libxtables/.libs/libxtables.a(libxtables_la-xtables.o): in function `dlreg_free':
-/srv/storage/autobuild/run/instance-3/output-1/build/iptables-1.8.5/libxtables/xtables.c:235: undefined reference to `dlclose'
-
-Issue has been added with
-https://git.netfilter.org/iptables/commit/?id=7db4333dc0b6cd8e943fab78d6dab40ff9f4512e
-
-Fixes:
- - http://autobuild.buildroot.org/results/00f551be87507757a78e332f2859b1e7b3190363
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ler-warning-fixes-for-NO_SHARED_LIBS.patch | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
+ support/scripts/pycompile.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-new file mode 100644
-index 0000000000..8d364b3789
---- /dev/null
-+++ b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-@@ -0,0 +1,58 @@
-+From 6cb8af1ff3951e47def7a16db39289dc9d9c61fe Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-+Date: Tue, 23 Jun 2020 16:09:02 -0700
-+Subject: libxtables: compiler warning fixes for NO_SHARED_LIBS
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index fb1a12b2b7..b713fe1932 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -6,11 +6,13 @@ when a python byte code generation failed.
+ Inspired from:
+    http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
+ '''
 +
-+Fixes two issues with NO_SHARED_LIBS:
-+ - #include <dlfcn.h> is ifdef'ed out and thus dlclose()
-+   triggers an undeclared function compiler warning
-+ - dlreg_add() is unused and thus triggers an unused
-+   function warning
+ from __future__ import print_function
+-import sys
+-import py_compile
+-import compileall
 +
-+Test: builds without warnings
-+Signed-off-by: Maciej ?enczykowski <maze@google.com>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+
-+[Retrieved from:
-+https://git.netfilter.org/iptables/commit/libxtables/xtables.c?id=6cb8af1ff3951e47def7a16db39289dc9d9c61fe]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libxtables/xtables.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/libxtables/xtables.c b/libxtables/xtables.c
-+index 7fe42580..8907ba20 100644
-+--- a/libxtables/xtables.c
-++++ b/libxtables/xtables.c
-+@@ -206,6 +206,7 @@ struct xtables_target *xtables_targets;
-+ static bool xtables_fully_register_pending_match(struct xtables_match *me);
-+ static bool xtables_fully_register_pending_target(struct xtables_target *me);
-+ 
-++#ifndef NO_SHARED_LIBS
-+ /* registry for loaded shared objects to close later */
-+ struct dlreg {
-+ 	struct dlreg *next;
-+@@ -237,6 +238,7 @@ static void dlreg_free(void)
-+ 		dlreg = next;
-+ 	}
-+ }
-++#endif
-+ 
-+ void xtables_init(void)
-+ {
-+@@ -267,7 +269,9 @@ void xtables_init(void)
-+ 
-+ void xtables_fini(void)
-+ {
-++#ifndef NO_SHARED_LIBS
-+ 	dlreg_free();
-++#endif
-+ }
-+ 
-+ void xtables_set_nfproto(uint8_t nfproto)
-+-- 
-+cgit v1.2.3
-+
--- 
-2.28.0
+ import argparse
++import compileall
++import py_compile
++import sys
+ 
+ 
+ def check_for_errors(comparison):
