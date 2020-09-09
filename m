@@ -1,54 +1,41 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 9 Sep 2020 09:45:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boost: bump to version 1.74.0
-In-Reply-To: <20200909061618.2053427-1-fido_max@inbox.ru>
-References: <20200909061618.2053427-1-fido_max@inbox.ru>
-Message-ID: <e349b5f5-adbf-0fc8-fa97-531a0f5f33e0@heine.tech>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 09 Sep 2020 09:59:55 +0200
+Subject: [Buildroot] [go] backport go-module patch series to 2020.08.x?
+In-Reply-To: <CA+h8R2pv+-ibEUFQoG1driWejuDxECumjKuNj+GUNy4985ZkcQ@mail.gmail.com>
+ (Christian Stewart's message of "Wed, 9 Sep 2020 00:33:06 -0700")
+References: <CA+h8R2rS323vadTNps=byzPQngRV3r-iQVK5ejy8-jD7E6wWdw@mail.gmail.com>
+ <87o8mf5tn5.fsf@dell.be.48ers.dk>
+ <CA+h8R2qXVRH_2c-zfi5YKAksTgqyWoh207doFqaFy0X_M8vyyg@mail.gmail.com>
+ <87k0x35sdh.fsf@dell.be.48ers.dk>
+ <CA+h8R2pv+-ibEUFQoG1driWejuDxECumjKuNj+GUNy4985ZkcQ@mail.gmail.com>
+Message-ID: <87ft7r5qis.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxim,
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-I was just about to submit this bump myself. So I can confirm that it
-compiles fine.
-Some remarks below.
+ > Hey Peter,
+ > On Wed, Sep 9, 2020 at 12:19 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> yes, but doesn't really explain why it is _NEEDED_ for 2020.08, right?
+ >> Also notice that 2020.08 uses go 1.13.15.
 
-On 09.09.2020 08:16, Maxim Kochetkov via buildroot wrote:
-> bimap broken with C++20 GCC 10 due to allocator changes
-> https://github.com/boostorg/bimap/issues/23
+ > That's a good point, Go 1.13 is an "archived version" - shouldn't the
+ > older branches be on at least 1.14?
 
-From the commits linked in the issue I take this issue was fixed in the
-1.74.0.beta1.
+We normally don't add new features post release, unless security issues
+forces us.
 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
->  package/boost/boost.hash | 4 ++--
->  package/boost/boost.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ > Not sure what the policy is on this, or if Go is still releasing 1.13.x patches.
 
+1.13.15 is a security bump from August 6th, so it has been updated
+recently.
 
-The 0002 patch has a slight offset change.
+If I understand correctly go doesn't do LTS releases, so there is not
+really much we can do for our LTS release. Barring security problems, is
+there any problem with staying on 1.13.x?
 
-
-diff --git a/package/boost/0002-fenv.patch b/package/boost/0002-fenv.patch
-index 95c769aea2..9dc7848c93 100644
---- a/package/boost/0002-fenv.patch
-+++ b/package/boost/0002-fenv.patch
-@@ -18,7 +18,7 @@ Index: b/boost/config/platform/linux.hpp
-?===================================================================
-?--- a/boost/config/platform/linux.hpp
-?+++ b/boost/config/platform/linux.hpp
--@@ -47,6 +47,16 @@
-+@@ -48,6 +48,16 @@
-? #endif
-
-? //
-
-could you add that?
-
-
-Regards,
-Michael
+-- 
+Bye, Peter Korsgaard
