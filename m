@@ -1,62 +1,78 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  9 Sep 2020 20:21:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/neardal: fix build with gcc 10
-Message-ID: <20200909182116.666068-1-fontaine.fabrice@gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed,  9 Sep 2020 12:22:10 -0600
+Subject: [Buildroot] [PATCH 1/1] package/weston: add patch fixing missing
+ fnctl include
+Message-ID: <20200909182210.2373172-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is needed to fix a build issue with musl libc.
+
 Fixes:
- - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
+http://autobuild.buildroot.net/results/931/931dc2bfd431dffc4693b62e0889e43709331d8e/build-end.log
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...-lib-neardal.h-fix-build-with-gcc-10.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+ ...ntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
 
-diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+diff --git a/package/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch b/package/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
 new file mode 100644
-index 0000000000..c9c4555022
+index 0000000000..2eb6bd838c
 --- /dev/null
-+++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,35 @@
-+From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 9 Sep 2020 19:14:52 +0200
-+Subject: [PATCH] lib/neardal.h: fix build with gcc 10
++++ b/package/weston/0001-tests-include-fcntl.h-for-open-O_RDWR-O_CLOEXEC-and-.patch
+@@ -0,0 +1,48 @@
++From b10c0e843dcb8148bbe869bb15261955b94ac98c Mon Sep 17 00:00:00 2001
++From: Denys Dmytriyenko <denys@ti.com>
++Date: Tue, 8 Sep 2020 19:37:42 -0400
++Subject: [PATCH] tests: include fcntl.h for open(), O_RDWR, O_CLOEXEC and
++ O_CREAT
 +
-+Define neardal_output_cb as extern to avoid the following build failure
-+with gcc 10 (which defaults to -fno-common):
++musl libc (unlike glibc) requires explicitly incuding fcntl.h to define open(),
++O_RDWR, O_CLOEXEC and O_CREAT. Otherwise the build fails with the errors:
 +
-+/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c: In function 'wait_for_lock':
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c:135:7: warning: implicit declaration of function 'open'; did you mean 'popen'? [-Wimplicit-function-declaration]
++|   135 |  fd = open(lock_path, O_RDWR | O_CLOEXEC | O_CREAT, 00700);
++|       |       ^~~~
++|       |       popen
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c:135:23: error: 'O_RDWR' undeclared (first use in this function)
++|   135 |  fd = open(lock_path, O_RDWR | O_CLOEXEC | O_CREAT, 00700);
++|       |                       ^~~~~~
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c:135:23: note: each undeclared identifier is reported only once for each function it appears in
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c:135:32: error: 'O_CLOEXEC' undeclared (first use in this function)
++|   135 |  fd = open(lock_path, O_RDWR | O_CLOEXEC | O_CREAT, 00700);
++|       |                                ^~~~~~~~~
++| ../weston-9.0.0/tests/weston-test-fixture-compositor.c:135:44: error: 'O_CREAT' undeclared (first use in this function)
++|   135 |  fd = open(lock_path, O_RDWR | O_CLOEXEC | O_CREAT, 00700);
++|       |                                            ^~~~~~~
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/connectivity/neardal/pull/10]
++Signed-off-by: Denys Dmytriyenko <denys@ti.com>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++b10c0e843dcb8148bbe869bb15261955b94ac98c]
 +---
-+ lib/neardal.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ tests/weston-test-fixture-compositor.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/lib/neardal.h b/lib/neardal.h
-+index d1cd18b..3e83595 100644
-+--- a/lib/neardal.h
-++++ b/lib/neardal.h
-+@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
++diff --git a/tests/weston-test-fixture-compositor.c b/tests/weston-test-fixture-compositor.c
++index 1c32959c..c1eb26c4 100644
++--- a/tests/weston-test-fixture-compositor.c
+++++ b/tests/weston-test-fixture-compositor.c
++@@ -35,6 +35,7 @@
++ #include <stdarg.h>
++ #include <stdlib.h>
++ #include <errno.h>
+++#include <fcntl.h>
 + 
-+ void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
-+ 	__attribute__((format(printf, 3, 4)));
-+-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-+ 
-+ #ifdef __cplusplus
-+ }
++ #include "shared/helpers.h"
++ #include "weston-test-fixture-compositor.h"
 +-- 
-+2.28.0
++2.25.1
 +
 -- 
-2.28.0
+2.25.1
