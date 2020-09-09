@@ -1,59 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2020 22:30:58 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gnutls: security
- bump to version 3.6.15
-Message-ID: <20200909203528.45B1B88524@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 22:36:14 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/lcdproc: renumber
+ patch
+Message-ID: <20200909203533.5A84F87037@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5c04f55fbb10399c8cb7b49d15c614ac3dd19a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
-
-libgnutls: Fixed "no_renegotiation" alert handling at incorrect timing.
-The server sending a "no_renegotiation" alert in an unexpected timing,
-followed by an invalid second handshake was able to cause a TLS 1.3
-client to crash via a null-pointer dereference. The crash happens in the
-application's error handling path, where the gnutls_deinit function is
-called after detecting a handshake failure (#1071).
-[GNUTLS-SA-2020-09-04, CVSS: medium]
-
-https://lists.gnupg.org/pipermail/gnutls-help/2020-September/004669.html
+commit: https://git.buildroot.net/buildroot/commit/?id=204443be15505d4ed258ef3e6ce96eaa5443ab40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fb3b23220bc7fb3cb8cf87b31a250cca6f0d42b1)
+(cherry picked from commit 32f80330775f30e7a256c9b2393294dce34019a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...Add-missing-ioctl-header.patch => 0002-Add-missing-ioctl-header.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 6a4203f3a2..c360a56f93 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.14.tar.xz.sig
--sha256  5630751adec7025b8ef955af4d141d00d252a985769f51b4059e5affa3d39d63  gnutls-3.6.14.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz.sig
-+sha256  0ea8c3283de8d8335d7ae338ef27c53a916f15f382753b174c18b45ffd481558  gnutls-3.6.15.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 34878e97b4..9f53150004 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).14
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
+diff --git a/package/lcdproc/0001-Add-missing-ioctl-header.patch b/package/lcdproc/0002-Add-missing-ioctl-header.patch
+similarity index 100%
+rename from package/lcdproc/0001-Add-missing-ioctl-header.patch
+rename to package/lcdproc/0002-Add-missing-ioctl-header.patch
