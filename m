@@ -1,46 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2020 08:01:55 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: bump
- version to 244.4
-Message-ID: <20200909055709.87D6988EF3@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 08:02:24 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: Backport
+ fix for network-generator
+Message-ID: <20200909055709.9A27E7FA0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7813cc4aaf4b1fee1406e766d1bdb11a3ccefae9
+commit: https://git.buildroot.net/buildroot/commit/?id=eb81345aa9b05409e9070b93217abf427c21fc94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
+The systemd-network-generator.service will fail to parse the bootarg "ip=xxx"
+if it's missing the (optional) hostname field. Backport this fix from
+systemd v245.
+
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/systemd/systemd.hash | 2 +-
- package/systemd/systemd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...03-network-generator-allow-empty-hostname.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 4ab514d673..3f6f4b4db6 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	e6b463733da5eb37075352a64112d030b8612935a54e5b3468279a4f15a4cec4	systemd-244.3.tar.gz
-+sha256	6f01276f45369d56ea5ced713e63a22acbb9142862eb719246a77a4b3f5699ee	systemd-244.4.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 2908caef61..e0a4679955 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 244.3
-+SYSTEMD_VERSION = 244.4
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+diff --git a/package/systemd/0003-network-generator-allow-empty-hostname.patch b/package/systemd/0003-network-generator-allow-empty-hostname.patch
+new file mode 100644
+index 0000000000..8d1f3aa86f
+--- /dev/null
++++ b/package/systemd/0003-network-generator-allow-empty-hostname.patch
+@@ -0,0 +1,44 @@
++From 21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db Mon Sep 17 00:00:00 2001
++From: Yu Watanabe <watanabe.yu+github@gmail.com>
++Date: Thu, 12 Dec 2019 19:01:21 +0900
++Subject: [PATCH 1/1] network-generator: allow empty hostname
++
++Fixes #14319.
++
++[Brandon: backport from https://github.com/systemd/systemd/commit/21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db]
++Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
++---
++ src/network/generator/network-generator.c | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/src/network/generator/network-generator.c b/src/network/generator/network-generator.c
++index 81afa95307..bed1e42697 100644
++--- a/src/network/generator/network-generator.c
+++++ b/src/network/generator/network-generator.c
++@@ -574,7 +574,7 @@ static int parse_netmask_or_prefixlen(int family, const char **value, unsigned c
++ 
++ static int parse_cmdline_ip_address(Context *context, int family, const char *value) {
++         union in_addr_union addr = {}, peer = {}, gateway = {};
++-        const char *hostname, *ifname, *dhcp_type, *dns, *p;
+++        const char *hostname = NULL, *ifname, *dhcp_type, *dns, *p;
++         unsigned char prefixlen;
++         int r;
++ 
++@@ -599,9 +599,11 @@ static int parse_cmdline_ip_address(Context *context, int family, const char *va
++         if (!p)
++                 return -EINVAL;
++ 
++-        hostname = strndupa(value, p - value);
++-        if (!hostname_is_valid(hostname, false))
++-                return -EINVAL;
+++        if (p != value) {
+++                hostname = strndupa(value, p - value);
+++                if (!hostname_is_valid(hostname, false))
+++                        return -EINVAL;
+++        }
++ 
++         value = p + 1;
++ 
++-- 
++2.23.0
++
