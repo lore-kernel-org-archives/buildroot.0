@@ -1,50 +1,53 @@
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Wed, 9 Sep 2020 18:08:08 +0200
-Subject: [Buildroot] Running Weston on stm32mp157c-dk2
-Message-ID: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Wed,  9 Sep 2020 18:41:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: fix build for powerpc
+ target
+Message-ID: <20200909164104.6246-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Folks,
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+---
+ ...Makefile-fix-ARCH-for-TARGET-powerpc.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
 
-I am just wondering if anybody tried and managed to run Weston on
-stm32mp157c-dk2 using Buildroot? If yes, I would appreciate any
-details on what should be done for it.
-
-My attempts lead me to the point where the following output comes from
-weston-launch:
-
-# openvt -c 3 -v weston-launch -- --log=weston.log
-
-# cat weston.log
-Date: 2000-01-01 UTC
-[05:08:08.782] weston 8.0.0
-               https://wayland.freedesktop.org
-               Bug reports to:
-https://gitlab.freedesktop.org/wayland/weston/issues/
-               Build: 8.0.0
-[05:08:08.783] Command line: /usr/bin/weston --log=weston.log
-[05:08:08.783] OS: Linux, 5.4.26, #1 SMP PREEMPT Thu Aug 27 17:02:16
-CEST 2020, armv7l
-[05:08:08.784] Using config file '/root/.config/weston.ini'
-[05:08:08.784] Output repaint window is 100 ms maximum.
-[05:08:08.785] Loading module '/usr/lib/libweston-8/drm-backend.so'
-[05:08:08.789] initializing drm backend
-[05:08:08.793] using /dev/dri/card0
-[05:08:08.793] DRM: supports universal planes
-[05:08:08.793] DRM: supports atomic modesetting
-[05:08:08.793] DRM: supports picture aspect ratio
-[05:08:08.793] Loading module '/usr/lib/libweston-8/gl-renderer.so'
-[05:08:08.806] failed to initialize egl
-[05:08:08.806] fatal: failed to create compositor backend
-
-Since there is /dev/dri/card0 I assume that the kernel recognized the
-hardware. Also, there is /usr/lib/libweston-8/gl-renderer.so , so
-probably Weston & Co. is also compiled correctly. But something is
-obviously missing and I have no idea what it might be.
-
-Best regards,
-Andrey.
+diff --git a/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
+new file mode 100644
+index 0000000000..ba75463ec4
+--- /dev/null
++++ b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
+@@ -0,0 +1,28 @@
++From 18acea4df1d02f0275606fa4e73292d7759bdf15 Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar-dev@posteo.net>
++Date: Wed, 9 Sep 2020 18:35:05 +0200
++Subject: [PATCH] Makefile: fix ARCH for TARGET powerpc
++
++TARGET 'ppc' and 'powerpc' shall result in ARCH 'powerpc32'.
++
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index ef20672..b55821c 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -24,7 +24,7 @@ endif
++ ARCH := $(shell echo ${TARGET}  | sed -e s/i.86/x86/ -e s/sun4u/sparc64/ \
++ 			       -e s/arm.*/arm/ -e s/sa110/arm/ \
++ 			       -e s/s390x/s390/ -e s/parisc64/parisc/ \
++-			       -e s/ppc64/powerpc64/ -e s/ppc/powerpc32/)
+++			       -e s/ppc64/powerpc64/ -e s/ppc/powerpc32/ -e s/powerpc/powerpc32/)
++ 
++ CROSS :=
++ ifneq ($(TARGET), $(HOST_ARCH))
++-- 
++2.28.0
++
+-- 
+2.28.0
