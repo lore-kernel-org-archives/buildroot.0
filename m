@@ -1,67 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 08:40:59 +0200
-Subject: [Buildroot] [PATCH] package/zeromq: security bump to version
- 4.3.3
-In-Reply-To: <20200908205315.6706-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 8 Sep 2020 22:53:15 +0200")
-References: <20200908205315.6706-1-peter@korsgaard.com>
-Message-ID: <871rjb78qs.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Sep 2020 08:45:30 +0200
+Subject: [Buildroot] [PATCH v2 3/6] package/elf2flt: add RISC-V support
+In-Reply-To: <20200908113324.1022230-4-damien.lemoal@wdc.com> (Damien Le
+ Moal's message of "Tue, 8 Sep 2020 20:33:21 +0900")
+References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
+ <20200908113324.1022230-4-damien.lemoal@wdc.com>
+Message-ID: <87wo135tyt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Damien" == Damien Le Moal <damien.lemoal@wdc.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2020-15166: Denial-of-Service on CURVE/ZAP-protected servers by
- >   unauthenticated clients.
- >   If a raw TCP socket is opened and connected to an endpoint that is fully
- >   configured with CURVE/ZAP, legitimate clients will not be able to exchange
- >   any message.  Handshakes complete successfully, and messages are delivered
- >   to the library, but the server application never receives them.  For more
- >   information see the security advisory:
- >   https://github.com/zeromq/libzmq/security/advisories/GHSA-25wp-cf8g-938m
+ > From: Christoph Hellwig <hch@lst.de>
+ > Enable selecting elf2flt for RISC-V no MMU builds ad add support for it.
 
- > - Stack overflow on server running PUB/XPUB socket (CURVE disabled).
- >   The PUB/XPUB subscription store (mtrie) is traversed using recursive
- >   function calls.  In the remove (unsubscription) case, the recursive calls
- >   are NOT tail calls, so even with optimizations the stack grows linearly
- >   with the length of a subscription topic.  Topics are under the control of
- >   remote clients - they can send a subscription to arbitrary length topics.
- >   An attacker can thus cause a server to create an mtrie sufficiently large
- >   such that, when unsubscribing, traversal will cause a stack overflow.  For
- >   more information see the security advisory:
- >   https://github.com/zeromq/libzmq/security/advisories/GHSA-qq65-x72m-9wr8
+ > Signed-off-by: Christoph Hellwig <hch@lst.de>
+ > Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+ > ---
+ >  .../0002-elf2flt-add-riscv-support.patch      | 302 ++++++++++++++++++
+ >  package/elf2flt/Config.in.host                |   2 +-
+ >  2 files changed, 303 insertions(+), 1 deletion(-)
+ >  create mode 100644 package/elf2flt/0002-elf2flt-add-riscv-support.patch
 
- > - Memory leak in PUB server induced by malicious client(s) without CURVE/ZAP.
- >   Messages with metadata are never processed by PUB sockets, but the
- >   metadata is kept referenced in the PUB object and never freed.  For more
- >   information see the security advisory:
- >   https://github.com/zeromq/libzmq/security/advisories/GHSA-4p5v-h92w-6wxw
+ > diff --git a/package/elf2flt/0002-elf2flt-add-riscv-support.patch b/package/elf2flt/0002-elf2flt-add-riscv-support.patch
+ > new file mode 100644
+ > index 0000000000..2f3ce5ac69
+ > --- /dev/null
+ > +++ b/package/elf2flt/0002-elf2flt-add-riscv-support.patch
+ > @@ -0,0 +1,302 @@
+ > +From 9a1c84590f31897e681a8142481c73456a7eedcf Mon Sep 17 00:00:00 2001
+ > +From: Christoph Hellwig <hch@lst.de>
+ > +Date: Mon, 10 Jun 2019 09:21:57 +0200
+ > +Subject: elf2flt: add riscv support
+ > +
+ > +We need a new linker script - riscv has a global_pointer and is
+ > +very picky about some section ordering.
+ > +
+ > +Signed-off-by: Christoph Hellwig <hch@lst.de>
 
- > - Memory leak in client induced by malicious server(s) without CURVE/ZAP.
- >   When a pipe processes a delimiter and is already not in active state but
- >   still has an unfinished message, the message is leaked.
- >   For more information see the security advisory:
- >   https://github.com/zeromq/libzmq/security/advisories/GHSA-wfr2-29gj-5w87
+What is the upstream status of this patch? I don't see a PR for it?
 
- > - Heap overflow when receiving malformed ZMTP v1 packets (CURVE disabled).
- >   By crafting a packet which is not valid ZMTP v2/v3, and which has two
- >   messages larger than 8192 bytes, the decoder can be tricked into changing
- >   the recorded size of the 8192 bytes static buffer, which then gets
- >   overflown by the next message.  The content that gets written in the
- >   overflown memory is entirely decided by the sender.
- >   For more information see the security advisory:
- >   https://github.com/zeromq/libzmq/security/advisories/GHSA-fc3w-qxf5-7hp6
-
- > Drop now upstreamed patches, autoreconf and reformat hash file with 2 space
- > delimiters.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+https://github.com/uclinux-dev/elf2flt/pulls?q=is%3Apr+is%3Aclosed
 
 -- 
 Bye, Peter Korsgaard
