@@ -1,33 +1,42 @@
-From: Damien Le Moal <Damien.LeMoal@wdc.com>
-Date: Tue, 8 Sep 2020 23:16:43 +0000
-Subject: [Buildroot] [PATCH 5/5] Add support for Kendryte K210 based
- RISC-V boards
-References: <20200908051624.425573-1-damien.lemoal@wdc.com>
- <20200908051624.425573-6-damien.lemoal@wdc.com>
- <20200908091728.6351079d@windsurf.hq.k.grp>
- <CY4PR04MB3751463068ACC779C758B3CDE7290@CY4PR04MB3751.namprd04.prod.outlook.com>
- <20200908110714.6979f5c8@windsurf.hq.k.grp>
- <CY4PR04MB3751D91DFA061C4587F51EAFE7290@CY4PR04MB3751.namprd04.prod.outlook.com>
- <20200908130806.0aa9df67@windsurf.hq.k.grp> <20200908122138.GB31727@lst.de>
-Message-ID: <CY4PR04MB3751B9486519A94E4C3CED26E7290@CY4PR04MB3751.namprd04.prod.outlook.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed,  9 Sep 2020 02:52:13 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ell: bump to 0.33
+Message-ID: <20200909005214.888612-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020/09/08 21:21, Christoph Hellwig wrote:
-> On Tue, Sep 08, 2020 at 01:08:06PM +0200, Thomas Petazzoni wrote:
->> Sounds good to me, I'm fine with a custom Busybox config file for the
->> time being. Perhaps justify that in the commit log so we have a trace
->> somewhere of why we accepted a custom Busybox config file.
-> 
-> Maybe give the busybox config a more generic name like initramfs-only
-> to document the purpose?
-> 
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Yes, good idea. Will do that in addition to the commit message rewrite.
-
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index c151812232..43324e658d 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  50ead312a290f44808fd5fcb4f8495b20ab16511d0b76f6d33db186b87c608a1  ell-0.32.tar.gz
++sha256  fc3fd66739008fabf4b62f8bc1b37110cc44b9e8233c34f8d991939d0e0247b6  ell-0.33.tar.gz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 6c265b93ab..f35c022503 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.32
++ELL_VERSION = 0.33
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 -- 
-Damien Le Moal
-Western Digital Research
+2.28.0
