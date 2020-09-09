@@ -1,25 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 22:39:10 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mongrel2: fix build with gcc 10
-In-Reply-To: <20200905124203.560735-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 5 Sep 2020 14:42:03 +0200")
-References: <20200905124203.560735-1-fontaine.fabrice@gmail.com>
- <20200905124203.560735-2-fontaine.fabrice@gmail.com>
-Message-ID: <878sdi4rdd.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 22:38:23 +0200
+Subject: [Buildroot] [git commit] package/libcap: disable GOLANG
+Message-ID: <20200909203131.C0FBB8078E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3daacfa65bf1e5bf861736b45e3112c8cd2c3f00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/858488774503c6cc6a5489bc1e080562f5fc6461
+Recently, the go infrastructure has changed, and libcap has been
+upgraded to 2.42. libcap introduced golang in 2.28, see:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/Make.Rules?id=0615d996379dceedefcd65a114f93fefd81c208f
 
-Committed to 2020.08.x, thanks.
+When you compile host-go and then compile host-libcap, GOLANG will be
+automatically set to yes. Because libcap.mk lacks golang support,
+compilation will fail.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libcap/libcap.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 08c1bc9deb..e16e4ed413 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -62,12 +62,12 @@ endef
+ 
+ define HOST_LIBCAP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+-		RAISE_SETFCAP=no
++		RAISE_SETFCAP=no GOLANG=no
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
+-		RAISE_SETFCAP=no lib=lib install
++		RAISE_SETFCAP=no GOLANG=no lib=lib install
+ endef
+ 
+ $(eval $(generic-package))
