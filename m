@@ -1,80 +1,106 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue, 8 Sep 2020 18:39:47 -0700
-Subject: [Buildroot] OpenSSH login problem
-In-Reply-To: <20200906193958.2b4199a4@gmx.net>
-References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
- <52-5f356200-5-2c492440@36238474>
- <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
- <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
- <20200816220620.65159d1d@windsurf.home>
- <CA+h8R2qO01wwrEJdTx2puEbDv6mv31YxyAjG5nCn6hosPAW_aQ@mail.gmail.com>
- <CA+h8R2pjvm7Wr_hkS2wtqhzqESmgqTtxivkdTLdEr07ngJLTbQ@mail.gmail.com>
- <20200906193958.2b4199a4@gmx.net>
-Message-ID: <CA+h8R2pdJExc9v7AeGAfvon1sVY-G2iYk7EzjdZFBLBRd9ApVQ@mail.gmail.com>
+Date: Tue,  8 Sep 2020 20:32:27 -0700
+Subject: [Buildroot] [PATCH 1/1] package/rtl8821au: fix build against 5.8.x
+ kernel
+Message-ID: <20200909033227.70098-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+sha256_state collides with symbols in the kernel, rename it to rtl_sha256_state.
 
-Unfortunately I'm still seeing this with GCC 9 and OpenSSH 8.3p1
-against a Odroid HC2 with kernel 5.8 + kernel-headers 5.8, using glibc
-2.31.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ ...ate-to-rtl_sha256_state-to-avoid-nam.patch | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/rtl8821au/0004-rename-sha256_state-to-rtl_sha256_state-to-avoid-nam.patch
 
-On Sun, Sep 6, 2020 at 10:40 AM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Christian, *,
->
-> On Sat, 5 Sep 2020 19:33:23 -0700, Christian Stewart <christian@paral.in> wrote:
->
-> > Hi all,
-> >
-> > Finally got around to running this test.
-> >
-> > I previously tested an Odroid XU4 with GCC 10 and latest binutils, and
-> > it worked.
-> >
-> > Now with a test against GCC 9 on a Odroid HC2, it's not working (ssh
-> > exits immediately after successful auth).
-> >
-> > Testing against OpenSSH 8.3p1 now and figuring out exactly why this is
-> > happening, if it's the GCC version or what.
->
-> Tested on RPi3, the following defconfig works (buildroot-git-d1c3f077e24a41f004945f94aceb6f059c58e423,
-> linux-5.4.51):
-
-[snip]
-
-> And the following defconfig fails (linux-4.19.126):
-
-[snip]
-
-> The last lines of sshd failure strace are:
->
-> 468   write(2, "Accepted none for root from 192."..., 59 <unfinished ...>
-> 490   clock_gettime(CLOCK_BOOTTIME, {tv_sec=306, tv_nsec=379381706}) = 0
-> 490   clock_nanosleep_time64(CLOCK_REALTIME, 0, {tv_sec=0, tv_nsec=24656548290918313},  <unfinished ...>) = ?
-> 490   +++ killed by SIGSYS +++
-> 468   <... write resumed>)              = 59
-> 468   --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=490, si_uid=1000, si_status=SIGSYS, si_utime=7, si_stime=2} ---
-> 468   write(2, "debug1: monitor_child_preauth: r"..., 82) = 82
-> 468   read(5, "", 4)                    = 0
-> 468   write(2, "debug1: do_cleanup\r\n", 20) = 20
-> 468   write(2, "debug1: Killing privsep child 49"..., 35) = 35
-> 468   kill(490, SIGKILL)                = 0
-> 468   exit_group(255)                   = ?
-> 468   +++ exited with 255 +++
->
->
-> In the failing case __NR_clock_nanosleep_time64 is not defined, so
-> SC_ALLOW(__NR_clock_nanosleep_time64) in openssh-8.3p1/sandbox-seccomp-filter.c
-> is not set...., but the strace output shows clock_nanosleep_time64() is called
-> (and aborted with SIGSYS)...
-
-Thanks for checking on this. Is there any known fix anywhere yet? I'll
-do some searching.
-
-Thanks,
-Christian
+diff --git a/package/rtl8821au/0004-rename-sha256_state-to-rtl_sha256_state-to-avoid-nam.patch b/package/rtl8821au/0004-rename-sha256_state-to-rtl_sha256_state-to-avoid-nam.patch
+new file mode 100644
+index 0000000000..41cee2b247
+--- /dev/null
++++ b/package/rtl8821au/0004-rename-sha256_state-to-rtl_sha256_state-to-avoid-nam.patch
+@@ -0,0 +1,79 @@
++From 19aee91e45788d594615a9be58fa5d0879ec816a Mon Sep 17 00:00:00 2001
++From: youcai <omegacoleman@gmail.com>
++Date: Tue, 18 Aug 2020 00:43:16 +0800
++Subject: [PATCH] rename sha256_state to rtl_sha256_state to avoid name
++ conflict with crypto
++
++[Upstream: https://github.com/abperiasamy/rtl8812AU_8821AU_linux/pull/338/commits/af6f6c1578f16145478326a939bb7593bbcdb4e7.patch]
++Signed-off-by: Coleman <omegacoleman@gmail.com>
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ core/rtw_security.c    | 10 +++++-----
++ include/rtw_security.h |  2 +-
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/core/rtw_security.c b/core/rtw_security.c
++index d54e6af..de2d91f 100644
++--- a/core/rtw_security.c
+++++ b/core/rtw_security.c
++@@ -2200,7 +2200,7 @@ BIP_exit:
++ 
++ #ifndef PLATFORM_FREEBSD
++ /* compress 512-bits */
++-static int sha256_compress(struct sha256_state *md, unsigned char *buf)
+++static int sha256_compress(struct rtl_sha256_state *md, unsigned char *buf)
++ {
++ 	u32 S[8], W[64], t0, t1;
++ 	u32 t;
++@@ -2249,7 +2249,7 @@ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
++ }
++ 
++ /* Initialize the hash state */
++-static void sha256_init(struct sha256_state *md)
+++static void sha256_init(struct rtl_sha256_state *md)
++ {
++ 	md->curlen = 0;
++ 	md->length = 0;
++@@ -2270,7 +2270,7 @@ static void sha256_init(struct sha256_state *md)
++    @param inlen  The length of the data (octets)
++    @return CRYPT_OK if successful
++ */
++-static int sha256_process(struct sha256_state *md, unsigned char *in,
+++static int sha256_process(struct rtl_sha256_state *md, unsigned char *in,
++                           unsigned long inlen)
++ {
++ 	unsigned long n;
++@@ -2311,7 +2311,7 @@ static int sha256_process(struct sha256_state *md, unsigned char *in,
++    @param out [out] The destination of the hash (32 bytes)
++    @return CRYPT_OK if successful
++ */
++-static int sha256_done(struct sha256_state *md, unsigned char *out)
+++static int sha256_done(struct rtl_sha256_state *md, unsigned char *out)
++ {
++ 	int i;
++ 
++@@ -2363,7 +2363,7 @@ static int sha256_done(struct sha256_state *md, unsigned char *out)
++ static int sha256_vector(size_t num_elem, u8 *addr[], size_t *len,
++                          u8 *mac)
++ {
++-	struct sha256_state ctx;
+++	struct rtl_sha256_state ctx;
++ 	size_t i;
++ 
++ 	sha256_init(&ctx);
++diff --git a/include/rtw_security.h b/include/rtw_security.h
++index d41014e..98feb69 100644
++--- a/include/rtw_security.h
+++++ b/include/rtw_security.h
++@@ -233,7 +233,7 @@ struct security_priv {
++ #endif /* DBG_SW_SEC_CNT */
++ };
++ 
++-struct sha256_state {
+++struct rtl_sha256_state {
++ 	u64 length;
++ 	u32 state[8], curlen;
++ 	u8 buf[64];
++-- 
++2.28.0
++
+-- 
+2.28.0
