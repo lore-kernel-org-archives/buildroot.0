@@ -1,55 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 23:12:23 +0200
-Subject: [Buildroot] [PATCH] package/libcap: fix build of host variant
- on systems without static libc
-In-Reply-To: <20200904210137.GO14354@scaer>
-References: <20200904151503.991741-1-thomas.petazzoni@bootlin.com>
- <20200904210137.GO14354@scaer>
-Message-ID: <20200909231223.56548dc3@windsurf.hq.k.grp>
+Date: Wed, 9 Sep 2020 23:20:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: fix build for
+ powerpc target
+In-Reply-To: <20200909164104.6246-1-egorenar-dev@posteo.net>
+References: <20200909164104.6246-1-egorenar-dev@posteo.net>
+Message-ID: <20200909232048.107b5922@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Alexander,
 
-On Fri, 4 Sep 2020 23:01:37 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Wed,  9 Sep 2020 18:41:04 +0200
+Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
 
-> On 2020-09-04 17:15 +0200, Thomas Petazzoni spake thusly:
-> > Since the bump to 2.42 in 241e3bdea8b68b3ce78b1b76db29019fdcbb7b05,
-> > the host variant of libcap fails to build on systems that don't have
-> > the static variant of the C library installed. Indeed, libcap tries to
-> > build test programs statically, which fails with:
-> > 
-> > /usr/bin/ld: cannot find -lc
-> > collect2: error: ld returned 1 exit status
-> > 
-> > This commit fixes that by:
-> > 
-> >  (1) Adding a patch, submitted upstream, which makes the
-> >      tests/Makefile obey the same DYNAMIC variable as the one used by
-> >      progs/Makefile.  
-> 
-> But then it means that tests will run with a system-wide version of
-> libcap if that exists, or would fail to run at all if libcap is not
-> installed in the system, both really not being what is expected of
-> the tests, I would think. So upstream will probably not be that thrilled
-> about that patch, I'm afraid...
-> 
-> But seeing how some tests are run udner sudo, we can't use
-> LD_LIBRARY_PATH.
-> 
-> Instead, I think we should womething like -Wl,-rpath,'$$ORIGN/../libcap'
-> 
-> Unless I missed something?
+> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 
-I have sent a new version of the patch, which uses fixes from upstream,
-and for the tests, they use LD_LIBRARY_PATH to use the locally
-available shared library.
+Is there an autobuilder failure for this? If so, there should be a link
+to it in your commit log. See for example this commit log:
 
-See https://patchwork.ozlabs.org/project/buildroot/patch/20200909210250.1093461-1-thomas.petazzoni at bootlin.com/
+  https://git.buildroot.org/buildroot/commit/?id=a85ae8b297fd0526f57fe99d73087dd840ea6219
+
+> diff --git a/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
+> new file mode 100644
+> index 0000000000..ba75463ec4
+> --- /dev/null
+> +++ b/package/makedumpfile/0003-Makefile-fix-ARCH-for-TARGET-powerpc.patch
+> @@ -0,0 +1,28 @@
+> +From 18acea4df1d02f0275606fa4e73292d7759bdf15 Mon Sep 17 00:00:00 2001
+> +From: Alexander Egorenkov <egorenar-dev@posteo.net>
+> +Date: Wed, 9 Sep 2020 18:35:05 +0200
+> +Subject: [PATCH] Makefile: fix ARCH for TARGET powerpc
+> +
+> +TARGET 'ppc' and 'powerpc' shall result in ARCH 'powerpc32'.
+> +
+> +Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+
+I'm not sure the best solution here is to patch makedumpfile. Indeed,
+Buildroot's makedumpfile.mk is passing TARGET=$(BR2_ARCH), but there is
+nothing that "forces" makedumpfile to understand the BR2_ARCH values.
+
+So instead, I think we should have some logic in makedumpfile.mk that
+calculates the correct TARGET values depending on the CPU architecture.
+Something along the lines of:
+
+ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+MAKEDUMPFILE_TARGET = ...
+else ifeq ($(BR2_arm)$(BR2_armeb),y)
+MAKEDUMPFILE_TARGET = ...
+else ifeq ...
+...
+endif
+
+Perhaps if for some architectures the BR2_ARCH value is OK, you could
+finish this if sequence by:
+
+else
+MAKEDUMPFILE_TARGET = $(BR2_ARCH)
+endif
+
+and then of course, pass TARGET=$(MAKEDUMPFILE_TARGET)
 
 Thanks!
 
