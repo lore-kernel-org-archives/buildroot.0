@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 12:49:01 +0200
-Subject: [Buildroot] [PATCH master] package/linux-headers: the latest
- headers are 5.8
-In-Reply-To: <20200909102539.838996-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 9 Sep 2020 12:25:38 +0200")
-References: <20200909102539.838996-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87blif5ioy.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Sep 2020 12:49:09 +0200
+Subject: [Buildroot] [PATCH 2020.08.x] package/linux-headers: the latest
+ headers are 5.7
+In-Reply-To: <20200909102554.839122-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 9 Sep 2020 12:25:54 +0200")
+References: <20200909102554.839122-1-thomas.petazzoni@bootlin.com>
+Message-ID: <877dt35ioq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,16 +30,17 @@ To: buildroot@busybox.net
  > this, which fixes a legal-info failure happening when Linux kernel
  > headers 5.4 are used:
 
- >>>> linux-headers 5.4.63 Patching
- >>>> linux-headers 5.4.63 Collecting legal info
+ >>>> linux-headers 5.4.61 Patching
+ >>>> linux-headers 5.4.61 Collecting legal info
  > ERROR: COPYING has wrong sha256 hash:
  > ERROR: expected: fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0
  > ERROR: got     : ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
  > ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+ > make: *** [package/linux-headers/linux-headers.mk:158: linux-headers-legal-info] Error 1
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Committed, thanks.
+Committed to 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
