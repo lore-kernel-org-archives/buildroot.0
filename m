@@ -1,38 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 08:49:12 +0200
-Subject: [Buildroot] [PATCH v2 0/6] Add support for Kendryte K210 RISC-V
- boards
-In-Reply-To: <20200908113324.1022230-1-damien.lemoal@wdc.com> (Damien Le
- Moal's message of "Tue, 8 Sep 2020 20:33:18 +0900")
-References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
-Message-ID: <87sgbr5tsn.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Sep 2020 08:52:30 +0200
+Subject: [Buildroot] [go] backport go-module patch series to 2020.08.x?
+In-Reply-To: <CA+h8R2rS323vadTNps=byzPQngRV3r-iQVK5ejy8-jD7E6wWdw@mail.gmail.com>
+ (Christian Stewart's message of "Tue, 8 Sep 2020 22:29:33 -0700")
+References: <CA+h8R2rS323vadTNps=byzPQngRV3r-iQVK5ejy8-jD7E6wWdw@mail.gmail.com>
+Message-ID: <87o8mf5tn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Damien" == Damien Le Moal <damien.lemoal@wdc.com> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > This patch series adds support for building bootable images for RISC-V
- > boards based on the Kendryte K210 SoC which is supported by the Linux
- > kernel since version 5.8.0. This SoC has no MMU supported by Linux and
- > requires uClibc flatbin binaries as gcc does not yet support FDPIC
- > executables for RISC-V.
+ > Hi Thomas,
+ > I noticed that, unless I'm seeing this wrong, the go-module patch
+ > series is not included in 2020.08.x -
 
- > The first four patches adjust buildroot configuration to allow building
- > uClibc static no-MMU libraries for RISC-V. The last and fifth patch adds
- > buildroot defconfig for the Kendryte K210 as well as uClibc and busybox
- > configuration.
+Indeed, this was only very recently merged - After 2020.08-rc1 was
+released and we stopped added new features to 2020.08.
 
- > Building is as simple as:
- > make kendryte_k210_defconfig
- > make
+ > I'd recommend including it, was there some reason not to?
 
- > Which generate the output/image/loader.bin bootable image.
-
-Nice! With 2020.08 out the door and kernel 5.8 added, this was next on
-my todo list, so great timing ;)
+I'm pretty clueless about go (modules), but why? What problems does it
+fix for the packages in 2020.08?
 
 -- 
 Bye, Peter Korsgaard
