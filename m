@@ -1,65 +1,120 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Sep 2020 22:40:54 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] {linux,
- linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.4.x series
-Message-ID: <20200909203533.8F442813DC@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Sep 2020 22:47:26 +0200
+Subject: [Buildroot] [PATCH v2 4/4] pycompile: add --verbose option
+In-Reply-To: <20200908081026.4701-5-robin.jarry@6wind.com>
+References: <20200908081026.4701-1-robin.jarry@6wind.com>
+ <20200908081026.4701-5-robin.jarry@6wind.com>
+Message-ID: <20200909204726.GT14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c758caec1c8506d7e5b881a839165a0b6159a41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Robin, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d25b9ead1ec73838222a3cc99541c2a161b5657f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+On 2020-09-08 10:10 +0200, Robin Jarry spake thusly:
+> Add a new option that prints the (runtime) path of compiled .py files
+> when VERBOSE=1 is set.
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index fbda638da6..a04dd4395b 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  419c6248b9ae4dfead4599787aecbfd202e88bc4124523adfa6dd2d642b99fe7  linux-5.7.19.tar.xz
--sha256  86f13d050f6389c5a1727fa81510ee8eceac795297bc584f443354609617fea4  linux-5.4.61.tar.xz
-+sha256  e0260dae0da01163b1a3289ad9c5cc6ee4226720e199e8a1d982e24efda7ffc0  linux-5.4.63.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  6994dda988e9fb7f5661cf80ff42039016cb0044acd39f830937ba0220296388  linux-4.4.234.tar.xz
--sha256  756f8544d261e8117716c911261690e4fb5491e14c1f4612c83e0986453782e3  linux-4.9.234.tar.xz
--sha256  394f28798670240baacd9e2cce521fbd79f8da5e1fc191695b0e11381445a021  linux-4.14.195.tar.xz
--sha256  6912db1c242d72ce9c8d4ff71982ac935d97690822af5c1c6ec22412b31667a4  linux-4.19.142.tar.xz
-+sha256  0dfb86052e7405692e29f8db2f5b480ed972d93b615ffb24d4607d33d29eb770  linux-4.4.235.tar.xz
-+sha256  e625a6212695efe5deeab5844e47404841fb1bf755f85eba818614c2ff580cc3  linux-4.9.235.tar.xz
-+sha256  5e61b2f58d4c930c3567821aeeb6f688554dca61454646d54711bfc9abc7b09a  linux-4.14.196.tar.xz
-+sha256  2a4335c66f0ea8cc49d89ab25e5e00d75fcb33fe638d5584855598b4b8f3038d  linux-4.19.143.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 833b81f79f..4f31521e0f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -334,11 +334,11 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.234"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.234"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.195"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.142"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.61"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.235"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.235"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.196"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.143"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.63"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.7.19"	if BR2_KERNEL_HEADERS_5_7
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+I said in my reply to the cover letter that I had something to say about
+that patch, but in fact no; it's pretty OK.
+
+Just do not forget to switch to using str.format() instead of using the
+old-style % formatting. ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+> ---
+>  package/python/python.mk     |  1 +
+>  package/python3/python3.mk   |  1 +
+>  support/scripts/pycompile.py | 11 +++++++++--
+>  3 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 7000658330e8..50e77db74628 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -263,6 +263,7 @@ define PYTHON_CREATE_PYC_FILES
+>  	$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR) \
+>  		$(TOPDIR)/support/scripts/pycompile.py \
+>  		$(if $(BR2_REPRODUCIBLE),--force) \
+> +		$(if $(VERBOSE),--verbose) \
+>  		$(TARGET_DIR) \
+>  		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+>  endef
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index e8c200b2081e..1ef757c6b66f 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -280,6 +280,7 @@ define PYTHON3_CREATE_PYC_FILES
+>  	$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
+>  		$(TOPDIR)/support/scripts/pycompile.py \
+>  		$(if $(BR2_REPRODUCIBLE),--force) \
+> +		$(if $(VERBOSE),--verbose) \
+>  		$(TARGET_DIR) \
+>  		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
+>  endef
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> index c60d4e13f3b4..cb2ba7f5016e 100644
+> --- a/support/scripts/pycompile.py
+> +++ b/support/scripts/pycompile.py
+> @@ -16,7 +16,7 @@ import struct
+>  import sys
+>  
+>  
+> -def compile_one(host_path, target_root, force=False):
+> +def compile_one(host_path, target_root, force=False, verbose=False):
+>      """
+>      Compile a .py file into a .pyc file located next to it.
+>  
+> @@ -26,6 +26,8 @@ def compile_one(host_path, target_root, force=False):
+>          Absolute path of the target dir (i.e. the future /).
+>      :arg force:
+>          Recompile even if already up-to-date.
+> +    :arg verbose:
+> +        Print compiled file paths.
+>      """
+>      if os.path.islink(host_path):
+>          return  # only compile real files
+> @@ -49,6 +51,8 @@ def compile_one(host_path, target_root, force=False):
+>      # determine the runtime path of the file (i.e.: relative path to target
+>      # root dir prepended with "/").
+>      runtime_path = os.path.join("/", os.path.relpath(host_path, target_root))
+> +    if verbose:
+> +        print("  PYC  %s" % (runtime_path,))
+>  
+>      # will raise an error if the file cannot be compiled
+>      py_compile.compile(host_path, cfile=host_path + "c",
+> @@ -63,6 +67,8 @@ def main():
+>                          help="Folder located inside TARGET to scan and compile")
+>      parser.add_argument("--force", action="store_true",
+>                          help="Force compilation even if already compiled")
+> +    parser.add_argument("--verbose", action="store_true",
+> +                        help="Print compiled files")
+>  
+>      args = parser.parse_args()
+>  
+> @@ -83,7 +89,8 @@ def main():
+>                  parser.error("PATH: not inside TARGET dir: %r" % d)
+>              for parent, _, files in os.walk(d):
+>                  for f in files:
+> -                    compile_one(os.path.join(parent, f), args.target, args.force)
+> +                    compile_one(os.path.join(parent, f), args.target,
+> +                                args.force, args.verbose)
+>  
+>      except Exception as e:
+>          print("error: %s" % e, file=sys.stderr)
+> -- 
+> 2.28.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
