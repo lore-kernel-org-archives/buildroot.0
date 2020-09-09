@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Sep 2020 22:52:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/neardal: fix build with gcc 10
-In-Reply-To: <20200909182116.666068-1-fontaine.fabrice@gmail.com>
-References: <20200909182116.666068-1-fontaine.fabrice@gmail.com>
-Message-ID: <c3fde928-8ee9-8151-19aa-accdc577d039@mind.be>
+Date: Wed, 9 Sep 2020 22:59:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/iwd: bump to 1.9
+In-Reply-To: <20200909203209.4621a2dd@gmx.net>
+References: <20200909005214.888612-1-m.niestroj@grinn-global.com>
+ <20200909005214.888612-2-m.niestroj@grinn-global.com>
+ <20200909203209.4621a2dd@gmx.net>
+Message-ID: <a07bf820-c64e-5190-ae10-ad45f135b118@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +14,110 @@ To: buildroot@busybox.net
 
 
 
-On 09/09/2020 20:21, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
+On 09/09/2020 20:32, Peter Seiderer wrote:
+> Hello Marcin,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> thanks for the patch, only one minor nitpick...
+> 
+> On Wed,  9 Sep 2020 02:52:14 +0200, Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+> 
+>> Also drop mainlined patch.
+> 
+> Reference to the upstream commit is a nice to have ([1]) ;-)
+> 
+> [1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=6bf5c3ddbd1e8f50e8c06bf8ff3cda79ee436de4
 
- Applied to master, thanks.
+
+ Applied both to master after adding Peter's suggestion, thanks.
 
  Regards,
  Arnout
 
-> ---
->  ...-lib-neardal.h-fix-build-with-gcc-10.patch | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
 > 
-> diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
-> new file mode 100644
-> index 0000000000..c9c4555022
-> --- /dev/null
-> +++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
-> @@ -0,0 +1,35 @@
-> +From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Wed, 9 Sep 2020 19:14:52 +0200
-> +Subject: [PATCH] lib/neardal.h: fix build with gcc 10
-> +
-> +Define neardal_output_cb as extern to avoid the following build failure
-> +with gcc 10 (which defaults to -fno-common):
-> +
-> +/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/connectivity/neardal/pull/10]
-> +---
-> + lib/neardal.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/lib/neardal.h b/lib/neardal.h
-> +index d1cd18b..3e83595 100644
-> +--- a/lib/neardal.h
-> ++++ b/lib/neardal.h
-> +@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
-> + 
-> + void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
-> + 	__attribute__((format(printf, 3, 4)));
-> +-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-> ++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-> + 
-> + #ifdef __cplusplus
-> + }
-> +-- 
-> +2.28.0
-> +
+>>
+>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+>> ---
+>>  ...0001-src-p2p.c-fix-build-with-uclibc.patch | 38 -------------------
+>>  package/iwd/iwd.hash                          |  2 +-
+>>  package/iwd/iwd.mk                            |  2 +-
+>>  3 files changed, 2 insertions(+), 40 deletions(-)
+>>  delete mode 100644 package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
+>>
+>> diff --git a/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
+>> deleted file mode 100644
+>> index 34c525f907..0000000000
+>> --- a/package/iwd/0001-src-p2p.c-fix-build-with-uclibc.patch
+>> +++ /dev/null
+>> @@ -1,38 +0,0 @@
+>> -From 7d29d294c7138460dc400df8d051d7f334d149cf Mon Sep 17 00:00:00 2001
+>> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> -Date: Sat, 20 Jun 2020 15:13:17 +0200
+>> -Subject: [PATCH] src/p2p.c: fix build with uclibc
+>> -
+>> -explicit_bzero is used in src/p2p.c since commit
+>> -1675c765a3d66f3c626a1581a7bf514e1859b064 but src/missing.h is not
+>> -included, as a result build with uclibc fails on:
+>> -
+>> -/home/naourr/work/instance-0/output-1/per-package/iwd/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: src/p2p.o: in function `p2p_connection_reset':
+>> -p2p.c:(.text+0x2cf4): undefined reference to `explicit_bzero'
+>> -/home/naourr/work/instance-0/output-1/per-package/iwd/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: p2p.c:(.text+0x2cfc): undefined reference to `explicit_bzero'
+>> -
+>> -Fixes:
+>> - - http://autobuild.buildroot.org/results/8bbf7e1d0929d0883c0c2445990f62f5a1d54163
+>> -
+>> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> -[Upstream status:
+>> -https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/EXR3JZJXIVITX2ZSQRE6GEXGN6P3KUTC]
+>> ----
+>> - src/p2p.c | 1 +
+>> - 1 file changed, 1 insertion(+)
+>> -
+>> -diff --git a/src/p2p.c b/src/p2p.c
+>> -index dc78b887..a759df5c 100644
+>> ---- a/src/p2p.c
+>> -+++ b/src/p2p.c
+>> -@@ -37,6 +37,7 @@
+>> -
+>> - #include "linux/nl80211.h"
+>> -
+>> -+#include "src/missing.h"
+>> - #include "src/iwd.h"
+>> - #include "src/wiphy.h"
+>> - #include "src/scan.h"
+>> ---
+>> -2.26.2
+>> -
+>> diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+>> index 10c9dde983..16e01ed473 100644
+>> --- a/package/iwd/iwd.hash
+>> +++ b/package/iwd/iwd.hash
+>> @@ -1,5 +1,5 @@
+>>  # Locally computed
+>> -sha256  14b39fc8b2bf170e75cc3d0c08b666dbcfeaee73384485cb6eaf463da8963aa4  iwd-1.8.tar.gz
+>> +sha256  e4178a105021ef1b7b7c23cbc6f8e45cbab3bb0830da588b406ff4a281e9f948  iwd-1.9.tar.gz
+>>
+>>  # License files
+>>  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+>> diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+>> index bba787c07f..58d332dc07 100644
+>> --- a/package/iwd/iwd.mk
+>> +++ b/package/iwd/iwd.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>
+>> -IWD_VERSION = 1.8
+>> +IWD_VERSION = 1.9
+>>  IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+>>  IWD_SITE_METHOD = git
+>>  IWD_LICENSE = LGPL-2.1+
+> 
+> Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> 
+> Regards,
+> Peter
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
