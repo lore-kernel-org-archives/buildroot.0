@@ -1,39 +1,36 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue, 8 Sep 2020 23:55:23 -0700
+Date: Tue, 8 Sep 2020 23:57:55 -0700
 Subject: [Buildroot] [go] backport go-module patch series to 2020.08.x?
-In-Reply-To: <87o8mf5tn5.fsf@dell.be.48ers.dk>
+In-Reply-To: <20200909085416.5d908423@windsurf.hq.k.grp>
 References: <CA+h8R2rS323vadTNps=byzPQngRV3r-iQVK5ejy8-jD7E6wWdw@mail.gmail.com>
- <87o8mf5tn5.fsf@dell.be.48ers.dk>
-Message-ID: <CA+h8R2qXVRH_2c-zfi5YKAksTgqyWoh207doFqaFy0X_M8vyyg@mail.gmail.com>
+ <20200909085416.5d908423@windsurf.hq.k.grp>
+Message-ID: <CA+h8R2ri+dCQQLPTSQUqFcLjx_RPaJothe14tJJs+6f318Sr_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Thomas,
 
 
-On Tue, Sep 8, 2020 at 11:52 PM Peter Korsgaard <peter@korsgaard.com> wrote:
-> Indeed, this was only very recently merged - After 2020.08-rc1 was
-> released and we stopped added new features to 2020.08.
+On Tue, Sep 8, 2020 at 11:54 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>   Each release cycle consist of two months of development on the master
+>   branch and one month stabilization before the release is made. During
+>   this phase no new features are added to master, only bugfixes.
 >
->  > I'd recommend including it, was there some reason not to?
->
-> I'm pretty clueless about go (modules), but why? What problems does it
-> fix for the packages in 2020.08?
+>   The stabilization phase starts with tagging -rc1, and every week
+>   until the release, another release candidate is tagged.
 
-As per the Go docs for 1.14 release:
+OK, understood, it should keep working fine with the old approach for
+all of the packages in the Buildroot tree - (some of my external ones,
+not so much).
 
-https://golang.org/doc/go1.14
+Unfortunate we couldn't get it into 2020.08.x and 2020.05.x, but I
+understand the reasoning.
 
-"Module support in the go command is now ready for production use, and
-we encourage all users to migrate to Go modules for dependency
-management. If you are unable to migrate due to a problem in the Go
-toolchain, please ensure that the problem has an open issue filed. (If
-the issue is not on the Go1.15 milestone, please let us know why it
-prevents you from migrating so that we can prioritize it
-appropriately.)"
+Everyday my downstream branches stray further from upstream... :)
 
-Best regards,
+Best,
 Christian
