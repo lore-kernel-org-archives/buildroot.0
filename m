@@ -1,35 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 9 Sep 2020 15:56:00 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/boost: bump to version 1.74.0
-In-Reply-To: <20200909093240.2178664-1-fido_max@inbox.ru>
-References: <20200909093240.2178664-1-fido_max@inbox.ru>
-Message-ID: <20200909155600.6cf8450e@windsurf.hq.k.grp>
+Date: Wed, 9 Sep 2020 15:59:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeopcua : new package
+In-Reply-To: <20200909074346.13037-1-jugurtha.belkalem@smile.fr>
+References: <20200909074346.13037-1-jugurtha.belkalem@smile.fr>
+Message-ID: <20200909155954.0c41a787@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim,
+Hello,
 
-On Wed,  9 Sep 2020 12:32:40 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+Thanks for this new contribution!
 
-> gcc 10 C++20 breaks boost library due to allocator changes.
-> https://github.com/boostorg/bimap/issues/23
-> 
-> We need boost 1.74.0 to fix build with gcc 10
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+On Wed,  9 Sep 2020 09:43:46 +0200
+Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-We don't have any failures of boost 1.73.0 with gcc 10 in our
-autobuilders. Could you give more details about a specific
-configuration that fails to build?
+> diff --git a/package/freeopcua/Config.in b/package/freeopcua/Config.in
+> new file mode 100644
+> index 0000000000..f210efe1b5
+> --- /dev/null
+> +++ b/package/freeopcua/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_FREEOPCUA
+> +	bool "freeopcua"
+> +	depends on BR2_PACKAGE_BOOST
 
-Indeed, we need to understand in which conditions this failure occurs,
-to see if we need to backport the fix to 2020.08.x.
+Please select the boost package, as it's not an obvious dependency.
 
-Thanks,
+> +	depends on BR2_PACKAGE_PYTHON3
+
+Are you sure python on the target is necessary? This OPC-UA
+implementation is written in C++. It has Python bindings, but I suppose
+they are optional.
+
+Perhaps there is some confusion about the fact that some code is
+auto-generated from XML specification using Python... but that is at
+build time, i.e Python would only be needed on the build machine.
+
+Could you investigate this?
+
+> +FREEOPCUA_DEPENDENCIES = boost mbedtls python3
+> +
+> +# Copy generated binaries and libraries to target
+> +# as this is not done by freeopcua buildsystem.
+> +define FREEOPCUA_INSTALL_BINARY_LIB
+> +	cp $(BUILD_DIR)/freeopcua-$(FREEOPCUA_VERSION)/bin/* \
+> +	$(TARGET_DIR)/usr/bin/
+> +
+> +	cp $(BUILD_DIR)/freeopcua-$(FREEOPCUA_VERSION)/lib/* \
+> +	$(TARGET_DIR)/usr/lib/
+> +endef
+> +FREEOPCUA_POST_INSTALL_TARGET_HOOKS += FREEOPCUA_INSTALL_BINARY_LIB
+
+The regular "make install" step doesn't install those
+libraries/binaries ?
+
+> +# Freeopcua uses some narrowing like int8 to char
+> +# which results in compilation error.
+> +FREEOPCUA_CONF_OPTS = \
+> +	-DCMAKE_CXX_FLAGS="-Wno-narrowing" \
+
+You need:
+
+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -Wno-narrowing"
+
+> +	-DBUILD_EXAMPLE=OFF \
+> +	-DBUILD_TESTING=OFF
+
+These two options are already passed by the cmake-package
+infrastructure, so they are not needed here.
 
 Thomas
 -- 
