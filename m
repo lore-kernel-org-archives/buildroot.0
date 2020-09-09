@@ -1,26 +1,19 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 09:26:00 +0200
-Subject: [Buildroot] [git commit] gitlab-ci: only check defconfigs for known
- branches
-Message-ID: <20200909073014.58E7280E3F@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 09:24:18 +0200
+Subject: [Buildroot] [git commit] gitlab-ci: handle the defconfig build
+ conditions in script
+Message-ID: <20200909073013.F328580E3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fb49636d62d80ea80b7754620e10e6528ea93a2
+commit: https://git.buildroot.net/buildroot/commit/?id=bca0f1bb415dcb1f26df2f7f6174367e821c6815
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the check of defconfigs is run for all branches, even those
-that are pushed only to run runtime tests. This is very inconvenient.
-
-In fact, we only want to check the defconfigs on standard branches, that
-is master, next, and the maintenance branches.
-
-This will also decrease drastically the number gitlab-ci minutes used
-when one pushes their repo to gitlab.com, where the number of CI minutes
-are now going to be pretty severely restricted.
+Note that we do not propagate the existing comment, because it is
+partially wrong; instead we just keep the per-condition comments.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Romain Naour <romain.naour@gmail.com>
@@ -29,64 +22,77 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/generate-gitlab-ci-yml | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+ support/misc/gitlab-ci.yml.in          |  9 ---------
+ support/scripts/generate-gitlab-ci-yml | 34 +++++++++++++++++++++++++++++-----
+ 2 files changed, 29 insertions(+), 14 deletions(-)
 
+diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+index f00c764aaf..7f2ae32725 100644
+--- a/support/misc/gitlab-ci.yml.in
++++ b/support/misc/gitlab-ci.yml.in
+@@ -67,15 +67,6 @@ check-package:
+ 
+ .defconfig:
+     extends: .defconfig_base
+-    # Running the defconfigs for every push is too much, so limit to
+-    # explicit triggers through the API.
+-    rules:
+-        # For tags, create a pipeline.
+-        - if: '$CI_COMMIT_TAG'
+-        # For pipeline created by using a trigger token.
+-        - if: '$CI_PIPELINE_TRIGGERED'
+-        # For the branch or tag name named *-defconfigs, create a pipeline.
+-        - if: '$CI_COMMIT_REF_NAME =~ /^.*-defconfigs$/'
+     before_script:
+         - DEFCONFIG_NAME=${CI_JOB_NAME}
+ 
 diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
-index 263d0c6d43..e42943953c 100755
+index b076b01d05..ed56a516a7 100755
 --- a/support/scripts/generate-gitlab-ci-yml
 +++ b/support/scripts/generate-gitlab-ci-yml
-@@ -42,37 +42,40 @@ gen_basics() {
+@@ -7,11 +7,7 @@ main() {
  
- gen_defconfigs() {
-     local -a defconfigs
--    local build_defconfigs cfg
-+    local template cfg ext
+     preamble "${template}"
  
-     defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
+-    (
+-        cd configs
+-        LC_ALL=C ls -1 *_defconfig
+-    ) \
+-    | sed -r -e 's/^(.+)$/\1: { extends: .defconfig }\n\1_check: { extends: .defconfig_check }/'
++    gen_defconfigs
  
--    build_defconfigs=false
-     if [ -n "${CI_COMMIT_TAG}" ]; then
-         # For tags, create a pipeline.
--        build_defconfigs=true
-+        template=base
-     fi
-     if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
-         # For pipeline created by using a trigger token.
--        build_defconfigs=true
-+        template=base
-     fi
-     case "${CI_COMMIT_REF_NAME}" in
-+        # For master, next, and maintenance branches, only check the defconfigs
-+        (master|next|????.??.x)
-+            template=check
-+            ext=_check
-+        ;;
-         # For the branch or tag name named *-defconfigs, create a pipeline.
-         (*-defconfigs)
--            build_defconfigs=true
-+            template=base
-         ;;
-         (*-*_defconfig)
-             defconfigs=( "${CI_COMMIT_REF_NAME##*-}" )
--            build_defconfigs=true
-+            template=base
-         ;;
-     esac
- 
--    for cfg in "${defconfigs[@]}"; do
--        if ${build_defconfigs}; then
--            printf '%s: { extends: .defconfig_base }\n' "${cfg}"
--        else
--            printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
--        fi
--    done
-+    if [ -n "${template}" ]; then
-+        for cfg in "${defconfigs[@]}"; do
-+            printf '%s%s: { extends: .defconfig_%s }\n' \
-+                   "${cfg}" "${ext}" "${template}"
-+        done
-+    fi
+     ./support/testing/run-tests -l 2>&1 \
+     | sed -r -e '/^test_run \((.*)\).*/!d; s//\1: { extends: .runtime_test }/' \
+@@ -30,4 +26,32 @@ preamble() {
+ _EOF_
  }
  
- gen_tests() {
++gen_defconfigs() {
++    local -a defconfigs
++    local build_defconfigs cfg
++
++    defconfigs=( $(cd configs; LC_ALL=C ls -1 *_defconfig) )
++
++    build_defconfigs=false
++    if [ -n "${CI_COMMIT_TAG}" ]; then
++        # For tags, create a pipeline.
++        build_defconfigs=true
++    fi
++    if [ -n "${CI_PIPELINE_TRIGGERED}" ]; then
++        # For pipeline created by using a trigger token.
++        build_defconfigs=true
++    fi
++    case "${CI_COMMIT_REF_NAME}" in
++        # For the branch or tag name named *-defconfigs, create a pipeline.
++        (*-defconfigs) build_defconfigs=true;;
++    esac
++
++    for cfg in "${defconfigs[@]}"; do
++        printf '%s_check: { extends: .defconfig_check }\n' "${cfg}"
++        if ${build_defconfigs}; then
++            printf '%s: { extends: .defconfig }\n' "${cfg}"
++        fi
++    done
++}
++
+ main "${@}"
