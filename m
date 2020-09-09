@@ -1,78 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 23:47:22 +0200
-Subject: [Buildroot] [PATCH] package/libxml-parser-perl: use the
- compiler as "LD"
-In-Reply-To: <20200909213404.1105535-1-thomas.petazzoni@bootlin.com>
-References: <20200909213404.1105535-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200909214722.GV14354@scaer>
+Date: Wed, 9 Sep 2020 23:48:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wlroots: disable xcb-errors
+In-Reply-To: <20200909210022.2822148-1-fontaine.fabrice@gmail.com>
+References: <20200909210022.2822148-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200909214856.GW14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fabrice, All,
 
-On 2020-09-09 23:34 +0200, Thomas Petazzoni spake thusly:
-> Since commit efa95b19aeab6bdcd7d5a620e199c2c32cf2516b
-> ("package/libxml-parser-perl: make host build use correct compiler"),
-> we pass $(HOST_CONFIGURE_OPTS) when building host-libxml-parser-perl,
-> in order to use the correct host compiler.
+On 2020-09-09 23:00 +0200, Fabrice Fontaine spake thusly:
+> wlroots enable or disable xcb-errors depending on xcb-util availability
+> since its addition with commit db5bccc04489672ded8a639f97b19a18e85ddd70
 > 
-> However, this means that LD="$(HOSTLD)" is passed. However, the
-> host-libxml-parser-perl passes compiler arguments to LD, so it really
-> assumes that LD is gcc, not ld. For example, it tries to pass
-> -mtune=generic.
+> However xcb-errors is not provided by xcb-util, it is provided by
+> xcb-util-errors (https://cgit.freedesktop.org/xcb/util-errors) which is
+> not yet available in buildroot
 > 
-> So, let's tell host-libxml-parser-perl that LD is "$(HOSTCC)".
+> As a result, the build will fail on:
+> 
+> Run-time dependency xcb-errors found: NO (tried pkgconfig)
+> Message: Install "xcb-errors" or pass "-Dxcb-errors=disabled".
+> Required for printing X11 errors.
+> 
+> ../output-1/build/wlroots-0.11.0/xwayland/meson.build:42:1: ERROR: Dependency "xcb-errors" not found, tried pkgconfig
 > 
 > Fixes:
+>  - http://autobuild.buildroot.org/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e
 > 
->   http://autobuild.buildroot.net/results/2ed2e5ccefe9047c597f84d5880de2e8de2bdd94/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, after adding the tested-by tag Joseph gave during our
-live discussion on IRC... Thanks.
+Sorry, I missed your patch, and I instead applied Adrian's.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/libxml-parser-perl/libxml-parser-perl.mk | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+>  package/wlroots/wlroots.mk | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-> index 100c49633c..37cef2e418 100644
-> --- a/package/libxml-parser-perl/libxml-parser-perl.mk
-> +++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-> @@ -12,9 +12,14 @@ LIBXML_PARSER_PERL_LICENSE = Artistic or GPL-1.0+
->  LIBXML_PARSER_PERL_LICENSE_FILES = README
->  LIBXML_PARSER_PERL_RUN_PERL = `which perl`
+> diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+> index 27ccc8d5f3..fb26593073 100644
+> --- a/package/wlroots/wlroots.mk
+> +++ b/package/wlroots/wlroots.mk
+> @@ -21,7 +21,9 @@ WLROOTS_DEPENDENCIES = \
+>  	wayland \
+>  	wayland-protocols
 >  
-> +HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS = \
-> +	$(HOST_CONFIGURE_OPTS) \
-> +	LD="$(HOSTCC)"
-> +
->  define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
->  	(cd $(@D) ; \
-> -		$(HOST_CONFIGURE_OPTS) $(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
-> +		$(HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS) \
-> +			$(LIBXML_PARSER_PERL_RUN_PERL) Makefile.PL \
->  			PREFIX=$(HOST_DIR) \
->  			EXPATLIBPATH=$(HOST_DIR)/lib \
->  			EXPATINCPATH=$(HOST_DIR)/include \
-> @@ -25,7 +30,7 @@ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
->  endef
+> -WLROOTS_CONF_OPTS = -Dexamples=false
+> +WLROOTS_CONF_OPTS = \
+> +	-Dexamples=false \
+> +	-Dxcb-errors=disabled
 >  
->  define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
-> -	$(HOST_MAKE_ENV) $(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-> +	$(HOST_MAKE_ENV) $(MAKE) $(HOST_LIBXML_PARSER_PERL_CONFIGURE_OPTS) -C $(@D)
->  endef
+>  ifeq ($(BR2_PACKAGE_FFMPEG),y)
+>  WLROOTS_DEPENDENCIES += ffmpeg
+> @@ -52,13 +54,6 @@ else
+>  WLROOTS_CONF_OPTS += -Dxwayland=disabled
+>  endif
 >  
->  define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
+> -ifeq ($(BR2_PACKAGE_XCB_UTIL),y)
+> -WLROOTS_CONF_OPTS += -Dxcb-errors=enabled
+> -WLROOTS_DEPENDENCIES += xcb-util
+> -else
+> -WLROOTS_CONF_OPTS += -Dxcb-errors=disabled
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
+>  WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
+>  WLROOTS_DEPENDENCIES += xcb-util-wm
 > -- 
-> 2.26.2
+> 2.28.0
 > 
 > _______________________________________________
 > buildroot mailing list
