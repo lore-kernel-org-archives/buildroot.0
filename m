@@ -1,62 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed,  9 Sep 2020 12:26:10 +0200
-Subject: [Buildroot] [PATCH 2020.05.x] package/linux-headers: the latest
- headers are 5.7
-Message-ID: <20200909102610.839245-1-thomas.petazzoni@bootlin.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed,  9 Sep 2020 12:03:10 +0300
+Subject: [Buildroot] [PATCH 1/1 v2] package/boost: bump to version 1.74.0
+Message-ID: <20200909090310.2177599-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit c2009e9f757fe759c74406f1025967b7b8e77f0a
-("package/linux-headers: license files hashes only valid for latest
-version"), we introduced BR2_KERNEL_HEADERS_LATEST, which should only
-be set for the most recent kernel headers versions.
+gcc 10 C++20 breaks boost library due to allocator changes.
+https://github.com/boostorg/bimap/issues/23
 
-Indeed, the COPYING file of Linux has changed before/after Linux 5.6,
-causing its hash file to be different. Since linux-headers uses
-linux/linux.hash as the hash file, and this hash file contains the
-COPYING hash of Linux >= 5.6, we cannot use that hash for Linux
-versions older than 5.6.
+We need boost 1.74.0 to fix build with gcc 10
 
-When newer versions of the headers than 5.4 were added, this
-BR2_KERNEL_HEADERS_LATEST was not moved as it should have been. We fix
-this, which fixes a legal-info failure happening when Linux kernel
-headers 5.4 are used:
-
->>> linux-headers 5.4.61 Patching
->>> linux-headers 5.4.61 Collecting legal info
-ERROR: COPYING has wrong sha256 hash:
-ERROR: expected: fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0
-ERROR: got     : ee5808b032a67f587d3541099d46de34f5bec8cd5976114ba07f1299ee6001ff
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-make: *** [package/linux-headers/linux-headers.mk:158: linux-headers-legal-info] Error 1
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/boost/0002-fenv.patch | 2 +-
+ package/boost/boost.hash      | 4 ++--
+ package/boost/boost.mk        | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 407a6b4518..5c4b7c28f4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -53,7 +53,6 @@ config BR2_KERNEL_HEADERS_4_19
- config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
--	select BR2_KERNEL_HEADERS_LATEST
+diff --git a/package/boost/0002-fenv.patch b/package/boost/0002-fenv.patch
+index 95c769aea2..9dc7848c93 100644
+--- a/package/boost/0002-fenv.patch
++++ b/package/boost/0002-fenv.patch
+@@ -18,7 +18,7 @@ Index: b/boost/config/platform/linux.hpp
+ ===================================================================
+ --- a/boost/config/platform/linux.hpp
+ +++ b/boost/config/platform/linux.hpp
+-@@ -47,6 +47,16 @@
++@@ -48,6 +48,16 @@
+  #endif
+  
+  //
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index c94699aa67..d11232f5a9 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From https://www.boost.org/users/history/version_1_73_0.html
+-sha256  4eb3b8d442b426dc35346235c8733b5ae35ba431690e38c6a8263dce9fcbb402  boost_1_73_0.tar.bz2
++# From https://www.boost.org/users/history/version_1_74_0.html
++sha256  83bfc1507731a0906e387fc28b7ef5417d591429e51e788417fe9ff025e116b1  boost_1_74_0.tar.bz2
  
- config BR2_KERNEL_HEADERS_5_5
- 	bool "Linux 5.5.x kernel headers"
-@@ -62,6 +61,7 @@ config BR2_KERNEL_HEADERS_5_5
- config BR2_KERNEL_HEADERS_5_6
- 	bool "Linux 5.6.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-+	select BR2_KERNEL_HEADERS_LATEST
+ # Locally computed
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 323802488d..82fe42d6b2 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
+-BOOST_VERSION = 1.73.0
++BOOST_VERSION = 1.74.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = https://dl.bintray.com/boostorg/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
 -- 
-2.26.2
+2.27.0
