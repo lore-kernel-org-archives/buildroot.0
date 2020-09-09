@@ -1,55 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Sep 2020 21:16:20 +0200
-Subject: [Buildroot] [git commit] support/scripts/pycompile: add main entry
- point
-Message-ID: <20200909194133.2141188FD1@busybox.osuosl.org>
+Date: Wed, 9 Sep 2020 21:53:09 +0200
+Subject: [Buildroot] [PATCH v2 0/4] pycompile: fix .pyc source paths +
+ improvements
+In-Reply-To: <20200908081026.4701-1-robin.jarry@6wind.com>
+References: <20200908081026.4701-1-robin.jarry@6wind.com>
+Message-ID: <20200909195309.GQ14354@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b3025f93ef47ac0ce980d0847748c363ab4176b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Robin, All,
 
-Only run code when the script is executed directly (not imported).
-Factorize command description by using the script's __doc__ variable.
-Fix typo in --force help message.
+On 2020-09-08 10:10 +0200, Robin Jarry spake thusly:
+> This series is about fixing the original .py source paths encoded into
+> .pyc files. It comes with small improvements on pycompile.py as well.
 
-Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/scripts/pycompile.py | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+Thanks for this new iteration.
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index 9192a7016a..fb1a12b2b7 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -58,12 +58,19 @@ class ReportProblem(int):
-         return not self == other
- 
- 
--parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
--parser.add_argument("target", metavar='DIRECTORY',
--                    help='Directory to scan')
--parser.add_argument("--force", action='store_true',
--                    help="Force compilation even if alread compiled")
-+def main():
-+    parser = argparse.ArgumentParser(description=__doc__)
-+    parser.add_argument("target", metavar="TARGET",
-+                        help="Directory to scan")
-+    parser.add_argument("--force", action="store_true",
-+                        help="Force compilation even if already compiled")
- 
--args = parser.parse_args()
-+    args = parser.parse_args()
- 
--compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
-+    compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
-+
-+    return 0
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main())
+> The first version of the patch was actually not working at all... No
+> .pyc file was compiled. We did not see it because
+> BR2_PACKAGE_PYTHON*_PYC_ONLY were not selected and therefore, the .pyc
+> files were generated automatically at runtime.
+> 
+> This v2 should work properly.
+> 
+> Robin Jarry (4):
+>   pycompile: add main entry point
+>   pycompile: sort imports
+
+I've applied those two ones.
+
+>   pycompile: fix .pyc original source file paths
+>   pycompile: add --verbose option
+
+I have some comments about those two, so I'll reply separately.
+
+Regards,
+Yann E. MORIN.
+
+> 
+>  package/python/python.mk     |   6 +-
+>  package/python3/python3.mk   |   6 +-
+>  support/scripts/pycompile.py | 158 +++++++++++++++++++++--------------
+>  3 files changed, 104 insertions(+), 66 deletions(-)
+> 
+> Differences with v1:
+> 
+>   * split in multiple commits
+>   * fixed the script itself
+>   * sorted imports at the top of the file
+>   * added new --verbose option
+> 
+> -- 
+> 2.28.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
