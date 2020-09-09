@@ -1,65 +1,32 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  9 Sep 2020 22:29:52 +0200
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 1.0.0
-Message-ID: <20200909202952.9738-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 09 Sep 2020 22:31:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: security bump to
+ version 3.6.15
+In-Reply-To: <20200905205353.1641544-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 5 Sep 2020 22:53:53 +0200")
+References: <20200905205353.1641544-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2li4rqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-- disable enable-xkbregistry (as suggested by documentation [2] and
-  to avoid libxml2 dependency)
+ > libgnutls: Fixed "no_renegotiation" alert handling at incorrect timing.
+ > The server sending a "no_renegotiation" alert in an unexpected timing,
+ > followed by an invalid second handshake was able to cause a TLS 1.3
+ > client to crash via a null-pointer dereference. The crash happens in the
+ > application's error handling path, where the gnutls_deinit function is
+ > called after detecting a handshake failure (#1071).
+ > [GNUTLS-SA-2020-09-04, CVSS: medium]
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041596.html
-[2] https://github.com/xkbcommon/libxkbcommon/blob/master/PACKAGING
+ > https://lists.gnupg.org/pipermail/gnutls-help/2020-September/004669.html
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libxkbcommon/libxkbcommon.hash | 8 +++-----
- package/libxkbcommon/libxkbcommon.mk   | 7 +++++--
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index 5d4c3af10a..1edc73736f 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,7 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041133.html
--md5 2d9ad3a46b317138b5e72a91cf105451  libxkbcommon-0.10.0.tar.xz
--sha1 d8f956f4bc5382d5d8e0e4dd590c4f090e0e985a  libxkbcommon-0.10.0.tar.xz
--sha256 57c3630cdc38fb4734cd57fa349e92244f5ae3862813e533cedbd86721a0b6f2  libxkbcommon-0.10.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041596.html
-+sha256  41411ad253b99f59978b4c7b369ba0979b2301c0499a105a399445a56eb7621f  libxkbcommon-1.0.0.tar.xz
- 
- # License file:
--sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-+sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 3923d69c8d..6bd0f9b207 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,14 +4,17 @@
- #
- ################################################################################
- 
--LIBXKBCOMMON_VERSION = 0.10.0
-+LIBXKBCOMMON_VERSION = 1.0.0
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
- LIBXKBCOMMON_LICENSE_FILES = LICENSE
- LIBXKBCOMMON_INSTALL_STAGING = YES
- LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
--LIBXKBCOMMON_CONF_OPTS = -Denable-docs=false -Denable-wayland=false
-+LIBXKBCOMMON_CONF_OPTS = \
-+	-Denable-docs=false \
-+	-Denable-wayland=false \
-+	-Denable-xkbregistry=false
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
