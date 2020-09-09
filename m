@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Sep 2020 12:49:09 +0200
-Subject: [Buildroot] [PATCH 2020.08.x] package/linux-headers: the latest
+Date: Wed, 09 Sep 2020 12:49:19 +0200
+Subject: [Buildroot] [PATCH 2020.05.x] package/linux-headers: the latest
  headers are 5.7
-In-Reply-To: <20200909102554.839122-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Wed, 9 Sep 2020 12:25:54 +0200")
-References: <20200909102554.839122-1-thomas.petazzoni@bootlin.com>
-Message-ID: <877dt35ioq.fsf@dell.be.48ers.dk>
+In-Reply-To: <20200909102610.839245-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 9 Sep 2020 12:26:10 +0200")
+References: <20200909102610.839245-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87363r5iog.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -40,7 +40,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Committed to 2020.08.x, thanks.
+Committed to 2020.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
