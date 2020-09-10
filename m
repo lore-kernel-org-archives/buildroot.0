@@ -1,42 +1,84 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Sep 2020 19:28:34 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi*: bump kernel version
- to 9a1dd17 (5.4.61)
-In-Reply-To: <87r1rafv3k.fsf@grinn-global.com>
-References: <20200909092900.897598-1-m.niestroj@grinn-global.com>
- <20200909202116.1a778c25@gmx.net> <87r1rafv3k.fsf@grinn-global.com>
-Message-ID: <20200910192834.5b29d76e@gmx.net>
+Date: Thu, 10 Sep 2020 19:39:33 +0200
+Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 2.6.8
+In-Reply-To: <20200910132613.1881110-1-francois.perrad@gadz.org>
+References: <20200910132613.1881110-1-francois.perrad@gadz.org>
+Message-ID: <20200910193933.451a0eac@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+Hello Francois,
 
-On Thu, 10 Sep 2020 00:23:11 +0200, Marcin Niestr?j <m.niestroj@grinn-global.com> wrote:
+On Thu, 10 Sep 2020 15:26:13 +0200, Francois Perrad <fperrad@gmail.com> wrote:
 
-> Hi Peter,
+> - update home page URL (old one is redirected to github)
+> - change download to new location (github)
+> - update license hash because of copyright year update:
+> diff COPING:
+> -Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
+> -Copyright ? 2019  Facebook, Inc.
+> +Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
+> +Copyright ? 2018,2019,2020  Ebrahim Byagowi
+> +Copyright ? 2019,2020  Facebook, Inc.
 > 
-> Peter Seiderer <ps.report@gmx.net> writes:
-> 
-> > Hello Marcin,
-> >
-> > thanks for your patch, was about to submit a similar one (only one upstream
-> > commit earlier), but did not yet finish testing, mind to add the
-> > rpi-firmware/rpi-userland bumps (to keep up-to-date with the kernel)?  
-> 
-> I've tested RPi 4B only, boots fine, BT and WiFi work as well in my use
-> cases. I didn't bump rpi-firmware/rpi-userland and honestly wasn't aware
-> they need to be. I'll be unavailable for ~2 weeks starting now, so feel
-> free to supersede my patches.
+> note: newer versions (2.7.x) require a migration to meson
 
-Thanks, did re-send yours as a patch series including the rpi-firmware/rpi-userland
-version bumps...
+Seems harfbuzz changed their mind (temporarily) and reverted the autobuild
+drop ([1])..., 2.7.2 builds fine...
 
 Regards,
 Peter
 
+[1] https://github.com/harfbuzz/harfbuzz/commit/519335783224e2cbfd8a4a5b9071216fe2b139b5
+
+
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/harfbuzz/Config.in     | 2 +-
+>  package/harfbuzz/harfbuzz.hash | 6 ++----
+>  package/harfbuzz/harfbuzz.mk   | 4 ++--
+>  3 files changed, 5 insertions(+), 7 deletions(-)
 > 
-> Regards,
-> Marcin
+> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+> index e8f407bb8..27fa102e1 100644
+> --- a/package/harfbuzz/Config.in
+> +++ b/package/harfbuzz/Config.in
+> @@ -6,7 +6,7 @@ config BR2_PACKAGE_HARFBUZZ
+>  	help
+>  	  HarfBuzz is an OpenType text shaping engine
+>  
+> -	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
+> +	  https://harfbuzz.github.io/
+>  
+>  	  Harfbuzz can make optional use of cairo, freetype,
+>  	  glib2 and icu packages if they are selected.
+> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+> index ba54f477a..660e19efc 100644
+> --- a/package/harfbuzz/harfbuzz.hash
+> +++ b/package/harfbuzz/harfbuzz.hash
+> @@ -1,5 +1,3 @@
+> -# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.6.4.tar.xz.sha256
+> -sha256 9413b8d96132d699687ef914ebb8c50440efc87b3f775d25856d7ec347c03c12  harfbuzz-2.6.4.tar.xz
+> -
+>  # Locally computed
+> -sha256 1b32b6e2fea50440c128c5ba482f7691367c46fd0cd573b80fc863bf07964cea  COPYING
+> +sha256  6648a571a27f186e47094121f0095e1b809e918b3037c630c7f38ffad86e3035  harfbuzz-2.6.8.tar.xz
+> +sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
+> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+> index 3006b5ab9..c7bb8f934 100644
+> --- a/package/harfbuzz/harfbuzz.mk
+> +++ b/package/harfbuzz/harfbuzz.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -HARFBUZZ_VERSION = 2.6.4
+> -HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
+> +HARFBUZZ_VERSION = 2.6.8
+> +HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+>  HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+>  HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+>  HARFBUZZ_LICENSE_FILES = COPYING
