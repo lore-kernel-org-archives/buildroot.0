@@ -1,84 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Sep 2020 19:39:33 +0200
-Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 2.6.8
-In-Reply-To: <20200910132613.1881110-1-francois.perrad@gadz.org>
-References: <20200910132613.1881110-1-francois.perrad@gadz.org>
-Message-ID: <20200910193933.451a0eac@gmx.net>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Thu, 10 Sep 2020 19:41:40 +0200
+Subject: [Buildroot] [PATCH 0/3] IBM s390x and Z architecture support
+Message-ID: <20200910174143.311039-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Francois,
+This series of patches adds support for IBM s390x and Z architectures
+to buildroot.
 
-On Thu, 10 Sep 2020 15:26:13 +0200, Francois Perrad <fperrad@gmail.com> wrote:
+Alexander Egorenkov (3):
+  support/gnuconfig/config.sub: bump to version 2020-06-28
+  arch: new architecture IBM s390x
+  package/s390-tools: new package
 
-> - update home page URL (old one is redirected to github)
-> - change download to new location (github)
-> - update license hash because of copyright year update:
-> diff COPING:
-> -Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
-> -Copyright ? 2019  Facebook, Inc.
-> +Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
-> +Copyright ? 2018,2019,2020  Ebrahim Byagowi
-> +Copyright ? 2019,2020  Facebook, Inc.
-> 
-> note: newer versions (2.7.x) require a migration to meson
+ DEVELOPERS                              |   4 +
+ Makefile                                |   1 +
+ arch/Config.in                          |  13 +
+ arch/Config.in.s390x                    |  35 ++
+ board/qemu/s390x/linux.config           |  35 ++
+ board/qemu/s390x/post-build.sh          |  11 +
+ board/qemu/s390x/readme.txt             |   6 +
+ configs/qemu_s390x_defconfig            |  11 +
+ linux/Config.in                         |   2 +-
+ package/Config.in                       |   1 +
+ package/cmake/Config.in                 |   3 +-
+ package/gcc/gcc.mk                      |   5 +
+ package/go/Config.in.host               |   2 +-
+ package/kexec/Config.in                 |   2 +-
+ package/liburcu/Config.in               |   2 +-
+ package/makedumpfile/Config.in          |   2 +-
+ package/s390-tools/Config.in            |  20 +
+ package/s390-tools/s390-tools.hash      |   3 +
+ package/s390-tools/s390-tools.mk        |  80 ++++
+ package/systemd/Config.in               |   1 +
+ support/gnuconfig/config.sub            | 579 +++++++++++++-----------
+ toolchain/toolchain-buildroot/Config.in |   6 +-
+ 22 files changed, 553 insertions(+), 271 deletions(-)
+ create mode 100644 arch/Config.in.s390x
+ create mode 100644 board/qemu/s390x/linux.config
+ create mode 100755 board/qemu/s390x/post-build.sh
+ create mode 100644 board/qemu/s390x/readme.txt
+ create mode 100644 configs/qemu_s390x_defconfig
+ create mode 100644 package/s390-tools/Config.in
+ create mode 100644 package/s390-tools/s390-tools.hash
+ create mode 100644 package/s390-tools/s390-tools.mk
 
-Seems harfbuzz changed their mind (temporarily) and reverted the autobuild
-drop ([1])..., 2.7.2 builds fine...
-
-Regards,
-Peter
-
-[1] https://github.com/harfbuzz/harfbuzz/commit/519335783224e2cbfd8a4a5b9071216fe2b139b5
-
-
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/harfbuzz/Config.in     | 2 +-
->  package/harfbuzz/harfbuzz.hash | 6 ++----
->  package/harfbuzz/harfbuzz.mk   | 4 ++--
->  3 files changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-> index e8f407bb8..27fa102e1 100644
-> --- a/package/harfbuzz/Config.in
-> +++ b/package/harfbuzz/Config.in
-> @@ -6,7 +6,7 @@ config BR2_PACKAGE_HARFBUZZ
->  	help
->  	  HarfBuzz is an OpenType text shaping engine
->  
-> -	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
-> +	  https://harfbuzz.github.io/
->  
->  	  Harfbuzz can make optional use of cairo, freetype,
->  	  glib2 and icu packages if they are selected.
-> diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-> index ba54f477a..660e19efc 100644
-> --- a/package/harfbuzz/harfbuzz.hash
-> +++ b/package/harfbuzz/harfbuzz.hash
-> @@ -1,5 +1,3 @@
-> -# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.6.4.tar.xz.sha256
-> -sha256 9413b8d96132d699687ef914ebb8c50440efc87b3f775d25856d7ec347c03c12  harfbuzz-2.6.4.tar.xz
-> -
->  # Locally computed
-> -sha256 1b32b6e2fea50440c128c5ba482f7691367c46fd0cd573b80fc863bf07964cea  COPYING
-> +sha256  6648a571a27f186e47094121f0095e1b809e918b3037c630c7f38ffad86e3035  harfbuzz-2.6.8.tar.xz
-> +sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
-> diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-> index 3006b5ab9..c7bb8f934 100644
-> --- a/package/harfbuzz/harfbuzz.mk
-> +++ b/package/harfbuzz/harfbuzz.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -HARFBUZZ_VERSION = 2.6.4
-> -HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
-> +HARFBUZZ_VERSION = 2.6.8
-> +HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
->  HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
->  HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
->  HARFBUZZ_LICENSE_FILES = COPYING
+-- 
+2.26.2
