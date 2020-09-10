@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Sep 2020 19:26:27 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/rpi-userland: bump version to
- f73fca0
+Date: Thu, 10 Sep 2020 19:26:26 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/rpi-firmware: bump version to
+ baec4d2
 In-Reply-To: <20200910172627.8160-1-ps.report@gmx.net>
 References: <20200910172627.8160-1-ps.report@gmx.net>
-Message-ID: <20200910172627.8160-3-ps.report@gmx.net>
+Message-ID: <20200910172627.8160-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +16,31 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Changes v1 -> v2:
   - new patch
 ---
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 0db5b7c83f..83d7fce54f 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 32f2076d6e..1f1485f246 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  7c58d6b4cdf65acef0ce1f441606df87e25745f78d74e11930383d03100aff4b  rpi-userland-188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e.tar.gz
-+sha256  024cafd2f4428e96bff1d29a782db1d484d4f1835f64097ca1bd0dc38f75e84f  rpi-userland-f73fca015d421b763936667a0b58fe5024d59921.tar.gz
- sha256  bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5  LICENCE
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 9edc92344e..4cfd5cb832 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
+-sha256  bad3eedb256631bdce1e7d3a0ac59fdd38923a68579089a6b64029c5ff7d68f4  rpi-firmware-542aceb30364db3ce87d532ea90451f46bbb84e9.tar.gz
++sha256  dcea78fcd14e0a0cb9f3b7eba42baf17566e141c3188f348017271d64edacaa3  rpi-firmware-baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 8aa855d0ef..91368fa809 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_USERLAND_VERSION = 188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e
-+RPI_USERLAND_VERSION = f73fca015d421b763936667a0b58fe5024d59921
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+-RPI_FIRMWARE_VERSION = 542aceb30364db3ce87d532ea90451f46bbb84e9
++RPI_FIRMWARE_VERSION = baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
 2.28.0
