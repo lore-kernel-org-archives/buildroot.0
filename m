@@ -1,78 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Sep 2020 11:46:08 +0200
-Subject: [Buildroot] [PATCH] boot/afboot-stm32: fix build with gcc 10
-Message-ID: <20200910094608.1251382-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Sep 2020 12:05:36 +0200
+Subject: [Buildroot] Toolchain issues on multiple architectures
+Message-ID: <20200910120536.2431494d@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch that passes -fno-builtin to fix the build
-with gcc 10. The patch has been submitted upstream.
+Hello,
 
-There are no autobuilder failures, since it's a bootloader package,
-and therefore not tested by the autobuilders. However, a build failure
-was detected when building toolchains and a minimal ARMv7-M system at
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359529.
+As part of the https://toolchains.bootlin.com project, I've tried to
+rebuild 175 toolchains on top of Buildroot 2020.08, and encountered a
+number of failures, which are summarized below.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...fno-builtin-to-fix-build-with-gcc-10.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
+Damien, Alistair: there is an issue with the RISC-V 32-bit toolchain.
+Could you have a look, and tell us if you have some suggestions?
 
-diff --git a/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch b/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..5ef47b59ff
---- /dev/null
-+++ b/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
-@@ -0,0 +1,46 @@
-+From 5448f328ff63a6ca4a64519c2f1dfc63a33df4b7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 10 Sep 2020 11:37:33 +0200
-+Subject: [PATCH] Pass -fno-builtin to fix build with gcc 10
-+
-+gcc 10, if it recognizes some hand-written code that looks like
-+memcpy, will generate a call to memcpy().
-+
-+For example:
-+
-+        while (dst < &_end_data) {
-+                *dst++ = *src++;
-+        }
-+
-+gets recognized as such. However, in the context of bare-metal code,
-+having a call to memcpy() in the C library doesn't work. So we fix
-+that by disabling builtins.
-+
-+Fixes:
-+
-+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: stm32f429i-disco.o: in function `reset':
-+stm32f429i-disco.c:(.text.reset+0x1a): undefined reference to `memcpy'
-+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: stm32f429i-disco.c:(.text.reset+0x34): undefined reference to `memset'
-+make[1]: *** [Makefile:26: stm32f429i-disco] Error 1
-+
-+Upstream: https://github.com/mcoquelin-stm32/afboot-stm32/pull/9
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/Makefile b/Makefile
-+index f699176..1e8557d 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -13,6 +13,7 @@ DTB_ADDR?=0x08004000
-+ CFLAGS := -mthumb -mcpu=cortex-m4
-+ CFLAGS += -ffunction-sections -fdata-sections
-+ CFLAGS += -Os -std=gnu99 -Wall
-++CFLAGS += -fno-builtin
-+ LINKERFLAGS := -nostartfiles --gc-sections
-+ 
-+ obj-y += gpio.o mpu.o qspi.o start_kernel.o
-+-- 
-+2.26.2
-+
+ARC maintainers: all ARC toolchains are failing to build due to the use
+of a recent gdb where gdbserver was moved to the top-level. However, it
+doesn't seem to be that easy to build just gdbserver in those recent
+gcc versions. I have posted a question about this on the gdb@ mailing
+list: https://sourceware.org/pipermail/gdb/2020-September/048888.html.
+
+Matt, there are some PowerPC64 build issues as well. Have you ever seen
+them, do you have any hints?
+
+There are also issues on other platforms, AArch64, x86-64, Microblaze, etc.
+
+See below the full details:
+
+AArch64
+=======
+
+- aarch64--musl--stable
+  https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359478
+
+  build failure while building gdb, with redefinitions of C library
+  structures
+
+ARC
+===
+
+All configurations are failing
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359481
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359482
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359483
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359484
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359485
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359487
+
+Issue is caused by the recent version of gdb, where gdbserver has been
+moved from gdb/gdbserver/ to gdbserver/. However, the story is not so
+simple: you can't simply go in gdbserver/ and run ./configure from it,
+that doesn't work anymore.
+
+ARMv7-M
+=======
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359529
+
+Build failures while building afboot-stm32, most likely due to gcc
+10.x emitting calls to memcpy().
+
+Fixed by:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20200910094608.1251382-1-thomas.petazzoni at bootlin.com/
+
+Microblaze
+==========
+
+All the "bleeding edge" configurations fail to boot under Qemu.
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359536
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359538
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359540
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359542
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359544
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359546
+
+PowerPC64 (big and little endian) Power 8
+=========================================
+
+Both the glibc stable and bleeding edge are failing to build libstdc++
+in host-gcc-final. Interesingly, the musl configurations work fine.
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359625
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359626
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359621
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359622
+
+RISC-V ILP32D
+=============
+
+The only configuration (glibc) fails to build in glibc, with a bunch
+of:
+
+../sysdeps/unix/sysv/linux/riscv/sysdep.h:120:31: error: '__NR_futex' undeclared (first use in this function); did you mean '__futex'?
+  120 | #define SYS_ify(syscall_name) __NR_##syscall_name
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359659
+
+SPARCv8
+=======
+
+Fortran support related issue:
+
+/builds/bootlin/toolchains-builder/build/opt/sparcv8--uclibc--stable-2020.08-1/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /builds/bootlin/toolchains-builder/build/opt/sparcv8--uclibc--stable-2020.08-1/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/lib/libgfortran.so: undefined reference to `__sync_bool_compare_and_swap_4'
+collect2: error: ld returned 1 exit status
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359681
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359683
+
+SPARCv8 doesn't have __sync built-ins of 4 bytes, so probably we
+should not allow Fortran support on SPARCv8 ?
+
+x86-64
+======
+
+Issue happens only with the uClibc bleeding edge toolchain: it seems
+like it cannot login into the system under Qemu. The login prompt
+appears, but then it doesn't seem to work.
+
+- https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359690
+
+
 -- 
-2.26.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
