@@ -1,34 +1,78 @@
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Thu, 10 Sep 2020 11:44:02 +0200
-Subject: [Buildroot] Running Weston on stm32mp157c-dk2
-In-Reply-To: <20200910114133.43bb3e53@windsurf.hq.k.grp>
-References: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
- <20200909221101.327887ca@windsurf.hq.k.grp>
- <CAOiXNkAW-_HZPMGzZSezjNDu=wyKN6eiiokfOXBkBaAce+SMLg@mail.gmail.com>
- <20200910114133.43bb3e53@windsurf.hq.k.grp>
-Message-ID: <CAOiXNkCVYCW=rf6pN5-e0D7NZWhoOry0ZwtPDEOPna_4G2ss6g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 10 Sep 2020 11:46:08 +0200
+Subject: [Buildroot] [PATCH] boot/afboot-stm32: fix build with gcc 10
+Message-ID: <20200910094608.1251382-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Sep 2020 at 11:41, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Thu, 10 Sep 2020 11:40:29 +0200
-> Andrey Nechypurenko <andreynech@gmail.com> wrote:
->
-> > > Which OpenGL implementation are you trying to use? The proprietary
-> > > blobs from Vivante, or the open-source Etnaviv implementation? I don't
-> > > know if the latter was tested on STM32MP157.
-> >
-> > Good question. In fact, I am not sure :-) . So I guess it is Etnaviv
-> > because I did nothing to add proprietary blobs. I will check it out
-> > and see what is used by Yocto-based distribution provided by STM where
-> > Weston works.
->
-> In Buildroot, the package package/gcnano-binaries/ will give you the
-> proprietary OpenGL blobs provided by ST.
+This commit adds a patch that passes -fno-builtin to fix the build
+with gcc 10. The patch has been submitted upstream.
 
-Cool! Thanks for the hint! Would probably never find it on my own :-)
+There are no autobuilder failures, since it's a bootloader package,
+and therefore not tested by the autobuilders. However, a build failure
+was detected when building toolchains and a minimal ARMv7-M system at
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359529.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...fno-builtin-to-fix-build-with-gcc-10.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
+
+diff --git a/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch b/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..5ef47b59ff
+--- /dev/null
++++ b/boot/afboot-stm32/0001-Pass-fno-builtin-to-fix-build-with-gcc-10.patch
+@@ -0,0 +1,46 @@
++From 5448f328ff63a6ca4a64519c2f1dfc63a33df4b7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 10 Sep 2020 11:37:33 +0200
++Subject: [PATCH] Pass -fno-builtin to fix build with gcc 10
++
++gcc 10, if it recognizes some hand-written code that looks like
++memcpy, will generate a call to memcpy().
++
++For example:
++
++        while (dst < &_end_data) {
++                *dst++ = *src++;
++        }
++
++gets recognized as such. However, in the context of bare-metal code,
++having a call to memcpy() in the C library doesn't work. So we fix
++that by disabling builtins.
++
++Fixes:
++
++/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: stm32f429i-disco.o: in function `reset':
++stm32f429i-disco.c:(.text.reset+0x1a): undefined reference to `memcpy'
++/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: stm32f429i-disco.c:(.text.reset+0x34): undefined reference to `memset'
++make[1]: *** [Makefile:26: stm32f429i-disco] Error 1
++
++Upstream: https://github.com/mcoquelin-stm32/afboot-stm32/pull/9
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile b/Makefile
++index f699176..1e8557d 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -13,6 +13,7 @@ DTB_ADDR?=0x08004000
++ CFLAGS := -mthumb -mcpu=cortex-m4
++ CFLAGS += -ffunction-sections -fdata-sections
++ CFLAGS += -Os -std=gnu99 -Wall
+++CFLAGS += -fno-builtin
++ LINKERFLAGS := -nostartfiles --gc-sections
++ 
++ obj-y += gpio.o mpu.o qspi.o start_kernel.o
++-- 
++2.26.2
++
+-- 
+2.26.2
