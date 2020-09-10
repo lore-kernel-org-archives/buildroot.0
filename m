@@ -1,100 +1,34 @@
 From: Robin Jarry <robin.jarry@6wind.com>
-Date: Thu, 10 Sep 2020 09:45:47 +0200
-Subject: [Buildroot] [PATCH v3 2/2] support/scripts/pycompile: add --verbose
- option
-In-Reply-To: <20200910074547.2983-1-robin.jarry@6wind.com>
+Date: Thu, 10 Sep 2020 09:53:28 +0200
+Subject: [Buildroot] [PATCH v3 1/2] support/scripts/pycompile: fix .pyc
+ original source file paths
+In-Reply-To: <20200910074547.2983-2-robin.jarry@6wind.com>
 References: <20200904112908.21686-1-julien.floret@6wind.com>
  <20200910074547.2983-1-robin.jarry@6wind.com>
-Message-ID: <20200910074547.2983-3-robin.jarry@6wind.com>
+ <20200910074547.2983-2-robin.jarry@6wind.com>
+Message-ID: <20200910075328.hhb2ppaefkpmag6l@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a new option that prints the (runtime) path of compiled .py files
-when VERBOSE=1 is set.
+2020-09-10, Robin Jarry:
+> +    if not force:
+> +        # inspired from compileall.compile_file in the standard library
+> +        try:
+> +            with open(host_path + "c", "rb") as f:
+> +                header = f.read(12)
+> +            expect = struct.pack("<4sll", importlib.util.MAGIC_NUMBER,
+> +                                 0, int(os.stat(host_path).st_mtime))
+> +            if header == expect:
+> +                return  # .pyc file already up to date.
+> +        except OSError:
+> +            pass  # .pyc file does not exist
 
-Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
----
- package/python/python.mk     |  1 +
- package/python3/python3.mk   |  1 +
- support/scripts/pycompile.py | 11 +++++++++--
- 3 files changed, 11 insertions(+), 2 deletions(-)
+This bit does not work with python 2. I'll submit a fix in a v4.
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 3fe5ecd00462..4bff5f0c7c66 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -263,6 +263,7 @@ define PYTHON_CREATE_PYC_FILES
- 	$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR) \
- 		$(TOPDIR)/support/scripts/pycompile.py \
- 		$(if $(BR2_REPRODUCIBLE),--force) \
-+		$(if $(VERBOSE),--verbose) \
- 		--strip-root $(TARGET_DIR) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
- endef
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 4c8a12c7a3ad..52c548accc9b 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -280,6 +280,7 @@ define PYTHON3_CREATE_PYC_FILES
- 	$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
- 		$(TOPDIR)/support/scripts/pycompile.py \
- 		$(if $(BR2_REPRODUCIBLE),--force) \
-+		$(if $(VERBOSE),--verbose) \
- 		--strip-root $(TARGET_DIR) \
- 		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
- endef
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index f3385555d647..d1daec5fac11 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -17,7 +17,7 @@ import struct
- import sys
- 
- 
--def compile_one(host_path, strip_root=None, force=False):
-+def compile_one(host_path, strip_root=None, force=False, verbose=False):
-     """
-     Compile a .py file into a .pyc file located next to it.
- 
-@@ -28,6 +28,8 @@ def compile_one(host_path, strip_root=None, force=False):
-         files.
-     :arg force:
-         Recompile even if already up-to-date.
-+    :arg verbose:
-+        Print compiled file paths.
-     """
-     if os.path.islink(host_path) or not os.path.isfile(host_path):
-         return  # only compile real files
-@@ -55,6 +57,9 @@ def compile_one(host_path, strip_root=None, force=False):
-     else:
-         runtime_path = host_path
- 
-+    if verbose:
-+        print("  PYC  {}".format(runtime_path))
-+
-     # will raise an error if the file cannot be compiled
-     py_compile.compile(host_path, cfile=host_path + "c",
-                        dfile=runtime_path, doraise=True)
-@@ -81,6 +86,8 @@ def main():
-                         """)
-     parser.add_argument("--force", action="store_true",
-                         help="Force compilation even if already compiled")
-+    parser.add_argument("--verbose", action="store_true",
-+                        help="Print compiled files")
- 
-     args = parser.parse_args()
- 
-@@ -91,7 +98,7 @@ def main():
-             for parent, _, files in os.walk(d):
-                 for f in files:
-                     compile_one(os.path.join(parent, f), args.strip_root,
--                                args.force)
-+                                args.force, args.verbose)
- 
-     except Exception as e:
-         print("error: {}".format(e))
+Sorry about the noise...
+
 -- 
-2.28.0
+Robin
