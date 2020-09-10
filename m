@@ -1,70 +1,67 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 10 Sep 2020 15:26:13 +0200
-Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 2.6.8
-Message-ID: <20200910132613.1881110-1-francois.perrad@gadz.org>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Thu, 10 Sep 2020 16:18:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx: custom
+ padding
+Message-ID: <20200910141843.3030855-1-pieter.degendt@basalte.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update home page URL (old one is redirected to github)
-- change download to new location (github)
-- update license hash because of copyright year update:
-diff COPING:
--Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
--Copyright ? 2019  Facebook, Inc.
-+Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
-+Copyright ? 2018,2019,2020  Ebrahim Byagowi
-+Copyright ? 2019,2020  Facebook, Inc.
+From: Tibault Damman <tibault.damman@basalte.be>
 
-note: newer versions (2.7.x) require a migration to meson
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Some derivatives (such as Variscite imx8mm) require the training data to
+be padded to a different loading address.
+
+Signed-off-by: Tibault Damman <tibault.damman@basalte.be>
+Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
 ---
- package/harfbuzz/Config.in     | 2 +-
- package/harfbuzz/harfbuzz.hash | 6 ++----
- package/harfbuzz/harfbuzz.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/freescale-imx/firmware-imx/Config.in       | 12 ++++++++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk |  6 ++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-index e8f407bb8..27fa102e1 100644
---- a/package/harfbuzz/Config.in
-+++ b/package/harfbuzz/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	help
- 	  HarfBuzz is an OpenType text shaping engine
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 5becf8b6a9..c947248ee1 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -69,6 +69,18 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
  
--	  http://www.freedesktop.org/wiki/Software/HarfBuzz/
-+	  https://harfbuzz.github.io/
+ endchoice # DDR training FW
  
- 	  Harfbuzz can make optional use of cairo, freetype,
- 	  glib2 and icu packages if they are selected.
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index ba54f477a..660e19efc 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,5 +1,3 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.6.4.tar.xz.sha256
--sha256 9413b8d96132d699687ef914ebb8c50440efc87b3f775d25856d7ec347c03c12  harfbuzz-2.6.4.tar.xz
--
- # Locally computed
--sha256 1b32b6e2fea50440c128c5ba482f7691367c46fd0cd573b80fc863bf07964cea  COPYING
-+sha256  6648a571a27f186e47094121f0095e1b809e918b3037c630c7f38ffad86e3035  harfbuzz-2.6.8.tar.xz
-+sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 3006b5ab9..c7bb8f934 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,8 +4,8 @@
++config BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR
++	hex "(lp)ddr imem load address"
++	default 0x8000
++	help
++	  The training FW will be padded to start at this load address
++
++config BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR
++	hex "(lp)ddr dmem load address"
++	default 0x4000
++	help
++	  The training FW will be padded to start at this load address
++
+ endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 
+ endif # BR2_PACKAGE_FIRMWARE_IMX
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index eb8595f022..1ace002d5b 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -23,10 +23,12 @@ endef
  #
- ################################################################################
  
--HARFBUZZ_VERSION = 2.6.4
--HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
-+HARFBUZZ_VERSION = 2.6.8
-+HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING
+ define FIRMWARE_IMX_PREPARE_DDR_FW
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
++	$(TARGET_OBJCOPY) -I binary -O binary \
++		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR) --gap-fill=0x0 \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
++	$(TARGET_OBJCOPY) -I binary -O binary \
++		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR) --gap-fill=0x0 \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
 -- 
 2.25.1
