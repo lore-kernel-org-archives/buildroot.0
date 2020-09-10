@@ -1,45 +1,100 @@
 From: Robin Jarry <robin.jarry@6wind.com>
-Date: Thu, 10 Sep 2020 10:32:50 +0200
-Subject: [Buildroot] [PATCH v4 0/2] pycompile: fix .pyc source paths +
- improvements
-In-Reply-To: <20200904112908.21686-1-julien.floret@6wind.com>
+Date: Thu, 10 Sep 2020 10:32:52 +0200
+Subject: [Buildroot] [PATCH v4 2/2] support/scripts/pycompile: add --verbose
+ option
+In-Reply-To: <20200910083252.7102-1-robin.jarry@6wind.com>
 References: <20200904112908.21686-1-julien.floret@6wind.com>
-Message-ID: <20200910083252.7102-1-robin.jarry@6wind.com>
+ <20200910083252.7102-1-robin.jarry@6wind.com>
+Message-ID: <20200910083252.7102-3-robin.jarry@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series is about fixing the original .py source paths encoded into
-.pyc files. It comes with small improvements on pycompile.py as well.
+Add a new option that prints the (runtime) path of compiled .py files
+when VERBOSE=1 is set.
 
-The first two commits of v2 have been applied already, I am sending the
-last two which needed some rework.
+Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+---
+ package/python/python.mk     |  1 +
+ package/python3/python3.mk   |  1 +
+ support/scripts/pycompile.py | 11 +++++++++--
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
-Also, v3 has a problem with python 3.4 and earlier (especially python
-2). This v4 should work with all versions of python.
-
-Robin Jarry (2):
-  support/scripts/pycompile: fix .pyc original source file paths
-  support/scripts/pycompile: add --verbose option
-
- package/python/python.mk     |   6 +-
- package/python3/python3.mk   |   6 +-
- support/scripts/pycompile.py | 153 +++++++++++++++++++++++------------
- 3 files changed, 108 insertions(+), 57 deletions(-)
-
-Differences since v3:
-
-  * Fixed errors with python <3.4.
-
-Differences since v2:
-
-  * Used str.format() instead of % format.
-  * Renamed the TARGET positional argument into --strip-root which is
-    more explicit. The script is called with --strip-root=$(TARGET_DIR).
-  * Homogenized the arguments metavars.
-  * Used argparse type callbacks for directory arguments checking.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 3fe5ecd00462..4bff5f0c7c66 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -263,6 +263,7 @@ define PYTHON_CREATE_PYC_FILES
+ 	$(HOST_DIR)/bin/python$(PYTHON_VERSION_MAJOR) \
+ 		$(TOPDIR)/support/scripts/pycompile.py \
+ 		$(if $(BR2_REPRODUCIBLE),--force) \
++		$(if $(VERBOSE),--verbose) \
+ 		--strip-root $(TARGET_DIR) \
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)
+ endef
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 4c8a12c7a3ad..52c548accc9b 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -280,6 +280,7 @@ define PYTHON3_CREATE_PYC_FILES
+ 	$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR) \
+ 		$(TOPDIR)/support/scripts/pycompile.py \
+ 		$(if $(BR2_REPRODUCIBLE),--force) \
++		$(if $(VERBOSE),--verbose) \
+ 		--strip-root $(TARGET_DIR) \
+ 		$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)
+ endef
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index 04193f4a02c2..55c09fe688d6 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -31,7 +31,7 @@ else:
+     PYC_HEADER_ARGS += (0,)  # zero hash, we use timestamp invalidation
+ 
+ 
+-def compile_one(host_path, strip_root=None, force=False):
++def compile_one(host_path, strip_root=None, force=False, verbose=False):
+     """
+     Compile a .py file into a .pyc file located next to it.
+ 
+@@ -42,6 +42,8 @@ def compile_one(host_path, strip_root=None, force=False):
+         files.
+     :arg force:
+         Recompile even if already up-to-date.
++    :arg verbose:
++        Print compiled file paths.
+     """
+     if os.path.islink(host_path) or not os.path.isfile(host_path):
+         return  # only compile real files
+@@ -69,6 +71,9 @@ def compile_one(host_path, strip_root=None, force=False):
+     else:
+         runtime_path = host_path
+ 
++    if verbose:
++        print("  PYC  {}".format(runtime_path))
++
+     # will raise an error if the file cannot be compiled
+     py_compile.compile(host_path, cfile=host_path + "c",
+                        dfile=runtime_path, doraise=True)
+@@ -95,6 +100,8 @@ def main():
+                         """)
+     parser.add_argument("--force", action="store_true",
+                         help="Force compilation even if already compiled")
++    parser.add_argument("--verbose", action="store_true",
++                        help="Print compiled files")
+ 
+     args = parser.parse_args()
+ 
+@@ -105,7 +112,7 @@ def main():
+             for parent, _, files in os.walk(d):
+                 for f in files:
+                     compile_one(os.path.join(parent, f), args.strip_root,
+-                                args.force)
++                                args.force, args.verbose)
+ 
+     except Exception as e:
+         print("error: {}".format(e))
 -- 
 2.28.0
