@@ -1,94 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Sep 2020 23:46:02 +0200
-Subject: [Buildroot] [git commit] package/iptables: fix static build
-Message-ID: <20200910213859.AF09D81E59@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 10 Sep 2020 15:30:04 -0700
+Subject: [Buildroot] More maintainers
+In-Reply-To: <20200907172052.50b4f148@windsurf.home>
+References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
+ <87o8mlmoga.fsf@dell.be.48ers.dk>
+ <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
+ <87blilmeo2.fsf@dell.be.48ers.dk>
+ <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
+ <877dt8n2o7.fsf@dell.be.48ers.dk>
+ <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
+ <20200905211650.0a229191@windsurf.home>
+ <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
+ <20200905223835.1e68d658@windsurf.home>
+ <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
+ <20200905230431.34bcd9ea@windsurf.home>
+ <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
+ <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
+ <87imcric55.fsf@dell.be.48ers.dk>
+ <CAGm1_ktS7BTH0wJnVqu0naPjdw0+Yzd+gD-evhBH2dFT2T97xQ@mail.gmail.com>
+ <CAEyMn7b0mjx+Vee9vtr2CzvYDYBgA5Spo3-paH_1pKGENczaHg@mail.gmail.com>
+ <20200907172052.50b4f148@windsurf.home>
+Message-ID: <CA+h8R2rATYdzbT9ybjibNkdyeL1vYtt85V_V6hEX4YOA7hmj4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a41e7d9ecd9ec4678ea068a0f2498cdaa16bbea7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Static build of iptables 1.8.5 fails on:
+Thank you all for your time on the phone discussion today. I really
+appreciated hearing everyone's viewpoints.
 
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libxtables/.libs/libxtables.a(libxtables_la-xtables.o): in function `dlreg_free':
-/srv/storage/autobuild/run/instance-3/output-1/build/iptables-1.8.5/libxtables/xtables.c:235: undefined reference to `dlclose'
+My goal here is /not/ to fragment the project, but rather find a way
+to allow everyone's desired workflows to come together.
 
-Issue has been added with
-https://git.netfilter.org/iptables/commit/?id=7db4333dc0b6cd8e943fab78d6dab40ff9f4512e
+In terms of the social issue with getting more quality Reviewed-by,
+that is not something I know any solution to.
 
-Fixes:
- - http://autobuild.buildroot.org/results/00f551be87507757a78e332f2859b1e7b3190363
+As for tooling;
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...compiler-warning-fixes-for-NO_SHARED_LIBS.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+I don't see any incompatibility between emails and GitLab - if we have
+a bot that formats the discussion on GitLab into the exact same format
+we expect in emails, and vise-versa.
 
-diff --git a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-new file mode 100644
-index 0000000000..8d364b3789
---- /dev/null
-+++ b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-@@ -0,0 +1,58 @@
-+From 6cb8af1ff3951e47def7a16db39289dc9d9c61fe Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-+Date: Tue, 23 Jun 2020 16:09:02 -0700
-+Subject: libxtables: compiler warning fixes for NO_SHARED_LIBS
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes two issues with NO_SHARED_LIBS:
-+ - #include <dlfcn.h> is ifdef'ed out and thus dlclose()
-+   triggers an undeclared function compiler warning
-+ - dlreg_add() is unused and thus triggers an unused
-+   function warning
-+
-+Test: builds without warnings
-+Signed-off-by: Maciej ??enczykowski <maze@google.com>
-+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-+
-+[Retrieved from:
-+https://git.netfilter.org/iptables/commit/libxtables/xtables.c?id=6cb8af1ff3951e47def7a16db39289dc9d9c61fe]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libxtables/xtables.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/libxtables/xtables.c b/libxtables/xtables.c
-+index 7fe42580..8907ba20 100644
-+--- a/libxtables/xtables.c
-++++ b/libxtables/xtables.c
-+@@ -206,6 +206,7 @@ struct xtables_target *xtables_targets;
-+ static bool xtables_fully_register_pending_match(struct xtables_match *me);
-+ static bool xtables_fully_register_pending_target(struct xtables_target *me);
-+ 
-++#ifndef NO_SHARED_LIBS
-+ /* registry for loaded shared objects to close later */
-+ struct dlreg {
-+ 	struct dlreg *next;
-+@@ -237,6 +238,7 @@ static void dlreg_free(void)
-+ 		dlreg = next;
-+ 	}
-+ }
-++#endif
-+ 
-+ void xtables_init(void)
-+ {
-+@@ -267,7 +269,9 @@ void xtables_init(void)
-+ 
-+ void xtables_fini(void)
-+ {
-++#ifndef NO_SHARED_LIBS
-+ 	dlreg_free();
-++#endif
-+ }
-+ 
-+ void xtables_set_nfproto(uint8_t nfproto)
-+-- 
-+cgit v1.2.3
-+
+Is there really a direct issue with having the same information in two places?
+
+So: to be most useful, this is what I will try to start work on this
+week towards this topic:
+
+ - Bot prototype for syncing between emails and GitLab PRs
+ - Automated CI w/ Buildroot in Initramfs against "real hardware"
+(odroid, pi, intel mostly)
+ - Contributing more GitLab runners for the CI using spare compute resources.
+ - Automated PR + test (and then my own manual review) of the patch backlog.
+
+
+On Mon, Sep 7, 2020 at 8:21 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Mon, 7 Sep 2020 17:02:20 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > regarding to this discussion I also have two infos I would like to
+> > share with you:
+> >
+> > [1] "As GitLab has grown over the years, we?re incredibly humbled by
+> > the number of users who choose to use our free platform. As the
+> > adoption of our free product has scaled, so have the underlying costs
+> > to support it. As we are committed to continue to support the free
+> > product for the larger community, we need to implement further CI/CD
+> > limits on GitLab.com. This change is only applicable to free
+> > GitLab.com users?current GitLab.com paid tiers and all self-managed
+> > GitLab tiers will remain unchanged."
+> >
+> > Does the buildroot gitlab is affected by this change? Or is buildroot
+> > a member of the GitLab for Open Source program [2]?
+>
+> For gitlab.com/buildroot/buildroot, we are using our own Gitlab CI
+> runners, and not the free runners, so my understanding is that we are
+> not affected by this change.
+
+Would be interested to hear what everyone thinks of the concept of
+keeping both e-mail and GitLab together.
+
+Best regards,
+Christian Stewart
