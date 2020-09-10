@@ -1,79 +1,125 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Thu, 10 Sep 2020 23:21:43 +0000
-Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
-In-Reply-To: <20191222224144.38603994@windsurf>
-References: <20191206221918.1c05e316@windsurf.home>
- <20191217213253.12446-1-vgupta@synopsys.com>
- <20191222224144.38603994@windsurf>
-Message-ID: <3b18564e-be2e-91b3-def1-6c3591288ecc@synopsys.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 10 Sep 2020 16:17:46 -0700
+Subject: [Buildroot] Toolchain issues on multiple architectures
+In-Reply-To: <20200910120536.2431494d@windsurf.hq.k.grp>
+References: <20200910120536.2431494d@windsurf.hq.k.grp>
+Message-ID: <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Thu, Sep 10, 2020 at 3:05 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> As part of the https://toolchains.bootlin.com project, I've tried to
+> rebuild 175 toolchains on top of Buildroot 2020.08, and encountered a
+> number of failures, which are summarized below.
+>
+> Damien, Alistair: there is an issue with the RISC-V 32-bit toolchain.
+> Could you have a look, and tell us if you have some suggestions?
+>
+> ARC maintainers: all ARC toolchains are failing to build due to the use
+> of a recent gdb where gdbserver was moved to the top-level. However, it
+> doesn't seem to be that easy to build just gdbserver in those recent
+> gcc versions. I have posted a question about this on the gdb@ mailing
+> list: https://sourceware.org/pipermail/gdb/2020-September/048888.html.
+>
+> Matt, there are some PowerPC64 build issues as well. Have you ever seen
+> them, do you have any hints?
+>
+> There are also issues on other platforms, AArch64, x86-64, Microblaze, etc.
+>
+> See below the full details:
+>
+> AArch64
+> =======
+>
+> - aarch64--musl--stable
+>   https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359478
+>
+>   build failure while building gdb, with redefinitions of C library
+>   structures
+>
+> ARC
+> ===
+>
+> All configurations are failing
+>
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359481
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359482
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359483
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359484
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359485
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359487
+>
+> Issue is caused by the recent version of gdb, where gdbserver has been
+> moved from gdb/gdbserver/ to gdbserver/. However, the story is not so
+> simple: you can't simply go in gdbserver/ and run ./configure from it,
+> that doesn't work anymore.
+>
+> ARMv7-M
+> =======
+>
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359529
+>
+> Build failures while building afboot-stm32, most likely due to gcc
+> 10.x emitting calls to memcpy().
+>
+> Fixed by:
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200910094608.1251382-1-thomas.petazzoni at bootlin.com/
+>
+> Microblaze
+> ==========
+>
+> All the "bleeding edge" configurations fail to boot under Qemu.
+>
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359536
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359538
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359540
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359542
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359544
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359546
+>
+> PowerPC64 (big and little endian) Power 8
+> =========================================
+>
+> Both the glibc stable and bleeding edge are failing to build libstdc++
+> in host-gcc-final. Interesingly, the musl configurations work fine.
+>
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359625
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359626
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359621
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359622
+>
+> RISC-V ILP32D
+> =============
+>
+> The only configuration (glibc) fails to build in glibc, with a bunch
+> of:
+>
+> ../sysdeps/unix/sysv/linux/riscv/sysdep.h:120:31: error: '__NR_futex' undeclared (first use in this function); did you mean '__futex'?
+>   120 | #define SYS_ify(syscall_name) __NR_##syscall_name
+>
+> - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359659
 
-On 12/22/19 1:41 PM, Thomas Petazzoni wrote:
-> Hello Vineet,
-> 
-> On Tue, 17 Dec 2019 13:32:53 -0800
-> Vineet Gupta <Vineet.Gupta1-HKixBCOQz3hWk0Htik3J/w@public.gmane.org> wrote:
-> 
->> Remove special handling for ARC - as it is not needed for cksy etc.
->>
->> A nice side benefit is that the ARC specific version now only needs to
->> be specified in single place (vs 3 currently) in binutils/Config.in.host
->>
->> Signed-off-by: Vineet Gupta <vgupta-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
->> ---
->>  package/binutils/binutils.mk | 6 +-----
->>  1 file changed, 1 insertion(+), 5 deletions(-)
->>
->> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
->> index a19d6940f7c1..3ae5561d67d3 100644
->> --- a/package/binutils/binutils.mk
->> +++ b/package/binutils/binutils.mk
->> @@ -8,14 +8,10 @@
->>  # If not, we do like other packages
->>  BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
->>  ifeq ($(BINUTILS_VERSION),)
->> -ifeq ($(BR2_arc),y)
->> -BINUTILS_VERSION = arc-2019.09-rc1
->> -else
->>  BINUTILS_VERSION = 2.32
->>  endif
->> -endif # BINUTILS_VERSION
->>  
->> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
->> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
+Do you have any steps to reproduce this?
 
-Looks like we need this specific thunk anyways. When I select pristine upstream
-binutils (not ARC fork @ github), the above forces it to download from github
-which it should not and will not if the tag/branch has not been mirrored there.
+I tried `make qemu_riscv32_virt_defconfig; make` in buildroot and I
+don't see any failures.
 
->>  BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
->>  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
->>  BINUTILS_FROM_GIT = y
-> 
-> In fact, I was wrong, this also does not work, in the following
-> situation:
-> 
->  - You're using a pre-compiled external toolchain, so host-binutils is
->    not selected/enabled, so the version selection in
->    package/binutils/Config.in.host is not used, and therefore
->    BR2_BINUTILS_VERSION_ARC cannot be set to 'y'.
-> 
->  - You have binutils enabled for the target.
-> 
-> Then, with your patch, we will no longer select the ARC-specific fork
-> of binutils.
-> 
-> Basically, for the target binutils (just like for target gdb), we don't
-> have any version selection, so we force using one specific version
-> depending on the architecture.
-> 
-> Best regards,
-> 
-> Thomas
-> 
+I tried `./build.sh riscv32-ilp32d--glibc--bleeding-edge testing
+buildroot-toolchains/toolchains.bootlin.com-2020.08 2020.08-1` in the
+toolchains-builder, but I'm missing
+frags/riscv32-ilp32d--glibc--bleeding-edge.config.
+
+I then tried `frags/riscv32-ilp32d--glibc--bleeding-edge.config` but
+it doesn't generate a RV32 frag.
+
+What am I missing?
+
+Alistair
