@@ -1,88 +1,41 @@
 From: Christian Stewart <christian@paral.in>
-Date: Thu, 10 Sep 2020 15:30:04 -0700
-Subject: [Buildroot] More maintainers
-In-Reply-To: <20200907172052.50b4f148@windsurf.home>
-References: <CAFSsvmpLGd-2pequ_skL+8d_txyhxt5q5tgo0SDAfifVLJY6cg@mail.gmail.com>
- <87o8mlmoga.fsf@dell.be.48ers.dk>
- <CA+TH9VkA2ETrCvQF+mhb=PeKm8P=o2Jnesmooh4KCKSbzUcANQ@mail.gmail.com>
- <87blilmeo2.fsf@dell.be.48ers.dk>
- <CA+h8R2qYVjSwFZR0DcOpAdSY8nZKURLwW+a8tanxpEvDh__fSg@mail.gmail.com>
- <877dt8n2o7.fsf@dell.be.48ers.dk>
- <CAFSsvmqdBURoCVmbFRBUoYwd3VErpOp1GcG=xzxJETpbpAVrTg@mail.gmail.com>
- <20200905211650.0a229191@windsurf.home>
- <CA+TH9Vn8cdHTKmoT1LLY7F=ywtuH_bSLFxZX1aQZgH6yFT26TA@mail.gmail.com>
- <20200905223835.1e68d658@windsurf.home>
- <CA+TH9VkgkuMUUy65L6njfjSuDeJ7wzXueJmX74XF9YQucd8RnA@mail.gmail.com>
- <20200905230431.34bcd9ea@windsurf.home>
- <CA+TH9Vn8aOXTCG-KeVNZ+=pJCEz5UXBhOtSqyf+uf8uts8hrsQ@mail.gmail.com>
- <CAFSsvmq4UWvSAhpmJCPt35PagXaZMuHVJenMd8d4oZd7E3KPDA@mail.gmail.com>
- <87imcric55.fsf@dell.be.48ers.dk>
- <CAGm1_ktS7BTH0wJnVqu0naPjdw0+Yzd+gD-evhBH2dFT2T97xQ@mail.gmail.com>
- <CAEyMn7b0mjx+Vee9vtr2CzvYDYBgA5Spo3-paH_1pKGENczaHg@mail.gmail.com>
- <20200907172052.50b4f148@windsurf.home>
-Message-ID: <CA+h8R2rATYdzbT9ybjibNkdyeL1vYtt85V_V6hEX4YOA7hmj4g@mail.gmail.com>
+Date: Thu, 10 Sep 2020 15:33:08 -0700
+Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
+ deps to vendor tree if not present
+In-Reply-To: <20200904080612.GG14354@scaer>
+References: <20200831070800.GN14354@scaer>
+ <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
+ <20200903132852.GZ14354@scaer> <20200903160205.7e67bbe7@windsurf.home>
+ <20200903151221.GA14354@scaer> <20200903181334.1a25642b@windsurf.home>
+ <20200903191841.GC14354@scaer>
+ <CA+h8R2rNmRJUor9CDjyNzsgGPCmpE3XPjtkFdjzCeMGYenWKxA@mail.gmail.com>
+ <20200903204341.GE14354@scaer>
+ <CA+h8R2ooPOmJeE0dK7bQ+AyHG+ZT3ZRtYG80RjUdpBf78Q4aHw@mail.gmail.com>
+ <20200904080612.GG14354@scaer>
+Message-ID: <CA+h8R2p=3KN=11jmkKg4AOToGhJ+BX+F8yx5-OOUyPO1yBD9fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Yann,
 
-Thank you all for your time on the phone discussion today. I really
-appreciated hearing everyone's viewpoints.
-
-My goal here is /not/ to fragment the project, but rather find a way
-to allow everyone's desired workflows to come together.
-
-In terms of the social issue with getting more quality Reviewed-by,
-that is not something I know any solution to.
-
-As for tooling;
-
-I don't see any incompatibility between emails and GitLab - if we have
-a bot that formats the discussion on GitLab into the exact same format
-we expect in emails, and vise-versa.
-
-Is there really a direct issue with having the same information in two places?
-
-So: to be most useful, this is what I will try to start work on this
-week towards this topic:
-
- - Bot prototype for syncing between emails and GitLab PRs
- - Automated CI w/ Buildroot in Initramfs against "real hardware"
-(odroid, pi, intel mostly)
- - Contributing more GitLab runners for the CI using spare compute resources.
- - Automated PR + test (and then my own manual review) of the patch backlog.
-
-
-On Mon, Sep 7, 2020 at 8:21 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+On Fri, Sep 4, 2020 at 1:06 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Ah, because you store all the go vendored dependencies "away" of the
+> package.
 >
-> On Mon, 7 Sep 2020 17:02:20 +0200
-> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> I am not sure I like that, because it breaks the semantics of the dl/
+> directory: all the csource needed by one package is in dl/foo/ and the
+> vendored dependencies *are* part of the package.
 >
-> > regarding to this discussion I also have two infos I would like to
-> > share with you:
-> >
-> > [1] "As GitLab has grown over the years, we?re incredibly humbled by
-> > the number of users who choose to use our free platform. As the
-> > adoption of our free product has scaled, so have the underlying costs
-> > to support it. As we are committed to continue to support the free
-> > product for the larger community, we need to implement further CI/CD
-> > limits on GitLab.com. This change is only applicable to free
-> > GitLab.com users?current GitLab.com paid tiers and all self-managed
-> > GitLab tiers will remain unchanged."
-> >
-> > Does the buildroot gitlab is affected by this change? Or is buildroot
-> > a member of the GitLab for Open Source program [2]?
->
-> For gitlab.com/buildroot/buildroot, we are using our own Gitlab CI
-> runners, and not the free runners, so my understanding is that we are
-> not affected by this change.
+> So I am absolutely not in favour of storing the go modules on the side.
 
-Would be interested to hear what everyone thinks of the concept of
-keeping both e-mail and GitLab together.
+I've thought about this quite a bit and I think you're probably right,
+for a v1 implementation in Buildroot we most likely should do the
+approach of "go mod vendor" just before compressing the source file
+for "make source." It should work fine for Go (can't speak for node or
+others) because the vendor/ tree is always consistent.
 
 Best regards,
-Christian Stewart
+Christian
