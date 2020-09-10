@@ -1,41 +1,79 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 10 Sep 2020 15:33:08 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
- deps to vendor tree if not present
-In-Reply-To: <20200904080612.GG14354@scaer>
-References: <20200831070800.GN14354@scaer>
- <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
- <20200903132852.GZ14354@scaer> <20200903160205.7e67bbe7@windsurf.home>
- <20200903151221.GA14354@scaer> <20200903181334.1a25642b@windsurf.home>
- <20200903191841.GC14354@scaer>
- <CA+h8R2rNmRJUor9CDjyNzsgGPCmpE3XPjtkFdjzCeMGYenWKxA@mail.gmail.com>
- <20200903204341.GE14354@scaer>
- <CA+h8R2ooPOmJeE0dK7bQ+AyHG+ZT3ZRtYG80RjUdpBf78Q4aHw@mail.gmail.com>
- <20200904080612.GG14354@scaer>
-Message-ID: <CA+h8R2p=3KN=11jmkKg4AOToGhJ+BX+F8yx5-OOUyPO1yBD9fQ@mail.gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Thu, 10 Sep 2020 23:21:43 +0000
+Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
+In-Reply-To: <20191222224144.38603994@windsurf>
+References: <20191206221918.1c05e316@windsurf.home>
+ <20191217213253.12446-1-vgupta@synopsys.com>
+ <20191222224144.38603994@windsurf>
+Message-ID: <3b18564e-be2e-91b3-def1-6c3591288ecc@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Hi Thomas,
 
-On Fri, Sep 4, 2020 at 1:06 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Ah, because you store all the go vendored dependencies "away" of the
-> package.
->
-> I am not sure I like that, because it breaks the semantics of the dl/
-> directory: all the csource needed by one package is in dl/foo/ and the
-> vendored dependencies *are* part of the package.
->
-> So I am absolutely not in favour of storing the go modules on the side.
+On 12/22/19 1:41 PM, Thomas Petazzoni wrote:
+> Hello Vineet,
+> 
+> On Tue, 17 Dec 2019 13:32:53 -0800
+> Vineet Gupta <Vineet.Gupta1-HKixBCOQz3hWk0Htik3J/w@public.gmane.org> wrote:
+> 
+>> Remove special handling for ARC - as it is not needed for cksy etc.
+>>
+>> A nice side benefit is that the ARC specific version now only needs to
+>> be specified in single place (vs 3 currently) in binutils/Config.in.host
+>>
+>> Signed-off-by: Vineet Gupta <vgupta-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
+>> ---
+>>  package/binutils/binutils.mk | 6 +-----
+>>  1 file changed, 1 insertion(+), 5 deletions(-)
+>>
+>> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+>> index a19d6940f7c1..3ae5561d67d3 100644
+>> --- a/package/binutils/binutils.mk
+>> +++ b/package/binutils/binutils.mk
+>> @@ -8,14 +8,10 @@
+>>  # If not, we do like other packages
+>>  BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+>>  ifeq ($(BINUTILS_VERSION),)
+>> -ifeq ($(BR2_arc),y)
+>> -BINUTILS_VERSION = arc-2019.09-rc1
+>> -else
+>>  BINUTILS_VERSION = 2.32
+>>  endif
+>> -endif # BINUTILS_VERSION
+>>  
+>> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
+>> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)
 
-I've thought about this quite a bit and I think you're probably right,
-for a v1 implementation in Buildroot we most likely should do the
-approach of "go mod vendor" just before compressing the source file
-for "make source." It should work fine for Go (can't speak for node or
-others) because the vendor/ tree is always consistent.
+Looks like we need this specific thunk anyways. When I select pristine upstream
+binutils (not ARC fork @ github), the above forces it to download from github
+which it should not and will not if the tag/branch has not been mirrored there.
 
-Best regards,
-Christian
+>>  BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
+>>  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+>>  BINUTILS_FROM_GIT = y
+> 
+> In fact, I was wrong, this also does not work, in the following
+> situation:
+> 
+>  - You're using a pre-compiled external toolchain, so host-binutils is
+>    not selected/enabled, so the version selection in
+>    package/binutils/Config.in.host is not used, and therefore
+>    BR2_BINUTILS_VERSION_ARC cannot be set to 'y'.
+> 
+>  - You have binutils enabled for the target.
+> 
+> Then, with your patch, we will no longer select the ARC-specific fork
+> of binutils.
+> 
+> Basically, for the target binutils (just like for target gdb), we don't
+> have any version selection, so we force using one specific version
+> depending on the architecture.
+> 
+> Best regards,
+> 
+> Thomas
+> 
