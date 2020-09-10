@@ -1,108 +1,57 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 10 Sep 2020 11:55:19 -0500
-Subject: [Buildroot] Toolchain issues on multiple architectures
-In-Reply-To: <CANQCQpbtpt-_pDFk0oBXiCqXDVfVcUCubBDq7kCdh+vbmWeVdg@mail.gmail.com>
-References: <20200910120536.2431494d@windsurf.hq.k.grp>
- <CANQCQparV9FCnOCT=arB7zK0rvhWN4n6tJXTcLLNpZjCJfHcaQ@mail.gmail.com>
- <CANQCQpbtpt-_pDFk0oBXiCqXDVfVcUCubBDq7kCdh+vbmWeVdg@mail.gmail.com>
-Message-ID: <CANQCQpamRBQ9hWrRDH3Ts7r3WoF7EKzKmvdNT4OQi=czz2sQyw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Sep 2020 18:56:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/musepack: fix build with gcc 10
+Message-ID: <20200910165630.890433-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 10, 2020 at 10:43 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> On Thu, Sep 10, 2020 at 9:43 AM Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
-> >
-> > On Thu, Sep 10, 2020 at 5:06 AM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > As part of the https://toolchains.bootlin.com project, I've tried to
-> > > rebuild 175 toolchains on top of Buildroot 2020.08, and encountered a
-> > > number of failures, which are summarized below.
-> > >
-> > > Damien, Alistair: there is an issue with the RISC-V 32-bit toolchain.
-> > > Could you have a look, and tell us if you have some suggestions?
-> > >
-> > > ARC maintainers: all ARC toolchains are failing to build due to the use
-> > > of a recent gdb where gdbserver was moved to the top-level. However, it
-> > > doesn't seem to be that easy to build just gdbserver in those recent
-> > > gcc versions. I have posted a question about this on the gdb@ mailing
-> > > list: https://sourceware.org/pipermail/gdb/2020-September/048888.html.
-> > >
-> > > Matt, there are some PowerPC64 build issues as well. Have you ever seen
-> > > them, do you have any hints?
-> > >
-> [snip]
-> > > PowerPC64 (big and little endian) Power 8
-> > > =========================================
-> > >
-> > > Both the glibc stable and bleeding edge are failing to build libstdc++
-> > > in host-gcc-final. Interesingly, the musl configurations work fine.
-> > >
-> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359625
-> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359626
-> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359621
-> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359622
-> >
-> > Checking out 2020.08 and using the following config from the CI job.
-> > BR2_powerpc64le=y
-> > BR2_powerpc_power8=y
-> > BR2_KERNEL_HEADERS_4_9=y
-> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
-> > BR2_PACKAGE_HOST_GDB=y
-> > BR2_INIT_NONE=y
-> > BR2_SYSTEM_BIN_SH_NONE=y
-> > # BR2_PACKAGE_BUSYBOX is not set
-> > BR2_PACKAGE_GDB=y
-> > # BR2_TARGET_ROOTFS_TAR is not set
-> >
-> > I see this error:
-> > ../../../libgfortran/libgfortran.h:61:12: fatal error:
-> > quadmath_weak.h: No such file or directory
-> >
-> > I did notice that if I did a basic build below using current defaults,
-> > it doesn't fail.
-> > BR2_powerpc64=y
-> > BR2_powerpc_power8=y
-> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > BR2_INIT_NONE=y
-> > # BR2_TARGET_ROOTFS_TAR is not set
->
-> Disregard the successful build above, I forgot to enable fortran.
->
-> It looks like the powerpc64 is detecting __float128 and is trying to
-> use the quadmath library which we disable.  I'll check to see if the
-> change should be in the libfortran configure stage or what is being
-> passed to gcc final.
+Fixes:
+ - http://autobuild.buildroot.org/results/9971da8c59484a6a26eb79d6e157461a47855dbf
 
-My original understanding was that just the IBM families with ISA 3.0+
-could do float128 [1].  Turns out any Power ISA v.2.06+ (64bit powerpc
-NXP & IBM) should be able to have quadmath enabled and the stdlib may
-emulate as needed [2].
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../musepack/0005-fix-build-with-gcc-10.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/musepack/0005-fix-build-with-gcc-10.patch
 
-I'm still testing a series of builds (e5500, e6500, power6/7/8) but I
-believe the fix is to just add power64(big/le) to the condition to
-enable quadmath (BR2_TOOLCHAIN_HAS_LIBQUADMATH).
-
-config BR2_TOOLCHAIN_HAS_LIBQUADMATH
-        bool
-        default y if BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le
-
-Are you able to make this change in your toolchain builder branch of
-buildroot and validate the IBM and e5500 toolchains create images that
-can login?  I can send a patch to the mailing list as well
-
-
-Regards,
-Matt
-
-[1] https://en.wikipedia.org/wiki/Power_ISA
-[2] https://gcc.gnu.org/onlinedocs/gcc/RS_002f6000-and-PowerPC-Options.html
+diff --git a/package/musepack/0005-fix-build-with-gcc-10.patch b/package/musepack/0005-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..012dbab542
+--- /dev/null
++++ b/package/musepack/0005-fix-build-with-gcc-10.patch
+@@ -0,0 +1,30 @@
++fix build with gcc 10
++
++Define __Cc, __Dc and Res_bit as extern to avoid the following build
++failure with gcc 10 (which defaults to -fno-common):
++
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x0): multiple definition of `__Dc'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x430): first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x28): multiple definition of `__Cc'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x458): first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x74): multiple definition of `Res_bit'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x4a4): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/9971da8c59484a6a26eb79d6e157461a47855dbf
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naur musepack_src_r475.orig/libmpcdec/requant.h musepack_src_r475/libmpcdec/requant.h
++--- musepack_src_r475.orig/libmpcdec/requant.h	2020-09-10 08:31:50.696105246 +0200
+++++ musepack_src_r475/libmpcdec/requant.h	2020-09-10 08:32:52.944106476 +0200
++@@ -47,9 +47,9 @@
++ 
++ 
++ /* C O N S T A N T S */
++-const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
++-const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
++-const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
+++extern const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
+++extern const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
+++extern const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
++ 
++ #define Cc (__Cc + 1)
++ #define Dc (__Dc + 1)
+-- 
+2.28.0
