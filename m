@@ -1,351 +1,1331 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Thu, 10 Sep 2020 19:41:42 +0200
-Subject: [Buildroot] [PATCH 2/3] arch: new architecture IBM s390x
+Date: Thu, 10 Sep 2020 19:41:41 +0200
+Subject: [Buildroot] [PATCH 1/3] support/gnuconfig/config.sub: bump to
+ version 2020-06-28
 In-Reply-To: <20200910174143.311039-1-egorenar@linux.ibm.com>
 References: <20200910174143.311039-1-egorenar@linux.ibm.com>
-Message-ID: <20200910174143.311039-3-egorenar@linux.ibm.com>
+Message-ID: <20200910174143.311039-2-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New IBM s390x and Z big-endian architecture.
+Fixes issues with the triple on IBM s390x and Z machines.
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- DEVELOPERS                              |  3 +++
- Makefile                                |  1 +
- arch/Config.in                          | 13 +++++++++
- arch/Config.in.s390x                    | 35 +++++++++++++++++++++++++
- board/qemu/s390x/linux.config           | 35 +++++++++++++++++++++++++
- board/qemu/s390x/post-build.sh          | 11 ++++++++
- board/qemu/s390x/readme.txt             |  6 +++++
- configs/qemu_s390x_defconfig            | 11 ++++++++
- linux/Config.in                         |  2 +-
- package/cmake/Config.in                 |  3 ++-
- package/gcc/gcc.mk                      |  5 ++++
- package/go/Config.in.host               |  2 +-
- package/kexec/Config.in                 |  2 +-
- package/liburcu/Config.in               |  2 +-
- package/makedumpfile/Config.in          |  2 +-
- package/systemd/Config.in               |  1 +
- toolchain/toolchain-buildroot/Config.in |  6 ++---
- 17 files changed, 131 insertions(+), 9 deletions(-)
- create mode 100644 arch/Config.in.s390x
- create mode 100644 board/qemu/s390x/linux.config
- create mode 100755 board/qemu/s390x/post-build.sh
- create mode 100644 board/qemu/s390x/readme.txt
- create mode 100644 configs/qemu_s390x_defconfig
+ support/gnuconfig/config.sub | 579 +++++++++++++++++++----------------
+ 1 file changed, 317 insertions(+), 262 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b1e60e505f..5e6e8c330c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -146,6 +146,9 @@ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
- F:	package/makedumpfile/
- F:	package/multipath-tools/
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 973a2980ac..ce89d5c546 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -2,7 +2,7 @@
+ # Configuration validation subroutine script.
+ #   Copyright 1992-2020 Free Software Foundation, Inc.
  
-+N:	Alexander Egorenkov <egorenar@linux.ibm.com>
-+F:	arch/Config.in.s390x
-+
- N:	Alexander Kurz <akurz@blala.de>
- F:	package/minimodem/
+-timestamp='2020-05-04'
++timestamp='2020-06-28'
  
-diff --git a/Makefile b/Makefile
-index 9648fa58d8..384bfe3fe9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -445,6 +445,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
- 	-e s/riscv.*/riscv/ \
- 	-e s/sh.*/sh/ \
-+	-e s/s390x/s390/ \
- 	-e s/microblazeel/microblaze/)
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -124,28 +124,27 @@ case $1 in
+ 		;;
+ 	*-*-*-*)
+ 		basic_machine=$field1-$field2
+-		os=$field3-$field4
++		basic_os=$field3-$field4
+ 		;;
+ 	*-*-*)
+ 		# Ambiguous whether COMPANY is present, or skipped and KERNEL-OS is two
+ 		# parts
+ 		maybe_os=$field2-$field3
+ 		case $maybe_os in
+-			nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc \
+-			| linux-newlib* | linux-musl* | linux-uclibc* | uclinux-uclibc* \
++			nto-qnx* | linux-* | uclinux-uclibc* \
+ 			| uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* \
+ 			| netbsd*-eabi* | kopensolaris*-gnu* | cloudabi*-eabi* \
+ 			| storm-chaos* | os2-emx* | rtmk-nova*)
+ 				basic_machine=$field1
+-				os=$maybe_os
++				basic_os=$maybe_os
+ 				;;
+ 			android-linux)
+ 				basic_machine=$field1-unknown
+-				os=linux-android
++				basic_os=linux-android
+ 				;;
+ 			*)
+ 				basic_machine=$field1-$field2
+-				os=$field3
++				basic_os=$field3
+ 				;;
+ 		esac
+ 		;;
+@@ -154,7 +153,7 @@ case $1 in
+ 		case $field1-$field2 in
+ 			decstation-3100)
+ 				basic_machine=mips-dec
+-				os=
++				basic_os=
+ 				;;
+ 			*-*)
+ 				# Second component is usually, but not always the OS
+@@ -162,7 +161,7 @@ case $1 in
+ 					# Prevent following clause from handling this valid os
+ 					sun*os*)
+ 						basic_machine=$field1
+-						os=$field2
++						basic_os=$field2
+ 						;;
+ 					# Manufacturers
+ 					dec* | mips* | sequent* | encore* | pc533* | sgi* | sony* \
+@@ -175,11 +174,11 @@ case $1 in
+ 					| microblaze* | sim | cisco \
+ 					| oki | wec | wrs | winbond)
+ 						basic_machine=$field1-$field2
+-						os=
++						basic_os=
+ 						;;
+ 					*)
+ 						basic_machine=$field1
+-						os=$field2
++						basic_os=$field2
+ 						;;
+ 				esac
+ 			;;
+@@ -191,447 +190,451 @@ case $1 in
+ 		case $field1 in
+ 			386bsd)
+ 				basic_machine=i386-pc
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			a29khif)
+ 				basic_machine=a29k-amd
+-				os=udi
++				basic_os=udi
+ 				;;
+ 			adobe68k)
+ 				basic_machine=m68010-adobe
+-				os=scout
++				basic_os=scout
+ 				;;
+ 			alliant)
+ 				basic_machine=fx80-alliant
+-				os=
++				basic_os=
+ 				;;
+ 			altos | altos3068)
+ 				basic_machine=m68k-altos
+-				os=
++				basic_os=
+ 				;;
+ 			am29k)
+ 				basic_machine=a29k-none
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			amdahl)
+ 				basic_machine=580-amdahl
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			amiga)
+ 				basic_machine=m68k-unknown
+-				os=
++				basic_os=
+ 				;;
+ 			amigaos | amigados)
+ 				basic_machine=m68k-unknown
+-				os=amigaos
++				basic_os=amigaos
+ 				;;
+ 			amigaunix | amix)
+ 				basic_machine=m68k-unknown
+-				os=sysv4
++				basic_os=sysv4
+ 				;;
+ 			apollo68)
+ 				basic_machine=m68k-apollo
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			apollo68bsd)
+ 				basic_machine=m68k-apollo
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			aros)
+ 				basic_machine=i386-pc
+-				os=aros
++				basic_os=aros
+ 				;;
+ 			aux)
+ 				basic_machine=m68k-apple
+-				os=aux
++				basic_os=aux
+ 				;;
+ 			balance)
+ 				basic_machine=ns32k-sequent
+-				os=dynix
++				basic_os=dynix
+ 				;;
+ 			blackfin)
+ 				basic_machine=bfin-unknown
+-				os=linux
++				basic_os=linux
+ 				;;
+ 			cegcc)
+ 				basic_machine=arm-unknown
+-				os=cegcc
++				basic_os=cegcc
+ 				;;
+ 			convex-c1)
+ 				basic_machine=c1-convex
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			convex-c2)
+ 				basic_machine=c2-convex
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			convex-c32)
+ 				basic_machine=c32-convex
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			convex-c34)
+ 				basic_machine=c34-convex
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			convex-c38)
+ 				basic_machine=c38-convex
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			cray)
+ 				basic_machine=j90-cray
+-				os=unicos
++				basic_os=unicos
+ 				;;
+ 			crds | unos)
+ 				basic_machine=m68k-crds
+-				os=
++				basic_os=
+ 				;;
+ 			da30)
+ 				basic_machine=m68k-da30
+-				os=
++				basic_os=
+ 				;;
+ 			decstation | pmax | pmin | dec3100 | decstatn)
+ 				basic_machine=mips-dec
+-				os=
++				basic_os=
+ 				;;
+ 			delta88)
+ 				basic_machine=m88k-motorola
+-				os=sysv3
++				basic_os=sysv3
+ 				;;
+ 			dicos)
+ 				basic_machine=i686-pc
+-				os=dicos
++				basic_os=dicos
+ 				;;
+ 			djgpp)
+ 				basic_machine=i586-pc
+-				os=msdosdjgpp
++				basic_os=msdosdjgpp
+ 				;;
+ 			ebmon29k)
+ 				basic_machine=a29k-amd
+-				os=ebmon
++				basic_os=ebmon
+ 				;;
+ 			es1800 | OSE68k | ose68k | ose | OSE)
+ 				basic_machine=m68k-ericsson
+-				os=ose
++				basic_os=ose
+ 				;;
+ 			gmicro)
+ 				basic_machine=tron-gmicro
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			go32)
+ 				basic_machine=i386-pc
+-				os=go32
++				basic_os=go32
+ 				;;
+ 			h8300hms)
+ 				basic_machine=h8300-hitachi
+-				os=hms
++				basic_os=hms
+ 				;;
+ 			h8300xray)
+ 				basic_machine=h8300-hitachi
+-				os=xray
++				basic_os=xray
+ 				;;
+ 			h8500hms)
+ 				basic_machine=h8500-hitachi
+-				os=hms
++				basic_os=hms
+ 				;;
+ 			harris)
+ 				basic_machine=m88k-harris
+-				os=sysv3
++				basic_os=sysv3
+ 				;;
+ 			hp300 | hp300hpux)
+ 				basic_machine=m68k-hp
+-				os=hpux
++				basic_os=hpux
+ 				;;
+ 			hp300bsd)
+ 				basic_machine=m68k-hp
+-				os=bsd
++				basic_os=bsd
+ 				;;
+ 			hppaosf)
+ 				basic_machine=hppa1.1-hp
+-				os=osf
++				basic_os=osf
+ 				;;
+ 			hppro)
+ 				basic_machine=hppa1.1-hp
+-				os=proelf
++				basic_os=proelf
+ 				;;
+ 			i386mach)
+ 				basic_machine=i386-mach
+-				os=mach
++				basic_os=mach
+ 				;;
+ 			isi68 | isi)
+ 				basic_machine=m68k-isi
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			m68knommu)
+ 				basic_machine=m68k-unknown
+-				os=linux
++				basic_os=linux
+ 				;;
+ 			magnum | m3230)
+ 				basic_machine=mips-mips
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			merlin)
+ 				basic_machine=ns32k-utek
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			mingw64)
+ 				basic_machine=x86_64-pc
+-				os=mingw64
++				basic_os=mingw64
+ 				;;
+ 			mingw32)
+ 				basic_machine=i686-pc
+-				os=mingw32
++				basic_os=mingw32
+ 				;;
+ 			mingw32ce)
+ 				basic_machine=arm-unknown
+-				os=mingw32ce
++				basic_os=mingw32ce
+ 				;;
+ 			monitor)
+ 				basic_machine=m68k-rom68k
+-				os=coff
++				basic_os=coff
+ 				;;
+ 			morphos)
+ 				basic_machine=powerpc-unknown
+-				os=morphos
++				basic_os=morphos
+ 				;;
+ 			moxiebox)
+ 				basic_machine=moxie-unknown
+-				os=moxiebox
++				basic_os=moxiebox
+ 				;;
+ 			msdos)
+ 				basic_machine=i386-pc
+-				os=msdos
++				basic_os=msdos
+ 				;;
+ 			msys)
+ 				basic_machine=i686-pc
+-				os=msys
++				basic_os=msys
+ 				;;
+ 			mvs)
+ 				basic_machine=i370-ibm
+-				os=mvs
++				basic_os=mvs
+ 				;;
+ 			nacl)
+ 				basic_machine=le32-unknown
+-				os=nacl
++				basic_os=nacl
+ 				;;
+ 			ncr3000)
+ 				basic_machine=i486-ncr
+-				os=sysv4
++				basic_os=sysv4
+ 				;;
+ 			netbsd386)
+ 				basic_machine=i386-pc
+-				os=netbsd
++				basic_os=netbsd
+ 				;;
+ 			netwinder)
+ 				basic_machine=armv4l-rebel
+-				os=linux
++				basic_os=linux
+ 				;;
+ 			news | news700 | news800 | news900)
+ 				basic_machine=m68k-sony
+-				os=newsos
++				basic_os=newsos
+ 				;;
+ 			news1000)
+ 				basic_machine=m68030-sony
+-				os=newsos
++				basic_os=newsos
+ 				;;
+ 			necv70)
+ 				basic_machine=v70-nec
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			nh3000)
+ 				basic_machine=m68k-harris
+-				os=cxux
++				basic_os=cxux
+ 				;;
+ 			nh[45]000)
+ 				basic_machine=m88k-harris
+-				os=cxux
++				basic_os=cxux
+ 				;;
+ 			nindy960)
+ 				basic_machine=i960-intel
+-				os=nindy
++				basic_os=nindy
+ 				;;
+ 			mon960)
+ 				basic_machine=i960-intel
+-				os=mon960
++				basic_os=mon960
+ 				;;
+ 			nonstopux)
+ 				basic_machine=mips-compaq
+-				os=nonstopux
++				basic_os=nonstopux
+ 				;;
+ 			os400)
+ 				basic_machine=powerpc-ibm
+-				os=os400
++				basic_os=os400
+ 				;;
+ 			OSE68000 | ose68000)
+ 				basic_machine=m68000-ericsson
+-				os=ose
++				basic_os=ose
+ 				;;
+ 			os68k)
+ 				basic_machine=m68k-none
+-				os=os68k
++				basic_os=os68k
+ 				;;
+ 			paragon)
+ 				basic_machine=i860-intel
+-				os=osf
++				basic_os=osf
+ 				;;
+ 			parisc)
+ 				basic_machine=hppa-unknown
+-				os=linux
++				basic_os=linux
++				;;
++			psp)
++				basic_machine=mipsallegrexel-sony
++				basic_os=psp
+ 				;;
+ 			pw32)
+ 				basic_machine=i586-unknown
+-				os=pw32
++				basic_os=pw32
+ 				;;
+ 			rdos | rdos64)
+ 				basic_machine=x86_64-pc
+-				os=rdos
++				basic_os=rdos
+ 				;;
+ 			rdos32)
+ 				basic_machine=i386-pc
+-				os=rdos
++				basic_os=rdos
+ 				;;
+ 			rom68k)
+ 				basic_machine=m68k-rom68k
+-				os=coff
++				basic_os=coff
+ 				;;
+ 			sa29200)
+ 				basic_machine=a29k-amd
+-				os=udi
++				basic_os=udi
+ 				;;
+ 			sei)
+ 				basic_machine=mips-sei
+-				os=seiux
++				basic_os=seiux
+ 				;;
+ 			sequent)
+ 				basic_machine=i386-sequent
+-				os=
++				basic_os=
+ 				;;
+ 			sps7)
+ 				basic_machine=m68k-bull
+-				os=sysv2
++				basic_os=sysv2
+ 				;;
+ 			st2000)
+ 				basic_machine=m68k-tandem
+-				os=
++				basic_os=
+ 				;;
+ 			stratus)
+ 				basic_machine=i860-stratus
+-				os=sysv4
++				basic_os=sysv4
+ 				;;
+ 			sun2)
+ 				basic_machine=m68000-sun
+-				os=
++				basic_os=
+ 				;;
+ 			sun2os3)
+ 				basic_machine=m68000-sun
+-				os=sunos3
++				basic_os=sunos3
+ 				;;
+ 			sun2os4)
+ 				basic_machine=m68000-sun
+-				os=sunos4
++				basic_os=sunos4
+ 				;;
+ 			sun3)
+ 				basic_machine=m68k-sun
+-				os=
++				basic_os=
+ 				;;
+ 			sun3os3)
+ 				basic_machine=m68k-sun
+-				os=sunos3
++				basic_os=sunos3
+ 				;;
+ 			sun3os4)
+ 				basic_machine=m68k-sun
+-				os=sunos4
++				basic_os=sunos4
+ 				;;
+ 			sun4)
+ 				basic_machine=sparc-sun
+-				os=
++				basic_os=
+ 				;;
+ 			sun4os3)
+ 				basic_machine=sparc-sun
+-				os=sunos3
++				basic_os=sunos3
+ 				;;
+ 			sun4os4)
+ 				basic_machine=sparc-sun
+-				os=sunos4
++				basic_os=sunos4
+ 				;;
+ 			sun4sol2)
+ 				basic_machine=sparc-sun
+-				os=solaris2
++				basic_os=solaris2
+ 				;;
+ 			sun386 | sun386i | roadrunner)
+ 				basic_machine=i386-sun
+-				os=
++				basic_os=
+ 				;;
+ 			sv1)
+ 				basic_machine=sv1-cray
+-				os=unicos
++				basic_os=unicos
+ 				;;
+ 			symmetry)
+ 				basic_machine=i386-sequent
+-				os=dynix
++				basic_os=dynix
+ 				;;
+ 			t3e)
+ 				basic_machine=alphaev5-cray
+-				os=unicos
++				basic_os=unicos
+ 				;;
+ 			t90)
+ 				basic_machine=t90-cray
+-				os=unicos
++				basic_os=unicos
+ 				;;
+ 			toad1)
+ 				basic_machine=pdp10-xkl
+-				os=tops20
++				basic_os=tops20
+ 				;;
+ 			tpf)
+ 				basic_machine=s390x-ibm
+-				os=tpf
++				basic_os=tpf
+ 				;;
+ 			udi29k)
+ 				basic_machine=a29k-amd
+-				os=udi
++				basic_os=udi
+ 				;;
+ 			ultra3)
+ 				basic_machine=a29k-nyu
+-				os=sym1
++				basic_os=sym1
+ 				;;
+ 			v810 | necv810)
+ 				basic_machine=v810-nec
+-				os=none
++				basic_os=none
+ 				;;
+ 			vaxv)
+ 				basic_machine=vax-dec
+-				os=sysv
++				basic_os=sysv
+ 				;;
+ 			vms)
+ 				basic_machine=vax-dec
+-				os=vms
++				basic_os=vms
+ 				;;
+ 			vsta)
+ 				basic_machine=i386-pc
+-				os=vsta
++				basic_os=vsta
+ 				;;
+ 			vxworks960)
+ 				basic_machine=i960-wrs
+-				os=vxworks
++				basic_os=vxworks
+ 				;;
+ 			vxworks68)
+ 				basic_machine=m68k-wrs
+-				os=vxworks
++				basic_os=vxworks
+ 				;;
+ 			vxworks29k)
+ 				basic_machine=a29k-wrs
+-				os=vxworks
++				basic_os=vxworks
+ 				;;
+ 			xbox)
+ 				basic_machine=i686-pc
+-				os=mingw32
++				basic_os=mingw32
+ 				;;
+ 			ymp)
+ 				basic_machine=ymp-cray
+-				os=unicos
++				basic_os=unicos
+ 				;;
+ 			*)
+ 				basic_machine=$1
+-				os=
++				basic_os=
+ 				;;
+ 		esac
+ 		;;
+@@ -683,17 +686,17 @@ case $basic_machine in
+ 	bluegene*)
+ 		cpu=powerpc
+ 		vendor=ibm
+-		os=cnk
++		basic_os=cnk
+ 		;;
+ 	decsystem10* | dec10*)
+ 		cpu=pdp10
+ 		vendor=dec
+-		os=tops10
++		basic_os=tops10
+ 		;;
+ 	decsystem20* | dec20*)
+ 		cpu=pdp10
+ 		vendor=dec
+-		os=tops20
++		basic_os=tops20
+ 		;;
+ 	delta | 3300 | motorola-3300 | motorola-delta \
+ 	      | 3300-motorola | delta-motorola)
+@@ -703,7 +706,7 @@ case $basic_machine in
+ 	dpx2*)
+ 		cpu=m68k
+ 		vendor=bull
+-		os=sysv3
++		basic_os=sysv3
+ 		;;
+ 	encore | umax | mmax)
+ 		cpu=ns32k
+@@ -712,7 +715,7 @@ case $basic_machine in
+ 	elxsi)
+ 		cpu=elxsi
+ 		vendor=elxsi
+-		os=${os:-bsd}
++		basic_os=${basic_os:-bsd}
+ 		;;
+ 	fx2800)
+ 		cpu=i860
+@@ -725,7 +728,7 @@ case $basic_machine in
+ 	h3050r* | hiux*)
+ 		cpu=hppa1.1
+ 		vendor=hitachi
+-		os=hiuxwe2
++		basic_os=hiuxwe2
+ 		;;
+ 	hp3k9[0-9][0-9] | hp9[0-9][0-9])
+ 		cpu=hppa1.0
+@@ -768,36 +771,36 @@ case $basic_machine in
+ 	i*86v32)
+ 		cpu=`echo "$1" | sed -e 's/86.*/86/'`
+ 		vendor=pc
+-		os=sysv32
++		basic_os=sysv32
+ 		;;
+ 	i*86v4*)
+ 		cpu=`echo "$1" | sed -e 's/86.*/86/'`
+ 		vendor=pc
+-		os=sysv4
++		basic_os=sysv4
+ 		;;
+ 	i*86v)
+ 		cpu=`echo "$1" | sed -e 's/86.*/86/'`
+ 		vendor=pc
+-		os=sysv
++		basic_os=sysv
+ 		;;
+ 	i*86sol2)
+ 		cpu=`echo "$1" | sed -e 's/86.*/86/'`
+ 		vendor=pc
+-		os=solaris2
++		basic_os=solaris2
+ 		;;
+ 	j90 | j90-cray)
+ 		cpu=j90
+ 		vendor=cray
+-		os=${os:-unicos}
++		basic_os=${basic_os:-unicos}
+ 		;;
+ 	iris | iris4d)
+ 		cpu=mips
+ 		vendor=sgi
+-		case $os in
++		case $basic_os in
+ 		    irix*)
+ 			;;
+ 		    *)
+-			os=irix4
++			basic_os=irix4
+ 			;;
+ 		esac
+ 		;;
+@@ -808,26 +811,26 @@ case $basic_machine in
+ 	*mint | mint[0-9]* | *MiNT | *MiNT[0-9]*)
+ 		cpu=m68k
+ 		vendor=atari
+-		os=mint
++		basic_os=mint
+ 		;;
+ 	news-3600 | risc-news)
+ 		cpu=mips
+ 		vendor=sony
+-		os=newsos
++		basic_os=newsos
+ 		;;
+ 	next | m*-next)
+ 		cpu=m68k
+ 		vendor=next
+-		case $os in
++		case $basic_os in
+ 		    openstep*)
+ 		        ;;
+ 		    nextstep*)
+ 			;;
+ 		    ns2*)
+-		      os=nextstep2
++		      basic_os=nextstep2
+ 			;;
+ 		    *)
+-		      os=nextstep3
++		      basic_os=nextstep3
+ 			;;
+ 		esac
+ 		;;
+@@ -838,12 +841,12 @@ case $basic_machine in
+ 	op50n-* | op60c-*)
+ 		cpu=hppa1.1
+ 		vendor=oki
+-		os=proelf
++		basic_os=proelf
+ 		;;
+ 	pa-hitachi)
+ 		cpu=hppa1.1
+ 		vendor=hitachi
+-		os=hiuxwe2
++		basic_os=hiuxwe2
+ 		;;
+ 	pbd)
+ 		cpu=sparc
+@@ -880,12 +883,12 @@ case $basic_machine in
+ 	sde)
+ 		cpu=mipsisa32
+ 		vendor=sde
+-		os=${os:-elf}
++		basic_os=${basic_os:-elf}
+ 		;;
+ 	simso-wrs)
+ 		cpu=sparclite
+ 		vendor=wrs
+-		os=vxworks
++		basic_os=vxworks
+ 		;;
+ 	tower | tower-32)
+ 		cpu=m68k
+@@ -902,7 +905,7 @@ case $basic_machine in
+ 	w89k-*)
+ 		cpu=hppa1.1
+ 		vendor=winbond
+-		os=proelf
++		basic_os=proelf
+ 		;;
+ 	none)
+ 		cpu=none
+@@ -955,11 +958,11 @@ case $cpu-$vendor in
+ 	# some cases the only manufacturer, in others, it is the most popular.
+ 	craynv-unknown)
+ 		vendor=cray
+-		os=${os:-unicosmp}
++		basic_os=${basic_os:-unicosmp}
+ 		;;
+ 	c90-unknown | c90-cray)
+ 		vendor=cray
+-		os=${os:-unicos}
++		basic_os=${Basic_os:-unicos}
+ 		;;
+ 	fx80-unknown)
+ 		vendor=alliant
+@@ -1003,7 +1006,7 @@ case $cpu-$vendor in
+ 	dpx20-unknown | dpx20-bull)
+ 		cpu=rs6000
+ 		vendor=bull
+-		os=${os:-bosx}
++		basic_os=${basic_os:-bosx}
+ 		;;
  
- ZCAT := $(call qstrip,$(BR2_ZCAT))
-diff --git a/arch/Config.in b/arch/Config.in
-index 0707c076e2..155403c363 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -219,6 +219,15 @@ config BR2_riscv
- 	  https://riscv.org/
- 	  https://en.wikipedia.org/wiki/RISC-V
+ 	# Here we normalize CPU types irrespective of the vendor
+@@ -1012,7 +1015,7 @@ case $cpu-$vendor in
+ 		;;
+ 	blackfin-*)
+ 		cpu=bfin
+-		os=linux
++		basic_os=linux
+ 		;;
+ 	c54x-*)
+ 		cpu=tic54x
+@@ -1025,7 +1028,7 @@ case $cpu-$vendor in
+ 		;;
+ 	e500v[12]-*)
+ 		cpu=powerpc
+-		os=$os"spe"
++		basic_os=${basic_os}"spe"
+ 		;;
+ 	mips3*-*)
+ 		cpu=mips64
+@@ -1035,7 +1038,7 @@ case $cpu-$vendor in
+ 		;;
+ 	m68knommu-*)
+ 		cpu=m68k
+-		os=linux
++		basic_os=linux
+ 		;;
+ 	m9s12z-* | m68hcs12z-* | hcs12z-* | s12z-*)
+ 		cpu=s12z
+@@ -1045,7 +1048,7 @@ case $cpu-$vendor in
+ 		;;
+ 	parisc-*)
+ 		cpu=hppa
+-		os=linux
++		basic_os=linux
+ 		;;
+ 	pentium-* | p5-* | k5-* | k6-* | nexgen-* | viac3-*)
+ 		cpu=i586
+@@ -1105,7 +1108,7 @@ case $cpu-$vendor in
+ 	# Recognize the canonical CPU Types that limit and/or modify the
+ 	# company names they are paired with.
+ 	cr16-*)
+-		os=${os:-elf}
++		basic_os=${basic_os:-elf}
+ 		;;
+ 	crisv32-* | etraxfs*-*)
+ 		cpu=crisv32
+@@ -1116,7 +1119,7 @@ case $cpu-$vendor in
+ 		vendor=axis
+ 		;;
+ 	crx-*)
+-		os=${os:-elf}
++		basic_os=${basic_os:-elf}
+ 		;;
+ 	neo-tandem)
+ 		cpu=neo
+@@ -1138,16 +1141,12 @@ case $cpu-$vendor in
+ 		cpu=nsx
+ 		vendor=tandem
+ 		;;
+-	s390-*)
+-		cpu=s390
+-		vendor=ibm
+-		;;
+-	s390x-*)
+-		cpu=s390x
+-		vendor=ibm
++	mipsallegrexel-sony)
++		cpu=mipsallegrexel
++		vendor=sony
+ 		;;
+ 	tile*-*)
+-		os=${os:-linux-gnu}
++		basic_os=${basic_os:-linux-gnu}
+ 		;;
  
-+config BR2_s390x
-+	bool "s390x"
-+	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_MMU_MANDATORY
-+	help
-+	  s390x is a big-endian architecture made by IBM.
-+	  http://www.ibm.com/
-+	  http://en.wikipedia.org/wiki/IBM_System/390
-+
- config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-@@ -457,6 +466,10 @@ if BR2_riscv
- source "arch/Config.in.riscv"
- endif
+ 	*)
+@@ -1229,6 +1228,7 @@ case $cpu-$vendor in
+ 			| pyramid \
+ 			| riscv | riscv32 | riscv64 \
+ 			| rl78 | romp | rs6000 | rx \
++			| s390 | s390x \
+ 			| score \
+ 			| sh | shl \
+ 			| sh[1234] | sh[24]a | sh[24]ae[lb] | sh[23]e | she[lb] | sh[lb]e \
+@@ -1275,8 +1275,43 @@ esac
  
-+if BR2_s390x
-+source "arch/Config.in.s390x"
-+endif
-+
- if BR2_sh
- source "arch/Config.in.sh"
- endif
-diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
-new file mode 100644
-index 0000000000..26db901df0
---- /dev/null
-+++ b/arch/Config.in.s390x
-@@ -0,0 +1,35 @@
-+
-+choice
-+	prompt "Target Architecture Variant"
-+	default BR2_s390x_z13
-+	depends on BR2_s390x
-+	help
-+	  Specific CPU variant to use
-+
-+config BR2_s390x_z13
-+	bool "z13"
-+	depends on BR2_s390x
-+
-+config BR2_s390x_z14
-+	bool "z14"
-+	depends on BR2_s390x
-+
-+config BR2_s390x_z15
-+	bool "z15"
-+	depends on BR2_s390x
-+
-+endchoice
-+
-+config BR2_ARCH
-+	default "s390x"	if BR2_s390x
-+
-+config BR2_ENDIAN
-+	default "BIG"
-+
-+config BR2_GCC_TARGET_ARCH
-+	default "arch11" if BR2_s390x_z13
-+	default "arch12" if BR2_s390x_z14
-+	default "arch13" if BR2_s390x_z15
-+
-+config BR2_READELF_ARCH_NAME
-+	default "IBM S/390"	if BR2_s390x
-diff --git a/board/qemu/s390x/linux.config b/board/qemu/s390x/linux.config
-new file mode 100644
-index 0000000000..06a3eaa0de
---- /dev/null
-+++ b/board/qemu/s390x/linux.config
-@@ -0,0 +1,35 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_PCI=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=m
-+CONFIG_DM_CRYPT=m
-+CONFIG_DM_MULTIPATH=m
-+CONFIG_DM_MULTIPATH_QL=m
-+CONFIG_DM_MULTIPATH_ST=m
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_HW_RANDOM_VIRTIO=m
-+CONFIG_VIRTIO_PCI=y
-+CONFIG_VIRTIO_BALLOON=y
-+CONFIG_VIRTIO_INPUT=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/s390x/post-build.sh b/board/qemu/s390x/post-build.sh
-new file mode 100755
-index 0000000000..bf83a002c2
---- /dev/null
-+++ b/board/qemu/s390x/post-build.sh
-@@ -0,0 +1,11 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+# Add a console on tty1
-+if [ -e ${TARGET_DIR}/etc/inittab ]; then
-+    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-+	sed -i '/GENERIC_SERIAL/a\
-+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
-+fi
-diff --git a/board/qemu/s390x/readme.txt b/board/qemu/s390x/readme.txt
-new file mode 100644
-index 0000000000..13e7ae80a3
---- /dev/null
-+++ b/board/qemu/s390x/readme.txt
-@@ -0,0 +1,6 @@
-+Run the emulation with:
-+
-+  qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 \
-+    -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
-+    -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio \
-+    -net nic,model=virtio -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22
-diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-new file mode 100644
-index 0000000000..7b4e4acc3d
---- /dev/null
-+++ b/configs/qemu_s390x_defconfig
-@@ -0,0 +1,11 @@
-+BR2_s390x=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/s390x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/s390x/linux.config"
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/linux/Config.in b/linux/Config.in
-index 49da2b81b2..ec74e1e65a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -226,7 +226,7 @@ config BR2_LINUX_KERNEL_APPENDED_UIMAGE
+ # Decode manufacturer-specific aliases for certain operating systems.
  
- config BR2_LINUX_KERNEL_BZIMAGE
- 	bool "bzImage"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_i386 || BR2_x86_64 || BR2_s390x
- 
- config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
-diff --git a/package/cmake/Config.in b/package/cmake/Config.in
-index e7bd14e69a..3c47fdcb49 100644
---- a/package/cmake/Config.in
-+++ b/package/cmake/Config.in
-@@ -5,7 +5,8 @@ config BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
- 		BR2_m68k      || BR2_mips        || BR2_mips64   || \
- 		BR2_mipsel    || BR2_mips64el    || BR2_powerpc  || \
- 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc    || \
--		BR2_i386      || BR2_x86_64      || BR2_xtensa
-+		BR2_i386      || BR2_x86_64      || BR2_xtensa   || \
-+		BR2_s390x
- 
- config BR2_PACKAGE_CMAKE
- 	bool
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b834269adc..0912c07a71 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -241,6 +241,11 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+ifeq ($(BR2_s390x),y)
-+HOST_GCC_COMMON_CONF_OPTS += \
-+	--with-long-double-128
-+endif
+-if [ x$os != x ]
++if [ x$basic_os != x ]
+ then
 +
- HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
++# First recognize some ad-hoc caes, or perhaps split kernel-os, or else just
++# set os.
++case $basic_os in
++	gnu/linux*)
++		kernel=linux
++		os=`echo $basic_os | sed -e 's|gnu/linux|gnu|'`
++		;;
++	nto-qnx*)
++		kernel=nto
++		os=`echo $basic_os | sed -e 's|nto-qnx|qnx|'`
++		;;
++	*-*)
++		# shellcheck disable=SC2162
++		IFS="-" read kernel os <<EOF
++$basic_os
++EOF
++		;;
++	# Default OS when just kernel was specified
++	nto*)
++		kernel=nto
++		os=`echo $basic_os | sed -e 's|nto|qnx|'`
++		;;
++	linux*)
++		kernel=linux
++		os=`echo $basic_os | sed -e 's|linux|gnu|'`
++		;;
++	*)
++		kernel=
++		os=$basic_os
++		;;
++esac
++
++# Now, normalize the OS (knowing we just have one component, it's not a kernel,
++# etc.)
+ case $os in
+ 	# First match some system type aliases that might get confused
+ 	# with valid system types.
+@@ -1296,9 +1331,6 @@ case $os in
+ 	unixware*)
+ 		os=sysv4.2uw
+ 		;;
+-	gnu/linux*)
+-		os=`echo $os | sed -e 's|gnu/linux|linux-gnu|'`
+-		;;
+ 	# es1800 is here to avoid being matched by es* (a different OS)
+ 	es1800*)
+ 		os=ose
+@@ -1322,10 +1354,7 @@ case $os in
+ 	sco3.2.[4-9]*)
+ 		os=`echo $os | sed -e 's/sco3.2./sco3.2v/'`
+ 		;;
+-	sco3.2v[4-9]* | sco5v6*)
+-		# Don't forget version if it is 3.2v4 or newer.
+-		;;
+-	scout)
++	sco*v* | scout)
+ 		# Don't match below
+ 		;;
+ 	sco*)
+@@ -1334,41 +1363,6 @@ case $os in
+ 	psos*)
+ 		os=psos
+ 		;;
+-	# Now accept the basic system types.
+-	# The portable systems comes first.
+-	# Each alternative MUST end in a * to match a version number.
+-	# sysv* is not here because it comes later, after sysvr4.
+-	gnu* | bsd* | mach* | minix* | genix* | ultrix* | irix* \
+-	     | *vms* | esix* | aix* | cnk* | sunos | sunos[34]*\
+-	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
+-	     | sym* | kopensolaris* | plan9* \
+-	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
+-	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
+-	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
+-	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
+-	     | knetbsd* | mirbsd* | netbsd* \
+-	     | bitrig* | openbsd* | solidbsd* | libertybsd* | os108* \
+-	     | ekkobsd* | kfreebsd* | freebsd* | riscix* | lynxos* \
+-	     | bosx* | nextstep* | cxux* | aout* | elf* | oabi* \
+-	     | ptx* | coff* | ecoff* | winnt* | domain* | vsta* \
+-	     | udi* | eabi* | lites* | ieee* | go32* | aux* | hcos* \
+-	     | chorusrdb* | cegcc* | glidix* \
+-	     | cygwin* | msys* | pe* | moss* | proelf* | rtems* \
+-	     | midipix* | mingw32* | mingw64* | linux-gnu* | linux-android* \
+-	     | linux-newlib* | linux-musl* | linux-uclibc* \
+-	     | uxpv* | beos* | mpeix* | udk* | moxiebox* \
+-	     | interix* | uwin* | mks* | rhapsody* | darwin* \
+-	     | openstep* | oskit* | conix* | pw32* | nonstopux* \
+-	     | storm-chaos* | tops10* | tenex* | tops20* | its* \
+-	     | os2* | vos* | palmos* | uclinux* | nucleus* \
+-	     | morphos* | superux* | rtmk* | windiss* \
+-	     | powermax* | dnix* | nx6 | nx7 | sei* | dragonfly* \
+-	     | skyos* | haiku* | rdos* | toppers* | drops* | es* \
+-	     | onefs* | tirtos* | phoenix* | fuchsia* | redox* | bme* \
+-	     | midnightbsd* | amdhsa* | unleashed* | emscripten* | wasi* \
+-	     | nsk* | powerunix* | genode*)
+-	# Remember, each alternative MUST END IN *, to match a version number.
+-		;;
+ 	qnx*)
+ 		case $cpu in
+ 		    x86 | i*86)
+@@ -1381,31 +1375,19 @@ case $os in
+ 	hiux*)
+ 		os=hiuxwe2
+ 		;;
+-	nto-qnx*)
+-		;;
+-	nto*)
+-		os=`echo $os | sed -e 's|nto|nto-qnx|'`
+-		;;
+-	sim | xray | os68k* | v88r* \
+-	    | windows* | osx | abug | netware* | os9* \
+-	    | macos* | mpw* | magic* | mmixware* | mon960* | lnews*)
+-		;;
+-	linux-dietlibc)
+-		os=linux-dietlibc
+-		;;
+-	linux*)
+-		os=`echo $os | sed -e 's|linux|linux-gnu|'`
+-		;;
+ 	lynx*178)
+ 		os=lynxos178
+ 		;;
+ 	lynx*5)
+ 		os=lynxos5
+ 		;;
++	lynxos*)
++		# don't get caught up in next wildcard
++		;;
+ 	lynx*)
+ 		os=lynxos
+ 		;;
+-	mac*)
++	mac[0-9]*)
+ 		os=`echo "$os" | sed -e 's|mac|macos|'`
+ 		;;
+ 	opened*)
+@@ -1475,18 +1457,12 @@ case $os in
+ 	sysvr4)
+ 		os=sysv4
+ 		;;
+-	# This must come after sysvr4.
+-	sysv*)
+-		;;
+ 	ose*)
+ 		os=ose
+ 		;;
+ 	*mint | mint[0-9]* | *MiNT | MiNT[0-9]*)
+ 		os=mint
+ 		;;
+-	zvmoe)
+-		os=zvmoe
+-		;;
+ 	dicos*)
+ 		os=dicos
+ 		;;
+@@ -1503,19 +1479,11 @@ case $os in
+ 			;;
+ 		esac
+ 		;;
+-	nacl*)
+-		;;
+-	ios)
+-		;;
+-	none)
+-		;;
+-	*-eabi)
+-		;;
+ 	*)
+-		echo Invalid configuration \`"$1"\': system \`"$os"\' not recognized 1>&2
+-		exit 1
++		# No normalization, but not necessarily accepted, that comes below.
+ 		;;
+ esac
++
+ else
  
- # For gcc-initial, we need to tell gcc that the C library will be
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 3f16dbaec3..87942c7a1e 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
--		|| BR2_mips64 || BR2_mips64el
-+		|| BR2_mips64 || BR2_mips64el || BR2_s390x
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# MIPS R6 support in Go has not yet been developed.
- 	depends on !BR2_MIPS_CPU_MIPS64R6
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index 410e503d9e..90a7bc2672 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_KEXEC
- 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
- 		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
- 		BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
--		BR2_sh4 || BR2_sh4a || BR2_aarch64
-+		BR2_sh4 || BR2_sh4a || BR2_aarch64 || BR2_s390x
- 	help
- 	  Kexec is a user space utility for loading another kernel
- 	  and asking the currently running kernel to do something with
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 7d29642084..5dc8528971 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
- 		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
- 		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_s390x || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
+ # Here we handle the default operating systems that come with various machines.
+@@ -1528,6 +1496,7 @@ else
+ # will signal an error saying that MANUFACTURER isn't an operating
+ # system, and we'll never get to this point.
  
- config BR2_PACKAGE_LIBURCU
-diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
-index a90ccbdf3c..d1efbc6e51 100644
---- a/package/makedumpfile/Config.in
-+++ b/package/makedumpfile/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
- 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
--	default y if BR2_sparc64
-+	default y if BR2_s390x || BR2_sparc64
++kernel=
+ case $cpu-$vendor in
+ 	score-*)
+ 		os=elf
+@@ -1539,7 +1508,8 @@ case $cpu-$vendor in
+ 		os=riscix1.2
+ 		;;
+ 	arm*-rebel)
+-		os=linux
++		kernel=linux
++		os=gnu
+ 		;;
+ 	arm*-semi)
+ 		os=aout
+@@ -1705,84 +1675,169 @@ case $cpu-$vendor in
+ 		os=none
+ 		;;
+ esac
++
+ fi
  
- comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
- 	depends on BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 74029aff05..7956370b83 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	default y if BR2_riscv
- 	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
- 	default y if BR2_sparc || BR2_sparc64
-+	default y if BR2_s390x
++# Now, validate our (potentially fixed-up) OS.
++case $os in
++	# Sometimes we do "kernel-abi", so those need to count as OSes.
++	musl* | newlib* | uclibc*)
++		;;
++	# Likewise for "kernel-libc"
++	eabi | eabihf | gnueabi | gnueabihf)
++		;;
++	# Now accept the basic system types.
++	# The portable systems comes first.
++	# Each alternative MUST end in a * to match a version number.
++	gnu* | android* | bsd* | mach* | minix* | genix* | ultrix* | irix* \
++	     | *vms* | esix* | aix* | cnk* | sunos | sunos[34]* \
++	     | hpux* | unos* | osf* | luna* | dgux* | auroraux* | solaris* \
++	     | sym* |  plan9* | psp* | sim* | xray* | os68k* | v88r* \
++	     | hiux* | abug | nacl* | netware* | windows* \
++	     | os9* | macos* | osx* | ios* \
++	     | mpw* | magic* | mmixware* | mon960* | lnews* \
++	     | amigaos* | amigados* | msdos* | newsos* | unicos* | aof* \
++	     | aos* | aros* | cloudabi* | sortix* | twizzler* \
++	     | nindy* | vxsim* | vxworks* | ebmon* | hms* | mvs* \
++	     | clix* | riscos* | uniplus* | iris* | isc* | rtu* | xenix* \
++	     | mirbsd* | netbsd* | dicos* | openedition* | ose* \
++	     | bitrig* | openbsd* | solidbsd* | libertybsd* | os108* \
++	     | ekkobsd* | freebsd* | riscix* | lynxos* | os400* \
++	     | bosx* | nextstep* | cxux* | aout* | elf* | oabi* \
++	     | ptx* | coff* | ecoff* | winnt* | domain* | vsta* \
++	     | udi* | lites* | ieee* | go32* | aux* | hcos* \
++	     | chorusrdb* | cegcc* | glidix* \
++	     | cygwin* | msys* | pe* | moss* | proelf* | rtems* \
++	     | midipix* | mingw32* | mingw64* | mint* \
++	     | uxpv* | beos* | mpeix* | udk* | moxiebox* \
++	     | interix* | uwin* | mks* | rhapsody* | darwin* \
++	     | openstep* | oskit* | conix* | pw32* | nonstopux* \
++	     | storm-chaos* | tops10* | tenex* | tops20* | its* \
++	     | os2* | vos* | palmos* | uclinux* | nucleus* | morphos* \
++	     | scout* | superux* | sysv* | rtmk* | tpf* | windiss* \
++	     | powermax* | dnix* | nx6 | nx7 | sei* | dragonfly* \
++	     | skyos* | haiku* | rdos* | toppers* | drops* | es* \
++	     | onefs* | tirtos* | phoenix* | fuchsia* | redox* | bme* \
++	     | midnightbsd* | amdhsa* | unleashed* | emscripten* | wasi* \
++	     | nsk* | powerunix* | genode* | zvmoe* )
++		;;
++	# This one is extra strict with allowed versions
++	sco3.2v2 | sco3.2v[4-9]* | sco5v6*)
++		# Don't forget version if it is 3.2v4 or newer.
++		;;
++	none)
++		;;
++	*)
++		echo Invalid configuration \`"$1"\': OS \`"$os"\' not recognized 1>&2
++		exit 1
++		;;
++esac
++
++# As a final step for OS-related things, validate the OS-kernel combination
++# (given a valid OS), if there is a kernel.
++case $kernel-$os in
++	linux-gnu* | linux-dietlibc* | linux-android* | linux-newlib* | linux-musl* | linux-uclibc* )
++		;;
++	-dietlibc* | -newlib* | -musl* | -uclibc* )
++		# These are just libc implementations, not actual OSes, and thus
++		# require a kernel.
++		echo "Invalid configuration \`$1': libc \`$os' needs explicit kernel." 1>&2
++		exit 1
++		;;
++	kfreebsd*-gnu* | kopensolaris*-gnu*)
++		;;
++	nto-qnx*)
++		;;
++	*-eabi* | *-gnueabi*)
++		;;
++	-*)
++		# Blank kernel with real OS is always fine.
++		;;
++	*-*)
++		echo "Invalid configuration \`$1': Kernel \`$kernel' not known to work with OS \`$os'." 1>&2
++		exit 1
++		;;
++esac
++
+ # Here we handle the case where we know the os, and the CPU type, but not the
+ # manufacturer.  We pick the logical manufacturer.
+ case $vendor in
+ 	unknown)
+-		case $os in
+-			riscix*)
++		case $cpu-$os in
++			*-riscix*)
+ 				vendor=acorn
+ 				;;
+-			sunos*)
++			*-sunos*)
+ 				vendor=sun
+ 				;;
+-			cnk*|-aix*)
++			*-cnk* | *-aix*)
+ 				vendor=ibm
+ 				;;
+-			beos*)
++			*-beos*)
+ 				vendor=be
+ 				;;
+-			hpux*)
++			*-hpux*)
+ 				vendor=hp
+ 				;;
+-			mpeix*)
++			*-mpeix*)
+ 				vendor=hp
+ 				;;
+-			hiux*)
++			*-hiux*)
+ 				vendor=hitachi
+ 				;;
+-			unos*)
++			*-unos*)
+ 				vendor=crds
+ 				;;
+-			dgux*)
++			*-dgux*)
+ 				vendor=dg
+ 				;;
+-			luna*)
++			*-luna*)
+ 				vendor=omron
+ 				;;
+-			genix*)
++			*-genix*)
+ 				vendor=ns
+ 				;;
+-			clix*)
++			*-clix*)
+ 				vendor=intergraph
+ 				;;
+-			mvs* | opened*)
++			*-mvs* | *-opened*)
++				vendor=ibm
++				;;
++			*-os400*)
+ 				vendor=ibm
+ 				;;
+-			os400*)
++			s390-* | s390x-*)
+ 				vendor=ibm
+ 				;;
+-			ptx*)
++			*-ptx*)
+ 				vendor=sequent
+ 				;;
+-			tpf*)
++			*-tpf*)
+ 				vendor=ibm
+ 				;;
+-			vxsim* | vxworks* | windiss*)
++			*-vxsim* | *-vxworks* | *-windiss*)
+ 				vendor=wrs
+ 				;;
+-			aux*)
++			*-aux*)
+ 				vendor=apple
+ 				;;
+-			hms*)
++			*-hms*)
+ 				vendor=hitachi
+ 				;;
+-			mpw* | macos*)
++			*-mpw* | *-macos*)
+ 				vendor=apple
+ 				;;
+-			*mint | mint[0-9]* | *MiNT | MiNT[0-9]*)
++			*-*mint | *-mint[0-9]* | *-*MiNT | *-MiNT[0-9]*)
+ 				vendor=atari
+ 				;;
+-			vos*)
++			*-vos*)
+ 				vendor=stratus
+ 				;;
+ 		esac
+ 		;;
+ esac
  
- menuconfig BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 418d5cb387..1c4705600e 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -46,9 +46,9 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
- 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
--		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
--		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
--		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
-+		   BR2_riscv       || BR2_s390x      || BR2_sh          || \
-+		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze  || \
-+		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+-echo "$cpu-$vendor-$os"
++echo "$cpu-$vendor-${kernel:+$kernel-}$os"
+ exit
+ 
+ # Local variables:
 -- 
 2.26.2
