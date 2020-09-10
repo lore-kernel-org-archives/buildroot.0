@@ -1,78 +1,38 @@
 From: Robin Jarry <robin.jarry@6wind.com>
-Date: Thu, 10 Sep 2020 09:29:10 +0200
-Subject: [Buildroot] [PATCH v2 3/4] pycompile: fix .pyc original source
- file paths
-In-Reply-To: <20200909203441.GR14354@scaer>
-References: <20200908081026.4701-1-robin.jarry@6wind.com>
- <20200908081026.4701-4-robin.jarry@6wind.com>
- <20200909203441.GR14354@scaer>
-Message-ID: <20200910072910.lbjjuh2e4ncg5a7i@6wind.com>
+Date: Thu, 10 Sep 2020 09:45:45 +0200
+Subject: [Buildroot] [PATCH v3 0/2] pycompile: fix .pyc source paths +
+ improvements
+In-Reply-To: <20200904112908.21686-1-julien.floret@6wind.com>
+References: <20200904112908.21686-1-julien.floret@6wind.com>
+Message-ID: <20200910074547.2983-1-robin.jarry@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2020-09-09, Yann E. MORIN:
-[snip]
-> I am not python expert, but I tend to be using '{}'.format(..), and
-> indeed, it seems that python considers the % formatting to be "old":
-> 
->     https://docs.python.org/3/tutorial/inputoutput.html#old-string-formatting
-> 
-> Do you think you could switch to using str.format() ?
+This series is about fixing the original .py source paths encoded into
+.pyc files. It comes with small improvements on pycompile.py as well.
 
-Sure, I have no strong opinion on the matter. I am more used to old
-formatting since it is often shorter, but the new str.format() is less
-ambiguous. I'll do that in a v3 today.
+The first two commits of v2 have been applied already, I am sending the
+last two which needed some rework.
 
-> So, back to this TARGET and PATH arguments. I find it pretty confusing
-> the way they are described.
-> 
-> First, what TARGET used to be in the previous script is now something
-> else, so keeping the naming is confusing. Also, 'target/' is a buildroot
-> naming; I think we could get a better generic name: root
-> 
-> As for PATH, I find it strange that the metavar and variable do not
-> match.
-> 
->     parser.add_argument('root', metavar='ROOT',
->                         help='Path on the build machine that will be / at runtime')
->     parser.add_argument('dirs', metavar='DIR',
->                         help='Directory, relative to ROOT, to scan for py-files to compile')
-> 
-> So now, it should be possible to use as thus:
-> 
->     python support/scripts/pycompile.py \
->         $(TARGET_DIR) \
->         usr/lib/python$(PYTHON_VERSION_MAJOR)
-> 
-> Or even (which I like better, because the DIR is absolute as seen at
-> runtime too):
-> 
->     python support/scripts/pycompile.py \
->         $(TARGET_DIR) \
->         /usr/lib/python$(PYTHON_VERSION_MAJOR)
-> 
-> But of course, dealing with path concatenation with an intermediate path
-> that starts with a '/' is always tricky (I don't understand why upstream
-> went that route...).
-> 
->     for d in args.dirs:
->         abs = os.path.join(args.root, d[(1 if d[0] == '/' else 0):])
-> 
-> Thoughts?
+Robin Jarry (2):
+  support/scripts/pycompile: fix .pyc original source file paths
+  support/scripts/pycompile: add --verbose option
 
-I have another suggestion: changing the current TARGET argument into
-a --strip-root "optional" argument (which will always be specified
-anyway, but if not cross compiling, it can make sense not to use it).
-It seems explicit enough to me and it avoids confusion with runtime/host
-paths. What do you think?
+ package/python/python.mk     |   6 +-
+ package/python3/python3.mk   |   6 +-
+ support/scripts/pycompile.py | 139 ++++++++++++++++++++++-------------
+ 3 files changed, 94 insertions(+), 57 deletions(-)
 
-I'll submit this in a v3 as well so we can discuss on something
-concrete.
+Differences since v2:
 
-Thanks for the thorough review.
+  * Used str.format() instead of % format.
+  * Renamed the TARGET positional argument into --strip-root which is
+    more explicit. The script is called with --strip-root=$(TARGET_DIR).
+  * Homogenized the arguments metavars.
+  * Used argparse type callbacks for directory arguments checking.
 
 -- 
-Robin
+2.28.0
