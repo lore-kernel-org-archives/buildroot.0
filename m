@@ -1,66 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 10 Sep 2020 08:20:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with uclibc
-Message-ID: <20200910062026.498143-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 9 Sep 2020 23:35:08 -0700
+Subject: [Buildroot] OpenSSH login problem
+In-Reply-To: <20200909195549.6aa402bd@gmx.net>
+References: <cc86bfd55f944197bcd610626edecf2f@go-sys.de>
+ <52-5f356200-5-2c492440@36238474>
+ <4d943f9a8e974a60a5167db44bce6cd1@go-sys.de>
+ <CA+h8R2oi0GRLYdumQOYxwON=xd7p_8pn+WoknjRd5N24Vr_5KQ@mail.gmail.com>
+ <20200816220620.65159d1d@windsurf.home>
+ <CA+h8R2qO01wwrEJdTx2puEbDv6mv31YxyAjG5nCn6hosPAW_aQ@mail.gmail.com>
+ <CA+h8R2pjvm7Wr_hkS2wtqhzqESmgqTtxivkdTLdEr07ngJLTbQ@mail.gmail.com>
+ <20200906193958.2b4199a4@gmx.net>
+ <CA+h8R2pdJExc9v7AeGAfvon1sVY-G2iYk7EzjdZFBLBRd9ApVQ@mail.gmail.com>
+ <20200909195549.6aa402bd@gmx.net>
+Message-ID: <CA+h8R2qrRd-Wxh8aVdHe_p=yzvEemZrktTTB3dr88rDrm88r-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is needed to fix a build failure with iwd 1.9.0 and uclibc
+Hi Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-src-ap.c-fix-build-with-uclibc.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
+On Wed, Sep 9, 2020 at 10:55 AM Peter Seiderer <ps.report@gmx.net> wrote:
+> > Thanks for checking on this. Is there any known fix anywhere yet? I'll
+> > do some searching.
 
-diff --git a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-new file mode 100644
-index 0000000000..b4e18098c0
---- /dev/null
-+++ b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-@@ -0,0 +1,37 @@
-+From 377df79e83e2127a087e1aa5ba6173e195e50933 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 10 Sep 2020 07:47:14 +0200
-+Subject: [PATCH] src/ap.c: fix build with uclibc
-+
-+explicit_bzero is used in src/ap.c since commit
-+d55e00b31d7bccdbb2ea1cdeb0a749df77a51e47 but src/missing.h is not
-+included, as a result build with uclibc fails on:
-+
-+/srv/storage/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/ap.o: in function `ap_probe_req_cb':
-+ap.c:(.text+0x23d8): undefined reference to `explicit_bzero'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/SSEFPYCJWH2CQGY7IV6BPNOPMQWYYZPD/]
-+---
-+ src/ap.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ap.c b/src/ap.c
-+index c972cfcb..ac705c31 100644
-+--- a/src/ap.c
-++++ b/src/ap.c
-+@@ -31,6 +31,7 @@
-+ 
-+ #include "linux/nl80211.h"
-+ 
-++#include "src/missing.h"
-+ #include "src/iwd.h"
-+ #include "src/module.h"
-+ #include "src/scan.h"
-+-- 
-+2.28.0
-+
--- 
-2.28.0
+> Could you do the same for your failing 'Odroid HC2 with kernel 5.8
+> + kernel-headers 5.8' case (and send my your defconfig)?
+
+I'm not sure what changed to fix the problem (unfortunately) but with
+kernel 5.8.6, headers 5.8.6, OpenSSH 8.3p1, OpenSSL 1.1.1g, glibc
+2.30-73, binutils 2.32 (perhaps the binutils change did it) - it
+works.
+
+This is against an odroid hc2, armv7l.
+
+Working case, as requested:
+
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm-generic/unistd.h:#define
+__NR_clock_nanosleep_time64 407
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm-generic/unistd.h:__SYSCALL(__NR_clock_nanosleep_time64,
+sys_clock_nanosleep)
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/syscall.h:#ifdef
+__NR_clock_nanosleep_time64
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/bits/syscall.h:#
+define SYS_clock_nanosleep_time64 __NR_clock_nanosleep_time64
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/asm/unistd-common.h:#define
+__NR_clock_nanosleep_time64 (__NR_SYSCALL_BASE + 407)
+
+
+Best,
+Christian
