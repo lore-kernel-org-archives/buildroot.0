@@ -1,61 +1,66 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 10 Sep 2020 07:50:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/subversion: drop first patch
-Message-ID: <20200910055023.111472-1-fontaine.fabrice@gmail.com>
+Date: Thu, 10 Sep 2020 08:20:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix build with uclibc
+Message-ID: <20200910062026.498143-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First patch is not needed since version 1.8.0 and
-https://github.com/apache/subversion/commit/f071ec0c26cdf47e89fa90b31d2233ee1a2b00c2
+This patch is needed to fix a build failure with iwd 1.9.0 and uclibc
 
-Indeed, as spotted by upstream when sending them this patch, the
-original expressions will not mangle '-mfloat-gprs=double' because the
-patterns contain a trailing space.
+Fixes:
+ - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../subversion/0001-dont-mangle-cflags.patch  | 24 -------------------
- ...ch => 0001-workaround-ac-run-ifelse.patch} |  0
- 2 files changed, 24 deletions(-)
- delete mode 100644 package/subversion/0001-dont-mangle-cflags.patch
- rename package/subversion/{0002-workaround-ac-run-ifelse.patch => 0001-workaround-ac-run-ifelse.patch} (100%)
+ .../0001-src-ap.c-fix-build-with-uclibc.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
 
-diff --git a/package/subversion/0001-dont-mangle-cflags.patch b/package/subversion/0001-dont-mangle-cflags.patch
-deleted file mode 100644
-index adb8b8e933..0000000000
---- a/package/subversion/0001-dont-mangle-cflags.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--[PATCH] configure.ac: don't mangle CFLAGS
--
--Ensure that the sed expression to strip debugging options from CFLAGS
--doesn't mangle flags like -mfloat-gprs=double, breaking the build.
--
--[Vincent: adapt to 1.9.2 and patch configure.ac instead of configure]
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -Nrup a/configure.ac b/configure.ac
----- a/configure.ac	2015-07-27 00:03:10.000000000 +0100
--+++ b/configure.ac	2015-09-28 10:33:39.175048493 +0100
--@@ -1110,8 +1110,8 @@ if test "$enable_debugging" = "yes" ; th
--   CXXFLAGS="$CXXFLAGS -DSVN_DEBUG -DAP_DEBUG"
-- elif test "$enable_debugging" = "no" ; then
--   AC_MSG_NOTICE([Disabling debugging])
---  CFLAGS=["`echo $CFLAGS' ' | $SED -e 's/-g[0-9] //g' -e 's/-g //g'`"]
---  CXXFLAGS=["`echo $CXXFLAGS' ' | $SED -e 's/-g[0-9] //g' -e 's/-g //g'`"]
--+  CFLAGS=["`echo $CFLAGS' ' | $SED -e 's/-g[0-9]* //g'`"]
--+  CXXFLAGS=["`echo $CXXFLAGS' ' | $SED -e 's/-g[0-9]* //g'`"]
--   dnl Compile with NDEBUG to get rid of assertions
--   CFLAGS="$CFLAGS -DNDEBUG"
--   CXXFLAGS="$CXXFLAGS -DNDEBUG"
-diff --git a/package/subversion/0002-workaround-ac-run-ifelse.patch b/package/subversion/0001-workaround-ac-run-ifelse.patch
-similarity index 100%
-rename from package/subversion/0002-workaround-ac-run-ifelse.patch
-rename to package/subversion/0001-workaround-ac-run-ifelse.patch
+diff --git a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
+new file mode 100644
+index 0000000000..b4e18098c0
+--- /dev/null
++++ b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
+@@ -0,0 +1,37 @@
++From 377df79e83e2127a087e1aa5ba6173e195e50933 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 10 Sep 2020 07:47:14 +0200
++Subject: [PATCH] src/ap.c: fix build with uclibc
++
++explicit_bzero is used in src/ap.c since commit
++d55e00b31d7bccdbb2ea1cdeb0a749df77a51e47 but src/missing.h is not
++included, as a result build with uclibc fails on:
++
++/srv/storage/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/ap.o: in function `ap_probe_req_cb':
++ap.c:(.text+0x23d8): undefined reference to `explicit_bzero'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/SSEFPYCJWH2CQGY7IV6BPNOPMQWYYZPD/]
++---
++ src/ap.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ap.c b/src/ap.c
++index c972cfcb..ac705c31 100644
++--- a/src/ap.c
+++++ b/src/ap.c
++@@ -31,6 +31,7 @@
++ 
++ #include "linux/nl80211.h"
++ 
+++#include "src/missing.h"
++ #include "src/iwd.h"
++ #include "src/module.h"
++ #include "src/scan.h"
++-- 
++2.28.0
++
 -- 
 2.28.0
