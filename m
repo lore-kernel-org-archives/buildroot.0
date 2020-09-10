@@ -1,109 +1,108 @@
-From: Robert Hancock <hancock@sedsystems.ca>
-Date: Thu, 10 Sep 2020 10:48:42 -0600
-Subject: [Buildroot] [PATCH] package/nginx-upload: bump to latest version
-Message-ID: <20200910164842.1317307-1-hancock@sedsystems.ca>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 10 Sep 2020 11:55:19 -0500
+Subject: [Buildroot] Toolchain issues on multiple architectures
+In-Reply-To: <CANQCQpbtpt-_pDFk0oBXiCqXDVfVcUCubBDq7kCdh+vbmWeVdg@mail.gmail.com>
+References: <20200910120536.2431494d@windsurf.hq.k.grp>
+ <CANQCQparV9FCnOCT=arB7zK0rvhWN4n6tJXTcLLNpZjCJfHcaQ@mail.gmail.com>
+ <CANQCQpbtpt-_pDFk0oBXiCqXDVfVcUCubBDq7kCdh+vbmWeVdg@mail.gmail.com>
+Message-ID: <CANQCQpamRBQ9hWrRDH3Ts7r3WoF7EKzKmvdNT4OQi=czz2sQyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update nginx-upload to a newer Git commit which adds upload support over
-HTTP2 as well as other fixes.
+On Thu, Sep 10, 2020 at 10:43 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> On Thu, Sep 10, 2020 at 9:43 AM Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+> >
+> > On Thu, Sep 10, 2020 at 5:06 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > As part of the https://toolchains.bootlin.com project, I've tried to
+> > > rebuild 175 toolchains on top of Buildroot 2020.08, and encountered a
+> > > number of failures, which are summarized below.
+> > >
+> > > Damien, Alistair: there is an issue with the RISC-V 32-bit toolchain.
+> > > Could you have a look, and tell us if you have some suggestions?
+> > >
+> > > ARC maintainers: all ARC toolchains are failing to build due to the use
+> > > of a recent gdb where gdbserver was moved to the top-level. However, it
+> > > doesn't seem to be that easy to build just gdbserver in those recent
+> > > gcc versions. I have posted a question about this on the gdb@ mailing
+> > > list: https://sourceware.org/pipermail/gdb/2020-September/048888.html.
+> > >
+> > > Matt, there are some PowerPC64 build issues as well. Have you ever seen
+> > > them, do you have any hints?
+> > >
+> [snip]
+> > > PowerPC64 (big and little endian) Power 8
+> > > =========================================
+> > >
+> > > Both the glibc stable and bleeding edge are failing to build libstdc++
+> > > in host-gcc-final. Interesingly, the musl configurations work fine.
+> > >
+> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359625
+> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359626
+> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359621
+> > > - https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359622
+> >
+> > Checking out 2020.08 and using the following config from the CI job.
+> > BR2_powerpc64le=y
+> > BR2_powerpc_power8=y
+> > BR2_KERNEL_HEADERS_4_9=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+> > BR2_PACKAGE_HOST_GDB=y
+> > BR2_INIT_NONE=y
+> > BR2_SYSTEM_BIN_SH_NONE=y
+> > # BR2_PACKAGE_BUSYBOX is not set
+> > BR2_PACKAGE_GDB=y
+> > # BR2_TARGET_ROOTFS_TAR is not set
+> >
+> > I see this error:
+> > ../../../libgfortran/libgfortran.h:61:12: fatal error:
+> > quadmath_weak.h: No such file or directory
+> >
+> > I did notice that if I did a basic build below using current defaults,
+> > it doesn't fail.
+> > BR2_powerpc64=y
+> > BR2_powerpc_power8=y
+> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> > BR2_INIT_NONE=y
+> > # BR2_TARGET_ROOTFS_TAR is not set
+>
+> Disregard the successful build above, I forgot to enable fortran.
+>
+> It looks like the powerpc64 is detecting __float128 and is trying to
+> use the quadmath library which we disable.  I'll check to see if the
+> change should be in the libfortran configure stage or what is being
+> passed to gcc final.
 
-Remove a patch which is no longer required in the current version.
+My original understanding was that just the IBM families with ISA 3.0+
+could do float128 [1].  Turns out any Power ISA v.2.06+ (64bit powerpc
+NXP & IBM) should be able to have quadmath enabled and the stdlib may
+emulate as needed [2].
 
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
----
- ...ad-module-add-openssl-lib-dependency.patch | 56 -------------------
- package/nginx-upload/nginx-upload.hash        |  2 +-
- package/nginx-upload/nginx-upload.mk          |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
- delete mode 100644 package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
+I'm still testing a series of builds (e5500, e6500, power6/7/8) but I
+believe the fix is to just add power64(big/le) to the condition to
+enable quadmath (BR2_TOOLCHAIN_HAS_LIBQUADMATH).
 
-diff --git a/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch b/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-deleted file mode 100644
-index 1161751546..0000000000
---- a/package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 600d0a36c2af785c8284acadeb062d73247281af Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Sun, 23 Jul 2017 09:21:23 -0500
--Subject: [PATCH] nginx-upload-module: add openssl lib dependency
--
--When building against nginx 1.11.2+, requires additional
---lcrypto dependency. (Nginx changed crypto approach
--and dependencies for openssl are no longer default)
--
--More details found here:
--https://github.com/vkholodkov/nginx-upload-module/issues/79
--
--Upstream pull request:
--https://github.com/vkholodkov/nginx-upload-module/pull/93
--
--Resolves build failure:
--objs/addon/nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3/ngx_http_upload_module.o \
--objs/ngx_modules.o \
---ldl -lpthread -lpthread -lpcre -lz -latomic_ops \
---Wl,-E
--ngx_http_upload_module.o: In function `ngx_http_upload_flush_output_buffer':
--ngx_http_upload_module.c:1625: undefined reference to `MD5_Update'
--ngx_http_upload_module.c:1628: undefined reference to `SHA1_Update'
--ngx_http_upload_module.c:1631: undefined reference to `SHA256_Update'
--ngx_http_upload_module.c:1634: undefined reference to `SHA512_Update'
--
--Fixes:
--http://autobuild.buildroot.net/results/e25f8ba8d8743e47a77707cf582e58477e1860e6
--http://autobuild.buildroot.net/results/c4aa6e22033be934bd311cd9761f646d44618dc0
--http://autobuild.buildroot.net/results/75e935d248b46df11c32c95526423a2287ac8c62
--
--Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-----
-- config | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/config b/config
--index cabd4f1..293529f 100644
----- a/config
--+++ b/config
--@@ -1,11 +1,10 @@
---USE_MD5=YES
---USE_SHA1=YES
-- ngx_addon_name=ngx_http_upload_module
-- 
-- if test -n "$ngx_module_link"; then
--     ngx_module_type=HTTP
--     ngx_module_name=$ngx_addon_name
--     ngx_module_srcs="$ngx_addon_dir/ngx_http_upload_module.c"
--+    ngx_module_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-- 
--     . auto/module
-- else
---- 
--1.9.1
--
-diff --git a/package/nginx-upload/nginx-upload.hash b/package/nginx-upload/nginx-upload.hash
-index ac04626eb0..b1d380eb1d 100644
---- a/package/nginx-upload/nginx-upload.hash
-+++ b/package/nginx-upload/nginx-upload.hash
-@@ -1,3 +1,3 @@
- #Locally Computed:
--sha256  5f1c3c2b9858b9cacd877a0f2df9b9263734e9cef8d837b73f0e659c0f7fde2d  nginx-upload-70bee48f1811eecd255ed094ce9f0fb560c390c3.tar.gz
-+sha256  61ad5bcb67c8f688a4c7a5611311a351049361840b8dfe78be542066f475166e  nginx-upload-4423994c7d8fb491d95867f6af968585d949e7a9.tar.gz
- sha256  825f9684c427e29fd1ab085d5c421a4cbf96a460f3c58884a42c28bfbac5e544  LICENCE
-diff --git a/package/nginx-upload/nginx-upload.mk b/package/nginx-upload/nginx-upload.mk
-index 738542571e..253ebeb34b 100644
---- a/package/nginx-upload/nginx-upload.mk
-+++ b/package/nginx-upload/nginx-upload.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_UPLOAD_VERSION = 70bee48f1811eecd255ed094ce9f0fb560c390c3
-+NGINX_UPLOAD_VERSION = 4423994c7d8fb491d95867f6af968585d949e7a9
- NGINX_UPLOAD_SITE = $(call github,vkholodkov,nginx-upload-module,$(NGINX_UPLOAD_VERSION))
- NGINX_UPLOAD_LICENSE = BSD-3-Clause
- NGINX_UPLOAD_LICENSE_FILES = LICENCE
--- 
-2.18.4
+config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+        bool
+        default y if BR2_i386 || BR2_x86_64 || BR2_powerpc64 || BR2_powerpc64le
+
+Are you able to make this change in your toolchain builder branch of
+buildroot and validate the IBM and e5500 toolchains create images that
+can login?  I can send a patch to the mailing list as well
+
+
+Regards,
+Matt
+
+[1] https://en.wikipedia.org/wiki/Power_ISA
+[2] https://gcc.gnu.org/onlinedocs/gcc/RS_002f6000-and-PowerPC-Options.html
