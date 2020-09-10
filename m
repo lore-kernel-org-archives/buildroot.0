@@ -1,9 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Sep 2020 20:11:52 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/harfbuzz: bump version to 2.7.2
-In-Reply-To: <20200910181152.22026-1-ps.report@gmx.net>
-References: <20200910181152.22026-1-ps.report@gmx.net>
-Message-ID: <20200910181152.22026-2-ps.report@gmx.net>
+Date: Thu, 10 Sep 2020 20:18:54 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/harfbuzz: bump version to 2.7.2
+Message-ID: <20200910181855.1280-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
