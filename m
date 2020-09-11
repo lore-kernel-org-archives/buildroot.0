@@ -1,133 +1,91 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 11 Sep 2020 15:29:08 +0200
-Subject: [Buildroot] [PATCH 3/3] package/grpc: bump version to 1.32
-In-Reply-To: <20200911132907.11748-1-buildroot@heine.tech>
-References: <20200911132907.11748-1-buildroot@heine.tech>
-Message-ID: <20200911132907.11748-4-buildroot@heine.tech>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Fri, 11 Sep 2020 15:41:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx:
+ custom padding
+In-Reply-To: <20200910141843.3030855-1-pieter.degendt@basalte.be>
+References: <20200910141843.3030855-1-pieter.degendt@basalte.be>
+Message-ID: <20200911134110.GA61000@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- order dependencies alphabetically
-- update hash
-- alter patch offsets
+Hi,
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- .../grpc/0001-target-build-using-host-plugin.patch    |  4 ++--
- ...-detect-the-availability-of-pthread_setname_.patch |  4 ++--
- package/grpc/grpc.hash                                |  2 +-
- package/grpc/grpc.mk                                  | 11 ++++++-----
- 4 files changed, 11 insertions(+), 10 deletions(-)
+Overall the patch is good, below are some small comments about the log
+and the variable naming.
 
-diff --git a/package/grpc/0001-target-build-using-host-plugin.patch b/package/grpc/0001-target-build-using-host-plugin.patch
-index 5b3c6a6fae..c6de0c1831 100644
---- a/package/grpc/0001-target-build-using-host-plugin.patch
-+++ b/package/grpc/0001-target-build-using-host-plugin.patch
-@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index be695c2..45c2fcb 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -11043,6 +11043,18 @@ target_link_libraries(grpc_cli
-+@@ -11199,6 +11199,18 @@ target_link_libraries(grpc_cli
-  endif()
-  if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
-  
-@@ -39,7 +39,7 @@ index be695c2..45c2fcb 100644
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
-  )
--@@ -11077,6 +11089,7 @@ if(gRPC_INSTALL)
-+@@ -11233,6 +11245,7 @@ if(gRPC_INSTALL)
-      ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
-    )
-  endif()
-diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-index c8b1dc8e73..32493ac1a0 100644
---- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index 45c2fcb..0b2be4f 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -180,6 +180,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-+@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-  endif()
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-  
-@@ -37,7 +37,7 @@ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codeg
- index 4f213ff..55ecd9d 100644
- --- a/include/grpc/impl/codegen/port_platform.h
- +++ b/include/grpc/impl/codegen/port_platform.h
--@@ -163,7 +163,9 @@
-+@@ -168,7 +168,9 @@
-  #endif /* _LP64 */
-  #ifdef __GLIBC__
-  #define GPR_POSIX_CRASH_HANDLER 1
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 20368068d9..3a2dbe2d8a 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1236514199d3deb111a6dd7f6092f67617cd2b147f7eda7adbafccea95de7381  grpc-1.31.0.tar.gz
-+sha256  f880ebeb2ccf0e47721526c10dd97469200e40b5f101a0d9774eb69efa0bd07a  grpc-1.32.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 2114f98e40..f7a731b8a1 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.31.0
-+GRPC_VERSION = 1.32.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
-@@ -12,7 +12,7 @@ GRPC_LICENSE_FILES = LICENSE
- GRPC_INSTALL_STAGING = YES
- 
- # Need to use host grpc_cpp_plugin during cross compilation.
--GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf re2 zlib libabseil-cpp
-+GRPC_DEPENDENCIES = c-ares host-grpc libabseil-cpp openssl protobuf re2 zlib
- HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protobuf \
- 	host-re2 host-zlib
- 
-@@ -21,13 +21,13 @@ HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protob
- # which doesn't do this.  These CARES settings trick the gRPC cmake code into
- # not looking for c-ares at all and yet still linking with the library.
- GRPC_CONF_OPTS = \
-+	-DgRPC_ABSL_PROVIDER=package \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
--	-DgRPC_ABSL_PROVIDER=package \
- 	-DgRPC_NATIVE_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin
- 
- # grpc can use __atomic builtins, so we need to link with
-@@ -64,13 +64,14 @@ GRPC_CONF_OPTS += \
- 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
- 
- HOST_GRPC_CONF_OPTS = \
-+	-DgRPC_ABSL_PROVIDER=package \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
--	-DgRPC_ZLIB_PROVIDER=package \
--	-DgRPC_ABSL_PROVIDER=package
-+	-DgRPC_ZLIB_PROVIDER=package
-+
- 
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
--- 
-2.25.1
+On Thu, Sep 10, 2020 at 04:18:43PM +0200, Pieter De Gendt wrote:
+> From: Tibault Damman <tibault.damman@basalte.be>
+> 
+> Some derivatives (such as Variscite imx8mm) require the training data to
+> be padded to a different loading address.
+
+On IRC you pointed to the varigit commit were that change is made, might
+be good to include it here for reference.
+https://github.com/varigit/uboot-imx/commit/5f8d814f
+
+That also explains the motivation behind that change.
+
+> Signed-off-by: Tibault Damman <tibault.damman@basalte.be>
+> Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
+> ---
+>  package/freescale-imx/firmware-imx/Config.in       | 12 ++++++++++++
+>  package/freescale-imx/firmware-imx/firmware-imx.mk |  6 ++++--
+>  2 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+> index 5becf8b6a9..c947248ee1 100644
+> --- a/package/freescale-imx/firmware-imx/Config.in
+> +++ b/package/freescale-imx/firmware-imx/Config.in
+> @@ -69,6 +69,18 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
+>  
+>  endchoice # DDR training FW
+>  
+> +config BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR
+> +	hex "(lp)ddr imem load address"
+> +	default 0x8000
+> +	help
+> +	  The training FW will be padded to start at this load address
+
+Not sure the description matches my understanding of that value.
+Isn't that value what the binary will be padded to (--pad-to).
+So I wouldn't say the training FW will be padded to start at the load
+address but instead to end at this address.
+Maybe the variable should be renamed to IMEM_LEN (matching U-Boot
+naming) or IMEM_PAD_ADDR.
+
+> +config BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR
+> +	hex "(lp)ddr dmem load address"
+> +	default 0x4000
+> +	help
+> +	  The training FW will be padded to start at this load address
+> +
+>  endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+>  
+>  endif # BR2_PACKAGE_FIRMWARE_IMX
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> index eb8595f022..1ace002d5b 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> @@ -23,10 +23,12 @@ endef
+>  #
+>  
+>  define FIRMWARE_IMX_PREPARE_DDR_FW
+> -	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
+> +	$(TARGET_OBJCOPY) -I binary -O binary \
+> +		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR) --gap-fill=0x0 \
+>  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
+>  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
+> -	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
+> +	$(TARGET_OBJCOPY) -I binary -O binary \
+> +		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR) --gap-fill=0x0 \
+>  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
+>  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
+>  	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
+
+Other than that I'm okay with the patch.
+
+Regards,
+Gary
