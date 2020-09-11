@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Sep 2020 09:47:00 +0200
-Subject: [Buildroot] [git commit] package/graphicsmagick: add support for
- webp image format
-Message-ID: <20200911073915.CCC1788632@busybox.osuosl.org>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 11 Sep 2020 10:07:42 +0200
+Subject: [Buildroot] package/localedef: parallel build failing. python3
+ dependency missing?
+Message-ID: <727a47d7-de5f-22a4-d8fb-1a3455e3a768@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ee1b0fac3029155b996bab65ca66f95a412b1ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/graphicsmagick/graphicsmagick.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 436df709e7..da7af5b53e 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -27,7 +27,6 @@ GRAPHICSMAGICK_CONF_OPTS = \
- 	--without-jbig \
- 	--without-perl \
- 	--without-trio \
--	--without-webp \
- 	--without-wmf \
- 	--without-x \
- 	--with-gs-font-dir=/usr/share/fonts/gs
-@@ -85,6 +84,13 @@ else
- GRAPHICSMAGICK_CONF_OPTS += --without-tiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_WEBP_MUX),y)
-+GRAPHICSMAGICK_CONF_OPTS += --with-webp
-+GRAPHICSMAGICK_DEPENDENCIES += webp
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --without-webp
-+endif
-+
- ifeq ($(BR2_PACKAGE_XZ),y)
- GRAPHICSMAGICK_CONF_OPTS += --with-lzma
- GRAPHICSMAGICK_DEPENDENCIES += xz
+I tried to move my build to parallel and the package host-localedef is
+failing with this message:
+
+
+checking if /build/build/per-package/host-localedef/host/bin/ccache
+/usr/bin/gcc is sufficient to build libc... yes
+checking for x86_64-pc-linux-gnu-nm... /usr/bin/nm
+checking for python3... no
+checking for python... python
+checking version of python... 2.7.18, bad
+configure: error:
+*** These critical programs are missing or too old: python
+*** Check the INSTALL file for required versions.
+
+
+The system I'm building on is a Ubuntu 20.04 with only python 2
+installed. On my other dev machine where python 3 is installed the
+package is successfully built.
+
+But from my understanding the python from package host-python3 should be
+used for building?
+This package is being built but I guess the host-localedef package is
+missing the dependency?
+
+
+Regards,
+Michael
