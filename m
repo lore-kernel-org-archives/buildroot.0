@@ -1,57 +1,126 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 11 Sep 2020 09:59:05 +0000
-Subject: [Buildroot] [arc-buildroot] Toolchain issues on multiple
- architectures
-In-Reply-To: <20200911102813.7dc2153f@windsurf.hq.k.grp>
-References: <20200910120536.2431494d@windsurf.hq.k.grp>
- <BN8PR12MB3330260C7D57EE97065A5DC0A1270@BN8PR12MB3330.namprd12.prod.outlook.com>,
- <20200911102813.7dc2153f@windsurf.hq.k.grp>
-Message-ID: <BN8PR12MB3330402F1023A1A6A823AF15A1240@BN8PR12MB3330.namprd12.prod.outlook.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Fri, 11 Sep 2020 14:22:40 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gdb: add patch for fixing build gdb
+ 9.2 with gcc 10 on ppc arch
+Message-ID: <20200911112240.3222531-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ ...ppc-Fix-linker-error-with-fno-common.patch | 101 ++++++++++++++++++
+ 1 file changed, 101 insertions(+)
+ create mode 100644 package/gdb/9.2/0006-sim-ppc-Fix-linker-error-with-fno-common.patch
 
-> On Thu, 10 Sep 2020 16:39:18 +0000
-> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
-> 
-> > > Issue is caused by the recent version of gdb, where gdbserver has been
-> > > moved from gdb/gdbserver/ to gdbserver/. However, the story is not so
-> > > simple: you can't simply go in gdbserver/ and run ./configure from it,
-> > > that doesn't work anymore. ?
-> > 
-> > But in your exercise mentioned above do you really need only gdbserver?
-> > I understand that full GDB might be quite an overkill for a tiny target but
-> > it might not be installed onto the target rootfs, right?
-> 
-> I'm building cross-compilation toolchains, in which we only want
-> gdbserver for the target, not the full gdb.
-> 
-> > So what if for GDB 10+ we'll add an installation quirk which will remove
-> > full GDB from "output/target" if we only want gdbsever?
-> 
-> Building the full blown gdb would also require building its
-> dependencies, i.e ncurses and possibly libiconv. Building only
-> gdbserver allows to avoid that.
-> 
-> I've got some feedback from upstream though, they pointed to:
-> ? https://github.com/bminor/binutils-gdb/blob/master/gdbserver/README#L86 
-> 
-> which explains what is the supported way of building just gdbserver.
-> We'll have to test this, and see if it works not only with recent GDB,
-> but also older GDB versions that we still support.
-
-That's an interesting finding indeed.
-So do you need any further help with that from our side now?
-
-BTW I was eagerly waiting for the next official GDB release
-(v10, which was supposed to happen a while ago according to
-https://www.gnu.org/software/gdb/schedule/) so that we may come-up with a more
-generic solution rather than just ARC quirk but the reality is there's no release
-and no ETAs I'm aware of so most probably we'll need to come-up with a custom
-quirk for now :(
-
--Alexey
+diff --git a/package/gdb/9.2/0006-sim-ppc-Fix-linker-error-with-fno-common.patch b/package/gdb/9.2/0006-sim-ppc-Fix-linker-error-with-fno-common.patch
+new file mode 100644
+index 0000000000..813a1054a5
+--- /dev/null
++++ b/package/gdb/9.2/0006-sim-ppc-Fix-linker-error-with-fno-common.patch
+@@ -0,0 +1,101 @@
++From ad8464f799a4c96c7ab8bdfec3f95846cf54f9b0 Mon Sep 17 00:00:00 2001
++From: Sebastian Huber <sebastian.huber@embedded-brains.de>
++Date: Wed, 1 Jul 2020 19:29:55 +0200
++Subject: [PATCH] sim/ppc: Fix linker error with -fno-common
++
++GCC 10 enables -fno-common by default.  This resulted in a multiple
++definition linker error since global variables were declared and defined
++in a header file:
++
++  ld: ld-insn.o:sim/ppc/ld-insn.h:221: multiple definition of
++  `max_model_fields_len'; igen.o:sim/ppc/ld-insn.h:221: first defined here
++
++sim/ppc
++
++	* ld-insn.h (last_model, last_model_data, last_model_function,
++	last_model_internal, last_model_macro, last_model_static):
++	Delete.
++	(max_model_fields_len, model_data, model_functions,
++	model_internal, model_macros, model_static, models): Declare, but do not
++	define.
++	* ld-insn.c (last_model, last_model_data, last_model_function,
++	last_model_internal, last_model_macro, last_model_static,
++	max_model_fields_len, model_data, model_functions,
++	model_internal, model_macros, model_static, models): Define.
++
++Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
++Fetch from: https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=ad8464f799a4c96c7ab8bdfec3f95846cf54f9b0
++---
++ sim/ppc/ld-insn.c | 18 ++++++++++++++++++
++ sim/ppc/ld-insn.h | 24 +++++++-----------------
++ 2 files changed, 25 insertions(+), 17 deletions(-)
++
++diff --git a/sim/ppc/ld-insn.c b/sim/ppc/ld-insn.c
++index e39131ca133..585071a861f 100644
++--- a/sim/ppc/ld-insn.c
+++++ b/sim/ppc/ld-insn.c
++@@ -28,6 +28,24 @@
++ 
++ #include "igen.h"
++ 
+++static model *last_model;
+++
+++static insn *last_model_macro;
+++static insn *last_model_function;
+++static insn *last_model_internal;
+++static insn *last_model_static;
+++static insn *last_model_data;
+++
+++model *models;
+++
+++insn *model_macros;
+++insn *model_functions;
+++insn *model_internal;
+++insn *model_static;
+++insn *model_data;
+++
+++int max_model_fields_len;
+++
++ static void
++ update_depth(insn_table *entry,
++ 	     lf *file,
++diff --git a/sim/ppc/ld-insn.h b/sim/ppc/ld-insn.h
++index 88318ffa2b3..52baeaa2d84 100644
++--- a/sim/ppc/ld-insn.h
+++++ b/sim/ppc/ld-insn.h
++@@ -200,25 +200,15 @@ extern insn_table *load_insn_table
++  table_include *includes,
++  cache_table **cache_rules);
++ 
++-model *models;
++-model *last_model;
+++extern model *models;
++ 
++-insn *model_macros;
++-insn *last_model_macro;
+++extern insn *model_macros;
+++extern insn *model_functions;
+++extern insn *model_internal;
+++extern insn *model_static;
+++extern insn *model_data;
++ 
++-insn *model_functions;
++-insn *last_model_function;
++-
++-insn *model_internal;
++-insn *last_model_internal;
++-
++-insn *model_static;
++-insn *last_model_static;
++-
++-insn *model_data;
++-insn *last_model_data;
++-
++-int max_model_fields_len;
+++extern int max_model_fields_len;
++ 
++ extern void insn_table_insert_insn
++ (insn_table *table,
++-- 
++2.18.4
++
+-- 
+2.27.0
