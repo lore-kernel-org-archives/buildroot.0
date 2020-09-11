@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 22:03:47 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/apparmor: fix
+Date: Fri, 11 Sep 2020 22:04:03 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/apparmor: fix
  per-package build with apache
-Message-ID: <20200911195707.EF5FE890D3@busybox.osuosl.org>
+Message-ID: <20200911195713.1756F890D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3edd3c531e55a278f0e36f1ce508ed2bee9d726
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3807305ea65c70bef52b855ac0f11e814f05a10b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Per-package build of apparmor with apache fails on:
 
