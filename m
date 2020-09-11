@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 22:39:52 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/memcached: fix
+Date: Fri, 11 Sep 2020 22:39:43 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/memcached: fix
  build with gcc 10
-Message-ID: <20200911203117.B5B268376C@busybox.osuosl.org>
+Message-ID: <20200911203124.4289D814D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67743d4ef1ae128a6d397dd0a8e13402094c9bf7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dce3209187f86c0a4a67fb3f88d45a7c0dfe04a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/ba8dcdece193b91845a30cd31d3574674ec30068
