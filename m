@@ -1,44 +1,42 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 11 Sep 2020 16:46:22 +0200
-Subject: [Buildroot] [PATCH 2/3] package/protobuf: bump version to 3.13
-In-Reply-To: <20200911154953.53acdab7@windsurf.home>
-References: <20200911132907.11748-1-buildroot@heine.tech>
- <20200911132907.11748-3-buildroot@heine.tech>
- <20200911154953.53acdab7@windsurf.home>
-Message-ID: <f20ed541-234d-e7ec-4ce0-146e408540bf@heine.tech>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Fri, 11 Sep 2020 17:18:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.20
+Message-ID: <20200911151825.15256-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Bump JasPer to 2.0.20
 
-On 11.09.2020 15:49, Thomas Petazzoni wrote:
-> On Fri, 11 Sep 2020 15:29:07 +0200
-> Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
-> 
->>  # When bumping this package, make sure to also verify if the
->>  # python-protobuf package still works, as they share the same
->>  # version/site variables.
->> -PROTOBUF_VERSION = 3.12.4
->> +PROTOBUF_VERSION = 3.13.0
-> 
-> You need to update package/python-protobuf/python-protobuf.hash as
-> well. We should actually update the comment above to make this clear.
-> 
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+---
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Oops, that slipped me. I'll update this as well.
-
-What I noticed: the python-protobuf description contains a link to the
-protobuf-c project [0]. Which is, from what I take from the description
-on its website, an independently developed project. So it doesn't seem
-to have a connection to the python package. Wouldn't it make more sense
-to put the link to the google protobuf site [1] as it is in the protobuf
-package?
-
-Regards,
-Michael
-
-[0] https://github.com/protobuf-c/protobuf-c
-[1] https://developers.google.com/protocol-buffers
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 67ad90d730..05cf5fc34e 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b9d16162a088617ada36450f2374d72165377cb64b33ed197c200bcfb73ec76c  jasper-2.0.19.tar.gz
++sha256 d55843ce52afa9bfe90f30118329578501040f30d48a027459a68a962695e506  jasper-2.0.20.tar.gz
+ sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index f6ae2ead78..9bf7d49971 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JASPER_VERSION = 2.0.19
++JASPER_VERSION = 2.0.20
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
+-- 
+2.16.4
