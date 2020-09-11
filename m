@@ -1,46 +1,133 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 11 Sep 2020 15:29:06 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libabseil-cpp: bump to 20200225.2
+Date: Fri, 11 Sep 2020 15:29:08 +0200
+Subject: [Buildroot] [PATCH 3/3] package/grpc: bump version to 1.32
 In-Reply-To: <20200911132907.11748-1-buildroot@heine.tech>
 References: <20200911132907.11748-1-buildroot@heine.tech>
-Message-ID: <20200911132907.11748-2-buildroot@heine.tech>
+Message-ID: <20200911132907.11748-4-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-patch release with two bugfixes
-- fixes the list of dependencies of absl::Cord in the CMake build
-- bug fix for absl::Status::ErasePayload
+- order dependencies alphabetically
+- update hash
+- alter patch offsets
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/libabseil-cpp/libabseil-cpp.hash | 2 +-
- package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../grpc/0001-target-build-using-host-plugin.patch    |  4 ++--
+ ...-detect-the-availability-of-pthread_setname_.patch |  4 ++--
+ package/grpc/grpc.hash                                |  2 +-
+ package/grpc/grpc.mk                                  | 11 ++++++-----
+ 4 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
-index 7f0b5fc394..fef96833de 100644
---- a/package/libabseil-cpp/libabseil-cpp.hash
-+++ b/package/libabseil-cpp/libabseil-cpp.hash
+diff --git a/package/grpc/0001-target-build-using-host-plugin.patch b/package/grpc/0001-target-build-using-host-plugin.patch
+index 5b3c6a6fae..c6de0c1831 100644
+--- a/package/grpc/0001-target-build-using-host-plugin.patch
++++ b/package/grpc/0001-target-build-using-host-plugin.patch
+@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ index be695c2..45c2fcb 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -11043,6 +11043,18 @@ target_link_libraries(grpc_cli
++@@ -11199,6 +11199,18 @@ target_link_libraries(grpc_cli
+  endif()
+  if(gRPC_BUILD_CODEGEN AND gRPC_BUILD_GRPC_CPP_PLUGIN)
+  
+@@ -39,7 +39,7 @@ index be695c2..45c2fcb 100644
+  add_executable(grpc_cpp_plugin
+    src/compiler/cpp_plugin.cc
+  )
+-@@ -11077,6 +11089,7 @@ if(gRPC_INSTALL)
++@@ -11233,6 +11245,7 @@ if(gRPC_INSTALL)
+      ARCHIVE DESTINATION ${gRPC_INSTALL_LIBDIR}
+    )
+  endif()
+diff --git a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+index c8b1dc8e73..32493ac1a0 100644
+--- a/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
++++ b/package/grpc/0002-Properly-detect-the-availability-of-pthread_setname_.patch
+@@ -20,7 +20,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ index 45c2fcb..0b2be4f 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -180,6 +180,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
++@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
+  endif()
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+  
+@@ -37,7 +37,7 @@ diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codeg
+ index 4f213ff..55ecd9d 100644
+ --- a/include/grpc/impl/codegen/port_platform.h
+ +++ b/include/grpc/impl/codegen/port_platform.h
+-@@ -163,7 +163,9 @@
++@@ -168,7 +168,9 @@
+  #endif /* _LP64 */
+  #ifdef __GLIBC__
+  #define GPR_POSIX_CRASH_HANDLER 1
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 20368068d9..3a2dbe2d8a 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353  libabseil-cpp-20200225.tar.gz
-+sha256  f41868f7a938605c92936230081175d1eae87f6ea2c248f41077c8f88316f111  libabseil-cpp-20200225.2.tar.gz
- sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
-diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
-index 92cbb0051d..6ca33535eb 100644
---- a/package/libabseil-cpp/libabseil-cpp.mk
-+++ b/package/libabseil-cpp/libabseil-cpp.mk
+-sha256  1236514199d3deb111a6dd7f6092f67617cd2b147f7eda7adbafccea95de7381  grpc-1.31.0.tar.gz
++sha256  f880ebeb2ccf0e47721526c10dd97469200e40b5f101a0d9774eb69efa0bd07a  grpc-1.32.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 2114f98e40..f7a731b8a1 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBABSEIL_CPP_VERSION = 20200225
-+LIBABSEIL_CPP_VERSION = 20200225.2
- LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
- LIBABSEIL_CPP_LICENSE = Apache-2.0
- LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+-GRPC_VERSION = 1.31.0
++GRPC_VERSION = 1.32.0
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
+@@ -12,7 +12,7 @@ GRPC_LICENSE_FILES = LICENSE
+ GRPC_INSTALL_STAGING = YES
+ 
+ # Need to use host grpc_cpp_plugin during cross compilation.
+-GRPC_DEPENDENCIES = c-ares host-grpc openssl protobuf re2 zlib libabseil-cpp
++GRPC_DEPENDENCIES = c-ares host-grpc libabseil-cpp openssl protobuf re2 zlib
+ HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protobuf \
+ 	host-re2 host-zlib
+ 
+@@ -21,13 +21,13 @@ HOST_GRPC_DEPENDENCIES = host-c-ares host-libabseil-cpp host-openssl host-protob
+ # which doesn't do this.  These CARES settings trick the gRPC cmake code into
+ # not looking for c-ares at all and yet still linking with the library.
+ GRPC_CONF_OPTS = \
++	-DgRPC_ABSL_PROVIDER=package \
+ 	-D_gRPC_CARES_LIBRARIES=cares \
+ 	-DgRPC_CARES_PROVIDER=none \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_RE2_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+ 	-DgRPC_ZLIB_PROVIDER=package \
+-	-DgRPC_ABSL_PROVIDER=package \
+ 	-DgRPC_NATIVE_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin
+ 
+ # grpc can use __atomic builtins, so we need to link with
+@@ -64,13 +64,14 @@ GRPC_CONF_OPTS += \
+ 	-DCMAKE_CXX_FLAGS="$(GRPC_CXXFLAGS)"
+ 
+ HOST_GRPC_CONF_OPTS = \
++	-DgRPC_ABSL_PROVIDER=package \
+ 	-D_gRPC_CARES_LIBRARIES=cares \
+ 	-DgRPC_CARES_PROVIDER=none \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_RE2_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+-	-DgRPC_ZLIB_PROVIDER=package \
+-	-DgRPC_ABSL_PROVIDER=package
++	-DgRPC_ZLIB_PROVIDER=package
++
+ 
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.25.1
