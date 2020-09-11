@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 22:21:03 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/minidlna: fix
+Date: Fri, 11 Sep 2020 22:22:51 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/minidlna: fix
  CallStranger a.k.a. CVE-2020-12675
-Message-ID: <20200911201731.4DF8689150@busybox.osuosl.org>
+Message-ID: <20200911201727.22D0288183@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62293a75368074933ea603c145dd76b0b3f438ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c1f8ff7e920fbd455f0fbbfbba09826e6c8a3e47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 No MINIDLNA_IGNORE_CVES entry is added as no CVE has been assigned to
 minidlna. Indeed, CallStranger vulnerability affect(ed) most of the UPnP
