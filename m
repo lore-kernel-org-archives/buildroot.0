@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Sep 2020 21:46:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/memtester: fix build with gcc 10
-Message-ID: <20200911194658.458887-1-fontaine.fabrice@gmail.com>
+Date: Fri, 11 Sep 2020 21:59:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/motion: fix build with gcc 10
+Message-ID: <20200911195942.607943-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,84 +9,72 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
+ - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0002-fix-build-with-gcc-10.patch          | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/memtester/0002-fix-build-with-gcc-10.patch
+ .../motion/0001-Fix-build-with-GCC-10.patch   | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/motion/0001-Fix-build-with-GCC-10.patch
 
-diff --git a/package/memtester/0002-fix-build-with-gcc-10.patch b/package/memtester/0002-fix-build-with-gcc-10.patch
+diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
 new file mode 100644
-index 0000000000..8c9b3945bb
+index 0000000000..58b5a1ebe4
 --- /dev/null
-+++ b/package/memtester/0002-fix-build-with-gcc-10.patch
-@@ -0,0 +1,65 @@
-+From acd226cd4073b77abce8783e19c5ef3bbf8074ef Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 11 Sep 2020 21:39:03 +0200
-+Subject: [PATCH] fix build with gcc 10
++++ b/package/motion/0001-Fix-build-with-GCC-10.patch
+@@ -0,0 +1,53 @@
++From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
++From: Vasiliy Glazov <vascom2@gmail.com>
++Date: Sun, 8 Mar 2020 03:00:21 +0300
++Subject: [PATCH] Fix build with GCC 10.
 +
-+Move mword8 and mword16 from types.h to tests.c to avoid the following
-+build failure with gcc 10 (which defaults to -fno-common):
-+
-+/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
-+tests.c:(.bss+0x4): multiple definition of `mword16'; memtester.o:memtester.c:(.bss+0xc): first defined here
-+/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
-+tests.c:(.bss+0x0): multiple definition of `mword8'; memtester.o:memtester.c:(.bss+0x10): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to charlesc at pyropus.ca]
++[Retrieved (and backported) from:
++https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
++Signed-off-bby: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ tests.c | 10 ++++++++++
-+ types.h | 10 ----------
-+ 2 files changed, 10 insertions(+), 10 deletions(-)
++ src/netcam.h    | 2 +-
++ src/translate.c | 2 ++
++ src/translate.h | 2 +-
++ 3 files changed, 4 insertions(+), 2 deletions(-)
 +
-+diff --git a/tests.c b/tests.c
-+index be1b350..d3d25c7 100644
-+--- a/tests.c
-++++ b/tests.c
-+@@ -22,6 +22,16 @@
-+ #include "sizes.h"
-+ #include "memtester.h"
++diff --git a/netcam.h b/netcam.h
++index 2951d917..4ee0e1c8 100644
++--- a/netcam.h
+++++ b/netcam.h
++@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
++ } netcam_buff;
++ typedef netcam_buff *netcam_buff_ptr;
 + 
-++union {
-++    unsigned char bytes[UL_LEN/8];
-++    ul val;
-++} mword8;
++-struct netcam_caps {                    /* netcam capabilities: */
+++extern struct netcam_caps {                    /* netcam capabilities: */
++         unsigned char streaming;        /*  See the NCS_* defines */
++         unsigned char content_length;   /*  0 - unsupported     */
++ } caps;
++diff --git a/translate.c b/translate.c
++index 0c9f1105..a212d9de 100644
++--- a/translate.c
+++++ b/translate.c
++@@ -10,6 +10,8 @@
++ #include "motion.h"
++ #include "translate.h"
++ 
+++int nls_enabled;
 ++
-++union {
-++    unsigned short u16s[UL_LEN/16];
-++    ul val;
-++} mword16;
-++
-+ char progress[] = "-\\|/";
-+ #define PROGRESSLEN 4
-+ #define PROGRESSOFTEN 2500
-+diff --git a/types.h b/types.h
-+index ad7ce73..dca7fc0 100644
-+--- a/types.h
-++++ b/types.h
-+@@ -24,13 +24,3 @@ struct test {
-+     char *name;
-+     int (*fp)();
-+ };
-+-
-+-union {
-+-    unsigned char bytes[UL_LEN/8];
-+-    ul val;
-+-} mword8;
-+-
-+-union {
-+-    unsigned short u16s[UL_LEN/16];
-+-    ul val;
-+-} mword16;
-+-- 
-+2.28.0
-+
++ void translate_locale_chg(const char *langcd){
++ #ifdef HAVE_GETTEXT
++     /* This routine is for development testing only.  It is not used for
++diff --git a/translate.h b/translate.h
++index 0832ffd8..eeba3745 100644
++--- a/translate.h
+++++ b/translate.h
++@@ -10,7 +10,7 @@
++ #ifndef _INCLUDE_TRANSLATE_H_
++ #define _INCLUDE_TRANSLATE_H_
++ 
++-int nls_enabled;
+++extern int nls_enabled;
++ 
++ #ifdef HAVE_GETTEXT
++ #   include <libintl.h>
 -- 
 2.28.0
