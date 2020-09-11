@@ -1,65 +1,46 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Fri, 11 Sep 2020 09:03:23 -0700
-Subject: [Buildroot] Toolchain issues on multiple architectures
-In-Reply-To: <20200911093009.68a115f9@windsurf.hq.k.grp>
-References: <20200910120536.2431494d@windsurf.hq.k.grp>
- <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
- <20200911093009.68a115f9@windsurf.hq.k.grp>
-Message-ID: <CAKmqyKN4Ge5YWUtbU-XwBD2JbrJ-jMhSVMZVbE6wOsz+CUM1jA@mail.gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 11 Sep 2020 18:34:07 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/libabseil-cpp: bump to 20200225.2
+In-Reply-To: <20200911163409.25778-1-buildroot@heine.tech>
+References: <20200911163409.25778-1-buildroot@heine.tech>
+Message-ID: <20200911163409.25778-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 11, 2020 at 12:30 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Alistair,
->
-> On Thu, 10 Sep 2020 16:17:46 -0700
-> Alistair Francis <alistair23@gmail.com> wrote:
->
-> > Do you have any steps to reproduce this?
->
-> You need to build this defconfig:
->
-> BR2_riscv=y
-> BR2_RISCV_32=y
-> BR2_KERNEL_HEADERS_5_4=y
-> BR2_BINUTILS_VERSION_2_34_X=y
-> BR2_GCC_VERSION_10_X=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_GDB=y
-> # BR2_TARGET_ROOTFS_TAR is not set
+patch release with two bugfixes
+- fixes the list of dependencies of absl::Cord in the CMake build
+- bug fix for absl::Status::ErasePayload
 
-I don't see any errors using this config with buildroot. Do I need to
-do anything else?
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/libabseil-cpp/libabseil-cpp.hash | 2 +-
+ package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
-> > I tried `./build.sh riscv32-ilp32d--glibc--bleeding-edge testing
-> > buildroot-toolchains/toolchains.bootlin.com-2020.08 2020.08-1` in the
-> > toolchains-builder, but I'm missing
-> > frags/riscv32-ilp32d--glibc--bleeding-edge.config.
-> >
-> > I then tried `frags/riscv32-ilp32d--glibc--bleeding-edge.config` but
-> > it doesn't generate a RV32 frag.
->
-> I don't recommend trying to use the toolchains-builder stuff. For now
-> it's not really designed to be executed locally. This is something I
-> want to fix, but I'm not there yet.
-
-No worries.
-
-Alistair
-
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 7f0b5fc394..fef96833de 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353  libabseil-cpp-20200225.tar.gz
++sha256  f41868f7a938605c92936230081175d1eae87f6ea2c248f41077c8f88316f111  libabseil-cpp-20200225.2.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 92cbb0051d..6ca33535eb 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBABSEIL_CPP_VERSION = 20200225
++LIBABSEIL_CPP_VERSION = 20200225.2
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+-- 
+2.25.1
