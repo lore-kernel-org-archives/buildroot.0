@@ -1,39 +1,94 @@
-From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Fri, 11 Sep 2020 08:00:22 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/olpc_xo175: bump kernel version
-In-Reply-To: <20200911060023.1210248-1-lkundrak@v3.sk>
-References: <20200911060023.1210248-1-lkundrak@v3.sk>
-Message-ID: <20200911060023.1210248-2-lkundrak@v3.sk>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 11 Sep 2020 08:43:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
+ bluez5_utils-headers}: bump to version 5.55
+Message-ID: <20200911064352.220841-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update kernel to version 5.8.2.
+Add a config option to explicitly enable the hid2hci tool, which is not
+build by default anymore.
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- configs/olpc_xo175_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/Config.in                       | 9 +++++++++
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 9 ++++++++-
+ 4 files changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/configs/olpc_xo175_defconfig b/configs/olpc_xo175_defconfig
-index 19075fe5a2..de790d66b4 100644
---- a/configs/olpc_xo175_defconfig
-+++ b/configs/olpc_xo175_defconfig
-@@ -1,12 +1,11 @@
- BR2_arm=y
- BR2_pj4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olpc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olpc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.2"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olpc/xo-1.75/linux.config"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olpc/linux.config"
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index 871986c817..589978c8c5 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.54
++BLUEZ5_UTILS_HEADERS_VERSION = 5.55
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 73c6f01324..016a16c4c5 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -104,6 +104,15 @@ config BR2_PACKAGE_BLUEZ5_UTILS_TEST
+ 	help
+ 	  Build BlueZ 5.x tests
+ 
++config BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI
++	bool "build hid2hci tool"
++	depends on BR2_PACKAGE_HAS_UDEV
++	help
++	  Build BlueZ 5.x hid2hci tool
++
++comment "hid2hci tool needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
++
+ endif
+ 
+ comment "bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 3eb6912fb3..d0f3b80598 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  68cdab9e63e8832b130d5979dc8c96fdb087b31278f342874d992af3e56656dc  bluez-5.54.tar.xz
++sha256  8863717113c4897e2ad3271fc808ea245319e6fd95eed2e934fae8e0894e9b88  bluez-5.55.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 2149614c56..f2c8cabcff 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.54
++BLUEZ5_UTILS_VERSION = 5.55
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+@@ -110,6 +110,13 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-test
+ endif
+ 
++# enable hid2hci tool
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_TOOLS_HID2HCI),y)
++BLUEZ5_UTILS_CONF_OPTS += --enable-hid2hci
++else
++BLUEZ5_UTILS_CONF_OPTS += --disable-hid2hci
++endif
++
+ # use udev if available
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ BLUEZ5_UTILS_CONF_OPTS += --enable-udev
 -- 
-2.26.2
+2.28.0
