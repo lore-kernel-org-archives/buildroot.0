@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 22:22:15 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/minidlna: fix
+Date: Fri, 11 Sep 2020 22:22:46 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/minidlna: fix
  build with gcc 10
-Message-ID: <20200911201720.28B77877EB@busybox.osuosl.org>
+Message-ID: <20200911201727.1731C88183@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08e4a7369501de4805d2a8e0f82daf80f253d625
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f1e0848aefd21fb2313ad7b730fc9a22c442fa57
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/8754bb4f7d749f999d5f8ddfec587470ceec4476
