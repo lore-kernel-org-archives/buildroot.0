@@ -1,80 +1,92 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Fri, 11 Sep 2020 19:37:15 +0000
-Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
-In-Reply-To: <20200911111828.5c9ea5d5@windsurf.hq.k.grp>
-References: <20191206221918.1c05e316@windsurf.home>
- <20191217213253.12446-1-vgupta@synopsys.com>
- <20191222224144.38603994@windsurf>
- <3b18564e-be2e-91b3-def1-6c3591288ecc@synopsys.com>
- <20200911111828.5c9ea5d5@windsurf.hq.k.grp>
-Message-ID: <afd5edc5-93b8-e838-d79c-9f14d7a60943@synopsys.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 11 Sep 2020 21:46:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/memtester: fix build with gcc 10
+Message-ID: <20200911194658.458887-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9/11/20 2:18 AM, Thomas Petazzoni wrote:
-> Hello Vineet,
->
-> On Thu, 10 Sep 2020 23:21:43 +0000
-> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
->
->>>> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
->>>> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)  
->> Looks like we need this specific thunk anyways. When I select pristine upstream
->> binutils (not ARC fork @ github), the above forces it to download from github
->> which it should not and will not if the tag/branch has not been mirrored there.
-> So I guess you're talking about the situation where a host-binutils is
-> not enabled, and only a target binutils is used. 
+Fixes:
+ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
 
-No sorry, I was not. I was trying to build a host binutils off upstream 2.34 and
-must have some local change to make it download 2.34 off of github ARC fork. I
-can't reproduce it now.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0002-fix-build-with-gcc-10.patch          | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/memtester/0002-fix-build-with-gcc-10.patch
 
-> In this case, indeed:
->
-> ifeq ($(BINUTILS_VERSION),)
-> ifeq ($(BR2_arc),y)
-> BINUTILS_VERSION = arc-2020.03-release
-> else
-> BINUTILS_VERSION = 2.33.1
-> endif
-> endif # BINUTILS_VERSION
->
-> will kick in and set BINUTILS_VERSION to arc-2020.03-release, which
-> will lead to:
->
-> ifeq ($(BINUTILS_VERSION),arc-2020.03-release)
-> BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
-> BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
-> BINUTILS_FROM_GIT = y
-> endif
-
-The use of a single release string to decide where to download off of seems a bit
-fragile. But given we are moving away from fork gradually it seems OK.
-
-> being taken into account.
->
-> What happens with target binutils is:
->
->  (1) If a host-binutils is built (because Buildroot is building the
->      toolchain), then we're using the same version as the
->      host-binutils, which is defined by the choice in
->      package/binutils/Config.in.host.
->
->  (2) If not host-binutils is built (because we're using an external
->      toolchain), then there is no version selection: we unconditionally
->      use 2.33.1, except on ARC where we use the special ARC fork.
->
-> So I guess the decision to take is: do we want to switch to using the
-> upstream binutils, even for ARC, when no host-binutils is built ?
-
-I suppose so. upstream binutils is perhaps an odd commit or two behind the fork,
-if at all.
-I'll pester Alexey to just ditch binutils fork for upstream buildroot.
-
->
-> Best regards,
->
-> Thomas
+diff --git a/package/memtester/0002-fix-build-with-gcc-10.patch b/package/memtester/0002-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..8c9b3945bb
+--- /dev/null
++++ b/package/memtester/0002-fix-build-with-gcc-10.patch
+@@ -0,0 +1,65 @@
++From acd226cd4073b77abce8783e19c5ef3bbf8074ef Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 11 Sep 2020 21:39:03 +0200
++Subject: [PATCH] fix build with gcc 10
++
++Move mword8 and mword16 from types.h to tests.c to avoid the following
++build failure with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x4): multiple definition of `mword16'; memtester.o:memtester.c:(.bss+0xc): first defined here
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x0): multiple definition of `mword8'; memtester.o:memtester.c:(.bss+0x10): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to charlesc at pyropus.ca]
++---
++ tests.c | 10 ++++++++++
++ types.h | 10 ----------
++ 2 files changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/tests.c b/tests.c
++index be1b350..d3d25c7 100644
++--- a/tests.c
+++++ b/tests.c
++@@ -22,6 +22,16 @@
++ #include "sizes.h"
++ #include "memtester.h"
++ 
+++union {
+++    unsigned char bytes[UL_LEN/8];
+++    ul val;
+++} mword8;
+++
+++union {
+++    unsigned short u16s[UL_LEN/16];
+++    ul val;
+++} mword16;
+++
++ char progress[] = "-\\|/";
++ #define PROGRESSLEN 4
++ #define PROGRESSOFTEN 2500
++diff --git a/types.h b/types.h
++index ad7ce73..dca7fc0 100644
++--- a/types.h
+++++ b/types.h
++@@ -24,13 +24,3 @@ struct test {
++     char *name;
++     int (*fp)();
++ };
++-
++-union {
++-    unsigned char bytes[UL_LEN/8];
++-    ul val;
++-} mword8;
++-
++-union {
++-    unsigned short u16s[UL_LEN/16];
++-    ul val;
++-} mword16;
++-- 
++2.28.0
++
+-- 
+2.28.0
