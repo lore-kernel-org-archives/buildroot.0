@@ -1,80 +1,690 @@
-From: Dagg Stompler <daggs@gmx.com>
-Date: Fri, 11 Sep 2020 12:39:22 +0300
-Subject: [Buildroot] [PATCH] meson-tools: fix autobuild failure
-Message-ID: <20200911093922.8298-1-daggs@gmx.com>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Fri, 11 Sep 2020 11:52:08 +0200
+Subject: [Buildroot] CVE analysis of the resiprocate package
+In-Reply-To: <87tuw4vf1e.fsf@BL-laptop>
+References: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
+ <CAMQcK5KyWBPOW7s9BD7xaE5nd15SzEARFf8sDm9aYq=E6bqVbA@mail.gmail.com>
+ <20200909235739.4ccaa8b6@windsurf.hq.k.grp> <87zh5wvkvw.fsf@BL-laptop>
+ <87wo10vhp1.fsf@BL-laptop> <20200911104753.49ab4f19@windsurf.hq.k.grp>
+ <87tuw4vf1e.fsf@BL-laptop>
+Message-ID: <87r1r8vdx3.fsf@BL-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix the code so it won't use non std C conevention.
+Gregory CLEMENT <gregory.clement@bootlin.com> writes:
 
-fixes:
- - http://autobuild.buildroot.net/results/602d474a12cf2400e4f38ffad903758d7fd9f2f5
- - http://autobuild.buildroot.net/results/65cfe582ce60fcff18afd008c3d469471ffb0e49
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>> On Fri, 11 Sep 2020 10:30:34 +0200
+>> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+>>
+>>> Among the 2412 packages there are 121 packages for which CVEs refer to
+>>> minor version.
+>>
+>> Could you provide that list, as well as the CPE ID entries that have a
+>> minor version, so that we can get a feeling of what it looks like ?
+>
+> Here is the list:
+>
+> libssh
+> util-linux
+> cups
+> qemu
+> stunnel
+> dnsmasq
+> gnuplot
+> bind
+> c-ares
+> aircrack-ng
+> iodine
+> libyang
+> privoxy
+> php
+> dbus
+> ruby
+> glibc
+> libgit2
+> mariadb
+> rpm
+> openswan
+> squid
+> lxc
+> thttpd
+> exiv2
+> xen
+> libxml2
+> dovecot
+> monkey
+> clamav
+> putty
+> freerdp
+> openssh
+> libmspack
+> libevent
+> freetype
+> irssi
+> fetchmail
+> bootstrap
+> graphicsmagick
+> exim
+> gnutls
+> oniguruma
+> openssl
+> cgilua
+> libtirpc
+> libvpx
+> pcsc-lite
+> pure-ftpd
+> grep
+> xz
+> dhcp
+> libvorbis
+> sudo
+> socat
+> rsyslog
+> jquery
+> openvpn
+> proftpd
+> libsndfile
+> resiprocate
+> logsurfer
+> libpng
+> syslog-ng
+> nfs-utils
+> docker
+> libcurl
+> postgresql
+> bash
+> busybox
+> openjdk
+> automake
+> tor
+> smack
+> suricata
+> unbound
+> nut
+> paxtest
+> ffmpeg
+> faad2
+> lynx
+> libesmtp
+> chrony
+> luajit
+> redis
+> valgrind
+> snort
+> ntp
+> tinyproxy
+> haproxy
+> enscript
+> libraw
+> perl
+> systemd
+> zeromq
+> netatalk
+> gdb
+> mysql
+> nmap
+> libcgroup
+> dhcpcd
+> logrotate
+> readline
+> collectd
+> git
+> subversion
+> asterisk
+> runc
+> ngircd
+> memcached
+> tinc
+> ipsec-tools
+> go
+> ejabberd
+> tcpreplay
+> dillo
+> python
+> imagemagick
+> links
+> gnupg
+> linux
+>
+> For CPE-id I need to make more change in the script and the list will be
+> bigger because for each package you can have many version.
+>
+> I am working on it.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
----
- ...l-remove-non-std-C-convention-in-for.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
+As I feared the list was very huge. Here it is the output for only a few
+packages (resiprocate,proftpd,monkey and bind):
 
-diff --git a/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch b/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
-new file mode 100644
-index 0000000000..0ee38416f9
---- /dev/null
-+++ b/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
-@@ -0,0 +1,50 @@
-+From 7c5475187d1bdf861360ffd8bc1aaea84a341db3 Mon Sep 17 00:00:00 2001
-+From: Dagg Stompler <daggs@gmx.com>
-+Date: Fri, 11 Sep 2020 12:28:52 +0300
-+Subject: [PATCH] amlbootenc-gxl: remove non std C convention in for
-+
-+not all compilers have c99 or gnu99 enabled, so try not to use a
-+non std C convention in for call loops
-+
-+Signed-off-by: Dagg Stompler <daggs@gmx.com>
-+---
-+ amlbootenc-gxl.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/amlbootenc-gxl.c b/amlbootenc-gxl.c
-+index 3695e13..233563d 100644
-+--- a/amlbootenc-gxl.c
-++++ b/amlbootenc-gxl.c
-+@@ -51,6 +51,7 @@ static int boot_enc(const char *input, const char *output)
-+ 		._unknown3 = 0x02000000,
-+ 		.sig2 = AMLOGIC_C_SIGNATURE,
-+ 	};
-++	int i;
-+
-+ 	assert(sizeof(hdr) == 0x100);
-+
-+@@ -130,10 +131,10 @@ static int boot_enc(const char *input, const char *output)
-+ 	memcpy(hdr.iv, (uint8_t[]){ 0x14, 0x82, 0x5b, 0x1b, 0x10, 0xc1, 0x49, 0x0d, 0x8f, 0x13, 0x0a, 0x99, 0x15, 0x50, 0x1d, 0x37 }, 16);
-+ 	}
-+ #else
-+-	for (int i = 0; i < sizeof(hdr.key); i++) {
-++	for (i = 0; i < sizeof(hdr.key); i++) {
-+ 		hdr.key[i] = rand();
-+ 	}
-+-	for (int i = 0; i < sizeof(hdr.iv); i++) {
-++	for (i = 0; i < sizeof(hdr.iv); i++) {
-+ 		hdr.iv[i] = rand();
-+ 	}
-+ #endif
-+@@ -151,7 +152,7 @@ static int boot_enc(const char *input, const char *output)
-+ 	AES_cbc_encrypt(src_buf, buf + hdr.first_offset, hdr.block_size, &aes_key, iv, AES_ENCRYPT);
-+ 	SHA256_Update(&sha256_ctx, buf + hdr.first_offset, hdr.block_size);
-+
-+-	for (int i = 1; i < hdr.payload_size / hdr.block_size; i++) {
-++	for (i = 1; i < hdr.payload_size / hdr.block_size; i++) {
-+ 		memset(src_buf, 0, hdr.block_size);
-+ 		fread(src_buf, 1, hdr.block_size, fin);
-+ 		AES_cbc_encrypt(src_buf, buf + hdr.data_offset + (i - 1) * hdr.block_size, hdr.block_size, &aes_key, iv, AES_ENCRYPT);
-+--
-+2.28.0
-+
---
-2.28.0
+cpe:2.3:a:isc:bind:4.9.5:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2.2:p7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:8.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.0:rc6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.0.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.2:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:beta2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:beta3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:p7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.4:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:s2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.5:s4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.6:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.6:s2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.7:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.7:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.10.8:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.8:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.10.8:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:alpha1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:alpha2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:alpha3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:beta2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:beta3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.12:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.1:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.21:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.3:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.3:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.3:s2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:s3:*:*:*:supported_preview:*:*
+cpe:2.3:a:isc:bind:9.11.5:s3:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:s5:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.5:s6:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.6:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.11.6:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.7:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.11.8:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.1:rc7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:alpha1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.1:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.3:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.4:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.12.4:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.3:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.1.3:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc10:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc8:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.0:rc9:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.3:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.3:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.3:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.4:rc8:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.5:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.6:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.7:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.7:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.7:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.2.9:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:b4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.0:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.1:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.3:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.3:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.5:p2_w1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.5-p2-w1:windows:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.5:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.3.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:a6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:b4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.2:p2_w1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.2:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:p5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.4:b1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r2:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r3:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r4:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r4-p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r5-b1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r5:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r5-p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.4:r5-rc1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:a7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:p2_w1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:p2_w2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.1:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.1:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.5.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.1:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.1:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.2:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r2:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r3:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r4:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r4_p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r5_b1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r5:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r5_p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r5_p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_b1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_rc1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r6_rc2:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r7:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r7_p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r7_p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r7_p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r7_p2:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r9:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.6:r9_p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.6:r9_p1:*:*:esv:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.1:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.2:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.4:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.4:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.4:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.5:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.5:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.6:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.6:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.6:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.7.6:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.1:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.1:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.1:b3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.2:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.2:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.3:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.3:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.3:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.5:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.6:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.6:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.8.6:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:a1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:a2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:a3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:p6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.0:rc4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.10:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.10:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.10:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.10:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.10:s2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.11:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.12:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.12:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.9.13:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.9.1:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.1:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.1:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.1:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.2:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.2:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.3:s1:*:*:*:supported_preview:*:*
+cpe:2.3:a:isc:bind:9.9.3:s1:*:*:supported_preview:*:*:*
+cpe:2.3:a:isc:bind:9.9.4:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.4:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.4:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.4:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.6:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.7:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.7:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.7:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.7:rc2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.8:s6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:b1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:b2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:beta1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:beta2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p3:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p4:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p5:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:p7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:s1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:s1rc1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:s6:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:s7:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:9.9.9:s8:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:*:p1:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:*:p2:*:*:*:*:*:*
+cpe:2.3:a:isc:bind:*:p3:*:*:*:*:*:*
+cpe:2.3:a:monkey-project:monkey:0.8.4:2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.0:pre10:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.0:pre9:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.10:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.10:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.10:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.2:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.2:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.5:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.5:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.5:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.6:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.7:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.7:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.7:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.8:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.8:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.9:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.9:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.2.9:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:a:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:rc4:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.0:rc5:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.1:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.1:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.1:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:a:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:b:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:c:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:d:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:e:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.2:rc4:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:a:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:b:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:c:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:d:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:e:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.3:rc4:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.4:d:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.4:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.4:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.4:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.5:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:a:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:alpha:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:beta:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:rc2:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:rc3:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.6:rc4:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:1.3.7:rc1:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:*:a:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:*:c:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:*:d:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:*:f:*:*:*:*:*:*
+cpe:2.3:a:proftpd:proftpd:*:rc2:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha1:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha10:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha11:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha2:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha3:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha4:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha5:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha6:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha7:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha8:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:alpha9:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:beta1:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:beta2:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:beta3:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:beta4:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.11.0:beta5:*:*:*:*:*:*
+cpe:2.3:a:resiprocate:resiprocate:1.12.0:alpha1:*:*:*:*:*:*
+
+Gregory
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
