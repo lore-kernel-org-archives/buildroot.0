@@ -1,223 +1,129 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 23:04:04 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/brotli: security
- update to version 1.0.9
-Message-ID: <20200911210035.0AED9890BE@busybox.osuosl.org>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 11 Sep 2020 23:12:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-09-10
+In-Reply-To: <20200911142131.GA10548@scaer>
+References: <20200911070826.658B8868D9@whitealder.osuosl.org>
+ <38c1b78d-82f6-2d50-a60f-eb6a161d22f8@heine.tech>
+ <20200911101547.77832bc9@windsurf.hq.k.grp> <20200911122734.GY14354@scaer>
+ <1f704b79-d506-698e-38c3-8d4ee1146802@heine.tech>
+ <20200911142131.GA10548@scaer>
+Message-ID: <5136b645-f8c9-36f5-5dbc-eeba060cba30@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13210a7c1ad6d2eac5c760d99a5d19b5eccb19ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Hi,
 
-Contains fixes for overflows when input chunks are larger than 2 GiB,
-an uninitialized data access, and minor correctness and performance
-improvements. There does not seem to be any CVEs filed, but there is
-a security notice in the release notes at:
+On 11.09.20 16:21, Yann E. MORIN wrote:
+> Michael, All,
+>
+> On 2020-09-11 15:18 +0200, Michael Nosthoff spake thusly:
+>> On 11.09.2020 14:27, Yann E. MORIN wrote:
+>>> Michael, All,
+>>>
+>>> On 2020-09-11 10:15 +0200, Thomas Petazzoni spake thusly:
+>>>> On Fri, 11 Sep 2020 09:29:20 +0200
+>>>> Michael Nosthoff <buildroot@heine.tech> wrote:
+>>>>> On 11.09.2020 09:08, Thomas Petazzoni wrote:
+>>>>>>    mips64el   |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e |
+>>> Thanks for looking into this. Here's a simple way to reproduce:
+>>>      $ curl https://pastebin.com/raw/JMe512Pt >foo/Dockerfile
+>> Thanks for the Dockerfile.
+>> Wouldn't it make sense to include the used Dockerfile with the autobuild
+>> results?
+> Because the autobuilders do not (all) run in docker.
+>
+> For example, my autobuilder (on which the host-grpc build issue happens)
+> is not running in docker, so there is no Dockerfile that created it. It
+> was manually created in November 2015 with debbootstrap.
+>
+> The Dockerfile I provided was made after the fact, a few months ago,
+> last May.
+Ah okay, I though this was all run in a docker container. I saw there is 
+a patch to dump os-release, that's a start.
+>
+>> Concerning the host-grpc issue:
+>>
+>> With the Dockerfile I was able to reproduce the issue.
+>> In comparison on a debian jessie with gcc 4.8.5 this problem does not occur.
+>>
+>>  From what I found on the protobuf issue tracker this seems to be an
+>> issue which hits people pretty randomly even with newer (mostly clang)
+>> compilers:
+>>
+>> https://github.com/protocolbuffers/protobuf/issues/6074
+> Yeah, I had already found those issues bacj when I was investigating:
+>
+>      https://github.com/protocolbuffers/protobuf/issues/5353
+>      https://github.com/protocolbuffers/protobuf/issues/5923
+>
+> And also:
+>
+>      https://github.com/grpc/grpc/issues/22781
 
-  https://github.com/google/brotli/releases/tag/v1.0.9
+Thanks for the links!
 
-Patch "0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch"
-is rebased against the latest upstream changes.
+>
+>> So currently I have no real idea how to fix this...
+> I also already spent quite some time investigating this issue, and I
+> have no clue...
+I did some further testing using a fresh docker container `ubuntu:trusty`.
+I derived a simple test which mirrors the failing code in [1].
+If you compile this code using `g++ --std=c++11 main.cpp -lpthread -o 
+thread_test`
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 777bbd1b07f0279230acd925a83035aa3d7793d6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-using-BUILD_SHARED_LIBS-to-choose-static.patch | 92 +++++++++-------------
- package/brotli/brotli.hash                         |  2 +-
- package/brotli/brotli.mk                           |  2 +-
- 3 files changed, 41 insertions(+), 55 deletions(-)
 
-diff --git a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-index ae5386b1ce..2a3204fc34 100644
---- a/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-+++ b/package/brotli/0001-CMake-Allow-using-BUILD_SHARED_LIBS-to-choose-static.patch
-@@ -1,6 +1,6 @@
--From 7289e5a378ba13801996a84d89d8fe95c3fc4c11 Mon Sep 17 00:00:00 2001
-+From 6cb16322decd643fed9de332d9cda77f7738b7af Mon Sep 17 00:00:00 2001
- From: Adrian Perez de Castro <aperez@igalia.com>
--Date: Mon, 26 Mar 2018 19:08:31 +0100
-+Date: Mon, 7 Sep 2020 12:14:22 +0300
- Subject: [PATCH] CMake: Allow using BUILD_SHARED_LIBS to choose static/shared
-  libs
- 
-@@ -18,16 +18,16 @@ This way, the following will both work as expected:
- 
- This is helpful for distributions which need (or want) to build only
- static libraries.
-----
-- CMakeLists.txt        | 42 ++++++++++++++----------------------------
-- c/fuzz/test_fuzzer.sh |  6 +++---
-- 2 files changed, 17 insertions(+), 31 deletions(-)
- 
- Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--Upstream-Status: Submitted [https://github.com/google/brotli/pull/655]
-+[Upstream status: https://github.com/google/brotli/pull/655]
-+---
-+ CMakeLists.txt        | 46 ++++++++++++++-----------------------------
-+ c/fuzz/test_fuzzer.sh |  6 +++---
-+ 2 files changed, 18 insertions(+), 34 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index fc45f80..3f87f13 100644
-+index 4ff3401..f889311 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
- @@ -6,6 +6,8 @@ cmake_minimum_required(VERSION 2.8.6)
-@@ -36,10 +36,10 @@ index fc45f80..3f87f13 100644
-  
- +option(BUILD_SHARED_LIBS "Build shared libraries" ON)
- +
-- # If Brotli is being bundled in another project, we don't want to
-- # install anything.  However, we want to let people override this, so
-- # we'll use the BROTLI_BUNDLED_MODE variable to let them do that; just
--@@ -114,10 +116,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
-+ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-+   message(STATUS "Setting build type to Release as none was specified.")
-+   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
-+@@ -137,10 +139,6 @@ set(BROTLI_LIBRARIES_CORE brotlienc brotlidec brotlicommon)
-  set(BROTLI_LIBRARIES ${BROTLI_LIBRARIES_CORE} ${LIBM_LIBRARY})
-  mark_as_advanced(BROTLI_LIBRARIES)
-  
-@@ -50,14 +50,20 @@ index fc45f80..3f87f13 100644
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    add_definitions(-DOS_LINUX)
-  elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
--@@ -137,24 +135,22 @@ endfunction()
-- transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
-+@@ -161,29 +159,25 @@ transform_sources_list("scripts/sources.lst" "${CMAKE_CURRENT_BINARY_DIR}/source
-  include("${CMAKE_CURRENT_BINARY_DIR}/sources.lst.cmake")
-  
---add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
---add_library(brotlidec SHARED ${BROTLI_DEC_C})
---add_library(brotlienc SHARED ${BROTLI_ENC_C})
---
-+ if(BROTLI_EMSCRIPTEN)
-+-  set(BROTLI_SHARED_LIBS "")
-+-else()
-+-  set(BROTLI_SHARED_LIBS brotlicommon brotlidec brotlienc)
-+-  add_library(brotlicommon SHARED ${BROTLI_COMMON_C})
-+-  add_library(brotlidec SHARED ${BROTLI_DEC_C})
-+-  add_library(brotlienc SHARED ${BROTLI_ENC_C})
-++  set(BUILD_SHARED_LIBS OFF)
-+ endif()
-+ 
-+-set(BROTLI_STATIC_LIBS brotlicommon-static brotlidec-static brotlienc-static)
- -add_library(brotlicommon-static STATIC ${BROTLI_COMMON_C})
- -add_library(brotlidec-static STATIC ${BROTLI_DEC_C})
- -add_library(brotlienc-static STATIC ${BROTLI_ENC_C})
-@@ -68,27 +74,27 @@ index fc45f80..3f87f13 100644
-  # Older CMake versions does not understand INCLUDE_DIRECTORIES property.
-  include_directories(${BROTLI_INCLUDE_DIRS})
-  
-+-foreach(lib IN LISTS BROTLI_SHARED_LIBS)
-+-  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
-+-  string(TOUPPER "${lib}" LIB)
-+-  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION")
-+-endforeach()
- +if(BUILD_SHARED_LIBS)
- +  foreach(lib brotlicommon brotlidec brotlienc)
- +    target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
- +    string(TOUPPER "${lib}" LIB)
--+    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
-++    set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION")
- +  endforeach()
- +endif()
--+
-- foreach(lib brotlicommon brotlidec brotlienc)
---  target_compile_definitions(${lib} PUBLIC "BROTLI_SHARED_COMPILATION" )
---  string(TOUPPER "${lib}" LIB)
---  set_target_properties (${lib} PROPERTIES DEFINE_SYMBOL "${LIB}_SHARED_COMPILATION" )
---endforeach()
---
---foreach(lib brotlicommon brotlidec brotlienc brotlicommon-static brotlidec-static brotlienc-static)
-+ 
-+-foreach(lib IN LISTS BROTLI_SHARED_LIBS BROTLI_STATIC_LIBS)
-++foreach(lib brotlicommon brotlidec brotlienc)
-    target_link_libraries(${lib} ${LIBM_LIBRARY})
-    set_property(TARGET ${lib} APPEND PROPERTY INCLUDE_DIRECTORIES ${BROTLI_INCLUDE_DIRS})
-    set_target_properties(${lib} PROPERTIES
--@@ -167,9 +163,6 @@ endforeach()
-- target_link_libraries(brotlidec brotlicommon)
-+@@ -200,9 +194,6 @@ target_link_libraries(brotlidec brotlicommon)
-  target_link_libraries(brotlienc brotlicommon)
-+ endif()
-  
- -target_link_libraries(brotlidec-static brotlicommon-static)
- -target_link_libraries(brotlienc-static brotlicommon-static)
-@@ -96,7 +102,7 @@ index fc45f80..3f87f13 100644
-  # For projects stuck on older versions of CMake, this will set the
-  # BROTLI_INCLUDE_DIRS and BROTLI_LIBRARIES variables so they still
-  # have a relatively easy way to use Brotli:
--@@ -183,7 +176,7 @@ endif()
-+@@ -216,7 +207,7 @@ endif()
-  
-  # Build the brotli executable
-  add_executable(brotli ${BROTLI_CLI_C})
-@@ -104,8 +110,8 @@ index fc45f80..3f87f13 100644
- +target_link_libraries(brotli ${BROTLI_LIBRARIES})
-  
-  # Installation
-- if(NOT BROTLI_BUNDLED_MODE)
--@@ -199,13 +192,6 @@ if(NOT BROTLI_BUNDLED_MODE)
-+ if(NOT BROTLI_EMSCRIPTEN)
-+@@ -233,13 +224,6 @@ if(NOT BROTLI_BUNDLED_MODE)
-      RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-    )
-  
-@@ -119,26 +125,6 @@ index fc45f80..3f87f13 100644
-    install(
-      DIRECTORY ${BROTLI_INCLUDE_DIRS}/brotli
-      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
--diff --git a/c/fuzz/test_fuzzer.sh b/c/fuzz/test_fuzzer.sh
--index 9985194..4b99947 100755
----- a/c/fuzz/test_fuzzer.sh
--+++ b/c/fuzz/test_fuzzer.sh
--@@ -13,12 +13,12 @@ mkdir bin
-- cd bin
-- 
-- cmake $BROTLI -DCMAKE_C_COMPILER="$CC" \
---    -DBUILD_TESTING=OFF -DENABLE_SANITIZER=address
---make -j$(nproc) brotlidec-static
--+    -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF -DENABLE_SANITIZER=address
--+make -j$(nproc) brotlidec
-- 
-- ${CC} -o run_decode_fuzzer -std=c99 -fsanitize=address -I$SRC/include \
--     $SRC/fuzz/decode_fuzzer.c $SRC/fuzz/run_decode_fuzzer.c \
---    ./libbrotlidec-static.a ./libbrotlicommon-static.a
--+    ./libbrotlidec.a ./libbrotlicommon.a
-- 
-- mkdir decode_corpora
-- unzip $BROTLI/java/org/brotli/integration/fuzz_data.zip -d decode_corpora
- -- 
--2.19.1
-+2.28.0
- 
-diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
-index 82163040d1..22f894c403 100644
---- a/package/brotli/brotli.hash
-+++ b/package/brotli/brotli.hash
-@@ -1,5 +1,5 @@
- # Locally generated:
--sha512  a82362aa36d2f2094bca0b2808d9de0d57291fb3a4c29d7c0ca0a37e73087ec5ac4df299c8c363e61106fccf2fe7f58b5cf76eb97729e2696058ef43b1d3930a  v1.0.7.tar.gz
-+sha512  b8e2df955e8796ac1f022eb4ebad29532cb7e3aa6a4b6aee91dbd2c7d637eee84d9a144d3e878895bb5e62800875c2c01c8f737a1261020c54feacf9f676b5f5  v1.0.9.tar.gz
- 
- # Hash for license files:
- sha512  bae78184c2f50f86d8c727826d3982c469454c42b9af81f4ef007e39036434fa894cf5be3bf5fc65b7de2301f0a72d067a8186e303327db8a96bd14867e0a3a8  LICENSE
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 134f480895..5209d3186b 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BROTLI_VERSION = 1.0.7
-+BROTLI_VERSION = 1.0.9
- BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
- BROTLI_SITE = https://github.com/google/brotli/archive
- BROTLI_LICENSE = MIT
+```
+#include <thread>
+#include <cassert>
+
+main() {
+ ? ??? std::thread::id runner;
+ ??? auto me = std::this_thread::get_id();
+
+ ??? assert(runner != me);
+}
+```
+
+running the resulting program will throw the assert. Doing the identical 
+thing in a `debian:jessie` container with g++-4.8 will finish successfully.
+
+What's happening in this code? When pthreads is not linked glibc's 
+implementation of std::thread::id is used.
+But this has a bug that it can't differentiate between a default 
+initialized id and the result of the get_id() call when you have no 
+threading.
+This is addressed in [0] which lead to a fix in gcc-6.
+
+But we are linking with -lpthread. So this bug should not affect us. So 
+when I try to actually create a thread like
+
+```
+std::thread worker([](){});
+```
+
+I get a crash when running the program. Which proves that pthread is not 
+actually linkend. Doing the same on debian yields a working program.
+Even when I compile the program on debian and copy it to ubuntu the 
+program runs successfully. So it is not a runtime thing.
+
+When I change the compiler flag to -pthread I suddenly get a working 
+program on ubuntu.
+
+This brings me to two possible solutions:
+
+- find out why in ubuntu:trusty -lpthread is not working
+- ensure that protobuf uses -pthread instead of -lpthread (i have to 
+check what is cmake decides to use on other compilers).
+
+I'll check this next week.
+
+Regards,
+Michael
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=57060
+[1] 
+https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/generated_message_util.cc#L796
