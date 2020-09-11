@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 23:31:32 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/strace: disable
+Date: Fri, 11 Sep 2020 23:31:27 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/strace: disable
  mpers support
-Message-ID: <20200911212517.A791382233@busybox.osuosl.org>
+Message-ID: <20200911212523.1D66F82233@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42d1ad55010ee4abedd44a3b8bc15137714ce4c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0378521a10a17ed8d27b1de28f317a82457c0ebf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 On aarch64 With the config option "--enable-mpers=check" the configure.ac
 script searchs for a 32bit compiler. When a matching compiler is found
