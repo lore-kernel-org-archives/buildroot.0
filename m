@@ -1,42 +1,65 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Fri, 11 Sep 2020 17:18:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.20
-Message-ID: <20200911151825.15256-1-jubalh@iodoru.org>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Fri, 11 Sep 2020 09:03:23 -0700
+Subject: [Buildroot] Toolchain issues on multiple architectures
+In-Reply-To: <20200911093009.68a115f9@windsurf.hq.k.grp>
+References: <20200910120536.2431494d@windsurf.hq.k.grp>
+ <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
+ <20200911093009.68a115f9@windsurf.hq.k.grp>
+Message-ID: <CAKmqyKN4Ge5YWUtbU-XwBD2JbrJ-jMhSVMZVbE6wOsz+CUM1jA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump JasPer to 2.0.20
+On Fri, Sep 11, 2020 at 12:30 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Alistair,
+>
+> On Thu, 10 Sep 2020 16:17:46 -0700
+> Alistair Francis <alistair23@gmail.com> wrote:
+>
+> > Do you have any steps to reproduce this?
+>
+> You need to build this defconfig:
+>
+> BR2_riscv=y
+> BR2_RISCV_32=y
+> BR2_KERNEL_HEADERS_5_4=y
+> BR2_BINUTILS_VERSION_2_34_X=y
+> BR2_GCC_VERSION_10_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_GDB=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
----
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I don't see any errors using this config with buildroot. Do I need to
+do anything else?
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 67ad90d730..05cf5fc34e 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b9d16162a088617ada36450f2374d72165377cb64b33ed197c200bcfb73ec76c  jasper-2.0.19.tar.gz
-+sha256 d55843ce52afa9bfe90f30118329578501040f30d48a027459a68a962695e506  jasper-2.0.20.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index f6ae2ead78..9bf7d49971 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.19
-+JASPER_VERSION = 2.0.20
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
--- 
-2.16.4
+>
+> > I tried `./build.sh riscv32-ilp32d--glibc--bleeding-edge testing
+> > buildroot-toolchains/toolchains.bootlin.com-2020.08 2020.08-1` in the
+> > toolchains-builder, but I'm missing
+> > frags/riscv32-ilp32d--glibc--bleeding-edge.config.
+> >
+> > I then tried `frags/riscv32-ilp32d--glibc--bleeding-edge.config` but
+> > it doesn't generate a RV32 frag.
+>
+> I don't recommend trying to use the toolchains-builder stuff. For now
+> it's not really designed to be executed locally. This is something I
+> want to fix, but I'm not there yet.
+
+No worries.
+
+Alistair
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
