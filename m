@@ -1,47 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Sep 2020 14:27:34 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-10
-In-Reply-To: <20200911101547.77832bc9@windsurf.hq.k.grp>
-References: <20200911070826.658B8868D9@whitealder.osuosl.org>
- <38c1b78d-82f6-2d50-a60f-eb6a161d22f8@heine.tech>
- <20200911101547.77832bc9@windsurf.hq.k.grp>
-Message-ID: <20200911122734.GY14354@scaer>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 11 Sep 2020 07:41:31 -0500
+Subject: [Buildroot] [PATCH] gcc: disable fortran use of libquadmath
+Message-ID: <20200911124131.8549-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+The GCC package has a default conf option of disabling libquadmath and
+the toolchain dependencies selectively enabled it if i386 / x64.
 
-On 2020-09-11 10:15 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 11 Sep 2020 09:29:20 +0200
-> Michael Nosthoff <buildroot@heine.tech> wrote:
-> > On 11.09.2020 09:08, Thomas Petazzoni wrote:
-> > >   aarch64    |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/c2078e821e0728fe980be2c849c25d82e791a4c2 |     
-> > >   mips64el   |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e |     
-> > >    x86_64    |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/3ebb2880b9b3fd5154979016391dde897e2c039c |       
-> > All those cases seem to fail with a GNU 4.8.2 host toolchain. I would
-> > like to reproduce that. On what OS are those build jobs run? Is this
-> > maybe a Docker Image which I could use?
-> Yes, Yann had a Docker image that allows to reproduce the issue.
+Fixes:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359622
 
-Thanks for looking into this. Here's a simple way to reproduce:
+This patch fixes a build failure when (GCC + glibc) is being built for
+the IBM Power8 arch and has libgfortran enabled + libquadmath disabled.
+The libgfortran has a code condition for __float128 and includes the
+quadmath headers. The bug occurs because Power8 has emulated
+float128 support. The fix per GCC options is to also set
+--disable-libquadmath-support which disables the
+__float128/libquadmath support in gcc/fortran and in libgfortran [1].
 
-    $ mkdir foo
-    $ curl https://pastebin.com/raw/JMe512Pt >foo/Dockerfile
-    $ docker build -t host-grpc:bleark foo
-    $ docker run --rm -ti host-grpc:bleark
-    (docker)# make host-grpc
+Another option to fix the build failure was to enable libquadmath for
+IBM Power8 (ISA 2.07), however this would be soft float based as the
+ISA 3.0+ (Power9) first supports native float128 [2][3].
 
-Regards,
-Yann E. MORIN.
+[1] https://fortran.gcc.gnu.narkive.com/8uSfoKUS/patch-build-pr-46540-add-disable-libquadmath-disable-libquadmath-support
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66382#c7
+[3] https://gcc.gnu.org/onlinedocs/gcc/RS_002f6000-and-PowerPC-Options.html
 
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/gcc/gcc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..c04d3b4d5c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -116,7 +116,7 @@ endif
+ ifeq ($(BR2_USE_WCHAR)$(BR2_TOOLCHAIN_HAS_LIBQUADMATH),yy)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
+ else
+-HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath
++HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath --disable-libquadmath-support
+ endif
+ 
+ # Disable libsanitizer due to a build issue with gcc 7.5 and glibc 2.31.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
