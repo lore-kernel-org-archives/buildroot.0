@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Sep 2020 09:30:09 +0200
-Subject: [Buildroot] Toolchain issues on multiple architectures
-In-Reply-To: <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
-References: <20200910120536.2431494d@windsurf.hq.k.grp>
- <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
-Message-ID: <20200911093009.68a115f9@windsurf.hq.k.grp>
+Date: Fri, 11 Sep 2020 09:47:00 +0200
+Subject: [Buildroot] [git commit] package/graphicsmagick: add support for
+ webp image format
+Message-ID: <20200911073915.CCC1788632@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alistair,
+commit: https://git.buildroot.net/buildroot/commit/?id=4ee1b0fac3029155b996bab65ca66f95a412b1ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 Sep 2020 16:17:46 -0700
-Alistair Francis <alistair23@gmail.com> wrote:
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/graphicsmagick/graphicsmagick.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> Do you have any steps to reproduce this?
-
-You need to build this defconfig:
-
-BR2_riscv=y
-BR2_RISCV_32=y
-BR2_KERNEL_HEADERS_5_4=y
-BR2_BINUTILS_VERSION_2_34_X=y
-BR2_GCC_VERSION_10_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GDB=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-> I tried `./build.sh riscv32-ilp32d--glibc--bleeding-edge testing
-> buildroot-toolchains/toolchains.bootlin.com-2020.08 2020.08-1` in the
-> toolchains-builder, but I'm missing
-> frags/riscv32-ilp32d--glibc--bleeding-edge.config.
-> 
-> I then tried `frags/riscv32-ilp32d--glibc--bleeding-edge.config` but
-> it doesn't generate a RV32 frag.
-
-I don't recommend trying to use the toolchains-builder stuff. For now
-it's not really designed to be executed locally. This is something I
-want to fix, but I'm not there yet.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+index 436df709e7..da7af5b53e 100644
+--- a/package/graphicsmagick/graphicsmagick.mk
++++ b/package/graphicsmagick/graphicsmagick.mk
+@@ -27,7 +27,6 @@ GRAPHICSMAGICK_CONF_OPTS = \
+ 	--without-jbig \
+ 	--without-perl \
+ 	--without-trio \
+-	--without-webp \
+ 	--without-wmf \
+ 	--without-x \
+ 	--with-gs-font-dir=/usr/share/fonts/gs
+@@ -85,6 +84,13 @@ else
+ GRAPHICSMAGICK_CONF_OPTS += --without-tiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WEBP_MUX),y)
++GRAPHICSMAGICK_CONF_OPTS += --with-webp
++GRAPHICSMAGICK_DEPENDENCIES += webp
++else
++GRAPHICSMAGICK_CONF_OPTS += --without-webp
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ GRAPHICSMAGICK_CONF_OPTS += --with-lzma
+ GRAPHICSMAGICK_DEPENDENCIES += xz
