@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 23:18:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Fri, 11 Sep 2020 23:18:19 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
  package/libxml-parser-perl: make host build use correct compiler
-Message-ID: <20200911211216.9EFF98863C@busybox.osuosl.org>
+Message-ID: <20200911211221.28DF38863C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04af94f347348821d4e745f1340fc0ad2d27f7ca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d8f9a3009bf5a9baa7ba5755e8d19eb078883376
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 This package uses gcc filename without absolute path, which breaks
 the host build if host and target compiler have the same filename.
