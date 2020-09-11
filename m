@@ -1,78 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Sep 2020 16:21:31 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-10
-In-Reply-To: <1f704b79-d506-698e-38c3-8d4ee1146802@heine.tech>
-References: <20200911070826.658B8868D9@whitealder.osuosl.org>
- <38c1b78d-82f6-2d50-a60f-eb6a161d22f8@heine.tech>
- <20200911101547.77832bc9@windsurf.hq.k.grp>
- <20200911122734.GY14354@scaer>
- <1f704b79-d506-698e-38c3-8d4ee1146802@heine.tech>
-Message-ID: <20200911142131.GA10548@scaer>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 11 Sep 2020 16:46:22 +0200
+Subject: [Buildroot] [PATCH 2/3] package/protobuf: bump version to 3.13
+In-Reply-To: <20200911154953.53acdab7@windsurf.home>
+References: <20200911132907.11748-1-buildroot@heine.tech>
+ <20200911132907.11748-3-buildroot@heine.tech>
+ <20200911154953.53acdab7@windsurf.home>
+Message-ID: <f20ed541-234d-e7ec-4ce0-146e408540bf@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+Hi,
 
-On 2020-09-11 15:18 +0200, Michael Nosthoff spake thusly:
-> On 11.09.2020 14:27, Yann E. MORIN wrote:
-> > Michael, All,
-> > 
-> > On 2020-09-11 10:15 +0200, Thomas Petazzoni spake thusly:
-> >> On Fri, 11 Sep 2020 09:29:20 +0200
-> >> Michael Nosthoff <buildroot@heine.tech> wrote:
-> >>> On 11.09.2020 09:08, Thomas Petazzoni wrote:
-> >>>>   mips64el   |        host-grpc-1.31.0        | NOK | http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e |     
-> > Thanks for looking into this. Here's a simple way to reproduce:
-> >     $ curl https://pastebin.com/raw/JMe512Pt >foo/Dockerfile
-> Thanks for the Dockerfile.
-> Wouldn't it make sense to include the used Dockerfile with the autobuild
-> results?
-
-Because the autobuilders do not (all) run in docker.
-
-For example, my autobuilder (on which the host-grpc build issue happens)
-is not running in docker, so there is no Dockerfile that created it. It
-was manually created in November 2015 with debbootstrap.
-
-The Dockerfile I provided was made after the fact, a few months ago,
-last May.
-
-> Concerning the host-grpc issue:
+On 11.09.2020 15:49, Thomas Petazzoni wrote:
+> On Fri, 11 Sep 2020 15:29:07 +0200
+> Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 > 
-> With the Dockerfile I was able to reproduce the issue.
-> In comparison on a debian jessie with gcc 4.8.5 this problem does not occur.
+>>  # When bumping this package, make sure to also verify if the
+>>  # python-protobuf package still works, as they share the same
+>>  # version/site variables.
+>> -PROTOBUF_VERSION = 3.12.4
+>> +PROTOBUF_VERSION = 3.13.0
 > 
-> From what I found on the protobuf issue tracker this seems to be an
-> issue which hits people pretty randomly even with newer (mostly clang)
-> compilers:
+> You need to update package/python-protobuf/python-protobuf.hash as
+> well. We should actually update the comment above to make this clear.
 > 
-> https://github.com/protocolbuffers/protobuf/issues/6074
 
-Yeah, I had already found those issues bacj when I was investigating:
+Oops, that slipped me. I'll update this as well.
 
-    https://github.com/protocolbuffers/protobuf/issues/5353
-    https://github.com/protocolbuffers/protobuf/issues/5923
-
-And also:
-
-    https://github.com/grpc/grpc/issues/22781
-
-> So currently I have no real idea how to fix this...
-
-I also already spent quite some time investigating this issue, and I
-have no clue...
+What I noticed: the python-protobuf description contains a link to the
+protobuf-c project [0]. Which is, from what I take from the description
+on its website, an independently developed project. So it doesn't seem
+to have a connection to the python package. Wouldn't it make more sense
+to put the link to the google protobuf site [1] as it is in the protobuf
+package?
 
 Regards,
-Yann E. MORIN.
+Michael
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+[0] https://github.com/protobuf-c/protobuf-c
+[1] https://developers.google.com/protocol-buffers
