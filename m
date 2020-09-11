@@ -1,42 +1,46 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 11 Sep 2020 15:29:07 +0200
-Subject: [Buildroot] [PATCH 2/3] package/protobuf: bump version to 3.13
+Date: Fri, 11 Sep 2020 15:29:06 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libabseil-cpp: bump to 20200225.2
 In-Reply-To: <20200911132907.11748-1-buildroot@heine.tech>
 References: <20200911132907.11748-1-buildroot@heine.tech>
-Message-ID: <20200911132907.11748-3-buildroot@heine.tech>
+Message-ID: <20200911132907.11748-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+patch release with two bugfixes
+- fixes the list of dependencies of absl::Cord in the CMake build
+- bug fix for absl::Status::ErasePayload
+
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/protobuf/protobuf.hash | 2 +-
- package/protobuf/protobuf.mk   | 2 +-
+ package/libabseil-cpp/libabseil-cpp.hash | 2 +-
+ package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index aa9d871561..c11f54edc3 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 7f0b5fc394..fef96833de 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  ccfbaaba52f67e0e6536a05f3df3f6618620d255513cfca3a07f5935b624e26b  protobuf-cpp-3.12.4.tar.gz
-+sha256  f8a547dfe143a9f61fadafba47fa6573713a33cb80909307c1502e26e1102298  protobuf-cpp-3.13.0.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 04fea3063e..2395221313 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works, as they share the same
- # version/site variables.
--PROTOBUF_VERSION = 3.12.4
-+PROTOBUF_VERSION = 3.13.0
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
+ # Locally computed
+-sha256  728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353  libabseil-cpp-20200225.tar.gz
++sha256  f41868f7a938605c92936230081175d1eae87f6ea2c248f41077c8f88316f111  libabseil-cpp-20200225.2.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 92cbb0051d..6ca33535eb 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBABSEIL_CPP_VERSION = 20200225
++LIBABSEIL_CPP_VERSION = 20200225.2
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
 -- 
 2.25.1
