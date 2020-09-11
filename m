@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 23:18:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/libxml-parser-perl: make
- host build use correct compiler
-In-Reply-To: <20200907235440.42283543@windsurf.hq.k.grp> (Thomas Petazzoni's
- message of "Mon, 7 Sep 2020 23:54:40 +0200")
-References: <20200606222339.6965-1-nolange79@gmail.com>
- <20200907235440.42283543@windsurf.hq.k.grp>
-Message-ID: <87pn6svwot.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Sep 2020 23:19:17 +0200
+Subject: [Buildroot] [PATCH] package/libxml-parser-perl: use the
+ compiler as "LD"
+In-Reply-To: <20200909213404.1105535-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Wed, 9 Sep 2020 23:34:04 +0200")
+References: <20200909213404.1105535-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87lfhgvwoa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,23 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > On Sun,  7 Jun 2020 00:23:38 +0200
- > Norbert Lange <nolange79@gmail.com> wrote:
+ > Since commit efa95b19aeab6bdcd7d5a620e199c2c32cf2516b
+ > ("package/libxml-parser-perl: make host build use correct compiler"),
+ > we pass $(HOST_CONFIGURE_OPTS) when building host-libxml-parser-perl,
+ > in order to use the correct host compiler.
 
- >> This package uses gcc filename without absolute path, which breaks
- >> the host build if host and target compiler have the same filename.
- >> (Can happen with an external toolchain).
- >> 
- >> This patch adds the variables for the host as overrides,
- >> as they are otherwise not picked up from the environment.
- >> 
- >> Signed-off-by: Norbert Lange <nolange79@gmail.com>
- >> ---
- >> package/libxml-parser-perl/libxml-parser-perl.mk | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ > However, this means that LD="$(HOSTLD)" is passed. However, the
+ > host-libxml-parser-perl passes compiler arguments to LD, so it really
+ > assumes that LD is gcc, not ld. For example, it tries to pass
+ > -mtune=generic.
+
+ > So, let's tell host-libxml-parser-perl that LD is "$(HOSTCC)".
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/2ed2e5ccefe9047c597f84d5880de2e8de2bdd94/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
