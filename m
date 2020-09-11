@@ -1,177 +1,80 @@
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 11 Sep 2020 11:27:57 +0200
-Subject: [Buildroot] CVE analysis of the resiprocate package
-In-Reply-To: <20200911104753.49ab4f19@windsurf.hq.k.grp>
-References: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
- <CAMQcK5KyWBPOW7s9BD7xaE5nd15SzEARFf8sDm9aYq=E6bqVbA@mail.gmail.com>
- <20200909235739.4ccaa8b6@windsurf.hq.k.grp> <87zh5wvkvw.fsf@BL-laptop>
- <87wo10vhp1.fsf@BL-laptop> <20200911104753.49ab4f19@windsurf.hq.k.grp>
-Message-ID: <87tuw4vf1e.fsf@BL-laptop>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Fri, 11 Sep 2020 12:39:22 +0300
+Subject: [Buildroot] [PATCH] meson-tools: fix autobuild failure
+Message-ID: <20200911093922.8298-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+fix the code so it won't use non std C conevention.
 
-> On Fri, 11 Sep 2020 10:30:34 +0200
-> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
->
->> Among the 2412 packages there are 121 packages for which CVEs refer to
->> minor version.
->
-> Could you provide that list, as well as the CPE ID entries that have a
-> minor version, so that we can get a feeling of what it looks like ?
+fixes:
+ - http://autobuild.buildroot.net/results/602d474a12cf2400e4f38ffad903758d7fd9f2f5
+ - http://autobuild.buildroot.net/results/65cfe582ce60fcff18afd008c3d469471ffb0e49
 
-Here is the list:
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ ...l-remove-non-std-C-convention-in-for.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
 
-libssh
-util-linux
-cups
-qemu
-stunnel
-dnsmasq
-gnuplot
-bind
-c-ares
-aircrack-ng
-iodine
-libyang
-privoxy
-php
-dbus
-ruby
-glibc
-libgit2
-mariadb
-rpm
-openswan
-squid
-lxc
-thttpd
-exiv2
-xen
-libxml2
-dovecot
-monkey
-clamav
-putty
-freerdp
-openssh
-libmspack
-libevent
-freetype
-irssi
-fetchmail
-bootstrap
-graphicsmagick
-exim
-gnutls
-oniguruma
-openssl
-cgilua
-libtirpc
-libvpx
-pcsc-lite
-pure-ftpd
-grep
-xz
-dhcp
-libvorbis
-sudo
-socat
-rsyslog
-jquery
-openvpn
-proftpd
-libsndfile
-resiprocate
-logsurfer
-libpng
-syslog-ng
-nfs-utils
-docker
-libcurl
-postgresql
-bash
-busybox
-openjdk
-automake
-tor
-smack
-suricata
-unbound
-nut
-paxtest
-ffmpeg
-faad2
-lynx
-libesmtp
-chrony
-luajit
-redis
-valgrind
-snort
-ntp
-tinyproxy
-haproxy
-enscript
-libraw
-perl
-systemd
-zeromq
-netatalk
-gdb
-mysql
-nmap
-libcgroup
-dhcpcd
-logrotate
-readline
-collectd
-git
-subversion
-asterisk
-runc
-ngircd
-memcached
-tinc
-ipsec-tools
-go
-ejabberd
-tcpreplay
-dillo
-python
-imagemagick
-links
-gnupg
-linux
-
-For CPE-id I need to make more change in the script and the list will be
-bigger because for each package you can have many version.
-
-I am working on it.
->
-> The question is how to deal with this minor version field. Ignore the
-> CPE ID when the minor version field is not "*" ? Something else ?
-
-It will work of non of the package managed by buildroot use minor
-version. If some packages points on minor version, then should provide
-this information.
-
-Using cpeid would allow to provide this information.
-
-Gregory
-
->
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+diff --git a/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch b/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
+new file mode 100644
+index 0000000000..0ee38416f9
+--- /dev/null
++++ b/package/meson-tools/0001-amlbootenc-gxl-remove-non-std-C-convention-in-for.patch
+@@ -0,0 +1,50 @@
++From 7c5475187d1bdf861360ffd8bc1aaea84a341db3 Mon Sep 17 00:00:00 2001
++From: Dagg Stompler <daggs@gmx.com>
++Date: Fri, 11 Sep 2020 12:28:52 +0300
++Subject: [PATCH] amlbootenc-gxl: remove non std C convention in for
++
++not all compilers have c99 or gnu99 enabled, so try not to use a
++non std C convention in for call loops
++
++Signed-off-by: Dagg Stompler <daggs@gmx.com>
++---
++ amlbootenc-gxl.c | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/amlbootenc-gxl.c b/amlbootenc-gxl.c
++index 3695e13..233563d 100644
++--- a/amlbootenc-gxl.c
+++++ b/amlbootenc-gxl.c
++@@ -51,6 +51,7 @@ static int boot_enc(const char *input, const char *output)
++ 		._unknown3 = 0x02000000,
++ 		.sig2 = AMLOGIC_C_SIGNATURE,
++ 	};
+++	int i;
++
++ 	assert(sizeof(hdr) == 0x100);
++
++@@ -130,10 +131,10 @@ static int boot_enc(const char *input, const char *output)
++ 	memcpy(hdr.iv, (uint8_t[]){ 0x14, 0x82, 0x5b, 0x1b, 0x10, 0xc1, 0x49, 0x0d, 0x8f, 0x13, 0x0a, 0x99, 0x15, 0x50, 0x1d, 0x37 }, 16);
++ 	}
++ #else
++-	for (int i = 0; i < sizeof(hdr.key); i++) {
+++	for (i = 0; i < sizeof(hdr.key); i++) {
++ 		hdr.key[i] = rand();
++ 	}
++-	for (int i = 0; i < sizeof(hdr.iv); i++) {
+++	for (i = 0; i < sizeof(hdr.iv); i++) {
++ 		hdr.iv[i] = rand();
++ 	}
++ #endif
++@@ -151,7 +152,7 @@ static int boot_enc(const char *input, const char *output)
++ 	AES_cbc_encrypt(src_buf, buf + hdr.first_offset, hdr.block_size, &aes_key, iv, AES_ENCRYPT);
++ 	SHA256_Update(&sha256_ctx, buf + hdr.first_offset, hdr.block_size);
++
++-	for (int i = 1; i < hdr.payload_size / hdr.block_size; i++) {
+++	for (i = 1; i < hdr.payload_size / hdr.block_size; i++) {
++ 		memset(src_buf, 0, hdr.block_size);
++ 		fread(src_buf, 1, hdr.block_size, fin);
++ 		AES_cbc_encrypt(src_buf, buf + hdr.data_offset + (i - 1) * hdr.block_size, hdr.block_size, &aes_key, iv, AES_ENCRYPT);
++--
++2.28.0
++
+--
+2.28.0
