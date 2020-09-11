@@ -1,70 +1,177 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 11 Sep 2020 11:18:28 +0200
-Subject: [Buildroot] [PATCH v2] binutils/ARC: cleanup
-In-Reply-To: <3b18564e-be2e-91b3-def1-6c3591288ecc@synopsys.com>
-References: <20191206221918.1c05e316@windsurf.home>
- <20191217213253.12446-1-vgupta@synopsys.com>
- <20191222224144.38603994@windsurf>
- <3b18564e-be2e-91b3-def1-6c3591288ecc@synopsys.com>
-Message-ID: <20200911111828.5c9ea5d5@windsurf.hq.k.grp>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Fri, 11 Sep 2020 11:27:57 +0200
+Subject: [Buildroot] CVE analysis of the resiprocate package
+In-Reply-To: <20200911104753.49ab4f19@windsurf.hq.k.grp>
+References: <20200907071032.C7EB26064C@crulimr02.rockwellcollins.com>
+ <CAMQcK5KyWBPOW7s9BD7xaE5nd15SzEARFf8sDm9aYq=E6bqVbA@mail.gmail.com>
+ <20200909235739.4ccaa8b6@windsurf.hq.k.grp> <87zh5wvkvw.fsf@BL-laptop>
+ <87wo10vhp1.fsf@BL-laptop> <20200911104753.49ab4f19@windsurf.hq.k.grp>
+Message-ID: <87tuw4vf1e.fsf@BL-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vineet,
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Thu, 10 Sep 2020 23:21:43 +0000
-Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+> On Fri, 11 Sep 2020 10:30:34 +0200
+> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
+>
+>> Among the 2412 packages there are 121 packages for which CVEs refer to
+>> minor version.
+>
+> Could you provide that list, as well as the CPE ID entries that have a
+> minor version, so that we can get a feeling of what it looks like ?
 
-> >> -ifeq ($(BINUTILS_VERSION),arc-2019.09-rc1)
-> >> +ifeq ($(BR2_BINUTILS_VERSION_ARC),y)  
-> 
-> Looks like we need this specific thunk anyways. When I select pristine upstream
-> binutils (not ARC fork @ github), the above forces it to download from github
-> which it should not and will not if the tag/branch has not been mirrored there.
+Here is the list:
 
-So I guess you're talking about the situation where a host-binutils is
-not enabled, and only a target binutils is used. In this case, indeed:
+libssh
+util-linux
+cups
+qemu
+stunnel
+dnsmasq
+gnuplot
+bind
+c-ares
+aircrack-ng
+iodine
+libyang
+privoxy
+php
+dbus
+ruby
+glibc
+libgit2
+mariadb
+rpm
+openswan
+squid
+lxc
+thttpd
+exiv2
+xen
+libxml2
+dovecot
+monkey
+clamav
+putty
+freerdp
+openssh
+libmspack
+libevent
+freetype
+irssi
+fetchmail
+bootstrap
+graphicsmagick
+exim
+gnutls
+oniguruma
+openssl
+cgilua
+libtirpc
+libvpx
+pcsc-lite
+pure-ftpd
+grep
+xz
+dhcp
+libvorbis
+sudo
+socat
+rsyslog
+jquery
+openvpn
+proftpd
+libsndfile
+resiprocate
+logsurfer
+libpng
+syslog-ng
+nfs-utils
+docker
+libcurl
+postgresql
+bash
+busybox
+openjdk
+automake
+tor
+smack
+suricata
+unbound
+nut
+paxtest
+ffmpeg
+faad2
+lynx
+libesmtp
+chrony
+luajit
+redis
+valgrind
+snort
+ntp
+tinyproxy
+haproxy
+enscript
+libraw
+perl
+systemd
+zeromq
+netatalk
+gdb
+mysql
+nmap
+libcgroup
+dhcpcd
+logrotate
+readline
+collectd
+git
+subversion
+asterisk
+runc
+ngircd
+memcached
+tinc
+ipsec-tools
+go
+ejabberd
+tcpreplay
+dillo
+python
+imagemagick
+links
+gnupg
+linux
 
-ifeq ($(BINUTILS_VERSION),)
-ifeq ($(BR2_arc),y)
-BINUTILS_VERSION = arc-2020.03-release
-else
-BINUTILS_VERSION = 2.33.1
-endif
-endif # BINUTILS_VERSION
+For CPE-id I need to make more change in the script and the list will be
+bigger because for each package you can have many version.
 
-will kick in and set BINUTILS_VERSION to arc-2020.03-release, which
-will lead to:
+I am working on it.
+>
+> The question is how to deal with this minor version field. Ignore the
+> CPE ID when the minor version field is not "*" ? Something else ?
 
-ifeq ($(BINUTILS_VERSION),arc-2020.03-release)
-BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
-BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
-BINUTILS_FROM_GIT = y
-endif
+It will work of non of the package managed by buildroot use minor
+version. If some packages points on minor version, then should provide
+this information.
 
-being taken into account.
+Using cpeid would allow to provide this information.
 
-What happens with target binutils is:
+Gregory
 
- (1) If a host-binutils is built (because Buildroot is building the
-     toolchain), then we're using the same version as the
-     host-binutils, which is defined by the choice in
-     package/binutils/Config.in.host.
+>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
- (2) If not host-binutils is built (because we're using an external
-     toolchain), then there is no version selection: we unconditionally
-     use 2.33.1, except on ARC where we use the special ARC fork.
-
-So I guess the decision to take is: do we want to switch to using the
-upstream binutils, even for ARC, when no host-binutils is built ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Gregory Clement, Bootlin
 Embedded Linux and Kernel engineering
-https://bootlin.com
+http://bootlin.com
