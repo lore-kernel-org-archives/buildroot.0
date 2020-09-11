@@ -1,80 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Sep 2020 21:59:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/motion: fix build with gcc 10
-Message-ID: <20200911195942.607943-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Sep 2020 22:04:41 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/apparmor: fix per-package build with apache
+In-Reply-To: <20200905214736.2035306-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 5 Sep 2020 23:47:36 +0200")
+References: <20200905214736.2035306-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8mcxep2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../motion/0001-Fix-build-with-GCC-10.patch   | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/motion/0001-Fix-build-with-GCC-10.patch
+ > Per-package build of apparmor with apache fails on:
+ > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apparmor/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/apxs  -c mod_apparmor.c -L/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apparmor/host/bin/../x86_64-buildroot-linux-musl/sysroot/usr/lib -lapparmor
 
-diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
-new file mode 100644
-index 0000000000..58b5a1ebe4
---- /dev/null
-+++ b/package/motion/0001-Fix-build-with-GCC-10.patch
-@@ -0,0 +1,53 @@
-+From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
-+From: Vasiliy Glazov <vascom2@gmail.com>
-+Date: Sun, 8 Mar 2020 03:00:21 +0300
-+Subject: [PATCH] Fix build with GCC 10.
-+
-+[Retrieved (and backported) from:
-+https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
-+Signed-off-bby: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/netcam.h    | 2 +-
-+ src/translate.c | 2 ++
-+ src/translate.h | 2 +-
-+ 3 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/netcam.h b/netcam.h
-+index 2951d917..4ee0e1c8 100644
-+--- a/netcam.h
-++++ b/netcam.h
-+@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
-+ } netcam_buff;
-+ typedef netcam_buff *netcam_buff_ptr;
-+ 
-+-struct netcam_caps {                    /* netcam capabilities: */
-++extern struct netcam_caps {                    /* netcam capabilities: */
-+         unsigned char streaming;        /*  See the NCS_* defines */
-+         unsigned char content_length;   /*  0 - unsupported     */
-+ } caps;
-+diff --git a/translate.c b/translate.c
-+index 0c9f1105..a212d9de 100644
-+--- a/translate.c
-++++ b/translate.c
-+@@ -10,6 +10,8 @@
-+ #include "motion.h"
-+ #include "translate.h"
-+ 
-++int nls_enabled;
-++
-+ void translate_locale_chg(const char *langcd){
-+ #ifdef HAVE_GETTEXT
-+     /* This routine is for development testing only.  It is not used for
-+diff --git a/translate.h b/translate.h
-+index 0832ffd8..eeba3745 100644
-+--- a/translate.h
-++++ b/translate.h
-+@@ -10,7 +10,7 @@
-+ #ifndef _INCLUDE_TRANSLATE_H_
-+ #define _INCLUDE_TRANSLATE_H_
-+ 
-+-int nls_enabled;
-++extern int nls_enabled;
-+ 
-+ #ifdef HAVE_GETTEXT
-+ #   include <libintl.h>
+ > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/build-1/libtool --silent --mode=compile /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/bin/x86_64-linux-gcc -prefer-pic -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2    -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/include  -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/include/apr-1   -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../usr/include/apr-1 -I/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/bin/../../../../x86_64-buildroot-
+ lin
+ >  ux-musl/sysroot/usr/include  -c -o mod_apparmor.lo mod_apparmor.c && touch mod_apparmor.slo
+ > mod_apparmor.c:28:10: fatal error: sys/apparmor.h: No such file or directory
+ >  #include <sys/apparmor.h>
+ >           ^~~~~~~~~~~~~~~~
+
+ > The issue is that sys/appamor.h is not installed in the apache
+ > per-package directory which is mangled by
+ > APACHE_FIX_STAGING_APACHE_CONFIG, i.e.
+ > /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-0/output-1/per-package/apache/host/x86_64-buildroot-linux-musl/sysroot/usr/include
+
+ > So implement the same workaround made on apache to replace those wrong
+ > apache paths by apparmor paths in apxs binary and its configuration file
+ > (i.e. config_vars.mk) as suggested by Thomas Petazzoni and Yann E. Morin
+ > during review of the first iteration of this patch
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/ef1fcd57e0c09a2806bf2272bb21df6d3300b45b
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Yann E. Morin and Thomas Petazzoni):
+ >  - Patch apxs and config_vars.mk
+
+Committed to 2020.05.x and 2020.08.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
