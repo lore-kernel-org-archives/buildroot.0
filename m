@@ -1,91 +1,52 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 11 Sep 2020 15:41:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/firmware-imx:
- custom padding
-In-Reply-To: <20200910141843.3030855-1-pieter.degendt@basalte.be>
-References: <20200910141843.3030855-1-pieter.degendt@basalte.be>
-Message-ID: <20200911134110.GA61000@p1g2>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 11 Sep 2020 15:49:53 +0200
+Subject: [Buildroot] [PATCH 2/3] package/protobuf: bump version to 3.13
+In-Reply-To: <20200911132907.11748-3-buildroot@heine.tech>
+References: <20200911132907.11748-1-buildroot@heine.tech>
+ <20200911132907.11748-3-buildroot@heine.tech>
+Message-ID: <20200911154953.53acdab7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, 11 Sep 2020 15:29:07 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-Overall the patch is good, below are some small comments about the log
-and the variable naming.
-
-On Thu, Sep 10, 2020 at 04:18:43PM +0200, Pieter De Gendt wrote:
-> From: Tibault Damman <tibault.damman@basalte.be>
-> 
-> Some derivatives (such as Variscite imx8mm) require the training data to
-> be padded to a different loading address.
-
-On IRC you pointed to the varigit commit were that change is made, might
-be good to include it here for reference.
-https://github.com/varigit/uboot-imx/commit/5f8d814f
-
-That also explains the motivation behind that change.
-
-> Signed-off-by: Tibault Damman <tibault.damman@basalte.be>
-> Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
->  package/freescale-imx/firmware-imx/Config.in       | 12 ++++++++++++
->  package/freescale-imx/firmware-imx/firmware-imx.mk |  6 ++++--
->  2 files changed, 16 insertions(+), 2 deletions(-)
+>  package/protobuf/protobuf.hash | 2 +-
+>  package/protobuf/protobuf.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-> index 5becf8b6a9..c947248ee1 100644
-> --- a/package/freescale-imx/firmware-imx/Config.in
-> +++ b/package/freescale-imx/firmware-imx/Config.in
-> @@ -69,6 +69,18 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
->  
->  endchoice # DDR training FW
->  
-> +config BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR
-> +	hex "(lp)ddr imem load address"
-> +	default 0x8000
-> +	help
-> +	  The training FW will be padded to start at this load address
+> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+> index aa9d871561..c11f54edc3 100644
+> --- a/package/protobuf/protobuf.hash
+> +++ b/package/protobuf/protobuf.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+>  sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+> -sha256  ccfbaaba52f67e0e6536a05f3df3f6618620d255513cfca3a07f5935b624e26b  protobuf-cpp-3.12.4.tar.gz
+> +sha256  f8a547dfe143a9f61fadafba47fa6573713a33cb80909307c1502e26e1102298  protobuf-cpp-3.13.0.tar.gz
+> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+> index 04fea3063e..2395221313 100644
+> --- a/package/protobuf/protobuf.mk
+> +++ b/package/protobuf/protobuf.mk
+> @@ -7,7 +7,7 @@
+>  # When bumping this package, make sure to also verify if the
+>  # python-protobuf package still works, as they share the same
+>  # version/site variables.
+> -PROTOBUF_VERSION = 3.12.4
+> +PROTOBUF_VERSION = 3.13.0
 
-Not sure the description matches my understanding of that value.
-Isn't that value what the binary will be padded to (--pad-to).
-So I wouldn't say the training FW will be padded to start at the load
-address but instead to end at this address.
-Maybe the variable should be renamed to IMEM_LEN (matching U-Boot
-naming) or IMEM_PAD_ADDR.
+You need to update package/python-protobuf/python-protobuf.hash as
+well. We should actually update the comment above to make this clear.
 
-> +config BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR
-> +	hex "(lp)ddr dmem load address"
-> +	default 0x4000
-> +	help
-> +	  The training FW will be padded to start at this load address
-> +
->  endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
->  
->  endif # BR2_PACKAGE_FIRMWARE_IMX
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index eb8595f022..1ace002d5b 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -23,10 +23,12 @@ endef
->  #
->  
->  define FIRMWARE_IMX_PREPARE_DDR_FW
-> -	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
-> +	$(TARGET_OBJCOPY) -I binary -O binary \
-> +		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_IMEM_ADDR) --gap-fill=0x0 \
->  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
->  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
-> -	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
-> +	$(TARGET_OBJCOPY) -I binary -O binary \
-> +		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_DMEM_ADDR) --gap-fill=0x0 \
->  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
->  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
->  	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
+Thanks!
 
-Other than that I'm okay with the patch.
-
-Regards,
-Gary
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
