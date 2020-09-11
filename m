@@ -1,52 +1,23 @@
-From: Charles Hardin <ckhardin@gmail.com>
-Date: Thu, 10 Sep 2020 17:30:02 -0700
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: move
- BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
-Message-ID: <20200911003002.5895-1-charles.hardin@chargepoint.com>
+From: daggs <daggs@gmx.com>
+Date: Fri, 11 Sep 2020 07:53:09 +0200
+Subject: [Buildroot] how to reproduce autobuild failure?
+Message-ID: <trinity-19ccadb5-7d6f-44a4-9552-791e69ceae52-1599803589362@3c-app-mailcom-bs06>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Charles Hardin <ckhardin@gmail.com>
+Greetings,
 
-The fakeroot script does not appear to be used in any of the checked
-in defconfig targets, but it seems that most often the post
-fakeroot script should be done after all the packages rules have
-been applied instead of before.
+I've received a mail stating a pkg I maintained failed autobuild.
+so I've syned my builroot folder to latest, entered the link, downloaded the defconfig to .config, ran make clean oldconfig,
+pressed enter for all options, made sure the .config included my pkg and ran make.
+after a while, I got a complete image, e.g. the failure didn't reproduced.
+assuming that the issue wasn't resolved, I'm doing something wrong.
 
-Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
-a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
-to disable a service or fixup a systemd configuration. The systemd
-move makes sense, and this just tries to preserve the same ability
-to fixup a rootfs after all the cmd hooks are processed.
+what is the proper process I need to follow?
 
-Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
-the change that instigated this reordering.
+Thanks,
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
----
- fs/common.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/common.mk b/fs/common.mk
-index ec6aa831d1..84e13d1b7e 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -173,11 +173,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
- 	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
--	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
--		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
--- 
-2.21.1 (Apple Git-122.3)
+Dagg
