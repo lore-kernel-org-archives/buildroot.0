@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Sep 2020 22:23:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix CallStranger
- a.k.a. CVE-2020-12675
-In-Reply-To: <20200906100938.2687269-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 6 Sep 2020 12:09:38 +0200")
-References: <20200906100938.2687269-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0x0xdtz.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Sep 2020 22:25:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: fix build with
+ uclibc
+In-Reply-To: <20200907182922.133312-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 7 Sep 2020 20:29:22 +0200")
+References: <20200907182922.133312-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ft7oxdpq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > No MINIDLNA_IGNORE_CVES entry is added as no CVE has been assigned to
- > minidlna. Indeed, CallStranger vulnerability affect(ed) most of the UPnP
- > stacks (e.g. gupnp, libupnp)
+ > Fix a build failure with ltp-testsuite in version 20200515
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+Committed to 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
