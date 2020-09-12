@@ -1,57 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Sep 2020 15:18:08 +0200
-Subject: [Buildroot] [PATCH v5 3/3] board: Add Kontron SMARC-sAL28
- support
-In-Reply-To: <20200604221123.1850-3-michael@walle.cc>
-References: <20200604221123.1850-1-michael@walle.cc>
- <20200604221123.1850-3-michael@walle.cc>
-Message-ID: <20200912151808.7672244e@windsurf.home>
+From: Ralph Siemsen <ralphs@netwinder.org>
+Date: Sat, 12 Sep 2020 09:31:50 -0400
+Subject: [Buildroot] [PATCH] package/systemtap: new package
+In-Reply-To: <20200912143513.6cd2a98e@windsurf.home>
+References: <20200609231257.275131-1-ralphs@netwinder.org>
+ <20200912143513.6cd2a98e@windsurf.home>
+Message-ID: <20200912133150.GB17923@rfs.netwinder.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+Hi Thomas,
 
-On Fri,  5 Jun 2020 00:11:22 +0200
-Michael Walle <michael@walle.cc> wrote:
+On Sat, Sep 12, 2020 at 02:35:13PM +0200, Thomas Petazzoni wrote:
+>
+>Thanks a lot for posting this! I think it would be useful to have
+>systemtap support in Buildroot.
 
-> Now that upstream supports this board add buildroot support for it, too.
-> 
-> This supports:
->  - latest upstream linux kernel. Since the support for this board and
->    its SoC is still in active development, we want to follow the
->    upstream kernel releases for now.
->  - building an image which can be installed to eMMC, SD card or USB
->    thumb drive.
->  - upstream u-boot patches are pending, therefore no support for
->    building a bootloader for now.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+Thanks for reviewing. I had pretty much forgotten all about this, it was 
+done several months ago.
 
-Thanks. I've applied your patch, with some minor changes.
+I'll try making the suggested changes, and send an updated patch. This 
+make take a few weeks as I'm rather busy with other stuff currently.
 
-Changed the commit title to follow the format:
+As far as adding myself to MAINTAINERS, for systemtap I am not really 
+comfortable with that -- I don't actually use this package, I just 
+helped out someone else (on IRC) that was having trouble getting it to 
+build. If I started getting bugs/questions about systemtap from other 
+users, I doubt I would be able to help, beyond what google says...
 
-	configs/foo_defconfig: new defconfig
-
-> +BR2_KERNEL_DTB_KEEP_DIRNAME=y
-
-I fixed the name of this option, as pointed by Heiko.
-
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_PACKAGE_IPROUTE2=y
-
-I dropped this, as we want our defconfigs to be minimal.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Ralph
