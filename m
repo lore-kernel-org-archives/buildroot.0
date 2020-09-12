@@ -1,33 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Sep 2020 14:23:26 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/harfbuzz: bump version to
- 2.7.2
-In-Reply-To: <20200910181855.1280-1-ps.report@gmx.net>
-References: <20200910181855.1280-1-ps.report@gmx.net>
-Message-ID: <20200912142326.49c14ca9@windsurf.home>
+Date: Sat, 12 Sep 2020 14:24:29 +0200
+Subject: [Buildroot] [git commit] package/weston: add imx-gpu-viv as
+ possible egl provider
+Message-ID: <20200912121656.354A786E55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Sep 2020 20:18:54 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=23f14802c3c6f818d62b3c0ba029b3a722195ec3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Note:
->  - based on top of '[v2] package/harfbuzz: bump to version 2.6.8'
->    https://patchwork.ozlabs.org/project/buildroot/patch/20200910132613.1881110-1-francois.perrad at gadz.org/
-> ---
->  package/harfbuzz/harfbuzz.hash | 2 +-
->  package/harfbuzz/harfbuzz.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+As the imx-gpu-viv package provides both EGL and gbm libraries.
 
-Both applied. Thanks!
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/weston/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index bf783b70d4..d07eba4c9d 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -39,11 +39,11 @@ config BR2_PACKAGE_WESTON_DEFAULT_FBDEV
+ 
+ config BR2_PACKAGE_WESTON_DEFAULT_DRM
+ 	bool "drm"
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL || BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 	select BR2_PACKAGE_WESTON_DRM
+ 
+ comment "drm backend needs mesa3d w/ EGL driver"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 
+ config BR2_PACKAGE_WESTON_DEFAULT_X11
+ 	bool "X11"
+@@ -63,11 +63,11 @@ config BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR
+ 
+ config BR2_PACKAGE_WESTON_DRM
+ 	bool "DRM compositor"
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL || BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 
+ # Uses libgbm from mesa3d
+ comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
++	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL && !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 
+ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
