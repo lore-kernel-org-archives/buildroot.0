@@ -1,60 +1,73 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 12 Sep 2020 10:10:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: drop patch
-Message-ID: <20200912081011.18983-1-heiko.thiery@gmail.com>
+From: Robin Jarry <robin.jarry@6wind.com>
+Date: Sat, 12 Sep 2020 13:44:20 +0200
+Subject: [Buildroot] [PATCH v4 1/2] support/scripts/pycompile: fix .pyc
+ original source file paths
+In-Reply-To: <20200911211543.GB10548@scaer>
+References: <20200904112908.21686-1-julien.floret@6wind.com>
+ <20200910083252.7102-1-robin.jarry@6wind.com>
+ <20200910083252.7102-2-robin.jarry@6wind.com>
+ <20200911211543.GB10548@scaer>
+Message-ID: <20200912114420.mm4qyzw6jbncuiaw@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With updating libssh to version 0.9.5 this patch is no longer needed.
+Hi Yann,
 
-http://lists.busybox.net/pipermail/buildroot/2020-September/291986.html
+2020-09-11, Yann E. MORIN:
+[snip]
+> This...
+[snip]
+> ... and this is scary to me... :-(
+> 
+> I understand the reasoning: no need to re-compile a file that was
+> already compiled and has not changed. This is an understandable
+> optimisation, and one that was already present in the previous script.
+> 
+> Still, having to poke into the internals sounds a bit too invasive to
+> me, especially as those internals are version-specific (as your
+> coditional code demonstrates).
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- ...move-version-check-for-faulty-libssh.patch | 32 -------------------
- 1 file changed, 32 deletions(-)
- delete mode 100644 package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
+Yes that is not very pretty and it will certainly be a burden to carry
+in the long run. I made the effort to implement this so that the
+previous incremental build feature was preserved.
 
-diff --git a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-deleted file mode 100644
-index d1df807626..0000000000
---- a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From ad89283f9ed36f0f1234c7f005edfc34e8b9fd58 Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@kontron.com>
--Date: Thu, 4 Jun 2020 15:31:56 +0200
--Subject: [PATCH] CMakeList.txt: remove version check for faulty libssh version
--
--libssh is fixed by a patch in buildroot so we can drop the libssh
--version check for 0.9.3 and 0.9.4.
--
--See: 39099153d9404cd6f107f0fd92ce8686bbd1beb2
--
--Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-----
-- CMakeLists.txt | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f21fec9..29ef202 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -148,9 +148,6 @@ endif()
-- # dependencies - libssh
-- if(ENABLE_SSH)
--     find_package(LibSSH 0.7.0 REQUIRED)
---    if(LIBSSH_VERSION VERSION_EQUAL 0.9.3 OR LIBSSH_VERSION VERSION_EQUAL 0.9.4)
---        message(FATAL_ERROR "LibSSH ${LIBSSH_VERSION} includes regression bugs and libnetconf2 will NOT work properly, try to use another version")
---    endif()
-- 
--     target_link_libraries(netconf2 ${LIBSSH_LIBRARIES})
--     list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSSH_LIBRARIES})
---- 
--2.20.1
--
+> Can't we instead use ctime or mtime to detect whether a file needs
+> updating?
+
+I am not sure it would be reliable given that buildroot may change the
+mtime of .py files in $(TARGET_DIR). But yes, it could be possible.
+I think it would be safer to remove this feature completely.
+
+> Alternatively, how much time do we actually shave off the build with
+> this optimisation? I've done a simple build with this defconfig:
+[snip]
+> The build takes 3min 40s, and the pre-compilation takes less than a
+> second. Of course, adding more python module will only increase the
+> pre-compile duration.
+> 
+> I think the duration gain is negligible, while the intricacies of the
+> code to detect whether pre-compilation should occur is probably too much
+> of a burden, maintenance-wise.
+> 
+> So, it is my opinion we should rop this.
+
+I agree, byte compiling python code is very fast and even if every
+python package is selected, the time it takes to compile all .py files
+will be completely negligible compared to the full duration of the
+build. The --force option could be removed in my opinion.
+
+> Of course, no need to reend for now: I'd like the opinion from the other
+> maitnainers,, and maybe we can leave the topic open for others to review
+> as well. Also, if we decide to drop it, I can do that pretty easily when
+> applying...
+
+I don't mind doing a v5 with --force removed or with a different (less
+reliable?) way to determine if .py files should be recompiled.
+
+Cheers,
+
 -- 
-2.20.1
+Robin
