@@ -1,84 +1,51 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sat, 12 Sep 2020 17:05:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/htpdate: fix build with static
- openssl
-Message-ID: <20200912150527.228019-1-titouan.christophe@railnova.eu>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Sat, 12 Sep 2020 18:18:14 +0200
+Subject: [Buildroot] [PATCH 0/2] weston: fix i.MX support
+In-Reply-To: <20200912142713.6da9e0d5@windsurf.home>
+References: <20200619125500.524503-1-gary.bisson@boundarydevices.com>
+ <20200912142713.6da9e0d5@windsurf.home>
+Message-ID: <20200912161814.GA4355@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Depending on its build configuration, openssl might not be compiled with
-dynamic zlib support, and programs that link against openssl need to link
-against zlib as well.
+Hi Thomas,
 
-This can be generally and easily handled using the pkg-config files
-installed by openssl.
+On Sat, Sep 12, 2020 at 02:27:13PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 19 Jun 2020 14:54:58 +0200
+> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+> 
+> > Gary Bisson (2):
+> >   package/weston: add imx-gpu-viv as possible egl provider
+> >   package/weston-imx: remove deprecated package
+> 
+> Thanks, series applied.
 
-Fixes: http://autobuild.buildroot.net/results/ae9/ae946ca72238840b3eaa5fe823e8d620618f7462/
+Thanks, that is awesome!
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- ...-config-to-determine-openssl-LDFLAGS.patch | 36 +++++++++++++++++++
- package/htpdate/htpdate.mk                    |  2 +-
- 2 files changed, 37 insertions(+), 1 deletion(-)
- create mode 100644 package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
+> For the first patch, I think we need to add a proper libgbm virtual
+> package. I had a patch series for that, but it's not trivial as not all
+> gbm implementations implement the full/recent GBM API. I had some ideas
+> to address that, but needs some more investigation/time.
 
-diff --git a/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch b/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-new file mode 100644
-index 0000000000..c1749e995d
---- /dev/null
-+++ b/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-@@ -0,0 +1,36 @@
-+From 32d6cec3be361c3d2228967d41b868b7b3b910c0 Mon Sep 17 00:00:00 2001
-+From: Titouan Christophe <titouan.christophe@railnova.eu>
-+Date: Sat, 12 Sep 2020 16:49:57 +0200
-+Subject: [PATCH 1/1] Use pkg-config to determine openssl LDFLAGS
-+
-+Depending on its build configuration, openssl might not be compiled with
-+dynamic zlib support, and programs that link against openssl need to link
-+against zlib as well, as illustrated in this build failure:
-+http://autobuild.buildroot.net/results/ae9/ae946ca72238840b3eaa5fe823e8d620618f7462/
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[upstream status: https://github.com/angeloc/htpdate/pull/1]
-+---
-+ Makefile | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 09eea4a..21668a6 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -4,10 +4,11 @@ mandir = ${prefix}/share/man
-+ 
-+ CC ?= gcc
-+ CFLAGS += -Wall -std=c99 -pedantic -O2
-++PKG_CONFIG ?= pkg-config
-+ 
-+ ifdef ENABLE_HTTPS
-+ CFLAGS += -DENABLE_HTTPS
-+-LDFLAGS += -lssl -lcrypto
-++LDFLAGS += $(shell $(PKG_CONFIG) --libs openssl)
-+ endif
-+ 
-+ INSTALL = install -c
-+-- 
-+2.25.3
-+
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index 99d3adafcd..ed74830494 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -11,7 +11,7 @@ HTPDATE_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- HTPDATE_BUILD_OPTS = ENABLE_HTTPS=1
--HTPDATE_DEPENDENCIES += openssl
-+HTPDATE_DEPENDENCIES += openssl host-pkgconf
- endif
- 
- define HTPDATE_BUILD_CMDS
--- 
-2.25.3
+Yes that would indeed be a better solution, I've noticed other packages
+that have added dependency on Mesa3d for libgbm (kmscube, glmark2
+pending patch[1]).
+
+From the cover letter of this series I also mentioned another patch sent
+before that is necessary for a proper build of Weston with imx-gpu-viv
+[2].
+I thought that was that patch that was problematic as, as you pointed
+out already, the sed isn't an elegant solution but I still believe it's
+the less intrusive one.
+Let me know what you think of it.
+
+Regards,
+Gary
+
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20200104193919.91589-2-bernd.kuhls at t-online.de/
+[2] http://patchwork.ozlabs.org/project/buildroot/patch/20200402130842.918696-3-gary.bisson at boundarydevices.com/
