@@ -1,30 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Sep 2020 14:21:04 +0200
-Subject: [Buildroot] [PATCH] package/nginx-upload: bump to latest version
-In-Reply-To: <20200910164842.1317307-1-hancock@sedsystems.ca>
-References: <20200910164842.1317307-1-hancock@sedsystems.ca>
-Message-ID: <20200912142104.7acbe353@windsurf.home>
+Date: Sat, 12 Sep 2020 14:21:23 +0200
+Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 2.6.8
+In-Reply-To: <20200910132613.1881110-1-francois.perrad@gadz.org>
+References: <20200910132613.1881110-1-francois.perrad@gadz.org>
+Message-ID: <20200912142123.778d9f32@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Sep 2020 10:48:42 -0600
-Robert Hancock <hancock@sedsystems.ca> wrote:
+On Thu, 10 Sep 2020 15:26:13 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Update nginx-upload to a newer Git commit which adds upload support over
-> HTTP2 as well as other fixes.
+> - update home page URL (old one is redirected to github)
+> - change download to new location (github)
+> - update license hash because of copyright year update:
+> diff COPING:
+> -Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
+> -Copyright ? 2019  Facebook, Inc.
+> +Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
+> +Copyright ? 2018,2019,2020  Ebrahim Byagowi
+> +Copyright ? 2019,2020  Facebook, Inc.
 > 
-> Remove a patch which is no longer required in the current version.
-> 
-> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> note: newer versions (2.7.x) require a migration to meson
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  ...ad-module-add-openssl-lib-dependency.patch | 56 -------------------
->  package/nginx-upload/nginx-upload.hash        |  2 +-
->  package/nginx-upload/nginx-upload.mk          |  2 +-
->  3 files changed, 2 insertions(+), 58 deletions(-)
->  delete mode 100644 package/nginx-upload/0001-nginx-upload-module-add-openssl-lib-dependency.patch
+>  package/harfbuzz/Config.in     | 2 +-
+>  package/harfbuzz/harfbuzz.hash | 6 ++----
+>  package/harfbuzz/harfbuzz.mk   | 4 ++--
+>  3 files changed, 5 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
