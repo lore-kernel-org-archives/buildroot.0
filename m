@@ -1,24 +1,60 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat, 12 Sep 2020 10:03:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libssh: security bump to
- version 0.9.5
-In-Reply-To: <20200911210306.617737-1-fontaine.fabrice@gmail.com>
-References: <20200911210306.617737-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAEyMn7bDBn_0mWfbWXRmE16+CO5UwMTQ+jxt8Dqzk7sxiF3kSA@mail.gmail.com>
+Date: Sat, 12 Sep 2020 10:10:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: drop patch
+Message-ID: <20200912081011.18983-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Fabrice,
+With updating libssh to version 0.9.5 this patch is no longer needed.
 
-Am Fr., 11. Sept. 2020 um 23:03 Uhr schrieb Fabrice Fontaine
-<fontaine.fabrice@gmail.com>:
->
-> - Drop patches (already in version)
-> - Fix CVE-2020-16135: libssh 0.9.4 has a NULL pointer dereference in
->   tftpserver.c if ssh_buffer_new returns NULL.
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+http://lists.busybox.net/pipermail/buildroot/2020-September/291986.html
+
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ ...move-version-check-for-faulty-libssh.patch | 32 -------------------
+ 1 file changed, 32 deletions(-)
+ delete mode 100644 package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
+
+diff --git a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
+deleted file mode 100644
+index d1df807626..0000000000
+--- a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From ad89283f9ed36f0f1234c7f005edfc34e8b9fd58 Mon Sep 17 00:00:00 2001
+-From: Heiko Thiery <heiko.thiery@kontron.com>
+-Date: Thu, 4 Jun 2020 15:31:56 +0200
+-Subject: [PATCH] CMakeList.txt: remove version check for faulty libssh version
+-
+-libssh is fixed by a patch in buildroot so we can drop the libssh
+-version check for 0.9.3 and 0.9.4.
+-
+-See: 39099153d9404cd6f107f0fd92ce8686bbd1beb2
+-
+-Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
+----
+- CMakeLists.txt | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index f21fec9..29ef202 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -148,9 +148,6 @@ endif()
+- # dependencies - libssh
+- if(ENABLE_SSH)
+-     find_package(LibSSH 0.7.0 REQUIRED)
+--    if(LIBSSH_VERSION VERSION_EQUAL 0.9.3 OR LIBSSH_VERSION VERSION_EQUAL 0.9.4)
+--        message(FATAL_ERROR "LibSSH ${LIBSSH_VERSION} includes regression bugs and libnetconf2 will NOT work properly, try to use another version")
+--    endif()
+- 
+-     target_link_libraries(netconf2 ${LIBSSH_LIBRARIES})
+-     list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSSH_LIBRARIES})
+--- 
+-2.20.1
+-
+-- 
+2.20.1
