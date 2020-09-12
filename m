@@ -1,37 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 12 Sep 2020 14:21:23 +0200
-Subject: [Buildroot] [PATCH v2] package/harfbuzz: bump to version 2.6.8
-In-Reply-To: <20200910132613.1881110-1-francois.perrad@gadz.org>
-References: <20200910132613.1881110-1-francois.perrad@gadz.org>
-Message-ID: <20200912142123.778d9f32@windsurf.home>
+Date: Sat, 12 Sep 2020 14:23:26 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/harfbuzz: bump version to
+ 2.7.2
+In-Reply-To: <20200910181855.1280-1-ps.report@gmx.net>
+References: <20200910181855.1280-1-ps.report@gmx.net>
+Message-ID: <20200912142326.49c14ca9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Sep 2020 15:26:13 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Thu, 10 Sep 2020 20:18:54 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> - update home page URL (old one is redirected to github)
-> - change download to new location (github)
-> - update license hash because of copyright year update:
-> diff COPING:
-> -Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019  Google, Inc.
-> -Copyright ? 2019  Facebook, Inc.
-> +Copyright ? 2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020  Google, Inc.
-> +Copyright ? 2018,2019,2020  Ebrahim Byagowi
-> +Copyright ? 2019,2020  Facebook, Inc.
-> 
-> note: newer versions (2.7.x) require a migration to meson
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/harfbuzz/Config.in     | 2 +-
->  package/harfbuzz/harfbuzz.hash | 6 ++----
->  package/harfbuzz/harfbuzz.mk   | 4 ++--
->  3 files changed, 5 insertions(+), 7 deletions(-)
+> Note:
+>  - based on top of '[v2] package/harfbuzz: bump to version 2.6.8'
+>    https://patchwork.ozlabs.org/project/buildroot/patch/20200910132613.1881110-1-francois.perrad at gadz.org/
+> ---
+>  package/harfbuzz/harfbuzz.hash | 2 +-
+>  package/harfbuzz/harfbuzz.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
