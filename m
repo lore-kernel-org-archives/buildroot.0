@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Sun, 13 Sep 2020 13:32:46 +0200
-Subject: [Buildroot] [PATCH v2 04/12] linux: add bzImage support for IBM
+Date: Sun, 13 Sep 2020 13:32:48 +0200
+Subject: [Buildroot] [PATCH v2 06/12] package/systemd: add support for IBM
  s390x and Z arch
 In-Reply-To: <20200913113254.1955447-1-egorenar@linux.ibm.com>
 References: <20200913113254.1955447-1-egorenar@linux.ibm.com>
-Message-ID: <20200913113254.1955447-5-egorenar@linux.ibm.com>
+Message-ID: <20200913113254.1955447-7-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/systemd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 49da2b81b2..ec74e1e65a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -226,7 +226,7 @@ config BR2_LINUX_KERNEL_APPENDED_UIMAGE
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 74029aff05..7956370b83 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	default y if BR2_riscv
+ 	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
+ 	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_s390x
  
- config BR2_LINUX_KERNEL_BZIMAGE
- 	bool "bzImage"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_i386 || BR2_x86_64 || BR2_s390x
- 
- config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
+ menuconfig BR2_PACKAGE_SYSTEMD
+ 	bool "systemd"
 -- 
 2.26.2
