@@ -1,41 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 15:54:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: disable -Werror
-In-Reply-To: <20200912185754.663166-1-fontaine.fabrice@gmail.com>
-References: <20200912185754.663166-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200913155455.0a6b5d9f@windsurf.home>
+Date: Sun, 13 Sep 2020 15:55:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.15.2
+In-Reply-To: <20200912234935.137556-1-christian@paral.in>
+References: <20200912234935.137556-1-christian@paral.in>
+Message-ID: <20200913155511.1b8fc809@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Sep 2020 20:57:54 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 12 Sep 2020 16:49:35 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-> Add an upstream patch that disable -Werror to avoid the following build
-> failure:
+> go1.15.2 (released 2020/09/09) includes fixes to the compiler, runtime,
+> documentation, the go command, and the net/mail, os, sync, and testing packages.
 > 
-> lttng-live.c: In function 'lttng_live_msg_iter_next':
-> lttng-live.c:1226:15: error: 'stream_iter' may be used uninitialized in this function [-Werror=maybe-uninitialized]
->      int ret = common_muxing_compare_messages(
->                ^
-> lttng-live.c:1198:38: note: 'stream_iter' was declared here
->    struct lttng_live_stream_iterator *stream_iter;
->                                       ^
-> lttng-live.c: At top level:
-> cc1: error: unrecognized command line option '-Wno-cast-function-type' [-Werror]
-> cc1: all warnings being treated as errors
+> https://golang.org/doc/devel/release.html#go1.15
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ff41326f913e71f982b3d5cbaf054f8be47913aa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Christian Stewart <christian@paral.in>
 > ---
->  ...ure-simplify-warning-flags-detection.patch | 669 ++++++++++++++++++
->  package/babeltrace2/babeltrace2.mk            |   2 +
->  2 files changed, 671 insertions(+)
->  create mode 100644 package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch
+>  package/go/go.hash | 2 +-
+>  package/go/go.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
