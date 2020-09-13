@@ -1,60 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 15:14:55 +0200
-Subject: [Buildroot] [git commit] package/haveged: change systemd service
- file to run earlier
-Message-ID: <20200913130613.B7EBE821A9@busybox.osuosl.org>
+Date: Sun, 13 Sep 2020 15:25:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: specify host-gawk path
+ for dhcp build environment
+In-Reply-To: <20200912200114.GA763352@curiosity>
+References: <20200623073918.3415-1-geomatsi@gmail.com>
+ <20200912145843.05493b9c@windsurf.home>
+ <20200912200114.GA763352@curiosity>
+Message-ID: <20200913152504.4738cf0c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d872a9dbbab8d9eed295a53415d01b58b62a3493
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Sergey,
 
-Drop default dependencies, haveged needs nothing but local sockets and
-/dev/random.
+On Sat, 12 Sep 2020 23:01:14 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-The service file now mostly matches the upstream Fedora file, except a
-lot of isolation options have been dropped. The benefit for a
-completely controlled system is small, and those option would pull in
-dependencies, delaying entropy being filled up.
+> But what were the files installed in your tests? Did you see dhcpd and
+> dhclient amount installed files in output/target ?
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/haveged/haveged.service | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+Yes, both dhcpd and dhclient are installed in output/target. I'm
+attaching to this e-mail the list of files that were installed when
+building with awk==mawk and awk==gawk.
 
-diff --git a/package/haveged/haveged.service b/package/haveged/haveged.service
-index 91035c6711..5a2336b0a7 100644
---- a/package/haveged/haveged.service
-+++ b/package/haveged/haveged.service
-@@ -1,10 +1,22 @@
- [Unit]
--Description=Entropy Harvesting Daemon
--Documentation=man:haveged(8)
-+# inspiration from upstream init.d/service.fedora
-+Description=Entropy Daemon based on the HAVEGE algorithm
-+Documentation=man:haveged(8) http://www.issihosts.com/haveged/
-+DefaultDependencies=no
-+# This would wait for filesystems, but we only need /dev/random, which
-+# is certainly available after systemd initialised
-+# After=systemd-tmpfiles-setup-dev.service
-+Before=sysinit.target shutdown.target systemd-journald.service
- 
- [Service]
--ExecStart=/usr/sbin/haveged -F -w 1024 -v 1
--SuccessExitStatus=143
-+ExecStart=/usr/sbin/haveged -w 1024 -v 1 --Foreground
-+Restart=always
-+SuccessExitStatus=137 143
-+
-+# Only simple isolation methods that don't pull in dependencies
-+CapabilityBoundingSet=CAP_SYS_ADMIN
-+SecureBits=noroot-locked
-+ProtectSystem=full
- 
- [Install]
--WantedBy=multi-user.target
-+WantedBy=sysinit.target
+> I still can reproduce the issue. The procedure is similar to yours. I
+> enable both client and server for isc-dhcp in the board config. Finally,
+> I do not have both dhcpd and dhclient in output/target if I do not have
+> gawk installed on my build server. Moreover, in this case the following
+> warnings appear in the end of dhcp build log:
+> 
+> bin/sh: line 19: gawk: command not found
+> 
+> Such warning are emitted by DHCP_INSTALL_SERVER and DHCP_INSTALL_CLIENT
+> commands from dhcp.mk. The same result can be reproduced manually:
+> 
+> $ make -C /home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server DESTDIR=/home/matsi/devel/code/buildroot/buildroot-release/output/target install-sbinPROGRAMS         
+> make: Entering directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
+>  /usr/bin/mkdir -p  '/home/matsi/devel/code/buildroot/buildroot-release/output/target/usr/sbin'
+> /bin/sh: line 19: gawk: command not found
+> make: Leaving directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
+> 
+> What exactly goes on can be figured out using '-n' make option.
+> Makefiles for isc-dhcp components use $(AWK) which is properly
+> detected by configure script. It can any of gawk, mawk, nawk, awk.
+> However in generated Makefiles that tool is used without specific 
+> path. As a result, *awk tool can be available in buildroot build
+> environment, but missing on the build server.
+
+I've posted at https://paste.ack.tf/52f197 at raw the full build of my
+Buildroot configuration, which has just BR2_PACKAGE_DHCP=y + client +
+server. awk is really mawk:
+
+checking for gawk... no
+checking for mawk... mawk
+
+Both dhpcd and dhclient are installed:
+
+$ find target/ -name 'dhcpd' -o -name 'dhclient'
+target/usr/sbin/dhcpd
+target/sbin/dhclient
+
+I have this version of mawk installed:
+
+ii  mawk                       1.3.3-17+b3                    amd64        a pattern scanning and text processing language
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
