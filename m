@@ -1,130 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 21:58:40 +0200
-Subject: [Buildroot] [git commit] package/kexec: fix build with gcc 10
-Message-ID: <20200913195014.EDEB288503@busybox.osuosl.org>
+Date: Sun, 13 Sep 2020 21:59:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build with gcc 10
+In-Reply-To: <20200913165123.2685199-1-fontaine.fabrice@gmail.com>
+References: <20200913165123.2685199-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200913215917.06abafed@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42218bce3cffb6de9aac9e19a10665c095423bce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 13 Sep 2020 18:51:23 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/89b6337db9efc55aaa422fc9964f942b6d4cd5f7
+> Fixes:
+>  - http://autobuild.buildroot.org/results/89b6337db9efc55aaa422fc9964f942b6d4cd5f7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ove-duplicated-variable-declarations.patch | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 package/kexec/0002-kexec-tools-Remove-duplicated-variable-declarations.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...s-Remove-duplicated-variable-declarations.patch | 102 +++++++++++++++++++++
- 1 file changed, 102 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/kexec/0002-kexec-tools-Remove-duplicated-variable-declarations.patch b/package/kexec/0002-kexec-tools-Remove-duplicated-variable-declarations.patch
-new file mode 100644
-index 0000000000..99cb9a2824
---- /dev/null
-+++ b/package/kexec/0002-kexec-tools-Remove-duplicated-variable-declarations.patch
-@@ -0,0 +1,102 @@
-+From cc087b11462af9f971a2c090d07e8d780a867b50 Mon Sep 17 00:00:00 2001
-+From: Kairui Song <kasong@redhat.com>
-+Date: Wed, 29 Jan 2020 13:38:19 +0800
-+Subject: kexec-tools: Remove duplicated variable declarations
-+
-+When building kexec-tools for Fedora 32, following error is observed:
-+
-+/usr/bin/ld: kexec/arch/x86_64/kexec-bzImage64.o:(.bss+0x0): multiple definition of `bzImage_support_efi_boot';
-+kexec/arch/i386/kexec-bzImage.o:(.bss+0x0): first defined here
-+
-+/builddir/build/BUILD/kexec-tools-2.0.20/kexec/arch/arm/../../fs2dt.h:33: multiple definition of `my_debug';
-+kexec/fs2dt.o:/builddir/build/BUILD/kexec-tools-2.0.20/kexec/fs2dt.h:33: first defined here
-+
-+/builddir/build/BUILD/kexec-tools-2.0.20/kexec/arch/arm64/kexec-arm64.h:68: multiple definition of `arm64_mem';
-+kexec/fs2dt.o:/builddir/build/BUILD/kexec-tools-2.0.20/././kexec/arch/arm64/kexec-arm64.h:68: first defined here
-+
-+/builddir/build/BUILD/kexec-tools-2.0.20/kexec/arch/arm64/kexec-arm64.h:54: multiple definition of `initrd_size';
-+kexec/fs2dt.o:/builddir/build/BUILD/kexec-tools-2.0.20/././kexec/arch/arm64/kexec-arm64.h:54: first defined here
-+
-+/builddir/build/BUILD/kexec-tools-2.0.20/kexec/arch/arm64/kexec-arm64.h:53: multiple definition of `initrd_base';
-+kexec/fs2dt.o:/builddir/build/BUILD/kexec-tools-2.0.20/././kexec/arch/arm64/kexec-arm64.h:53: first defined here
-+
-+And apparently, these variables are wrongly declared multiple times. So
-+remove duplicated declaration.
-+
-+Signed-off-by: Kairui Song <kasong@redhat.com>
-+Signed-off-by: Simon Horman <horms@verge.net.au>
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=cc087b11462af9f971a2c090d07e8d780a867b50]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ kexec/arch/arm64/kexec-arm64.h      | 6 +++---
-+ kexec/arch/ppc64/kexec-elf-ppc64.c  | 2 --
-+ kexec/arch/x86_64/kexec-bzImage64.c | 1 -
-+ kexec/fs2dt.h                       | 2 +-
-+ 4 files changed, 4 insertions(+), 7 deletions(-)
-+
-+diff --git a/kexec/arch/arm64/kexec-arm64.h b/kexec/arch/arm64/kexec-arm64.h
-+index 628de79..ed447ac 100644
-+--- a/kexec/arch/arm64/kexec-arm64.h
-++++ b/kexec/arch/arm64/kexec-arm64.h
-+@@ -50,8 +50,8 @@ int zImage_arm64_load(int argc, char **argv, const char *kernel_buf,
-+ void zImage_arm64_usage(void);
-+ 
-+ 
-+-off_t initrd_base;
-+-off_t initrd_size;
-++extern off_t initrd_base;
-++extern off_t initrd_size;
-+ 
-+ /**
-+  * struct arm64_mem - Memory layout info.
-+@@ -65,7 +65,7 @@ struct arm64_mem {
-+ };
-+ 
-+ #define arm64_mem_ngv UINT64_MAX
-+-struct arm64_mem arm64_mem;
-++extern struct arm64_mem arm64_mem;
-+ 
-+ uint64_t get_phys_offset(void);
-+ uint64_t get_vp_offset(void);
-+diff --git a/kexec/arch/ppc64/kexec-elf-ppc64.c b/kexec/arch/ppc64/kexec-elf-ppc64.c
-+index 3510b70..695b8b0 100644
-+--- a/kexec/arch/ppc64/kexec-elf-ppc64.c
-++++ b/kexec/arch/ppc64/kexec-elf-ppc64.c
-+@@ -44,8 +44,6 @@
-+ uint64_t initrd_base, initrd_size;
-+ unsigned char reuse_initrd = 0;
-+ const char *ramdisk;
-+-/* Used for enabling printing message from purgatory code */
-+-int my_debug = 0;
-+ 
-+ int elf_ppc64_probe(const char *buf, off_t len)
-+ {
-+diff --git a/kexec/arch/x86_64/kexec-bzImage64.c b/kexec/arch/x86_64/kexec-bzImage64.c
-+index 8edb3e4..ba8dc48 100644
-+--- a/kexec/arch/x86_64/kexec-bzImage64.c
-++++ b/kexec/arch/x86_64/kexec-bzImage64.c
-+@@ -42,7 +42,6 @@
-+ #include <arch/options.h>
-+ 
-+ static const int probe_debug = 0;
-+-int bzImage_support_efi_boot;
-+ 
-+ int bzImage64_probe(const char *buf, off_t len)
-+ {
-+diff --git a/kexec/fs2dt.h b/kexec/fs2dt.h
-+index 7633273..fe24931 100644
-+--- a/kexec/fs2dt.h
-++++ b/kexec/fs2dt.h
-+@@ -30,7 +30,7 @@ extern struct bootblock bb[1];
-+ 
-+ /* Used for enabling printing message from purgatory code
-+  * Only has implemented for PPC64 */
-+-int my_debug;
-++extern int my_debug;
-+ extern int dt_no_old_root;
-+ 
-+ void reserve(unsigned long long where, unsigned long long length);
-+-- 
-+cgit 1.2.3-1.el7
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
