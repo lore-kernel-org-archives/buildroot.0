@@ -1,41 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 16:21:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python3: do not install MS
- Windows installers on the target
-In-Reply-To: <20200912115622.134543-1-titouan.christophe@railnova.eu>
-References: <20200912115622.134543-1-titouan.christophe@railnova.eu>
-Message-ID: <20200913162115.0722d5b7@windsurf.home>
+Date: Sun, 13 Sep 2020 16:21:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: drop patch
+In-Reply-To: <20200912081011.18983-1-heiko.thiery@gmail.com>
+References: <20200912081011.18983-1-heiko.thiery@gmail.com>
+Message-ID: <20200913162136.43f01a99@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Sep 2020 13:56:21 +0200
-Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+On Sat, 12 Sep 2020 10:10:11 +0200
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-> Buildroot generates Linux systems, so there is no need to have
-> MS Windows executables in there.
+> With updating libssh to version 0.9.5 this patch is no longer needed.
 > 
-> This reduces the target filesystem size by about 2MB:
-> $ du -hcs usr/lib/python3.8/distutils/command/wininst-*.exe
-> 60K usr/lib/python3.8/distutils/command/wininst-6.0.exe
-> 64K usr/lib/python3.8/distutils/command/wininst-7.1.exe
-> 60K usr/lib/python3.8/distutils/command/wininst-8.0.exe
-> 192K    usr/lib/python3.8/distutils/command/wininst-9.0.exe
-> 220K    usr/lib/python3.8/distutils/command/wininst-9.0-amd64.exe
-> 188K    usr/lib/python3.8/distutils/command/wininst-10.0.exe
-> 220K    usr/lib/python3.8/distutils/command/wininst-10.0-amd64.exe
-> 448K    usr/lib/python3.8/distutils/command/wininst-14.0.exe
-> 576K    usr/lib/python3.8/distutils/command/wininst-14.0-amd64.exe
-> 2,0M    total
+> http://lists.busybox.net/pipermail/buildroot/2020-September/291986.html
 > 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 > ---
->  package/python3/python3.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...move-version-check-for-faulty-libssh.patch | 32 -------------------
+>  1 file changed, 32 deletions(-)
+>  delete mode 100644 package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
