@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 15:55:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to 1.15.2
-In-Reply-To: <20200912234935.137556-1-christian@paral.in>
-References: <20200912234935.137556-1-christian@paral.in>
-Message-ID: <20200913155511.1b8fc809@windsurf.home>
+Date: Sun, 13 Sep 2020 15:55:36 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/3] package/cairo: enable gobject for host
+In-Reply-To: <20200912172400.327527-1-fontaine.fabrice@gmail.com>
+References: <20200912172400.327527-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200913155536.278b9360@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Sep 2020 16:49:35 -0700
-Christian Stewart <christian@paral.in> wrote:
+On Sat, 12 Sep 2020 19:23:58 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> go1.15.2 (released 2020/09/09) includes fixes to the compiler, runtime,
-> documentation, the go command, and the net/mail, os, sync, and testing packages.
+> gobject is needed for host-librsvg
 > 
-> https://golang.org/doc/devel/release.html#go1.15
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/go/go.hash | 2 +-
->  package/go/go.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/cairo/cairo.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+Series applied, thanks a lot!
 
 Thomas
 -- 
