@@ -1,44 +1,86 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Sun, 13 Sep 2020 12:03:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/re2: needs threads
-In-Reply-To: <20200912170420.325240-1-fontaine.fabrice@gmail.com>
-References: <20200912170420.325240-1-fontaine.fabrice@gmail.com>
-Message-ID: <19c58f3e-bccd-b129-f3de-e3878864284a@heine.tech>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Sun, 13 Sep 2020 13:32:24 +0200
+Subject: [Buildroot] [PATCH 3/3] package/s390-tools: new package
+In-Reply-To: <20200912224347.GJ10548@scaer>
+References: <20200910174143.311039-1-egorenar@linux.ibm.com>
+ <20200910174143.311039-4-egorenar@linux.ibm.com>
+ <20200912224347.GJ10548@scaer>
+Message-ID: <87lfhd7vzr.fsf@oc8242746057.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+"Yann E. MORIN" <yann.morin.1998@free.fr> writes:
 
-On 12.09.20 19:04, Fabrice Fontaine wrote:
-> re2 unconditionally uses -pthread and add it to re2.pc
+
 >
-> Moreover, it fails to buid without threads on:
+> In this case, this package is really architecture-specific, so it will
+> never be available on other archtectures (or sub-architectures).
 >
-> In file included from /home/peko/autobuild/instance-0/output-1/per-package/re2/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabihf/include/c++/8.3.0/arm-buildroot-linux-uclibcgnueabihf/bits/os_defines.h:39,
->                   from /home/peko/autobuild/instance-0/output-1/per-package/re2/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabihf/include/c++/8.3.0/arm-buildroot-linux-uclibcgnueabihf/bits/c++config.h:508,
->                   from /home/peko/autobuild/instance-0/output-1/per-package/re2/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabihf/include/c++/8.3.0/bits/stl_algobase.h:59,
->                   from /home/peko/autobuild/instance-0/output-1/per-package/re2/host/opt/ext-toolchain/arm-buildroot-linux-uclibcgnueabihf/include/c++/8.3.0/memory:62,
->                   from /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/filtered_re2.h:24,
->                   from /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/filtered_re2.cc:5:
-> /home/peko/autobuild/instance-0/output-1/per-package/re2/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
->   #   warning requested reentrant code, but thread support was disabled
->       ^~~~~~~
-> In file included from /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/prog.h:22,
->                   from /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/bitstate.cc:28:
-> /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/re2.h:768:16: error: 'once_flag' in namespace 'std' does not name a type
->     mutable std::once_flag rprog_once_;
->                  ^~~~~~~~~
-> /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/re2.h:768:11: note: 'std::once_flag' is defined in header '<mutex>'; did you forget to '#include <mutex>'?
-> /home/peko/autobuild/instance-0/output-1/build/re2-2020-08-01/re2/re2.h:218:1:
-> +#include <mutex>
+> As such, BR2_PACKAGE_S390_TOOLS_ARCH_SUPPORTS is superfluous here,
+> and...
 >
-> Fixes:
->   - http://autobuild.buildroot.org/results/7d7c6dcac3cb8ea6deb753178e85eb1c5c74c8e3
 
-thanks for taking care of this!
+Done.
+
+>
+> ... here you should directly depend on BR2_s390x, and...
+>
+
+Done.
+
+>
+> ... here as well.
+>
+
+Done.
+
+>
+> I see that s390-tools is supposed to work on a uclibc toolchain, but
+> your previous patch only enabled glibc for the internal toolchain.
+>
+> However, I don;t see much support for s390x in uClibc-ng.
+>
+> Quid?
+>
+
+Fixed.
+
+> It is custimary to do that with a single assignment:
+>
+>     S390_TOOLS_MAKE_OPTS = \
+>         ARCH=$(BR2_ARCH) \
+>         CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+>         LINK="$(TARGET_CC)" \
+>         LINKXX="$(TARGET_CXX)"
+>
+> Any reason for forcing verbosity (V=1)?
+>
+
+Fixed.
+
+>
+> We want explicitly enabling of options as well (applicable to the other
+> options as well, of course):
+>
+>     ifeq ($(BR2_PACKAGE_LIBCURL),y)
+>     S390_TOOLS_DEPENDENCIES += libcurl
+>     S390_TOOLS_MAKE_OPTS += HAVE_CURL=1
+>     else
+>     S390_TOOLS_MAKE_OPTS += HAVE_CURL=0
+>     endif
+>
+> If that does not work, please explain it in the commit log:
+>
+>     Options (e.g. HAVE_CURL=0) can only be disabled, and can't be
+>     explicitly enabled.
+>
+
+Fixed.
 
 
-Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
+Thank you for your review
+Regards
+Alexander Egorenkov
