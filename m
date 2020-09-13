@@ -1,86 +1,72 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Sun, 13 Sep 2020 13:32:24 +0200
-Subject: [Buildroot] [PATCH 3/3] package/s390-tools: new package
-In-Reply-To: <20200912224347.GJ10548@scaer>
-References: <20200910174143.311039-1-egorenar@linux.ibm.com>
- <20200910174143.311039-4-egorenar@linux.ibm.com>
- <20200912224347.GJ10548@scaer>
-Message-ID: <87lfhd7vzr.fsf@oc8242746057.ibm.com>
+Date: Sun, 13 Sep 2020 13:32:42 +0200
+Subject: [Buildroot] [PATCH v2 00/12] IBM s390x and Z architecture support
+Message-ID: <20200913113254.1955447-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> writes:
+This series of patches adds support for IBM s390x and Z architectures
+to buildroot.
 
+v1 -> v2:
+  * Addressed all review findings by Yann E. Morin
+  * Split up into smaller patches to ease further review process
+  * qemu s390x board
+    - Clean up of qemu_s390x_defconfig
+    - Use fixed Linux kernel version
+    - Use in-tree Linux kernel config
+    - Add defconfig comment to readme.txt for CI testing
+  * s390-tools package
+    - Improve Makefile
+    - Add dependency on C++ toolchain (due to libvmdump)
+    - uClibc-ng is not supported
 
->
-> In this case, this package is really architecture-specific, so it will
-> never be available on other archtectures (or sub-architectures).
->
-> As such, BR2_PACKAGE_S390_TOOLS_ARCH_SUPPORTS is superfluous here,
-> and...
->
+Alexander Egorenkov (12):
+  support/gnuconfig/config.sub: bump to version 2020-06-28
+  arch: add the basic IBM s390x and Z arch support
+  toolchain: add support for the internal IBM s390x and Z toolchain
+  linux: add bzImage support for IBM s390x and Z arch
+  board/qemu: add IBM s390x and Z arch support
+  package/systemd: add support for IBM s390x and Z arch
+  package/cmake: add support for IBM s390x and Z arch
+  package/liburcu: add support for IBM s390x and Z arch
+  package/kexec: add support for IBM s390x and Z arch
+  package/go: add support for IBM s390x and Z arch
+  package/makedumpfile: add support for IBM s390x and Z arch
+  package/s390-tools: new package
 
-Done.
+ DEVELOPERS                              |   6 +
+ Makefile                                |   1 +
+ arch/Config.in                          |  13 +
+ arch/Config.in.s390x                    |  34 ++
+ board/qemu/s390x/post-build.sh          |  11 +
+ board/qemu/s390x/readme.txt             |   8 +
+ configs/qemu_s390x_defconfig            |  12 +
+ linux/Config.in                         |   2 +-
+ package/Config.in                       |   1 +
+ package/cmake/Config.in                 |   3 +-
+ package/gcc/gcc.mk                      |   5 +
+ package/go/Config.in.host               |   2 +-
+ package/kexec/Config.in                 |   2 +-
+ package/liburcu/Config.in               |   2 +-
+ package/makedumpfile/Config.in          |   2 +-
+ package/s390-tools/Config.in            |  17 +
+ package/s390-tools/s390-tools.hash      |   3 +
+ package/s390-tools/s390-tools.mk        |  91 ++++
+ package/systemd/Config.in               |   1 +
+ support/gnuconfig/config.sub            | 579 +++++++++++++-----------
+ toolchain/toolchain-buildroot/Config.in |   6 +-
+ 21 files changed, 530 insertions(+), 271 deletions(-)
+ create mode 100644 arch/Config.in.s390x
+ create mode 100755 board/qemu/s390x/post-build.sh
+ create mode 100644 board/qemu/s390x/readme.txt
+ create mode 100644 configs/qemu_s390x_defconfig
+ create mode 100644 package/s390-tools/Config.in
+ create mode 100644 package/s390-tools/s390-tools.hash
+ create mode 100644 package/s390-tools/s390-tools.mk
 
->
-> ... here you should directly depend on BR2_s390x, and...
->
-
-Done.
-
->
-> ... here as well.
->
-
-Done.
-
->
-> I see that s390-tools is supposed to work on a uclibc toolchain, but
-> your previous patch only enabled glibc for the internal toolchain.
->
-> However, I don;t see much support for s390x in uClibc-ng.
->
-> Quid?
->
-
-Fixed.
-
-> It is custimary to do that with a single assignment:
->
->     S390_TOOLS_MAKE_OPTS = \
->         ARCH=$(BR2_ARCH) \
->         CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
->         LINK="$(TARGET_CC)" \
->         LINKXX="$(TARGET_CXX)"
->
-> Any reason for forcing verbosity (V=1)?
->
-
-Fixed.
-
->
-> We want explicitly enabling of options as well (applicable to the other
-> options as well, of course):
->
->     ifeq ($(BR2_PACKAGE_LIBCURL),y)
->     S390_TOOLS_DEPENDENCIES += libcurl
->     S390_TOOLS_MAKE_OPTS += HAVE_CURL=1
->     else
->     S390_TOOLS_MAKE_OPTS += HAVE_CURL=0
->     endif
->
-> If that does not work, please explain it in the commit log:
->
->     Options (e.g. HAVE_CURL=0) can only be disabled, and can't be
->     explicitly enabled.
->
-
-Fixed.
-
-
-Thank you for your review
-Regards
-Alexander Egorenkov
+-- 
+2.26.2
