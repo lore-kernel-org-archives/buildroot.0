@@ -1,44 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Sep 2020 18:52:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sofia-sip: fix static build with
- openssl
-Message-ID: <20200913165226.2685331-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Sep 2020 18:52:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/sofia-sip: fix build without openssl
+In-Reply-To: <20200913165226.2685331-1-fontaine.fabrice@gmail.com>
+References: <20200913165226.2685331-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200913165226.2685331-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use --with-openssl=pkg-config otherwise sofia-sip will fail to retrieve
-openssl dependencies resulting in the following build failure:
-
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libsofia-sip-ua/.libs/libsofia-sip-ua.a(tport_type_ws.o): in function `tport_ws_deinit_primary':
-tport_type_ws.c:(.text+0x2c): undefined reference to `SSL_CTX_free'
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libsofia-sip-ua/.libs/libsofia-sip-ua.a(tport_type_ws.o): in function `tport_ws_init_primary_secure':
-
-pkg-config option has been added to freeswitch sofia-sip since 2007 and
-https://github.com/freeswitch/sofia-sip/commit/044ac9d8fa7e840cf3e38c3fa7f8cacd0d21b3ea
+HTTP-related modules are enabled by default and depend on openssl since
+https://github.com/freeswitch/sofia-sip/commit/5b4103a12596ea01b4cdbb21b75826a085d557aa
 
 Fixes:
- - http://autobuild.buildroot.org/results/8a0c9dbad74a3b358f90c7a3b56b638c4bdb8045
+ - http://autobuild.buildroot.org/results/95b6c489fed07d6fe626200ea057c83756d54deb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sofia-sip/sofia-sip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sofia-sip/sofia-sip.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 54b48a7048..0ce0340d87 100644
+index 0ce0340d87..ef1b35fa2c 100644
 --- a/package/sofia-sip/sofia-sip.mk
 +++ b/package/sofia-sip/sofia-sip.mk
-@@ -20,7 +20,7 @@ SOFIA_SIP_CONF_OPTS += --without-glib
+@@ -20,10 +20,14 @@ SOFIA_SIP_CONF_OPTS += --without-glib
  endif
  
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SOFIA_SIP_CONF_OPTS += --with-openssl
-+SOFIA_SIP_CONF_OPTS += --with-openssl=pkg-config
+-SOFIA_SIP_CONF_OPTS += --with-openssl=pkg-config
++SOFIA_SIP_CONF_OPTS += \
++	--enable-nth \
++	--with-openssl=pkg-config
  SOFIA_SIP_DEPENDENCIES += openssl
  else
- SOFIA_SIP_CONF_OPTS += --without-openssl
+-SOFIA_SIP_CONF_OPTS += --without-openssl
++SOFIA_SIP_CONF_OPTS += \
++	--disable-nth \
++	--without-openssl
+ endif
+ 
+ ifeq ($(BR2_ENABLE_DEBUG),y)
 -- 
 2.28.0
