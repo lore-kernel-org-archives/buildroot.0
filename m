@@ -1,43 +1,47 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 12 Sep 2020 17:16:56 -0700
-Subject: [Buildroot] [PATCH v1 3/5] package/docker-cli: bump to version
- 19.03.12
+Date: Sat, 12 Sep 2020 17:16:58 -0700
+Subject: [Buildroot] [PATCH v1 5/5] package/docker-proxy: bump to latest
+ commit hash 6d6f28
 In-Reply-To: <20200913001659.472814-1-christian@paral.in>
 References: <20200913001659.472814-1-christian@paral.in>
-Message-ID: <20200913001659.472814-3-christian@paral.in>
+Message-ID: <20200913001659.472814-5-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+docker network library has not published a release, take the latest master
+branch commit hash.
+
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/docker-proxy/docker-proxy.hash | 4 ++--
+ package/docker-proxy/docker-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 8868a60e38..8f9e69e593 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-proxy/docker-proxy.hash b/package/docker-proxy/docker-proxy.hash
+index 4fa9541bed..9f63fa2834 100644
+--- a/package/docker-proxy/docker-proxy.hash
++++ b/package/docker-proxy/docker-proxy.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	a5b1d6c5766f77896273e864a448a7f0ea4055bb52f50f884f14ad6ef0d5fdb4  docker-cli-19.03.11.tar.gz
-+sha256	00801d6b7e9777cf2cf54255ca5afb7b58b3d35c14bb0f60bb9f07d031883223  docker-cli-19.03.12.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 577e92c502..e17f3186ba 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  0fffcd438b9a87a7ff8315364ff4631d2241ac0cf9f9f83871aeafcb2a383fd1  docker-proxy-feeff4f0a3fd2a2bb19cf67c826082c66ffaaed9.tar.gz
+-sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14	LICENSE
++sha256	c68d09e47dc1dbe27c93e121959be5f0c6cfe47940efe81e3465cb438e9ef625  docker-proxy-6d6f28a1b61b6dd0ad562277d19592125428ed4e.tar.gz
++sha256	cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/docker-proxy/docker-proxy.mk b/package/docker-proxy/docker-proxy.mk
+index bd8a3d0f17..392e5f1b59 100644
+--- a/package/docker-proxy/docker-proxy.mk
++++ b/package/docker-proxy/docker-proxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 19.03.11
-+DOCKER_CLI_VERSION = 19.03.12
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_PROXY_VERSION = feeff4f0a3fd2a2bb19cf67c826082c66ffaaed9
++DOCKER_PROXY_VERSION = 6d6f28a1b61b6dd0ad562277d19592125428ed4e
+ DOCKER_PROXY_SITE = $(call github,docker,libnetwork,$(DOCKER_PROXY_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_PROXY_LICENSE = Apache-2.0
 -- 
 2.28.0
