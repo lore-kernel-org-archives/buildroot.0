@@ -1,72 +1,122 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Sun, 13 Sep 2020 13:32:42 +0200
-Subject: [Buildroot] [PATCH v2 00/12] IBM s390x and Z architecture support
-Message-ID: <20200913113254.1955447-1-egorenar@linux.ibm.com>
+Date: Sun, 13 Sep 2020 13:32:44 +0200
+Subject: [Buildroot] [PATCH v2 02/12] arch: add the basic IBM s390x and Z
+ arch support
+In-Reply-To: <20200913113254.1955447-1-egorenar@linux.ibm.com>
+References: <20200913113254.1955447-1-egorenar@linux.ibm.com>
+Message-ID: <20200913113254.1955447-3-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series of patches adds support for IBM s390x and Z architectures
-to buildroot.
-
-v1 -> v2:
-  * Addressed all review findings by Yann E. Morin
-  * Split up into smaller patches to ease further review process
-  * qemu s390x board
-    - Clean up of qemu_s390x_defconfig
-    - Use fixed Linux kernel version
-    - Use in-tree Linux kernel config
-    - Add defconfig comment to readme.txt for CI testing
-  * s390-tools package
-    - Improve Makefile
-    - Add dependency on C++ toolchain (due to libvmdump)
-    - uClibc-ng is not supported
-
-Alexander Egorenkov (12):
-  support/gnuconfig/config.sub: bump to version 2020-06-28
-  arch: add the basic IBM s390x and Z arch support
-  toolchain: add support for the internal IBM s390x and Z toolchain
-  linux: add bzImage support for IBM s390x and Z arch
-  board/qemu: add IBM s390x and Z arch support
-  package/systemd: add support for IBM s390x and Z arch
-  package/cmake: add support for IBM s390x and Z arch
-  package/liburcu: add support for IBM s390x and Z arch
-  package/kexec: add support for IBM s390x and Z arch
-  package/go: add support for IBM s390x and Z arch
-  package/makedumpfile: add support for IBM s390x and Z arch
-  package/s390-tools: new package
-
- DEVELOPERS                              |   6 +
- Makefile                                |   1 +
- arch/Config.in                          |  13 +
- arch/Config.in.s390x                    |  34 ++
- board/qemu/s390x/post-build.sh          |  11 +
- board/qemu/s390x/readme.txt             |   8 +
- configs/qemu_s390x_defconfig            |  12 +
- linux/Config.in                         |   2 +-
- package/Config.in                       |   1 +
- package/cmake/Config.in                 |   3 +-
- package/gcc/gcc.mk                      |   5 +
- package/go/Config.in.host               |   2 +-
- package/kexec/Config.in                 |   2 +-
- package/liburcu/Config.in               |   2 +-
- package/makedumpfile/Config.in          |   2 +-
- package/s390-tools/Config.in            |  17 +
- package/s390-tools/s390-tools.hash      |   3 +
- package/s390-tools/s390-tools.mk        |  91 ++++
- package/systemd/Config.in               |   1 +
- support/gnuconfig/config.sub            | 579 +++++++++++++-----------
- toolchain/toolchain-buildroot/Config.in |   6 +-
- 21 files changed, 530 insertions(+), 271 deletions(-)
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ DEVELOPERS           |  3 +++
+ Makefile             |  1 +
+ arch/Config.in       | 14 ++++++++++++++
+ arch/Config.in.s390x | 34 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 52 insertions(+)
  create mode 100644 arch/Config.in.s390x
- create mode 100755 board/qemu/s390x/post-build.sh
- create mode 100644 board/qemu/s390x/readme.txt
- create mode 100644 configs/qemu_s390x_defconfig
- create mode 100644 package/s390-tools/Config.in
- create mode 100644 package/s390-tools/s390-tools.hash
- create mode 100644 package/s390-tools/s390-tools.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 884c79cfdf..86e620944d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -146,6 +146,9 @@ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
+ F:	package/makedumpfile/
+ F:	package/multipath-tools/
+ 
++N:	Alexander Egorenkov <egorenar@linux.ibm.com>
++F:	arch/Config.in.s390x
++
+ N:	Alexander Kurz <akurz@blala.de>
+ F:	package/minimodem/
+ 
+diff --git a/Makefile b/Makefile
+index 9648fa58d8..384bfe3fe9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -445,6 +445,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+ 	-e s/riscv.*/riscv/ \
+ 	-e s/sh.*/sh/ \
++	-e s/s390x/s390/ \
+ 	-e s/microblazeel/microblaze/)
+ 
+ ZCAT := $(call qstrip,$(BR2_ZCAT))
+diff --git a/arch/Config.in b/arch/Config.in
+index 0707c076e2..eb9b6007c9 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -219,6 +219,16 @@ config BR2_riscv
+ 	  https://riscv.org/
+ 	  https://en.wikipedia.org/wiki/RISC-V
+ 
++config BR2_s390x
++	bool "s390x"
++	select BR2_ARCH_IS_64
++	select BR2_ARCH_HAS_MMU_MANDATORY
++	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
++	help
++	  s390x is a big-endian architecture made by IBM.
++	  http://www.ibm.com/
++	  http://en.wikipedia.org/wiki/IBM_System/390
++
+ config BR2_sh
+ 	bool "SuperH"
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+@@ -457,6 +467,10 @@ if BR2_riscv
+ source "arch/Config.in.riscv"
+ endif
+ 
++if BR2_s390x
++source "arch/Config.in.s390x"
++endif
++
+ if BR2_sh
+ source "arch/Config.in.sh"
+ endif
+diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
+new file mode 100644
+index 0000000000..39d2f58aa9
+--- /dev/null
++++ b/arch/Config.in.s390x
+@@ -0,0 +1,34 @@
++
++choice
++	prompt "Target Architecture Variant"
++	depends on BR2_s390x
++	help
++	  Specific CPU variant to use
++
++config BR2_s390x_z13
++	bool "z13"
++	depends on BR2_s390x
++
++config BR2_s390x_z14
++	bool "z14"
++	depends on BR2_s390x
++
++config BR2_s390x_z15
++	bool "z15"
++	depends on BR2_s390x
++
++endchoice
++
++config BR2_ARCH
++	default "s390x"	if BR2_s390x
++
++config BR2_ENDIAN
++	default "BIG"
++
++config BR2_GCC_TARGET_ARCH
++	default "arch11" if BR2_s390x_z13
++	default "arch12" if BR2_s390x_z14
++	default "arch13" if BR2_s390x_z15
++
++config BR2_READELF_ARCH_NAME
++	default "IBM S/390"	if BR2_s390x
 -- 
 2.26.2
