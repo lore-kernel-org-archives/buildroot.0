@@ -1,81 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 16:23:32 +0200
-Subject: [Buildroot] [git commit] package/motion: fix build with gcc 10
-Message-ID: <20200913142529.6C3F380FA5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Sep 2020 18:49:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/supertux: needs -fPIC
+Message-ID: <20200913164937.2684977-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bff0733c1434c2d73647db4c256cff3b1f0048d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add -fPIC to CFLAGS (and CXXFLAGS for consistency) to avoid the
+following build failure:
+
+/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
+/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
+collect2: error: ld returned 1 exit status
 
 Fixes:
- - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
+ - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
+ - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/motion/0001-Fix-build-with-GCC-10.patch | 53 +++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/supertux/supertux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
-new file mode 100644
-index 0000000000..a5684db965
---- /dev/null
-+++ b/package/motion/0001-Fix-build-with-GCC-10.patch
-@@ -0,0 +1,53 @@
-+From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
-+From: Vasiliy Glazov <vascom2@gmail.com>
-+Date: Sun, 8 Mar 2020 03:00:21 +0300
-+Subject: [PATCH] Fix build with GCC 10.
-+
-+[Retrieved (and backported) from:
-+https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/netcam.h    | 2 +-
-+ src/translate.c | 2 ++
-+ src/translate.h | 2 +-
-+ 3 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/netcam.h b/netcam.h
-+index 2951d917..4ee0e1c8 100644
-+--- a/netcam.h
-++++ b/netcam.h
-+@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
-+ } netcam_buff;
-+ typedef netcam_buff *netcam_buff_ptr;
-+ 
-+-struct netcam_caps {                    /* netcam capabilities: */
-++extern struct netcam_caps {                    /* netcam capabilities: */
-+         unsigned char streaming;        /*  See the NCS_* defines */
-+         unsigned char content_length;   /*  0 - unsupported     */
-+ } caps;
-+diff --git a/translate.c b/translate.c
-+index 0c9f1105..a212d9de 100644
-+--- a/translate.c
-++++ b/translate.c
-+@@ -10,6 +10,8 @@
-+ #include "motion.h"
-+ #include "translate.h"
-+ 
-++int nls_enabled;
-++
-+ void translate_locale_chg(const char *langcd){
-+ #ifdef HAVE_GETTEXT
-+     /* This routine is for development testing only.  It is not used for
-+diff --git a/translate.h b/translate.h
-+index 0832ffd8..eeba3745 100644
-+--- a/translate.h
-++++ b/translate.h
-+@@ -10,7 +10,7 @@
-+ #ifndef _INCLUDE_TRANSLATE_H_
-+ #define _INCLUDE_TRANSLATE_H_
-+ 
-+-int nls_enabled;
-++extern int nls_enabled;
-+ 
-+ #ifdef HAVE_GETTEXT
-+ #   include <libintl.h>
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index 3587aefe3a..14b7ed535f 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -30,7 +30,8 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
+ # ENABLE_OPENGLES2=OFF: Disable opengles2 for now.
+ SUPERTUX_CONF_OPTS += \
+ 	-DCMAKE_BUILD_TYPE=Release \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGLEW_NO_GLU" \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGLEW_NO_GLU -fPIC" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGLEW_NO_GLU -fPIC" \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
+ 	-DENABLE_OPENGL=ON \
+-- 
+2.28.0
