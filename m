@@ -1,139 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 16:21:55 +0200
-Subject: [Buildroot] [git commit] package/libssh: security bump to version
- 0.9.5
-Message-ID: <20200913142529.5ECA080FA5@busybox.osuosl.org>
+Date: Sun, 13 Sep 2020 16:23:32 +0200
+Subject: [Buildroot] [git commit] package/motion: fix build with gcc 10
+Message-ID: <20200913142529.6C3F380FA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df2adb2a09989a6394cc390c23f6592aabae2ac1
+commit: https://git.buildroot.net/buildroot/commit/?id=bff0733c1434c2d73647db4c256cff3b1f0048d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patches (already in version)
-- Fix CVE-2020-16135: libssh 0.9.4 has a NULL pointer dereference in
-  tftpserver.c if ssh_buffer_new returns NULL.
+Fixes:
+ - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-libssh.h-bump-to-version-0.9.4.patch      | 29 --------------
- ...oid-returning-SSH_AGAIN-from-ssh_channel_.patch | 45 ----------------------
- package/libssh/libssh.hash                         |  4 +-
- package/libssh/libssh.mk                           |  2 +-
- 4 files changed, 3 insertions(+), 77 deletions(-)
+ package/motion/0001-Fix-build-with-GCC-10.patch | 53 +++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch b/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
-deleted file mode 100644
-index d6ec50509e..0000000000
---- a/package/libssh/0001-libssh.h-bump-to-version-0.9.4.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 8d8428cbbc2c00d078cfbc967e4e6fee7ff7bf0b Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@gmail.com>
--Date: Wed, 15 Apr 2020 11:57:29 +0200
--Subject: [PATCH] libssh.h: bump to version 0.9.4
--
--In the released version of libssh the version bump was not done
--properly. Therefore the current release 0.9.4 reports 0.9.3.
--
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- include/libssh/libssh.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/libssh/libssh.h b/include/libssh/libssh.h
--index 79030131..e2a8d991 100644
----- a/include/libssh/libssh.h
--+++ b/include/libssh/libssh.h
--@@ -79,7 +79,7 @@
-- /* libssh version */
-- #define LIBSSH_VERSION_MAJOR  0
-- #define LIBSSH_VERSION_MINOR  9
---#define LIBSSH_VERSION_MICRO  3
--+#define LIBSSH_VERSION_MICRO  4
-- 
-- #define LIBSSH_VERSION_INT SSH_VERSION_INT(LIBSSH_VERSION_MAJOR, \
--                                            LIBSSH_VERSION_MINOR, \
---- 
--2.20.1
--
-diff --git a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch b/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-deleted file mode 100644
-index 9cc9389479..0000000000
---- a/package/libssh/0002-channels-Avoid-returning-SSH_AGAIN-from-ssh_channel_.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4 Mon Sep 17 00:00:00 2001
--From: Jakub Jelen <jjelen@redhat.com>
--Date: Thu, 16 Apr 2020 11:13:34 +0200
--Subject: [PATCH] channels: Avoid returning SSH_AGAIN from
-- ssh_channel_poll_timeout()
--
--This addresses a regression introduced in 3bad0607, partially fixed in 022409e9,
--but the function was still able to return SSH_AGAIN, which was not expected by
--callers.
--
--Based on discussion in [1] and [2]
--
--[1] https://gitlab.com/libssh/libssh-mirror/-/merge_requests/101
--[2] https://www.libssh.org/archive/libssh/2020-03/0000029.html
--
--Signed-off-by: Jakub Jelen <jjelen@redhat.com>
--Reviewed-by: Anderson Toshiyuki Sasaki <ansasaki@redhat.com>
--
--[Backport from upstream commit:
--6417f5a3cac8537ac6f6ff7fc1642dfaa0917fb4]
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-----
-- src/channels.c | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/src/channels.c b/src/channels.c
--index bcc1c207..9fe309d0 100644
----- a/src/channels.c
--+++ b/src/channels.c
--@@ -3116,6 +3116,12 @@ int ssh_channel_poll_timeout(ssh_channel channel, int timeout, int is_stderr)
--         session->session_state == SSH_SESSION_STATE_ERROR) {
--         rc = SSH_ERROR;
--         goto out;
--+    } else if (rc == SSH_AGAIN) {
--+        /* If the above timeout expired, it is ok and we do not need to
--+         * attempt to check the read buffer. The calling functions do not
--+         * expect us to return SSH_AGAIN either here. */
--+        rc = SSH_OK;
--+        goto out;
--     }
--     len = ssh_buffer_get_len(stdbuf);
--     if (len > 0) {
---- 
--2.20.1
--
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 62b860300a..bc6fa3f1f8 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.9/libssh-0.9.3.tar.xz.asc
-+# https://www.libssh.org/files/0.9/libssh-0.9.5.tar.xz.asc
- # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256  150897a569852ac05aac831dc417a7ba8e610c86ca2e0154a99c6ade2486226b  libssh-0.9.4.tar.xz
-+sha256  acffef2da98e761fc1fd9c4fddde0f3af60ab44c4f5af05cd1b2d60a3fa08718  libssh-0.9.5.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index abc9aec9a3..67e3ad9f91 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBSSH_VERSION_MAJOR = 0.9
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).4
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
+new file mode 100644
+index 0000000000..a5684db965
+--- /dev/null
++++ b/package/motion/0001-Fix-build-with-GCC-10.patch
+@@ -0,0 +1,53 @@
++From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
++From: Vasiliy Glazov <vascom2@gmail.com>
++Date: Sun, 8 Mar 2020 03:00:21 +0300
++Subject: [PATCH] Fix build with GCC 10.
++
++[Retrieved (and backported) from:
++https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/netcam.h    | 2 +-
++ src/translate.c | 2 ++
++ src/translate.h | 2 +-
++ 3 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/netcam.h b/netcam.h
++index 2951d917..4ee0e1c8 100644
++--- a/netcam.h
+++++ b/netcam.h
++@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
++ } netcam_buff;
++ typedef netcam_buff *netcam_buff_ptr;
++ 
++-struct netcam_caps {                    /* netcam capabilities: */
+++extern struct netcam_caps {                    /* netcam capabilities: */
++         unsigned char streaming;        /*  See the NCS_* defines */
++         unsigned char content_length;   /*  0 - unsupported     */
++ } caps;
++diff --git a/translate.c b/translate.c
++index 0c9f1105..a212d9de 100644
++--- a/translate.c
+++++ b/translate.c
++@@ -10,6 +10,8 @@
++ #include "motion.h"
++ #include "translate.h"
++ 
+++int nls_enabled;
+++
++ void translate_locale_chg(const char *langcd){
++ #ifdef HAVE_GETTEXT
++     /* This routine is for development testing only.  It is not used for
++diff --git a/translate.h b/translate.h
++index 0832ffd8..eeba3745 100644
++--- a/translate.h
+++++ b/translate.h
++@@ -10,7 +10,7 @@
++ #ifndef _INCLUDE_TRANSLATE_H_
++ #define _INCLUDE_TRANSLATE_H_
++ 
++-int nls_enabled;
+++extern int nls_enabled;
++ 
++ #ifdef HAVE_GETTEXT
++ #   include <libintl.h>
