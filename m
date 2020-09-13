@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Sep 2020 22:46:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librsvg: fix license
-Message-ID: <20200913204609.2713172-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Sep 2020 22:49:20 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/librsvg: fix license
+Message-ID: <20200913204920.2713307-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,14 @@ Commit df20e4546384d1c249a6a0541183590671e83d77 forgot to update hash of
 COPYING.LIB which has been updated to use LGPL-2.1+ in version 2.47.0:
 https://github.com/GNOME/librsvg/commit/96b34f865dc8465d2ab93c7ae8344178b0ea7ed7
 
+Fixes:
+ - http://autobuild.buildroot.org/results/94fde5707a1104548c3386b628c92ebc9e034285
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Add link on autobuilder failure
+
  package/librsvg/librsvg.hash | 2 +-
  package/librsvg/librsvg.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
