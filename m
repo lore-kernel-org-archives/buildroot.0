@@ -1,61 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 16:21:29 +0200
-Subject: [Buildroot] [git commit] package/libnetconf2: drop patch
-Message-ID: <20200913142529.53B1B88651@busybox.osuosl.org>
+Date: Sun, 13 Sep 2020 16:34:14 +0200
+Subject: [Buildroot] [git commit] package/memtester: fix build with gcc 10
+Message-ID: <20200913142529.768CB8A4B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79b15efb9d7d6ce8038b11e273610691d475faef
+commit: https://git.buildroot.net/buildroot/commit/?id=a68350f039682fbbced9a499f053d22210f5e853
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With updating libssh to version 0.9.5 this patch is no longer needed.
+Fixes:
+ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
 
-http://lists.busybox.net/pipermail/buildroot/2020-September/291986.html
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...xt-remove-version-check-for-faulty-libssh.patch | 32 ----------------------
- 1 file changed, 32 deletions(-)
+ package/memtester/0002-fix-build-with-gcc-10.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch b/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-deleted file mode 100644
-index d1df807626..0000000000
---- a/package/libnetconf2/0001-CMakeList.txt-remove-version-check-for-faulty-libssh.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From ad89283f9ed36f0f1234c7f005edfc34e8b9fd58 Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@kontron.com>
--Date: Thu, 4 Jun 2020 15:31:56 +0200
--Subject: [PATCH] CMakeList.txt: remove version check for faulty libssh version
--
--libssh is fixed by a patch in buildroot so we can drop the libssh
--version check for 0.9.3 and 0.9.4.
--
--See: 39099153d9404cd6f107f0fd92ce8686bbd1beb2
--
--Signed-off-by: Heiko Thiery <heiko.thiery@kontron.com>
-----
-- CMakeLists.txt | 3 ---
-- 1 file changed, 3 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f21fec9..29ef202 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -148,9 +148,6 @@ endif()
-- # dependencies - libssh
-- if(ENABLE_SSH)
--     find_package(LibSSH 0.7.0 REQUIRED)
---    if(LIBSSH_VERSION VERSION_EQUAL 0.9.3 OR LIBSSH_VERSION VERSION_EQUAL 0.9.4)
---        message(FATAL_ERROR "LibSSH ${LIBSSH_VERSION} includes regression bugs and libnetconf2 will NOT work properly, try to use another version")
---    endif()
-- 
--     target_link_libraries(netconf2 ${LIBSSH_LIBRARIES})
--     list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSSH_LIBRARIES})
---- 
--2.20.1
--
+diff --git a/package/memtester/0002-fix-build-with-gcc-10.patch b/package/memtester/0002-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..8c9b3945bb
+--- /dev/null
++++ b/package/memtester/0002-fix-build-with-gcc-10.patch
+@@ -0,0 +1,65 @@
++From acd226cd4073b77abce8783e19c5ef3bbf8074ef Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 11 Sep 2020 21:39:03 +0200
++Subject: [PATCH] fix build with gcc 10
++
++Move mword8 and mword16 from types.h to tests.c to avoid the following
++build failure with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x4): multiple definition of `mword16'; memtester.o:memtester.c:(.bss+0xc): first defined here
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x0): multiple definition of `mword8'; memtester.o:memtester.c:(.bss+0x10): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to charlesc at pyropus.ca]
++---
++ tests.c | 10 ++++++++++
++ types.h | 10 ----------
++ 2 files changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/tests.c b/tests.c
++index be1b350..d3d25c7 100644
++--- a/tests.c
+++++ b/tests.c
++@@ -22,6 +22,16 @@
++ #include "sizes.h"
++ #include "memtester.h"
++ 
+++union {
+++    unsigned char bytes[UL_LEN/8];
+++    ul val;
+++} mword8;
+++
+++union {
+++    unsigned short u16s[UL_LEN/16];
+++    ul val;
+++} mword16;
+++
++ char progress[] = "-\\|/";
++ #define PROGRESSLEN 4
++ #define PROGRESSOFTEN 2500
++diff --git a/types.h b/types.h
++index ad7ce73..dca7fc0 100644
++--- a/types.h
+++++ b/types.h
++@@ -24,13 +24,3 @@ struct test {
++     char *name;
++     int (*fp)();
++ };
++-
++-union {
++-    unsigned char bytes[UL_LEN/8];
++-    ul val;
++-} mword8;
++-
++-union {
++-    unsigned short u16s[UL_LEN/16];
++-    ul val;
++-} mword16;
++-- 
++2.28.0
++
