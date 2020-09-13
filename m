@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Sun, 13 Sep 2020 13:32:48 +0200
-Subject: [Buildroot] [PATCH v2 06/12] package/systemd: add support for IBM
+Date: Sun, 13 Sep 2020 13:32:49 +0200
+Subject: [Buildroot] [PATCH v2 07/12] package/cmake: add support for IBM
  s390x and Z arch
 In-Reply-To: <20200913113254.1955447-1-egorenar@linux.ibm.com>
 References: <20200913113254.1955447-1-egorenar@linux.ibm.com>
-Message-ID: <20200913113254.1955447-7-egorenar@linux.ibm.com>
+Message-ID: <20200913113254.1955447-8-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/systemd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/cmake/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 74029aff05..7956370b83 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	default y if BR2_riscv
- 	default y if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
- 	default y if BR2_sparc || BR2_sparc64
-+	default y if BR2_s390x
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index e7bd14e69a..3c47fdcb49 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 		BR2_m68k      || BR2_mips        || BR2_mips64   || \
+ 		BR2_mipsel    || BR2_mips64el    || BR2_powerpc  || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc    || \
+-		BR2_i386      || BR2_x86_64      || BR2_xtensa
++		BR2_i386      || BR2_x86_64      || BR2_xtensa   || \
++		BR2_s390x
  
- menuconfig BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
+ config BR2_PACKAGE_CMAKE
+ 	bool
 -- 
 2.26.2
