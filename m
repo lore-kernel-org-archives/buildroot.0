@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Sun, 13 Sep 2020 13:32:52 +0200
-Subject: [Buildroot] [PATCH v2 10/12] package/go: add support for IBM s390x
- and Z arch
+Date: Sun, 13 Sep 2020 13:32:45 +0200
+Subject: [Buildroot] [PATCH v2 03/12] toolchain: add support for the
+ internal IBM s390x and Z toolchain
 In-Reply-To: <20200913113254.1955447-1-egorenar@linux.ibm.com>
 References: <20200913113254.1955447-1-egorenar@linux.ibm.com>
-Message-ID: <20200913113254.1955447-11-egorenar@linux.ibm.com>
+Message-ID: <20200913113254.1955447-4-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,55 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/go/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in                          | 1 -
+ package/gcc/gcc.mk                      | 5 +++++
+ toolchain/toolchain-buildroot/Config.in | 6 +++---
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 3f16dbaec3..87942c7a1e 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
--		|| BR2_mips64 || BR2_mips64el
-+		|| BR2_mips64 || BR2_mips64el || BR2_s390x
- 	depends on !BR2_ARM_CPU_ARMV4
- 	# MIPS R6 support in Go has not yet been developed.
- 	depends on !BR2_MIPS_CPU_MIPS64R6
+diff --git a/arch/Config.in b/arch/Config.in
+index eb9b6007c9..155403c363 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -223,7 +223,6 @@ config BR2_s390x
+ 	bool "s390x"
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+-	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  s390x is a big-endian architecture made by IBM.
+ 	  http://www.ibm.com/
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..0912c07a71 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -241,6 +241,11 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
++ifeq ($(BR2_s390x),y)
++HOST_GCC_COMMON_CONF_OPTS += \
++	--with-long-double-128
++endif
++
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ 
+ # For gcc-initial, we need to tell gcc that the C library will be
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 418d5cb387..1c4705600e 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -46,9 +46,9 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
+ 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+-		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+-		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
++		   BR2_riscv       || BR2_s390x      || BR2_sh          || \
++		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze  || \
++		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
 2.26.2
