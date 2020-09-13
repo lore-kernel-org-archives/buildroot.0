@@ -1,46 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Sep 2020 21:59:44 +0200
-Subject: [Buildroot] [git commit] package/sofia-sip: fix static build with
- openssl
-Message-ID: <20200913201714.7C1A38816B@busybox.osuosl.org>
+Date: Sun, 13 Sep 2020 22:21:32 +0200
+Subject: [Buildroot] [git commit] package/efl: depends on gcc >= 4.9
+Message-ID: <20200913201714.99D6982724@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=090dc1d6cb6e37195f52d63f54a4f585d5f95ac7
+commit: https://git.buildroot.net/buildroot/commit/?id=dbe2d2e686281c19739824d4d4faec62187d1779
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use --with-openssl=pkg-config otherwise sofia-sip will fail to retrieve
-openssl dependencies resulting in the following build failure:
-
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libsofia-sip-ua/.libs/libsofia-sip-ua.a(tport_type_ws.o): in function `tport_ws_deinit_primary':
-tport_type_ws.c:(.text+0x2c): undefined reference to `SSL_CTX_free'
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../libsofia-sip-ua/.libs/libsofia-sip-ua.a(tport_type_ws.o): in function `tport_ws_init_primary_secure':
-
-pkg-config option has been added to freeswitch sofia-sip since 2007 and
-https://github.com/freeswitch/sofia-sip/commit/044ac9d8fa7e840cf3e38c3fa7f8cacd0d21b3ea
+efl depends on C++11 since version 1.22.0 and
+https://github.com/Enlightenment/efl/commit/ac95f38d1b06ac6977ea6d8b9f14f9405396858f
 
 Fixes:
- - http://autobuild.buildroot.org/results/8a0c9dbad74a3b358f90c7a3b56b638c4bdb8045
+ - http://autobuild.buildroot.org/results/458ec719a7251b59796edfc865b7226baaed6d8f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sofia-sip/sofia-sip.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/efl/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/sofia-sip/sofia-sip.mk b/package/sofia-sip/sofia-sip.mk
-index 54b48a7048..0ce0340d87 100644
---- a/package/sofia-sip/sofia-sip.mk
-+++ b/package/sofia-sip/sofia-sip.mk
-@@ -20,7 +20,7 @@ SOFIA_SIP_CONF_OPTS += --without-glib
- endif
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index c1b19770bb..738bfcd010 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_EFL
+ 	bool "efl"
+-	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+@@ -282,8 +281,8 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--SOFIA_SIP_CONF_OPTS += --with-openssl
-+SOFIA_SIP_CONF_OPTS += --with-openssl=pkg-config
- SOFIA_SIP_DEPENDENCIES += openssl
- else
- SOFIA_SIP_CONF_OPTS += --without-openssl
+ endif # BR2_PACKAGE_EFL
+ 
+-comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
++comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
