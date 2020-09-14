@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 21:21:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix tarball name in
- hash file
-In-Reply-To: <20200914171659.3364205-1-fontaine.fabrice@gmail.com>
-References: <20200914171659.3364205-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200914212125.2ed1a258@windsurf.hq.k.grp>
+Date: Mon, 14 Sep 2020 21:21:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpfm4: bump to version 4.11.0
+In-Reply-To: <20200914174619.3409389-1-fontaine.fabrice@gmail.com>
+References: <20200914174619.3409389-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200914212150.0f4c5cc4@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2020 19:16:59 +0200
+On Mon, 14 Sep 2020 19:46:19 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Commit 819a4207f6a5c3b579cb5191b03b51ebec4298ff forgot to rename
-> libuhttpd-3.2.0.tar.gz
+> Major updates:
+>  - AMD Zen1 core PMU updates
+>  - AMD Zen2 core PMU support
+>  - Intel Icelake core PMU support
+>  - support to report if events are speculative
+>  - support for Extended PEBS events on Icelake
+>  - Intel Tremont core PMU support
+>  - ARM Neoverse N1 core PMU support
+>  - s390 event table updates
+>  - Marvell TX2 core and uncore updates
+>  - Intel CascadeLakeX uncore PMU support
+>  - Various other event table updates and bug fixes
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/965be1c72996df94668be81d1e90ed6937fb9a7c
+> http://perfmon2.sourceforge.net/
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libuhttpd/libuhttpd.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libpfm4/libpfm4.hash | 6 +++---
+>  package/libpfm4/libpfm4.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
