@@ -1,44 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Sep 2020 22:42:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcpdump: fix build without pod2man
-Message-ID: <20200914204239.3456222-1-fontaine.fabrice@gmail.com>
+Date: Mon, 14 Sep 2020 22:47:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcap-ng: bump to version 0.8
+Message-ID: <20200914204717.3461244-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
-following build failure if pod2man is not available:
+This release adds support for ambient capabilities and V3 filesystem
+capabilities.
 
-pod2man --section 8 \
-	--date "23 June 2008" \
-	--name "DHCPDUMP" \
-	--center "User Contributed Software" \
-	dhcpdump.pod dhcpdump.8
-/bin/sh: pod2man: command not found
-make[1]: *** [Makefile:11: dhcpdump.8] Error 127
-
-Fixes:
- - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
+A bug in the python bindings was also fixed which prevented use of
+capng_updatev.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dhcpdump/dhcpdump.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcap-ng/libcap-ng.hash | 2 +-
+ package/libcap-ng/libcap-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
-index 2413812880..ec9571c0af 100644
---- a/package/dhcpdump/dhcpdump.mk
-+++ b/package/dhcpdump/dhcpdump.mk
-@@ -20,7 +20,7 @@ DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index d1c7034c08..d52f466084 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  85815c711862d01a440db471f12fba462c9949e923966f5859607e652d9c0ae9  libcap-ng-0.7.11.tar.gz
++sha256  f14d23b60ae1465b032e4e8cbd4112006572c69a6017d55d5d3c6aad622a9e21  libcap-ng-0.8.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 914a72333b..03949d740a 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define DHCPDUMP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
--		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
-+		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
- endef
- 
- define DHCPDUMP_INSTALL_TARGET_CMDS
+-LIBCAP_NG_VERSION = 0.7.11
++LIBCAP_NG_VERSION = 0.8
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.28.0
