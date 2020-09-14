@@ -1,90 +1,97 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Sep 2020 22:33:29 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/supertux: fix build with RELRO
-Message-ID: <20200914203329.3432074-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Sep 2020 22:16:23 +0200
+Subject: [Buildroot] [git commit] package/asn1c: new host package
+Message-ID: <20200914202856.B71148A615@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable static building of external/squirrel to fix the following build
-failure with RELRO:
+commit: https://git.buildroot.net/buildroot/commit/?id=16c7ac984f2f213b6fcb91b498cacc858984a675
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
-/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
-collect2: error: ld returned 1 exit status
+The asn1c is a free, open source compiler of ASN.1 specifications into C
+source code.
 
-Fixes:
- - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
- - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Disable static building of external/squirrel instead of adding -fPIC
+ DEVELOPERS                   |  1 +
+ package/Config.in.host       |  1 +
+ package/asn1c/Config.in.host | 11 +++++++++++
+ package/asn1c/asn1c.hash     |  5 +++++
+ package/asn1c/asn1c.mk       | 12 ++++++++++++
+ 5 files changed, 30 insertions(+)
 
- ...ass-DISABLE_STATIC-to-external-squir.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch
-
-diff --git a/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch b/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 884c79cfdf..f754a6f341 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2384,6 +2384,7 @@ N:	Sergio Prado <sergio.prado@e-labworks.com>
+ F:	board/toradex/apalis-imx6/
+ F:	configs/toradex_apalis_imx6_defconfig
+ F:	package/aoetools/
++F:	package/asn1c/
+ F:	package/azure-iot-sdk-c/
+ F:	package/curlpp/
+ F:	package/daq/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 097e2fb47d..243da8969f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -2,6 +2,7 @@ menu "Host utilities"
+ 
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
++	source "package/asn1c/Config.in.host"
+ 	source "package/babeltrace2/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+diff --git a/package/asn1c/Config.in.host b/package/asn1c/Config.in.host
 new file mode 100644
-index 0000000000..43652d0906
+index 0000000000..951f5f6691
 --- /dev/null
-+++ b/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch
-@@ -0,0 +1,52 @@
-+From 95590485d7cd95611eeac1fc06226d45f235c63a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 13 Sep 2020 22:09:49 +0200
-+Subject: [PATCH] CMakeLists.txt: pass DISABLE_STATIC to external/squirrel
++++ b/package/asn1c/Config.in.host
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HOST_ASN1C
++	bool "host asn1c"
++	help
++	  ASN.1 stands for Abstract Syntax Notation One and allows
++	  to describe complex data structures independently of any
++	  particular programming language.
 +
-+external/squirrel will always build a static binary and library except
-+if DISABLE_STATIC is defined so define it to avoid the following build
-+failure with RELRO_FULL:
++	  The asn1c is a free, open source compiler of ASN.1
++	  specifications into C source code.
 +
-+/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
-+/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
-+collect2: error: ld returned 1 exit status
++	  http://lionet.info/asn1c
+diff --git a/package/asn1c/asn1c.hash b/package/asn1c/asn1c.hash
+new file mode 100644
+index 0000000000..abc4d77e1c
+--- /dev/null
++++ b/package/asn1c/asn1c.hash
+@@ -0,0 +1,5 @@
++# Locally computed:
++sha256  8007440b647ef2dd9fb73d931c33ac11764e6afb2437dbe638bb4e5fc82386b9  asn1c-0.9.28.tar.gz
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
-+ - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
++# Hash for license files:
++sha256  bcc636802a52ace2255212be15fb707084af87061b5cfd37eb84dcf6a02cc48b  LICENSE
+diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
+new file mode 100644
+index 0000000000..314462a92b
+--- /dev/null
++++ b/package/asn1c/asn1c.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# asn1c
++#
++################################################################################
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
++ASN1C_VERSION = 0.9.28
++ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
++ASN1C_LICENSE = BSD-2-Clause
++ASN1C_LICENSE_FILES = LICENSE
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 1ae0d653b..bb4358b01 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -411,6 +411,7 @@ ExternalProject_Add(squirrel
-+   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-+   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-+   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
-++  -DDISABLE_STATIC=ON
-+   -DINSTALL_INC_DIR=include)
-+ 
-+ if(WIN32)
-+@@ -424,10 +425,10 @@ if(WIN32)
-+   #For debug run purposes
-+   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/mk/msvc/run_supertux.bat.in" "${PROJECT_BINARY_DIR}/run_supertux.bat")
-+ else()
-+-  add_library(squirrel_lib STATIC IMPORTED)
-+-  set_target_properties(squirrel_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}squirrel_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
-+-  add_library(sqstdlib_lib STATIC IMPORTED)
-+-  set_target_properties(sqstdlib_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}sqstdlib_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
-++  add_library(squirrel_lib SHARED IMPORTED)
-++  set_target_properties(squirrel_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}squirrel${CMAKE_SHARED_LIBRARY_SUFFIX}")
-++  add_library(sqstdlib_lib SHARED IMPORTED)
-++  set_target_properties(sqstdlib_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}sqstdlib${CMAKE_SHARED_LIBRARY_SUFFIX}")
-+ endif()
-+ 
-+ include_directories(SYSTEM ${SQUIRREL_PREFIX}/include)
-+-- 
-+2.28.0
-+
--- 
-2.28.0
++$(eval $(host-autotools-package))
