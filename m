@@ -1,64 +1,44 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 14 Sep 2020 22:41:02 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2] scripts/autobuild-run: create
- host-distro file
-Message-ID: <20200914204101.16172-1-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 14 Sep 2020 22:42:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhcpdump: fix build without pod2man
+Message-ID: <20200914204239.3456222-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes autobuilder failures occur only on a specific distribution. To
-ease the research for the maintainer/developers add the host distribution
-information to the result archive.
+Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
+following build failure if pod2man is not available:
 
-The distribution information comes from '/etc/os-release' (or
-'/usr/lib/os-release') that seems to be present on the most common distros:
+pod2man --section 8 \
+	--date "23 June 2008" \
+	--name "DHCPDUMP" \
+	--center "User Contributed Software" \
+	dhcpdump.pod dhcpdump.8
+/bin/sh: pod2man: command not found
+make[1]: *** [Makefile:11: dhcpdump.8] Error 127
 
-Debian: https://manpages.debian.org/buster/systemd/os-release.5.en.html
-Ubuntu: http://manpages.ubuntu.com/manpages/bionic/man5/os-release.5.html
-Red Red: https://www.freedesktop.org/software/systemd/man/os-release.html
-Open-Suse: https://en.opensuse.org/SDB:Find_openSUSE_version
+Fixes:
+ - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2:
- - implement comments from Yann
- - copy the whole file (os-release) as host-distro to the result archive
- - reword the commit log
+ package/dhcpdump/dhcpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
- scripts/autobuild-run | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index f657d49..d4644d6 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -699,6 +699,23 @@ class Builder:
-         with open(os.path.join(self.resultdir, "submitter"), "w+") as submitterf:
-             submitterf.write(self.submitter)
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index 2413812880..ec9571c0af 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -20,7 +20,7 @@ DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
  
-+        def get_os_release_path():
-+            for p in ['/etc/os-release', '/usr/lib/os-release']:
-+                if os.path.exists(p):
-+                    return p
-+            return None
-+
-+        def save_host_distro_info():
-+            host_distro = os.path.join(self.resultdir, "host-distro")
-+            os_release = get_os_release_path()
-+            if os_release is None:
-+                with open(host_distro, "w") as f:
-+                    f.write('Unknown')
-+            else:
-+                shutil.copyfile(os_release, host_distro)
-+
-+        save_host_distro_info()
-+
-         # Yes, shutil.make_archive() would be nice, but it doesn't exist
-         # in Python 2.6.
-         ret = subprocess.call(["tar", "cjf", "results.tar.bz2", "results"],
+ define DHCPDUMP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
+-		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
++		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
+ endef
+ 
+ define DHCPDUMP_INSTALL_TARGET_CMDS
 -- 
-2.20.1
+2.28.0
