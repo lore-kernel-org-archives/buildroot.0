@@ -1,82 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Sep 2020 23:20:08 +0200
-Subject: [Buildroot] [PATCH 1/1] fs/common.mk: move
- BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
-In-Reply-To: <20200911003002.5895-1-charles.hardin@chargepoint.com>
-References: <20200911003002.5895-1-charles.hardin@chargepoint.com>
-Message-ID: <20200914212008.GC19902@scaer>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Mon, 14 Sep 2020 14:37:48 -0700
+Subject: [Buildroot] [PATCH] package/glibc: ARC: use upstream 2.32
+Message-ID: <20200914213748.3953423-1-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles, All,
+ARC glibc port was merged upstream in 2.32
+There's no need to refer to github as it has the exact same version and
+can be retired in future.
 
-On 2020-09-10 17:30 -0700, Charles Hardin spake thusly:
-> From: Charles Hardin <ckhardin@gmail.com>
-> 
-> The fakeroot script does not appear to be used in any of the checked
-> in defconfig targets, but it seems that most often the post
-> fakeroot script should be done after all the packages rules have
-> been applied instead of before.
-> 
-> Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
-> a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
-> to disable a service or fixup a systemd configuration. The systemd
-> move makes sense, and this just tries to preserve the same ability
-> to fixup a rootfs after all the cmd hooks are processed.
-> 
-> Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
-> the change that instigated this reordering.
-> 
-> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+---
+ .../glibc.hash                                |  2 ++
+ package/glibc/glibc.mk                        | 20 ++++++++++---------
+ 2 files changed, 13 insertions(+), 9 deletions(-)
+ create mode 100644 package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
 
-Did you verify that our run-time testing still works:
-
-    support/testing/tests/core/test_post_scripts.py
-
-which can be tested with:
-
-    ./support/testing/run-tests \
-        -o /path/to/where/you/want/temp/stuff \
-        -d /path/to/BR2_DL_DIR \
-        -k \
-        tests.core.test_post_scripts
-
-Otherwise, this change does make sense, because we do want to allow
-users to be able to override the internal decisions.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  fs/common.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index ec6aa831d1..84e13d1b7e 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -173,11 +173,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
->  	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
->  	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
->  	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-> +	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-> +		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
->  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
->  		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
-> -	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-> -		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
->  
->  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
->  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
-
+diff --git a/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash b/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
+new file mode 100644
+index 000000000000..7fb36ad2ba7e
+--- /dev/null
++++ b/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated (fetched from Github)
++sha256  07f3804abbc6a23315f09568686c0e5bb81d714251cf537d25a36f826cae540b  glibc-2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index f2b5b4caf6ac..29f2f5fd3555 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -4,22 +4,24 @@
+ #
+ ################################################################################
+ 
+-ifeq ($(BR2_arc),y)
+-GLIBC_VERSION =  arc-2020.03-release
+-GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
+-else ifeq ($(BR2_RISCV_32),y)
+-# RISC-V 32-bit (RV32) requires glibc 2.33 or newer
+-# Until 2.33 is released, just use master
+-GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
+-GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
+-else ifeq ($(BR2_csky),y)
++ifeq ($(BR2_csky),y)
+ GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
+ GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
++ifeq ($(BR2_arc),y)
++# ARC support in upstream was merged in 2.32 release
++# This can be removed once BR upgrades upto 2.32 or later
++GLIBC_VERSION = 2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5
++else ifeq ($(BR2_RISCV_32),y)
++# RISC-V 32-bit (RV32) requires glibc 2.33 or newer
++# Until 2.33 is released, just use master
++GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
++else
+ GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
++endif
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
