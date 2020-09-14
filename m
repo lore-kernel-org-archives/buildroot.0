@@ -1,105 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Sep 2020 23:05:49 +0200
-Subject: [Buildroot] [git commit] package/altera-stapl: new package
-Message-ID: <20200914205758.1E1F588629@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 14 Sep 2020 23:06:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libxml2: fix CVE-2020-24977
+Message-ID: <20200914210644.3473075-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=644e85d66046a6c61f7dd3b484c37e6e6d25ad86
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+GNOME project libxml2 v2.9.10 and earlier have a global Buffer Overflow
+vulnerability in xmlEncodeEntitiesInternal at libxml2/entities.c.
 
-Alteras Jam STAPL Bytecode Player with 64-bit support.
-This is a user-space port of the altera-stapl driver from the linux kernel.
-The source released by Altera wasn't 64-bit compatible.
-Additionally, the linux version is much cleaner and old cruft was removed.
-
-Signed-off-by: Jochen Baltes <jochen.baltes@gmail.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-[yann.morin.1998 at free.fr: use the latest HEAD of the repository]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                             |  3 +++
- package/Config.in                      |  1 +
- package/altera-stapl/Config.in         |  8 ++++++++
- package/altera-stapl/altera-stapl.hash |  2 ++
- package/altera-stapl/altera-stapl.mk   | 21 +++++++++++++++++++++
- 5 files changed, 35 insertions(+)
+ ...of-bounds-read-with-xmllint--htmlout.patch | 40 +++++++++++++++++++
+ package/libxml2/libxml2.mk                    |  2 +
+ 2 files changed, 42 insertions(+)
+ create mode 100644 package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f754a6f341..d59d538e42 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1315,6 +1315,9 @@ N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
- F:	configs/snps_aarch64_vdk_defconfig
+diff --git a/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch b/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
+new file mode 100644
+index 0000000000..460f2a3ae6
+--- /dev/null
++++ b/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
+@@ -0,0 +1,40 @@
++From 50f06b3efb638efb0abd95dc62dca05ae67882c2 Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Fri, 7 Aug 2020 21:54:27 +0200
++Subject: [PATCH] Fix out-of-bounds read with 'xmllint --htmlout'
++
++Make sure that truncated UTF-8 sequences don't cause an out-of-bounds
++array access.
++
++Thanks to @SuhwanSong and the Agency for Defense Development (ADD) for
++the report.
++
++Fixes #178.
++
++[Retrieved from:
++https://gitlab.gnome.org/GNOME/libxml2/-/commit/50f06b3efb638efb0abd95dc62dca05ae67882c2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ xmllint.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/xmllint.c b/xmllint.c
++index f6a8e4636..c647486f3 100644
++--- a/xmllint.c
+++++ b/xmllint.c
++@@ -528,6 +528,12 @@ static void
++ xmlHTMLEncodeSend(void) {
++     char *result;
++ 
+++    /*
+++     * xmlEncodeEntitiesReentrant assumes valid UTF-8, but the buffer might
+++     * end with a truncated UTF-8 sequence. This is a hack to at least avoid
+++     * an out-of-bounds read.
+++     */
+++    memset(&buffer[sizeof(buffer)-4], 0, 4);
++     result = (char *) xmlEncodeEntitiesReentrant(NULL, BAD_CAST buffer);
++     if (result) {
++ 	xmlGenericError(xmlGenericErrorContext, "%s", result);
++-- 
++GitLab
++
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index acbdfb7728..e9379b05ae 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -13,6 +13,8 @@ LIBXML2_LICENSE_FILES = COPYING
+ LIBXML2_IGNORE_CVES += CVE-2020-7595
+ # 0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+ LIBXML2_IGNORE_CVES += CVE-2019-20388
++# 0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
++LIBXML2_IGNORE_CVES += CVE-2020-24977
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
  
-+N:	Jochen Baltes <jochen.baltes@gmail.com>
-+F:	package/altera-stapl
-+
- N:	Joel Carlson <JoelsonCarl@gmail.com>
- F:	package/c-capnproto/
- F:	package/capnproto/
-diff --git a/package/Config.in b/package/Config.in
-index 7d6ac1b33c..1cf36fa28a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -418,6 +418,7 @@ endmenu
- 	source "package/acpid/Config.in"
- 	source "package/acpitool/Config.in"
- 	source "package/aer-inject/Config.in"
-+	source "package/altera-stapl/Config.in"
- 	source "package/am335x-pru-package/Config.in"
- 	source "package/apcupsd/Config.in"
- 	source "package/avrdude/Config.in"
-diff --git a/package/altera-stapl/Config.in b/package/altera-stapl/Config.in
-new file mode 100644
-index 0000000000..ff7d23f841
---- /dev/null
-+++ b/package/altera-stapl/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_ALTERA_STAPL
-+	bool "altera-stapl"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_8 # libgpiod
-+	select BR2_PACKAGE_LIBGPIOD
-+	help
-+	  Altera Jam STAPL Bytecode Player.
-+
-+	  https://github.com/kontron/altera-stapl
-diff --git a/package/altera-stapl/altera-stapl.hash b/package/altera-stapl/altera-stapl.hash
-new file mode 100644
-index 0000000000..29e62b9d44
---- /dev/null
-+++ b/package/altera-stapl/altera-stapl.hash
-@@ -0,0 +1,2 @@
-+sha256  7f72c234f2fd0181140b6f1f09fc272eae07f20622cec7f26e3b3499ff69825a  altera-stapl-7044a63b7d1a3fc6840cd3130ec984454f1559c0.tar.gz
-+sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
-diff --git a/package/altera-stapl/altera-stapl.mk b/package/altera-stapl/altera-stapl.mk
-new file mode 100644
-index 0000000000..189b6c4ced
---- /dev/null
-+++ b/package/altera-stapl/altera-stapl.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# altera-stapl
-+#
-+################################################################################
-+
-+ALTERA_STAPL_VERSION = 7044a63b7d1a3fc6840cd3130ec984454f1559c0
-+ALTERA_STAPL_SITE = $(call github,kontron,altera-stapl,$(ALTERA_STAPL_VERSION))
-+ALTERA_STAPL_LICENSE = GPLv2+
-+ALTERA_STAPL_LICENSE_FILES = COPYING
-+ALTERA_STAPL_DEPENDENCIES = libgpiod
-+
-+define ALTERA_STAPL_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+endef
-+
-+define ALTERA_STAPL_INSTALL_TARGET_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+ # relocation truncated to fit: R_68K_GOT16O
+-- 
+2.28.0
