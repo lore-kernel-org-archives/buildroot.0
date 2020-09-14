@@ -1,237 +1,112 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 14 Sep 2020 21:34:50 +0200
-Subject: [Buildroot] [PATCH 2/3] arch: new architecture IBM s390x
-In-Reply-To: <20200912223100.GI10548@scaer>
-References: <20200910174143.311039-1-egorenar@linux.ibm.com>
- <20200910174143.311039-3-egorenar@linux.ibm.com>
- <20200912223100.GI10548@scaer>
-Message-ID: <b0282438-c8de-ac24-b5b0-a2be29ee66d5@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 14 Sep 2020 21:46:59 +0200
+Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.25
+Message-ID: <20200914194659.177826-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexander, Yann, All,
+patch merged
 
-Le 13/09/2020 ? 00:31, Yann E. MORIN a ?crit?:
-> Aleksander, All,
-> 
-> Thanks for this new architecture support!
-> 
-> Would it be possible for you to pitch in a few word how IBM is using
-> Buildroot with s390x?
-> 
-> +Romain in Cc: question about the qemu boot-test for you below...
-> 
-> On 2020-09-10 19:41 +0200, Alexander Egorenkov spake thusly:
->> New IBM s390x and Z big-endian architecture.
->>
->> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
->> ---
->>  DEVELOPERS                              |  3 +++
->>  Makefile                                |  1 +
->>  arch/Config.in                          | 13 +++++++++
->>  arch/Config.in.s390x                    | 35 +++++++++++++++++++++++++
->>  board/qemu/s390x/linux.config           | 35 +++++++++++++++++++++++++
->>  board/qemu/s390x/post-build.sh          | 11 ++++++++
->>  board/qemu/s390x/readme.txt             |  6 +++++
->>  configs/qemu_s390x_defconfig            | 11 ++++++++
->>  linux/Config.in                         |  2 +-
->>  package/cmake/Config.in                 |  3 ++-
->>  package/gcc/gcc.mk                      |  5 ++++
->>  package/go/Config.in.host               |  2 +-
->>  package/kexec/Config.in                 |  2 +-
->>  package/liburcu/Config.in               |  2 +-
->>  package/makedumpfile/Config.in          |  2 +-
->>  package/systemd/Config.in               |  1 +
->>  toolchain/toolchain-buildroot/Config.in |  6 ++---
->>  17 files changed, 131 insertions(+), 9 deletions(-)
->>  create mode 100644 arch/Config.in.s390x
->>  create mode 100644 board/qemu/s390x/linux.config
->>  create mode 100755 board/qemu/s390x/post-build.sh
->>  create mode 100644 board/qemu/s390x/readme.txt
->>  create mode 100644 configs/qemu_s390x_defconfig
-> 
-> This patch does too many things; it should be split in more
-> self-contained patches:
-> 
->  1. add the basic arch support:
->         DEVELOPERS                              |  3 +++
->         Makefile                                |  1 +
->         arch/Config.in                          | 13 +++++++++
->         arch/Config.in.s390x                    | 35 +++++++++++++++++++++++++
->     Note that BR2_s390x should probably select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
->     in this first patch, to only rely on an external toolchain as a
->     first step (makes a simpler, smaller patch, easier to review)
-> 
->  2. add support for the internal toolchain:
->         package/gcc/gcc.mk                      |  5 ++++
->         toolchain/toolchain-buildroot/Config.in |  6 ++---
->     and then BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT can now be dropped.
-> 
->  3. add bzImage support in Linux:
->         linux/Config.in                         |  2 +-
-> 
->  4. add the defconfig:
->         board/qemu/s390x/linux.config           | 35 +++++++++++++++++++++++++
->         board/qemu/s390x/post-build.sh          | 11 ++++++++
->         board/qemu/s390x/readme.txt             |  6 +++++
->         configs/qemu_s390x_defconfig            | 11 ++++++++
-> 
->  6. one patch for each of the packages that gains an s390x capability:
->         package/cmake/Config.in                 |  3 ++-
->         package/go/Config.in.host               |  2 +-
->         package/kexec/Config.in                 |  2 +-
->         package/liburcu/Config.in               |  2 +-
->         package/makedumpfile/Config.in          |  2 +-
->         package/systemd/Config.in               |  1 +
-> 
-> See also below for more tidbits...
-> 
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index b1e60e505f..5e6e8c330c 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -146,6 +146,9 @@ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
->>  F:	package/makedumpfile/
->>  F:	package/multipath-tools/
->>  
->> +N:	Alexander Egorenkov <egorenar@linux.ibm.com>
->> +F:	arch/Config.in.s390x
-> 
-> Please also add board/qemu/s390x/ and configs/qemu_s390x_defconfig.
-> 
->>  N:	Alexander Kurz <akurz@blala.de>
->>  F:	package/minimodem/
->>  
->> diff --git a/Makefile b/Makefile
->> index 9648fa58d8..384bfe3fe9 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -445,6 +445,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
->>  	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->>  	-e s/riscv.*/riscv/ \
->>  	-e s/sh.*/sh/ \
->> +	-e s/s390x/s390/ \
->>  	-e s/microblazeel/microblaze/)
-> 
-> I did not realise that we still had this ugliness... I think that we
-> should ultimately move that to the Kconfig side rather than compute that
-> in the Makefile... But that's not to be part of your series.
-> 
-> [--SNIP--]
->> diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
->> new file mode 100644
->> index 0000000000..26db901df0
->> --- /dev/null
->> +++ b/arch/Config.in.s390x
->> @@ -0,0 +1,35 @@
->> +
->> +choice
->> +	prompt "Target Architecture Variant"
->> +	default BR2_s390x_z13
-> 
-> The default of a choice is always the first item that is available, so
-> no need to provide it in this case.
-> 
->> +	depends on BR2_s390x
->> +	help
->> +	  Specific CPU variant to use
->> +
->> +config BR2_s390x_z13
->> +	bool "z13"
->> +	depends on BR2_s390x
->> +
->> +config BR2_s390x_z14
->> +	bool "z14"
->> +	depends on BR2_s390x
->> +
->> +config BR2_s390x_z15
->> +	bool "z15"
->> +	depends on BR2_s390x
->> +
->> +endchoice
-> [--SNIP--]
->> diff --git a/board/qemu/s390x/post-build.sh b/board/qemu/s390x/post-build.sh
->> new file mode 100755
->> index 0000000000..bf83a002c2
->> --- /dev/null
->> +++ b/board/qemu/s390x/post-build.sh
->> @@ -0,0 +1,11 @@
->> +#!/bin/sh
->> +
->> +set -u
->> +set -e
->> +
->> +# Add a console on tty1
->> +if [ -e ${TARGET_DIR}/etc/inittab ]; then
->> +    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
->> +	sed -i '/GENERIC_SERIAL/a\
->> +tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
->> +fi
-> 
-> Why can't you set Buildroot's option: BR2_TARGET_GENERIC_GETTY_PORT="tty1" ?
-> 
->> diff --git a/board/qemu/s390x/readme.txt b/board/qemu/s390x/readme.txt
->> new file mode 100644
->> index 0000000000..13e7ae80a3
->> --- /dev/null
->> +++ b/board/qemu/s390x/readme.txt
->> @@ -0,0 +1,6 @@
->> +Run the emulation with:
->> +
->> +  qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 \
->> +    -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
->> +    -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio \
->> +    -net nic,model=virtio -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22
-> 
-> Hint: if you end that line with a comment naming the defconfig, it will
-> be automatically boot-tested in our weekly gitlab-ci pipelines.
-> 
-> Romain ^^^^, can you xonfirm this is how tit works? And that multi-line
-> are supported (IIRC, they should be)?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...Makefile-am-install-mc-lib-only-once.patch | 60 -------------------
+ package/mc/mc.hash                            |  4 +-
+ package/mc/mc.mk                              |  2 +-
+ 3 files changed, 3 insertions(+), 63 deletions(-)
+ delete mode 100644 package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
 
-Yes, this qemu command line should end with the defconfig file name to allow
-runtime testing with qemu (and multi-line is supported):
-
-# qemu_s390x_defconfig
-
-Indeed, this behavior should be documented in the manual at some point.
-
-Best regards,
-Romain
-
-> 
->> diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
->> new file mode 100644
->> index 0000000000..7b4e4acc3d
->> --- /dev/null
->> +++ b/configs/qemu_s390x_defconfig
->> @@ -0,0 +1,11 @@
->> +BR2_s390x=y
->> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->> +BR2_SYSTEM_DHCP="eth0"
->> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/s390x/post-build.sh"
->> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
->> +BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
->> +BR2_LINUX_KERNEL=y
-> 
-> This will by default use the latest kernel version known by Buildroot,
-> so when we update the kernel in Buildroot, this defconfig would use the
-> newer version of the kernel.
-> 
-> However, we prefer that defconfigs are known-tested to work, and thus
-> that they use a pinned version of the kernel:
-> 
->     BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->     BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
-> 
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/s390x/linux.config"
-> 
-> Any reason we can't use a defconfig in the kerenl tree?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
+deleted file mode 100644
+index be9bf7a40..000000000
+--- a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From afb09f7cd7024484845ade25e15b8b93d6cf2d2c Mon Sep 17 00:00:00 2001
+-From: Sergei Trofimovich <slyfox@gentoo.org>
+-Date: Tue, 3 Mar 2020 09:26:12 +0000
+-Subject: [PATCH] Ticket #4070: misc/Makefile.am: install mc.lib only once.
+-
+-Before the change mc.lib was installed twice due to being
+-in two _DATA variables:
+-
+-dist_pkgdata_DATA = \
+-        mc.lib
+-
+-pkgdata_DATA = \
+-        $(dist_pkgdata_DATA) \
+-        $(PKGDATA_OUT)
+-
+-This causes occasional install failures when two parallel
+-`/usr/bin/install` calls race in installing the file:
+-
+-$ make -j20 DESTDIR=/var/tmp/portage/app-misc/mc-4.8.24/image install
+-...
+- /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
+-    -c -m 644 mc.lib '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
+- /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
+-    -c -m 644 mc.lib mc.charsets '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
+-...
+- /usr/bin/install: cannot create regular file
+-   '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc/mc.lib': File exists
+-
+-After the change mc.lib is present only in dist_pkgdata_DATA.
+-
+-Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
+-Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/MidnightCommander/mc/commit/afb09f7cd7024484845ade25e15b8b93d6cf2d2c]
+----
+- misc/Makefile.am | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/misc/Makefile.am b/misc/Makefile.am
+-index 8ed1826136..24f4a0e1ad 100644
+---- a/misc/Makefile.am
+-+++ b/misc/Makefile.am
+-@@ -17,7 +17,6 @@ dist_pkgdata_DATA = \
+- 	mc.lib
+- 
+- pkgdata_DATA = \
+--	$(dist_pkgdata_DATA) \
+- 	$(PKGDATA_OUT)
+- 
+- SCRIPTS_IN = \
+-@@ -54,7 +53,6 @@ EXTRA_DIST = \
+- 	$(LIBFILES_SCRIPT) \
+- 	$(SCRIPTS_IN) \
+- 	$(noinst_DATA) \
+--	$(dist_pkgdata_DATA) \
+- 	$(PKGDATA_IN)
+- 
+- install-data-hook:
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 687c356ef..208d0beda 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,4 +1,4 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.24.sha256
+-sha256  859f1cc070450bf6eb4d319ffcb6a5ac29deb0ac0d81559fb2e71242b1176d46  mc-4.8.24.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.25.sha256
++sha256  ffc19617f20ebb23330acd3998b7fd559a042d172fa55746d53d246697b2548a  mc-4.8.25.tar.xz
+ # sha256 locally computed:
+ sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index b689e50e7..64a54ce6b 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MC_VERSION = 4.8.24
++MC_VERSION = 4.8.25
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPL-3.0+
+-- 
+2.25.1
