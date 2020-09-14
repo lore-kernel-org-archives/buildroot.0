@@ -1,112 +1,81 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 14 Sep 2020 21:46:59 +0200
-Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.25
-Message-ID: <20200914194659.177826-1-francois.perrad@gadz.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 14 Sep 2020 21:53:16 +0200
+Subject: [Buildroot] [PATCH v2 00/12] Add the support for Clang
+ cross-compiler
+In-Reply-To: <6b09950c-b36e-fdab-ff93-503445e7cddb@mind.be>
+References: <20190907094027.9537-1-romain.naour@smile.fr>
+ <6b09950c-b36e-fdab-ff93-503445e7cddb@mind.be>
+Message-ID: <7d8a4fff-2ca5-4dc1-fe8d-098422070519@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-patch merged
+Hi Arnout,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...Makefile-am-install-mc-lib-only-once.patch | 60 -------------------
- package/mc/mc.hash                            |  4 +-
- package/mc/mc.mk                              |  2 +-
- 3 files changed, 3 insertions(+), 63 deletions(-)
- delete mode 100644 package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
+Le 29/08/2020 ? 20:53, Arnout Vandecappelle a ?crit?:
+>  Hi Romain,
+> 
+>  After almost a year, let's try to make some progress on this series :-)
+> 
+> On 07/09/2019 11:40, Romain Naour wrote:
+> [snip]
+>> Recently, I've tried to build an aarch64 Linux kernel (5.2.7) with
+>> Clang and it worked under Qemu [3]. I also tested for x86_64 but we need
+>> the upcomming llvm/clang version 9 to build the kernel [4].
+> 
+>  Since we waited long enough, this is now in Buildroot :-)
 
-diff --git a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch b/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
-deleted file mode 100644
-index be9bf7a40..000000000
---- a/package/mc/0001-Ticket-4070-misc-Makefile-am-install-mc-lib-only-once.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From afb09f7cd7024484845ade25e15b8b93d6cf2d2c Mon Sep 17 00:00:00 2001
--From: Sergei Trofimovich <slyfox@gentoo.org>
--Date: Tue, 3 Mar 2020 09:26:12 +0000
--Subject: [PATCH] Ticket #4070: misc/Makefile.am: install mc.lib only once.
--
--Before the change mc.lib was installed twice due to being
--in two _DATA variables:
--
--dist_pkgdata_DATA = \
--        mc.lib
--
--pkgdata_DATA = \
--        $(dist_pkgdata_DATA) \
--        $(PKGDATA_OUT)
--
--This causes occasional install failures when two parallel
--`/usr/bin/install` calls race in installing the file:
--
--$ make -j20 DESTDIR=/var/tmp/portage/app-misc/mc-4.8.24/image install
--...
-- /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
--    -c -m 644 mc.lib '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
-- /usr/lib/portage/python3.6/ebuild-helpers/xattr/install \
--    -c -m 644 mc.lib mc.charsets '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc'
--...
-- /usr/bin/install: cannot create regular file
--   '/var/tmp/portage/app-misc/mc-4.8.24/image/usr/share/mc/mc.lib': File exists
--
--After the change mc.lib is present only in dist_pkgdata_DATA.
--
--Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
--Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/MidnightCommander/mc/commit/afb09f7cd7024484845ade25e15b8b93d6cf2d2c]
-----
-- misc/Makefile.am | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/misc/Makefile.am b/misc/Makefile.am
--index 8ed1826136..24f4a0e1ad 100644
----- a/misc/Makefile.am
--+++ b/misc/Makefile.am
--@@ -17,7 +17,6 @@ dist_pkgdata_DATA = \
-- 	mc.lib
-- 
-- pkgdata_DATA = \
---	$(dist_pkgdata_DATA) \
-- 	$(PKGDATA_OUT)
-- 
-- SCRIPTS_IN = \
--@@ -54,7 +53,6 @@ EXTRA_DIST = \
-- 	$(LIBFILES_SCRIPT) \
-- 	$(SCRIPTS_IN) \
-- 	$(noinst_DATA) \
---	$(dist_pkgdata_DATA) \
-- 	$(PKGDATA_IN)
-- 
-- install-data-hook:
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 687c356ef..208d0beda 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.24.sha256
--sha256  859f1cc070450bf6eb4d319ffcb6a5ac29deb0ac0d81559fb2e71242b1176d46  mc-4.8.24.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.25.sha256
-+sha256  ffc19617f20ebb23330acd3998b7fd559a042d172fa55746d53d246697b2548a  mc-4.8.25.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index b689e50e7..64a54ce6b 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.24
-+MC_VERSION = 4.8.25
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
--- 
-2.25.1
+We are in late about llvm version, the version 11 should be released anytime soon.
+
+> 
+>> This new version add the support of "asm-goto" which was the last
+>> missing part to be able to build the Linux kernel on x86_64 [5].
+>> But for theses tests, only the kernel was built with Clang.
+>>
+>> While testing the x86_64 kernel and it's rootfs built with Clang under Qemu,
+>> I had a runtime issue during the userspace boot process (Busybox's init).
+>> While searching about the issue, I discover the lowRISC blog from Lu?s Marques
+>> about the same issue and tested the patch he contributed to the Busybox project
+>> (Thanks!).
+>>
+>> So, this series is about to complete the integration of Clang as cross-compiler
+>> by using a toolchain-wrapper and fixing some build system infrastructure
+>> (cmake, meson) to use Clang instead of GCC.
+> 
+>  I started integrating the series, but then I had some fundamental problems with
+> the core patch itself. So I stopped and pushed my results to
+> https://gitlab.com/arnout/buildroot branch clang-as-cross-compiler. I put my
+> changes as squash patches rather than changing the original patches, so you can
+> easily take over from there. Note that I haven't tested my rebased and modified
+> branch (just a build test immediately after applying the modified patch), so
+> there may still be some rebase f**up there.
+> 
+>  I'll put my feedback in the individual patches.
+
+Thanks!
+
+I'm not sure how many free time I will able to devote to this series.
+I recently did a test with llvm/clang 10 for risv64 [1] but the series needs
+some work to be upstreamable...
+
+I'd like to be able to work on this series as a full day job :)
+
+[1] https://asciinema.org/a/DDspJVktlVl1Rh97dwLgtYcRY
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
+>>
+>> Add this new experimental option into "Advanced" menu since we are expecting
+>> some build and runtime issues for number of packages (bootloaders, kernel).
+>>
+>> For now, Clang cross-compiler can only be use as internal toolchain,
+>> so it is build from the source which take a long time...
+> [snip]
+> 
