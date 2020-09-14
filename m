@@ -1,45 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 13:21:01 +0200
-Subject: [Buildroot] Running Weston on stm32mp157c-dk2
-In-Reply-To: <CAOiXNkDBjvTj=ND=qVvaz+vk2H8LBiE3dm0HCFK=9a+Y8NBf1A@mail.gmail.com>
-References: <CAOiXNkAuzbY-8VLckB71VgamhH9i80CK3TX0TGLLj0z_0iTygQ@mail.gmail.com>
- <20200909221101.327887ca@windsurf.hq.k.grp>
- <CAOiXNkAW-_HZPMGzZSezjNDu=wyKN6eiiokfOXBkBaAce+SMLg@mail.gmail.com>
- <20200910114133.43bb3e53@windsurf.hq.k.grp>
- <CAOiXNkCVYCW=rf6pN5-e0D7NZWhoOry0ZwtPDEOPna_4G2ss6g@mail.gmail.com>
- <CAOiXNkDBjvTj=ND=qVvaz+vk2H8LBiE3dm0HCFK=9a+Y8NBf1A@mail.gmail.com>
-Message-ID: <20200914132101.536ed541@windsurf.home>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 14 Sep 2020 04:56:50 -0700
+Subject: [Buildroot] [PATCH v1 5/5] package/docker-proxy: bump to latest
+ commit hash 6d6f28
+In-Reply-To: <20200914084123.058b6aed@windsurf.home>
+References: <20200913001659.472814-1-christian@paral.in>
+ <20200913001659.472814-5-christian@paral.in>
+ <20200914084123.058b6aed@windsurf.home>
+Message-ID: <CA+h8R2ppc0aFtxG4H2nLmohdzyqYpvPVLd3DSOprCjeCZR31hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 14 Sep 2020 11:10:41 +0200
-Andrey Nechypurenko <andreynech@gmail.com> wrote:
+We are bumping to latest, the previous doesn't matter.
 
-> Selecting the gcnano-binaries package leads to the following compile errors.
-> This time "make clean" does not help unfortunately :-) .
-> If someone has an idea how to fix these errors, I would appreciate the hint.
 
-Which Linux kernel are you using ?
+On Sun, Sep 13, 2020, 11:41 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Indeed, the gcnano-binaries kernel module is tested by ST to work with
-the ST-provided kernel.
+> I have not applied this patch, because it doesn't apply to master. Your
+> "previous" version of docker-proxy doesn't match the one we have in
+> master. Of course, I could have fixed up the trivial conflict myself,
+> but rather than blindly doing that I wanted to make sure we haven't
+> missed something.
+>
 
-However, Buildroot's stm32mp157c_dk2_defconfig uses the upstream Linux
-kernel. With some effort, it should be possible to get the
-gcnano-binaries kernel module to build/work with the upstream kernel,
-but I'm not too surprised it is not "immediate".
+I'll submit another revision of this patch if needed.
 
-Otherwise, you can switch to the ST-provided kernel.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200914/fdc8c5be/attachment.html>
