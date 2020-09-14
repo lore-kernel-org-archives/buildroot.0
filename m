@@ -1,46 +1,117 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Mon, 14 Sep 2020 16:47:27 +0200
-Subject: [Buildroot] [PATCH] package/systemd: bump version to 246.5
-Message-ID: <20200914144727.867179-1-nolange79@gmail.com>
+From: Stefan =?ISO-8859-1?Q?M=FCller?= <s.mueller@zzeroo.com>
+Date: Mon, 14 Sep 2020 17:35:09 +0200
+Subject: [Buildroot] Error: host-python3-3.8.5;
+ ModuleNotFoundError: No module named 'msvcrt'
+Message-ID: <36d2e48cec0b9e6c8ed130745db2c9bcfe383c95.camel@zzeroo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/systemd/systemd.hash | 4 ++--
- package/systemd/systemd.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 4672e43422..cad249199c 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,6 +1,6 @@
- # sha256 locally computed
--sha256  4268bd88037806c61c5cd1c78d869f7f20bf7e7368c63916d47b5d1c3411bd6f  systemd-246.tar.gz
-+sha256  f45c5a98d3be7dd05ed7f1e1a0ab00c7ba52602aa2dc42615bf74be61fcbe178  systemd-246.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
--sha256  a5ce42cd4614b086ef75aae6663f88f55bdf9e09a83c615c636ca540282528cf  README
-+sha256  b142af99a3d950fb465326d6fd5a49d348523dc0d216682880527264d0a011e9  README
- sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index d72cb58693..30e28adf95 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 246
--SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
-+SYSTEMD_VERSION = 246.5
-+SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
- SYSTEMD_INSTALL_STAGING = YES
+
+I try to build my buildroot project with the latest buildroot master on a arch linux box.
+I get an error while building host-python3. `make clean` and `make
+host-python-dirclean` don't solve the issue.
+
+   Traceback (most recent call last):
+     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
+   3.8.5/Lib/subprocess.py", line 64, in <module>
+       import msvcrt
+   ModuleNotFoundError: No module named 'msvcrt'
+
+   During handling of the above exception, another exception occurred:
+
+   Traceback (most recent call last):
+     File "./setup.py", line 13, in <module>
+       from distutils import log
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/_distutils_hack/__init__.py", line 82, in create_module
+       return importlib.import_module('._distutils', 'setuptools')
+     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
+   3.8.5/Lib/importlib/__init__.py", line 127, in import_module
+       return _bootstrap._gcd_import(name[level:], package, level)
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/setuptools/__init__.py", line 8, in <module>
+       import _distutils_hack.override  # noqa: F401
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/_distutils_hack/override.py", line 1, in <module>
+       __import__('_distutils_hack').do_override()
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/_distutils_hack/__init__.py", line 64, in do_override
+       ensure_local_distutils()
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/_distutils_hack/__init__.py", line 51, in
+   ensure_local_distutils
+       core = importlib.import_module('distutils.core')
+     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
+   3.8.5/Lib/importlib/__init__.py", line 127, in import_module
+       return _bootstrap._gcd_import(name[level:], package, level)
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/setuptools/_distutils/core.py", line 16, in <module>
+       from distutils.dist import Distribution
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/setuptools/_distutils/dist.py", line 19, in <module>
+       from distutils.util import check_environ, strtobool,
+   rfc822_escape
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/setuptools/_distutils/util.py", line 14, in <module>
+       from distutils.spawn import spawn
+     File "/home/smueller/.local/lib/python3.8/site-
+   packages/setuptools/_distutils/spawn.py", line 11, in <module>
+       import subprocess
+     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
+   3.8.5/Lib/subprocess.py", line 69, in <module>
+       import _posixsubprocess
+   ModuleNotFoundError: No module named '_posixsubprocess'
+   make[2]: *** [Makefile:616: sharedmods] Error 1
+   make[1]: *** [package/pkg-generic.mk:250: /mnt/src/Buildroot/xmz-
+   firmware/make/build/host-python3-3.8.5/.stamp_built] Error 2
+   make: *** [Makefile:23: _all] Error 2
+
+
 -- 
-2.28.0
+mit freundlichem Gru?,
+Yours sincerely,
+Stefan M?ller
+- IT Systemkaufmann -
+
+Stefan M?ller - Hard.- und Software Entwicklung
+Am Wasserwerk 4
+04654 Frohburg
+
+Tel:	+49 160 97 96 65 28
+Mail:	s.mueller at zzeroo.com
+Web:	https://zzeroo.com
+PGP:	9A6C 0EC3 6C0B ED42 F61A  AD99 E27C 8E9D F3FE 2E7C
+	https://www.zzeroo.com/imprint
+IBAN:	DE74100110012620762039
+BIC:	NTSBDEB1XXX
+
+USt-IdNr.: DE325255754
+FA Grimma: 238/251/16346
+
+Wichtig!! 
+Diese email kann Betriebs- und Gesch?ftsgeheimnisse unterliegende oder 
+sonstige vertrauliche Informationen enthalten. Sollten Sie diese email 
+irrt?mlich erhalten haben, ist Ihnen eine Kenntnisnahme des Inhalts,
+eine Vervielf?ltigung oder Weitergabe der email ausdr?cklich untersagt.
+Bitte benachrichtigen Sie uns und vernichten Sie die email.
+Vielen Dank.
+ 
+Important!! 
+The information contained in this email message may be confidential 
+information. If you are not the intended recipient, any use,
+interference with, disclosure or copying of this material is
+unauthorised and prohibited. 
+Please inform us immediately and destroy the email. 
+Thank you for your cooperation
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200914/b31c906d/attachment.asc>
