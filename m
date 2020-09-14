@@ -1,47 +1,84 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Sep 2020 22:47:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcap-ng: bump to version 0.8
-Message-ID: <20200914204717.3461244-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Sep 2020 22:52:01 +0200
+Subject: [Buildroot] [PATCH buildroot-test v2] scripts/autobuild-run:
+ create host-distro file
+In-Reply-To: <20200914204101.16172-1-heiko.thiery@gmail.com>
+References: <20200914204101.16172-1-heiko.thiery@gmail.com>
+Message-ID: <20200914205201.GA19902@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release adds support for ambient capabilities and V3 filesystem
-capabilities.
+Heiko, Thomas, All,
 
-A bug in the python bindings was also fixed which prevented use of
-capng_updatev.
+On 2020-09-14 22:41 +0200, Heiko Thiery spake thusly:
+> Sometimes autobuilder failures occur only on a specific distribution. To
+> ease the research for the maintainer/developers add the host distribution
+> information to the result archive.
+> 
+> The distribution information comes from '/etc/os-release' (or
+> '/usr/lib/os-release') that seems to be present on the most common distros:
+> 
+> Debian: https://manpages.debian.org/buster/systemd/os-release.5.en.html
+> Ubuntu: http://manpages.ubuntu.com/manpages/bionic/man5/os-release.5.html
+> Red Red: https://www.freedesktop.org/software/systemd/man/os-release.html
+> Open-Suse: https://en.opensuse.org/SDB:Find_openSUSE_version
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libcap-ng/libcap-ng.hash | 2 +-
- package/libcap-ng/libcap-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index d1c7034c08..d52f466084 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  85815c711862d01a440db471f12fba462c9949e923966f5859607e652d9c0ae9  libcap-ng-0.7.11.tar.gz
-+sha256  f14d23b60ae1465b032e4e8cbd4112006572c69a6017d55d5d3c6aad622a9e21  libcap-ng-0.8.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 914a72333b..03949d740a 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCAP_NG_VERSION = 0.7.11
-+LIBCAP_NG_VERSION = 0.8
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+Regards,
+Yann E. MORIN.
+
+> ---
+> v2:
+>  - implement comments from Yann
+>  - copy the whole file (os-release) as host-distro to the result archive
+>  - reword the commit log
+> 
+> ---
+>  scripts/autobuild-run | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index f657d49..d4644d6 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -699,6 +699,23 @@ class Builder:
+>          with open(os.path.join(self.resultdir, "submitter"), "w+") as submitterf:
+>              submitterf.write(self.submitter)
+>  
+> +        def get_os_release_path():
+> +            for p in ['/etc/os-release', '/usr/lib/os-release']:
+> +                if os.path.exists(p):
+> +                    return p
+> +            return None
+> +
+> +        def save_host_distro_info():
+> +            host_distro = os.path.join(self.resultdir, "host-distro")
+> +            os_release = get_os_release_path()
+> +            if os_release is None:
+> +                with open(host_distro, "w") as f:
+> +                    f.write('Unknown')
+> +            else:
+> +                shutil.copyfile(os_release, host_distro)
+> +
+> +        save_host_distro_info()
+> +
+>          # Yes, shutil.make_archive() would be nice, but it doesn't exist
+>          # in Python 2.6.
+>          ret = subprocess.call(["tar", "cjf", "results.tar.bz2", "results"],
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
