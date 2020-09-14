@@ -1,41 +1,124 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Sep 2020 00:00:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpfm4: disable examples
-Message-ID: <20200914220015.3544577-1-fontaine.fabrice@gmail.com>
+From: Charles Hardin <ckhardin@gmail.com>
+Date: Mon, 14 Sep 2020 15:44:10 -0700
+Subject: [Buildroot] [PATCH 1/1] fs/common.mk: move
+ BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
+In-Reply-To: <20200914212008.GC19902@scaer>
+References: <20200911003002.5895-1-charles.hardin@chargepoint.com>
+ <20200914212008.GC19902@scaer>
+Message-ID: <CAN=fXj2NiUGOcw9srG8dVSg0yE-WhQoj9FHLHNaTW18BsHxvqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do not build examples to avoid a build failure on rtop example which
-depends on ncurses and has been added in version 4.11.0 with
-https://sourceforge.net/p/perfmon2/libpfm4/ci/7d1ec562ddbb2af2d6b7af8cec78b03213a3e4ce
+Yes - inline
 
-/tmp/instance-0/output-1/host/bin/arm-linux-gcc   -I. -I/tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../include -DCONFIG_PFMLIB_DEBUG -DCONFIG_PFMLIB_OS_LINUX -I. -D_GNU_SOURCE -pthread -o rtop  rtop.o perf_util.o /tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../lib/libpfm.a  -lpthread -lncurses -ltinfo -lm
-/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find -ltinfo
+On Mon, Sep 14, 2020 at 2:20 PM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/8ad23a82bcf32cd22256f9984a8f4cfa45951eee
+> Charles, All,
+>
+> On 2020-09-10 17:30 -0700, Charles Hardin spake thusly:
+> > From: Charles Hardin <ckhardin@gmail.com>
+> >
+> > The fakeroot script does not appear to be used in any of the checked
+> > in defconfig targets, but it seems that most often the post
+> > fakeroot script should be done after all the packages rules have
+> > been applied instead of before.
+> >
+> > Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
+> > a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
+> > to disable a service or fixup a systemd configuration. The systemd
+> > move makes sense, and this just tries to preserve the same ability
+> > to fixup a rootfs after all the cmd hooks are processed.
+> >
+> > Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
+> > the change that instigated this reordering.
+> >
+> > Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+>
+> Did you verify that our run-time testing still works:
+>
+>     support/testing/tests/core/test_post_scripts.py
+>
+> which can be tested with:
+>
+>     ./support/testing/run-tests \
+>         -o /path/to/where/you/want/temp/stuff \
+>         -d /path/to/BR2_DL_DIR \
+>         -k \
+>         tests.core.test_post_scripts
+>
+>
+vagrant$ ./support/testing/run-tests -o ~/dumpster -d ~/build/buildroot-dl
+-k tests.core.test_post_scripts
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libpfm4/libpfm4.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+22:35:57 TestPostScripts                          Starting
 
-diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-index 3692ebabe7..2144766d96 100644
---- a/package/libpfm4/libpfm4.mk
-+++ b/package/libpfm4/libpfm4.mk
-@@ -14,7 +14,8 @@ LIBPFM4_INSTALL_STAGING = YES
- LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
- 	CC="$(TARGET_CC)" LDCONFIG=true \
- 	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y) \
--	DBG=
-+	DBG= \
-+	EXAMPLE_DIRS=
- 
- define LIBPFM4_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
--- 
-2.28.0
+22:36:03 TestPostScripts                          Building
+
+22:41:26 TestPostScripts                          Building done
+
+22:41:26 TestPostScripts                          Cleaning up
+
+.
+
+----------------------------------------------------------------------
+
+Ran 1 test in 328.762s
+
+
+OK
+
+Otherwise, this change does make sense, because we do want to allow
+> users to be able to override the internal decisions.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  fs/common.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/common.mk b/fs/common.mk
+> > index ec6aa831d1..84e13d1b7e 100644
+> > --- a/fs/common.mk
+> > +++ b/fs/common.mk
+> > @@ -173,11 +173,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME):
+> $$(ROOTFS_$(2)_DEPENDENCIES)
+> >       echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> >       PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers
+> $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+> >       echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE)
+> $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> > +     $$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+> > +             $$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+> >       $$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+> >               echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script
+> $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+> >               echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR)
+> $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+> > -     $$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+> > -             $$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+> >
+> >       $$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+> >               $$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200914/7ade830e/attachment.html>
