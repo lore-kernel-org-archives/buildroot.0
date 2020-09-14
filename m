@@ -1,45 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 21:10:08 +0200
-Subject: [Buildroot] [git commit] package/libnpupnp: bump to version 4.0.11
-Message-ID: <20200914190150.7104183A90@busybox.osuosl.org>
+Date: Mon, 14 Sep 2020 21:10:26 +0200
+Subject: [Buildroot] [git commit] package/mutt: bump to version 1.14.7
+Message-ID: <20200914190150.947C1821BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f9203eaa80faa0835cbd28832e5074f0667ff40
+commit: https://git.buildroot.net/buildroot/commit/?id=af757d959431eb57efe7de1fa8e8b09de5790f3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This is a bug-fix release, fixing a variety of small issues.
+
+https://gitlab.com/muttmua/mutt/raw/stable/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnpupnp/libnpupnp.hash | 4 ++--
- package/libnpupnp/libnpupnp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
-index 3bad603269..53a0c16fd3 100644
---- a/package/libnpupnp/libnpupnp.hash
-+++ b/package/libnpupnp/libnpupnp.hash
-@@ -1,5 +1,5 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.10.tar.gz.sha256
--sha256  a682d0584d79acd5a4d551ae18efc83cb0765624da27fb0edcd47e3fb94418f9  libnpupnp-4.0.10.tar.gz
-+# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.11.tar.gz.sha256
-+sha256  15b73a5197e649afe44dd15002be131b4b0e20a2b2e9b7ea4a2000b9644fefae  libnpupnp-4.0.11.tar.gz
- 
- # Hash for license file:
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
-index 4575ad40f2..23cc52c169 100644
---- a/package/libnpupnp/libnpupnp.mk
-+++ b/package/libnpupnp/libnpupnp.mk
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index e3007370a4..23e5dd0ff1 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  47972a0152b81b9f67ff322a0a6682b914c15545bfdeac6bcc2f2c0bf9361844  mutt-1.14.6.tar.gz
++sha256  e4f507b133253cb5eef27996b8668956cdf9caac622cf8adad13f0f9a4eda864  mutt-1.14.7.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 6c85202fc0..0ff03724c1 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNPUPNP_VERSION = 4.0.10
-+LIBNPUPNP_VERSION = 4.0.11
- LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBNPUPNP_LICENSE = BSD-3-Clause
- LIBNPUPNP_LICENSE_FILES = COPYING
+-MUTT_VERSION = 1.14.6
++MUTT_VERSION = 1.14.7
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
