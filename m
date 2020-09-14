@@ -1,69 +1,41 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Mon, 14 Sep 2020 14:37:48 -0700
-Subject: [Buildroot] [PATCH] package/glibc: ARC: use upstream 2.32
-Message-ID: <20200914213748.3953423-1-vgupta@synopsys.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 Sep 2020 00:00:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libpfm4: disable examples
+Message-ID: <20200914220015.3544577-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC glibc port was merged upstream in 2.32
-There's no need to refer to github as it has the exact same version and
-can be retired in future.
+Do not build examples to avoid a build failure on rtop example which
+depends on ncurses and has been added in version 4.11.0 with
+https://sourceforge.net/p/perfmon2/libpfm4/ci/7d1ec562ddbb2af2d6b7af8cec78b03213a3e4ce
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+/tmp/instance-0/output-1/host/bin/arm-linux-gcc   -I. -I/tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../include -DCONFIG_PFMLIB_DEBUG -DCONFIG_PFMLIB_OS_LINUX -I. -D_GNU_SOURCE -pthread -o rtop  rtop.o perf_util.o /tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../lib/libpfm.a  -lpthread -lncurses -ltinfo -lm
+/tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find -ltinfo
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8ad23a82bcf32cd22256f9984a8f4cfa45951eee
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../glibc.hash                                |  2 ++
- package/glibc/glibc.mk                        | 20 ++++++++++---------
- 2 files changed, 13 insertions(+), 9 deletions(-)
- create mode 100644 package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
+ package/libpfm4/libpfm4.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash b/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
-new file mode 100644
-index 000000000000..7fb36ad2ba7e
---- /dev/null
-+++ b/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated (fetched from Github)
-+sha256  07f3804abbc6a23315f09568686c0e5bb81d714251cf537d25a36f826cae540b  glibc-2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5.tar.gz
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index f2b5b4caf6ac..29f2f5fd3555 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -4,22 +4,24 @@
- #
- ################################################################################
+diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
+index 3692ebabe7..2144766d96 100644
+--- a/package/libpfm4/libpfm4.mk
++++ b/package/libpfm4/libpfm4.mk
+@@ -14,7 +14,8 @@ LIBPFM4_INSTALL_STAGING = YES
+ LIBPFM4_FLAGS = SYS=Linux ARCH=$(BR2_ARCH) \
+ 	CC="$(TARGET_CC)" LDCONFIG=true \
+ 	CONFIG_PFMLIB_SHARED=$(if $(BR2_STATIC_LIBS),n,y) \
+-	DBG=
++	DBG= \
++	EXAMPLE_DIRS=
  
--ifeq ($(BR2_arc),y)
--GLIBC_VERSION =  arc-2020.03-release
--GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
--else ifeq ($(BR2_RISCV_32),y)
--# RISC-V 32-bit (RV32) requires glibc 2.33 or newer
--# Until 2.33 is released, just use master
--GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
--GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
--else ifeq ($(BR2_csky),y)
-+ifeq ($(BR2_csky),y)
- GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
- GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
-+ifeq ($(BR2_arc),y)
-+# ARC support in upstream was merged in 2.32 release
-+# This can be removed once BR upgrades upto 2.32 or later
-+GLIBC_VERSION = 2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5
-+else ifeq ($(BR2_RISCV_32),y)
-+# RISC-V 32-bit (RV32) requires glibc 2.33 or newer
-+# Until 2.33 is released, just use master
-+GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
-+else
- GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
-+endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+ define LIBPFM4_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(LIBPFM4_FLAGS)
 -- 
-2.25.1
+2.28.0
