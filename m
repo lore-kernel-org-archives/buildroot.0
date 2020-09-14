@@ -1,34 +1,40 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 14 Sep 2020 11:47:04 +0200
-Subject: [Buildroot] [PATCH] package/localedef: depend host build on python3
-Message-ID: <20200914094703.2788070-1-buildroot@heine.tech>
+Date: Mon, 14 Sep 2020 12:20:43 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-09-13
+In-Reply-To: <20200914071215.44B0E203D8@silver.osuosl.org>
+References: <20200914071215.44B0E203D8@silver.osuosl.org>
+Message-ID: <406f8fd2-5cb4-fd7a-1bf4-2835f1b132de@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-needed for parallel build.
+Hi,
 
-fixes:
- - http://lists.busybox.net/pipermail/buildroot/2020-September/291929.html
+On 14.09.2020 09:12, Thomas Petazzoni wrote:
+> nios2 | boost-1.74.0 | NOK |
+> http://autobuild.buildroot.net/results/f54c998a107c797b14889dd957f90c0dc3bf20b6
+> | nios2 | boost-1.74.0 | NOK |
+> http://autobuild.buildroot.net/results/cfefb8cc111525a7d17237d9a11c0d06d6daacda
+> | nios2 | boost-1.74.0 | NOK |
+> http://autobuild.buildroot.net/results/8dbcd14fd36c5dd19935a365f77309c2774e7bc0
+> | 
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/localedef/localedef.mk | 1 +
- 1 file changed, 1 insertion(+)
+all those builds fail because of boost::atomic with this failing assert:
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index e3c571241c..8eefb84a29 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -14,6 +14,7 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
- HOST_LOCALEDEF_DEPENDENCIES = \
- 	$(BR2_MAKE_HOST_DEPENDENCY) \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY) \
- 	host-bison \
- 	host-gawk
- 
--- 
-2.25.1
+"Boost.Atomic unsupported target platform: native atomic operations not
+implemented for bytes"
+which triggers on "once_flag_operations::is_always_lock_free".
+
+Should the nios2 toolchain provide this?
+
+I think the package libatomic_ops provides similar functionality and is
+not enabled for nios2. So would it be an option to mirror the conditions
+for |BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS? Or would it make sense to
+make this a more global flag?
+
+
+Regards,
+Michael
