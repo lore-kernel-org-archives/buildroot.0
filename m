@@ -1,62 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 21:10:19 +0200
-Subject: [Buildroot] [git commit] package/libpfm4: bump to version 4.11.0
-Message-ID: <20200914190150.893C183A90@busybox.osuosl.org>
+Date: Mon, 14 Sep 2020 21:11:00 +0200
+Subject: [Buildroot] [git commit] package/localedef: depend host build on
+ python3
+Message-ID: <20200914190259.258AE8A498@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27e8cd5db37b3fe7ff1749e752e05c704b31cc57
+commit: https://git.buildroot.net/buildroot/commit/?id=6e73c71cc48fb1528044bbc63da028d2f74cbbab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Major updates:
- - AMD Zen1 core PMU updates
- - AMD Zen2 core PMU support
- - Intel Icelake core PMU support
- - support to report if events are speculative
- - support for Extended PEBS events on Icelake
- - Intel Tremont core PMU support
- - ARM Neoverse N1 core PMU support
- - s390 event table updates
- - Marvell TX2 core and uncore updates
- - Intel CascadeLakeX uncore PMU support
- - Various other event table updates and bug fixes
+Just like glibc, host-localedef needs python3 on the host to
+build... since host-localedef is basically using the sources of glibc.
 
-http://perfmon2.sourceforge.net/
+Fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+checking if /build/build/per-package/host-localedef/host/bin/ccache
+/usr/bin/gcc is sufficient to build libc... yes
+checking for x86_64-pc-linux-gnu-nm... /usr/bin/nm
+checking for python3... no
+checking for python... python
+checking version of python... 2.7.18, bad
+configure: error:
+*** These critical programs are missing or too old: python
+*** Check the INSTALL file for required versions.
+
+As reported at:
+
+  http://lists.busybox.net/pipermail/buildroot/2020-September/291929.html
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libpfm4/libpfm4.hash | 6 +++---
- package/libpfm4/libpfm4.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/localedef/localedef.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libpfm4/libpfm4.hash b/package/libpfm4/libpfm4.hash
-index 2c1442dd11..bdc7806a7c 100644
---- a/package/libpfm4/libpfm4.hash
-+++ b/package/libpfm4/libpfm4.hash
-@@ -1,6 +1,6 @@
- # From http://sourceforge.net/projects/perfmon2/files/libpfm4/:
--sha1  78599e1668142f48c24afb1f79ca00a89df51b65  libpfm-4.10.1.tar.gz
--md5  d8f66cb9bfa7e1434434e0de6409db5b  libpfm-4.10.1.tar.gz
-+sha1  112bced9a67d565ff0ce6c2bb90452516d1183e5  libpfm-4.11.0.tar.gz
-+md5  4811c1d99b95752b4ba53b89a9389ec3  libpfm-4.11.0.tar.gz
- # Locally calculated
--sha256  c61c575378b5c17ccfc5806761e4038828610de76e2e34fac9f7fa73ba844b49  libpfm-4.10.1.tar.gz
-+sha256  5da5f8872bde14b3634c9688d980f68bda28b510268723cc12973eedbab9fecc  libpfm-4.11.0.tar.gz
- sha256  beef323d68fc5db9c67b20e8e9de7ccde371d20cdbcdd686804055b18b926d90  COPYING
-diff --git a/package/libpfm4/libpfm4.mk b/package/libpfm4/libpfm4.mk
-index cc89d4422b..3692ebabe7 100644
---- a/package/libpfm4/libpfm4.mk
-+++ b/package/libpfm4/libpfm4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index e3c571241c..8eefb84a29 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -14,6 +14,7 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
  
--LIBPFM4_VERSION = 4.10.1
-+LIBPFM4_VERSION = 4.11.0
- LIBPFM4_SOURCE = libpfm-$(LIBPFM4_VERSION).tar.gz
- LIBPFM4_SITE = http://downloads.sourceforge.net/project/perfmon2/libpfm4
- LIBPFM4_LICENSE = libpfm4 license
+ HOST_LOCALEDEF_DEPENDENCIES = \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
++	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+ 	host-bison \
+ 	host-gawk
+ 
