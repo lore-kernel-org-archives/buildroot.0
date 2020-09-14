@@ -1,25 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 21:23:07 +0200
-Subject: [Buildroot] [PATCH] package/systemd: bump version to 246.5
-In-Reply-To: <20200914144727.867179-1-nolange79@gmail.com>
-References: <20200914144727.867179-1-nolange79@gmail.com>
-Message-ID: <20200914212307.4da28e93@windsurf.hq.k.grp>
+Date: Mon, 14 Sep 2020 21:27:30 +0200
+Subject: [Buildroot] Buildroot meeting: September 15, 9 PM Paris time
+Message-ID: <20200914212730.0029174b@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2020 16:47:27 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+Hello,
 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/systemd/systemd.hash | 4 ++--
->  package/systemd/systemd.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+This is your reminder that our next Buildroot meeting will take place
+on IRC on September 15 (i.e tomorrow) at 9 PM Paris time.
 
-Applied to master, thanks.
+On my side, I'll prepare tomorrow a small list of patches that I'd like
+to discuss. Other participants are invited to also prepare a list of
+patches that either should be merged, or that need discussion.
+
+Thanks in advance for your participation!
 
 Thomas
 -- 
