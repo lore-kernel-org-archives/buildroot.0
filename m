@@ -1,112 +1,82 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 14 Sep 2020 18:12:13 -0300
-Subject: [Buildroot] [PATCH] configs/imx8mqevk_defconfig: new defconfig
-Message-ID: <20200914211213.16772-1-festevam@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Sep 2020 23:20:08 +0200
+Subject: [Buildroot] [PATCH 1/1] fs/common.mk: move
+ BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
+In-Reply-To: <20200911003002.5895-1-charles.hardin@chargepoint.com>
+References: <20200911003002.5895-1-charles.hardin@chargepoint.com>
+Message-ID: <20200914212008.GC19902@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for imx8mqevk_defconfig that allows booting a mainline
-kernel.
+Charles, All,
 
-This defconfig still relies on NXP ATF and U-Boot, but in the long term
-the plan is to switch to mainline ATF and U-Boot as well.
+On 2020-09-10 17:30 -0700, Charles Hardin spake thusly:
+> From: Charles Hardin <ckhardin@gmail.com>
+> 
+> The fakeroot script does not appear to be used in any of the checked
+> in defconfig targets, but it seems that most often the post
+> fakeroot script should be done after all the packages rules have
+> been applied instead of before.
+> 
+> Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
+> a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
+> to disable a service or fixup a systemd configuration. The systemd
+> move makes sense, and this just tries to preserve the same ability
+> to fixup a rootfs after all the cmd hooks are processed.
+> 
+> Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
+> the change that instigated this reordering.
+> 
+> Signed-off-by: Charles Hardin <ckhardin@gmail.com>
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Hi,
+Did you verify that our run-time testing still works:
 
-There was an attempt from Xavier to allow generating a Buildroot
-image with mainline U-Boot for i.MX8M:
-http://lists.buildroot.org/pipermail/buildroot/2020-July/287144.html
+    support/testing/tests/core/test_post_scripts.py
 
-As this effort seems to have stalled, let's a give the first step and
-use mainline kernel only for now.
+which can be tested with:
 
- DEVELOPERS                           |  1 +
- board/freescale/imx8mqevk/readme.txt |  6 +++++
- configs/imx8mqevk_defconfig          | 40 ++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 100644 configs/imx8mqevk_defconfig
+    ./support/testing/run-tests \
+        -o /path/to/where/you/want/temp/stuff \
+        -d /path/to/BR2_DL_DIR \
+        -k \
+        tests.core.test_post_scripts
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 884c79cfdf..cfecb219d9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -823,6 +823,7 @@ F:	configs/imx6ullevk_defconfig
- F:	configs/imx6ulpico_defconfig
- F:	configs/imx7d-sdb_defconfig
- F:	configs/imx7dpico_defconfig
-+F:	configs/imx8mqevk_defconfig
- F:	configs/mx25pdk_defconfig
- F:	configs/mx51evk_defconfig
- F:	configs/mx53loco_defconfig
-diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
-index e60eba4cb6..61fb2bc80b 100644
---- a/board/freescale/imx8mqevk/readme.txt
-+++ b/board/freescale/imx8mqevk/readme.txt
-@@ -10,8 +10,14 @@ Build
- 
- First, configure Buildroot for the i.MX8MQ EVK board:
- 
-+If you want to use the NXP kernel:
-+
-   make freescale_imx8mqevk_defconfig
- 
-+Or if you want to use a mainline kernel:
-+
-+  make imx8mqevk_defconfig
-+
- Build all components:
- 
-   make
-diff --git a/configs/imx8mqevk_defconfig b/configs/imx8mqevk_defconfig
-new file mode 100644
-index 0000000000..1981fa06c8
---- /dev/null
-+++ b/configs/imx8mqevk_defconfig
-@@ -0,0 +1,40 @@
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-evk.dtb"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-evk"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+Otherwise, this change does make sense, because we do want to allow
+users to be able to override the internal decisions.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  fs/common.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index ec6aa831d1..84e13d1b7e 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -173,11 +173,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+>  	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+>  	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+>  	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> +	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+> +		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+>  	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
+>  		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
+>  		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
+> -	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
+> -		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+>  
+>  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
+>  		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
