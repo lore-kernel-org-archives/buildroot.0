@@ -1,81 +1,43 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 14 Sep 2020 21:53:16 +0200
-Subject: [Buildroot] [PATCH v2 00/12] Add the support for Clang
- cross-compiler
-In-Reply-To: <6b09950c-b36e-fdab-ff93-503445e7cddb@mind.be>
+Date: Mon, 14 Sep 2020 21:58:16 +0200
+Subject: [Buildroot] [PATCH v2 07/12] package/busybox: fix applets
+ runtime issue when building with clang cross-compiler
+In-Reply-To: <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
 References: <20190907094027.9537-1-romain.naour@smile.fr>
- <6b09950c-b36e-fdab-ff93-503445e7cddb@mind.be>
-Message-ID: <7d8a4fff-2ca5-4dc1-fe8d-098422070519@gmail.com>
+ <20190907094027.9537-8-romain.naour@smile.fr>
+ <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
+Message-ID: <ae1f557e-6aad-42b7-5dd4-f4f7173bc0f4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-Le 29/08/2020 ? 20:53, Arnout Vandecappelle a ?crit?:
->  Hi Romain,
+Le 29/08/2020 ? 22:21, Arnout Vandecappelle a ?crit?:
 > 
->  After almost a year, let's try to make some progress on this series :-)
 > 
 > On 07/09/2019 11:40, Romain Naour wrote:
-> [snip]
->> Recently, I've tried to build an aarch64 Linux kernel (5.2.7) with
->> Clang and it worked under Qemu [3]. I also tested for x86_64 but we need
->> the upcomming llvm/clang version 9 to build the kernel [4].
-> 
->  Since we waited long enough, this is now in Buildroot :-)
-
-We are in late about llvm version, the version 11 should be released anytime soon.
-
-> 
->> This new version add the support of "asm-goto" which was the last
->> missing part to be able to build the Linux kernel on x86_64 [5].
->> But for theses tests, only the kernel was built with Clang.
+>> Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
+>> fixing a runtime issue (segfault) when busybox is compiled by Clang.
 >>
->> While testing the x86_64 kernel and it's rootfs built with Clang under Qemu,
->> I had a runtime issue during the userspace boot process (Busybox's init).
->> While searching about the issue, I discover the lowRISC blog from Lu?s Marques
->> about the same issue and tested the patch he contributed to the Busybox project
->> (Thanks!).
+>> The patch disable the compiler optimizations for Clang/LLVM only.
 >>
->> So, this series is about to complete the integration of Clang as cross-compiler
->> by using a toolchain-wrapper and fixing some build system infrastructure
->> (cmake, meson) to use Clang instead of GCC.
+>> Without this patch, busybox segfault with several applets
+>> (login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
 > 
->  I started integrating the series, but then I had some fundamental problems with
-> the core patch itself. So I stopped and pushed my results to
-> https://gitlab.com/arnout/buildroot branch clang-as-cross-compiler. I put my
-> changes as squash patches rather than changing the original patches, so you can
-> easily take over from there. Note that I haven't tested my rebased and modified
-> branch (just a build test immediately after applying the modified patch), so
-> there may still be some rebase f**up there.
-> 
->  I'll put my feedback in the individual patches.
+>  We should probably check if this patch is still needed with current busybox.
 
-Thanks!
+It should be fixed with the latest version of busybox 1.32 but it didn't work
+well while testing with riscv64 and llvm/clang 10. I need to test again with
+aarch64.
 
-I'm not sure how many free time I will able to devote to this series.
-I recently did a test with llvm/clang 10 for risv64 [1] but the series needs
-some work to be upstreamable...
-
-I'd like to be able to work on this series as a full day job :)
-
-[1] https://asciinema.org/a/DDspJVktlVl1Rh97dwLgtYcRY
+https://git.busybox.net/busybox/commit/?id=af7169b4a70eb3f60555ced17a40780f70aaaa5c
 
 Best regards,
 Romain
 
+
 > 
 >  Regards,
 >  Arnout
-> 
->>
->> Add this new experimental option into "Advanced" menu since we are expecting
->> some build and runtime issues for number of packages (bootloaders, kernel).
->>
->> For now, Clang cross-compiler can only be use as internal toolchain,
->> so it is build from the source which take a long time...
-> [snip]
 > 
