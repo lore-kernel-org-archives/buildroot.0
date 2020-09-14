@@ -1,117 +1,87 @@
-From: Stefan =?ISO-8859-1?Q?M=FCller?= <s.mueller@zzeroo.com>
-Date: Mon, 14 Sep 2020 17:35:09 +0200
-Subject: [Buildroot] Error: host-python3-3.8.5;
- ModuleNotFoundError: No module named 'msvcrt'
-Message-ID: <36d2e48cec0b9e6c8ed130745db2c9bcfe383c95.camel@zzeroo.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Mon, 14 Sep 2020 19:18:17 +0300
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: specify host-gawk path
+ for dhcp build environment
+In-Reply-To: <20200913152504.4738cf0c@windsurf.home>
+References: <20200623073918.3415-1-geomatsi@gmail.com>
+ <20200912145843.05493b9c@windsurf.home>
+ <20200912200114.GA763352@curiosity>
+ <20200913152504.4738cf0c@windsurf.home>
+Message-ID: <20200914161817.GA8847@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
+> Hello Sergey,
+> 
+> On Sat, 12 Sep 2020 23:01:14 +0300
+> Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> 
+> > But what were the files installed in your tests? Did you see dhcpd and
+> > dhclient amount installed files in output/target ?
+> 
+> Yes, both dhcpd and dhclient are installed in output/target. I'm
+> attaching to this e-mail the list of files that were installed when
+> building with awk==mawk and awk==gawk.
+> 
+> > I still can reproduce the issue. The procedure is similar to yours. I
+> > enable both client and server for isc-dhcp in the board config. Finally,
+> > I do not have both dhcpd and dhclient in output/target if I do not have
+> > gawk installed on my build server. Moreover, in this case the following
+> > warnings appear in the end of dhcp build log:
+> > 
+> > bin/sh: line 19: gawk: command not found
+> > 
+> > Such warning are emitted by DHCP_INSTALL_SERVER and DHCP_INSTALL_CLIENT
+> > commands from dhcp.mk. The same result can be reproduced manually:
+> > 
+> > $ make -C /home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server DESTDIR=/home/matsi/devel/code/buildroot/buildroot-release/output/target install-sbinPROGRAMS         
+> > make: Entering directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
+> >  /usr/bin/mkdir -p  '/home/matsi/devel/code/buildroot/buildroot-release/output/target/usr/sbin'
+> > /bin/sh: line 19: gawk: command not found
+> > make: Leaving directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
+> > 
+> > What exactly goes on can be figured out using '-n' make option.
+> > Makefiles for isc-dhcp components use $(AWK) which is properly
+> > detected by configure script. It can any of gawk, mawk, nawk, awk.
+> > However in generated Makefiles that tool is used without specific 
+> > path. As a result, *awk tool can be available in buildroot build
+> > environment, but missing on the build server.
+> 
+> I've posted at https://paste.ack.tf/52f197 at raw the full build of my
+> Buildroot configuration, which has just BR2_PACKAGE_DHCP=y + client +
+> server. awk is really mawk:
+> 
+> checking for gawk... no
+> checking for mawk... mawk
+> 
+> Both dhpcd and dhclient are installed:
+> 
+> $ find target/ -name 'dhcpd' -o -name 'dhclient'
+> target/usr/sbin/dhcpd
+> target/sbin/dhclient
+> 
+> I have this version of mawk installed:
+> 
+> ii  mawk                       1.3.3-17+b3                    amd64        a pattern scanning and text processing language
 
-I try to build my buildroot project with the latest buildroot master on a arch linux box.
-I get an error while building host-python3. `make clean` and `make
-host-python-dirclean` don't solve the issue.
+Let me clarify a possible root cause. IIUC, the problem occurs when
+buildroot configuration and build host environment provide _different_
+flavors of awk. For instance, mawk is available on host and  gawk is
+available in buildroot output/host. In this case isc-dhcp configure
+script detects gawk in output/host and generates Makefiles specifying
+gawk without explicit path. Finally, during Buildroot installation
+phase, those Makefiles are used to install dhcp binaries. They attempt
+to use gawk without specific path, but host does not provide gawk.
 
-   Traceback (most recent call last):
-     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
-   3.8.5/Lib/subprocess.py", line 64, in <module>
-       import msvcrt
-   ModuleNotFoundError: No module named 'msvcrt'
+Could you please take another look at your tests and check whether you
+have different awk flavors in buildroot config and on build host ?
+If yes, then my understanding is not correct. In this case I would
+suggest to mark this patch as rejected for the time being.
 
-   During handling of the above exception, another exception occurred:
-
-   Traceback (most recent call last):
-     File "./setup.py", line 13, in <module>
-       from distutils import log
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/_distutils_hack/__init__.py", line 82, in create_module
-       return importlib.import_module('._distutils', 'setuptools')
-     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
-   3.8.5/Lib/importlib/__init__.py", line 127, in import_module
-       return _bootstrap._gcd_import(name[level:], package, level)
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/setuptools/__init__.py", line 8, in <module>
-       import _distutils_hack.override  # noqa: F401
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/_distutils_hack/override.py", line 1, in <module>
-       __import__('_distutils_hack').do_override()
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/_distutils_hack/__init__.py", line 64, in do_override
-       ensure_local_distutils()
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/_distutils_hack/__init__.py", line 51, in
-   ensure_local_distutils
-       core = importlib.import_module('distutils.core')
-     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
-   3.8.5/Lib/importlib/__init__.py", line 127, in import_module
-       return _bootstrap._gcd_import(name[level:], package, level)
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/setuptools/_distutils/core.py", line 16, in <module>
-       from distutils.dist import Distribution
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/setuptools/_distutils/dist.py", line 19, in <module>
-       from distutils.util import check_environ, strtobool,
-   rfc822_escape
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/setuptools/_distutils/util.py", line 14, in <module>
-       from distutils.spawn import spawn
-     File "/home/smueller/.local/lib/python3.8/site-
-   packages/setuptools/_distutils/spawn.py", line 11, in <module>
-       import subprocess
-     File "/mnt/src/Buildroot/xmz-firmware/make/build/host-python3-
-   3.8.5/Lib/subprocess.py", line 69, in <module>
-       import _posixsubprocess
-   ModuleNotFoundError: No module named '_posixsubprocess'
-   make[2]: *** [Makefile:616: sharedmods] Error 1
-   make[1]: *** [package/pkg-generic.mk:250: /mnt/src/Buildroot/xmz-
-   firmware/make/build/host-python3-3.8.5/.stamp_built] Error 2
-   make: *** [Makefile:23: _all] Error 2
-
-
--- 
-mit freundlichem Gru?,
-Yours sincerely,
-Stefan M?ller
-- IT Systemkaufmann -
-
-Stefan M?ller - Hard.- und Software Entwicklung
-Am Wasserwerk 4
-04654 Frohburg
-
-Tel:	+49 160 97 96 65 28
-Mail:	s.mueller at zzeroo.com
-Web:	https://zzeroo.com
-PGP:	9A6C 0EC3 6C0B ED42 F61A  AD99 E27C 8E9D F3FE 2E7C
-	https://www.zzeroo.com/imprint
-IBAN:	DE74100110012620762039
-BIC:	NTSBDEB1XXX
-
-USt-IdNr.: DE325255754
-FA Grimma: 238/251/16346
-
-Wichtig!! 
-Diese email kann Betriebs- und Gesch?ftsgeheimnisse unterliegende oder 
-sonstige vertrauliche Informationen enthalten. Sollten Sie diese email 
-irrt?mlich erhalten haben, ist Ihnen eine Kenntnisnahme des Inhalts,
-eine Vervielf?ltigung oder Weitergabe der email ausdr?cklich untersagt.
-Bitte benachrichtigen Sie uns und vernichten Sie die email.
-Vielen Dank.
- 
-Important!! 
-The information contained in this email message may be confidential 
-information. If you are not the intended recipient, any use,
-interference with, disclosure or copying of this material is
-unauthorised and prohibited. 
-Please inform us immediately and destroy the email. 
-Thank you for your cooperation
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200914/b31c906d/attachment.asc>
+Regards,
+Sergey
