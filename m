@@ -1,44 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 14 Sep 2020 19:52:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mutt: bump to version 1.14.7
-Message-ID: <20200914175228.3418194-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 14 Sep 2020 21:09:52 +0200
+Subject: [Buildroot] [git commit] package/libuhttpd: fix tarball name in
+ hash file
+Message-ID: <20200914190100.D7BE286E55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a bug-fix release, fixing a variety of small issues.
+commit: https://git.buildroot.net/buildroot/commit/?id=d127c38a542b755f268605e34d937823fc46c896
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.com/muttmua/mutt/raw/stable/ChangeLog
+Commit 819a4207f6a5c3b579cb5191b03b51ebec4298ff forgot to rename
+libuhttpd-3.2.0.tar.gz
+
+Fixes:
+ - http://autobuild.buildroot.org/results/965be1c72996df94668be81d1e90ed6937fb9a7c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mutt/mutt.hash | 2 +-
- package/mutt/mutt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
-index e3007370a4..23e5dd0ff1 100644
---- a/package/mutt/mutt.hash
-+++ b/package/mutt/mutt.hash
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 66fd2f07a2..b7c839a5f0 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  47972a0152b81b9f67ff322a0a6682b914c15545bfdeac6bcc2f2c0bf9361844  mutt-1.14.6.tar.gz
-+sha256  e4f507b133253cb5eef27996b8668956cdf9caac622cf8adad13f0f9a4eda864  mutt-1.14.7.tar.gz
- sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 6c85202fc0..0ff03724c1 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.14.6
-+MUTT_VERSION = 1.14.7
- MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
- MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
--- 
-2.28.0
+-sha256  161aac7a09ed143278804f8f55ed3c1dd3c813cd68418325ca8862acdaf8a163  libuhttpd-3.2.0.tar.gz
++sha256  161aac7a09ed143278804f8f55ed3c1dd3c813cd68418325ca8862acdaf8a163  libuhttpd-3.3.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
