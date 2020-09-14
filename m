@@ -1,43 +1,57 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 14 Sep 2020 21:58:16 +0200
-Subject: [Buildroot] [PATCH v2 07/12] package/busybox: fix applets
- runtime issue when building with clang cross-compiler
-In-Reply-To: <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
-References: <20190907094027.9537-1-romain.naour@smile.fr>
- <20190907094027.9537-8-romain.naour@smile.fr>
- <7164ade8-bbe7-7e0f-a25c-24daf754b7e0@mind.be>
-Message-ID: <ae1f557e-6aad-42b7-5dd4-f4f7173bc0f4@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Sep 2020 21:57:33 +0200
+Subject: [Buildroot] [git commit] package/pkg-meson: ensure the global
+ cross-compilation.conf file is correct
+Message-ID: <20200914195135.A88368B253@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 29/08/2020 ? 22:21, Arnout Vandecappelle a ?crit?:
-> 
-> 
-> On 07/09/2019 11:40, Romain Naour wrote:
->> Apply a patch contributed by Luis Marques on the Busybox mailing list [1]
->> fixing a runtime issue (segfault) when busybox is compiled by Clang.
->>
->> The patch disable the compiler optimizations for Clang/LLVM only.
->>
->> Without this patch, busybox segfault with several applets
->> (login on aarch64 using Clang 8.0.1, init on x86_64 using Clang 9.0.0rc3)
-> 
->  We should probably check if this patch is still needed with current busybox.
+commit: https://git.buildroot.net/buildroot/commit/?id=48d2606e28c41e22971e2b6ee163a6cedf041813
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It should be fixed with the latest version of busybox 1.32 but it didn't work
-well while testing with riscv64 and llvm/clang 10. I need to test again with
-aarch64.
+Currently, the cross-compilation.conf installed in
+$(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
+generated in a post-install-staging hook of the toolchain package.
 
-https://git.busybox.net/busybox/commit/?id=af7169b4a70eb3f60555ced17a40780f70aaaa5c
+With per-package directory support enabled, this means that the
+generated cross-compilation.conf contains references to the
+per-package directory of the toolchain/ package, which is not want we
+want:
 
-Best regards,
-Romain
+[binaries]
+c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
+cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
+ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
+strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
+pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
 
+So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
+so that the global paths are used:
 
-> 
->  Regards,
->  Arnout
-> 
+[binaries]
+c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
+cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
+ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
+strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
+pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index e827bb5f3c..c3fe6df5d0 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+ endef
+ 
+-TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
++TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
