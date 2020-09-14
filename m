@@ -1,87 +1,33 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Mon, 14 Sep 2020 19:18:17 +0300
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: specify host-gawk path
- for dhcp build environment
-In-Reply-To: <20200913152504.4738cf0c@windsurf.home>
-References: <20200623073918.3415-1-geomatsi@gmail.com>
- <20200912145843.05493b9c@windsurf.home>
- <20200912200114.GA763352@curiosity>
- <20200913152504.4738cf0c@windsurf.home>
-Message-ID: <20200914161817.GA8847@curiosity>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 14 Sep 2020 19:16:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix tarball name in hash
+ file
+Message-ID: <20200914171659.3364205-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Commit 819a4207f6a5c3b579cb5191b03b51ebec4298ff forgot to rename
+libuhttpd-3.2.0.tar.gz
 
-> Hello Sergey,
-> 
-> On Sat, 12 Sep 2020 23:01:14 +0300
-> Sergey Matyukevich <geomatsi@gmail.com> wrote:
-> 
-> > But what were the files installed in your tests? Did you see dhcpd and
-> > dhclient amount installed files in output/target ?
-> 
-> Yes, both dhcpd and dhclient are installed in output/target. I'm
-> attaching to this e-mail the list of files that were installed when
-> building with awk==mawk and awk==gawk.
-> 
-> > I still can reproduce the issue. The procedure is similar to yours. I
-> > enable both client and server for isc-dhcp in the board config. Finally,
-> > I do not have both dhcpd and dhclient in output/target if I do not have
-> > gawk installed on my build server. Moreover, in this case the following
-> > warnings appear in the end of dhcp build log:
-> > 
-> > bin/sh: line 19: gawk: command not found
-> > 
-> > Such warning are emitted by DHCP_INSTALL_SERVER and DHCP_INSTALL_CLIENT
-> > commands from dhcp.mk. The same result can be reproduced manually:
-> > 
-> > $ make -C /home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server DESTDIR=/home/matsi/devel/code/buildroot/buildroot-release/output/target install-sbinPROGRAMS         
-> > make: Entering directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
-> >  /usr/bin/mkdir -p  '/home/matsi/devel/code/buildroot/buildroot-release/output/target/usr/sbin'
-> > /bin/sh: line 19: gawk: command not found
-> > make: Leaving directory '/home/matsi/devel/code/buildroot/buildroot-release/output/build/dhcp-4.4.1/server'
-> > 
-> > What exactly goes on can be figured out using '-n' make option.
-> > Makefiles for isc-dhcp components use $(AWK) which is properly
-> > detected by configure script. It can any of gawk, mawk, nawk, awk.
-> > However in generated Makefiles that tool is used without specific 
-> > path. As a result, *awk tool can be available in buildroot build
-> > environment, but missing on the build server.
-> 
-> I've posted at https://paste.ack.tf/52f197 at raw the full build of my
-> Buildroot configuration, which has just BR2_PACKAGE_DHCP=y + client +
-> server. awk is really mawk:
-> 
-> checking for gawk... no
-> checking for mawk... mawk
-> 
-> Both dhpcd and dhclient are installed:
-> 
-> $ find target/ -name 'dhcpd' -o -name 'dhclient'
-> target/usr/sbin/dhcpd
-> target/sbin/dhclient
-> 
-> I have this version of mawk installed:
-> 
-> ii  mawk                       1.3.3-17+b3                    amd64        a pattern scanning and text processing language
+Fixes:
+ - http://autobuild.buildroot.org/results/965be1c72996df94668be81d1e90ed6937fb9a7c
 
-Let me clarify a possible root cause. IIUC, the problem occurs when
-buildroot configuration and build host environment provide _different_
-flavors of awk. For instance, mawk is available on host and  gawk is
-available in buildroot output/host. In this case isc-dhcp configure
-script detects gawk in output/host and generates Makefiles specifying
-gawk without explicit path. Finally, during Buildroot installation
-phase, those Makefiles are used to install dhcp binaries. They attempt
-to use gawk without specific path, but host does not provide gawk.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you please take another look at your tests and check whether you
-have different awk flavors in buildroot config and on build host ?
-If yes, then my understanding is not correct. In this case I would
-suggest to mark this patch as rejected for the time being.
-
-Regards,
-Sergey
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 66fd2f07a2..b7c839a5f0 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  161aac7a09ed143278804f8f55ed3c1dd3c813cd68418325ca8862acdaf8a163  libuhttpd-3.2.0.tar.gz
++sha256  161aac7a09ed143278804f8f55ed3c1dd3c813cd68418325ca8862acdaf8a163  libuhttpd-3.3.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+-- 
+2.28.0
