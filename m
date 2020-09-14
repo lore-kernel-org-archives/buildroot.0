@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 14 Sep 2020 21:22:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mutt: bump to version 1.14.7
-In-Reply-To: <20200914175228.3418194-1-fontaine.fabrice@gmail.com>
-References: <20200914175228.3418194-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200914212201.5f6ebd54@windsurf.hq.k.grp>
+Date: Mon, 14 Sep 2020 21:22:47 +0200
+Subject: [Buildroot] [PATCH 1/3] syslog-ng: Bump to 3.29.1
+In-Reply-To: <20200914085831.25302-1-judge.packham@gmail.com>
+References: <20200914085831.25302-1-judge.packham@gmail.com>
+Message-ID: <20200914212247.3cb2372d@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2020 19:52:28 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 14 Sep 2020 20:58:29 +1200
+Chris Packham <judge.packham@gmail.com> wrote:
 
-> This is a bug-fix release, fixing a variety of small issues.
-> 
-> https://gitlab.com/muttmua/mutt/raw/stable/ChangeLog
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
->  package/mutt/mutt.hash | 2 +-
->  package/mutt/mutt.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/syslog-ng/syslog-ng.conf | 2 +-
+>  package/syslog-ng/syslog-ng.hash | 2 +-
+>  package/syslog-ng/syslog-ng.mk   | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+All three applied. For future patches, it would be nice if the commit
+title could follow our convention:
+
+	package/foo: bump version to XYZ
+
+Thanks a lot!
 
 Thomas
 -- 
