@@ -1,57 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 15 Sep 2020 21:47:13 +0200
-Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: specify
- image to use
-In-Reply-To: <20200915193832.291674-1-arnout@mind.be>
-References: <20200915193832.291674-1-arnout@mind.be>
-Message-ID: <5ed75a34-3772-53a1-2d68-58bf881e0553@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Tue, 15 Sep 2020 21:49:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 6.0.8
+Message-ID: <20200915194929.15323-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+From the release notes
+See: https://github.com/redis/redis/blob/6.0.8/00-RELEASENOTES
 
-Le 15/09/2020 ? 21:38, Arnout Vandecappelle (Essensium/Mind) a ?crit?:
-> Commit 93a2870966 split off the generated gitlab-ci.yml into a child
-> pipeline. However, the generated gitlab-ci.yml file no longer had an
-> 'image' tag. The result is that the jobs will use whatever image happens
-> to be configured on the runner - which leads to frequent pipeline
-> failures.
-> 
-> Fix this by explicitly specifying the image to use (the same one as in
-> top-level .gitlab-ci.yml).
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  support/misc/gitlab-ci.yml.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index fcfff5c6aa..892eb9ed64 100644
-> --- a/support/misc/gitlab-ci.yml.in
-> +++ b/support/misc/gitlab-ci.yml.in
-> @@ -1,3 +1,5 @@
-> +image: buildroot/base:20200814.2228
-> +
+================================================================================
+Redis 6.0.7     Released Fri Aug 28 11:05:09 IDT 2020
+================================================================================
 
-Adding Yann in Cc:
+Upgrade urgency MODERATE: several bugs with moderate impact are fixed,
+Specifically the first two listed below which cause protocol errors for clients.
 
-This basically revert change from:
+================================================================================
+Redis 6.0.8     Released Wed Sep 09 23:34:17 IDT 2020
+================================================================================
 
-https://git.buildroot.net/buildroot/commit/?id=bef67390949dd6ba5cbfd658371c5df81bb5758c
+Upgrade urgency HIGH: Anyone who's using Redis 6.0.7 with Sentinel or
+CONFIG REWRITE command is affected and should upgrade ASAP, see #7760.
 
-commit 93a2870966 didn't remove the 'image' tag.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I guess you used support/scripts/generate-gitlab-ci-yml locally without gilab
-environment variable (CI_JOB_IMAGE).
-
-Best regards,
-Romain
-
-
->  .check-DEVELOPERS_base:
->      # get-developers should print just "No action specified"; if it prints
->      # anything else, it's a parse error.
-> 
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 840019415d..d686d59847 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  12ad49b163af5ef39466e8d2f7d212a58172116e5b441eebecb4e6ca22363d94  redis-6.0.6.tar.gz
++sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 33c764a0d5..c567d3200d 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.6
++REDIS_VERSION = 6.0.8
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+-- 
+2.25.3
