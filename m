@@ -1,53 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Sep 2020 19:43:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: bump to version 0.19.0
-Message-ID: <20200915174347.399685-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 19:48:15 +0200
+Subject: [Buildroot] [PATCH] package/zeromq: security bump to version
+ 4.3.3
+In-Reply-To: <20200908205315.6706-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 8 Sep 2020 22:53:15 +0200")
+References: <20200908205315.6706-1-peter@korsgaard.com>
+Message-ID: <87tuvzue1s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bump is needed to fix build with ghostscript 9.53.0
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/fbcc2fa29f3736f78212cb4b3869ffaeefda7a33
+ > Fixes the following security issues:
+ > - CVE-2020-15166: Denial-of-Service on CURVE/ZAP-protected servers by
+ >   unauthenticated clients.
+ >   If a raw TCP socket is opened and connected to an endpoint that is fully
+ >   configured with CURVE/ZAP, legitimate clients will not be able to exchange
+ >   any message.  Handshakes complete successfully, and messages are delivered
+ >   to the library, but the server application never receives them.  For more
+ >   information see the security advisory:
+ >   https://github.com/zeromq/libzmq/security/advisories/GHSA-25wp-cf8g-938m
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jbig2dec/jbig2dec.hash | 4 ++--
- package/jbig2dec/jbig2dec.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ > - Stack overflow on server running PUB/XPUB socket (CURVE disabled).
+ >   The PUB/XPUB subscription store (mtrie) is traversed using recursive
+ >   function calls.  In the remove (unsubscription) case, the recursive calls
+ >   are NOT tail calls, so even with optimizations the stack grows linearly
+ >   with the length of a subscription topic.  Topics are under the control of
+ >   remote clients - they can send a subscription to arbitrary length topics.
+ >   An attacker can thus cause a server to create an mtrie sufficiently large
+ >   such that, when unsubscribing, traversal will cause a stack overflow.  For
+ >   more information see the security advisory:
+ >   https://github.com/zeromq/libzmq/security/advisories/GHSA-qq65-x72m-9wr8
 
-diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
-index 86584b19a6..5a34af37f6 100644
---- a/package/jbig2dec/jbig2dec.hash
-+++ b/package/jbig2dec/jbig2dec.hash
-@@ -1,7 +1,7 @@
--# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
-+# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/MD5SUMS
- # and SHA512SUMS are missing the hashes for this file.
- # Locally computed:
--sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
-+sha256  279476695b38f04939aa59d041be56f6bade3422003a406a85e9792c27118a37  jbig2dec-0.19.tar.gz
- 
- # Hash for license files:
- sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
-index 08ef89bfcb..59fcddfc1c 100644
---- a/package/jbig2dec/jbig2dec.mk
-+++ b/package/jbig2dec/jbig2dec.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--JBIG2DEC_VERSION = 0.18
--JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
-+JBIG2DEC_VERSION = 0.19
-+JBIG2DEC_SITE = \
-+	https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530
- JBIG2DEC_LICENSE = AGPL-3.0+
- JBIG2DEC_LICENSE_FILES = LICENSE
- JBIG2DEC_INSTALL_STAGING = YES
+ > - Memory leak in PUB server induced by malicious client(s) without CURVE/ZAP.
+ >   Messages with metadata are never processed by PUB sockets, but the
+ >   metadata is kept referenced in the PUB object and never freed.  For more
+ >   information see the security advisory:
+ >   https://github.com/zeromq/libzmq/security/advisories/GHSA-4p5v-h92w-6wxw
+
+ > - Memory leak in client induced by malicious server(s) without CURVE/ZAP.
+ >   When a pipe processes a delimiter and is already not in active state but
+ >   still has an unfinished message, the message is leaked.
+ >   For more information see the security advisory:
+ >   https://github.com/zeromq/libzmq/security/advisories/GHSA-wfr2-29gj-5w87
+
+ > - Heap overflow when receiving malformed ZMTP v1 packets (CURVE disabled).
+ >   By crafting a packet which is not valid ZMTP v2/v3, and which has two
+ >   messages larger than 8192 bytes, the decoder can be tricked into changing
+ >   the recorded size of the 8192 bytes static buffer, which then gets
+ >   overflown by the next message.  The content that gets written in the
+ >   overflown memory is entirely decided by the sender.
+ >   For more information see the security advisory:
+ >   https://github.com/zeromq/libzmq/security/advisories/GHSA-fc3w-qxf5-7hp6
+
+ > Drop now upstreamed patches, autoreconf and reformat hash file with 2 space
+ > delimiters.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
