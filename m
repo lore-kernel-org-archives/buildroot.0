@@ -1,57 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:03:28 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x]
- support/scripts/pycompile: add main entry point
-Message-ID: <20200915185503.8CC83868C4@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:52:56 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/docker-cli: bump
+ to version 19.03.12
+Message-ID: <20200915185504.2F6CF8B657@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17bcb6e15721c0eb47c508c6d8255e9368dbab27
+commit: https://git.buildroot.net/buildroot/commit/?id=cc155d9c7e937e07a30d8c2cfd57bc564fea5f1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Only run code when the script is executed directly (not imported).
-Factorize command description by using the script's __doc__ variable.
-Fix typo in --force help message.
-
-Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7b3025f93ef47ac0ce980d0847748c363ab4176b)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e3d734c4310001e285b186b61c8f41aae29d90ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pycompile.py | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index 9192a7016a..fb1a12b2b7 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -58,12 +58,19 @@ class ReportProblem(int):
-         return not self == other
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 8868a60e38..8f9e69e593 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	a5b1d6c5766f77896273e864a448a7f0ea4055bb52f50f884f14ad6ef0d5fdb4  docker-cli-19.03.11.tar.gz
++sha256	00801d6b7e9777cf2cf54255ca5afb7b58b3d35c14bb0f60bb9f07d031883223  docker-cli-19.03.12.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 766c984f0b..49abefcaf2 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-DOCKER_CLI_VERSION = 19.03.11
++DOCKER_CLI_VERSION = 19.03.12
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
--parser = argparse.ArgumentParser(description='Compile Python source files in a directory tree.')
--parser.add_argument("target", metavar='DIRECTORY',
--                    help='Directory to scan')
--parser.add_argument("--force", action='store_true',
--                    help="Force compilation even if alread compiled")
-+def main():
-+    parser = argparse.ArgumentParser(description=__doc__)
-+    parser.add_argument("target", metavar="TARGET",
-+                        help="Directory to scan")
-+    parser.add_argument("--force", action="store_true",
-+                        help="Force compilation even if already compiled")
- 
--args = parser.parse_args()
-+    args = parser.parse_args()
- 
--compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
-+    compileall.compile_dir(args.target, force=args.force, quiet=ReportProblem())
-+
-+    return 0
-+
-+
-+if __name__ == "__main__":
-+    sys.exit(main())
