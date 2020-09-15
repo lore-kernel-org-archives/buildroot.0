@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:14:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnetconf2: drop patch
-In-Reply-To: <20200912081011.18983-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Sat, 12 Sep 2020 10:10:11 +0200")
-References: <20200912081011.18983-1-heiko.thiery@gmail.com>
-Message-ID: <87een2ucuj.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Sep 2020 20:15:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/motion: fix build with gcc 10
+In-Reply-To: <20200911195942.607943-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 11 Sep 2020 21:59:42 +0200")
+References: <20200911195942.607943-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a6xqucsm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > With updating libssh to version 0.9.5 this patch is no longer needed.
- > http://lists.busybox.net/pipermail/buildroot/2020-September/291986.html
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
 
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.08.x, thanks.
 
