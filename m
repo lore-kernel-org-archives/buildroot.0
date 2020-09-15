@@ -1,52 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:20:07 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/efl: depends on
- gcc >= 4.9
-Message-ID: <20200915185504.1B84181015@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:14:53 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/motion: fix build
+ with gcc 10
+Message-ID: <20200915185503.E0D7A868C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6daae227a3333dc45f57f500140a86f6a36fd6a
+commit: https://git.buildroot.net/buildroot/commit/?id=1d26bf5e14e26b87a310877db4558b6a4edd24d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-efl depends on C++11 since version 1.22.0 and
-https://github.com/Enlightenment/efl/commit/ac95f38d1b06ac6977ea6d8b9f14f9405396858f
-
 Fixes:
- - http://autobuild.buildroot.org/results/458ec719a7251b59796edfc865b7226baaed6d8f
+ - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dbe2d2e686281c19739824d4d4faec62187d1779)
+(cherry picked from commit bff0733c1434c2d73647db4c256cff3b1f0048d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/motion/0001-Fix-build-with-GCC-10.patch | 53 +++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 031bff7ad6..ba5bf6fcf7 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_EFL
- 	bool "efl"
--	 # g++ issue with 4.4.5, tested with g++ 4.7.2
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -280,8 +279,8 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
- 
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
- 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
+diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
+new file mode 100644
+index 0000000000..a5684db965
+--- /dev/null
++++ b/package/motion/0001-Fix-build-with-GCC-10.patch
+@@ -0,0 +1,53 @@
++From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
++From: Vasiliy Glazov <vascom2@gmail.com>
++Date: Sun, 8 Mar 2020 03:00:21 +0300
++Subject: [PATCH] Fix build with GCC 10.
++
++[Retrieved (and backported) from:
++https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/netcam.h    | 2 +-
++ src/translate.c | 2 ++
++ src/translate.h | 2 +-
++ 3 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/netcam.h b/netcam.h
++index 2951d917..4ee0e1c8 100644
++--- a/netcam.h
+++++ b/netcam.h
++@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
++ } netcam_buff;
++ typedef netcam_buff *netcam_buff_ptr;
++ 
++-struct netcam_caps {                    /* netcam capabilities: */
+++extern struct netcam_caps {                    /* netcam capabilities: */
++         unsigned char streaming;        /*  See the NCS_* defines */
++         unsigned char content_length;   /*  0 - unsupported     */
++ } caps;
++diff --git a/translate.c b/translate.c
++index 0c9f1105..a212d9de 100644
++--- a/translate.c
+++++ b/translate.c
++@@ -10,6 +10,8 @@
++ #include "motion.h"
++ #include "translate.h"
++ 
+++int nls_enabled;
+++
++ void translate_locale_chg(const char *langcd){
++ #ifdef HAVE_GETTEXT
++     /* This routine is for development testing only.  It is not used for
++diff --git a/translate.h b/translate.h
++index 0832ffd8..eeba3745 100644
++--- a/translate.h
+++++ b/translate.h
++@@ -10,7 +10,7 @@
++ #ifndef _INCLUDE_TRANSLATE_H_
++ #define _INCLUDE_TRANSLATE_H_
++ 
++-int nls_enabled;
+++extern int nls_enabled;
++ 
++ #ifdef HAVE_GETTEXT
++ #   include <libintl.h>
