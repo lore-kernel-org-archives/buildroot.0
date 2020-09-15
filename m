@@ -1,45 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:53:02 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/docker-engine:
- bump to version 19.03.12
-Message-ID: <20200915185504.38B068B66D@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:10:02 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python3: do not
+ install MS Windows installers on the target
+Message-ID: <20200915185503.B6A81868C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=220ab127d5be985cf3f15422b52962f8f36806c3
+commit: https://git.buildroot.net/buildroot/commit/?id=a484fb85e01ab30c6476cb8e8eb68cd7c6625805
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Buildroot generates Linux systems, so there is no need to have
+MS Windows executables in there.
+
+This reduces the target filesystem size by about 2MB:
+$ du -hcs usr/lib/python3.8/distutils/command/wininst-*.exe
+60K usr/lib/python3.8/distutils/command/wininst-6.0.exe
+64K usr/lib/python3.8/distutils/command/wininst-7.1.exe
+60K usr/lib/python3.8/distutils/command/wininst-8.0.exe
+192K    usr/lib/python3.8/distutils/command/wininst-9.0.exe
+220K    usr/lib/python3.8/distutils/command/wininst-9.0-amd64.exe
+188K    usr/lib/python3.8/distutils/command/wininst-10.0.exe
+220K    usr/lib/python3.8/distutils/command/wininst-10.0-amd64.exe
+448K    usr/lib/python3.8/distutils/command/wininst-14.0.exe
+576K    usr/lib/python3.8/distutils/command/wininst-14.0-amd64.exe
+2,0M    total
+
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f826e8817a15bc855ad64dcbebbd15031e00cec7)
+(cherry picked from commit 4e97032c82deb11653db0f7e41fa8397e0b988bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python3/python3.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 99159f9376..3283e4eb48 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	5ff62d7b3638a275b2c459e53a4d1a7a8fb03dde8305defcd55e05e059e5618d  docker-engine-19.03.11.tar.gz
-+sha256	858e4e74ee0097bcbdb71d737e268dfcfd1970efa4a1600354253b02fd403e39  docker-engine-19.03.12.tar.gz
- sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 6bb382f5a7..bd5c23fc59 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 19.03.11
-+DOCKER_ENGINE_VERSION = 19.03.12
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7daf893712..c8491322c5 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -212,6 +212,7 @@ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
++	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/distutils/command/wininst*.exe
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
+ 		-type f -not -name Makefile` ; do \
+ 		rm -f $$i ; \
