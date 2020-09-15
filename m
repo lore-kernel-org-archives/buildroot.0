@@ -1,69 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:46:39 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] docs/manual: Add section
- about contributing to maintenance branches
-Message-ID: <20200915175146.DB2DF87660@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:57:43 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/trinity: fix
+ build with gcc 10
+Message-ID: <20200915175147.195A380F82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64cfdc599fe2934993d1d9039ee017cf0c9b44c4
+commit: https://git.buildroot.net/buildroot/commit/?id=b9ad8782844e5630834458f60b122e3fd7ac0878
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - s/release branch/maintenance branch/
-  - extend the master-then-backport section
-  - slight eye-candy on the rest
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 76ed69499d63ffb1e9167d36d794ebda6b17cd1a)
+Fixes:
+ - http://autobuild.buildroot.org/results/bac2cbc791e2ab1d0995c8417bd3d19cbc884e47
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b1bc703ee46b65f015484ff20d3578c796be8d88)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/contribute.txt | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/trinity/0001-Fix-build-with-GCC-10.patch | 38 ++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 11d8811b44..14ecdbd66c 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -371,6 +371,37 @@ in the following cases:
- * whenever you feel it will help presenting your work, your choices,
-   the review process, etc.
- 
-+==== Patches for maintenance branches
+diff --git a/package/trinity/0001-Fix-build-with-GCC-10.patch b/package/trinity/0001-Fix-build-with-GCC-10.patch
+new file mode 100644
+index 0000000000..5ae3735db2
+--- /dev/null
++++ b/package/trinity/0001-Fix-build-with-GCC-10.patch
+@@ -0,0 +1,38 @@
++From e53e25cc8dd5bdb5f7d9b4247de9e9921eec81d8 Mon Sep 17 00:00:00 2001
++From: Vinson Lee <vlee@freedesktop.org>
++Date: Thu, 30 Jan 2020 22:09:45 -0800
++Subject: [PATCH] Fix build with GCC 10.
 +
-+When fixing bugs on a maintenance branch, bugs should be fixed on the
-+master branch first. The commit log for such a patch may then contain a
-+post-commit note specifying what branches are affected:
++  CC	trinity
++/usr/bin/ld: debug.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: log-files.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: log.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: main.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: output.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: params.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: shm.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
++/usr/bin/ld: trinity.o:include/logfile.h:8: multiple definition of `mainlogfile'; child.o:include/logfile.h:8: first defined here
 +
-+----
-+package/foo: fix stuff
++Fixes: 13856316c259 ("reinstate the log-to-file code for now.")
++Signed-off-by: Vinson Lee <vlee@freedesktop.org>
 +
-+Signed-off-by: Your Real Name <your@email.address>
++[Retrieved from:
++https://github.com/kernelslacker/trinity/commit/e53e25cc8dd5bdb5f7d9b4247de9e9921eec81d8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+Backport to: 2020.02.x, 2020.05.x
-+(2020.08.x not affected as the version was bumped)
-+----
++ include/logfile.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+Those changes will then be backported by a maintainer to the affected
-+branches.
-+
-+However, some bugs may apply only to a specific release, for example
-+because it is using an older version of a package. In that case, patches
-+should be based off the maintenance branch, and the patch subject prefix
-+must include the maintenance branch name (for example "[PATCH 2020.02.x]").
-+This can be done with the +git format-patch+ flag +--subject-prefix+:
-+
-+---------------------
-+$ git format-patch --subject-prefix "PATCH 2020.02.x" \
-+    -M -s -o outgoing origin/2020.02.x
-+---------------------
-+
-+Then send the patches with +git send-email+, as described above.
-+
- ==== Patch revision changelog
- 
- When improvements are requested, the new revision of each commit
++diff --git a/include/logfile.h b/include/logfile.h
++index 90ea8b23..2305ac15 100644
++--- a/include/logfile.h
+++++ b/include/logfile.h
++@@ -5,7 +5,7 @@
++ FILE *find_logfile_handle(void);
++ void synclogs(void);
++ 
++-FILE *mainlogfile;
+++extern FILE *mainlogfile;
++ void open_main_logfile(void);
++ void close_logfile(FILE **handle);
++ 
