@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:44:12 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/runc: security
- bump to version 1.0.0-rc92
-Message-ID: <20200915185442.684A68ABA4@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:10:18 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python: do not
+ install MS Windows installers on the target
+Message-ID: <20200915185442.3B7648B4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f95548b49ecd55a9ce85f38500417806bdf0acce
+commit: https://git.buildroot.net/buildroot/commit/?id=f31cd341ac6f4e3c50b9f66d961279ae9ee89279
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-1.0.0-rc91 fixes a minor security issue:
-https://github.com/opencontainers/runc/security/advisories/GHSA-g54h-m393-cpwq
+Buildroot generates Linux systems, so there is no need to have
+MS Windows executables in there.
 
-In addition, 1.0.0-rc92 fixes a regression introduced in 1.0.0-rc91.
+This reduces the target filesystem size by about 600kB:
+$ du -hcs usr/lib/python2.7/distutils/command/wininst-*.exe
+60K usr/lib/python2.7/distutils/command/wininst-6.0.exe
+64K usr/lib/python2.7/distutils/command/wininst-7.1.exe
+60K usr/lib/python2.7/distutils/command/wininst-8.0.exe
+192K    usr/lib/python2.7/distutils/command/wininst-9.0.exe
+220K    usr/lib/python2.7/distutils/command/wininst-9.0-amd64.exe
+596K    total
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2462bf1ba5941e5d7981eb792e47ba335aa3f20c)
+(cherry picked from commit a7e71716f5fed63e3634e40eb3f069d2baebfbf1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python/python.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index b895f6fccb..d792947d5f 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
-+sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 4c2f84ab16..1c2fee067e 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUNC_VERSION = 1.0.0-rc10
-+RUNC_VERSION = 1.0.0-rc92
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 1320770eab..7bc71b58e2 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -199,6 +199,7 @@ define PYTHON_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python2-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
++	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/distutils/command/wininst*.exe
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
+ 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
+ 		rm -f $$i ; \
