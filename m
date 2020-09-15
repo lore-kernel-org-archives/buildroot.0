@@ -1,7 +1,8 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Tue, 15 Sep 2020 12:29:27 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual: add qemu defconfigs gitlab test
-Message-ID: <20200915102927.12907-1-jugurtha.belkalem@smile.fr>
+Date: Tue, 15 Sep 2020 12:38:06 +0200
+Subject: [Buildroot] [PATH v2 1/1] docs/manual: add qemu defconfigs gitlab
+ test
+Message-ID: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,15 +11,18 @@ To: buildroot@busybox.net
 
 Buildroot supports testing qemu defconfigs on gitlab since [1].
 
-[1] : commit 0c7935063851accf3db4c9eb2fc4f11c3da0c391.  
+[1] : commit 0c7935063851accf3db4c9eb2fc4f11c3da0c391.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
+Changes v1 -> v2:
+  - remove drive=hd0 from doc.
+
  docs/manual/adding-board-support.txt | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
 
 diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index 33ed709535..e6d609986f 100644
+index 33ed709535..6c7eb93ce2 100644
 --- a/docs/manual/adding-board-support.txt
 +++ b/docs/manual/adding-board-support.txt
 @@ -46,3 +46,21 @@ create a directory +board/<manufacturer>+ and a subdirectory
@@ -32,7 +36,7 @@ index 33ed709535..e6d609986f 100644
 +to validate all defconfigs under +board/qemu/. Every supported qemu
 +architecture should append the comment : # qemu_ARCH_defconfig
 +at the end of its command line entry in board/qemu/ARCH/readme.txt (for
-+example aarch64-virt includes : drive=hd0 # qemu_aarch64_virt_defconfig).
++example aarch64-virt includes : # qemu_aarch64_virt_defconfig).
 +Once a week, every defconfig is tested under gitlab's pipelines :
 +* Launches a qemu instance.
 +* Enters root credentials and checks if login shell is available.
