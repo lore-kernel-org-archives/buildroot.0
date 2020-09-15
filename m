@@ -1,396 +1,149 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:58:14 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/opentyrian: fix
- build with gcc 10
-Message-ID: <20200915175147.27EC680F82@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:47:20 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/zeromq: security
+ bump to version 4.3.3
+Message-ID: <20200915175154.A1E1988524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a58d03e87fd3538b0a3c0e77601596516f9d4af6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=92da2f42e97005615a825c957bb1eba2e72e9a76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/241b594bab63b2eeceb749e01510da550ed0ffd1
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2020-15166: Denial-of-Service on CURVE/ZAP-protected servers by
+  unauthenticated clients.
+  If a raw TCP socket is opened and connected to an endpoint that is fully
+  configured with CURVE/ZAP, legitimate clients will not be able to exchange
+  any message.  Handshakes complete successfully, and messages are delivered
+  to the library, but the server application never receives them.  For more
+  information see the security advisory:
+  https://github.com/zeromq/libzmq/security/advisories/GHSA-25wp-cf8g-938m
+
+- Stack overflow on server running PUB/XPUB socket (CURVE disabled).
+  The PUB/XPUB subscription store (mtrie) is traversed using recursive
+  function calls.  In the remove (unsubscription) case, the recursive calls
+  are NOT tail calls, so even with optimizations the stack grows linearly
+  with the length of a subscription topic.  Topics are under the control of
+  remote clients - they can send a subscription to arbitrary length topics.
+  An attacker can thus cause a server to create an mtrie sufficiently large
+  such that, when unsubscribing, traversal will cause a stack overflow.  For
+  more information see the security advisory:
+  https://github.com/zeromq/libzmq/security/advisories/GHSA-qq65-x72m-9wr8
+
+- Memory leak in PUB server induced by malicious client(s) without CURVE/ZAP.
+  Messages with metadata are never processed by PUB sockets, but the
+  metadata is kept referenced in the PUB object and never freed.  For more
+  information see the security advisory:
+  https://github.com/zeromq/libzmq/security/advisories/GHSA-4p5v-h92w-6wxw
+
+- Memory leak in client induced by malicious server(s) without CURVE/ZAP.
+  When a pipe processes a delimiter and is already not in active state but
+  still has an unfinished message, the message is leaked.
+  For more information see the security advisory:
+  https://github.com/zeromq/libzmq/security/advisories/GHSA-wfr2-29gj-5w87
+
+- Heap overflow when receiving malformed ZMTP v1 packets (CURVE disabled).
+  By crafting a packet which is not valid ZMTP v2/v3, and which has two
+  messages larger than 8192 bytes, the decoder can be tricked into changing
+  the recorded size of the 8192 bytes static buffer, which then gets
+  overflown by the next message.  The content that gets written in the
+  overflown memory is entirely decided by the sender.
+  For more information see the security advisory:
+  https://github.com/zeromq/libzmq/security/advisories/GHSA-fc3w-qxf5-7hp6
+
+Drop now upstreamed patches, autoreconf and reformat hash file with 2 space
+delimiters.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bea67e6fdecc9100bbe05e48b1c3bd471ec8426c)
+(cherry picked from commit fd1ac2e762cf6b32146881a540134f274c35ceb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-t-need-to-be-exposed-from-opl-h-to-opl-c.patch | 365 +++++++++++++++++++++
- 1 file changed, 365 insertions(+)
+ ...ude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch | 36 ----------------------
+ package/zeromq/zeromq.hash                         | 10 +++---
+ package/zeromq/zeromq.mk                           |  4 +--
+ 3 files changed, 6 insertions(+), 44 deletions(-)
 
-diff --git a/package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch b/package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch
-new file mode 100644
-index 0000000000..f41758ce30
---- /dev/null
-+++ b/package/opentyrian/0001-Move-definitions-that-don-t-need-to-be-exposed-from-opl-h-to-opl-c.patch
-@@ -0,0 +1,365 @@
-+From 962ee8fc46ca51691bde1c8c1022dacbe8a037ed Mon Sep 17 00:00:00 2001
-+From: Carl Reinke <carlreinke@users.noreply.github.com>
-+Date: Sun, 14 Jun 2020 14:11:00 -0600
-+Subject: [PATCH] Move definitions that don't need to be exposed from opl.h to
-+ opl.c
-+
-+[Retrieved from:
-+https://github.com/opentyrian/opentyrian/commit/962ee8fc46ca51691bde1c8c1022dacbe8a037ed]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/opl.c | 153 +++++++++++++++++++++++++++++++++++++++++++++++++++-
-+ src/opl.h | 157 ++----------------------------------------------------
-+ 2 files changed, 154 insertions(+), 156 deletions(-)
-+
-+diff --git a/src/opl.c b/src/opl.c
-+index a4071c5..f15474c 100644
-+--- a/src/opl.c
-++++ b/src/opl.c
-+@@ -23,12 +23,161 @@
-+  * Copyright (C) 1998-2001 Ken Silverman
-+  * Ken Silverman's official web site: "http://www.advsys.net/ken"
-+  */
-+-
-++#include "opl.h"
-+ 
-+ #include <math.h>
-++#include <stdbool.h>
-+ #include <stdlib.h> // rand()
-+ #include <string.h> // memset()
-+-#include "opl.h"
-++
-++#define fltype double
-++
-++ /*
-++ define attribution that inlines/forces inlining of a function (optional)
-++ */
-++#define OPL_INLINE inline
-++
-++
-++#undef NUM_CHANNELS
-++#if defined(OPLTYPE_IS_OPL3)
-++#define NUM_CHANNELS	18
-++#else
-++#define NUM_CHANNELS	9
-++#endif
-++
-++#define MAXOPERATORS	(NUM_CHANNELS*2)
-++
-++
-++#define FL05	((fltype)0.5)
-++#define FL2		((fltype)2.0)
-++#define PI		((fltype)3.1415926535897932384626433832795)
-++
-++
-++#define FIXEDPT			0x10000		// fixed-point calculations using 16+16
-++#define FIXEDPT_LFO		0x1000000	// fixed-point calculations using 8+24
-++
-++#define WAVEPREC		1024		// waveform precision (10 bits)
-++
-++#define INTFREQU		((fltype)(14318180.0 / 288.0))		// clocking of the chip
-++
-++
-++#define OF_TYPE_ATT			0
-++#define OF_TYPE_DEC			1
-++#define OF_TYPE_REL			2
-++#define OF_TYPE_SUS			3
-++#define OF_TYPE_SUS_NOKEEP	4
-++#define OF_TYPE_OFF			5
-++
-++#define ARC_CONTROL			0x00
-++#define ARC_TVS_KSR_MUL		0x20
-++#define ARC_KSL_OUTLEV		0x40
-++#define ARC_ATTR_DECR		0x60
-++#define ARC_SUSL_RELR		0x80
-++#define ARC_FREQ_NUM		0xa0
-++#define ARC_KON_BNUM		0xb0
-++#define ARC_PERC_MODE		0xbd
-++#define ARC_FEEDBACK		0xc0
-++#define ARC_WAVE_SEL		0xe0
-++
-++#define ARC_SECONDSET		0x100	// second operator set for OPL3
-++
-++
-++#define OP_ACT_OFF			0x00
-++#define OP_ACT_NORMAL		0x01	// regular channel activated (bitmasked)
-++#define OP_ACT_PERC			0x02	// percussion channel activated (bitmasked)
-++
-++#define BLOCKBUF_SIZE		512
-++
-++
-++ // vibrato constants
-++#define VIBTAB_SIZE			8
-++#define VIBFAC				70/50000		// no braces, integer mul/div
-++
-++ // tremolo constants and table
-++#define TREMTAB_SIZE		53
-++#define TREM_FREQ			((fltype)(3.7))			// tremolo at 3.7hz
-++
-++
-++ /* operator struct definition
-++ For OPL2 all 9 channels consist of two operators each, carrier and modulator.
-++ Channel x has operators x as modulator and operators (9+x) as carrier.
-++ For OPL3 all 18 channels consist either of two operators (2op mode) or four
-++ operators (4op mode) which is determined through register4 of the second
-++ adlib register set.
-++ Only the channels 0,1,2 (first set) and 9,10,11 (second set) can act as
-++ 4op channels. The two additional operators for a channel y come from the
-++ 2op channel y+3 so the operatorss y, (9+y), y+3, (9+y)+3 make up a 4op
-++ channel.
-++ */
-++typedef struct operator_struct {
-++	Bit32s cval, lastcval;			// current output/last output (used for feedback)
-++	Bit32u tcount, wfpos, tinc;		// time (position in waveform) and time increment
-++	fltype amp, step_amp;			// and amplification (envelope)
-++	fltype vol;						// volume
-++	fltype sustain_level;			// sustain level
-++	Bit32s mfbi;					// feedback amount
-++	fltype a0, a1, a2, a3;			// attack rate function coefficients
-++	fltype decaymul, releasemul;	// decay/release rate functions
-++	Bit32u op_state;				// current state of operator (attack/decay/sustain/release/off)
-++	Bit32u toff;
-++	Bit32s freq_high;				// highest three bits of the frequency, used for vibrato calculations
-++	Bit16s* cur_wform;				// start of selected waveform
-++	Bit32u cur_wmask;				// mask for selected waveform
-++	Bit32u act_state;				// activity state (regular, percussion)
-++	bool sus_keep;					// keep sustain level when decay finished
-++	bool vibrato,tremolo;			// vibrato/tremolo enable bits
-++
-++									// variables used to provide non-continuous envelopes
-++	Bit32u generator_pos;			// for non-standard sample rates we need to determine how many samples have passed
-++	Bits cur_env_step;				// current (standardized) sample position
-++	Bits env_step_a,env_step_d,env_step_r;	// number of std samples of one step (for attack/decay/release mode)
-++	Bit8u step_skip_pos_a;			// position of 8-cyclic step skipping (always 2^x to check against mask)
-++	Bits env_step_skip_a;			// bitmask that determines if a step is skipped (respective bit is zero then)
-++
-++#if defined(OPLTYPE_IS_OPL3)
-++	bool is_4op,is_4op_attached;	// base of a 4op channel/part of a 4op channel
-++	Bit32s left_pan,right_pan;		// opl3 stereo panning amount
-++#endif
-++} op_type;
-++
-++// per-chip variables
-++static op_type op[MAXOPERATORS];
-++
-++static Bits int_samplerate;
-++
-++static Bit8u status;
-++static Bit32u opl_index;
-++#if defined(OPLTYPE_IS_OPL3)
-++static Bit8u adlibreg[512];	// adlib register set (including second set)
-++static Bit8u wave_sel[44];		// waveform selection
-++#else
-++static Bit8u adlibreg[256];	// adlib register set
-++static Bit8u wave_sel[22];		// waveform selection
-++#endif
-++
-++
-++						// vibrato/tremolo increment/counter
-++static Bit32u vibtab_pos;
-++static Bit32u vibtab_add;
-++static Bit32u tremtab_pos;
-++static Bit32u tremtab_add;
-++
-++
-++// enable an operator
-++void enable_operator(Bitu regbase, op_type* op_pt, Bit32u act_type);
-++
-++// functions to change parameters of an operator
-++void change_frequency(Bitu chanbase, Bitu regbase, op_type* op_pt);
-++
-++void change_attackrate(Bitu regbase, op_type* op_pt);
-++void change_decayrate(Bitu regbase, op_type* op_pt);
-++void change_releaserate(Bitu regbase, op_type* op_pt);
-++void change_sustainlevel(Bitu regbase, op_type* op_pt);
-++void change_waveform(Bitu regbase, op_type* op_pt);
-++void change_keepsustain(Bitu regbase, op_type* op_pt);
-++void change_vibrato(Bitu regbase, op_type* op_pt);
-++void change_feedback(Bitu chanbase, op_type* op_pt);
-++
-+ 
-+ static Bit32u generator_add;	// should be a chip parameter
-+ 
-+diff --git a/src/opl.h b/src/opl.h
-+index c8e643b..cbb56ad 100644
-+--- a/src/opl.h
-++++ b/src/opl.h
-+@@ -25,11 +25,8 @@
-+  * Ken Silverman's official web site: "http://www.advsys.net/ken"
-+  */
-+ 
-+-
-+-#define fltype double
-+-
-+-#include <stdbool.h>
-+ #include <stdint.h>
-++
-+ typedef uintptr_t	Bitu;
-+ typedef intptr_t	Bits;
-+ typedef uint32_t	Bit32u;
-+@@ -39,154 +36,6 @@ typedef int16_t		Bit16s;
-+ typedef uint8_t		Bit8u;
-+ typedef int8_t		Bit8s;
-+ 
-+-
-+-/*
-+-	define attribution that inlines/forces inlining of a function (optional)
-+-*/
-+-#define OPL_INLINE inline
-+-
-+-
-+-#undef NUM_CHANNELS
-+-#if defined(OPLTYPE_IS_OPL3)
-+-#define NUM_CHANNELS	18
-+-#else
-+-#define NUM_CHANNELS	9
-+-#endif
-+-
-+-#define MAXOPERATORS	(NUM_CHANNELS*2)
-+-
-+-
-+-#define FL05	((fltype)0.5)
-+-#define FL2		((fltype)2.0)
-+-#define PI		((fltype)3.1415926535897932384626433832795)
-+-
-+-
-+-#define FIXEDPT			0x10000		// fixed-point calculations using 16+16
-+-#define FIXEDPT_LFO		0x1000000	// fixed-point calculations using 8+24
-+-
-+-#define WAVEPREC		1024		// waveform precision (10 bits)
-+-
-+-#define INTFREQU		((fltype)(14318180.0 / 288.0))		// clocking of the chip
-+-
-+-
-+-#define OF_TYPE_ATT			0
-+-#define OF_TYPE_DEC			1
-+-#define OF_TYPE_REL			2
-+-#define OF_TYPE_SUS			3
-+-#define OF_TYPE_SUS_NOKEEP	4
-+-#define OF_TYPE_OFF			5
-+-
-+-#define ARC_CONTROL			0x00
-+-#define ARC_TVS_KSR_MUL		0x20
-+-#define ARC_KSL_OUTLEV		0x40
-+-#define ARC_ATTR_DECR		0x60
-+-#define ARC_SUSL_RELR		0x80
-+-#define ARC_FREQ_NUM		0xa0
-+-#define ARC_KON_BNUM		0xb0
-+-#define ARC_PERC_MODE		0xbd
-+-#define ARC_FEEDBACK		0xc0
-+-#define ARC_WAVE_SEL		0xe0
-+-
-+-#define ARC_SECONDSET		0x100	// second operator set for OPL3
-+-
-+-
-+-#define OP_ACT_OFF			0x00
-+-#define OP_ACT_NORMAL		0x01	// regular channel activated (bitmasked)
-+-#define OP_ACT_PERC			0x02	// percussion channel activated (bitmasked)
-+-
-+-#define BLOCKBUF_SIZE		512
-+-
-+-
-+-// vibrato constants
-+-#define VIBTAB_SIZE			8
-+-#define VIBFAC				70/50000		// no braces, integer mul/div
-+-
-+-// tremolo constants and table
-+-#define TREMTAB_SIZE		53
-+-#define TREM_FREQ			((fltype)(3.7))			// tremolo at 3.7hz
-+-
-+-
-+-/* operator struct definition
-+-     For OPL2 all 9 channels consist of two operators each, carrier and modulator.
-+-     Channel x has operators x as modulator and operators (9+x) as carrier.
-+-     For OPL3 all 18 channels consist either of two operators (2op mode) or four
-+-     operators (4op mode) which is determined through register4 of the second
-+-     adlib register set.
-+-     Only the channels 0,1,2 (first set) and 9,10,11 (second set) can act as
-+-     4op channels. The two additional operators for a channel y come from the
-+-     2op channel y+3 so the operatorss y, (9+y), y+3, (9+y)+3 make up a 4op
-+-     channel.
-+-*/
-+-typedef struct operator_struct {
-+-	Bit32s cval, lastcval;			// current output/last output (used for feedback)
-+-	Bit32u tcount, wfpos, tinc;		// time (position in waveform) and time increment
-+-	fltype amp, step_amp;			// and amplification (envelope)
-+-	fltype vol;						// volume
-+-	fltype sustain_level;			// sustain level
-+-	Bit32s mfbi;					// feedback amount
-+-	fltype a0, a1, a2, a3;			// attack rate function coefficients
-+-	fltype decaymul, releasemul;	// decay/release rate functions
-+-	Bit32u op_state;				// current state of operator (attack/decay/sustain/release/off)
-+-	Bit32u toff;
-+-	Bit32s freq_high;				// highest three bits of the frequency, used for vibrato calculations
-+-	Bit16s* cur_wform;				// start of selected waveform
-+-	Bit32u cur_wmask;				// mask for selected waveform
-+-	Bit32u act_state;				// activity state (regular, percussion)
-+-	bool sus_keep;					// keep sustain level when decay finished
-+-	bool vibrato,tremolo;			// vibrato/tremolo enable bits
-+-	
-+-	// variables used to provide non-continuous envelopes
-+-	Bit32u generator_pos;			// for non-standard sample rates we need to determine how many samples have passed
-+-	Bits cur_env_step;				// current (standardized) sample position
-+-	Bits env_step_a,env_step_d,env_step_r;	// number of std samples of one step (for attack/decay/release mode)
-+-	Bit8u step_skip_pos_a;			// position of 8-cyclic step skipping (always 2^x to check against mask)
-+-	Bits env_step_skip_a;			// bitmask that determines if a step is skipped (respective bit is zero then)
-+-
-+-#if defined(OPLTYPE_IS_OPL3)
-+-	bool is_4op,is_4op_attached;	// base of a 4op channel/part of a 4op channel
-+-	Bit32s left_pan,right_pan;		// opl3 stereo panning amount
-+-#endif
-+-} op_type;
-+-
-+-// per-chip variables
-+-Bitu chip_num;
-+-op_type op[MAXOPERATORS];
-+-
-+-Bits int_samplerate;
-+-	
-+-Bit8u status;
-+-Bit32u opl_index;
-+-#if defined(OPLTYPE_IS_OPL3)
-+-Bit8u adlibreg[512];	// adlib register set (including second set)
-+-Bit8u wave_sel[44];		// waveform selection
-+-#else
-+-Bit8u adlibreg[256];	// adlib register set
-+-Bit8u wave_sel[22];		// waveform selection
-+-#endif
-+-
-+-
-+-// vibrato/tremolo increment/counter
-+-Bit32u vibtab_pos;
-+-Bit32u vibtab_add;
-+-Bit32u tremtab_pos;
-+-Bit32u tremtab_add;
-+-
-+-
-+-// enable an operator
-+-void enable_operator(Bitu regbase, op_type* op_pt, Bit32u act_type);
-+-
-+-// functions to change parameters of an operator
-+-void change_frequency(Bitu chanbase, Bitu regbase, op_type* op_pt);
-+-
-+-void change_attackrate(Bitu regbase, op_type* op_pt);
-+-void change_decayrate(Bitu regbase, op_type* op_pt);
-+-void change_releaserate(Bitu regbase, op_type* op_pt);
-+-void change_sustainlevel(Bitu regbase, op_type* op_pt);
-+-void change_waveform(Bitu regbase, op_type* op_pt);
-+-void change_keepsustain(Bitu regbase, op_type* op_pt);
-+-void change_vibrato(Bitu regbase, op_type* op_pt);
-+-void change_feedback(Bitu chanbase, op_type* op_pt);
-+-
-+ // general functions
-+ void adlib_init(Bit32u samplerate);
-+ void adlib_write(Bitu idx, Bit8u val);
-+@@ -195,8 +44,8 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples);
-+ Bitu adlib_reg_read(Bitu port);
-+ void adlib_write_index(Bitu port, Bit8u val);
-+ 
-+-#endif /* OPL_H */
-+-
-+ #define opl_init() adlib_init(OUTPUT_QUALITY * 11025)
-+ #define opl_write(reg, val) adlib_write(reg, val)
-+ #define opl_update(buf, num) adlib_getsample(buf, num)
-++
-++#endif /* OPL_H */
+diff --git a/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch b/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch
+deleted file mode 100644
+index 49f753b27f..0000000000
+--- a/package/zeromq/0001-acinclude.m4-add-latomic-to-PKGCFG_LIBS_PRIVATE.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From d59dcbcaebd91ca30a0f866403c383177a4843f8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 12 Jan 2020 10:10:15 +0100
+-Subject: [PATCH] acinclude.m4: add -latomic to PKGCFG_LIBS_PRIVATE
+-
+-Add -latomic to PKGCFG_LIBS_PRIVATE so applications linking statically
+-with libzmq (such czmq) will know that they have to link with -latomic
+-and the following build failure will be avoided:
+-
+-  CCLD     src/czmq_selftest
+-/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/sparc-buildroot-linux-uclibc/sysroot/usr/lib/libzmq.a(src_libzmq_la-ctx.o): in function `zmq::ctx_t::create_socket(int)':
+-ctx.cpp:(.text+0x1710): undefined reference to `__atomic_fetch_add_4'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4a12f1ede260cd956a0b5ccb4eec6ca8b44cb04f
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/zeromq/libzmq/commit/d59dcbcaebd91ca30a0f866403c383177a4843f8]
+----
+- acinclude.m4 | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/acinclude.m4 b/acinclude.m4
+-index 8c042ca50..387a3d2a1 100644
+---- a/acinclude.m4
+-+++ b/acinclude.m4
+-@@ -691,7 +691,7 @@ int main (int, char **)
+-             return t;
+-         }
+-         ])],
+--        [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" ; $1],
+-+        [AC_MSG_RESULT(yes) ; libzmq_cv_has_atomic_instrisics="yes" PKGCFG_LIBS_PRIVATE="$PKGCFG_LIBS_PRIVATE -latomic" ; $1],
+-         [AC_MSG_RESULT(no) ; libzmq_cv_has_atomic_instrisics="no" LIBS=$save_LIBS ; $2])
+-     fi
+- }])
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index 689d960b28..17ffff8762 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,7 +1,7 @@
+ # From https://github.com/zeromq/libzmq/releases
+-md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
+-sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
++md5  78acc277d95e10812d71b2b3c3c3c9a9  zeromq-4.3.3.tar.gz
++sha1  d78bc504194d6908df40a2b9e41849b181b02491  zeromq-4.3.3.tar.gz
+ # Locally computed
+-sha256 ebd7b5c830d6428956b67a0454a7f8cbed1de74b3b01e5c33c5378e22740f763  zeromq-4.3.2.tar.gz
+-sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
+-sha256 83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
++sha256  9d9285db37ae942ed0780c016da87060497877af45094ff9e1a1ca736e3875a2  zeromq-4.3.3.tar.gz
++sha256  4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
++sha256  83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 04f7e7d3f2..7840d03624 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
+ 
+-ZEROMQ_VERSION = 4.3.2
++ZEROMQ_VERSION = 4.3.3
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+-# We're patching acinclude.m4
+-ZEROMQ_AUTORECONF = YES
+ 
+ # Assume these flags are always available. It is true, at least for
+ # SOCK_CLOEXEC, since linux v2.6.27.
