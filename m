@@ -1,65 +1,48 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 15 Sep 2020 17:46:18 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/meson: use specific BR
- variables for cross-compilation.conf
-In-Reply-To: <e03b2581-ce33-25a5-2c35-5145d4f0dd1a@green-communications.fr>
-References: <20200915100546.806157-1-nolange79@gmail.com>
- <20200915100546.806157-2-nolange79@gmail.com>
- <e03b2581-ce33-25a5-2c35-5145d4f0dd1a@green-communications.fr>
-Message-ID: <CADYdroOFr0KdVKspvj28ERrFShHv28zHzsmQuwo7EPhm9NsdxQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 18:03:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python3: do not install MS
+ Windows installers on the target
+In-Reply-To: <20200912115622.134543-1-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Sat, 12 Sep 2020 13:56:21 +0200")
+References: <20200912115622.134543-1-titouan.christophe@railnova.eu>
+Message-ID: <87y2lbuiwv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Di., 15. Sept. 2020 um 16:05 Uhr schrieb Nicolas Cavallari
-<nicolas.cavallari@green-communications.fr>:
->
-> On 15/09/2020 12:05, Norbert Lange wrote:
-> > dont depend on specific names of compiler tools, but use existing
-> > Buildroot variables.
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> > ---
-> >  package/meson/cross-compilation.conf.in | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> > index e9344e2b2f..67c5da8156 100644
-> > --- a/package/meson/cross-compilation.conf.in
-> > +++ b/package/meson/cross-compilation.conf.in
-> > @@ -4,11 +4,11 @@
-> >  # - Buildroot's 'target' is Meson's 'host'
-> >
-> >  [binaries]
-> > -c = '@TARGET_CROSS at gcc'
-> > -cpp = '@TARGET_CROSS at g++'
-> > -ar = '@TARGET_CROSS at ar'
-> > -strip = '@TARGET_CROSS at strip'
-> > -pkgconfig = '@HOST_DIR@/bin/pkgconf'
-> > +c = '@TARGET_CC@'
-> > +cpp = '@TARGET_CXX@'
-> > +ar = '@TARGET_AR@'
-> > +strip = '@TARGET_STRIP@'
-> > +pkgconfig = '@PKG_CONFIG_HOST_BINARY@'
-> >  g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
-> >  g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
->
-> This changes host/bin/pkgconf to host/bin/pkg-config, but that shouldn't
-> be a problem, given meson only uses this pkgconfig to find target
-> packages and not host packages (for that meson would look it up in a
-> native-file instead of a cross-file).
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-Well, its used by all other build systems, so this makes more sense to me,
-otherwise, shouldn't PKG_CONFIG_HOST_BINARY be changed to pkgconfig?
+ > Buildroot generates Linux systems, so there is no need to have
+ > MS Windows executables in there.
 
->
-> Also @PKG_CONFIG_HOST_BINARY@ won't be replaced if patch 3 isn't
-> applied, so this isn't bisectable. Maybe it must be merged with patch 3 ?
+ > This reduces the target filesystem size by about 2MB:
+ > $ du -hcs usr/lib/python3.8/distutils/command/wininst-*.exe
+ > 60K usr/lib/python3.8/distutils/command/wininst-6.0.exe
+ > 64K usr/lib/python3.8/distutils/command/wininst-7.1.exe
+ > 60K usr/lib/python3.8/distutils/command/wininst-8.0.exe
+ > 192K    usr/lib/python3.8/distutils/command/wininst-9.0.exe
+ > 220K    usr/lib/python3.8/distutils/command/wininst-9.0-amd64.exe
+ > 188K    usr/lib/python3.8/distutils/command/wininst-10.0.exe
+ > 220K    usr/lib/python3.8/distutils/command/wininst-10.0-amd64.exe
+ > 448K    usr/lib/python3.8/distutils/command/wininst-14.0.exe
+ > 576K    usr/lib/python3.8/distutils/command/wininst-14.0-amd64.exe
+ > 2,0M    total
 
-Yeah, I did actually split this off as doing too much in a single
-patch was often critized.
-can fix PATCH #2 or merge it again. Gonnna wait for more feedback
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Norbert
+Funky!
+
+It seems like we need to do something similar for python{,3}-setuptools:
+
+# find /usr/ -name \*.exe | grep -v wininst | xargs ls -lahS
+-rw-rw-r--    1 root     root       73.5K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui-64.exe
+-rw-rw-r--    1 root     root       73.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli-64.exe
+-rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli-32.exe
+-rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli.exe
+-rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui-32.exe
+-rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui.exe
+
+-- 
+Bye, Peter Korsgaard
