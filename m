@@ -1,45 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:53:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/docker-cli: bump
- to version 19.03.12
-Message-ID: <20200915185442.741308151C@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:05:29 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x]
+ support/scripts/pycompile: sort imports
+Message-ID: <20200915185442.1D4E88B4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e97d22a7b4bded83d597fba1884dea95d93764
+commit: https://git.buildroot.net/buildroot/commit/?id=2bbdd246fc77c50887eb31ecbec84a9088430c9c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e3d734c4310001e285b186b61c8f41aae29d90ee)
+Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4c77dca5503a40148ffbc177e5edd4cc6d093a0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/scripts/pycompile.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 8868a60e38..8f9e69e593 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	a5b1d6c5766f77896273e864a448a7f0ea4055bb52f50f884f14ad6ef0d5fdb4  docker-cli-19.03.11.tar.gz
-+sha256	00801d6b7e9777cf2cf54255ca5afb7b58b3d35c14bb0f60bb9f07d031883223  docker-cli-19.03.12.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 766c984f0b..49abefcaf2 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index fb1a12b2b7..b713fe1932 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -6,11 +6,13 @@ when a python byte code generation failed.
+ Inspired from:
+    http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
+ '''
++
+ from __future__ import print_function
+-import sys
+-import py_compile
+-import compileall
++
+ import argparse
++import compileall
++import py_compile
++import sys
  
--DOCKER_CLI_VERSION = 19.03.11
-+DOCKER_CLI_VERSION = 19.03.12
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
  
+ def check_for_errors(comparison):
