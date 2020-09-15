@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:58:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opentyrian: fix build with gcc
- 10
-In-Reply-To: <20200910170923.933284-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 10 Sep 2020 19:09:23 +0200")
-References: <20200910170923.933284-1-fontaine.fabrice@gmail.com>
-Message-ID: <874knyvs53.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Sep 2020 19:59:22 +0200
+Subject: [Buildroot] [PATCH] boot/afboot-stm32: fix build with gcc 10
+In-Reply-To: <20200910094608.1251382-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 10 Sep 2020 11:46:08 +0200")
+References: <20200910094608.1251382-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87zh5qudj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/241b594bab63b2eeceb749e01510da550ed0ffd1
+ > This commit adds a patch that passes -fno-builtin to fix the build
+ > with gcc 10. The patch has been submitted upstream.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > There are no autobuilder failures, since it's a bootloader package,
+ > and therefore not tested by the autobuilders. However, a build failure
+ > was detected when building toolchains and a minimal ARMv7-M system at
+ > https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359529.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.08.x, thanks.
 
