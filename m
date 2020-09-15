@@ -1,34 +1,44 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 15 Sep 2020 11:46:22 +0200
-Subject: [Buildroot] [PATCH 1/3] package/pkg-meson.mk: fix generation of
- pkg_config_static prop
-Message-ID: <20200915094625.598048-1-nolange79@gmail.com>
+Date: Tue, 15 Sep 2020 11:46:23 +0200
+Subject: [Buildroot] [PATCH 2/3] package/meson: use specific BR variables
+ for cross-compilation.conf
+In-Reply-To: <20200915094625.598048-1-nolange79@gmail.com>
+References: <20200915094625.598048-1-nolange79@gmail.com>
+Message-ID: <20200915094625.598048-2-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fixes following in the generated cross-complation.conf file:
-pkg_config_static = '$(if $(BR2_STATIC_LIBS),true,false)'
+dont depend on specific names of compiler tools, but use existing
+Buildroot variables.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/meson/cross-compilation.conf.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index c3fe6df5d0..7d103add98 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -195,7 +195,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
--	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
-+	    -e 's%@STATIC@%$$(if $(BR2_STATIC_LIBS),true,false)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index e9344e2b2f..67c5da8156 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -4,11 +4,11 @@
+ # - Buildroot's 'target' is Meson's 'host'
+ 
+ [binaries]
+-c = '@TARGET_CROSS at gcc'
+-cpp = '@TARGET_CROSS at g++'
+-ar = '@TARGET_CROSS at ar'
+-strip = '@TARGET_CROSS at strip'
+-pkgconfig = '@HOST_DIR@/bin/pkgconf'
++c = '@TARGET_CC@'
++cpp = '@TARGET_CXX@'
++ar = '@TARGET_AR@'
++strip = '@TARGET_STRIP@'
++pkgconfig = '@PKG_CONFIG_HOST_BINARY@'
+ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+ 
 -- 
 2.28.0
