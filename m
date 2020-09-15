@@ -1,36 +1,195 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 15 Sep 2020 14:15:34 -0700
-Subject: [Buildroot] [PATCH v1 2/5] package/docker-containerd: bump to
- version 1.4.0
-In-Reply-To: <87ft7iswih.fsf@dell.be.48ers.dk>
-References: <20200913001659.472814-1-christian@paral.in>
- <20200913001659.472814-2-christian@paral.in>
- <87ft7iswih.fsf@dell.be.48ers.dk>
-Message-ID: <CA+h8R2pDrOpkaSGsc7oV3tkQ3PT_h8NZjspDLxkSq1r_9RnReQ@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 15 Sep 2020 23:13:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ettercap: new package
+In-Reply-To: <CAEyMn7ZEfuc0AREeJat15z8U7KfP+EUr0ewiGangNUCzoQicJg@mail.gmail.com>
+References: <1597227392-9101-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1597227392-9101-2-git-send-email-jugurtha.belkalem@smile.fr>
+ <CAEyMn7ZEfuc0AREeJat15z8U7KfP+EUr0ewiGangNUCzoQicJg@mail.gmail.com>
+Message-ID: <652ca88f-a591-94b5-119a-14375ef3c850@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Heiko,
 
+Le 15/09/2020 ? 22:57, Heiko Thiery a ?crit?:
+> Hi Jugurtha, Hi Romain,
+> 
+> Am Mi., 12. Aug. 2020 um 12:16 Uhr schrieb Jugurtha BELKALEM
+> <jugurtha.belkalem@smile.fr>:
+>>
+>> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> ---
+>>  DEVELOPERS                     |  1 +
+>>  package/Config.in              |  1 +
+>>  package/ettercap/Config.in     | 32 ++++++++++++++++++++++++++++++++
+>>  package/ettercap/ettercap.hash |  3 +++
+>>  package/ettercap/ettercap.mk   | 32 ++++++++++++++++++++++++++++++++
+>>  5 files changed, 69 insertions(+)
+>>  create mode 100644 package/ettercap/Config.in
+>>  create mode 100644 package/ettercap/ettercap.hash
+>>  create mode 100644 package/ettercap/ettercap.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index 42fa5a4..2097f4d 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1396,6 +1396,7 @@ N:        Joshua Henderson <joshua.henderson@microchip.com>
+>>  F:     package/qt5/qt5wayland/
+>>
+>>  N:     Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> +F:     package/ettercap/
+>>  F:     package/python-cycler/
+>>  F:     package/python-matplotlib/
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index d7e79f4..db886a1 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -2042,6 +2042,7 @@ menu "Networking applications"
+>>         source "package/ebtables/Config.in"
+>>         source "package/ejabberd/Config.in"
+>>         source "package/ethtool/Config.in"
+>> +       source "package/ettercap/Config.in"
+>>         source "package/faifa/Config.in"
+>>         source "package/fail2ban/Config.in"
+>>         source "package/fastd/Config.in"
+>> diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
+>> new file mode 100644
+>> index 0000000..e0693f4
+>> --- /dev/null
+>> +++ b/package/ettercap/Config.in
+>> @@ -0,0 +1,32 @@
+>> +config BR2_PACKAGE_ETTERCAP
+>> +       bool "ettercap"
+>> +       depends on !BR2_STATIC_LIBS
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +       depends on BR2_USE_WCHAR # ncurses wchar
+>> +       select BR2_PACKAGE_ETHTOOL # runtime
+>> +       select BR2_PACKAGE_GEOIP
+> 
+> As far as I can see in the CMakelist.txt this can be disabled. So this
+> looks to me like an option for the package.
 
-On Tue, Sep 15, 2020, 11:52 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+Indeed, geoip is optional. But even when selected the geoip package doesn't
+install MaxMind's GeoIP lite databases.
 
-> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
->
->  > Signed-off-by: Christian Stewart <christian@paral.in>
->
-> Is this a dependency for the docker-cli / docker-engine bumps? From the
-> looks of it, it isn't?
->
+Jugurtha, maybe we can just turn it off ?
 
-It's not necessarily a dependency but I cannot understand why you would
-chose to not update it at the same time.
+> 
+>> +       select BR2_PACKAGE_LIBCURL
+> 
+> Tried to build and failed due to missing:
+> select BR2_PACKAGE_LIBICONV
 
-Best,
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200915/381fd688/attachment.html>
+libiconv package is only used for uclibc based toolchain. The dependency must be
+conditional.
+> 
+>> +       select BR2_PACKAGE_LIBNET
+>> +       select BR2_PACKAGE_LIBPCAP
+>> +       select BR2_PACKAGE_NCURSES
+>> +       select BR2_PACKAGE_NCURSES_WCHAR
+> 
+> Same for ncurses support. This seems also to be optional.
+
+Jugurtha, can you have a look ?
+
+> 
+>> +       select BR2_PACKAGE_OPENSSL
+>> +       select BR2_PACKAGE_ZLIB
+>> +       help
+>> +         Ettercap is a comprehensive suite for man
+>> +         in the middle attacks. It features sniffing of
+>> +         live connections, content filtering on the fly
+>> +         and many other interesting tricks. It supports
+>> +         active and passive dissection of many protocols
+>> +         and includes many features for network and
+>> +         host analysis.
+>> +
+>> +         Note : Ettercap can provide better tracking
+>> +         for IP addresses when GeoIP.dat is provided by
+>> +         users (GeoIP.dat is available on maxmind website).
+>> +
+>> +         http://www.ettercap-project.org/
+>> +
+>> +comment "ettercap needs a toolchain w/ threads, wchar, dynamic library"
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS \
+>                                ^
+> I think the "!" is missing?!
+
+Indeed
+
+> 
+>> +               || !BR2_USE_WCHAR ||BR2_STATIC_LIBS
+
+need space between "||" and "BR2_STATIC_LIBS"
+
+> 
+>> diff --git a/package/ettercap/ettercap.hash b/package/ettercap/ettercap.hash
+>> new file mode 100644
+>> index 0000000..61ecbec
+>> --- /dev/null
+>> +++ b/package/ettercap/ettercap.hash
+>> @@ -0,0 +1,3 @@
+>> +# Locally calculated
+>> +sha256 d0c3ef88dfc284b61d3d5b64d946c1160fd04276b448519c1ae4438a9cdffaf3  ettercap-0.8.3.1.tar.gz
+>> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+>> diff --git a/package/ettercap/ettercap.mk b/package/ettercap/ettercap.mk
+>> new file mode 100644
+>> index 0000000..ee8c8a2
+>> --- /dev/null
+>> +++ b/package/ettercap/ettercap.mk
+>> @@ -0,0 +1,32 @@
+>> +################################################################################
+>> +#
+>> +# ettercap
+>> +#
+>> +################################################################################
+>> +
+>> +ETTERCAP_VERSION = 0.8.3.1
+>> +ETTERCAP_SITE = $(call github,Ettercap,ettercap,v$(ETTERCAP_VERSION))
+>> +ETTERCAP_LICENSE = GPL-2.0+
+>> +ETTERCAP_LICENSE_FILES = LICENSE
+>> +ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
+>> +ETTERCAP_INSTALL_STAGING = YES
+> 
+> Why do we need to install in staging?
+
+Ettercap should provide libettercap.so.0 (I need to check).
+
+https://rpmfind.net/linux/RPM/fedora/devel/rawhide/x86_64/e/ettercap-0.8.3.1-1.fc33.i686.html
+
+Heiko, thanks for the review!
+
+Best regards,
+Romain
+
+> 
+>> +ETTERCAP_DEPENDENCIES = geoip libcurl libnet libpcap ncurses openssl zlib \
+>> +       host-bison host-flex host-pkgconf
+> 
+> Add dependency for libiconv (see above).
+> 
+>> +
+>> +ETTERCAP_CONF_OPTS = -DENABLE_IPV6=ON -DENABLE_GTK=OFF -DBUNDLED_LIBS=OFF
+>> +
+>> +ifeq ($(BR2_PACKAGE_PCRE),y)
+>> +ETTERCAP_DEPENDENCIES += pcre
+>> +endif
+>> +
+>> +# Replaces default encoding set (ISO-8859-1) with UTF-8 in ettercap
+>> +# configuration file installed by the package.
+>> +# It ensures that all characters are properly decoded and avoids
+>> +# any fatal errors while running in text mode (-T).
+>> +define ETTERCAP_SET_UTF8_ENCODING
+>> +       $(SED) 's%^utf8_encoding.*%utf8_encoding = "UTF-8"%' \
+>> +               $(TARGET_DIR)/etc/ettercap/etter.conf
+>> +endef
+>> +ETTERCAP_POST_INSTALL_TARGET_HOOKS += ETTERCAP_SET_UTF8_ENCODING
+>> +
+>> +$(eval $(cmake-package))
+> 
+> Thank you.
+> 
