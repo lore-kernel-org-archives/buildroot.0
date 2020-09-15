@@ -1,51 +1,42 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Tue, 15 Sep 2020 12:38:06 +0200
-Subject: [Buildroot] [PATH v2 1/1] docs/manual: add qemu defconfigs gitlab
- test
-Message-ID: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
+From: Jonatan Hatakeyama Zeidler <jonatan.zeidler@brainlab.com>
+Date: Tue, 15 Sep 2020 12:55:08 +0000
+Subject: [Buildroot] Adding BR2_PACKAGE_PYTHON3 make U-Boot build fail
+Message-ID: <d30bce23621c48874241cbd24e7c85a741067991.camel@brainlab.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot supports testing qemu defconfigs on gitlab since [1].
+Hello,
 
-[1] : commit 0c7935063851accf3db4c9eb2fc4f11c3da0c391.
+my buildroot config (attached) works fine and produces a bootable
+build. Now I want to add Python 3 to the root fs. But adding
+BR2_PACKAGE_PYTHON3=y leads to a build error in u-boot:
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
-Changes v1 -> v2:
-  - remove drive=hd0 from doc.
+./arch/arm/mach-k3/make_fit.py am65xx_phycore_kit \
+arch/arm/dts/k3-am65xx-phycore-kit.dtb > u-boot.its
+  CAT     u-boot-dtb.bin
+  COPY    u-boot.dtb
+  MKIMAGE u-boot-dtb.img
+  COPY    u-boot.bin
+Traceback (most recent call last):
+  File "./arch/arm/mach-k3/make_fit.py", line 155, in <module>
+    main()
+  File "./arch/arm/mach-k3/make_fit.py", line 151, in main
+    generate_its(board, dtbs)
+  File "./arch/arm/mach-k3/make_fit.py", line 127, in generate_its
+    overlays=generate_fdts(get_overlays(board), dtbdir))
+  File "./arch/arm/mach-k3/make_fit.py", line 75, in get_overlays
+    m = r.match(l)
+TypeError: cannot use a string pattern on a bytes-like object
 
- docs/manual/adding-board-support.txt | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+How is it possible that a target package affects the build tools? And
+how can I solve that?
 
-diff --git a/docs/manual/adding-board-support.txt b/docs/manual/adding-board-support.txt
-index 33ed709535..6c7eb93ce2 100644
---- a/docs/manual/adding-board-support.txt
-+++ b/docs/manual/adding-board-support.txt
-@@ -46,3 +46,21 @@ create a directory +board/<manufacturer>+ and a subdirectory
- +board/<manufacturer>/<boardname>+. You can then store your patches
- and configurations in these directories, and reference them from the main
- Buildroot configuration. Refer to xref:customize[] for more details.
-+
-+=== Adding qemu defconfig gitlab test
-+
-+Buildroot provides a test script (support/scripts/boot-qemu-image.py)
-+to validate all defconfigs under +board/qemu/. Every supported qemu
-+architecture should append the comment : # qemu_ARCH_defconfig
-+at the end of its command line entry in board/qemu/ARCH/readme.txt (for
-+example aarch64-virt includes : # qemu_aarch64_virt_defconfig).
-+Once a week, every defconfig is tested under gitlab's pipelines :
-+* Launches a qemu instance.
-+* Enters root credentials and checks if login shell is available.
-+* Powers off the instance.
-+The job fails if one of above steps returns unsuccessful status code.
-+to trigger qemu defconfigs test jobs:
-+
-+---------------------
-+ $ git push gitlab HEAD:<name>_defconfig
-+---------------------
--- 
-2.11.0
+Thanks
+Jonatan
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: phycore-am65x_defconfig
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200915/6ea55fce/attachment.ksh>
