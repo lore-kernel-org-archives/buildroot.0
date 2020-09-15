@@ -1,69 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:46:44 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] docs/manual: Add section
- about contributing to maintenance branches
-Message-ID: <20200915175154.94E8987660@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:55:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/wlroots: always
+ disable xcb-errors
+Message-ID: <20200915175154.ADB7087660@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60522566b41b5a2bd1dbfe495238ef3621b8d25a
+commit: https://git.buildroot.net/buildroot/commit/?id=5485d509dbb449dd0cd4f2f3962d16d0f767ed37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - s/release branch/maintenance branch/
-  - extend the master-then-backport section
-  - slight eye-candy on the rest
-]
+Stop trying to enable the xcb-errors Meson option and always disable it:
+there is no xcb-util-errors package in Buildroot. The build recipe was
+wrongly assuming that the XCB errors library would be installed as part
+of the xcb-util package, which is not the case.
+
+Fixes the following autobuilder failure:
+
+  http://autobuild.buildroot.net/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e/
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 76ed69499d63ffb1e9167d36d794ebda6b17cd1a)
+(cherry picked from commit c2bc0694c45bb6bc0a19e06b2fcddff365be5a2e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/contribute.txt | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/wlroots/wlroots.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index bde7543c25..70d178d00b 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -371,6 +371,37 @@ in the following cases:
- * whenever you feel it will help presenting your work, your choices,
-   the review process, etc.
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 988643485f..8b646b4536 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -21,7 +21,7 @@ WLROOTS_DEPENDENCIES = \
+ 	wayland \
+ 	wayland-protocols
  
-+==== Patches for maintenance branches
-+
-+When fixing bugs on a maintenance branch, bugs should be fixed on the
-+master branch first. The commit log for such a patch may then contain a
-+post-commit note specifying what branches are affected:
-+
-+----
-+package/foo: fix stuff
-+
-+Signed-off-by: Your Real Name <your@email.address>
-+---
-+Backport to: 2020.02.x, 2020.05.x
-+(2020.08.x not affected as the version was bumped)
-+----
-+
-+Those changes will then be backported by a maintainer to the affected
-+branches.
-+
-+However, some bugs may apply only to a specific release, for example
-+because it is using an older version of a package. In that case, patches
-+should be based off the maintenance branch, and the patch subject prefix
-+must include the maintenance branch name (for example "[PATCH 2020.02.x]").
-+This can be done with the +git format-patch+ flag +--subject-prefix+:
-+
-+---------------------
-+$ git format-patch --subject-prefix "PATCH 2020.02.x" \
-+    -M -s -o outgoing origin/2020.02.x
-+---------------------
-+
-+Then send the patches with +git send-email+, as described above.
-+
- ==== Patch revision changelog
+-WLROOTS_CONF_OPTS = -Dexamples=false
++WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled
  
- When improvements are requested, the new revision of each commit
+ ifeq ($(BR2_PACKAGE_FFMPEG),y)
+ WLROOTS_DEPENDENCIES += ffmpeg
+@@ -59,13 +59,6 @@ else
+ WLROOTS_CONF_OPTS += -Dxwayland=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XCB_UTIL),y)
+-WLROOTS_CONF_OPTS += -Dxcb-errors=enabled
+-WLROOTS_DEPENDENCIES += xcb-util
+-else
+-WLROOTS_CONF_OPTS += -Dxcb-errors=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
+ WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
+ WLROOTS_DEPENDENCIES += xcb-util-wm
