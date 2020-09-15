@@ -1,50 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:39:01 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/runc: security
- bump to version 1.0.0-rc92
-Message-ID: <20200915185504.26F4081015@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 21:01:04 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/systemd: bump
+ version to 246.5
+Message-ID: <20200915185504.54C2A81015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0afacfff349c28ed75905bb24b165ef3bfa6a2b5
+commit: https://git.buildroot.net/buildroot/commit/?id=402dadb8ccf3a116edf8a9e613824bdfbf9483cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-1.0.0-rc91 fixes a minor security issue:
-https://github.com/opencontainers/runc/security/advisories/GHSA-g54h-m393-cpwq
-
-In addition, 1.0.0-rc92 fixes a regression introduced in 1.0.0-rc91.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2462bf1ba5941e5d7981eb792e47ba335aa3f20c)
+(cherry picked from commit ea2c2190b3348f86458a205a59befbdc3fdb2566)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/systemd.hash | 4 ++--
+ package/systemd/systemd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index b895f6fccb..d792947d5f 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
-+sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 4c2f84ab16..1c2fee067e 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 4672e43422..cad249199c 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,6 +1,6 @@
+ # sha256 locally computed
+-sha256  4268bd88037806c61c5cd1c78d869f7f20bf7e7368c63916d47b5d1c3411bd6f  systemd-246.tar.gz
++sha256  f45c5a98d3be7dd05ed7f1e1a0ab00c7ba52602aa2dc42615bf74be61fcbe178  systemd-246.5.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+-sha256  a5ce42cd4614b086ef75aae6663f88f55bdf9e09a83c615c636ca540282528cf  README
++sha256  b142af99a3d950fb465326d6fd5a49d348523dc0d216682880527264d0a011e9  README
+ sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 65541f6b1f..c40f8c2c84 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.0.0-rc10
-+RUNC_VERSION = 1.0.0-rc92
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-SYSTEMD_VERSION = 246
+-SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
++SYSTEMD_VERSION = 246.5
++SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+ SYSTEMD_INSTALL_STAGING = YES
