@@ -1,50 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:44:18 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/runc: security
- bump to version 1.0.0-rc92
-Message-ID: <20200915185431.E32428B626@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:58:21 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/localedef: depend
+ host build on python3
+Message-ID: <20200915185432.12583810A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a3e86c83749ed0f58322c4d681f620fe089676
+commit: https://git.buildroot.net/buildroot/commit/?id=ae88d05bb2bf34befdeba7aa49822fb89b821cf4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-1.0.0-rc91 fixes a minor security issue:
-https://github.com/opencontainers/runc/security/advisories/GHSA-g54h-m393-cpwq
+Just like glibc, host-localedef needs python3 on the host to
+build... since host-localedef is basically using the sources of glibc.
 
-In addition, 1.0.0-rc92 fixes a regression introduced in 1.0.0-rc91.
+Fixes:
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+checking if /build/build/per-package/host-localedef/host/bin/ccache
+/usr/bin/gcc is sufficient to build libc... yes
+checking for x86_64-pc-linux-gnu-nm... /usr/bin/nm
+checking for python3... no
+checking for python... python
+checking version of python... 2.7.18, bad
+configure: error:
+*** These critical programs are missing or too old: python
+*** Check the INSTALL file for required versions.
+
+As reported at:
+
+  http://lists.busybox.net/pipermail/buildroot/2020-September/291929.html
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2462bf1ba5941e5d7981eb792e47ba335aa3f20c)
+(cherry picked from commit 6e73c71cc48fb1528044bbc63da028d2f74cbbab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/localedef/localedef.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index b895f6fccb..d792947d5f 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	6b44985023347fb9c5a2cc6f761df8c41cc2c84a7a68a6e6acf834dff6653a9a  runc-1.0.0-rc10.tar.gz
-+sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 4c2f84ab16..1c2fee067e 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index f6e26b5666..d6f1625e3f 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -14,6 +14,7 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
  
--RUNC_VERSION = 1.0.0-rc10
-+RUNC_VERSION = 1.0.0-rc92
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+ HOST_LOCALEDEF_DEPENDENCIES = \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
++	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+ 	host-bison \
+ 	host-gawk
+ 
