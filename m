@@ -1,69 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Sep 2020 22:34:29 +0200
-Subject: [Buildroot] [PATCH 0/4] Add python-boto3
-In-Reply-To: <20200207114350.31365-1-raphael.melotte@essensium.com>
-References: <20200207114350.31365-1-raphael.melotte@essensium.com>
-Message-ID: <20200915203429.GB2422@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Sep 2020 22:42:49 +0200
+Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include
+ and lib
+In-Reply-To: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
+References: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
+Message-ID: <20200915224249.4b8b3869@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rapha?l, All,
+Hello Thomas,
 
-On 2020-02-07 12:43 +0100, Rapha?l M?lotte spake thusly:
-> Rapha?l M?lotte (4):
->   package/python-jmespath: new package.
->   package/python-botocore: new package.
->   package/python-s3transfer: new package.
->   package/python-boto3: new package.
+Sorry for the long delay in getting back to this patch.
 
-All four patches applied to master now, thanks for your patience!
+On Mon, 21 Oct 2019 13:38:10 +0100
+Thomas Preston <thomas.preston@codethink.co.uk> wrote:
 
-Regards,
-Yann E. MORIN.
-
->  DEVELOPERS                                       |  6 ++++++
->  package/Config.in                                |  4 ++++
->  package/python-boto3/Config.in                   |  9 +++++++++
->  package/python-boto3/python-boto3.hash           |  5 +++++
->  package/python-boto3/python-boto3.mk             | 14 ++++++++++++++
->  package/python-botocore/Config.in                | 10 ++++++++++
->  package/python-botocore/python-botocore.hash     |  5 +++++
->  package/python-botocore/python-botocore.mk       | 14 ++++++++++++++
->  package/python-jmespath/Config.in                |  6 ++++++
->  package/python-jmespath/python-jmespath.hash     |  5 +++++
->  package/python-jmespath/python-jmespath.mk       | 14 ++++++++++++++
->  package/python-s3transfer/Config.in              |  9 +++++++++
->  package/python-s3transfer/python-s3transfer.hash |  5 +++++
->  package/python-s3transfer/python-s3transfer.mk   | 14 ++++++++++++++
->  14 files changed, 120 insertions(+)
->  create mode 100644 package/python-boto3/Config.in
->  create mode 100644 package/python-boto3/python-boto3.hash
->  create mode 100644 package/python-boto3/python-boto3.mk
->  create mode 100644 package/python-botocore/Config.in
->  create mode 100644 package/python-botocore/python-botocore.hash
->  create mode 100644 package/python-botocore/python-botocore.mk
->  create mode 100644 package/python-jmespath/Config.in
->  create mode 100644 package/python-jmespath/python-jmespath.hash
->  create mode 100644 package/python-jmespath/python-jmespath.mk
->  create mode 100644 package/python-s3transfer/Config.in
->  create mode 100644 package/python-s3transfer/python-s3transfer.hash
->  create mode 100644 package/python-s3transfer/python-s3transfer.mk
+> Recently, a change to the pkg-config wrapper made it more explicit about
+> where the system include and library directories are, so that pkgconf
+> does not print them. See upstream commit 9cc8680.
 > 
-> -- 
-> 2.23.0
+> By default, we configure the pkg-config wrapper for the target sysroot,
+> however the default system include and library directories are not
+> reconfigured for the host build environment (they still point at the
+> target sysroot). Fix this by adding the host system include and library
+> directories to HOST_MAKE_ENV.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Note: this isn't likely to fix any bugs at present, but the incorrect
+> configuration may hide an include-order related error which the original
+> patch was supposed to fix!
+> 
+> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+> ---
+>  package/Makefile.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 0a7899c852..3ae4d4d4e9 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -309,6 +309,8 @@ HOST_MAKE_ENV = \
+>  	PATH=$(BR_PATH) \
+>  	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+>  	PKG_CONFIG_SYSROOT_DIR="/" \
+> +	PKG_CONFIG_SYSTEM_INCLUDE_PATH="/usr/include" \
+> +	PKG_CONFIG_SYSTEM_LIBRARY_PATH="/usr/lib" \
 
+So, today, Peter Korsgaard and me discussed this patch. While I think
+we understand the idea of telling pkg-config that it is useless to emit
+-I and -L options pointing to the default header/library paths of the
+host compiler, the issue is that nothing guarantees that /usr/include
+and /usr/lib are really the standard path for the host compiler, and
+that these are the only paths.
+
+Since your change was apparently not related to the fix of a specific
+issue, and was merely there to improve "correctness", we don't think it
+makes sense to have it if it's in fact not really correct for systems
+where header/libraries are not in /usr/include and /usr/lib
+respectively.
+
+Of course, if you have more details about specific issues that this
+patch was solving, let us know.
+
+Thanks a lot,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
