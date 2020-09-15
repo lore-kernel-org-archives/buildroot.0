@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 15:27:20 +0200
-Subject: [Buildroot] Adding BR2_PACKAGE_PYTHON3 make U-Boot build fail
-In-Reply-To: <d30bce23621c48874241cbd24e7c85a741067991.camel@brainlab.com>
-References: <d30bce23621c48874241cbd24e7c85a741067991.camel@brainlab.com>
-Message-ID: <20200915152720.355ef868@windsurf.hq.k.grp>
+Date: Tue, 15 Sep 2020 15:28:24 +0200
+Subject: [Buildroot] Weird ping behaviour
+In-Reply-To: <008a01d68b49$9ab9a720$d02cf560$@gmail.com>
+References: <008a01d68b49$9ab9a720$d02cf560$@gmail.com>
+Message-ID: <20200915152824.4230e780@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Rob,
 
-On Tue, 15 Sep 2020 12:55:08 +0000
-Jonatan Hatakeyama Zeidler <jonatan.zeidler@brainlab.com> wrote:
+On Tue, 15 Sep 2020 12:18:48 +0200
+<rob.r374@gmail.com> wrote:
 
-> my buildroot config (attached) works fine and produces a bootable
-> build. Now I want to add Python 3 to the root fs. But adding
-> BR2_PACKAGE_PYTHON3=y leads to a build error in u-boot:
+> I'm following this buildroot build and get quite strange behaviour on
+> ethernet network.
 > 
-> ./arch/arm/mach-k3/make_fit.py am65xx_phycore_kit \
-> arch/arm/dts/k3-am65xx-phycore-kit.dtb > u-boot.its
->   CAT     u-boot-dtb.bin
->   COPY    u-boot.dtb
->   MKIMAGE u-boot-dtb.img
->   COPY    u-boot.bin
-> Traceback (most recent call last):
->   File "./arch/arm/mach-k3/make_fit.py", line 155, in <module>
->     main()
->   File "./arch/arm/mach-k3/make_fit.py", line 151, in main
->     generate_its(board, dtbs)
->   File "./arch/arm/mach-k3/make_fit.py", line 127, in generate_its
->     overlays=generate_fdts(get_overlays(board), dtbdir))
->   File "./arch/arm/mach-k3/make_fit.py", line 75, in get_overlays
->     m = r.match(l)
-> TypeError: cannot use a string pattern on a bytes-like object
+> Ping response times vary quite a lot and then ping crashes at the end.
 > 
-> How is it possible that a target package affects the build tools? And
-> how can I solve that?
+> Is there any setting, compile option that would help in this case ?
+> 64 bytes from 192.168.0.2: seq=1282 ttl=64 time=152.114 ms
+> 
+> 64 bytes from 192.168.0.2: seq=1283 ttl=64 time=1001.781 ms
+> 
+> 64 bytes from 192.168.0.2: seq=1284 ttl=64 time=1.992 ms
+> 
+> 64 bytes from 192.168.0.2: seq=1285 ttl=64 time=850.570 ms
+> 
+> [ 2345.039206][    C0] ------------[ cut here ]------------
+> 
+> [ 2345.044434][    C0] WARNING: CPU: 0 PID: 0 at net/sched/sch_generic.c:448
+> dev_watchdog+0x7f/0xe8
+> 
+> [ 2345.053163][    C0] NETDEV WATCHDOG: eth0 (stm32-dwmac): transmit queue 0
+> timed out
 
-When BR2_PACKAGE_PYTHON3=y, we create $(HOST_DIR)/bin/python as a
-symlink to $(HOST_DIR)/bin/python3. This means that any script that
-uses just "python" will be executed by the Python 3 interpreter built
-by Buildroot. So if you have a Python 2.x script in the U-Boot build,
-it won't work anymore.
+This is really not a Buildroot issue, but rather a kernel problem. You
+would have this problem regardless of the build system / distribution
+you use.
 
-While I can explain the situation, I don't immediately have a
-good/simple solution to suggest. We have recently introduced
-BR2_TARGET_UBOOT_NEEDS_PYTHON2 and BR2_TARGET_UBOOT_NEEDS_PYTHON3.
-Perhaps these should ensure that the U-Boot build takes place with the
-PATH that points to a folder where a "python" symlink is created,
-pointing to the correct Python interpreter ?
+Best regards,
 
 Thomas
 -- 
