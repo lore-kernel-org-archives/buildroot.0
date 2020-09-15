@@ -1,48 +1,26 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 15 Sep 2020 20:13:22 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/wayland-utils: change download
- url to https
-In-Reply-To: <20200915181322.8364-1-ps.report@gmx.net>
-References: <20200915181322.8364-1-ps.report@gmx.net>
-Message-ID: <20200915181322.8364-2-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 20:14:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libssh: security bump to
+ version 0.9.5
+In-Reply-To: <20200911210306.617737-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 11 Sep 2020 23:03:06 +0200")
+References: <20200911210306.617737-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imceucuu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  - change download url to https (as given by the original announcement [1]
-    and redirected by the http url)
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
+ > - Drop patches (already in version)
+ > - Fix CVE-2020-16135: libssh 0.9.4 has a NULL pointer dereference in
+ >   tftpserver.c if ssh_buffer_new returns NULL.
 
-  - http://autobuild.buildroot.net/results/84ad38933e4f42b74c3185c8c5e777fd714c9601
-  >>> wayland-utils 1.0.0 Downloading[27m
-  --2020-09-14 13:53:35--  http://wayland.freedesktop.org/releases/wayland-utils-1.0.0.tar.xz
-  Resolving wayland.freedesktop.org (wayland.freedesktop.org)... 35.227.58.183
-  Connecting to wayland.freedesktop.org (wayland.freedesktop.org)|35.227.58.183|:80... connected.
-  HTTP request sent, awaiting response... 308 Permanent Redirect
-  2020-09-14 13:53:35 ERROR 308: Permanent Redirect.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-July/041565.html
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/wayland-utils/wayland-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/wayland-utils/wayland-utils.mk b/package/wayland-utils/wayland-utils.mk
-index 5269454b7e..30a33b61d6 100644
---- a/package/wayland-utils/wayland-utils.mk
-+++ b/package/wayland-utils/wayland-utils.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- WAYLAND_UTILS_VERSION = 1.0.0
--WAYLAND_UTILS_SITE = http://wayland.freedesktop.org/releases
-+WAYLAND_UTILS_SITE = https://wayland.freedesktop.org/releases
- WAYLAND_UTILS_SOURCE = wayland-utils-$(WAYLAND_UTILS_VERSION).tar.xz
- WAYLAND_UTILS_LICENSE = MIT
- WAYLAND_UTILS_LICENSE_FILES = COPYING
 -- 
-2.28.0
+Bye, Peter Korsgaard
