@@ -1,38 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Sep 2020 21:05:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ecryptfs-utils: fix build failure
- without pod2man
-Message-ID: <20200915190556.605608-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 21:08:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/micropython: fix license hash
+In-Reply-To: <20200915172035.6871-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 15 Sep 2020 19:20:35 +0200")
+References: <20200915172035.6871-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfharh6g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set ac_cv_path_POD2MAN to true to avoid the following build failure:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-checking for pod2man... no
-configure: error: I couldn't find pod2man; make sure it's installed and in your path
+ > Commit 7676191cfacbdb1a92af1d0218d3280207b03090 forgot to update
+ > license hash which changed due to an update in year:
+ > https://github.com/micropython/micropython/commit/338b12d3c840ea56504c83d9c51e4d0f628684f4
 
-Fixes:
- - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
+ > While at it, also update indentation in hash file (two spaces)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/2a650636965d8575374333f847acc169caf8d2ac
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 326ff4f2dd..3a3253a366 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
- 
- #Needed for build system to find pk11func.h and libnss3.so
- ECRYPTFS_UTILS_CONF_ENV = \
-+	ac_cv_path_POD2MAN=true \
- 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
- 	NSS_LIBS="-lnss3"
- 
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
