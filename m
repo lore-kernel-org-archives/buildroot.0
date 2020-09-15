@@ -1,46 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:10:09 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python: do not
- install MS Windows installers on the target
-Message-ID: <20200915185503.C1713868C4@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:15:36 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/memtester: fix
+ build with gcc 10
+Message-ID: <20200915185503.EA741868C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5f5d68b666a32d7dc7d07fd63f61d30a2891a5a
+commit: https://git.buildroot.net/buildroot/commit/?id=346ec83700f29ce4ccaa4a9b8838e33aa99fc1f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Buildroot generates Linux systems, so there is no need to have
-MS Windows executables in there.
+Fixes:
+ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
 
-This reduces the target filesystem size by about 600kB:
-$ du -hcs usr/lib/python2.7/distutils/command/wininst-*.exe
-60K usr/lib/python2.7/distutils/command/wininst-6.0.exe
-64K usr/lib/python2.7/distutils/command/wininst-7.1.exe
-60K usr/lib/python2.7/distutils/command/wininst-8.0.exe
-192K    usr/lib/python2.7/distutils/command/wininst-9.0.exe
-220K    usr/lib/python2.7/distutils/command/wininst-9.0-amd64.exe
-596K    total
-
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7e71716f5fed63e3634e40eb3f069d2baebfbf1)
+(cherry picked from commit a68350f039682fbbced9a499f053d22210f5e853)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/memtester/0002-fix-build-with-gcc-10.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 1320770eab..7bc71b58e2 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -199,6 +199,7 @@ define PYTHON_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python2-config
- 	rm -f $(TARGET_DIR)/usr/bin/python-config
- 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
-+	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/distutils/command/wininst*.exe
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
+diff --git a/package/memtester/0002-fix-build-with-gcc-10.patch b/package/memtester/0002-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..8c9b3945bb
+--- /dev/null
++++ b/package/memtester/0002-fix-build-with-gcc-10.patch
+@@ -0,0 +1,65 @@
++From acd226cd4073b77abce8783e19c5ef3bbf8074ef Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 11 Sep 2020 21:39:03 +0200
++Subject: [PATCH] fix build with gcc 10
++
++Move mword8 and mword16 from types.h to tests.c to avoid the following
++build failure with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x4): multiple definition of `mword16'; memtester.o:memtester.c:(.bss+0xc): first defined here
++/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
++tests.c:(.bss+0x0): multiple definition of `mword8'; memtester.o:memtester.c:(.bss+0x10): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to charlesc at pyropus.ca]
++---
++ tests.c | 10 ++++++++++
++ types.h | 10 ----------
++ 2 files changed, 10 insertions(+), 10 deletions(-)
++
++diff --git a/tests.c b/tests.c
++index be1b350..d3d25c7 100644
++--- a/tests.c
+++++ b/tests.c
++@@ -22,6 +22,16 @@
++ #include "sizes.h"
++ #include "memtester.h"
++ 
+++union {
+++    unsigned char bytes[UL_LEN/8];
+++    ul val;
+++} mword8;
+++
+++union {
+++    unsigned short u16s[UL_LEN/16];
+++    ul val;
+++} mword16;
+++
++ char progress[] = "-\\|/";
++ #define PROGRESSLEN 4
++ #define PROGRESSOFTEN 2500
++diff --git a/types.h b/types.h
++index ad7ce73..dca7fc0 100644
++--- a/types.h
+++++ b/types.h
++@@ -24,13 +24,3 @@ struct test {
++     char *name;
++     int (*fp)();
++ };
++-
++-union {
++-    unsigned char bytes[UL_LEN/8];
++-    ul val;
++-} mword8;
++-
++-union {
++-    unsigned short u16s[UL_LEN/16];
++-    ul val;
++-} mword16;
++-- 
++2.28.0
++
