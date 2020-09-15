@@ -1,46 +1,36 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue, 15 Sep 2020 18:11:07 +0200
-Subject: [Buildroot] [PATCH] package/grpc: fix build on ubuntu gcc 4.8
-Message-ID: <20200915161107.1826-1-buildroot@heine.tech>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 Sep 2020 19:20:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/micropython: fix license hash
+Message-ID: <20200915172035.6871-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc 4.8 on ubuntu 14.04 does some broken optimization at link-time
-which causes grpc to create a grpc_cpp_plugin which quits because
-of a failing assertion. The created plugin is itself used during
-compilation which lets the build fail.
-With the added -Wl,--no-as-needed flag the LTO is disabled and grpc
-compiles successfully.
+Commit 7676191cfacbdb1a92af1d0218d3280207b03090 forgot to update
+license hash which changed due to an update in year:
+https://github.com/micropython/micropython/commit/338b12d3c840ea56504c83d9c51e4d0f628684f4
 
-fixes:
-- http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e
-- http://autobuild.buildroot.net/results/3ebb2880b9b3fd5154979016391dde897e2c039c
-- http://autobuild.buildroot.net/results/c2078e821e0728fe980be2c849c25d82e791a4c2
+While at it, also update indentation in hash file (two spaces)
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Fixes:
+ - http://autobuild.buildroot.org/results/2a650636965d8575374333f847acc169caf8d2ac
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/grpc/grpc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/micropython/micropython.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 2114f98e40..4db309d4e9 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -72,5 +72,12 @@ HOST_GRPC_CONF_OPTS = \
- 	-DgRPC_ZLIB_PROVIDER=package \
- 	-DgRPC_ABSL_PROVIDER=package
- 
-+#With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks the linkage of
-+#the grpc_cpp_plugin with libprotobuf and pthread. This additional flag fixes this.
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
-+HOST_GRPC_CONF_OPTS += \
-+	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS) -Wl,--no-as-needed"
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 4ca3f8402f..5dfbb74522 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,3 +1,3 @@
+ #locally computed
+-sha256 31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
+-sha256 afde3432122205e8e08d615fcb920aca58631c52b6c0c01813854287a457b298  LICENSE
++sha256  31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
++sha256  4b8a8884a60cd72749f9ef40328b85b40d13c22594c01352e0a55392141e0f89  LICENSE
 -- 
-2.25.1
+2.28.0
