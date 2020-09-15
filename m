@@ -1,53 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:58:21 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/localedef: depend
- host build on python3
-Message-ID: <20200915185432.12583810A5@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:10:16 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python3: do not
+ install MS Windows installers on the target
+Message-ID: <20200915185442.30DA78B4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae88d05bb2bf34befdeba7aa49822fb89b821cf4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2caa1d5362b4f7fa2de81e8f685041fe3e270c69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Just like glibc, host-localedef needs python3 on the host to
-build... since host-localedef is basically using the sources of glibc.
+Buildroot generates Linux systems, so there is no need to have
+MS Windows executables in there.
 
-Fixes:
+This reduces the target filesystem size by about 2MB:
+$ du -hcs usr/lib/python3.8/distutils/command/wininst-*.exe
+60K usr/lib/python3.8/distutils/command/wininst-6.0.exe
+64K usr/lib/python3.8/distutils/command/wininst-7.1.exe
+60K usr/lib/python3.8/distutils/command/wininst-8.0.exe
+192K    usr/lib/python3.8/distutils/command/wininst-9.0.exe
+220K    usr/lib/python3.8/distutils/command/wininst-9.0-amd64.exe
+188K    usr/lib/python3.8/distutils/command/wininst-10.0.exe
+220K    usr/lib/python3.8/distutils/command/wininst-10.0-amd64.exe
+448K    usr/lib/python3.8/distutils/command/wininst-14.0.exe
+576K    usr/lib/python3.8/distutils/command/wininst-14.0-amd64.exe
+2,0M    total
 
-checking if /build/build/per-package/host-localedef/host/bin/ccache
-/usr/bin/gcc is sufficient to build libc... yes
-checking for x86_64-pc-linux-gnu-nm... /usr/bin/nm
-checking for python3... no
-checking for python... python
-checking version of python... 2.7.18, bad
-configure: error:
-*** These critical programs are missing or too old: python
-*** Check the INSTALL file for required versions.
-
-As reported at:
-
-  http://lists.busybox.net/pipermail/buildroot/2020-September/291929.html
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6e73c71cc48fb1528044bbc63da028d2f74cbbab)
+(cherry picked from commit 4e97032c82deb11653db0f7e41fa8397e0b988bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/localedef/localedef.mk | 1 +
+ package/python3/python3.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index f6e26b5666..d6f1625e3f 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -14,6 +14,7 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
- 
- HOST_LOCALEDEF_DEPENDENCIES = \
- 	$(BR2_MAKE_HOST_DEPENDENCY) \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY) \
- 	host-bison \
- 	host-gawk
- 
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7daf893712..c8491322c5 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -212,6 +212,7 @@ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
++	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/distutils/command/wininst*.exe
+ 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
+ 		-type f -not -name Makefile` ; do \
+ 		rm -f $$i ; \
