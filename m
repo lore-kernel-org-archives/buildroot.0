@@ -1,54 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 21:05:43 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mesa3d: x11 needs EGL,
- GLX or a vulkan driver
-In-Reply-To: <20191229131453.327907-2-fontaine.fabrice@gmail.com>
-References: <20191229131453.327907-1-fontaine.fabrice@gmail.com>
- <20191229131453.327907-2-fontaine.fabrice@gmail.com>
-Message-ID: <20200915210543.647f37bd@windsurf.hq.k.grp>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 15 Sep 2020 21:05:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ecryptfs-utils: fix build failure
+ without pod2man
+Message-ID: <20200915190556.605608-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Dec 2019 14:14:53 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Set ac_cv_path_POD2MAN to true to avoid the following build failure:
 
-> As specified in meson.build, x11 platform needs EGL, GLX or a vulkan
-> driver:
-> 
-> if with_platform_x11
->   if with_any_vk or with_egl or (with_glx == 'dri' and with_dri_platform == 'drm')
->     pre_args += '-DHAVE_X11_PLATFORM'
->   endif
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e044609e603ca68695d842d08809fdcb35bc8127
+checking for pod2man... no
+configure: error: I couldn't find pod2man; make sure it's installed and in your path
 
-This autobuilder failure seems related to the XvMC issue fixed by PATCH
-1/2 in this series.
+Fixes:
+ - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 844360950c..373fe7004c 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -87,6 +87,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_X11
->  	bool
->  	depends on BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_LIBXCB
-> +	select BR2_PACKAGE_MESA3D_OPENGL_EGL if !(BR2_PACKAGE_MESA3D_OPENGL_GLX || BR2_PACKAGE_MESA3D_VULKAN_DRIVER)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I am rather confused but this. How is having a Vulkan driver at the
-same "level" as having either EGL or GLX ?
-
-Shouldn't it be the responsibility of whoever selects
-BR2_PACKAGE_MESA3D_NEEDS_X11 to define whether EGL or GLX is used. It
-seems a bit "random" to me that EGL is selected if neither GLX nor a
-Vulkan driver are enabled.
-
-Thomas
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+index 326ff4f2dd..3a3253a366 100644
+--- a/package/ecryptfs-utils/ecryptfs-utils.mk
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
+ 
+ #Needed for build system to find pk11func.h and libnss3.so
+ ECRYPTFS_UTILS_CONF_ENV = \
++	ac_cv_path_POD2MAN=true \
+ 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
+ 	NSS_LIBS="-lnss3"
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
