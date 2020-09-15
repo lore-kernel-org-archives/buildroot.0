@@ -1,86 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Sep 2020 23:09:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 6.0.8
-In-Reply-To: <20200915194929.15323-1-titouan.christophe@railnova.eu>
-References: <20200915194929.15323-1-titouan.christophe@railnova.eu>
-Message-ID: <20200915210910.GC2422@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Tue, 15 Sep 2020 14:15:34 -0700
+Subject: [Buildroot] [PATCH v1 2/5] package/docker-containerd: bump to
+ version 1.4.0
+In-Reply-To: <87ft7iswih.fsf@dell.be.48ers.dk>
+References: <20200913001659.472814-1-christian@paral.in>
+ <20200913001659.472814-2-christian@paral.in>
+ <87ft7iswih.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2pDrOpkaSGsc7oV3tkQ3PT_h8NZjspDLxkSq1r_9RnReQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Titouan, All,
+Hi Peter,
 
-On 2020-09-15 21:49 +0200, Titouan Christophe spake thusly:
-> From the release notes
-> See: https://github.com/redis/redis/blob/6.0.8/00-RELEASENOTES
-> 
-> ================================================================================
-> Redis 6.0.7     Released Fri Aug 28 11:05:09 IDT 2020
-> ================================================================================
-> 
-> Upgrade urgency MODERATE: several bugs with moderate impact are fixed,
-> Specifically the first two listed below which cause protocol errors for clients.
-> 
-> ================================================================================
-> Redis 6.0.8     Released Wed Sep 09 23:34:17 IDT 2020
-> ================================================================================
-> 
-> Upgrade urgency HIGH: Anyone who's using Redis 6.0.7 with Sentinel or
-> CONFIG REWRITE command is affected and should upgrade ASAP, see #7760.
-> 
-> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-Applied to master. Since it was a security bump, I changed the commit
-title accordingly.
+On Tue, Sep 15, 2020, 11:52 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Thanks.
+> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>
+>  > Signed-off-by: Christian Stewart <christian@paral.in>
+>
+> Is this a dependency for the docker-cli / docker-engine bumps? From the
+> looks of it, it isn't?
+>
 
-Regards,
-Yann E. MORIN.
+It's not necessarily a dependency but I cannot understand why you would
+chose to not update it at the same time.
 
-> ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-> index 840019415d..d686d59847 100644
-> --- a/package/redis/redis.hash
-> +++ b/package/redis/redis.hash
-> @@ -1,5 +1,5 @@
->  # From https://github.com/redis/redis-hashes/blob/master/README
-> -sha256  12ad49b163af5ef39466e8d2f7d212a58172116e5b441eebecb4e6ca22363d94  redis-6.0.6.tar.gz
-> +sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
->  
->  # Locally calculated
->  sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index 33c764a0d5..c567d3200d 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -REDIS_VERSION = 6.0.6
-> +REDIS_VERSION = 6.0.8
->  REDIS_SITE = http://download.redis.io/releases
->  REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
->  REDIS_LICENSE_FILES = COPYING
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200915/381fd688/attachment.html>
