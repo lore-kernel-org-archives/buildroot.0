@@ -1,54 +1,46 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 15 Sep 2020 19:07:07 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 0.30.0
-Message-ID: <20200915160707.2433132-1-aperez@igalia.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Tue, 15 Sep 2020 18:11:07 +0200
+Subject: [Buildroot] [PATCH] package/grpc: fix build on ubuntu gcc 4.8
+Message-ID: <20200915161107.1826-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a new major release which bring in many improvements and new
-features. For a complete list, please refer to the release notes:
+gcc 4.8 on ubuntu 14.04 does some broken optimization at link-time
+which causes grpc to create a grpc_cpp_plugin which quits because
+of a failing assertion. The created plugin is itself used during
+compilation which lets the build fail.
+With the added -Wl,--no-as-needed flag the LTO is disabled and grpc
+compiles successfully.
 
-  https://webkitgtk.org/2020/09/11/webkitgtk2.30.0-released.html
+fixes:
+- http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e
+- http://autobuild.buildroot.net/results/3ebb2880b9b3fd5154979016391dde897e2c039c
+- http://autobuild.buildroot.net/results/c2078e821e0728fe980be2c849c25d82e791a4c2
 
-None of the new features need additional dependencies.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/grpc/grpc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index cdca65a5a8..31e30997e2 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.28.4.tar.xz.sums
--md5  10e0cce27208dfbd4cf63dd68a9a47d7  webkitgtk-2.28.4.tar.xz
--sha1  70e9dd80647b30eaaf8a7f5b30d8869cd1254056  webkitgtk-2.28.4.tar.xz
--sha256  821952e8c9303ed752f1fb1d4283f612c25249d00d705d2b79c2db1bc49c9464  webkitgtk-2.28.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.30.0.tar.xz.sums
-+md5  71428fefd33f40583465649baf05ceb5  webkitgtk-2.30.0.tar.xz
-+sha1  60407e68b5452b5fd90ab1c03d8cc844bb68b590  webkitgtk-2.30.0.tar.xz
-+sha256  caf3dbf2d2383072614e34281f2fffb6331faf92f4ecf215f6f6a5a57f755d11  webkitgtk-2.30.0.tar.xz
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 2114f98e40..4db309d4e9 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -72,5 +72,12 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_ZLIB_PROVIDER=package \
+ 	-DgRPC_ABSL_PROVIDER=package
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 65a4439839..b4623a407a 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.28.4
-+WEBKITGTK_VERSION = 2.30.0
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
++#With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks the linkage of
++#the grpc_cpp_plugin with libprotobuf and pthread. This additional flag fixes this.
++ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
++HOST_GRPC_CONF_OPTS += \
++	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS) -Wl,--no-as-needed"
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
-2.28.0
+2.25.1
