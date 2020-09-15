@@ -1,41 +1,34 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 15 Sep 2020 20:15:04 +1200
-Subject: [Buildroot] [PATCH 1/3] syslog-ng: Bump to 3.29.1
-In-Reply-To: <20200914212247.3cb2372d@windsurf.hq.k.grp>
-References: <20200914085831.25302-1-judge.packham@gmail.com>
- <20200914212247.3cb2372d@windsurf.hq.k.grp>
-Message-ID: <CAFOYHZCuzhuFXimJB6NZTUJ96VhSb3utZQwtDbsF6S-iMuXWTw@mail.gmail.com>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Tue, 15 Sep 2020 11:46:22 +0200
+Subject: [Buildroot] [PATCH 1/3] package/pkg-meson.mk: fix generation of
+ pkg_config_static prop
+Message-ID: <20200915094625.598048-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 15, 2020 at 7:22 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 14 Sep 2020 20:58:29 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> > ---
-> >  package/syslog-ng/syslog-ng.conf | 2 +-
-> >  package/syslog-ng/syslog-ng.hash | 2 +-
-> >  package/syslog-ng/syslog-ng.mk   | 2 +-
-> >  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> All three applied. For future patches, it would be nice if the commit
-> title could follow our convention:
->
->         package/foo: bump version to XYZ
->
+fixes following in the generated cross-complation.conf file:
+pkg_config_static = '$(if $(BR2_STATIC_LIBS),true,false)'
 
-I'll try to remember that for next time.
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index c3fe6df5d0..7d103add98 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -195,7 +195,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    -e "s%@TARGET_CXXFLAGS@%$(call make-sq-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g" \
+ 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
+ 	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
+-	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
++	    -e 's%@STATIC@%$$(if $(BR2_STATIC_LIBS),true,false)%g' \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+-- 
+2.28.0
