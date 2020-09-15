@@ -1,43 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:05:29 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- support/scripts/pycompile: sort imports
-Message-ID: <20200915185442.1D4E88B4C1@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 21:02:11 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-meson: ensure
+ the global cross-compilation.conf file is correct
+Message-ID: <20200915185442.9E65E8151C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bbdd246fc77c50887eb31ecbec84a9088430c9c
+commit: https://git.buildroot.net/buildroot/commit/?id=5935b68772e8a23cbdddff9f16a5ae90eddddf5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+Currently, the cross-compilation.conf installed in
+$(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
+generated in a post-install-staging hook of the toolchain package.
+
+With per-package directory support enabled, this means that the
+generated cross-compilation.conf contains references to the
+per-package directory of the toolchain/ package, which is not want we
+want:
+
+[binaries]
+c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
+cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
+ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
+strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
+pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
+
+So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
+so that the global paths are used:
+
+[binaries]
+c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
+cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
+ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
+strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
+pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4c77dca5503a40148ffbc177e5edd4cc6d093a0d)
+(cherry picked from commit 48d2606e28c41e22971e2b6ee163a6cedf041813)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pycompile.py | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index fb1a12b2b7..b713fe1932 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -6,11 +6,13 @@ when a python byte code generation failed.
- Inspired from:
-    http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
- '''
-+
- from __future__ import print_function
--import sys
--import py_compile
--import compileall
-+
- import argparse
-+import compileall
-+import py_compile
-+import sys
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 0a4ab2194c..70f1d88d92 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -205,4 +205,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+ endef
  
- 
- def check_for_errors(comparison):
+-TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
++TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
