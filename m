@@ -1,52 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 15:44:50 +0200
-Subject: [Buildroot] Adding BR2_PACKAGE_PYTHON3 make U-Boot build fail
-In-Reply-To: <d767bea6910b5a518802f2b7bb99efe7349e20f0.camel@brainlab.com>
-References: <d30bce23621c48874241cbd24e7c85a741067991.camel@brainlab.com>
- <20200915152720.355ef868@windsurf.hq.k.grp>
- <d767bea6910b5a518802f2b7bb99efe7349e20f0.camel@brainlab.com>
-Message-ID: <20200915154450.55b1c6d1@windsurf.hq.k.grp>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Tue, 15 Sep 2020 16:05:37 +0200
+Subject: [Buildroot] [PATCH v2 2/3] package/meson: use specific BR
+ variables for cross-compilation.conf
+In-Reply-To: <20200915100546.806157-2-nolange79@gmail.com>
+References: <20200915100546.806157-1-nolange79@gmail.com>
+ <20200915100546.806157-2-nolange79@gmail.com>
+Message-ID: <e03b2581-ce33-25a5-2c35-5145d4f0dd1a@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Please keep the list in Cc. Thanks.
-
-On Tue, 15 Sep 2020 13:42:43 +0000
-Jonatan Hatakeyama Zeidler <jonatan.zeidler@brainlab.com> wrote:
-
-> > When BR2_PACKAGE_PYTHON3=y, we create $(HOST_DIR)/bin/python as a
-> > symlink to $(HOST_DIR)/bin/python3. This means that any script that
-> > uses just "python" will be executed by the Python 3 interpreter built
-> > by Buildroot. So if you have a Python 2.x script in the U-Boot build,
-> > it won't work anymore.
-> > 
-> > While I can explain the situation, I don't immediately have a
-> > good/simple solution to suggest. We have recently introduced
-> > BR2_TARGET_UBOOT_NEEDS_PYTHON2 and BR2_TARGET_UBOOT_NEEDS_PYTHON3.
-> > Perhaps these should ensure that the U-Boot build takes place with
-> > the
-> > PATH that points to a folder where a "python" symlink is created,
-> > pointing to the correct Python interpreter ?
-> > 
-> > Thomas  
+On 15/09/2020 12:05, Norbert Lange wrote:
+> dont depend on specific names of compiler tools, but use existing
+> Buildroot variables.
 > 
-> Thanks for the explanation. I get the issue with having
-> BR2_TARGET_UBOOT_NEEDS_PYTHON2=y set, unfortunately.
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/meson/cross-compilation.conf.in | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index e9344e2b2f..67c5da8156 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -4,11 +4,11 @@
+>  # - Buildroot's 'target' is Meson's 'host'
+>  
+>  [binaries]
+> -c = '@TARGET_CROSS at gcc'
+> -cpp = '@TARGET_CROSS at g++'
+> -ar = '@TARGET_CROSS at ar'
+> -strip = '@TARGET_CROSS at strip'
+> -pkgconfig = '@HOST_DIR@/bin/pkgconf'
+> +c = '@TARGET_CC@'
+> +cpp = '@TARGET_CXX@'
+> +ar = '@TARGET_AR@'
+> +strip = '@TARGET_STRIP@'
+> +pkgconfig = '@PKG_CONFIG_HOST_BINARY@'
+>  g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+>  g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
 
-Yes, as I explained: "Perhaps these should ensure that the U-Boot build
-takes place with the PATH that points to a folder where a "python"
-symlink is created, pointing to the correct Python interpreter ?"
+This changes host/bin/pkgconf to host/bin/pkg-config, but that shouldn't
+be a problem, given meson only uses this pkgconfig to find target
+packages and not host packages (for that meson would look it up in a
+native-file instead of a cross-file).
 
-Which implies this is not done at the moment, and therefore indeed
-BR2_TARGET_UBOOT_NEEDS_PYTHON2=y will not solve your problem.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Also @PKG_CONFIG_HOST_BINARY@ won't be replaced if patch 3 isn't
+applied, so this isn't bisectable. Maybe it must be merged with patch 3 ?
