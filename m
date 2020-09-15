@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 16:51:56 +0200
-Subject: [Buildroot] [PATH v2 1/1] docs/manual: add qemu defconfigs
- gitlab test
-In-Reply-To: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
-References: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
-Message-ID: <20200915165156.179380a9@windsurf.hq.k.grp>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 15 Sep 2020 09:22:05 -0600
+Subject: [Buildroot] [PATCH 1/1] package/meson: support additional cpu
+ families
+Message-ID: <20200915152205.1249707-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Sep 2020 12:38:06 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+Meson expects known cpu families to be in a normalized format based on
+https://mesonbuild.com/Reference-tables.html#cpu-families
 
-> +=== Adding qemu defconfig gitlab test
-> +
-> +Buildroot provides a test script (support/scripts/boot-qemu-image.py)
-> +to validate all defconfigs under +board/qemu/. Every supported qemu
-> +architecture should append the comment : # qemu_ARCH_defconfig
-> +at the end of its command line entry in board/qemu/ARCH/readme.txt (for
-> +example aarch64-virt includes : # qemu_aarch64_virt_defconfig).
-> +Once a week, every defconfig is tested under gitlab's pipelines :
-> +* Launches a qemu instance.
-> +* Enters root credentials and checks if login shell is available.
-> +* Powers off the instance.
-> +The job fails if one of above steps returns unsuccessful status code.
-> +to trigger qemu defconfigs test jobs:
-> +
-> +---------------------
-> + $ git push gitlab HEAD:<name>_defconfig
-> +---------------------
+Add support for m68k, microblaze and sh4 cpu families.
 
-While I understand the idea of documenting this, I am wondering if the
-Buildroot manual is really the right place for this. Indeed, this bit
-of documentation is really only useful for the very specific/narrow use
-case of qemu defconfigs.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/meson/meson.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Should this be in board/qemu/readme.txt ? I'm not sure.
-
-Thomas
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 8633a2f717..8b1bf1e58f 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -25,6 +25,10 @@ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ HOST_MESON_TARGET_CPU_FAMILY = aarch64
+ else ifeq ($(BR2_i386),y)
+ HOST_MESON_TARGET_CPU_FAMILY = x86
++else ifeq ($(BR2_m68k),y)
++HOST_MESON_TARGET_CPU_FAMILY = m68k
++else ifeq ($(BR2_microblazeel)$(BR2_microblazebe),y)
++HOST_MESON_TARGET_CPU_FAMILY = microblaze
+ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ HOST_MESON_TARGET_CPU_FAMILY = mips
+ else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+@@ -35,6 +39,8 @@ else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+ HOST_MESON_TARGET_CPU_FAMILY = ppc64
+ else ifeq ($(BR2_riscv),y)
+ HOST_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
++HOST_MESON_TARGET_CPU_FAMILY = sh4
+ else ifeq ($(BR2_sparc),y)
+ HOST_MESON_TARGET_CPU_FAMILY = sparc
+ else ifeq ($(BR2_sparc64),y)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
