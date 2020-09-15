@@ -1,27 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:20:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: depends on gcc >= 4.9
-In-Reply-To: <20200913165336.2685439-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 13 Sep 2020 18:53:36 +0200")
-References: <20200913165336.2685439-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgbisxyv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 15 Sep 2020 20:46:36 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-base: gl
+ needs api, platform and window
+Message-ID: <20200915183741.0847287634@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=66e484a7514128552543262da7bfb4a7816436b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > efl depends on C++11 since version 1.22.0 and
- > https://github.com/Enlightenment/efl/commit/ac95f38d1b06ac6977ea6d8b9f14f9405396858f
+Build will fail if gl is enabled without an api, a platform and a
+window:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/458ec719a7251b59796edfc865b7226baaed6d8f
+Message: No OpenGL Platforms found or requested
+Message: No OpenGL Window systems found or requested
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+gst-libs/gst/gl/meson.build:948:2: ERROR: Problem encountered: GStreamer OpenGL integration required via options, but needed dependencies not found.
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+This requirement is already specified in Config.in through a simple
+comment:
 
--- 
-Bye, Peter Korsgaard
+comment "The opengl library needs an API, a platform and a window system"
+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d171059801adf8dea1a2116d7c729a2aa5767ac8
+ - http://autobuild.buildroot.org/results/b1bfa505bba534440d331c4948eea5eb2d165c97
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index fe80f4751c..f0c14bc190 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -51,19 +51,22 @@ else
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW),yyy)
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
++else
++GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+ GST1_PLUGINS_BASE_GL_API_LIST = opengl
+ GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
+ endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+ GST1_PLUGINS_BASE_GL_API_LIST += gles2
+ GST1_PLUGINS_BASE_DEPENDENCIES += libgles
+ endif
+-else
+-GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+-endif
++
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_api='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_GL_API_LIST))'
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
