@@ -1,42 +1,80 @@
-From: Jonatan Hatakeyama Zeidler <jonatan.zeidler@brainlab.com>
-Date: Tue, 15 Sep 2020 12:55:08 +0000
-Subject: [Buildroot] Adding BR2_PACKAGE_PYTHON3 make U-Boot build fail
-Message-ID: <d30bce23621c48874241cbd24e7c85a741067991.camel@brainlab.com>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Tue, 15 Sep 2020 15:04:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/firmware-imx:
+ custom padding
+In-Reply-To: <20200910141843.3030855-1-pieter.degendt@basalte.be>
+References: <20200910141843.3030855-1-pieter.degendt@basalte.be>
+Message-ID: <20200915130414.3286332-1-pieter.degendt@basalte.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Tibault Damman <tibault.damman@basalte.be>
 
-my buildroot config (attached) works fine and produces a bootable
-build. Now I want to add Python 3 to the root fs. But adding
-BR2_PACKAGE_PYTHON3=y leads to a build error in u-boot:
+Some derivatives (such as Variscite imx8mm) expect the (LP)DDR4
+training data to be padded to a different length.
 
-./arch/arm/mach-k3/make_fit.py am65xx_phycore_kit \
-arch/arm/dts/k3-am65xx-phycore-kit.dtb > u-boot.its
-  CAT     u-boot-dtb.bin
-  COPY    u-boot.dtb
-  MKIMAGE u-boot-dtb.img
-  COPY    u-boot.bin
-Traceback (most recent call last):
-  File "./arch/arm/mach-k3/make_fit.py", line 155, in <module>
-    main()
-  File "./arch/arm/mach-k3/make_fit.py", line 151, in main
-    generate_its(board, dtbs)
-  File "./arch/arm/mach-k3/make_fit.py", line 127, in generate_its
-    overlays=generate_fdts(get_overlays(board), dtbdir))
-  File "./arch/arm/mach-k3/make_fit.py", line 75, in get_overlays
-    m = r.match(l)
-TypeError: cannot use a string pattern on a bytes-like object
+eg: https://github.com/varigit/uboot-imx/commit/5f8d814f
 
-How is it possible that a target package affects the build tools? And
-how can I solve that?
+This patch makes the padding length configurable.
 
-Thanks
-Jonatan
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: phycore-am65x_defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200915/6ea55fce/attachment.ksh>
+Signed-off-by: Tibault Damman <tibault.damman@basalte.be>
+Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
+
+---
+Changes v1 -> v2:
+  - improved description
+  - renamed variables to match U-Boot (suggested by Gary Bisson)
+
+Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
+---
+ package/freescale-imx/firmware-imx/Config.in       | 12 ++++++++++++
+ package/freescale-imx/firmware-imx/firmware-imx.mk |  6 ++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 5becf8b6a9..587f402426 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -69,6 +69,18 @@ config BR2_PACKAGE_FIRMWARE_IMX_DDR4
+ 
+ endchoice # DDR training FW
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN
++	hex "(LP)DDR IMEM padding length"
++	default 0x8000
++	help
++	  The IMEM firmware will be padded to this length
++
++config BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN
++	hex "(LP)DDR DMEM padding length"
++	default 0x4000
++	help
++	  The DMEM firmware will be padded to this length
++
+ endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 
+ endif # BR2_PACKAGE_FIRMWARE_IMX
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index eb8595f022..fb3cfe640b 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -23,10 +23,12 @@ endef
+ #
+ 
+ define FIRMWARE_IMX_PREPARE_DDR_FW
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 \
++	$(TARGET_OBJCOPY) -I binary -O binary \
++		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_IMEM_LEN) --gap-fill=0x0 \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1)).bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin
+-	$(TARGET_OBJCOPY) -I binary -O binary --pad-to 0x4000 --gap-fill=0x0 \
++	$(TARGET_OBJCOPY) -I binary -O binary \
++		--pad-to $(BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN) --gap-fill=0x0 \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2)).bin \
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(2))_pad.bin
+ 	cat $(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(1))_pad.bin \
+-- 
+2.25.1
