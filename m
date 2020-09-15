@@ -1,164 +1,118 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 15 Sep 2020 22:57:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ettercap: new package
-In-Reply-To: <1597227392-9101-2-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1597227392-9101-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1597227392-9101-2-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <CAEyMn7ZEfuc0AREeJat15z8U7KfP+EUr0ewiGangNUCzoQicJg@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 15 Sep 2020 13:57:38 -0700
+Subject: [Buildroot] [PATCH] package/sentry-cli: new package
+Message-ID: <20200915205738.2144347-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jugurtha, Hi Romain,
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in.host             |  1 +
+ package/sentry-cli/Config.in.host  | 10 ++++++++
+ package/sentry-cli/sentry-cli.hash |  3 +++
+ package/sentry-cli/sentry-cli.mk   | 39 ++++++++++++++++++++++++++++++
+ 5 files changed, 54 insertions(+)
+ create mode 100644 package/sentry-cli/Config.in.host
+ create mode 100644 package/sentry-cli/sentry-cli.hash
+ create mode 100644 package/sentry-cli/sentry-cli.mk
 
-Am Mi., 12. Aug. 2020 um 12:16 Uhr schrieb Jugurtha BELKALEM
-<jugurtha.belkalem@smile.fr>:
->
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/ettercap/Config.in     | 32 ++++++++++++++++++++++++++++++++
->  package/ettercap/ettercap.hash |  3 +++
->  package/ettercap/ettercap.mk   | 32 ++++++++++++++++++++++++++++++++
->  5 files changed, 69 insertions(+)
->  create mode 100644 package/ettercap/Config.in
->  create mode 100644 package/ettercap/ettercap.hash
->  create mode 100644 package/ettercap/ettercap.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 42fa5a4..2097f4d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1396,6 +1396,7 @@ N:        Joshua Henderson <joshua.henderson@microchip.com>
->  F:     package/qt5/qt5wayland/
->
->  N:     Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> +F:     package/ettercap/
->  F:     package/python-cycler/
->  F:     package/python-matplotlib/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4..db886a1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2042,6 +2042,7 @@ menu "Networking applications"
->         source "package/ebtables/Config.in"
->         source "package/ejabberd/Config.in"
->         source "package/ethtool/Config.in"
-> +       source "package/ettercap/Config.in"
->         source "package/faifa/Config.in"
->         source "package/fail2ban/Config.in"
->         source "package/fastd/Config.in"
-> diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
-> new file mode 100644
-> index 0000000..e0693f4
-> --- /dev/null
-> +++ b/package/ettercap/Config.in
-> @@ -0,0 +1,32 @@
-> +config BR2_PACKAGE_ETTERCAP
-> +       bool "ettercap"
-> +       depends on !BR2_STATIC_LIBS
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_USE_WCHAR # ncurses wchar
-> +       select BR2_PACKAGE_ETHTOOL # runtime
-> +       select BR2_PACKAGE_GEOIP
-
-As far as I can see in the CMakelist.txt this can be disabled. So this
-looks to me like an option for the package.
-
-> +       select BR2_PACKAGE_LIBCURL
-
-Tried to build and failed due to missing:
-select BR2_PACKAGE_LIBICONV
-
-> +       select BR2_PACKAGE_LIBNET
-> +       select BR2_PACKAGE_LIBPCAP
-> +       select BR2_PACKAGE_NCURSES
-> +       select BR2_PACKAGE_NCURSES_WCHAR
-
-Same for ncurses support. This seems also to be optional.
-
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +         Ettercap is a comprehensive suite for man
-> +         in the middle attacks. It features sniffing of
-> +         live connections, content filtering on the fly
-> +         and many other interesting tricks. It supports
-> +         active and passive dissection of many protocols
-> +         and includes many features for network and
-> +         host analysis.
-> +
-> +         Note : Ettercap can provide better tracking
-> +         for IP addresses when GeoIP.dat is provided by
-> +         users (GeoIP.dat is available on maxmind website).
-> +
-> +         http://www.ettercap-project.org/
-> +
-> +comment "ettercap needs a toolchain w/ threads, wchar, dynamic library"
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS \
-                               ^
-I think the "!" is missing?!
-
-> +               || !BR2_USE_WCHAR ||BR2_STATIC_LIBS
-
-> diff --git a/package/ettercap/ettercap.hash b/package/ettercap/ettercap.hash
-> new file mode 100644
-> index 0000000..61ecbec
-> --- /dev/null
-> +++ b/package/ettercap/ettercap.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 d0c3ef88dfc284b61d3d5b64d946c1160fd04276b448519c1ae4438a9cdffaf3  ettercap-0.8.3.1.tar.gz
-> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-> diff --git a/package/ettercap/ettercap.mk b/package/ettercap/ettercap.mk
-> new file mode 100644
-> index 0000000..ee8c8a2
-> --- /dev/null
-> +++ b/package/ettercap/ettercap.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# ettercap
-> +#
-> +################################################################################
-> +
-> +ETTERCAP_VERSION = 0.8.3.1
-> +ETTERCAP_SITE = $(call github,Ettercap,ettercap,v$(ETTERCAP_VERSION))
-> +ETTERCAP_LICENSE = GPL-2.0+
-> +ETTERCAP_LICENSE_FILES = LICENSE
-> +ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
-> +ETTERCAP_INSTALL_STAGING = YES
-
-Why do we need to install in staging?
-
-> +ETTERCAP_DEPENDENCIES = geoip libcurl libnet libpcap ncurses openssl zlib \
-> +       host-bison host-flex host-pkgconf
-
-Add dependency for libiconv (see above).
-
-> +
-> +ETTERCAP_CONF_OPTS = -DENABLE_IPV6=ON -DENABLE_GTK=OFF -DBUNDLED_LIBS=OFF
-> +
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> +ETTERCAP_DEPENDENCIES += pcre
-> +endif
-> +
-> +# Replaces default encoding set (ISO-8859-1) with UTF-8 in ettercap
-> +# configuration file installed by the package.
-> +# It ensures that all characters are properly decoded and avoids
-> +# any fatal errors while running in text mode (-T).
-> +define ETTERCAP_SET_UTF8_ENCODING
-> +       $(SED) 's%^utf8_encoding.*%utf8_encoding = "UTF-8"%' \
-> +               $(TARGET_DIR)/etc/ettercap/etter.conf
-> +endef
-> +ETTERCAP_POST_INSTALL_TARGET_HOOKS += ETTERCAP_SET_UTF8_ENCODING
-> +
-> +$(eval $(cmake-package))
-
-Thank you.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d59d538e42..9a2b10c4c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1422,6 +1422,7 @@ F:	package/python-schedule/
+ F:	package/python-sentry-sdk/
+ F:	package/python-websockets/
+ F:	package/python-xlib/
++F:	package/sentry-cli/
+ F:	package/unclutter-xfixes/
+ 
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 243da8969f..58b600d948 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -74,6 +74,7 @@ menu "Host utilities"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/sdbusplus/Config.in.host"
++	source "package/sentry-cli/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/swig/Config.in.host"
+diff --git a/package/sentry-cli/Config.in.host b/package/sentry-cli/Config.in.host
+new file mode 100644
+index 0000000000..b71f7f2f9b
+--- /dev/null
++++ b/package/sentry-cli/Config.in.host
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_HOST_SENTRY_CLI
++	bool "sentry-cli"
++	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  Official Sentry command line interface
++
++	  For managing debug information files and source maps.
++
++	  https://docs.sentry.io/cli/
+diff --git a/package/sentry-cli/sentry-cli.hash b/package/sentry-cli/sentry-cli.hash
+new file mode 100644
+index 0000000000..3b0733a276
+--- /dev/null
++++ b/package/sentry-cli/sentry-cli.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256  5d0f7acf6a139d1c1716b9a8ff76c8bfaab09104ba663c957bb9a5dba2ffbabd  sentry-cli-1.57.0.tar.gz
++sha256  9503def7b54ceb6e3cd182fd59bc05d3a30d7eae481e65aaba4b495133c83c14  LICENSE
+diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
+new file mode 100644
+index 0000000000..55bc03d1ec
+--- /dev/null
++++ b/package/sentry-cli/sentry-cli.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# sentry-cli
++#
++################################################################################
++
++SENTRY_CLI_VERSION = 1.57.0
++SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
++SENTRY_CLI_LICENSE = BSD-3-clause
++SENTRY_CLI_LICENSE_FILES = LICENSE
++
++SENTRY_CLI_DEPENDENCIES = host-rustc
++
++HOST_SENTRY_CLI_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
++
++HOST_SENTRY_CLI_BIN_DIR = target/$(SENTRY_CLI_CARGO_BIN_SUBDIR)/
++
++HOST_SENTRY_CLI_CARGO_OPTS = \
++	$(if $(BR2_ENABLE_DEBUG),,--release) \
++	--manifest-path=$(@D)/Cargo.toml
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++SENTRY_CLI_CARGO_BIN_SUBDIR = debug
++else
++SENTRY_CLI_CARGO_OPTS += --release
++SENTRY_CLI_CARGO_BIN_SUBDIR = release
++endif
++
++define HOST_SENTRY_CLI_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(HOST_SENTRY_CLI_CARGO_ENV) \
++		cargo build $(HOST_SENTRY_CLI_CARGO_OPTS)
++endef
++
++define HOST_SENTRY_CLI_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/$(HOST_SENTRY_CLI_BIN_DIR)/sentry-cli \
++		$(HOST_DIR)/bin
++endef
++
++$(eval $(host-generic-package))
 -- 
-Heiko
+2.28.0
