@@ -1,17 +1,17 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Sep 2020 22:26:19 +0200
-Subject: [Buildroot] [git commit] package/python-s3transfer: new package.
-Message-ID: <20200915202422.05C3681E44@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 22:32:31 +0200
+Subject: [Buildroot] [git commit] package/python-boto3: new package.
+Message-ID: <20200915202422.1789D81E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b8ffe69b2675013fb806fad4856a561eb6adc13
+commit: https://git.buildroot.net/buildroot/commit/?id=f8a387e525364bae35b74d355849e6efba513692
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An Amazon S3 Transfer Manager.
+The AWS SDK for Python.
 
 Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
@@ -19,80 +19,80 @@ Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
 Tested-by: Jagan Teki <jagan@amarulasolutions.com> # roc-rk3399-pc
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-s3transfer/Config.in              |  9 +++++++++
- package/python-s3transfer/python-s3transfer.hash |  5 +++++
- package/python-s3transfer/python-s3transfer.mk   | 14 ++++++++++++++
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-boto3/Config.in         |  9 +++++++++
+ package/python-boto3/python-boto3.hash |  5 +++++
+ package/python-boto3/python-boto3.mk   | 14 ++++++++++++++
  5 files changed, 30 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d989242c4..e3e1eb36ec 100644
+index e3e1eb36ec..c5124f97ef 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2213,6 +2213,7 @@ N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
+@@ -2211,6 +2211,7 @@ F:	package/bitwise/
+ 
+ N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
  F:	package/jbig2dec/
++F:	package/python-boto3/
  F:	package/python-botocore/
  F:	package/python-jmespath/
-+F:	package/python-s3transfer/
- 
- N:	Refik Tuzakli <tuzakli.refik@gmail.com>
- F:	package/freescale-imx/
+ F:	package/python-s3transfer/
 diff --git a/package/Config.in b/package/Config.in
-index 448fa3759e..44b2a1b357 100644
+index 44b2a1b357..7783c26dc6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1147,6 +1147,7 @@ menu "External python modules"
- 	source "package/python-rpi-gpio/Config.in"
- 	source "package/python-rpi-ws281x/Config.in"
- 	source "package/python-rtslib-fb/Config.in"
-+	source "package/python-s3transfer/Config.in"
- 	source "package/python-scandir/Config.in"
- 	source "package/python-scapy/Config.in"
- 	source "package/python-schedule/Config.in"
-diff --git a/package/python-s3transfer/Config.in b/package/python-s3transfer/Config.in
+@@ -897,6 +897,7 @@ menu "External python modules"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bitstring/Config.in"
+ 	source "package/python-bluezero/Config.in"
++	source "package/python-boto3/Config.in"
+ 	source "package/python-botocore/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-brotli/Config.in"
+diff --git a/package/python-boto3/Config.in b/package/python-boto3/Config.in
 new file mode 100644
-index 0000000000..6587a5fe39
+index 0000000000..67b1420388
 --- /dev/null
-+++ b/package/python-s3transfer/Config.in
++++ b/package/python-boto3/Config.in
 @@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_S3TRANSFER
-+	bool "python-s3transfer"
++config BR2_PACKAGE_PYTHON_BOTO3
++	bool "python-boto3"
 +	select BR2_PACKAGE_PYTHON_BOTOCORE # runtime
-+	# runtime, not needed for python3:
-+	select BR2_PACKAGE_PYTHON_FUTURES if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_JMESPATH # runtime
++	select BR2_PACKAGE_PYTHON_S3TRANSFER # runtime
 +	help
-+	  An Amazon S3 Transfer Manager.
++	  The AWS SDK for Python.
 +
-+	  https://github.com/boto/s3transfer
-diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
++	  https://github.com/boto/boto3
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
 new file mode 100644
-index 0000000000..6b554607da
+index 0000000000..49eb9ae5c6
 --- /dev/null
-+++ b/package/python-s3transfer/python-s3transfer.hash
++++ b/package/python-boto3/python-boto3.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/s3transfer/json
-+md5	8ca74015d9dc58af26c68276a8867eca  s3transfer-0.2.1.tar.gz
-+sha256	6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d  s3transfer-0.2.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/boto3/json
++md5	02e0d5ea4affd9c64e9166d5d3786766  boto3-1.9.210.tar.gz
++sha256	e221f6867282266e06aec2213f0ea5fdbd4eb3facbca4fcbf96886073350bc5e  boto3-1.9.210.tar.gz
 +# Locally computed sha256 checksums
-+sha256	8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
-diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
++sha256	0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
 new file mode 100644
-index 0000000000..86bdc19eae
+index 0000000000..e00cb84ad1
 --- /dev/null
-+++ b/package/python-s3transfer/python-s3transfer.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-s3transfer
++# python-boto3
 +#
 +################################################################################
 +
-+PYTHON_S3TRANSFER_VERSION = 0.2.1
-+PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
-+PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/39/12/150cd55c606ebca6725683642a8e7068cd6af10f837ce5419a9f16b7fb55
-+PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
-+PYTHON_S3TRANSFER_LICENSE = Apache-2.0
-+PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
++PYTHON_BOTO3_VERSION = 1.9.210
++PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/d3/ac/79093e14a5397096d1fe4a17329a8453cebed8629cbc434e2dad5fb75b65
++PYTHON_BOTO3_SETUP_TYPE = setuptools
++PYTHON_BOTO3_LICENSE = Apache-2.0
++PYTHON_BOTO3_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
