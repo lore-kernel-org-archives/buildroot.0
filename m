@@ -1,31 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:56:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wlroots: always disable
- xcb-errors
-In-Reply-To: <20200909213756.1945855-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Thu, 10 Sep 2020 00:37:56 +0300")
-References: <20200909213756.1945855-1-aperez@igalia.com>
-Message-ID: <87h7ryvs8c.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Sep 2020 19:57:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/musepack: fix build with gcc 10
+In-Reply-To: <20200910165630.890433-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 10 Sep 2020 18:56:30 +0200")
+References: <20200910165630.890433-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d02mvs6y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Stop trying to enable the xcb-errors Meson option and always disable it:
- > there is no xcb-util-errors package in Buildroot. The build recipe was
- > wrongly assuming that the XCB errors library would be installed as part
- > of the xcb-util package, which is not the case.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9971da8c59484a6a26eb79d6e157461a47855dbf
 
- > Fixes the following autobuilder failure:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- >   http://autobuild.buildroot.net/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e/
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-Committed to 2020.05.x and 2020.08.x, thanks.
+Committed to 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
