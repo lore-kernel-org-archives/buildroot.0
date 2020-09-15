@@ -1,35 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:10:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python: do not install MS
- Windows installers on the target
-In-Reply-To: <20200912115622.134543-2-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Sat, 12 Sep 2020 13:56:22 +0200")
-References: <20200912115622.134543-1-titouan.christophe@railnova.eu>
- <20200912115622.134543-2-titouan.christophe@railnova.eu>
-Message-ID: <87mu1qud07.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 15 Sep 2020 20:13:21 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/wayland-protocols: change
+ download url to https
+Message-ID: <20200915181322.8364-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+- change download url to https (as redirected by the original http url)
 
- > Buildroot generates Linux systems, so there is no need to have
- > MS Windows executables in there.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/wayland-protocols/wayland-protocols.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > This reduces the target filesystem size by about 600kB:
- > $ du -hcs usr/lib/python2.7/distutils/command/wininst-*.exe
- > 60K usr/lib/python2.7/distutils/command/wininst-6.0.exe
- > 64K usr/lib/python2.7/distutils/command/wininst-7.1.exe
- > 60K usr/lib/python2.7/distutils/command/wininst-8.0.exe
- > 192K    usr/lib/python2.7/distutils/command/wininst-9.0.exe
- > 220K    usr/lib/python2.7/distutils/command/wininst-9.0-amd64.exe
- > 596K    total
-
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index ed60d1c995..84028b97d5 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ WAYLAND_PROTOCOLS_VERSION = 1.20
+-WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
++WAYLAND_PROTOCOLS_SITE = https://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+ WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.28.0
