@@ -1,57 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 21:03:09 +0200
-Subject: [Buildroot] [PATCH] package/pkg-meson: ensure the global
- cross-compilation.conf file is correct
-In-Reply-To: <20200914200407.GB8792@scaer> (Yann E. MORIN's message of "Mon,
- 14 Sep 2020 22:04:07 +0200")
-References: <20191204150225.33749-1-thomas.petazzoni@bootlin.com>
- <20200914200407.GB8792@scaer>
-Message-ID: <87pn6mrhg2.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Sep 2020 20:06:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ support/scripts/pycompile: sort imports
+Message-ID: <20200915185431.879DF85EEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8673646dcc1a6dae3c2c94eac8693bcab3b821d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Thomas?, All,
- > On 2019-12-04 16:02 +0100, Thomas Petazzoni spake thusly:
- >> Currently, the cross-compilation.conf installed in
- >> $(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
- >> generated in a post-install-staging hook of the toolchain package.
- >> 
- >> With per-package directory support enabled, this means that the
- >> generated cross-compilation.conf contains references to the
- >> per-package directory of the toolchain/ package, which is not want we
- >> want:
- >> 
- >> [binaries]
- >> c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
- >> cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
- >> ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
- >> strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
- >> pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
- >> 
- >> So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
- >> so that the global paths are used:
- >> 
- >> [binaries]
- >> c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
- >> cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
- >> ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
- >> strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
- >> pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 4c77dca5503a40148ffbc177e5edd4cc6d093a0d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/pycompile.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- > After giving it quite some thoughts, I think we do not want to provide
- > any guarantee about the stableness of target/ vs. host/ on a partial
- > rebuild, like Thomas P. said.
-
- > As such, I have applied this patch now.
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index fb1a12b2b7..b713fe1932 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -6,11 +6,13 @@ when a python byte code generation failed.
+ Inspired from:
+    http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
+ '''
++
+ from __future__ import print_function
+-import sys
+-import py_compile
+-import compileall
++
+ import argparse
++import compileall
++import py_compile
++import sys
+ 
+ 
+ def check_for_errors(comparison):
