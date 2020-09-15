@@ -1,58 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:51:47 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/wlroots: always
- disable xcb-errors
-Message-ID: <20200915175147.0231E8B50A@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:50:29 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/neardal: fix
+ build with gcc 10
+Message-ID: <20200915175146.EE6F68756A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9924dc7d572d86b6ae6ed2601d9fb5fa723d05bb
+commit: https://git.buildroot.net/buildroot/commit/?id=6215997deb46a5f405d3a884b5ad8e700f91d6a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Stop trying to enable the xcb-errors Meson option and always disable it:
-there is no xcb-util-errors package in Buildroot. The build recipe was
-wrongly assuming that the XCB errors library would be installed as part
-of the xcb-util package, which is not the case.
+Fixes:
+ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
 
-Fixes the following autobuilder failure:
-
-  http://autobuild.buildroot.net/results/1891aa624b29e4bbcbbe6bc752a1cc90c316024e/
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c2bc0694c45bb6bc0a19e06b2fcddff365be5a2e)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit a85ae8b297fd0526f57fe99d73087dd840ea6219)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wlroots/wlroots.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ .../0001-lib-neardal.h-fix-build-with-gcc-10.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 988643485f..8b646b4536 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -21,7 +21,7 @@ WLROOTS_DEPENDENCIES = \
- 	wayland \
- 	wayland-protocols
- 
--WLROOTS_CONF_OPTS = -Dexamples=false
-+WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled
- 
- ifeq ($(BR2_PACKAGE_FFMPEG),y)
- WLROOTS_DEPENDENCIES += ffmpeg
-@@ -59,13 +59,6 @@ else
- WLROOTS_CONF_OPTS += -Dxwayland=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_XCB_UTIL),y)
--WLROOTS_CONF_OPTS += -Dxcb-errors=enabled
--WLROOTS_DEPENDENCIES += xcb-util
--else
--WLROOTS_CONF_OPTS += -Dxcb-errors=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
- WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
- WLROOTS_DEPENDENCIES += xcb-util-wm
+diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..c9c4555022
+--- /dev/null
++++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 9 Sep 2020 19:14:52 +0200
++Subject: [PATCH] lib/neardal.h: fix build with gcc 10
++
++Define neardal_output_cb as extern to avoid the following build failure
++with gcc 10 (which defaults to -fno-common):
++
++/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/connectivity/neardal/pull/10]
++---
++ lib/neardal.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/neardal.h b/lib/neardal.h
++index d1cd18b..3e83595 100644
++--- a/lib/neardal.h
+++++ b/lib/neardal.h
++@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
++ 
++ void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
++ 	__attribute__((format(printf, 3, 4)));
++-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
+++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
++ 
++ #ifdef __cplusplus
++ }
++-- 
++2.28.0
++
