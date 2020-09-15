@@ -1,140 +1,44 @@
-From: Sam Voss <sam.voss@rockwellcollins.com>
-Date: Tue, 15 Sep 2020 15:08:02 -0500
-Subject: [Buildroot] [RFC PATCH v1 1/1] package/pkg-golang: download
- deps to vendor tree if not present
-In-Reply-To: <bf2665e6-c73c-cef2-3f3c-f85238b9932c@mind.be>
-References: <20200831070800.GN14354@scaer>
- <CAK714xKp0H5HEv5bp1bjDumZff6+cC41cs=exZk8bKuZTCV2vQ@mail.gmail.com>
- <20200903132852.GZ14354@scaer> <20200903160205.7e67bbe7@windsurf.home>
- <20200903151221.GA14354@scaer> <20200903181334.1a25642b@windsurf.home>
- <20200903191841.GC14354@scaer>
- <CA+h8R2rNmRJUor9CDjyNzsgGPCmpE3XPjtkFdjzCeMGYenWKxA@mail.gmail.com>
- <20200903204341.GE14354@scaer>
- <CA+h8R2ooPOmJeE0dK7bQ+AyHG+ZT3ZRtYG80RjUdpBf78Q4aHw@mail.gmail.com>
- <20200904080612.GG14354@scaer>
- <CA+h8R2p=3KN=11jmkKg4AOToGhJ+BX+F8yx5-OOUyPO1yBD9fQ@mail.gmail.com>
- <bf2665e6-c73c-cef2-3f3c-f85238b9932c@mind.be>
-Message-ID: <CAH=K+6nwcFz8rBLugbN0x7syQM5ETu8So8+7y=av5OVR_+c63g@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 15 Sep 2020 22:09:09 +0200
+Subject: [Buildroot] [PATCH v2 11/12] package/makedumpfile: add support
+ for IBM s390x and Z arch
+In-Reply-To: <20200913113254.1955447-12-egorenar@linux.ibm.com>
+References: <20200913113254.1955447-1-egorenar@linux.ibm.com>
+ <20200913113254.1955447-12-egorenar@linux.ibm.com>
+Message-ID: <2083ee9f-4aed-aa74-750b-c7e43839e149@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Arnout,
+Hi Alexander,
 
-On Tue, Sep 15, 2020 at 2:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 11/09/2020 00:33, Christian Stewart wrote:
-> > Yann,
-> >
-> > On Fri, Sep 4, 2020 at 1:06 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> Ah, because you store all the go vendored dependencies "away" of the
-> >> package.
-> >>
-> >> I am not sure I like that, because it breaks the semantics of the dl/
-> >> directory: all the csource needed by one package is in dl/foo/ and the
-> >> vendored dependencies *are* part of the package.
-> >>
-> >> So I am absolutely not in favour of storing the go modules on the side.
-> >
-> > I've thought about this quite a bit and I think you're probably right,
-> > for a v1 implementation in Buildroot we most likely should do the
-> > approach of "go mod vendor" just before compressing the source file
-> > for "make source." It should work fine for Go (can't speak for node or
-> > others) because the vendor/ tree is always consistent.
->
->  Now that apparently everyone is on the same page, I think it's good to keep
-> track of the conclusions, so I've created a wiki page [1].
->
->  If there is anything that needs further discussion, please continue that here
-> in the list. However, if there is something I just didn't write down correctly
-> or clearly enough, simply update the wiki.
+Le 13/09/2020 ? 13:32, Alexander Egorenkov a ?crit?:
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> ---
+>  package/makedumpfile/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
+> index a90ccbdf3c..d1efbc6e51 100644
+> --- a/package/makedumpfile/Config.in
+> +++ b/package/makedumpfile/Config.in
+> @@ -4,7 +4,7 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+>  	default y if BR2_arm || BR2_armeb
+>  	default y if BR2_i386 || BR2_x86_64
+>  	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> -	default y if BR2_sparc64
+> +	default y if BR2_s390x || BR2_sparc64
 
-Thanks for writing all of this down and creating a wiki for this. I
-think this helps clarify our options and will give us room for
-discussion.
+Maybe just add a new line here:
+    default y if BR2_s390x
 
->
->  For your convenience, I've copied the wiki page below.
->
->
-> == Problem statement and requirements
->
-> Language package managers make it possible to express dependencies and make sure
-> the correct version of those dependencies are used.
->
-> For Buildroot, the problem is to make sure those dependencies are downloaded.
-> Sometimes the upstream package simply bundles all dependencies (this is called
-> "vendored"), but sometimes they only have them by reference.
->
-> Buildroot needs to make sure that:
->
-> * the dependencies are downloaded;
-> * the dependencies are extracted in a way that they're accessible by the
-> language's build system;
-> * everything is properly hashed so we are sure the correct tarballs were downloaded;
-> * it is possible to do "make source", unplug the network, and do a build;
-> * it is possible to use a BR2_PRIMARY_SITE and BR2_PRIMARY_SITE_ONLY;
-> * it is possible to use BR2_BACKUP_SITE;
-> * the information produced by "make legal-info" is correct.
->
-> An additional nice-to-have is to be able to split off the open source
-> dependencies from the non-redistributable dependencies.
->
->
-> == Possible solutions
->
-> 1. Add a download helper that downloads the base source, runs the package
-> manager to vendor all dependencies, and creates a tarball of this bundle.
-> 2. Add a download helper that downloads the base source, runs the package
-> manager to vendor all dependencies, and creates a separate tarball containing
-> only the dependencies.
-> 3. Add a download helper that downloads the base source, runs the package
-> manager to vendor all dependencies, splits off the non-redistributable
-> dependencies, and creates a separate tarball for the open-source and the
-> non-redistributable dependencies.
-> 4. Add a download helper that downloads the base source, runs the package
-> manager to get all dependencies, and creates a separate tarball for each
-> individual dependency.
-> 5. Solution 1 + extra legal-info infrastructure that makes it possible to strip
-> off non-redistributable parts when generating the legal-info tarball.
->
-> Solution 1 is the simplest to implement. It is the approach taken by
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=159771 for cargo.
->
-> Solution 2 is also easy to implement. However:
->
-> - the download infra has to "know" how to download the additional tarball (it
-> should not be downloaded when using the normal method, but it should be
-> downloaded for PRIMARY and BACKUP);
-> - the additional tarball has to be added to the hash file;
-> - the additional tarball has to be extracted as well.
+Best regards,
+Romain
 
-I sent an RFC last night, which created a very crude initial
-implementation of this, as I needed/wanted to leverage the atomic
-saves in support/download/dl-wrapper.
 
-After briefly chatting with Christian, we believe this could very
-easily be leveraged by using `go mod vendor` instead of `cargo
-vendor`.
-
-http://lists.busybox.net/pipermail/buildroot/2020-September/292211.html
-
-Thanks,
--- 
-Sam Voss | Sr. Software Engineer | Commercial Avionics
-COLLINS AEROSPACE
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-Tel: +1 319 263 4039
-sam.voss at collins.com | collinsaerospace.com
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
+>  
+>  comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
+>  	depends on BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+> 
