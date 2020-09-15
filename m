@@ -1,69 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 20:46:36 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-base: gl
- needs api, platform and window
-Message-ID: <20200915183741.0847287634@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 20:46:51 +0200
+Subject: [Buildroot] [PATCH v4 1/2] support/scripts/pycompile: fix .pyc
+ original source file paths
+In-Reply-To: <20200910083252.7102-2-robin.jarry@6wind.com> (Robin Jarry's
+ message of "Thu, 10 Sep 2020 10:32:51 +0200")
+References: <20200904112908.21686-1-julien.floret@6wind.com>
+ <20200910083252.7102-1-robin.jarry@6wind.com>
+ <20200910083252.7102-2-robin.jarry@6wind.com>
+Message-ID: <87o8m6swro.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66e484a7514128552543262da7bfb4a7816436b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Robin" == Robin Jarry <robin.jarry@6wind.com> writes:
 
-Build will fail if gl is enabled without an api, a platform and a
-window:
+ > When generating a .pyc file, the original .py source file path is
+ > encoded in it. It is used for various purposes: traceback generation,
+ > .pyc file comparison with its .py source, and code inspection.
 
-Message: No OpenGL Platforms found or requested
-Message: No OpenGL Window systems found or requested
+ > By default, the source path used when invoking compileall is encoded in
+ > the .pyc file. Since we use paths relative to TARGET_DIR, we end up with
+ > paths that are only valid when relative to '/' encoded in the installed
+ > .pyc files on the target.
 
-gst-libs/gst/gl/meson.build:948:2: ERROR: Problem encountered: GStreamer OpenGL integration required via options, but needed dependencies not found.
+ > This breaks code inspection at runtime since the original source path
+ > will be invalid unless the code is executed from '/'.
 
-This requirement is already specified in Config.in through a simple
-comment:
+ > Unfortunately, compileall cannot be forced to use the proper path. It
+ > was not written with cross-compilation usage in mind.
 
-comment "The opengl library needs an API, a platform and a window system"
-	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+ > Rework the script to call py_compile.compile() directly with pertinent
+ > options:
 
-Fixes:
- - http://autobuild.buildroot.org/results/d171059801adf8dea1a2116d7c729a2aa5767ac8
- - http://autobuild.buildroot.org/results/b1bfa505bba534440d331c4948eea5eb2d165c97
+ > - The script now has a new --strip-root argument. This argument is
+ >   optional but will always be specified when compiling py files in
+ >   buildroot.
+ > - All other (non-optional) arguments are folders in which all
+ >   "importable" .py files will be compiled to .pyc.
+ > - Using --strip-root=$(TARGET_DIR), the future runtime path of each .py
+ >   file is computed and encoded into the compiled .pyc.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ > No need to change directory before running the script anymore.
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index fe80f4751c..f0c14bc190 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -51,19 +51,22 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API),y)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW),yyy)
- GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
- GST1_PLUGINS_BASE_GL_API_LIST = opengl
- GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
- endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
- GST1_PLUGINS_BASE_GL_API_LIST += gles2
- GST1_PLUGINS_BASE_DEPENDENCIES += libgles
- endif
--else
--GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
--endif
-+
- GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_api='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_GL_API_LIST))'
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
+ > The trickery used to handle error reporting was only applicable with
+ > compileall. Since we implement our own "compileall", error reporting
+ > becomes trivial.
+
+ > Signed-off-by: Julien Floret <julien.floret@6wind.com>
+ > Signed-off-by: Robin Jarry <robin.jarry@6wind.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
