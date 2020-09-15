@@ -1,47 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Sep 2020 19:51:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efl: needs host gcc >= 4.9
-Message-ID: <20200915175139.400535-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 15 Sep 2020 19:52:38 +0200
+Subject: [Buildroot] [PATCH v2] package/libxkbcommon: bump version to 1.0.1
+Message-ID: <20200915175238.32353-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit dbe2d2e686281c19739824d4d4faec62187d1779 forgot to add a
-host gcc >= 4.9 dependency on efl (because of host-efl)
+For details see [1].
 
-Fixes:
- - http://autobuild.buildroot.org/results/f627d44919c20e068e377d7fe113833e2d4d0ad3
+- disable enable-xkbregistry (as suggested by documentation [3] and
+  to avoid libxml2 dependency)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041596.html
+[2] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041609.html
+[3] https://github.com/xkbcommon/libxkbcommon/blob/master/PACKAGING
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/efl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - updated to libxkbcommon-1.0.1
+---
+ package/libxkbcommon/libxkbcommon.hash | 8 +++-----
+ package/libxkbcommon/libxkbcommon.mk   | 7 +++++--
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 738bfcd010..e4e4c72161 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EFL
- 	bool "efl"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-efl
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -281,8 +282,9 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 5d4c3af10a..c643f1c4ac 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-January/041133.html
+-md5 2d9ad3a46b317138b5e72a91cf105451  libxkbcommon-0.10.0.tar.xz
+-sha1 d8f956f4bc5382d5d8e0e4dd590c4f090e0e985a  libxkbcommon-0.10.0.tar.xz
+-sha256 57c3630cdc38fb4734cd57fa349e92244f5ae3862813e533cedbd86721a0b6f2  libxkbcommon-0.10.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041609.html
++sha256  ab68b25341c99f2218d7cf3dad459c1827f411219901ade05bbccbdb856b6c8d  libxkbcommon-1.0.1.tar.xz
  
- endif # BR2_PACKAGE_EFL
+ # License file:
+-sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
++sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 3923d69c8d..bf1bd058cb 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,14 +4,17 @@
+ #
+ ################################################################################
  
--comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
+-LIBXKBCOMMON_VERSION = 0.10.0
++LIBXKBCOMMON_VERSION = 1.0.1
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
+ LIBXKBCOMMON_LICENSE_FILES = LICENSE
+ LIBXKBCOMMON_INSTALL_STAGING = YES
+ LIBXKBCOMMON_DEPENDENCIES = host-bison host-flex
+-LIBXKBCOMMON_CONF_OPTS = -Denable-docs=false -Denable-wayland=false
++LIBXKBCOMMON_CONF_OPTS = \
++	-Denable-docs=false \
++	-Denable-wayland=false \
++	-Denable-xkbregistry=false
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIBXKBCOMMON_CONF_OPTS += -Denable-x11=true
 -- 
 2.28.0
