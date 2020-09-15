@@ -1,51 +1,164 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue, 15 Sep 2020 22:54:07 +0200
-Subject: [Buildroot] [PATCH] package/nginx: use /run for PIDFile
-In-Reply-To: <20200915222532.5dcba8fc@windsurf.hq.k.grp>
-References: <20200915194958.658-1-buildroot@heine.tech>
- <20200915222532.5dcba8fc@windsurf.hq.k.grp>
-Message-ID: <acfd27d5-31af-4324-317e-feb038da8eca@heine.tech>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue, 15 Sep 2020 22:57:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ettercap: new package
+In-Reply-To: <1597227392-9101-2-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1597227392-9101-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1597227392-9101-2-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <CAEyMn7ZEfuc0AREeJat15z8U7KfP+EUr0ewiGangNUCzoQicJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Jugurtha, Hi Romain,
 
-On 15.09.20 22:25, Thomas Petazzoni wrote:
-> Hello,
+Am Mi., 12. Aug. 2020 um 12:16 Uhr schrieb Jugurtha BELKALEM
+<jugurtha.belkalem@smile.fr>:
 >
-> On Tue, 15 Sep 2020 21:49:56 +0200
-> Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/ettercap/Config.in     | 32 ++++++++++++++++++++++++++++++++
+>  package/ettercap/ettercap.hash |  3 +++
+>  package/ettercap/ettercap.mk   | 32 ++++++++++++++++++++++++++++++++
+>  5 files changed, 69 insertions(+)
+>  create mode 100644 package/ettercap/Config.in
+>  create mode 100644 package/ettercap/ettercap.hash
+>  create mode 100644 package/ettercap/ettercap.mk
 >
->> Fixes:
->>
->> systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
->> a path below legacy directory /var/run/, updating /var/run/nginx.pid ?
->> /run/nginx.pid; please update the unit file accordingly.
->>
->> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> Thanks for this. Does this means we also need to fix:
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 42fa5a4..2097f4d 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1396,6 +1396,7 @@ N:        Joshua Henderson <joshua.henderson@microchip.com>
+>  F:     package/qt5/qt5wayland/
 >
-> $ git grep PIDFile=/var *
-> package/bandwidthd/bandwidthd.service:PIDFile=/var/run/bandwidthd.pid
-> package/dhcpcd/dhcpcd.service:PIDFile=/var/run/dhcpcd.pid
-> package/htpdate/htpdate.service:PIDFile=/var/run/htpdate
-> package/minidlna/minidlnad.service:PIDFile=/var/run/minidlna/minidlna.pid
-> package/nginx/nginx.service:PIDFile=/var/run/nginx.pid
-> package/nss-pam-ldapd/nslcd.service:PIDFile=/var/run/nslcd/nslcd.pid
-> package/openvmtools/vmtoolsd.service:PIDFile=/var/run/vmtoolsd.pid
-> package/postgresql/postgresql.service:PIDFile=/var/lib/pgsql/postmaster.pid
+>  N:     Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> +F:     package/ettercap/
+>  F:     package/python-cycler/
+>  F:     package/python-matplotlib/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index d7e79f4..db886a1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2042,6 +2042,7 @@ menu "Networking applications"
+>         source "package/ebtables/Config.in"
+>         source "package/ejabberd/Config.in"
+>         source "package/ethtool/Config.in"
+> +       source "package/ettercap/Config.in"
+>         source "package/faifa/Config.in"
+>         source "package/fail2ban/Config.in"
+>         source "package/fastd/Config.in"
+> diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
+> new file mode 100644
+> index 0000000..e0693f4
+> --- /dev/null
+> +++ b/package/ettercap/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_ETTERCAP
+> +       bool "ettercap"
+> +       depends on !BR2_STATIC_LIBS
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on BR2_USE_WCHAR # ncurses wchar
+> +       select BR2_PACKAGE_ETHTOOL # runtime
+> +       select BR2_PACKAGE_GEOIP
 
-i don't use any of those packages. So i didn't get warnings for them. 
-But it would make sense.
-I ran into the issue that systemd removed /var/lock entirely with the 
-version in BR 2020.08. So this might happen to /var/run in the future as 
-well.
+As far as I can see in the CMakelist.txt this can be disabled. So this
+looks to me like an option for the package.
 
-Should I throw this together into one single patch?
+> +       select BR2_PACKAGE_LIBCURL
 
+Tried to build and failed due to missing:
+select BR2_PACKAGE_LIBICONV
 
-Regards,
-Michael
+> +       select BR2_PACKAGE_LIBNET
+> +       select BR2_PACKAGE_LIBPCAP
+> +       select BR2_PACKAGE_NCURSES
+> +       select BR2_PACKAGE_NCURSES_WCHAR
+
+Same for ncurses support. This seems also to be optional.
+
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_ZLIB
+> +       help
+> +         Ettercap is a comprehensive suite for man
+> +         in the middle attacks. It features sniffing of
+> +         live connections, content filtering on the fly
+> +         and many other interesting tricks. It supports
+> +         active and passive dissection of many protocols
+> +         and includes many features for network and
+> +         host analysis.
+> +
+> +         Note : Ettercap can provide better tracking
+> +         for IP addresses when GeoIP.dat is provided by
+> +         users (GeoIP.dat is available on maxmind website).
+> +
+> +         http://www.ettercap-project.org/
+> +
+> +comment "ettercap needs a toolchain w/ threads, wchar, dynamic library"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS \
+                               ^
+I think the "!" is missing?!
+
+> +               || !BR2_USE_WCHAR ||BR2_STATIC_LIBS
+
+> diff --git a/package/ettercap/ettercap.hash b/package/ettercap/ettercap.hash
+> new file mode 100644
+> index 0000000..61ecbec
+> --- /dev/null
+> +++ b/package/ettercap/ettercap.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 d0c3ef88dfc284b61d3d5b64d946c1160fd04276b448519c1ae4438a9cdffaf3  ettercap-0.8.3.1.tar.gz
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+> diff --git a/package/ettercap/ettercap.mk b/package/ettercap/ettercap.mk
+> new file mode 100644
+> index 0000000..ee8c8a2
+> --- /dev/null
+> +++ b/package/ettercap/ettercap.mk
+> @@ -0,0 +1,32 @@
+> +################################################################################
+> +#
+> +# ettercap
+> +#
+> +################################################################################
+> +
+> +ETTERCAP_VERSION = 0.8.3.1
+> +ETTERCAP_SITE = $(call github,Ettercap,ettercap,v$(ETTERCAP_VERSION))
+> +ETTERCAP_LICENSE = GPL-2.0+
+> +ETTERCAP_LICENSE_FILES = LICENSE
+> +ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
+> +ETTERCAP_INSTALL_STAGING = YES
+
+Why do we need to install in staging?
+
+> +ETTERCAP_DEPENDENCIES = geoip libcurl libnet libpcap ncurses openssl zlib \
+> +       host-bison host-flex host-pkgconf
+
+Add dependency for libiconv (see above).
+
+> +
+> +ETTERCAP_CONF_OPTS = -DENABLE_IPV6=ON -DENABLE_GTK=OFF -DBUNDLED_LIBS=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_PCRE),y)
+> +ETTERCAP_DEPENDENCIES += pcre
+> +endif
+> +
+> +# Replaces default encoding set (ISO-8859-1) with UTF-8 in ettercap
+> +# configuration file installed by the package.
+> +# It ensures that all characters are properly decoded and avoids
+> +# any fatal errors while running in text mode (-T).
+> +define ETTERCAP_SET_UTF8_ENCODING
+> +       $(SED) 's%^utf8_encoding.*%utf8_encoding = "UTF-8"%' \
+> +               $(TARGET_DIR)/etc/ettercap/etter.conf
+> +endef
+> +ETTERCAP_POST_INSTALL_TARGET_HOOKS += ETTERCAP_SET_UTF8_ENCODING
+> +
+> +$(eval $(cmake-package))
+
+Thank you.
+-- 
+Heiko
