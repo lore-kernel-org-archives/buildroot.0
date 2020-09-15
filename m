@@ -1,84 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:14:53 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/motion: fix build
- with gcc 10
-Message-ID: <20200915185503.E0D7A868C4@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:56:11 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/localedef: depend
+ host build on python3
+Message-ID: <20200915185504.4142381015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d26bf5e14e26b87a310877db4558b6a4edd24d3
+commit: https://git.buildroot.net/buildroot/commit/?id=3b7e9ca600f15eb07e58a4cbcc303d1a2cf2fa8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/99d99dad219776e88aaedcaaf38eb4530d0870ed
+Just like glibc, host-localedef needs python3 on the host to
+build... since host-localedef is basically using the sources of glibc.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+checking if /build/build/per-package/host-localedef/host/bin/ccache
+/usr/bin/gcc is sufficient to build libc... yes
+checking for x86_64-pc-linux-gnu-nm... /usr/bin/nm
+checking for python3... no
+checking for python... python
+checking version of python... 2.7.18, bad
+configure: error:
+*** These critical programs are missing or too old: python
+*** Check the INSTALL file for required versions.
+
+As reported at:
+
+  http://lists.busybox.net/pipermail/buildroot/2020-September/291929.html
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bff0733c1434c2d73647db4c256cff3b1f0048d1)
+(cherry picked from commit 6e73c71cc48fb1528044bbc63da028d2f74cbbab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/motion/0001-Fix-build-with-GCC-10.patch | 53 +++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/localedef/localedef.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
-new file mode 100644
-index 0000000000..a5684db965
---- /dev/null
-+++ b/package/motion/0001-Fix-build-with-GCC-10.patch
-@@ -0,0 +1,53 @@
-+From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
-+From: Vasiliy Glazov <vascom2@gmail.com>
-+Date: Sun, 8 Mar 2020 03:00:21 +0300
-+Subject: [PATCH] Fix build with GCC 10.
-+
-+[Retrieved (and backported) from:
-+https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/netcam.h    | 2 +-
-+ src/translate.c | 2 ++
-+ src/translate.h | 2 +-
-+ 3 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/netcam.h b/netcam.h
-+index 2951d917..4ee0e1c8 100644
-+--- a/netcam.h
-++++ b/netcam.h
-+@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
-+ } netcam_buff;
-+ typedef netcam_buff *netcam_buff_ptr;
-+ 
-+-struct netcam_caps {                    /* netcam capabilities: */
-++extern struct netcam_caps {                    /* netcam capabilities: */
-+         unsigned char streaming;        /*  See the NCS_* defines */
-+         unsigned char content_length;   /*  0 - unsupported     */
-+ } caps;
-+diff --git a/translate.c b/translate.c
-+index 0c9f1105..a212d9de 100644
-+--- a/translate.c
-++++ b/translate.c
-+@@ -10,6 +10,8 @@
-+ #include "motion.h"
-+ #include "translate.h"
-+ 
-++int nls_enabled;
-++
-+ void translate_locale_chg(const char *langcd){
-+ #ifdef HAVE_GETTEXT
-+     /* This routine is for development testing only.  It is not used for
-+diff --git a/translate.h b/translate.h
-+index 0832ffd8..eeba3745 100644
-+--- a/translate.h
-++++ b/translate.h
-+@@ -10,7 +10,7 @@
-+ #ifndef _INCLUDE_TRANSLATE_H_
-+ #define _INCLUDE_TRANSLATE_H_
-+ 
-+-int nls_enabled;
-++extern int nls_enabled;
-+ 
-+ #ifdef HAVE_GETTEXT
-+ #   include <libintl.h>
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index e3c571241c..8eefb84a29 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -14,6 +14,7 @@ HOST_LOCALEDEF_DL_SUBDIR = glibc
+ 
+ HOST_LOCALEDEF_DEPENDENCIES = \
+ 	$(BR2_MAKE_HOST_DEPENDENCY) \
++	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+ 	host-bison \
+ 	host-gawk
+ 
