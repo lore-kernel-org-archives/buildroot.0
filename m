@@ -1,46 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 20:10:18 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python: do not
- install MS Windows installers on the target
-Message-ID: <20200915185442.3B7648B4C1@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:16:41 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/ghostscript:
+ security bump to version 9.53.0
+Message-ID: <20200915185442.52D1A8ABA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f31cd341ac6f4e3c50b9f66d961279ae9ee89279
+commit: https://git.buildroot.net/buildroot/commit/?id=5aebd918aad6c8ee1cd92383979e57bddb6bfe2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Buildroot generates Linux systems, so there is no need to have
-MS Windows executables in there.
+- Use tar.gz as SHA512SUMS does not contain the hash for tar.xz
+- Fix CVE-2020-15900: A memory corruption issue was found in Artifex
+  Ghostscript 9.50 and 9.52. Use of a non-standard PostScript operator
+  can allow overriding of file access controls. The 'rsearch'
+  calculation for the 'post' size resulted in a size that was too large,
+  and could underflow to max uint32_t.
 
-This reduces the target filesystem size by about 600kB:
-$ du -hcs usr/lib/python2.7/distutils/command/wininst-*.exe
-60K usr/lib/python2.7/distutils/command/wininst-6.0.exe
-64K usr/lib/python2.7/distutils/command/wininst-7.1.exe
-60K usr/lib/python2.7/distutils/command/wininst-8.0.exe
-192K    usr/lib/python2.7/distutils/command/wininst-9.0.exe
-220K    usr/lib/python2.7/distutils/command/wininst-9.0-amd64.exe
-596K    total
+https://www.ghostscript.com/doc/9.53.0/News.htm
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7e71716f5fed63e3634e40eb3f069d2baebfbf1)
+(cherry picked from commit cae8be20edc59ab80fd97790e7015f5d8f7e556b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python/python.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .../0002-configure.ac-fix-cross-compilation.patch  | 39 ++++++++++++++++++++++
+ package/ghostscript/ghostscript.hash               |  4 +--
+ package/ghostscript/ghostscript.mk                 |  3 +-
+ 3 files changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 1320770eab..7bc71b58e2 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -199,6 +199,7 @@ define PYTHON_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python2-config
- 	rm -f $(TARGET_DIR)/usr/bin/python-config
- 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
-+	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/distutils/command/wininst*.exe
- 	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
- 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
- 		rm -f $$i ; \
+diff --git a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch b/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
+new file mode 100644
+index 0000000000..2bbff431ec
+--- /dev/null
++++ b/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
+@@ -0,0 +1,39 @@
++From 579f2e089b9502e48222ab85d342128857bf20c3 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 12 Sep 2020 11:38:01 +0200
++Subject: [PATCH] configure.ac: fix cross-compilation
++
++Cross-compilation fails since version 9.53.0 and
++https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=3ff82b33f24ed54c2d3bb88ec31da7d2f9fd2765
++
++Indeed, when x"$host" != x"$build", a recursive call to configure script
++(for auxiliary tools) is being made. In this call,
++--enable-auxtools_only and --without-libtiff are passed which will
++result in the following build failure because SHARE_LIBTIFF is not set
++and SHARE_LIBJPEG is set to 0:
++
++checking for local lcms2mt library source... configure: error: Mixing local libtiff with shared libjpeg not supported
++configure: error: Recursive call to configure script failed
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=702897]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index d4f56fdea..6ae3c2cc1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1618,7 +1618,7 @@ case "x$with_system_libtiff" in
++ esac
++ 
++ 
++-if test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
+++if test x"$SHARE_LIBTIFF" != x"" && test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
++     AC_MSG_ERROR([Mixing local libtiff with shared libjpeg not supported])
++ fi
++ 
++-- 
++2.28.0
++
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index d0b2e610df..102e5355a5 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/SHA512SUMS
+-sha512  4c4a33884e1138bad553eee61fac1a72158297ad5c2ce46a4b36150848dea8158affaf2b902f4ff03e4f72ebc8154c198b618112624f409230a610b7648faa67  ghostscript-9.52.tar.xz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/SHA512SUMS
++sha512  fe73842339bee7aa6d0f177be7733b97b9394dafe69b122645c9c80de763214ffb6735b961ff5bf97146b29c2d0e9b4b9cfaee60baf77a1c280bcf651d789982  ghostscript-9.53.0.tar.gz
+ 
+ # Hash for license file:
+ sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index 9a74563a8c..e8ebc366e4 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 9.52
++GHOSTSCRIPT_VERSION = 9.53.0
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+-GHOSTSCRIPT_SOURCE = ghostscript-$(GHOSTSCRIPT_VERSION).tar.xz
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+ # 0001-Fix-cross-compilation-issue.patch
