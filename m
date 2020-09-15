@@ -1,70 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 22:42:49 +0200
-Subject: [Buildroot] [PATCH] pkgconf: Add HOST_MAKE_ENV sytem include
- and lib
-In-Reply-To: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
-References: <20191021123810.23135-1-thomas.preston@codethink.co.uk>
-Message-ID: <20200915224249.4b8b3869@windsurf.hq.k.grp>
+Date: Tue, 15 Sep 2020 22:47:01 +0200
+Subject: [Buildroot] [PATCH 1/3] support/scripts/mkusers: allow option
+ for system uid/gid
+In-Reply-To: <20200113153516.486106-1-nolange79@gmail.com>
+References: <20200113153516.486106-1-nolange79@gmail.com>
+Message-ID: <20200915224701.5f096d97@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Norbert,
 
-Sorry for the long delay in getting back to this patch.
+On Mon, 13 Jan 2020 16:35:13 +0100
+Norbert Lange <nolange79@gmail.com> wrote:
 
-On Mon, 21 Oct 2019 13:38:10 +0100
-Thomas Preston <thomas.preston@codethink.co.uk> wrote:
-
-> Recently, a change to the pkg-config wrapper made it more explicit about
-> where the system include and library directories are, so that pkgconf
-> does not print them. See upstream commit 9cc8680.
+> Extend the mkusers script to allow -2 for uid/gid.
+> This value will take an identifier from the system range.
 > 
-> By default, we configure the pkg-config wrapper for the target sysroot,
-> however the default system include and library directories are not
-> reconfigured for the host build environment (they still point at the
-> target sysroot). Fix this by adding the host system include and library
-> directories to HOST_MAKE_ENV.
-> 
-> Note: this isn't likely to fix any bugs at present, but the incorrect
-> configuration may hide an include-order related error which the original
-> patch was supposed to fix!
-> 
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> ---
->  package/Makefile.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 0a7899c852..3ae4d4d4e9 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -309,6 +309,8 @@ HOST_MAKE_ENV = \
->  	PATH=$(BR_PATH) \
->  	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
->  	PKG_CONFIG_SYSROOT_DIR="/" \
-> +	PKG_CONFIG_SYSTEM_INCLUDE_PATH="/usr/include" \
-> +	PKG_CONFIG_SYSTEM_LIBRARY_PATH="/usr/lib" \
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
-So, today, Peter Korsgaard and me discussed this patch. While I think
-we understand the idea of telling pkg-config that it is useless to emit
--I and -L options pointing to the default header/library paths of the
-host compiler, the issue is that nothing guarantees that /usr/include
-and /usr/lib are really the standard path for the host compiler, and
-that these are the only paths.
+Sorry for the long delay in getting back to you. We had an earlier
+proposal from Stephan Henningsen doing pretty much the same:
 
-Since your change was apparently not related to the fix of a specific
-issue, and was merely there to improve "correctness", we don't think it
-makes sense to have it if it's in fact not really correct for systems
-where header/libraries are not in /usr/include and /usr/lib
-respectively.
+  https://patchwork.ozlabs.org/project/buildroot/patch/20191023211313.6758-1-stephan+buildroot at asklandd.dk/
 
-Of course, if you have more details about specific issues that this
-patch was solving, let us know.
+The argument of Stephan was pretty much beauty/consistency with what
+"most systems do" without much other arguments.
 
-Thanks a lot,
+However, based on your PATCH 2/3 and a reading of
+https://systemd.io/UIDS-GIDS/ it seems like systemd somehow cares about
+this system vs. normal user difference.
+
+Could you give some details about the *why* you did this change?
+Indeed, your commit log doesn't explain anything about the *why*.
+
+Also, could you compare your changes to mkusers with the ones proposed
+by Stephan? The ones proposed by Stephan looked quite a bit more
+complicated.
+
+Another (minor) question is: if we're going to go to this route of
+separating system and normal users, wouldn't it make sense to have -1
+identify system users, and -2 identify normal users? Indeed the vast
+majority (all?) Buildroot packages probably want to create system
+users, and they already use -1.
+
+Best regards,
 
 Thomas
 -- 
