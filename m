@@ -1,36 +1,53 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 15 Sep 2020 19:20:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: fix license hash
-Message-ID: <20200915172035.6871-1-fontaine.fabrice@gmail.com>
+Date: Tue, 15 Sep 2020 19:43:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: bump to version 0.19.0
+Message-ID: <20200915174347.399685-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 7676191cfacbdb1a92af1d0218d3280207b03090 forgot to update
-license hash which changed due to an update in year:
-https://github.com/micropython/micropython/commit/338b12d3c840ea56504c83d9c51e4d0f628684f4
-
-While at it, also update indentation in hash file (two spaces)
+This bump is needed to fix build with ghostscript 9.53.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/2a650636965d8575374333f847acc169caf8d2ac
+ - http://autobuild.buildroot.org/results/fbcc2fa29f3736f78212cb4b3869ffaeefda7a33
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/micropython/micropython.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/jbig2dec/jbig2dec.hash | 4 ++--
+ package/jbig2dec/jbig2dec.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 4ca3f8402f..5dfbb74522 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,3 +1,3 @@
- #locally computed
--sha256 31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
--sha256 afde3432122205e8e08d615fcb920aca58631c52b6c0c01813854287a457b298  LICENSE
-+sha256  31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
-+sha256  4b8a8884a60cd72749f9ef40328b85b40d13c22594c01352e0a55392141e0f89  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+index 86584b19a6..5a34af37f6 100644
+--- a/package/jbig2dec/jbig2dec.hash
++++ b/package/jbig2dec/jbig2dec.hash
+@@ -1,7 +1,7 @@
+-# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
++# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/MD5SUMS
+ # and SHA512SUMS are missing the hashes for this file.
+ # Locally computed:
+-sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
++sha256  279476695b38f04939aa59d041be56f6bade3422003a406a85e9792c27118a37  jbig2dec-0.19.tar.gz
+ 
+ # Hash for license files:
+ sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+index 08ef89bfcb..59fcddfc1c 100644
+--- a/package/jbig2dec/jbig2dec.mk
++++ b/package/jbig2dec/jbig2dec.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-JBIG2DEC_VERSION = 0.18
+-JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
++JBIG2DEC_VERSION = 0.19
++JBIG2DEC_SITE = \
++	https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530
+ JBIG2DEC_LICENSE = AGPL-3.0+
+ JBIG2DEC_LICENSE_FILES = LICENSE
+ JBIG2DEC_INSTALL_STAGING = YES
 -- 
 2.28.0
