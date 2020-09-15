@@ -1,66 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:50:29 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/neardal: fix
- build with gcc 10
-Message-ID: <20200915175146.EE6F68756A@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:46:39 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] docs/manual: Add section
+ about contributing to maintenance branches
+Message-ID: <20200915175146.DB2DF87660@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6215997deb46a5f405d3a884b5ad8e700f91d6a8
+commit: https://git.buildroot.net/buildroot/commit/?id=64cfdc599fe2934993d1d9039ee017cf0c9b44c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a85ae8b297fd0526f57fe99d73087dd840ea6219)
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+[yann.morin.1998 at free.fr:
+  - s/release branch/maintenance branch/
+  - extend the master-then-backport section
+  - slight eye-candy on the rest
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 76ed69499d63ffb1e9167d36d794ebda6b17cd1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-lib-neardal.h-fix-build-with-gcc-10.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ docs/manual/contribute.txt | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..c9c4555022
---- /dev/null
-+++ b/package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,35 @@
-+From 08467411d7dfc2a2b7ede62e5fdc640748ea1db2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 9 Sep 2020 19:14:52 +0200
-+Subject: [PATCH] lib/neardal.h: fix build with gcc 10
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 11d8811b44..14ecdbd66c 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -371,6 +371,37 @@ in the following cases:
+ * whenever you feel it will help presenting your work, your choices,
+   the review process, etc.
+ 
++==== Patches for maintenance branches
 +
-+Define neardal_output_cb as extern to avoid the following build failure
-+with gcc 10 (which defaults to -fno-common):
++When fixing bugs on a maintenance branch, bugs should be fixed on the
++master branch first. The commit log for such a patch may then contain a
++post-commit note specifying what branches are affected:
 +
-+/srv/storage/autobuild/run/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: ./.libs/neardal_adapter.o:(.bss+0x0): multiple definition of `neardal_output_cb'; ./.libs/neardal.o:(.bss+0x68): first defined here
++----
++package/foo: fix stuff
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7efb100c899b67ffd570f73c202442f95ca5397e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/connectivity/neardal/pull/10]
++Signed-off-by: Your Real Name <your@email.address>
 +---
-+ lib/neardal.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++Backport to: 2020.02.x, 2020.05.x
++(2020.08.x not affected as the version was bumped)
++----
 +
-+diff --git a/lib/neardal.h b/lib/neardal.h
-+index d1cd18b..3e83595 100644
-+--- a/lib/neardal.h
-++++ b/lib/neardal.h
-+@@ -638,7 +638,7 @@ neardal_record *neardal_g_variant_to_record(GVariant *in);
-+ 
-+ void neardal_trace(const char *func, FILE *fp, char *fmt, ...)
-+ 	__attribute__((format(printf, 3, 4)));
-+-int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-++extern int (*neardal_output_cb)(FILE *fp, const char *fmt, va_list ap);
-+ 
-+ #ifdef __cplusplus
-+ }
-+-- 
-+2.28.0
++Those changes will then be backported by a maintainer to the affected
++branches.
 +
++However, some bugs may apply only to a specific release, for example
++because it is using an older version of a package. In that case, patches
++should be based off the maintenance branch, and the patch subject prefix
++must include the maintenance branch name (for example "[PATCH 2020.02.x]").
++This can be done with the +git format-patch+ flag +--subject-prefix+:
++
++---------------------
++$ git format-patch --subject-prefix "PATCH 2020.02.x" \
++    -M -s -o outgoing origin/2020.02.x
++---------------------
++
++Then send the patches with +git send-email+, as described above.
++
+ ==== Patch revision changelog
+ 
+ When improvements are requested, the new revision of each commit
