@@ -1,48 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 18:03:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python3: do not install MS
- Windows installers on the target
-In-Reply-To: <20200912115622.134543-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Sat, 12 Sep 2020 13:56:21 +0200")
-References: <20200912115622.134543-1-titouan.christophe@railnova.eu>
-Message-ID: <87y2lbuiwv.fsf@dell.be.48ers.dk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 15 Sep 2020 19:07:07 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 0.30.0
+Message-ID: <20200915160707.2433132-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+This is a new major release which bring in many improvements and new
+features. For a complete list, please refer to the release notes:
 
- > Buildroot generates Linux systems, so there is no need to have
- > MS Windows executables in there.
+  https://webkitgtk.org/2020/09/11/webkitgtk2.30.0-released.html
 
- > This reduces the target filesystem size by about 2MB:
- > $ du -hcs usr/lib/python3.8/distutils/command/wininst-*.exe
- > 60K usr/lib/python3.8/distutils/command/wininst-6.0.exe
- > 64K usr/lib/python3.8/distutils/command/wininst-7.1.exe
- > 60K usr/lib/python3.8/distutils/command/wininst-8.0.exe
- > 192K    usr/lib/python3.8/distutils/command/wininst-9.0.exe
- > 220K    usr/lib/python3.8/distutils/command/wininst-9.0-amd64.exe
- > 188K    usr/lib/python3.8/distutils/command/wininst-10.0.exe
- > 220K    usr/lib/python3.8/distutils/command/wininst-10.0-amd64.exe
- > 448K    usr/lib/python3.8/distutils/command/wininst-14.0.exe
- > 576K    usr/lib/python3.8/distutils/command/wininst-14.0-amd64.exe
- > 2,0M    total
+None of the new features need additional dependencies.
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Funky!
-
-It seems like we need to do something similar for python{,3}-setuptools:
-
-# find /usr/ -name \*.exe | grep -v wininst | xargs ls -lahS
--rw-rw-r--    1 root     root       73.5K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui-64.exe
--rw-rw-r--    1 root     root       73.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli-64.exe
--rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli-32.exe
--rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/cli.exe
--rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui-32.exe
--rw-rw-r--    1 root     root       64.0K Sep  8 14:28 /usr/lib/python3.8/site-packages/setuptools/gui.exe
-
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index cdca65a5a8..31e30997e2 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.28.4.tar.xz.sums
+-md5  10e0cce27208dfbd4cf63dd68a9a47d7  webkitgtk-2.28.4.tar.xz
+-sha1  70e9dd80647b30eaaf8a7f5b30d8869cd1254056  webkitgtk-2.28.4.tar.xz
+-sha256  821952e8c9303ed752f1fb1d4283f612c25249d00d705d2b79c2db1bc49c9464  webkitgtk-2.28.4.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.30.0.tar.xz.sums
++md5  71428fefd33f40583465649baf05ceb5  webkitgtk-2.30.0.tar.xz
++sha1  60407e68b5452b5fd90ab1c03d8cc844bb68b590  webkitgtk-2.30.0.tar.xz
++sha256  caf3dbf2d2383072614e34281f2fffb6331faf92f4ecf215f6f6a5a57f755d11  webkitgtk-2.30.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 65a4439839..b4623a407a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.28.4
++WEBKITGTK_VERSION = 2.30.0
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.28.0
