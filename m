@@ -1,59 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 21:02:39 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson: ensure
- the global cross-compilation.conf file is correct
-Message-ID: <20200915185432.301BF810A5@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 20:20:48 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/efl: depends on
+ gcc >= 4.9
+Message-ID: <20200915185431.D4FF188D1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0f448180b406bcdc26a09f3ea75409003a08198
+commit: https://git.buildroot.net/buildroot/commit/?id=e058e5e1bc0d2eff7506133814989cda7a172980
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Currently, the cross-compilation.conf installed in
-$(HOST_DIR)/etc/meson/cross-compilation.conf for use by the SDK is
-generated in a post-install-staging hook of the toolchain package.
+efl depends on C++11 since version 1.22.0 and
+https://github.com/Enlightenment/efl/commit/ac95f38d1b06ac6977ea6d8b9f14f9405396858f
 
-With per-package directory support enabled, this means that the
-generated cross-compilation.conf contains references to the
-per-package directory of the toolchain/ package, which is not want we
-want:
+Fixes:
+ - http://autobuild.buildroot.org/results/458ec719a7251b59796edfc865b7226baaed6d8f
 
-[binaries]
-c = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-gcc'
-cpp = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-g++'
-ar = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-ar'
-strip = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/bin/arm-linux-strip'
-pkgconfig = '/home/thomas/projets/buildroot/output/per-package/toolchain/host/usr/bin/pkg-config'
-
-So instead, we generate this file in TOOLCHAIN_TARGET_FINALIZE_HOOKS,
-so that the global paths are used:
-
-[binaries]
-c = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc'
-cpp = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-g++'
-ar = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-ar'
-strip = '/home/thomas/projets/buildroot/output/host/bin/arm-linux-strip'
-pkgconfig = '/home/thomas/projets/buildroot/output/host/usr/bin/pkg-config'
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 48d2606e28c41e22971e2b6ee163a6cedf041813)
+(cherry picked from commit dbe2d2e686281c19739824d4d4faec62187d1779)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/efl/Config.in | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 97129d808e..188cc17409 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -203,4 +203,4 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 728032018b..cf4976f66d 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_EFL
+ 	bool "efl"
+-	 # g++ issue with 4.4.5, tested with g++ 4.7.2
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+@@ -301,8 +300,8 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
  
--TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
-+TOOLCHAIN_TARGET_FINALIZE_HOOKS += PKG_MESON_INSTALL_CROSS_CONF
+ endif # BR2_PACKAGE_EFL
+ 
+-comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.7, threads, wchar"
++comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
