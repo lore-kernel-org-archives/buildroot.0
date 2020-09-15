@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Sep 2020 16:19:31 +0200
-Subject: [Buildroot] Buildroot meeting: September 15, 9 PM Paris time
-In-Reply-To: <20200914212730.0029174b@windsurf.hq.k.grp>
-References: <20200914212730.0029174b@windsurf.hq.k.grp>
-Message-ID: <20200915161931.4075a2a2@windsurf.hq.k.grp>
+Date: Tue, 15 Sep 2020 16:51:56 +0200
+Subject: [Buildroot] [PATH v2 1/1] docs/manual: add qemu defconfigs
+ gitlab test
+In-Reply-To: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
+References: <20200915103806.13785-1-jugurtha.belkalem@smile.fr>
+Message-ID: <20200915165156.179380a9@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 15 Sep 2020 12:38:06 +0200
+Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-On Mon, 14 Sep 2020 21:27:30 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> +=== Adding qemu defconfig gitlab test
+> +
+> +Buildroot provides a test script (support/scripts/boot-qemu-image.py)
+> +to validate all defconfigs under +board/qemu/. Every supported qemu
+> +architecture should append the comment : # qemu_ARCH_defconfig
+> +at the end of its command line entry in board/qemu/ARCH/readme.txt (for
+> +example aarch64-virt includes : # qemu_aarch64_virt_defconfig).
+> +Once a week, every defconfig is tested under gitlab's pipelines :
+> +* Launches a qemu instance.
+> +* Enters root credentials and checks if login shell is available.
+> +* Powers off the instance.
+> +The job fails if one of above steps returns unsuccessful status code.
+> +to trigger qemu defconfigs test jobs:
+> +
+> +---------------------
+> + $ git push gitlab HEAD:<name>_defconfig
+> +---------------------
 
-> On my side, I'll prepare tomorrow a small list of patches that I'd like
-> to discuss. Other participants are invited to also prepare a list of
-> patches that either should be merged, or that need discussion.
+While I understand the idea of documenting this, I am wondering if the
+Buildroot manual is really the right place for this. Indeed, this bit
+of documentation is really only useful for the very specific/narrow use
+case of qemu defconfigs.
 
-I have prepared a small set of patches:
-
-  https://annuel2.framapad.org/p/buildroot-meetings-2020-9iz1
-
-Of course, feel free to add more if you have more topics. I tried to
-look at some of the older patches where I believe some discussion is
-needed.
-
-Thanks,
+Should this be in board/qemu/readme.txt ? I'm not sure.
 
 Thomas
 -- 
