@@ -1,69 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Sep 2020 19:46:48 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: Add section
- about contributing to maintenance branches
-Message-ID: <20200915175205.0109787660@busybox.osuosl.org>
+Date: Tue, 15 Sep 2020 19:57:09 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/musepack: fix
+ build with gcc 10
+Message-ID: <20200915175147.0FD7B8756A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6dbe986282a366225f48e6894be7446b2a261691
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0bde15cbb318b980a9487cb4e4b39fec538eb273
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - s/release branch/maintenance branch/
-  - extend the master-then-backport section
-  - slight eye-candy on the rest
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 76ed69499d63ffb1e9167d36d794ebda6b17cd1a)
+Fixes:
+ - http://autobuild.buildroot.org/results/9971da8c59484a6a26eb79d6e157461a47855dbf
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 14efb3255915805edd71af7adecacb738414d5ae)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/contribute.txt | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/musepack/0005-fix-build-with-gcc-10.patch | 30 +++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index bde7543c25..70d178d00b 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -371,6 +371,37 @@ in the following cases:
- * whenever you feel it will help presenting your work, your choices,
-   the review process, etc.
- 
-+==== Patches for maintenance branches
+diff --git a/package/musepack/0005-fix-build-with-gcc-10.patch b/package/musepack/0005-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..012dbab542
+--- /dev/null
++++ b/package/musepack/0005-fix-build-with-gcc-10.patch
+@@ -0,0 +1,30 @@
++fix build with gcc 10
 +
-+When fixing bugs on a maintenance branch, bugs should be fixed on the
-+master branch first. The commit log for such a patch may then contain a
-+post-commit note specifying what branches are affected:
++Define __Cc, __Dc and Res_bit as extern to avoid the following build
++failure with gcc 10 (which defaults to -fno-common):
 +
-+----
-+package/foo: fix stuff
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x0): multiple definition of `__Dc'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x430): first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x28): multiple definition of `__Cc'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x458): first defined here
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/mpcdec_shared.dir/requant.o:(.rodata+0x74): multiple definition of `Res_bit'; CMakeFiles/mpcdec_shared.dir/mpc_decoder.o:(.rodata+0x4a4): first defined here
 +
-+Signed-off-by: Your Real Name <your@email.address>
-+---
-+Backport to: 2020.02.x, 2020.05.x
-+(2020.08.x not affected as the version was bumped)
-+----
++Fixes:
++ - http://autobuild.buildroot.org/results/9971da8c59484a6a26eb79d6e157461a47855dbf
 +
-+Those changes will then be backported by a maintainer to the affected
-+branches.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +
-+However, some bugs may apply only to a specific release, for example
-+because it is using an older version of a package. In that case, patches
-+should be based off the maintenance branch, and the patch subject prefix
-+must include the maintenance branch name (for example "[PATCH 2020.02.x]").
-+This can be done with the +git format-patch+ flag +--subject-prefix+:
-+
-+---------------------
-+$ git format-patch --subject-prefix "PATCH 2020.02.x" \
-+    -M -s -o outgoing origin/2020.02.x
-+---------------------
-+
-+Then send the patches with +git send-email+, as described above.
-+
- ==== Patch revision changelog
- 
- When improvements are requested, the new revision of each commit
++diff -Naur musepack_src_r475.orig/libmpcdec/requant.h musepack_src_r475/libmpcdec/requant.h
++--- musepack_src_r475.orig/libmpcdec/requant.h	2020-09-10 08:31:50.696105246 +0200
+++++ musepack_src_r475/libmpcdec/requant.h	2020-09-10 08:32:52.944106476 +0200
++@@ -47,9 +47,9 @@
++ 
++ 
++ /* C O N S T A N T S */
++-const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
++-const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
++-const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
+++extern const mpc_uint8_t      Res_bit [18];     ///< Bits per sample for chosen quantizer
+++extern const MPC_SAMPLE_FORMAT __Cc    [1 + 18]; ///< Requantization coefficients
+++extern const mpc_int16_t       __Dc    [1 + 18]; ///< Requantization offset
++ 
++ #define Cc (__Cc + 1)
++ #define Dc (__Dc + 1)
