@@ -1,78 +1,42 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 15 Sep 2020 23:29:24 +0200
-Subject: [Buildroot] [PATCH 1/3] support/scripts/mkusers: allow option
- for system uid/gid
-In-Reply-To: <20200915224701.5f096d97@windsurf.hq.k.grp>
-References: <20200113153516.486106-1-nolange79@gmail.com>
- <20200915224701.5f096d97@windsurf.hq.k.grp>
-Message-ID: <CADYdroMULeB=so8q27z1PfK2yFh+myhBV_Dm6+5+AJzqKFDhQA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Sep 2020 23:30:39 +0200
+Subject: [Buildroot] [PATCH v1 2/5] package/docker-containerd: bump to
+ version 1.4.0
+In-Reply-To: <CA+h8R2pDrOpkaSGsc7oV3tkQ3PT_h8NZjspDLxkSq1r_9RnReQ@mail.gmail.com>
+ (Christian Stewart's message of "Tue, 15 Sep 2020 14:15:34 -0700")
+References: <20200913001659.472814-1-christian@paral.in>
+ <20200913001659.472814-2-christian@paral.in>
+ <87ft7iswih.fsf@dell.be.48ers.dk>
+ <CA+h8R2pDrOpkaSGsc7oV3tkQ3PT_h8NZjspDLxkSq1r_9RnReQ@mail.gmail.com>
+Message-ID: <87h7ryram8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> schrieb am Di., 15. Sep.
-2020, 22:47:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-> Hello Norbert,
->
-> On Mon, 13 Jan 2020 16:35:13 +0100
-> Norbert Lange <nolange79@gmail.com> wrote:
->
-> > Extend the mkusers script to allow -2 for uid/gid.
-> > This value will take an identifier from the system range.
-> >
-> > Signed-off-by: Norbert Lange <nolange79@gmail.com>
->
-> Sorry for the long delay in getting back to you. We had an earlier
-> proposal from Stephan Henningsen doing pretty much the same:
->
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20191023211313.6758-1-stephan+buildroot at asklandd.dk/
->
-> The argument of Stephan was pretty much beauty/consistency with what
-> "most systems do" without much other arguments.
->
-> However, based on your PATCH 2/3 and a reading of
-> https://systemd.io/UIDS-GIDS/ it seems like systemd somehow cares about
-> this system vs. normal user difference.
->
-> Could you give some details about the *why* you did this change?
-> Indeed, your commit log doesn't explain anything about the *why*.
->
-> Also, could you compare your changes to mkusers with the ones proposed
-> by Stephan? The ones proposed by Stephan looked quite a bit more
-> complicated.
->
-> Another (minor) question is: if we're going to go to this route of
-> separating system and normal users, wouldn't it make sense to have -1
-> identify system users, and -2 identify normal users? Indeed the vast
-> majority (all?) Buildroot packages probably want to create system
-> users, and they already use -1.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+ > Hi Peter,
+ > On Tue, Sep 15, 2020, 11:52 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
+ >> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+ >> 
+ >> > Signed-off-by: Christian Stewart <christian@paral.in>
+ >> 
+ >> Is this a dependency for the docker-cli / docker-engine bumps? From the
+ >> looks of it, it isn't?
+ >> 
 
-Yeah, this was touched upon (both points), see [1].
+ > It's not necessarily a dependency but I cannot understand why you would
+ > chose to not update it at the same time.
 
-System users exist as concept on all distros an observable effects are for
-ex journald spawning a separate logging stream.
+Ehh, containerd 1.2.x -> 1.4.0 brings quite a lot of changes and new
+code:
 
-So no, it's not just cosmetics, and yes I'd make system user the default.
+https://github.com/containerd/containerd/releases/tag/v1.4.0
 
-Norbert
+So this is normally not something we do for the stable branches.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-February/273558.html
-
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200915/64a12f4d/attachment.html>
+-- 
+Bye, Peter Korsgaard
