@@ -1,44 +1,73 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 16 Sep 2020 21:49:21 +0200
-Subject: [Buildroot] [RFC v1 01/13] package/gst1-interpipe: bump version to
- 94dea52 (1.1.2)
-Message-ID: <20200916194933.24921-1-ps.report@gmx.net>
+Date: Wed, 16 Sep 2020 21:49:27 +0200
+Subject: [Buildroot] [RFC v1 07/13] package/gst1-plugins-ugly: bump version
+ to 1.18.0
+In-Reply-To: <20200916194933.24921-1-ps.report@gmx.net>
+References: <20200916194933.24921-1-ps.report@gmx.net>
+Message-ID: <20200916194933.24921-7-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- change home page url to https
+
+- meson options: doc=disabled
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 4 ++--
- package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/Config.in              | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 6 +++---
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 5 +++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-index 0ce6ad460d..4764611487 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-@@ -1,5 +1,5 @@
- # locally computed hash
--sha256 6dc2c9d5ff4c3777d40712199a0cafa6bc0058327bca5a20e31d743a46e1ad21 gst1-interpipe-9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1.tar.gz
-+sha256  4b0d8c5fabe1705ba92ac8409d7d138429df5874ba196101cdd1871936719b1a  gst1-interpipe-94dea528dc9e2d0df02fdf2114deecfef6a23740.tar.gz
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index c24ec7ae7b..ba19989892 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -5,7 +5,7 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
+ 	  A set of well-supported plug-ins for GStreamer, but might pose
+ 	  problems for distributors.
  
- # Hashes for license files:
--sha256 16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5 COPYING
-+sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-index 87e5f2e5d2..92e2bb38fc 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+-	  http://gstreamer.freedesktop.org/
++	  https://gstreamer.freedesktop.org/
+ 
+ if BR2_PACKAGE_GST1_PLUGINS_UGLY
+ 
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index e5df44ab90..9afc9a9c9a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.2.tar.xz.sha256sum
+-sha256 5500415b865e8b62775d4742cbb9f37146a50caecfc0e7a6fc0160d3c560fbca gst-plugins-ugly-1.16.2.tar.xz
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.18.0.tar.xz.sha256sum
++sha256  686644e45e08258ae240c4519376668ad8d34ea6d0f6ab556473c317bfb7e082  gst-plugins-ugly-1.18.0.tar.xz
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 9f8b1d3359..2072772d9a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_INTERPIPE_VERSION = 9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1
-+GST1_INTERPIPE_VERSION = 94dea528dc9e2d0df02fdf2114deecfef6a23740
- GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
- GST1_INTERPIPE_SITE_METHOD = git
- # fetch gst-interpipe/common sub module
+-GST1_PLUGINS_UGLY_VERSION = 1.16.2
++GST1_PLUGINS_UGLY_VERSION = 1.18.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -15,7 +15,8 @@ GST1_PLUGINS_UGLY_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	-Dexamples=disabled \
+-	-Dtests=disabled
++	-Dtests=disabled \
++	-Ddoc=disabled
+ 
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	-Da52dec=disabled \
 -- 
 2.28.0
