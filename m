@@ -1,65 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Sep 2020 23:11:31 +0200
-Subject: [Buildroot] [PATCH 0/3 v4] package/qt5/qt5webengine: fix options
- and dependencies (branch yem/qt5webengine-options)
-Message-ID: <cover.1600290685.git.yann.morin.1998@free.fr>
+Date: Wed, 16 Sep 2020 23:11:32 +0200
+Subject: [Buildroot] [PATCH 1/3 v4] package/qt5/qt5webengine: fix
+ ffmpeg/codec/alsa option handling for latest
+In-Reply-To: <cover.1600290685.git.yann.morin.1998@free.fr>
+References: <cover.1600290685.git.yann.morin.1998@free.fr>
+Message-ID: <73c8adc83c7e856136f5eacd8aab44631b0a64cc.1600290685.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Nathan Ford <nford@westpond.com>
 
-This series is a refresh and respin of the commits by Nathan, which got
-reviewed by Peter.
+As of qt 5.10, options are handled as arguments to qmake instead of
+defines:
 
-I (Yann) merely did the following changes:
+    qt5webengine-5.12.2$ vi dist/changes-5.9.0
 
- 1. refresh on top of master, now that we no longer have a version
-    choice for qt5,
+    Important Changes
+    -----------------
 
- 2. split the first patch in two: the first to switch to the new options
-    instead of defines, the second to add the missing dependency
+     - Configure options are now handled by the global configure script. This
+       means options previously controlled by WEBENGINE_CONFIG options should
+       now use configure flags. For instance the configure command-line option
+       -proprietary-codecs replaces WEBENGINE_CONFIG+=use_proprietary_codecs.
 
-As such, I did not carry Peter's review on the first patch, since I
-split it.
+    qt5webengine-5.12.2$ vi dist/changes-5.10.0
 
-Note: this is not even build-tested; it's just a refresh-n-respin.
+    Important Changes
+    -----------------
 
+       * WebEngine Features are now configured as Qt features and
+         WEBENGINE_CONFIG has been removed.
 
-Regards,
-Yann E. MORIN.
+Fixes: #12416 (which was an inspiration for this patch)
 
+Signed-off-by: Nathan Ford <nford@westpond.com>
+[yann.morin.1998 at free.fr:
+  - refresh on top of master, as we no longer have the version choice
+  - extend commit log
+  - mocve the new dependency to its own commit
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5webengine/qt5webengine.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-The following changes since commit e5f92758ff52ff713c9b45a52f4fdb1bfabdfc2f
-
-  package/qt5/qt5webengine: fix build with Bison 3.7 (2020-09-16 22:13:20 +0200)
-
-
-are available in the git repository at:
-
-  https://git.busybox.net/~ymorin/git/buildroot
-
-for you to fetch changes up to 6efc39e9d97769fae93be2bcb91f56b050dda219
-
-  package/qt5/qt5webengine: fix build dependencies for autodetected packages (2020-09-16 23:01:16 +0200)
-
-
-----------------------------------------------------------------
-Nathan Ford (3):
-      package/qt5/qt5webengine: fix ffmpeg/codec/alsa option handling for latest
-      package/qt5/qt5webengine: ffmpeg supports needs webp mux
-      package/qt5/qt5webengine: fix build dependencies for autodetected packages
-
- package/qt5/qt5webengine/Config.in       |  1 +
- package/qt5/qt5webengine/qt5webengine.mk | 34 +++++++++++++++++++++++++++++---
- 2 files changed, 32 insertions(+), 3 deletions(-)
-
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 9101f35937..5df6942977 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -29,16 +29,16 @@ endif
+ 
+ QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+ 
+-QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_system_ffmpeg
++QT5WEBENGINE_CONF_OPTS = -webengine-ffmpeg
+ 
+ ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
+-QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_proprietary_codecs
++QT5WEBENGINE_CONF_OPTS += -webengine-proprietary-codecs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
+ QT5WEBENGINE_DEPENDENCIES += alsa-lib
+ else
+-QT5WEBENGINE_CONF_OPTS += QT_CONFIG-=alsa
++QT5WEBENGINE_CONF_OPTS += -no-webengine-alsa
+ endif
+ 
+ # QtWebengine's build system uses python, but only supports python2. We work
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
