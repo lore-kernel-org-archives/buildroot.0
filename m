@@ -1,42 +1,95 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 16 Sep 2020 09:48:43 +0200
-Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.11.2
-Message-ID: <20200916074843.211307-1-francois.perrad@gadz.org>
+From: =?UTF-8?B?SsOpcsOpbXkgUk9TRU4=?= <jeremy.rosen@smile.fr>
+Date: Wed, 16 Sep 2020 08:41:47 +0200
+Subject: [Buildroot] [PATCH 1/3] support/scripts/mkusers: allow option
+ for system uid/gid
+In-Reply-To: <CADYdroMULeB=so8q27z1PfK2yFh+myhBV_Dm6+5+AJzqKFDhQA@mail.gmail.com>
+References: <20200113153516.486106-1-nolange79@gmail.com>
+ <20200915224701.5f096d97@windsurf.hq.k.grp>
+ <CADYdroMULeB=so8q27z1PfK2yFh+myhBV_Dm6+5+AJzqKFDhQA@mail.gmail.com>
+Message-ID: <CAFvCimXckN_s=b3N0-Ys=o=q8=FQZxk3bqT5ngu8ggjXEgaOyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/dash/dash.hash | 4 ++--
- package/dash/dash.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I'll give a bit more detail about the way journald handles system/user UID.
+there might be other places where systemd treats them differently, but
+that's the only
+one I know from memory.
 
-diff --git a/package/dash/dash.hash b/package/dash/dash.hash
-index aa8e378f4..069a7b179 100644
---- a/package/dash/dash.hash
-+++ b/package/dash/dash.hash
-@@ -1,4 +1,4 @@
--# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.tar.gz.sha256sum
--sha256  4dd9a6ed5fe7546095157918fe5d784bb0b7887ae13de50e1e2d11e1b5a391cb  dash-0.5.11.tar.gz
-+# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.2.tar.gz.sha256sum
-+sha256  00fb7d68b7599cc41ab151051c06c01e9500540183d8aa72116cb9c742bd6d5f  dash-0.5.11.2.tar.gz
- # Locally calculated
- sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 55961c5cb..88caa6609 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DASH_VERSION = 0.5.11
-+DASH_VERSION = 0.5.11.2
- DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
+journald collects all logs on the system
+* from the daemons running around
+* from the kernel/audit system
+* from containers
+* from user sessions.
+
+When a user logs in, a "per user" instance of systemd is spawned that
+can starts daemons for that user (ssh-agent, pulseaudio, colord...
+daemons that make sense at the user level but not at the system level)
+
+To ease the handling of permissions and reading those files, journald does
+not store all logs in a single file, but in one file per user. Journald uses
+ACL to allow each user to have access to his logs through normal unix
+permissions instead of relying on some sort of SUID mechanism.
+
+However, it would be a bad idea to have a separate journal file for system
+users, since system users are part of the system and the log they produce
+are really only for the administrator to see. So those logs are stored with
+the
+system logs in the machine's main log file.
+
+The separation between the two types of users uses the UID1000 split
+
+A quick grep in systemd yields a couple of other usages
+* systemd-coredumps will tweak access right to allow non-system users to
+  read the core-dumps they generate
+* When closing a session, logind may clean up IPC for non-system user.
+  The explanation is a bit complex so i'll just copy/paste the comment in
+the code
+
+        /* Clean SysV + POSIX IPC objects, but only if this is not a system
+user. Background: in many setups cronjobs
+         * are run in full PAM and thus logind sessions, even if the code
+run doesn't belong to actual users but to
+         * system components. Since enable RemoveIPC= globally for all
+users, we need to be a bit careful with such
+         * cases, as we shouldn't accidentally remove a system service's
+IPC objects while it is running, just because
+         * a cronjob running as the same user just finished. Hence: exclude
+system users generally from IPC clean-up,
+         * and do it only for normal users. */
+
+* there is a unit condition calle ConditionUser= (and AssertUser=) that
+  allow to limit a unit file to only be allowed for a certain user. This
+condition
+  can take a user name, a UID or the magic value "@system" to be allowed
+  to any system user
+
+
+Regards
+Jeremy
+
+
 -- 
-2.25.1
+[image: SMILE]  <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+*J?r?my ROSEN*
+Architecte technique
+
+[image: email] jeremy.rosen at smile.fr
+[image: phone]  +33 6 88 25 87 42
+[image: url] http://www.smile.eu
+
+[image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+<https://www.facebook.com/smileopensource> [image: LinkedIn]
+<https://www.linkedin.com/company/smile> [image: Github]
+<https://github.com/Smile-SA>
+
+[image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+<https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200916/dbf5dbef/attachment.html>
