@@ -1,55 +1,74 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Wed, 16 Sep 2020 06:30:40 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/freescale-imx/firmware-imx:
- custom padding
-In-Reply-To: <20200915131902.GA316402@p1g2>
-References: <20200910141843.3030855-1-pieter.degendt@basalte.be>
- <20200915130414.3286332-1-pieter.degendt@basalte.be>,
- <20200915131902.GA316402@p1g2>
-Message-ID: <VE1PR04MB740571AF5827D0B59B923344A7210@VE1PR04MB7405.eurprd04.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 16 Sep 2020 08:32:59 +0200
+Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: specify
+ image to use
+In-Reply-To: <20200915195050.GA2422@scaer>
+References: <20200915193832.291674-1-arnout@mind.be>
+ <20200915195050.GA2422@scaer>
+Message-ID: <20200916063259.GD2422@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pieter, Gary and all,
+Arnout, All,
 
->
->Hi Pieter,
->
->On Tue, Sep 15, 2020 at 03:04:14PM +0200, Pieter De Gendt wrote:
->> From: Tibault Damman <tibault.damman@basalte.be>
->>
->> Some derivatives (such as Variscite imx8mm) expect the (LP)DDR4
->> training data to be padded to a different length.
->>
->> eg: https://github.com/varigit/uboot-imx/commit/5f8d814f
->>
->> This patch makes the padding length configurable.
->>
->> Signed-off-by: Tibault Damman <tibault.damman@basalte.be>
->> Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
->>
->> ---
->> Changes v1 -> v2:
->>   - improved description
->>   - renamed variables to match U-Boot (suggested by Gary Bisson)
->>
->> Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
->
->Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+On 2020-09-15 21:50 +0200, Yann E. MORIN spake thusly:
+> On 2020-09-15 21:38 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> > Commit 93a2870966 split off the generated gitlab-ci.yml into a child
+> > pipeline. However, the generated gitlab-ci.yml file no longer had an
+> > 'image' tag.
+> Commit 93a2870966 still kept the image tag in the template. The removal
+> of the iamge tag was done later, see below...
+> > The result is that the jobs will use whatever image happens
+> > to be configured on the runner - which leads to frequent pipeline
+> > failures.
+> Do you have an example of such a pipeline (and its parent)?
 
-Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
-[Stephane: tested on i.MX8MM, i.MX8MN(ddr4) and i.MX8MQ EVK]
-  
->
->Thanks for your contribution!
->
->Regards,
->Gary
->_______________________________________________
->buildroot mailing list
->buildroot at busybox.net
->http://lists.busybox.net/mailman/listinfo/buildroot
->
+Ah, I see some, indeed:
+
+    https://gitlab.com/buildroot.org/buildroot/-/pipelines/189823194
+
+What is interesting here, is that the generate-gitlab-ci-yml job ran on
+your runner:
+
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/737264806
+
+    Running with gitlab-runner 12.6.0 (ac8e767a)
+      on Buildroot-mind fMZePpyU
+
+While a working pipeline was running on another runner:
+
+    https://gitlab.com/buildroot.org/buildroot/-/pipelines/190372488
+    https://gitlab.com/buildroot.org/buildroot/-/jobs/739712931
+
+    Running with gitlab-runner 13.0.0 (c127439c)
+      on gcc160 f0ab0d82
+
+And my tests were also using a more recent runner version:
+
+    https://gitlab.com/ymorin/buildroot/-/pipelines/186530918
+    https://gitlab.com/ymorin/buildroot/-/jobs/723345502
+
+    Running with gitlab-runner 13.3.1 (738bbe5a)
+      on docker-auto-scale ed2dce3a
+
+So it seems that the 12.6.0 runner version is too old to export the
+CI_JOB_IMAGE variable, and that 13.0.0 and up are OK.
+
+Could you update your runner, maybe?
+
+And we should also probably be using the same version on all our
+runners, maybe...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
