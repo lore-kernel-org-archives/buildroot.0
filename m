@@ -1,29 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Sep 2020 12:36:20 +0000
-Subject: [Buildroot] [Bug 13211] buildroot 2020.02.6 systemd segment fault
- after cross compiled
-In-Reply-To: <bug-13211-163@https.bugs.busybox.net/>
-References: <bug-13211-163@https.bugs.busybox.net/>
-Message-ID: <bug-13211-163-XVuhIXPrIG@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Sep 2020 15:10:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 6.0.8
+In-Reply-To: <20200915210910.GC2422@scaer> (Yann E. MORIN's message of "Tue,
+ 15 Sep 2020 23:09:10 +0200")
+References: <20200915194929.15323-1-titouan.christophe@railnova.eu>
+ <20200915210910.GC2422@scaer>
+Message-ID: <875z8drhnh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13211
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Jeff WANG <wdqfirst@163.com> changed:
+ > Titouan, All,
+ > On 2020-09-15 21:49 +0200, Titouan Christophe spake thusly:
+ >> From the release notes
+ >> See: https://github.com/redis/redis/blob/6.0.8/00-RELEASENOTES
+ >> 
+ >> ================================================================================
+ >> Redis 6.0.7     Released Fri Aug 28 11:05:09 IDT 2020
+ >> ================================================================================
+ >> 
+ >> Upgrade urgency MODERATE: several bugs with moderate impact are fixed,
+ >> Specifically the first two listed below which cause protocol errors for clients.
+ >> 
+ >> ================================================================================
+ >> Redis 6.0.8     Released Wed Sep 09 23:34:17 IDT 2020
+ >> ================================================================================
+ >> 
+ >> Upgrade urgency HIGH: Anyone who's using Redis 6.0.7 with Sentinel or
+ >> CONFIG REWRITE command is affected and should upgrade ASAP, see #7760.
+ >> 
+ >> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Severity|normal                      |critical
-   Target Milestone|---                         |2020.02
-            Product|Infrastructure              |buildroot
-            Version|unspecified                 |2020.02.5
-          Component|Bugzilla                    |Other
-                 CC|                            |buildroot at uclibc.org
+ > Applied to master. Since it was a security bump, I changed the commit
+ > title accordingly.
+
+Where do you see that it is a security bump? I don't seem to find any
+security related fixes in 6.0.7 / 6.0.8.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
