@@ -1,10 +1,11 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 16 Sep 2020 17:35:07 +0200
-Subject: [Buildroot] [PATCH v3 5/8] package/minidlna: use /run for PIDFile
+Date: Wed, 16 Sep 2020 17:35:08 +0200
+Subject: [Buildroot] [PATCH v3 6/8] package/nss-pam-ldapd: use /run for
+ PIDFile
 In-Reply-To: <20200916153510.476-1-buildroot@heine.tech>
 References: <20200916153340.345-1-buildroot@heine.tech>
  <20200916153510.476-1-buildroot@heine.tech>
-Message-ID: <20200916153510.476-5-buildroot@heine.tech>
+Message-ID: <20200916153510.476-6-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +15,26 @@ To: buildroot@busybox.net
 Fixes:
 
 PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/minidlna.pid ? /run/minidlna.pid; please update the unit file
+/var/run/nslcd.pid ? /run/nslcd.pid; please update the unit file
 accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/minidlna/minidlnad.service | 2 +-
+ package/nss-pam-ldapd/nslcd.service | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/minidlna/minidlnad.service b/package/minidlna/minidlnad.service
-index f69476b303..4e968d3858 100644
---- a/package/minidlna/minidlnad.service
-+++ b/package/minidlna/minidlnad.service
-@@ -5,7 +5,7 @@ After=network.target
+diff --git a/package/nss-pam-ldapd/nslcd.service b/package/nss-pam-ldapd/nslcd.service
+index 6c0d71b241..5a000a8e4c 100644
+--- a/package/nss-pam-ldapd/nslcd.service
++++ b/package/nss-pam-ldapd/nslcd.service
+@@ -4,7 +4,7 @@ After=syslog.target network.target
+ 
  [Service]
  Type=forking
- ExecStart=/usr/sbin/minidlnad
--PIDFile=/var/run/minidlna/minidlna.pid
-+PIDFile=/run/minidlna/minidlna.pid
+-PIDFile=/var/run/nslcd/nslcd.pid
++PIDFile=/run/nslcd/nslcd.pid
+ ExecStart=/usr/sbin/nslcd
  
  [Install]
- WantedBy=multi-user.target
 -- 
 2.25.1
