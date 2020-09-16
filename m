@@ -1,9 +1,10 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 16 Sep 2020 17:35:03 +0200
-Subject: [Buildroot] [PATCH v3 1/8] package/nginx: use /run for PIDFile
-In-Reply-To: <20200916153340.345-1-buildroot@heine.tech>
+Date: Wed, 16 Sep 2020 17:35:04 +0200
+Subject: [Buildroot] [PATCH v3 2/8] package/bandwithd: use /run for PIDFile
+In-Reply-To: <20200916153510.476-1-buildroot@heine.tech>
 References: <20200916153340.345-1-buildroot@heine.tech>
-Message-ID: <20200916153510.476-1-buildroot@heine.tech>
+ <20200916153510.476-1-buildroot@heine.tech>
+Message-ID: <20200916153510.476-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,27 @@ To: buildroot@busybox.net
 
 Fixes:
 
-systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
-a path below legacy directory /var/run/, updating /var/run/nginx.pid ?
-/run/nginx.pid; please update the unit file accordingly.
+PIDFile= references a path below legacy directory /var/run/, updating
+/var/run/bandwithd.pid ? /run/bandwithd.pid; please update the unit file
+accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/nginx/nginx.service | 2 +-
+ package/bandwidthd/bandwidthd.service | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 320df9a80e..9fd215fd3e 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -4,7 +4,7 @@ After=syslog.target network.target
- 
+diff --git a/package/bandwidthd/bandwidthd.service b/package/bandwidthd/bandwidthd.service
+index 9c03d42946..ab7f05a2e8 100644
+--- a/package/bandwidthd/bandwidthd.service
++++ b/package/bandwidthd/bandwidthd.service
+@@ -5,7 +5,7 @@ After=network.target
  [Service]
  Type=forking
--PIDFile=/var/run/nginx.pid
-+PIDFile=/run/nginx.pid
- ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
- ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
- ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+ ExecStart=/usr/bin/bandwidthd
+-PIDFile=/var/run/bandwidthd.pid
++PIDFile=/run/bandwidthd.pid
+ 
+ [Install]
+ WantedBy=multi-user.target
 -- 
 2.25.1
