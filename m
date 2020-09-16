@@ -1,105 +1,46 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 16 Sep 2020 21:49:33 +0200
-Subject: [Buildroot] [RFC v1 13/13] package/gst-omx: bump version to 1.18.0
- and convert to meson
-In-Reply-To: <20200916194933.24921-1-ps.report@gmx.net>
-References: <20200916194933.24921-1-ps.report@gmx.net>
-Message-ID: <20200916194933.24921-13-ps.report@gmx.net>
+Date: Wed, 16 Sep 2020 21:55:40 +0200
+Subject: [Buildroot] [PATCH v1] package/weston: change download url to https
+Message-ID: <20200916195540.25640-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- change home page url to https
+  - change download url to https (as given by the original announcement [1]
+    and redirected by the http url)
+
+Fixes:
+
+  - http://autobuild.buildroot.net/results/00b9e1ccb97d9ff5c2ee0e856288f689bdab52ee
+
+  >>> weston 9.0.0 Downloading[23m
+  --2020-09-15 14:10:22--  http://wayland.freedesktop.org/releases/weston-9.0.0.tar.xz
+  Resolving wayland.freedesktop.org (wayland.freedesktop.org)... 35.227.58.183
+  Connecting to wayland.freedesktop.org (wayland.freedesktop.org)|35.227.58.183|:80... connected.
+  HTTP request sent, awaiting response... 308 Permanent Redirect
+  2020-09-15 14:10:23 ERROR 308: Permanent Redirect.
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041595.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes:
- - droped the version downgrade for the bellagio case (no meson
-   options available), maybe needs extra testing...
----
- package/gstreamer1/gst-omx/Config.in    |  2 +-
- package/gstreamer1/gst-omx/gst-omx.hash |  6 +++---
- package/gstreamer1/gst-omx/gst-omx.mk   | 24 ++++++++++--------------
- 3 files changed, 14 insertions(+), 18 deletions(-)
+ package/weston/weston.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
-index d2e477648b..efe3d211d6 100644
---- a/package/gstreamer1/gst-omx/Config.in
-+++ b/package/gstreamer1/gst-omx/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_GST_OMX
- 	help
- 	  GStreamer plug-in to use OpenMAX API.
- 
--	  http://cgit.freedesktop.org/gstreamer/gst-omx
-+	  https://cgit.freedesktop.org/gstreamer/gst-omx
- 
- comment "gst-omx requires a OpenMAX implementation"
- 	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index 85487f3491..9cd1b49a33 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.16.2.tar.xz.sha256sum
--sha256 11ed411a2eba75610d72331eeb14ff05e2df28f4fd05cb69225a88bec6d27439 gst-omx-1.16.2.tar.xz
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.18.0.tar.xz.sha256sum
-+sha256  302c65e04578991364f7605e04cfb54dfd75268d51080d35f221ee1a8b341fad  gst-omx-1.18.0.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index 5ed9e3ce2c..c60997a315 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,33 +4,29 @@
- #
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index a20f16ab46..f59963bf2e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GST_OMX_VERSION = 1.16.2
-+GST_OMX_VERSION = 1.18.0
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
- GST_OMX_LICENSE = LGPL-2.1
- GST_OMX_LICENSE_FILES = COPYING
- 
-+GST_OMX_CONF_OPTS = \
-+	-Dexamples=disabled \
-+	-Dtests=disabled \
-+	-Dtools=disabled \
-+	-Ddoc=disabled
-+
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- GST_OMX_VARIANT = rpi
--GST_OMX_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) \
--		-I$(STAGING_DIR)/usr/include/IL \
--		-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
--		-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
-+GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
- else ifeq ($(BR2_PACKAGE_BELLAGIO),y)
- GST_OMX_VARIANT = bellagio
--GST_OMX_CONF_ENV = \
--	CFLAGS="$(TARGET_CFLAGS) \
--		-DOMX_VERSION_MAJOR=1 \
--		-DOMX_VERSION_MINOR=1 \
--		-DOMX_VERSION_REVISION=2 \
--		-DOMX_VERSION_STEP=0"
- else
- GST_OMX_VARIANT = generic
- endif
- 
--GST_OMX_CONF_OPTS += --with-omx-target=$(GST_OMX_VARIANT)
-+GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
- 
- GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
- 
-@@ -42,4 +38,4 @@ endef
- 
- GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ WESTON_VERSION = 9.0.0
+-WESTON_SITE = http://wayland.freedesktop.org/releases
++WESTON_SITE = https://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
 -- 
 2.28.0
