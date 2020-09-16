@@ -1,116 +1,67 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 16 Sep 2020 18:45:05 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build with
- Bison 3.7
-In-Reply-To: <20200916121354.1914130-1-thomas.petazzoni@bootlin.com>
-References: <20200916121354.1914130-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20200916184505.611500c7@gmx.net>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 16 Sep 2020 19:44:51 +0200
+Subject: [Buildroot] [PATCH] package/ipmitool: fix patch
+Message-ID: <20200916174452.5730-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+The previous commit to this package
+(37c5e903a7e18f5b3847c11a40af5f74984d6c77) introduced a bunch of patches
+to fix a CVE. Unfortunatly only applying of the patches was tested but
+not building the package.
 
-On Wed, 16 Sep 2020 14:13:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+This commit replaces a define that was introduced in a previous patch
+upstream and caused the build failure.
 
-> Add patch from upstream that fixes build with Bison 3.7.
-> 
-> There are no autobuilder failures for this issue, but the following
-> defconfig:
-> 
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_NONE=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> BR2_PACKAGE_QT5=y
-> BR2_PACKAGE_QT5WEBENGINE=y
-> BR2_PACKAGE_RPI_USERLAND=y
-> 
-> Failed with:
-> 
-> /home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.0/src/core/release/gen/third_party/blink/renderer/core/xpath_grammar.cc:124:10: fatal error: xpath_grammar.hh: No such file or directory
->   124 | #include "xpath_grammar.hh"
->       |          ^~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> 
-> With this patch applied, it builds fine.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  .../qt5/qt5webengine/0002-fix-bison-3.7.patch | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 package/qt5/qt5webengine/0002-fix-bison-3.7.patch
-> 
-> diff --git a/package/qt5/qt5webengine/0002-fix-bison-3.7.patch b/package/qt5/qt5webengine/0002-fix-bison-3.7.patch
-> new file mode 100644
-> index 0000000000..575fe27b1b
-> --- /dev/null
-> +++ b/package/qt5/qt5webengine/0002-fix-bison-3.7.patch
-> @@ -0,0 +1,55 @@
-> +From 1a53f5995697f5ac6fd501dbdc0ee39c9488ee66 Mon Sep 17 00:00:00 2001
-> +From: Allan Sandfeld Jensen <allan.jensen@qt.io>
-> +Date: Fri, 14 Aug 2020 16:38:48 +0200
-> +Subject: Fix bison 3.7
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Do a replace run inspired by newer versions of the script.
-> +
-> +Fixes: QTBUG-86018
-> +Change-Id: Ib1dc771e22a662aff0fae842d135ad58fad08bc1
-> +Reviewed-by: Michael Br?ning <michael.bruning@qt.io>
+Tested:
 
-[Upstream: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?h=80-based&id=1a53f5995697f5ac6fd501dbdc0ee39c9488ee66]
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+ - http://autobuild.buildroot.net/results/3f7fe8ad181318153c459ba5e1afbbc8b49d541c/
+ - and more
 
-Regards,
-Peter
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/ipmitool/0011-channel-Fix-buffer-overflow.patch | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + .../blink/renderer/build/scripts/rule_bison.py        | 19 +++++++++++++++++++
-> + 1 file changed, 19 insertions(+)
-> +
-> +diff --git a/chromium/third_party/blink/renderer/build/scripts/rule_bison.py b/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
-> +index f75e25fd23f..7e0767e951a 100755
-> +--- a/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
-> ++++ b/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
-> +@@ -45,6 +45,19 @@ from utilities import abs
-> + 
-> + from blinkbuild.name_style_converter import NameStyleConverter
-> + 
-> ++def modify_file(path, prefix_lines, suffix_lines, replace_list=[]):
-> ++    prefix_lines = map(lambda s: s + '\n', prefix_lines)
-> ++    suffix_lines = map(lambda s: s + '\n', suffix_lines)
-> ++    with open(path, 'r') as f:
-> ++        old_lines = f.readlines()
-> ++    for i in range(len(old_lines)):
-> ++        for src, dest in replace_list:
-> ++            old_lines[i] = old_lines[i].replace(src, dest)
-> ++    new_lines = prefix_lines + old_lines + suffix_lines
-> ++    with open(path, 'w') as f:
-> ++        f.writelines(new_lines)
-> ++
-> ++
-> + assert len(sys.argv) == 4 or len(sys.argv) == 5
-> + 
-> + inputFile = abs(sys.argv[1])
-> +@@ -115,3 +128,9 @@ print >>outputHFile, '#define %s' % headerGuard
-> + print >>outputHFile, outputHContents
-> + print >>outputHFile, '#endif  // %s' % headerGuard
-> + outputHFile.close()
-> ++
-> ++common_replace_list = [(inputRoot + '.hh',
-> ++                        inputRoot + '.h')]
-> ++modify_file(
-> ++    outputCpp, [], [],
-> ++    replace_list=common_replace_list)
-> +-- 
-> +cgit v1.2.1
-> +
+diff --git a/package/ipmitool/0011-channel-Fix-buffer-overflow.patch b/package/ipmitool/0011-channel-Fix-buffer-overflow.patch
+index 8d7ecb9550..62e04c3e27 100644
+--- a/package/ipmitool/0011-channel-Fix-buffer-overflow.patch
++++ b/package/ipmitool/0011-channel-Fix-buffer-overflow.patch
+@@ -14,7 +14,12 @@ the final response?s `data_len`, which can lead to stack buffer overflow
+ on the final copy.
+ 
+ [Retrieve from:
+-https://github.com/ipmitool/ipmitool/commit/9452be87181a6e83cfcc768b3ed8321763db50e4]
++https://github.com/ipmitool/ipmitool/commit/9452be87181a6e83cfcc768b3ed8321763db50e4
++
++The patch is slightly modified manually. The define
++(MAX_CIPHER_SUITE_DATA_LEN) was introduced upstream in another patch.
++Replace the define by the value 0x10.]
++
+ Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+ ---
+  lib/ipmi_channel.c | 5 ++++-
+@@ -31,7 +36,7 @@ index fab2e54..59ac227 100644
+ -		if (rsp->ccode > 0) {
+ +		if (rsp->ccode
+ +		    || rsp->data_len < 1
+-+		    || rsp->data_len > sizeof(uint8_t) + MAX_CIPHER_SUITE_DATA_LEN)
+++		    || rsp->data_len > sizeof(uint8_t) + 0x10)
+ +		{
+  			lprintf(LOG_ERR, "Get Channel Cipher Suites failed: %s",
+  					val2str(rsp->ccode, completion_code_vals));
+-- 
+2.20.1
