@@ -1,80 +1,67 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Wed, 16 Sep 2020 07:59:23 +0200
-Subject: [Buildroot] [PATCH v3 00/11] IBM s390x and Z architecture support
-Message-ID: <20200916055934.609436-1-egorenar@linux.ibm.com>
+Date: Wed, 16 Sep 2020 07:59:25 +0200
+Subject: [Buildroot] [PATCH v3 02/11] toolchain: add support for the
+ internal IBM s390x and Z toolchain
+In-Reply-To: <20200916055934.609436-1-egorenar@linux.ibm.com>
+References: <20200916055934.609436-1-egorenar@linux.ibm.com>
+Message-ID: <20200916055934.609436-3-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series of patches adds support for IBM s390x and Z architectures
-to buildroot.
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ arch/Config.in                          | 1 -
+ package/gcc/gcc.mk                      | 5 +++++
+ toolchain/toolchain-buildroot/Config.in | 6 +++---
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-v2 -> v3:
-  * Addressed all review findings by Romain Naour
-  * qemu s390x board
-    - Linux kernel needs host OpenSSL
-  * makedumpfile
-    - Cosmetic improvement of dependencies
-  * s390-tools
-    - Clean up redundant dependencies which are brought in
-      already by glibc
-
-v1 -> v2:
-  * Addressed all review findings by Yann E. Morin
-  * Split up into smaller patches to ease further review process
-  * qemu s390x board
-    - Clean up of qemu_s390x_defconfig
-    - Use fixed Linux kernel version
-    - Use in-tree Linux kernel config
-    - Add defconfig comment to readme.txt for CI testing
-  * s390-tools package
-    - Improve Makefile
-    - Add dependency on C++ toolchain (due to libvmdump)
-    - uClibc-ng is not supported
-
-Alexander Egorenkov (11):
-  arch: add the basic IBM s390x and Z arch support
-  toolchain: add support for the internal IBM s390x and Z toolchain
-  linux: add bzImage support for IBM s390x and Z arch
-  board/qemu: add IBM s390x and Z arch support
-  package/systemd: add support for IBM s390x and Z arch
-  package/cmake: add support for IBM s390x and Z arch
-  package/liburcu: add support for IBM s390x and Z arch
-  package/kexec: add support for IBM s390x and Z arch
-  package/go: add support for IBM s390x and Z arch
-  package/makedumpfile: add support for IBM s390x and Z arch
-  package/s390-tools: new package
-
- DEVELOPERS                              |  6 ++
- Makefile                                |  1 +
- arch/Config.in                          | 13 ++++
- arch/Config.in.s390x                    | 34 +++++++++
- board/qemu/s390x/post-build.sh          | 11 +++
- board/qemu/s390x/readme.txt             |  8 +++
- configs/qemu_s390x_defconfig            | 13 ++++
- linux/Config.in                         |  2 +-
- package/Config.in                       |  1 +
- package/cmake/Config.in                 |  3 +-
- package/gcc/gcc.mk                      |  5 ++
- package/go/Config.in.host               |  2 +-
- package/kexec/Config.in                 |  2 +-
- package/liburcu/Config.in               |  2 +-
- package/makedumpfile/Config.in          |  1 +
- package/s390-tools/Config.in            | 13 ++++
- package/s390-tools/s390-tools.hash      |  3 +
- package/s390-tools/s390-tools.mk        | 91 +++++++++++++++++++++++++
- package/systemd/Config.in               |  1 +
- toolchain/toolchain-buildroot/Config.in |  6 +-
- 20 files changed, 210 insertions(+), 8 deletions(-)
- create mode 100644 arch/Config.in.s390x
- create mode 100755 board/qemu/s390x/post-build.sh
- create mode 100644 board/qemu/s390x/readme.txt
- create mode 100644 configs/qemu_s390x_defconfig
- create mode 100644 package/s390-tools/Config.in
- create mode 100644 package/s390-tools/s390-tools.hash
- create mode 100644 package/s390-tools/s390-tools.mk
-
+diff --git a/arch/Config.in b/arch/Config.in
+index eb9b6007c9..155403c363 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -223,7 +223,6 @@ config BR2_s390x
+ 	bool "s390x"
+ 	select BR2_ARCH_IS_64
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+-	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  s390x is a big-endian architecture made by IBM.
+ 	  http://www.ibm.com/
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..0912c07a71 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -241,6 +241,11 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
++ifeq ($(BR2_s390x),y)
++HOST_GCC_COMMON_CONF_OPTS += \
++	--with-long-double-128
++endif
++
+ HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
+ 
+ # For gcc-initial, we need to tell gcc that the C library will be
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 418d5cb387..1c4705600e 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -46,9 +46,9 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
+ 		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+-		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+-		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
++		   BR2_riscv       || BR2_s390x      || BR2_sh          || \
++		   BR2_sparc64     || BR2_x86_64     || BR2_microblaze  || \
++		   BR2_nios2       || (BR2_arc && BR2_ARC_ATOMIC_EXT)   || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
 2.26.2
