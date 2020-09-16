@@ -1,41 +1,128 @@
-From: Miken Valabdas <mvalabdas@distech-controls.com>
-Date: Wed, 16 Sep 2020 16:35:25 -0400
-Subject: [Buildroot] [PATCH] package/18xx-ti-utils: update makefile in order
- to compile wlconf
-Message-ID: <20200916203525.5913-1-mvalabdas@distech-controls.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 16 Sep 2020 22:37:06 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build with
+ Bison 3.7
+In-Reply-To: <20200916121354.1914130-1-thomas.petazzoni@bootlin.com>
+References: <20200916121354.1914130-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20200916203706.GE2422@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Miken Valabdas <mvalabdas@distech-controls.com>
----
-Changes v1 -> v2:
-  - adjust compilation parameters
----
- package/18xx-ti-utils/18xx-ti-utils.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Thomas, All,
 
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
-index d1f0388c3a..afe07ba227 100644
---- a/package/18xx-ti-utils/18xx-ti-utils.mk
-+++ b/package/18xx-ti-utils/18xx-ti-utils.mk
-@@ -21,10 +21,15 @@ define 18XX_TI_UTILS_BUILD_CMDS
- 		NFSROOT="$(STAGING_DIR)" NLVER=3 $(MAKE) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS) $(18XX_TI_UTILS_CFLAGS)" \
- 		$(18XX_TI_UTILS_BUILD_TARGET)
-+
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/wlconf \
-+		CC="$(HOSTCC)" \
-+		CFLAGS="$(HOST_CFLAGS)" \
- endef
- 
- define 18XX_TI_UTILS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/calibrator $(TARGET_DIR)/usr/bin/calibrator
-+	$(INSTALL) -m 0755 $(@D)/wlconf/wlconf $(HOST_DIR)/bin/wlconf
- endef
- 
- $(eval $(generic-package))
+On 2020-09-16 14:13 +0200, Thomas Petazzoni spake thusly:
+> Add patch from upstream that fixes build with Bison 3.7.
+> 
+> There are no autobuilder failures for this issue, but the following
+> defconfig:
+> 
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_INIT_NONE=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> BR2_PACKAGE_QT5=y
+> BR2_PACKAGE_QT5WEBENGINE=y
+> BR2_PACKAGE_RPI_USERLAND=y
+> 
+> Failed with:
+> 
+> /home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.0/src/core/release/gen/third_party/blink/renderer/core/xpath_grammar.cc:124:10: fatal error: xpath_grammar.hh: No such file or directory
+>   124 | #include "xpath_grammar.hh"
+>       |          ^~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> 
+> With this patch applied, it builds fine.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../qt5/qt5webengine/0002-fix-bison-3.7.patch | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 package/qt5/qt5webengine/0002-fix-bison-3.7.patch
+> 
+> diff --git a/package/qt5/qt5webengine/0002-fix-bison-3.7.patch b/package/qt5/qt5webengine/0002-fix-bison-3.7.patch
+> new file mode 100644
+> index 0000000000..575fe27b1b
+> --- /dev/null
+> +++ b/package/qt5/qt5webengine/0002-fix-bison-3.7.patch
+> @@ -0,0 +1,55 @@
+> +From 1a53f5995697f5ac6fd501dbdc0ee39c9488ee66 Mon Sep 17 00:00:00 2001
+> +From: Allan Sandfeld Jensen <allan.jensen@qt.io>
+> +Date: Fri, 14 Aug 2020 16:38:48 +0200
+> +Subject: Fix bison 3.7
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Do a replace run inspired by newer versions of the script.
+> +
+> +Fixes: QTBUG-86018
+> +Change-Id: Ib1dc771e22a662aff0fae842d135ad58fad08bc1
+> +Reviewed-by: Michael Br?ning <michael.bruning@qt.io>
+> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> +---
+> + .../blink/renderer/build/scripts/rule_bison.py        | 19 +++++++++++++++++++
+> + 1 file changed, 19 insertions(+)
+> +
+> +diff --git a/chromium/third_party/blink/renderer/build/scripts/rule_bison.py b/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
+> +index f75e25fd23f..7e0767e951a 100755
+> +--- a/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
+> ++++ b/src/3rdparty/chromium/third_party/blink/renderer/build/scripts/rule_bison.py
+> +@@ -45,6 +45,19 @@ from utilities import abs
+> + 
+> + from blinkbuild.name_style_converter import NameStyleConverter
+> + 
+> ++def modify_file(path, prefix_lines, suffix_lines, replace_list=[]):
+> ++    prefix_lines = map(lambda s: s + '\n', prefix_lines)
+> ++    suffix_lines = map(lambda s: s + '\n', suffix_lines)
+> ++    with open(path, 'r') as f:
+> ++        old_lines = f.readlines()
+> ++    for i in range(len(old_lines)):
+> ++        for src, dest in replace_list:
+> ++            old_lines[i] = old_lines[i].replace(src, dest)
+> ++    new_lines = prefix_lines + old_lines + suffix_lines
+> ++    with open(path, 'w') as f:
+> ++        f.writelines(new_lines)
+> ++
+> ++
+> + assert len(sys.argv) == 4 or len(sys.argv) == 5
+> + 
+> + inputFile = abs(sys.argv[1])
+> +@@ -115,3 +128,9 @@ print >>outputHFile, '#define %s' % headerGuard
+> + print >>outputHFile, outputHContents
+> + print >>outputHFile, '#endif  // %s' % headerGuard
+> + outputHFile.close()
+> ++
+> ++common_replace_list = [(inputRoot + '.hh',
+> ++                        inputRoot + '.h')]
+> ++modify_file(
+> ++    outputCpp, [], [],
+> ++    replace_list=common_replace_list)
+> +-- 
+> +cgit v1.2.1
+> +
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
