@@ -1,57 +1,56 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Wed, 16 Sep 2020 19:12:30 +1200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: fix license hash
-In-Reply-To: <20200915172035.6871-1-fontaine.fabrice@gmail.com>
-References: <20200915172035.6871-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFOYHZCj0PHfrnSjiU2cdQNDpAC4mJodJjc7VV4YNxuz8gQFqg@mail.gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Wed, 16 Sep 2020 07:26:00 +0000
+Subject: [Buildroot] [PATCH] package/glibc: ARC: use upstream 2.32
+In-Reply-To: <20200916085814.1b555f69@windsurf.hq.k.grp>
+References: <20200914213748.3953423-1-vgupta@synopsys.com>
+ <20200915153324.318c612b@windsurf.hq.k.grp>
+ <94daa7f5-5780-9716-cea8-a355930e33c6@synopsys.com>
+ <20200916085814.1b555f69@windsurf.hq.k.grp>
+Message-ID: <8b275794-f0e6-00b7-7f72-27bbdbe2f097@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020, 5:20 AM Fabrice Fontaine, <fontaine.fabrice@gmail.com>
-wrote:
+On 9/15/20 11:58 PM, Thomas Petazzoni wrote:
+> On Wed, 16 Sep 2020 04:22:36 +0000
+> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+>
+>> On 9/15/20 6:33 AM, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> On Mon, 14 Sep 2020 14:37:48 -0700
+>>> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+>>>  
+>>>> ARC glibc port was merged upstream in 2.32
+>>>> There's no need to refer to github as it has the exact same version and
+>>>> can be retired in future.
+>>>>
+>>>> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+>>>> ---
+>>>>  .../glibc.hash                                |  2 ++
+>>>>  package/glibc/glibc.mk                        | 20 ++++++++++---------
+>>>>  2 files changed, 13 insertions(+), 9 deletions(-)
+>>>>  create mode 100644 package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash  
+>>> The hash file for the ARC-specific glibc version used on Github should
+>>> be dropped.  
+>> The hash in the patch is from the sourceware downloaded gz.
+>>
+>> $ sha256sum ../dl/glibc/glibc-2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5.tar.gz
+>>
+>> 07f3804abbc6a23315f09568686c0e5bb81d714251cf537d25a36f826cae540b?
+>> ../dl/glibc/glibc-2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5.tar.gz
+>>
+> I think you missed my point: with this patch, you are removing support
+> for using the arc-2020.03-release version of glibc. Therefore the
+> folder package/glibc/arc-2020.03-release/, which contains the hash file
+> of glibc of the arc-2020.03-release version should be removed.
 
-> Commit 7676191cfacbdb1a92af1d0218d3280207b03090 forgot to update
-> license hash which changed due to an update in year:
->
-> https://github.com/micropython/micropython/commit/338b12d3c840ea56504c83d9c51e4d0f628684f4
->
-> While at it, also update indentation in hash file (two spaces)
->
-> Fixes:
->  -
-> http://autobuild.buildroot.org/results/2a650636965d8575374333f847acc169caf8d2ac
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->
+oops you are right, I missed your point indeed.
 
-Thanks for picking that up.
-
- package/micropython/micropython.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Or is it me who is missing something ?
 >
-> diff --git a/package/micropython/micropython.hash
-> b/package/micropython/micropython.hash
-> index 4ca3f8402f..5dfbb74522 100644
-> --- a/package/micropython/micropython.hash
-> +++ b/package/micropython/micropython.hash
-> @@ -1,3 +1,3 @@
->  #locally computed
-> -sha256 31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23
-> micropython-1.13.tar.gz
-> -sha256 afde3432122205e8e08d615fcb920aca58631c52b6c0c01813854287a457b298
-> LICENSE
-> +sha256  31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23
-> micropython-1.13.tar.gz
-> +sha256  4b8a8884a60cd72749f9ef40328b85b40d13c22594c01352e0a55392141e0f89
-> LICENSE
-> --
-> 2.28.0
+> Best regards,
 >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200916/8a90db5c/attachment.html>
+> Thomas
