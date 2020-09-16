@@ -1,46 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 16 Sep 2020 21:55:40 +0200
-Subject: [Buildroot] [PATCH v1] package/weston: change download url to https
-Message-ID: <20200916195540.25640-1-ps.report@gmx.net>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 16 Sep 2020 22:00:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fmt: bump to version 7.0.3
+Message-ID: <20200916200013.94007-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  - change download url to https (as given by the original announcement [1]
-    and redirected by the http url)
+Switch to use uploaded zip archive instead of githubs provided tarball.
 
-Fixes:
-
-  - http://autobuild.buildroot.net/results/00b9e1ccb97d9ff5c2ee0e856288f689bdab52ee
-
-  >>> weston 9.0.0 Downloading[23m
-  --2020-09-15 14:10:22--  http://wayland.freedesktop.org/releases/weston-9.0.0.tar.xz
-  Resolving wayland.freedesktop.org (wayland.freedesktop.org)... 35.227.58.183
-  Connecting to wayland.freedesktop.org (wayland.freedesktop.org)|35.227.58.183|:80... connected.
-  HTTP request sent, awaiting response... 308 Permanent Redirect
-  2020-09-15 14:10:23 ERROR 308: Permanent Redirect.
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041595.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/weston/weston.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fmt/fmt.hash | 2 +-
+ package/fmt/fmt.mk   | 9 +++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index a20f16ab46..f59963bf2e 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 8559d6605f..1f45c212f3 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7697e022f9cdc4f90b5e0a409643faa2cde0a6312f85e575c8388a1913374de5  fmt-7.0.2.tar.gz
++sha256  decfdf9ad274070fa85f26407b816f5a4d82205ae86bac1990be658d0795ea4d  fmt-7.0.3.zip
+ sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index 10e2f0f0b4..0539dcc024 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,8 +4,9 @@
+ #
  ################################################################################
  
- WESTON_VERSION = 9.0.0
--WESTON_SITE = http://wayland.freedesktop.org/releases
-+WESTON_SITE = https://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
+-FMT_VERSION = 7.0.2
+-FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
++FMT_VERSION = 7.0.3
++FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
++FMT_SOURCE = fmt-$(FMT_VERSION).zip
+ FMT_LICENSE = MIT with exception
+ FMT_LICENSE_FILES = LICENSE.rst
+ FMT_INSTALL_STAGING = YES
+@@ -14,4 +15,8 @@ FMT_CONF_OPTS = \
+ 	-DFMT_INSTALL=ON \
+ 	-DFMT_TEST=OFF
+ 
++define FMT_EXTRACT_CMDS
++	$(UNZIP) -d $(BUILD_DIR) $(FMT_DL_DIR)/$(FMT_SOURCE)
++endef
++
+ $(eval $(cmake-package))
 -- 
 2.28.0
