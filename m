@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 16 Sep 2020 08:45:36 +0200
-Subject: [Buildroot] [PATCH v2]  package/{bandwithd, dhcpcd, htpdate,
- minidlna, nginx, nss-pam-ldapd,
- openvmtools}: use PIDFile=/run in systemd services
-In-Reply-To: <20200915215645.2010-1-buildroot@heine.tech>
-References: <20200915194958.658-1-buildroot@heine.tech>
- <20200915215645.2010-1-buildroot@heine.tech>
-Message-ID: <20200916084536.094c5b17@windsurf.hq.k.grp>
+Date: Wed, 16 Sep 2020 08:53:14 +0200
+Subject: [Buildroot] [PATCH 1/3] support/scripts/mkusers: allow option
+ for system uid/gid
+In-Reply-To: <CADYdroMULeB=so8q27z1PfK2yFh+myhBV_Dm6+5+AJzqKFDhQA@mail.gmail.com>
+References: <20200113153516.486106-1-nolange79@gmail.com>
+ <20200915224701.5f096d97@windsurf.hq.k.grp>
+ <CADYdroMULeB=so8q27z1PfK2yFh+myhBV_Dm6+5+AJzqKFDhQA@mail.gmail.com>
+Message-ID: <20200916085314.3b7122b7@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 15 Sep 2020 23:56:45 +0200
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Tue, 15 Sep 2020 23:29:24 +0200
+Norbert Lange <nolange79@gmail.com> wrote:
 
-> Fixes:
+> Yeah, this was touched upon (both points), see [1].
 > 
-> systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
-> a path below legacy directory /var/run/, updating /var/run/nginx.pid ?
-> /run/nginx.pid; please update the unit file accordingly.
-> 
-> Details:
->  - https://github.com/systemd/systemd/pull/10712
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> System users exist as concept on all distros an observable effects are for
+> ex journald spawning a separate logging stream.
 
-I think we would normally prefer one patch for each. For example, for
-htpdate, we also need to fix the PIDFile path so that it has a .pid
-extension.
+Right, thanks for the additional feedback.
 
-Also, is there something that needs to be done with Postgresql:
+> So no, it's not just cosmetics, and yes I'd make system user the default.
 
-package/postgresql/postgresql.service:PIDFile=/var/lib/pgsql/postmaster.pid
+Agreed.
 
-is it expected to have the PIDFile in /var/lib ?
+Did you compare your implementation with the one proposed by Stephan
+earlier ?
+
+Best regards,
 
 Thomas
 -- 
