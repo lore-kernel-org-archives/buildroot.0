@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Wed, 16 Sep 2020 07:59:30 +0200
-Subject: [Buildroot] [PATCH v3 07/11] package/liburcu: add support for IBM
+Date: Wed, 16 Sep 2020 07:59:29 +0200
+Subject: [Buildroot] [PATCH v3 06/11] package/cmake: add support for IBM
  s390x and Z arch
 In-Reply-To: <20200916055934.609436-1-egorenar@linux.ibm.com>
 References: <20200916055934.609436-1-egorenar@linux.ibm.com>
-Message-ID: <20200916055934.609436-8-egorenar@linux.ibm.com>
+Message-ID: <20200916055934.609436-7-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/liburcu/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cmake/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 7d29642084..5dc8528971 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be || \
- 		BR2_i386 || BR2_mips || BR2_mips64 || BR2_mipsel || \
- 		BR2_mips64el || BR2_nios2 || BR2_powerpc || BR2_powerpc64 || \
--		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_x86_64
-+		BR2_powerpc64le || BR2_riscv || BR2_sparc64 || BR2_s390x || BR2_x86_64
- 	depends on BR2_USE_MMU # fork() in test
+diff --git a/package/cmake/Config.in b/package/cmake/Config.in
+index e7bd14e69a..3c47fdcb49 100644
+--- a/package/cmake/Config.in
++++ b/package/cmake/Config.in
+@@ -5,7 +5,8 @@ config BR2_PACKAGE_CMAKE_ARCH_SUPPORTS
+ 		BR2_m68k      || BR2_mips        || BR2_mips64   || \
+ 		BR2_mipsel    || BR2_mips64el    || BR2_powerpc  || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc    || \
+-		BR2_i386      || BR2_x86_64      || BR2_xtensa
++		BR2_i386      || BR2_x86_64      || BR2_xtensa   || \
++		BR2_s390x
  
- config BR2_PACKAGE_LIBURCU
+ config BR2_PACKAGE_CMAKE
+ 	bool
 -- 
 2.26.2
