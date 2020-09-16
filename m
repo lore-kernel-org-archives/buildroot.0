@@ -1,10 +1,9 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 16 Sep 2020 13:45:06 +0200
-Subject: [Buildroot] [PATCH v3 6/8] package/nss-pam-ldapd: use /run for
- PIDFile
+Date: Wed, 16 Sep 2020 13:45:07 +0200
+Subject: [Buildroot] [PATCH v3 7/8] package/openvmtools: use /run for PIDFile
 In-Reply-To: <20200915215645.2010-1-buildroot@heine.tech>
 References: <20200915215645.2010-1-buildroot@heine.tech>
-Message-ID: <20200916114508.3575-7-buildroot@heine.tech>
+Message-ID: <20200916114508.3575-8-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +13,28 @@ To: buildroot@busybox.net
 Fixes:
 
 PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/nslcd.pid ? /run/nslcd.pid; please update the unit file
+/var/run/vmtoolsd.pid ? /run/vmtoolsd.pid; please update the unit file
 accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/nss-pam-ldapd/nslcd.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openvmtools/vmtoolsd.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nss-pam-ldapd/nslcd.service b/package/nss-pam-ldapd/nslcd.service
-index 6c0d71b241..5a000a8e4c 100644
---- a/package/nss-pam-ldapd/nslcd.service
-+++ b/package/nss-pam-ldapd/nslcd.service
-@@ -4,7 +4,7 @@ After=syslog.target network.target
+diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
+index cb97357ec2..1d2a3566cf 100644
+--- a/package/openvmtools/vmtoolsd.service
++++ b/package/openvmtools/vmtoolsd.service
+@@ -5,8 +5,8 @@ ConditionVirtualization=vmware
  
  [Service]
  Type=forking
--PIDFile=/var/run/nslcd/nslcd.pid
-+PIDFile=/run/nslcd/nslcd.pid
- ExecStart=/usr/sbin/nslcd
- 
- [Install]
+-PIDFile=/var/run/vmtoolsd.pid
+-ExecStart=/usr/bin/vmtoolsd -b /var/run/vmtoolsd.pid
++PIDFile=/run/vmtoolsd.pid
++ExecStart=/usr/bin/vmtoolsd -b /run/vmtoolsd.pid
+ Restart=on-failure
+ KillMode=process
+ KillSignal=SIGKILL
 -- 
 2.25.1
