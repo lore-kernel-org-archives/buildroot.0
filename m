@@ -1,40 +1,54 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 16 Sep 2020 10:30:50 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-15
-In-Reply-To: <20200916070958.9330B86E2E@whitealder.osuosl.org>
-References: <20200916070958.9330B86E2E@whitealder.osuosl.org>
-Message-ID: <CAEyMn7b-fz_T73HFTW+rXX+2iLLFzSAGPs_kZbG+OvhQJGe7hg@mail.gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Wed, 16 Sep 2020 11:29:56 +0200
+Subject: [Buildroot] [PATCH v2] package/{bandwithd, dhcpcd, htpdate,
+ minidlna, nginx, nss-pam-ldapd,
+ openvmtools}: use PIDFile=/run in systemd services
+In-Reply-To: <20200916084536.094c5b17@windsurf.hq.k.grp>
+References: <20200915194958.658-1-buildroot@heine.tech>
+ <20200915215645.2010-1-buildroot@heine.tech>
+ <20200916084536.094c5b17@windsurf.hq.k.grp>
+Message-ID: <ec5cb887-efd6-d87f-9303-61d3a6a85919@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hi,
 
-Am Mi., 16. Sept. 2020 um 09:10 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
+On 16.09.2020 08:45, Thomas Petazzoni wrote:
 > Hello,
->
-> Autobuild statistics for 2020-09-15
-> ===================================
->
->       branch |  OK | NOK | TIM | TOT |
->   2020.02.x  | 19  |  9  |  0  | 28  |
->   2020.05.x  | 24  | 13  |  0  | 37  |
->   2020.08.x  | 26  |  9  |  0  | 35  |
->     master   | 81  | 122 |  0  | 203 |
->
-> Classification of failures by reason for master
-> -----------------------------------------------
->
->                ipmitool-1.8.18 | 21
+> 
 
-Damn .. I was pretty sure I tested this .. will look into that later ;-/
+> I think we would normally prefer one patch for each. For example, for
+> htpdate, we also need to fix the PIDFile path so that it has a .pid
+> extension.
 
-[SNIP]
+okay, i'll split that up.
+> 
+> Also, is there something that needs to be done with Postgresql:
+> 
+> package/postgresql/postgresql.service:PIDFile=/var/lib/pgsql/postmaster.pid
+> 
+> is it expected to have the PIDFile in /var/lib ?
 
--- 
-Heiko
+I'm not sure where the initial .service file came from. The postgres
+manual doesn't use PIDFile as it has a Type=notify configuration [0].
+Debian uses a forking config for it's clustered setup [1], maybe it was
+derived from there.
+
+The unit was changed to notify in [2] and I think this commit should
+have also removed the PIDFile.
+
+(for the initial topic this isn't an issue because /var/lib is still a
+valid folder, but while we're at it...)
+
+
+[0] https://www.postgresql.org/docs/12/server-start.html
+[1]
+https://salsa.debian.org/postgresql/postgresql-common/-/blob/master/systemd/postgresql at .service
+[2]
+https://git.busybox.net/buildroot/commit/package/postgresql/postgresql.service?id=eada187e77022f0da30884a826dc1767ba99abe8
+
+Regards,
+Michael
