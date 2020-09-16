@@ -1,44 +1,42 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Wed, 16 Sep 2020 09:42:00 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/meson: use specific BR
- variables for cross-compilation.conf
-In-Reply-To: <20200915225036.7e858a1e@windsurf.hq.k.grp>
-References: <20200915100546.806157-1-nolange79@gmail.com>
- <20200915100546.806157-2-nolange79@gmail.com>
- <e03b2581-ce33-25a5-2c35-5145d4f0dd1a@green-communications.fr>
- <CADYdroOFr0KdVKspvj28ERrFShHv28zHzsmQuwo7EPhm9NsdxQ@mail.gmail.com>
- <20200915225036.7e858a1e@windsurf.hq.k.grp>
-Message-ID: <e4a5fcea-0f59-5fbc-4150-98dbbe005b79@green-communications.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 16 Sep 2020 09:48:43 +0200
+Subject: [Buildroot] [PATCH] package/dash: bump to version 0.5.11.2
+Message-ID: <20200916074843.211307-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/09/2020 22:50, Thomas Petazzoni wrote:
-> On Tue, 15 Sep 2020 17:46:18 +0200
-> Norbert Lange <nolange79@gmail.com> wrote:
-> 
->>> This changes host/bin/pkgconf to host/bin/pkg-config, but that shouldn't
->>> be a problem, given meson only uses this pkgconfig to find target
->>> packages and not host packages (for that meson would look it up in a
->>> native-file instead of a cross-file).  
->>
->> Well, its used by all other build systems, so this makes more sense to me,
->> otherwise, shouldn't PKG_CONFIG_HOST_BINARY be changed to pkgconfig?
-> 
-> No, for Meson things are special, and it should really point to pkgconf
-> directly, and not to Buildroot's pkg-config wrapper around pkgconf.
-> 
-> Otherwise, what you're doing essentially reverts
-> 4e0bc29993376613d200e892d491e31ea5a49622.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/dash/dash.hash | 4 ++--
+ package/dash/dash.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-We have already established that 4e0bc299 doesn't work:
-
-https://marc.info/?l=buildroot&m=158853516017526&w=2
-
-And i can confirm that the situation hasn't changed in 2020.08, the logs from my
-first message in this thread are unchanged in 2020.08
-https://marc.info/?l=buildroot&m=158849499805939&w=2
-
-but this is probably another topic.
+diff --git a/package/dash/dash.hash b/package/dash/dash.hash
+index aa8e378f4..069a7b179 100644
+--- a/package/dash/dash.hash
++++ b/package/dash/dash.hash
+@@ -1,4 +1,4 @@
+-# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.tar.gz.sha256sum
+-sha256  4dd9a6ed5fe7546095157918fe5d784bb0b7887ae13de50e1e2d11e1b5a391cb  dash-0.5.11.tar.gz
++# From http://gondor.apana.org.au/~herbert/dash/files/dash-0.5.11.2.tar.gz.sha256sum
++sha256  00fb7d68b7599cc41ab151051c06c01e9500540183d8aa72116cb9c742bd6d5f  dash-0.5.11.2.tar.gz
+ # Locally calculated
+ sha256  254a7894923ff62e69184a991dcbccae97edee58a1105e8efbe78caf10595d72  COPYING
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 55961c5cb..88caa6609 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DASH_VERSION = 0.5.11
++DASH_VERSION = 0.5.11.2
+ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
+-- 
+2.25.1
