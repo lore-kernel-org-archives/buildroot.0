@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Sep 2020 23:11:33 +0200
-Subject: [Buildroot] [PATCH 2/3 v4] package/qt5/qt5webengine: ffmpeg
- supports needs webp mux
+Date: Wed, 16 Sep 2020 23:11:34 +0200
+Subject: [Buildroot] [PATCH 3/3 v4] package/qt5/qt5webengine: fix build
+ dependencies for autodetected packages
 In-Reply-To: <cover.1600290685.git.yann.morin.1998@free.fr>
 References: <cover.1600290685.git.yann.morin.1998@free.fr>
-Message-ID: <3ffb3868cd4aa642a914fb61f5caec94a956b45b.1600290685.git.yann.morin.1998@free.fr>
+Message-ID: <6efc39e9d97769fae93be2bcb91f56b050dda219.1600290685.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,51 @@ To: buildroot@busybox.net
 
 From: Nathan Ford <nford@westpond.com>
 
-qt5webengine also now requires webp mux support or the auto
-detection of ffmpeg will fail.
-
 Signed-off-by: Nathan Ford <nford@westpond.com>
-[yann.morin.1998 at free.fr:
-  - refresh on master
-  - split into ists own patch
-]
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5webengine/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt5/qt5webengine/qt5webengine.mk | 28 ++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 9879345e1e..c830420479 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	select BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-+	select BR2_PACKAGE_WEBP_MUX
- 	select BR2_PACKAGE_QT5BASE_DBUS
- 	select BR2_PACKAGE_QT5BASE_EGLFS
- 	select BR2_PACKAGE_QT5BASE_FONTCONFIG
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 5df6942977..520d32835b 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -41,6 +41,34 @@ else
+ QT5WEBENGINE_CONF_OPTS += -no-webengine-alsa
+ endif
+ 
++ifeq ($(BR2_PACKAGE_JSONCPP),y)
++QT5WEBENGINE_DEPENDENCIES += jsoncpp
++endif
++
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++QT5WEBENGINE_DEPENDENCIES += lcms2
++endif
++
++ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++QT5WEBENGINE_DEPENDENCIES += libevent
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++QT5WEBENGINE_DEPENDENCIES += libxml2
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXSLT),y)
++QT5WEBENGINE_DEPENDENCIES += libxslt
++endif
++
++ifeq ($(BR2_PACKAGE_PROTOBUF),y)
++QT5WEBENGINE_DEPENDENCIES += protobuf
++endif
++
++ifeq ($(BR2_PACKAGE_SNAPPY),y)
++QT5WEBENGINE_DEPENDENCIES += snappy
++endif
++
+ # QtWebengine's build system uses python, but only supports python2. We work
+ # around this by forcing python2 early in the PATH, via a python->python2
+ # symlink.
 -- 
 2.20.1
