@@ -1,30 +1,35 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 16 Sep 2020 12:02:08 +0200
-Subject: [Buildroot] [PATCH 0/3] package/pkg-cmake.mk: host: build shared as
- default
-Message-ID: <20200916100212.2903033-1-buildroot@heine.tech>
+Date: Wed, 16 Sep 2020 12:02:09 +0200
+Subject: [Buildroot] [PATCH 1/3] package/doxygen: disable shared libs for
+ host
+In-Reply-To: <20200916100212.2903033-1-buildroot@heine.tech>
+References: <20200916100212.2903033-1-buildroot@heine.tech>
+Message-ID: <20200916100212.2903033-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this is a follow-up to this discussion/investigation
- http://lists.busybox.net/pipermail/buildroot/2020-September/291494.html
+doxygen fails to build with BUILD_SHARED_LIBS=ON as it only
+for some targets honors this flag and links the rest static.
+So enforce BUILD_SHARED_LIBS=OFF for this package.
 
-first for doxygen and clangd/lld -DBUILD_SHARED_LIBS is enforced to =OFF.
-finally the default flag -DBUILD_SHARED_LIBS=ON is set.
-
-Michael Nosthoff (3):
-  package/doxygen: disable shared libs for host
-  package/{clang, lld}: host: disable shared_libs
-  package/pkg-cmake.mk: build host with shared libs
-
- package/clang/clang.mk     | 1 +
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
  package/doxygen/doxygen.mk | 2 ++
- package/lld/lld.mk         | 3 +++
- package/pkg-cmake.mk       | 1 +
- 4 files changed, 7 insertions(+)
+ 1 file changed, 2 insertions(+)
 
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index 6d8727208a..ee8ae4fde4 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -11,4 +11,6 @@ DOXYGEN_LICENSE = GPL-2.0
+ DOXYGEN_LICENSE_FILES = LICENSE
+ HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+ 
++HOST_DOXYGEN_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
++
+ $(eval $(host-cmake-package))
 -- 
 2.25.1
