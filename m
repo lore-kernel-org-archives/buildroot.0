@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 22:17:00 +0200
-Subject: [Buildroot] [git commit] package/logrotate: bump to version 3.17.0
-Message-ID: <20200917201021.9AB058B874@busybox.osuosl.org>
+Date: Thu, 17 Sep 2020 22:19:38 +0200
+Subject: [Buildroot] [git commit] package/libfribidi: bump to version 1.0.10
+Message-ID: <20200917201032.9DD5085367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=113f931f34f071e07d93557dc321077f7c6e11b4
+commit: https://git.buildroot.net/buildroot/commit/?id=5e74d8f0a0871734b677d867ecdb65b7574c6733
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/logrotate/logrotate.hash | 4 ++--
- package/logrotate/logrotate.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libfribidi/libfribidi.hash | 2 +-
+ package/libfribidi/libfribidi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index 24f2cd834f..704cbcabd6 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index 9856f4eaa2..8e7eb49bcd 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 bc6acfd09925045d48b5ff553c24c567cfd5f59d513c4ac34bfb51fa6b79dc8a  logrotate-3.16.0.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  c25ea219018b024988b791e91e9f6070c34d2056efa6ffed878067866c0ed765  logrotate-3.17.0.tar.gz
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index aabf73b6b4..fe674ee6a5 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
+ # Locally computed
+-sha256  c5e47ea9026fb60da1944da9888b4e0a18854a0e2410bbfe7ad90a054d36e0c7  fribidi-1.0.9.tar.xz
++sha256  7f1c687c7831499bcacae5e8675945a39bacbad16ecaa945e9454a32df653c01  fribidi-1.0.10.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 6818b13425..055620ae0d 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LOGROTATE_VERSION = 3.16.0
-+LOGROTATE_VERSION = 3.17.0
- LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
- LOGROTATE_LICENSE = GPL-2.0+
- LOGROTATE_LICENSE_FILES = COPYING
+-LIBFRIBIDI_VERSION = 1.0.9
++LIBFRIBIDI_VERSION = 1.0.10
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
+ LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
