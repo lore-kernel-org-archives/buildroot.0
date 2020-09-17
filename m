@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 22:44:52 +0200
-Subject: [Buildroot] [PATCH 3/6] package/wpebackend-fdo: bump to version
- 1.8.0
-In-Reply-To: <20200915223053.3090447-4-aperez@igalia.com>
-References: <20200915223053.3090447-1-aperez@igalia.com>
- <20200915223053.3090447-4-aperez@igalia.com>
-Message-ID: <20200917224452.6e856078@windsurf.hq.k.grp>
+Date: Thu, 17 Sep 2020 22:57:42 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/qt5: bump version to 5.15.1
+In-Reply-To: <20200915180004.2335-1-ps.report@gmx.net>
+References: <20200915180004.2335-1-ps.report@gmx.net>
+Message-ID: <20200917225742.0123a3ca@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 01:30:50 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Tue, 15 Sep 2020 20:00:02 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
->  comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
->  	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-> -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +		|| !BR2_PACKAGE_HAS_LIBGL || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> qt5base:
+>  - remove 0005-evdevkeyboard-fix-input_event-time-related-compile.patch
+>    (upstream [1])
+>  - remove 0006-evdevtouch-fix-input_event-time-related-compile.patch
+>    (upstream [2])
+>  - remove 0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+>    (upstream [3])
+> 
+> qt5declarative:
+>  - remove 0002-examples-fix-parallel-install.patch
+>    (superseeded by upstream commit [4])
+> 
+> qt5imageformats:
+>  - remove 0001-fix-build-on-Arch-Linux.patch
+>    (upstream [5])
+> 
+> qt5tools:
+>  - rebased 0001-Disable-designer-tool-fixes-configure-error.patch
+> 
+> [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c5b8b662105cc5ced968da9f567fe1134c52d6b5
+> [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=71fb4d081c7f3675939ac8c62063631a18175fd1
+> [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=2246f270ffd3875cad8c334fdf4878be48620514
+> [4] https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=1f0b3a54ffa2ab0dc0cdff1345980ea68d749d24
+> [5] https://code.qt.io/cgit/qt/qtimageformats.git/commit/?id=704868db61be1542c2d9e2b75ead00c45c56cc36
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-This is not longer really in sync with the comment that says "an OpenGL
-capable Wayland backend".
+There is a small issue when applied, due to the
+0002-fix-bison-3.7.patch recently added in qt5webengine, and which is
+part of 5.15.1 it seems.
 
->  config BR2_PACKAGE_WPEBACKEND_FDO
->  	bool "wpebackend-fdo"
->  	depends on !BR2_STATIC_LIBS # wayland
->  	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_HAS_LIBGL # libepoxy
+Other than that, I did a legal-info on all qt5 packages, and it looked
+good.
 
-This looks really odd as:
+Have you updated the package/qt5/qt5webengine/chromium-latest.inc file
+? Perhaps it doesn't need any update, I'm just checking.
 
- (1) Requiring full OpenGL means that no OpenGL ES platform can use
-     wpebakend-fdo. Remember that libgl == full/desktop OpenGL, while
-     libgles = OpenGL ES.
+I will however not apply this patch, as I have some concerns about
+PATCH 2/3, which might impact this PATCH 1/3.
 
- (2) libepoxy does not depned on HAS_LIBGL, but HAS_LIBGL || HAS_LIBEGL
-
- (3) You have a dependency on HAS_LIBEGL_WAYLAND... so it kind of
-     implies that an EGL/OpenGL ES configuration should work ?
-
-Could you revisit this ?
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
