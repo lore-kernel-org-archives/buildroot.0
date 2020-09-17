@@ -1,45 +1,51 @@
-From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Thu, 17 Sep 2020 17:03:45 +0800
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: disable the e2scrub stuff
-Message-ID: <1600333425.32426.1.camel@aliyun.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 17 Sep 2020 14:55:51 +0200
+Subject: [Buildroot] [PATCH 1/3 v4] package/qt5/qt5webengine: fix
+ ffmpeg/codec/alsa option handling for latest
+In-Reply-To: <73c8adc83c7e856136f5eacd8aab44631b0a64cc.1600290685.git.yann.morin.1998@free.fr>
+References: <cover.1600290685.git.yann.morin.1998@free.fr>
+ <73c8adc83c7e856136f5eacd8aab44631b0a64cc.1600290685.git.yann.morin.1998@free.fr>
+Message-ID: <20200917145551.3f4a7187@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-e2scrub_all depends on the readlink of coreutils. If you use the
-readlink of busybox, an error [1] occurs.
+Hello,
 
-Embedded systems usually do not use LVM, in which case e2scrub is
-useless.
+On Wed, 16 Sep 2020 23:11:32 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-There is no single option to completely disable e2scrub, so use a method
-similar to [2] to disable the e2scrub stuff.
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index 9101f35937..5df6942977 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -29,16 +29,16 @@ endif
+>  
+>  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+>  
+> -QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_system_ffmpeg
+> +QT5WEBENGINE_CONF_OPTS = -webengine-ffmpeg
+>  
+>  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
+> -QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_proprietary_codecs
+> +QT5WEBENGINE_CONF_OPTS += -webengine-proprietary-codecs
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
+>  QT5WEBENGINE_DEPENDENCIES += alsa-lib
+>  else
+> -QT5WEBENGINE_CONF_OPTS += QT_CONFIG-=alsa
+> +QT5WEBENGINE_CONF_OPTS += -no-webengine-alsa
+>  endif
 
-[1]: https://github.com/tytso/e2fsprogs/issues/32
-[2]: https://patchwork.ozlabs.org/project/buildroot/patch/20200717120654.548833-1-antoine.tenart at bootlin.com/
+In the original patch, there was a "--" that was added to separate
+these webengine options from the main options. You have not kept that.
+Are you sure this is OK ?
 
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
----
-?package/e2fsprogs/e2fsprogs.mk | 5 ++++-
-?1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index eb82a55..cf6579d 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -52,7 +52,10 @@ E2FSPROGS_CONF_OPTS = \
-?	--disable-e2initrd-helper \
-?	--disable-testio-debug \
-?	--disable-rpath \
--	--enable-symlink-install
-+	--enable-symlink-install \
-+	--with-crond-dir=no \
-+	--with-systemd-unit-dir=no \
-+	--with-udev-rules-dir=no
-?
-?ifeq ($(BR2_PACKAGE_E2FSPROGS_FUSE2FS),y)
-?E2FSPROGS_CONF_OPTS += --enable-fuse2fs
---?
-2.7.4
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
