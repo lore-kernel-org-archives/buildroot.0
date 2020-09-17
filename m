@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 21:30:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 1.4.14
-In-Reply-To: <20200917063655.927560-1-joerg.krause@embedded.rocks>
-References: <20200917063655.927560-1-joerg.krause@embedded.rocks>
-Message-ID: <20200917213016.07d717c0@windsurf.hq.k.grp>
+Date: Thu, 17 Sep 2020 21:30:29 +0200
+Subject: [Buildroot] [PATCH] configs/lafrite_defconfig: bump kernel to
+ 5.8.10
+In-Reply-To: <20200917183519.31494-1-peter@korsgaard.com>
+References: <20200917183519.31494-1-peter@korsgaard.com>
+Message-ID: <20200917213029.61660c6d@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Sep 2020 08:36:55 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+On Thu, 17 Sep 2020 20:35:18 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Drop upstream patch which is included in the new version.
+> Brings a number of fixes and audio support.  The aarch64 defconfig has
+> grown, so bump the ext4 size to make it fit.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  ...dapt-streamproxy-to-newer-microhttpd.patch | 106 ------------------
->  package/upmpdcli/upmpdcli.hash                |   4 +-
->  package/upmpdcli/upmpdcli.mk                  |   2 +-
->  3 files changed, 3 insertions(+), 109 deletions(-)
->  delete mode 100644 package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
+>  configs/lafrite_defconfig | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
