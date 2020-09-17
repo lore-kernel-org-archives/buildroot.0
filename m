@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Thu, 17 Sep 2020 06:07:51 +0200
-Subject: [Buildroot] [PATCH v4 01/12] arch: add the basic IBM s390x and Z
- arch support
+Date: Thu, 17 Sep 2020 06:07:55 +0200
+Subject: [Buildroot] [PATCH v4 05/12] board/qemu: add IBM s390x and Z arch
+ support
 In-Reply-To: <20200917040802.846896-1-egorenar@linux.ibm.com>
 References: <20200917040802.846896-1-egorenar@linux.ibm.com>
-Message-ID: <20200917040802.846896-2-egorenar@linux.ibm.com>
+Message-ID: <20200917040802.846896-6-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,110 +13,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- DEVELOPERS           |  3 +++
- Makefile             |  1 +
- arch/Config.in       | 14 ++++++++++++++
- arch/Config.in.s390x | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 52 insertions(+)
- create mode 100644 arch/Config.in.s390x
+ DEVELOPERS                     |  2 ++
+ board/qemu/s390x/post-build.sh | 11 +++++++++++
+ board/qemu/s390x/readme.txt    |  8 ++++++++
+ configs/qemu_s390x_defconfig   | 24 ++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100755 board/qemu/s390x/post-build.sh
+ create mode 100644 board/qemu/s390x/readme.txt
+ create mode 100644 configs/qemu_s390x_defconfig
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c5124f97ef..2285694f66 100644
+index 2285694f66..2c6cc45d45 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -146,6 +146,9 @@ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
- F:	package/makedumpfile/
- F:	package/multipath-tools/
+@@ -148,6 +148,8 @@ F:	package/multipath-tools/
  
-+N:	Alexander Egorenkov <egorenar@linux.ibm.com>
-+F:	arch/Config.in.s390x
-+
+ N:	Alexander Egorenkov <egorenar@linux.ibm.com>
+ F:	arch/Config.in.s390x
++F:	board/qemu/s390x/
++F:	configs/qemu_s390x_defconfig
+ 
  N:	Alexander Kurz <akurz@blala.de>
  F:	package/minimodem/
- 
-diff --git a/Makefile b/Makefile
-index 9648fa58d8..384bfe3fe9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -445,6 +445,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
- 	-e s/riscv.*/riscv/ \
- 	-e s/sh.*/sh/ \
-+	-e s/s390x/s390/ \
- 	-e s/microblazeel/microblaze/)
- 
- ZCAT := $(call qstrip,$(BR2_ZCAT))
-diff --git a/arch/Config.in b/arch/Config.in
-index 0707c076e2..eb9b6007c9 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -219,6 +219,16 @@ config BR2_riscv
- 	  https://riscv.org/
- 	  https://en.wikipedia.org/wiki/RISC-V
- 
-+config BR2_s390x
-+	bool "s390x"
-+	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+	help
-+	  s390x is a big-endian architecture made by IBM.
-+	  http://www.ibm.com/
-+	  http://en.wikipedia.org/wiki/IBM_System/390
-+
- config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-@@ -457,6 +467,10 @@ if BR2_riscv
- source "arch/Config.in.riscv"
- endif
- 
-+if BR2_s390x
-+source "arch/Config.in.s390x"
-+endif
-+
- if BR2_sh
- source "arch/Config.in.sh"
- endif
-diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
-new file mode 100644
-index 0000000000..39d2f58aa9
+diff --git a/board/qemu/s390x/post-build.sh b/board/qemu/s390x/post-build.sh
+new file mode 100755
+index 0000000000..bf83a002c2
 --- /dev/null
-+++ b/arch/Config.in.s390x
-@@ -0,0 +1,34 @@
++++ b/board/qemu/s390x/post-build.sh
+@@ -0,0 +1,11 @@
++#!/bin/sh
 +
-+choice
-+	prompt "Target Architecture Variant"
-+	depends on BR2_s390x
-+	help
-+	  Specific CPU variant to use
++set -u
++set -e
 +
-+config BR2_s390x_z13
-+	bool "z13"
-+	depends on BR2_s390x
++# Add a console on tty1
++if [ -e ${TARGET_DIR}/etc/inittab ]; then
++    grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
++	sed -i '/GENERIC_SERIAL/a\
++tty1::respawn:/sbin/getty -L  tty1 0 vt100 # QEMU graphical window' ${TARGET_DIR}/etc/inittab
++fi
+diff --git a/board/qemu/s390x/readme.txt b/board/qemu/s390x/readme.txt
+new file mode 100644
+index 0000000000..7fa41640c0
+--- /dev/null
++++ b/board/qemu/s390x/readme.txt
+@@ -0,0 +1,8 @@
++Run the emulation with:
 +
-+config BR2_s390x_z14
-+	bool "z14"
-+	depends on BR2_s390x
++  qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 \
++    -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
++    -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio \
++    -net nic,model=virtio -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 # qemu_s390x_defconfig
 +
-+config BR2_s390x_z15
-+	bool "z15"
-+	depends on BR2_s390x
++The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+new file mode 100644
+index 0000000000..8e25d64e15
+--- /dev/null
++++ b/configs/qemu_s390x_defconfig
+@@ -0,0 +1,24 @@
++# Architecture
++BR2_s390x=y
 +
-+endchoice
++# System
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_SYSTEM_DHCP="eth0"
 +
-+config BR2_ARCH
-+	default "s390x"	if BR2_s390x
++# Filesystem
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/s390x/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
 +
-+config BR2_ENDIAN
-+	default "BIG"
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +
-+config BR2_GCC_TARGET_ARCH
-+	default "arch11" if BR2_s390x_z13
-+	default "arch12" if BR2_s390x_z14
-+	default "arch13" if BR2_s390x_z15
-+
-+config BR2_READELF_ARCH_NAME
-+	default "IBM S/390"	if BR2_s390x
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.26.2
