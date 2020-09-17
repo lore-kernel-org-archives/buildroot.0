@@ -1,31 +1,45 @@
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Thu, 17 Sep 2020 10:44:11 +0200
-Subject: [Buildroot] [PATCH v3 04/11] board/qemu: add IBM s390x and Z
- arch support
-In-Reply-To: <a2616806-51ae-c3b8-e5d6-1ba0daa2298f@gmail.com>
-References: <20200916055934.609436-1-egorenar@linux.ibm.com>
- <20200916055934.609436-5-egorenar@linux.ibm.com>
- <a79e13e6-902e-c351-c292-383660e06451@gmail.com>
- <87wo0t2gob.fsf@oc8242746057.ibm.com>
- <a2616806-51ae-c3b8-e5d6-1ba0daa2298f@gmail.com>
-Message-ID: <87tuvw23ok.fsf@oc8242746057.ibm.com>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Thu, 17 Sep 2020 17:03:45 +0800
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: disable the e2scrub stuff
+Message-ID: <1600333425.32426.1.camel@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain Naour <romain.naour@gmail.com> writes:
+e2scrub_all depends on the readlink of coreutils. If you use the
+readlink of busybox, an error [1] occurs.
 
->
-> Yes, I'm on a f31 x86_64 host.
-> I tested several time and it boot time to time.
-> I didn't investigated further, but it seems a problem around the RNG driver.
->
+Embedded systems usually do not use LVM, in which case e2scrub is
+useless.
 
-Could you please add "initcall_debug debug" to the kernel command line
-and send the console output back when it crashed ?
+There is no single option to completely disable e2scrub, so use a method
+similar to [2] to disable the e2scrub stuff.
 
-Thanks
-Regards
-Alex
+[1]: https://github.com/tytso/e2fsprogs/issues/32
+[2]: https://patchwork.ozlabs.org/project/buildroot/patch/20200717120654.548833-1-antoine.tenart at bootlin.com/
+
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+---
+?package/e2fsprogs/e2fsprogs.mk | 5 ++++-
+?1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index eb82a55..cf6579d 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -52,7 +52,10 @@ E2FSPROGS_CONF_OPTS = \
+?	--disable-e2initrd-helper \
+?	--disable-testio-debug \
+?	--disable-rpath \
+-	--enable-symlink-install
++	--enable-symlink-install \
++	--with-crond-dir=no \
++	--with-systemd-unit-dir=no \
++	--with-udev-rules-dir=no
+?
+?ifeq ($(BR2_PACKAGE_E2FSPROGS_FUSE2FS),y)
+?E2FSPROGS_CONF_OPTS += --enable-fuse2fs
+--?
+2.7.4
