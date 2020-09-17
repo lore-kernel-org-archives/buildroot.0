@@ -1,46 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 22:07:54 +0200
-Subject: [Buildroot] [PATCH 3/3 v4] package/qt5/qt5webengine: fix build
- dependencies for autodetected packages
-In-Reply-To: <CAOgXH4eLXGW+7-OrtX-8JnG+156Q-4ouT6BnHgD3rS0NycANmw@mail.gmail.com>
-References: <cover.1600290685.git.yann.morin.1998@free.fr>
- <6efc39e9d97769fae93be2bcb91f56b050dda219.1600290685.git.yann.morin.1998@free.fr>
- <20200917205147.79d63fc9@windsurf.hq.k.grp>
- <CAOgXH4eLXGW+7-OrtX-8JnG+156Q-4ouT6BnHgD3rS0NycANmw@mail.gmail.com>
-Message-ID: <20200917220754.1f970435@windsurf.hq.k.grp>
+Date: Thu, 17 Sep 2020 22:15:30 +0200
+Subject: [Buildroot] [PATCH] package/18xx-ti-utils: update makefile in
+ order to compile wlconf
+In-Reply-To: <20200916210146.12836-1-mvalabdas@distech-controls.com>
+References: <20200916210146.12836-1-mvalabdas@distech-controls.com>
+Message-ID: <20200917221530.2f56c1b4@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Sep 2020 15:22:55 -0400
-Nathan Ford <nford@westpond.com> wrote:
+On Wed, 16 Sep 2020 17:01:46 -0400
+Miken Valabdas via buildroot <buildroot@busybox.net> wrote:
 
-> In src/buildtools/configure.json some of the library dependencies have
-> had their auto detection disabled ( look for the key "autoDetect" in
-> the features section ), at least as of 5.14.2 ( I have not migrated to
-> newer for the projects I work on yet ).
+> Signed-off-by: Miken Valabdas <mvalabdas@distech-controls.com>
+> ---
+> Change  v2 -> v3:
+>   -  typo
+> Changes v1 -> v2:
+>   - adjust compilation parameters
+> ---
+>  package/18xx-ti-utils/18xx-ti-utils.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+> index d1f0388c3a..cbd5096eed 100644
+> --- a/package/18xx-ti-utils/18xx-ti-utils.mk
+> +++ b/package/18xx-ti-utils/18xx-ti-utils.mk
+> @@ -21,10 +21,16 @@ define 18XX_TI_UTILS_BUILD_CMDS
+>  		NFSROOT="$(STAGING_DIR)" NLVER=3 $(MAKE) -C $(@D) \
+>  		CFLAGS="$(TARGET_CFLAGS) $(18XX_TI_UTILS_CFLAGS)" \
+>  		$(18XX_TI_UTILS_BUILD_TARGET)
+> +
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/wlconf \
+> +		CC="$(HOSTCC)" \
+> +		CFLAGS="$(HOST_CFLAGS)"
 
-Ah yes, there was also src/buildtools/configure.json, which I don't
-know how it interacts with ./src/core/configure.json...
+I've replaced CC and CFLAGS here by $(HOST_CONFIGURE_OPTS)
 
-So, the ones that have "autoDetect": "false", it means that the build
-system doesn't try to detect them, and it will only enable them if
-explicitly enabled?
+> +		
 
-> I assumed that any lib that qt5webengine built itself was a hard
-> dependency, so if it is present in the buildroot build, use it,
-> otherwise let qt5webengine build its own. The alternative is to make
-> all those libs build dependencies of qt5webengine.
+There was some trailing white space here, so I've simply dropped this
+line.
 
-As much as possible we want to:
+Applied to master with those changes, and a slightly improved commit
+log.
 
- (1) Use system libraries installed of bundled ones
-
- (2) Be explicit when handling optional dependencies by telling the
-     build system "please enable support for FOO", "please disable support
-     for FOO".
+Thanks!
 
 Thomas
 -- 
