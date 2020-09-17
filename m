@@ -1,50 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 22:42:23 +0200
-Subject: [Buildroot] [PATCH 2/6] package/libwpe: switch over to Meson
-In-Reply-To: <20200915223053.3090447-3-aperez@igalia.com>
+Date: Thu, 17 Sep 2020 22:44:52 +0200
+Subject: [Buildroot] [PATCH 3/6] package/wpebackend-fdo: bump to version
+ 1.8.0
+In-Reply-To: <20200915223053.3090447-4-aperez@igalia.com>
 References: <20200915223053.3090447-1-aperez@igalia.com>
- <20200915223053.3090447-3-aperez@igalia.com>
-Message-ID: <20200917224223.10a07628@windsurf.hq.k.grp>
+ <20200915223053.3090447-4-aperez@igalia.com>
+Message-ID: <20200917224452.6e856078@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 01:30:49 +0300
+On Wed, 16 Sep 2020 01:30:50 +0300
 Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-> index 6c3a1d354a..369ef5824a 100644
-> --- a/package/libwpe/libwpe.mk
-> +++ b/package/libwpe/libwpe.mk
-> @@ -14,9 +14,8 @@ LIBWPE_DEPENDENCIES = libegl libxkbcommon
->  
->  # Workaround for https://github.com/raspberrypi/userland/issues/316
->  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> -LIBWPE_CONF_OPTS += \
-> -	-DCMAKE_C_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE' \
-> -	-DCMAKE_CXX_FLAGS='$(TARGET_CFLAGS) -D_GNU_SOURCE'
-> +LIBWPE_CFLAGS += -D_GNU_SOURCE
-> +LIBWPE_CXXFLAGS += -D_GNU_SOURCE
->  endif
+>  comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
+>  	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+> -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> +		|| !BR2_PACKAGE_HAS_LIBGL || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
 
-Unfortunately pkg-meson.mk does this:
+This is not longer really in sync with the comment that says "an OpenGL
+capable Wayland backend".
 
-$(2)_CFLAGS ?= $$(TARGET_CFLAGS)
-$(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
-$(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
+>  config BR2_PACKAGE_WPEBACKEND_FDO
+>  	bool "wpebackend-fdo"
+>  	depends on !BR2_STATIC_LIBS # wayland
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_PACKAGE_HAS_LIBGL # libepoxy
 
-So, with your libwpe.mk, it means that when BR2_PACKAGE_RPI_USERLAND is
-disabled, LIBWPE_CFLAGS is not defined by libwpe.mk, and the
-$(TARGET_CFLAGS) value will be used by pkg-meson.mk.
+This looks really odd as:
 
-However, if BR2_PACKAGE_RPI_USERLAND=y, LIBWPE_CFLAGS will be non-empty
-by the time the meson-package infrastructure is invoked, and so you
-LIBWPE_CFLAGS will contain only -D_GNU_SOURCE and not the other
-$(TARGET_CFLAGS).
+ (1) Requiring full OpenGL means that no OpenGL ES platform can use
+     wpebakend-fdo. Remember that libgl == full/desktop OpenGL, while
+     libgles = OpenGL ES.
 
-I fixed that up and applied to master. Thanks!
+ (2) libepoxy does not depned on HAS_LIBGL, but HAS_LIBGL || HAS_LIBEGL
+
+ (3) You have a dependency on HAS_LIBEGL_WAYLAND... so it kind of
+     implies that an EGL/OpenGL ES configuration should work ?
+
+Could you revisit this ?
+
+Thanks!
 
 Thomas
 -- 
