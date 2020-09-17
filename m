@@ -1,160 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 21:21:34 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.4.14
-Message-ID: <20200917191236.0CADC8813E@busybox.osuosl.org>
+Date: Thu, 17 Sep 2020 21:25:01 +0200
+Subject: [Buildroot] [git commit] configs/lafrite_defconfig: bump kernel to
+ 5.8.10
+Message-ID: <20200917191555.F20C88A4B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9247a42c4bd0b5c386cc5cc94d7e0945bae6e54f
+commit: https://git.buildroot.net/buildroot/commit/?id=365240775613be6e3485eef8d3c987b3e965454e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch which is included in the new version.
+Brings a number of fixes and audio support.  The aarch64 defconfig has
+grown, so bump the ext4 size to make it fit.
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-Adapt-streamproxy-to-newer-microhttpd.patch | 106 ---------------------
- package/upmpdcli/upmpdcli.hash                     |   4 +-
- package/upmpdcli/upmpdcli.mk                       |   2 +-
- 3 files changed, 3 insertions(+), 109 deletions(-)
+ configs/lafrite_defconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch b/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
-deleted file mode 100644
-index 55c691b86a..0000000000
---- a/package/upmpdcli/0001-Adapt-streamproxy-to-newer-microhttpd.patch
-+++ /dev/null
-@@ -1,106 +0,0 @@
--From 4fd8a07b560dcd4ad5706684d512d33707de3da0 Mon Sep 17 00:00:00 2001
--From: Jean-Francois Dockes <jf@dockes.org>
--Date: Fri, 3 Jul 2020 19:26:37 +0200
--Subject: [PATCH] Adapt streamproxy to newer microhttpd where results are now
-- an enum
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded from upstream commit
-- https://framagit.org/medoc92/upmpdcli/-/commit/4fd8a07b560dcd4ad5706684d512d33707de3da0]
-----
-- src/mediaserver/cdplugins/streamproxy.cpp | 23 ++++++++++++++---------
-- 1 file changed, 14 insertions(+), 9 deletions(-)
--
--diff --git a/src/mediaserver/cdplugins/streamproxy.cpp b/src/mediaserver/cdplugins/streamproxy.cpp
--index abc57915..8d283834 100644
----- a/src/mediaserver/cdplugins/streamproxy.cpp
--+++ b/src/mediaserver/cdplugins/streamproxy.cpp
--@@ -28,6 +28,11 @@
-- #include <fcntl.h>
-- #include <microhttpd.h>
-- 
--+
--+#if MHD_VERSION < 0x00097002
--+typedef int MHD_Result;
--+#endif
--+
-- #include <mutex>
-- #include <condition_variable>
-- #include <unordered_map>
--@@ -155,7 +160,7 @@ public:
--     ~Internal();
--     bool startMHD();
-- 
---    int answerConn(
--+    MHD_Result answerConn(
--         struct MHD_Connection *connection, const char *url, 
--         const char *method, const char *version, 
--         const char *upload_data, size_t *upload_data_size,
--@@ -202,7 +207,7 @@ StreamProxy::Internal::Internal(int _listenport, UrlTransFunc _urltrans)
-- }
-- 
-- 
---static int answer_to_connection(
--+static MHD_Result answer_to_connection(
--     void *cls, struct MHD_Connection *conn, 
--     const char *url, const char *method, const char *version, 
--     const char *upload_data, size_t *upload_data_size,
--@@ -214,7 +219,7 @@ static int answer_to_connection(
--         return internal->answerConn(
--             conn, url, method, version, upload_data, upload_data_size, con_cls);
--     } else {
---        return -1;
--+        return MHD_NO;
--     }
-- }
-- 
--@@ -238,8 +243,8 @@ static int print_out_key (void *cls, enum MHD_ValueKind kind,
-- }
-- #endif /* PRINT_KEYS */
-- 
---static int mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
---                        const char *key, const char *value)
--+static MHD_Result mapvalues_cb(void *cls, enum MHD_ValueKind kind, 
--+                               const char *key, const char *value)
-- {
--     unordered_map<string,string> *mp = (unordered_map<string,string> *)cls;
--     if (mp) {
--@@ -307,7 +312,7 @@ static bool processRange(struct MHD_Connection *mhdconn, uint64_t& offset)
--     return true;
-- }
-- 
---int StreamProxy::Internal::answerConn(
--+MHD_Result StreamProxy::Internal::answerConn(
--     struct MHD_Connection *mhdconn, const char *_url,
--     const char *method, const char *version, 
--     const char *upload_data, size_t *upload_data_size,
--@@ -352,7 +357,7 @@ int StreamProxy::Internal::answerConn(
--                 return MHD_NO;
--             }
--             MHD_add_response_header (response, "Location", url.c_str());
---            int ret = MHD_queue_response(mhdconn, 302, response);
--+            MHD_Result ret = MHD_queue_response(mhdconn, 302, response);
--             MHD_destroy_response(response);
--             return ret;
--         }
--@@ -393,7 +398,7 @@ int StreamProxy::Internal::answerConn(
--         int code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
--         struct MHD_Response *response =
--             MHD_create_response_from_buffer(0, 0, MHD_RESPMEM_PERSISTENT);
---        int ret = MHD_queue_response(mhdconn, code, response);
--+        MHD_Result ret = MHD_queue_response(mhdconn, code, response);
--         MHD_destroy_response(response);
--         LOGINF("StreamProxy::answerConn (1): return with http code: " <<
--                code << endl);
--@@ -434,7 +439,7 @@ int StreamProxy::Internal::answerConn(
--     if (reader->fetcher->fetchDone(&fetchcode, &httpcode)) {
--         code = httpcode ? httpcode : MHD_HTTP_INTERNAL_SERVER_ERROR;
--     }
---    int ret = MHD_queue_response(mhdconn, code, response);
--+    MHD_Result ret = MHD_queue_response(mhdconn, code, response);
--     MHD_destroy_response(response);
--     return ret;
-- }
---- 
--GitLab
--
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 83fb5cf967..68ea707e53 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.12.tar.gz.sha256:
--sha256  bffc78c140ad688987894ea5a1e162e6dcbc7dcae7d2cc322a894f5ea2a2f53b  upmpdcli-1.4.12.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.14.tar.gz.sha256:
-+sha256  e3d90dedee6a942acc049324ca81b7f008d217d386a3e2590a2ca5670cc9df05  upmpdcli-1.4.14.tar.gz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 1315022ee8..6531b90ee9 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 1.4.12
-+UPMPDCLI_VERSION = 1.4.14
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+diff --git a/configs/lafrite_defconfig b/configs/lafrite_defconfig
+index 63370928e5..5496bbc30d 100644
+--- a/configs/lafrite_defconfig
++++ b/configs/lafrite_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a53=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_OVERLAY="board/librecomputer/lafrite/overlay/"
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/librecomputer/lafrite/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxl-s805x-libretech-ac"
+@@ -16,5 +16,6 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_PACKAGE_HOST_GENIMAGE=y
