@@ -1,49 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 22:35:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
- 0.10.0
-In-Reply-To: <20200916100830.24731-1-jubalh@iodoru.org>
-References: <20200916100830.24731-1-jubalh@iodoru.org>
-Message-ID: <20200917223544.05051ae4@windsurf.hq.k.grp>
+Date: Thu, 17 Sep 2020 22:36:08 +0200
+Subject: [Buildroot] [git commit] package/libwpe: bump to version 1.8.0
+Message-ID: <20200917203110.CE35E82639@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 12:08:30 +0200
-Michael Vetter <jubalh@iodoru.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e8686be9f045457ca7c919c9e13db67234c740d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changes:
->   * Coding style has been unified
->   * SCRAM-SHA-256 and SCRAM-SHA-512 support
->   * c-ares support
->   * LibreSSL support
->   * Introduced global timed handlers that fire periodically regardless of connections status, such a handler can be used to implement deferred re-connection
->   * examples/register implements XEP-0077
->   * Fixed issue with IPv6 on Windows (#153)
->   * Improved portability across systems such as Haiku, Windows
->   * New API:
->     - xmpp_stanza_get_child_by_name_and_ns()
->     - xmpp_conn_is_connecting()
->     - xmpp_conn_is_connected()
->     - xmpp_conn_is_disconnected()
->     - xmpp_stanza_new_from_string()
->     - xmpp_stanza_add_child_ex()
->     - xmpp_stanza_get_context()
->     - xmpp_stanza_reply_error()
->     - xmpp_global_timed_handler_add()
->     - xmpp_global_timed_handler_delete()
-> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-> ---
->  package/libstrophe/libstrophe.hash | 2 +-
->  package/libstrophe/libstrophe.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Release notes:
 
-Applied to master, thanks.
+  https://wpewebkit.org/release/libwpe-1.8.0.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libwpe/libwpe.hash | 8 ++++----
+ package/libwpe/libwpe.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+index e138c06f2b..36cdf56664 100644
+--- a/package/libwpe/libwpe.hash
++++ b/package/libwpe/libwpe.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/libwpe-1.6.0.tar.xz.sums
+-md5  6e8a2c279dcc3617db5ec7ac4c03d628  libwpe-1.6.0.tar.xz
+-sha1  e8424d5e29f35861d85acdc5962d8b59b53bb1ad  libwpe-1.6.0.tar.xz
+-sha256  3587c6b8a807f4bb76b268ba74ca82c6b395b90235db41ad8252224456193c90  libwpe-1.6.0.tar.xz
++# From https://wpewebkit.org/releases/libwpe-1.8.0.tar.xz.sums
++md5  328ea59dd8dee9107a49353536d00844  libwpe-1.8.0.tar.xz
++sha1  3c893b1e8118a06f082d98373e279a8f8e33750d  libwpe-1.8.0.tar.xz
++sha256  a6f00a7d091cbd4db57fe7ee3b4c12c6350921d654ed79812800a26c888481d2  libwpe-1.8.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256  35bef295cedbbf179eaee14328002587a0e7dc08ebf3f15ea080a6f2815f0d7b  COPYING
+diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+index fd4f3d0cbd..6c3a1d354a 100644
+--- a/package/libwpe/libwpe.mk
++++ b/package/libwpe/libwpe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBWPE_VERSION = 1.6.0
++LIBWPE_VERSION = 1.8.0
+ LIBWPE_SITE = https://wpewebkit.org/releases
+ LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+ LIBWPE_INSTALL_STAGING = YES
