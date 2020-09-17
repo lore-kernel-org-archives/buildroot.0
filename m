@@ -1,44 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 21:44:20 +0200
-Subject: [Buildroot] [PATCH v1] package/weston: change download url to
- https
-In-Reply-To: <20200916195540.25640-1-ps.report@gmx.net>
-References: <20200916195540.25640-1-ps.report@gmx.net>
-Message-ID: <20200917214420.022a64ff@windsurf.hq.k.grp>
+From: Nathan Ford <nford@westpond.com>
+Date: Thu, 17 Sep 2020 15:23:53 -0400
+Subject: [Buildroot] [PATCH 1/3 v4] package/qt5/qt5webengine: fix
+ ffmpeg/codec/alsa option handling for latest
+In-Reply-To: <20200917191557.595453fe@gmx.net>
+References: <cover.1600290685.git.yann.morin.1998@free.fr>
+ <73c8adc83c7e856136f5eacd8aab44631b0a64cc.1600290685.git.yann.morin.1998@free.fr>
+ <20200917145551.3f4a7187@windsurf.hq.k.grp> <20200917153910.GG2422@scaer>
+ <20200917191557.595453fe@gmx.net>
+Message-ID: <CAOgXH4doM+wTN=vLvZdF-ntyZsO-ht7expa9+8hicZpFQTJUsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 21:55:40 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hi All,
 
->   - change download url to https (as given by the original announcement [1]
->     and redirected by the http url)
-> 
-> Fixes:
-> 
->   - http://autobuild.buildroot.net/results/00b9e1ccb97d9ff5c2ee0e856288f689bdab52ee
-> 
->   >>> weston 9.0.0 Downloading[23m  
->   --2020-09-15 14:10:22--  http://wayland.freedesktop.org/releases/weston-9.0.0.tar.xz
->   Resolving wayland.freedesktop.org (wayland.freedesktop.org)... 35.227.58.183
->   Connecting to wayland.freedesktop.org (wayland.freedesktop.org)|35.227.58.183|:80... connected.
->   HTTP request sent, awaiting response... 308 Permanent Redirect
->   2020-09-15 14:10:23 ERROR 308: Permanent Redirect.
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2020-September/041595.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/weston/weston.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I can't speak for newer qt5 versions, but for 5.14.2 the -- is
+required. I don't understand the qt build system well enough to
+explain why.
 
-Applied to master, thanks.
+--Nate
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On Thu, Sep 17, 2020 at 1:16 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Yann,
+>
+> On Thu, 17 Sep 2020 17:39:10 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > Thomas, All,
+> >
+> > On 2020-09-17 14:55 +0200, Thomas Petazzoni spake thusly:
+> > > On Wed, 16 Sep 2020 23:11:32 +0200
+> > > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > > diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> > > > index 9101f35937..5df6942977 100644
+> > > > --- a/package/qt5/qt5webengine/qt5webengine.mk
+> > > > +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> > > > @@ -29,16 +29,16 @@ endif
+> > > >
+> > > >  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+> > > >
+> > > > -QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_system_ffmpeg
+> > > > +QT5WEBENGINE_CONF_OPTS = -webengine-ffmpeg
+> > > >
+> > > >  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
+> > > > -QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_proprietary_codecs
+> > > > +QT5WEBENGINE_CONF_OPTS += -webengine-proprietary-codecs
+> > > >  endif
+> > > >
+> > > >  ifeq ($(BR2_PACKAGE_QT5WEBENGINE_ALSA),y)
+> > > >  QT5WEBENGINE_DEPENDENCIES += alsa-lib
+> > > >  else
+> > > > -QT5WEBENGINE_CONF_OPTS += QT_CONFIG-=alsa
+> > > > +QT5WEBENGINE_CONF_OPTS += -no-webengine-alsa
+> > > >  endif
+> > >
+> > > In the original patch, there was a "--" that was added to separate
+> > > these webengine options from the main options. You have not kept that.
+> > > Are you sure this is OK ?
+> >
+> > I am not sure, hence I said in the cover-letter "Note: this is not even
+> > build-tested; it's just a refresh-n-respin."
+> >
+> > I'll do a test-build tonight (I did not have spare CPU cycles yesterday,
+> > but tonight I should have some.)
+> >
+> > However, none of the qmake-package we have use that '--'.
+>
+> I believe Thomas is right, all other qmake-packages set
+> an option <name>=|-=|+=<value> as the old behavior before
+> the patch and not the 'real' option one after the patch
+> (see above 'QT_CONFIG-=alsa' vs. '-no-webengine-alsa' or
+> in case for the first one '-- -webengine-ffmpeg'...
+>
+> Regards,
+> Peter
+>
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
