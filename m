@@ -1,55 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 17 Sep 2020 21:39:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: disable the e2scrub
- stuff
-In-Reply-To: <1600333425.32426.1.camel@aliyun.com>
-References: <1600333425.32426.1.camel@aliyun.com>
-Message-ID: <20200917213935.67fc4894@windsurf.hq.k.grp>
+Date: Thu, 17 Sep 2020 21:28:36 +0200
+Subject: [Buildroot] [git commit] package/armbian-firmware: bump version to
+ 70a0850
+Message-ID: <20200917193048.7B53081408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 17 Sep 2020 17:03:45 +0800
-Tian Yuanhao via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec82c7d57f02bc9c330c8b02b4a906a5b7e7bda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> e2scrub_all depends on the readlink of coreutils. If you use the
-> readlink of busybox, an error [1] occurs.
-> 
-> Embedded systems usually do not use LVM, in which case e2scrub is
-> useless.
-> 
-> There is no single option to completely disable e2scrub, so use a method
-> similar to [2] to disable the e2scrub stuff.
-> 
-> [1]: https://github.com/tytso/e2fsprogs/issues/32
-> [2]: https://patchwork.ozlabs.org/project/buildroot/patch/20200717120654.548833-1-antoine.tenart at bootlin.com/
-> 
-> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-> ---
-> ?package/e2fsprogs/e2fsprogs.mk | 5 ++++-
-> ?1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index eb82a55..cf6579d 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -52,7 +52,10 @@ E2FSPROGS_CONF_OPTS = \
-> ?	--disable-e2initrd-helper \
-> ?	--disable-testio-debug \
-> ?	--disable-rpath \
-> -	--enable-symlink-install
-> +	--enable-symlink-install \
-> +	--with-crond-dir=no \
-> +	--with-systemd-unit-dir=no \
-> +	--with-udev-rules-dir=no
+While at it, adjust spacing in the hash file.
 
-I'm not sure this is really a good solution. Indeed, we probably do
-want to install udev rules or systemd services.
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/armbian-firmware/armbian-firmware.hash | 2 +-
+ package/armbian-firmware/armbian-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/armbian-firmware/armbian-firmware.hash b/package/armbian-firmware/armbian-firmware.hash
+index 0f3858dedf..edbc9c8282 100644
+--- a/package/armbian-firmware/armbian-firmware.hash
++++ b/package/armbian-firmware/armbian-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 876958ce6ba8a4a01a424f2b4455208b7a989eaba96015649c774340553f0c35 armbian-firmware-455d6b6701178dafe7fd0168eb4a4ef78a8d24a3.tar.gz
++sha256  975bc377728496006f058317cccc88e2d3c4ab172ee3df08cfd085cf13221752  armbian-firmware-70a08503ac9e765f5d1ccf4fa3e825db0751e53e.tar.gz
+diff --git a/package/armbian-firmware/armbian-firmware.mk b/package/armbian-firmware/armbian-firmware.mk
+index 77e518542b..36b0450037 100644
+--- a/package/armbian-firmware/armbian-firmware.mk
++++ b/package/armbian-firmware/armbian-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMBIAN_FIRMWARE_VERSION = 455d6b6701178dafe7fd0168eb4a4ef78a8d24a3
++ARMBIAN_FIRMWARE_VERSION = 70a08503ac9e765f5d1ccf4fa3e825db0751e53e
+ ARMBIAN_FIRMWARE_SITE = https://github.com/armbian/firmware
+ ARMBIAN_FIRMWARE_SITE_METHOD = git
+ 
