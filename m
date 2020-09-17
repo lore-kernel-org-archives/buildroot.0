@@ -1,10 +1,10 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Thu, 17 Sep 2020 06:07:53 +0200
-Subject: [Buildroot] [PATCH v4 03/12] linux: add bzImage support for IBM
- s390x and Z arch
+Date: Thu, 17 Sep 2020 06:07:54 +0200
+Subject: [Buildroot] [PATCH v4 04/12] package/qemu: add IBM s390x and Z arch
+ support
 In-Reply-To: <20200917040802.846896-1-egorenar@linux.ibm.com>
 References: <20200917040802.846896-1-egorenar@linux.ibm.com>
-Message-ID: <20200917040802.846896-4-egorenar@linux.ibm.com>
+Message-ID: <20200917040802.846896-5-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qemu/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 49da2b81b2..ec74e1e65a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -226,7 +226,7 @@ config BR2_LINUX_KERNEL_APPENDED_UIMAGE
- 
- config BR2_LINUX_KERNEL_BZIMAGE
- 	bool "bzImage"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_i386 || BR2_x86_64 || BR2_s390x
- 
- config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 7ccf768d15..a7c0f7bf59 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+ 	default y if BR2_riscv
++	default y if BR2_s390x
+ 	default y if BR2_sh
+ 	default y if BR2_sparc
+ 	default y if BR2_sparc64
 -- 
 2.26.2
