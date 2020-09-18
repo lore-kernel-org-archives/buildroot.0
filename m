@@ -1,72 +1,150 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Sep 2020 22:05:15 +0200
-Subject: [Buildroot] [PATCH v1 1/3] package/qt5: bump version to 5.15.1
-In-Reply-To: <20200917225742.0123a3ca@windsurf.hq.k.grp>
-References: <20200915180004.2335-1-ps.report@gmx.net>
- <20200917225742.0123a3ca@windsurf.hq.k.grp>
-Message-ID: <20200918220515.073e79ec@gmx.net>
+Date: Fri, 18 Sep 2020 22:33:06 +0200
+Subject: [Buildroot] [PATCH 3/3 v4] package/qt5/qt5webengine: fix build
+ dependencies for autodetected packages
+In-Reply-To: <20200918223027.74a2ea7c@gmx.net>
+References: <cover.1600290685.git.yann.morin.1998@free.fr>
+ <6efc39e9d97769fae93be2bcb91f56b050dda219.1600290685.git.yann.morin.1998@free.fr>
+ <20200917205147.79d63fc9@windsurf.hq.k.grp>
+ <20200918223027.74a2ea7c@gmx.net>
+Message-ID: <20200918223306.04712ecc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Re-add CC: Yann, buildroot
 
-On Thu, 17 Sep 2020 22:57:42 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> On Tue, 15 Sep 2020 20:00:02 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > qt5base:
-> >  - remove 0005-evdevkeyboard-fix-input_event-time-related-compile.patch
-> >    (upstream [1])
-> >  - remove 0006-evdevtouch-fix-input_event-time-related-compile.patch
-> >    (upstream [2])
-> >  - remove 0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
-> >    (upstream [3])
-> >
-> > qt5declarative:
-> >  - remove 0002-examples-fix-parallel-install.patch
-> >    (superseeded by upstream commit [4])
-> >
-> > qt5imageformats:
-> >  - remove 0001-fix-build-on-Arch-Linux.patch
-> >    (upstream [5])
-> >
-> > qt5tools:
-> >  - rebased 0001-Disable-designer-tool-fixes-configure-error.patch
-> >
-> > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c5b8b662105cc5ced968da9f567fe1134c52d6b5
-> > [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=71fb4d081c7f3675939ac8c62063631a18175fd1
-> > [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=2246f270ffd3875cad8c334fdf4878be48620514
-> > [4] https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=1f0b3a54ffa2ab0dc0cdff1345980ea68d749d24
-> > [5] https://code.qt.io/cgit/qt/qtimageformats.git/commit/?id=704868db61be1542c2d9e2b75ead00c45c56cc36
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> There is a small issue when applied, due to the
-> 0002-fix-bison-3.7.patch recently added in qt5webengine, and which is
-> part of 5.15.1 it seems.
-
-Fixed in v2...
-
->
-> Other than that, I did a legal-info on all qt5 packages, and it looked
-> good.
->
-> Have you updated the package/qt5/qt5webengine/chromium-latest.inc file
-> ? Perhaps it doesn't need any update, I'm just checking.
-
-Yes, checked, but no update needed...
-
-Regards,
+Sorry,
 Peter
 
+On Fri, 18 Sep 2020 22:30:27 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Thomas,
 >
-> I will however not apply this patch, as I have some concerns about
-> PATCH 2/3, which might impact this PATCH 1/3.
+> On Thu, 17 Sep 2020 20:51:47 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 >
-> Thanks,
+> > On Wed, 16 Sep 2020 23:11:34 +0200
+> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> >
+> > > +ifeq ($(BR2_PACKAGE_JSONCPP),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += jsoncpp
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LCMS2),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += lcms2
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LIBEVENT),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += libevent
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += libxml2
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LIBXSLT),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += libxslt
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += protobuf
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_SNAPPY),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += snappy
+> > > +endif
+> >
+> > I am not 100% sure but I believe those dependencies do have options,
+> > much like the -webengine-ffmpeg option that PATCH 1/3 is using. If you
+> > look at ./src/core/configure.json in the qt5webengine sources, you can
+> > see:
 >
-> Thomas
+> Do not see options for jsoncpp, lcms2, libevent, libxml2, libxslt, protobuf
+> or snappy...
+>
+> >
+> >     "commandline": {
+> >         "options": {
+> >             "webengine-alsa": "boolean",
+> >             "webengine-embedded-build": "boolean",
+> >             "webengine-full-debug-info": "boolean",
+> >             "webengine-icu": { "type": "enum", "name": "webengine-system-icu", "values": { "system": "yes", "qt": "no" } },
+> >             "webengine-ffmpeg": { "type": "enum", "name": "webengine-system-ffmpeg", "values": { "system": "yes", "qt": "no" } },
+> >             "webengine-opus": { "type": "enum", "name": "webengine-system-opus", "values": { "system": "yes", "qt": "no" } },
+> >             "webengine-webp": { "type": "enum", "name": "webengine-system-libwebp", "values": { "system": "yes", "qt": "no" } },
+> >             "webengine-pepper-plugins": "boolean",
+> >             "webengine-printing-and-pdf": "boolean",
+> >             "webengine-proprietary-codecs": "boolean",
+> >             "webengine-pulseaudio": "boolean",
+> >             "webengine-spellchecker": "boolean",
+> >             "webengine-native-spellchecker": "boolean",
+> >             "webengine-extensions": "boolean",
+> >             "webengine-webrtc": "boolean",
+> >             "webengine-geolocation": "boolean",
+> >             "webengine-webchannel": "boolean",
+> >             "webengine-kerberos": "boolean",
+> >             "alsa": { "type": "boolean", "name": "webengine-alsa" },
+> >             "pulseaudio": { "type": "boolean", "name": "webengine-pulseaudio" },
+> >             "ffmpeg": { "type": "enum", "name": "webengine-system-ffmpeg", "values": { "system": "yes", "qt": "no" } },
+> >             "opus": { "type": "enum", "name": "webengine-system-opus", "values": { "system": "yes", "qt": "no" } },
+> >             "webp": { "type": "enum", "name": "webengine-system-libwebp", "values": { "system": "yes", "qt": "no" } },
+> >             "pepper-plugins": { "type": "boolean", "name": "webengine-pepper-plugins" },
+> >             "printing-and-pdf": { "type": "boolean", "name": "webengine-printing-and-pdf" },
+> >             "proprietary-codecs": { "type": "boolean", "name": "webengine-proprietary-codecs" },
+> >             "spellchecker": { "type": "boolean", "name": "webengine-spellchecker" },
+> >             "extensions": { "type": "boolean", "name": "webengine-extensions" },
+> >             "webrtc": { "type": "boolean", "name": "webengine-webrtc" }
+> >         }
+> >     },
+> >
+> > So it seems like if we have a -webengine-ffmpeg option, then we should
+> > also have many other options to enable (and perhaps disable ?) other
+> > optional features.
+> >
+> > However, I'm not sure to understand the difference between the
+> > "webengine-<something>" option and the corresponding "<something>"
+> > option.
+>
+> I believe the second one is an (short) alias for the first/long one...
+>
+> >
+> > Also, it seems like some options such as webengine-ffmpeg or
+> > webengine-icu can take multiple values: they are enums and not
+> > booleans. should we use -webengine-ffmpeg=system for example ? Ditto
+> > for the other dependencies;
+>
+> Or '-webengine-ffmpeg' means option enabled/yes --> use system one
+> as the summary output (from the original submit, [1]) suggests:
+>
+>     According to build/qt5webengine-5.12.7/config.summary:
+>
+>       Optional system libraries used:
+>     [...]
+>        ffmpeg ............................... yes
+>     [...]
+>
+>
+> >
+> > For the record, the qt5webengine source code bundles chromium in
+> > ./src/3rdparty/, which itself bundles a bunch of things including
+> > ffmpeg in ./src/3rdparty/chromium/third_party/ffmpeg/ (do you like when
+> > a 3rdparty folder includes another third_party folder ?).
+> >
+> > Obviously, in the context of Buildroot, we'd prefer to use as few
+> > bundled libraries as possible, and use as much as possible system
+> > libraries.
+>
+> Still a lot of space for improvements....
+>
+> Regards,
+> Peter
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-February/275313.html
+>
+> >
+> > How is the configure.json above being parsed and used ?
+> >
+> > Thomas
+>
