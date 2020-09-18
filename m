@@ -1,12 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Sep 2020 22:03:45 +0200
-Subject: [Buildroot] [PATCH v1 3/3] package/qt5webkit: fix bison-3.7.1
- related compile failure
-In-Reply-To: <20200917230641.05a6ac65@windsurf.hq.k.grp>
+Date: Fri, 18 Sep 2020 22:05:15 +0200
+Subject: [Buildroot] [PATCH v1 1/3] package/qt5: bump version to 5.15.1
+In-Reply-To: <20200917225742.0123a3ca@windsurf.hq.k.grp>
 References: <20200915180004.2335-1-ps.report@gmx.net>
- <20200915180004.2335-3-ps.report@gmx.net>
- <20200917230641.05a6ac65@windsurf.hq.k.grp>
-Message-ID: <20200918220345.292103f2@gmx.net>
+ <20200917225742.0123a3ca@windsurf.hq.k.grp>
+Message-ID: <20200918220515.073e79ec@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +13,60 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Thu, 17 Sep 2020 23:06:41 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Thu, 17 Sep 2020 22:57:42 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> On Tue, 15 Sep 2020 20:00:04 +0200
+> On Tue, 15 Sep 2020 20:00:02 +0200
 > Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> > Add gentoo patch to fix bison-3.7.1 related compile failure and
-> > an additional one doing a similare change for another bison call
-> > in Source/WebCore/DerivedSources.pri.
+> > qt5base:
+> >  - remove 0005-evdevkeyboard-fix-input_event-time-related-compile.patch
+> >    (upstream [1])
+> >  - remove 0006-evdevtouch-fix-input_event-time-related-compile.patch
+> >    (upstream [2])
+> >  - remove 0007-qimage_conversions-arm-neon-draw-helper-only-availab.patch
+> >    (upstream [3])
 > >
-> > Fixes:
+> > qt5declarative:
+> >  - remove 0002-examples-fix-parallel-install.patch
+> >    (superseeded by upstream commit [4])
 > >
-> >   generated/XPathGrammar.tab.c:124:10: fatal error: XPathGrammar.tab.h: No such file or directory
+> > qt5imageformats:
+> >  - remove 0001-fix-build-on-Arch-Linux.patch
+> >    (upstream [5])
+> >
+> > qt5tools:
+> >  - rebased 0001-Disable-designer-tool-fixes-configure-error.patch
+> >
+> > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=c5b8b662105cc5ced968da9f567fe1134c52d6b5
+> > [2] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=71fb4d081c7f3675939ac8c62063631a18175fd1
+> > [3] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=2246f270ffd3875cad8c334fdf4878be48620514
+> > [4] https://code.qt.io/cgit/qt/qtdeclarative.git/commit/?id=1f0b3a54ffa2ab0dc0cdff1345980ea68d749d24
+> > [5] https://code.qt.io/cgit/qt/qtimageformats.git/commit/?id=704868db61be1542c2d9e2b75ead00c45c56cc36
 > >
 > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 >
-> Here as well, it would be good to understand if this is also happened
-> on 5.15.0 or only with 5.15.1. I assume the former, and I've started a
-> test build to confirm it.
+> There is a small issue when applied, due to the
+> 0002-fix-bison-3.7.patch recently added in qt5webengine, and which is
+> part of 5.15.1 it seems.
 
-Same patch is needed  by qt5webkit-5.9.1/qt-5.15.0 (before qt version bump)
-combination, re-ordered the patch set accordingly...
+Fixed in v2...
+
+>
+> Other than that, I did a legal-info on all qt5 packages, and it looked
+> good.
+>
+> Have you updated the package/qt5/qt5webengine/chromium-latest.inc file
+> ? Perhaps it doesn't need any update, I'm just checking.
+
+Yes, checked, but no update needed...
 
 Regards,
 Peter
 
 >
-> Thanks!
+> I will however not apply this patch, as I have some concerns about
+> PATCH 2/3, which might impact this PATCH 1/3.
+>
+> Thanks,
 >
 > Thomas
