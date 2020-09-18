@@ -1,78 +1,46 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 17 Sep 2020 23:43:16 +0200
-Subject: [Buildroot] [PATCH] package/live555: bump to version 2020.08.19
-Message-ID: <20200917214317.23734-1-buildroot@heine.tech>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Fri, 18 Sep 2020 09:57:30 +0800
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: disable the e2scrub
+ stuff
+In-Reply-To: <20200917213935.67fc4894@windsurf.hq.k.grp>
+References: <1600333425.32426.1.camel@aliyun.com>
+ <20200917213935.67fc4894@windsurf.hq.k.grp>
+Message-ID: <1600394250.18560.2.camel@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to [0] this version fixes memory leaks and buffer overflows.
+On ?, 2020-09-17 at 21:39 +0200, Thomas Petazzoni wrote:
+> On Thu, 17 Sep 2020 17:03:45 +0800
+> Tian Yuanhao via buildroot <buildroot@busybox.net> wrote:
+>?
+> > 
+> > diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> > index eb82a55..cf6579d 100644
+> > --- a/package/e2fsprogs/e2fsprogs.mk
+> > +++ b/package/e2fsprogs/e2fsprogs.mk
+> > @@ -52,7 +52,10 @@ E2FSPROGS_CONF_OPTS = \
+> > ?	--disable-e2initrd-helper \
+> > ?	--disable-testio-debug \
+> > ?	--disable-rpath \
+> > -	--enable-symlink-install
+> > +	--enable-symlink-install \
+> > +	--with-crond-dir=no \
+> > +	--with-systemd-unit-dir=no \
+> > +	--with-udev-rules-dir=no
+> I'm not sure this is really a good solution. Indeed, we probably do
+> want to install udev rules or systemd services.
+> 
+> Thomas
 
-Commit bc80c9121b70b576 added LIBS_FOR_LIVEMEDIA_LIB also for
-static builds. That broke those builds.
-With this commit it now only alters this parameter if it's there
-by replacing echo with sed.
-Also it explicitly links static against -pthread -lz as this
-seems neccessary.
+'--with-crond-dir=no --with-systemd-unit-dir=no --with-udev-rules-dir=no'
+is approximately equal to '--disable-scrub' which does not exist.
 
-Fixes:
-http://autobuild.buildroot.net/results/f13/f13f1e40a2749fec5ad8a93cd8eea9a6e4e577b
+Android [1], Yocto [2] and PTXdist [3] do not install e2scrub. Therefore,
+I thought Buildroot should boldly use those options.
 
-[0] http://live555.com/liveMedia/public/changelog.txt
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 9 ++++++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 52ca068288..5e65cacd7b 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
--md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
-+md5  4645d2a0c865505c85b48af5317bcb4a  live.2020.08.19.tar.gz
- # Locally generated
--sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
-+sha256  af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537  live.2020.08.19.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index e7be6024c9..59650d2174 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2020.06.25
-+LIVE555_VERSION = 2020.08.19
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- # There is a COPYING file with the GPL-3.0 license text, but none of
-@@ -29,6 +29,9 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIVE555_DEPENDENCIES += openssl
- LIVE555_LIBS = -lssl -lcrypto
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIVE555_LIBS += $(if $(BR2_TOOLCHAIN_HAS_THREADS),-lpthread) -lz
-+endif
- else
- LIVE555_CFLAGS += -DNO_OPENSSL
- endif
-@@ -48,8 +51,8 @@ define LIVE555_CONFIGURE_CMDS
- 	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
- 	# fails
- 	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	sed -i 's:^LIBS_FOR_CONSOLE_APPLICATION =.*:LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS):g' $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	sed -i 's:^LIBS_FOR_LIVEMEDIA_LIB =.*:LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS):g' $(@D)/config.$(LIVE555_CONFIG_TARGET)
- 	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
- endef
- 
--- 
-2.25.1
+[1]: https://android.googlesource.com/platform/external/e2fsprogs/+/refs/heads/master/Android.bp
+[2]: http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/e2fsprogs/e2fsprogs_1.45.6.bb
+[3]: https://git.pengutronix.de/cgit/ptxdist/tree/rules/e2fsprogs.make
