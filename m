@@ -1,12 +1,12 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Sep 2020 22:01:59 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/qt5webengine: needs
- libxkbcommon
-In-Reply-To: <20200917230546.1beaf61f@windsurf.hq.k.grp>
+Date: Fri, 18 Sep 2020 22:03:45 +0200
+Subject: [Buildroot] [PATCH v1 3/3] package/qt5webkit: fix bison-3.7.1
+ related compile failure
+In-Reply-To: <20200917230641.05a6ac65@windsurf.hq.k.grp>
 References: <20200915180004.2335-1-ps.report@gmx.net>
- <20200915180004.2335-2-ps.report@gmx.net>
- <20200917230546.1beaf61f@windsurf.hq.k.grp>
-Message-ID: <20200918220159.3649dbdc@gmx.net>
+ <20200915180004.2335-3-ps.report@gmx.net>
+ <20200917230641.05a6ac65@windsurf.hq.k.grp>
+Message-ID: <20200918220345.292103f2@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,62 +15,27 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Thu, 17 Sep 2020 23:05:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Thu, 17 Sep 2020 23:06:41 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> On Tue, 15 Sep 2020 20:00:03 +0200
+> On Tue, 15 Sep 2020 20:00:04 +0200
 > Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> > Fixes:
-> >   subprocess.CalledProcessError: Command '['/home/seiderer/Work/Buildroot/build_rpi4_qt5_update_001/build/qt5webengine-5.15.1/src/core/pkg-config_wrapper.sh', '--variable=prefix', 'xkbcommon']' returned non-zero exit status 1
+> > Add gentoo patch to fix bison-3.7.1 related compile failure and
+> > an additional one doing a similare change for another bison call
+> > in Source/WebCore/DerivedSources.pri.
 > >
-> >   See //ui/events/keycodes/BUILD.gn:12:3: whence it was called.
-> >     pkg_config("xkbcommon") {
-> >     ^------------------------
-> >   See //ui/events/ozone/layout/BUILD.gn:42:15: which caused the file to be included.
-> >       deps += [ "//ui/events/keycodes:xkb" ]
-> >                 ^-------------------------
-> >   Project ERROR: GN run error!
+> > Fixes:
+> >
+> >   generated/XPathGrammar.tab.c:124:10: fatal error: XPathGrammar.tab.h: No such file or directory
 > >
 > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Notes:
-> >  - send as extra patch as I am not sure if the failure is caused by
-> >    the version bump and/or by a combination from my buildroot config
 >
-> Unfortunately, I think we really need to understand if this is a change
-> needed in relation to the bump or not, so that we know if it needs to
-> go in a stable branch.
->
-> At least in a simple build of qt5webengine in v5.15.0 I have not
-> encountered this particular build failure. But perhaps it occurs only
-> when you have a bunch of other dependencies enabled.
->
-> The BUILD.gn file contains:
->
-> if (use_xkbcommon) {
->   pkg_config("xkbcommon") {
->     packages = [ "xkbcommon" ]
->   }
-> }
->
-> And src/buildtools/config/linux.pri seems to be defining the value of
-> use_xkbcommon:
->
->     qtConfig(build-qtwebengine-core):qtConfig(webengine-system-xkbcommon) {
->         gn_args += use_xkbcommon=true
->     } else {
->         gn_args += use_xkbcommon=false
->     }
->
-> I've never been familiar enough with the .pri syntax though to
-> understand what this is doing.
->
-> Could you try to see if the problem really comes from the 5.15.1 bump ?
+> Here as well, it would be good to understand if this is also happened
+> on 5.15.0 or only with 5.15.1. I assume the former, and I've started a
+> test build to confirm it.
 
-qt5webengine-5.15.0 with the same buildroot config
-compiles fine without libxkbcommon, will try qt5webengine-5.15.1
-with a striped down buildroot config to evaluate if some of
-my buildroot config options enable the need for libxkbcommon...
+Same patch is needed  by qt5webkit-5.9.1/qt-5.15.0 (before qt version bump)
+combination, re-ordered the patch set accordingly...
 
 Regards,
 Peter
