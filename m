@@ -1,79 +1,61 @@
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 18 Sep 2020 12:22:25 +0200
-Subject: [Buildroot] [PATCH v4 2/2] support/script/cve-checker: Manage the
- CVEs that need to be check
-In-Reply-To: <20200918102225.76756-1-gregory.clement@bootlin.com>
-References: <20200918102225.76756-1-gregory.clement@bootlin.com>
-Message-ID: <20200918102225.76756-3-gregory.clement@bootlin.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 18 Sep 2020 17:06:42 +0300
+Subject: [Buildroot] [PATCH 3/6] package/wpebackend-fdo: bump to version
+ 1.8.0
+In-Reply-To: <20200917224452.6e856078@windsurf.hq.k.grp>
+References: <20200915223053.3090447-1-aperez@igalia.com>
+ <20200915223053.3090447-4-aperez@igalia.com>
+ <20200917224452.6e856078@windsurf.hq.k.grp>
+Message-ID: <20200918170642.GB889680@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When looking for if a package is affected, the version comparison can
-fail. This means that we don't know if the version of the package used
-is affected or not and we need to check manually the version.
+Hello Thomas,
 
-This patch exposes this new information in json and html format.
+On Thu, 17 Sep 2020 22:44:52 +0200 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> On Wed, 16 Sep 2020 01:30:50 +0300
+> Adrian Perez de Castro <aperez@igalia.com> wrote:
+> 
+> >  comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
+> >  	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+> > -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> > +		|| !BR2_PACKAGE_HAS_LIBGL || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> 
+> This is not longer really in sync with the comment that says "an OpenGL
+> capable Wayland backend".
+> 
+> >  config BR2_PACKAGE_WPEBACKEND_FDO
+> >  	bool "wpebackend-fdo"
+> >  	depends on !BR2_STATIC_LIBS # wayland
+> >  	depends on BR2_INSTALL_LIBSTDCPP
+> > +	depends on BR2_PACKAGE_HAS_LIBGL # libepoxy
+> 
+> This looks really odd as:
+> 
+>  (1) Requiring full OpenGL means that no OpenGL ES platform can use
+>      wpebakend-fdo. Remember that libgl == full/desktop OpenGL, while
+>      libgles = OpenGL ES.
+> 
+>  (2) libepoxy does not depned on HAS_LIBGL, but HAS_LIBGL || HAS_LIBEGL
+> 
+>  (3) You have a dependency on HAS_LIBEGL_WAYLAND... so it kind of
+>      implies that an EGL/OpenGL ES configuration should work ?
+> 
+> Could you revisit this ?
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- support/scripts/cve-checker | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+You are right, any EGL + GLES implementation should do, and actually ?desktop
+GL? (libgl) is not even supported by WPE. I'll update this patch later on and
+submit an updated version.
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-index 998ea5b8af..b32e036d76 100755
---- a/support/scripts/cve-checker
-+++ b/support/scripts/cve-checker
-@@ -30,6 +30,7 @@ class Package:
-         self.name = name
-         self.version = version
-         self.cves = list()
-+        self.cves_to_check = list()
-         self.ignored_cves = ignored_cves
- 
- 
-@@ -40,8 +41,12 @@ def check_package_cves(nvd_path, packages):
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
-             pkg = packages.get(pkg_name, '')
--            if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves) == cve.CVE_AFFECTS:
--                pkg.cves.append(cve.identifier)
-+            if pkg:
-+                affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
-+                if (affected == cve.CVE_UNKNOWN):
-+                    pkg.cves_to_check.append(cve.identifier)
-+                elif affected == cve.CVE_AFFECTS:
-+                    pkg.cves.append(cve.identifier)
- 
- 
- html_header = """
-@@ -106,6 +111,17 @@ def dump_html_pkg(f, pkg):
-         f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-     f.write("  </td>\n")
- 
-+    # CVEs to check
-+    td_class = ["centered"]
-+    if len(pkg.cves_to_check) == 0:
-+        td_class.append("correct")
-+    else:
-+        td_class.append("wrong")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    for cve in pkg.cves_to_check:
-+        f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-+    f.write("  </td>\n")
-+
-     f.write(" </tr>\n")
- 
- 
-@@ -116,6 +132,7 @@ def dump_html_all_pkgs(f, packages):
- <td>Package</td>
- <td class=\"centered\">Version</td>
- <td class=\"centered\">CVEs</td>
-+<td class=\"centered\">CVEs to check</td>
- </tr>
- """)
-     for pkg in packages:
--- 
-2.28.0
+Thanks for the review,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200918/4f42ad63/attachment.asc>
