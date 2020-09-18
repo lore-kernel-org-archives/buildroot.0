@@ -1,61 +1,54 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 18 Sep 2020 17:06:42 +0300
-Subject: [Buildroot] [PATCH 3/6] package/wpebackend-fdo: bump to version
- 1.8.0
-In-Reply-To: <20200917224452.6e856078@windsurf.hq.k.grp>
-References: <20200915223053.3090447-1-aperez@igalia.com>
- <20200915223053.3090447-4-aperez@igalia.com>
- <20200917224452.6e856078@windsurf.hq.k.grp>
-Message-ID: <20200918170642.GB889680@momiji>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Fri, 18 Sep 2020 18:02:04 +0300
+Subject: [Buildroot] [PATCH v1] package/acpica: bump version to 20200717
+In-Reply-To: <20200909191711.69977-1-andriy.shevchenko@linux.intel.com>
+References: <20200909191711.69977-1-andriy.shevchenko@linux.intel.com>
+Message-ID: <20200918150204.GH3956970@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+On Wed, Sep 09, 2020 at 10:17:11PM +0300, Andy Shevchenko wrote:
+> Fixes:
+> 	https://github.com/acpica/acpica/issues/630
 
-On Thu, 17 Sep 2020 22:44:52 +0200 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> On Wed, 16 Sep 2020 01:30:50 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
-> >  comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
-> >  	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-> > -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> > +		|| !BR2_PACKAGE_HAS_LIBGL || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> 
-> This is not longer really in sync with the comment that says "an OpenGL
-> capable Wayland backend".
-> 
-> >  config BR2_PACKAGE_WPEBACKEND_FDO
-> >  	bool "wpebackend-fdo"
-> >  	depends on !BR2_STATIC_LIBS # wayland
-> >  	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_PACKAGE_HAS_LIBGL # libepoxy
-> 
-> This looks really odd as:
-> 
->  (1) Requiring full OpenGL means that no OpenGL ES platform can use
->      wpebakend-fdo. Remember that libgl == full/desktop OpenGL, while
->      libgles = OpenGL ES.
-> 
->  (2) libepoxy does not depned on HAS_LIBGL, but HAS_LIBGL || HAS_LIBEGL
-> 
->  (3) You have a dependency on HAS_LIBEGL_WAYLAND... so it kind of
->      implies that an EGL/OpenGL ES configuration should work ?
-> 
-> Could you revisit this ?
+Guys, can this be pushed to BR repo? It's really nasty bug in the tools this
+update fixes.
 
-You are right, any EGL + GLES implementation should do, and actually ?desktop
-GL? (libgl) is not even supported by WPE. I'll update this patch later on and
-submit an updated version.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  package/acpica/acpica.hash | 2 +-
+>  package/acpica/acpica.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+> index 961ee9dbe3ce..a2fdfe602e06 100644
+> --- a/package/acpica/acpica.hash
+> +++ b/package/acpica/acpica.hash
+> @@ -1,3 +1,3 @@
+>  # locally computed hash
+> -sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
+> +sha256  8a49904744a8159b7f325ed941b56968ba37a0371c634036628064f97538de4b  acpica-unix2-20200717.tar.gz
+>  sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
+> diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+> index 8f1a36fbb70a..21ecc155be2a 100644
+> --- a/package/acpica/acpica.mk
+> +++ b/package/acpica/acpica.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -ACPICA_VERSION = 20200528
+> +ACPICA_VERSION = 20200717
+>  ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
+>  ACPICA_SITE = https://acpica.org/sites/acpica/files
+>  ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+> -- 
+> 2.28.0
+> 
 
-Thanks for the review,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200918/4f42ad63/attachment.asc>
+-- 
+With Best Regards,
+Andy Shevchenko
