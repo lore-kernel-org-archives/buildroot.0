@@ -1,128 +1,81 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Sep 2020 21:58:50 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/qt5webkit: fix bison-3.7.1
- related compile failure
-Message-ID: <20200918195852.6999-1-ps.report@gmx.net>
+Date: Fri, 18 Sep 2020 22:01:59 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/qt5webengine: needs
+ libxkbcommon
+In-Reply-To: <20200917230546.1beaf61f@windsurf.hq.k.grp>
+References: <20200915180004.2335-1-ps.report@gmx.net>
+ <20200915180004.2335-2-ps.report@gmx.net>
+ <20200917230546.1beaf61f@windsurf.hq.k.grp>
+Message-ID: <20200918220159.3649dbdc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add gentoo patch to fix bison-3.7.1 related compile failure and
-an additional one doing a similare change for another bison call
-in Source/WebCore/DerivedSources.pri.
+Hello Thomas,
 
-Fixes:
+On Thu, 17 Sep 2020 23:05:46 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-  generated/XPathGrammar.tab.c:124:10: fatal error: XPathGrammar.tab.h: No such file or directory
+> On Tue, 15 Sep 2020 20:00:03 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Fixes:
+> >   subprocess.CalledProcessError: Command '['/home/seiderer/Work/Buildroot/build_rpi4_qt5_update_001/build/qt5webengine-5.15.1/src/core/pkg-config_wrapper.sh', '--variable=prefix', 'xkbcommon']' returned non-zero exit status 1
+> >
+> >   See //ui/events/keycodes/BUILD.gn:12:3: whence it was called.
+> >     pkg_config("xkbcommon") {
+> >     ^------------------------
+> >   See //ui/events/ozone/layout/BUILD.gn:42:15: which caused the file to be included.
+> >       deps += [ "//ui/events/keycodes:xkb" ]
+> >                 ^-------------------------
+> >   Project ERROR: GN run error!
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Notes:
+> >  - send as extra patch as I am not sure if the failure is caused by
+> >    the version bump and/or by a combination from my buildroot config
+>
+> Unfortunately, I think we really need to understand if this is a change
+> needed in relation to the bump or not, so that we know if it needs to
+> go in a stable branch.
+>
+> At least in a simple build of qt5webengine in v5.15.0 I have not
+> encountered this particular build failure. But perhaps it occurs only
+> when you have a bunch of other dependencies enabled.
+>
+> The BUILD.gn file contains:
+>
+> if (use_xkbcommon) {
+>   pkg_config("xkbcommon") {
+>     packages = [ "xkbcommon" ]
+>   }
+> }
+>
+> And src/buildtools/config/linux.pri seems to be defining the value of
+> use_xkbcommon:
+>
+>     qtConfig(build-qtwebengine-core):qtConfig(webengine-system-xkbcommon) {
+>         gn_args += use_xkbcommon=true
+>     } else {
+>         gn_args += use_xkbcommon=false
+>     }
+>
+> I've never been familiar enough with the .pri syntax though to
+> understand what this is doing.
+>
+> Could you try to see if the problem really comes from the 5.15.1 bump ?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - re-ordered to first patch as needed by qt5webkit-5.9.1/qt-5.15.0
-    (before qt version bump)
----
- ...te-the-header-directly-to-fix-build-.patch | 52 +++++++++++++++++++
- ...te-the-header-directly-to-fix-build-.patch | 31 +++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch
- create mode 100644 package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch
+qt5webengine-5.15.0 with the same buildroot config
+compiles fine without libxkbcommon, will try qt5webengine-5.15.1
+with a striped down buildroot config to evaluate if some of
+my buildroot config options enable the need for libxkbcommon...
 
-diff --git a/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch b/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch
-new file mode 100644
-index 0000000000..7bb81b1259
---- /dev/null
-+++ b/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch
-@@ -0,0 +1,52 @@
-+From 894a5448ee8ce0f134845c877b4c0a2a660e4ab3 Mon Sep 17 00:00:00 2001
-+From: Dmitry Shachnev <mitya57@gmail.com>
-+Date: Tue, 4 Aug 2020 21:04:06 +0300
-+Subject: [PATCH] Let Bison generate the header directly, to fix build with
-+ Bison 3.7
-+
-+Starting with Bison 3.7, the generated C++ file #include's the header
-+by default, instead of duplicating it. So we should not delete it.
-+
-+Remove the code to add #ifdef guards to the header, since Bison adds
-+them itself since version 2.6.3.
-+
-+[Original patch taken from
-+https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-qt/qtwebkit/files/qtwebkit-5.212.0_pre20200309-bison-3.7.patch?id=69e618c88a9134f754264efc11aa0b1fdc028b88
-+ported to qtwebkit-opensource-src-5.9.1]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Source/WebCore/css/makegrammar.pl | 21 +--------------------
-+ 1 file changed, 1 insertion(+), 20 deletions(-)
-+
-+diff --git a/Source/WebCore/css/makegrammar.pl b/Source/WebCore/css/makegrammar.pl
-+index 4e0452ed..9ef32963 100644
-+--- a/Source/WebCore/css/makegrammar.pl
-++++ b/Source/WebCore/css/makegrammar.pl
-+@@ -73,23 +73,4 @@ if ($suffix eq ".y.in") {
-+ }
-+ 
-+ my $fileBase = File::Spec->join($outputDir, $filename);
-+-system("$bison -d -p $symbolsPrefix $grammarFilePath -o $fileBase.cpp");
-+-
-+-open HEADER, ">$fileBase.h" or die;
-+-print HEADER << "EOF";
-+-#ifndef CSSGRAMMAR_H
-+-#define CSSGRAMMAR_H
-+-EOF
-+-
-+-open HPP, "<$fileBase.cpp.h" or open HPP, "<$fileBase.hpp" or die;
-+-while (<HPP>) {
-+-    print HEADER;
-+-}
-+-close HPP;
-+-
-+-print HEADER "#endif\n";
-+-close HEADER;
-+-
-+-unlink("$fileBase.cpp.h");
-+-unlink("$fileBase.hpp");
-+-
-++system("$bison --defines=$fileBase.h -p $symbolsPrefix $grammarFilePath -o $fileBase.cpp");
-+-- 
-+2.28.0
-+
-diff --git a/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch b/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch
-new file mode 100644
-index 0000000000..9deb2d8c63
---- /dev/null
-+++ b/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch
-@@ -0,0 +1,31 @@
-+From 8959e226fac7f73b9a40e202610bd5e12334561b Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 15 Sep 2020 19:11:18 +0200
-+Subject: [PATCH] let bison generate the header directly, to fix build with
-+ bison 3.7
-+
-+Do the same as the patch taken from [1] for the bison call in
-+Source/WebCore/DerivedSources.pri to fix file generation
-+for bison 3.7.
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Source/WebCore/DerivedSources.pri | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Source/WebCore/DerivedSources.pri b/Source/WebCore/DerivedSources.pri
-+index 57a6b0f7..e9f52614 100644
-+--- a/Source/WebCore/DerivedSources.pri
-++++ b/Source/WebCore/DerivedSources.pri
-+@@ -987,7 +987,7 @@ GENERATORS += pluginsresources
-+ # GENERATOR 11: XPATH grammar
-+ xpathbison.output = ${QMAKE_FILE_BASE}.cpp
-+ xpathbison.input = XPATHBISON
-+-xpathbison.commands = bison -d -p xpathyy ${QMAKE_FILE_NAME} -o ${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.tab.c && $(MOVE) ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.tab.c ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.cpp && $(MOVE) ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.tab.h ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.h
-++xpathbison.commands = bison --defines=${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.h -p xpathyy ${QMAKE_FILE_NAME} -o ${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.cpp
-+ xpathbison.depends = ${QMAKE_FILE_NAME}
-+ GENERATORS += xpathbison
-+ 
-+-- 
-+2.28.0
-+
--- 
-2.28.0
+Regards,
+Peter
+
+>
+> Thanks!
+>
+> Thomas
