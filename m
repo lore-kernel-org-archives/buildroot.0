@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:32:20 +0200
-Subject: [Buildroot] [git commit] package/graphicsmagick: enable OpenMP when
- supported by toolchain
-Message-ID: <20200919122349.9385281E8C@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 14:33:32 +0200
+Subject: [Buildroot] [PATCH 2/2] package/graphicsmagick: remove
+ redundant BR2_USE_WCHAR condition
+In-Reply-To: <20200918172135.85009-2-grzegorz@blach.pl>
+References: <20200918172135.85009-1-grzegorz@blach.pl>
+ <20200918172135.85009-2-grzegorz@blach.pl>
+Message-ID: <20200919143332.1d21cc2e@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89c904c27a1f6a7551b8d2559cf18bbac7464c67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 18 Sep 2020 19:21:33 +0200
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/graphicsmagick/graphicsmagick.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> ---
+>  package/graphicsmagick/graphicsmagick.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+> index ab00ee2c9e..7e71870482 100644
+> --- a/package/graphicsmagick/graphicsmagick.mk
+> +++ b/package/graphicsmagick/graphicsmagick.mk
+> @@ -16,7 +16,7 @@ GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
+>  # 0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
+>  GRAPHICSMAGICK_IGNORE_CVES += CVE-2020-12672
+>  
+> -ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
 
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index da7af5b53e..ab00ee2c9e 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -21,7 +21,6 @@ GRAPHICSMAGICK_CONFIG_SCRIPTS += GraphicsMagick++-config
- endif
- 
- GRAPHICSMAGICK_CONF_OPTS = \
--	--disable-openmp \
- 	--without-dps \
- 	--without-fpx \
- 	--without-jbig \
-@@ -33,6 +32,12 @@ GRAPHICSMAGICK_CONF_OPTS = \
- 
- GRAPHICSMAGICK_DEPENDENCIES = host-pkgconf
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
-+GRAPHICSMAGICK_CONF_OPTS += --enable-openmp
-+else
-+GRAPHICSMAGICK_CONF_OPTS += --disable-openmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- GRAPHICSMAGICK_CONF_OPTS += --with-ttf
- GRAPHICSMAGICK_CONF_ENV += ac_cv_path_freetype_config=$(STAGING_DIR)/usr/bin/freetype-config
+In what sense is the BR2_USE_WCHAR dependency redundant ? Redundant
+with what ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
