@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:54:55 +0200
-Subject: [Buildroot] [git commit] package/prosody: bump to version 0.11.6
-Message-ID: <20200919194742.476CF82B49@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 21:55:09 +0200
+Subject: [Buildroot] [git commit] package/spi-tools: bump to version 0.8.5
+Message-ID: <20200919194742.5B40D82B49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a925b4ee14741d102f9dc9ab9ae9093a3fc55337
+commit: https://git.buildroot.net/buildroot/commit/?id=b299e96454e3674eb2dcbfaaeb30b19ff56e8fc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/spi-tools/spi-tools.hash | 4 ++--
+ package/spi-tools/spi-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index e158f5de45..868b781f96 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5    224b9b49bd1a568a9548590ade253dd6  prosody-0.11.5.tar.gz
--sha1   fbe27d3203671a6ecd5ba8233dc4c113fd76cd2e  prosody-0.11.5.tar.gz
--sha256 55f8bd65d5d2af61cc739bd6164e4207011e0d2d260cde583071c90d8d85408b  prosody-0.11.5.tar.gz
--sha512 43a9facee8d61b69e277e7e8a9091fbfa60be71d6141195dff991f6020c8afadacce26f356b869cb2d7edd9be285e9ce1bcd822f9628cc845d91757e818a0dff  prosody-0.11.5.tar.gz
-+md5  e49a0cff05b307f9010bffafdec60b6d  prosody-0.11.6.tar.gz
-+sha1  3c24f3faf7735c570213da74eba6343c3afdf50d  prosody-0.11.6.tar.gz
-+sha256  cda1db631c5f91f8439c66c9204dbf3bc41efd65313f7f5d3c88121ff9141755  prosody-0.11.6.tar.gz
-+sha512  4ba048f686d3780ed9a58d81bbb791bec85d6c1caf60793fa85f9921c5352d74ccfc70b3c8db57a16edd8ad8f05cfc26e1403e4e2d0fa53a0d2ecc238dd2781d  prosody-0.11.6.tar.gz
- 
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index 7348ddabef..2bf4f3e791 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
+diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
+index eb8073f783..8b7590b338 100644
+--- a/package/spi-tools/spi-tools.hash
++++ b/package/spi-tools/spi-tools.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  201ffcb53e64f28a05aa0a8de5686f7ac644268da1305c0d5f70a3d96b4a22ce spi-tools-0.8.4.tar.gz
+-sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c LICENSE
++sha256  a1846bf3b4d38fc419f8efe4555242aa581358fdca28452b3ca11f74e3572e33  spi-tools-0.8.5.tar.gz
++sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
+diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
+index c25521a07f..1af74c7a1d 100644
+--- a/package/spi-tools/spi-tools.mk
++++ b/package/spi-tools/spi-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROSODY_VERSION = 0.11.5
-+PROSODY_VERSION = 0.11.6
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+-SPI_TOOLS_VERSION = 0.8.4
++SPI_TOOLS_VERSION = 0.8.5
+ SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
+ # autoreconf must be run as specified in package documentation
+ SPI_TOOLS_AUTORECONF = YES
