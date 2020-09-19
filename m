@@ -1,43 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:15:51 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/supertux: fix build with RELRO
-In-Reply-To: <20200914203329.3432074-1-fontaine.fabrice@gmail.com>
-References: <20200914203329.3432074-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200919211551.5f044a74@windsurf>
+Date: Sat, 19 Sep 2020 21:13:45 +0200
+Subject: [Buildroot] [git commit] package/libcap-ng: bump to version 0.8
+Message-ID: <20200919193043.C474781125@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2020 22:33:29 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=60c46a256e48ec2d3f14f7888bfd50dd93cd1f44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Disable static building of external/squirrel to fix the following build
-> failure with RELRO:
-> 
-> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
-> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
-> collect2: error: ld returned 1 exit status
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
->  - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Disable static building of external/squirrel instead of adding -fPIC
+This release adds support for ambient capabilities and V3 filesystem
+capabilities.
 
-Applied to master, thanks. Could you discuss this with upstream? I'm
-not sure they will accept the patch as-is, but perhaps they will
-suggest some more elaborate solution ?
+A bug in the python bindings was also fixed which prevented use of
+capng_updatev.
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcap-ng/libcap-ng.hash | 2 +-
+ package/libcap-ng/libcap-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
+index d1c7034c08..d52f466084 100644
+--- a/package/libcap-ng/libcap-ng.hash
++++ b/package/libcap-ng/libcap-ng.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  85815c711862d01a440db471f12fba462c9949e923966f5859607e652d9c0ae9  libcap-ng-0.7.11.tar.gz
++sha256  f14d23b60ae1465b032e4e8cbd4112006572c69a6017d55d5d3c6aad622a9e21  libcap-ng-0.8.tar.gz
+ sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+ sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+index 914a72333b..03949d740a 100644
+--- a/package/libcap-ng/libcap-ng.mk
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCAP_NG_VERSION = 0.7.11
++LIBCAP_NG_VERSION = 0.8
+ LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
+ LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
