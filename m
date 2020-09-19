@@ -1,48 +1,55 @@
-From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Sat, 19 Sep 2020 17:42:13 +0000
-Subject: [Buildroot] [PATCH 1/1] package/kismet: bump version to
- 2020-09-R2
-In-Reply-To: <20200919142131.34999f64@windsurf.hq.k.grp>
-References: <20200918175953.6888-1-fgervais@distech-controls.com>,
- <20200919142131.34999f64@windsurf.hq.k.grp>
-Message-ID: <DM6PR01MB3755BB8C323A54CF26EECA9EF33C0@DM6PR01MB3755.prod.exchangelabs.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 19 Sep 2020 21:09:35 +0200
+Subject: [Buildroot] [git commit] package/jbig2dec: bump to version 0.19.0
+Message-ID: <20200919190028.8088D8B10D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From what I can see, Fabrice seems to have the better patch.
-I'll give it a try on monday, see if it works on my end and report here.
+commit: https://git.buildroot.net/buildroot/commit/?id=f4d3dc9bc15260ba545118e2d90f432b31b4b20b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Sent: September 19, 2020 8:21 AM
-To: Gervais, Francois <FGervais@distech-controls.com>
-Cc: buildroot at buildroot.org <buildroot@buildroot.org>; Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/1] package/kismet: bump version to 2020-09-R2 
-?
-Hello Fran?ois,
+This bump is needed to fix build with ghostscript 9.53.0
 
-On Fri, 18 Sep 2020 13:59:53 -0400
-Francois Gervais via buildroot <buildroot@busybox.net> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/fbcc2fa29f3736f78212cb4b3869ffaeefda7a33
 
-> Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/jbig2dec/jbig2dec.hash | 4 ++--
+ package/jbig2dec/jbig2dec.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Thanks for this patch! It turns out that today, Fabrice Fontaine has
-also sent a patch also bumping the kismet package.
-
-However, your changes are quite radically different. Could you
-synchronize, compare your changes, and propose a common solution ?
-
-Fabrice: in your patch, it would at least be nice to split the addition
-of python tools support into a separate patch, i.e the first patch
-should have an unconditional --disable-python-tools, with the second
-patch adding the option to enable python tools.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://urldefense.com/v3/__https://bootlin.com__;!!Po4YltK3bPMkYw!j8Wm5n3iF1ibtKcxFpnIhX9UjwZJR2ivXQEarg2LQPSGTqBIcLGOFvW9fOgPqZWMbDNynRU$ 
+diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+index 86584b19a6..5a34af37f6 100644
+--- a/package/jbig2dec/jbig2dec.hash
++++ b/package/jbig2dec/jbig2dec.hash
+@@ -1,7 +1,7 @@
+-# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
++# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/MD5SUMS
+ # and SHA512SUMS are missing the hashes for this file.
+ # Locally computed:
+-sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
++sha256  279476695b38f04939aa59d041be56f6bade3422003a406a85e9792c27118a37  jbig2dec-0.19.tar.gz
+ 
+ # Hash for license files:
+ sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+index 08ef89bfcb..59fcddfc1c 100644
+--- a/package/jbig2dec/jbig2dec.mk
++++ b/package/jbig2dec/jbig2dec.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-JBIG2DEC_VERSION = 0.18
+-JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
++JBIG2DEC_VERSION = 0.19
++JBIG2DEC_SITE = \
++	https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530
+ JBIG2DEC_LICENSE = AGPL-3.0+
+ JBIG2DEC_LICENSE_FILES = LICENSE
+ JBIG2DEC_INSTALL_STAGING = YES
