@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 15:16:07 +0200
-Subject: [Buildroot] [git commit] package/postgresql: remove PIDFile from
- .service
-Message-ID: <20200919130827.0D4BF81581@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 15:15:34 +0200
+Subject: [Buildroot] [git commit] package/htpdate: use /run for PIDFile
+Message-ID: <20200919130826.D145B81581@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9bc0024b6f79a59537a48e64d71a78b73175561
+commit: https://git.buildroot.net/buildroot/commit/?id=7e85145d97ea264018eb6b1e11ae78b1df18538a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-commit eada187e77022f0d changed the service to Type=notify.
-notify units don't need a PIDFile so this can be removed.
+- rename pidfile from htpdate to htpdate.pid
+
+Fixes:
+
+PIDFile= references a path below legacy directory /var/run/, updating
+/var/run/htpdate.pid ??? /run/htpdate.pid; please update the unit file
+accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.service | 1 -
- 1 file changed, 1 deletion(-)
+ package/htpdate/htpdate.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-index 53e6f84f00..539eea8964 100644
---- a/package/postgresql/postgresql.service
-+++ b/package/postgresql/postgresql.service
-@@ -15,7 +15,6 @@ Group=postgres
- StandardOutput=syslog
- StandardError=syslog
- SyslogIdentifier=postgres
--PIDFile=/var/lib/pgsql/postmaster.pid
+diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
+index 0c77550813..b7f1371b08 100644
+--- a/package/htpdate/htpdate.service
++++ b/package/htpdate/htpdate.service
+@@ -4,10 +4,10 @@ After=network.target
  
- ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
- ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+ [Service]
+ Type=forking
+-PIDFile=/var/run/htpdate
++PIDFile=/run/htpdate.pid
+ Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
+ EnvironmentFile=-/etc/default/htpdate
+-ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate $HTPDATE_ARGS
++ExecStart=/usr/bin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
+ 
+ [Install]
+ WantedBy=multi-user.target
