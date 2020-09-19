@@ -1,52 +1,50 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Sat, 19 Sep 2020 20:07:50 +1200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-09-18
-In-Reply-To: <20200919100107.6470d236@windsurf.hq.k.grp>
-References: <5f65af16.1c69fb81.8e15f.d9b0SMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZDhc1KX5tEhobOgqpZ+P89xH=26oNXgv162iAEbU7taBg@mail.gmail.com>
- <20200919100107.6470d236@windsurf.hq.k.grp>
-Message-ID: <CAFOYHZCw8csXXrda7zm=QbVP1Z0iNavqdoc5h5jGWxUHuyxOgg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Sep 2020 10:17:33 +0200
+Subject: [Buildroot] [git commit] package/grpc: fix build on ubuntu gcc 4.8
+Message-ID: <20200919080842.4EB1A822AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Sep 2020, 8:01 PM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
-wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=19dfe7f6e78e4a0d30464ecec23576a4774ee02b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello Chris,
->
-> On Sat, 19 Sep 2020 19:56:58 +1200
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > The builds are failing with "arm-none-linux-gnueabi-gcc: error:
-> > unrecognized command line option '-Wfloat-conversion'". This was recently
-> > added to the micropython Makefiles. I haven't tracked down when this was
-> > added to gcc but it looks like whatever version is used by these configs
-> it
-> > doesn't recognize it.
-> >
-> > The simple fix is to require a sufficiently new gcc version. I'll see if
-> i
-> > can get to it this weekend unless someone beats me to it.
->
-> Thanks for the analysis. Since -Wfloat-conversion is only a warning
-> option, it would not be really nice to force a newer gcc version just
-> because of this. It would be better if the micropython build system
-> could enable this warning if gcc supports it, and otherwise not enable
-> it.
->
-> Thanks,
->
-> Thomas
-> --
->
+gcc 4.8 on ubuntu 14.04 does some broken optimization at link-time
+which causes grpc to create a grpc_cpp_plugin which quits because
+of a failing assertion. The created plugin is itself used during
+compilation which lets the build fail.
+With the added -Wl,--no-as-needed flag the LTO is disabled and grpc
+compiles successfully.
 
-Yeah I was thinking the same thing. I don't think they have any
-infrastructure for compiler feature detection but I'll see if I can find
-someway of handling the older compilers.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200919/10417ac8/attachment.html>
+fixes:
+- http://autobuild.buildroot.net/results/b554f6f2fb66892273f7520ad6e36923557b229e
+- http://autobuild.buildroot.net/results/3ebb2880b9b3fd5154979016391dde897e2c039c
+- http://autobuild.buildroot.net/results/c2078e821e0728fe980be2c849c25d82e791a4c2
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+[yann.morin.1998 at free.fr: rewrap the comment]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/grpc/grpc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 2114f98e40..613f45dacc 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -72,5 +72,13 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_ZLIB_PROVIDER=package \
+ 	-DgRPC_ABSL_PROVIDER=package
+ 
++# With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks
++# the linkage of the grpc_cpp_plugin with libprotobuf and pthread. This
++# additional flag fixes this.
++ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
++HOST_GRPC_CONF_OPTS += \
++	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS) -Wl,--no-as-needed"
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
