@@ -1,97 +1,124 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:52:33 +0200
-Subject: [Buildroot] [git commit] package/netcalc: new package
-Message-ID: <20200919124626.44F0F88094@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 14:59:57 +0200
+Subject: [Buildroot] [git commit] package/qt5/qt5webkit: fix bison-3.7.1
+ related compile failure
+Message-ID: <20200919125046.5A2F282A1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e36f19026076b98a562e7f539c60a1578b0bcaa8
+commit: https://git.buildroot.net/buildroot/commit/?id=7c5804cf758f812004341d22aff3cd2157868cf6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-netcalc is a slimmed down clone of sipcalc, using the popular output
-format of ipcalc (perl).  It is written in C and only depends on a
-POSIX compliant C library.  Both IPv4 and IPv6 are supported.
+Add gentoo patch to fix bison-3.7.1 related compile failure and
+an additional one doing a similare change for another bison call
+in Source/WebCore/DerivedSources.pri.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
-Tested-by: Michael Nosthoff <buildroot@heine.tech>
+Fixes:
+
+  generated/XPathGrammar.tab.c:124:10: fatal error: XPathGrammar.tab.h: No such file or directory
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/netcalc/Config.in    |  8 ++++++++
- package/netcalc/netcalc.hash |  5 +++++
- package/netcalc/netcalc.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
+ ...enerate-the-header-directly-to-fix-build-.patch | 52 ++++++++++++++++++++++
+ ...enerate-the-header-directly-to-fix-build-.patch | 31 +++++++++++++
+ 2 files changed, 83 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c5124f97ef..506e675587 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1310,6 +1310,7 @@ N:	Joachim Wiberg <troglobit@gmail.com>
- F:	configs/globalscale_espressobin_defconfig
- F:	board/globalscale/espressobin/
- F:	package/mg/
-+F:	package/netcalc/
- 
- N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
-diff --git a/package/Config.in b/package/Config.in
-index 7783c26dc6..2f30252891 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2151,6 +2151,7 @@ menu "Networking applications"
- 	source "package/ndisc6/Config.in"
- 	source "package/net-tools/Config.in"
- 	source "package/netatalk/Config.in"
-+	source "package/netcalc/Config.in"
- 	source "package/netcat/Config.in"
- 	source "package/netcat-openbsd/Config.in"
- 	source "package/netplug/Config.in"
-diff --git a/package/netcalc/Config.in b/package/netcalc/Config.in
+diff --git a/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch b/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch
 new file mode 100644
-index 0000000000..897cb872c5
+index 0000000000..7bb81b1259
 --- /dev/null
-+++ b/package/netcalc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_NETCALC
-+	bool "netcalc"
-+	help
-+	  netcalc (40 kiB) is a slimmed down version of sipcalc
-+	  using the popular output format of ipcalc.  Both IPv4
-+	  and IPv6 are supported.
++++ b/package/qt5/qt5webkit/0007-Let-Bison-generate-the-header-directly-to-fix-build-.patch
+@@ -0,0 +1,52 @@
++From 894a5448ee8ce0f134845c877b4c0a2a660e4ab3 Mon Sep 17 00:00:00 2001
++From: Dmitry Shachnev <mitya57@gmail.com>
++Date: Tue, 4 Aug 2020 21:04:06 +0300
++Subject: [PATCH] Let Bison generate the header directly, to fix build with
++ Bison 3.7
 +
-+	  https://github.com/troglobit/netcalc/
-diff --git a/package/netcalc/netcalc.hash b/package/netcalc/netcalc.hash
++Starting with Bison 3.7, the generated C++ file #include's the header
++by default, instead of duplicating it. So we should not delete it.
++
++Remove the code to add #ifdef guards to the header, since Bison adds
++them itself since version 2.6.3.
++
++[Original patch taken from
++https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-qt/qtwebkit/files/qtwebkit-5.212.0_pre20200309-bison-3.7.patch?id=69e618c88a9134f754264efc11aa0b1fdc028b88
++ported to qtwebkit-opensource-src-5.9.1]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ Source/WebCore/css/makegrammar.pl | 21 +--------------------
++ 1 file changed, 1 insertion(+), 20 deletions(-)
++
++diff --git a/Source/WebCore/css/makegrammar.pl b/Source/WebCore/css/makegrammar.pl
++index 4e0452ed..9ef32963 100644
++--- a/Source/WebCore/css/makegrammar.pl
+++++ b/Source/WebCore/css/makegrammar.pl
++@@ -73,23 +73,4 @@ if ($suffix eq ".y.in") {
++ }
++ 
++ my $fileBase = File::Spec->join($outputDir, $filename);
++-system("$bison -d -p $symbolsPrefix $grammarFilePath -o $fileBase.cpp");
++-
++-open HEADER, ">$fileBase.h" or die;
++-print HEADER << "EOF";
++-#ifndef CSSGRAMMAR_H
++-#define CSSGRAMMAR_H
++-EOF
++-
++-open HPP, "<$fileBase.cpp.h" or open HPP, "<$fileBase.hpp" or die;
++-while (<HPP>) {
++-    print HEADER;
++-}
++-close HPP;
++-
++-print HEADER "#endif\n";
++-close HEADER;
++-
++-unlink("$fileBase.cpp.h");
++-unlink("$fileBase.hpp");
++-
+++system("$bison --defines=$fileBase.h -p $symbolsPrefix $grammarFilePath -o $fileBase.cpp");
++-- 
++2.28.0
++
+diff --git a/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch b/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch
 new file mode 100644
-index 0000000000..34d64b1679
+index 0000000000..9deb2d8c63
 --- /dev/null
-+++ b/package/netcalc/netcalc.hash
-@@ -0,0 +1,5 @@
-+# From https://github.com/troglobit/netcalc/releases/tag/v2.1.6
-+md5 c8660b61370c76d866247fe65966a35b  netcalc-2.1.6.tar.gz
-+# Locally computed:
-+sha256 cff41782fcf63d7d4ce6d35f95ed302127f6ddf6fc0ca03a8188af95a7c3243b  netcalc-2.1.6.tar.gz
-+sha256 745538f8d515d37af6f03442df982a8b211b129e8dc10d0195e33c4b42f8fe5f  LICENSE
-diff --git a/package/netcalc/netcalc.mk b/package/netcalc/netcalc.mk
-new file mode 100644
-index 0000000000..7d96fc53cf
---- /dev/null
-+++ b/package/netcalc/netcalc.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# netcalc
-+#
-+################################################################################
++++ b/package/qt5/qt5webkit/0008-let-bison-generate-the-header-directly-to-fix-build-.patch
+@@ -0,0 +1,31 @@
++From 8959e226fac7f73b9a40e202610bd5e12334561b Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 15 Sep 2020 19:11:18 +0200
++Subject: [PATCH] let bison generate the header directly, to fix build with
++ bison 3.7
 +
-+NETCALC_VERSION = 2.1.6
-+NETCALC_SITE = https://github.com/troglobit/netcalc/releases/download/v$(NETCALC_VERSION)
-+NETCALC_LICENSE = BSD-3-Clause
-+NETCALC_LICENSE_FILES = LICENSE
-+NETCALC_CONF_OPTS = --disable-ipcalc-symlink
++Do the same as the patch taken from [1] for the bison call in
++Source/WebCore/DerivedSources.pri to fix file generation
++for bison 3.7.
 +
-+$(eval $(autotools-package))
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ Source/WebCore/DerivedSources.pri | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Source/WebCore/DerivedSources.pri b/Source/WebCore/DerivedSources.pri
++index 57a6b0f7..e9f52614 100644
++--- a/Source/WebCore/DerivedSources.pri
+++++ b/Source/WebCore/DerivedSources.pri
++@@ -987,7 +987,7 @@ GENERATORS += pluginsresources
++ # GENERATOR 11: XPATH grammar
++ xpathbison.output = ${QMAKE_FILE_BASE}.cpp
++ xpathbison.input = XPATHBISON
++-xpathbison.commands = bison -d -p xpathyy ${QMAKE_FILE_NAME} -o ${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.tab.c && $(MOVE) ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.tab.c ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.cpp && $(MOVE) ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.tab.h ${QMAKE_FUNC_FILE_OUT_PATH}$${QMAKE_DIR_SEP}${QMAKE_FILE_BASE}.h
+++xpathbison.commands = bison --defines=${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.h -p xpathyy ${QMAKE_FILE_NAME} -o ${QMAKE_FUNC_FILE_OUT_PATH}/${QMAKE_FILE_BASE}.cpp
++ xpathbison.depends = ${QMAKE_FILE_NAME}
++ GENERATORS += xpathbison
++ 
++-- 
++2.28.0
++
