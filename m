@@ -1,28 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 23:23:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ympd: renumber patch
-In-Reply-To: <20200909182640.679929-1-fontaine.fabrice@gmail.com>
-References: <20200909182640.679929-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200919232320.0e982cc6@windsurf>
+Date: Sat, 19 Sep 2020 23:22:49 +0200
+Subject: [Buildroot] [git commit] package/ympd: renumber patch
+Message-ID: <20200919211444.892DD85735@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  9 Sep 2020 20:26:39 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7018cacaf8be43c69730efc2ee73a07b91def10d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../{0002-only-c-language.patch => 0001-only-c-language.patch}    | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/ympd/{0002-only-c-language.patch => 0001-only-c-language.patch} (100%)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ympd/{0002-only-c-language.patch => 0001-only-c-language.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ympd/0002-only-c-language.patch b/package/ympd/0001-only-c-language.patch
+similarity index 100%
+rename from package/ympd/0002-only-c-language.patch
+rename to package/ympd/0001-only-c-language.patch
