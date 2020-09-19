@@ -1,52 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:52:15 +0200
-Subject: [Buildroot] [PATCH] package/live555: bump to version 2020.08.19
-In-Reply-To: <20200917214317.23734-1-buildroot@heine.tech>
-References: <20200917214317.23734-1-buildroot@heine.tech>
-Message-ID: <20200919145215.20573071@windsurf.hq.k.grp>
+Date: Sat, 19 Sep 2020 14:52:33 +0200
+Subject: [Buildroot] [git commit] package/netcalc: new package
+Message-ID: <20200919124626.44F0F88094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael,
+commit: https://git.buildroot.net/buildroot/commit/?id=e36f19026076b98a562e7f539c60a1578b0bcaa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Fabrice in Cc.
+netcalc is a slimmed down clone of sipcalc, using the popular output
+format of ipcalc (perl).  It is written in C and only depends on a
+POSIX compliant C library.  Both IPv4 and IPv6 are supported.
 
-On Thu, 17 Sep 2020 23:43:16 +0200
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Reviewed-by: Michael Nosthoff <buildroot@heine.tech>
+Tested-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/netcalc/Config.in    |  8 ++++++++
+ package/netcalc/netcalc.hash |  5 +++++
+ package/netcalc/netcalc.mk   | 13 +++++++++++++
+ 5 files changed, 28 insertions(+)
 
-> According to [0] this version fixes memory leaks and buffer overflows.
-> 
-> Commit bc80c9121b70b576 added LIBS_FOR_LIVEMEDIA_LIB also for
-> static builds. That broke those builds.
-> With this commit it now only alters this parameter if it's there
-> by replacing echo with sed.
-> Also it explicitly links static against -pthread -lz as this
-> seems neccessary.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/f13/f13f1e40a2749fec5ad8a93cd8eea9a6e4e577b
-> 
-> [0] http://live555.com/liveMedia/public/changelog.txt
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
-The static linking fix seems unrelated to the version bump, and this is
-the sort of fix we might want to backport.
-
-However, Fabrice already took a look at that static linking issue and
-has submitted a while ago some patches:
-
-  https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-1-fontaine.fabrice at gmail.com/
-  https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-2-fontaine.fabrice at gmail.com/
-
-I guess we should try to apply these and then the version bump on its
-own.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c5124f97ef..506e675587 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1310,6 +1310,7 @@ N:	Joachim Wiberg <troglobit@gmail.com>
+ F:	configs/globalscale_espressobin_defconfig
+ F:	board/globalscale/espressobin/
+ F:	package/mg/
++F:	package/netcalc/
+ 
+ N:	Joao Pinto <jpinto@synopsys.com>
+ F:	board/synopsys/vdk/
+diff --git a/package/Config.in b/package/Config.in
+index 7783c26dc6..2f30252891 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2151,6 +2151,7 @@ menu "Networking applications"
+ 	source "package/ndisc6/Config.in"
+ 	source "package/net-tools/Config.in"
+ 	source "package/netatalk/Config.in"
++	source "package/netcalc/Config.in"
+ 	source "package/netcat/Config.in"
+ 	source "package/netcat-openbsd/Config.in"
+ 	source "package/netplug/Config.in"
+diff --git a/package/netcalc/Config.in b/package/netcalc/Config.in
+new file mode 100644
+index 0000000000..897cb872c5
+--- /dev/null
++++ b/package/netcalc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_NETCALC
++	bool "netcalc"
++	help
++	  netcalc (40 kiB) is a slimmed down version of sipcalc
++	  using the popular output format of ipcalc.  Both IPv4
++	  and IPv6 are supported.
++
++	  https://github.com/troglobit/netcalc/
+diff --git a/package/netcalc/netcalc.hash b/package/netcalc/netcalc.hash
+new file mode 100644
+index 0000000000..34d64b1679
+--- /dev/null
++++ b/package/netcalc/netcalc.hash
+@@ -0,0 +1,5 @@
++# From https://github.com/troglobit/netcalc/releases/tag/v2.1.6
++md5 c8660b61370c76d866247fe65966a35b  netcalc-2.1.6.tar.gz
++# Locally computed:
++sha256 cff41782fcf63d7d4ce6d35f95ed302127f6ddf6fc0ca03a8188af95a7c3243b  netcalc-2.1.6.tar.gz
++sha256 745538f8d515d37af6f03442df982a8b211b129e8dc10d0195e33c4b42f8fe5f  LICENSE
+diff --git a/package/netcalc/netcalc.mk b/package/netcalc/netcalc.mk
+new file mode 100644
+index 0000000000..7d96fc53cf
+--- /dev/null
++++ b/package/netcalc/netcalc.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# netcalc
++#
++################################################################################
++
++NETCALC_VERSION = 2.1.6
++NETCALC_SITE = https://github.com/troglobit/netcalc/releases/download/v$(NETCALC_VERSION)
++NETCALC_LICENSE = BSD-3-Clause
++NETCALC_LICENSE_FILES = LICENSE
++NETCALC_CONF_OPTS = --disable-ipcalc-symlink
++
++$(eval $(autotools-package))
