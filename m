@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 15:15:34 +0200
-Subject: [Buildroot] [git commit] package/htpdate: use /run for PIDFile
-Message-ID: <20200919130826.D145B81581@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 15:18:07 +0200
+Subject: [Buildroot] [PATCH v3 1/8] package/nginx: use /run for PIDFile
+In-Reply-To: <20200916153510.476-1-buildroot@heine.tech>
+References: <20200916153340.345-1-buildroot@heine.tech>
+ <20200916153510.476-1-buildroot@heine.tech>
+Message-ID: <20200919151807.3e25f549@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e85145d97ea264018eb6b1e11ae78b1df18538a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 16 Sep 2020 17:35:03 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-- rename pidfile from htpdate to htpdate.pid
+> Fixes:
+> 
+> systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
+> a path below legacy directory /var/run/, updating /var/run/nginx.pid ?
+> /run/nginx.pid; please update the unit file accordingly.
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/nginx/nginx.service | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes:
+Thanks, series applied.
 
-PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/htpdate.pid ??? /run/htpdate.pid; please update the unit file
-accordingly.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/htpdate/htpdate.service | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
-index 0c77550813..b7f1371b08 100644
---- a/package/htpdate/htpdate.service
-+++ b/package/htpdate/htpdate.service
-@@ -4,10 +4,10 @@ After=network.target
- 
- [Service]
- Type=forking
--PIDFile=/var/run/htpdate
-+PIDFile=/run/htpdate.pid
- Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
- EnvironmentFile=-/etc/default/htpdate
--ExecStart=/usr/bin/htpdate -D -i /var/run/htpdate $HTPDATE_ARGS
-+ExecStart=/usr/bin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
- 
- [Install]
- WantedBy=multi-user.target
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
