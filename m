@@ -1,26 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:57:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcap: bump to version 2.43
-In-Reply-To: <20200919131941.90848-1-fontaine.fabrice@gmail.com>
-References: <20200919131941.90848-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200919215728.6c07ecd8@windsurf>
+Date: Sat, 19 Sep 2020 21:57:40 +0200
+Subject: [Buildroot] [PATCH] package/prosody: bump to version 0.11.6
+In-Reply-To: <20200919162108.664829-1-francois.perrad@gadz.org>
+References: <20200919162108.664829-1-francois.perrad@gadz.org>
+Message-ID: <20200919215740.1a3f0a3c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Sep 2020 15:19:41 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 19 Sep 2020 18:21:08 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Retrieve first patch from upstream
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  ...-dynamic-test-compilation-and-execution.patch | 16 +++++++++-------
->  package/libcap/libcap.hash                       |  2 +-
->  package/libcap/libcap.mk                         |  2 +-
->  3 files changed, 11 insertions(+), 9 deletions(-)
+>  package/prosody/prosody.hash | 8 ++++----
+>  package/prosody/prosody.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
