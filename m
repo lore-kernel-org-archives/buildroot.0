@@ -1,43 +1,65 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 19 Sep 2020 13:11:38 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mcelog: bump to version 172
-In-Reply-To: <20200919111138.367874-1-francois.perrad@gadz.org>
-References: <20200919111138.367874-1-francois.perrad@gadz.org>
-Message-ID: <20200919111138.367874-2-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 19 Sep 2020 14:13:50 +0200
+Subject: [Buildroot] [git commit] package/micropython: fix build with gcc 4.8
+Message-ID: <20200919120439.145B08572F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/mcelog/mcelog.hash | 4 ++--
- package/mcelog/mcelog.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=50c66003673c6b84481db04ec2bda10093fd822b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mcelog/mcelog.hash b/package/mcelog/mcelog.hash
-index dea97eb42..49f29e244 100644
---- a/package/mcelog/mcelog.hash
-+++ b/package/mcelog/mcelog.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 11c0f9ab9c97e12d912a51d2b4d2ee937378c5b08a3bb4e34214e0736c6fb7ef  mcelog-168.tar.gz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  d21dfddaaa8e6f4ebd59ce353165c8d8079d0d5ed563492a0415af2248d8b3a5  mcelog-172.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index 9fbbbfb4d..c24366546 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+micropython uses -Wfloat-conversion since version 1.13 and
+https://github.com/micropython/micropython/commit/30840ebc9925bb8ef025dbc2d5982b1bfeb75f1b
+
+This will result in the following build failure with gcc 4.8:
+arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wfloat-conversion'
+
+To avoid this build failure, set CWARN to an empty value moreover, while
+at it, move some duplicated variables under MICROPYTHON_MAKE_OPTS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6fe5a5ab91a5d235147e74461bb165ec2cfdc967
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/micropython/micropython.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 7c83b18b4e..a126b3eeae 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -23,22 +23,22 @@ endif
  
--MCELOG_VERSION = 168
-+MCELOG_VERSION = 172
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
--- 
-2.25.1
+ # When building from a tarball we don't have some of the dependencies that are in
+ # the git repository as submodules
+-MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
+-MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
++MICROPYTHON_MAKE_OPTS += \
++	MICROPY_PY_BTREE=0 \
++	MICROPY_PY_USSL=0 \
++	CROSS_COMPILE=$(TARGET_CROSS) \
++	CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
++	CWARN=
+ 
+ define MICROPYTHON_BUILD_CMDS
+ 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
+ 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
+-		$(MICROPYTHON_MAKE_OPTS) \
+-		CROSS_COMPILE=$(TARGET_CROSS) \
+-		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
++		$(MICROPYTHON_MAKE_OPTS)
+ endef
+ 
+ define MICROPYTHON_INSTALL_TARGET_CMDS
+ 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
+ 		$(MICROPYTHON_MAKE_OPTS) \
+-		CROSS_COMPILE=$(TARGET_CROSS) \
+-		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		PREFIX=/usr \
+ 		install
