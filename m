@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:33:32 +0200
-Subject: [Buildroot] [PATCH 2/2] package/graphicsmagick: remove
- redundant BR2_USE_WCHAR condition
-In-Reply-To: <20200918172135.85009-2-grzegorz@blach.pl>
-References: <20200918172135.85009-1-grzegorz@blach.pl>
- <20200918172135.85009-2-grzegorz@blach.pl>
-Message-ID: <20200919143332.1d21cc2e@windsurf.hq.k.grp>
+Date: Sat, 19 Sep 2020 14:36:19 +0200
+Subject: [Buildroot] [git commit] package/makedumpfile: remove consecutive
+ empty lines
+Message-ID: <20200919123954.228E780467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 18 Sep 2020 19:21:33 +0200
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=24ed3fef9d07ae5695cc631600eca421a21330b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  package/graphicsmagick/graphicsmagick.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-> index ab00ee2c9e..7e71870482 100644
-> --- a/package/graphicsmagick/graphicsmagick.mk
-> +++ b/package/graphicsmagick/graphicsmagick.mk
-> @@ -16,7 +16,7 @@ GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
->  # 0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
->  GRAPHICSMAGICK_IGNORE_CVES += CVE-2020-12672
->  
-> -ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
-> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+Fixes the following check-package warning:
 
-In what sense is the BR2_USE_WCHAR dependency redundant ? Redundant
-with what ?
+package/makedumpfile/makedumpfile.mk:24: consecutive empty lines
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/makedumpfile/makedumpfile.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
+index 276f3f908c..c949af9f71 100644
+--- a/package/makedumpfile/makedumpfile.mk
++++ b/package/makedumpfile/makedumpfile.mk
+@@ -21,7 +21,6 @@ else
+ MAKEDUMPFILE_TARGET = $(BR2_ARCH)
+ endif
+ 
+-
+ define MAKEDUMPFILE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+ 		$(MAKEDUMPFILE_MAKE_OPTS) TARGET=$(MAKEDUMPFILE_TARGET) LINKTYPE=dynamic
