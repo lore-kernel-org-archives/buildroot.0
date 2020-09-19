@@ -1,63 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 19 Sep 2020 12:01:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: fix build with gcc 4.8
-Message-ID: <20200919100138.80853-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 19 Sep 2020 13:11:37 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mcelog: install init systemd
+Message-ID: <20200919111138.367874-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-micropython uses -Wfloat-conversion since version 1.13 and
-https://github.com/micropython/micropython/commit/30840ebc9925bb8ef025dbc2d5982b1bfeb75f1b
-
-This will result in the following build failure with gcc 4.8:
-arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-Wfloat-conversion'
-
-To avoid this build failure, set CWARN to an empty value moreover, while
-at it, move some duplicated variables under MICROPYTHON_MAKE_OPTS
-
-Fixes:
- - http://autobuild.buildroot.org/results/6fe5a5ab91a5d235147e74461bb165ec2cfdc967
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/micropython/micropython.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/mcelog/mcelog.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 7c83b18b4e..a126b3eeae 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -23,22 +23,22 @@ endif
- 
- # When building from a tarball we don't have some of the dependencies that are in
- # the git repository as submodules
--MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
--MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
-+MICROPYTHON_MAKE_OPTS += \
-+	MICROPY_PY_BTREE=0 \
-+	MICROPY_PY_USSL=0 \
-+	CROSS_COMPILE=$(TARGET_CROSS) \
-+	CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
-+	CWARN=
- 
- define MICROPYTHON_BUILD_CMDS
- 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
- 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
--		$(MICROPYTHON_MAKE_OPTS) \
--		CROSS_COMPILE=$(TARGET_CROSS) \
--		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
-+		$(MICROPYTHON_MAKE_OPTS)
+diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
+index dcabc2c96..9fbbbfb4d 100644
+--- a/package/mcelog/mcelog.mk
++++ b/package/mcelog/mcelog.mk
+@@ -17,4 +17,9 @@ define MCELOG_INSTALL_TARGET_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
  endef
  
- define MICROPYTHON_INSTALL_TARGET_CMDS
- 	$(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
- 		$(MICROPYTHON_MAKE_OPTS) \
--		CROSS_COMPILE=$(TARGET_CROSS) \
--		CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
- 		DESTDIR=$(TARGET_DIR) \
- 		PREFIX=/usr \
- 		install
++define MCELOG_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/mcelog.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/mcelog.service
++endef
++
+ $(eval $(generic-package))
 -- 
-2.28.0
+2.25.1
