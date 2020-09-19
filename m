@@ -1,35 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:50:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: fix passing of
- make opts and add snappy dep
-In-Reply-To: <20200919091313.29175-1-egorenar-dev@posteo.net>
-References: <20200919091313.29175-1-egorenar-dev@posteo.net>
-Message-ID: <20200919145006.7a36a671@windsurf.hq.k.grp>
+Date: Sat, 19 Sep 2020 14:52:15 +0200
+Subject: [Buildroot] [PATCH] package/live555: bump to version 2020.08.19
+In-Reply-To: <20200917214317.23734-1-buildroot@heine.tech>
+References: <20200917214317.23734-1-buildroot@heine.tech>
+Message-ID: <20200919145215.20573071@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Michael,
 
-On Sat, 19 Sep 2020 11:13:13 +0200
-Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
++Fabrice in Cc.
 
-> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+On Thu, 17 Sep 2020 23:43:16 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-Since this patch was doing two different things, I split it into two
-patches, which I applied. I also did two other minor fixes/improvements
-as separate patches.
+> According to [0] this version fixes memory leaks and buffer overflows.
+> 
+> Commit bc80c9121b70b576 added LIBS_FOR_LIVEMEDIA_LIB also for
+> static builds. That broke those builds.
+> With this commit it now only alters this parameter if it's there
+> by replacing echo with sed.
+> Also it explicitly links static against -pthread -lz as this
+> seems neccessary.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/f13/f13f1e40a2749fec5ad8a93cd8eea9a6e4e577b
+> 
+> [0] http://live555.com/liveMedia/public/changelog.txt
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-See:
+The static linking fix seems unrelated to the version bump, and this is
+the sort of fix we might want to backport.
 
-5b05b0c82ba835282f5b27eb6427faa5fc6514fd package/makedumpfile: add optional dependency on snappy
-301f746629de3c01fa5ad4290c273043a49df69f package/makedumpfile: pass all options through MAKEDUMPFILE_MAKE_OPTS
-24ed3fef9d07ae5695cc631600eca421a21330b8 package/makedumpfile: remove consecutive empty lines
-660692939cf6bd13fd0c822083f1fd4b0fafca1c package/makedumpfile: fix passing of MAKEDUMPFILE_MAKE_OPTS
+However, Fabrice already took a look at that static linking issue and
+has submitted a while ago some patches:
 
-Best regards,
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-1-fontaine.fabrice at gmail.com/
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-2-fontaine.fabrice at gmail.com/
+
+I guess we should try to apply these and then the version bump on its
+own.
 
 Thomas
 -- 
