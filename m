@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 19 Sep 2020 18:42:49 +0200
-Subject: [Buildroot] [PATCH] package/spi-tools: bump to version 0.8.5
-Message-ID: <20200919164250.672070-1-francois.perrad@gadz.org>
+Date: Sat, 19 Sep 2020 18:55:56 +0200
+Subject: [Buildroot] [PATCH] package/sunxi-tools: bump to version 1.4.2
+Message-ID: <20200919165556.673876-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/spi-tools/spi-tools.hash | 4 ++--
- package/spi-tools/spi-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sunxi-tools/sunxi-tools.hash | 2 +-
+ package/sunxi-tools/sunxi-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
-index eb8073f78..8b7590b33 100644
---- a/package/spi-tools/spi-tools.hash
-+++ b/package/spi-tools/spi-tools.hash
+diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
+index 2de26c418..84acc2c76 100644
+--- a/package/sunxi-tools/sunxi-tools.hash
++++ b/package/sunxi-tools/sunxi-tools.hash
 @@ -1,3 +1,3 @@
- # locally computed hash
--sha256  201ffcb53e64f28a05aa0a8de5686f7ac644268da1305c0d5f70a3d96b4a22ce spi-tools-0.8.4.tar.gz
--sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c LICENSE
-+sha256  a1846bf3b4d38fc419f8efe4555242aa581358fdca28452b3ca11f74e3572e33  spi-tools-0.8.5.tar.gz
-+sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
-diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
-index c25521a07..1af74c7a1 100644
---- a/package/spi-tools/spi-tools.mk
-+++ b/package/spi-tools/spi-tools.mk
+ # Locally calculated
+-sha256  da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-1.4.1.tar.gz
++sha256  81f48014a520cb83cac4e17f5ae627a637c4d6a422b60c693c5a705c92e43822  sunxi-tools-1.4.2.tar.gz
+ sha256  2b0d4dda4bf8034e1506507a67f80f982131137afe62bf144d248f9faea31da4  LICENSE.md
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 35254263c..c2913ee8f 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPI_TOOLS_VERSION = 0.8.4
-+SPI_TOOLS_VERSION = 0.8.5
- SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
- # autoreconf must be run as specified in package documentation
- SPI_TOOLS_AUTORECONF = YES
+-SUNXI_TOOLS_VERSION = 1.4.1
++SUNXI_TOOLS_VERSION = 1.4.2
+ SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
+ SUNXI_TOOLS_LICENSE = GPL-2.0+
+ SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
 -- 
 2.25.1
