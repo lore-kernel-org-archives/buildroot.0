@@ -1,39 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:14:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcpdump: fix build without
- pod2man
-In-Reply-To: <20200914204239.3456222-1-fontaine.fabrice@gmail.com>
-References: <20200914204239.3456222-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200919211427.4194b0e2@windsurf>
+Date: Sat, 19 Sep 2020 21:15:51 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/supertux: fix build with RELRO
+In-Reply-To: <20200914203329.3432074-1-fontaine.fabrice@gmail.com>
+References: <20200914203329.3432074-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200919211551.5f044a74@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Sep 2020 22:42:39 +0200
+On Mon, 14 Sep 2020 22:33:29 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
-> following build failure if pod2man is not available:
+> Disable static building of external/squirrel to fix the following build
+> failure with RELRO:
 > 
-> pod2man --section 8 \
-> 	--date "23 June 2008" \
-> 	--name "DHCPDUMP" \
-> 	--center "User Contributed Software" \
-> 	dhcpdump.pod dhcpdump.8
-> /bin/sh: pod2man: command not found
-> make[1]: *** [Makefile:11: dhcpdump.8] Error 127
+> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
+> /home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
+> collect2: error: ld returned 1 exit status
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
+>  - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
+>  - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/dhcpdump/dhcpdump.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes v1 -> v2 (after review of Thomas Petazzoni):
+>  - Disable static building of external/squirrel instead of adding -fPIC
 
-Applied to master, thanks.
+Applied to master, thanks. Could you discuss this with upstream? I'm
+not sure they will accept the patch as-is, but perhaps they will
+suggest some more elaborate solution ?
+
+Thanks!
 
 Thomas
 -- 
