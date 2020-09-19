@@ -1,7 +1,8 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 19 Sep 2020 16:07:27 -0600
-Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.55.3
-Message-ID: <20200919220727.3488766-1-james.hilliard1@gmail.com>
+Date: Sat, 19 Sep 2020 16:12:21 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to version
+ 0.3.0
+Message-ID: <20200919221221.3732419-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +11,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/meson/meson.hash | 4 ++--
- package/meson/meson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-aioconsole/python-aioconsole.hash | 4 ++--
+ package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index 331e50c038..9d278ef906 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.55.1/meson-0.55.1.tar.gz.asc
--sha256  3b5741f884e04928bdfa1947467ff06afa6c98e623c25cef75adf71ca39ce080  meson-0.55.1.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.55.3/meson-0.55.3.tar.gz.asc
-+sha256  6bed2a25a128bbabe97cf40f63165ebe800e4fcb46db8ab7ef5c2b5789f092a5  meson-0.55.3.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 8b1bf1e58f..d39e66cf05 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
+index 3aaeaa2eaf..0aa9a7882c 100644
+--- a/package/python-aioconsole/python-aioconsole.hash
++++ b/package/python-aioconsole/python-aioconsole.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/aioconsole/json
+-md5  cf0a22b980bfd30e0c72160de8c66cbb  aioconsole-0.2.1.tar.gz
+-sha256  f63d007c5c0fd5a30769af0a6b749307ea86001c4f217d3e5e9e248ccdfec1d0  aioconsole-0.2.1.tar.gz
++md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
++sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
+diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
+index ecebc8af00..5c26d863c0 100644
+--- a/package/python-aioconsole/python-aioconsole.mk
++++ b/package/python-aioconsole/python-aioconsole.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.55.1
-+MESON_VERSION = 0.55.3
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-PYTHON_AIOCONSOLE_VERSION = 0.2.1
++PYTHON_AIOCONSOLE_VERSION = 0.3.0
+ PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
+-PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/06/24/d88c186e84457b6a7a2a01c21ccf1e9a1125b5d33157acb28388bfc0a73c
++PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
+ PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
+ PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
+ 
 -- 
 2.25.1
