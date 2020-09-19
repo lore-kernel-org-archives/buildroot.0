@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 14:36:19 +0200
-Subject: [Buildroot] [git commit] package/makedumpfile: remove consecutive
- empty lines
-Message-ID: <20200919123954.228E780467@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 14:35:54 +0200
+Subject: [Buildroot] [git commit] package/makedumpfile: fix passing of
+ MAKEDUMPFILE_MAKE_OPTS
+Message-ID: <20200919123954.147C182877@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24ed3fef9d07ae5695cc631600eca421a21330b8
+commit: https://git.buildroot.net/buildroot/commit/?id=660692939cf6bd13fd0c822083f1fd4b0fafca1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following check-package warning:
+MAKEDUMP_MAKE_OPTS contains an important option to enable LZO support,
+but it was not passed at build time.
 
-package/makedumpfile/makedumpfile.mk:24: consecutive empty lines
-
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/makedumpfile/makedumpfile.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/makedumpfile/makedumpfile.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index 276f3f908c..c949af9f71 100644
+index 8077664892..276f3f908c 100644
 --- a/package/makedumpfile/makedumpfile.mk
 +++ b/package/makedumpfile/makedumpfile.mk
-@@ -21,7 +21,6 @@ else
- MAKEDUMPFILE_TARGET = $(BR2_ARCH)
- endif
+@@ -24,7 +24,7 @@ endif
  
--
  define MAKEDUMPFILE_BUILD_CMDS
  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		$(MAKEDUMPFILE_MAKE_OPTS) TARGET=$(MAKEDUMPFILE_TARGET) LINKTYPE=dynamic
+-		TARGET=$(MAKEDUMPFILE_TARGET) LINKTYPE=dynamic
++		$(MAKEDUMPFILE_MAKE_OPTS) TARGET=$(MAKEDUMPFILE_TARGET) LINKTYPE=dynamic
+ endef
+ 
+ define MAKEDUMPFILE_INSTALL_TARGET_CMDS
