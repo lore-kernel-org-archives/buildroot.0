@@ -1,42 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:55:14 +0200
-Subject: [Buildroot] [git commit] package/sunxi-tools: bump to version 1.4.2
-Message-ID: <20200919194742.668018B86B@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 21:55:04 +0200
+Subject: [Buildroot] [git commit] package/wampcc: fix build with gcc 10
+Message-ID: <20200919194742.5158982B49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaf909aa263f5bb2fe260fb43d59114ba5e2bd47
+commit: https://git.buildroot.net/buildroot/commit/?id=cd9d7c55e2998116afc3da6fc87bf423e43bd93c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/5668ee2a81daba689cc16c520681cfd16a79dbd7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-tools/sunxi-tools.hash | 2 +-
- package/sunxi-tools/sunxi-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wampcc/0003-Broken-build-on-Windows.patch | 27 +++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/sunxi-tools/sunxi-tools.hash b/package/sunxi-tools/sunxi-tools.hash
-index 2de26c418b..84acc2c76c 100644
---- a/package/sunxi-tools/sunxi-tools.hash
-+++ b/package/sunxi-tools/sunxi-tools.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  da5d762608517b4b2e9bd392bd9a63afae3973d9c8264cbcfb757ddac8120d1b  sunxi-tools-1.4.1.tar.gz
-+sha256  81f48014a520cb83cac4e17f5ae627a637c4d6a422b60c693c5a705c92e43822  sunxi-tools-1.4.2.tar.gz
- sha256  2b0d4dda4bf8034e1506507a67f80f982131137afe62bf144d248f9faea31da4  LICENSE.md
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index 35254263cf..c2913ee8f7 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_TOOLS_VERSION = 1.4.1
-+SUNXI_TOOLS_VERSION = 1.4.2
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,v$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPL-2.0+
- SUNXI_TOOLS_LICENSE_FILES = LICENSE.md
+diff --git a/package/wampcc/0003-Broken-build-on-Windows.patch b/package/wampcc/0003-Broken-build-on-Windows.patch
+new file mode 100644
+index 0000000000..3c528cd888
+--- /dev/null
++++ b/package/wampcc/0003-Broken-build-on-Windows.patch
+@@ -0,0 +1,27 @@
++From eaa70a289288db1e8d90a2a9bcde435a8975fe74 Mon Sep 17 00:00:00 2001
++From: Sergey Lukashevich <sergey.lukashevi4@gmail.com>
++Date: Fri, 26 Jul 2019 21:58:34 +0300
++Subject: [PATCH] Broken build on Windows: "http_parser.h(66,18): error C2039: 
++ 'runtime_error': is not a member of 'std'"
++
++Add missing <stdexcept> include.
++
++[Retrieved from:
++https://github.com/darrenjs/wampcc/commit/eaa70a289288db1e8d90a2a9bcde435a8975fe74]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/wampcc/http_parser.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/wampcc/http_parser.h b/include/wampcc/http_parser.h
++index a9405dd..4c20417 100644
++--- a/include/wampcc/http_parser.h
+++++ b/include/wampcc/http_parser.h
++@@ -11,6 +11,7 @@
++ #include <map>
++ #include <string>
++ #include <memory>
+++#include <stdexcept>
++ 
++ // types brought in from nodejs http-parser project
++ struct http_parser;
