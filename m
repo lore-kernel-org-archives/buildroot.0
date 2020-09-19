@@ -1,31 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 23:22:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{bluez5_utils,
- bluez5_utils-headers}: bump to version 5.55
-In-Reply-To: <20200911064352.220841-1-joerg.krause@embedded.rocks>
-References: <20200911064352.220841-1-joerg.krause@embedded.rocks>
-Message-ID: <20200919232230.24145d26@windsurf>
+Date: Sat, 19 Sep 2020 23:23:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ympd: renumber patch
+In-Reply-To: <20200909182640.679929-1-fontaine.fabrice@gmail.com>
+References: <20200909182640.679929-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200919232320.0e982cc6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 11 Sep 2020 08:43:52 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+On Wed,  9 Sep 2020 20:26:39 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Add a config option to explicitly enable the hid2hci tool, which is not
-> build by default anymore.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
->  package/bluez5_utils/Config.in                       | 9 +++++++++
->  package/bluez5_utils/bluez5_utils.hash               | 2 +-
->  package/bluez5_utils/bluez5_utils.mk                 | 9 ++++++++-
->  4 files changed, 19 insertions(+), 3 deletions(-)
+>  .../{0002-only-c-language.patch => 0001-only-c-language.patch}    | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/ympd/{0002-only-c-language.patch => 0001-only-c-language.patch} (100%)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
