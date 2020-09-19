@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 22:10:50 +0200
-Subject: [Buildroot] [git commit] package/efl: needs host gcc >= 4.9
-Message-ID: <20200919200135.5BF287F9D8@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 22:00:04 +0200
+Subject: [Buildroot] [git commit] package/wayland-protocols: change download
+ url to https
+Message-ID: <20200919200134.BFF7388375@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60cd158f0eb323c479f3d2b212261276410c5669
+commit: https://git.buildroot.net/buildroot/commit/?id=79609dd78f9054de74120da45defb3fdf693410d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit dbe2d2e686281c19739824d4d4faec62187d1779 forgot to add a
-host gcc >= 4.9 dependency on efl (because of host-efl)
+- change download url to https (as redirected by the original http url)
 
-Fixes:
- - http://autobuild.buildroot.org/results/f627d44919c20e068e377d7fe113833e2d4d0ad3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/efl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/wayland-protocols/wayland-protocols.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 738bfcd010..e4e4c72161 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EFL
- 	bool "efl"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-efl
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -281,8 +282,9 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index ed60d1c995..84028b97d5 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
+ WAYLAND_PROTOCOLS_VERSION = 1.20
+-WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
++WAYLAND_PROTOCOLS_SITE = https://wayland.freedesktop.org/releases
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
+ WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
