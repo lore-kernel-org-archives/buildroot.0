@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:57:40 +0200
-Subject: [Buildroot] [PATCH] package/prosody: bump to version 0.11.6
-In-Reply-To: <20200919162108.664829-1-francois.perrad@gadz.org>
-References: <20200919162108.664829-1-francois.perrad@gadz.org>
-Message-ID: <20200919215740.1a3f0a3c@windsurf>
+Date: Sat, 19 Sep 2020 21:57:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wampcc: fix build with gcc 10
+In-Reply-To: <20200919163307.468763-1-fontaine.fabrice@gmail.com>
+References: <20200919163307.468763-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200919215752.74db93aa@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Sep 2020 18:21:08 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Sat, 19 Sep 2020 18:33:07 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5668ee2a81daba689cc16c520681cfd16a79dbd7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/prosody/prosody.hash | 8 ++++----
->  package/prosody/prosody.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  .../wampcc/0003-Broken-build-on-Windows.patch | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 package/wampcc/0003-Broken-build-on-Windows.patch
 
 Applied to master, thanks.
 
