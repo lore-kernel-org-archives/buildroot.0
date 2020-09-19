@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 15:21:20 +0200
-Subject: [Buildroot] [git commit] package/ecryptfs-utils: fix build failure
- without pod2man
-Message-ID: <20200919131323.C4A90856C7@busybox.osuosl.org>
+Date: Sat, 19 Sep 2020 15:22:35 +0200
+Subject: [Buildroot] [git commit] package/meson: support additional cpu
+ families
+Message-ID: <20200919131323.E701382133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1030f295e629d749dfb731f5908f39114d5a8f36
+commit: https://git.buildroot.net/buildroot/commit/?id=2f5a26630c189f0dd518006b6df2b184f3c94e48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set ac_cv_path_POD2MAN to true to avoid the following build failure:
+Meson expects known cpu families to be in a normalized format based on
+https://mesonbuild.com/Reference-tables.html#cpu-families
 
-checking for pod2man... no
-configure: error: I couldn't find pod2man; make sure it's installed and in your path
+Add support for m68k, microblaze and sh4 cpu families.
 
-Fixes:
- - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/meson/meson.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 326ff4f2dd..3a3253a366 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
- 
- #Needed for build system to find pk11func.h and libnss3.so
- ECRYPTFS_UTILS_CONF_ENV = \
-+	ac_cv_path_POD2MAN=true \
- 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
- 	NSS_LIBS="-lnss3"
- 
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 8633a2f717..8b1bf1e58f 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -25,6 +25,10 @@ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
+ HOST_MESON_TARGET_CPU_FAMILY = aarch64
+ else ifeq ($(BR2_i386),y)
+ HOST_MESON_TARGET_CPU_FAMILY = x86
++else ifeq ($(BR2_m68k),y)
++HOST_MESON_TARGET_CPU_FAMILY = m68k
++else ifeq ($(BR2_microblazeel)$(BR2_microblazebe),y)
++HOST_MESON_TARGET_CPU_FAMILY = microblaze
+ else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ HOST_MESON_TARGET_CPU_FAMILY = mips
+ else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
+@@ -35,6 +39,8 @@ else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+ HOST_MESON_TARGET_CPU_FAMILY = ppc64
+ else ifeq ($(BR2_riscv),y)
+ HOST_MESON_TARGET_CPU_FAMILY = riscv64
++else ifeq ($(BR2_sh4)$(BR2_sh4eb)$(BR2_sh4a)$(BR2_sh4aeb),y)
++HOST_MESON_TARGET_CPU_FAMILY = sh4
+ else ifeq ($(BR2_sparc),y)
+ HOST_MESON_TARGET_CPU_FAMILY = sparc
+ else ifeq ($(BR2_sparc64),y)
