@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Sep 2020 21:12:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libpfm4: disable examples
-In-Reply-To: <20200914220015.3544577-1-fontaine.fabrice@gmail.com>
-References: <20200914220015.3544577-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200919211243.24fb53ab@windsurf>
+Date: Sat, 19 Sep 2020 21:12:50 +0200
+Subject: [Buildroot] [git commit] package/hicolor-icon-theme: bump to
+ version 0.17
+Message-ID: <20200919190345.CED0185E76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Sep 2020 00:00:15 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ded85763061e27b8d4a53f24926cc12f8309948a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Do not build examples to avoid a build failure on rtop example which
-> depends on ncurses and has been added in version 4.11.0 with
-> https://sourceforge.net/p/perfmon2/libpfm4/ci/7d1ec562ddbb2af2d6b7af8cec78b03213a3e4ce
-> 
-> /tmp/instance-0/output-1/host/bin/arm-linux-gcc   -I. -I/tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../include -DCONFIG_PFMLIB_DEBUG -DCONFIG_PFMLIB_OS_LINUX -I. -D_GNU_SOURCE -pthread -o rtop  rtop.o perf_util.o /tmp/instance-0/output-1/build/libpfm4-4.11.0/perf_examples/../lib/libpfm.a  -lpthread -lncurses -ltinfo -lm
-> /tmp/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/9.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: cannot find -ltinfo
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8ad23a82bcf32cd22256f9984a8f4cfa45951eee
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libpfm4/libpfm4.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hicolor-icon-theme/hicolor-icon-theme.hash | 2 +-
+ package/hicolor-icon-theme/hicolor-icon-theme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.hash b/package/hicolor-icon-theme/hicolor-icon-theme.hash
+index b1dcaf4ae8..ec9635f05a 100644
+--- a/package/hicolor-icon-theme/hicolor-icon-theme.hash
++++ b/package/hicolor-icon-theme/hicolor-icon-theme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9cc45ac3318c31212ea2d8cb99e64020732393ee7630fa6c1810af5f987033cc  hicolor-icon-theme-0.15.tar.xz
++sha256  317484352271d18cbbcfac3868eab798d67fff1b8402e740baa6ff41d588a9d8  hicolor-icon-theme-0.17.tar.xz
+ sha256  b0a64377d4ee87b7dbcf418ce4fb33ec3b2d7081b6732890e4af06b8118c4526  COPYING
+diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.mk b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+index dec75c15c4..088aecf31c 100644
+--- a/package/hicolor-icon-theme/hicolor-icon-theme.mk
++++ b/package/hicolor-icon-theme/hicolor-icon-theme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HICOLOR_ICON_THEME_VERSION = 0.15
++HICOLOR_ICON_THEME_VERSION = 0.17
+ HICOLOR_ICON_THEME_SITE = http://icon-theme.freedesktop.org/releases
+ HICOLOR_ICON_THEME_SOURCE = hicolor-icon-theme-$(HICOLOR_ICON_THEME_VERSION).tar.xz
+ HICOLOR_ICON_THEME_LICENSE = GPL-2.0
