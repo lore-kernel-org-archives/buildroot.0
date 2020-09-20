@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:01:47 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-asteroids: bump
- version to 2.3.3-Leia
-Message-ID: <20200920125535.95E73826C2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:01:49 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-fishbmc: bump
+ version to 5.1.3-Leia
+Message-ID: <20200920125535.A4AAD8CA43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd4576b3699194def1cfc42aabc0c8f016f5ce11
+commit: https://git.buildroot.net/buildroot/commit/?id=a9381eda281ad323add1dbe2b3e834b2ba04d2ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash | 2 +-
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk   | 2 +-
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash | 2 +-
+ package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index 3cf6f1ccc2..e6855a3bc6 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 390b4be8fc..4e215f331c 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  c359f8bb6a2e9b42dcfb063cdf965ce0b3fc95761816d98160000aea33894241  kodi-screensaver-asteroids-2.3.2-Leia.tar.gz
-+sha256  f4b54ed79eedd1a39e24dcbe8d372dbfc9edbc9358499ea9ab28777dd9082ee3  kodi-screensaver-asteroids-2.3.3-Leia.tar.gz
- sha256  297a1d34e6000f1b1a924f5ab75c16c2270968bfa47357dd8fa3799c9dfc47d8  debian/copyright
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index 278efb4eea..dcd0a3d34c 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+-sha256  8142fe4a32c0c113945c5fc9745e54639ca73308371d292e3422730bfad1d064  kodi-visualisation-fishbmc-5.1.2-Leia.tar.gz
++sha256  a03d4f64a6d44625d6936fd3abd359a0a08d11252663cae9fc5d061bd489c006  kodi-visualisation-fishbmc-5.1.3-Leia.tar.gz
+ sha256  684792cea796ea39d086ffd6cf5cb7c70ab8188dcf493707ba90d081d28f787e  visualization.fishbmc/LICENSE
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index a89c559d26..defc183ff9 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.2-Leia
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.3-Leia
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = debian/copyright
+-KODI_VISUALISATION_FISHBMC_VERSION = 5.1.2-Leia
++KODI_VISUALISATION_FISHBMC_VERSION = 5.1.3-Leia
+ KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
