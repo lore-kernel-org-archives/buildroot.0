@@ -1,148 +1,109 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Sep 2020 23:19:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/memtester: bump to version 4.5.0
-Message-ID: <20200920211924.1660523-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
+Date: Sun, 20 Sep 2020 23:36:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qprint: new package
+Message-ID: <20200920213636.132481-1-alejandro.gonzalez.correo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches (already in version)
+qprint is a small utility that handles encoding and decoding arbitrary
+binary data in the Quoted-Printable format, which was introduced along
+MIME.
 
-http://pyropus.ca/software/memtester/CHANGELOG
+As stated in the package description, although MUAs nowadays usually
+take care of doing this encoding themselves, there are some use cases
+where doing it manually is needed, and providing a command-line program
+to do it is amenable to shell scripts.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
 ---
- package/memtester/0001-makefile-fix.patch     | 23 -------
- .../0002-fix-build-with-gcc-10.patch          | 65 -------------------
- package/memtester/memtester.hash              |  2 +-
- package/memtester/memtester.mk                |  2 +-
- 4 files changed, 2 insertions(+), 90 deletions(-)
- delete mode 100644 package/memtester/0001-makefile-fix.patch
- delete mode 100644 package/memtester/0002-fix-build-with-gcc-10.patch
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/qprint/Config.in   | 18 ++++++++++++++++++
+ package/qprint/qprint.hash |  3 +++
+ package/qprint/qprint.mk   | 13 +++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/qprint/Config.in
+ create mode 100644 package/qprint/qprint.hash
+ create mode 100644 package/qprint/qprint.mk
 
-diff --git a/package/memtester/0001-makefile-fix.patch b/package/memtester/0001-makefile-fix.patch
-deleted file mode 100644
-index 6f1481beca..0000000000
---- a/package/memtester/0001-makefile-fix.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--The a/{b,c} construct doesn't work within make, so let's split the
--creation of the installation directories in two commands.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- Makefile |    3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--Index: memtester-4.2.1/Makefile
--===================================================================
----- memtester-4.2.1.orig/Makefile
--+++ memtester-4.2.1/Makefile
--@@ -25,8 +25,9 @@
-- all: memtester
-- 
-- install: all
---	mkdir -m 755 -p $(INSTALLPATH)/{bin,man/man8}
--+	mkdir -m 755 -p $(INSTALLPATH)/bin
-- 	install -m 755 memtester $(INSTALLPATH)/bin/
--+	mkdir -m 755 -p $(INSTALLPATH)/man/man8
-- 	gzip -c memtester.8 >memtester.8.gz ; install -m 644 memtester.8.gz $(INSTALLPATH)/man/man8/
-- 
-- auto-ccld.sh: \
-diff --git a/package/memtester/0002-fix-build-with-gcc-10.patch b/package/memtester/0002-fix-build-with-gcc-10.patch
-deleted file mode 100644
-index 8c9b3945bb..0000000000
---- a/package/memtester/0002-fix-build-with-gcc-10.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From acd226cd4073b77abce8783e19c5ef3bbf8074ef Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 11 Sep 2020 21:39:03 +0200
--Subject: [PATCH] fix build with gcc 10
--
--Move mword8 and mword16 from types.h to tests.c to avoid the following
--build failure with gcc 10 (which defaults to -fno-common):
--
--/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
--tests.c:(.bss+0x4): multiple definition of `mword16'; memtester.o:memtester.c:(.bss+0xc): first defined here
--/srv/storage/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: tests.o: in function `.LANCHOR1':
--tests.c:(.bss+0x0): multiple definition of `mword8'; memtester.o:memtester.c:(.bss+0x10): first defined here
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e1c276603475a952847fd53724e56101cdccbbcb
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: sent to charlesc at pyropus.ca]
-----
-- tests.c | 10 ++++++++++
-- types.h | 10 ----------
-- 2 files changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/tests.c b/tests.c
--index be1b350..d3d25c7 100644
----- a/tests.c
--+++ b/tests.c
--@@ -22,6 +22,16 @@
-- #include "sizes.h"
-- #include "memtester.h"
-- 
--+union {
--+    unsigned char bytes[UL_LEN/8];
--+    ul val;
--+} mword8;
--+
--+union {
--+    unsigned short u16s[UL_LEN/16];
--+    ul val;
--+} mword16;
--+
-- char progress[] = "-\\|/";
-- #define PROGRESSLEN 4
-- #define PROGRESSOFTEN 2500
--diff --git a/types.h b/types.h
--index ad7ce73..dca7fc0 100644
----- a/types.h
--+++ b/types.h
--@@ -24,13 +24,3 @@ struct test {
--     char *name;
--     int (*fp)();
-- };
---
---union {
---    unsigned char bytes[UL_LEN/8];
---    ul val;
---} mword8;
---
---union {
---    unsigned short u16s[UL_LEN/16];
---    ul val;
---} mword16;
---- 
--2.28.0
--
-diff --git a/package/memtester/memtester.hash b/package/memtester/memtester.hash
-index da8c1c02c9..7d7820e746 100644
---- a/package/memtester/memtester.hash
-+++ b/package/memtester/memtester.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f9dfe2fd737c38fad6535bbab327da9a21f7ce4ea6f18c7b3339adef6bf5fd88  memtester-4.3.0.tar.gz
-+sha256  8ed52b0d06d4aeb61954994146e2a5b2d20448a8f3ce3ee995120e6dbde2ae37  memtester-4.5.0.tar.gz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
-index 0e64d8cde2..1a319462a5 100644
---- a/package/memtester/memtester.mk
-+++ b/package/memtester/memtester.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 057592b8e5..e6f2695e86 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -119,6 +119,7 @@ F:	package/bird/
+ F:	package/glorytun/
  
--MEMTESTER_VERSION = 4.3.0
-+MEMTESTER_VERSION = 4.5.0
- MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions
- MEMTESTER_LICENSE = GPL-2.0
- MEMTESTER_LICENSE_FILES = COPYING
+ N:	Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
++F:	package/qprint/
+ F:	package/watchdog/
+ 
+ N:	Aleksander Morgado <aleksander@aleksander.es>
+diff --git a/package/Config.in b/package/Config.in
+index 0282a2069f..0bea80356c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2351,6 +2351,7 @@ comment "Utilities"
+ 	source "package/logsurfer/Config.in"
+ 	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
++	source "package/qprint/Config.in"
+ 	source "package/ranger/Config.in"
+ 	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+diff --git a/package/qprint/Config.in b/package/qprint/Config.in
+new file mode 100644
+index 0000000000..edfb92a5f3
+--- /dev/null
++++ b/package/qprint/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_QPRINT
++	bool "qprint"
++	help
++	  qprint is a program that encodes and decodes binary data in
++	  the Quoted-Printable encoding, defined as a part of the MIME
++	  specification in RFC 1521. This encoding allows for efficient
++	  transfer of mostly ASCII data over transports that are only
++	  7-bit clean, like SMTP without 8BITMIME or BINARYMIME
++	  extensions. It also allows the transfer of long lines of text
++	  by wrapping them every 76 characters.
++
++	  Usually, a sophisticated MUA will take care of automatically
++	  choosing the best encodings for an e-mail. Nevertheless, this
++	  utility may be useful when a MTA (e.g. msmtp) is used without
++	  a MUA, or if using this encoding for other purposes is
++	  desired.
++
++	  https://www.fourmilab.ch/webtools/qprint/
+diff --git a/package/qprint/qprint.hash b/package/qprint/qprint.hash
+new file mode 100644
+index 0000000000..0412cf84c5
+--- /dev/null
++++ b/package/qprint/qprint.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  ffa9ca1d51c871fb3b56a4bf0165418348cf080f01ff7e59cd04511b9665019c  qprint-1.1.tar.gz
++sha256  3bd4089942977a357fed0d3c84b6ea877000c20c7c344c2feabf4b10db9f7495  COPYING
+diff --git a/package/qprint/qprint.mk b/package/qprint/qprint.mk
+new file mode 100644
+index 0000000000..e34fba54b9
+--- /dev/null
++++ b/package/qprint/qprint.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# qprint
++#
++################################################################################
++
++QPRINT_VERSION = 1.1
++QPRINT_SITE = https://www.fourmilab.ch/webtools/qprint
++QPRINT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-bin
++QPRINT_LICENSE = Public Domain
++QPRINT_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
 2.28.0
