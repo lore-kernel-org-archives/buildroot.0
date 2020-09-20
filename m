@@ -1,160 +1,112 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun, 20 Sep 2020 20:40:42 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5location: needs
- qt5declarative quick package
-In-Reply-To: <20200920174148.36199e66@gmx.net>
-References: <20200919194857.491282-1-b.bilas@grinn-global.com>
- <20200919220820.2d5d47ab@windsurf>
- <6c7c6fdf-a5a8-e1cf-ad28-9b7d7ba34b7b@grinn-global.com>
- <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
- <20200920174148.36199e66@gmx.net>
-Message-ID: <e251623d-9d8d-1172-81e2-1eb3964afc80@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 20 Sep 2020 23:12:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: disable the e2scrub
+ stuff
+In-Reply-To: <1600394250.18560.2.camel@aliyun.com>
+References: <1600333425.32426.1.camel@aliyun.com>
+ <20200917213935.67fc4894@windsurf.hq.k.grp>
+ <1600394250.18560.2.camel@aliyun.com>
+Message-ID: <20200920211236.GK2422@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Tian, All,
 
-On 20.09.2020 17:41, Peter Seiderer wrote:
-> Hello Bartek,
->
-> On Sat, 19 Sep 2020 23:05:00 +0200, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->
->> Hello again,
->>
->> On 19.09.2020 22:34, Bartosz Bilas wrote:
->>> Hi Thomas,
->>>
->>> On 19.09.2020 22:08, Thomas Petazzoni wrote:
->>>> On Sat, 19 Sep 2020 21:48:57 +0200
->>>> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->>>>   
->>>>> Simply add the dependency of qt5declarative quick module that
->>>>> forces Qt OpenGL support which is needed for qt5location component [1].
->>>>>
->>>>> Fixes:
->>>>> http://autobuild.buildroot.net/results/ddd/ddda7cdb9400f6ca7d548e9b5ada18674fbe42e0/
->>>>> http://autobuild.buildroot.net/results/ddb/ddb25ebb591ed6029a7bd4934464171358553936/
->>>>>
->>>>> and many many more...
->>>>>
->>>>> [1]
->>>>> https://code.woboq.org/qt5/qtdeclarative/src/quick/scenegraph/coreapi/qsgmaterialshader.h.html#105
->>>>>
->>>>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
->>>>> ---
->>>>>  ? package/qt5/qt5location/Config.in????? | 4 ++++
->>>>>  ? package/qt5/qt5location/qt5location.mk | 5 +----
->>>>>  ? 2 files changed, 5 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/package/qt5/qt5location/Config.in
->>>>> b/package/qt5/qt5location/Config.in
->>>>> index c68deb1006..207ad5a37a 100644
->>>>> --- a/package/qt5/qt5location/Config.in
->>>>> +++ b/package/qt5/qt5location/Config.in
->>>>> @@ -1,5 +1,6 @@
->>>>>  ? config BR2_PACKAGE_QT5LOCATION
->>>>>  ????? bool "qt5location"
->>>>> +??? depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
->>>> This looks a bit weird, because src/src.pro looks like this:
->>>>
->>>> SUBDIRS += positioning
->>>> positioning.depends = clip2tri
->>>>
->>>> qtHaveModule(quick) {
->>>>  ???? SUBDIRS += positioningquick location
->>>>  ???? positioningquick.depends += positioning
->>>>  ???? location.depends += positioningquick clip2tri
->>>>
->>>>  ???? plugins.depends += location
->>>>
->>>>  ???? SUBDIRS += imports
->>>>  ???? imports.depends += positioningquick positioning location
->>>> }
->>>>
->>>> So, the "location" subdirectory should not be built of the quick module
->>>> is not there.
->>> Yes, it's weird - it seems that this condition is always true even
->>> though quick module isn't compiled therefore I sent a quick workaround
->>> to fix build errors until I find a proper solution ;)
->> After a quick investigation it seems that we should drop
->> BR2_PACKAGE_QT5DECLARATIVE_QUICK option and select
->> BR2_PACKAGE_QT5BASE_OPENGL option if BR2_PACKAGE_QT5_GL_AVAILABLE
->> directly when BR2_PACKAGE_QT5DECLARATIVE package is selected because
->> qt5declarative module includes quick subdirectory when gui module is
->> available:
->>
->> qtHaveModule(gui):qtConfig(qml-animation) {
->>   ??? SUBDIRS += quick
->>
->>   ?? ...snip...
->> }
->>
->> and then we should add dependency of the qt5declarative package in
->> qt5location to solve the issue above.
->>
->> qt5declarative package contains most of quick components enabled by
->> default even though quick module wasn't selected, see:
->>
->> Qt QML:
->>   ? QML network support .................... yes
->>   ? QML debugging and profiling support .... yes
->>   ? QML just-in-time compiler .............. yes
->>   ? QML sequence object .................... yes
->>   ? QML XML http request ................... yes
->>   ? QML Locale ............................. yes
->> Qt QML Models:
->>   ? QML list model ......................... yes
->>   ? QML delegate model ..................... yes
->> Qt Quick:
->>   ? Direct3D 12 ............................ no
->>   ? AnimatedImage item ..................... yes
->>   ? Canvas item ............................ yes
->>   ? Support for Qt Quick Designer .......... yes
->>   ? Flipable item .......................... yes
->>   ? GridView item .......................... yes
->>   ? ListView item .......................... yes
->>   ? TableView item ......................... yes
->>   ? Path support ........................... yes
->>   ? PathView item .......................... yes
->>   ? Positioner items ....................... yes
->>   ? Repeater item .......................... yes
->>   ? ShaderEffect item ...................... yes
->>   ? Sprite item ............................ yes
-> I believe your analysis is right (and the conditional installation
-> of the quick library is gone with patch [1], there is no
-> explicit configure option in qtdeclarative for disabling quick)...
->
-> Regards,
-> Peter
->
-> [1] https://git.buildroot.net/buildroot/commit/package/qt5/qt5declarative/qt5declarative.mk?id=1bdceb5d735aad5fbf32b35e3a7f573ecb727e20
+On 2020-09-18 09:57 +0800, Tian Yuanhao via buildroot spake thusly:
+> On ?, 2020-09-17 at 21:39 +0200, Thomas Petazzoni wrote:
+> > On Thu, 17 Sep 2020 17:03:45 +0800
+> > Tian Yuanhao via buildroot <buildroot@busybox.net> wrote:
+> >?
+> > > 
+> > > diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> > > index eb82a55..cf6579d 100644
+> > > --- a/package/e2fsprogs/e2fsprogs.mk
+> > > +++ b/package/e2fsprogs/e2fsprogs.mk
+> > > @@ -52,7 +52,10 @@ E2FSPROGS_CONF_OPTS = \
+> > > ?	--disable-e2initrd-helper \
+> > > ?	--disable-testio-debug \
+> > > ?	--disable-rpath \
+> > > -	--enable-symlink-install
+> > > +	--enable-symlink-install \
+> > > +	--with-crond-dir=no \
+> > > +	--with-systemd-unit-dir=no \
+> > > +	--with-udev-rules-dir=no
+> > I'm not sure this is really a good solution. Indeed, we probably do
+> > want to install udev rules or systemd services.
+> > 
+> > Thomas
+> 
+> '--with-crond-dir=no --with-systemd-unit-dir=no --with-udev-rules-dir=no'
+> is approximately equal to '--disable-scrub' which does not exist.
 
-So in that case it explains why qt5location always includes location 
-sub-directory even when quick package isn't selected but qt5declarative 
-is because it always compiles this module ;) Currently I can't see any 
-other solution than my previous one assuming that we are not able to 
-disable/enable quick module as Peter said.
+But this is not very obvious. Also, even if one does not want e2scrub,
+ont may still want the systemd units files and udev ruels to be
+installed, sa Thomas already explained.
 
+Furthermore, if one look at the e2fsprogs Mafiles, e2scrub is onlt build
+on linux;
 
-Best
-Bartek
->>>> Could you try to see what's going on ?
->>> Yes, I'm doing that now :)
->>>> Thanks!
->>>>
->>>> Thomas
->>> Best
->>> Bartek
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->> Best
->> Bartek
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+    $ cat configure.ac
+    [...]
+      1464 dnl e2scrub only builds on linux
+      1465 dnl
+      1466 E2SCRUB_CMT="$LINUX_CMT"
+      1467 AC_SUBST(E2SCRUB_CMT)
+    [...]
+
+And so, following the E2SCRUB_CMT definition leads to:
+
+    $ cat -n Makefile.in
+    [...]
+      16 @E2SCRUB_CMT at E2SCRUB_DIR= scrub
+    [...]
+
+So, if E2SCRUB_CMT is set (to a sharp sign), E2SCRUB_DIR is not set.
+E2SCRUB_DIR is then used later on:
+
+    $ cat -n Makefile.in
+    [...]
+      24 PROG_SUBDIRS=e2fsck $(DEBUGFS_DIR) misc $(RESIZE_DIR) tests/progs po \
+      25         $(E2SCRUB_DIR)
+    [...]
+
+So, if we really want to be able to disable e2scrub, can we try to use:
+
+    E2FSPROGS_MAKE_OPTS = E2SCRUB_DIR=
+    E2FSPROGS_INSTALL_TARGET_OPTS = E2SCRUB_DIR= DESTDIR=$(TARGET_DIR) install
+
+Could you give it a try, and respin a new patch, please?
+
+> Android [1], Yocto [2] and PTXdist [3] do not install e2scrub. Therefore,
+> I thought Buildroot should boldly use those options.
+> [1]: https://android.googlesource.com/platform/external/e2fsprogs/+/refs/heads/master/Android.bp
+> [2]: http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/e2fsprogs/e2fsprogs_1.45.6.bb
+> [3]: https://git.pengutronix.de/cgit/ptxdist/tree/rules/e2fsprogs.make
+
+As far as I can tell, they all use different ways to disable e2scrub:
+
+  - Android and PTXDist seem to do selective install, by only installing
+    in select sub-dirs
+
+  - the Yocto one seem to cherry-pick individual files from the
+    'staging' areau, when assembling the package archive.
+
+I.e. none of those three do explicitly disable e2scrub, they just don;t
+install it.
+
+But Buildroot does no selective install; we just rely on the package's
+own 'make install' rule.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
