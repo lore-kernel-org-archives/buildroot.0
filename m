@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:43:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/matio: bump to version 1.5.18
-In-Reply-To: <20200920101908.1167169-1-fontaine.fabrice@gmail.com>
-References: <20200920101908.1167169-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200920154327.1320c03b@windsurf>
+Date: Sun, 20 Sep 2020 15:43:58 +0200
+Subject: [Buildroot] [git commit] package/dbus: drop unrecognized option
+Message-ID: <20200920133616.689AF8028C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 12:19:08 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=649f4e8c77c5ddbbcf1f3dd63156b269f76b57f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop all patches (already in version)
-> - Update hash of COPYING (update in year:
->   https://github.com/tbeu/matio/commit/4638154d738ae1cae3ebac6b86ddcde63e69a92f)
-> 
-> https://github.com/tbeu/matio/releases/tag/v1.5.18
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Avoid-uninitialized-memory.patch     | 27 -----------
->  .../0002-Fix-illegal-memory-access.patch      | 47 -------------------
->  .../0003-Fix-illegal-memory-access.patch      | 46 ------------------
->  package/matio/0004-Fix-memory-leak.patch      | 39 ---------------
->  package/matio/matio.hash                      |  6 +--
->  package/matio/matio.mk                        | 11 +----
->  6 files changed, 4 insertions(+), 172 deletions(-)
->  delete mode 100644 package/matio/0001-Avoid-uninitialized-memory.patch
->  delete mode 100644 package/matio/0002-Fix-illegal-memory-access.patch
->  delete mode 100644 package/matio/0003-Fix-illegal-memory-access.patch
->  delete mode 100644 package/matio/0004-Fix-memory-leak.patch
+--with-xml option has been dropped seven years ago in version 1.7.4 and
+https://github.com/freedesktop/dbus/commit/46602768c537bfa51af80ba2c67857f3a30c0e67
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dbus/dbus.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 70f2c6fef4..b58f1ddda3 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -28,7 +28,6 @@ DBUS_CONF_OPTS = \
+ 	--disable-asserts \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+-	--with-xml=expat \
+ 	--with-system-socket=/run/dbus/system_bus_socket \
+ 	--with-system-pid-file=/run/messagebus.pid
+ 
+@@ -110,8 +109,7 @@ HOST_DBUS_CONF_OPTS = \
+ 	--disable-xml-docs \
+ 	--disable-doxygen-docs \
+ 	--disable-systemd \
+-	--without-x \
+-	--with-xml=expat
++	--without-x
+ 
+ # dbus for the host
+ DBUS_HOST_INTROSPECT = $(HOST_DBUS_DIR)/introspect.xml
