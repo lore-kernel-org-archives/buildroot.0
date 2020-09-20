@@ -1,98 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:06:01 +0200
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.4.5
-Message-ID: <20200920131304.D8B8E8A4B5@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:05:58 +0200
+Subject: [Buildroot] [git commit] package/clamav: bump version to 0.103.0
+Message-ID: <20200920131304.B4E0281321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ceefab178f0c9664302bb3bfd55fc64f07de08b
+commit: https://git.buildroot.net/buildroot/commit/?id=c9d55310e300479a453a47220aff9b11c3ed1724
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://blog.torproject.org/node/1921
+Release notes:
+https://lists.clamav.net/pipermail/clamav-announce/2020/000050.html
 
-Rebased patch.
+Rebased patch 0002.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tor/0001-Fix-static-linking-with-OpenSSL.patch | 12 ++++++------
- package/tor/tor.hash                                   |  2 +-
- package/tor/tor.mk                                     |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch   | 4 +++-
+ package/clamav/clamav.hash                                            | 2 +-
+ package/clamav/clamav.mk                                              | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-index 942f913465..128b6ed0ce 100644
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-@@ -8,8 +8,8 @@ and remove host paths when looking for openssl.
+diff --git a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+index e99a9742ec..d4be5c7b29 100644
+--- a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
++++ b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+@@ -12,6 +12,8 @@ This is a bit hacky, and would greatly benefit from a test in ./configure
+ instead, but does nicely as a quick fix for now.
  
- [Vincent:
-  - Adapt the patch to make it apply on the new version.]
--[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10 &
--        0.3.4.8, 0.3.5.7]
-+[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10,
-+        0.3.4.8, 0.3.5.7 & 0.4.4.5]
- [Fabrice: fix detection of openssl functions in 0.3.5.8]
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-@@ -38,7 +38,7 @@ diff --git a/configure.ac b/configure.ac
- index 05e1392cf..580befa6b 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -966,7 +966,7 @@ AC_ARG_WITH(ssl-dir,
-+@@ -973,7 +973,7 @@ AC_ARG_WITH(ssl-dir,
-    ])
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 0.103.0]
+ ---
+  libclamav/mbox.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -20,7 +22,7 @@ diff --git a/libclamav/mbox.c b/libclamav/mbox.c
+ index 71f540c0a..4851297a9 100644
+ --- a/libclamav/mbox.c
+ +++ b/libclamav/mbox.c
+-@@ -98,7 +98,7 @@
++@@ -91,7 +91,7 @@
+  #include <features.h>
+  #endif
   
-  AC_MSG_NOTICE([Now, we'll look for OpenSSL >= 1.0.1])
-@@ -47,7 +47,7 @@ index 05e1392cf..580befa6b 100644
-      [#include <openssl/ssl.h>
-       char *getenv(const char *);],
-      [struct ssl_cipher_st;
--@@ -998,7 +998,7 @@ dnl Now check for particular openssl functions.
-+@@ -1005,7 +1005,7 @@ dnl Now check for particular openssl functions.
-  save_LIBS="$LIBS"
-  save_LDFLAGS="$LDFLAGS"
-  save_CPPFLAGS="$CPPFLAGS"
-@@ -60,7 +60,7 @@ diff --git a/src/test/include.am b/src/test/include.am
- index ecb768957..39a622e88 100644
- --- a/src/test/include.am
- +++ b/src/test/include.am
--@@ -378,8 +378,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-+@@ -400,8 +400,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
-  	$(rust_ldadd) \
-@@ -71,7 +71,7 @@ index ecb768957..39a622e88 100644
-  	@CURVE25519_LIBS@ @TOR_LZMA_LIBS@
-  src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-  	$(AM_CPPFLAGS)
--@@ -388,8 +388,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-+@@ -410,8 +410,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-  src_test_test_hs_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_hs_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 47c2dd49b4..ddf1a880ff 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6a2d0637d4e514be2ec574723a05065245cce51da78a21cec1dc831be5ccac62  tor-0.4.3.6.tar.gz
-+sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 050114ccac..fe9b52670b 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index b15460cecc..bc1bf3bf90 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  eebd426a68020ecad0d2084b8c763e6898ccfd5febcae833d719640bb3ff391b  clamav-0.102.4.tar.gz
++sha256  32a9745277bfdda80e77ac9ca2f5990897418e9416880f3c31553ca673e80546  clamav-0.103.0.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 358228b861..fc979a74aa 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.3.6
-+TOR_VERSION = 0.4.4.5
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-CLAMAV_VERSION = 0.102.4
++CLAMAV_VERSION = 0.103.0
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
