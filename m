@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:23:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.8
-In-Reply-To: <20200920070957.321308-1-bernd.kuhls@t-online.de>
-References: <20200920070957.321308-1-bernd.kuhls@t-online.de>
-Message-ID: <20200920152306.11413edd@windsurf>
+Date: Sun, 20 Sep 2020 14:36:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-aioconsole: bump to
+ version 0.3.0
+In-Reply-To: <20200919221221.3732419-1-james.hilliard1@gmail.com>
+References: <20200919221221.3732419-1-james.hilliard1@gmail.com>
+Message-ID: <20200920143620.0efa0442@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 09:09:57 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sat, 19 Sep 2020 16:12:21 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  package/mesa3d/mesa3d.hash               | 6 +++---
->  package/mesa3d/mesa3d.mk                 | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+>  package/python-aioconsole/python-aioconsole.hash | 4 ++--
+>  package/python-aioconsole/python-aioconsole.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
