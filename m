@@ -1,63 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 13:58:16 +0200
-Subject: [Buildroot] [PATCH 3/3] package/ffmpeg: fix static build with
- wavpack support enabled
-In-Reply-To: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
-References: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
-Message-ID: <20200920115816.1567616-3-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 Sep 2020 14:35:41 +0200
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.55.3
+Message-ID: <20200920122633.1161B8B863@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d2d/d2d73f3c7075ca6e9782b9bb591dae40ab56b6a2/
+commit: https://git.buildroot.net/buildroot/commit/?id=32c6aad14ce1cfb1a9e5bcf900777a22d57134dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please note that the wavpack error only occurs after fixing fontconfig.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...quire_pkg_config-to-check-for-wavpac.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch b/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
-new file mode 100644
-index 0000000000..49c3ccee9b
---- /dev/null
-+++ b/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
-@@ -0,0 +1,31 @@
-+From a507a9cd6525d5b3a1eea32e25a139b4023800a2 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 20 Sep 2020 13:48:00 +0200
-+Subject: [PATCH] configure: use require_pkg_config to check for wavpack
-+
-+Fixes static builds with toolchains needing "-lm" for math functions.
-+
-+Patch sent upstream:
-+http://ffmpeg.org/pipermail/ffmpeg-devel/2020-September/270127.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index 5d68695192..4e6c6edd30 100755
-+--- a/configure
-++++ b/configure
-+@@ -6438,7 +6438,7 @@ enabled libvpx            && {
-+     fi
-+ }
-+ 
-+-enabled libwavpack        && require libwavpack wavpack/wavpack.h WavpackOpenFileOutput  -lwavpack
-++enabled libwavpack        && require_pkg_config libwavpack wavpack "wavpack/wavpack.h" WavpackOpenFileOutput
-+ enabled libwebp           && {
-+     enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
-+     enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
-+-- 
-+2.27.0
-+
--- 
-2.27.0
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 331e50c038..9d278ef906 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.55.1/meson-0.55.1.tar.gz.asc
+-sha256  3b5741f884e04928bdfa1947467ff06afa6c98e623c25cef75adf71ca39ce080  meson-0.55.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.55.3/meson-0.55.3.tar.gz.asc
++sha256  6bed2a25a128bbabe97cf40f63165ebe800e4fcb46db8ab7ef5c2b5789f092a5  meson-0.55.3.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 8b1bf1e58f..d39e66cf05 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.55.1
++MESON_VERSION = 0.55.3
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
