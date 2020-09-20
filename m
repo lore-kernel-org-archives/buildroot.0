@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:01:41 +0200
-Subject: [Buildroot] [git commit] package/kodi-screensaver-cpblobs: bump
- version to 3.0.5-Leia
-Message-ID: <20200920125535.38F9B826C2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:01:50 +0200
+Subject: [Buildroot] [git commit] package/kodi-visualisation-starburst: bump
+ version to 2.0.3-Leia
+Message-ID: <20200920125535.B148F826C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3986a63f3e12d5748220af8f620de87d0a6dc2b
+commit: https://git.buildroot.net/buildroot/commit/?id=ec9f2ad7522e71bde8072bc66ffd7c958f2d52e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk   | 2 +-
+ package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash | 2 +-
+ package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index 12e52a6747..4ff614a995 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+index a0c820eea3..834d71ae5c 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  8234240670c8cd0feb61536e08058a1ec2122dc638dcc4bf328fad8d70b3d4c6  kodi-screensaver-cpblobs-3.0.4-Leia.tar.gz
-+sha256  afab934a2c93f73334943775f45f5a1d065e74714528bc700459d110e88e43a4  kodi-screensaver-cpblobs-3.0.5-Leia.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index f64fe3e55d..01f6bdf3d3 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+-sha256  8e2ee8b39fe1c0daa24b11a9c4a175a85fdbdf7dc1bc48a1ab4876edeb6f676f  kodi-visualisation-starburst-2.0.2-Leia.tar.gz
++sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
+ sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+index 9f1137d12c..8d736f08e9 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.4-Leia
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.5-Leia
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
- KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
+-KODI_VISUALISATION_STARBURST_VERSION = 2.0.2-Leia
++KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
+ KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
+ KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
