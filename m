@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 16:09:07 +0200
-Subject: [Buildroot] [git commit] package/gst1-interpipe: bump version to
- 94dea52 (1.1.2)
-Message-ID: <20200920140002.19B2088094@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 16:09:34 +0200
+Subject: [Buildroot] [git commit] package/gst1-interpipe: change to meson
+ build
+Message-ID: <20200920140014.E07ED8B260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37c03dc3696eafdef41fe71eb9068e260baf8949
+commit: https://git.buildroot.net/buildroot/commit/?id=53d2cbba16d68cf59aac9325ee1e7dc50bdda8b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 4 ++--
- package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-index 0ce6ad460d..4764611487 100644
---- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-+++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
-@@ -1,5 +1,5 @@
- # locally computed hash
--sha256 6dc2c9d5ff4c3777d40712199a0cafa6bc0058327bca5a20e31d743a46e1ad21 gst1-interpipe-9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1.tar.gz
-+sha256  4b0d8c5fabe1705ba92ac8409d7d138429df5874ba196101cdd1871936719b1a  gst1-interpipe-94dea528dc9e2d0df02fdf2114deecfef6a23740.tar.gz
- 
- # Hashes for license files:
--sha256 16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5 COPYING
-+sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
 diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-index 87e5f2e5d2..92e2bb38fc 100644
+index 92e2bb38fc..9d3402d02b 100644
 --- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
 +++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -13,9 +13,10 @@ GST1_INTERPIPE_GIT_SUBMODULES = YES
+ GST1_INTERPIPE_LICENSE = LGPL-2.1
+ GST1_INTERPIPE_LICENSE_FILES = COPYING
  
--GST1_INTERPIPE_VERSION = 9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1
-+GST1_INTERPIPE_VERSION = 94dea528dc9e2d0df02fdf2114deecfef6a23740
- GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
- GST1_INTERPIPE_SITE_METHOD = git
- # fetch gst-interpipe/common sub module
+-# from git source
+-GST1_INTERPIPE_AUTORECONF = YES
+-
+ GST1_INTERPIPE_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
+ 
+-$(eval $(autotools-package))
++GST1_INTERPIPE_CONF_OPTS = \
++	-Dtests=disabled \
++	-Denable-gtk-doc=false
++
++$(eval $(meson-package))
