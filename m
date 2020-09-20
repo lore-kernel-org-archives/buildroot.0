@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:01:50 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-starburst: bump
- version to 2.0.3-Leia
-Message-ID: <20200920125535.B148F826C2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:01:43 +0200
+Subject: [Buildroot] [git commit] package/kodi-vfs-rar: bump version to
+ 2.3.2-Leia
+Message-ID: <20200920125535.569D5826C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec9f2ad7522e71bde8072bc66ffd7c958f2d52e7
+commit: https://git.buildroot.net/buildroot/commit/?id=ba9660a725b1f495a164d8a92ab1e55217e8c465
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash | 2 +-
- package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk   | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-index a0c820eea3..834d71ae5c 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+index 0fcf7f795b..22ad584fb8 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  8e2ee8b39fe1c0daa24b11a9c4a175a85fdbdf7dc1bc48a1ab4876edeb6f676f  kodi-visualisation-starburst-2.0.2-Leia.tar.gz
-+sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
- sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-index 9f1137d12c..8d736f08e9 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+-sha256  0ca45226b071d50595f2c06471761713765a83484bb2b9629c694d4b310007c1  kodi-vfs-rar-2.3.1-Leia.tar.gz
++sha256  5275c09eed7e8354849caa17c3d9699abcfa2437a7c7af3833bffd10fc1c577f  kodi-vfs-rar-2.3.2-Leia.tar.gz
+ # License files
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+index 315a77903e..c0d52a1d25 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_STARBURST_VERSION = 2.0.2-Leia
-+KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
- KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
- KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
- KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
+-KODI_VFS_RAR_VERSION = 2.3.1-Leia
++KODI_VFS_RAR_VERSION = 2.3.2-Leia
+ KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
+ KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
+ KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
