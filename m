@@ -1,152 +1,48 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 20 Sep 2020 17:41:48 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5location: needs
- qt5declarative quick package
-In-Reply-To: <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
-References: <20200919194857.491282-1-b.bilas@grinn-global.com>
- <20200919220820.2d5d47ab@windsurf>
- <6c7c6fdf-a5a8-e1cf-ad28-9b7d7ba34b7b@grinn-global.com>
- <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
-Message-ID: <20200920174148.36199e66@gmx.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 20 Sep 2020 10:30:16 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-aiozipkin: bump to version
+ 0.7.1
+Message-ID: <20200920163016.1275750-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bartek,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-aiozipkin/python-aiozipkin.hash | 6 +++---
+ package/python-aiozipkin/python-aiozipkin.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-On Sat, 19 Sep 2020 23:05:00 +0200, Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-
-> Hello again,
-> 
-> On 19.09.2020 22:34, Bartosz Bilas wrote:
-> > Hi Thomas,
-> >
-> > On 19.09.2020 22:08, Thomas Petazzoni wrote:  
-> >> On Sat, 19 Sep 2020 21:48:57 +0200
-> >> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-> >>  
-> >>> Simply add the dependency of qt5declarative quick module that
-> >>> forces Qt OpenGL support which is needed for qt5location component [1].
-> >>>
-> >>> Fixes:
-> >>> http://autobuild.buildroot.net/results/ddd/ddda7cdb9400f6ca7d548e9b5ada18674fbe42e0/
-> >>> http://autobuild.buildroot.net/results/ddb/ddb25ebb591ed6029a7bd4934464171358553936/
-> >>>
-> >>> and many many more...
-> >>>
-> >>> [1] 
-> >>> https://code.woboq.org/qt5/qtdeclarative/src/quick/scenegraph/coreapi/qsgmaterialshader.h.html#105
-> >>>
-> >>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> >>> ---
-> >>> ? package/qt5/qt5location/Config.in????? | 4 ++++
-> >>> ? package/qt5/qt5location/qt5location.mk | 5 +----
-> >>> ? 2 files changed, 5 insertions(+), 4 deletions(-)
-> >>>
-> >>> diff --git a/package/qt5/qt5location/Config.in 
-> >>> b/package/qt5/qt5location/Config.in
-> >>> index c68deb1006..207ad5a37a 100644
-> >>> --- a/package/qt5/qt5location/Config.in
-> >>> +++ b/package/qt5/qt5location/Config.in
-> >>> @@ -1,5 +1,6 @@
-> >>> ? config BR2_PACKAGE_QT5LOCATION
-> >>> ????? bool "qt5location"
-> >>> +??? depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK  
-> >> This looks a bit weird, because src/src.pro looks like this:
-> >>
-> >> SUBDIRS += positioning
-> >> positioning.depends = clip2tri
-> >>
-> >> qtHaveModule(quick) {
-> >> ???? SUBDIRS += positioningquick location
-> >> ???? positioningquick.depends += positioning
-> >> ???? location.depends += positioningquick clip2tri
-> >>
-> >> ???? plugins.depends += location
-> >>
-> >> ???? SUBDIRS += imports
-> >> ???? imports.depends += positioningquick positioning location
-> >> }
-> >>
-> >> So, the "location" subdirectory should not be built of the quick module
-> >> is not there.  
-> > Yes, it's weird - it seems that this condition is always true even 
-> > though quick module isn't compiled therefore I sent a quick workaround 
-> > to fix build errors until I find a proper solution ;)  
-> 
-> After a quick investigation it seems that we should drop 
-> BR2_PACKAGE_QT5DECLARATIVE_QUICK option and select 
-> BR2_PACKAGE_QT5BASE_OPENGL option if BR2_PACKAGE_QT5_GL_AVAILABLE 
-> directly when BR2_PACKAGE_QT5DECLARATIVE package is selected because 
-> qt5declarative module includes quick subdirectory when gui module is 
-> available:
-> 
-> qtHaveModule(gui):qtConfig(qml-animation) {
->  ??? SUBDIRS += quick
-> 
->  ?? ...snip...
-> }
-> 
-> and then we should add dependency of the qt5declarative package in 
-> qt5location to solve the issue above.
-> 
-> qt5declarative package contains most of quick components enabled by 
-> default even though quick module wasn't selected, see:
-> 
-> Qt QML:
->  ? QML network support .................... yes
->  ? QML debugging and profiling support .... yes
->  ? QML just-in-time compiler .............. yes
->  ? QML sequence object .................... yes
->  ? QML XML http request ................... yes
->  ? QML Locale ............................. yes
-> Qt QML Models:
->  ? QML list model ......................... yes
->  ? QML delegate model ..................... yes
-> Qt Quick:
->  ? Direct3D 12 ............................ no
->  ? AnimatedImage item ..................... yes
->  ? Canvas item ............................ yes
->  ? Support for Qt Quick Designer .......... yes
->  ? Flipable item .......................... yes
->  ? GridView item .......................... yes
->  ? ListView item .......................... yes
->  ? TableView item ......................... yes
->  ? Path support ........................... yes
->  ? PathView item .......................... yes
->  ? Positioner items ....................... yes
->  ? Repeater item .......................... yes
->  ? ShaderEffect item ...................... yes
->  ? Sprite item ............................ yes
-
-I believe your analysis is right (and the conditional installation
-of the quick library is gone with patch [1], there is no
-explicit configure option in qtdeclarative for disabling quick)...
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/commit/package/qt5/qt5declarative/qt5declarative.mk?id=1bdceb5d735aad5fbf32b35e3a7f573ecb727e20
-
-> 
-> >>
-> >> Could you try to see what's going on ?  
-> > Yes, I'm doing that now :)  
-> >>
-> >> Thanks!
-> >>
-> >> Thomas  
-> > Best
-> > Bartek
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> Best
-> Bartek
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/python-aiozipkin/python-aiozipkin.hash b/package/python-aiozipkin/python-aiozipkin.hash
+index 8034381751..af07285c23 100644
+--- a/package/python-aiozipkin/python-aiozipkin.hash
++++ b/package/python-aiozipkin/python-aiozipkin.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiozipkin/json
+-md5	01766aa607ae121d2cbb3ebf15a8cd0b  aiozipkin-0.6.0.tar.gz
+-sha256	7270cdaff81f4a6ea70de48b3e4597629c3beef76740bfe6f7c9b58b45b67c73  aiozipkin-0.6.0.tar.gz
++md5  7be9acaa48d4d4dc14abcc79edfd6c16  aiozipkin-0.7.1.tar.gz
++sha256  aa99984832225378d900a5cd0d4e8e89af7ec9f359612c2e311f55b9039ed501  aiozipkin-0.7.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
++sha256  9b42fe3a288996988c552e387e7877be7525a1649e62086aedd6b32d3cb56365  LICENSE
+diff --git a/package/python-aiozipkin/python-aiozipkin.mk b/package/python-aiozipkin/python-aiozipkin.mk
+index 2f5b54be6c..e351dbacfe 100644
+--- a/package/python-aiozipkin/python-aiozipkin.mk
++++ b/package/python-aiozipkin/python-aiozipkin.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOZIPKIN_VERSION = 0.6.0
++PYTHON_AIOZIPKIN_VERSION = 0.7.1
+ PYTHON_AIOZIPKIN_SOURCE = aiozipkin-$(PYTHON_AIOZIPKIN_VERSION).tar.gz
+-PYTHON_AIOZIPKIN_SITE = https://files.pythonhosted.org/packages/8d/14/33c79497c3082dd93172f834e4f3d1d6d0eb9b957b6885c919ca73462ed6
++PYTHON_AIOZIPKIN_SITE = https://files.pythonhosted.org/packages/9e/33/120925f90470b7f52f46e2b9f71caf2514e389f42b3ed3b62f6389baee95
+ PYTHON_AIOZIPKIN_SETUP_TYPE = setuptools
+ PYTHON_AIOZIPKIN_LICENSE = Apache-2.0
+ PYTHON_AIOZIPKIN_LICENSE_FILES = LICENSE
+-- 
+2.25.1
