@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 08:44:54 +0200
-Subject: [Buildroot] [PATCH 03/11] package/kodi-screensaver-cpblobs: bump
- version to 3.0.5-Leia
+Date: Sun, 20 Sep 2020 08:44:57 +0200
+Subject: [Buildroot] [PATCH 06/11] package/kodi-vfs-rar: bump version to
+ 2.3.2-Leia
 In-Reply-To: <20200920064502.8233-1-bernd.kuhls@t-online.de>
 References: <20200920064502.8233-1-bernd.kuhls@t-online.de>
-Message-ID: <20200920064502.8233-3-bernd.kuhls@t-online.de>
+Message-ID: <20200920064502.8233-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk   | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
+ package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index 12e52a6747..4ff614a995 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+index 0fcf7f795b..22ad584fb8 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
+@@ -1,5 +1,5 @@
  # Locally computed
--sha256  8234240670c8cd0feb61536e08058a1ec2122dc638dcc4bf328fad8d70b3d4c6  kodi-screensaver-cpblobs-3.0.4-Leia.tar.gz
-+sha256  afab934a2c93f73334943775f45f5a1d065e74714528bc700459d110e88e43a4  kodi-screensaver-cpblobs-3.0.5-Leia.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 819bb25558..48138e37bb 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+-sha256  0ca45226b071d50595f2c06471761713765a83484bb2b9629c694d4b310007c1  kodi-vfs-rar-2.3.1-Leia.tar.gz
++sha256  5275c09eed7e8354849caa17c3d9699abcfa2437a7c7af3833bffd10fc1c577f  kodi-vfs-rar-2.3.2-Leia.tar.gz
+ # License files
+ sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+index 315a77903e..c0d52a1d25 100644
+--- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
++++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.4-Leia
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.5-Leia
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
- KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
+-KODI_VFS_RAR_VERSION = 2.3.1-Leia
++KODI_VFS_RAR_VERSION = 2.3.2-Leia
+ KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
+ KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
+ KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
 -- 
 2.27.0
