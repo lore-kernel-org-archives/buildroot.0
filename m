@@ -1,92 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 09:13:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.4.10
-Message-ID: <20200920071321.458641-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 09:21:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clamav: bump version to 0.103.0
+Message-ID: <20200920072126.575876-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.10
+Release notes:
+https://lists.clamav.net/pipermail/clamav-announce/2020/000050.html
 
-Rebased patches 0002 & 0003.
+Rebased patch 0002.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/0002-iconv-tweak-iconv-detection.patch     | 4 +++-
- package/php/0003-configure-disable-the-phar-tool.patch | 4 +++-
- package/php/php.hash                                   | 2 +-
- package/php/php.mk                                     | 2 +-
- 4 files changed, 8 insertions(+), 4 deletions(-)
+ ...mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch | 4 +++-
+ package/clamav/clamav.hash                                    | 2 +-
+ package/clamav/clamav.mk                                      | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
-index 1aa8400136..a12041603d 100644
---- a/package/php/0002-iconv-tweak-iconv-detection.patch
-+++ b/package/php/0002-iconv-tweak-iconv-detection.patch
-@@ -15,6 +15,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Gustavo: update for 5.6.10]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [aduskett at gmail.com: Update for 7.3.0]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased for 7.4.10]
- ---
-  build/php.m4        |  2 +-
-  ext/iconv/config.m4 | 22 ----------------------
-@@ -24,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
- index 9586c490..8b3d47ed 100644
- --- a/build/php.m4
- +++ b/build/php.m4
--@@ -1971,7 +1971,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
-+@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
-    dnl Check external libs for iconv funcs.
-    if test "$found_iconv" = "no"; then
-  
-diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
-index 7cc3637973..aface92d77 100644
---- a/package/php/0003-configure-disable-the-phar-tool.patch
-+++ b/package/php/0003-configure-disable-the-phar-tool.patch
-@@ -12,6 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Gustavo: update for autoreconf/configure.in]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [Aduskett: update for 7.3.0]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased for 7.4.10]
- ---
-  configure.ac | 9 ++-------
-  1 file changed, 2 insertions(+), 7 deletions(-)
-@@ -20,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
- index 0dfab302..6026fb66 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1430,13 +1430,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
-+@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
-  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
-  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
-  
-diff --git a/package/php/php.hash b/package/php/php.hash
-index d648d90c04..c383c471eb 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
-+sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
+diff --git a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+index e99a9742ec..d4be5c7b29 100644
+--- a/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
++++ b/package/clamav/0002-mbox-do-not-use-backtrace-if-using-uClibc-without-ba.patch
+@@ -12,6 +12,8 @@ This is a bit hacky, and would greatly benefit from a test in ./configure
+ instead, but does nicely as a quick fix for now.
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index d9516ae127..3047bfe94d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 0.103.0]
+ ---
+  libclamav/mbox.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -20,7 +22,7 @@ diff --git a/libclamav/mbox.c b/libclamav/mbox.c
+ index 71f540c0a..4851297a9 100644
+ --- a/libclamav/mbox.c
+ +++ b/libclamav/mbox.c
+-@@ -98,7 +98,7 @@
++@@ -91,7 +91,7 @@
+  #include <features.h>
+  #endif
+  
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index b15460cecc..bc1bf3bf90 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  eebd426a68020ecad0d2084b8c763e6898ccfd5febcae833d719640bb3ff391b  clamav-0.102.4.tar.gz
++sha256  32a9745277bfdda80e77ac9ca2f5990897418e9416880f3c31553ca673e80546  clamav-0.103.0.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 358228b861..fc979a74aa 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.9
-+PHP_VERSION = 7.4.10
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-CLAMAV_VERSION = 0.102.4
++CLAMAV_VERSION = 0.103.0
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
 2.27.0
