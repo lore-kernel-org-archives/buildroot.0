@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 13:58:14 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/fontconfig: add pthread as a
- dependency of a static lib
-Message-ID: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 13:58:16 +0200
+Subject: [Buildroot] [PATCH 3/3] package/ffmpeg: fix static build with
+ wavpack support enabled
+In-Reply-To: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
+References: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
+Message-ID: <20200920115816.1567616-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +14,48 @@ To: buildroot@busybox.net
 Fixes:
 http://autobuild.buildroot.net/results/d2d/d2d73f3c7075ca6e9782b9bb591dae40ab56b6a2/
 
-ffmpeg configure prints: "ERROR: fontconfig not found using pkg-config"
-
-Please note that the ffmpeg build error was reproducible but with a
-different error message in ffbuild/config.log:
-
-  sysroot/usr/lib/libfontconfig.a(fccache.o): in function `lock_cache':
-  fccache.c:(.text+0xcd8): undefined reference to `pthread_mutex_init'
-
-  arm-buildroot-linux-gnueabi/bin/ld: fccache.c:(.text+0xcf8):
-  undefined reference to `pthread_mutex_destroy'
-
-  arm-buildroot-linux-gnueabi/bin/ld: fccache.c:(.text+0xd00):
-  undefined reference to `pthread_mutex_lock'
+Please note that the wavpack error only occurs after fixing fontconfig.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: removed " 1/1" from patch subject
+ ...quire_pkg_config-to-check-for-wavpac.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
 
- ...read-as-a-dependency-of-a-static-lib.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
-
-diff --git a/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch b/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
+diff --git a/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch b/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
 new file mode 100644
-index 0000000000..eed9dba005
+index 0000000000..49c3ccee9b
 --- /dev/null
-+++ b/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
-@@ -0,0 +1,44 @@
-+From 40ec04a8bf36dd8d0aa3da98b167792ce2dcd114 Mon Sep 17 00:00:00 2001
-+From: Silvan Scherrer <silvan.scherrer@aroa.ch>
-+Date: Sun, 20 Sep 2020 12:52:08 +0200
-+Subject: [PATCH] add pthread as a dependency of a static lib
++++ b/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
+@@ -0,0 +1,31 @@
++From a507a9cd6525d5b3a1eea32e25a139b4023800a2 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 20 Sep 2020 13:48:00 +0200
++Subject: [PATCH] configure: use require_pkg_config to check for wavpack
 +
-+Downloaded from https://trac.netlabs.org/ports/changeset/2220
++Fixes static builds with toolchains needing "-lm" for math functions.
 +
 +Patch sent upstream:
-+https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/121
++http://ffmpeg.org/pipermail/ffmpeg-devel/2020-September/270127.html
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ configure.ac     | 2 ++
-+ fontconfig.pc.in | 4 ++--
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index f3189a7..594d6fd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -690,6 +690,8 @@ fi
-+ have_pthread=false
-+ if test "$os_win32" = no; then
-+ 	AX_PTHREAD([have_pthread=true])
-++	AC_SUBST(PTHREAD_CFLAGS)
-++	AC_SUBST(PTHREAD_LIBS)
-+ fi
-+ if $have_pthread; then
-+ 	LIBS="$PTHREAD_LIBS $LIBS"
-+diff --git a/fontconfig.pc.in b/fontconfig.pc.in
-+index 61b35fb..f823bac 100644
-+--- a/fontconfig.pc.in
-++++ b/fontconfig.pc.in
-+@@ -14,5 +14,5 @@ Version: @VERSION@
-+ Requires: @PKGCONFIG_REQUIRES@
-+ Requires.private: @PKGCONFIG_REQUIRES_PRIVATELY@
-+ Libs: -L${libdir} -lfontconfig
-+-Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@
-+-Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@
-++Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@ @PTHREAD_LIBS@
-++Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@ @PTHREAD_CFLAGS@
++diff --git a/configure b/configure
++index 5d68695192..4e6c6edd30 100755
++--- a/configure
+++++ b/configure
++@@ -6438,7 +6438,7 @@ enabled libvpx            && {
++     fi
++ }
++ 
++-enabled libwavpack        && require libwavpack wavpack/wavpack.h WavpackOpenFileOutput  -lwavpack
+++enabled libwavpack        && require_pkg_config libwavpack wavpack "wavpack/wavpack.h" WavpackOpenFileOutput
++ enabled libwebp           && {
++     enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
++     enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
 +-- 
 +2.27.0
 +
