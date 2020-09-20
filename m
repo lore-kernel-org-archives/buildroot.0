@@ -1,55 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 16:06:38 +0200
-Subject: [Buildroot] [git commit] package/gqview: fix build with gcc 10
-Message-ID: <20200920135720.5F4E281423@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 16:07:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gqview: fix build with gcc 10
+In-Reply-To: <20200909193252.1248281-1-fontaine.fabrice@gmail.com>
+References: <20200909193252.1248281-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200920160735.6ca863b2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50688b9b10e49dd141a2544cad60bee408400c34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  9 Sep 2020 21:32:52 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/ab19e23cae603b2aa6e696e4937d106883e78b76
+> Fixes:
+>  - http://autobuild.buildroot.org/results/ab19e23cae603b2aa6e696e4937d106883e78b76
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../gqview/0002-fix-build-with-gcc-10.patch   | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 package/gqview/0002-fix-build-with-gcc-10.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gqview/0002-fix-build-with-gcc-10.patch | 27 +++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Applied to master, thanks. I have applied, but to be honest, I believe
+we should drop gqview. It has been unmaintained since 2006. There is a
+fork called geeqie. Perhaps it makes sense to package it... or not. I'm
+not sure this kind of desktop-level applications are really that useful
+in the context of Buildroot.
 
-diff --git a/package/gqview/0002-fix-build-with-gcc-10.patch b/package/gqview/0002-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..55791c78b9
---- /dev/null
-+++ b/package/gqview/0002-fix-build-with-gcc-10.patch
-@@ -0,0 +1,27 @@
-+fix build with gcc 10
-+
-+Define bar_exif_key_count and bar_exif_key_list as extern to avoid the
-+following build failure with gcc 10 (which defaults to -fno-common):
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: info.o:(.rodata+0x0): multiple definition of `bar_exif_key_count'; bar_exif.o:(.rodata+0x0): first defined here
-+/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: info.o:(.bss+0x0): multiple definition of `bar_exif_key_list'; bar_exif.o:(.data+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/ab19e23cae603b2aa6e696e4937d106883e78b76
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Naur gqview-2.1.5.orig/src/bar_exif.h gqview-2.1.5/src/bar_exif.h
-+--- gqview-2.1.5.orig/src/bar_exif.h	2020-09-09 20:32:50.506755031 +0200
-++++ gqview-2.1.5/src/bar_exif.h	2020-09-09 20:33:30.370755818 +0200
-+@@ -24,8 +24,8 @@
-+ 
-+ /* these are exposed for when duplication of the exif bar's text is needed */
-+ 
-+-const gchar **bar_exif_key_list;
-+-const gint bar_exif_key_count;
-++extern const gchar **bar_exif_key_list;
-++extern const gint bar_exif_key_count;
-+ 
-+ gchar *bar_exif_validate_text(gchar *text);
-+ 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
