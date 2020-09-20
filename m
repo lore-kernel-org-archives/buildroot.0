@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:23:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.4.5
-In-Reply-To: <20200920073702.704430-1-bernd.kuhls@t-online.de>
-References: <20200920073702.704430-1-bernd.kuhls@t-online.de>
-Message-ID: <20200920152356.45d07542@windsurf>
+Date: Sun, 20 Sep 2020 15:24:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: security bump to
+ version 6.11
+In-Reply-To: <20200920075720.636748-1-fontaine.fabrice@gmail.com>
+References: <20200920075720.636748-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200920152417.57a94860@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 09:37:02 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sun, 20 Sep 2020 09:57:20 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Release notes: https://blog.torproject.org/node/1921
+> Fix CVE-2020-14342: It was found that cifs-utils' mount.cifs was
+> invoking a shell when requesting the Samba password, which could be used
+> to inject arbitrary commands. An attacker able to invoke mount.cifs with
+> special permission, such as via sudo rules, could use this flaw to
+> escalate their privileges.
 > 
-> Rebased patch.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../tor/0001-Fix-static-linking-with-OpenSSL.patch   | 12 ++++++------
->  package/tor/tor.hash                                 |  2 +-
->  package/tor/tor.mk                                   |  2 +-
->  3 files changed, 8 insertions(+), 8 deletions(-)
+>  package/cifs-utils/cifs-utils.hash | 2 +-
+>  package/cifs-utils/cifs-utils.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
