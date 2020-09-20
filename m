@@ -1,119 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:06:02 +0200
-Subject: [Buildroot] [git commit] package/samba4: security bump version to
- 4.11.13
-Message-ID: <20200920131304.E855881321@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:05:57 +0200
+Subject: [Buildroot] [git commit] package/php: bump version to 7.4.10
+Message-ID: <20200920131304.AA57A81321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e56f54220ee14ccdbfdb60bf56e2a88b35877394
+commit: https://git.buildroot.net/buildroot/commit/?id=4fecbce9535b2169381a0b92ccd218dba03fefd8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 4.11.11 fixed
-o CVE-2020-10730: NULL pointer de-reference and use-after-free in Samba AD DC
-		  LDAP Server with ASQ, VLV and paged_results.
-o CVE-2020-10745: Parsing and packing of NBT and DNS packets can consume
-		  excessive CPU
-o CVE-2020-10760: LDAP Use-after-free in Samba AD DC Global Catalog with
-		  paged_results and VLV.
-o CVE-2020-14303: Empty UDP packet DoS in Samba AD DC nbtd.
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.10
 
-Version 4.11.12 was a bugfix-only release.
-
-Version 4.11.13 fixes CVE-2020-1472.
-
-Release notes:
-https://www.samba.org/samba/history/samba-4.11.11.html
-https://www.samba.org/samba/history/samba-4.11.12.html
-https://www.samba.org/samba/security/CVE-2020-1472.html
-
-Rebased patches 0001 & 0002.
+Rebased patches 0002 & 0003.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/samba4/0001-libreplace-disable-libbsd-support.patch          | 4 ++--
- .../0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch  | 5 +++--
- package/samba4/samba4.hash                                           | 4 ++--
- package/samba4/samba4.mk                                             | 2 +-
- 4 files changed, 8 insertions(+), 7 deletions(-)
+ package/php/0002-iconv-tweak-iconv-detection.patch     | 4 +++-
+ package/php/0003-configure-disable-the-phar-tool.patch | 4 +++-
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/0001-libreplace-disable-libbsd-support.patch b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-index a303fa6669..79216860dd 100644
---- a/package/samba4/0001-libreplace-disable-libbsd-support.patch
-+++ b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-@@ -9,7 +9,7 @@ This causes redefinition conflicts for link(2) when both standard
- unistd.h and bsd/unistd.h get included.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Bernd: rebased for versions 4.7.3, 4.8.0 & 4.8.5]
-+[Bernd: rebased for versions 4.7.3, 4.8.0, 4.8.5 & 4.11.13]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index 1aa8400136..a12041603d 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for 5.6.10]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
  ---
-  lib/replace/wscript | 15 ---------------
-@@ -19,7 +19,7 @@ diff --git a/lib/replace/wscript b/lib/replace/wscript
- index 240d730cbee..c6d8df43c74 100644
- --- a/lib/replace/wscript
- +++ b/lib/replace/wscript
--@@ -381,21 +381,6 @@ def configure(conf):
-+@@ -406,21 +406,6 @@ def configure(conf):
+  build/php.m4        |  2 +-
+  ext/iconv/config.m4 | 22 ----------------------
+@@ -24,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1971,7 +1971,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
   
-      strlcpy_in_bsd = False
-  
-diff --git a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-index 563b274d57..b8636958ee 100644
---- a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-+++ b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-@@ -33,6 +33,7 @@ BUG: https://bugzilla.samba.org/show_bug.cgi?id=14164
- 
- Signed-off-by: Uri Simchoni <uri@samba.org>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased for version 4.11.13]
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index 7cc3637973..aface92d77 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -12,6 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for autoreconf/configure.in]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [Aduskett: update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
  ---
-  wscript_configure_embedded_heimdal | 11 +++++++++++
-  wscript_configure_system_heimdal   | 11 -----------
-@@ -59,7 +60,7 @@ diff --git a/wscript_configure_system_heimdal b/wscript_configure_system_heimdal
- index 0ff6dad2f55..f77c177442f 100644
- --- a/wscript_configure_system_heimdal
- +++ b/wscript_configure_system_heimdal
--@@ -36,14 +36,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
-+@@ -37,14 +37,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
-      conf.define('USING_SYSTEM_%s' % name.upper(), 1)
-      return True
+  configure.ac | 9 ++-------
+  1 file changed, 2 insertions(+), 7 deletions(-)
+@@ -20,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1430,13 +1430,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
++@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
   
-@@ -74,7 +75,7 @@ index 0ff6dad2f55..f77c177442f 100644
-  check_system_heimdal_lib("com_err", "com_right_r com_err", "com_err.h")
-  
-  if check_system_heimdal_lib("roken", "rk_socket_set_reuseaddr", "roken.h"):
--@@ -88,7 +88,4 @@
-+@@ -96,7 +96,4 @@
-  #if conf.CHECK_BUNDLED_SYSTEM('tommath', checkfunctions='mp_init', headers='tommath.h'):
-  #    conf.define('USING_SYSTEM_TOMMATH', 1)
-  
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 34ae6f84bc..4d47871fc5 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
--sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.13.tar.asc
-+sha256  e71ed29ae01c5ce7be8cee1f53e0530db86dd19b911accb08fae60224e686ba1  samba-4.11.13.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index b6fe1a827c..48ac48c180 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d648d90c04..c383c471eb 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
++sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d9516ae127..3047bfe94d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.11.10
-+SAMBA4_VERSION = 4.11.13
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-PHP_VERSION = 7.4.9
++PHP_VERSION = 7.4.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
