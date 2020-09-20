@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 08:44:57 +0200
-Subject: [Buildroot] [PATCH 06/11] package/kodi-vfs-rar: bump version to
- 2.3.2-Leia
+Date: Sun, 20 Sep 2020 08:44:59 +0200
+Subject: [Buildroot] [PATCH 08/11] package/kodi-visualisation-goom: bump
+ version to 2.2.3-Leia
 In-Reply-To: <20200920064502.8233-1-bernd.kuhls@t-online.de>
 References: <20200920064502.8233-1-bernd.kuhls@t-online.de>
-Message-ID: <20200920064502.8233-6-bernd.kuhls@t-online.de>
+Message-ID: <20200920064502.8233-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index 0fcf7f795b..22ad584fb8 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index c7c45ab64d..c9fa7dea9f 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  0ca45226b071d50595f2c06471761713765a83484bb2b9629c694d4b310007c1  kodi-vfs-rar-2.3.1-Leia.tar.gz
-+sha256  5275c09eed7e8354849caa17c3d9699abcfa2437a7c7af3833bffd10fc1c577f  kodi-vfs-rar-2.3.2-Leia.tar.gz
- # License files
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index 315a77903e..c0d52a1d25 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
+-sha256  14b948e7e3b6e4b9c5d7a8438fe076480483d2a515047401a1769e82858ef245  kodi-visualisation-goom-2.2.2-Leia.tar.gz
++sha256  fdd656721f6d1b1962fd0a1e240eafb4710237ba70809dd0391cd10cacf4417c  kodi-visualisation-goom-2.2.3-Leia.tar.gz
+ sha256  a6b36f495079206146ae0b11624a8db49a538f421ffe1341f8651c9e6b06f0b0  debian/copyright
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index 9883ef8c38..d83f857ae1 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VFS_RAR_VERSION = 2.3.1-Leia
-+KODI_VFS_RAR_VERSION = 2.3.2-Leia
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
- KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+-KODI_VISUALISATION_GOOM_VERSION = 2.2.2-Leia
++KODI_VISUALISATION_GOOM_VERSION = 2.2.3-Leia
+ KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = debian/copyright
 -- 
 2.27.0
