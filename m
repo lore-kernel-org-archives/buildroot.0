@@ -1,41 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 10:09:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: disable asm on i386
-Message-ID: <20200920080930.864480-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 20 Sep 2020 10:13:52 +0200
+Subject: [Buildroot] [PATCH 1/3] package/nginx: add stream realip option
+Message-ID: <20200920081354.663762-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/19e/19ee2bdd4c8d14cc1554092594b3721117ca1005/
-http://autobuild.buildroot.net/results/72e/72e4089dafacd245e781214b72baeb81a1e3d3d7/
+stream realip is available since version 1.11.4 and
+https://github.com/nginx/nginx/commit/fe2774a9d689fa1bf201dd0e89449e3d9e4ad926
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dav1d/dav1d.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/nginx/Config.in | 5 +++++
+ package/nginx/nginx.mk  | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 1e84c21b47..62f673b991 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -14,12 +14,12 @@ DAV1D_CONF_OPTS = \
- 	-Denable_tests=false \
- 	-Denable_tools=false
+diff --git a/package/nginx/Config.in b/package/nginx/Config.in
+index 6dba7e0ead..507b4dcfb4 100644
+--- a/package/nginx/Config.in
++++ b/package/nginx/Config.in
+@@ -328,6 +328,11 @@ config BR2_PACKAGE_NGINX_STREAM
  
--ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+ifeq ($(BR2_x86_64),y)
- DAV1D_DEPENDENCIES += host-nasm
- endif
+ if BR2_PACKAGE_NGINX_STREAM
  
--# ARM assembly requires v6+ ISA
--ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M),y)
-+# ARM assembly requires v6+ ISA, asm is broken in i386
-+ifeq ($(BR2_ARM_CPU_ARMV4)$(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV7M)$(BR2_i386),y)
- DAV1D_CONF_OPTS += -Denable_asm=false
- endif
++config BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE
++	bool "ngx_stream_realip_module"
++	help
++	  Enable ngx_stream_realip_module
++
+ config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
+ 	bool "ngx_stream_ssl_module"
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index ead2ce92f5..2fcdf91b0c 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -224,6 +224,10 @@ endif # BR2_PACKAGE_NGINX_MAIL
+ ifeq ($(BR2_PACKAGE_NGINX_STREAM),y)
+ NGINX_CONF_OPTS += --with-stream
  
++ifeq ($(BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE),y)
++NGINX_CONF_OPTS += --with-stream_realip_module
++endif
++
+ ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
+ NGINX_DEPENDENCIES += openssl
+ NGINX_CONF_OPTS += --with-stream_ssl_module
 -- 
-2.27.0
+2.28.0
