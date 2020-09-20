@@ -1,43 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:51:28 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version to
- f73fca0
-Message-ID: <20200920134223.450AD8875D@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 16:06:38 +0200
+Subject: [Buildroot] [git commit] package/gqview: fix build with gcc 10
+Message-ID: <20200920135720.5F4E281423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad9a5eed8f5ad7af81e6d329b12bda1b395a4d84
+commit: https://git.buildroot.net/buildroot/commit/?id=50688b9b10e49dd141a2544cad60bee408400c34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/ab19e23cae603b2aa6e696e4937d106883e78b76
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-userland/rpi-userland.hash | 2 +-
- package/rpi-userland/rpi-userland.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gqview/0002-fix-build-with-gcc-10.patch | 27 +++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/rpi-userland/rpi-userland.hash b/package/rpi-userland/rpi-userland.hash
-index 0db5b7c83f..83d7fce54f 100644
---- a/package/rpi-userland/rpi-userland.hash
-+++ b/package/rpi-userland/rpi-userland.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7c58d6b4cdf65acef0ce1f441606df87e25745f78d74e11930383d03100aff4b  rpi-userland-188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e.tar.gz
-+sha256  024cafd2f4428e96bff1d29a782db1d484d4f1835f64097ca1bd0dc38f75e84f  rpi-userland-f73fca015d421b763936667a0b58fe5024d59921.tar.gz
- sha256  bee6f1249175683d8610651706e1aa7dffcbfd3f9c4c05bc1e5ab34f313c2db5  LICENCE
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 9edc92344e..4cfd5cb832 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = 188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e
-+RPI_USERLAND_VERSION = f73fca015d421b763936667a0b58fe5024d59921
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3-Clause
- RPI_USERLAND_LICENSE_FILES = LICENCE
+diff --git a/package/gqview/0002-fix-build-with-gcc-10.patch b/package/gqview/0002-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..55791c78b9
+--- /dev/null
++++ b/package/gqview/0002-fix-build-with-gcc-10.patch
+@@ -0,0 +1,27 @@
++fix build with gcc 10
++
++Define bar_exif_key_count and bar_exif_key_list as extern to avoid the
++following build failure with gcc 10 (which defaults to -fno-common):
++
++/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: info.o:(.rodata+0x0): multiple definition of `bar_exif_key_count'; bar_exif.o:(.rodata+0x0): first defined here
++/home/buildroot/autobuild/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: info.o:(.bss+0x0): multiple definition of `bar_exif_key_list'; bar_exif.o:(.data+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/ab19e23cae603b2aa6e696e4937d106883e78b76
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Naur gqview-2.1.5.orig/src/bar_exif.h gqview-2.1.5/src/bar_exif.h
++--- gqview-2.1.5.orig/src/bar_exif.h	2020-09-09 20:32:50.506755031 +0200
+++++ gqview-2.1.5/src/bar_exif.h	2020-09-09 20:33:30.370755818 +0200
++@@ -24,8 +24,8 @@
++ 
++ /* these are exposed for when duplication of the exif bar's text is needed */
++ 
++-const gchar **bar_exif_key_list;
++-const gint bar_exif_key_count;
+++extern const gchar **bar_exif_key_list;
+++extern const gint bar_exif_key_count;
++ 
++ gchar *bar_exif_validate_text(gchar *text);
++ 
