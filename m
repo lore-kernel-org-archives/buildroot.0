@@ -1,87 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Sep 2020 11:30:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lua-gd: bump version
-In-Reply-To: <CAB0FRsuyN-KSLGUuJO7uwYLaf=T=E3ugePvQfiWM+RhQYUA3mA@mail.gmail.com>
-References: <20200920082135.670074-1-fontaine.fabrice@gmail.com>
- <CAB0FRsuyN-KSLGUuJO7uwYLaf=T=E3ugePvQfiWM+RhQYUA3mA@mail.gmail.com>
-Message-ID: <CAPi7W82WziQeh0f20SqGvb3eaeS+-92CpMbM5OrJrc3kOj7gHQ@mail.gmail.com>
+Date: Sun, 20 Sep 2020 11:38:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/w_scan: fix build with gcc 10
+Message-ID: <20200920093846.1158644-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois,
+Fixes:
+ - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
 
-Le dim. 20 sept. 2020 ? 11:24, Fran?ois Perrad
-<francois.perrad@gadz.org> a ?crit :
->
->
-> Le dim. 20 sept. 2020 ? 10:21, Fabrice Fontaine <fontaine.fabrice@gmail.com> a ?crit :
->>
->> Bump to latest master to get latest commit and drop gdlib-config which
->> is not available on latest gd:
->> https://github.com/ittner/lua-gd/commit/2ce8e478a8591afd71e607506bc8c64b161bbd30
->>
->> gd has a pkg-config file since version 2.1.0 and
->> https://github.com/libgd/libgd/commit/071a2a94ee9f9e5ce00ff689dfe67a0fcb885ad6
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
->
-> Nack
->
-> in commit https://github.com/ittner/lua-gd/commit/2ce8e478a8591afd71e607506bc8c64b161bbd30
-> you could see that pkg-config replaces gdlib-config for CFLAGS & LFLAGS
-> but GDFEATURES is set unconditionnally.
->
-> I've already sent a good patch,
-> see https://patchwork.ozlabs.org/project/buildroot/patch/20200908052352.1735787-1-francois.perrad at gadz.org/
-OK, I missed it. I'll set my patch as rejected.
->
-> Fran?ois
->
->> ---
->>  package/lua-gd/lua-gd.hash | 2 +-
->>  package/lua-gd/lua-gd.mk   | 5 ++---
->>  2 files changed, 3 insertions(+), 4 deletions(-)
->>
->> diff --git a/package/lua-gd/lua-gd.hash b/package/lua-gd/lua-gd.hash
->> index d1bab37bc1..512573b474 100644
->> --- a/package/lua-gd/lua-gd.hash
->> +++ b/package/lua-gd/lua-gd.hash
->> @@ -1,3 +1,3 @@
->>  # Locally calculated
->> -sha256  114f273a64da6ccbf6e0555757b952f84ab8c134416dd7aae1aeb666ca0e964d  lua-gd-e60b13b7977bb3424d7044976ccba5d42c256934.tar.gz
->> +sha256  928fa036b37595d773db1999c9ff43195c4290f0722298fa5b0c3e619c678525  lua-gd-2ce8e478a8591afd71e607506bc8c64b161bbd30.tar.gz
->>  sha256  b0ca41d88ddb0ca785436d37b08b8f413055755eb6bfd3ea0a6ff3214303aa43  COPYING
->> diff --git a/package/lua-gd/lua-gd.mk b/package/lua-gd/lua-gd.mk
->> index e9a51a1677..38e064b77e 100644
->> --- a/package/lua-gd/lua-gd.mk
->> +++ b/package/lua-gd/lua-gd.mk
->> @@ -4,17 +4,16 @@
->>  #
->>  ################################################################################
->>
->> -LUA_GD_VERSION = e60b13b7977bb3424d7044976ccba5d42c256934
->> +LUA_GD_VERSION = 2ce8e478a8591afd71e607506bc8c64b161bbd30
->>  LUA_GD_SITE = $(call github,ittner,lua-gd,$(LUA_GD_VERSION))
->>  LUA_GD_LICENSE = MIT
->>  LUA_GD_LICENSE_FILES = COPYING
->> -LUA_GD_DEPENDENCIES = luainterpreter gd
->> +LUA_GD_DEPENDENCIES = host-pkgconf luainterpreter gd
->>
->>  # VERSION follows the scheme described on https://ittner.github.io/lua-gd/manual.html#intro,
->>  # the current version of the binding is 3.
->>  define LUA_GD_BUILD_CMDS
->>         $(MAKE) -C $(@D) gd.so \
->> -               GDLIBCONFIG="$(STAGING_DIR)/usr/bin/gdlib-config" \
->>                 CC=$(TARGET_CC) \
->>                 CFLAGS="$(TARGET_CFLAGS) -fPIC -DVERSION=\\\"$(GD_VERSION)r3\\\"" \
->>                 LFLAGS="-shared -lgd"
->> --
->> 2.28.0
->>
-Best Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...002-si_types-h-fix-build-with-gcc-10.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
 
-Fabrice
+diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..50d2488190
+--- /dev/null
++++ b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,37 @@
++si_types.h: fix build with gcc 10
++
++Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
++the following build failure with gcc 10 (which defaults to -fno-common):
++
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
++--- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
+++++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
++@@ -114,7 +114,7 @@
++   uint32_t logical_channel_number;
++   uint8_t  running;
++   void   * priv;
++-} service_t, * p_service_t;
+++};
++ 
++ /*******************************************************************************
++ /* transponder type.
++@@ -201,7 +201,7 @@
++   /*----------------------------*/
++   char * network_name;
++   network_change_t network_change;
++-} __attribute__((packed))  transponder_t, * p_transponder_t;
+++} __attribute__((packed));
++ 
++ /*******************************************************************************
++ /* satellite channel routing type.
+-- 
+2.28.0
