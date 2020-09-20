@@ -1,96 +1,117 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 09:37:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.4.5
-Message-ID: <20200920073702.704430-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 09:43:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
+ 4.11.13
+Message-ID: <20200920074328.763948-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/node/1921
+Version 4.11.11 fixed
+o CVE-2020-10730: NULL pointer de-reference and use-after-free in Samba AD DC
+		  LDAP Server with ASQ, VLV and paged_results.
+o CVE-2020-10745: Parsing and packing of NBT and DNS packets can consume
+		  excessive CPU
+o CVE-2020-10760: LDAP Use-after-free in Samba AD DC Global Catalog with
+		  paged_results and VLV.
+o CVE-2020-14303: Empty UDP packet DoS in Samba AD DC nbtd.
 
-Rebased patch.
+Version 4.11.12 was a bugfix-only release.
+
+Version 4.11.13 fixes CVE-2020-1472.
+
+Release notes:
+https://www.samba.org/samba/history/samba-4.11.11.html
+https://www.samba.org/samba/history/samba-4.11.12.html
+https://www.samba.org/samba/security/CVE-2020-1472.html
+
+Rebased patches 0001 & 0002.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../tor/0001-Fix-static-linking-with-OpenSSL.patch   | 12 ++++++------
- package/tor/tor.hash                                 |  2 +-
- package/tor/tor.mk                                   |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/samba4/0001-libreplace-disable-libbsd-support.patch  | 4 ++--
+ ...uild-find-pre-built-heimdal-build-tools-in-case-of-.patch | 5 +++--
+ package/samba4/samba4.hash                                   | 4 ++--
+ package/samba4/samba4.mk                                     | 2 +-
+ 4 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-index 942f913465..128b6ed0ce 100644
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-@@ -8,8 +8,8 @@ and remove host paths when looking for openssl.
+diff --git a/package/samba4/0001-libreplace-disable-libbsd-support.patch b/package/samba4/0001-libreplace-disable-libbsd-support.patch
+index a303fa6669..79216860dd 100644
+--- a/package/samba4/0001-libreplace-disable-libbsd-support.patch
++++ b/package/samba4/0001-libreplace-disable-libbsd-support.patch
+@@ -9,7 +9,7 @@ This causes redefinition conflicts for link(2) when both standard
+ unistd.h and bsd/unistd.h get included.
  
- [Vincent:
-  - Adapt the patch to make it apply on the new version.]
--[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10 &
--        0.3.4.8, 0.3.5.7]
-+[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10,
-+        0.3.4.8, 0.3.5.7 & 0.4.4.5]
- [Fabrice: fix detection of openssl functions in 0.3.5.8]
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-[Bernd: rebased for versions 4.7.3, 4.8.0 & 4.8.5]
++[Bernd: rebased for versions 4.7.3, 4.8.0, 4.8.5 & 4.11.13]
  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-@@ -38,7 +38,7 @@ diff --git a/configure.ac b/configure.ac
- index 05e1392cf..580befa6b 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -966,7 +966,7 @@ AC_ARG_WITH(ssl-dir,
-+@@ -973,7 +973,7 @@ AC_ARG_WITH(ssl-dir,
-    ])
+ ---
+  lib/replace/wscript | 15 ---------------
+@@ -19,7 +19,7 @@ diff --git a/lib/replace/wscript b/lib/replace/wscript
+ index 240d730cbee..c6d8df43c74 100644
+ --- a/lib/replace/wscript
+ +++ b/lib/replace/wscript
+-@@ -381,21 +381,6 @@ def configure(conf):
++@@ -406,21 +406,6 @@ def configure(conf):
   
-  AC_MSG_NOTICE([Now, we'll look for OpenSSL >= 1.0.1])
-@@ -47,7 +47,7 @@ index 05e1392cf..580befa6b 100644
-      [#include <openssl/ssl.h>
-       char *getenv(const char *);],
-      [struct ssl_cipher_st;
--@@ -998,7 +998,7 @@ dnl Now check for particular openssl functions.
-+@@ -1005,7 +1005,7 @@ dnl Now check for particular openssl functions.
-  save_LIBS="$LIBS"
-  save_LDFLAGS="$LDFLAGS"
-  save_CPPFLAGS="$CPPFLAGS"
-@@ -60,7 +60,7 @@ diff --git a/src/test/include.am b/src/test/include.am
- index ecb768957..39a622e88 100644
- --- a/src/test/include.am
- +++ b/src/test/include.am
--@@ -378,8 +378,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-+@@ -400,8 +400,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
-  	$(rust_ldadd) \
-@@ -71,7 +71,7 @@ index ecb768957..39a622e88 100644
-  	@CURVE25519_LIBS@ @TOR_LZMA_LIBS@
-  src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-  	$(AM_CPPFLAGS)
--@@ -388,8 +388,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-+@@ -410,8 +410,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-  src_test_test_hs_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_hs_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 47c2dd49b4..ddf1a880ff 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6a2d0637d4e514be2ec574723a05065245cce51da78a21cec1dc831be5ccac62  tor-0.4.3.6.tar.gz
-+sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 050114ccac..fe9b52670b 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
+      strlcpy_in_bsd = False
+  
+diff --git a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+index 563b274d57..b8636958ee 100644
+--- a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
++++ b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+@@ -33,6 +33,7 @@ BUG: https://bugzilla.samba.org/show_bug.cgi?id=14164
+ 
+ Signed-off-by: Uri Simchoni <uri@samba.org>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for version 4.11.13]
+ ---
+  wscript_configure_embedded_heimdal | 11 +++++++++++
+  wscript_configure_system_heimdal   | 11 -----------
+@@ -59,7 +60,7 @@ diff --git a/wscript_configure_system_heimdal b/wscript_configure_system_heimdal
+ index 0ff6dad2f55..f77c177442f 100644
+ --- a/wscript_configure_system_heimdal
+ +++ b/wscript_configure_system_heimdal
+-@@ -36,14 +36,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
++@@ -37,14 +37,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
+      conf.define('USING_SYSTEM_%s' % name.upper(), 1)
+      return True
+  
+@@ -74,7 +75,7 @@ index 0ff6dad2f55..f77c177442f 100644
+  check_system_heimdal_lib("com_err", "com_right_r com_err", "com_err.h")
+  
+  if check_system_heimdal_lib("roken", "rk_socket_set_reuseaddr", "roken.h"):
+-@@ -88,7 +88,4 @@
++@@ -96,7 +96,4 @@
+  #if conf.CHECK_BUNDLED_SYSTEM('tommath', checkfunctions='mp_init', headers='tommath.h'):
+  #    conf.define('USING_SYSTEM_TOMMATH', 1)
+  
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 34ae6f84bc..4d47871fc5 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
+-sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.13.tar.asc
++sha256  e71ed29ae01c5ce7be8cee1f53e0530db86dd19b911accb08fae60224e686ba1  samba-4.11.13.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index b6fe1a827c..48ac48c180 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.3.6
-+TOR_VERSION = 0.4.4.5
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+-SAMBA4_VERSION = 4.11.10
++SAMBA4_VERSION = 4.11.13
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
 2.27.0
