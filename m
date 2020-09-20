@@ -1,42 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Sep 2020 12:50:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dbus: drop unrecognized option
-Message-ID: <20200920105004.1402686-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 13:22:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/fbterm: remove fontconfig fix
+In-Reply-To: <20200920112226.1331818-1-bernd.kuhls@t-online.de>
+References: <20200920112226.1331818-1-bernd.kuhls@t-online.de>
+Message-ID: <20200920112226.1331818-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---with-xml option has been dropped seven years ago in version 1.7.4 and
-https://github.com/freedesktop/dbus/commit/46602768c537bfa51af80ba2c67857f3a30c0e67
+The previous patch added a fix for fontconfig.pc.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dbus/dbus.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/fbterm/fbterm.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 70f2c6fef4..b58f1ddda3 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -28,7 +28,6 @@ DBUS_CONF_OPTS = \
- 	--disable-asserts \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
--	--with-xml=expat \
- 	--with-system-socket=/run/dbus/system_bus_socket \
- 	--with-system-pid-file=/run/messagebus.pid
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+index 712d4f97fa..9964827801 100644
+--- a/package/fbterm/fbterm.mk
++++ b/package/fbterm/fbterm.mk
+@@ -10,12 +10,6 @@ FBTERM_LICENSE = GPL-2.0+
+ FBTERM_LICENSE_FILES = COPYING
+ FBTERM_DEPENDENCIES = fontconfig liberation
  
-@@ -110,8 +109,7 @@ HOST_DBUS_CONF_OPTS = \
- 	--disable-xml-docs \
- 	--disable-doxygen-docs \
- 	--disable-systemd \
--	--without-x \
--	--with-xml=expat
-+	--without-x
- 
- # dbus for the host
- DBUS_HOST_INTROSPECT = $(HOST_DBUS_DIR)/introspect.xml
+-ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+-# fontconfig uses pthreads if available, but fbterm forgets to link
+-# with it breaking static builds
+-FBTERM_CONF_ENV += LIBS='-lpthread'
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GPM),y)
+ FBTERM_DEPENDENCIES += gpm
+ FBTERM_CONF_OPTS += --enable-gpm
 -- 
-2.28.0
+2.27.0
