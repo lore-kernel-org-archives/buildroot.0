@@ -1,85 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 13:22:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/fontconfig: add pthread as a
- dependency of a static lib
-Message-ID: <20200920112226.1331818-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 20 Sep 2020 13:49:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/graphicsmagick: remove
+ redundant BR2_USE_WCHAR condition
+In-Reply-To: <dbcd34e0-8480-0eb9-123f-d411a2807c5d@blach.pl>
+References: <20200918172135.85009-1-grzegorz@blach.pl>
+ <20200918172135.85009-2-grzegorz@blach.pl>
+ <20200919143332.1d21cc2e@windsurf.hq.k.grp>
+ <dbcd34e0-8480-0eb9-123f-d411a2807c5d@blach.pl>
+Message-ID: <20200920134950.767fa40d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/99f/99f9da23bb272fb109e03c85ef48dd7b350d0733/
-for the ffmpeg package.
+Hello,
 
-Please note that the ffmpeg build error was reproducible but with a
-different error message in ffbuild/config.log:
+On Sun, 20 Sep 2020 11:18:52 +0200
+Grzegorz Blach <grzegorz@blach.pl> wrote:
 
-  sysroot/usr/lib/libfontconfig.a(fccache.o): in function `lock_cache':
-  fccache.c:(.text+0xcd8): undefined reference to `pthread_mutex_init'
+> > In what sense is the BR2_USE_WCHAR dependency redundant ? Redundant
+> > with what ?  
+> 
+> I mean that graphicsmagick supports C++ whenever WCHAR is enabled or 
+> not.
 
-  arm-buildroot-linux-gnueabi/bin/ld: fccache.c:(.text+0xcf8):
-  undefined reference to `pthread_mutex_destroy'
+Are you sure about this ? graphicsmagick.mk is copy/pasted from
+imagemagick.mk, and in imagemagick.mk, this BR2_USE_WCHAR also exists,
+and was explicitly added by:
 
-  arm-buildroot-linux-gnueabi/bin/ld: fccache.c:(.text+0xd00):
-  undefined reference to `pthread_mutex_lock'
+commit b339bb5641c59ad2e19aeb95c1387584c7c2aeab
+Author: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date:   Mon Aug 12 09:06:58 2013 -0300
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...read-as-a-dependency-of-a-static-lib.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
+    imagemagick: fix magick++-config fixup error
+    
+    Magic++ bindings are built only with C++ and WCHAR toolchains.
+    Add a WCHAR toolchain check for the magick++ config fixup.
+    Looking into the future the fixup shouldn't bail on a missing file so we
+    can avoid awkward kludges for packages that have many options and config
+    files.
+    Fixes:
+    http://autobuild.buildroot.net/results/33a/33ac4b17866a64379b7bab3c0549f6e075c98dde/
+    
+    Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch b/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
-new file mode 100644
-index 0000000000..3112676649
---- /dev/null
-+++ b/package/fontconfig/0002-add-pthread-as-a-dependency-of-a-static-lib.patch
-@@ -0,0 +1,44 @@
-+From 40ec04a8bf36dd8d0aa3da98b167792ce2dcd114 Mon Sep 17 00:00:00 2001
-+From: Silvan Scherrer <silvan.scherrer@aroa.ch>
-+Date: Sun, 20 Sep 2020 12:52:08 +0200
-+Subject: [PATCH 1/1] add pthread as a dependency of a static lib
-+
-+Downloaded from https://trac.netlabs.org/ports/changeset/2220
-+
-+Patch sent upstream:
-+https://gitlab.freedesktop.org/fontconfig/fontconfig/-/merge_requests/121
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac     | 2 ++
-+ fontconfig.pc.in | 4 ++--
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f3189a7..594d6fd 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -690,6 +690,8 @@ fi
-+ have_pthread=false
-+ if test "$os_win32" = no; then
-+ 	AX_PTHREAD([have_pthread=true])
-++	AC_SUBST(PTHREAD_CFLAGS)
-++	AC_SUBST(PTHREAD_LIBS)
-+ fi
-+ if $have_pthread; then
-+ 	LIBS="$PTHREAD_LIBS $LIBS"
-+diff --git a/fontconfig.pc.in b/fontconfig.pc.in
-+index 61b35fb..f823bac 100644
-+--- a/fontconfig.pc.in
-++++ b/fontconfig.pc.in
-+@@ -14,5 +14,5 @@ Version: @VERSION@
-+ Requires: @PKGCONFIG_REQUIRES@
-+ Requires.private: @PKGCONFIG_REQUIRES_PRIVATELY@
-+ Libs: -L${libdir} -lfontconfig
-+-Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@
-+-Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@
-++Libs.private: @ICONV_LIBS@ @PKG_EXPAT_LIBS@ @PTHREAD_LIBS@
-++Cflags: -I${includedir} @ICONV_CFLAGS@ @PKG_EXPAT_CFLAGS@ @PTHREAD_CFLAGS@
-+-- 
-+2.27.0
-+
+Of course, perhaps graphicsmagick is different. Have you done a test
+build with C++ support enabled, but wchar disabled, and confirmed that
+Magick++-config was there ?
+
+Thanks!
+
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
