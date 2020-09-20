@@ -1,43 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:51:20 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump version to
- baec4d2
-Message-ID: <20200920134223.3A2298875D@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:51:13 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi*: bump kernel version
+ to 9a1dd17 (5.4.61)
+Message-ID: <20200920134223.2D1D58875D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9520640346aad6ac158b683a4481e0cd7578a484
+commit: https://git.buildroot.net/buildroot/commit/?id=42f8de940255c043c36db114e32ac3e9642f9779
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Now based on 5.4.61 (from 5.4.51)
+
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/raspberrypi0_defconfig       | 2 +-
+ configs/raspberrypi0w_defconfig      | 2 +-
+ configs/raspberrypi2_defconfig       | 2 +-
+ configs/raspberrypi3_64_defconfig    | 2 +-
+ configs/raspberrypi3_defconfig       | 2 +-
+ configs/raspberrypi3_qt5we_defconfig | 2 +-
+ configs/raspberrypi4_64_defconfig    | 2 +-
+ configs/raspberrypi4_defconfig       | 2 +-
+ configs/raspberrypi_defconfig        | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index 32f2076d6e..1f1485f246 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bad3eedb256631bdce1e7d3a0ac59fdd38923a68579089a6b64029c5ff7d68f4  rpi-firmware-542aceb30364db3ce87d532ea90451f46bbb84e9.tar.gz
-+sha256  dcea78fcd14e0a0cb9f3b7eba42baf17566e141c3188f348017271d64edacaa3  rpi-firmware-baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55.tar.gz
- sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 8aa855d0ef..91368fa809 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index e4a704f2f6..d61eb4f1f1 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
--RPI_FIRMWARE_VERSION = 542aceb30364db3ce87d532ea90451f46bbb84e9
-+RPI_FIRMWARE_VERSION = baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B from the kernel sources: the zero is the same
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index d5670b19bd..bdee6575a0 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -9,7 +9,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 375cb86763..af88da27ae 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 9f9a145908..1f3ca14d60 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 1a1e7b3dd8..c2d08c81ff 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index cbcbf64460..06a9a87ce1 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -12,7 +12,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index f2b08f96a8..0e17d3de4d 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index 879ed0c1cc..230d0a982a 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -11,7 +11,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+ 
+ # Build the DTB from the kernel sources
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 558c04ca6d..ae7eb10321 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,1c64f4bc22811d2d371b271daa3fb27895a8abdd)/linux-1c64f4bc22811d2d371b271daa3fb27895a8abdd.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,9a1dd17906692f1ab76e45b9f59976b063b37034)/linux-9a1dd17906692f1ab76e45b9f59976b063b37034.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
