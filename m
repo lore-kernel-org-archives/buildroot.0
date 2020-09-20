@@ -1,47 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 14:35:46 +0200
-Subject: [Buildroot] [git commit] package/python-aioconsole: bump to version
- 0.3.0
-Message-ID: <20200920122633.1D733814C2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 14:35:52 +0200
+Subject: [Buildroot] [git commit] package/python-brotli: bump to version
+ 1.0.9
+Message-ID: <20200920122633.215A18AB9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d024ca2d3a88de0c6b942628979be9dc2af5193
+commit: https://git.buildroot.net/buildroot/commit/?id=c42f8e6a11f0b430eb1ae9e9fa364e6db5901305
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aioconsole/python-aioconsole.hash | 4 ++--
- package/python-aioconsole/python-aioconsole.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-brotli/python-brotli.hash | 6 +++---
+ package/python-brotli/python-brotli.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aioconsole/python-aioconsole.hash b/package/python-aioconsole/python-aioconsole.hash
-index 3aaeaa2eaf..0aa9a7882c 100644
---- a/package/python-aioconsole/python-aioconsole.hash
-+++ b/package/python-aioconsole/python-aioconsole.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/aioconsole/json
--md5  cf0a22b980bfd30e0c72160de8c66cbb  aioconsole-0.2.1.tar.gz
--sha256  f63d007c5c0fd5a30769af0a6b749307ea86001c4f217d3e5e9e248ccdfec1d0  aioconsole-0.2.1.tar.gz
-+md5  a8b0640a1e2a3869baf4efcbb1182fbe  aioconsole-0.3.0.tar.gz
-+sha256  b84724e6b93d1306a909974864df377236cf4bab8e0594096fed7936207205c5  aioconsole-0.3.0.tar.gz
-diff --git a/package/python-aioconsole/python-aioconsole.mk b/package/python-aioconsole/python-aioconsole.mk
-index ecebc8af00..5c26d863c0 100644
---- a/package/python-aioconsole/python-aioconsole.mk
-+++ b/package/python-aioconsole/python-aioconsole.mk
+diff --git a/package/python-brotli/python-brotli.hash b/package/python-brotli/python-brotli.hash
+index eaf59ae71e..de4964dd25 100644
+--- a/package/python-brotli/python-brotli.hash
++++ b/package/python-brotli/python-brotli.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/brotli/json
+-md5	3444b534e86f65f9f229fd123965be87  Brotli-1.0.7.zip
+-sha256	0538dc1744fd17c314d2adc409ea7d1b779783b89fd95bcfb0c2acc93a6ea5a7  Brotli-1.0.7.zip
++md5  08f1f098697c64aa4596468b556d0c94  Brotli-1.0.9.zip
++sha256  4d1b810aa0ed773f81dceda2cc7b403d01057458730e309856356d4ef4188438  Brotli-1.0.9.zip
+ # Locally computed sha256 checksums
+-sha256	3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
++sha256  3d180008e36922a4e8daec11c34c7af264fed5962d07924aea928c38e8663c94  LICENSE
+diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
+index 2ec549ed0c..ff78e6ab2c 100644
+--- a/package/python-brotli/python-brotli.mk
++++ b/package/python-brotli/python-brotli.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOCONSOLE_VERSION = 0.2.1
-+PYTHON_AIOCONSOLE_VERSION = 0.3.0
- PYTHON_AIOCONSOLE_SOURCE = aioconsole-$(PYTHON_AIOCONSOLE_VERSION).tar.gz
--PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/06/24/d88c186e84457b6a7a2a01c21ccf1e9a1125b5d33157acb28388bfc0a73c
-+PYTHON_AIOCONSOLE_SITE = https://files.pythonhosted.org/packages/d1/bc/2e52bd41293e63d95fcb6c5de406d43ccbb91255a48feaa22c1b8e2e4a40
- PYTHON_AIOCONSOLE_SETUP_TYPE = setuptools
- PYTHON_AIOCONSOLE_LICENSE = GPL-3.0
- 
+-PYTHON_BROTLI_VERSION = 1.0.7
++PYTHON_BROTLI_VERSION = 1.0.9
+ PYTHON_BROTLI_SOURCE = Brotli-$(PYTHON_BROTLI_VERSION).zip
+-PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cd/9c/7955895f5672ecc85270244582c6b53ff95bb4c24bf77bd9271d42351635
++PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/2a/18/70c32fe9357f3eea18598b23aa9ed29b1711c3001835f7cf99a9818985d0
+ PYTHON_BROTLI_SETUP_TYPE = setuptools
+ PYTHON_BROTLI_LICENSE = MIT
+ PYTHON_BROTLI_LICENSE_FILES = LICENSE
