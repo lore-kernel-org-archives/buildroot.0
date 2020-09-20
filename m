@@ -1,60 +1,92 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 09:09:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.8
-Message-ID: <20200920070957.321308-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 09:13:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.4.10
+Message-ID: <20200920071321.458641-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.10
+
+Rebased patches 0002 & 0003.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/php/0002-iconv-tweak-iconv-detection.patch     | 4 +++-
+ package/php/0003-configure-disable-the-phar-tool.patch | 4 +++-
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 6bc23b50e1..663667ed4d 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index 1aa8400136..a12041603d 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for 5.6.10]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  build/php.m4        |  2 +-
+  ext/iconv/config.m4 | 22 ----------------------
+@@ -24,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1971,7 +1971,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
+  
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index 7cc3637973..aface92d77 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -12,6 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for autoreconf/configure.in]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [Aduskett: update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  configure.ac | 9 ++-------
+  1 file changed, 2 insertions(+), 7 deletions(-)
+@@ -20,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1430,13 +1430,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
++@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d648d90c04..c383c471eb 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
++sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.1.7
-+MESA3D_HEADERS_VERSION = 20.1.8
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d0fb2003ee..9d640295df 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000597.html
--sha256  4de9dd0cb2ca367606cada421db62fbf6d276dfd533e522bfab6001ff9aba288  mesa-20.1.7.tar.xz
--sha512  5ff614c3f7568db7673cd2398615e5398c7f50093abdabd0730e07fe9c358310793fea3f130058110c9a2aa284c6efd207e1bdca3d1a1ba46fb18d76e34f361a  mesa-20.1.7.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000599.html
-+sha256 df21351494f7caaec5a3ccc16f14f15512e98d2ecde178bba1d134edc899b961  mesa-20.1.8.tar.xz
-+sha512 519b0e2837982d097c362d974a90c94efd1cdf14505fc43eaa740a23c042bc0c3f04d0edaf6b371966d82667cade6d0c68c92528e1be6c12884b38c67fd064c1  mesa-20.1.8.tar.xz
- 
- # License
- sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index a5dac045d4..55c0ebd86a 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d9516ae127..3047bfe94d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.1.7
-+MESA3D_VERSION = 20.1.8
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-PHP_VERSION = 7.4.9
++PHP_VERSION = 7.4.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.27.0
