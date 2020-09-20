@@ -1,37 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 19:01:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: disable asm on i386
-References: <20200920080930.864480-1-bernd.kuhls@t-online.de>
- <20200920153118.6d58e6ba@windsurf>
-Message-ID: <cfek3hx9oo.ln2@ID-313208.user.individual.net>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 20 Sep 2020 11:18:45 -0600
+Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 2.1.5
+Message-ID: <20200920171845.433825-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 20 Sep 2020 15:31:18 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> However dav1d was bumped to 0.7.1 in June 2020, so it cannot be that.
-> But the nasm compiler was bumped on August 25, 2020, in commit
-> 090a748aae1b9495362000ca6bf953ef8bc8154e. So it rather seems like a
-> change in nasm broke i386 assembly in dav1d.
-
-Hi Thomas,
-
-I tested
-https://code.videolan.org/videolan/dav1d/-/commit/
-464ca6c2f37b93180cc27ea41889ffaf1eab388e
-
-and various other patches committed to dav1d after the last version bump 
-and all of them did not fix the autobuilder error.
-
-But pointing to nasm now did the trick nonetheless:
-https://nasm.us/doc/nasmdocc.html
-"Correct %ifid $ and %ifid $$ being treated as true."
-
-Bumping nasm fixes the dav1d build error, sent patch:
-http://patchwork.ozlabs.org/project/buildroot/patch/
-20200920165758.2032916-1-bernd.kuhls at t-online.de/
-
-Regards, Bernd
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index b83f21abd0..ecf9d5e159 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  e2547078bd73d62abda343515f1368ee  gensio-2.1.4.tar.gz
+-sha1  f8c0e787fad22a71b10f1d8eefea83617f489bdb  gensio-2.1.4.tar.gz
++md5  bef0312c68ef541f85893c6bc85930ed  gensio-2.1.5.tar.gz
++sha1  f23b4017aba5a6f9066f734ffb600fa36b1399c0  gensio-2.1.5.tar.gz
+ # Locally computed:
+-sha256  1f5a29aabfb35886893cfda5cd78192db67e96de796dbf9758dbecd4077a3fd8  gensio-2.1.4.tar.gz
++sha256  e497043a0415177652bfb2b1d045e4605cd5726bbcfe790ef6f555ac25825c12  gensio-2.1.5.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 89b7be9cdc..1170ec00f4 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENSIO_VERSION = 2.1.4
++GENSIO_VERSION = 2.1.5
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
+-- 
+2.25.1
