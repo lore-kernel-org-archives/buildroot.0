@@ -1,15 +1,17 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 20 Sep 2020 10:13:52 +0200
-Subject: [Buildroot] [PATCH 1/3] package/nginx: add stream realip option
-Message-ID: <20200920081354.663762-1-fontaine.fabrice@gmail.com>
+Date: Sun, 20 Sep 2020 10:13:53 +0200
+Subject: [Buildroot] [PATCH 2/3] package/nginx: add stream ssl preread module
+In-Reply-To: <20200920081354.663762-1-fontaine.fabrice@gmail.com>
+References: <20200920081354.663762-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200920081354.663762-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-stream realip is available since version 1.11.4 and
-https://github.com/nginx/nginx/commit/fe2774a9d689fa1bf201dd0e89449e3d9e4ad926
+stream ssl preread is available since version 1.11.5 and
+https://github.com/nginx/nginx/commit/5a7afb1b0d3f74d0ff96d4d9c519c26deb0fde39
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
@@ -18,35 +20,35 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  2 files changed, 9 insertions(+)
 
 diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-index 6dba7e0ead..507b4dcfb4 100644
+index 507b4dcfb4..30947e50fe 100644
 --- a/package/nginx/Config.in
 +++ b/package/nginx/Config.in
-@@ -328,6 +328,11 @@ config BR2_PACKAGE_NGINX_STREAM
+@@ -345,6 +345,11 @@ config BR2_PACKAGE_NGINX_STREAM_GEOIP_MODULE
+ 	help
+ 	  Enable ngx_stream_geoip_module
  
- if BR2_PACKAGE_NGINX_STREAM
- 
-+config BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE
-+	bool "ngx_stream_realip_module"
++config BR2_PACKAGE_NGINX_STREAM_SSL_PREREAD_MODULE
++	bool "ngx_stream_ssl_preread_module"
 +	help
-+	  Enable ngx_stream_realip_module
++	  Enable ngx_stream_ssl_preread_module
 +
- config BR2_PACKAGE_NGINX_STREAM_SSL_MODULE
- 	bool "ngx_stream_ssl_module"
- 	select BR2_PACKAGE_OPENSSL
+ config BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE
+ 	bool "ngx_stream_limit_conn_module"
+ 	default y
 diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index ead2ce92f5..2fcdf91b0c 100644
+index 2fcdf91b0c..7d9214baff 100644
 --- a/package/nginx/nginx.mk
 +++ b/package/nginx/nginx.mk
-@@ -224,6 +224,10 @@ endif # BR2_PACKAGE_NGINX_MAIL
- ifeq ($(BR2_PACKAGE_NGINX_STREAM),y)
- NGINX_CONF_OPTS += --with-stream
+@@ -238,6 +238,10 @@ NGINX_DEPENDENCIES += geoip
+ NGINX_CONF_OPTS += --with-stream_geoip_module
+ endif
  
-+ifeq ($(BR2_PACKAGE_NGINX_STREAM_REALIP_MODULE),y)
-+NGINX_CONF_OPTS += --with-stream_realip_module
++ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_PREREAD_MODULE),y)
++NGINX_CONF_OPTS += --with-stream_ssl_preread_module
 +endif
 +
- ifeq ($(BR2_PACKAGE_NGINX_STREAM_SSL_MODULE),y)
- NGINX_DEPENDENCIES += openssl
- NGINX_CONF_OPTS += --with-stream_ssl_module
+ NGINX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_LIMIT_CONN_MODULE),,--without-stream_limit_conn_module) \
+ 	$(if $(BR2_PACKAGE_NGINX_STREAM_ACCESS_MODULE),,--without-stream_access_module) \
 -- 
 2.28.0
