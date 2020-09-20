@@ -1,44 +1,37 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Sep 2020 18:57:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nasm: bump version to 2.15.05
-Message-ID: <20200920165758.2032916-1-bernd.kuhls@t-online.de>
+Date: Sun, 20 Sep 2020 19:01:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: disable asm on i386
+References: <20200920080930.864480-1-bernd.kuhls@t-online.de>
+ <20200920153118.6d58e6ba@windsurf>
+Message-ID: <cfek3hx9oo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/19e/19ee2bdd4c8d14cc1554092594b3721117ca1005/
-http://autobuild.buildroot.net/results/72e/72e4089dafacd245e781214b72baeb81a1e3d3d7/
+Am Sun, 20 Sep 2020 15:31:18 +0200 schrieb Thomas Petazzoni:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/nasm/nasm.hash | 2 +-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> However dav1d was bumped to 0.7.1 in June 2020, so it cannot be that.
+> But the nasm compiler was bumped on August 25, 2020, in commit
+> 090a748aae1b9495362000ca6bf953ef8bc8154e. So it rather seems like a
+> change in nasm broke i386 assembly in dav1d.
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index 7d04add9dc..86c67d6ba5 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b0891d23aa083546e7845dfaa0a9109a03f1f57ad0740e7acd07f80df57876d8  nasm-2.15.04.tar.xz
-+sha256  3caf6729c1073bf96629b57cee31eeb54f4f8129b01902c73428836550b30a3f  nasm-2.15.05.tar.xz
- sha256  1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index 63ff52a4af..b44b97e62b 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NASM_VERSION = 2.15.04
-+NASM_VERSION = 2.15.05
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
--- 
-2.27.0
+Hi Thomas,
+
+I tested
+https://code.videolan.org/videolan/dav1d/-/commit/
+464ca6c2f37b93180cc27ea41889ffaf1eab388e
+
+and various other patches committed to dav1d after the last version bump 
+and all of them did not fix the autobuilder error.
+
+But pointing to nasm now did the trick nonetheless:
+https://nasm.us/doc/nasmdocc.html
+"Correct %ifid $ and %ifid $$ being treated as true."
+
+Bumping nasm fixes the dav1d build error, sent patch:
+http://patchwork.ozlabs.org/project/buildroot/patch/
+20200920165758.2032916-1-bernd.kuhls at t-online.de/
+
+Regards, Bernd
