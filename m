@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 15:01:44 +0200
-Subject: [Buildroot] [git commit] package/kodi-visualisation-goom: bump
- version to 2.2.3-Leia
-Message-ID: <20200920125535.606D1826C2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 15:01:41 +0200
+Subject: [Buildroot] [git commit] package/kodi-screensaver-cpblobs: bump
+ version to 3.0.5-Leia
+Message-ID: <20200920125535.38F9B826C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3bb09a61603044b7681618317ed26db65475441
+commit: https://git.buildroot.net/buildroot/commit/?id=d3986a63f3e12d5748220af8f620de87d0a6dc2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk   | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index c7c45ab64d..c9fa7dea9f 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index 12e52a6747..4ff614a995 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  14b948e7e3b6e4b9c5d7a8438fe076480483d2a515047401a1769e82858ef245  kodi-visualisation-goom-2.2.2-Leia.tar.gz
-+sha256  fdd656721f6d1b1962fd0a1e240eafb4710237ba70809dd0391cd10cacf4417c  kodi-visualisation-goom-2.2.3-Leia.tar.gz
- sha256  a6b36f495079206146ae0b11624a8db49a538f421ffe1341f8651c9e6b06f0b0  debian/copyright
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 9883ef8c38..d83f857ae1 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+-sha256  8234240670c8cd0feb61536e08058a1ec2122dc638dcc4bf328fad8d70b3d4c6  kodi-screensaver-cpblobs-3.0.4-Leia.tar.gz
++sha256  afab934a2c93f73334943775f45f5a1d065e74714528bc700459d110e88e43a4  kodi-screensaver-cpblobs-3.0.5-Leia.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index f64fe3e55d..01f6bdf3d3 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_GOOM_VERSION = 2.2.2-Leia
-+KODI_VISUALISATION_GOOM_VERSION = 2.2.3-Leia
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.4-Leia
++KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.5-Leia
+ KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
+ KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
+ KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
