@@ -1,67 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 Sep 2020 16:08:09 +0200
-Subject: [Buildroot] [git commit] package/iwd: fix build with uclibc
-Message-ID: <20200920140002.0A92A875B2@busybox.osuosl.org>
+Date: Sun, 20 Sep 2020 16:09:07 +0200
+Subject: [Buildroot] [git commit] package/gst1-interpipe: bump version to
+ 94dea52 (1.1.2)
+Message-ID: <20200920140002.19B2088094@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3a99230203597ab89b776c6e371f17b0d68e4ad
+commit: https://git.buildroot.net/buildroot/commit/?id=37c03dc3696eafdef41fe71eb9068e260baf8949
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch is needed to fix a build failure with iwd 1.9.0 and uclibc
-
-Fixes:
- - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../iwd/0001-src-ap.c-fix-build-with-uclibc.patch  | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 4 ++--
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-new file mode 100644
-index 0000000000..97f8c5a8e7
---- /dev/null
-+++ b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-@@ -0,0 +1,36 @@
-+From 377df79e83e2127a087e1aa5ba6173e195e50933 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 10 Sep 2020 07:47:14 +0200
-+Subject: [PATCH] src/ap.c: fix build with uclibc
-+
-+explicit_bzero is used in src/ap.c since commit
-+d55e00b31d7bccdbb2ea1cdeb0a749df77a51e47 but src/missing.h is not
-+included, as a result build with uclibc fails on:
-+
-+/srv/storage/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/ap.o: in function `ap_probe_req_cb':
-+ap.c:(.text+0x23d8): undefined reference to `explicit_bzero'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream: https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=0a6de7932a61ec82aca4f78f71dab7247c897860]
-+---
-+ src/ap.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/ap.c b/src/ap.c
-+index c972cfcb..ac705c31 100644
-+--- a/src/ap.c
-++++ b/src/ap.c
-+@@ -31,6 +31,7 @@
-+ 
-+ #include "linux/nl80211.h"
-+ 
-++#include "src/missing.h"
-+ #include "src/iwd.h"
-+ #include "src/module.h"
-+ #include "src/scan.h"
-+-- 
-+2.28.0
-+
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index 0ce6ad460d..4764611487 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256 6dc2c9d5ff4c3777d40712199a0cafa6bc0058327bca5a20e31d743a46e1ad21 gst1-interpipe-9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1.tar.gz
++sha256  4b0d8c5fabe1705ba92ac8409d7d138429df5874ba196101cdd1871936719b1a  gst1-interpipe-94dea528dc9e2d0df02fdf2114deecfef6a23740.tar.gz
+ 
+ # Hashes for license files:
+-sha256 16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5 COPYING
++sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index 87e5f2e5d2..92e2bb38fc 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_INTERPIPE_VERSION = 9af5b40d106f35ce75f8baa5efc8c59fc5f7eda1
++GST1_INTERPIPE_VERSION = 94dea528dc9e2d0df02fdf2114deecfef6a23740
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
