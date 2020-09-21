@@ -1,43 +1,46 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 21 Sep 2020 10:28:34 +0200
-Subject: [Buildroot] [PATCH] package/live555: bump to version 2020.08.19
-In-Reply-To: <20200919145215.20573071@windsurf.hq.k.grp>
-References: <20200917214317.23734-1-buildroot@heine.tech>
- <20200919145215.20573071@windsurf.hq.k.grp>
-Message-ID: <aec4640d-acf2-f36d-db7c-f08b1edbb4c0@heine.tech>
+Date: Mon, 21 Sep 2020 10:32:57 +0200
+Subject: [Buildroot] [PATCH v2] package/live555: bump to version 2020.08.19
+Message-ID: <20200921083257.3130-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI,
+According to changelog this version fixes memory leaks and buffer overflows.
+- http://live555.com/liveMedia/public/changelog.txt
 
-On 19.09.2020 14:52, Thomas Petazzoni wrote:
-> Hello Michael,
->
-> +Fabrice in Cc.
-> -by: Michael Nosthoff <buildroot@heine.tech>
-> The static linking fix seems unrelated to the version bump, and this is
-> the sort of fix we might want to backport.
->
-> However, Fabrice already took a look at that static linking issue and
-> has submitted a while ago some patches:
->
->   https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-1-fontaine.fabrice at gmail.com/
->   https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-2-fontaine.fabrice at gmail.com/
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Oops, I wasn't aware of this patch. It is nicer than mine with finding
-the dependencies :)
-I don't have the original message so I can't reply to it directly. But I
-compile tested it with
-
-armv7-eabihf glibc bleeding-edge 2020.02-2
-armv7m uclibc bleeding-edge 2018.11-1
-
-and it runs through fine. So from my side that one is good to go.
-
-I'll resend just the version bump.
-
-Regards,
-Michael
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 52ca068288..5e65cacd7b 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,5 +1,5 @@
+ # From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
+-md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
++md5  4645d2a0c865505c85b48af5317bcb4a  live.2020.08.19.tar.gz
+ # Locally generated
+-sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
++sha256  af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537  live.2020.08.19.tar.gz
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index e7be6024c9..4bbe35d6ea 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2020.06.25
++LIVE555_VERSION = 2020.08.19
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ # There is a COPYING file with the GPL-3.0 license text, but none of
+-- 
+2.25.1
