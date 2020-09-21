@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:37:22 +0200
-Subject: [Buildroot] [git commit] package/enchant: bump to version 2.2.11
-Message-ID: <20200921202821.B5CFF7FF2B@busybox.osuosl.org>
+Date: Mon, 21 Sep 2020 22:36:01 +0200
+Subject: [Buildroot] [git commit] package/libsecret: bump to version 0.20.3
+Message-ID: <20200921202821.96D057FB32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2657782db50a672e8c1c4d20d2edfcf2a020d659
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4c018eb8bd753e3474202de38f360f631c5149
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/enchant/enchant.hash | 2 +-
- package/enchant/enchant.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsecret/libsecret.hash | 4 ++--
+ package/libsecret/libsecret.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
-index 5485444519..84d738ffa6 100644
---- a/package/enchant/enchant.hash
-+++ b/package/enchant/enchant.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  c7b5e2853f0dd0b1aafea2f9e071941affeec3a76df8e3f6d67a718c89293555  enchant-2.2.8.tar.gz
-+sha256  a29c5777c4e45fcac2595c15c49d6d2aa434fa5e7c993dff3f9f367b65fe472a  enchant-2.2.11.tar.gz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING.LIB
-diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
-index 4465b38885..c342600bd8 100644
---- a/package/enchant/enchant.mk
-+++ b/package/enchant/enchant.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index 3a256fd700..a53cddefa5 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.1.sha256sum
+-sha256  57f73e94ec6263a17a077fb809cf8cf424637a897a7f15b4eec42ce4aef52447  libsecret-0.20.1.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.3.sha256sum
++sha256  4fcb3c56f8ac4ab9c75b66901fb0104ec7f22aa9a012315a14c0d6dffa5290e4  libsecret-0.20.3.tar.xz
+ 
+ # Hash for license file:
+ sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index f87df47097..7526c49c36 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ENCHANT_VERSION = 2.2.8
-+ENCHANT_VERSION = 2.2.11
- ENCHANT_SITE = \
- 	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
- ENCHANT_INSTALL_STAGING = YES
+ LIBSECRET_VERSION_MAJOR = 0.20
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).1
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).3
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
