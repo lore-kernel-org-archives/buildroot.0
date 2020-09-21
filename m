@@ -1,50 +1,56 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Mon, 21 Sep 2020 12:14:45 +0200
-Subject: [Buildroot] [PATCH v4 0/2] Improving CVE reporting
-In-Reply-To: <20200919141639.17a1a41a@windsurf.hq.k.grp>
-References: <20200918102225.76756-1-gregory.clement@bootlin.com>
- <20200919141639.17a1a41a@windsurf.hq.k.grp>
-Message-ID: <87sgbbigh6.fsf@BL-laptop>
+Date: Mon, 21 Sep 2020 12:15:15 +0200
+Subject: [Buildroot] [PATCH v5 3/3] package/pkg-utils/cve.py: Manage case
+ when package version doesn't exist
+In-Reply-To: <20200921101515.132359-1-gregory.clement@bootlin.com>
+References: <20200921101515.132359-1-gregory.clement@bootlin.com>
+Message-ID: <20200921101515.132359-4-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Until now, when a package didn't report a version, then the CVE
+comparison was just skipped. It leads most of the time to declare the
+package not affected by the CVE.
 
-> Hello,
->
-> On Fri, 18 Sep 2020 12:22:23 +0200
-> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
->
->> Gregory CLEMENT (2):
->>   support/script/pkg-stats: Manage the CVEs that need to be check
->>   support/script/cve-checker: Manage the CVEs that need to be check
->
-> From your previous iteration, 3 patches were still pending, but you're
-> only resending 2 here.
->
-> What happened with
-> https://patchwork.ozlabs.org/project/buildroot/patch/20200724154356.2607639-9-gregory.clement at bootlin.com/
-> ?
+Instead of it, report the CVE_UNKNOWN status in order to be aware that
+the CVE related to this package has to be checked.
 
-I thought it was already applied I get it mixed up with another patch.
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+ support/scripts/cve.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-I am sending a v5 with the missing patch.
-
-Gregory
-
->
-> Thanks,
->
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 6396019e0e..3cc01248b2 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -198,6 +198,7 @@ class CVE:
+         if self.identifier in cve_ignore_list:
+             return self.CVE_DOESNT_AFFECT
+ 
++        unknown_pkg_version = False
+         pkg_version = distutils.version.LooseVersion(version)
+         if not hasattr(pkg_version, "version"):
+             print("Cannot parse package '%s' version '%s'" % (name, version))
+@@ -212,6 +213,7 @@ class CVE:
+                 print("No CVE affected version")
+                 continue
+             if not pkg_version:
++                unknown_pkg_version = True
+                 continue
+ 
+             if cpe['v_start']:
+@@ -241,4 +243,7 @@ class CVE:
+             # We're in the version range affected by this CVE
+             return self.CVE_AFFECTS
+ 
+-        return self.CVE_DOESNT_AFFECT
++        if unknown_pkg_version:
++            return self.CVE_UNKNOWN
++        else:
++            return self.CVE_DOESNT_AFFECT
 -- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.28.0
