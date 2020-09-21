@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:42:59 +0200
-Subject: [Buildroot] [PATCH 0/2] libnss version bump to 3.57
-In-Reply-To: <20200921074436.213451-1-giulio.benetti@benettiengineering.com>
-References: <20200921074436.213451-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20200921224259.78614aac@windsurf>
+Date: Mon, 21 Sep 2020 22:43:08 +0200
+Subject: [Buildroot] [PATCH] package/htop: bump to version 3.0.2
+In-Reply-To: <20200921104201.693400-1-francois.perrad@gadz.org>
+References: <20200921104201.693400-1-francois.perrad@gadz.org>
+Message-ID: <20200921224308.5391b66e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Sep 2020 09:44:34 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On Mon, 21 Sep 2020 12:42:01 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Giulio Benetti (2):
->   package/libnspr: bump version to 4.29
->   package/libnss: bump version to 3.57
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/htop/htop.hash | 2 +-
+>  package/htop/htop.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
