@@ -1,33 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:42:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/memtester: bump to version 4.5.0
-In-Reply-To: <20200920211924.1660523-1-fontaine.fabrice@gmail.com>
-References: <20200920211924.1660523-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200921224245.2897efd5@windsurf>
+Date: Mon, 21 Sep 2020 22:42:59 +0200
+Subject: [Buildroot] [PATCH 0/2] libnss version bump to 3.57
+In-Reply-To: <20200921074436.213451-1-giulio.benetti@benettiengineering.com>
+References: <20200921074436.213451-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20200921224259.78614aac@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 23:19:24 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 21 Sep 2020 09:44:34 +0200
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> Drop patches (already in version)
-> 
-> http://pyropus.ca/software/memtester/CHANGELOG
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/memtester/0001-makefile-fix.patch     | 23 -------
->  .../0002-fix-build-with-gcc-10.patch          | 65 -------------------
->  package/memtester/memtester.hash              |  2 +-
->  package/memtester/memtester.mk                |  2 +-
->  4 files changed, 2 insertions(+), 90 deletions(-)
->  delete mode 100644 package/memtester/0001-makefile-fix.patch
->  delete mode 100644 package/memtester/0002-fix-build-with-gcc-10.patch
+> Giulio Benetti (2):
+>   package/libnspr: bump version to 4.29
+>   package/libnss: bump version to 3.57
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
