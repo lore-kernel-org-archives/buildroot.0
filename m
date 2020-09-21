@@ -1,85 +1,50 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 21 Sep 2020 20:59:11 +1200
-Subject: [Buildroot] [PATCH 1/1] package/micropython: fix build with gcc
- 4.8
-In-Reply-To: <20200919100138.80853-1-fontaine.fabrice@gmail.com>
-References: <20200919100138.80853-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAFOYHZDP-cqwJGw2EQGHUe4B9b5P+sOT8rD9wDqqHGS=8ttGRQ@mail.gmail.com>
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Mon, 21 Sep 2020 12:14:45 +0200
+Subject: [Buildroot] [PATCH v4 0/2] Improving CVE reporting
+In-Reply-To: <20200919141639.17a1a41a@windsurf.hq.k.grp>
+References: <20200918102225.76756-1-gregory.clement@bootlin.com>
+ <20200919141639.17a1a41a@windsurf.hq.k.grp>
+Message-ID: <87sgbbigh6.fsf@BL-laptop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 19 Sep 2020, 10:01 PM Fabrice Fontaine, <fontaine.fabrice@gmail.com>
-wrote:
+Hello Thomas,
 
-> micropython uses -Wfloat-conversion since version 1.13 and
+> Hello,
 >
-> https://github.com/micropython/micropython/commit/30840ebc9925bb8ef025dbc2d5982b1bfeb75f1b
+> On Fri, 18 Sep 2020 12:22:23 +0200
+> Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 >
-> This will result in the following build failure with gcc 4.8:
-> arm-none-linux-gnueabi-gcc: error: unrecognized command line option
-> '-Wfloat-conversion'
+>> Gregory CLEMENT (2):
+>>   support/script/pkg-stats: Manage the CVEs that need to be check
+>>   support/script/cve-checker: Manage the CVEs that need to be check
 >
-> To avoid this build failure, set CWARN to an empty value moreover, while
-> at it, move some duplicated variables under MICROPYTHON_MAKE_OPTS
+> From your previous iteration, 3 patches were still pending, but you're
+> only resending 2 here.
 >
-> Fixes:
->  -
-> http://autobuild.buildroot.org/results/6fe5a5ab91a5d235147e74461bb165ec2cfdc967
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
+> What happened with
+> https://patchwork.ozlabs.org/project/buildroot/patch/20200724154356.2607639-9-gregory.clement at bootlin.com/
+> ?
 
-Looks good thanks.
+I thought it was already applied I get it mixed up with another patch.
 
-Reviewed-by: Chris Packham <judge.packham@gmail.com>
+I am sending a v5 with the missing patch.
 
----
->  package/micropython/micropython.mk | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+Gregory
+
 >
-> diff --git a/package/micropython/micropython.mk b/package/micropython/
-> micropython.mk
-> index 7c83b18b4e..a126b3eeae 100644
-> --- a/package/micropython/micropython.mk
-> +++ b/package/micropython/micropython.mk
-> @@ -23,22 +23,22 @@ endif
+> Thanks,
 >
->  # When building from a tarball we don't have some of the dependencies
-> that are in
->  # the git repository as submodules
-> -MICROPYTHON_MAKE_OPTS = MICROPY_PY_BTREE=0
-> -MICROPYTHON_MAKE_OPTS += MICROPY_PY_USSL=0
-> +MICROPYTHON_MAKE_OPTS += \
-> +       MICROPY_PY_BTREE=0 \
-> +       MICROPY_PY_USSL=0 \
-> +       CROSS_COMPILE=$(TARGET_CROSS) \
-> +       CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
-> +       CWARN=
->
->  define MICROPYTHON_BUILD_CMDS
->         $(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
->         $(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
-> -               $(MICROPYTHON_MAKE_OPTS) \
-> -               CROSS_COMPILE=$(TARGET_CROSS) \
-> -               CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS)
-> +               $(MICROPYTHON_MAKE_OPTS)
->  endef
->
->  define MICROPYTHON_INSTALL_TARGET_CMDS
->         $(MICROPYTHON_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
->                 $(MICROPYTHON_MAKE_OPTS) \
-> -               CROSS_COMPILE=$(TARGET_CROSS) \
-> -               CFLAGS_EXTRA=$(MICROPYTHON_CFLAGS) \
->                 DESTDIR=$(TARGET_DIR) \
->                 PREFIX=/usr \
->                 install
-> --
-> 2.28.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200921/e8a31a49/attachment.html>
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
