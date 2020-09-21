@@ -1,40 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 10:20:13 +0200
-Subject: [Buildroot] [PATCH v1 2/3] package/postgresql: needs locale
- command
-In-Reply-To: <20200920150659.7562-2-ps.report@gmx.net>
-References: <20200920150659.7562-1-ps.report@gmx.net>
- <20200920150659.7562-2-ps.report@gmx.net>
-Message-ID: <20200921102013.622616ed@windsurf>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Mon, 21 Sep 2020 10:28:34 +0200
+Subject: [Buildroot] [PATCH] package/live555: bump to version 2020.08.19
+In-Reply-To: <20200919145215.20573071@windsurf.hq.k.grp>
+References: <20200917214317.23734-1-buildroot@heine.tech>
+ <20200919145215.20573071@windsurf.hq.k.grp>
+Message-ID: <aec4640d-acf2-f36d-db7c-f08b1edbb4c0@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+HI,
 
-On Sun, 20 Sep 2020 17:06:58 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On 19.09.2020 14:52, Thomas Petazzoni wrote:
+> Hello Michael,
+>
+> +Fabrice in Cc.
+> -by: Michael Nosthoff <buildroot@heine.tech>
+> The static linking fix seems unrelated to the version bump, and this is
+> the sort of fix we might want to backport.
+>
+> However, Fabrice already took a look at that static linking issue and
+> has submitted a while ago some patches:
+>
+>   https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-1-fontaine.fabrice at gmail.com/
+>   https://patchwork.ozlabs.org/project/buildroot/patch/20200713155135.1214109-2-fontaine.fabrice at gmail.com/
 
-> Running (as e.g. /etc/init.d/S50postgresql does):
-> 
->   su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
-> 
-> gives the following warning:
-> 
->   performing post-bootstrap initialization ... sh: locale: not found
->   1970-01-01 01:13:43.498 UTC [246] WARNING:  no usable system locales were found
->   ok
+Oops, I wasn't aware of this patch. It is nicer than mine with finding
+the dependencies :)
+I don't have the original message so I can't reply to it directly. But I
+compile tested it with
 
-What is the situation with uClibc and musl toolchains ? Do they provide
-the "locale" command as well ?
+armv7-eabihf glibc bleeding-edge 2020.02-2
+armv7m uclibc bleeding-edge 2018.11-1
 
-What about external glibc toolchains ? Do we install/copy the locale
-tool to the target ?
+and it runs through fine. So from my side that one is good to go.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I'll resend just the version bump.
+
+Regards,
+Michael
