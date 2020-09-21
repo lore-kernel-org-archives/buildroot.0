@@ -1,38 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 23:11:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gqview: drop package
-In-Reply-To: <20200920142143.1415754-1-fontaine.fabrice@gmail.com>
-References: <20200920142143.1415754-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200921231151.24ab9a9d@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Sep 2020 23:22:24 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/postgresql: needs locale
+ command
+In-Reply-To: <20200921220400.1717794e@gmx.net>
+References: <20200920150659.7562-1-ps.report@gmx.net>
+ <20200920150659.7562-2-ps.report@gmx.net> <20200921102013.622616ed@windsurf>
+ <20200921220400.1717794e@gmx.net>
+Message-ID: <cb3d6427-c511-4b5d-56b0-6cd0a9fecb81@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 16:21:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+ Hi Peter,
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  Config.in.legacy                              |  7 +++++
->  package/Config.in                             |  1 -
->  package/gqview/0001-make.patch                | 11 --------
->  .../gqview/0002-fix-build-with-gcc-10.patch   | 27 -------------------
->  package/gqview/Config.in                      |  7 -----
->  package/gqview/gqview.hash                    |  3 ---
->  package/gqview/gqview.mk                      | 14 ----------
->  7 files changed, 7 insertions(+), 63 deletions(-)
->  delete mode 100644 package/gqview/0001-make.patch
->  delete mode 100644 package/gqview/0002-fix-build-with-gcc-10.patch
->  delete mode 100644 package/gqview/Config.in
->  delete mode 100644 package/gqview/gqview.hash
->  delete mode 100644 package/gqview/gqview.mk
+On 21/09/2020 22:04, Peter Seiderer wrote:
+> Hello Thomas,
+> 
+> On Mon, 21 Sep 2020 10:20:13 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> Hello,
+>>
+>> On Sun, 20 Sep 2020 17:06:58 +0200
+>> Peter Seiderer <ps.report@gmx.net> wrote:
+>>
+>>> Running (as e.g. /etc/init.d/S50postgresql does):
+>>>
+>>>   su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
+>>>
+>>> gives the following warning:
+>>>
+>>>   performing post-bootstrap initialization ... sh: locale: not found
+>>>   1970-01-01 01:13:43.498 UTC [246] WARNING:  no usable system locales were found
+>>>   ok
+>>
+>> What is the situation with uClibc and musl toolchains ? Do they provide
+>> the "locale" command as well ?
+> 
+> - uclibc without BR2_TOOLCHAIN_BUILDROOT_LOCALE: no warning, no locale command ([1])
+> - uclicc with BR2_TOOLCHAIN_BUILDROOT_LOCALE: no warning, locale command installed on target
+> - musl: 'locale: not found' warning, no locale commmand
+> 
+> But it is 'only' a warning... and easy to fix for gcc/buildroot toolchain...
+> 
+>>
+>> What about external glibc toolchains ? Do we install/copy the locale
+>> tool to the target ?
 
-Applied to master, thanks.
+ I checked - no, we don't install it, even if it is part of the toolchain sysroot.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Do not know...., but it is only a warning...
+
+ It is only a warning, but this patch is meant to get rid of that warning, no?
+If this series only fixes that warning for the internal toolchain, I don't think
+it's very useful.
+
+ But probably toolchain-external-pkg.mk should be fixed to install locale if
+available, just like we do for ldd. And maybe also ldconfig and getconf (the
+other two glibc utils we install) should be handled in the same way?
+
+
+> Regards,
+> Peter
+> 
+> [1] The usage of the locale command depends on 'HAVE_LOCALE_T' which depends
+> on the availability of the locale_t type (see postgresql-12.4/config/c-library.m4
+> and postgresql-12.4/src/backend/commands/collationcmds.c)
+
+ We could instead prepopulate the cache variable pgac_cv_type_locale_t with the
+presence of the locale binary in the target directory. Something like:
+
+POSTGRESQL_CONF_ENV += pgac_cv_type_locale_t=$(if $(wildcard
+$(TARGET_DIR)/usr/bin/locale),yes,no)
+
+ This is assuming that the presence of the locale executable corresponds with
+the availability of locales (which is apparently not the case for musl, but I
+think that that should be considered a bug in our musl integration). But at
+least for glibc and uClibc it seems to be correct.
+
+ This solution also removes the need for patch 1/3, which I thought was a bit
+iffy anyway.
+
+ Regards,
+ Arnout
