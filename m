@@ -1,31 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:40:21 +0200
-Subject: [Buildroot] [git commit] package/vsftpd: renumber patches
-Message-ID: <20200921203840.7269583DB9@busybox.osuosl.org>
+Date: Mon, 21 Sep 2020 22:38:51 +0200
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.57
+Message-ID: <20200921203840.2760982650@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd847f0986580c0ca4263ce6ae2cc57d26275820
+commit: https://git.buildroot.net/buildroot/commit/?id=03b48dd2203c1f9509a397a371507c9c1c9dcea7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 415765b5a8861f3b7e86e9786bf903a5a4d09e73 removed the second patch
-without renumbering the remaining ones
+Bump version to 3.57. Unfortunately local patch is still pending
+upstream and not applied due to Covid-19 latency:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This version requires NSPR 4.29.
+
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.57_release_notes
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../vsftpd/{0003-fix-CVE-2015-1419.patch => 0002-fix-CVE-2015-1419.patch} | 0
- ...n-SIGCHLD-handler.patch => 0003-Prevent-hang-in-SIGCHLD-handler.patch} | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vsftpd/0003-fix-CVE-2015-1419.patch b/package/vsftpd/0002-fix-CVE-2015-1419.patch
-similarity index 100%
-rename from package/vsftpd/0003-fix-CVE-2015-1419.patch
-rename to package/vsftpd/0002-fix-CVE-2015-1419.patch
-diff --git a/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
-similarity index 100%
-rename from package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
-rename to package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index b153b614e9..e3b584351e 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_56_RTM/src/SHA256SUMS
+-sha256  f875e0e8ed3b5ce92d675be4a55aa25a8c1199789a4a01f69b5f2327e2048e9c  nss-3.56.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_57_RTM/src/SHA256SUMS
++sha256  55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382  nss-3.57.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index d0b2d51772..21cd65cb8f 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.56
++LIBNSS_VERSION = 3.57
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
