@@ -1,79 +1,40 @@
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Mon, 21 Sep 2020 12:15:14 +0200
-Subject: [Buildroot] [PATCH v5 2/3] support/script/cve-checker: Manage the
- CVEs that need to be check
-In-Reply-To: <20200921101515.132359-1-gregory.clement@bootlin.com>
-References: <20200921101515.132359-1-gregory.clement@bootlin.com>
-Message-ID: <20200921101515.132359-3-gregory.clement@bootlin.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 21 Sep 2020 12:42:01 +0200
+Subject: [Buildroot] [PATCH] package/htop: bump to version 3.0.2
+Message-ID: <20200921104201.693400-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When looking for if a package is affected, the version comparison can
-fail. This means that we don't know if the version of the package used
-is affected or not and we need to check manually the version.
-
-This patch exposes this new information in json and html format.
-
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- support/scripts/cve-checker | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ package/htop/htop.hash | 2 +-
+ package/htop/htop.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-index 998ea5b8af..b32e036d76 100755
---- a/support/scripts/cve-checker
-+++ b/support/scripts/cve-checker
-@@ -30,6 +30,7 @@ class Package:
-         self.name = name
-         self.version = version
-         self.cves = list()
-+        self.cves_to_check = list()
-         self.ignored_cves = ignored_cves
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index 23d9c767b..fb8d0bff4 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e9dbf91e621216e7baab6b72ae2251b57e9d3c7b20682a826f627b618eb0fe1b  htop-3.0.1.tar.gz
++sha256  6471d9505daca5c64073fc37dbab4d012ca4fc6a7040a925dad4a7553e3349c4  htop-3.0.2.tar.gz
+ sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index f07282ace..457926afe 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
-@@ -40,8 +41,12 @@ def check_package_cves(nvd_path, packages):
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
-             pkg = packages.get(pkg_name, '')
--            if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves) == cve.CVE_AFFECTS:
--                pkg.cves.append(cve.identifier)
-+            if pkg:
-+                affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
-+                if (affected == cve.CVE_UNKNOWN):
-+                    pkg.cves_to_check.append(cve.identifier)
-+                elif affected == cve.CVE_AFFECTS:
-+                    pkg.cves.append(cve.identifier)
- 
- 
- html_header = """
-@@ -106,6 +111,17 @@ def dump_html_pkg(f, pkg):
-         f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-     f.write("  </td>\n")
- 
-+    # CVEs to check
-+    td_class = ["centered"]
-+    if len(pkg.cves_to_check) == 0:
-+        td_class.append("correct")
-+    else:
-+        td_class.append("wrong")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    for cve in pkg.cves_to_check:
-+        f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-+    f.write("  </td>\n")
-+
-     f.write(" </tr>\n")
- 
- 
-@@ -116,6 +132,7 @@ def dump_html_all_pkgs(f, packages):
- <td>Package</td>
- <td class=\"centered\">Version</td>
- <td class=\"centered\">CVEs</td>
-+<td class=\"centered\">CVEs to check</td>
- </tr>
- """)
-     for pkg in packages:
+-HTOP_VERSION = 3.0.1
++HTOP_VERSION = 3.0.2
+ HTOP_SITE = https://dl.bintray.com/htop/source
+ HTOP_DEPENDENCIES = ncurses
+ # Prevent htop build system from searching the host paths
 -- 
-2.28.0
+2.25.1
