@@ -1,43 +1,63 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 21 Sep 2020 18:19:18 +0200
-Subject: [Buildroot] [PATCH] package/libsecret: bump to version 0.20.3
-Message-ID: <20200921161918.722299-1-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Sep 2020 18:20:02 +0200
+Subject: [Buildroot] [PATCH] package/busybox/udhcpc.script: support RFC3442
+ static routes
+Message-ID: <20200921162002.22197-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/libsecret/libsecret.hash | 4 ++--
- package/libsecret/libsecret.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+RFC3442 specifies a DHCP extension to provide the client with a list of
+static routes to use.  This is already handled by udhcpc and exposed as the
+"staticroutes" environment variable, but currently not handled by the action
+script.
 
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-index 3a256fd70..a53cddefa 100644
---- a/package/libsecret/libsecret.hash
-+++ b/package/libsecret/libsecret.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.1.sha256sum
--sha256  57f73e94ec6263a17a077fb809cf8cf424637a897a7f15b4eec42ce4aef52447  libsecret-0.20.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.20/libsecret-0.20.3.sha256sum
-+sha256  4fcb3c56f8ac4ab9c75b66901fb0104ec7f22aa9a012315a14c0d6dffa5290e4  libsecret-0.20.3.tar.xz
+Extend the script to do so.  The RFC specifies that if this option is
+provided by the server then the normal "routes" (3) option should be
+ignored, so ensure that is done.
+
+As we may now have more than just a default route on the interface, extend
+the route cleanup logic to handle all routes for the interface (except for
+the implied local 0.0.0.0 one).
+
+Notice that this option is only sent by servers if explicitly requested by
+the client, E.G.  using the -O staticroutes option to udhcpc.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/udhcpc.script | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index 0196351cd5..ec4d9f6185 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -61,7 +61,23 @@ case "$1" in
+ 			wait_for_ipv6_default_route
+ 		fi
  
- # Hash for license file:
- sha256  a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b  COPYING
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index f87df4709..7526c49c3 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBSECRET_VERSION_MAJOR = 0.20
--LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).1
-+LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).3
- LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
+-		if [ -n "$router" ] ; then
++		# RFC3442: If the DHCP server returns both a Classless
++		# Static Routes option and a Router option, the DHCP
++		# client MUST ignore the Router option.
++		if [ -n "$staticroutes" ]; then
++			echo "deleting routers"
++			route -n | while read dest gw mask flags metric ref use iface; do
++				[ "$iface" != "$interface" -o "$gw" = "0.0.0.0" ] || \
++					route del -net "$dest" netmask "$mask" gw "$gw" dev "$interface"
++			done
++
++			# format: dest1/mask gw1 ... destn/mask gwn
++			set -- $staticroutes
++			while [ -n "$1" -a -n "$2" ]; do
++				route add -net "$1" gw "$2" dev "$interface"
++				shift 2
++			done
++		elif [ -n "$router" ] ; then
+ 			echo "deleting routers"
+ 			while route del default gw 0.0.0.0 dev $interface 2> /dev/null; do
+ 				:
 -- 
-2.25.1
+2.20.1
