@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:41:34 +0200
+Date: Mon, 21 Sep 2020 22:41:27 +0200
 Subject: [Buildroot] [PATCH 1/1] package/nasm: bump version to 2.15.05
 In-Reply-To: <20200920165758.2032916-1-bernd.kuhls@t-online.de>
 References: <20200920165758.2032916-1-bernd.kuhls@t-online.de>
-Message-ID: <20200921224134.606ec76f@windsurf>
+Message-ID: <20200921224127.30f42218@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
