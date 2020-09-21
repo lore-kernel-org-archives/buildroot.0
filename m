@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:38:47 +0200
-Subject: [Buildroot] [git commit] package/libnspr: bump version to 4.29
-Message-ID: <20200921203840.193E583DB9@busybox.osuosl.org>
+Date: Mon, 21 Sep 2020 22:39:21 +0200
+Subject: [Buildroot] [git commit] package/nasm: bump version to 2.15.05
+Message-ID: <20200921203840.51E2883DB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b931a688bce001782b21306ae9ade589c3637ed6
+commit: https://git.buildroot.net/buildroot/commit/?id=709fabe51f9dc9ecc5bbbbd0b5c1e199634a4a0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes:
+http://autobuild.buildroot.net/results/19e/19ee2bdd4c8d14cc1554092594b3721117ca1005/
+http://autobuild.buildroot.net/results/72e/72e4089dafacd245e781214b72baeb81a1e3d3d7/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nasm/nasm.hash | 2 +-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index ec3d783503..f8f8fa76b9 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.28/src/SHA256SUMS
--sha256  63defc8e19a80b6f98fcc7d5a89e84ea703c0b50aa6bc13bf7ad071adf433b56  nspr-4.28.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.29/src/SHA256SUMS
-+sha256  22286bdb8059d74632cc7c2865c139e63953ecfb33bf4362ab58827e86e92582  nspr-4.29.tar.gz
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index 7d04add9dc..86c67d6ba5 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index f43811d5d1..6f072cb6d2 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
+-sha256  b0891d23aa083546e7845dfaa0a9109a03f1f57ad0740e7acd07f80df57876d8  nasm-2.15.04.tar.xz
++sha256  3caf6729c1073bf96629b57cee31eeb54f4f8129b01902c73428836550b30a3f  nasm-2.15.05.tar.xz
+ sha256  1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 63ff52a4af..b44b97e62b 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSPR_VERSION = 4.28
-+LIBNSPR_VERSION = 4.29
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+-NASM_VERSION = 2.15.04
++NASM_VERSION = 2.15.05
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2-Clause
