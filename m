@@ -1,109 +1,45 @@
-From: =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= <alejandro.gonzalez.correo@gmail.com>
-Date: Sun, 20 Sep 2020 23:36:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qprint: new package
-Message-ID: <20200920213636.132481-1-alejandro.gonzalez.correo@gmail.com>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Mon, 21 Sep 2020 10:48:54 +0800
+Subject: [Buildroot] [PATCH v2 1/1] package/e2fsprogs: disable e2scrub
+In-Reply-To: <20200920211236.GK2422@scaer>
+References: <1600333425.32426.1.camel@aliyun.com>
+ <20200917213935.67fc4894@windsurf.hq.k.grp>
+ <1600394250.18560.2.camel@aliyun.com> <20200920211236.GK2422@scaer>
+Message-ID: <1600656534.31411.3.camel@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qprint is a small utility that handles encoding and decoding arbitrary
-binary data in the Quoted-Printable format, which was introduced along
-MIME.
+e2scrub_all depends on coreutils' readlink. If you use busybox's
+readlink, you will see the following error:
 
-As stated in the package description, although MUAs nowadays usually
-take care of doing this encoding themselves, there are some use cases
-where doing it manually is needed, and providing a command-line program
-to do it is amenable to shell scripts.
+	readlink: invalid option -- 'e'
 
-Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
+Embedded systems usually don't install e2scrub, which is useless without
+LVM.
+
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/qprint/Config.in   | 18 ++++++++++++++++++
- package/qprint/qprint.hash |  3 +++
- package/qprint/qprint.mk   | 13 +++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/qprint/Config.in
- create mode 100644 package/qprint/qprint.hash
- create mode 100644 package/qprint/qprint.mk
+?package/e2fsprogs/e2fsprogs.mk | 4 ++++
+?1 file changed, 4 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 057592b8e5..e6f2695e86 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -119,6 +119,7 @@ F:	package/bird/
- F:	package/glorytun/
- 
- N:	Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-+F:	package/qprint/
- F:	package/watchdog/
- 
- N:	Aleksander Morgado <aleksander@aleksander.es>
-diff --git a/package/Config.in b/package/Config.in
-index 0282a2069f..0bea80356c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2351,6 +2351,7 @@ comment "Utilities"
- 	source "package/logsurfer/Config.in"
- 	source "package/pdmenu/Config.in"
- 	source "package/pinentry/Config.in"
-+	source "package/qprint/Config.in"
- 	source "package/ranger/Config.in"
- 	source "package/rtty/Config.in"
- 	source "package/screen/Config.in"
-diff --git a/package/qprint/Config.in b/package/qprint/Config.in
-new file mode 100644
-index 0000000000..edfb92a5f3
---- /dev/null
-+++ b/package/qprint/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QPRINT
-+	bool "qprint"
-+	help
-+	  qprint is a program that encodes and decodes binary data in
-+	  the Quoted-Printable encoding, defined as a part of the MIME
-+	  specification in RFC 1521. This encoding allows for efficient
-+	  transfer of mostly ASCII data over transports that are only
-+	  7-bit clean, like SMTP without 8BITMIME or BINARYMIME
-+	  extensions. It also allows the transfer of long lines of text
-+	  by wrapping them every 76 characters.
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index eb82a55..44413ba 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -73,6 +73,10 @@ E2FSPROGS_INSTALL_STAGING_OPTS = \
+?	DESTDIR=$(STAGING_DIR) \
+?	install-libs
+?
++# Disable e2scrub as we don't need it.
++E2FSPROGS_MAKE_OPTS = E2SCRUB_DIR=
++E2FSPROGS_INSTALL_TARGET_OPTS = E2SCRUB_DIR= DESTDIR=$(TARGET_DIR) install
 +
-+	  Usually, a sophisticated MUA will take care of automatically
-+	  choosing the best encodings for an e-mail. Nevertheless, this
-+	  utility may be useful when a MTA (e.g. msmtp) is used without
-+	  a MUA, or if using this encoding for other purposes is
-+	  desired.
-+
-+	  https://www.fourmilab.ch/webtools/qprint/
-diff --git a/package/qprint/qprint.hash b/package/qprint/qprint.hash
-new file mode 100644
-index 0000000000..0412cf84c5
---- /dev/null
-+++ b/package/qprint/qprint.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  ffa9ca1d51c871fb3b56a4bf0165418348cf080f01ff7e59cd04511b9665019c  qprint-1.1.tar.gz
-+sha256  3bd4089942977a357fed0d3c84b6ea877000c20c7c344c2feabf4b10db9f7495  COPYING
-diff --git a/package/qprint/qprint.mk b/package/qprint/qprint.mk
-new file mode 100644
-index 0000000000..e34fba54b9
---- /dev/null
-+++ b/package/qprint/qprint.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# qprint
-+#
-+################################################################################
-+
-+QPRINT_VERSION = 1.1
-+QPRINT_SITE = https://www.fourmilab.ch/webtools/qprint
-+QPRINT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-bin
-+QPRINT_LICENSE = Public Domain
-+QPRINT_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-2.28.0
+?# Package does not build in parallel due to improper make rules
+?define HOST_E2FSPROGS_INSTALL_CMDS
+?	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install install-libs
+--?
+2.7.4
