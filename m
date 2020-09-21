@@ -1,28 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:42:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vsftpd: renumber patches
-In-Reply-To: <20200920143036.1430126-1-fontaine.fabrice@gmail.com>
-References: <20200920143036.1430126-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200921224213.15e50f6f@windsurf>
+Date: Mon, 21 Sep 2020 22:42:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gensio: bump to version 2.1.5
+In-Reply-To: <20200920171845.433825-1-james.hilliard1@gmail.com>
+References: <20200920171845.433825-1-james.hilliard1@gmail.com>
+Message-ID: <20200921224221.69317b1d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Sep 2020 16:30:36 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 20 Sep 2020 11:18:45 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> Commit 415765b5a8861f3b7e86e9786bf903a5a4d09e73 removed the second patch
-> without renumbering the remaining ones
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  ...{0003-fix-CVE-2015-1419.patch => 0002-fix-CVE-2015-1419.patch} | 0
->  ...D-handler.patch => 0003-Prevent-hang-in-SIGCHLD-handler.patch} | 0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/vsftpd/{0003-fix-CVE-2015-1419.patch => 0002-fix-CVE-2015-1419.patch} (100%)
->  rename package/vsftpd/{0004-Prevent-hang-in-SIGCHLD-handler.patch => 0003-Prevent-hang-in-SIGCHLD-handler.patch} (100%)
+>  package/gensio/gensio.hash | 6 +++---
+>  package/gensio/gensio.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
