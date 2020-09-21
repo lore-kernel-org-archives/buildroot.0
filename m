@@ -1,63 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Sep 2020 18:20:02 +0200
-Subject: [Buildroot] [PATCH] package/busybox/udhcpc.script: support RFC3442
- static routes
-Message-ID: <20200921162002.22197-1-peter@korsgaard.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 21 Sep 2020 18:29:39 +0200
+Subject: [Buildroot] [PATCH] package/opkg-utils: bump to version 0.4.3
+Message-ID: <20200921162939.726213-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-RFC3442 specifies a DHCP extension to provide the client with a list of
-static routes to use.  This is already handled by udhcpc and exposed as the
-"staticroutes" environment variable, but currently not handled by the action
-script.
-
-Extend the script to do so.  The RFC specifies that if this option is
-provided by the server then the normal "routes" (3) option should be
-ignored, so ensure that is done.
-
-As we may now have more than just a default route on the interface, extend
-the route cleanup logic to handle all routes for the interface (except for
-the implied local 0.0.0.0 one).
-
-Notice that this option is only sent by servers if explicitly requested by
-the client, E.G.  using the -O staticroutes option to udhcpc.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/busybox/udhcpc.script | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/opkg-utils/opkg-utils.hash | 4 ++--
+ package/opkg-utils/opkg-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-index 0196351cd5..ec4d9f6185 100755
---- a/package/busybox/udhcpc.script
-+++ b/package/busybox/udhcpc.script
-@@ -61,7 +61,23 @@ case "$1" in
- 			wait_for_ipv6_default_route
- 		fi
+diff --git a/package/opkg-utils/opkg-utils.hash b/package/opkg-utils/opkg-utils.hash
+index d95286abc..471ce4c2f 100644
+--- a/package/opkg-utils/opkg-utils.hash
++++ b/package/opkg-utils/opkg-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 5a3071019715cf3066946ac9a57fcb51117c611a3114efc56894afc8b3b51b4c  opkg-utils-0.4.2.tar.gz
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
++sha256  acb208fe32f93f7fc0f7fdf9f870c07e40a016bcb7fa07ada6c99503e033dafd  opkg-utils-0.4.3.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
+index 38137bc67..fa14053f6 100644
+--- a/package/opkg-utils/opkg-utils.mk
++++ b/package/opkg-utils/opkg-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--		if [ -n "$router" ] ; then
-+		# RFC3442: If the DHCP server returns both a Classless
-+		# Static Routes option and a Router option, the DHCP
-+		# client MUST ignore the Router option.
-+		if [ -n "$staticroutes" ]; then
-+			echo "deleting routers"
-+			route -n | while read dest gw mask flags metric ref use iface; do
-+				[ "$iface" != "$interface" -o "$gw" = "0.0.0.0" ] || \
-+					route del -net "$dest" netmask "$mask" gw "$gw" dev "$interface"
-+			done
-+
-+			# format: dest1/mask gw1 ... destn/mask gwn
-+			set -- $staticroutes
-+			while [ -n "$1" -a -n "$2" ]; do
-+				route add -net "$1" gw "$2" dev "$interface"
-+				shift 2
-+			done
-+		elif [ -n "$router" ] ; then
- 			echo "deleting routers"
- 			while route del default gw 0.0.0.0 dev $interface 2> /dev/null; do
- 				:
+-OPKG_UTILS_VERSION = 0.4.2
++OPKG_UTILS_VERSION = 0.4.3
+ OPKG_UTILS_SITE = http://git.yoctoproject.org/git/opkg-utils
+ OPKG_UTILS_SITE_METHOD = git
+ OPKG_UTILS_LICENSE = GPL-2.0+
 -- 
-2.20.1
+2.25.1
