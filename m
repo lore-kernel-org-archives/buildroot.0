@@ -1,65 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:35:44 +0200
-Subject: [Buildroot] [git commit] package/busybox/udhcpc.script: support
- RFC3442 static routes
-Message-ID: <20200921202821.7F5268A49F@busybox.osuosl.org>
+Date: Mon, 21 Sep 2020 22:36:16 +0200
+Subject: [Buildroot] [git commit] package/glmark2: bump to the latest version
+Message-ID: <20200921202821.A88B27FF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f79a420825479c47d064e40bc12d3a6755a64383
+commit: https://git.buildroot.net/buildroot/commit/?id=7ea9a4efa15bddbb1c2839827323f9cfcce34135
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-RFC3442 specifies a DHCP extension to provide the client with a list of
-static routes to use.  This is already handled by udhcpc and exposed as the
-"staticroutes" environment variable, but currently not handled by the action
-script.
+Current version does not run on imx6 and fails like this:
 
-Extend the script to do so.  The RFC specifies that if this option is
-provided by the server then the normal "routes" (3) option should be
-ignored, so ensure that is done.
+Error: eglCreateWindowSurface failed with error: 0x3009
+Error: eglCreateWindowSurface failed with error: 0x3009
+Error: CanvasGeneric: Invalid EGL state
+Error: main: Could not initialize canvas
 
-As we may now have more than just a default route on the interface, extend
-the route cleanup logic to handle all routes for the interface (except for
-the implied local 0.0.0.0 one).
+Bumping to the latest version fixes this problem.
 
-Notice that this option is only sent by servers if explicitly requested by
-the client, E.G.  using the -O staticroutes option to udhcpc.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/busybox/udhcpc.script | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ package/glmark2/glmark2.hash | 2 +-
+ package/glmark2/glmark2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-index 0196351cd5..ec4d9f6185 100755
---- a/package/busybox/udhcpc.script
-+++ b/package/busybox/udhcpc.script
-@@ -61,7 +61,23 @@ case "$1" in
- 			wait_for_ipv6_default_route
- 		fi
+diff --git a/package/glmark2/glmark2.hash b/package/glmark2/glmark2.hash
+index ffd1ba2d50..33a99de12a 100644
+--- a/package/glmark2/glmark2.hash
++++ b/package/glmark2/glmark2.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  6a9de46c098406895411b629fe8fadfdce92360500f0f10e4cc60a889a1692eb  glmark2-9e01aef1a786b28aca73135a5b00f85c357e8f5e.tar.gz
++sha256  9ad57e4eec0049c47a367b57f5f8d3e31e4c488b1d5d6673a75f1b2282e40888  glmark2-c493520253fbfe3676c8b34b6f91a7c9a838fc8e.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  16fbc228292bd774b263b212ae422c524cbf3b2078bcf21b22f8bdd4373be617  COPYING.SGI
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index 3d31003d06..ec62faada2 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--		if [ -n "$router" ] ; then
-+		# RFC3442: If the DHCP server returns both a Classless
-+		# Static Routes option and a Router option, the DHCP
-+		# client MUST ignore the Router option.
-+		if [ -n "$staticroutes" ]; then
-+			echo "deleting routers"
-+			route -n | while read dest gw mask flags metric ref use iface; do
-+				[ "$iface" != "$interface" -o "$gw" = "0.0.0.0" ] || \
-+					route del -net "$dest" netmask "$mask" gw "$gw" dev "$interface"
-+			done
-+
-+			# format: dest1/mask gw1 ... destn/mask gwn
-+			set -- $staticroutes
-+			while [ -n "$1" -a -n "$2" ]; do
-+				route add -net "$1" gw "$2" dev "$interface"
-+				shift 2
-+			done
-+		elif [ -n "$router" ] ; then
- 			echo "deleting routers"
- 			while route del default gw 0.0.0.0 dev $interface 2> /dev/null; do
- 				:
+-GLMARK2_VERSION = 9e01aef1a786b28aca73135a5b00f85c357e8f5e
++GLMARK2_VERSION = c493520253fbfe3676c8b34b6f91a7c9a838fc8e
+ GLMARK2_SITE = $(call github,glmark2,glmark2,$(GLMARK2_VERSION))
+ GLMARK2_LICENSE = GPL-3.0+, SGIv1
+ GLMARK2_LICENSE_FILES = COPYING COPYING.SGI
