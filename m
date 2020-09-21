@@ -1,53 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 21 Sep 2020 22:38:51 +0200
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.57
-Message-ID: <20200921203840.2760982650@busybox.osuosl.org>
+Date: Mon, 21 Sep 2020 22:39:17 +0200
+Subject: [Buildroot] [git commit] package/gensio: bump to version 2.1.5
+Message-ID: <20200921203840.47F928D4C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03b48dd2203c1f9509a397a371507c9c1c9dcea7
+commit: https://git.buildroot.net/buildroot/commit/?id=9cef96225134faafe736f07f11a56838e5ed1037
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump version to 3.57. Unfortunately local patch is still pending
-upstream and not applied due to Covid-19 latency:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
-
-This version requires NSPR 4.29.
-
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.57_release_notes
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b153b614e9..e3b584351e 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_56_RTM/src/SHA256SUMS
--sha256  f875e0e8ed3b5ce92d675be4a55aa25a8c1199789a4a01f69b5f2327e2048e9c  nss-3.56.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_57_RTM/src/SHA256SUMS
-+sha256  55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382  nss-3.57.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index d0b2d51772..21cd65cb8f 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index b83f21abd0..ecf9d5e159 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  e2547078bd73d62abda343515f1368ee  gensio-2.1.4.tar.gz
+-sha1  f8c0e787fad22a71b10f1d8eefea83617f489bdb  gensio-2.1.4.tar.gz
++md5  bef0312c68ef541f85893c6bc85930ed  gensio-2.1.5.tar.gz
++sha1  f23b4017aba5a6f9066f734ffb600fa36b1399c0  gensio-2.1.5.tar.gz
+ # Locally computed:
+-sha256  1f5a29aabfb35886893cfda5cd78192db67e96de796dbf9758dbecd4077a3fd8  gensio-2.1.4.tar.gz
++sha256  e497043a0415177652bfb2b1d045e4605cd5726bbcfe790ef6f555ac25825c12  gensio-2.1.5.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index 89b7be9cdc..1170ec00f4 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.56
-+LIBNSS_VERSION = 3.57
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-GENSIO_VERSION = 2.1.4
++GENSIO_VERSION = 2.1.5
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
