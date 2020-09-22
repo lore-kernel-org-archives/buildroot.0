@@ -1,70 +1,51 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 21 Sep 2020 17:29:16 -0700
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: fix
- segfault on brcm platforms
-Message-ID: <20200922002916.3621404-1-joseph.kogut@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 22 Sep 2020 02:42:04 +0000
+Subject: [Buildroot] [Bug 13216] New: [Documentation] 2020.02.6 requires GNU
+ find utils
+Message-ID: <bug-13216-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the original patch message:
-    Some Broadcom set-top-box boards have PCI busses, but the GPU is
-    still probed through DT.  We would dereference a null busid here
-    in that case.
+https://bugs.busybox.net/show_bug.cgi?id=13216
 
-Fixes a segfault on at least the RPi 4 w/ xserver 1.20.9, probably
-others as well.
+            Bug ID: 13216
+           Summary: [Documentation] 2020.02.6 requires GNU find utils
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: waitman at waitman.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
+The documentation states that GNU binutils are required, however binutils does
+not include "find". If user has a "find" that is not from GNU find utils
+package then the Makefile stops with error.
 
-Somehow this patch was merged to master a year ago, but didn't make it
-into 1.20.9. Consider applying this to stable branches w/ 1.20.9 as
-well, Xorg is broken on Broadcom platforms without it.
+Documentation should specify that GNU find utils are required.
 
- ...probing-a-non-PCI-platform-device-on.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/0001-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
+../buildroot-2020.02.6/output/build/host-e2fsprogs-1.45.6
 
-diff --git a/package/x11r7/xserver_xorg-server/0001-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/0001-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-new file mode 100644
-index 0000000000..75d2813152
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0001-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-@@ -0,0 +1,32 @@
-+From e50c85f4ebf559a3bac4817b41074c43d4691779 Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 26 Oct 2018 17:47:30 -0700
-+Subject: [PATCH] Fix segfault on probing a non-PCI platform device on a system
-+ with PCI.
-+
-+Some Broadcom set-top-box boards have PCI busses, but the GPU is still
-+probed through DT.  We would dereference a null busid here in that
-+case.
-+
-+Signed-off-by: Eric Anholt <eric@anholt.net>
-+Backported from: e50c85f4ebf559a3bac4817b41074c43d4691779
-+---
-+ hw/xfree86/common/xf86platformBus.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/hw/xfree86/common/xf86platformBus.c b/hw/xfree86/common/xf86platformBus.c
-+index cef47da03..dadbac6c8 100644
-+--- a/hw/xfree86/common/xf86platformBus.c
-++++ b/hw/xfree86/common/xf86platformBus.c
-+@@ -289,7 +289,7 @@ xf86platformProbe(void)
-+     for (i = 0; i < xf86_num_platform_devices; i++) {
-+         char *busid = xf86_platform_odev_attributes(i)->busid;
-+
-+-        if (pci && (strncmp(busid, "pci:", 4) == 0)) {
-++        if (pci && busid && (strncmp(busid, "pci:", 4) == 0)) {
-+             platform_find_pci_info(&xf86_platform_devices[i], busid);
-+         }
-+
-+--
-+2.24.1
-+
---
-2.28.0
+find: unrecognized: -printf
+
+
+GNU find utils are available at the following URL:
+
+https://www.gnu.org/software/findutils/
+
+(optionally update Makefile so that GNU find utils are not required)
+
+Additionally there is no "2020.06.2" option (the long term support release) in
+the version select box, in the bug report.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
