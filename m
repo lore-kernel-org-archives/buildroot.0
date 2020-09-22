@@ -1,68 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 22:19:36 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5location: needs
- qt5declarative quick package
-In-Reply-To: <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
-References: <20200919194857.491282-1-b.bilas@grinn-global.com>
- <20200919220820.2d5d47ab@windsurf>
- <6c7c6fdf-a5a8-e1cf-ad28-9b7d7ba34b7b@grinn-global.com>
- <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
-Message-ID: <20200922221936.560d4ab7@windsurf>
+Date: Tue, 22 Sep 2020 22:22:35 +0200
+Subject: [Buildroot] [git commit] package/python-m2crypto: new package
+Message-ID: <20200922201328.BB1868B8AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8b9c3100ef4897523c72b513956a14c01224f1ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-First of all, thanks for the additional investigation, much appreciated.
+Signed-off-by: Gustavo Heinz <gustavo@gsthnz.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  3 +++
+ package/Config.in                            |  1 +
+ package/python-m2crypto/Config.in            | 12 ++++++++++++
+ package/python-m2crypto/python-m2crypto.hash |  5 +++++
+ package/python-m2crypto/python-m2crypto.mk   | 16 ++++++++++++++++
+ 5 files changed, 37 insertions(+)
 
-On Sat, 19 Sep 2020 23:05:00 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
-
-> >> So, the "location" subdirectory should not be built of the quick module
-> >> is not there.  
-> > Yes, it's weird - it seems that this condition is always true even 
-> > though quick module isn't compiled therefore I sent a quick workaround 
-> > to fix build errors until I find a proper solution ;)  
-> 
-> After a quick investigation it seems that we should drop 
-> BR2_PACKAGE_QT5DECLARATIVE_QUICK option and select 
-> BR2_PACKAGE_QT5BASE_OPENGL option if BR2_PACKAGE_QT5_GL_AVAILABLE 
-> directly when BR2_PACKAGE_QT5DECLARATIVE package is selected because 
-> qt5declarative module includes quick subdirectory when gui module is 
-> available:
-
-Could you provide a sample patch? Because I am a bit confused when you
-say "select BR2_PACKAGE_QT5BASE_OPENGL option if
-BR2_PACKAGE_QT5_GL_AVAILABLE". Where would you do that? qt5location?
-qt5declarative?
-
-> 
-> qtHaveModule(gui):qtConfig(qml-animation) {
-
-What is the qml-animation condition? When is it true/false?
-
->  ??? SUBDIRS += quick
-> 
->  ?? ...snip...
-> }
-> 
-> and then we should add dependency of the qt5declarative package in 
-> qt5location to solve the issue above.
-
-But, as I have reported, qt5declarative is not mandatory for
-qt5location, only some parts of qt5location need the quick module from
-qt5declarative.
-
-Could you submit another patch (or patch series, if needed), with more
-substantial explanations?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e6f2695e86..9ce19c0de9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1102,6 +1102,9 @@ F:	board/qemu/csky
+ F:	configs/csky_*
+ F:	configs/qemu_csky*
+ 
++N:	Gustavo Heinz <gustavo@gsthnz.com>
++F:	package/python-m2crypto/
++
+ N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+ F:	configs/arm_juno_defconfig
+ F:	board/arm/juno/
+diff --git a/package/Config.in b/package/Config.in
+index 956ac6f7b0..20a0167dab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1027,6 +1027,7 @@ menu "External python modules"
+ 	source "package/python-logbook/Config.in"
+ 	source "package/python-logstash/Config.in"
+ 	source "package/python-lxml/Config.in"
++	source "package/python-m2crypto/Config.in"
+ 	source "package/python-m2r/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
+new file mode 100644
+index 0000000000..7481d49e5c
+--- /dev/null
++++ b/package/python-m2crypto/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_M2CRYPTO
++	bool "python-m2crypto"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
++	select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
++	help
++	  M2Crypto: A Python crypto and SSL toolkit.
++
++	  https://gitlab.com/m2crypto/m2crypto
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+new file mode 100644
+index 0000000000..148cdd8317
+--- /dev/null
++++ b/package/python-m2crypto/python-m2crypto.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/m2crypto/json
++md5  b8b34c5b83892096a8676b6f2e8f4e7e  M2Crypto-0.36.0.tar.gz
++sha256  1542c18e3ee5c01db5031d0b594677536963e3f54ecdf5315aeecb3a595b4dc1  M2Crypto-0.36.0.tar.gz
++# Locally computed sha256 checksums
++sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+new file mode 100644
+index 0000000000..ccc63058ce
+--- /dev/null
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-m2crypto
++#
++################################################################################
++
++PYTHON_M2CRYPTO_VERSION = 0.36.0
++PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
++PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/ff/df/84609ed874b5e6fcd3061a517bf4b6e4d0301f553baf9fa37bef2b509797
++PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
++PYTHON_M2CRYPTO_LICENSE = MIT
++PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
++PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
++PYTHON_M2CRYPTO_BUILD_OPTS = --openssl=$(STAGING_DIR)/usr
++
++$(eval $(python-package))
