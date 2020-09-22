@@ -1,88 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 21:58:18 +0200
-Subject: [Buildroot] [PATCH] package/mstpd: new package
-In-Reply-To: <20200919201904.15883-1-vadim4j@gmail.com>
-References: <20200919201904.15883-1-vadim4j@gmail.com>
-Message-ID: <20200922215818.7d3cf75d@windsurf>
+Date: Tue, 22 Sep 2020 21:59:02 +0200
+Subject: [Buildroot] [git commit] package/qprint: new package
+Message-ID: <20200922195109.A1D1A8D37A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadym,
+commit: https://git.buildroot.net/buildroot/commit/?id=03ab7c709cff796d9a8921a86bb47f378675fd79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution. See below for a number of comments.
+qprint is a small utility that handles encoding and decoding arbitrary
+binary data in the Quoted-Printable format, which was introduced along
+MIME.
 
-On Sat, 19 Sep 2020 23:19:04 +0300
-Vadym Kochan <vadim4j@gmail.com> wrote:
+As stated in the package description, although MUAs nowadays usually
+take care of doing this encoding themselves, there are some use cases
+where doing it manually is needed, and providing a command-line program
+to do it is amenable to shell scripts.
 
-> diff --git a/package/mstpd/Config.in b/package/mstpd/Config.in
-> new file mode 100644
-> index 0000000000..ac921b0d2b
-> --- /dev/null
-> +++ b/package/mstpd/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_MSTPD
-> +	bool "mstpd"
-> +	select BR2_PACKAGE_BASH # init
+Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/qprint/Config.in   | 18 ++++++++++++++++++
+ package/qprint/qprint.hash |  3 +++
+ package/qprint/qprint.mk   | 13 +++++++++++++
+ 5 files changed, 36 insertions(+)
 
-Are you sure bash is needed? For what? I don't see an init script being
-installed.
-
-> diff --git a/package/mstpd/mstpd.mk b/package/mstpd/mstpd.mk
-> new file mode 100644
-> index 0000000000..49dc769509
-> --- /dev/null
-> +++ b/package/mstpd/mstpd.mk
-> @@ -0,0 +1,20 @@
-> +################################################################################
-> +#
-> +# mstpd
-> +#
-> +################################################################################
-> +
-> +MSTPD_VERSION = 0.0.8
-> +MSTPD_SOURCE = $(MSTPD_VERSION).tar.gz
-> +MSTPD_SITE = https://github.com/mstpd/mstpd/archive
-
-Please use the github macro, since they haven't uploaded their own
-tarball.
-
-> +MSTPD_LICENSE = GPL-2.0
-
-The license is actually GPL-2.0+
-
-> +MSTPD_LICENSE_FILES = LICENSE
-> +MSTPD_AUTORECONF = YES
-> +
-> +# mstpd requires that it is installed into /sbin, not /usr/sbin
-> +MSTPD_CONF_OPTS = \
-> +	--prefix=/ \
-> +	--exec-prefix=/ \
-> +	--sbindir=/sbin
-
-This doesn't work, because it puts the stuff that normally go into
-/usr/share into /share, and so the manpages are still on the target as
-they are not located at the usual /usr/share/man location.
-
-??? share
-??? ??? doc
-??? ??? ??? mstpd
-??? ???     ??? README.VLANs
-??? ??? man
-???     ??? man5
-???     ??? ??? mstpctl-utils-interfaces.5.gz
-???     ??? man8
-???         ??? mstpctl.8.gz
-
-Would it be possible instead to fix things so that it can be installed
-into /usr/sbin ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 057592b8e5..e6f2695e86 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -119,6 +119,7 @@ F:	package/bird/
+ F:	package/glorytun/
+ 
+ N:	Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
++F:	package/qprint/
+ F:	package/watchdog/
+ 
+ N:	Aleksander Morgado <aleksander@aleksander.es>
+diff --git a/package/Config.in b/package/Config.in
+index c85a3c6bd3..956ac6f7b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2350,6 +2350,7 @@ comment "Utilities"
+ 	source "package/logsurfer/Config.in"
+ 	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
++	source "package/qprint/Config.in"
+ 	source "package/ranger/Config.in"
+ 	source "package/rtty/Config.in"
+ 	source "package/screen/Config.in"
+diff --git a/package/qprint/Config.in b/package/qprint/Config.in
+new file mode 100644
+index 0000000000..edfb92a5f3
+--- /dev/null
++++ b/package/qprint/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_QPRINT
++	bool "qprint"
++	help
++	  qprint is a program that encodes and decodes binary data in
++	  the Quoted-Printable encoding, defined as a part of the MIME
++	  specification in RFC 1521. This encoding allows for efficient
++	  transfer of mostly ASCII data over transports that are only
++	  7-bit clean, like SMTP without 8BITMIME or BINARYMIME
++	  extensions. It also allows the transfer of long lines of text
++	  by wrapping them every 76 characters.
++
++	  Usually, a sophisticated MUA will take care of automatically
++	  choosing the best encodings for an e-mail. Nevertheless, this
++	  utility may be useful when a MTA (e.g. msmtp) is used without
++	  a MUA, or if using this encoding for other purposes is
++	  desired.
++
++	  https://www.fourmilab.ch/webtools/qprint/
+diff --git a/package/qprint/qprint.hash b/package/qprint/qprint.hash
+new file mode 100644
+index 0000000000..0412cf84c5
+--- /dev/null
++++ b/package/qprint/qprint.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  ffa9ca1d51c871fb3b56a4bf0165418348cf080f01ff7e59cd04511b9665019c  qprint-1.1.tar.gz
++sha256  3bd4089942977a357fed0d3c84b6ea877000c20c7c344c2feabf4b10db9f7495  COPYING
+diff --git a/package/qprint/qprint.mk b/package/qprint/qprint.mk
+new file mode 100644
+index 0000000000..e34fba54b9
+--- /dev/null
++++ b/package/qprint/qprint.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# qprint
++#
++################################################################################
++
++QPRINT_VERSION = 1.1
++QPRINT_SITE = https://www.fourmilab.ch/webtools/qprint
++QPRINT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-bin
++QPRINT_LICENSE = Public Domain
++QPRINT_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
