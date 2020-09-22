@@ -1,278 +1,164 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Sep 2020 09:58:49 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: bump
- version to 244.5
-Message-ID: <20200922075002.4DF1686BD1@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 22 Sep 2020 10:14:47 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/freescale-imx/imx-dpu-g2d:
+ new package
+In-Reply-To: <20200208134950.28582-1-tuzakli.refik@gmail.com>
+References: <20200208134950.28582-1-tuzakli.refik@gmail.com>
+Message-ID: <20200922081447.GA10096@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c077cfbba771b93e11e11b739efd392331e402d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hi,
 
-Tag 244.5 includes our patches, so drop them.
+On Sat, Feb 08, 2020 at 04:49:50PM +0300, Refik Tuzakli wrote:
+> imx-dpu-g2d package is used by i.MX 8 and i.MX 8X series instead
+> of imx-vpu or imx-vpu-hantro. With this commit, imx-dpu-g2d is added
+> and is enabled for i.MX8 and i.MX 8X.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-Fix-build-with-libmicrohttpd-0.9.71.patch | 71 ----------------------
- ...seed-add-missing-header-for-GRND_NONBLOCK.patch | 39 ------------
- ...03-network-generator-allow-empty-hostname.patch | 44 --------------
- .../0004-makefs-strdup-arguments-to-mkfs.patch     | 48 ---------------
- package/systemd/systemd.hash                       |  2 +-
- package/systemd/systemd.mk                         |  2 +-
- 6 files changed, 2 insertions(+), 204 deletions(-)
+My review on v2 [1] still applies here, this has nothing to do with VPU
+operations.
 
-diff --git a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch b/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-deleted file mode 100644
-index 7c1cfe939b..0000000000
---- a/package/systemd/0001-Fix-build-with-libmicrohttpd-0.9.71.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From d17eabb1052e7c8c432331a7a782845e36164f01 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
--Date: Tue, 30 Jun 2020 09:56:10 +0200
--Subject: [PATCH] =?UTF-8?q?Fix=20build=20with=20=C2=B5httpd=200.9.71?=
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The return type of callbacks was changed from int to an enum.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[downloaded from upstream commit
-- https://github.com/systemd/systemd/commit/d17eabb1052e7c8c432331a7a782845e36164f01]
-----
-- src/journal-remote/journal-gatewayd.c    | 4 ++--
-- src/journal-remote/journal-remote-main.c | 2 +-
-- src/journal-remote/microhttpd-util.h     | 6 ++++++
-- 3 files changed, 9 insertions(+), 3 deletions(-)
--
--diff --git a/src/journal-remote/journal-gatewayd.c b/src/journal-remote/journal-gatewayd.c
--index 5177e0d1577..3ab7c98b0b5 100644
----- a/src/journal-remote/journal-gatewayd.c
--+++ b/src/journal-remote/journal-gatewayd.c
--@@ -349,7 +349,7 @@ static int request_parse_range(
--         return 0;
-- }
-- 
---static int request_parse_arguments_iterator(
--+static mhd_result request_parse_arguments_iterator(
--                 void *cls,
--                 enum MHD_ValueKind kind,
--                 const char *key,
--@@ -796,7 +796,7 @@ static int request_handler_machine(
--         return MHD_queue_response(connection, MHD_HTTP_OK, response);
-- }
-- 
---static int request_handler(
--+static mhd_result request_handler(
--                 void *cls,
--                 struct MHD_Connection *connection,
--                 const char *url,
--diff --git a/src/journal-remote/journal-remote-main.c b/src/journal-remote/journal-remote-main.c
--index 69a111afead..f82d188a8c6 100644
----- a/src/journal-remote/journal-remote-main.c
--+++ b/src/journal-remote/journal-remote-main.c
--@@ -253,7 +253,7 @@ static int process_http_upload(
--         return mhd_respond(connection, MHD_HTTP_ACCEPTED, "OK.");
-- };
-- 
---static int request_handler(
--+static mhd_result request_handler(
--                 void *cls,
--                 struct MHD_Connection *connection,
--                 const char *url,
--diff --git a/src/journal-remote/microhttpd-util.h b/src/journal-remote/microhttpd-util.h
--index d90c6bbd4f1..4ca9a5c4f16 100644
----- a/src/journal-remote/microhttpd-util.h
--+++ b/src/journal-remote/microhttpd-util.h
--@@ -47,6 +47,12 @@
-- #  define MHD_create_response_from_fd_at_offset64 MHD_create_response_from_fd_at_offset
-- #endif
-- 
--+#if MHD_VERSION >= 0x00097002
--+#  define mhd_result enum MHD_Result
--+#else
--+#  define mhd_result int
--+#endif
--+
-- void microhttpd_logger(void *arg, const char *fmt, va_list ap) _printf_(2, 0);
-- 
-- /* respond_oom() must be usable with return, hence this form. */
-diff --git a/package/systemd/0002-random-seed-add-missing-header-for-GRND_NONBLOCK.patch b/package/systemd/0002-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-deleted file mode 100644
-index e74df10e9d..0000000000
---- a/package/systemd/0002-random-seed-add-missing-header-for-GRND_NONBLOCK.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 806e2011a0ea684b10a07b74c4ee0f817437e8c6 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@smile.fr>
--Date: Sun, 1 Mar 2020 15:19:01 +0100
--Subject: [PATCH] random-seed: add missing header for GRND_NONBLOCK
--
--GRND_NONBLOCK has been introduced with the 3.17 kernel version [1]
--while adding getrandom(2) system call.
--
--The header missing_random.h is needed for random-seed.c when building
--with old toolchain, such Sourcery CodeBench ARM 2014.05.
--
--Fixes:
--https://gitlab.com/buildroot.org/buildroot/-/jobs/454255917
--
--[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=c6e9d6f38894798696f23c8084ca7edbf16ee895
--
--Upstream status:
--https://github.com/systemd/systemd/pull/14988
--
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
-----
-- src/random-seed/random-seed.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/random-seed/random-seed.c b/src/random-seed/random-seed.c
--index 2fcbcb281a..596bff98f1 100644
----- a/src/random-seed/random-seed.c
--+++ b/src/random-seed/random-seed.c
--@@ -19,6 +19,7 @@
-- #include "io-util.h"
-- #include "log.h"
-- #include "main-func.h"
--+#include "missing_random.h"
-- #include "missing_syscall.h"
-- #include "mkdir.h"
-- #include "parse-util.h"
---- 
--2.24.1
--
-diff --git a/package/systemd/0003-network-generator-allow-empty-hostname.patch b/package/systemd/0003-network-generator-allow-empty-hostname.patch
-deleted file mode 100644
-index 8d1f3aa86f..0000000000
---- a/package/systemd/0003-network-generator-allow-empty-hostname.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db Mon Sep 17 00:00:00 2001
--From: Yu Watanabe <watanabe.yu+github@gmail.com>
--Date: Thu, 12 Dec 2019 19:01:21 +0900
--Subject: [PATCH 1/1] network-generator: allow empty hostname
--
--Fixes #14319.
--
--[Brandon: backport from https://github.com/systemd/systemd/commit/21a925a4ac7955e7d7e6cfd477e96d3a2aaee7db]
--Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-----
-- src/network/generator/network-generator.c | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/src/network/generator/network-generator.c b/src/network/generator/network-generator.c
--index 81afa95307..bed1e42697 100644
----- a/src/network/generator/network-generator.c
--+++ b/src/network/generator/network-generator.c
--@@ -574,7 +574,7 @@ static int parse_netmask_or_prefixlen(int family, const char **value, unsigned c
-- 
-- static int parse_cmdline_ip_address(Context *context, int family, const char *value) {
--         union in_addr_union addr = {}, peer = {}, gateway = {};
---        const char *hostname, *ifname, *dhcp_type, *dns, *p;
--+        const char *hostname = NULL, *ifname, *dhcp_type, *dns, *p;
--         unsigned char prefixlen;
--         int r;
-- 
--@@ -599,9 +599,11 @@ static int parse_cmdline_ip_address(Context *context, int family, const char *va
--         if (!p)
--                 return -EINVAL;
-- 
---        hostname = strndupa(value, p - value);
---        if (!hostname_is_valid(hostname, false))
---                return -EINVAL;
--+        if (p != value) {
--+                hostname = strndupa(value, p - value);
--+                if (!hostname_is_valid(hostname, false))
--+                        return -EINVAL;
--+        }
-- 
--         value = p + 1;
-- 
---- 
--2.23.0
--
-diff --git a/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch b/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch
-deleted file mode 100644
-index 140d741f63..0000000000
---- a/package/systemd/0004-makefs-strdup-arguments-to-mkfs.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From c315b79fb43a4d921a533ba0c2cb303324887993 Mon Sep 17 00:00:00 2001
--From: Oliver Giles <ohw.giles@gmail.com>
--Date: Thu, 13 Feb 2020 08:55:57 +0200
--Subject: [PATCH] makefs: strdup arguments to mkfs
--
--Don't pass values from argv[] directly to child process forked using
--safe_fork, because it clears argv[]. strdup them first.
--
--[Brandon: backport from https://github.com/systemd/systemd/commit/c315b79fb43a4d921a533ba0c2cb303324887993]
--Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-----
-- src/partition/makefs.c | 13 +++++++++----
-- 1 file changed, 9 insertions(+), 4 deletions(-)
--
--diff --git a/src/partition/makefs.c b/src/partition/makefs.c
--index 951989cbb6..d73d67c4e8 100644
----- a/src/partition/makefs.c
--+++ b/src/partition/makefs.c
--@@ -41,8 +41,7 @@ static int makefs(const char *type, const char *device) {
-- }
-- 
-- static int run(int argc, char *argv[]) {
---        const char *device, *type;
---        _cleanup_free_ char *detected = NULL;
--+        _cleanup_free_ char *device = NULL, *type = NULL, *detected = NULL;
--         struct stat st;
--         int r;
-- 
--@@ -52,8 +51,14 @@ static int run(int argc, char *argv[]) {
--                 return log_error_errno(SYNTHETIC_ERRNO(EINVAL),
--                                        "This program expects two arguments.");
-- 
---        type = argv[1];
---        device = argv[2];
--+        /* type and device must be copied because makefs calls safe_fork, which clears argv[] */
--+        type = strdup(argv[1]);
--+        if (!type)
--+                return -ENOMEM;
--+
--+        device = strdup(argv[2]);
--+        if (!device)
--+                return -ENOMEM;
-- 
--         if (stat(device, &st) < 0)
--                 return log_error_errno(errno, "Failed to stat \"%s\": %m", device);
---- 
--2.23.0
--
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 3f6f4b4db6..db8f0193bb 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256	6f01276f45369d56ea5ced713e63a22acbb9142862eb719246a77a4b3f5699ee	systemd-244.4.tar.gz
-+sha256	d526f217450f98c695d0a20285436e48f1f1b3f31fe76aa4d6211ec60fee33c4	systemd-244.5.tar.gz
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6	LICENSE.GPL2
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL2.1
- sha256	f7299f5f5e8bdffd347dce1bed888b1cea6ddaf27de521c307265098bcbeae92	README
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index e0a4679955..c01e8c9a3e 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 244.4
-+SYSTEMD_VERSION = 244.5
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+> ---
+>  DEVELOPERS                                    |  1 +
+>  package/freescale-imx/Config.in               |  8 ++++
+>  package/freescale-imx/imx-dpu-g2d/Config.in   | 23 ++++++++++++
+>  .../imx-dpu-g2d/imx-dpu-g2d.hash              |  4 ++
+>  .../freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk  | 37 +++++++++++++++++++
+>  5 files changed, 73 insertions(+)
+>  create mode 100644 package/freescale-imx/imx-dpu-g2d/Config.in
+>  create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+>  create mode 100644 package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 3520072034..198b687d39 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2077,6 +2077,7 @@ F:	package/uhttpd/
+>  F:	package/ustream-ssl/
+>  
+>  N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+> +F:	package/freescale-imx/imx-dpu-g2d
+>  F:	package/paho-mqtt-cpp/
+>  
+>  N:	R?mi R?rolle <remi.rerolle@gmail.com>
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index 711e8f72c2..2343511c28 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -79,6 +79,11 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+>  	bool
+>  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
+> +	bool
+> +	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8 || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+> +
+>  config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  	bool
+>  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
+> @@ -99,6 +104,9 @@ source "package/freescale-imx/imx-uuc/Config.in"
+>  source "package/freescale-imx/imx-vpu/Config.in"
+>  source "package/freescale-imx/imx-vpu-hantro/Config.in"
+>  source "package/freescale-imx/imx-vpuwrap/Config.in"
+> +if BR2_PACKAGE_FREESCALE_IMX_HAS_DPU
+> +source "package/freescale-imx/imx-dpu-g2d/Config.in"
+> +endif
+>  source "package/freescale-imx/firmware-imx/Config.in"
+>  source "package/freescale-imx/imx-sc-firmware/Config.in"
+>  if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
+> diff --git a/package/freescale-imx/imx-dpu-g2d/Config.in b/package/freescale-imx/imx-dpu-g2d/Config.in
+> new file mode 100644
+> index 0000000000..377ad31dcb
+> --- /dev/null
+> +++ b/package/freescale-imx/imx-dpu-g2d/Config.in
+> @@ -0,0 +1,23 @@
+> +comment "imx-dpu-g2d needs a glibc toolchain"
+> +	depends on BR2_aarch64
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +
+> +config BR2_PACKAGE_IMX_DPU_G2D
+> +	bool "imx-dpu-g2d"
+> +	# Library binaries are linked against libc.so.6
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_LIBDRM
+> +	help
+> +	  Userspace DPU 2D libraries for Vivante GPU on i.MX platforms.
+
+Also, this is not Vivante-related either.
+
+> +	  This library is provided by NXP as-is and doesn't have an
+> +	  upstream.
+> +
+> +if BR2_PACKAGE_IMX_DPU_G2D
+> +
+> +config BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES
+> +	bool "install examples"
+> +	help
+> +	  Copy the Vivante DPU examples to the target.
+
+Ditto.
+
+> +endif
+> diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+> new file mode 100644
+> index 0000000000..50eee591c3
+> --- /dev/null
+> +++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated
+> +sha256	46c72ce9b98b7116e9f7f53a66aadc8fb66910473477c6553db77ed71e54d7ea  imx-dpu-g2d-1.8.2.bin
+> +sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
+> +sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
+> diff --git a/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+> new file mode 100644
+> index 0000000000..ea5bbb9f97
+> --- /dev/null
+> +++ b/package/freescale-imx/imx-dpu-g2d/imx-dpu-g2d.mk
+> @@ -0,0 +1,37 @@
+> +################################################################################
+> +#
+> +# imx-dpu-g2d
+> +#
+> +################################################################################
+> +
+> +IMX_DPU_G2D_VERSION = 1.8.2
+> +IMX_DPU_G2D_SITE = $(FREESCALE_IMX_SITE)
+> +IMX_DPU_G2D_SOURCE = imx-dpu-g2d-$(IMX_DPU_G2D_VERSION).bin
+> +IMX_DPU_G2D_DEPENDENCIES = libdrm
+> +IMX_DPU_G2D_INSTALL_STAGING = YES
+> +
+> +IMX_DPU_G2D_LICENSE = NXP Semiconductor Software License Agreement
+> +IMX_DPU_G2D_LICENSE_FILES = EULA COPYING
+> +IMX_DPU_G2D_REDISTRIBUTE = NO
+> +
+> +define IMX_DPU_G2D_EXTRACT_CMDS
+> +	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_DPU_G2D_DL_DIR)/$(IMX_DPU_G2D_SOURCE))
+> +endef
+> +
+> +define IMX_DPU_G2D_INSTALL_STAGING_CMDS
+> +	cp -dpfr $(@D)/g2d/usr/* $(STAGING_DIR)/usr
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_IMX_DPU_G2D_EXAMPLES),y)
+> +define IMX_DPU_G2D_INSTALL_EXAMPLES
+> +	mkdir -p $(TARGET_DIR)/usr/share/examples/
+> +	cp -dpfr $(@D)/gpu-demos/opt/* $(TARGET_DIR)/usr/share/examples/
+> +endef
+> +endif
+> +
+> +define IMX_DPU_G2D_INSTALL_TARGET_CMDS
+> +	$(IMX_DPU_G2D_INSTALL_EXAMPLES)
+> +	cp -dpfr $(@D)/g2d/usr/lib $(TARGET_DIR)/usr
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Regards,
+Gary
+
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/20200203193155.12657-2-tuzakli.refik at gmail.com/#2359160
