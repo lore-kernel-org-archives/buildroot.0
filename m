@@ -1,59 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 22:26:15 +0200
-Subject: [Buildroot] [PATCH] package/python-m2crypto: add package
-In-Reply-To: <20200918151852.1148219-1-gustavo@gsthnz.com>
-References: <20200918151852.1148219-1-gustavo@gsthnz.com>
-Message-ID: <20200922222615.797ea14d@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 22 Sep 2020 23:20:04 +0200
+Subject: [Buildroot] [PATCH v1 2/3] package/postgresql: needs locale
+ command
+In-Reply-To: <cb3d6427-c511-4b5d-56b0-6cd0a9fecb81@mind.be>
+References: <20200920150659.7562-1-ps.report@gmx.net>
+ <20200920150659.7562-2-ps.report@gmx.net>
+ <20200921102013.622616ed@windsurf>
+ <20200921220400.1717794e@gmx.net>
+ <cb3d6427-c511-4b5d-56b0-6cd0a9fecb81@mind.be>
+Message-ID: <20200922232004.354d1852@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-On Fri, 18 Sep 2020 12:18:51 -0300
-Gustavo Heinz <gustavo@gsthnz.com> wrote:
+On Mon, 21 Sep 2020 23:22:24 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> Signed-off-by: Gustavo Heinz <gustavo@gsthnz.com>
+>  Hi Peter,
+>
+> On 21/09/2020 22:04, Peter Seiderer wrote:
+> > Hello Thomas,
+> >
+> > On Mon, 21 Sep 2020 10:20:13 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> >
+> >> Hello,
+> >>
+> >> On Sun, 20 Sep 2020 17:06:58 +0200
+> >> Peter Seiderer <ps.report@gmx.net> wrote:
+> >>
+> >>> Running (as e.g. /etc/init.d/S50postgresql does):
+> >>>
+> >>>   su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
+> >>>
+> >>> gives the following warning:
+> >>>
+> >>>   performing post-bootstrap initialization ... sh: locale: not found
+> >>>   1970-01-01 01:13:43.498 UTC [246] WARNING:  no usable system locales were found
+> >>>   ok
+> >>
+> >> What is the situation with uClibc and musl toolchains ? Do they provide
+> >> the "locale" command as well ?
+> >
+> > - uclibc without BR2_TOOLCHAIN_BUILDROOT_LOCALE: no warning, no locale command ([1])
+> > - uclicc with BR2_TOOLCHAIN_BUILDROOT_LOCALE: no warning, locale command installed on target
+> > - musl: 'locale: not found' warning, no locale commmand
+> >
+> > But it is 'only' a warning... and easy to fix for gcc/buildroot toolchain...
+> >
+> >>
+> >> What about external glibc toolchains ? Do we install/copy the locale
+> >> tool to the target ?
+>
+>  I checked - no, we don't install it, even if it is part of the toolchain sysroot.
+>
+> > Do not know...., but it is only a warning...
+>
+>  It is only a warning, but this patch is meant to get rid of that warning, no?
+> If this series only fixes that warning for the internal toolchain, I don't think
+> it's very useful.
 
-Thanks for your contribution. I have applied, with just a few tweaks.
+Get rid of the warning for one use case (where it is easy to fix) ;-)
 
-> diff --git a/package/python-m2crypto/Config.in b/package/python-m2crypto/Config.in
-> new file mode 100644
-> index 0000000000..385a16cac6
-> --- /dev/null
-> +++ b/package/python-m2crypto/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_M2CRYPTO
-> +	bool "python-m2crypto"
-> +	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-> +	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-> +	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-> +    select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
+>
+>  But probably toolchain-external-pkg.mk should be fixed to install locale if
+> available, just like we do for ldd. And maybe also ldconfig and getconf (the
+> other two glibc utils we install) should be handled in the same way?
 
-There was an indentation issue here, and you forgot to select
-BR2_PACKAGE_OPENSSL: it is a build dependency, it must be selected.
+Will take a look...
 
-> +PYTHON_M2CRYPTO_VERSION = 0.36.0
-> +PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
-> +PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/ff/df/84609ed874b5e6fcd3061a517bf4b6e4d0301f553baf9fa37bef2b509797
-> +PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
-> +PYTHON_M2CRYPTO_LICENSE = MIT
-> +PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
-> +PYTHON_M2CRYPTO_DEPENDENCIES = openssl host-swig
-> +PYTHON_M2CRYPTO_BUILD_OPTS = "--openssl=$(TARGET_DIR)/usr"
+>
+>
+> > Regards,
+> > Peter
+> >
+> > [1] The usage of the locale command depends on 'HAVE_LOCALE_T' which depends
+> > on the availability of the locale_t type (see postgresql-12.4/config/c-library.m4
+> > and postgresql-12.4/src/backend/commands/collationcmds.c)
+>
+>  We could instead prepopulate the cache variable pgac_cv_type_locale_t with the
+> presence of the locale binary in the target directory. Something like:
+>
+> POSTGRESQL_CONF_ENV += pgac_cv_type_locale_t=$(if $(wildcard
+> $(TARGET_DIR)/usr/bin/locale),yes,no)
+>
+>  This is assuming that the presence of the locale executable corresponds with
+> the availability of locales (which is apparently not the case for musl, but I
+> think that that should be considered a bug in our musl integration). But at
+> least for glibc and uClibc it seems to be correct.
 
-No need for the double quotes, but more importantly, you should not use
-TARGET_DIR here, but STAGING_DIR.
+I believe false assumption, locale_t type availability (and the availability of
+different locale definitions) does not automatically mean the locale command will
+be available (see glibc case without  BR2_PACKAGE_GLIBC_UTILS, and without
+BR2_SYSTEM_ENABLE_NLS before patch 1)...
 
-I fixed that up when applying.
+>
+>  This solution also removes the need for patch 1/3, which I thought was a bit
+> iffy anyway.
 
-Thanks a lot!
+See above and any reasons why the locale command should be bound to NSL support?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Peter
+
+>
+>  Regards,
+>  Arnout
