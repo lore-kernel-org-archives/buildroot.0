@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 21:42:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.21
-In-Reply-To: <20200921214529.32473-1-jubalh@iodoru.org>
-References: <20200921214529.32473-1-jubalh@iodoru.org>
-Message-ID: <20200922214240.13484fd4@windsurf>
+Date: Tue, 22 Sep 2020 21:42:51 +0200
+Subject: [Buildroot] [git commit] package/live555: bump to version 2020.08.19
+Message-ID: <20200922193320.C958083C43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Sep 2020 23:45:29 +0200
-Michael Vetter <jubalh@iodoru.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8489c6d80654b4c0ecb629f1e5b606140394006c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-> ---
->  package/jasper/jasper.hash | 2 +-
->  package/jasper/jasper.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+According to changelog this version fixes memory leaks and buffer overflows.
+- http://live555.com/liveMedia/public/changelog.txt
 
-Applied to master, thanks.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 52ca068288..5e65cacd7b 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,5 +1,5 @@
+ # From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
+-md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
++md5  4645d2a0c865505c85b48af5317bcb4a  live.2020.08.19.tar.gz
+ # Locally generated
+-sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
++sha256  af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537  live.2020.08.19.tar.gz
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index e7be6024c9..4bbe35d6ea 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIVE555_VERSION = 2020.06.25
++LIVE555_VERSION = 2020.08.19
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ # There is a COPYING file with the GPL-3.0 license text, but none of
