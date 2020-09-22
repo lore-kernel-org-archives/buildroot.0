@@ -1,65 +1,62 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 22 Sep 2020 12:47:01 -0300
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump U-Boot and kernel
- versions
-Message-ID: <20200922154701.6393-1-festevam@gmail.com>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Tue, 22 Sep 2020 15:16:10 +0000
+Subject: [Buildroot] [PATCH 1/1] package/kismet: bump version to
+ 2020-09-R2
+In-Reply-To: <20200919215928.7be3eb0f@windsurf>
+References: <20200918175953.6888-1-fgervais@distech-controls.com>
+ <20200919142131.34999f64@windsurf.hq.k.grp>
+ <DM6PR01MB3755BB8C323A54CF26EECA9EF33C0@DM6PR01MB3755.prod.exchangelabs.com>,
+ <20200919215928.7be3eb0f@windsurf>
+Message-ID: <DM6PR01MB3755DA31D2099BC957591F2EF33B0@DM6PR01MB3755.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2020.07 version and kernel to 5.4.63.
+I'm flattered that my patch could complement a patch from one of the top contributors but I must
+say, I fail to see what.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6-sabresd_defconfig     | 4 ++--
- configs/imx6-sabresd_qt5_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I tried Fabrice's patch, first it works. So that's out of the way.
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index d244c5961a..574816f7d6 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.63"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index df50990dc6..b521f20ee0 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.63"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+It also adds obsolete parameters to the Config.in.legacy which I forgot.
+
+Like me it can install just the capture tools or the whole thing. His config layout is better though
+as on my side you could disable everything so kismet would get built but nothing would get installed
+which is kinda weird. In his case when you select kismet you'll get the capture tools, then you get the
+option to install the server or not.
+
+In my patch I would just build everything and do a partial install. In his case he actually uses a config
+option to disable building things that won't get installed. Obviously better.
+
+He also changes the installation so when you install the capture tools only they are setuid so you
+don't have to run them as root. To me setuid seems unsecure but kismet has a clear message stating
+that this is actually more secure so nothing to say here.
+
+I cannot comment on the python tools though as my target doesn't have python so I didn't try them.
+
+Did I miss something?
+
+
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Sent: September 19, 2020 3:59 PM
+To: Gervais, Francois <FGervais@distech-controls.com>
+Cc: buildroot at buildroot.org <buildroot@buildroot.org>; Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [Buildroot] [PATCH 1/1] package/kismet: bump version to 2020-09-R2 
+?
+Hello,
+
+On Sat, 19 Sep 2020 17:42:13 +0000
+"Gervais, Francois" <FGervais@distech-controls.com> wrote:
+
+> From what I can see, Fabrice seems to have the better patch.
+> I'll give it a try on monday, see if it works on my end and report here.
+
+Well, your patch did contain a number of other changes that Fabrice's
+version did not, so it would be good to compare them, and pick the best
+of both :-)
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
