@@ -1,103 +1,68 @@
-From: vadim4j at gmail.com <vadim4j@gmail.com>
-Date: Tue, 22 Sep 2020 23:16:05 +0300
-Subject: [Buildroot] [PATCH] package/mstpd: new package
-In-Reply-To: <20200922215818.7d3cf75d@windsurf>
-References: <20200919201904.15883-1-vadim4j@gmail.com>
- <20200922215818.7d3cf75d@windsurf>
-Message-ID: <20200922201605.GA343765@archlinux>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 22 Sep 2020 22:19:36 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5location: needs
+ qt5declarative quick package
+In-Reply-To: <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
+References: <20200919194857.491282-1-b.bilas@grinn-global.com>
+ <20200919220820.2d5d47ab@windsurf>
+ <6c7c6fdf-a5a8-e1cf-ad28-9b7d7ba34b7b@grinn-global.com>
+ <3e8a0246-3edb-578d-9d31-21a2f66f493b@grinn-global.com>
+Message-ID: <20200922221936.560d4ab7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Tue, Sep 22, 2020 at 09:58:18PM +0200, Thomas Petazzoni wrote:
-> Hello Vadym,
-> 
-> Thanks for this contribution. See below for a number of comments.
-> 
-> On Sat, 19 Sep 2020 23:19:04 +0300
-> Vadym Kochan <vadim4j@gmail.com> wrote:
-> 
-> > diff --git a/package/mstpd/Config.in b/package/mstpd/Config.in
-> > new file mode 100644
-> > index 0000000000..ac921b0d2b
-> > --- /dev/null
-> > +++ b/package/mstpd/Config.in
-> > @@ -0,0 +1,11 @@
-> > +config BR2_PACKAGE_MSTPD
-> > +	bool "mstpd"
-> > +	select BR2_PACKAGE_BASH # init
-> 
-Might be a mistake.
+First of all, thanks for the additional investigation, much appreciated.
 
-> Are you sure bash is needed? For what? I don't see an init script being
-> installed.
-> 
-> > diff --git a/package/mstpd/mstpd.mk b/package/mstpd/mstpd.mk
-> > new file mode 100644
-> > index 0000000000..49dc769509
-> > --- /dev/null
-> > +++ b/package/mstpd/mstpd.mk
-> > @@ -0,0 +1,20 @@
-> > +################################################################################
-> > +#
-> > +# mstpd
-> > +#
-> > +################################################################################
-> > +
-> > +MSTPD_VERSION = 0.0.8
-> > +MSTPD_SOURCE = $(MSTPD_VERSION).tar.gz
-> > +MSTPD_SITE = https://github.com/mstpd/mstpd/archive
-> 
-> Please use the github macro, since they haven't uploaded their own
-> tarball.
-> 
-> > +MSTPD_LICENSE = GPL-2.0
-> 
-> The license is actually GPL-2.0+
-> 
-> > +MSTPD_LICENSE_FILES = LICENSE
-> > +MSTPD_AUTORECONF = YES
-> > +
-> > +# mstpd requires that it is installed into /sbin, not /usr/sbin
-> > +MSTPD_CONF_OPTS = \
-> > +	--prefix=/ \
-> > +	--exec-prefix=/ \
-> > +	--sbindir=/sbin
-> 
-> This doesn't work, because it puts the stuff that normally go into
-> /usr/share into /share, and so the manpages are still on the target as
-> they are not located at the usual /usr/share/man location.
-> 
-> ??? share
-> ??? ??? doc
-> ??? ??? ??? mstpd
-> ??? ???     ??? README.VLANs
-> ??? ??? man
-> ???     ??? man5
-> ???     ??? ??? mstpctl-utils-interfaces.5.gz
-> ???     ??? man8
-> ???         ??? mstpctl.8.gz
-> 
-> Would it be possible instead to fix things so that it can be installed
-> into /usr/sbin ?
+On Sat, 19 Sep 2020 23:05:00 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-I think you are right about the default prefix and --exec-prefix, but
-regarding --sbindir it looks like it should point to /sbin because
-Linux's bridge implementation calls /sbin/bridge-stp in case the STP
-handling is delegated to user space.
+> >> So, the "location" subdirectory should not be built of the quick module
+> >> is not there.  
+> > Yes, it's weird - it seems that this condition is always true even 
+> > though quick module isn't compiled therefore I sent a quick workaround 
+> > to fix build errors until I find a proper solution ;)  
+> 
+> After a quick investigation it seems that we should drop 
+> BR2_PACKAGE_QT5DECLARATIVE_QUICK option and select 
+> BR2_PACKAGE_QT5BASE_OPENGL option if BR2_PACKAGE_QT5_GL_AVAILABLE 
+> directly when BR2_PACKAGE_QT5DECLARATIVE package is selected because 
+> qt5declarative module includes quick subdirectory when gui module is 
+> available:
+
+Could you provide a sample patch? Because I am a bit confused when you
+say "select BR2_PACKAGE_QT5BASE_OPENGL option if
+BR2_PACKAGE_QT5_GL_AVAILABLE". Where would you do that? qt5location?
+qt5declarative?
 
 > 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> qtHaveModule(gui):qtConfig(qml-animation) {
 
-Regards,
-Vadym Kochan
+What is the qml-animation condition? When is it true/false?
+
+>  ??? SUBDIRS += quick
+> 
+>  ?? ...snip...
+> }
+> 
+> and then we should add dependency of the qt5declarative package in 
+> qt5location to solve the issue above.
+
+But, as I have reported, qt5declarative is not mandatory for
+qt5location, only some parts of qt5location need the quick module from
+qt5declarative.
+
+Could you submit another patch (or patch series, if needed), with more
+substantial explanations?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
