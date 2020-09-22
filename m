@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 21:23:22 +0200
-Subject: [Buildroot] [PATCH] package/libopenssl: bump to version 1.1.1h
-In-Reply-To: <20200922180348.13130-1-peter@korsgaard.com>
-References: <20200922180348.13130-1-peter@korsgaard.com>
-Message-ID: <20200922212322.022440d5@windsurf>
+Date: Tue, 22 Sep 2020 21:23:15 +0200
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump U-Boot and
+ kernel versions
+In-Reply-To: <20200922154701.6393-1-festevam@gmail.com>
+References: <20200922154701.6393-1-festevam@gmail.com>
+Message-ID: <20200922212315.085d9147@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 22 Sep 2020 20:03:48 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Tue, 22 Sep 2020 12:47:01 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-> For details, see the release notes:
-> https://www.openssl.org/news/openssl-1.1.1-notes.html
+> Bump U-Boot to 2020.07 version and kernel to 5.4.63.
 > 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  package/libopenssl/libopenssl.hash | 4 ++--
->  package/libopenssl/libopenssl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  configs/imx6-sabresd_defconfig     | 4 ++--
+>  configs/imx6-sabresd_qt5_defconfig | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
