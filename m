@@ -1,108 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 21:59:02 +0200
-Subject: [Buildroot] [git commit] package/qprint: new package
-Message-ID: <20200922195109.A1D1A8D37A@busybox.osuosl.org>
+Date: Tue, 22 Sep 2020 22:01:43 +0200
+Subject: [Buildroot] [git commit] package/graphicsmagick: remove
+ BR2_USE_WCHAR condition for C++ support
+Message-ID: <20200922195250.7DD2A8AA9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03ab7c709cff796d9a8921a86bb47f378675fd79
+commit: https://git.buildroot.net/buildroot/commit/?id=894116a6e07541c654810ed042fc03ad3d04959e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-qprint is a small utility that handles encoding and decoding arbitrary
-binary data in the Quoted-Printable format, which was introduced along
-MIME.
+While the imagemagick C++ support requires wchar, it is not the case
+for the graphicsmagick C++ support, so we can drop the BR2_USE_WCHAR
+condition when deciding whether or not GraphicsMagick++-config should
+be tweaked.
 
-As stated in the package description, although MUAs nowadays usually
-take care of doing this encoding themselves, there are some use cases
-where doing it manually is needed, and providing a command-line program
-to do it is amenable to shell scripts.
-
-Signed-off-by: Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/qprint/Config.in   | 18 ++++++++++++++++++
- package/qprint/qprint.hash |  3 +++
- package/qprint/qprint.mk   | 13 +++++++++++++
- 5 files changed, 36 insertions(+)
+ package/graphicsmagick/graphicsmagick.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 057592b8e5..e6f2695e86 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -119,6 +119,7 @@ F:	package/bird/
- F:	package/glorytun/
+diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+index ab00ee2c9e..7e71870482 100644
+--- a/package/graphicsmagick/graphicsmagick.mk
++++ b/package/graphicsmagick/graphicsmagick.mk
+@@ -16,7 +16,7 @@ GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
+ # 0001-MNG-Fix-small-heap-overwrite-or-assertion.patch
+ GRAPHICSMAGICK_IGNORE_CVES += CVE-2020-12672
  
- N:	Alejandro Gonz??lez <alejandro.gonzalez.correo@gmail.com>
-+F:	package/qprint/
- F:	package/watchdog/
+-ifeq ($(BR2_INSTALL_LIBSTDCPP)$(BR2_USE_WCHAR),yy)
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ GRAPHICSMAGICK_CONFIG_SCRIPTS += GraphicsMagick++-config
+ endif
  
- N:	Aleksander Morgado <aleksander@aleksander.es>
-diff --git a/package/Config.in b/package/Config.in
-index c85a3c6bd3..956ac6f7b0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2350,6 +2350,7 @@ comment "Utilities"
- 	source "package/logsurfer/Config.in"
- 	source "package/pdmenu/Config.in"
- 	source "package/pinentry/Config.in"
-+	source "package/qprint/Config.in"
- 	source "package/ranger/Config.in"
- 	source "package/rtty/Config.in"
- 	source "package/screen/Config.in"
-diff --git a/package/qprint/Config.in b/package/qprint/Config.in
-new file mode 100644
-index 0000000000..edfb92a5f3
---- /dev/null
-+++ b/package/qprint/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QPRINT
-+	bool "qprint"
-+	help
-+	  qprint is a program that encodes and decodes binary data in
-+	  the Quoted-Printable encoding, defined as a part of the MIME
-+	  specification in RFC 1521. This encoding allows for efficient
-+	  transfer of mostly ASCII data over transports that are only
-+	  7-bit clean, like SMTP without 8BITMIME or BINARYMIME
-+	  extensions. It also allows the transfer of long lines of text
-+	  by wrapping them every 76 characters.
-+
-+	  Usually, a sophisticated MUA will take care of automatically
-+	  choosing the best encodings for an e-mail. Nevertheless, this
-+	  utility may be useful when a MTA (e.g. msmtp) is used without
-+	  a MUA, or if using this encoding for other purposes is
-+	  desired.
-+
-+	  https://www.fourmilab.ch/webtools/qprint/
-diff --git a/package/qprint/qprint.hash b/package/qprint/qprint.hash
-new file mode 100644
-index 0000000000..0412cf84c5
---- /dev/null
-+++ b/package/qprint/qprint.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  ffa9ca1d51c871fb3b56a4bf0165418348cf080f01ff7e59cd04511b9665019c  qprint-1.1.tar.gz
-+sha256  3bd4089942977a357fed0d3c84b6ea877000c20c7c344c2feabf4b10db9f7495  COPYING
-diff --git a/package/qprint/qprint.mk b/package/qprint/qprint.mk
-new file mode 100644
-index 0000000000..e34fba54b9
---- /dev/null
-+++ b/package/qprint/qprint.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# qprint
-+#
-+################################################################################
-+
-+QPRINT_VERSION = 1.1
-+QPRINT_SITE = https://www.fourmilab.ch/webtools/qprint
-+QPRINT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-bin
-+QPRINT_LICENSE = Public Domain
-+QPRINT_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
