@@ -1,67 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 22 Sep 2020 21:22:49 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: fix
- segfault on brcm platforms
-Message-ID: <20200922191325.43C5C82653@busybox.osuosl.org>
+Date: Tue, 22 Sep 2020 21:23:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.36
+In-Reply-To: <20200922144731.2546-1-mf@go-sys.de>
+References: <20200922144731.2546-1-mf@go-sys.de>
+Message-ID: <20200922212308.77441ccb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6427ede939ca38199a2fcd253a2a214db8b43972
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 22 Sep 2020 16:47:31 +0200
+Michael Fischer <mf@go-sys.de> wrote:
 
-According to the original patch message:
-    Some Broadcom set-top-box boards have PCI busses, but the GPU is
-    still probed through DT.  We would dereference a null busid here
-    in that case.
+> Drop patches 0001-0004: already applied upstream
+> 
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
+> ---
+>  ...0001-blkdiscard-use-O_EXCL-add-force.patch |  86 --------
+>  ...d-fdisk_set_disklabel_id_from_string.patch | 195 ------------------
+>  ...k-add-disk-id-to-change-disk-UUID-ID.patch | 139 -------------
+>  .../0004-include-cleanup-pidfd-inckudes.patch |  40 ----
+>  package/util-linux/util-linux.hash            |   4 +-
+>  package/util-linux/util-linux.mk              |   5 +-
+>  6 files changed, 4 insertions(+), 465 deletions(-)
+>  delete mode 100644 package/util-linux/0001-blkdiscard-use-O_EXCL-add-force.patch
+>  delete mode 100644 package/util-linux/0002-libfdisk-add-fdisk_set_disklabel_id_from_string.patch
+>  delete mode 100644 package/util-linux/0003-sfdisk-add-disk-id-to-change-disk-UUID-ID.patch
+>  delete mode 100644 package/util-linux/0004-include-cleanup-pidfd-inckudes.patch
 
-Fixes a segfault on at least the RPi 4 w/ xserver 1.20.9, probably
-others as well.
+Applied to master, thanks.
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...t-on-probing-a-non-PCI-platform-device-on.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/package/x11r7/xserver_xorg-server/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-new file mode 100644
-index 0000000000..7802fd96c9
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-@@ -0,0 +1,33 @@
-+From e50c85f4ebf559a3bac4817b41074c43d4691779 Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 26 Oct 2018 17:47:30 -0700
-+Subject: [PATCH] Fix segfault on probing a non-PCI platform device on a system
-+ with PCI.
-+
-+Some Broadcom set-top-box boards have PCI busses, but the GPU is still
-+probed through DT.  We would dereference a null busid here in that
-+case.
-+
-+Signed-off-by: Eric Anholt <eric@anholt.net>
-+Backported from: e50c85f4ebf559a3bac4817b41074c43d4691779
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ hw/xfree86/common/xf86platformBus.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/hw/xfree86/common/xf86platformBus.c b/hw/xfree86/common/xf86platformBus.c
-+index cef47da03..dadbac6c8 100644
-+--- a/hw/xfree86/common/xf86platformBus.c
-++++ b/hw/xfree86/common/xf86platformBus.c
-+@@ -289,7 +289,7 @@ xf86platformProbe(void)
-+     for (i = 0; i < xf86_num_platform_devices; i++) {
-+         char *busid = xf86_platform_odev_attributes(i)->busid;
-+
-+-        if (pci && (strncmp(busid, "pci:", 4) == 0)) {
-++        if (pci && busid && (strncmp(busid, "pci:", 4) == 0)) {
-+             platform_find_pci_info(&xf86_platform_devices[i], busid);
-+         }
-+
-+--
-+2.24.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
