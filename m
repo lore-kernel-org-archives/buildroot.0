@@ -1,14 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:20:23 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1: bump version to 1.18.0
-Message-ID: <20200923201700.1C1A283C43@busybox.osuosl.org>
+Date: Wed, 23 Sep 2020 22:25:22 +0200
+Subject: [Buildroot] [git commit] package/gst1-rtsp-server: bump version to
+ 1.18.0
+Message-ID: <20200923201700.7540183C43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f21ffbc65e08af5f2f3cd9aaf088550db032ae8c
+commit: https://git.buildroot.net/buildroot/commit/?id=552347484f6e2035095ae085c7436bb1c2f53129
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - change home page url to https
@@ -16,29 +17,28 @@ branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 - remove 0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
   (upstream [1])
 
-- meson options: add extra-checks=disabled, gst_parse=true, doc=disabled
-  (and re-order tools and gobjec-cast-checks according to meson_options.txt order)
+- meson options: doc=disabled
 
-[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/35db4a2433fbdf8612cf98b5aab5b14aeb5372f8.patch
+[1] https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/commit/95ce953e34cd0e9f5d42ce7900a9572e7bc8ca47.patch
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  ...ven-when-cross-compiling-if-introspection.patch | 36 ----------------------
- package/gstreamer1/gstreamer1/Config.in            |  2 +-
- package/gstreamer1/gstreamer1/gstreamer1.hash      |  6 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk        |  9 ++++--
- 4 files changed, 10 insertions(+), 43 deletions(-)
+ package/gstreamer1/gst1-rtsp-server/Config.in      |  2 +-
+ .../gst1-rtsp-server/gst1-rtsp-server.hash         |  8 ++---
+ .../gst1-rtsp-server/gst1-rtsp-server.mk           |  5 +--
+ 4 files changed, 8 insertions(+), 43 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch b/package/gstreamer1/gstreamer1/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+diff --git a/package/gstreamer1/gst1-rtsp-server/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch b/package/gstreamer1/gst1-rtsp-server/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
 deleted file mode 100644
-index fc290f6cc0..0000000000
---- a/package/gstreamer1/gstreamer1/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+index 0adf6d4e47..0000000000
+--- a/package/gstreamer1/gst1-rtsp-server/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
 +++ /dev/null
 @@ -1,36 +0,0 @@
 -From 35db4a2433fbdf8612cf98b5aab5b14aeb5372f8 Mon Sep 17 00:00:00 2001
 -From: Tim Philipp <tim@centricular.com>
--Date: Thu, 17 Oct 2019 12:13:35 +0100
+-Date:  Fri, 18 Oct 2019 00:42:12 +0100
 -Subject: [PATCH] meson: build gir even when cross-compiling if introspection
 - was enabled explicitly
 -
@@ -47,9 +47,9 @@ index fc290f6cc0..0000000000
 -when cross-compiling, but allow it if introspection was
 -enabled explicitly via -Dintrospection=enabled.
 -
--Fixes #454 and #381.
+-See gstreamer/gstreamer#454 and gstreamer/gstreamer#381.
 -
--Upstream commit: 35db4a2433fbdf8612cf98b5aab5b14aeb5372f8
+-Upstream commit: 95ce953e34cd0e9f5d42ce7900a9572e7bc8ca47
 -Signed-off-by: Tim Philipp <tim@centricular.com>
 -Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ----
@@ -57,77 +57,64 @@ index fc290f6cc0..0000000000
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
 -diff --git a/meson.build b/meson.build
--index 90d98d8eb00..a47e7f34e8a 100644
+-index e1e3b1d..3f45f0e 100644
 ---- a/meson.build
 -+++ b/meson.build
--@@ -453,7 +453,7 @@ rt_lib = cc.find_library('rt', required : false)
+-@@ -173,7 +173,7 @@ endif
+- 
 - gir = find_program('g-ir-scanner', required : get_option('introspection'))
 - gnome = import('gnome')
-- 
 --build_gir = gir.found() and not meson.is_cross_build()
 -+build_gir = gir.found() and (not meson.is_cross_build() or get_option('introspection').enabled())
-- 
 - gir_init_section = [ '--add-init-section=extern void gst_init(gint*,gchar**);' + \
--     'g_setenv("GST_REGISTRY_DISABLE", "yes", TRUE);' + \
+-     'g_setenv("GST_REGISTRY_1.0", "@0@", TRUE);'.format(meson.current_build_dir() + '/gir_empty_registry.reg') + \
+-     'g_setenv("GST_PLUGIN_PATH_1_0", "", TRUE);' + \
 --- 
 -2.24.1
 -
-diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-index 0626bcc96d..5609d8699d 100644
---- a/package/gstreamer1/gstreamer1/Config.in
-+++ b/package/gstreamer1/gstreamer1/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_GSTREAMER1
- 	  GStreamer is an open source multimedia framework. This 1.x
- 	  version of Gstreamer is incompatible with Gstreamer 0.10.x.
+diff --git a/package/gstreamer1/gst1-rtsp-server/Config.in b/package/gstreamer1/gst1-rtsp-server/Config.in
+index 5869952f58..f0294795a1 100644
+--- a/package/gstreamer1/gst1-rtsp-server/Config.in
++++ b/package/gstreamer1/gst1-rtsp-server/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_GST1_RTSP_SERVER
+ 	help
+ 	  RTSP server library based on GStreamer.
  
 -	  http://gstreamer.freedesktop.org/
 +	  https://gstreamer.freedesktop.org/
- 
- if BR2_PACKAGE_GSTREAMER1
- 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index dd379e6027..47cf680ba6 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.2.tar.xz.sha256sum
--sha256 e3f044246783fd685439647373fa13ba14f7ab0b346eadd06437092f8419e94e gstreamer-1.16.2.tar.xz
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index f3dca615cf..d054756688 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.16.2.tar.xz.sha256sum
+-sha256 de07a2837b3b04820ce68264a4909f70c221b85dbff0cede7926e9cdbb1dc26e gst-rtsp-server-1.16.2.tar.xz
 -sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.0.tar.xz.sha256sum
-+sha256  0ff09245b06c0aeb5d9a156edcab088a7e8213a0bf9c84a1ff0318f9c00c7805  gstreamer-1.18.0.tar.xz
+-sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.18.0.tar.xz.sha256sum
++sha256  2ad19311054cbf2df0d0622936bc703dedc06ced706df46a3d3a3ea5a4b7c70f  gst-rtsp-server-1.18.0.tar.xz
 +sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 47615aad1f..1f190c0bc3 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
++sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index 13653565bd..6f1db3644f 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.16.2
-+GSTREAMER1_VERSION = 1.18.0
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
-@@ -15,16 +15,19 @@ GSTREAMER1_CONF_OPTS = \
+-GST1_RTSP_SERVER_VERSION = 1.16.2
++GST1_RTSP_SERVER_VERSION = 1.18.0
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+@@ -20,7 +20,8 @@ GST1_RTSP_SERVER_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ GST1_RTSP_SERVER_CONF_OPTS = \
  	-Dexamples=disabled \
- 	-Dtests=disabled \
- 	-Dbenchmarks=disabled \
-+	-Dtools=$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),enabled,disabled) \
- 	-Dgtk_doc=disabled \
-+	-Dgobject-cast-checks=disabled \
- 	-Dglib-asserts=disabled \
- 	-Dglib-checks=disabled \
--	-Dgobject-cast-checks=disabled \
-+	-Dextra-checks=disabled \
- 	-Dcheck=$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),enabled,disabled) \
- 	-Dtracer_hooks=$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),true,false) \
- 	-Doption-parsing=$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),true,false) \
- 	-Dgst_debug=$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),true,false) \
-+	-Dgst_parse=true \
- 	-Dregistry=$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),true,false) \
--	-Dtools=$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),enabled,disabled)
+-	-Dtests=disabled
++	-Dtests=disabled \
 +	-Ddoc=disabled
  
- GSTREAMER1_DEPENDENCIES = \
- 	host-bison \
+ GST1_RTSP_SERVER_CONF_OPTS += \
+ 	-Dexamples=disabled \
