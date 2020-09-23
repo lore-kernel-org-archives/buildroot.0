@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:31:59 +0200
-Subject: [Buildroot] [RFC v1 13/13] package/gst-omx: bump version to
- 1.18.0 and convert to meson
-In-Reply-To: <20200916194933.24921-13-ps.report@gmx.net>
-References: <20200916194933.24921-1-ps.report@gmx.net>
- <20200916194933.24921-13-ps.report@gmx.net>
-Message-ID: <20200923223159.0ef09f89@windsurf>
+Date: Wed, 23 Sep 2020 22:56:55 +0200
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump version to
+ 0.17.3
+Message-ID: <20200923204731.B2F588B8AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 21:49:33 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fc27e7e1fc386662e338430b10d8c4f991c4965e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - change home page url to https
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->  - droped the version downgrade for the bellagio case (no meson
->    options available), maybe needs extra testing...
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-I think this really needs to be looked at, or we dropped bellagio,
-which hasn't seen any update since 2011. It has never been clear to me
-what bellagio is exactly: isn't the OpenMAX API supposed to be like
-OpenGL, i.e provide some HW-platform specific implementations ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index a2c739e262..feade89f0a 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
+-md5  21ec2fefe3561a12b4ee1efef3748400  sentry-sdk-0.14.4.tar.gz
+-sha256  0e5e947d0f7a969314aa23669a94a9712be5a688ff069ff7b9fc36c66adc160c  sentry-sdk-0.14.4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
++md5  5d4abcc416cbd0b9443bf56588b02b55  sentry-sdk-0.17.3.tar.gz
++sha256  0af429c221670e602f960fca85ca3f607c85510a91f11e8be8f742a978127f78  sentry-sdk-0.17.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 13495047b9..696c487005 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SENTRY_SDK_VERSION = 0.14.4
++PYTHON_SENTRY_SDK_VERSION = 0.17.3
+ PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/ab/67/b653a44ce124a2b700a7fc349ca129282c5fec4fdc9197f558178a9e32ae
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/64/7e/f1725d8649ef8f7d58cbec582157c454884238e59fef00b1707d555c7bea
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
