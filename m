@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:57:02 +0200
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: fix select
- ordering
-Message-ID: <20200923204731.BC5CB81171@busybox.osuosl.org>
+Date: Wed, 23 Sep 2020 22:57:47 +0200
+Subject: [Buildroot] [PATCH 1/3] package/python-sentry-sdk: bump version
+ to 0.17.3
+In-Reply-To: <20200908192336.155428-1-joseph.kogut@gmail.com>
+References: <20200908192336.155428-1-joseph.kogut@gmail.com>
+Message-ID: <20200923225747.147803d4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b799881ebef67eeccc21810be54436c4b67520c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Sep 2020 12:23:34 -0700
+Joseph Kogut <joseph.kogut@gmail.com> wrote:
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-sentry-sdk/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
+>  package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sentry-sdk/Config.in b/package/python-sentry-sdk/Config.in
-index 5bddabe282..62b8100bdb 100644
---- a/package/python-sentry-sdk/Config.in
-+++ b/package/python-sentry-sdk/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PYTHON_SENTRY_SDK
- 	bool "python-sentry-sdk"
--	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
- 	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
-+	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
- 	help
- 	  Python client for Sentry (https://getsentry.com).
- 
+Thanks, all three patches applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
