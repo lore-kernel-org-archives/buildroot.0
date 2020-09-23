@@ -1,51 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 23 Sep 2020 07:26:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: add missing depends and
- driver name to r100 driver
-References: <20200209183441.130187-1-james.hilliard1@gmail.com>
-Message-ID: <1t2r3hxkiu.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 23 Sep 2020 08:56:13 +0200
+Subject: [Buildroot] [PATCH v3] package/python-imutils: new package
+In-Reply-To: <bc9d03e2-428c-9c39-f750-cc0c97213643@t-online.de>
+References: <20190802144503.23601-1-alexandre.payen@smile.fr>
+ <bc9d03e2-428c-9c39-f750-cc0c97213643@t-online.de>
+Message-ID: <20200923085613.0edea9e6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi James,
+On Wed, 23 Sep 2020 07:04:07 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Am Sun, 09 Feb 2020 11:34:41 -0700 schrieb James Hilliard:
-
-> Propagate libdrm dependencies.
+> Hi Thomas,
 > 
-> Add r100 to menu name to differentiate from r200 dri driver.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1-
-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
->  package/mesa3d/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index ff39652508..788705544d 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -355,7 +355,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
->  	  Support for Nvidia-based GPUs.
->  
->  config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-> -	bool "DRI radeon driver"
-> +	bool "DRI radeon r100 driver"
+> please change the patch state of http://patchwork.ozlabs.org/project/
+> buildroot/patch/20190802144503.23601-1-alexandre.payen at smile.fr/ to
+> "Changes Requested".
 
-ok.
+Done. Thanks!
 
-> +	depends on BR2_i386 || BR2_x86_64
-
-Ok, the build system of mesa3d limits the driver to these archs:
-https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=20.1#n141
-
-> +	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
-
-ok.
-
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
