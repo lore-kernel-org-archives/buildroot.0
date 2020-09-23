@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:57:07 +0200
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: update homepage
- URL
-Message-ID: <20200923204731.C84C98DA6E@busybox.osuosl.org>
+Date: Wed, 23 Sep 2020 22:57:02 +0200
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: fix select
+ ordering
+Message-ID: <20200923204731.BC5CB81171@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd87db1d657a02c2016ef3d9730d943f3910d861
+commit: https://git.buildroot.net/buildroot/commit/?id=3b799881ebef67eeccc21810be54436c4b67520c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
@@ -20,14 +20,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/python-sentry-sdk/Config.in b/package/python-sentry-sdk/Config.in
-index 62b8100bdb..e8e88bac18 100644
+index 5bddabe282..62b8100bdb 100644
 --- a/package/python-sentry-sdk/Config.in
 +++ b/package/python-sentry-sdk/Config.in
-@@ -3,6 +3,6 @@ config BR2_PACKAGE_PYTHON_SENTRY_SDK
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_SENTRY_SDK
+ 	bool "python-sentry-sdk"
+-	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
  	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
- 	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
++	select BR2_PACKAGE_PYTHON_URLLIB3 # runtime
  	help
--	  Python client for Sentry (https://getsentry.com).
-+	  Python client for Sentry (https://sentry.io).
+ 	  Python client for Sentry (https://getsentry.com).
  
- 	  https://github.com/getsentry/sentry-python
