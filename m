@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Sep 2020 21:07:15 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/ipmitool: fix
+Date: Wed, 23 Sep 2020 21:06:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/ipmitool: fix
  0011-channel-Fix-buffer-overflow.patch
-Message-ID: <20200923185759.04B298DA71@busybox.osuosl.org>
+Message-ID: <20200923185811.BF3C2826D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31794691b4276831c4825b9d80f6e9574178094c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d86b338740cb42e7f296baf6035f0c9d9b7065f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 The previous commit to this package
 (37c5e903a7e18f5b3847c11a40af5f74984d6c77) introduced a bunch of patches
