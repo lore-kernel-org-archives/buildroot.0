@@ -1,46 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 20:46:07 +0200
-Subject: [Buildroot] [git commit] package/libvpx: vp9 encoder needs c++
-Message-ID: <20200923183632.692BC81973@busybox.osuosl.org>
+Date: Wed, 23 Sep 2020 20:44:39 +0200
+Subject: [Buildroot] [git commit] package/open-plc-utils: fix build with gcc
+ 10
+Message-ID: <20200923183632.513EE8DA53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=182bd22ece1a02db956afac873258a7be37e6125
+commit: https://git.buildroot.net/buildroot/commit/?id=86ae2856d800f215acbfb925db8a9669195ef11b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Encoding rate control interface for v9 is implemented in c++:
-https://github.com/webmproject/libvpx/commit/745979bc2913b4f26847084699d9fddd68b60410#diff-58f26933c120328b31831a743eec5ba3R534
-
-Disable vp9 encoding when toolchain lacks c++.
-
 Fixes:
-http://autobuild.buildroot.net/results/983/9836215fe22f260483f9153fb5447892801a14a9/
-http://autobuild.buildroot.net/results/88a/88aa80ee006ba2dcc40c15be3af73c756cb62974/
+ - http://autobuild.buildroot.org/results/6b3064b64dea3d4aaf219f787429c25918101483
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libvpx/libvpx.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../0002-plc-plc.h-fix-build-with-gcc-10.patch     | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index c7245885d9..26d211cf86 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -20,6 +20,13 @@ LIBVPX_CONF_OPTS = \
- 	--disable-docs \
- 	--disable-unit-tests
- 
-+# vp9/ratectrl_rtc.cc
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+LIBVPX_CONF_OPTS += --enable-vp9-encoder
-+else
-+LIBVPX_CONF_OPTS += --disable-vp9-encoder
-+endif
+diff --git a/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch b/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..063bfc536c
+--- /dev/null
++++ b/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,37 @@
++From 27222be0b8db59cae30a5fcca93255daea147bb6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 23 Sep 2020 19:05:23 +0200
++Subject: [PATCH] plc/plc.h: fix build with gcc 10
 +
- # This is not a true autotools package.  It is based on the ffmpeg build system
- define LIBVPX_CONFIGURE_CMDS
- 	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
++Drop plcproperty from plc/plc.h to avoid the following build failure
++with gcc 10 (which defaults to -fno-common):
++
++/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: rules.o:(.bss+0x0): multiple definition of `plcproperty'; pibruin.o:(.bss+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6b3064b64dea3d4aaf219f787429c25918101483
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/qca/open-plc-utils/pull/141]
++---
++ plc/plc.h | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/plc/plc.h b/plc/plc.h
++index 1fa32b53..208cf91a 100644
++--- a/plc/plc.h
+++++ b/plc/plc.h
++@@ -496,9 +496,7 @@ struct __packed plcproperty
++ 	uint8_t DATA_FORMAT;
++ 	uint32_t DATA_LENGTH;
++ 	uint8_t DATA_BUFFER [128];
++-}
++-
++-plcproperty;
+++};
++ 
++ #ifndef __GNUC__
++ #pragma pack (pop)
++-- 
++2.28.0
++
