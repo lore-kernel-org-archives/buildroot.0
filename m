@@ -1,86 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 20:45:23 +0200
-Subject: [Buildroot] [git commit] package/clamav: needs dynamic library
-Message-ID: <20200923183632.603EB7FC08@busybox.osuosl.org>
+Date: Wed, 23 Sep 2020 20:47:02 +0200
+Subject: [Buildroot] [git commit] package/gcc: transition PowerPC 32 to
+ secureplt
+Message-ID: <20200923183806.95F4B86A94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19d1ca28d248b998c5a8ea37ae1b77629c4ce3e2
+commit: https://git.buildroot.net/buildroot/commit/?id=f9b539bf4054d55da69280b19f4b99a91cbe6e0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream commit
-https://github.com/Cisco-Talos/clamav-devel/commit/9e20cdf6eaf545a66f55ce5ba85ef9a98dad3648
-added dlopen() to others.c
-https://github.com/Cisco-Talos/clamav-devel/blob/dev/0.104/libclamav/others.c#L199
+PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
+runtime code generation to generate the PLT stubs. Secure-PLT was
+introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
+Binutils 2.17), and is a more secure PLT format, using a read-only
+linkage table, with the dynamic linker populating a non-executable
+index table.
 
-"libclamav used to build in multiple stages where an earlier stage is
-a static library containing utils required by the "shared" code.
-Linking clamdscan and clamdtop with this libclamav utils static lib
-allowed these two apps to function without libclamav. While this is
-nice in theory, the practical gains are minimal and it complicates
-the build system. As such, the autotools and CMake tooling was
-simplified for improved maintainability and this feature was thrown
-out. clamdtop and clamdscan now require libclamav to function."
+References to other distro/BSD transitions:
+  https://patchwork.openembedded.org/patch/106621/
+  https://reviews.freebsd.org/D20598
 
-Fixes:
-http://autobuild.buildroot.net/results/e27/e276894781e3e37fbc03a0745738c61541e0a211/
-http://autobuild.buildroot.net/results/552/552ee8d9e44152c9d7e315a5491542771264d466/
-http://autobuild.buildroot.net/results/fde/fde4af47542f0eb0bd57b172c99bd086eb566b76/
+Fixes a bug observed when creating SELinux policy where all apps
+require execmem because the heap requires execute before this change.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/clamav/Config.in | 6 +++---
- package/clamav/clamav.mk | 3 ---
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ package/gcc/gcc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 08f3e47461..990a818b5c 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -3,10 +3,10 @@ config BR2_PACKAGE_CLAMAV
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBMSPACK
--	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_ZLIB
-@@ -16,7 +16,7 @@ config BR2_PACKAGE_CLAMAV
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..df5bf22b96 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -223,6 +223,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
  
- 	  http://www.clamav.net
- 
--comment "clamav needs a toolchain w/ C++, threads, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP \
-+comment "clamav needs a toolchain w/ C++, dynamic library, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index fc979a74aa..45d62943a0 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -14,7 +14,6 @@ CLAMAV_DEPENDENCIES = \
- 	host-pkgconf \
- 	libcurl \
- 	libmspack \
--	libtool \
- 	openssl \
- 	zlib \
- 	$(TARGET_NLS_DEPENDENCIES)
-@@ -38,8 +37,6 @@ CLAMAV_CONF_ENV += LIBS="$(CLAMAV_LIBS)"
- 
- CLAMAV_CONF_OPTS = \
- 	--with-dbdir=/var/lib/clamav \
--	--with-ltdl-include=$(STAGING_DIR)/usr/include \
--	--with-ltdl-lib=$(STAGING_DIR)/usr/lib \
- 	--with-libcurl=$(STAGING_DIR)/usr \
- 	--with-openssl=$(STAGING_DIR)/usr \
- 	--with-system-libmspack=$(STAGING_DIR)/usr \
++# Set default to Secure-PLT to prevent run-time
++# generation of PLT stubs (supports RELRO and
++# SELinux non-exemem capabilities)
++ifeq ($(BR2_powerpc),y)
++HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
++endif
++
+ # PowerPC64 big endian by default uses the elfv1 ABI, and PowerPC 64
+ # little endian by default uses the elfv2 ABI. However, musl has
+ # decided to use the elfv2 ABI for both, so we force the elfv2 ABI for
