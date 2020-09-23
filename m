@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:29:26 +0200
-Subject: [Buildroot] [RFC v1 11/13] package/gst1-rtsp-server: bump
+Date: Wed, 23 Sep 2020 22:27:47 +0200
+Subject: [Buildroot] [RFC v1 04/13] package/gst1-plugins-base: bump
  version to 1.18.0
-In-Reply-To: <20200916194933.24921-11-ps.report@gmx.net>
+In-Reply-To: <20200916194933.24921-4-ps.report@gmx.net>
 References: <20200916194933.24921-1-ps.report@gmx.net>
- <20200916194933.24921-11-ps.report@gmx.net>
-Message-ID: <20200923222926.3955eae2@windsurf>
+ <20200916194933.24921-4-ps.report@gmx.net>
+Message-ID: <20200923222747.3cb18008@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 16 Sep 2020 21:49:31 +0200
+On Wed, 16 Sep 2020 21:49:24 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
 > - change home page url to https
 > 
-> - remove 0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+> - remove 0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
 >   (upstream [1])
 > 
-> - meson options: doc=disabled
+> - remove 0002-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+>   (upstream [2])
 > 
-> [1] https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/-/commit/95ce953e34cd0e9f5d42ce7900a9572e7bc8ca47.patch
+> - meson options: remove gtk_doc, add doc=disabled
+> 
+> - add option for new plugin gio-typefinder
+> 
+> [1] https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/commit/51253830f3e9dad108baa07c87ed62509ee3123f.patch
+> [2] https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/commit/30672ba7d134553e59935ddc875104adba26f25c.patch
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...hen-cross-compiling-if-introspection.patch | 36 -------------------
->  package/gstreamer1/gst1-rtsp-server/Config.in |  2 +-
->  .../gst1-rtsp-server/gst1-rtsp-server.hash    |  8 ++---
->  .../gst1-rtsp-server/gst1-rtsp-server.mk      |  5 +--
->  4 files changed, 8 insertions(+), 43 deletions(-)
->  delete mode 100644 package/gstreamer1/gst1-rtsp-server/0001-meson-build-gir-even-when-cross-compiling-if-introspection.patch
+>  ...ic-linkig-of-tools-needs-gmodule_dep.patch | 38 -------------------
+>  ...hen-cross-compiling-if-introspection.patch | 35 -----------------
+>  .../gstreamer1/gst1-plugins-base/Config.in    |  7 +++-
+>  .../gst1-plugins-base/gst1-plugins-base.hash  |  6 +--
+>  .../gst1-plugins-base/gst1-plugins-base.mk    | 10 ++++-
+>  5 files changed, 17 insertions(+), 79 deletions(-)
+>  delete mode 100644 package/gstreamer1/gst1-plugins-base/0001-meson-static-linkig-of-tools-needs-gmodule_dep.patch
+>  delete mode 100644 package/gstreamer1/gst1-plugins-base/0002-meson-build-gir-even-when-cross-compiling-if-introspection.patch
 
 Applied to master, thanks.
 
