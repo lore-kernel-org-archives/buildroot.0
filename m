@@ -1,44 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 23 Sep 2020 20:08:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: vp9 encoder needs c++
-Message-ID: <20200923180830.84180-1-bernd.kuhls@t-online.de>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed, 23 Sep 2020 20:23:00 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5declarative: remove optional
+ quick module option
+Message-ID: <20200923182300.58950-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Encoding rate control interface for v9 is implemented in c++:
-https://github.com/webmproject/libvpx/commit/745979bc2913b4f26847084699d9fddd68b60410#diff-58f26933c120328b31831a743eec5ba3R534
+Since commit [1] we are not able to disable/enable this module
+so let's force to set Qt5 OpenGL support by default
+if it's possible because currently quick's components
+are being built anyway.
 
-Disable vp9 encoding when toolchain lacks c++.
+This should fix the build errors with qt5location package
+which includes couple of built-in components that require
+OpenGL support [2] when Qt Quick module is detected.
 
-Fixes:
-http://autobuild.buildroot.net/results/983/9836215fe22f260483f9153fb5447892801a14a9/
-http://autobuild.buildroot.net/results/88a/88aa80ee006ba2dcc40c15be3af73c756cb62974/
+http://autobuild.buildroot.net/results/ddd/ddda7cdb9400f6ca7d548e9b5ada18674fbe42e0/
+http://autobuild.buildroot.net/results/ddb/ddb25ebb591ed6029a7bd4934464171358553936/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] https://git.buildroot.net/buildroot/commit/package/qt5/qt5declarative/qt5declarative.mk?id=1bdceb5d735aad5fbf32b35e3a7f573ecb727e20
+[2] https://code.woboq.org/qt5/qtdeclarative/src/quick/scenegraph/coreapi/qsgmaterialshader.h.html#105
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/libvpx/libvpx.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/qt5/qt5declarative/Config.in | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index c7245885d9..26d211cf86 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -20,6 +20,13 @@ LIBVPX_CONF_OPTS = \
- 	--disable-docs \
- 	--disable-unit-tests
+diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
+index 3ba9224c22..a25a12f06f 100644
+--- a/package/qt5/qt5declarative/Config.in
++++ b/package/qt5/qt5declarative/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_QT5DECLARATIVE
+ 	bool "qt5declarative"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	select BR2_PACKAGE_QT5BASE_GUI
++	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -11,11 +12,3 @@ config BR2_PACKAGE_QT5DECLARATIVE
  
-+# vp9/ratectrl_rtc.cc
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+LIBVPX_CONF_OPTS += --enable-vp9-encoder
-+else
-+LIBVPX_CONF_OPTS += --disable-vp9-encoder
-+endif
-+
- # This is not a true autotools package.  It is based on the ffmpeg build system
- define LIBVPX_CONFIGURE_CMDS
- 	(cd $(LIBVPX_SRCDIR) && rm -rf config.cache && \
+ 	  http://doc.qt.io/qt-5/qtqml-index.html
+ 	  http://doc.qt.io/qt-5/qtquick-index.html
+-
+-if BR2_PACKAGE_QT5DECLARATIVE
+-
+-config BR2_PACKAGE_QT5DECLARATIVE_QUICK
+-	bool "quick module"
+-	select BR2_PACKAGE_QT5BASE_OPENGL if BR2_PACKAGE_QT5_GL_AVAILABLE
+-
+-endif
 -- 
-2.27.0
+2.28.0
