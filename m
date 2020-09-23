@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 20:51:27 +0200
-Subject: [Buildroot] [PATCH] gcc: powerpc32 transition to secureplt
-In-Reply-To: <20200923152908.21153-1-matthew.weber@rockwellcollins.com>
-References: <20200923152908.21153-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200923205127.0a60882c@windsurf>
+Date: Wed, 23 Sep 2020 20:56:17 +0200
+Subject: [Buildroot] [PATCH 2/3] boards: chromebook: Move "mksd.sh" out
+ of chromebook snow folder.
+In-Reply-To: <20200921181246.88781-3-bilalwasim676@gmail.com>
+References: <20200921181246.88781-1-bilalwasim676@gmail.com>
+ <20200921181246.88781-3-bilalwasim676@gmail.com>
+Message-ID: <20200923205617.42ba52fe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Sep 2020 10:29:08 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+Hello Bilal,
 
-> PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
-> runtime code generation to generate the PLT stubs. Secure-PLT was
-> introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
-> Binutils 2.17), and is a more secure PLT format, using a read-only
-> linkage table, with the dynamic linker populating a non-executable
-> index table.
+Thanks for your contribution!
+
+On Mon, 21 Sep 2020 23:12:45 +0500
+Bilal Wasim <bilalwasim676@gmail.com> wrote:
+
+> The same script is used by Chromebook Elm to generate a bootable
+> SD / USB image. Therefore, move the script out of the snow folder
+> to one level above (boards/chromebook/snow -> boards/chromebook).
 > 
-> Ref to other distro/BSD transitions
-> https://patchwork.openembedded.org/patch/106621/
-> https://reviews.freebsd.org/D20598
+> Update the Chrome snow defconfig to reflect the new location of the
+> script.
 > 
-> Fixes a bug observed when creating SELinux policy where all apps
-> require execmem because the heap requires execute before this
-> change.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Bilal Wasim <bilalwasim676@gmail.com>
 > ---
->  package/gcc/gcc.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  board/chromebook/{snow => }/mksd.sh | 0
+>  configs/chromebook_snow_defconfig   | 2 +-
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>  rename board/chromebook/{snow => }/mksd.sh (100%)
 
-Applied to master, thanks.
+I fixed up a bit the commit title and commit log, and applied. This
+indeed is needed as a pre-requisite to adding the Chromebook Elm
+configuration.
+
+Another question: could you see if this mksd.sh script can be dropped
+in favor of using genimage to generate the SD card image? Indeed,
+genimage now has support for GPT partitions, so I believe it should be
+able to generate a working image. Do you think you could have a look at
+that ?
+
+Thanks!
 
 Thomas
 -- 
