@@ -1,44 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 23 Sep 2020 22:19:45 +0200
-Subject: [Buildroot] [PATCH 2/2] packages/rsyslog: add support for RELP
-In-Reply-To: <20200921165834.7514-3-dgouarin@gmail.com>
-References: <20200921165834.7514-1-dgouarin@gmail.com>
- <20200921165834.7514-3-dgouarin@gmail.com>
-Message-ID: <20200923221945.050f9eda@windsurf>
+Date: Wed, 23 Sep 2020 22:21:18 +0200
+Subject: [Buildroot] [git commit] package/gst1-plugins-good: bump version to
+ 1.18.0
+Message-ID: <20200923201700.3A3D57FDAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=686321390a30ef00c220d11f9c8d7fbf40f5c27f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 21 Sep 2020 18:58:34 +0200
-David GOUARIN <dgouarin@gmail.com> wrote:
+- change home page url to https
 
-> +config BR2_PACKAGE_RSYSLOG_RELP
-> +	bool "enable support for relp logging protocol"
-> +	depends on BR2_PACKAGE_RSYSLOG
-> +	select BR2_PACKAGE_LIBRELP
-> +	help
-> +	  Enable relp rsyslog plugin.
+- disable new plugin rpicamsrc (compile failure with current buildroot)
 
-I dropped this option entirely.
+- meson options: add gobject-cast-checks=disabled, glib-asserts=disabled,
+  glib-checks=disabled, asm=disabled (needs host-nasm), doc=disabled
 
-> +ifeq ($(BR2_PACKAGE_RSYSLOG_RELP),y)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in              |  2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash |  6 +++---
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 10 ++++++++--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-And simply made this based on the following condition:
-
-ifeq ($(BR2_PACKAGE_LIBRELP),y)
-
-> +RSYSLOG_DEPENDENCIES += librelp
-> +RSYSLOG_PLUGINS += relp
-> +endif
-
-And I've applied with those changes. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index be77f5a82e..4dcf26766a 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -8,7 +8,7 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_GOOD
+ 	  A set of well-supported plug-ins for GStreamer under the
+ 	  preferred license.
+ 
+-	  http://gstreamer.freedesktop.org/
++	  https://gstreamer.freedesktop.org/
+ 
+ if BR2_PACKAGE_GST1_PLUGINS_GOOD
+ 
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 075338b14b..01e2377d03 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.2.tar.xz.sha256sum
+-sha256 40bb3bafda25c0b739c8fc36e48380fccf61c4d3f83747e97ac3f9b0171b1319 gst-plugins-good-1.16.2.tar.xz
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.18.0.tar.xz.sha256sum
++sha256  6329bc377a3afea5cf1ab329a91cc4a906f075781780d1edc59e8bea8c1a8bac  gst-plugins-good-1.18.0.tar.xz
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index eed4bfe117..396d693a71 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PLUGINS_GOOD_VERSION = 1.16.2
++GST1_PLUGINS_GOOD_VERSION = 1.18.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+@@ -15,12 +15,18 @@ GST1_PLUGINS_GOOD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ 	-Dexamples=disabled \
+ 	-Dtests=disabled \
++	-Dgobject-cast-checks=disabled \
++	-Dglib-asserts=disabled \
++	-Dglib-checks=disabled \
++	-Dasm=disabled \
+ 	-Ddirectsound=disabled \
+ 	-Dwaveform=disabled \
++	-Drpicamsrc=disabled \
+ 	-Dosxaudio=disabled \
+ 	-Dosxvideo=disabled \
+ 	-Daalib=disabled \
+-	-Dlibcaca=disabled
++	-Dlibcaca=disabled \
++	-Ddoc=disabled
+ 
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
