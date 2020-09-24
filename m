@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 24 Sep 2020 09:33:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptodev-linux: bump to
- version fabe598
-In-Reply-To: <20200908133051.13321-1-alejandro.gonzalez.correo@gmail.com>
-References: <20200908133051.13321-1-alejandro.gonzalez.correo@gmail.com>
-Message-ID: <20200924093346.58a421c7@windsurf>
+Date: Thu, 24 Sep 2020 10:26:55 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: gst1-validate is now
+ gst1-devtools
+Message-ID: <20200924081726.CB71583786@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  8 Sep 2020 15:30:51 +0200
-Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f6caa9f55bea61c78b950bc2a4147c924fdfdbfd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This version fixes building with 5.9 kernels.
-> 
-> Signed-off-by: Alejandro Gonz?lez <alejandro.gonzalez.correo@gmail.com>
-> ---
->  package/cryptodev-linux/cryptodev-linux.hash | 2 +-
->  package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4e465221d4..dcefb8f4df 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2111,8 +2111,8 @@ F:	package/dillo/
+ F:	package/edid-decode/
+ F:	package/ell/
+ F:	package/ghostscript-fonts/
++F:	package/gstreamer1/gst1-devtools/
+ F:	package/gstreamer1/gst1-interpipe/
+-F:	package/gstreamer1/gst1-validate/
+ F:	package/gstreamer1/gstreamer1-editing-services/
+ F:	package/iwd/
+ F:	package/libevdev/
