@@ -1,70 +1,88 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 Sep 2020 19:20:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/log4cxx: fix build without wchar
-Message-ID: <20200924172018.904670-1-fontaine.fabrice@gmail.com>
+Date: Thu, 24 Sep 2020 19:29:02 +0200
+Subject: [Buildroot] [PATCH v2, 2/2] package/kismet: add python tools support
+In-Reply-To: <20200924172903.913531-1-fontaine.fabrice@gmail.com>
+References: <20200924172903.913531-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200924172903.913531-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build with log4cxx in version 0.11.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-build-without-wchar.patch        | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/log4cxx/0001-fix-build-without-wchar.patch
+ package/kismet/Config.in | 28 ++++++++++++++++++++++++++++
+ package/kismet/kismet.mk | 11 ++++++++++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-diff --git a/package/log4cxx/0001-fix-build-without-wchar.patch b/package/log4cxx/0001-fix-build-without-wchar.patch
-new file mode 100644
-index 0000000000..c297c76da3
---- /dev/null
-+++ b/package/log4cxx/0001-fix-build-without-wchar.patch
-@@ -0,0 +1,41 @@
-+From f6507390138fa599bc93bafc0552cfb3128b6cd7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Sep 2020 08:47:37 +0200
-+Subject: [PATCH] fix build without wchar
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 8c4c63d9ed..4ef84731da 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -26,6 +26,34 @@ config BR2_PACKAGE_KISMET
+ 
+ if BR2_PACKAGE_KISMET
+ 
++config BR2_PACKAGE_KISMET_PYTHON_TOOLS
++	bool "Install python tools"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_PACKAGE_PYTHON3
++	depends on !BR2_STATIC_LIBS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_PYTHON_NUMPY # runtime for RTLAMR and RTLADSB
++	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
++	select BR2_PACKAGE_PYTHON_SERIAL # runtime for Freaklabs Zigbee
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	help
++	  Enable Python and Python-related tools (RTL_433, RTLAMR,
++	  RTLADSB and Freaklabs Zigbee)
 +
-+Disable wencode without wchar or the build will fail on:
++comment "python tools needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
 +
-+odbcappender.cpp: In static member function 'static void log4cxx::db::ODBCAppender::encode(wchar_t**, const LogString&, log4cxx::helpers::Pool&)':
-+odbcappender.cpp:362:22: error: 'wencode' is not a member of 'log4cxx::helpers::Transcoder'
-+  *dest = Transcoder::wencode(src, p);
-+                      ^~~~~~~
++comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 4.8"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
+ config BR2_PACKAGE_KISMET_SERVER
+ 	bool "Install server"
+ 	default y
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 6a915c6cd4..4fd46da699 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -17,7 +17,7 @@ KISMET_DEPENDENCIES = \
+ 	zlib
+ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
+-KISMET_CONF_OPTS = --disable-debuglibs --disable-python-tools
++KISMET_CONF_OPTS = --disable-debuglibs
+ 
+ KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+@@ -55,6 +55,15 @@ else
+ KISMET_CONF_OPTS += --disable-pcre
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KISMET_PYTHON_TOOLS),y)
++KISMET_DEPENDENCIES += python3 python-setuptools
++KISMET_CONF_OPTS += \
++	--enable-python-tools \
++	--with-python-interpreter=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
++else
++KISMET_CONF_OPTS += --disable-python-tools
++endif
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/apache/logging-log4cxx/pull/42]
-+---
-+ src/main/cpp/odbcappender.cpp | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/main/cpp/odbcappender.cpp b/src/main/cpp/odbcappender.cpp
-+index 6bfa519e..51ec5cd0 100644
-+--- a/src/main/cpp/odbcappender.cpp
-++++ b/src/main/cpp/odbcappender.cpp
-+@@ -357,10 +357,12 @@ void ODBCAppender::setSql(const LogString& s)
-+ 	}
-+ }
-+ 
-++#if LOG4CXX_WCHAR_T_API
-+ void ODBCAppender::encode(wchar_t** dest, const LogString& src, Pool& p)
-+ {
-+ 	*dest = Transcoder::wencode(src, p);
-+ }
-++#endif
-+ 
-+ void ODBCAppender::encode(unsigned short** dest,
-+ 	const LogString& src, Pool& p)
-+-- 
-+2.28.0
-+
+ KISMET_INSTALL_TARGET_OPTS += \
+ 	DESTDIR=$(TARGET_DIR) \
+ 	INSTUSR=$(shell id -u) \
 -- 
 2.28.0
