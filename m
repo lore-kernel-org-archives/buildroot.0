@@ -1,75 +1,102 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 24 Sep 2020 11:47:50 -0700
-Subject: [Buildroot] Toolchain issues on multiple architectures
-In-Reply-To: <20200924204707.58010cfc@windsurf>
-References: <20200910120536.2431494d@windsurf.hq.k.grp>
- <CAKmqyKOSLH-VJc-72eyn=O_-nNwneb3Wqcm-Yb1qt6TzXdDS0g@mail.gmail.com>
- <20200911093009.68a115f9@windsurf.hq.k.grp>
- <CAKmqyKN4Ge5YWUtbU-XwBD2JbrJ-jMhSVMZVbE6wOsz+CUM1jA@mail.gmail.com>
- <20200924114204.7713bdfe@windsurf>
- <CAKmqyKMuzcbZ0ZhMdmgYxRnxkLT0z9+-3Vb==sdc2miHKvF7YA@mail.gmail.com>
- <20200924204707.58010cfc@windsurf>
-Message-ID: <CAKmqyKPppM=v8zJHQKtw74pEA=Qc16_fMAaLP0zFZ_FQw5Eb8w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 24 Sep 2020 21:06:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: add introspection support
+Message-ID: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 24, 2020 at 11:47 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 24 Sep 2020 11:20:18 -0700
-> Alistair Francis <alistair23@gmail.com> wrote:
->
-> > > Sorry for the slow feedback. I retested the above defconfig, and it
-> > > fails to build here. Did you try on the 2020.08 tag, with no change ?
-> > > Perhaps you tried on master and something fixed this on master after
-> > > 2020.08 ?
-> >
-> > Yep, that doesn't work.
-> >
-> > That branch is missing the patches to use upstream glibc:
-> >
-> > * acc1330d4a configs/qemu_riscv32_virt: use Linux 5.4 kernel (by
-> > Alistair Francis 3 weeks ago)
-> > * a4889545aa package/glibc: use upstream glibc for RISC-V 32-bit (by
-> > Alistair Francis 3 weeks ago)
-> >
-> > Because of that the kernel headers need to be patched to add support
-> > for a 32-bit time_t.
-> >
-> > This change in the defconfig should fix that:
-> >
-> > BR2_GLOBAL_PATCH_DIR="board/qemu/riscv32-virt/patches/"
-> >
-> > Although it looks like the kernel build is also required to get the
-> > patches to take effect:
-> >
-> > # Kernel
-> > BR2_LINUX_KERNEL=y
-> > BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-> > BR2_LINUX_KERNEL_DEFCONFIG="rv32"
-> > BR2_LINUX_KERNEL_IMAGE=y
-> >
-> > Although applying the two commits mentioned above would be a much better option.
->
-> Thanks a lot for the feedback, it makes sense. To me, it illustrates
-> very well that the solution of having patches for the kernel headers
-> that only apply to a specific defconfig doesn't work: whenever someone
-> builds a system from scratch without using a defconfig, such patches
-> are not applied.
+Add introspection support to harfbuzz otherwise activation of
+introspection in pango 1.46.1 will fail on:
 
-Yep, makes sense. Luckily we no longer need them for RV32 :)
+Couldn't find include 'HarfBuzz-0.0.gir' (search path: '['/home/naourr/work/instance-2/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share', '/home/naourr/.local/share/flatpak/exports/share/gir-1.0', '/var/lib/flatpak/exports/share/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
 
-Alistair
+Fixes:
+ - http://autobuild.buildroot.org/results/3357225ee2d8392bfd57af91cde04a1113e03493
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...allow-introspection-when-cross-compi.patch | 33 +++++++++++++++++++
+ package/harfbuzz/harfbuzz.mk                  | 13 ++++++--
+ 2 files changed, 44 insertions(+), 2 deletions(-)
+ create mode 100644 package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
+
+diff --git a/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
+new file mode 100644
+index 0000000000..700f6f85e4
+--- /dev/null
++++ b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
+@@ -0,0 +1,33 @@
++From 432dfd0a1d8fe0a8df89e7ce828c520c7758f10c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Sep 2020 21:00:34 +0200
++Subject: [PATCH] src/meson.build: allow introspection when cross-compiling
++
++introspection can be enabled when cross-compiling on certains conditions
++(for example it is supported by buildroot)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/harfbuzz/harfbuzz/pull/2692]
++---
++ src/meson.build | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/src/meson.build b/src/meson.build
++index 19290245..7db43508 100644
++--- a/src/meson.build
+++++ b/src/meson.build
++@@ -637,11 +637,6 @@ if have_gobject
++   gir = find_program('g-ir-scanner', required: get_option('introspection'))
++   build_gir = gir.found()
++ 
++-  build_gir = build_gir and not meson.is_cross_build()
++-  if not build_gir and get_option('introspection').enabled()
++-    error('Introspection support is requested but it isn\'t available in cross builds')
++-  endif
++-
++   build_gir = build_gir and get_option('default_library') != 'static'
++   if not build_gir and get_option('introspection').enabled()
++     error('Introspection support is requested but the default library option should be shared or both')
++-- 
++2.28.0
++
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 6d35e8b65e..fae9278b7c 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -11,13 +11,11 @@ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ HARFBUZZ_LICENSE_FILES = COPYING
+ HARFBUZZ_INSTALL_STAGING = YES
+ HARFBUZZ_CONF_OPTS = \
+-	-Dgobject=disabled \
+ 	-Dfontconfig=disabled \
+ 	-Dgdi=disabled \
+ 	-Ddirectwrite=disabled \
+ 	-Dcoretext=disabled \
+ 	-Dtests=disabled \
+-	-Dintrospection=disabled \
+ 	-Ddocs=disabled \
+ 	-Dbenchmark=disabled \
+ 	-Dicu_builtin=false \
+@@ -61,6 +59,17 @@ else
+ HARFBUZZ_CONF_OPTS += -Dfreetype=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++HARFBUZZ_DEPENDENCIES += gobject-introspection
++HARFBUZZ_CONF_OPTS += \
++	-Dgobject=enabled \
++	-Dintrospection=enabled
++else
++HARFBUZZ_CONF_OPTS += \
++	-Dgobject=disabled \
++	-Dintrospection=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GRAPHITE2),y)
+ HARFBUZZ_DEPENDENCIES += graphite2
+ HARFBUZZ_CONF_OPTS += -Dgraphite=enabled
+-- 
+2.28.0
