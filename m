@@ -1,32 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Sep 2020 22:05:34 +0200
-Subject: [Buildroot] [git commit] package/qemu: add IBM s390x and Z arch
- support
-Message-ID: <20200924213039.B7A9183786@busybox.osuosl.org>
+Date: Thu, 24 Sep 2020 22:57:56 +0200
+Subject: [Buildroot] [git commit] package/makedumpfile: add support for IBM
+ s390x and Z arch
+Message-ID: <20200924213040.0CBC480E36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d6e60994e18311321737888be7c54547e9bc0f8
+commit: https://git.buildroot.net/buildroot/commit/?id=a02eabb75059152c2f6ef820ce9ad0f9e2786b05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in.host | 1 +
+ package/makedumpfile/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 7ccf768d15..a7c0f7bf59 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
- 	default y if BR2_riscv
+diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
+index a90ccbdf3c..e41c4641a2 100644
+--- a/package/makedumpfile/Config.in
++++ b/package/makedumpfile/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+ 	default y if BR2_arm || BR2_armeb
+ 	default y if BR2_i386 || BR2_x86_64
+ 	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
 +	default y if BR2_s390x
- 	default y if BR2_sh
- 	default y if BR2_sparc
  	default y if BR2_sparc64
+ 
+ comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
