@@ -1,121 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Sep 2020 22:02:03 +0200
-Subject: [Buildroot] [git commit] arch: add the basic IBM s390x and Z arch
+Date: Thu, 24 Sep 2020 23:42:32 +0200
+Subject: [Buildroot] [PATCH v4 00/12] IBM s390x and Z architecture
  support
-Message-ID: <20200924213039.9A20F83786@busybox.osuosl.org>
+In-Reply-To: <20200917040802.846896-1-egorenar@linux.ibm.com>
+References: <20200917040802.846896-1-egorenar@linux.ibm.com>
+Message-ID: <20200924214232.GA11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9a31ea3541b60e6b045f637644008fcdfa9a14d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alexander, All,
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-[yann.morin.1998 at free.fr: drop supperfluous depends on s390x in choice]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- DEVELOPERS           |  3 +++
- Makefile             |  1 +
- arch/Config.in       | 14 ++++++++++++++
- arch/Config.in.s390x | 33 +++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+)
+On 2020-09-17 06:07 +0200, Alexander Egorenkov spake thusly:
+> This series of patches adds support for IBM s390x and Z architectures
+> to buildroot.
+> 
+> Alexander Egorenkov (12):
+>   arch: add the basic IBM s390x and Z arch support
+>   toolchain: add support for the internal IBM s390x and Z toolchain
+>   linux: add bzImage support for IBM s390x and Z arch
+>   package/qemu: add IBM s390x and Z arch support
+>   board/qemu: add IBM s390x and Z arch support
+>   package/systemd: add support for IBM s390x and Z arch
+>   package/cmake: add support for IBM s390x and Z arch
+>   package/liburcu: add support for IBM s390x and Z arch
+>   package/kexec: add support for IBM s390x and Z arch
+>   package/go: add support for IBM s390x and Z arch
+>   package/makedumpfile: add support for IBM s390x and Z arch
+>   package/s390-tools: new package
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dcefb8f4df..403e42b81e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -147,6 +147,9 @@ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
- F:	package/makedumpfile/
- F:	package/multipath-tools/
- 
-+N:	Alexander Egorenkov <egorenar@linux.ibm.com>
-+F:	arch/Config.in.s390x
-+
- N:	Alexander Kurz <akurz@blala.de>
- F:	package/minimodem/
- 
-diff --git a/Makefile b/Makefile
-index 9648fa58d8..384bfe3fe9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -445,6 +445,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
- 	-e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
- 	-e s/riscv.*/riscv/ \
- 	-e s/sh.*/sh/ \
-+	-e s/s390x/s390/ \
- 	-e s/microblazeel/microblaze/)
- 
- ZCAT := $(call qstrip,$(BR2_ZCAT))
-diff --git a/arch/Config.in b/arch/Config.in
-index 0707c076e2..eb9b6007c9 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -219,6 +219,16 @@ config BR2_riscv
- 	  https://riscv.org/
- 	  https://en.wikipedia.org/wiki/RISC-V
- 
-+config BR2_s390x
-+	bool "s390x"
-+	select BR2_ARCH_IS_64
-+	select BR2_ARCH_HAS_MMU_MANDATORY
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+	help
-+	  s390x is a big-endian architecture made by IBM.
-+	  http://www.ibm.com/
-+	  http://en.wikipedia.org/wiki/IBM_System/390
-+
- config BR2_sh
- 	bool "SuperH"
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-@@ -457,6 +467,10 @@ if BR2_riscv
- source "arch/Config.in.riscv"
- endif
- 
-+if BR2_s390x
-+source "arch/Config.in.s390x"
-+endif
-+
- if BR2_sh
- source "arch/Config.in.sh"
- endif
-diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
-new file mode 100644
-index 0000000000..1d3079c942
---- /dev/null
-+++ b/arch/Config.in.s390x
-@@ -0,0 +1,33 @@
-+
-+choice
-+	prompt "Target Architecture Variant"
-+	help
-+	  Specific CPU variant to use
-+
-+config BR2_s390x_z13
-+	bool "z13"
-+	depends on BR2_s390x
-+
-+config BR2_s390x_z14
-+	bool "z14"
-+	depends on BR2_s390x
-+
-+config BR2_s390x_z15
-+	bool "z15"
-+	depends on BR2_s390x
-+
-+endchoice
-+
-+config BR2_ARCH
-+	default "s390x"	if BR2_s390x
-+
-+config BR2_ENDIAN
-+	default "BIG"
-+
-+config BR2_GCC_TARGET_ARCH
-+	default "arch11" if BR2_s390x_z13
-+	default "arch12" if BR2_s390x_z14
-+	default "arch13" if BR2_s390x_z15
-+
-+config BR2_READELF_ARCH_NAME
-+	default "IBM S/390"	if BR2_s390x
+Thanks for the sustained iterations. :-)
+
+Ive now applied the series to master, with a few changes to some
+patches; I'll individually reply to the impacted ones.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+>  DEVELOPERS                              |  6 ++
+>  Makefile                                |  1 +
+>  arch/Config.in                          | 13 ++++
+>  arch/Config.in.s390x                    | 34 +++++++++
+>  board/qemu/s390x/post-build.sh          | 11 +++
+>  board/qemu/s390x/readme.txt             |  8 +++
+>  configs/qemu_s390x_defconfig            | 24 +++++++
+>  linux/Config.in                         |  2 +-
+>  package/Config.in                       |  1 +
+>  package/cmake/Config.in                 |  3 +-
+>  package/gcc/gcc.mk                      |  5 ++
+>  package/go/Config.in.host               |  2 +-
+>  package/kexec/Config.in                 |  2 +-
+>  package/liburcu/Config.in               |  2 +-
+>  package/makedumpfile/Config.in          |  1 +
+>  package/qemu/Config.in.host             |  1 +
+>  package/s390-tools/Config.in            | 13 ++++
+>  package/s390-tools/s390-tools.hash      |  3 +
+>  package/s390-tools/s390-tools.mk        | 91 +++++++++++++++++++++++++
+>  package/systemd/Config.in               |  1 +
+>  toolchain/toolchain-buildroot/Config.in |  6 +-
+>  21 files changed, 222 insertions(+), 8 deletions(-)
+>  create mode 100644 arch/Config.in.s390x
+>  create mode 100755 board/qemu/s390x/post-build.sh
+>  create mode 100644 board/qemu/s390x/readme.txt
+>  create mode 100644 configs/qemu_s390x_defconfig
+>  create mode 100644 package/s390-tools/Config.in
+>  create mode 100644 package/s390-tools/s390-tools.hash
+>  create mode 100644 package/s390-tools/s390-tools.mk
+> 
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
