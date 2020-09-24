@@ -1,318 +1,1103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 24 Sep 2020 07:09:55 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-09-23
-Message-ID: <20200924071002.A275486B18@whitealder.osuosl.org>
+Date: Thu, 24 Sep 2020 09:17:17 +0200
+Subject: [Buildroot] [git commit] configs/chromebook_elm: new defconfig
+Message-ID: <20200924070836.F40FD8A4B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=71c255f594c981e886cbda6e3ccc92721c8442e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Autobuild statistics for 2020-09-23
-===================================
+This commit adds supports for building buildroot kernel + rootfs
+for MT8173 Elm board, also known as Chromebook Elm
+(https://www.acer.com/ac/en/US/content/series/acerchromebookr13).
 
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  | 20  | 19  |  0  | 39  |
-  2020.05.x  | 16  | 23  |  0  | 39  |
-  2020.08.x  | 22  |  9  |  0  | 31  |
-    master   | 166 | 111 |  0  | 277 |
+Though Chrome-OS is officially supproted on this board, the
+mainline kernel works as well (benchmarks + conformance), and so
+the 5.9 kernel is used. As the 5.9 kernel isn't yet released, we
+use the 5.9-rc5 for now, which will be up-revd to 5.9 once its
+released.
 
-Classification of failures by reason for master
------------------------------------------------
+Using the mainline kernel means that we have to apply certain patches
+to get the HDMI screen working. These patches are lying in the
+"drm-misc-next" list and will make it to the kernel after 5.9. At that
+time, we will remove the patches and point Buildroot to use the latest
+kernel (hopefully, 5.10).
 
-        host-sentry-cli-1.57.0 | 17
-              asterisk-16.10.0 | 8 
-                       unknown | 8 
- Makefile:752: target-finalize | 6 
-         libcpprestsdk-2.10.16 | 5 
-                  zeromq-4.3.3 | 5 
-               apparmor-2.13.4 | 3 
-                  boost-1.74.0 | 3 
-          gstreamer1-mm-1.10.0 | 3 
-                 uclibc-1.0.35 | 3 
-             kismet-2016-07-R1 | 2 
-                   libcap-2.43 | 2 
-                   libnl-3.5.0 | 2 
-                log4cxx-0.11.0 | 2 
-              micropython-1.13 | 2 
-                rocksdb-6.10.1 | 2 
-                samba4-4.11.13 | 2 
-                 ser2net-4.2.2 | 2 
-               target-finalize | 2 
-              alsa-lib-1.2.3.2 | 1 
-              asterisk-16.13.0 | 1 
-             babeltrace2-2.0.3 | 1 
-              bitcoin-0.19.0.1 | 1 
-               capnproto-0.8.0 | 1 
-                clamav-0.103.0 | 1 
-                 corkscrew-2.0 | 1 
-                 dc3dd-7.2.641 | 1 
-                 dmalloc-5.5.2 | 1 
-dvb-apps-3d43b280298c39a67d... | 1 
-              ejabberd-19.09.1 | 1 
-                 fwts-19.09.00 | 1 
-   gdb-arc-2020.03-release-gdb | 1 
-                host-gdb-8.3.1 | 1 
-             ipsec-tools-0.8.2 | 1 
-                 libpcap-1.9.1 | 1 
-               libupnpp-0.19.4 | 1 
-                  libvpx-1.9.0 | 1 
-            live555-2020.08.19 | 1 
-                  ndisc6-1.0.4 | 1 
-open-plc-utils-32408520fceb... | 1 
-                openblas-0.3.9 | 1 
-                 opencv3-3.4.9 | 1 
-             openswan-2.6.51.5 | 1 
-                  pango-1.46.1 | 1 
-        python-m2crypto-0.36.0 | 1 
-                qt5base-5.15.1 | 1 
-            qt5location-5.15.1 | 1 
-      spandsp-3.0.0-6ec23e5a7e | 1 
-                  uhd-3.15.0.0 | 1 
-               util-linux-2.36 | 1 
-                    vlc-3.0.11 | 1 
+This commit also adds an ITS file (for creating FIT images), an ARGS
+file (for providing kernel args) and a "sign.sh" script to generate
+signed kernel images. Though the "sign.sh" is very similar to the
+coresponding file under board/chromebook/snow, it cannot be shared
+between both boards, as the script requires access to the board
+specific its / args file.
 
+Additionally a readme & defconfig is added to help the user get started.
 
-Detail of failures for master
------------------------------
+Signed-off-by: Bilal Wasim <bilalwasim676@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |   4 +
+ board/chromebook/elm/kernel.args                   |   1 +
+ board/chromebook/elm/kernel.its                    |  38 ++
+ board/chromebook/elm/linux.config                  | 453 +++++++++++++++++++++
+ ...connector-Set-default-status-connected-fo.patch |  35 ++
+ ...idge-ps8640-Get-the-EDID-from-eDP-control.patch |  50 +++
+ ...ps8640-Return-an-error-for-incorrect-atta.patch |  35 ++
+ ...ps8640-Print-an-error-if-VDO-control-fail.patch |  58 +++
+ ...bridge-ps8640-Rework-power-state-handling.patch | 162 ++++++++
+ board/chromebook/elm/readme.txt                    |  56 +++
+ board/chromebook/elm/sign.sh                       |  41 ++
+ configs/chromebook_elm_defconfig                   |  37 ++
+ 12 files changed, 970 insertions(+)
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        alsa-lib-1.2.3.2        | NOK | http://autobuild.buildroot.net/results/1f5cdd10406efe7e4c44d01b27eae7c22022f528 |     
-    arc      |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/097daf46a3d8710094eca10c3c6f16b26af168aa |     
-  riscv64    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/cb29a20246caf4be6f11c9385755161f6c216db4 |     
-  mips64el   |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/7f088f3129be199cdf66fea09940864d7353ebaf |     
-  mips64el   |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/49c0851cb3ab1792d3556be52d9f95815043dc2a |     
-  powerpc    |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/f7bb49012f93d83fa29c482f67f7708fe1a6074a |     
-    arm      |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/0d8e0d7486ec84cad1564b53b294ad7637338786 |     
-   mipsel    |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/731f547ea57f6b8b350e0a4e712895a92b728175 |     
-    arc      |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/8f954c9d3053195131336787003d4666f5eee304 |     
-    arm      |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/50a7bde53dec5f2827ed7be822ec8a32636c418a |     
-    arm      |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/7eee58c0216d9e5881a52b62e9a4ae7fae0dd439 |     
-  mips64el   |        asterisk-16.10.0        | NOK | http://autobuild.buildroot.net/results/897eb985a3d1ed5a8f61b199cebddb661c213751 |     
- powerpc64   |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/22433aa8e1844bd51c30efaf1c6465383c6118e1 |     
-    arm      |       babeltrace2-2.0.3        | NOK | http://autobuild.buildroot.net/results/6c8bce4919e4f80b9deb2971f93ed7be09a60810 |     
-    arc      |        bitcoin-0.19.0.1        | NOK | http://autobuild.buildroot.net/results/47290fbd93f4d1a8413eabb3c2b59cf71d6689a2 |     
-   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/39ddbd17aefbfc3fa8c4b5023a57eded63f0c07b |     
-   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/af703e8cf4fd3570e398b287527b38b670967d5d |     
-   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/7c371ae6c33ab2d3aa02c69e70bcb0af5837c03c |     
-  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/a5e1e6f872b0d9d27ca358fb0c916d4d44dfe848 |     
-    arm      |         clamav-0.103.0         | NOK | http://autobuild.buildroot.net/results/e276894781e3e37fbc03a0745738c61541e0a211 |     
-    arm      |         corkscrew-2.0          | NOK | http://autobuild.buildroot.net/results/e89c92623feb4f44748f9ae9437d62cf73dac8d7 |     
-    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/7df2792a8bbc111069a135108e92837ecd57cf4f | ORPH
-    arc      |         dmalloc-5.5.2          | NOK | http://autobuild.buildroot.net/results/c74cb466584a85008d486796b131edce22ea6ea7 | ORPH
-    arm      | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/c014a0ead3b63c3fbc6d669483fe8c4906f37382 |     
-    arm      |        ejabberd-19.09.1        | NOK | http://autobuild.buildroot.net/results/415d1de9c2d683a693f74642b85812039f0ee48e |     
-  aarch64    |         fwts-19.09.00          | NOK | http://autobuild.buildroot.net/results/05bf7b52d3869ac66d4b5d0403d239fb58aadaec |     
-    arc      |  gdb-arc-2020.03-release-gdb   | NOK | http://autobuild.buildroot.net/results/126791cb4d67a204af6b1aeca7b1f784ed8ed019 | ORPH
-  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/bcd1350041dc029eaf37820566c1af36fd268662 |     
-  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/043134ab43a7b602b710c03ec6e1ac72c6d2570e |     
-    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/ea7a3a9570b1eeb7fd4c94ad073a35ace82617ed |     
-    arm      |         host-gdb-8.3.1         | NOK | http://autobuild.buildroot.net/results/e0ece39f512bd5efd2b8c5c195e1ce012d9024d5 | ORPH
-microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/123f25150b5d95d7094f56c30dee65df86de9a9b |     
-  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/e8d45326a1c72566a17fd5f2f57019f0d49ab868 |     
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/d44ea8ca45085cf6126bbfb9fc41c94b5866b5c5 |     
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/56349fbb8b2ed51b0caa55fe56ecb14160672c6e |     
- powerpc64   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/426b30b694765bc1628623aa9fe3b49028caab57 |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3ce8de209aee53c4715a2ddeba2737ec8d10e7ac |     
-   xtensa    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/9e55e08399bc986ab09e0580ae0c0071e5b13e8f |     
-  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/ae5b65e9b1c8c9ee5d25f34afed83f0b43cc8760 |     
-   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/0204d8d5d2ad5f9a6058ea5f56fb2b4049c2240d |     
-    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/56609deec68770a06f46cfe437441f69b0e90f8a |     
-  mips64el   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/be0b7ed08a095265733affa9bc6ee95378d559ea |     
-    i586     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/5375eed9c8f678a1e129cf92777708cf7342faf3 |     
-   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8255c0215fd35862ab72e2df83141b4e80fac38c |     
-    mips     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/721d5ddb87c187ab172713077a92bdb6b6239120 |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/4be46b49b8b4b4637e3e5e84f2c6178536085f5e |     
-    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/74bf498cc1fa73de8e6b29807a76c906bbb900ff |     
-  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/6cd6d701acb559f9c0df4cc5febddaf8345daf69 |     
-    arc      |       ipsec-tools-0.8.2        | NOK | http://autobuild.buildroot.net/results/9e181c360c345c00ebdd25de2f83881c8800d67d | ORPH
-    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/5bb95ca214100c1032ac572a37b4c11a3b1c5927 | ORPH
-    arc      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/71a7770113c36028b2447f21e47a064d3b1fa704 | ORPH
-    arm      |          libcap-2.43           | NOK | http://autobuild.buildroot.net/results/411f97ce7c5174b1dcbba7e7be8cbd4930c031eb |     
-    arm      |          libcap-2.43           | NOK | http://autobuild.buildroot.net/results/6bb78a3c9e5d6943f0376edff72fcc9906fff5e3 |     
-    sh4      |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/1489d171220190154e0b3fd91579c0be4efeee86 |     
-   x86_64    |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/2795dcab57e6ca287eb93c05c760c3c584a8aa3b |     
-    arc      |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/0378342eb2394369ef51e4107da1f9687f278a0a |     
-    arc      |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/0f9a4b3dcbb3240c67c9f8db24e02efcdbf403e6 |     
-    i686     |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/0252da1b3dfdfd1362e496fd7a0cba0da89716cc |     
-   nios2     |          libnl-3.5.0           | NOK | http://autobuild.buildroot.net/results/bd1c9899eb2e1999c23d867c0f252c21706582b4 | ORPH
-    arm      |          libnl-3.5.0           | NOK | http://autobuild.buildroot.net/results/983953b6872fbd2e29577e4628ebd815bec6f33e | ORPH
-    arm      |         libpcap-1.9.1          | NOK | http://autobuild.buildroot.net/results/d99dda99722c53730b5964bd4ff1e1281c4ad759 |     
-    arc      |        libupnpp-0.19.4         | NOK | http://autobuild.buildroot.net/results/8d12ee8df4f465dd0bd8327de4d17c0af0cbc6eb |     
-microblazeel |          libvpx-1.9.0          | NOK | http://autobuild.buildroot.net/results/88aa80ee006ba2dcc40c15be3af73c756cb62974 |     
-    arm      |       live555-2020.08.19       | NOK | http://autobuild.buildroot.net/results/79fa87fa9ef25e28363f9181509af357075dd8bf | ORPH
-  powerpc    |         log4cxx-0.11.0         | NOK | http://autobuild.buildroot.net/results/30d71e0cea4ea8ca5eade972f05cf12ea1b1d244 |     
-  powerpc    |         log4cxx-0.11.0         | NOK | http://autobuild.buildroot.net/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c |     
-   xtensa    | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/66a645d349e994c997291ea4efc653cb7bba7ec7 |     
-    arm      | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/e958b47a68a3cf49e88426ed1cc5d3e3c582eea2 |     
-    mips     | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/56aff1ef161edbf1ab41a1f43a3c97252a816a4c |     
-    i586     | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/d34110b4c4649de8471e4f720b2bc0798c61c260 |     
-    arm      | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/72d423482cd6d0b75419e48c00d20bb583bc7cd2 |     
-   x86_64    | Makefile:752: target-finalize  | NOK | http://autobuild.buildroot.net/results/457412dd87e19b095d3e40942acddb438d7b8448 |     
-   xtensa    |        micropython-1.13        | NOK | http://autobuild.buildroot.net/results/fcfb63e76b8607b2eadc308335b0f7e83f6b1b59 |     
-   xtensa    |        micropython-1.13        | NOK | http://autobuild.buildroot.net/results/c915231c500b501a265f441119233b5589f79889 |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/c70058300bf759e4a10160f12efa2df7bcb91ea8 | ORPH
-    arm      | open-plc-utils-32408520fceb... | NOK | http://autobuild.buildroot.net/results/6b3064b64dea3d4aaf219f787429c25918101483 |     
- aarch64_be  |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/192ba6feff1d17f26781fb7e7c08d8a38ed7dc2f | ORPH
-  mips64el   |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/c4b00ec23cffb61c17ecedee965bef2e182c8d5f |     
-    arm      |       openswan-2.6.51.5        | NOK | http://autobuild.buildroot.net/results/650fc0046fd063c70e17ce5ebd9592195657434d | ORPH
-    arm      |          pango-1.46.1          | NOK | http://autobuild.buildroot.net/results/2d083d2c60b8b12ef3b62a7c6a8662cf1f8178a1 | ORPH
-   mipsel    |     python-m2crypto-0.36.0     | NOK | http://autobuild.buildroot.net/results/dd57181603ef8f0be183efcdbdc47560d6bc0474 |     
-  aarch64    |         qt5base-5.15.1         | NOK | http://autobuild.buildroot.net/results/827f375fa0689ff555856b82613ff60c6caa5850 |     
-    arm      |       qt5location-5.15.1       | NOK | http://autobuild.buildroot.net/results/f16ff438ddc1897e9408ebefedd5674d93157dc3 |     
- powerpc64   |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/5390f69a6a8314dd93b4882b8b522f56b020d42c |     
- powerpc64   |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/edbfa8975861ce65cf22c4e2cf5ba2e18cd03c96 |     
-  mips64el   |         samba4-4.11.13         | NOK | http://autobuild.buildroot.net/results/83302fe0e5faf4ff8faa49e89090b27d022d6059 |     
-  mips64el   |         samba4-4.11.13         | NOK | http://autobuild.buildroot.net/results/76a8dccbe001f14dc455349a5fe53618d0d79e22 |     
-    i586     |         ser2net-4.2.2          | NOK | http://autobuild.buildroot.net/results/ece234b6367c886a6dd2e74c06ce5a9e21797e1d |     
-  riscv64    |         ser2net-4.2.2          | NOK | http://autobuild.buildroot.net/results/6d23e133617dd6b8d6e0c8236f01120512cbf0ab |     
-    i686     |    spandsp-3.0.0-6ec23e5a7e    | NOK | http://autobuild.buildroot.net/results/0cf342d059d98dd05e9d7826ef066f0b71874a67 |     
-  mips64el   |        target-finalize         | NOK | http://autobuild.buildroot.net/results/ee272070f7dcedf9ec59bffca72fc65f6d66f621 |     
-  aarch64    |        target-finalize         | NOK | http://autobuild.buildroot.net/results/6ac3f022a241cbe50a1b1867571f3a03f470e0a7 |     
-    arc      |         uclibc-1.0.35          | NOK | http://autobuild.buildroot.net/results/687d298e2b5574693151286506a799d93651d3da |     
-  powerpc    |         uclibc-1.0.35          | NOK | http://autobuild.buildroot.net/results/d99ae9ccec89f28d8753d47e7a04539d69377eb2 |     
-  powerpc    |         uclibc-1.0.35          | NOK | http://autobuild.buildroot.net/results/5554afd3b8aa7c6760ddfd9be6983c5f8aab670e |     
-    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/7480c6378db0f32b57ae24b862b77dc0178ad4b5 |     
-    i586     |            unknown             | NOK | http://autobuild.buildroot.net/results/45f4c07bce74335671595663efd870d5ceef7e56 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/9db907446d64978fff9b1d1db565d50ec6f68162 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/4e9eb144708819ced4fe0966030b1c37af54eb50 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/2d7517de532abcfd908597573f29cac3c8f5e754 |     
-  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/f55ea076933b4fa717dc2c8121ac1e579b21dfa9 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/0ff299ba853b7fe6e1eff5d3b8774c42a24526c4 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/8cdcf7b874555035670eaa077d505b8f10c88525 |     
-    sh4      |            unknown             | NOK | http://autobuild.buildroot.net/results/e60f622fff2040d3fa2f238d0937274626c1183c |     
-   nios2     |        util-linux-2.36         | NOK | http://autobuild.buildroot.net/results/a69c773710c405fae4124fb468d1e26a38af5d51 | ORPH
-    sh4      |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/c49bce4f3cfc06302f85a55d77b1a1d149f690ef |     
-    i686     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/f5fee8365b2d55b3ffba76bbea7e768039b460a3 |     
-    i586     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/0ac6ca52738c064a954c1a55201cdef5c5b5af50 |     
-    arm      |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/c15239d4131a9a04005c2eb4fdac7edb02deb5d1 |     
-    i686     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/5059c2878c39b0a2e21fef01797a0b98206cf008 |     
-  mips64el   |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/58c844de3222d2a3d6fab3ef15e079351265b7c6 |     
-
-
-Classification of failures by reason for 2020.02.x
---------------------------------------------------
-
-               ipmitool-1.8.18 | 6 
-                       unknown | 3 
- Makefile:753: target-finalize | 2 
-                  botan-2.11.0 | 1 
-              host-grpc-1.25.0 | 1 
-             libopenssl-1.1.1g | 1 
-               libupnpp-0.17.2 | 1 
-               protobuf-3.11.0 | 1 
-                 rocksdb-6.6.4 | 1 
-                    vlc-3.0.11 | 1 
-                 xvisor-0.2.11 | 1 
-
-
-Detail of failures for 2020.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |          botan-2.11.0          | NOK | http://autobuild.buildroot.net/results/918405c3481ef62977e91ddfbc2515720c85514b | ORPH
-    m68k     |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/141b7614c084018d664383f411aeb8b7083dc8d2 |     
- aarch64_be  |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/0e6df4188468d78a33c0b6a6f6258d2585b6c5dd |     
-    arc      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/b2e546cc9ea40752e97b8488740f426638db3a80 |     
-    arm      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/86973f8c88f6acf32a993cf73cdf2a5c5e04a294 |     
- aarch64_be  |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/66f63e6ef8066912f23831213a367484c4a95795 |     
-   mipsel    |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/14bcf4ca38d6230dd10a3efdd6322583718676f7 |     
-    arm      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/272d8cb70219758354f6fd9b3b15083147143a93 |     
-    m68k     |       libopenssl-1.1.1g        | NOK | http://autobuild.buildroot.net/results/cd11951337ba0e01355bad2c7219a7a501b34288 |     
-    arc      |        libupnpp-0.17.2         | NOK | http://autobuild.buildroot.net/results/22d35a28c36cdde4af93ec14d268d5372640bf3e |     
-   nios2     | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/3cf3839e043c94f42baa8522ece5ef5140b5db1f |     
-   x86_64    | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/9f0c2428ff4563afcc883e5262093ab29321289d |     
-    or1k     |        protobuf-3.11.0         | NOK | http://autobuild.buildroot.net/results/bc2c4039ce68ffb9c7dd9acc0b9b5f0428d3a72b |     
-  powerpc    |         rocksdb-6.6.4          | NOK | http://autobuild.buildroot.net/results/34c5c3308df8efc5abaaebd62f0a93c00c5aa01c |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/0c8608d9acfa036721d28378132060ad4dcd0a9c |     
-  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/e89416032a19f25a0dcd5940b846f0a89dab2ff3 |     
-   xtensa    |            unknown             | NOK | http://autobuild.buildroot.net/results/c4e1feddb9448c7d2bfe84854f7fceffacd16003 |     
-    arm      |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/7e6f07179ddf3b4cab1445214c064921f2b6f8bd |     
-    arm      |         xvisor-0.2.11          | NOK | http://autobuild.buildroot.net/results/8a78b99ba6ba9d6ab267097469ae8539b2ebd98f |     
-
-
-Classification of failures by reason for 2020.05.x
---------------------------------------------------
-
-               ipmitool-1.8.18 | 6 
-            ghostscript-9.53.0 | 3 
-              luabitop-1.0.2-1 | 2 
-                  zeromq-4.3.3 | 2 
-               apparmor-2.13.4 | 1 
-              host-grpc-1.25.0 | 1 
-             kismet-2016-07-R1 | 1 
-                  luajit-2.1.2 | 1 
- Makefile:753: target-finalize | 1 
-                    mpv-0.29.1 | 1 
-                  ndisc6-1.0.4 | 1 
-                openblas-0.3.9 | 1 
-                 rocksdb-6.6.4 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2020.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/1e1d07cf56e743ea31040dae6cece940a86c1b96 |     
-   nios2     |       ghostscript-9.53.0       | NOK | http://autobuild.buildroot.net/results/c25f26957fe3ba8741566d2b630e7a6edbee059e |     
-    arc      |       ghostscript-9.53.0       | NOK | http://autobuild.buildroot.net/results/4daa27dc970faa08d4486509814a8017908ce21e |     
-    arc      |       ghostscript-9.53.0       | NOK | http://autobuild.buildroot.net/results/689022f1a1fb836dc676655f29dadd3679dea9ac |     
-  aarch64    |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/c8c7174dd1b309f2d83dc4fff4944f616af16799 |     
-   mipsel    |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/d1871944202d616ee4e0a59c8ed0291c8fc42ef6 |     
-    arc      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/6dfab6af54ed65eefe2f90ab170edeeb001d3793 |     
-  riscv64    |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/4cec68f6712e7b648d7519db08974cfb7d31dc1e |     
-   x86_64    |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/ce5631a7f9f1e2b6bc64bd47fd32c0e434966ffa |     
-  powerpc    |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/336c4c13dcecc1439335717806d1dd0c38b0bb57 |     
-   nios2     |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/f06054459db52c0252c5451764c4b93765c16757 |     
-    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/dcf35ac8a68ba6af9c179efc37f0ccc7b5eefbcd | ORPH
-  powerpc    |        luabitop-1.0.2-1        | NOK | http://autobuild.buildroot.net/results/c606971d1360438af234be62a553fa0a37ef06ef |     
-microblazeel |        luabitop-1.0.2-1        | NOK | http://autobuild.buildroot.net/results/804886f9fd39645150af20f185e53e0c12c5b75e |     
-  powerpc    |          luajit-2.1.2          | NOK | http://autobuild.buildroot.net/results/d98080124682900a70c1ba10960ed14a4d17542a |     
-   nios2     | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/7e1f6ab8a7c7fd9fafa76a97992950ccaf549ee1 |     
-    arm      |           mpv-0.29.1           | NOK | http://autobuild.buildroot.net/results/3ecceee5c550e7605ac27020898c07b8ddd3497d |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/8c34db72d6e524e0ad439b866705d9c2bfc2feff | ORPH
- aarch64_be  |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/5b884dcbb9cbb95be44a82061ea0e2c244fb6714 | ORPH
-  powerpc    |         rocksdb-6.6.4          | NOK | http://autobuild.buildroot.net/results/2705d92bdb1071d02dc8ba819bd59d54bc5e9608 |     
-    arc      |            unknown             | NOK | http://autobuild.buildroot.net/results/09f16c0a425cde19f5692675345a69d6b7ad72fe |     
-  mips64el   |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/4cd803e16d71bb4ee0494d06ac3ee86a4b699c5b |     
-    arm      |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/4a6f12414d1816af51dfc11d724964c59ff30ee3 |     
-
-
-Classification of failures by reason for 2020.08.x
---------------------------------------------------
-
-               ipmitool-1.8.18 | 5 
-              bitcoin-0.19.0.1 | 1 
-               host-efl-1.24.3 | 1 
-            live555-2020.06.25 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2020.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |        bitcoin-0.19.0.1        | NOK | http://autobuild.buildroot.net/results/c4d517baff456d57baaadeca30b3982f0a7918fc |     
-  powerpc    |        host-efl-1.24.3         | NOK | http://autobuild.buildroot.net/results/1e8ae2f40e73de982acd82f23dbb7c4865c34cd2 |     
-    or1k     |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/943743e8d62309b82d69713405af6c0eee95d26c |     
-powerpc64le  |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/070a88a2a6d8b389957fd3a3db972d30aade152a |     
-    arm      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/3f2a4d5ee7643e38a3a8e482374724aef22efd1e |     
-    arm      |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/f09b872fdb21d811a32117064eb7fddd210cc443 |     
-   nios2     |        ipmitool-1.8.18         | NOK | http://autobuild.buildroot.net/results/e37cdd13e01748bd8d13183e9f846eab7d55000f |     
-    arm      |       live555-2020.06.25       | NOK | http://autobuild.buildroot.net/results/74f8e529f57fcf9ecf75d69b79cd8de7155b503b | ORPH
- aarch64_be  |            unknown             | NOK | http://autobuild.buildroot.net/results/ff485e475dcd8ce29857959a495f52b5cbcd50da |     
-
-
-Gitlab CI results for 2020-09-23
-================================
-
-
--- 
-http://autobuild.buildroot.net
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d1e5e4f5f..4e465221d4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -511,6 +511,10 @@ N:	Biagio Montaruli <biagio.hkr@gmail.com>
+ F:	board/acmesystems/
+ F:	configs/acmesystems_*
+ 
++N:	Bilal Wasim <bilalwasim676@gmail.com>
++F:	board/chromebook/elm/
++F:	configs/chromebook_elm_defconfig
++
+ N:	Bogdan Radulescu <bogdan@nimblex.net>
+ F:	package/iftop/
+ F:	package/ncdu/
+diff --git a/board/chromebook/elm/kernel.args b/board/chromebook/elm/kernel.args
+new file mode 100644
+index 0000000000..848e179d68
+--- /dev/null
++++ b/board/chromebook/elm/kernel.args
+@@ -0,0 +1 @@
++root=PARTUUID=%U/PARTNROFF=1 rootwait rw noinitrd kern_guid=%U console=tty0
+diff --git a/board/chromebook/elm/kernel.its b/board/chromebook/elm/kernel.its
+new file mode 100644
+index 0000000000..bc4b09eabe
+--- /dev/null
++++ b/board/chromebook/elm/kernel.its
+@@ -0,0 +1,38 @@
++/dts-v1/;
++
++/ {
++	description = "Chrome OS kernel image with FDT";
++	#address-cells = <1>;
++
++	images {
++		kernel-1 {
++			data = /incbin/("Image");
++			type = "kernel_noload";
++			arch = "arm64";
++			os = "linux";
++			compression = "none";
++			load = <0>;
++			entry = <0>;
++		};
++
++		fdt-1 {
++			description = "mt8173-elm.dtb";
++			data = /incbin/("mt8173-elm.dtb");
++			type = "flat_dt";
++			arch = "arm64";
++			compression = "none";
++
++			hash-1 {
++				algo = "sha1";
++			};
++		};
++	};
++
++	configurations {
++		default = "conf-1";
++		conf-1 {
++			kernel = "kernel-1";
++			fdt = "fdt-1";
++		};
++	};
++};
+diff --git a/board/chromebook/elm/linux.config b/board/chromebook/elm/linux.config
+new file mode 100644
+index 0000000000..50402eae8a
+--- /dev/null
++++ b/board/chromebook/elm/linux.config
+@@ -0,0 +1,453 @@
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_IRQ_TIME_ACCOUNTING=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_NUMA_BALANCING=y
++CONFIG_MEMCG=y
++CONFIG_BLK_CGROUP=y
++CONFIG_CGROUP_PIDS=y
++CONFIG_CGROUP_HUGETLB=y
++CONFIG_CPUSETS=y
++CONFIG_CGROUP_DEVICE=y
++CONFIG_CGROUP_CPUACCT=y
++CONFIG_CGROUP_PERF=y
++CONFIG_USER_NS=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_RELAY=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_KALLSYMS_ALL=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_ARCH_MEDIATEK=y
++CONFIG_ARM64_VA_BITS_48=y
++CONFIG_SCHED_MC=y
++CONFIG_SCHED_SMT=y
++CONFIG_NR_CPUS=4
++CONFIG_NUMA=y
++CONFIG_SECCOMP=y
++CONFIG_PARAVIRT=y
++CONFIG_CRASH_DUMP=y
++CONFIG_COMPAT=y
++CONFIG_RANDOMIZE_BASE=y
++# CONFIG_EFI is not set
++# CONFIG_SUSPEND is not set
++CONFIG_PM=y
++CONFIG_PM_DEBUG=y
++CONFIG_PM_ADVANCED_DEBUG=y
++CONFIG_CPU_IDLE=y
++CONFIG_CPU_IDLE_GOV_LADDER=y
++CONFIG_ARM_CPUIDLE=y
++CONFIG_ARM_PSCI_CPUIDLE=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_STAT=y
++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
++CONFIG_CPU_FREQ_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
++CONFIG_CPUFREQ_DT=y
++CONFIG_ARM_SCPI_CPUFREQ=y
++CONFIG_ARM_MEDIATEK_CPUFREQ=y
++CONFIG_ARM_SCPI_PROTOCOL=y
++CONFIG_JUMP_LABEL=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++# CONFIG_BLK_DEBUG_FS is not set
++# CONFIG_MQ_IOSCHED_KYBER is not set
++# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
++CONFIG_KSM=y
++CONFIG_MEMORY_FAILURE=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_CMA=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_UNIX_DIAG=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_INET_UDP_DIAG=y
++# CONFIG_IPV6 is not set
++CONFIG_CFG80211=y
++# CONFIG_CFG80211_DEFAULT_PS is not set
++CONFIG_MAC80211=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_FW_LOADER_USER_HELPER=y
++CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
++CONFIG_BRCMSTB_GISB_ARB=y
++CONFIG_VEXPRESS_CONFIG=y
++CONFIG_MTD=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_CFI=y
++CONFIG_MTD_CFI_ADV_OPTIONS=y
++CONFIG_MTD_CFI_INTELEXT=y
++CONFIG_MTD_CFI_AMDSTD=y
++CONFIG_MTD_CFI_STAA=y
++CONFIG_MTD_PHYSMAP=y
++CONFIG_MTD_PHYSMAP_OF=y
++CONFIG_MTD_DATAFLASH=y
++CONFIG_MTD_SST25L=y
++CONFIG_MTD_RAW_NAND=y
++CONFIG_MTD_NAND_DENALI_DT=y
++CONFIG_MTD_SPI_NOR=y
++CONFIG_SPI_CADENCE_QUADSPI=y
++CONFIG_OF_OVERLAY=y
++# CONFIG_BLK_DEV is not set
++CONFIG_SRAM=y
++CONFIG_EEPROM_AT24=m
++CONFIG_EEPROM_AT25=m
++CONFIG_RAID_ATTRS=m
++CONFIG_SCSI=y
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_SAS_LIBSAS=y
++CONFIG_SCSI_UFSHCD=y
++CONFIG_SCSI_UFSHCD_PLATFORM=y
++CONFIG_MD=y
++CONFIG_BLK_DEV_MD=m
++CONFIG_BLK_DEV_DM=m
++CONFIG_DM_MIRROR=m
++CONFIG_DM_ZERO=m
++CONFIG_NETDEVICES=y
++# CONFIG_ETHERNET is not set
++CONFIG_USB_RTL8152=y
++CONFIG_USB_USBNET=y
++# CONFIG_USB_NET_AX88179_178A is not set
++# CONFIG_USB_NET_NET1080 is not set
++# CONFIG_USB_NET_CDC_SUBSET is not set
++# CONFIG_USB_NET_ZAURUS is not set
++# CONFIG_WLAN_VENDOR_ADMTEK is not set
++# CONFIG_WLAN_VENDOR_ATH is not set
++# CONFIG_WLAN_VENDOR_ATMEL is not set
++# CONFIG_WLAN_VENDOR_BROADCOM is not set
++# CONFIG_WLAN_VENDOR_CISCO is not set
++# CONFIG_WLAN_VENDOR_INTEL is not set
++# CONFIG_WLAN_VENDOR_INTERSIL is not set
++CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
++# CONFIG_WLAN_VENDOR_MEDIATEK is not set
++# CONFIG_WLAN_VENDOR_RALINK is not set
++# CONFIG_WLAN_VENDOR_REALTEK is not set
++# CONFIG_WLAN_VENDOR_RSI is not set
++# CONFIG_WLAN_VENDOR_ST is not set
++# CONFIG_WLAN_VENDOR_TI is not set
++# CONFIG_WLAN_VENDOR_ZYDAS is not set
++# CONFIG_WLAN_VENDOR_QUANTENNA is not set
++CONFIG_INPUT_POLLDEV=m
++CONFIG_INPUT_EVDEV=y
++CONFIG_KEYBOARD_ADC=m
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_KEYBOARD_CROS_EC=y
++CONFIG_MOUSE_ELAN_I2C=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_ATMEL_MXT=m
++CONFIG_TOUCHSCREEN_ELAN=y
++CONFIG_INPUT_MISC=y
++# CONFIG_SERIO_SERPORT is not set
++CONFIG_SERIO_AMBAKMI=y
++CONFIG_LEGACY_PTY_COUNT=16
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_DW=y
++CONFIG_SERIAL_8250_MT6577=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_SERIAL_XILINX_PS_UART=y
++CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
++CONFIG_SERIAL_FSL_LPUART=y
++CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
++CONFIG_SERIAL_FSL_LINFLEXUART=y
++CONFIG_SERIAL_FSL_LINFLEXUART_CONSOLE=y
++CONFIG_SERIAL_DEV_BUS=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_IPMI_HANDLER=m
++CONFIG_IPMI_DEVICE_INTERFACE=m
++CONFIG_IPMI_SI=m
++CONFIG_TCG_TPM=y
++CONFIG_TCG_TIS_I2C_INFINEON=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX_PCA954x=y
++CONFIG_I2C_DESIGNWARE_PLATFORM=y
++CONFIG_I2C_GPIO=m
++CONFIG_I2C_MT65XX=y
++CONFIG_I2C_RK3X=y
++CONFIG_I2C_CROS_EC_TUNNEL=y
++CONFIG_I2C_SLAVE=y
++CONFIG_SPI=y
++CONFIG_SPI_NXP_FLEXSPI=y
++CONFIG_SPI_GPIO=y
++CONFIG_SPI_MT65XX=y
++CONFIG_SPI_PL022=y
++CONFIG_SPI_ROCKCHIP=y
++CONFIG_SPI_SPIDEV=y
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_PINCTRL_MAX77620=y
++CONFIG_GPIO_ALTERA=m
++CONFIG_GPIO_DWAPB=y
++CONFIG_GPIO_MB86S7X=y
++CONFIG_GPIO_PL061=y
++CONFIG_GPIO_XGENE=y
++CONFIG_GPIO_MAX732X=y
++CONFIG_GPIO_PCA953X=y
++CONFIG_GPIO_PCA953X_IRQ=y
++CONFIG_GPIO_BD9571MWV=m
++CONFIG_GPIO_MAX77620=y
++CONFIG_POWER_AVS=y
++CONFIG_POWER_RESET_BRCMSTB=y
++CONFIG_POWER_RESET_XGENE=y
++CONFIG_POWER_RESET_SYSCON=y
++CONFIG_SYSCON_REBOOT_MODE=y
++CONFIG_BATTERY_SBS=m
++CONFIG_BATTERY_BQ27XXX=y
++CONFIG_SENSORS_ARM_SCPI=y
++CONFIG_SENSORS_LM90=m
++CONFIG_SENSORS_PWM_FAN=m
++CONFIG_SENSORS_INA2XX=m
++CONFIG_SENSORS_INA3221=m
++CONFIG_THERMAL=y
++CONFIG_CPU_THERMAL=y
++CONFIG_DEVFREQ_THERMAL=y
++CONFIG_THERMAL_EMULATION=y
++CONFIG_WATCHDOG=y
++CONFIG_MEDIATEK_WATCHDOG=y
++CONFIG_MFD_BD9571MWV=y
++CONFIG_MFD_AXP20X_I2C=y
++CONFIG_MFD_HI6421_PMIC=y
++CONFIG_MFD_MAX77620=y
++CONFIG_MFD_MT6397=y
++CONFIG_MFD_RK808=y
++CONFIG_MFD_SEC_CORE=y
++CONFIG_MFD_ROHM_BD718XX=y
++CONFIG_REGULATOR_DEBUG=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_AXP20X=y
++CONFIG_REGULATOR_BD718XX=y
++CONFIG_REGULATOR_BD9571MWV=y
++CONFIG_REGULATOR_DA9211=y
++CONFIG_REGULATOR_FAN53555=y
++CONFIG_REGULATOR_GPIO=y
++CONFIG_REGULATOR_HI6421V530=y
++CONFIG_REGULATOR_MAX77620=y
++CONFIG_REGULATOR_MAX8973=y
++CONFIG_REGULATOR_MT6397=y
++CONFIG_REGULATOR_PFUZE100=y
++CONFIG_REGULATOR_PWM=y
++CONFIG_REGULATOR_RK808=y
++CONFIG_REGULATOR_S2MPS11=y
++CONFIG_REGULATOR_VCTRL=m
++CONFIG_MEDIA_SUPPORT=y
++CONFIG_MEDIA_CAMERA_SUPPORT=y
++CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
++CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
++CONFIG_MEDIA_SDR_SUPPORT=y
++CONFIG_VIDEO_V4L2_SUBDEV_API=y
++CONFIG_MEDIA_USB_SUPPORT=y
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_DRM=y
++CONFIG_DRM_I2C_CH7006=m
++CONFIG_DRM_I2C_SIL164=m
++CONFIG_DRM_I2C_NXP_TDA998X=m
++CONFIG_DRM_MALI_DISPLAY=m
++CONFIG_DRM_PANEL_LVDS=m
++CONFIG_DRM_PANEL_SIMPLE=y
++CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=m
++CONFIG_DRM_DISPLAY_CONNECTOR=y
++CONFIG_DRM_PARADE_PS8640=y
++CONFIG_DRM_SII902X=m
++CONFIG_DRM_THINE_THC63LVD1024=m
++CONFIG_DRM_TI_SN65DSI86=m
++CONFIG_DRM_ANALOGIX_ANX78XX=y
++CONFIG_DRM_I2C_ADV7511=m
++CONFIG_DRM_MEDIATEK=y
++CONFIG_DRM_MEDIATEK_HDMI=y
++CONFIG_FB_MODE_HELPERS=y
++CONFIG_FB_SIMPLE=y
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++CONFIG_BACKLIGHT_PWM=y
++CONFIG_BACKLIGHT_LP855X=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_SOC=y
++CONFIG_SND_SOC_MT8173=y
++CONFIG_SND_SOC_MT8173_RT5650_RT5676=y
++CONFIG_I2C_HID=m
++CONFIG_USB_CONN_GPIO=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_HCD_PLATFORM=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_OHCI_HCD_PLATFORM=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_MTU3=y
++CONFIG_USB_MUSB_HDRC=y
++CONFIG_USB_DWC3=y
++CONFIG_USB_DWC2=y
++CONFIG_USB_CHIPIDEA=y
++CONFIG_USB_CHIPIDEA_UDC=y
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_ISP1760=y
++CONFIG_USB_SERIAL=y
++CONFIG_USB_SERIAL_CONSOLE=y
++CONFIG_USB_SERIAL_PL2303=y
++CONFIG_USB_HSIC_USB3503=y
++CONFIG_NOP_USB_XCEIV=y
++CONFIG_USB_ULPI=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_SNP_UDC_PLAT=y
++CONFIG_USB_BDC_UDC=y
++CONFIG_USB_ETH=m
++CONFIG_USB_ETH_EEM=y
++CONFIG_TYPEC=m
++CONFIG_TYPEC_TCPM=m
++CONFIG_TYPEC_FUSB302=m
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK_MINORS=32
++CONFIG_MMC_ARMMMCI=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_OF_ARASAN=y
++CONFIG_MMC_SDHCI_CADENCE=y
++CONFIG_MMC_SDHCI_F_SDH30=y
++CONFIG_MMC_SPI=y
++CONFIG_MMC_DW=y
++CONFIG_MMC_DW_EXYNOS=y
++CONFIG_MMC_DW_HI3798CV200=y
++CONFIG_MMC_DW_K3=y
++CONFIG_MMC_MTK=y
++CONFIG_MMC_SDHCI_XENON=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_PWM=y
++CONFIG_LEDS_SYSCON=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_LEDS_TRIGGER_PANIC=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_DS1307=m
++CONFIG_RTC_DRV_MAX77686=y
++CONFIG_RTC_DRV_RK808=m
++CONFIG_RTC_DRV_PCF85363=m
++CONFIG_RTC_DRV_RX8581=m
++CONFIG_RTC_DRV_S5M=y
++CONFIG_RTC_DRV_DS3232=y
++CONFIG_RTC_DRV_PCF2127=m
++CONFIG_RTC_DRV_CROS_EC=y
++CONFIG_RTC_DRV_PL031=y
++CONFIG_DMADEVICES=y
++CONFIG_FSL_EDMA=y
++CONFIG_MV_XOR_V2=y
++CONFIG_PL330_DMA=y
++CONFIG_MTK_CQDMA=y
++CONFIG_QCOM_HIDMA_MGMT=y
++CONFIG_QCOM_HIDMA=y
++# CONFIG_VIRTIO_MENU is not set
++CONFIG_MFD_CROS_EC=y
++CONFIG_CROS_EC_I2C=y
++CONFIG_CROS_EC_SPI=y
++CONFIG_COMMON_CLK_RK808=y
++CONFIG_COMMON_CLK_SCPI=y
++CONFIG_COMMON_CLK_CS2000_CP=y
++CONFIG_COMMON_CLK_S2MPS11=y
++CONFIG_CLK_QORIQ=y
++CONFIG_COMMON_CLK_XGENE=y
++CONFIG_COMMON_CLK_PWM=y
++CONFIG_COMMON_CLK_VC5=y
++CONFIG_COMMON_CLK_MT6797_MMSYS=y
++CONFIG_COMMON_CLK_MT6797_IMGSYS=y
++CONFIG_COMMON_CLK_MT6797_VDECSYS=y
++CONFIG_COMMON_CLK_MT6797_VENCSYS=y
++CONFIG_HWSPINLOCK=y
++CONFIG_ARM_MHU=y
++CONFIG_PLATFORM_MHU=y
++CONFIG_ARM_SMMU=y
++CONFIG_ARM_SMMU_V3=y
++CONFIG_MTK_IOMMU=y
++CONFIG_REMOTEPROC=y
++CONFIG_MTK_CMDQ=y
++CONFIG_MTK_PMIC_WRAP=y
++CONFIG_EXTCON_USB_GPIO=y
++CONFIG_EXTCON_USBC_CROS_EC=y
++CONFIG_IIO=y
++CONFIG_MAX9611=m
++CONFIG_IIO_CROS_EC_SENSORS_CORE=m
++CONFIG_IIO_CROS_EC_SENSORS=m
++CONFIG_IIO_CROS_EC_LIGHT_PROX=m
++CONFIG_SENSORS_ISL29018=m
++CONFIG_IIO_CROS_EC_BARO=m
++CONFIG_MPL3115=m
++CONFIG_PWM=y
++CONFIG_PWM_CROS_EC=m
++CONFIG_PWM_MTK_DISP=y
++CONFIG_PWM_MEDIATEK=y
++CONFIG_PHY_XGENE=y
++CONFIG_PHY_FSL_IMX8MQ_USB=y
++CONFIG_PHY_MTK_TPHY=y
++CONFIG_PHY_QCOM_USB_HS=y
++CONFIG_PHY_SAMSUNG_USB2=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_FANOTIFY=y
++CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
++CONFIG_QUOTA=y
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=m
++CONFIG_CUSE=m
++CONFIG_OVERLAY_FS=y
++CONFIG_OVERLAY_FS_INDEX=y
++CONFIG_OVERLAY_FS_XINO_AUTO=y
++CONFIG_OVERLAY_FS_METACOPY=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_HUGETLBFS=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_PSTORE=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_SECURITY=y
++CONFIG_CRYPTO_CRYPTD=y
++CONFIG_CRYPTO_DH=m
++CONFIG_CRYPTO_ECDH=m
++CONFIG_CRYPTO_SEQIV=y
++CONFIG_CRYPTO_ECHAINIV=y
++CONFIG_CRYPTO_CBC=y
++CONFIG_CRYPTO_ECB=y
++CONFIG_CRYPTO_XXHASH=m
++CONFIG_CRYPTO_SHA1=y
++CONFIG_CRYPTO_SHA3=m
++CONFIG_CRYPTO_DES=m
++CONFIG_CRYPTO_ANSI_CPRNG=y
++CONFIG_CRYPTO_DEV_CCREE=m
++CONFIG_PACKING=y
++CONFIG_INDIRECT_PIO=y
++CONFIG_CRC_CCITT=m
++CONFIG_CRC_T10DIF=y
++CONFIG_LIBCRC32C=m
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=32
++CONFIG_IRQ_POLL=y
++CONFIG_PRINTK_TIME=y
++CONFIG_DEBUG_INFO=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
++CONFIG_DEBUG_KERNEL=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++CONFIG_STACKTRACE=y
++# CONFIG_FTRACE is not set
++# CONFIG_STRICT_DEVMEM is not set
+\ No newline at end of file
+diff --git a/board/chromebook/elm/patches/linux/0001-drm-bridge_connector-Set-default-status-connected-fo.patch b/board/chromebook/elm/patches/linux/0001-drm-bridge_connector-Set-default-status-connected-fo.patch
+new file mode 100644
+index 0000000000..f037391897
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0001-drm-bridge_connector-Set-default-status-connected-fo.patch
+@@ -0,0 +1,35 @@
++From 510d0ad0ce1b51c072309ba12dfb024fc2c3dbac Mon Sep 17 00:00:00 2001
++From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Date: Wed, 26 Aug 2020 10:15:22 +0200
++Subject: [PATCH 1/5] drm/bridge_connector: Set default status connected for
++ eDP connectors
++
++In an eDP application, HPD is not required and on most bridge chips
++useless. If HPD is not used, we need to set initial status as connected,
++otherwise the connector created by the drm_bridge_connector API remains
++in an unknown state.
++
++Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++Acked-by: Sam Ravnborg <sam@ravnborg.org>
++Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Reviewed-by: Bilal Wasim <bwasim.lkml@gmail.com>
++Tested-by: Bilal Wasim <bwasim.lkml@gmail.com>
++---
++ drivers/gpu/drm/drm_bridge_connector.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
++index c6994fe673f3..a58cbde59c34 100644
++--- a/drivers/gpu/drm/drm_bridge_connector.c
+++++ b/drivers/gpu/drm/drm_bridge_connector.c
++@@ -187,6 +187,7 @@ drm_bridge_connector_detect(struct drm_connector *connector, bool force)
++ 		case DRM_MODE_CONNECTOR_DPI:
++ 		case DRM_MODE_CONNECTOR_LVDS:
++ 		case DRM_MODE_CONNECTOR_DSI:
+++		case DRM_MODE_CONNECTOR_eDP:
++ 			status = connector_status_connected;
++ 			break;
++ 		default:
++-- 
++2.25.1
++
+diff --git a/board/chromebook/elm/patches/linux/0002-drm-bridge-ps8640-Get-the-EDID-from-eDP-control.patch b/board/chromebook/elm/patches/linux/0002-drm-bridge-ps8640-Get-the-EDID-from-eDP-control.patch
+new file mode 100644
+index 0000000000..5f7517c7b9
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0002-drm-bridge-ps8640-Get-the-EDID-from-eDP-control.patch
+@@ -0,0 +1,50 @@
++From cc0f2fea61fb34ca84e4812a615e0035d812aa8b Mon Sep 17 00:00:00 2001
++From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Date: Wed, 26 Aug 2020 10:15:23 +0200
++Subject: [PATCH 2/5] drm/bridge: ps8640: Get the EDID from eDP control
++
++The PS8640 DSI-to-eDP bridge can retrieve the EDID, so implement the
++.get_edid callback and set the flag to indicate the core to use it.
++
++Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++Acked-by: Sam Ravnborg <sam@ravnborg.org>
++Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++---
++ drivers/gpu/drm/bridge/parade-ps8640.c | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++
++diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
++index 4b099196afeb..13755d278db6 100644
++--- a/drivers/gpu/drm/bridge/parade-ps8640.c
+++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
++@@ -242,8 +242,18 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
++ 	return ret;
++ }
++ 
+++static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
+++					   struct drm_connector *connector)
+++{
+++	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+++
+++	return drm_get_edid(connector,
+++			    ps_bridge->page[PAGE0_DP_CNTL]->adapter);
+++}
+++
++ static const struct drm_bridge_funcs ps8640_bridge_funcs = {
++ 	.attach = ps8640_bridge_attach,
+++	.get_edid = ps8640_bridge_get_edid,
++ 	.post_disable = ps8640_post_disable,
++ 	.pre_enable = ps8640_pre_enable,
++ };
++@@ -294,6 +304,8 @@ static int ps8640_probe(struct i2c_client *client)
++ 
++ 	ps_bridge->bridge.funcs = &ps8640_bridge_funcs;
++ 	ps_bridge->bridge.of_node = dev->of_node;
+++	ps_bridge->bridge.ops = DRM_BRIDGE_OP_EDID;
+++	ps_bridge->bridge.type = DRM_MODE_CONNECTOR_eDP;
++ 
++ 	ps_bridge->page[PAGE0_DP_CNTL] = client;
++ 
++-- 
++2.25.1
++
+diff --git a/board/chromebook/elm/patches/linux/0003-drm-bridge-ps8640-Return-an-error-for-incorrect-atta.patch b/board/chromebook/elm/patches/linux/0003-drm-bridge-ps8640-Return-an-error-for-incorrect-atta.patch
+new file mode 100644
+index 0000000000..5f52c45424
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0003-drm-bridge-ps8640-Return-an-error-for-incorrect-atta.patch
+@@ -0,0 +1,35 @@
++From 62afc499fc46c8018f40733c31a675b28f0717d8 Mon Sep 17 00:00:00 2001
++From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Date: Wed, 26 Aug 2020 10:15:24 +0200
++Subject: [PATCH 3/5] drm/bridge: ps8640: Return an error for incorrect attach
++ flags
++
++Bridge drivers that implement the new model only shall return an error
++from their attach() handler when the DRM_BRIDGE_ATTACH_NO_CONNECTOR flag
++is not set. So make sure we return an error because only the new
++drm_bridge model is supported.
++
++Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
++Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++---
++ drivers/gpu/drm/bridge/parade-ps8640.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
++index 13755d278db6..ce3e8b2da8c9 100644
++--- a/drivers/gpu/drm/bridge/parade-ps8640.c
+++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
++@@ -200,6 +200,10 @@ static int ps8640_bridge_attach(struct drm_bridge *bridge,
++ 						   .channel = 0,
++ 						   .node = NULL,
++ 						 };
+++
+++	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
+++		return -EINVAL;
+++
++ 	/* port at 0 is ps8640 dsi input port */
++ 	in_ep = of_graph_get_endpoint_by_regs(dev->of_node, 0, -1);
++ 	if (!in_ep)
++-- 
++2.25.1
++
+diff --git a/board/chromebook/elm/patches/linux/0004-drm-bridge-ps8640-Print-an-error-if-VDO-control-fail.patch b/board/chromebook/elm/patches/linux/0004-drm-bridge-ps8640-Print-an-error-if-VDO-control-fail.patch
+new file mode 100644
+index 0000000000..4ef074a6c8
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0004-drm-bridge-ps8640-Print-an-error-if-VDO-control-fail.patch
+@@ -0,0 +1,58 @@
++From 4897262a71cbf55d726d9174f5f646897dc13704 Mon Sep 17 00:00:00 2001
++From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Date: Wed, 26 Aug 2020 10:15:25 +0200
++Subject: [PATCH 4/5] drm/bridge: ps8640: Print an error if VDO control fails
++
++Print an error message inside ps8640_bridge_vdo_control() function when
++it fails so we can simplify a bit the callers, they will only need to
++check the error code.
++
++Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
++Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++---
++ drivers/gpu/drm/bridge/parade-ps8640.c | 13 ++++++-------
++ 1 file changed, 6 insertions(+), 7 deletions(-)
++
++diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
++index ce3e8b2da8c9..9f7b7a9c53c5 100644
++--- a/drivers/gpu/drm/bridge/parade-ps8640.c
+++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
++@@ -82,8 +82,11 @@ static int ps8640_bridge_vdo_control(struct ps8640 *ps_bridge,
++ 	ret = i2c_smbus_write_i2c_block_data(client, PAGE3_SET_ADD,
++ 					     sizeof(vdo_ctrl_buf),
++ 					     vdo_ctrl_buf);
++-	if (ret < 0)
+++	if (ret < 0) {
+++		DRM_ERROR("failed to %sable VDO: %d\n",
+++			  ctrl == ENABLE ? "en" : "dis", ret);
++ 		return ret;
+++	}
++ 
++ 	return 0;
++ }
++@@ -150,10 +153,8 @@ static void ps8640_pre_enable(struct drm_bridge *bridge)
++ 	}
++ 
++ 	ret = ps8640_bridge_vdo_control(ps_bridge, ENABLE);
++-	if (ret) {
++-		DRM_ERROR("failed to enable VDO: %d\n", ret);
+++	if (ret)
++ 		goto err_regulators_disable;
++-	}
++ 
++ 	/* Switch access edp panel's edid through i2c */
++ 	ret = i2c_smbus_write_byte_data(client, PAGE2_I2C_BYPASS,
++@@ -175,9 +176,7 @@ static void ps8640_post_disable(struct drm_bridge *bridge)
++ 	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
++ 	int ret;
++ 
++-	ret = ps8640_bridge_vdo_control(ps_bridge, DISABLE);
++-	if (ret < 0)
++-		DRM_ERROR("failed to disable VDO: %d\n", ret);
+++	ps8640_bridge_vdo_control(ps_bridge, DISABLE);
++ 
++ 	gpiod_set_value(ps_bridge->gpio_reset, 1);
++ 	gpiod_set_value(ps_bridge->gpio_powerdown, 1);
++-- 
++2.25.1
++
+diff --git a/board/chromebook/elm/patches/linux/0005-drm-bridge-ps8640-Rework-power-state-handling.patch b/board/chromebook/elm/patches/linux/0005-drm-bridge-ps8640-Rework-power-state-handling.patch
+new file mode 100644
+index 0000000000..f682600d11
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0005-drm-bridge-ps8640-Rework-power-state-handling.patch
+@@ -0,0 +1,162 @@
++From 5bb60fe7c748a0aae2bdbab10e73b2dc48c09dda Mon Sep 17 00:00:00 2001
++From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++Date: Wed, 26 Aug 2020 10:15:26 +0200
++Subject: [PATCH 5/5] drm/bridge: ps8640: Rework power state handling
++
++The get_edid() callback can be triggered anytime by an ioctl, i.e
++
++  drm_mode_getconnector (ioctl)
++    -> drm_helper_probe_single_connector_modes
++       -> drm_bridge_connector_get_modes
++          -> ps8640_bridge_get_edid
++
++Actually if the bridge pre_enable() function was not called before
++get_edid(), the driver will not be able to get the EDID properly and
++display will not work until a second get_edid() call is issued and if
++pre_enable() is called before. The side effect of this, for example, is
++that you see anything when `Frecon` starts, neither the splash screen,
++until the graphical session manager starts.
++
++To fix this we need to make sure that all we need is enabled before
++reading the EDID. This means the following:
++
++1. If get_edid() is called before having the device powered we need to
++   power on the device. In such case, the driver will power off again the
++   device.
++
++2. If get_edid() is called after having the device powered, all should
++   just work. We added a powered flag in order to avoid recurrent calls
++   to ps8640_bridge_poweron() and unneeded delays.
++
++3. This seems to be specific for this device, but we need to make sure
++   the panel is powered on before do a power on cycle on this device.
++   Otherwise the device fails to retrieve the EDID.
++
++Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
++---
++ drivers/gpu/drm/bridge/parade-ps8640.c | 64 +++++++++++++++++++++++---
++ 1 file changed, 58 insertions(+), 6 deletions(-)
++
++diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
++index 9f7b7a9c53c5..c5d76e209bda 100644
++--- a/drivers/gpu/drm/bridge/parade-ps8640.c
+++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
++@@ -65,6 +65,7 @@ struct ps8640 {
++ 	struct regulator_bulk_data supplies[2];
++ 	struct gpio_desc *gpio_reset;
++ 	struct gpio_desc *gpio_powerdown;
+++	bool powered;
++ };
++ 
++ static inline struct ps8640 *bridge_to_ps8640(struct drm_bridge *e)
++@@ -91,13 +92,15 @@ static int ps8640_bridge_vdo_control(struct ps8640 *ps_bridge,
++ 	return 0;
++ }
++ 
++-static void ps8640_pre_enable(struct drm_bridge *bridge)
+++static void ps8640_bridge_poweron(struct ps8640 *ps_bridge)
++ {
++-	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
++ 	struct i2c_client *client = ps_bridge->page[PAGE2_TOP_CNTL];
++ 	unsigned long timeout;
++ 	int ret, status;
++ 
+++	if (ps_bridge->powered)
+++		return;
+++
++ 	ret = regulator_bulk_enable(ARRAY_SIZE(ps_bridge->supplies),
++ 				    ps_bridge->supplies);
++ 	if (ret < 0) {
++@@ -164,6 +167,8 @@ static void ps8640_pre_enable(struct drm_bridge *bridge)
++ 		goto err_regulators_disable;
++ 	}
++ 
+++	ps_bridge->powered = true;
+++
++ 	return;
++ 
++ err_regulators_disable:
++@@ -171,12 +176,12 @@ static void ps8640_pre_enable(struct drm_bridge *bridge)
++ 			       ps_bridge->supplies);
++ }
++ 
++-static void ps8640_post_disable(struct drm_bridge *bridge)
+++static void ps8640_bridge_poweroff(struct ps8640 *ps_bridge)
++ {
++-	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
++ 	int ret;
++ 
++-	ps8640_bridge_vdo_control(ps_bridge, DISABLE);
+++	if (!ps_bridge->powered)
+++		return;
++ 
++ 	gpiod_set_value(ps_bridge->gpio_reset, 1);
++ 	gpiod_set_value(ps_bridge->gpio_powerdown, 1);
++@@ -184,6 +189,28 @@ static void ps8640_post_disable(struct drm_bridge *bridge)
++ 				     ps_bridge->supplies);
++ 	if (ret < 0)
++ 		DRM_ERROR("cannot disable regulators %d\n", ret);
+++
+++	ps_bridge->powered = false;
+++}
+++
+++static void ps8640_pre_enable(struct drm_bridge *bridge)
+++{
+++	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+++	int ret;
+++
+++	ps8640_bridge_poweron(ps_bridge);
+++
+++	ret = ps8640_bridge_vdo_control(ps_bridge, DISABLE);
+++	if (ret < 0)
+++		ps8640_bridge_poweroff(ps_bridge);
+++}
+++
+++static void ps8640_post_disable(struct drm_bridge *bridge)
+++{
+++	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+++
+++	ps8640_bridge_vdo_control(ps_bridge, DISABLE);
+++	ps8640_bridge_poweroff(ps_bridge);
++ }
++ 
++ static int ps8640_bridge_attach(struct drm_bridge *bridge,
++@@ -249,9 +276,34 @@ static struct edid *ps8640_bridge_get_edid(struct drm_bridge *bridge,
++ 					   struct drm_connector *connector)
++ {
++ 	struct ps8640 *ps_bridge = bridge_to_ps8640(bridge);
+++	bool poweroff = !ps_bridge->powered;
+++	struct edid *edid;
+++
+++	/*
+++	 * When we end calling get_edid() triggered by an ioctl, i.e
+++	 *
+++	 *   drm_mode_getconnector (ioctl)
+++	 *     -> drm_helper_probe_single_connector_modes
+++	 *        -> drm_bridge_connector_get_modes
+++	 *           -> ps8640_bridge_get_edid
+++	 *
+++	 * We need to make sure that what we need is enabled before reading
+++	 * EDID, for this chip, we need to do a full poweron, otherwise it will
+++	 * fail.
+++	 */
+++	drm_bridge_chain_pre_enable(bridge);
++ 
++-	return drm_get_edid(connector,
+++	edid = drm_get_edid(connector,
++ 			    ps_bridge->page[PAGE0_DP_CNTL]->adapter);
+++
+++	/*
+++	 * If we call the get_edid() function without having enabled the chip
+++	 * before, return the chip to its original power state.
+++	 */
+++	if (poweroff)
+++		drm_bridge_chain_post_disable(bridge);
+++
+++	return edid;
++ }
++ 
++ static const struct drm_bridge_funcs ps8640_bridge_funcs = {
++-- 
++2.25.1
++
+diff --git a/board/chromebook/elm/readme.txt b/board/chromebook/elm/readme.txt
+new file mode 100644
+index 0000000000..b63e7e8bcf
+--- /dev/null
++++ b/board/chromebook/elm/readme.txt
+@@ -0,0 +1,56 @@
++Mediatek MT8173 aka Chromebook Elm
++==================================
++
++This file describes booting the Chromebook from an SD card containing
++Buildroot kernel and rootfs, using the original bootloader. This is
++the least invasive way to get Buildroot onto the devices and a good
++starting point.
++
++The bootloader will only boot a kernel from a GPT partition marked
++bootable with cgpt tool from vboot-utils package.
++The kernel image must be signed using futility from the same package.
++The signing part is done by sign.sh script in this directory.
++
++It does not really matter where rootfs is as long as the kernel is able
++to find it, but this particular configuration assumes the kernel is on
++partition 1 and rootfs is on partition 2 of the SD card.
++Make sure to check kernel.args if you change this.
++
++Making the boot media
++---------------------
++Start by configuring and building the images.
++
++	make chromebook_elm_defconfig
++	make menuconfig # if necessary
++	make
++
++The important files are:
++
++	uImage.kpart (kernel and device tree, signed)
++	rootfs.tar
++	bootsd.img (SD card image containing both kernel and rootfs)
++
++Write the image directly to some SD card.
++WARNING: make sure there is nothing important on that card,
++and double-check the device name!
++
++	SD=/dev/mmcblk1		# may be /dev/sdX on some hosts
++	dd if=output/images/bootsd.img of=$SD
++
++Switching to developer mode and booting from SD
++-----------------------------------------------
++Power Chromebook down, then power it up while holding Esc+F3.
++BEWARE: switching to developer mode deletes all user data.
++Create backups if you need them.
++
++While in developer mode, Chromebook will boot into a white screen saying
++"OS verification is off".
++
++Press Ctrl-D at this screen to boot Chromium OS from eMMC.
++Press Ctrl-U at this screen to boot from SD (or USB)
++Press Power to power it off.
++Do NOT press Space unless you mean it.
++This will switch it back to normal mode.
++
++The is no way to get rid of the white screen without re-flashing the bootloader.
++
+diff --git a/board/chromebook/elm/sign.sh b/board/chromebook/elm/sign.sh
+new file mode 100755
+index 0000000000..af1f9d21c8
+--- /dev/null
++++ b/board/chromebook/elm/sign.sh
+@@ -0,0 +1,41 @@
++#!/bin/sh
++
++# This script creates u-boot FIT image containing the kernel and the DT,
++# then signs it using futility from vboot-utils.
++# The resulting file is called uImage.kpart.
++
++BOARD_DIR=$(dirname $0)/${BOARD_NAME}
++mkimage=$HOST_DIR/bin/mkimage
++futility=$HOST_DIR/bin/futility
++devkeys=$HOST_DIR/share/vboot/devkeys
++
++run() { echo "$@"; "$@"; }
++die() { echo "$@" >&2; exit 1; }
++test -f $BINARIES_DIR/Image  || \
++	die "No kernel image found"
++test -x $mkimage || \
++	die "No mkimage found (host-uboot-tools has not been built?)"
++test -x $futility || \
++	die "No futility found (host-vboot-utils has not been built?)"
++
++# kernel.its references Image and mt8173-elm.dtb, and all three
++# files must be in current directory for mkimage.
++run cp $BOARD_DIR/kernel.its $BINARIES_DIR/kernel.its || exit 1
++echo "# entering $BINARIES_DIR for the next command"
++(cd $BINARIES_DIR && run $mkimage -f kernel.its uImage.itb) || exit 1
++
++# futility requires non-empty file to be supplied with --bootloader
++# even if it does not make sense for the target platform.
++echo > $BINARIES_DIR/dummy.txt
++
++run $futility vbutil_kernel \
++	--keyblock $devkeys/kernel.keyblock \
++	--signprivate $devkeys/kernel_data_key.vbprivk \
++	--arch aarch64 \
++	--version 1 \
++	--config $BOARD_DIR/kernel.args \
++	--vmlinuz $BINARIES_DIR/uImage.itb \
++	--bootloader $BINARIES_DIR/dummy.txt \
++	--pack $BINARIES_DIR/uImage.kpart || exit 1
++
++rm -f $BINARIES_DIR/kernel.its $BINARIES_DIR/dummy.txt
+diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
+new file mode 100644
+index 0000000000..0c8e0a42bf
+--- /dev/null
++++ b/configs/chromebook_elm_defconfig
+@@ -0,0 +1,37 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++
++# Patches
++BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches/"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9-rc5"
++
++# Build Kernel with a Custom config.
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/chromebook/elm/linux.config"
++
++# DTS support
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="mediatek/mt8173-elm"
++
++# Package Firmware for WiFi chip.
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8797=y
++
++# Scripts to generate final images.
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/elm/sign.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/mksd.sh"
++
++# Supporting host tools to build / sign FIT Image.
++BR2_PACKAGE_HOST_PARTED=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
++BR2_PACKAGE_HOST_VBOOT_UTILS=y
