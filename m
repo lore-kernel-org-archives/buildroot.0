@@ -1,52 +1,46 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 24 Sep 2020 14:29:12 -0500
-Subject: [Buildroot] [PATCH v2 3/3] genrandconfig: uboot-tools env/scr
- creation test files
-In-Reply-To: <20200924192912.51913-1-matthew.weber@rockwellcollins.com>
-References: <20200924192912.51913-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20200924192912.51913-4-matthew.weber@rockwellcollins.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 24 Sep 2020 22:17:01 +0200
+Subject: [Buildroot] [RFC v1 13/13] package/gst-omx: bump version to
+ 1.18.0 and convert to meson
+In-Reply-To: <20200923223159.0ef09f89@windsurf>
+References: <20200916194933.24921-1-ps.report@gmx.net>
+ <20200916194933.24921-13-ps.report@gmx.net>
+ <20200923223159.0ef09f89@windsurf>
+Message-ID: <20200924221701.46d34616@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Normally the kconfig stings would end up empty and cause a build
-error.  This patch provides test files to allow testing the creation
-of uboot environment and script bin files from user provided txt files.
+Hello Thomas,
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- utils/genrandconfig | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On Wed, 23 Sep 2020 22:31:59 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 63ff32cbfb..93dc6d898b 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -301,6 +301,22 @@ def fixup_config(sysinfo, configfile):
-        'BR2_PACKAGE_FLANN=y\n' in configlines:
-         return False
- 
-+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y\n' in configlines:
-+        bootenv = os.path.join(args.outputdir, "boot_env.txt")
-+        with open(bootenv, "w+") as bootenvf:
-+            bootenvf.write("prop=value")
-+        configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE=""\n')
-+        configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="%s"\n' % bootenv)
-+        configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE=""\n')
-+        configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x1000"\n')
-+
-+    if 'BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y\n' in configlines:
-+        bootscr = os.path.join(args.outputdir, "boot_script.txt")
-+        with open(bootscr, "w+") as bootscrf:
-+            bootscrf.write("prop=value")
-+        configlines.remove('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE=""\n')
-+        configlines.append('BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="%s"\n' % bootscr)
-+
-     with open(configfile, "w+") as configf:
-         configf.writelines(configlines)
- 
--- 
-2.17.1
+> On Wed, 16 Sep 2020 21:49:33 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > - change home page url to https
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Notes:
+> >  - droped the version downgrade for the bellagio case (no meson
+> >    options available), maybe needs extra testing...
+>
+> I think this really needs to be looked at, or we dropped bellagio,
+> which hasn't seen any update since 2011. It has never been clear to me
+> what bellagio is exactly: isn't the OpenMAX API supposed to be like
+> OpenGL, i.e provide some HW-platform specific implementations ?
+
+Dropping bellagio (in case no one raises one hand to keep support for it)
+is fine with me (but I am no OpenMAX user)...
+
+The other specific targets are rpi (already handled), tizonia and
+zynqultrascaleplus...
+
+Regards,
+Peter
+
+>
+> Thomas
