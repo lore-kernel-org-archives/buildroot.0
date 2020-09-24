@@ -1,53 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 24 Sep 2020 12:59:55 +0300
-Subject: [Buildroot] [PATCH v2 1/1] package/fakeroot: bump version to
- 1.25.1
-In-Reply-To: <20200924095241.210229-1-nolange79@gmail.com>
-References: <20200924095241.210229-1-nolange79@gmail.com>
-Message-ID: <87y2kz8pgk.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 24 Sep 2020 12:22:18 +0200
+Subject: [Buildroot] [PATCH] package/gcc: drop leftovers from PowerPC
+ conditional patching
+Message-ID: <20200924102219.3443175-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Norbert,
+We used to have a conditional patch applied on PowerPC soft-float, but
+this logic was dropped in commit
+0c82f3f63563c4d4d7e034d0e9e4ceb766d92322 ("package/gcc: remove powerpc
+conditional patching logic"). However, we still have some related
+leftovers in the calculation of the hashes for ccache, which can now
+be dropped.
 
-On Thu, Sep 24 2020, Norbert Lange wrote:
-> This version adds wrappers for getgroups and statx,
-> the latter is used by coreutils 8.32.
->
-> Removed patches that are now in upstream.
->
-> Added a patch to fix failure when installing.
->
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/gcc/gcc.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-[...]
-
-> diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-> index 1be99071bf..ed96fea2ae 100644
-> --- a/package/fakeroot/fakeroot.mk
-> +++ b/package/fakeroot/fakeroot.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -FAKEROOT_VERSION = 1.20.2
-> -FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
-> -FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
-> +FAKEROOT_VERSION = 1.25.1
-> +FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
-> +FAKEROOT_SITE = http://deb.debian.org/debian/pool/main/f/fakeroot
-
-We prefer links to snapshot.debian.org because source files tend to
-disappear from debian archives when distro versions are updated and
-removed.
-
-baruch
-
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index d9c4b4ef83..cc1dbbcf3a 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -279,11 +279,6 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
+ ifeq ($(BR2_xtensa),y)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_TAR)
+ endif
+-ifeq ($(ARCH),powerpc)
+-ifneq ($(BR2_SOFT_FLOAT),)
+-HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
+-endif
+-endif
+ 
+ # _CONF_OPTS contains some references to the absolute path of $(HOST_DIR)
+ # and a reference to the Buildroot git revision (BR2_VERSION_FULL),
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.26.2
