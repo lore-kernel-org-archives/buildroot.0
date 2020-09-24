@@ -1,49 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 24 Sep 2020 21:20:51 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: gst1-validate is now
- gst1-devtools
-In-Reply-To: <20200924081726.CB71583786@busybox.osuosl.org>
-References: <20200924081726.CB71583786@busybox.osuosl.org>
-Message-ID: <20200924212051.393b7f1a@gmx.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 24 Sep 2020 14:29:09 -0500
+Subject: [Buildroot] [PATCH v2 0/3] Support uboot file creation w/o uboot
+Message-ID: <20200924192912.51913-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This patch series migrates the support for building uboot env and
+script files to be a feature of the uboot-tools package. This enables
+a Buildroot defconfig that isn't modifying a system's firmware(uboot /
+cpu configuration files / etc) to tailor the uboot environment and
+startup behavior.
 
-On Thu, 24 Sep 2020 10:26:55 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+v2 - Fixes up legecy config handling and covers a case where the
+     generation of autobuilder configs would fail as uboot-tools is
+     tested vs target uboot is not.
 
-> commit: https://git.buildroot.net/buildroot/commit/?id=f6caa9f55bea61c78b950bc2a4147c924fdfdbfd
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4e465221d4..dcefb8f4df 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2111,8 +2111,8 @@ F:	package/dillo/
->  F:	package/edid-decode/
->  F:	package/ell/
->  F:	package/ghostscript-fonts/
-> +F:	package/gstreamer1/gst1-devtools/
->  F:	package/gstreamer1/gst1-interpipe/
-> -F:	package/gstreamer1/gst1-validate/
->  F:	package/gstreamer1/gstreamer1-editing-services/
->  F:	package/iwd/
->  F:	package/libevdev/
+Matt Weber (3):
+  package/uboot-tools: migrate BR2_TARGET_UBOOT_ENVIMAGE from U-Boot pkg
+  package/uboot-tools: migrate BR2_TARGET_UBOOT_BOOT_SCRIPT from U-Boot
+    pkg
+  genrandconfig: uboot-tools env/scr creation test files
 
-Thanks for the update...
+ Config.in.legacy                   | 63 ++++++++++++++++++++++++++
+ boot/uboot/Config.in               | 59 ------------------------
+ boot/uboot/uboot.mk                | 38 ----------------
+ package/uboot-tools/Config.in.host | 73 +++++++++++++++++++++++++++++-
+ package/uboot-tools/uboot-tools.mk | 48 ++++++++++++++++++++
+ utils/genrandconfig                | 16 +++++++
+ 6 files changed, 198 insertions(+), 99 deletions(-)
 
-Regards,
-Peter
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+2.17.1
