@@ -1,10 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 24 Sep 2020 23:17:12 +0200
-Subject: [Buildroot] [PATCH v2 2/5] package/gstreamer1-editing-services:
- bump version to 1.18.0 and convert to meson
-In-Reply-To: <20200924211715.7433-1-ps.report@gmx.net>
-References: <20200924211715.7433-1-ps.report@gmx.net>
-Message-ID: <20200924211715.7433-2-ps.report@gmx.net>
+Date: Thu, 24 Sep 2020 23:17:11 +0200
+Subject: [Buildroot] [PATCH v2 1/5] package/gst1-plugins-ugly: bump version
+ to 1.18.0
+Message-ID: <20200924211715.7433-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,112 +11,65 @@ To: buildroot@busybox.net
 
 - change home page url to https
 
-- change download url to https
-
-- download source renamed from gstreamer-editing-services to
-  gst-editing-services
-
-- convert to meson build
-
-- use BR2_PACKAGE_GST1_DEVTOOLS/gst1-devtools instead of legacy
-  BR2_PACKAGE_GST1_VALIDATE/gst1-validate
-
-- drop examples support
+- meson options: doc=disabled
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - use BR2_PACKAGE_GST1_DEVTOOLS/gst1-devtools instead of legacy
-    BR2_PACKAGE_GST1_VALIDATE/gst1-validate (Thomas Petazzoni)
-  - drop examples support
+  - no changes (despite the applied message [1] no commit apears on git master)
+    [1] http://lists.busybox.net/pipermail/buildroot/2020-September/293062.html
 ---
- .../gstreamer1-editing-services/Config.in     |  2 +-
- .../gstreamer1-editing-services.hash          |  8 ++---
- .../gstreamer1-editing-services.mk            | 36 +++++++++----------
- 3 files changed, 21 insertions(+), 25 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/Config.in              | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 6 +++---
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 5 +++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/Config.in b/package/gstreamer1/gstreamer1-editing-services/Config.in
-index fe46870491..9c41e8142b 100644
---- a/package/gstreamer1/gstreamer1-editing-services/Config.in
-+++ b/package/gstreamer1/gstreamer1-editing-services/Config.in
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 	  GStreamer Editing Services is a high-level library for
- 	  facilitating the creation of audio/video non-linear editors.
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index c24ec7ae7b..ba19989892 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -5,7 +5,7 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_UGLY
+ 	  A set of well-supported plug-ins for GStreamer, but might pose
+ 	  problems for distributors.
  
--	  http://gstreamer.freedesktop.org
-+	  https://gstreamer.freedesktop.org
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 8724f39498..7ac263f978 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,6 +1,6 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.2.tar.xz.sha256sum
--sha256 0e06a6191a0c6c16e16272bf2573cecaeb245f10629486ad940a299bef700c16 gstreamer-editing-services-1.16.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.0.tar.xz.sha256sum
-+sha256  4daef0d4875415ea262f7fb1287d4a33939a9594f3c1e661f8587ab00f7000a8  gst-editing-services-1.18.0.tar.xz
+-	  http://gstreamer.freedesktop.org/
++	  https://gstreamer.freedesktop.org/
  
- # Hashes for license files:
--sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
--sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-+sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-+sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING.LIB
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 4b0b61e877..9ea7817f0a 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,9 +4,9 @@
+ if BR2_PACKAGE_GST1_PLUGINS_UGLY
+ 
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index e5df44ab90..9afc9a9c9a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.2.tar.xz.sha256sum
+-sha256 5500415b865e8b62775d4742cbb9f37146a50caecfc0e7a6fc0160d3c560fbca gst-plugins-ugly-1.16.2.tar.xz
+-sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.18.0.tar.xz.sha256sum
++sha256  686644e45e08258ae240c4519376668ad8d34ea6d0f6ab556473c317bfb7e082  gst-plugins-ugly-1.18.0.tar.xz
++sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 9f8b1d3359..2072772d9a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.2
--GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
--GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.0
-+GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
-+GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
- GSTREAMER1_EDITING_SERVICES_LICENSE_FILES = COPYING COPYING.LIB
- GSTREAMER1_EDITING_SERVICES_INSTALL_STAGING = YES
-@@ -15,27 +15,23 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	gst1-plugins-good \
--	$(if $(BR2_PACKAGE_GST1_VALIDATE),gst1-validate) \
- 	libxml2
+-GST1_PLUGINS_UGLY_VERSION = 1.16.2
++GST1_PLUGINS_UGLY_VERSION = 1.18.0
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -15,7 +15,8 @@ GST1_PLUGINS_UGLY_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
- GSTREAMER1_EDITING_SERVICES_CONF_OPTS = \
--	--disable-benchmarks \
--	--disable-introspection
--
--# examples need GTK2/3 with X11 backend
--ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --enable-examples
--
--ifeq ($(BR2_PACKAGE_LIBGTK2),y)
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-gtk=2.0
--GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += libgtk2
--else
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-gtk=3.0
--GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += libgtk3
--endif
-+	-Ddoc=disabled \
-+	-Dexamples=disabled \
-+	-Dintrospection=disabled \
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	-Dexamples=disabled \
+-	-Dtests=disabled
 +	-Dtests=disabled \
-+	-Dtools=enabled \
-+	-Dbash-completion=disabled \
-+	-Dxptv=disabled \
-+	-Dpython=disabled
++	-Ddoc=disabled
  
-+ifeq ($(BR2_PACKAGE_GST1_DEVTOOLS),y)
-+GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += gst1-devtools
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS += -Dvalidate=enabled
- else
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --disable-examples
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS += -Dvalidate=disabled
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	-Da52dec=disabled \
 -- 
 2.28.0
