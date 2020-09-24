@@ -1,102 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 Sep 2020 21:06:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: add introspection support
-Message-ID: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 24 Sep 2020 21:20:03 +0200
+Subject: [Buildroot] [git commit] Config.in.legacy: fix spelling of
+ 'config'
+In-Reply-To: <20200923205607.8F9338D4BC@busybox.osuosl.org>
+References: <20200923205607.8F9338D4BC@busybox.osuosl.org>
+Message-ID: <20200924212003.40246997@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add introspection support to harfbuzz otherwise activation of
-introspection in pango 1.46.1 will fail on:
+Hello Arnout,
 
-Couldn't find include 'HarfBuzz-0.0.gir' (search path: '['/home/naourr/work/instance-2/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share', '/home/naourr/.local/share/flatpak/exports/share/gir-1.0', '/var/lib/flatpak/exports/share/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
+On Wed, 23 Sep 2020 23:04:43 +0200, Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3357225ee2d8392bfd57af91cde04a1113e03493
+> commit: https://git.buildroot.net/buildroot/commit/?id=0e4be4677151f429bf31561f0d27b5bbd299c0df
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  Config.in.legacy | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index c1b3e18186..92816e562d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,7 +146,7 @@ endif
+>
+>  comment "Legacy options removed in 2020.11"
+>
+> -connfig BR2_PACKAGE_GST1_VALIDATE
+> +config BR2_PACKAGE_GST1_VALIDATE
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...allow-introspection-when-cross-compi.patch | 33 +++++++++++++++++++
- package/harfbuzz/harfbuzz.mk                  | 13 ++++++--
- 2 files changed, 44 insertions(+), 2 deletions(-)
- create mode 100644 package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
+Thanks for fixing my typo...
 
-diff --git a/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-new file mode 100644
-index 0000000000..700f6f85e4
---- /dev/null
-+++ b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-@@ -0,0 +1,33 @@
-+From 432dfd0a1d8fe0a8df89e7ce828c520c7758f10c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Sep 2020 21:00:34 +0200
-+Subject: [PATCH] src/meson.build: allow introspection when cross-compiling
-+
-+introspection can be enabled when cross-compiling on certains conditions
-+(for example it is supported by buildroot)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/harfbuzz/harfbuzz/pull/2692]
-+---
-+ src/meson.build | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/src/meson.build b/src/meson.build
-+index 19290245..7db43508 100644
-+--- a/src/meson.build
-++++ b/src/meson.build
-+@@ -637,11 +637,6 @@ if have_gobject
-+   gir = find_program('g-ir-scanner', required: get_option('introspection'))
-+   build_gir = gir.found()
-+ 
-+-  build_gir = build_gir and not meson.is_cross_build()
-+-  if not build_gir and get_option('introspection').enabled()
-+-    error('Introspection support is requested but it isn\'t available in cross builds')
-+-  endif
-+-
-+   build_gir = build_gir and get_option('default_library') != 'static'
-+   if not build_gir and get_option('introspection').enabled()
-+     error('Introspection support is requested but the default library option should be shared or both')
-+-- 
-+2.28.0
-+
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 6d35e8b65e..fae9278b7c 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -11,13 +11,11 @@ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING
- HARFBUZZ_INSTALL_STAGING = YES
- HARFBUZZ_CONF_OPTS = \
--	-Dgobject=disabled \
- 	-Dfontconfig=disabled \
- 	-Dgdi=disabled \
- 	-Ddirectwrite=disabled \
- 	-Dcoretext=disabled \
- 	-Dtests=disabled \
--	-Dintrospection=disabled \
- 	-Ddocs=disabled \
- 	-Dbenchmark=disabled \
- 	-Dicu_builtin=false \
-@@ -61,6 +59,17 @@ else
- HARFBUZZ_CONF_OPTS += -Dfreetype=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+HARFBUZZ_DEPENDENCIES += gobject-introspection
-+HARFBUZZ_CONF_OPTS += \
-+	-Dgobject=enabled \
-+	-Dintrospection=enabled
-+else
-+HARFBUZZ_CONF_OPTS += \
-+	-Dgobject=disabled \
-+	-Dintrospection=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GRAPHITE2),y)
- HARFBUZZ_DEPENDENCIES += graphite2
- HARFBUZZ_CONF_OPTS += -Dgraphite=enabled
--- 
-2.28.0
+Regards,
+Peter
+
+>  	bool "gst1-validate was moved to gst1-devtools"
+>  	select BR2_PACKAGE_GST1_DEVTOOLS
+>  	select BR2_LEGACY
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
