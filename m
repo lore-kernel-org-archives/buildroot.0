@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Sep 2020 23:42:32 +0200
-Subject: [Buildroot] [PATCH v4 00/12] IBM s390x and Z architecture
- support
-In-Reply-To: <20200917040802.846896-1-egorenar@linux.ibm.com>
+Date: Thu, 24 Sep 2020 23:44:29 +0200
+Subject: [Buildroot] [PATCH v4 01/12] arch: add the basic IBM s390x and
+ Z arch support
+In-Reply-To: <20200917040802.846896-2-egorenar@linux.ibm.com>
 References: <20200917040802.846896-1-egorenar@linux.ibm.com>
-Message-ID: <20200924214232.GA11621@scaer>
+ <20200917040802.846896-2-egorenar@linux.ibm.com>
+Message-ID: <20200924214429.GB11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,63 +15,71 @@ To: buildroot@busybox.net
 Alexander, All,
 
 On 2020-09-17 06:07 +0200, Alexander Egorenkov spake thusly:
-> This series of patches adds support for IBM s390x and Z architectures
-> to buildroot.
-> 
-> Alexander Egorenkov (12):
->   arch: add the basic IBM s390x and Z arch support
->   toolchain: add support for the internal IBM s390x and Z toolchain
->   linux: add bzImage support for IBM s390x and Z arch
->   package/qemu: add IBM s390x and Z arch support
->   board/qemu: add IBM s390x and Z arch support
->   package/systemd: add support for IBM s390x and Z arch
->   package/cmake: add support for IBM s390x and Z arch
->   package/liburcu: add support for IBM s390x and Z arch
->   package/kexec: add support for IBM s390x and Z arch
->   package/go: add support for IBM s390x and Z arch
->   package/makedumpfile: add support for IBM s390x and Z arch
->   package/s390-tools: new package
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> ---
+[--SNIP--]
+> index 0707c076e2..eb9b6007c9 100644
+> --- a/arch/Config.in
+> +++ b/arch/Config.in
+[--SNIP--]
+> @@ -457,6 +467,10 @@ if BR2_riscv
+>  source "arch/Config.in.riscv"
+>  endif
+>  
+> +if BR2_s390x
+> +source "arch/Config.in.s390x"
+> +endif
 
-Thanks for the sustained iterations. :-)
+Here, we already have a dependency on s390x, by way of the if-block
+condition, so...
 
-Ive now applied the series to master, with a few changes to some
-patches; I'll individually reply to the impacted ones.
+> diff --git a/arch/Config.in.s390x b/arch/Config.in.s390x
+> new file mode 100644
+> index 0000000000..39d2f58aa9
+> --- /dev/null
+> +++ b/arch/Config.in.s390x
+> @@ -0,0 +1,34 @@
+> +
+> +choice
+> +	prompt "Target Architecture Variant"
+> +	depends on BR2_s390x
 
-Thanks!
+...here we do not need the dependency on s390x, so I dropped it and
+applied to master. Thanks!
 
 Regards,
 Yann E. MORIN.
 
->  DEVELOPERS                              |  6 ++
->  Makefile                                |  1 +
->  arch/Config.in                          | 13 ++++
->  arch/Config.in.s390x                    | 34 +++++++++
->  board/qemu/s390x/post-build.sh          | 11 +++
->  board/qemu/s390x/readme.txt             |  8 +++
->  configs/qemu_s390x_defconfig            | 24 +++++++
->  linux/Config.in                         |  2 +-
->  package/Config.in                       |  1 +
->  package/cmake/Config.in                 |  3 +-
->  package/gcc/gcc.mk                      |  5 ++
->  package/go/Config.in.host               |  2 +-
->  package/kexec/Config.in                 |  2 +-
->  package/liburcu/Config.in               |  2 +-
->  package/makedumpfile/Config.in          |  1 +
->  package/qemu/Config.in.host             |  1 +
->  package/s390-tools/Config.in            | 13 ++++
->  package/s390-tools/s390-tools.hash      |  3 +
->  package/s390-tools/s390-tools.mk        | 91 +++++++++++++++++++++++++
->  package/systemd/Config.in               |  1 +
->  toolchain/toolchain-buildroot/Config.in |  6 +-
->  21 files changed, 222 insertions(+), 8 deletions(-)
->  create mode 100644 arch/Config.in.s390x
->  create mode 100755 board/qemu/s390x/post-build.sh
->  create mode 100644 board/qemu/s390x/readme.txt
->  create mode 100644 configs/qemu_s390x_defconfig
->  create mode 100644 package/s390-tools/Config.in
->  create mode 100644 package/s390-tools/s390-tools.hash
->  create mode 100644 package/s390-tools/s390-tools.mk
-> 
+> +	help
+> +	  Specific CPU variant to use
+> +
+> +config BR2_s390x_z13
+> +	bool "z13"
+> +	depends on BR2_s390x
+> +
+> +config BR2_s390x_z14
+> +	bool "z14"
+> +	depends on BR2_s390x
+> +
+> +config BR2_s390x_z15
+> +	bool "z15"
+> +	depends on BR2_s390x
+> +
+> +endchoice
+> +
+> +config BR2_ARCH
+> +	default "s390x"	if BR2_s390x
+> +
+> +config BR2_ENDIAN
+> +	default "BIG"
+> +
+> +config BR2_GCC_TARGET_ARCH
+> +	default "arch11" if BR2_s390x_z13
+> +	default "arch12" if BR2_s390x_z14
+> +	default "arch13" if BR2_s390x_z15
+> +
+> +config BR2_READELF_ARCH_NAME
+> +	default "IBM S/390"	if BR2_s390x
 > -- 
 > 2.26.2
 > 
