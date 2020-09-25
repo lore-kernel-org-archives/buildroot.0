@@ -1,47 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 25 Sep 2020 11:57:56 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-24
-In-Reply-To: <20200925071202.077EA86CCD@whitealder.osuosl.org>
-References: <20200925071202.077EA86CCD@whitealder.osuosl.org>
-Message-ID: <878scy8c8b.fsf@tarshish>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 25 Sep 2020 11:04:51 +0200
+Subject: [Buildroot] [PATCH] package/gcc: help libbacktrace detection of
+ sync builtins
+Message-ID: <20200925090451.1407258-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xogium,
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-On Fri, Sep 25 2020, Thomas Petazzoni wrote:
-> Autobuild statistics for 2020-09-24
-> ===================================
+The logic in libbacktrace/configure.ac to detect if __sync builtins
+are available assumes they are as soon as target_subdir is not
+empty, i.e when cross-compiling. However, some platforms do not have
+__sync builtins, so help the configure script a bit.
 
-[...]
+"libbacktrace_cv_sys_sync=no" is lost when it is added to
+HOST_GCC_COMMON_CONF_ENV because the environment is not exported
+when executing the libbacktrace configure script.
 
->     arm      |         libpcap-1.9.1          | NOK | http://autobuild.buildroot.net/results/058e8ec90da3c06e31b31eb94541331cced44db3 |     
+Use target_configargs to force "libbacktrace_cv_sys_sync=no" when
+executiong the libbacktrace configure script.
 
-Your autobuilder reported this error several times over the last few
-days:
+Fixes:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359681
 
-  http://autobuild.buildroot.net/?reason=libpcap-1.9.1
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Romain: use target_configargs="libbacktrace_cv_sys_sync=no"]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/gcc/gcc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-checking for bison... bison -y
-checking for capable yacc/bison... insufficient
-configure: error: bison -y is insufficient to compile libpcap.
- libpcap requires Bison, a newer version of Berkeley YACC with support
- for reentrant parsers, or another YACC compatible with them.
-
-This is most likely triggered by the recent bison version bump (commit
-f4c89374eaec306). For some reason libpcap does not like host-bison on
-your machine.
-
-Can you take a look?
-
-Thanks,
-baruch
-
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..6e60ea9980 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -141,6 +141,14 @@ ifeq ($(BR2_sparc)$(BR2_sparc64),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
+ 
++# The logic in libbacktrace/configure.ac to detect if __sync builtins
++# are available assumes they are as soon as target_subdir is not
++# empty, i.e when cross-compiling. However, some platforms do not have
++# __sync builtins, so help the configure script a bit.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),)
++HOST_GCC_COMMON_CONF_ENV += target_configargs="libbacktrace_cv_sys_sync=no"
++endif
++
+ # TLS support is not needed on uClibc/no-thread and
+ # uClibc/linux-threads, otherwise, for all other situations (glibc,
+ # musl and uClibc/NPTL), we need it.
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.25.4
