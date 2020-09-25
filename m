@@ -1,49 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 23:20:52 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/dhcpdump: fix
- build without pod2man
-Message-ID: <20200928211203.CB18E8E1EA@busybox.osuosl.org>
+Date: Fri, 25 Sep 2020 17:38:40 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/nginx: use /run
+ for PIDFile
+Message-ID: <20200928211214.17B8E80FFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5132c0ae0e076aa865ca8883ccf0c692fc9f44ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
-
-Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
-following build failure if pod2man is not available:
-
-pod2man --section 8 \
-	--date "23 June 2008" \
-	--name "DHCPDUMP" \
-	--center "User Contributed Software" \
-	dhcpdump.pod dhcpdump.8
-/bin/sh: pod2man: command not found
-make[1]: *** [Makefile:11: dhcpdump.8] Error 127
+commit: https://git.buildroot.net/buildroot/commit/?id=3bf6de98ad6da39e6758b974ce98afdff396a844
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
+a path below legacy directory /var/run/, updating /var/run/nginx.pid ???
+/run/nginx.pid; please update the unit file accordingly.
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 698dcb61ea8ab81f92091dba372e996611d1168d)
+(cherry picked from commit 4027ba29f448b9f70347dbfd27cdeddab44e40b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpdump/dhcpdump.mk | 2 +-
+ package/nginx/nginx.service | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
-index 2413812880..ec9571c0af 100644
---- a/package/dhcpdump/dhcpdump.mk
-+++ b/package/dhcpdump/dhcpdump.mk
-@@ -20,7 +20,7 @@ DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
+diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
+index 320df9a80e..9fd215fd3e 100644
+--- a/package/nginx/nginx.service
++++ b/package/nginx/nginx.service
+@@ -4,7 +4,7 @@ After=syslog.target network.target
  
- define DHCPDUMP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
--		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
-+		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
- endef
- 
- define DHCPDUMP_INSTALL_TARGET_CMDS
+ [Service]
+ Type=forking
+-PIDFile=/var/run/nginx.pid
++PIDFile=/run/nginx.pid
+ ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+ ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+ ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
