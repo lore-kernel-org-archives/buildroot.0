@@ -1,152 +1,76 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 25 Sep 2020 23:43:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/socketcand: fix build with gcc 10
-Message-ID: <20200925214344.3723600-1-fontaine.fabrice@gmail.com>
+Date: Fri, 25 Sep 2020 23:49:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/read-edid: fix build with gcc 10
+Message-ID: <20200925214950.3731162-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also update socketcand.hash as the patch is updating socketcand.c
-
 Fixes:
- - http://autobuild.buildroot.org/results/a72f3e34c161a012e8091db331d02bbf2da6ad94
+ - http://autobuild.buildroot.org/results/28bde8049b6610273bceae26eca407c819a37dcd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Fix-GCC10-build-failure.patch        | 113 ++++++++++++++++++
- package/socketcand/socketcand.hash            |   2 +-
- 2 files changed, 114 insertions(+), 1 deletion(-)
- create mode 100644 package/socketcand/0001-Fix-GCC10-build-failure.patch
+ .../0003-fix-build-with-gcc-10.patch          | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/read-edid/0003-fix-build-with-gcc-10.patch
 
-diff --git a/package/socketcand/0001-Fix-GCC10-build-failure.patch b/package/socketcand/0001-Fix-GCC10-build-failure.patch
+diff --git a/package/read-edid/0003-fix-build-with-gcc-10.patch b/package/read-edid/0003-fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..057cd40657
+index 0000000000..713b09aa8d
 --- /dev/null
-+++ b/package/socketcand/0001-Fix-GCC10-build-failure.patch
-@@ -0,0 +1,113 @@
-+From ae0af080058a576d62c72ffc011d644d0b4dcb98 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 7 Jul 2020 19:39:41 +0200
-+Subject: [PATCH] Fix GCC10 build failure (#17)
++++ b/package/read-edid/0003-fix-build-with-gcc-10.patch
+@@ -0,0 +1,49 @@
++fix build with gcc 10
 +
-+GCC10 breaks on multiple definitions:
++Define quiet as static to avoid the following build failure with gcc 10
++(which defaults to -fno-common):
 +
-+ld: /tmp/ccFiGYO7.o:(.bss+0x114): multiple definition of `tv'; /tmp/cc7f6J5h.o:(.bss+0x80): first defined here
++/home/naourr/work/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/get-edid.dir/i2c.c.o:(.bss+0x0): multiple definition of `quiet'; CMakeFiles/get-edid.dir/get-edid.c.o:(.bss+0x0): first defined here
 +
-+Change the scope of the related variables.
++Fixes:
++ - http://autobuild.buildroot.org/results/28bde8049b6610273bceae26eca407c819a37dcd
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+
-+[Retrieved from:
-+https://github.com/linux-can/socketcand/commit/ae0af080058a576d62c72ffc011d644d0b4dcb98]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ socketcand.c  | 3 ++-
-+ state_bcm.c   | 4 ++--
-+ state_isotp.c | 2 +-
-+ state_raw.c   | 2 +-
-+ 4 files changed, 6 insertions(+), 5 deletions(-)
++[Upstream status: sent to pyrophobicman at gmail.com]
 +
-+diff --git a/socketcand.c b/socketcand.c
-+index 8d84754..6125be9 100644
-+--- a/socketcand.c
-++++ b/socketcand.c
-+@@ -102,7 +102,6 @@ socklen_t unaddrlen;
-+ struct sockaddr_un remote_unaddr;
-+ socklen_t remote_unaddrlen;
-+ char* interface_string;
-+-struct ifreq ifr, ifr_brd;
++diff -Nura read-edid-3.0.2.orig/get-edid/classic.c read-edid-3.0.2/get-edid/classic.c
++--- read-edid-3.0.2.orig/get-edid/classic.c	2020-09-25 23:25:01.928805414 +0200
+++++ read-edid-3.0.2/get-edid/classic.c	2020-09-25 23:26:37.440807301 +0200
++@@ -26,7 +26,7 @@
++ #define dosmemput(buffer,length,offset) memcpy(offset,buffer,length)
 + 
-+ int state_changed(char *buf, int current_state)
++ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
++-int quiet;
+++static int quiet;
++ 
++ real_ptr far_ptr_to_real_ptr( uint32 farptr )
 + {
-+@@ -666,6 +665,8 @@ int receive_command(int socket, char *buffer) {
-+ }
++diff -Nura read-edid-3.0.2.orig/get-edid/get-edid.c read-edid-3.0.2/get-edid/get-edid.c
++--- read-edid-3.0.2.orig/get-edid/get-edid.c	2020-09-25 23:25:01.928805414 +0200
+++++ read-edid-3.0.2/get-edid/get-edid.c	2020-09-25 23:28:20.740809341 +0200
++@@ -9,7 +9,7 @@
++ #include <stdlib.h>
++ #include <string.h>
 + 
-+ void determine_adress() {
-++	struct ifreq ifr, ifr_brd;
-++
-+ 	int probe_socket = socket(AF_INET, SOCK_DGRAM, 0);
++-int quiet=0;
+++static int quiet=0;
++ int i2conly=0; //0=both, 1=i2conly, 2=classiconly
++ int i2cbus=-1;
++ int classmon=0;
++diff -Nura read-edid-3.0.2.orig/get-edid/i2c.c read-edid-3.0.2/get-edid/i2c.c
++--- read-edid-3.0.2.orig/get-edid/i2c.c	2020-09-25 23:25:01.928805414 +0200
+++++ read-edid-3.0.2/get-edid/i2c.c	2020-09-25 23:28:32.152809567 +0200
++@@ -15,7 +15,7 @@
 + 
-+ 	if(probe_socket < 0) {
-+diff --git a/state_bcm.c b/state_bcm.c
-+index cfaa8ed..05a5f7c 100644
-+--- a/state_bcm.c
-++++ b/state_bcm.c
-+@@ -28,8 +28,6 @@
-+ #define RXLEN 128
++ //Ideas (but not too much actual code) taken from i2c-tools. Thanks guys.
 + 
-+ int sc = -1;
-+-fd_set readfds;
-+-struct timeval tv;
++-int quiet;
+++static int quiet;
 + 
-+ void state_bcm() {
-+ 	int i, j, ret;
-+@@ -38,6 +36,7 @@ void state_bcm() {
-+ 	struct ifreq ifr;
-+ 	char rxmsg[RXLEN];
-+ 	char buf[MAXLEN];
-++	fd_set readfds;
++ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
 + 
-+ 	struct {
-+ 		struct bcm_msg_head msg_head;
-+@@ -91,6 +90,7 @@ void state_bcm() {
-+ 	}
-+ 
-+ 	if (FD_ISSET(sc, &readfds)) {
-++		struct timeval tv;
-+ 
-+ 		ret = recvfrom(sc, &msg, sizeof(msg), 0,
-+ 			       (struct sockaddr*)&caddr, &caddrlen);
-+diff --git a/state_isotp.c b/state_isotp.c
-+index 5c671f9..e1b944b 100644
-+--- a/state_isotp.c
-++++ b/state_isotp.c
-+@@ -25,7 +25,6 @@
-+ #include <linux/sockios.h>
-+ 
-+ int si = -1;
-+-fd_set readfds;
-+ 
-+ void state_isotp() {
-+ 	int i, items, ret;
-+@@ -39,6 +38,7 @@ void state_isotp() {
-+ 	char buf[MAXLEN]; /* inet commands to can */
-+ 	unsigned char isobuf[ISOTPLEN+1]; /* binary buffer for isotp socket */
-+ 	unsigned char tmp;
-++	fd_set readfds;
-+ 	
-+ 	while(previous_state != STATE_ISOTP) {
-+ 
-+diff --git a/state_raw.c b/state_raw.c
-+index e83e6ec..2c49975 100644
-+--- a/state_raw.c
-++++ b/state_raw.c
-+@@ -25,7 +25,6 @@
-+ int raw_socket;
-+ struct ifreq ifr;
-+ struct sockaddr_can addr;
-+-fd_set readfds;
-+ struct msghdr msg;
-+ struct can_frame frame;
-+ struct iovec iov;
-+@@ -36,6 +35,7 @@ struct cmsghdr *cmsg;
-+ void state_raw() {
-+ 	char buf[MAXLEN];
-+ 	int i, ret, items;
-++	fd_set readfds;
-+ 
-+ 	if(previous_state != STATE_RAW) {
-+ 
-diff --git a/package/socketcand/socketcand.hash b/package/socketcand/socketcand.hash
-index 6ee0c314a8..713939897d 100644
---- a/package/socketcand/socketcand.hash
-+++ b/package/socketcand/socketcand.hash
-@@ -1,3 +1,3 @@
- # Locally computed
- sha256  3c5cc7af4ff707ac344e62d2e37a74b59aeccd14b88e837cc142c52b69d64a39  socketcand-69e2201222f015a1abe7a58ecf61325012cd91b1.tar.gz
--sha256  b32028a4080be38208ee951c6e8afc6f3bfb3d5496559b260ab0dce9472740f6  socketcand.c
-+sha256  18bda0db4e3c56cefdb1b9b01b7eada7764c0746f6321378c30d78f5ee81cfee  socketcand.c
 -- 
 2.28.0
