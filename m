@@ -1,69 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 25 Sep 2020 17:05:19 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2020-09-24
-In-Reply-To: <C5WHSEGX6N1N.2D5DWORN9UHJA@dragonstone>
-References: <878scy8c8b.fsf@tarshish> <C5WHSEGX6N1N.2D5DWORN9UHJA@dragonstone>
-Message-ID: <875z827y00.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Sep 2020 15:33:20 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: fix
+ alphabetical ordering
+Message-ID: <20200925140149.9570F81356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xogium,
+commit: https://git.buildroot.net/buildroot/commit/?id=c41e575be97e0facea56cf691fa22e97898034b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-On Fri, Sep 25 2020, Xogium wrote:
-> I wouldn't mind taking a look, but I am not sure what to look for. Archlinux is 
-> always having bleeding edge softwares since it is a rolling release, and next to 
-> no patching is done to what upstream provides. 
->
-> I had a quick look at the libpcap version, which is 1.9.1. It was built on 
-> november 13, 2019, and hasn't see any rebuild since. So maybe it is something 
-> that host-bison now does that it did not do before? Thanks for the warning. I 
-> hope I can be helpful in determining what is going wrong.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ab19f5492fa6d5060fed72ee25b2ee5ca408fbd2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-The failing line is this (from configure.ac):
-
-    if $YACC -p pcap_ -o /dev/null $srcdir/grammar.y >/dev/null 2>&1; then
-
-What do you see if you run this with $YACC set to the host-bison
-produced binary, without /dev/null redirection?
-
-baruch
-
-> On Fri Sep 25, 2020 at 1:57 PM CEST, Baruch Siach wrote:
->> Hi Xogium,
->>
->> On Fri, Sep 25 2020, Thomas Petazzoni wrote:
->> > Autobuild statistics for 2020-09-24
->> > ===================================
->>
->> [...]
->>
->> >     arm      |         libpcap-1.9.1          | NOK | http://autobuild.buildroot.net/results/058e8ec90da3c06e31b31eb94541331cced44db3 |     
->>
->> Your autobuilder reported this error several times over the last few
->> days:
->>
->> http://autobuild.buildroot.net/?reason=libpcap-1.9.1
->>
->> checking for bison... bison -y
->> checking for capable yacc/bison... insufficient
->> configure: error: bison -y is insufficient to compile libpcap.
->> libpcap requires Bison, a newer version of Berkeley YACC with support
->> for reentrant parsers, or another YACC compatible with them.
->>
->> This is most likely triggered by the recent bison version bump (commit
->> f4c89374eaec306). For some reason libpcap does not like host-bison on
->> your machine.
->>
->> Can you take a look?
->>
->> Thanks,
->> baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c3dcda859..ce3d588edf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2154,16 +2154,16 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
+ F:	package/uhttpd/
+ F:	package/ustream-ssl/
+ 
+-N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+-F:	package/freescale-imx/
+-F:	package/paho-mqtt-cpp/
+-
+ N:	Ramon Fried <rfried.dev@gmail.com>
+ F:	package/bitwise/
+ 
+ N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
+ F:	package/jbig2dec/
+ 
++N:	Refik Tuzakli <tuzakli.refik@gmail.com>
++F:	package/freescale-imx/
++F:	package/paho-mqtt-cpp/
++
+ N:	R??mi R??rolle <remi.rerolle@gmail.com>
+ F:	package/libfreeimage/
+ 
