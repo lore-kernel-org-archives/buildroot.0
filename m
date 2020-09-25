@@ -1,56 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 25 Sep 2020 11:04:51 +0200
-Subject: [Buildroot] [PATCH] package/gcc: help libbacktrace detection of
- sync builtins
-Message-ID: <20200925090451.1407258-1-romain.naour@gmail.com>
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Fri, 25 Sep 2020 10:58:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/proj: bump to 7.1.1
+Message-ID: <20200925085801.1021665-1-zgyarmati@zgyarmati.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-The logic in libbacktrace/configure.ac to detect if __sync builtins
-are available assumes they are as soon as target_subdir is not
-empty, i.e when cross-compiling. However, some platforms do not have
-__sync builtins, so help the configure script a bit.
-
-"libbacktrace_cv_sys_sync=no" is lost when it is added to
-HOST_GCC_COMMON_CONF_ENV because the environment is not exported
-when executing the libbacktrace configure script.
-
-Use target_configargs to force "libbacktrace_cv_sys_sync=no" when
-executiong the libbacktrace configure script.
-
-Fixes:
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359681
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Romain: use target_configargs="libbacktrace_cv_sys_sync=no"]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 ---
- package/gcc/gcc.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/proj/proj.hash | 6 +++---
+ package/proj/proj.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b834269adc..6e60ea9980 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -141,6 +141,14 @@ ifeq ($(BR2_sparc)$(BR2_sparc64),y)
- HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
- endif
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index ac3d12b271..0d59d54e26 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-7.0.1.tar.gz.md5
+-md5  5ba7536b579a6c9e0ad822dbdd455985  proj-7.0.1.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-7.1.1.tar.gz.md5
++md5  b7ce84943dcf2b660b11c2ef9657dad5  proj-7.1.1.tar.gz
+ # Locally calculated
+-sha256  a7026d39c9c80d51565cfc4b33d22631c11e491004e19020b3ff5a0791e1779f  proj-7.0.1.tar.gz
++sha256  324e7abb5569fb5f787dadf1d4474766915c485a188cf48cf07153b99156b5f9  proj-7.1.1.tar.gz
+ sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 1c8f3f77c5..663db4abcc 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# The logic in libbacktrace/configure.ac to detect if __sync builtins
-+# are available assumes they are as soon as target_subdir is not
-+# empty, i.e when cross-compiling. However, some platforms do not have
-+# __sync builtins, so help the configure script a bit.
-+ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),)
-+HOST_GCC_COMMON_CONF_ENV += target_configargs="libbacktrace_cv_sys_sync=no"
-+endif
-+
- # TLS support is not needed on uClibc/no-thread and
- # uClibc/linux-threads, otherwise, for all other situations (glibc,
- # musl and uClibc/NPTL), we need it.
+-PROJ_VERSION = 7.0.1
++PROJ_VERSION = 7.1.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
 -- 
-2.25.4
+2.28.0
