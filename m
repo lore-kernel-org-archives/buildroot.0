@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Sep 2020 15:30:21 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
+Date: Fri, 25 Sep 2020 15:30:56 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
  package/gstreamer1/gst1-plugins-base: gl needs api, platform and window
-Message-ID: <20200925140153.F19668DF79@busybox.osuosl.org>
+Message-ID: <20200925142846.0BC3B815CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c6905b14d19f99e6f6fa2e134cae58387121325
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=34498c1f1a0fa272753917e4ef014600413c6a5f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Build will fail if gl is enabled without an api, a platform and a
 window:
@@ -39,10 +39,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index fe80f4751c..f0c14bc190 100644
+index 1781a5d461..42fe09bf57 100644
 --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
 +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -51,19 +51,22 @@ else
+@@ -38,19 +38,22 @@ else
  GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
  endif
  
