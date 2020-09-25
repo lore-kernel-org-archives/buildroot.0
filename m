@@ -1,43 +1,41 @@
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Fri, 25 Sep 2020 07:31:31 +0200
-Subject: [Buildroot] [PATCH v4 05/12] board/qemu: add IBM s390x and Z
- arch support
-In-Reply-To: <20200924214901.GC11621@scaer>
-References: <20200917040802.846896-1-egorenar@linux.ibm.com>
- <20200917040802.846896-6-egorenar@linux.ibm.com>
- <20200924214901.GC11621@scaer>
-Message-ID: <873636e824.fsf@oc8242746057.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Sep 2020 09:03:17 +0200
+Subject: [Buildroot] [RFC v1 12/13] package/gstreamer1-editing-services:
+ bump version to 1.18.0 and convert to meson
+In-Reply-To: <20200924222340.4e38185d@gmx.net>
+References: <20200916194933.24921-1-ps.report@gmx.net>
+ <20200916194933.24921-12-ps.report@gmx.net>
+ <20200923223020.751ca54a@windsurf>
+ <20200924222340.4e38185d@gmx.net>
+Message-ID: <20200925090317.3f72a8ed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+On Thu, 24 Sep 2020 22:23:40 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> writes:
+> From streamer1-editing-services-1.18.0/examples/c/meson.build
+> 
+> # TODO Properly port to Gtk 3
+> #
+> # if gtk_dep.found()
+> #     examples = examples + ['ges-ui']
+> # endif
+> 
+> So, the only example needing gtk is skipped for this version...
+> 
+> But thinking a little about, I would prefer to disable the
+> example support at whole...
 
->> +++ b/board/qemu/s390x/readme.txt
->> @@ -0,0 +1,8 @@
->> +Run the emulation with:
->> +
->> +  qemu-system-s390x -M s390-ccw-virtio -cpu max,zpci=on -m 4G -smp 2 \
->> +    -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw \
->> +    -append "rootwait root=/dev/vda net.ifnames=0 biosdevname=0" -display none -serial mon:stdio \
->> +    -net nic,model=virtio -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 # qemu_s390x_defconfig
->
-> I saw no reason to force the network IP,so I dropped it. Also, there is
-> no sshd running, so there is no need to do a port forwarding either, so
-> dropped too.
->
-> Applied to master with those minor fixes, thanks!
->
-> Regards,
-> Yann E. MORIN.
->
+It seems reasonable indeed.
 
-Tested, works great :)
-Thank you very much.
+Thanks!
 
-Regards
-Alex
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
