@@ -1,46 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Sep 2020 15:33:20 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: fix
- alphabetical ordering
-Message-ID: <20200925140149.9570F81356@busybox.osuosl.org>
+Date: Fri, 25 Sep 2020 15:28:43 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/gstreamer1/gst1-plugins-base: gl needs api, platform and window
+Message-ID: <20200925140149.8DDEA8E07E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c41e575be97e0facea56cf691fa22e97898034b2
+commit: https://git.buildroot.net/buildroot/commit/?id=ac1ba1a21b66584312c8cf798098b58b5e345a9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ab19f5492fa6d5060fed72ee25b2ee5ca408fbd2)
+Build will fail if gl is enabled without an api, a platform and a
+window:
+
+Message: No OpenGL Platforms found or requested
+Message: No OpenGL Window systems found or requested
+
+gst-libs/gst/gl/meson.build:948:2: ERROR: Problem encountered: GStreamer OpenGL integration required via options, but needed dependencies not found.
+
+This requirement is already specified in Config.in through a simple
+comment:
+
+comment "The opengl library needs an API, a platform and a window system"
+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d171059801adf8dea1a2116d7c729a2aa5767ac8
+ - http://autobuild.buildroot.org/results/b1bfa505bba534440d331c4948eea5eb2d165c97
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 66e484a7514128552543262da7bfb4a7816436b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3c3dcda859..ce3d588edf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2154,16 +2154,16 @@ N:	Rahul Jain <rahul.jain@imgtec.com>
- F:	package/uhttpd/
- F:	package/ustream-ssl/
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index fe80f4751c..f0c14bc190 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -51,19 +51,22 @@ else
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
+ endif
  
--N:	Refik Tuzakli <tuzakli.refik@gmail.com>
--F:	package/freescale-imx/
--F:	package/paho-mqtt-cpp/
--
- N:	Ramon Fried <rfried.dev@gmail.com>
- F:	package/bitwise/
- 
- N:	Rapha??l M??lotte <raphael.melotte@essensium.com>
- F:	package/jbig2dec/
- 
-+N:	Refik Tuzakli <tuzakli.refik@gmail.com>
-+F:	package/freescale-imx/
-+F:	package/paho-mqtt-cpp/
+-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM)$(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW),yyy)
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
++else
++GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
++endif
 +
- N:	R??mi R??rolle <remi.rerolle@gmail.com>
- F:	package/libfreeimage/
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+ GST1_PLUGINS_BASE_GL_API_LIST = opengl
+ GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
+ endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+ GST1_PLUGINS_BASE_GL_API_LIST += gles2
+ GST1_PLUGINS_BASE_DEPENDENCIES += libgles
+ endif
+-else
+-GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+-endif
++
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl_api='$(subst $(space),$(comma),$(GST1_PLUGINS_BASE_GL_API_LIST))'
  
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
