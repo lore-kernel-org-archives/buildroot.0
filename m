@@ -1,36 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 23:21:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcpdump: fix build without
- pod2man
-In-Reply-To: <20200914204239.3456222-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 14 Sep 2020 22:42:39 +0200")
-References: <20200914204239.3456222-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dsdzjfd.fsf@dell.be.48ers.dk>
+Date: Fri, 25 Sep 2020 17:38:26 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/nginx: use /run
+ for PIDFile
+Message-ID: <20200928211157.2954F8E1A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b6b2266f2b7bf6764e0ec3e18eefe374efc50893
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
- > following build failure if pod2man is not available:
+Fixes:
 
- > pod2man --section 8 \
- > 	--date "23 June 2008" \
- > 	--name "DHCPDUMP" \
- > 	--center "User Contributed Software" \
- > 	dhcpdump.pod dhcpdump.8
- > /bin/sh: pod2man: command not found
- > make[1]: *** [Makefile:11: dhcpdump.8] Error 127
+systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
+a path below legacy directory /var/run/, updating /var/run/nginx.pid ???
+/run/nginx.pid; please update the unit file accordingly.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4027ba29f448b9f70347dbfd27cdeddab44e40b0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nginx/nginx.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
+index 320df9a80e..9fd215fd3e 100644
+--- a/package/nginx/nginx.service
++++ b/package/nginx/nginx.service
+@@ -4,7 +4,7 @@ After=syslog.target network.target
+ 
+ [Service]
+ Type=forking
+-PIDFile=/var/run/nginx.pid
++PIDFile=/run/nginx.pid
+ ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+ ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
+ ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
