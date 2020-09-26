@@ -1,70 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:39:59 +0200
-Subject: [Buildroot] [git commit] package/ser2net: fix build on musl
-Message-ID: <20200926133109.363C689169@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:41:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gst1-devtools: select
+ BR2_PACKAGE_GSTREAMER1_CHECK
+In-Reply-To: <20200925211655.3400054-1-fontaine.fabrice@gmail.com>
+References: <20200925211655.3400054-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200926154110.446bfd43@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa828ecafda083627008933a4a0e7b3b0e3ea5c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 25 Sep 2020 23:16:55 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Build on musl fails since version 4.2.2 and
-https://github.com/cminyard/ser2net/commit/1703ddf5231caf08c7bb2c14a845bc2dd602159f
+> validate option needs gstreamer-check-1.0
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/297ebea95b487f4c542e1217620e8c3d921260f3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gstreamer1/gst1-devtools/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fixes:
- - http://autobuild.buildroot.org/results/4c0b238186cb2fb2d81807ce006945594f92b2cd
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../ser2net/0001-port.h-include-sys-time.h.patch   | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/ser2net/0001-port.h-include-sys-time.h.patch b/package/ser2net/0001-port.h-include-sys-time.h.patch
-new file mode 100644
-index 0000000000..daf5372437
---- /dev/null
-+++ b/package/ser2net/0001-port.h-include-sys-time.h.patch
-@@ -0,0 +1,39 @@
-+From 021543b02b6fdb78c9217757736eabac90a647eb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 26 Sep 2020 12:37:38 +0200
-+Subject: [PATCH] port.h: include <sys/time.h>
-+
-+Include <sys/time.h> to avoid the following build failure on musl:
-+
-+port.h:361:29: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
-+     const char *str, struct timeval *tv,
-+                             ^~~~~~~
-+portconfig.c: In function 'myconfig':
-+portconfig.c:586:9: error: variable 'tv' has initializer but incomplete type
-+  struct timeval tv = { 0, 0 };
-+         ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/4c0b238186cb2fb2d81807ce006945594f92b2cd
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/cminyard/ser2net/pull/34]
-+---
-+ port.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/port.h b/port.h
-+index 048c5bd..86c3b1d 100644
-+--- a/port.h
-++++ b/port.h
-+@@ -9,6 +9,7 @@
-+ #define PORT
-+ 
-+ #include <netdb.h>
-++#include <sys/time.h>
-+ #include "gbuf.h"
-+ #include "absout.h"
-+ 
-+-- 
-+2.28.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
