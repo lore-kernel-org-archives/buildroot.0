@@ -1,40 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:56:12 +0200
-Subject: [Buildroot] [PATCH v2 1/5] package/gst1-plugins-ugly: bump
- version to 1.18.0
-In-Reply-To: <20200924211715.7433-1-ps.report@gmx.net>
-References: <20200924211715.7433-1-ps.report@gmx.net>
-Message-ID: <20200926155612.5d185299@windsurf.hq.k.grp>
+From: Dagg Stompler <daggs@gmx.com>
+Date: Sat, 26 Sep 2020 17:02:52 +0300
+Subject: [Buildroot] [PATCH] odruidc2: remove rootfs size limit
+Message-ID: <20200926140252.10714-1-daggs@gmx.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Sep 2020 23:17:11 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+as resizing the fs using paritions manager can result with a non booting
+image due to the firmware's location, removal of the size limit for the rootfs
+allows better match size-wise.
 
-> - change home page url to https
-> 
-> - meson options: doc=disabled
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - no changes (despite the applied message [1] no commit apears on git master)
->     [1] http://lists.busybox.net/pipermail/buildroot/2020-September/293062.html
-> ---
->  package/gstreamer1/gst1-plugins-ugly/Config.in              | 2 +-
->  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 6 +++---
->  package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 5 +++--
->  3 files changed, 7 insertions(+), 6 deletions(-)
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+---
+ board/hardkernel/odroidc2/genimage.cfg | 1 -
+ 1 file changed, 1 deletion(-)
 
-Applied to master, thanks. While looking at this package, I noticed
-that the LICENSE variable was not correctly formatted when GPL-licensed
-plugins are enabled. So I did a follow-up commit to fix this. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
+index c9306b0639..f49c1deaf3 100644
+--- a/board/hardkernel/odroidc2/genimage.cfg
++++ b/board/hardkernel/odroidc2/genimage.cfg
+@@ -34,6 +34,5 @@ image sdcard.img {
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
+-		size = 512M
+ 	}
+ }
+--
+2.28.0
