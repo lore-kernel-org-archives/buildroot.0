@@ -1,48 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:42:08 +0200
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20200908
-Message-ID: <20200926133318.6BD3882876@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:42:12 +0200
+Subject: [Buildroot] [git commit] package/python-semver: bump version to
+ 2.10.2
+Message-ID: <20200926133318.7B7C482876@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8cb637442861985a05efcfff4ca9ce99dfb3f4c
+commit: https://git.buildroot.net/buildroot/commit/?id=2be774303dc14be8f80eeac3f9a0a9cb10fb51e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a race condition. For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
+Bugfix release, fixing an issue with version fields containing '0'.  For
+details, see the changelog:
+
+https://python-semver.readthedocs.io/en/2.10.2/changelog.html#version-2-10-2
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-semver/python-semver.hash | 4 ++--
+ package/python-semver/python-semver.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index ac160cdf9d..833e1af2fc 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-June/005597.html
--sha256  130937724515799edf05ff8216bc837df8acda879428f3a7f96a3287758f9445  wireguard-linux-compat-1.0.20200623.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
-+sha256  ad33b2d2267a37e0f65c97e65e7d4d926d5aef7d530c251b63fbf919048eead9  wireguard-linux-compat-1.0.20200908.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 5e8636072c..082d10c53b 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
+index 510b42cac9..5c13764e57 100644
+--- a/package/python-semver/python-semver.hash
++++ b/package/python-semver/python-semver.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/semver/json
+-md5  a8466a3a0487a90e97a4199ad174d3e9  semver-2.10.1.tar.gz
+-sha256  b08a84f604ef579e474ce448672a05c8d50d1ee0b24cee9fb58a12b260e4d0dc  semver-2.10.1.tar.gz
++md5  3e11ae9782121e8ffe9f8a8b763a8cb5  semver-2.10.2.tar.gz
++sha256  c0a4a9d1e45557297a722ee9bac3de2ec2ea79016b6ffcaca609b0bc62cf4276  semver-2.10.2.tar.gz
+ # Locally computed
+ sha256  cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
+index fec02546ba..32ed6b971f 100644
+--- a/package/python-semver/python-semver.mk
++++ b/package/python-semver/python-semver.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200623
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200908
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-PYTHON_SEMVER_VERSION = 2.10.1
++PYTHON_SEMVER_VERSION = 2.10.2
+ PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
+-PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/bc/82/5a9ee107810deb6cb142ea3b07aba619d6b6c0bd74c9e276b2b48b62696e
++PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/aa/e8/cb894f70a52887f001aff5f264f68272c21fa58268495aca17df396c161f
+ PYTHON_SEMVER_SETUP_TYPE = setuptools
+ PYTHON_SEMVER_LICENSE = BSD-3-Clause
+ PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
