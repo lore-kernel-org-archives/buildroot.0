@@ -1,288 +1,87 @@
-From: Alexander Egorenkov <egorenar-dev@posteo.net>
-Date: Sat, 26 Sep 2020 22:00:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/crash: new package
-Message-ID: <20200926200021.28930-1-egorenar-dev@posteo.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Sep 2020 22:18:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: fix tests with uclibc
+Message-ID: <20200926201817.996329-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
----
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- .../0001-Support-cross-compilation.patch      | 134 ++++++++++++++++++
- package/crash/Config.in                       |  27 ++++
- package/crash/crash.hash                      |   3 +
- package/crash/crash.mk                        |  50 +++++++
- 6 files changed, 216 insertions(+)
- create mode 100644 package/crash/0001-Support-cross-compilation.patch
- create mode 100644 package/crash/Config.in
- create mode 100644 package/crash/crash.hash
- create mode 100644 package/crash/crash.mk
+It should be noted that upstream does not want to add a --disable-tests
+option: https://review.lttng.org/c/babeltrace/+/4075
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9352d891d3..5d0f93d0d4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -144,6 +144,7 @@ F:	package/libuecc/
- F:	package/putty/
- 
- N:	Alexander Egorenkov <egorenar-dev@posteo.net>
-+F:	package/crash/
- F:	package/makedumpfile/
- F:	package/multipath-tools/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 51583d07d6..9ded2a2b4f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/clinfo/Config.in"
-+	source "package/crash/Config.in"
- 	source "package/dacapo/Config.in"
- 	source "package/dhrystone/Config.in"
- 	source "package/dieharder/Config.in"
-diff --git a/package/crash/0001-Support-cross-compilation.patch b/package/crash/0001-Support-cross-compilation.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/1e50e1ff90c1ac2af2223365dc0cd6e1914bcd75
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...trace_ir_ref.c-rename-user-structure.patch | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+
+diff --git a/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch b/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
 new file mode 100644
-index 0000000000..7e1bd3f861
+index 0000000000..ac9eee82d8
 --- /dev/null
-+++ b/package/crash/0001-Support-cross-compilation.patch
-@@ -0,0 +1,134 @@
-+From 44cb56ad5bbd78203fb6f346299ccfe45f2568fe Mon Sep 17 00:00:00 2001
-+From: Alexander Egorenkov <egorenar-dev@posteo.net>
-+Date: Sat, 26 Sep 2020 14:29:49 +0200
-+Subject: [PATCH 1/1] Support cross-compilation
++++ b/package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+@@ -0,0 +1,57 @@
++From 7a27f13c192d15cae47740f3e884bba16f15ed41 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 26 Sep 2020 22:03:10 +0200
++Subject: [PATCH] tests/lib/test_trace_ir_ref.c: rename user structure
 +
-+- Introduce CONF_CC variable to compile configure.c
-+- Introduce CONF_HOST_ARCH to configure.c to enable overriding target
-+  at compile time
++Rename user structure to bt_user to avoid the following build failure
++with uclibc:
 +
-+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++test_trace_ir_ref.c:41:8: error: redefinition of 'struct user'
++ struct user {
++        ^
++In file included from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/procfs.h:33,
++                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:25,
++                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:329,
++                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib/gbacktrace.h:36,
++                 from /home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0/glib.h:34,
++                 from ../../src/common/assert.h:28,
++                 from ../../src/lib/object.h:28,
++                 from test_trace_ir_ref.c:25:
++/home/naourr/work/instance-0/output-1/per-package/babeltrace2/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/user.h:48:8: note: originally defined here
++ struct user
++        ^~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e4229e2b9c892b419a9d2eaa6929b80ea62dd130
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/efficios/babeltrace/pull/115]
 +---
-+ Makefile    |  4 ++-
-+ configure.c | 76 ++++++++++++++++++++++++++++-------------------------
-+ 2 files changed, 43 insertions(+), 37 deletions(-)
++ tests/lib/test_trace_ir_ref.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/Makefile b/Makefile
-+index 7455410..402be6e 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -17,6 +17,8 @@
-+ # GNU General Public License for more details.
-+ #
++diff --git a/tests/lib/test_trace_ir_ref.c b/tests/lib/test_trace_ir_ref.c
++index d5dfa9cf..70caf29c 100644
++--- a/tests/lib/test_trace_ir_ref.c
+++++ b/tests/lib/test_trace_ir_ref.c
++@@ -25,7 +25,7 @@
 + 
-++CONF_CC = ${CC}
-++
-+ PROGRAM=crash
++ #define NR_TESTS 37
 + 
-+ #
-+@@ -288,7 +290,7 @@ force:
++-struct user {
+++struct bt_user {
++ 	bt_trace_class *tc;
++ 	bt_stream_class *sc;
++ 	bt_event_class *ec;
++@@ -265,7 +265,7 @@ static void test_example_scenario(bt_self_component_source *self_comp)
++ 	bt_stream_class *weak_sc1 = NULL, *weak_sc2 = NULL;
++ 	bt_event_class *weak_ec1 = NULL, *weak_ec2 = NULL,
++ 			*weak_ec3 = NULL;
++-	struct user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
+++	struct bt_user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
 + 
-+ make_configure: force
-+ 	@rm -f configure
-+-	@${CC} ${CONF_FLAGS} -o configure configure.c ${WARNING_ERROR} ${WARNING_OPTIONS}
-++	@${CONF_CC} ${CONF_FLAGS} -o configure configure.c ${WARNING_ERROR} ${WARNING_OPTIONS}
-+ 
-+ clean: make_configure
-+ 	@./configure ${CONF_TARGET_FLAG} -q -b
-+diff --git a/configure.c b/configure.c
-+index 7f6d19e..d736c56 100644
-+--- a/configure.c
-++++ b/configure.c
-+@@ -120,6 +120,45 @@ void add_extra_lib(char *);
-+ #define MIPS    11
-+ #define SPARC64 12
-+ 
-++#ifndef CONF_HOST_ARCH
-++#ifdef __alpha__
-++#define CONF_HOST_ARCH ALPHA
-++#endif
-++#ifdef __i386__
-++#define CONF_HOST_ARCH X86
-++#endif
-++#ifdef __powerpc__
-++#define CONF_HOST_ARCH PPC
-++#endif
-++#ifdef __ia64__
-++#define CONF_HOST_ARCH IA64
-++#endif
-++#ifdef __s390__
-++#define CONF_HOST_ARCH S390
-++#endif
-++#ifdef __s390x__
-++#define CONF_HOST_ARCH S390X
-++#endif
-++#ifdef __powerpc64__
-++#define CONF_HOST_ARCH PPC64
-++#endif
-++#ifdef __x86_64__
-++#define CONF_HOST_ARCH X86_64
-++#endif
-++#ifdef __arm__
-++#define CONF_HOST_ARCH ARM
-++#endif
-++#ifdef __aarch64__
-++#define CONF_HOST_ARCH ARM64
-++#endif
-++#ifdef __mips__
-++#define CONF_HOST_ARCH MIPS
-++#endif
-++#ifdef __sparc_v9__
-++#define CONF_HOST_ARCH SPARC64
-++#endif
-++#endif // #ifndef CONF_HOST_ARCH
-++
-+ #define TARGET_X86    "TARGET=X86"
-+ #define TARGET_ALPHA  "TARGET=ALPHA"
-+ #define TARGET_PPC    "TARGET=PPC"
-+@@ -349,42 +388,7 @@ get_current_configuration(struct supported_gdb_version *sp)
-+ 	static char buf[512];
-+ 	char *p;
-+ 
-+-#ifdef __alpha__
-+-        target_data.target = ALPHA;
-+-#endif
-+-#ifdef __i386__
-+-        target_data.target = X86;
-+-#endif
-+-#ifdef __powerpc__
-+-        target_data.target = PPC;
-+-#endif
-+-#ifdef __ia64__
-+-        target_data.target = IA64;
-+-#endif
-+-#ifdef __s390__
-+-        target_data.target = S390;
-+-#endif
-+-#ifdef __s390x__
-+-        target_data.target = S390X;
-+-#endif
-+-#ifdef __powerpc64__
-+-        target_data.target = PPC64;
-+-#endif
-+-#ifdef __x86_64__
-+-        target_data.target = X86_64;
-+-#endif
-+-#ifdef __arm__
-+-        target_data.target = ARM;
-+-#endif
-+-#ifdef __aarch64__
-+-        target_data.target = ARM64;
-+-#endif
-+-#ifdef __mips__
-+-        target_data.target = MIPS;
-+-#endif
-+-#ifdef __sparc_v9__
-+-	target_data.target = SPARC64;
-+-#endif
-++	target_data.target = CONF_HOST_ARCH;
-+ 
-+ 	set_initial_target(sp);
-+ 
++ 	/* The only reference which exists at this point is on TC1. */
++ 	tc1 = create_tc1(self_comp);
 +-- 
 +2.28.0
 +
-diff --git a/package/crash/Config.in b/package/crash/Config.in
-new file mode 100644
-index 0000000000..7372123937
---- /dev/null
-+++ b/package/crash/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_CRASH_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64 || BR2_aarch64_be
-+	default y if BR2_arm || BR2_armeb
-+	default y if BR2_i386 || BR2_x86_64
-+	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-+	default y if BR2_s390x
-+	default y if BR2_sparc64
-+
-+comment "crash needs a glibc toolchain w/ wchar, dynamic library"
-+	depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
-+
-+config BR2_PACKAGE_CRASH
-+	bool "crash"
-+	depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS # dlopen
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_LESS
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Analyze Linux crash dump data or a live system
-+
-+	  https://github.com/crash-utility/crash
-diff --git a/package/crash/crash.hash b/package/crash/crash.hash
-new file mode 100644
-index 0000000000..1a34cf4421
---- /dev/null
-+++ b/package/crash/crash.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  996d3367764c77e23921c164725e4d0221acc7a15a92a3f825053ea37f2452dc  crash-7.2.8.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
-diff --git a/package/crash/crash.mk b/package/crash/crash.mk
-new file mode 100644
-index 0000000000..d045417a5e
---- /dev/null
-+++ b/package/crash/crash.mk
-@@ -0,0 +1,50 @@
-+################################################################################
-+#
-+# crash
-+#
-+################################################################################
-+
-+CRASH_VERSION = 7.2.8
-+CRASH_SITE = $(call github,crash-utility,crash,$(CRASH_VERSION))
-+CRASH_DEPENDENCIES = host-bison less ncurses zlib
-+CRASH_LICENSE = GPL-3.0
-+CRASH_LICENSE_FILES = COPYING3
-+
-+CRASH_GDB_CONF_FLAGS = \
-+	--host=$(GNU_TARGET_NAME)
-+
-+ifeq ($(BR2_i386),y)
-+CRASH_TARGET = X86
-+else ifeq ($(BR2_x86_64),y)
-+CRASH_TARGET = X86_64
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+CRASH_TARGET = ARM
-+else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-+CRASH_TARGET = ARM64
-+else ifeq ($(BR2_powerpc),y)
-+CRASH_TARGET = PPC
-+else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-+CRASH_TARGET = PPC64
-+else ifeq ($(BR2_s390x),y)
-+CRASH_TARGET = S390X
-+else ifeq ($(BR2_sparc64),y)
-+CRASH_TARGET = SPARC64
-+endif
-+
-+CRASH_MAKE_OPTS = \
-+	CONF_CC="$(HOSTCC_NOCCACHE)" \
-+	CONF_FLAGS="-DCONF_HOST_ARCH=$(CRASH_TARGET)" \
-+	GDB_CONF_FLAGS="$(CRASH_GDB_CONF_FLAGS)" \
-+	"gdb_cv_prfpregset_t_broken=no"
-+
-+define CRASH_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(CRASH_MAKE_OPTS)
-+endef
-+
-+define CRASH_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
-+		DESTDIR="$(TARGET_DIR)"
-+endef
-+
-+$(eval $(generic-package))
 -- 
 2.28.0
