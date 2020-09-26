@@ -1,48 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:42:03 +0200
-Subject: [Buildroot] [git commit] package/wireguard-tools: bump to
- 1.0.20200827 release
-Message-ID: <20200926133318.5E76E8865F@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:43:31 +0200
+Subject: [Buildroot] [PATCH] package/python-semver: bump version to
+ 2.10.2
+In-Reply-To: <20200925100341.13094-1-peter@korsgaard.com>
+References: <20200925100341.13094-1-peter@korsgaard.com>
+Message-ID: <20200926154331.550e7bfb@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5acc34464d3e8698ef487bf8b83b691053210882
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 25 Sep 2020 12:03:40 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
+> Bugfix release, fixing an issue with version fields containing '0'.  For
+> details, see the changelog:
+> 
+> https://python-semver.readthedocs.io/en/2.10.2/changelog.html#version-2-10-2
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/python-semver/python-semver.hash | 4 ++--
+>  package/python-semver/python-semver.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wireguard-tools/wireguard-tools.hash | 4 ++--
- package/wireguard-tools/wireguard-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
-index 96134074f3..3bff364e06 100644
---- a/package/wireguard-tools/wireguard-tools.hash
-+++ b/package/wireguard-tools/wireguard-tools.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005431.html
--sha256  e73409a9fb8c90506db241d1e1a4e7372a60dbfa400e37f4ab2fd70a92ba495f  wireguard-tools-1.0.20200513.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
-+sha256  51bc85e33a5b3cf353786ae64b0f1216d7a871447f058b6137f793eb0f53b7fd  wireguard-tools-1.0.20200827.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
-index c4890f9337..d360c81208 100644
---- a/package/wireguard-tools/wireguard-tools.mk
-+++ b/package/wireguard-tools/wireguard-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_TOOLS_VERSION = 1.0.20200513
-+WIREGUARD_TOOLS_VERSION = 1.0.20200827
- WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
- WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
- WIREGUARD_TOOLS_LICENSE = GPL-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
