@@ -1,31 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:44:08 +0200
-Subject: [Buildroot] [PATCH] package/lua: bump to version 5.3.6
-In-Reply-To: <20200925181717.905681-1-francois.perrad@gadz.org>
-References: <20200925181717.905681-1-francois.perrad@gadz.org>
-Message-ID: <20200926154408.5cdd4115@windsurf.hq.k.grp>
+Date: Sat, 26 Sep 2020 15:45:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openswan: fix build with gcc 10
+In-Reply-To: <20200924203133.2031332-1-fontaine.fabrice@gmail.com>
+References: <20200924203133.2031332-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200926154502.12c510d4@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Sep 2020 20:17:17 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Thu, 24 Sep 2020 22:31:33 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../lua/5.3.5/0003-fix-revision-number.patch  | 31 -------------------
->  .../lua/{5.3.5 => 5.3.6}/0001-root-path.patch |  0
->  .../0002-shared-libs-for-lua.patch            |  0
->  .../lua/{5.3.5 => 5.3.6}/0011-linenoise.patch |  0
->  package/lua/lua.hash                          |  5 +--
->  package/lua/lua.mk                            |  2 +-
->  6 files changed, 4 insertions(+), 34 deletions(-)
->  delete mode 100644 package/lua/5.3.5/0003-fix-revision-number.patch
->  rename package/lua/{5.3.5 => 5.3.6}/0001-root-path.patch (100%)
->  rename package/lua/{5.3.5 => 5.3.6}/0002-shared-libs-for-lua.patch (100%)
->  rename package/lua/{5.3.5 => 5.3.6}/0011-linenoise.patch (100%)
+>  .../openswan/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/openswan/0001-fix-build-with-gcc-10.patch
 
 Applied to master, thanks.
 
