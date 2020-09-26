@@ -1,26 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:45:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: fix build with gcc 10
-In-Reply-To: <20200924203133.2031332-1-fontaine.fabrice@gmail.com>
-References: <20200924203133.2031332-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200926154502.12c510d4@windsurf.hq.k.grp>
+Date: Sat, 26 Sep 2020 15:45:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/librsvg: bump to version 2.50.0
+In-Reply-To: <20200924205924.2400291-1-fontaine.fabrice@gmail.com>
+References: <20200924205924.2400291-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200926154516.459f124f@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Sep 2020 22:31:33 +0200
+On Thu, 24 Sep 2020 22:59:24 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
-> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../openswan/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/openswan/0001-fix-build-with-gcc-10.patch
+>  package/librsvg/librsvg.hash | 4 ++--
+>  package/librsvg/librsvg.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
