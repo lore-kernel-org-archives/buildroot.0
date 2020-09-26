@@ -1,31 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:43:31 +0200
-Subject: [Buildroot] [PATCH] package/python-semver: bump version to
- 2.10.2
-In-Reply-To: <20200925100341.13094-1-peter@korsgaard.com>
-References: <20200925100341.13094-1-peter@korsgaard.com>
-Message-ID: <20200926154331.550e7bfb@windsurf.hq.k.grp>
+Date: Sat, 26 Sep 2020 15:43:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/wireguard-tools: bump to
+ 1.0.20200827 release
+In-Reply-To: <20200925093429.11094-1-peter@korsgaard.com>
+References: <20200925093429.11094-1-peter@korsgaard.com>
+Message-ID: <20200926154358.73c6a4c4@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Sep 2020 12:03:40 +0200
+On Fri, 25 Sep 2020 11:34:28 +0200
 Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Bugfix release, fixing an issue with version fields containing '0'.  For
-> details, see the changelog:
-> 
-> https://python-semver.readthedocs.io/en/2.10.2/changelog.html#version-2-10-2
+> For details, see the announcement:
+> https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/python-semver/python-semver.hash | 4 ++--
->  package/python-semver/python-semver.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/wireguard-tools/wireguard-tools.hash | 4 ++--
+>  package/wireguard-tools/wireguard-tools.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
