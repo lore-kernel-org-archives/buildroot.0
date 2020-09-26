@@ -1,47 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:44:55 +0200
-Subject: [Buildroot] [git commit] package/librsvg: bump to version 2.50.0
-Message-ID: <20200926133529.8FB8283960@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:44:45 +0200
+Subject: [Buildroot] [git commit] package/openswan: fix build with gcc 10
+Message-ID: <20200926133529.82EC983960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b9493bb137be3099a5e97e95034612c61e24d40
+commit: https://git.buildroot.net/buildroot/commit/?id=a2f69b8cc4d34521abfaafc61aeb5b5e7154cf6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+ - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/openswan/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index c9fb23807f..da9f758f48 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.48/librsvg-2.48.8.sha256sum
--sha256  f480a325bbdf26d1874eb6fb330ebc5920ba64e3e08de61931bb4506dfef2692  librsvg-2.48.8.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.0.sha256sum
-+sha256  b3fadba240f09b9c9898ab20cb7311467243e607cf8f928b7c5f842474ee3df4  librsvg-2.50.0.tar.xz
- 
- # Locally computed
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 67bc743656..120f71c792 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBRSVG_VERSION_MAJOR = 2.48
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).8
-+LIBRSVG_VERSION_MAJOR = 2.50
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).0
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+diff --git a/package/openswan/0001-fix-build-with-gcc-10.patch b/package/openswan/0001-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..eb474b56aa
+--- /dev/null
++++ b/package/openswan/0001-fix-build-with-gcc-10.patch
+@@ -0,0 +1,49 @@
++From 3324d5ab1d00920ea46f453240da1356e0639e98 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Sep 2020 21:55:31 +0200
++Subject: [PATCH] fix build with gcc 10
++
++Define kw_host_list and kw_connaddrfamily_list as extern to avoid the following
++build failure with gcc 10 (which defaults to -fno-common):
++
++/home/peko/autobuild/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: initiate.o:/home/peko/autobuild/instance-1/output-1/build/openswan-2.6.51.5/include/pluto_constants.h:650: multiple definition of `kw_host_list'; connections.o:/home/peko/autobuild/instance-1/output-1/build/openswan-2.6.51.5/include/pluto_constants.h:650: first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/xelerance/Openswan/pull/444]
++---
++ include/ipsecconf/keywords.h | 2 +-
++ include/pluto_constants.h    | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/ipsecconf/keywords.h b/include/ipsecconf/keywords.h
++index e32be7968..02e8e073e 100644
++--- a/include/ipsecconf/keywords.h
+++++ b/include/ipsecconf/keywords.h
++@@ -314,7 +314,7 @@ struct config_parsed {
++     bool                got_default;
++ };
++ 
++-const struct keyword_enum_values kw_connaddrfamily_list;
+++extern const struct keyword_enum_values kw_connaddrfamily_list;
++ 
++ extern struct keyword_def ipsec_conf_keywords_v2[];
++ extern const int ipsec_conf_keywords_v2_count;
++diff --git a/include/pluto_constants.h b/include/pluto_constants.h
++index c35dd9576..dcbd3b5b4 100644
++--- a/include/pluto_constants.h
+++++ b/include/pluto_constants.h
++@@ -665,7 +665,7 @@ enum keyword_host {
++     KH_IPADDR       = LOOSE_ENUM_OTHER,
++ };
++ /* keyword_name(&kw_host_list, type, buffer[KEYWORD_NAME_BUFLEN]) */
++-struct keyword_enum_values kw_host_list;
+++extern struct keyword_enum_values kw_host_list;
++ #define KH_ISWILDCARD(type)  ((type) == KH_ANY || (type) == KH_DEFAULTROUTE)
++ #define KH_ISKNOWNADDR(type) ((type) == KH_IPADDR || (type)==KH_IFACE)
++ 
++-- 
++2.28.0
++
