@@ -1,46 +1,76 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Sep 2020 17:06:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: bump version to 2.9.0
-Message-ID: <20200926150626.908337-1-bernd.kuhls@t-online.de>
+From: daggs <daggs@gmx.com>
+Date: Sat, 26 Sep 2020 18:06:25 +0200
+Subject: [Buildroot] [PATCH] dvb-apps: fix build failure with glibc 2.31
+In-Reply-To: <20200926153910.009ca5ed@windsurf.hq.k.grp>
+References: <20200926095550.27437-1-daggs@gmx.com>
+ <20200926153910.009ca5ed@windsurf.hq.k.grp>
+Message-ID: <trinity-191718b2-1823-476c-b87e-3f66019aba4b-1601136385289@3c-app-mailcom-bs14>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://github.com/intel/libva/blob/master/NEWS
+Greetings Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Sent: Saturday, September 26, 2020 at 4:39 PM
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "Dagg Stompler" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] dvb-apps: fix build failure with glibc 2.31
+>
+> Hello,
+>
+> Thanks for the patch. There are however a few coding style issues.
+> First, the commit title must always have the following format:
+>
+> 	package/<foo>: <something>
+>
+> I.e you forgot the package/ prefix.
+you are correct, I've forgot about this, will fix
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 083c949147..f40599c719 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.8.0/libva-2.8.0.tar.bz2.sha1sum
--sha1  9fb5df0e511c4aa918f9e8cd2be072cb3bb5040c  libva-2.8.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.9.0/libva-2.9.0.tar.bz2.sha1sum
-+sha1  3e20605243096b4e935e1ef6ac7797efbacc44f6  libva-2.9.0.tar.bz2
- # Locally computed
--sha256  adbb1244d278908f89ccfcf254a442de6d71934565a492cb6f03caf2ed4d1ec3  libva-2.8.0.tar.bz2
-+sha256  e344c1392dde92696c9ffd9cb3c7277d0a3b912236eb4e0fdedf7f375434584b  libva-2.9.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index c4778e9d73..75d26fa7fa 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 2.8.0
-+LIBVA_VERSION = 2.9.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
--- 
-2.27.0
+>
+> On Sat, 26 Sep 2020 12:55:50 +0300
+> Dagg Stompler <daggs@gmx.com> wrote:
+>
+> > dvb-apps fails to build with glibc 2.31 with the following error:
+> > | dvbdate.c: In function set_time:
+> > | dvbdate.c:312:6: warning: implicit declaration of function stime; did you mean ctime? [-Wimplicit-function-declaration]
+> > |   312 |  if (stime(new_time)) {
+> > |       |      ^~~~~
+> > |       |      ctime
+> >
+> > this patch takes from the first entry in the reference fixes it.
+> >
+> > reference:
+> >  1. https://gitweb.gentoo.org/repo/gentoo.git/commit/media-tv/linuxtv-dvb-apps/files/linuxtv-dvb-apps-glibc-2.31.patch?id=eb705f892eae45b93306c1de1407c1c22ac23956
+> >  2. https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=964223
+>
+> Please add a reference to the autobuilder failure, like this:
+>
+> Fixes:
+>
+>   http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/
+
+frankly speaking, I had no idea this issue was marked by the autobuilder, I've encountered it when trying to build an image with dvb-apps installed.
+
+I'll reference the failure in my next revision.
+
+>
+> > diff --git a/package/dvb-apps/0006-fix-glibc-2.31.patch b/package/dvb-apps/0006-fix-glibc-2.31.patch
+> > new file mode 100644
+> > index 0000000000..d404212b5e
+> > --- /dev/null
+> > +++ b/package/dvb-apps/0006-fix-glibc-2.31.patch
+>
+> All patches must have a description and Signed-off-by.
+>
+> Could you fix those details, and send an updated version? Thanks a lot!
+>
+
+as mentioned in the commit mail, I took the patch as is from the first reference.
+I'll try to find a more detailed commit or will rewrite it.
+
+Thanks,
+
+Dagg.
