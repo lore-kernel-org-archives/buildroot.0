@@ -1,95 +1,288 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 26 Sep 2020 21:53:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ipmiutil: bump to version 3.1.7
-Message-ID: <20200926195335.771505-1-fontaine.fabrice@gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 26 Sep 2020 22:00:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/crash: new package
+Message-ID: <20200926200021.28930-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (not needed since
-  https://github.com/arcress0/ipmiutil/commit/32b6e5634d773150338b60585e9c258cd575e3d9)
-- Drop autoreconf
-- Update indentation in hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 ---
- package/ipmiutil/0001-no-build-doc.patch | 31 ------------------------
- package/ipmiutil/ipmiutil.hash           |  8 +++---
- package/ipmiutil/ipmiutil.mk             |  4 +--
- 3 files changed, 5 insertions(+), 38 deletions(-)
- delete mode 100644 package/ipmiutil/0001-no-build-doc.patch
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ .../0001-Support-cross-compilation.patch      | 134 ++++++++++++++++++
+ package/crash/Config.in                       |  27 ++++
+ package/crash/crash.hash                      |   3 +
+ package/crash/crash.mk                        |  50 +++++++
+ 6 files changed, 216 insertions(+)
+ create mode 100644 package/crash/0001-Support-cross-compilation.patch
+ create mode 100644 package/crash/Config.in
+ create mode 100644 package/crash/crash.hash
+ create mode 100644 package/crash/crash.mk
 
-diff --git a/package/ipmiutil/0001-no-build-doc.patch b/package/ipmiutil/0001-no-build-doc.patch
-deleted file mode 100644
-index ea7da97249..0000000000
---- a/package/ipmiutil/0001-no-build-doc.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--configure: do not build doc
--
--Fixes:
--    http://autobuild.buildroot.org/results/2ec/2ecfb1143ba89ffa5cdc8096bb175b2c396c4670/
--    http://autobuild.buildroot.org/results/c49/c497fc446140694084922d51fe6be308ce5c1c1a/
--    http://autobuild.buildroot.org/results/434/434b156b5c9b5c7b65ffe6174cf4e029e7e3ffd8/
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff --git a/configure.ac b/configure.ac
--index 344b27a71a35..41b6ea89167a 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -56,7 +56,7 @@ LIB_DIR="/usr/lib"
-- isredhat=0
-- init_scripts="scripts/ipmi_port.sh scripts/ipmiutil_evt scripts/ipmiutil_asy scripts/ipmiutil_wdt"
-- projdir=`pwd`
---SUBDIR_S="doc scripts lib util"
--+SUBDIR_S="scripts lib util"
-- os=Linux
-- 
-- # ltmain.sh, config.sub, et al should have been created, but check to be sure.
--@@ -162,7 +162,7 @@ AC_ARG_ENABLE([standalone],
-- 	LANPLUS_SAM="no"
-- 	LD_SAMX=""
-- 	CFLAGS="-O2"
---        SUBDIR_S="doc scripts util"
--+        SUBDIR_S="scripts util"
-- 	if test "x$cross_compiling" = "xyes"; then
-- 	   # cross-compiling, so link with -static (e.g. Android ARM)
-- 	   CROSS_LFLAGS="-static"
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
-index 3f89b9049c..f87c2762de 100644
---- a/package/ipmiutil/ipmiutil.hash
-+++ b/package/ipmiutil/ipmiutil.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ipmiutil/files/
--md5 0d448d14726e2fda0eb9451fb2866a5c  ipmiutil-3.1.3.tar.gz
--sha1 d20cb3194f4c5cb8c9fd64b3693d5b53dc9510d4  ipmiutil-3.1.3.tar.gz
-+md5  fab260bc834a0f3f9324a6365fc26eca  ipmiutil-3.1.7.tar.gz
-+sha1  a0cd29820b15166120eb4a51e6239bfa6f9c65dd  ipmiutil-3.1.7.tar.gz
- # Locally computed
--sha256 b80303b6f05cbe48e728dd925fef201e9604a90cd3fc9c8af113367e8d6dbe57  ipmiutil-3.1.3.tar.gz
--sha256 7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
-+sha256  911fd6f8b33651b98863d57e678d2fc593bc43fcd2a21f5dc7d5db8f92128a9a  ipmiutil-3.1.7.tar.gz
-+sha256  7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index 9633914e11..d85b9643f0 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9352d891d3..5d0f93d0d4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -144,6 +144,7 @@ F:	package/libuecc/
+ F:	package/putty/
  
--IPMIUTIL_VERSION = 3.1.3
-+IPMIUTIL_VERSION = 3.1.7
- IPMIUTIL_SITE = https://sourceforge.net/projects/ipmiutil/files
- IPMIUTIL_LICENSE = BSD-3-Clause
- IPMIUTIL_LICENSE_FILES = COPYING
--# We're patching configure.ac
--IPMIUTIL_AUTORECONF = YES
+ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
++F:	package/crash/
+ F:	package/makedumpfile/
+ F:	package/multipath-tools/
  
- IPMIUTIL_MAKE = $(MAKE1)
- 
+diff --git a/package/Config.in b/package/Config.in
+index 51583d07d6..9ded2a2b4f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/bonnie/Config.in"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/clinfo/Config.in"
++	source "package/crash/Config.in"
+ 	source "package/dacapo/Config.in"
+ 	source "package/dhrystone/Config.in"
+ 	source "package/dieharder/Config.in"
+diff --git a/package/crash/0001-Support-cross-compilation.patch b/package/crash/0001-Support-cross-compilation.patch
+new file mode 100644
+index 0000000000..7e1bd3f861
+--- /dev/null
++++ b/package/crash/0001-Support-cross-compilation.patch
+@@ -0,0 +1,134 @@
++From 44cb56ad5bbd78203fb6f346299ccfe45f2568fe Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar-dev@posteo.net>
++Date: Sat, 26 Sep 2020 14:29:49 +0200
++Subject: [PATCH 1/1] Support cross-compilation
++
++- Introduce CONF_CC variable to compile configure.c
++- Introduce CONF_HOST_ARCH to configure.c to enable overriding target
++  at compile time
++
++Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
++---
++ Makefile    |  4 ++-
++ configure.c | 76 ++++++++++++++++++++++++++++-------------------------
++ 2 files changed, 43 insertions(+), 37 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index 7455410..402be6e 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -17,6 +17,8 @@
++ # GNU General Public License for more details.
++ #
++ 
+++CONF_CC = ${CC}
+++
++ PROGRAM=crash
++ 
++ #
++@@ -288,7 +290,7 @@ force:
++ 
++ make_configure: force
++ 	@rm -f configure
++-	@${CC} ${CONF_FLAGS} -o configure configure.c ${WARNING_ERROR} ${WARNING_OPTIONS}
+++	@${CONF_CC} ${CONF_FLAGS} -o configure configure.c ${WARNING_ERROR} ${WARNING_OPTIONS}
++ 
++ clean: make_configure
++ 	@./configure ${CONF_TARGET_FLAG} -q -b
++diff --git a/configure.c b/configure.c
++index 7f6d19e..d736c56 100644
++--- a/configure.c
+++++ b/configure.c
++@@ -120,6 +120,45 @@ void add_extra_lib(char *);
++ #define MIPS    11
++ #define SPARC64 12
++ 
+++#ifndef CONF_HOST_ARCH
+++#ifdef __alpha__
+++#define CONF_HOST_ARCH ALPHA
+++#endif
+++#ifdef __i386__
+++#define CONF_HOST_ARCH X86
+++#endif
+++#ifdef __powerpc__
+++#define CONF_HOST_ARCH PPC
+++#endif
+++#ifdef __ia64__
+++#define CONF_HOST_ARCH IA64
+++#endif
+++#ifdef __s390__
+++#define CONF_HOST_ARCH S390
+++#endif
+++#ifdef __s390x__
+++#define CONF_HOST_ARCH S390X
+++#endif
+++#ifdef __powerpc64__
+++#define CONF_HOST_ARCH PPC64
+++#endif
+++#ifdef __x86_64__
+++#define CONF_HOST_ARCH X86_64
+++#endif
+++#ifdef __arm__
+++#define CONF_HOST_ARCH ARM
+++#endif
+++#ifdef __aarch64__
+++#define CONF_HOST_ARCH ARM64
+++#endif
+++#ifdef __mips__
+++#define CONF_HOST_ARCH MIPS
+++#endif
+++#ifdef __sparc_v9__
+++#define CONF_HOST_ARCH SPARC64
+++#endif
+++#endif // #ifndef CONF_HOST_ARCH
+++
++ #define TARGET_X86    "TARGET=X86"
++ #define TARGET_ALPHA  "TARGET=ALPHA"
++ #define TARGET_PPC    "TARGET=PPC"
++@@ -349,42 +388,7 @@ get_current_configuration(struct supported_gdb_version *sp)
++ 	static char buf[512];
++ 	char *p;
++ 
++-#ifdef __alpha__
++-        target_data.target = ALPHA;
++-#endif
++-#ifdef __i386__
++-        target_data.target = X86;
++-#endif
++-#ifdef __powerpc__
++-        target_data.target = PPC;
++-#endif
++-#ifdef __ia64__
++-        target_data.target = IA64;
++-#endif
++-#ifdef __s390__
++-        target_data.target = S390;
++-#endif
++-#ifdef __s390x__
++-        target_data.target = S390X;
++-#endif
++-#ifdef __powerpc64__
++-        target_data.target = PPC64;
++-#endif
++-#ifdef __x86_64__
++-        target_data.target = X86_64;
++-#endif
++-#ifdef __arm__
++-        target_data.target = ARM;
++-#endif
++-#ifdef __aarch64__
++-        target_data.target = ARM64;
++-#endif
++-#ifdef __mips__
++-        target_data.target = MIPS;
++-#endif
++-#ifdef __sparc_v9__
++-	target_data.target = SPARC64;
++-#endif
+++	target_data.target = CONF_HOST_ARCH;
++ 
++ 	set_initial_target(sp);
++ 
++-- 
++2.28.0
++
+diff --git a/package/crash/Config.in b/package/crash/Config.in
+new file mode 100644
+index 0000000000..7372123937
+--- /dev/null
++++ b/package/crash/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_CRASH_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_s390x
++	default y if BR2_sparc64
++
++comment "crash needs a glibc toolchain w/ wchar, dynamic library"
++	depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
++
++config BR2_PACKAGE_CRASH
++	bool "crash"
++	depends on BR2_PACKAGE_CRASH_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_LESS
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_ZLIB
++	help
++	  Analyze Linux crash dump data or a live system
++
++	  https://github.com/crash-utility/crash
+diff --git a/package/crash/crash.hash b/package/crash/crash.hash
+new file mode 100644
+index 0000000000..1a34cf4421
+--- /dev/null
++++ b/package/crash/crash.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  996d3367764c77e23921c164725e4d0221acc7a15a92a3f825053ea37f2452dc  crash-7.2.8.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING3
+diff --git a/package/crash/crash.mk b/package/crash/crash.mk
+new file mode 100644
+index 0000000000..d045417a5e
+--- /dev/null
++++ b/package/crash/crash.mk
+@@ -0,0 +1,50 @@
++################################################################################
++#
++# crash
++#
++################################################################################
++
++CRASH_VERSION = 7.2.8
++CRASH_SITE = $(call github,crash-utility,crash,$(CRASH_VERSION))
++CRASH_DEPENDENCIES = host-bison less ncurses zlib
++CRASH_LICENSE = GPL-3.0
++CRASH_LICENSE_FILES = COPYING3
++
++CRASH_GDB_CONF_FLAGS = \
++	--host=$(GNU_TARGET_NAME)
++
++ifeq ($(BR2_i386),y)
++CRASH_TARGET = X86
++else ifeq ($(BR2_x86_64),y)
++CRASH_TARGET = X86_64
++else ifeq ($(BR2_arm)$(BR2_armeb),y)
++CRASH_TARGET = ARM
++else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
++CRASH_TARGET = ARM64
++else ifeq ($(BR2_powerpc),y)
++CRASH_TARGET = PPC
++else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
++CRASH_TARGET = PPC64
++else ifeq ($(BR2_s390x),y)
++CRASH_TARGET = S390X
++else ifeq ($(BR2_sparc64),y)
++CRASH_TARGET = SPARC64
++endif
++
++CRASH_MAKE_OPTS = \
++	CONF_CC="$(HOSTCC_NOCCACHE)" \
++	CONF_FLAGS="-DCONF_HOST_ARCH=$(CRASH_TARGET)" \
++	GDB_CONF_FLAGS="$(CRASH_GDB_CONF_FLAGS)" \
++	"gdb_cv_prfpregset_t_broken=no"
++
++define CRASH_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(CRASH_MAKE_OPTS)
++endef
++
++define CRASH_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) install \
++		DESTDIR="$(TARGET_DIR)"
++endef
++
++$(eval $(generic-package))
 -- 
 2.28.0
