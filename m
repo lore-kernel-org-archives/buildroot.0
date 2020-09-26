@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:40:44 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-devtools: select
- BR2_PACKAGE_GSTREAMER1_CHECK
-Message-ID: <20200926133109.42D8C89169@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:31:19 +0200
+Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.4.0
+Message-ID: <20200926133109.2A64F89169@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c96315268119b66e6bba120533d87861deda4ec5
+commit: https://git.buildroot.net/buildroot/commit/?id=06140ef93d59d48566f539e3274bae724415af1a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-validate option needs gstreamer-check-1.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/297ebea95b487f4c542e1217620e8c3d921260f3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-devtools/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/luarocks/luarocks.hash | 4 ++--
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-devtools/Config.in b/package/gstreamer1/gst1-devtools/Config.in
-index 1ca8ab8299..55cf25d53e 100644
---- a/package/gstreamer1/gst1-devtools/Config.in
-+++ b/package/gstreamer1/gst1-devtools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GST1_DEVTOOLS
- 	bool "gst1-devtools"
- 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_GSTREAMER1_CHECK
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_JSON_GLIB
- 	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 069d181d61..565b1cccfa 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 eb20cd9814df05535d9aae98da532217c590fc07d48d90ca237e2a7cdcf284fe  luarocks-3.3.1.tar.gz
+-sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
++sha256  62ce5826f0eeeb760d884ea8330cd1552b5d432138b8bade0fa72f35badd02d0  luarocks-3.4.0.tar.gz
++sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 14f05b3498..00b3e17cb5 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 3.3.1
++LUAROCKS_VERSION = 3.4.0
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
