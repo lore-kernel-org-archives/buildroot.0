@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:43:58 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wireguard-tools: bump to
- 1.0.20200827 release
-In-Reply-To: <20200925093429.11094-1-peter@korsgaard.com>
-References: <20200925093429.11094-1-peter@korsgaard.com>
-Message-ID: <20200926154358.73c6a4c4@windsurf.hq.k.grp>
+Date: Sat, 26 Sep 2020 15:44:08 +0200
+Subject: [Buildroot] [PATCH] package/lua: bump to version 5.3.6
+In-Reply-To: <20200925181717.905681-1-francois.perrad@gadz.org>
+References: <20200925181717.905681-1-francois.perrad@gadz.org>
+Message-ID: <20200926154408.5cdd4115@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Sep 2020 11:34:28 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Fri, 25 Sep 2020 20:17:17 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> For details, see the announcement:
-> https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/wireguard-tools/wireguard-tools.hash | 4 ++--
->  package/wireguard-tools/wireguard-tools.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../lua/5.3.5/0003-fix-revision-number.patch  | 31 -------------------
+>  .../lua/{5.3.5 => 5.3.6}/0001-root-path.patch |  0
+>  .../0002-shared-libs-for-lua.patch            |  0
+>  .../lua/{5.3.5 => 5.3.6}/0011-linenoise.patch |  0
+>  package/lua/lua.hash                          |  5 +--
+>  package/lua/lua.mk                            |  2 +-
+>  6 files changed, 4 insertions(+), 34 deletions(-)
+>  delete mode 100644 package/lua/5.3.5/0003-fix-revision-number.patch
+>  rename package/lua/{5.3.5 => 5.3.6}/0001-root-path.patch (100%)
+>  rename package/lua/{5.3.5 => 5.3.6}/0002-shared-libs-for-lua.patch (100%)
+>  rename package/lua/{5.3.5 => 5.3.6}/0011-linenoise.patch (100%)
 
-Both applied, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
