@@ -1,65 +1,146 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 26 Sep 2020 21:13:30 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: Disable
- -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
-In-Reply-To: <20200926191330.96074-1-romain.naour@gmail.com>
-References: <20200926191330.96074-1-romain.naour@gmail.com>
-Message-ID: <20200926191330.96074-2-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Sep 2020 21:35:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ghostscript: bump to version 9.53.2
+Message-ID: <20200926193502.739394-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC 10 now enable by default -ftree-loop-distribute-patterns at -O2 or -Os
-optimization level instead of -O3, see commit [1].
+- Drop first patch (already in version)
+- Drop second patch (not needed since
+  https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=f0d19bf181a156d011dba422ae4d165b36b0af7e)
+- Drop autoreconf
 
-Due to this change, the microblaze kernel doesn't boot (as reported by
-toolchain-builder project).
+https://www.ghostscript.com/doc/9.53.2/News.htm
 
-The gcc docs between version 9 and 10 has been updated accordingly [2] [3]
-but there no word about this change in the gcc 10 changelog [4].
-
-Fixes microblazebe:
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359536 (glibc)
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359538 (musl)
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359540 (uClubc-ng)
-
-Fixes microblazeel:
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359542 (glibc)
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359544 (musl)
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359546 (uClibc-ng)
-
-This has been reported upsteam [5].
-
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
-[2] https://gcc.gnu.org/onlinedocs/gcc-9.3.0/gcc/Optimize-Options.html#Optimize-Options
-[3] https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Optimize-Options.html#Optimize-Options
-[4] https://gcc.gnu.org/gcc-10/changes.html
-[5] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- linux/linux.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../0001-Fix-cross-compilation-issue.patch    | 36 -----------------
+ ...2-configure.ac-fix-cross-compilation.patch | 39 -------------------
+ package/ghostscript/ghostscript.hash          |  4 +-
+ package/ghostscript/ghostscript.mk            |  4 +-
+ 4 files changed, 3 insertions(+), 80 deletions(-)
+ delete mode 100644 package/ghostscript/0001-Fix-cross-compilation-issue.patch
+ delete mode 100644 package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index b9b223e3f3..9ee9054bed 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -158,6 +158,12 @@ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
- LINUX_KCFLAGS += -Wno-attribute-alias
- endif
+diff --git a/package/ghostscript/0001-Fix-cross-compilation-issue.patch b/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+deleted file mode 100644
+index a13c7f8381..0000000000
+--- a/package/ghostscript/0001-Fix-cross-compilation-issue.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 5fed765abb8ff07c381cc3ebb9367e9560f7a658 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 20 Mar 2017 23:43:03 +0100
+-Subject: [PATCH] Fix cross compilation issue
+-
+-Without this patch unsafe paths are used:
+-x86_64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '/libtiff'
+-
+-Downloaded from
+-http://bugs.ghostscript.com/show_bug.cgi?id=696508#c3
+-
+-Slightly updated to work with 9.23
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d0f62d7..0d49344 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1173,7 +1173,7 @@ XPSWRITEDEVICE=''
+- 
+- 
+- LIBTIFFDIR='src'
+--LIBTIFFCONFDIR=''
+-+LIBTIFFCONFDIR='src'
+- TIFFCFLAGS=''
+- 
+- TIFFDEVS_ALL='tiffs tiff12nc tiff24nc tiff48nc tiff32nc tiff64nc tiffcrle tifflzw tiffpack tiffgray tiffsep tiffsep1 tiffscaled tiffscaled4 tiffscaled8 tiffscaled24 tiffscaled32'
+- FAX_DEVS_ALL='cfax dfaxlow dfaxhigh fax faxg3 faxg32d faxg4 tiffg3 tiffg32d tiffg4 tfax'
+--- 
+-2.7.4
+-
+diff --git a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch b/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
+deleted file mode 100644
+index 2bbff431ec..0000000000
+--- a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 579f2e089b9502e48222ab85d342128857bf20c3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 12 Sep 2020 11:38:01 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation
+-
+-Cross-compilation fails since version 9.53.0 and
+-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=3ff82b33f24ed54c2d3bb88ec31da7d2f9fd2765
+-
+-Indeed, when x"$host" != x"$build", a recursive call to configure script
+-(for auxiliary tools) is being made. In this call,
+---enable-auxtools_only and --without-libtiff are passed which will
+-result in the following build failure because SHARE_LIBTIFF is not set
+-and SHARE_LIBJPEG is set to 0:
+-
+-checking for local lcms2mt library source... configure: error: Mixing local libtiff with shared libjpeg not supported
+-configure: error: Recursive call to configure script failed
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=702897]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d4f56fdea..6ae3c2cc1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1618,7 +1618,7 @@ case "x$with_system_libtiff" in
+- esac
+- 
+- 
+--if test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
+-+if test x"$SHARE_LIBTIFF" != x"" && test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
+-     AC_MSG_ERROR([Mixing local libtiff with shared libjpeg not supported])
+- fi
+- 
+--- 
+-2.28.0
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 102e5355a5..143b28014d 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/SHA512SUMS
+-sha512  fe73842339bee7aa6d0f177be7733b97b9394dafe69b122645c9c80de763214ffb6735b961ff5bf97146b29c2d0e9b4b9cfaee60baf77a1c280bcf651d789982  ghostscript-9.53.0.tar.gz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9532/SHA512SUMS
++sha512  73aa6013aeecbd1345317a40349089a2f19a2205fc11b8ca0b619df1e91f2ca8b03efc09be9e079cb5ab8e1b838aa2236349cd1c177217c14308242f99138ae4  ghostscript-9.53.2.tar.gz
  
-+# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10)$(BR2_microblaze),yy)
-+LINUX_KCFLAGS += -fno-tree-loop-distribute-patterns
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
- LINUX_MAKE_ENV += DTC_FLAGS=-@
- endif
+ # Hash for license file:
+ sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index e8ebc366e4..e8d35a50bc 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-GHOSTSCRIPT_VERSION = 9.53.0
++GHOSTSCRIPT_VERSION = 9.53.2
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+-# 0001-Fix-cross-compilation-issue.patch
+-GHOSTSCRIPT_AUTORECONF = YES
+ GHOSTSCRIPT_DEPENDENCIES = \
+ 	host-lcms2 \
+ 	host-libjpeg \
 -- 
-2.25.4
+2.28.0
