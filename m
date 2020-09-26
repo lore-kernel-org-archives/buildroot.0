@@ -1,104 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:42:51 +0200
-Subject: [Buildroot] [git commit] package/lua: bump to version 5.3.6
-Message-ID: <20200926133318.85F0C82876@busybox.osuosl.org>
+Date: Sat, 26 Sep 2020 15:42:03 +0200
+Subject: [Buildroot] [git commit] package/wireguard-tools: bump to
+ 1.0.20200827 release
+Message-ID: <20200926133318.5E76E8865F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86a6eb872c2f97310e6389905620312cd6675b5b
+commit: https://git.buildroot.net/buildroot/commit/?id=5acc34464d3e8698ef487bf8b83b691053210882
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lua/5.3.5/0003-fix-revision-number.patch   | 31 ----------------------
- package/lua/{5.3.5 => 5.3.6}/0001-root-path.patch  |  0
- .../0002-shared-libs-for-lua.patch                 |  0
- .../0003-linenoise.patch}                          |  0
- package/lua/lua.hash                               |  5 ++--
- package/lua/lua.mk                                 |  2 +-
- 6 files changed, 4 insertions(+), 34 deletions(-)
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua/5.3.5/0003-fix-revision-number.patch b/package/lua/5.3.5/0003-fix-revision-number.patch
-deleted file mode 100644
-index ed2e0460eb..0000000000
---- a/package/lua/5.3.5/0003-fix-revision-number.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--Fix revision number
--
--In 0002-shared-libs-for-lua.patch, revision number is used to set 
--library name:
--TO_SOLIB = liblua.so.$(R)
--
--However, library is built using PKG_VERSION which is passed only during
--build step:
--$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
--
--As a result, dynamic library is not installed in staging or target paths
--since bump to lua 5.3.5
--
--So, instead of replacing R by PKG_VERSION and passing this variable in
--all steps, simply update R to 5
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -47,6 +47,6 @@
--
-- # Lua version and release.
-- V= 5.3
---R= $V.4
--+R= $V.5
--
-- # Targets start here.
-- all:    $(PLAT)
-diff --git a/package/lua/5.3.5/0001-root-path.patch b/package/lua/5.3.6/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.3.5/0001-root-path.patch
-rename to package/lua/5.3.6/0001-root-path.patch
-diff --git a/package/lua/5.3.5/0002-shared-libs-for-lua.patch b/package/lua/5.3.6/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.3.5/0002-shared-libs-for-lua.patch
-rename to package/lua/5.3.6/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.3.5/0011-linenoise.patch b/package/lua/5.3.6/0003-linenoise.patch
-similarity index 100%
-rename from package/lua/5.3.5/0011-linenoise.patch
-rename to package/lua/5.3.6/0003-linenoise.patch
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-index ab72480e55..5ace44458f 100644
---- a/package/lua/lua.hash
-+++ b/package/lua/lua.hash
-@@ -2,10 +2,11 @@
- md5 dbf155764e5d433fc55ae80ea7060b60           lua-5.4.0.tar.gz
- sha1 8cdbffa8a214a23d190d7c45f38c19518ae62e89  lua-5.4.0.tar.gz
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index 96134074f3..3bff364e06 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-May/005431.html
+-sha256  e73409a9fb8c90506db241d1e1a4e7372a60dbfa400e37f4ab2fd70a92ba495f  wireguard-tools-1.0.20200513.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
++sha256  51bc85e33a5b3cf353786ae64b0f1216d7a871447f058b6137f793eb0f53b7fd  wireguard-tools-1.0.20200827.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index c4890f9337..d360c81208 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--md5 4f4b4f323fd3514a68e0ab3da8ce3455           lua-5.3.5.tar.gz
--sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
-+md5 83f23dbd5230140a3770d5f54076948d           lua-5.3.6.tar.gz
-+sha1 f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
- 
- md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
- sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
-+
- # Locally computed
- sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index ee604b6121..9ff738656d 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -7,7 +7,7 @@
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
- LUA_VERSION = 5.4.0
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
--LUA_VERSION = 5.3.5
-+LUA_VERSION = 5.3.6
- else
- LUA_VERSION = 5.1.5
- endif
+-WIREGUARD_TOOLS_VERSION = 1.0.20200513
++WIREGUARD_TOOLS_VERSION = 1.0.20200827
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
