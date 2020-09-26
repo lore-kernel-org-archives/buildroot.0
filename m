@@ -1,33 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Sep 2020 15:41:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gst1-devtools: select
- BR2_PACKAGE_GSTREAMER1_CHECK
-In-Reply-To: <20200925211655.3400054-1-fontaine.fabrice@gmail.com>
-References: <20200925211655.3400054-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200926154110.446bfd43@windsurf.hq.k.grp>
+Date: Sat, 26 Sep 2020 15:42:08 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 1.0.20200908
+Message-ID: <20200926133318.6BD3882876@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 25 Sep 2020 23:16:55 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d8cb637442861985a05efcfff4ca9ce99dfb3f4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> validate option needs gstreamer-check-1.0
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/297ebea95b487f4c542e1217620e8c3d921260f3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gstreamer1/gst1-devtools/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Fixes a race condition. For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index ac160cdf9d..833e1af2fc 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-June/005597.html
+-sha256  130937724515799edf05ff8216bc837df8acda879428f3a7f96a3287758f9445  wireguard-linux-compat-1.0.20200623.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
++sha256  ad33b2d2267a37e0f65c97e65e7d4d926d5aef7d530c251b63fbf919048eead9  wireguard-linux-compat-1.0.20200908.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 5e8636072c..082d10c53b 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200623
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200908
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
