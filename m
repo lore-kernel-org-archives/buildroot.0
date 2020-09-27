@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Sep 2020 13:50:07 +0200
+Date: Sun, 27 Sep 2020 14:03:47 +0200
 Subject: [Buildroot] [PATCH 1/1] support/gnuconfig: bump version
 In-Reply-To: <20200927084612.1488420-1-fontaine.fabrice@gmail.com>
 References: <20200927084612.1488420-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200927115007.GI11621@scaer>
+Message-ID: <20200927120347.GJ11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,23 @@ On 2020-09-27 10:46 +0200, Fabrice Fontaine spake thusly:
 > Build with uclinux-uclibc toolchains are broken since commit
 > cf8162ce518449be6a311dd21167aeee83a1ed82 so bump version to get
 > https://git.savannah.gnu.org/cgit/config.git/commit/?id=d7a4dee7cc25e332b990d0a6d9f0ddd42cb33cf5
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f8528d568de0dad751129900ae38ae292d7567b9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+Actually, this is not what this patch does.
+
+Running ./support/gnuconfig/update will give a different content for
+config.sub. So it looks like you had local modifications that you
+comitted to Buildroot, or that upstream did not apply exactly the patch
+you submitted them...
+
+Could you please check whether d7a4dee7cc25e3 is correct or not?
 
 Regards,
 Yann E. MORIN.
 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f8528d568de0dad751129900ae38ae292d7567b9
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
 >  support/gnuconfig/README.buildroot |  2 +-
 >  support/gnuconfig/config.guess     | 14 ++++++--------
