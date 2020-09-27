@@ -1,45 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Sep 2020 11:57:01 +0200
-Subject: [Buildroot] [PATCH 1/1]
- configs/stm32mp157c_dk2_trusted_defconfig: new platform
-In-Reply-To: <20200927061606.10239-1-shlomi.39sd@gmail.com>
-References: <20200927061606.10239-1-shlomi.39sd@gmail.com>
-Message-ID: <20200927115701.520b50a6@windsurf.hq.k.grp>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Sep 2020 13:49:32 +0200
+Subject: [Buildroot] [git commit] support/gnuconfig: bump version
+Message-ID: <20200927113946.57C568CA19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Shlomi,
+commit: https://git.buildroot.net/buildroot/commit/?id=a2830f0dad7acbc91e742a7135eb3861600d9770
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Bartosz in Cc.
+Build with uclinux-uclibc toolchains are broken since commit
+cf8162ce518449be6a311dd21167aeee83a1ed82 so bump version to get
+https://git.savannah.gnu.org/cgit/config.git/commit/?id=d7a4dee7cc25e332b990d0a6d9f0ddd42cb33cf5
 
-Thanks for your contribution.
+Fixes:
+ - http://autobuild.buildroot.org/results/f8528d568de0dad751129900ae38ae292d7567b9
 
-On Sun, 27 Sep 2020 09:16:06 +0300
-Shlomi Vaknin <shlomi.39sd@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/gnuconfig/README.buildroot |  2 +-
+ support/gnuconfig/config.guess     | 14 ++++++--------
+ support/gnuconfig/config.sub       |  4 +++-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-> Adding support for trusted configuration for stm32mp157c-dk2.
-> In addtion, the following changes made to the original stm32mp157c_dk2_defconfig:
-> 1. Enable gadget support and wifi support in `linux.config`.
-> 2. Create a new dts file that contains the bindings for the wifi module. This was
->    copied from the stm32 kernel fork.
-> 3. A txt file for the wifi firmware. This was copied from the yocto bsp layer of st.
-> 
-> Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
-
-I am not sure it makes sense to have a separate defconfig for this. The
-ATF-based boot is really the one recommended by ST, and it's also the
-only one that allows to use the STM32 Cube Programmer for flashing.
-
-So I would rather suggest that we change the existing stm32mp1
-defconfigs (both DK1 and DK2) to use ATF instead of U-Boot SPL.
-
-Bartosz, what do you think ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+index 979edf32d9..952eea8b10 100644
+--- a/support/gnuconfig/README.buildroot
++++ b/support/gnuconfig/README.buildroot
+@@ -18,4 +18,4 @@ Run the script 'update' in this directory, and commit the result.
+ The current Buildroot version is based on this commit of the config.git
+ repository (leave alone on its own line, the script updates it):
+ 
+-e072cc210e5d0584396f6c13ba34cb9c7bd8538d
++d7a4dee7cc25e332b990d0a6d9f0ddd42cb33cf5
+diff --git a/support/gnuconfig/config.guess b/support/gnuconfig/config.guess
+index 9aff91cfd0..8d70ec2b26 100755
+--- a/support/gnuconfig/config.guess
++++ b/support/gnuconfig/config.guess
+@@ -2,7 +2,7 @@
+ # Attempt to guess a canonical system name.
+ #   Copyright 1992-2020 Free Software Foundation, Inc.
+ 
+-timestamp='2020-08-17'
++timestamp='2020-09-19'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -150,17 +150,15 @@ Linux|GNU|GNU/*)
+ 	#elif defined(__dietlibc__)
+ 	LIBC=dietlibc
+ 	#else
++	#include <stdarg.h>
++	#ifdef __DEFINED_va_list
++	LIBC=musl
++	#else
+ 	LIBC=gnu
+ 	#endif
++	#endif
+ 	EOF
+ 	eval "`$CC_FOR_BUILD -E "$dummy.c" 2>/dev/null | grep '^LIBC' | sed 's, ,,g'`"
+-
+-	# If ldd exists, use it to detect musl libc.
+-	if command -v ldd >/dev/null && \
+-		ldd --version 2>&1 | grep -q ^musl
+-	then
+-	    LIBC=musl
+-	fi
+ 	;;
+ esac
+ 
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 780c2bbaa0..2df66beeb0 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -1733,7 +1733,9 @@ esac
+ # As a final step for OS-related things, validate the OS-kernel combination
+ # (given a valid OS), if there is a kernel.
+ case $kernel-$os in
+-	linux-gnu* | linux-dietlibc* | linux-android* | linux-newlib* | linux-musl* | linux-uclibc* )
++	linux-gnu* | linux-dietlibc* | linux-android* | linux-newlib* | linux-musl* | linux-uclibc* | uclinux-gnu* |??uclinux-uclibc* )
++		;;
++	uclinux-uclibc* )
+ 		;;
+ 	-dietlibc* | -newlib* | -musl* | -uclibc* )
+ 		# These are just libc implementations, not actual OSes, and thus
