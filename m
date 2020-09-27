@@ -1,87 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Sep 2020 10:46:12 +0200
-Subject: [Buildroot] [PATCH 1/1] support/gnuconfig: bump version
-Message-ID: <20200927084612.1488420-1-fontaine.fabrice@gmail.com>
+Date: Sun, 27 Sep 2020 11:39:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rsh-redone: disable rlogind on musl
+Message-ID: <20200927093940.1491555-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build with uclinux-uclibc toolchains are broken since commit
-cf8162ce518449be6a311dd21167aeee83a1ed82 so bump version to get
-https://git.savannah.gnu.org/cgit/config.git/commit/?id=d7a4dee7cc25e332b990d0a6d9f0ddd42cb33cf5
+Commit f89ca996b6deb660b53c33196b8b309fac659bf9 enabled linux-pam on
+musl however rlogind fails to build on musl because it uses logwtmp:
+
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: rlogind.c:(.text.startup+0x9ec): undefined reference to `logwtmp'
+
+As this package is unmaintained, just disable back rlogind on musl
 
 Fixes:
- - http://autobuild.buildroot.org/results/f8528d568de0dad751129900ae38ae292d7567b9
+ - http://autobuild.buildroot.org/results/f2eb1c0bab7c6c32d6c561da0f85a530bd419206
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- support/gnuconfig/README.buildroot |  2 +-
- support/gnuconfig/config.guess     | 14 ++++++--------
- support/gnuconfig/config.sub       |  4 +++-
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ package/rsh-redone/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
-index 979edf32d9..952eea8b10 100644
---- a/support/gnuconfig/README.buildroot
-+++ b/support/gnuconfig/README.buildroot
-@@ -18,4 +18,4 @@ Run the script 'update' in this directory, and commit the result.
- The current Buildroot version is based on this commit of the config.git
- repository (leave alone on its own line, the script updates it):
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 5647d7edef..53ff2bea7f 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -17,12 +17,13 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	bool "rlogind"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
  
--e072cc210e5d0584396f6c13ba34cb9c7bd8538d
-+d7a4dee7cc25e332b990d0a6d9f0ddd42cb33cf5
-diff --git a/support/gnuconfig/config.guess b/support/gnuconfig/config.guess
-index 9aff91cfd0..8d70ec2b26 100755
---- a/support/gnuconfig/config.guess
-+++ b/support/gnuconfig/config.guess
-@@ -2,7 +2,7 @@
- # Attempt to guess a canonical system name.
- #   Copyright 1992-2020 Free Software Foundation, Inc.
+-comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
++comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
  
--timestamp='2020-08-17'
-+timestamp='2020-09-19'
- 
- # This file is free software; you can redistribute it and/or modify it
- # under the terms of the GNU General Public License as published by
-@@ -150,17 +150,15 @@ Linux|GNU|GNU/*)
- 	#elif defined(__dietlibc__)
- 	LIBC=dietlibc
- 	#else
-+	#include <stdarg.h>
-+	#ifdef __DEFINED_va_list
-+	LIBC=musl
-+	#else
- 	LIBC=gnu
- 	#endif
-+	#endif
- 	EOF
- 	eval "`$CC_FOR_BUILD -E "$dummy.c" 2>/dev/null | grep '^LIBC' | sed 's, ,,g'`"
--
--	# If ldd exists, use it to detect musl libc.
--	if command -v ldd >/dev/null && \
--		ldd --version 2>&1 | grep -q ^musl
--	then
--	    LIBC=musl
--	fi
- 	;;
- esac
- 
-diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
-index 780c2bbaa0..2df66beeb0 100755
---- a/support/gnuconfig/config.sub
-+++ b/support/gnuconfig/config.sub
-@@ -1733,7 +1733,9 @@ esac
- # As a final step for OS-related things, validate the OS-kernel combination
- # (given a valid OS), if there is a kernel.
- case $kernel-$os in
--	linux-gnu* | linux-dietlibc* | linux-android* | linux-newlib* | linux-musl* | linux-uclibc* )
-+	linux-gnu* | linux-dietlibc* | linux-android* | linux-newlib* | linux-musl* | linux-uclibc* | uclinux-gnu* |?uclinux-uclibc* )
-+		;;
-+	uclinux-uclibc* )
- 		;;
- 	-dietlibc* | -newlib* | -musl* | -uclibc* )
- 		# These are just libc implementations, not actual OSes, and thus
+ config BR2_PACKAGE_RSH_REDONE_RSH
+ 	bool "rsh"
 -- 
 2.28.0
