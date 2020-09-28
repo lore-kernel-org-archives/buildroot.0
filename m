@@ -1,97 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 28 Sep 2020 22:31:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/zstd: link programs dynamically
- with libzstd to save space
-In-Reply-To: <20200928194739.GN11621@scaer>
-References: <20200928114228.23637-1-patrickdepinguin@gmail.com>
- <20200928114228.23637-2-patrickdepinguin@gmail.com>
- <20200928194739.GN11621@scaer>
-Message-ID: <CAAXf6LX6dKgr31MP+tRR-M0Y+CW1Ha5S-zMky5Jo=bZoXUTdUQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Sep 2020 22:43:43 +0200
+Subject: [Buildroot] [PATCH] package/open2300: switch to github
+Message-ID: <20200928204343.2103959-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Sep 28, 2020, 21:47 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Upstream repository has been dead for quite a while now, and in fact
+we are using s.b.o as the "official" location now.
 
-> Thomas, All,
->
-> Second review, as I forgot to read down to the end before replying...
->
-> On 2020-09-28 13:42 +0200, Thomas De Schampheleire spake thusly:
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > Even when a shared libzstd is built, the zstd command-line programs are
-> > statically linked with libzstd, causing a large rootfs footprint.
-> >
-> > While the cmake backend in zstd already supported a flag
-> > ZSTD_PROGRAMS_LINK_SHARED, the make backend did not.
-> >
-> > This commit adds support for ZSTD_PROGRAMS_LINK_SHARED in the make system
-> > and applies it for the target compilation, unless only static libs are
-> > supported.
-> >
-> > Signed-off-by: Thomas De Schampheleire <
-> thomas.de_schampheleire at nokia.com>
-> > ---
-> [--SNIP--]
-> > diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-> > index 35002da332..c7b224b002 100644
-> > --- a/package/zstd/zstd.mk
-> > +++ b/package/zstd/zstd.mk
-> > @@ -43,9 +43,19 @@ ZSTD_INSTALL_LIBS = install-static
-> >  else ifeq ($(BR2_SHARED_LIBS),y)
-> >  ZSTD_BUILD_LIBS = libzstd
-> >  ZSTD_INSTALL_LIBS = install-shared
-> > +ZSTD_OPTS += ZSTD_PROGRAMS_LINK_SHARED=1
-> >  else
-> >  ZSTD_BUILD_LIBS = libzstd.a libzstd
-> >  ZSTD_INSTALL_LIBS = install-static install-shared
-> > +ZSTD_OPTS += ZSTD_PROGRAMS_LINK_SHARED=1
-> > +endif
-> > +
-> > +# The HAVE_THREAD flag is read by the 'programs' makefile but not by
-> the 'lib'
-> > +# one. Building a multi-threaded binary with a library (which defaults
-> to
-> > +# single-threaded) gives a runtime error when compressing files.
-> > +# The 'lib' makefile provides specific '%-mt' targets for this purpose.
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> > +ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
-> >  endif
->
-> This last part seems unrelated, and should be in its own patch. If not,
-> then it should be explained in the commit log.
->
+There however exists a Github repository, which is still ive. That
+repository has not been touched in a looooong while, but it's still
+up, and there is a revision which actually gives the exact same
+content (although the hash changes, because the directory name has
+changed, from open2300-12/ to open2300-f2198.../).
 
-The comment tries to explain it but it's probably not clear enough: the
-HAVE_THREAD flag that buildroot passes is interpreted by programs/Makefile.
-Before this patch, that makefile will build and link the library files
-directly together with the cli programs. This means that all these
-compilations use flags defined by this programs/Makefile.
+Also fix spaces in hash file.
 
-When we change to use dynamic libraries, such that libzstd.so is built
-first, and that the programs just dynamically link with it, then there are
-two makefiles of importance:
-- lib/Makefile : this makefile does not interpret HAVE_DEBUG and thus
-builds a single threaded library.
-- programs/Makefile: would build a multithreaded program if Buildroot
-requests it.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/open2300/open2300.hash | 6 ++----
+ package/open2300/open2300.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-We are thus left with a multithreaded program that links dynamically with a
-library which is build for singlethreaded operation, which is checked at
-runtime, resulting in an error.
-
-As lib/Makefile already provides -mt rules to produce the libs for
-multithreaded operation, use them instead.
-
-I think we could add this change as first patch, as it seems that today
-Buildroot would produce a libzstd.so supporting single-threaded operation
-only?
-
-Best regards
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200928/f20940c2/attachment.html>
+diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
+index 414041b923..f8b1150694 100644
+--- a/package/open2300/open2300.hash
++++ b/package/open2300/open2300.hash
+@@ -1,6 +1,4 @@
+ # Localy computed
+-# Note: open2300's upstream svn tree is off-line, so this tarball is
+-# served from s.b.o. instead, which actually makes it stable.
+-sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
++sha256  ffa7f8d35b16abfbf5e52285cb21f2a7fc6afb901abb40c0c80eef9d23d08aab  open2300-f21982e0b1f8321561e5ad1668307fde97700e1b.tar.gz
+ 
+-sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+index 0ffb8b5046..9fb7dbc2fd 100644
+--- a/package/open2300/open2300.mk
++++ b/package/open2300/open2300.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk
+-OPEN2300_SITE_METHOD = svn
+-OPEN2300_VERSION = 12
++OPEN2300_VERSION = f21982e0b1f8321561e5ad1668307fde97700e1b
++OPEN2300_SITE = $(call github,wezm,open2300,$(OPEN2300_VERSION))
+ OPEN2300_LICENSE = GPL-2.0
+ OPEN2300_LICENSE_FILES = COPYING
+ 
+-- 
+2.25.1
