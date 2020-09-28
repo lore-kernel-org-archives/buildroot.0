@@ -1,93 +1,126 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 28 Sep 2020 20:08:18 +0200
-Subject: [Buildroot] [PATCH] package/keyutils: bump to version 1.6.3
-Message-ID: <20200928180818.2256383-1-francois.perrad@gadz.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 28 Sep 2020 11:42:15 -0700
+Subject: [Buildroot] [PATCH v2 10/14] package/systemd: invoke
+ systemd-tmpfilesd on final image
+In-Reply-To: <CADYdroNfW0eO3NV0eJgWQtwBndqDmHDoE7-YF6gnHQYViqE8eQ@mail.gmail.com>
+References: <20200615072055.2083-1-nolange79@gmail.com>
+ <20200615072055.2083-11-nolange79@gmail.com>
+ <CAFvCimWYc_MpYbpvi3rB+uwWpK4EB5Er7DUG7U=eF0bQfK5pXA@mail.gmail.com>
+ <CADYdroNfW0eO3NV0eJgWQtwBndqDmHDoE7-YF6gnHQYViqE8eQ@mail.gmail.com>
+Message-ID: <CAFSsvmqN0oe4+KvZ1sCCHmGSM_WV7nQPeUjBdhN19craLMU=6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update home page URL
-- change download to new location
+On Mon, Jun 15, 2020 at 7:59 AM Norbert Lange <nolange79@gmail.com> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/keyutils/0001-fix-install-rule.patch | 2 +-
- package/keyutils/0002-cifs.patch             | 4 ++--
- package/keyutils/Config.in                   | 2 +-
- package/keyutils/keyutils.hash               | 6 +++---
- package/keyutils/keyutils.mk                 | 5 ++---
- 5 files changed, 9 insertions(+), 10 deletions(-)
+>
+>
+> Am Mo., 15. Juni 2020 um 16:32 Uhr schrieb J?r?my ROSEN <
+> jeremy.rosen at smile.fr>:
+>
+>> I wonder how that would work with lines that contain %b (boot id)
+>> and %m (machine-id)
+>> my educated guest would be that it would create files with the host's
+>> boot-id/machine-id. Thus leaking the host's information. This is not
+>> good, especially the machine-id of the host which is confidential
+>> information (not crypto-grade, but still shouldn't be leaked)
+>>
+>
+>> if systemd-tmpile supports that correctly (maybe skipping all %b %m
+>> when --root is used) it's all fine. But I don't remember seeing that.
+>>
+>> does it ?
+>>
+>
+> The default config files don't create files with machine-id, and %b is not
+> replaced at all AFAIR.
+> But I believe you are right that systemd-tmpfiles picks up the host
+> machine-id and would replace it.
+> Good catch, need to check.
+>
 
-diff --git a/package/keyutils/0001-fix-install-rule.patch b/package/keyutils/0001-fix-install-rule.patch
-index 26545716c..b8bad533b 100644
---- a/package/keyutils/0001-fix-install-rule.patch
-+++ b/package/keyutils/0001-fix-install-rule.patch
-@@ -11,7 +11,7 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- 
- --- keyutils-1.5.9/Makefile.orig	2014-09-22 16:13:41.593562765 +0100
- +++ keyutils-1.5.9/Makefile	2014-09-22 16:14:05.377963952 +0100
--@@ -184,7 +184,7 @@ ifeq ($(NO_SOLIB),0)
-+@@ -200,7 +200,7 @@ ifeq ($(NO_SOLIB),0)
-  	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
-  	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
-  	mkdir -p $(DESTDIR)$(USRLIBDIR)
-diff --git a/package/keyutils/0002-cifs.patch b/package/keyutils/0002-cifs.patch
-index b2903f971..23f8e3312 100644
---- a/package/keyutils/0002-cifs.patch
-+++ b/package/keyutils/0002-cifs.patch
-@@ -6,8 +6,8 @@ Description: Added 2 cifs helpers to request-key.conf (for CIFS DFS support)
- diff -Naurp keyutils.orig/request-key.conf keyutils/request-key.conf
- --- keyutils.orig/request-key.conf	2008-09-07 23:53:10.000000000 +0000
- +++ keyutils/request-key.conf	2009-02-05 00:53:00.000000000 +0000
--@@ -34,4 +34,6 @@
-- create	user	debug:*		negate		/bin/keyctl negate %k 30 %S
-+@@ -38,4 +38,6 @@
-+ create  user    debug:*         revoked         /bin/keyctl reject %k 30 %c %S
-  create	user	debug:loop:*	*		|/bin/cat
-  create	user	debug:*		*		/usr/share/keyutils/request-key-debug.sh %k %d %c %S
- +create	cifs.spnego	*	*		/usr/sbin/cifs.upcall -c %k
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index 7813de379..e4a2e846a 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_KEYUTILS
- 	  These tools are used to control the key management system
- 	  built into the Linux kernel.
- 
--	  http://people.redhat.com/~dhowells/keyutils/
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/
- 
- comment "keyutils needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-diff --git a/package/keyutils/keyutils.hash b/package/keyutils/keyutils.hash
-index d6781628c..35de0c782 100644
---- a/package/keyutils/keyutils.hash
-+++ b/package/keyutils/keyutils.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 d3aef20cec0005c0fa6b4be40079885567473185b1a57b629b030e67942c7115  keyutils-1.6.tar.bz2
--sha256 f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d  LICENCE.GPL
--sha256 0d15593e3a8ad90917f8509b5ac1e4b5e5d196434a68029aa9dc0858a4a4c521  LICENCE.LGPL
-+sha256  a61d5706136ae4c05bd48f86186bcfdbd88dd8bd5107e3e195c924cfc1b39bb4  keyutils-1.6.3.tar.gz
-+sha256  f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d  LICENCE.GPL
-+sha256  0d15593e3a8ad90917f8509b5ac1e4b5e5d196434a68029aa9dc0858a4a4c521  LICENCE.LGPL
-diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-index c8de3a0df..46f06531c 100644
---- a/package/keyutils/keyutils.mk
-+++ b/package/keyutils/keyutils.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--KEYUTILS_VERSION = 1.6
--KEYUTILS_SOURCE = keyutils-$(KEYUTILS_VERSION).tar.bz2
--KEYUTILS_SITE = http://people.redhat.com/~dhowells/keyutils
-+KEYUTILS_VERSION = 1.6.3
-+KEYUTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot
- KEYUTILS_LICENSE = GPL-2.0+, LGPL-2.1+
- KEYUTILS_LICENSE_FILES = LICENCE.GPL LICENCE.LGPL
- KEYUTILS_INSTALL_STAGING = YES
--- 
-2.25.1
+
+>  FYI, this issue is being worked on:
+> https://github.com/systemd/systemd/pull/16187
+>
+
+
+>
+>> Cheers
+>> Jeremy
+>>
+>>
+>> Le lun. 15 juin 2020 ? 09:21, Norbert Lange <nolange79@gmail.com> a
+>> ?crit :
+>>
+>>> Especially for read-only filesystems it is helpfull to
+>>> pre-create all folders for non-volatile paths.
+>>>
+>>> This needs to run under fakeroot to allow setting
+>>> uids/gids/perms for the target fs.
+>>>
+>>> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+>>> ---
+>>>  package/systemd/systemd.mk | 8 +++++++-
+>>>  1 file changed, 7 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>>> index e117e3a082..cb0278f3b7 100644
+>>> --- a/package/systemd/systemd.mk
+>>> +++ b/package/systemd/systemd.mk
+>>> @@ -599,6 +599,12 @@ SYSTEMD_TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+>>>  endif
+>>>  SYSTEMD_TARGET_FINALIZE_HOOKS += SYSTEMD_UPDATE_CATALOGS
+>>>
+>>> +define SYSTEMD_CREATE_TMPFILES_HOOK
+>>> +       $(HOST_DIR)/bin/systemd-tmpfiles --root=$(TARGET_DIR) --create
+>>> --boot \
+>>> +               $(addprefix --exclude-prefix=/,dev mnt proc run sys tmp)
+>>> || :
+>>> +endef
+>>> +SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SYSTEMD_CREATE_TMPFILES_HOOK
+>>> +
+>>>  SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
+>>>  SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
+>>>
+>>> @@ -652,7 +658,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+>>>         -Dvconsole=false \
+>>>         -Dquotacheck=false \
+>>>         -Dsysusers=false \
+>>> -       -Dtmpfiles=false \
+>>> +       -Dtmpfiles=true \
+>>>         -Dimportd=false \
+>>>         -Dhwdb=false \
+>>>         -Drfkill=false \
+>>> --
+>>> 2.27.0
+>>>
+>>>
+>>
+>> --
+>> [image: SMILE]  <http://www.smile.eu/>
+>>
+>> 20 rue des Jardins
+>> 92600 Asni?res-sur-Seine
+>> *J?r?my ROSEN*
+>> Architecte technique
+>>
+>> [image: email] jeremy.rosen at smile.fr
+>> [image: phone]  +33 6 88 25 87 42
+>> [image: url] http://www.smile.eu
+>>
+>> [image: Twitter] <https://twitter.com/GroupeSmile> [image: Facebook]
+>> <https://www.facebook.com/smileopensource> [image: LinkedIn]
+>> <https://www.linkedin.com/company/smile> [image: Github]
+>> <https://github.com/Smile-SA>
+>>
+>> [image: D?couvrez l?univers Smile, rendez-vous sur smile.eu]
+>> <https://www.smile.eu/fr/publications/livres-blancs/yocto?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20200928/3e28f12b/attachment.html>
