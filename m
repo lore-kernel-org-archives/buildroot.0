@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:55:48 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/minidlna: use
- /run for PIDFile
-Message-ID: <20200928211157.5220E7FD00@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 22:55:26 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dhcpcd: use /run
+ for PIDFile
+Message-ID: <20200928211157.45AC98E1D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=264667d91ae44cb9bcc65a0b21651721f247e91a
+commit: https://git.buildroot.net/buildroot/commit/?id=dd8b784259516523302e21c8dfecd016abd78385
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
 
 PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/minidlna.pid ??? /run/minidlna.pid; please update the unit file
+/var/run/dhcpcd.pid ??? /run/dhcpcd.pid; please update the unit file
 accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ad46c0ac3681bbf84d564c2825b24cd619f6f5dc)
+(cherry picked from commit 9668296056c265836b61f2e7afe6bcd7c9d773ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minidlna/minidlnad.service | 2 +-
+ package/dhcpcd/dhcpcd.service | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/minidlna/minidlnad.service b/package/minidlna/minidlnad.service
-index f69476b303..4e968d3858 100644
---- a/package/minidlna/minidlnad.service
-+++ b/package/minidlna/minidlnad.service
+diff --git a/package/dhcpcd/dhcpcd.service b/package/dhcpcd/dhcpcd.service
+index 0552b5c73a..e648092c9b 100644
+--- a/package/dhcpcd/dhcpcd.service
++++ b/package/dhcpcd/dhcpcd.service
 @@ -5,7 +5,7 @@ After=network.target
  [Service]
  Type=forking
- ExecStart=/usr/sbin/minidlnad
--PIDFile=/var/run/minidlna/minidlna.pid
-+PIDFile=/run/minidlna/minidlna.pid
+ EnvironmentFile=-/etc/default/dhcpcd
+-PIDFile=/var/run/dhcpcd.pid
++PIDFile=/run/dhcpcd.pid
+ ExecStart=/sbin/dhcpcd $DAEMON_ARGS
+ Restart=always
  
- [Install]
- WantedBy=multi-user.target
