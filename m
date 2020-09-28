@@ -1,37 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:56:28 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/postgresql:
- remove PIDFile from .service
-Message-ID: <20200928211157.738F47FD00@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 22:56:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openvmtools: use
+ /run for PIDFile
+Message-ID: <20200928211157.65B3C7FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15689a10b66c77e8b93fd9aa78b09001dcac3297
+commit: https://git.buildroot.net/buildroot/commit/?id=99273babe60cd7e70159149d3efe28cb084f15fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-commit eada187e77022f0d changed the service to Type=notify.
-notify units don't need a PIDFile so this can be removed.
+Fixes:
+
+PIDFile= references a path below legacy directory /var/run/, updating
+/var/run/vmtoolsd.pid ??? /run/vmtoolsd.pid; please update the unit file
+accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a9bc0024b6f79a59537a48e64d71a78b73175561)
+(cherry picked from commit e97fe4f28cc2015775bdd85251396674826227fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.service | 1 -
- 1 file changed, 1 deletion(-)
+ package/openvmtools/vmtoolsd.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-index 53e6f84f00..539eea8964 100644
---- a/package/postgresql/postgresql.service
-+++ b/package/postgresql/postgresql.service
-@@ -15,7 +15,6 @@ Group=postgres
- StandardOutput=syslog
- StandardError=syslog
- SyslogIdentifier=postgres
--PIDFile=/var/lib/pgsql/postmaster.pid
+diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
+index cb97357ec2..1d2a3566cf 100644
+--- a/package/openvmtools/vmtoolsd.service
++++ b/package/openvmtools/vmtoolsd.service
+@@ -5,8 +5,8 @@ ConditionVirtualization=vmware
  
- ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
- ExecStart=/usr/bin/postgres -D /var/lib/pgsql
+ [Service]
+ Type=forking
+-PIDFile=/var/run/vmtoolsd.pid
+-ExecStart=/usr/bin/vmtoolsd -b /var/run/vmtoolsd.pid
++PIDFile=/run/vmtoolsd.pid
++ExecStart=/usr/bin/vmtoolsd -b /run/vmtoolsd.pid
+ Restart=on-failure
+ KillMode=process
+ KillSignal=SIGKILL
