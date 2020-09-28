@@ -1,73 +1,60 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 28 Sep 2020 09:41:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: bump version to 3.1
-Message-ID: <20200928074135.21207-1-heiko.thiery@gmail.com>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Mon, 28 Sep 2020 11:29:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbedtls: custom configuration file
+Message-ID: <20200928092945.584196-1-pieter.degendt@basalte.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From release note:
+mbedlts is customizable with a single configuration header file.
+Instead of altering the existing config.h file based on the selection
+of packages, we can simply replace it.
 
-Version 3.1 - September 2020
-
-This release offers substantial new functionality. Users are encouraged
-to upgrade. The most notable changes are as follows.
-
-* Fixes non-functional NMEA mode of the ts2phc program (since 3.0)
-* Improves system time synchronization via the PTP_SYS_OFFSET_PRECISE
-  and PTP_SYS_OFFSET_EXTENDED ioctls.
-* Supports implementing a PTP GM clock by using a GPS radio or other
-  PPS time source.
-* Provides per-port statistics via the management interface.
-* Implements IEEE 1588 v2.1 slave event monitoring.
-* Adds Automotive Profile support.y
-
- utils/test-pkg -p linuxptp
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 0 skipped, 0 build failed, 0 legal-info failed
-
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Pieter De Gendt <pieter.degendt@basalte.be>
 ---
- package/linuxptp/linuxptp.hash | 6 +++---
- package/linuxptp/linuxptp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mbedtls/Config.in  | 12 ++++++++++++
+ package/mbedtls/mbedtls.mk |  8 ++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index de82ff2b84..4f8a1f89fc 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,9 +1,9 @@
- # From https://sourceforge.net/projects/linuxptp/files/v3.0/
--sha1  cf56f1ab6c622a569be8c14d2cb121f0183affc9  linuxptp-3.0.tgz
--md5  1318805702eb6d59f9f247e1dd5ce12a  linuxptp-3.0.tgz
-+sha1  9a3869dbd322252c9a6bc0dbdfe8941586810a7f  linuxptp-3.1.tgz
-+md5  2264cb69c9af947028835c12c89a7572  linuxptp-3.1.tgz
+diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
+index a39ba65d98..b5000f422d 100644
+--- a/package/mbedtls/Config.in
++++ b/package/mbedtls/Config.in
+@@ -29,4 +29,16 @@ config BR2_PACKAGE_MBEDTLS_COMPRESSION
+ 	  sure CRIME and similar attacks are not applicable to your
+ 	  particular situation.
  
- # Locally computed:
--sha256  d74ceca722c75bfff53c633425f926dd48eb04f4a089451b855155c016d15785  linuxptp-3.0.tgz
-+sha256  f58f5b11cf14dc7c4f7c9efdfb27190e43d02cf20c3525f6639edac10528ce7d  linuxptp-3.1.tgz
++config BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG
++	string "mbedtls custom configuration"
++	help
++	  Mbed TLS should build out-of-the box on a large variety of
++	  platforms. However, you may need to adjust a few platform-
++	  specific settings or want to customize the set of features
++	  that will be built. You can do all of this in a single
++	  configuration file.
++
++	  Provide the location of the custom configuration file or
++	  leave this empty to keep the default.
++
+ endif
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 5094434e6c..fa74197004 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -68,4 +68,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
+ MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
+ endif
  
- # Hash for license file:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 3d018a4657..f91be921af 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUXPTP_VERSION = 3.0
-+LINUXPTP_VERSION = 3.1
- LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
++define MBEDTLS_OVERRIDE_CONFIG
++	cp $(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG) $(@D)/include/mbedtls/config.h
++endef
++
++ifneq ($(call qstrip,$(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG)),)
++MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_OVERRIDE_CONFIG
++endif
++
+ $(eval $(cmake-package))
 -- 
-2.20.1
+2.25.1
