@@ -1,41 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:55:15 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bandwithd: use
- /run for PIDFile
-Message-ID: <20200928211157.337187FD00@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 22:56:28 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/postgresql:
+ remove PIDFile from .service
+Message-ID: <20200928211157.738F47FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab8123c18a43c2602882dee20302390469b91001
+commit: https://git.buildroot.net/buildroot/commit/?id=15689a10b66c77e8b93fd9aa78b09001dcac3297
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
-
-PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/bandwithd.pid ??? /run/bandwithd.pid; please update the unit file
-accordingly.
+commit eada187e77022f0d changed the service to Type=notify.
+notify units don't need a PIDFile so this can be removed.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cdc183eef026ecfc3f2ae2afc02440b549829be4)
+(cherry picked from commit a9bc0024b6f79a59537a48e64d71a78b73175561)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bandwidthd/bandwidthd.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/postgresql/postgresql.service | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/bandwidthd/bandwidthd.service b/package/bandwidthd/bandwidthd.service
-index 9c03d42946..ab7f05a2e8 100644
---- a/package/bandwidthd/bandwidthd.service
-+++ b/package/bandwidthd/bandwidthd.service
-@@ -5,7 +5,7 @@ After=network.target
- [Service]
- Type=forking
- ExecStart=/usr/bin/bandwidthd
--PIDFile=/var/run/bandwidthd.pid
-+PIDFile=/run/bandwidthd.pid
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+index 53e6f84f00..539eea8964 100644
+--- a/package/postgresql/postgresql.service
++++ b/package/postgresql/postgresql.service
+@@ -15,7 +15,6 @@ Group=postgres
+ StandardOutput=syslog
+ StandardError=syslog
+ SyslogIdentifier=postgres
+-PIDFile=/var/lib/pgsql/postmaster.pid
  
- [Install]
- WantedBy=multi-user.target
+ ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+ ExecStart=/usr/bin/postgres -D /var/lib/pgsql
