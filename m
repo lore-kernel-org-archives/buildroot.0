@@ -1,52 +1,150 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 29 Sep 2020 00:29:11 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.30.1
-Message-ID: <20200928212911.1342633-1-aperez@igalia.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Sep 2020 23:41:00 +0200
+Subject: [Buildroot] [PATCH 0/7 RFC] support/download: reproducible archives
+ whatever tar version (branch yem/dl-git-tar-pax)
+Message-ID: <cover.1601329249.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a minor release which fixes a regression found in 2.30.0.
-Release notes:
+Hello All!
 
-  https://webkitgtk.org/2020/09/21/webkitgtk2.30.1-released.html
+This series fixes our download backends, git and svn, to generate
+reproducible archives whatever the tar version, thus removing
+therequirement for a maximum tar version.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+This however changes the actual format of the generated archives,
+and they are different from the existing ones. So we also change the
+compression to avoid collision with existign archives on s.b.o, that
+need to be read by older Buildroot versions.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 31e30997e2..0098fe1a66 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.30.0.tar.xz.sums
--md5  71428fefd33f40583465649baf05ceb5  webkitgtk-2.30.0.tar.xz
--sha1  60407e68b5452b5fd90ab1c03d8cc844bb68b590  webkitgtk-2.30.0.tar.xz
--sha256  caf3dbf2d2383072614e34281f2fffb6331faf92f4ecf215f6f6a5a57f755d11  webkitgtk-2.30.0.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.30.1.tar.xz.sums
-+md5  de0f910d60de88273ffde7b4bb88bd42  webkitgtk-2.30.1.tar.xz
-+sha1  23dd526e95399f97c758f8796e8cb184e9465eb7  webkitgtk-2.30.1.tar.xz
-+sha256  17c59dfdadb7377192e9b59bc56c8a029c9fad4f38ed732b652bf33d0bd5d6b1  webkitgtk-2.30.1.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index b4623a407a..5293d2d0ff 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.30.0
-+WEBKITGTK_VERSION = 2.30.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+A huge thank to Vincent for digging up the adequate set of options
+that allows generating reproducible archives. Thanks! :-)
+
+Note that this series contains commits marked "WIP": they are separate
+commits for ease of review, but they should ultimately be squashed
+together of they would not be bisectable.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2e8bf36dc4421f2213f8fa6de91b2c9bf3d64e45
+
+  package/zstd: avoid compilation during host-zstd install step (2020-09-28 22:04:15 +0200)
+
+
+are available in the git repository at:
+
+  https://git.busybox.net/~ymorin/git/buildroot
+
+for you to fetch changes up to a71f772a27d008b72b67b081c4a4aaaa9f83ea53
+
+  support/dependencies: drop check for maximal tar version (2020-09-28 23:38:40 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      core/pkg-infra: prepare for alternate default source archives
+      WIP: support/download: change format of archives generated from git
+      WIP: boot+packages: update hash to new git-tarballs format
+      WIP: support/testing: update git-hash checks with new archive format
+      package/open2300: switch to github
+      support/download: change format of archives generated from svn
+      support/dependencies: drop check for maximal tar version
+
+ boot/vexpress-firmware/vexpress-firmware.hash      |  2 +-
+ package/18xx-ti-utils/18xx-ti-utils.hash           |  4 +-
+ package/aer-inject/aer-inject.hash                 |  2 +-
+ package/am33x-cm3/am33x-cm3.hash                   |  2 +-
+ package/armbian-firmware/armbian-firmware.hash     |  2 +-
+ package/at/at.hash                                 |  6 +-
+ package/bayer2rgb-neon/bayer2rgb-neon.hash         |  4 +-
+ package/brickd/brickd.hash                         |  4 +-
+ package/c-capnproto/c-capnproto.hash               |  2 +-
+ package/dbus-triggerd/dbus-triggerd.hash           |  2 +-
+ package/dt-utils/dt-utils.hash                     |  4 +-
+ package/dtv-scan-tables/dtv-scan-tables.hash       |  6 +-
+ package/flashbench/flashbench.hash                 |  2 +-
+ .../imx-alsa-plugins/imx-alsa-plugins.hash         |  2 +-
+ package/freescale-imx/imx-lib/imx-lib.hash         |  2 +-
+ package/google-breakpad/google-breakpad.hash       |  2 +-
+ .../gstreamer1/gst1-interpipe/gst1-interpipe.hash  |  2 +-
+ package/gstreamer1/gst1-shark/gst1-shark.hash      |  4 +-
+ package/imx-mkimage/imx-mkimage.hash               |  4 +-
+ package/kvm-unit-tests/kvm-unit-tests.hash         |  2 +-
+ package/kvmtool/kvmtool.hash                       |  2 +-
+ package/libbroadvoice/libbroadvoice.hash           |  4 +-
+ package/libclc/libclc.hash                         |  4 +-
+ package/libg7221/libg7221.hash                     |  4 +-
+ package/libilbc/libilbc.hash                       |  4 +-
+ package/libsilk/libsilk.hash                       |  4 +-
+ package/libsvgtiny/libsvgtiny.hash                 |  4 +-
+ package/libuci/libuci.hash                         |  2 +-
+ package/libyuv/libyuv.hash                         |  4 +-
+ package/linux-firmware/linux-firmware.hash         | 68 +++++++++++-----------
+ .../linux-syscall-support.hash                     |  2 +-
+ package/minicom/minicom.hash                       |  4 +-
+ package/mmc-utils/mmc-utils.hash                   |  4 +-
+ package/net-tools/net-tools.hash                   |  2 +-
+ package/netcat-openbsd/netcat-openbsd.hash         |  4 +-
+ .../netsurf-buildsystem/netsurf-buildsystem.hash   |  2 +-
+ package/odhcp6c/odhcp6c.hash                       |  2 +-
+ package/open2300/open2300.hash                     |  6 +-
+ package/open2300/open2300.mk                       |  5 +-
+ package/opkg-utils/opkg-utils.hash                 |  2 +-
+ package/piglit/piglit.hash                         |  2 +-
+ package/pkg-generic.mk                             |  9 ++-
+ package/prelink-cross/prelink-cross.hash           |  2 +-
+ package/psplash/psplash.hash                       |  4 +-
+ package/qt-webkit-kiosk/qt-webkit-kiosk.hash       |  2 +-
+ package/rcw/rcw.hash                               |  4 +-
+ package/rtc-tools/rtc-tools.hash                   |  4 +-
+ package/rtmpdump/rtmpdump.hash                     |  4 +-
+ package/speexdsp/speexdsp.hash                     |  4 +-
+ package/stm32flash/stm32flash.hash                 |  4 +-
+ package/ti-sgx-demos/ti-sgx-demos.hash             |  4 +-
+ package/ti-sgx-km/ti-sgx-km.hash                   |  4 +-
+ package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  4 +-
+ package/ti-sgx-um/ti-sgx-um.hash                   |  4 +-
+ package/trace-cmd/trace-cmd.hash                   |  6 +-
+ package/tremor/tremor.hash                         |  4 +-
+ package/ubus/ubus.hash                             |  2 +-
+ package/uemacs/uemacs.hash                         |  4 +-
+ package/uhttpd/uhttpd.hash                         |  2 +-
+ package/ustream-ssl/ustream-ssl.hash               |  4 +-
+ package/vboot-utils/vboot-utils.hash               |  2 +-
+ package/wilink-bt-firmware/wilink-bt-firmware.hash |  4 +-
+ .../xdriver_xf86-video-imx-viv.hash                |  2 +-
+ .../xdriver_xf86-video-intel.hash                  |  1 +
+ support/dependencies/check-host-tar.sh             | 14 +----
+ support/download/git                               | 20 +++++--
+ support/download/svn                               | 12 ++--
+ .../br2-external/git-hash/package/bad/bad.hash     |  2 +-
+ .../br2-external/git-hash/package/good/good.hash   |  2 +-
+ .../git-partial-sha1-branch-head.hash              |  2 +-
+ .../git-partial-sha1-reachable-by-branch.hash      |  2 +-
+ .../git-partial-sha1-reachable-by-tag.hash         |  2 +-
+ .../git-partial-sha1-tag-itself.hash               |  2 +-
+ .../git-partial-sha1-tag-points-to.hash            |  2 +-
+ .../git-sha1-branch-head/git-sha1-branch-head.hash |  2 +-
+ .../git-sha1-reachable-by-branch.hash              |  2 +-
+ .../git-sha1-reachable-by-tag.hash                 |  2 +-
+ .../git-sha1-tag-itself/git-sha1-tag-itself.hash   |  2 +-
+ .../git-sha1-tag-points-to.hash                    |  2 +-
+ .../git-submodule-disabled.hash                    |  2 +-
+ .../git-submodule-enabled.hash                     |  2 +-
+ .../git-refs/package/git-tag/git-tag.hash          |  2 +-
+ .../git-wrong-content/git-wrong-content.hash       |  2 +-
+ 83 files changed, 181 insertions(+), 176 deletions(-)
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
