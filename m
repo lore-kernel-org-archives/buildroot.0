@@ -1,87 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Sep 2020 21:17:30 +0200
-Subject: [Buildroot] [PATCH v2, 1/1] package/log4cxx: fix build without wchar
-Message-ID: <20200928191730.36288-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 Sep 2020 21:22:27 +0200
+Subject: [Buildroot] [PATCH] dvb-apps: fix build failure with glibc 2.31
+In-Reply-To: <trinity-191718b2-1823-476c-b87e-3f66019aba4b-1601136385289@3c-app-mailcom-bs14>
+References: <20200926095550.27437-1-daggs@gmx.com>
+ <20200926153910.009ca5ed@windsurf.hq.k.grp>
+ <trinity-191718b2-1823-476c-b87e-3f66019aba4b-1601136385289@3c-app-mailcom-bs14>
+Message-ID: <20200928212227.0daf8624@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build with log4cxx in version 0.11.0
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
+On Sat, 26 Sep 2020 18:06:25 +0200
+daggs <daggs@gmx.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Retrieve upstream patch
+> > Fixes:
+> >
+> >   http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/  
+> 
+> frankly speaking, I had no idea this issue was marked by the
+> autobuilder, I've encountered it when trying to build an image with
+> dvb-apps installed.
 
- .../0001-fix-build-without-wchar.patch        | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/log4cxx/0001-fix-build-without-wchar.patch
+No problem. But when you have a failure, it makes sense to check if we
+have encountered it in the autobuilders. You can easily search by doing
+this:
 
-diff --git a/package/log4cxx/0001-fix-build-without-wchar.patch b/package/log4cxx/0001-fix-build-without-wchar.patch
-new file mode 100644
-index 0000000000..fc0e7be5c9
---- /dev/null
-+++ b/package/log4cxx/0001-fix-build-without-wchar.patch
-@@ -0,0 +1,55 @@
-+From 1fa70eaf24d75e84625f22779ec347fd29bf1ae6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Sep 2020 08:47:37 +0200
-+Subject: [PATCH] fix build without wchar
-+
-+Disable wencode without wchar or the build will fail on:
-+
-+odbcappender.cpp: In static member function 'static void log4cxx::db::ODBCAppender::encode(wchar_t**, const LogString&, log4cxx::helpers::Pool&)':
-+odbcappender.cpp:362:22: error: 'wencode' is not a member of 'log4cxx::helpers::Transcoder'
-+  *dest = Transcoder::wencode(src, p);
-+                      ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/apache/logging-log4cxx/commit/f171f818c798d48631d5b45851e4593953f31d9c]
-+---
-+ src/main/cpp/odbcappender.cpp              | 2 ++
-+ src/main/include/log4cxx/db/odbcappender.h | 2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/src/main/cpp/odbcappender.cpp b/src/main/cpp/odbcappender.cpp
-+index 6bfa519e..218df132 100644
-+--- a/src/main/cpp/odbcappender.cpp
-++++ b/src/main/cpp/odbcappender.cpp
-+@@ -357,10 +357,12 @@ void ODBCAppender::setSql(const LogString& s)
-+ 	}
-+ }
-+ 
-++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
-+ void ODBCAppender::encode(wchar_t** dest, const LogString& src, Pool& p)
-+ {
-+ 	*dest = Transcoder::wencode(src, p);
-+ }
-++#endif
-+ 
-+ void ODBCAppender::encode(unsigned short** dest,
-+ 	const LogString& src, Pool& p)
-+diff --git a/src/main/include/log4cxx/db/odbcappender.h b/src/main/include/log4cxx/db/odbcappender.h
-+index a26bc35b..fdc144ff 100644
-+--- a/src/main/include/log4cxx/db/odbcappender.h
-++++ b/src/main/include/log4cxx/db/odbcappender.h
-+@@ -300,8 +300,10 @@ class LOG4CXX_EXPORT ODBCAppender : public AppenderSkeleton
-+ 	private:
-+ 		ODBCAppender(const ODBCAppender&);
-+ 		ODBCAppender& operator=(const ODBCAppender&);
-++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
-+ 		static void encode(wchar_t** dest, const LogString& src,
-+ 			log4cxx::helpers::Pool& p);
-++#endif
-+ 		static void encode(unsigned short** dest, const LogString& src,
-+ 			log4cxx::helpers::Pool& p);
-+ }; // class ODBCAppender
+	http://autobuild.buildroot.org/?reason=dvb-apps%
+
+The % at the end is important, as it acts as a wildcard.
+
+And if the failure was not found by the autobuilders, it is interesting
+to investigate why. Is it because the failure is related to a very
+specific system configuration? Or an architecture/toolchain combination
+we are not testing?
+
+Best regards,
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
