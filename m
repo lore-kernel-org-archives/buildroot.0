@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:52:56 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/minidlna: use
+Date: Mon, 28 Sep 2020 22:53:11 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/openvmtools: use
  /run for PIDFile
-Message-ID: <20200928211203.6978580E5D@busybox.osuosl.org>
+Message-ID: <20200928211203.82D7D80E5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaa7bafd8202774c3363b78021c96b690b2c7f0a
+commit: https://git.buildroot.net/buildroot/commit/?id=3b7447c7950206f5cf200a058b067a033bef9403
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Fixes:
 
 PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/minidlna.pid ??? /run/minidlna.pid; please update the unit file
+/var/run/vmtoolsd.pid ??? /run/vmtoolsd.pid; please update the unit file
 accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ad46c0ac3681bbf84d564c2825b24cd619f6f5dc)
+(cherry picked from commit e97fe4f28cc2015775bdd85251396674826227fa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/minidlna/minidlnad.service | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openvmtools/vmtoolsd.service | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/minidlna/minidlnad.service b/package/minidlna/minidlnad.service
-index f69476b303..4e968d3858 100644
---- a/package/minidlna/minidlnad.service
-+++ b/package/minidlna/minidlnad.service
-@@ -5,7 +5,7 @@ After=network.target
+diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
+index cb97357ec2..1d2a3566cf 100644
+--- a/package/openvmtools/vmtoolsd.service
++++ b/package/openvmtools/vmtoolsd.service
+@@ -5,8 +5,8 @@ ConditionVirtualization=vmware
+ 
  [Service]
  Type=forking
- ExecStart=/usr/sbin/minidlnad
--PIDFile=/var/run/minidlna/minidlna.pid
-+PIDFile=/run/minidlna/minidlna.pid
- 
- [Install]
- WantedBy=multi-user.target
+-PIDFile=/var/run/vmtoolsd.pid
+-ExecStart=/usr/bin/vmtoolsd -b /var/run/vmtoolsd.pid
++PIDFile=/run/vmtoolsd.pid
++ExecStart=/usr/bin/vmtoolsd -b /run/vmtoolsd.pid
+ Restart=on-failure
+ KillMode=process
+ KillSignal=SIGKILL
