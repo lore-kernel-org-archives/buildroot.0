@@ -1,58 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 23:17:06 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/jbig2dec: bump to
- version 0.19.0
-Message-ID: <20200928211203.B5B2A8E1EA@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 23:20:52 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/dhcpdump: fix
+ build without pod2man
+Message-ID: <20200928211203.CB18E8E1EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8b325de6631538131e25df0d4e90b1b29eb9cd1
+commit: https://git.buildroot.net/buildroot/commit/?id=5132c0ae0e076aa865ca8883ccf0c692fc9f44ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This bump is needed to fix build with ghostscript 9.53.0
+Use dhcpdump target to avoid building dhcpdump.8 as it will raise the
+following build failure if pod2man is not available:
+
+pod2man --section 8 \
+	--date "23 June 2008" \
+	--name "DHCPDUMP" \
+	--center "User Contributed Software" \
+	dhcpdump.pod dhcpdump.8
+/bin/sh: pod2man: command not found
+make[1]: *** [Makefile:11: dhcpdump.8] Error 127
 
 Fixes:
- - http://autobuild.buildroot.org/results/fbcc2fa29f3736f78212cb4b3869ffaeefda7a33
+ - http://autobuild.buildroot.org/results/db3be149ec71de8376f685a6a9f027191d9bccc9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f4d3dc9bc15260ba545118e2d90f432b31b4b20b)
+(cherry picked from commit 698dcb61ea8ab81f92091dba372e996611d1168d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jbig2dec/jbig2dec.hash | 4 ++--
- package/jbig2dec/jbig2dec.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/dhcpdump/dhcpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
-index 86584b19a6..5a34af37f6 100644
---- a/package/jbig2dec/jbig2dec.hash
-+++ b/package/jbig2dec/jbig2dec.hash
-@@ -1,7 +1,7 @@
--# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/MD5SUMS
-+# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/MD5SUMS
- # and SHA512SUMS are missing the hashes for this file.
- # Locally computed:
--sha256  9e19775237350e299c422b7b91b0c045e90ffa4ba66abf28c8fb5eb005772f5e  jbig2dec-0.18.tar.gz
-+sha256  279476695b38f04939aa59d041be56f6bade3422003a406a85e9792c27118a37  jbig2dec-0.19.tar.gz
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index 2413812880..ec9571c0af 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -20,7 +20,7 @@ DHCPDUMP_CFLAGS = $(TARGET_CFLAGS) -DHAVE_STRSEP
  
- # Hash for license files:
- sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
-diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
-index 08ef89bfcb..59fcddfc1c 100644
---- a/package/jbig2dec/jbig2dec.mk
-+++ b/package/jbig2dec/jbig2dec.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+ define DHCPDUMP_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC="$(TARGET_CC) $(DHCPDUMP_CFLAGS) \
+-		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)"
++		-D_GNU_SOURCE" LIBS="$(DHCPDUMP_LIBS)" dhcpdump
+ endef
  
--JBIG2DEC_VERSION = 0.18
--JBIG2DEC_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952
-+JBIG2DEC_VERSION = 0.19
-+JBIG2DEC_SITE = \
-+	https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530
- JBIG2DEC_LICENSE = AGPL-3.0+
- JBIG2DEC_LICENSE_FILES = LICENSE
- JBIG2DEC_INSTALL_STAGING = YES
+ define DHCPDUMP_INSTALL_TARGET_CMDS
