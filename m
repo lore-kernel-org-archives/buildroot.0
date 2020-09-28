@@ -1,8 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 28 Sep 2020 13:32:10 +0200
-Subject: [Buildroot] [PATCH master+LTS] support/scripts/setlocalversion:
- fix/improve Mercurial output
-Message-ID: <20200928113210.3153-1-patrickdepinguin@gmail.com>
+Date: Mon, 28 Sep 2020 13:42:26 +0200
+Subject: [Buildroot] [PATCH 1/2] package/zstd: avoid compilation during
+ host-zstd install step
+Message-ID: <20200928114228.23637-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,65 +11,35 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 modified the output of
-'setlocalversion' so that the Buildroot version tag is included in the
-output, the version part was added in Makefile.
+The host-zstd-build step was not actually compiling the library:
 
-Due to differences in behavior of the used git and Mercurial commands, this
-caused different output for the Mercurial case, in BR2_VERSION_FULL and thus
-/etc/os-release and 'make print-version'. Assuming the official Buildroot
-releases are tagged and no project-specific tags are present, the output
-after commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 is:
-    -hg<commit>
-whereas it is expected to be something like:
-    2020.02.6-hg<commit>
+make[1]: Entering directory '/buildroot/output/build/host-zstd-1.4.5/lib'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/buildroot/output/build/host-zstd-1.4.5/lib'
 
-Change the Mercurial case in setlocalversion to behave similar to git,
-looking up the latest tag if the current revision is not itself tagged.
+and the actual compilation was part of the install step.
+This is not how other Buildroot packages work.
 
-The number of commits after the latest tag is not added, unlike in git, as
-this value is not commonly present in Mercurial output, and its added value
-can be disputed in this context. Even one commit could bring a huge change
-to the sources, so in order to interpret the number one has to look at the
-repository anyhow, in which case the commit ID can just be used.
+Make sure to specify which library targets we want instead. The total amount
+of compiled files does not change with this patch.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/scripts/setlocalversion | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/zstd/zstd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index e04c955d9e..49971b0fad 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -48,14 +48,28 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
- 
- # Check for mercurial and a mercurial repo.
-+# In the git case, 'git describe' will show the latest tag, and unless we are
-+# exactly on that tag, the number of commits since then, and last commit id.
-+# Mimic something similar in the Mercurial case.
- if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
- 
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
-+		# current revision is not tagged, determine latest tag
-+		latesttag=`HGRCPATH= hg log -r. -T '{latesttag}' 2>/dev/null`
-+		# In case there is more than one tag on the latest tagged commit,
-+		# 'latesttag' will separate them by colon (:). We'll retain this.
-+		# In case there is no tag at all, 'null' will be returned.
-+		if [ "$latesttag" != "null" ]; then
-+			printf "${latesttag}"
-+		fi
-+
-+		# add the commit id
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
- 		printf '%s%s' -hg "$id"
- 	else
-+		# current revision is tagged, just print the tag
- 		printf ${tag}
- 	fi
- 
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index e2ba12b058..35002da332 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -71,7 +71,7 @@ endef
+ # note: no 'HAVE_...' options for host library build only
+ define HOST_ZSTD_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+-		-C $(@D)/lib
++		-C $(@D)/lib libzstd.a libzstd
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		-C $(@D) zstd
+ endef
 -- 
 2.26.2
