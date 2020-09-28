@@ -1,42 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 23:01:18 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ecryptfs-utils:
- fix build failure without pod2man
-Message-ID: <20200928211214.62F7E7FD7F@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 22:48:53 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/postgresql:
+ remove PIDFile from .service
+Message-ID: <20200928211214.5949D7FD7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4620a5a8295bc301b080115de90e08ab11db7a53
+commit: https://git.buildroot.net/buildroot/commit/?id=9ecdaef76178219b26add7fc93fd62bafaab73c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Set ac_cv_path_POD2MAN to true to avoid the following build failure:
+commit eada187e77022f0d changed the service to Type=notify.
+notify units don't need a PIDFile so this can be removed.
 
-checking for pod2man... no
-configure: error: I couldn't find pod2man; make sure it's installed and in your path
-
-Fixes:
- - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1030f295e629d749dfb731f5908f39114d5a8f36)
+(cherry picked from commit a9bc0024b6f79a59537a48e64d71a78b73175561)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/postgresql/postgresql.service | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 326ff4f2dd..3a3253a366 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
+diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+index 53e6f84f00..539eea8964 100644
+--- a/package/postgresql/postgresql.service
++++ b/package/postgresql/postgresql.service
+@@ -15,7 +15,6 @@ Group=postgres
+ StandardOutput=syslog
+ StandardError=syslog
+ SyslogIdentifier=postgres
+-PIDFile=/var/lib/pgsql/postmaster.pid
  
- #Needed for build system to find pk11func.h and libnss3.so
- ECRYPTFS_UTILS_CONF_ENV = \
-+	ac_cv_path_POD2MAN=true \
- 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
- 	NSS_LIBS="-lnss3"
- 
+ ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
+ ExecStart=/usr/bin/postgres -D /var/lib/pgsql
