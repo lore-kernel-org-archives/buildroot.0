@@ -1,58 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Sep 2020 22:43:43 +0200
-Subject: [Buildroot] [PATCH] package/open2300: switch to github
-Message-ID: <20200928204343.2103959-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Sep 2020 22:59:14 +0200
+Subject: [Buildroot] [PATCH v3 1/8] package/nginx: use /run for PIDFile
+In-Reply-To: <20200919151807.3e25f549@windsurf.hq.k.grp> (Thomas Petazzoni's
+ message of "Sat, 19 Sep 2020 15:18:07 +0200")
+References: <20200916153340.345-1-buildroot@heine.tech>
+ <20200916153510.476-1-buildroot@heine.tech>
+ <20200919151807.3e25f549@windsurf.hq.k.grp>
+Message-ID: <87sgb1zkgt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream repository has been dead for quite a while now, and in fact
-we are using s.b.o as the "official" location now.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-There however exists a Github repository, which is still ive. That
-repository has not been touched in a looooong while, but it's still
-up, and there is a revision which actually gives the exact same
-content (although the hash changes, because the directory name has
-changed, from open2300-12/ to open2300-f2198.../).
+ > On Wed, 16 Sep 2020 17:35:03 +0200
+ > Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-Also fix spaces in hash file.
+ >> Fixes:
+ >> 
+ >> systemd[1]: /usr/lib/systemd/system/nginx.service:7: PIDFile= references
+ >> a path below legacy directory /var/run/, updating /var/run/nginx.pid ?
+ >> /run/nginx.pid; please update the unit file accordingly.
+ >> 
+ >> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ >> ---
+ >> package/nginx/nginx.service | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/open2300/open2300.hash | 6 ++----
- package/open2300/open2300.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ > Thanks, series applied.
 
-diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-index 414041b923..f8b1150694 100644
---- a/package/open2300/open2300.hash
-+++ b/package/open2300/open2300.hash
-@@ -1,6 +1,4 @@
- # Localy computed
--# Note: open2300's upstream svn tree is off-line, so this tarball is
--# served from s.b.o. instead, which actually makes it stable.
--sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-+sha256  ffa7f8d35b16abfbf5e52285cb21f2a7fc6afb901abb40c0c80eef9d23d08aab  open2300-f21982e0b1f8321561e5ad1668307fde97700e1b.tar.gz
- 
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 0ffb8b5046..9fb7dbc2fd 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk
--OPEN2300_SITE_METHOD = svn
--OPEN2300_VERSION = 12
-+OPEN2300_VERSION = f21982e0b1f8321561e5ad1668307fde97700e1b
-+OPEN2300_SITE = $(call github,wezm,open2300,$(OPEN2300_VERSION))
- OPEN2300_LICENSE = GPL-2.0
- OPEN2300_LICENSE_FILES = COPYING
- 
+Series (except for the htpdate one) committed to 2020.02.x, 2020.05.x
+and 2020.08.x, thanks.
+
 -- 
-2.25.1
+Bye, Peter Korsgaard
