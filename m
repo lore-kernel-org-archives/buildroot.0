@@ -1,60 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Sep 2020 23:41:01 +0200
-Subject: [Buildroot] [PATCH 5/7 RFC] package/open2300: switch to github
+Date: Mon, 28 Sep 2020 23:41:02 +0200
+Subject: [Buildroot] [PATCH 6/7 RFC] support/download: change format of
+ archives generated from svn
 In-Reply-To: <cover.1601329249.git.yann.morin.1998@free.fr>
 References: <cover.1601329249.git.yann.morin.1998@free.fr>
-Message-ID: <9fde96887f873a7edf7a990e6e3cfd3fa97158a0.1601329249.git.yann.morin.1998@free.fr>
+Message-ID: <0b91a78988ff3fe8259d1a75786f566937d334f4.1601329249.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream repository has been dead for quite a while now, and in fact
-we are using s.b.o as the "official" location now.
+Like we recently did for git, switch the archives generated from
+subversion to be reproducible whatever the tar version. This implies
+changing the compression to xz (and the extension accordingly).
 
-There however exists a Github repository, which is still ive. That
-repository has not been touched in a looooong while, but it's still
-up, and there is a revision which actually gives the exact same
-content (although the hash changes, because the directory name has
-changed, from open2300-12/ to open2300-f2198.../).
-
-Also fix spaces in hash file.
+We have no in-tree users of the svn backend, that also has hashes.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vincent Fazio <vfazio@xes-inc.com>
 ---
- package/open2300/open2300.hash | 6 ++----
- package/open2300/open2300.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/pkg-generic.mk |  2 +-
+ support/download/svn   | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-index 414041b923..f8b1150694 100644
---- a/package/open2300/open2300.hash
-+++ b/package/open2300/open2300.hash
-@@ -1,6 +1,4 @@
- # Localy computed
--# Note: open2300's upstream svn tree is off-line, so this tarball is
--# served from s.b.o. instead, which actually makes it stable.
--sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-+sha256  ffa7f8d35b16abfbf5e52285cb21f2a7fc6afb901abb40c0c80eef9d23d08aab  open2300-f21982e0b1f8321561e5ad1668307fde97700e1b.tar.gz
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 115115a345..af259766ab 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -564,7 +564,7 @@ ifndef $(2)_DL_OPTS
+  endif
+ endif
  
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 0ffb8b5046..9fb7dbc2fd 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+-ifneq ($$(filter git,$$($(2)_SITE_METHOD)),)
++ifneq ($$(filter git svn,$$($(2)_SITE_METHOD)),)
+ $(2)_SOURCE_EXT = .tar.xz
+ else
+ $(2)_SOURCE_EXT = .tar.gz
+diff --git a/support/download/svn b/support/download/svn
+index 012f286dd9..42307eb236 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -52,12 +52,16 @@ find "${basename}" -not -type d \
+        -and -not -path "./.svn/*" >"${output}.list"
+ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
  
--OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk
--OPEN2300_SITE_METHOD = svn
--OPEN2300_VERSION = 12
-+OPEN2300_VERSION = f21982e0b1f8321561e5ad1668307fde97700e1b
-+OPEN2300_SITE = $(call github,wezm,open2300,$(OPEN2300_VERSION))
- OPEN2300_LICENSE = GPL-2.0
- OPEN2300_LICENSE_FILES = COPYING
+-# Create GNU-format tarballs, since that's the format of the tarballs on
+-# sources.buildroot.org and used in the *.hash files
++pax_options="delete=atime,delete=ctime,delete=mtime"
++pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
++
++# Create POSIX tarballs, since that's the format the most reproducible
+ tar cf - --transform="s#^\./#${basename}/#" \
+-         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
++         --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++         --format=posix \
++         --pax-option="${pax_options}" \
+          -T "${output}.list.sorted" >"${output}.tar"
+-gzip -6 -n <"${output}.tar" >"${output}"
++xz -9 <"${output}.tar" >"${output}"
  
+ rm -f "${output}.list"
+ rm -f "${output}.list.sorted"
 -- 
 2.25.1
