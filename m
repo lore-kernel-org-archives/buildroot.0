@@ -1,42 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 23:01:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/ecryptfs-utils:
- fix build failure without pod2man
-Message-ID: <20200928211203.9986D8E1BE@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 23:19:28 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] DEVELOPERS: add myself as
+ contact for systemd
+Message-ID: <20200928211203.C014B8E1BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1054b72b56417f6447653b82aa88651a86558dd3
+commit: https://git.buildroot.net/buildroot/commit/?id=3ab1aa236a1cf6e9d8d3a307110302ad6576eb4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Set ac_cv_path_POD2MAN to true to avoid the following build failure:
+As requested, I add myself to systemd.
 
-checking for pod2man... no
-configure: error: I couldn't find pod2man; make sure it's installed and in your path
-
-Fixes:
- - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1030f295e629d749dfb731f5908f39114d5a8f36)
+(cherry picked from commit dcee2627f426f2bfc1795495dbad44f64bc0403f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
+ DEVELOPERS | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
-index 326ff4f2dd..3a3253a366 100644
---- a/package/ecryptfs-utils/ecryptfs-utils.mk
-+++ b/package/ecryptfs-utils/ecryptfs-utils.mk
-@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0321817ac3..357df515ab 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1888,6 +1888,7 @@ F:	package/tpm-tools/
+ F:	package/trousers/
  
- #Needed for build system to find pk11func.h and libnss3.so
- ECRYPTFS_UTILS_CONF_ENV = \
-+	ac_cv_path_POD2MAN=true \
- 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
- 	NSS_LIBS="-lnss3"
+ N:	Norbert Lange <nolange79@gmail.com>
++F:	package/systemd/
+ F:	package/tcf-agent/
  
+ N:	Nylon Chen <nylon7@andestech.com>
