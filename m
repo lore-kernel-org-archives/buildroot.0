@@ -1,45 +1,40 @@
 From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Mon, 28 Sep 2020 16:54:23 +0200
-Subject: [Buildroot] [PATCH 5/7] support/testing: add a test for
- BR2_PACKAGE_REFPOLICY_CUSTOM_GIT
+Date: Mon, 28 Sep 2020 16:54:25 +0200
+Subject: [Buildroot] [PATCH 7/7] DEVELOPERS: update my watchlist
 In-Reply-To: <20200928145425.2109095-1-antoine.tenart@bootlin.com>
 References: <20200928145425.2109095-1-antoine.tenart@bootlin.com>
-Message-ID: <20200928145425.2109095-6-antoine.tenart@bootlin.com>
+Message-ID: <20200928145425.2109095-8-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a test for BR2_PACKAGE_REFPOLICY_CUSTOM_GIT (which allows to select
-a custom location for the SELinux refpolicy). The test uses the official
-refpolicy as a test (we only want to test the functionality is working,
-not that another refpolicy is correctly building; that is an user
-problematic).
+Update my watchlist with SELinux related files.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- support/testing/tests/core/test_selinux.py | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ DEVELOPERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/support/testing/tests/core/test_selinux.py b/support/testing/tests/core/test_selinux.py
-index 9e189d6114df..bb6604590ab5 100644
---- a/support/testing/tests/core/test_selinux.py
-+++ b/support/testing/tests/core/test_selinux.py
-@@ -47,3 +47,14 @@ class TestSELinuxExtraModulesDirs(TestSELinuxInfra):
-         out, ret = self.emulator.run("seinfo -t buildroot_test_t", 15)
-         self.assertEqual(ret, 0)
-         self.assertEqual(out[2].strip(), "buildroot_test_t")
-+
-+class TestSELinuxCustomGit(TestSELinuxInfra):
-+    config = TestSELinuxInfra.config + \
-+             """
-+             BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y
-+             BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL="https://github.com/SELinuxProject/refpolicy.git"
-+             BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION="RELEASE_2_20200818"
-+             """
-+
-+    def test_run(self):
-+        pass
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9352d891d35d..904b35984b0e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -254,7 +254,14 @@ N:	Anthony Viallard <viallard@syscom-instruments.com>
+ F:	package/gnuplot/
+ 
+ N:	Antoine T?nart <antoine.tenart@bootlin.com>
++F:	configs/qemu_x86_64_selinux_defconfig
++F:	package/libselinux/
++F:	package/refpolicy/
+ F:	package/wf111/
++F:	support/testing/tests/boot/test_selinux/
++F:	support/testing/tests/boot/test_selinux.py
++F:	support/testing/tests/core/test_selinux/
++F:	support/testing/tests/core/test_selinux.py
+ 
+ N:	Antony Pavlov <antonynpavlov@gmail.com>
+ F:	package/lsscsi/
 -- 
 2.26.2
