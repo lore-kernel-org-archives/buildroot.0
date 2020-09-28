@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:53:11 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/openvmtools: use
- /run for PIDFile
-Message-ID: <20200928211203.82D7D80E5D@busybox.osuosl.org>
+Date: Mon, 28 Sep 2020 23:01:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/ecryptfs-utils:
+ fix build failure without pod2man
+Message-ID: <20200928211203.9986D8E1BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b7447c7950206f5cf200a058b067a033bef9403
+commit: https://git.buildroot.net/buildroot/commit/?id=1054b72b56417f6447653b82aa88651a86558dd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
+Set ac_cv_path_POD2MAN to true to avoid the following build failure:
+
+checking for pod2man... no
+configure: error: I couldn't find pod2man; make sure it's installed and in your path
+
 Fixes:
+ - http://autobuild.buildroot.org/results/7a3a182aa91a07a720a02f854c59f952930708e1
 
-PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/vmtoolsd.pid ??? /run/vmtoolsd.pid; please update the unit file
-accordingly.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e97fe4f28cc2015775bdd85251396674826227fa)
+(cherry picked from commit 1030f295e629d749dfb731f5908f39114d5a8f36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvmtools/vmtoolsd.service | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ecryptfs-utils/ecryptfs-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
-index cb97357ec2..1d2a3566cf 100644
---- a/package/openvmtools/vmtoolsd.service
-+++ b/package/openvmtools/vmtoolsd.service
-@@ -5,8 +5,8 @@ ConditionVirtualization=vmware
+diff --git a/package/ecryptfs-utils/ecryptfs-utils.mk b/package/ecryptfs-utils/ecryptfs-utils.mk
+index 326ff4f2dd..3a3253a366 100644
+--- a/package/ecryptfs-utils/ecryptfs-utils.mk
++++ b/package/ecryptfs-utils/ecryptfs-utils.mk
+@@ -15,6 +15,7 @@ ECRYPTFS_UTILS_CONF_OPTS = --disable-pywrap
  
- [Service]
- Type=forking
--PIDFile=/var/run/vmtoolsd.pid
--ExecStart=/usr/bin/vmtoolsd -b /var/run/vmtoolsd.pid
-+PIDFile=/run/vmtoolsd.pid
-+ExecStart=/usr/bin/vmtoolsd -b /run/vmtoolsd.pid
- Restart=on-failure
- KillMode=process
- KillSignal=SIGKILL
+ #Needed for build system to find pk11func.h and libnss3.so
+ ECRYPTFS_UTILS_CONF_ENV = \
++	ac_cv_path_POD2MAN=true \
+ 	NSS_CFLAGS="-I$(STAGING_DIR)/usr/include/nss -I$(STAGING_DIR)/usr/include/nspr" \
+ 	NSS_LIBS="-lnss3"
+ 
