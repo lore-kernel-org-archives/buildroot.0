@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Sep 2020 22:47:14 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/bandwithd: use
+Date: Mon, 28 Sep 2020 22:47:48 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/minidlna: use
  /run for PIDFile
-Message-ID: <20200928211214.25AD97FD7F@busybox.osuosl.org>
+Message-ID: <20200928211214.3D4AA7FD7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a503505d4cbdd12db5b49794b23a898ab9b4195
+commit: https://git.buildroot.net/buildroot/commit/?id=ef09b73ff00d6bd9fa232727ca1fcc7cc553d8db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
 
 PIDFile= references a path below legacy directory /var/run/, updating
-/var/run/bandwithd.pid ??? /run/bandwithd.pid; please update the unit file
+/var/run/minidlna.pid ??? /run/minidlna.pid; please update the unit file
 accordingly.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cdc183eef026ecfc3f2ae2afc02440b549829be4)
+(cherry picked from commit ad46c0ac3681bbf84d564c2825b24cd619f6f5dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bandwidthd/bandwidthd.service | 2 +-
+ package/minidlna/minidlnad.service | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bandwidthd/bandwidthd.service b/package/bandwidthd/bandwidthd.service
-index 9c03d42946..ab7f05a2e8 100644
---- a/package/bandwidthd/bandwidthd.service
-+++ b/package/bandwidthd/bandwidthd.service
+diff --git a/package/minidlna/minidlnad.service b/package/minidlna/minidlnad.service
+index f69476b303..4e968d3858 100644
+--- a/package/minidlna/minidlnad.service
++++ b/package/minidlna/minidlnad.service
 @@ -5,7 +5,7 @@ After=network.target
  [Service]
  Type=forking
- ExecStart=/usr/bin/bandwidthd
--PIDFile=/var/run/bandwidthd.pid
-+PIDFile=/run/bandwidthd.pid
+ ExecStart=/usr/sbin/minidlnad
+-PIDFile=/var/run/minidlna/minidlna.pid
++PIDFile=/run/minidlna/minidlna.pid
  
  [Install]
  WantedBy=multi-user.target
