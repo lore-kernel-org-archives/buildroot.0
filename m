@@ -1,28 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:35:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: security bump to
- version 6.11
-In-Reply-To: <20200920075720.636748-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 20 Sep 2020 09:57:20 +0200")
-References: <20200920075720.636748-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgb0wq7c.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Sep 2020 17:20:20 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/ympd: fix build
+ with gcc 10
+Message-ID: <20200929152738.D9C647FC8C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=27e28fd479741e540b6b52c79a7fc55910a4b4c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > Fix CVE-2020-14342: It was found that cifs-utils' mount.cifs was
- > invoking a shell when requesting the Samba password, which could be used
- > to inject arbitrary commands. An attacker able to invoke mount.cifs with
- > special permission, such as via sudo rules, could use this flaw to
- > escalate their privileges.
+Fixes:
+ - http://autobuild.buildroot.org/results/ea4b96ba8d4a398515ed349e8304a656b684f718
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 9a0b2d3738d850cd110707d971c817cb2079c06f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ympd/0002-added-forward-declarations.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ympd/0002-added-forward-declarations.patch b/package/ympd/0002-added-forward-declarations.patch
+new file mode 100644
+index 0000000000..90ee1eae68
+--- /dev/null
++++ b/package/ympd/0002-added-forward-declarations.patch
+@@ -0,0 +1,43 @@
++From 2268e0f0f372a61827b912155a1796490968b3ff Mon Sep 17 00:00:00 2001
++From: SuperBFG7 <daniel@despite.ch>
++Date: Tue, 2 Jun 2020 12:41:52 +0200
++Subject: [PATCH] added forward declarations
++
++
++[Retrieved (and slightly updated to remove update of dirble_api_token)
++from:
++https://github.com/notandy/ympd/pull/191/commits/2268e0f0f372a61827b912155a1796490968b3ff]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/mpd_client.c | 2 ++
++ src/mpd_client.h | 6 ++++--
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/mpd_client.c b/src/mpd_client.c
++index 2911e461..9f003ab0 100644
++--- a/src/mpd_client.c
+++++ b/src/mpd_client.c
++@@ -30,6 +30,8 @@
++ 
++ /* forward declaration */
++ static int mpd_notify_callback(struct mg_connection *c, enum mg_event ev);
+++char dirble_api_token[28];
+++struct t_mpd mpd;
++ 
++ const char * mpd_cmd_strs[] = {
++     MPD_CMDS(GEN_STR)
++diff --git a/src/mpd_client.h b/src/mpd_client.h
++index 447dd563..9342c550 100644
++--- a/src/mpd_client.h
+++++ b/src/mpd_client.h
++@@ -96,6 +96,8 @@ struct t_mpd {
++ 
++     int song_id;
++     unsigned queue_version;
++-} mpd;
+++};
+++
+++extern struct t_mpd mpd;
++ 
++ struct t_mpd_client_session {
++     int song_id;
