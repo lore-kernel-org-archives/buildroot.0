@@ -1,121 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:33:34 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: security
- bump version to 4.11.13
-Message-ID: <20200929152803.2145081585@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 17:35:20 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/cifs-utils:
+ security bump to version 6.11
+Message-ID: <20200929152803.39A4981585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a41e709f3715cb1238b8b962f0a3c29e2a095fb3
+commit: https://git.buildroot.net/buildroot/commit/?id=e76e4273a3ba4610a3db9d89a6a4959b5c484618
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Version 4.11.11 fixed
-o CVE-2020-10730: NULL pointer de-reference and use-after-free in Samba AD DC
-		  LDAP Server with ASQ, VLV and paged_results.
-o CVE-2020-10745: Parsing and packing of NBT and DNS packets can consume
-		  excessive CPU
-o CVE-2020-10760: LDAP Use-after-free in Samba AD DC Global Catalog with
-		  paged_results and VLV.
-o CVE-2020-14303: Empty UDP packet DoS in Samba AD DC nbtd.
+Fix CVE-2020-14342: It was found that cifs-utils' mount.cifs was
+invoking a shell when requesting the Samba password, which could be used
+to inject arbitrary commands. An attacker able to invoke mount.cifs with
+special permission, such as via sudo rules, could use this flaw to
+escalate their privileges.
 
-Version 4.11.12 was a bugfix-only release.
-
-Version 4.11.13 fixes CVE-2020-1472.
-
-Release notes:
-https://www.samba.org/samba/history/samba-4.11.11.html
-https://www.samba.org/samba/history/samba-4.11.12.html
-https://www.samba.org/samba/security/CVE-2020-1472.html
-
-Rebased patches 0001 & 0002.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e56f54220ee14ccdbfdb60bf56e2a88b35877394)
+(cherry picked from commit ce0e86b293018279416213a56db56c6cfa548402)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/0001-libreplace-disable-libbsd-support.patch          | 4 ++--
- .../0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch  | 5 +++--
- package/samba4/samba4.hash                                           | 4 ++--
- package/samba4/samba4.mk                                             | 2 +-
- 4 files changed, 8 insertions(+), 7 deletions(-)
+ package/cifs-utils/cifs-utils.hash | 2 +-
+ package/cifs-utils/cifs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/0001-libreplace-disable-libbsd-support.patch b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-index a303fa6669..79216860dd 100644
---- a/package/samba4/0001-libreplace-disable-libbsd-support.patch
-+++ b/package/samba4/0001-libreplace-disable-libbsd-support.patch
-@@ -9,7 +9,7 @@ This causes redefinition conflicts for link(2) when both standard
- unistd.h and bsd/unistd.h get included.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Bernd: rebased for versions 4.7.3, 4.8.0 & 4.8.5]
-+[Bernd: rebased for versions 4.7.3, 4.8.0, 4.8.5 & 4.11.13]
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  lib/replace/wscript | 15 ---------------
-@@ -19,7 +19,7 @@ diff --git a/lib/replace/wscript b/lib/replace/wscript
- index 240d730cbee..c6d8df43c74 100644
- --- a/lib/replace/wscript
- +++ b/lib/replace/wscript
--@@ -381,21 +381,6 @@ def configure(conf):
-+@@ -406,21 +406,6 @@ def configure(conf):
-  
-      strlcpy_in_bsd = False
-  
-diff --git a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-index 563b274d57..b8636958ee 100644
---- a/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-+++ b/package/samba4/0002-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
-@@ -33,6 +33,7 @@ BUG: https://bugzilla.samba.org/show_bug.cgi?id=14164
- 
- Signed-off-by: Uri Simchoni <uri@samba.org>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased for version 4.11.13]
- ---
-  wscript_configure_embedded_heimdal | 11 +++++++++++
-  wscript_configure_system_heimdal   | 11 -----------
-@@ -59,7 +60,7 @@ diff --git a/wscript_configure_system_heimdal b/wscript_configure_system_heimdal
- index 0ff6dad2f55..f77c177442f 100644
- --- a/wscript_configure_system_heimdal
- +++ b/wscript_configure_system_heimdal
--@@ -36,14 +36,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
-+@@ -37,14 +37,6 @@ def check_system_heimdal_lib(name, functions='', headers='', onlyif=None):
-      conf.define('USING_SYSTEM_%s' % name.upper(), 1)
-      return True
-  
-@@ -74,7 +75,7 @@ index 0ff6dad2f55..f77c177442f 100644
-  check_system_heimdal_lib("com_err", "com_right_r com_err", "com_err.h")
-  
-  if check_system_heimdal_lib("roken", "rk_socket_set_reuseaddr", "roken.h"):
--@@ -88,7 +88,4 @@
-+@@ -96,7 +96,4 @@
-  #if conf.CHECK_BUNDLED_SYSTEM('tommath', checkfunctions='mp_init', headers='tommath.h'):
-  #    conf.define('USING_SYSTEM_TOMMATH', 1)
-  
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 34ae6f84bc..4d47871fc5 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index 5eaa84f370..ca97eb8e56 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
  # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.10.tar.asc
--sha256  4346ed80c90132a4117fe2dd3e846954f44f006f4d057de3a3544116364e012f  samba-4.11.10.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.13.tar.asc
-+sha256  e71ed29ae01c5ce7be8cee1f53e0530db86dd19b911accb08fae60224e686ba1  samba-4.11.13.tar.gz
+-sha256  92fc29c8e9039637f3344267500f1fa381e2cccd7d10142f0c1676fa575904a7  cifs-utils-6.10.tar.bz2
++sha256  b859239a3f204f8220d3e54ed43bf8109e1ef202042dd87ba87492f8878728d9  cifs-utils-6.11.tar.bz2
+ 
+ # Hash for license file:
  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index b6fe1a827c..48ac48c180 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index b59a54d987..b06ce7dddf 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.11.10
-+SAMBA4_VERSION = 4.11.13
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-CIFS_UTILS_VERSION = 6.10
++CIFS_UTILS_VERSION = 6.11
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
