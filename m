@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 16:17:56 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/efl: needs host
+Date: Tue, 29 Sep 2020 16:18:08 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/efl: needs host
  gcc >= 4.9
-Message-ID: <20200929140959.8D3568E1A8@busybox.osuosl.org>
+Message-ID: <20200929140956.2F57D8E1A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdd2630154b98a8123e46fbd00e682aee120a6a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=50ea613163963be6ddff0d0e90fc7d04a05bb5cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Commit dbe2d2e686281c19739824d4d4faec62187d1779 forgot to add a
 host gcc >= 4.9 dependency on efl (because of host-efl)
