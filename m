@@ -1,70 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 20:41:08 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x]
- package/x11r7/xserver_xorg-server: fix segfault on brcm platforms
-Message-ID: <20200929185628.484038E42A@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 21:05:42 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/open-plc-utils:
+ fix build with gcc 10
+Message-ID: <20200929185628.6ED118E42A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ee9c86716c63a3bf2ad8c43e5803e14d2b5ec01
+commit: https://git.buildroot.net/buildroot/commit/?id=d5348fca8418872c7b8b3a631c93f5ac2f899b0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-According to the original patch message:
-    Some Broadcom set-top-box boards have PCI busses, but the GPU is
-    still probed through DT.  We would dereference a null busid here
-    in that case.
+Fixes:
+ - http://autobuild.buildroot.org/results/6b3064b64dea3d4aaf219f787429c25918101483
 
-Fixes a segfault on at least the RPi 4 w/ xserver 1.20.9, probably
-others as well.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6427ede939ca38199a2fcd253a2a214db8b43972)
-[Peter: move to 1.20.9 subdir]
+(cherry picked from commit 86ae2856d800f215acbfb925db8a9669195ef11b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-on-probing-a-non-PCI-platform-device-on.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../0002-plc-plc.h-fix-build-with-gcc-10.patch     | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
+diff --git a/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch b/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..7802fd96c9
+index 0000000000..063bfc536c
 --- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-@@ -0,0 +1,33 @@
-+From e50c85f4ebf559a3bac4817b41074c43d4691779 Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 26 Oct 2018 17:47:30 -0700
-+Subject: [PATCH] Fix segfault on probing a non-PCI platform device on a system
-+ with PCI.
++++ b/package/open-plc-utils/0002-plc-plc.h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,37 @@
++From 27222be0b8db59cae30a5fcca93255daea147bb6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 23 Sep 2020 19:05:23 +0200
++Subject: [PATCH] plc/plc.h: fix build with gcc 10
 +
-+Some Broadcom set-top-box boards have PCI busses, but the GPU is still
-+probed through DT.  We would dereference a null busid here in that
-+case.
++Drop plcproperty from plc/plc.h to avoid the following build failure
++with gcc 10 (which defaults to -fno-common):
 +
-+Signed-off-by: Eric Anholt <eric@anholt.net>
-+Backported from: e50c85f4ebf559a3bac4817b41074c43d4691779
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
++/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: rules.o:(.bss+0x0): multiple definition of `plcproperty'; pibruin.o:(.bss+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/6b3064b64dea3d4aaf219f787429c25918101483
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/qca/open-plc-utils/pull/141]
 +---
-+ hw/xfree86/common/xf86platformBus.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ plc/plc.h | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
 +
-+diff --git a/hw/xfree86/common/xf86platformBus.c b/hw/xfree86/common/xf86platformBus.c
-+index cef47da03..dadbac6c8 100644
-+--- a/hw/xfree86/common/xf86platformBus.c
-++++ b/hw/xfree86/common/xf86platformBus.c
-+@@ -289,7 +289,7 @@ xf86platformProbe(void)
-+     for (i = 0; i < xf86_num_platform_devices; i++) {
-+         char *busid = xf86_platform_odev_attributes(i)->busid;
-+
-+-        if (pci && (strncmp(busid, "pci:", 4) == 0)) {
-++        if (pci && busid && (strncmp(busid, "pci:", 4) == 0)) {
-+             platform_find_pci_info(&xf86_platform_devices[i], busid);
-+         }
-+
-+--
-+2.24.1
++diff --git a/plc/plc.h b/plc/plc.h
++index 1fa32b53..208cf91a 100644
++--- a/plc/plc.h
+++++ b/plc/plc.h
++@@ -496,9 +496,7 @@ struct __packed plcproperty
++ 	uint8_t DATA_FORMAT;
++ 	uint32_t DATA_LENGTH;
++ 	uint8_t DATA_BUFFER [128];
++-}
++-
++-plcproperty;
+++};
++ 
++ #ifndef __GNUC__
++ #pragma pack (pop)
++-- 
++2.28.0
 +
