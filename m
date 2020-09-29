@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 21:09:11 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gcc: transition
+Date: Tue, 29 Sep 2020 21:08:49 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: transition
  PowerPC 32 to secureplt
-Message-ID: <20200929185926.5D9D685296@busybox.osuosl.org>
+Message-ID: <20200929185938.6BB6B8CA3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bfc3e915d0d5866dcd33e3a964c924f3a9da16b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=85b5f2c6ff79a283b752e292685cd825293993b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
 runtime code generation to generate the PLT stubs. Secure-PLT was
@@ -35,10 +35,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index af25d268a7..a0d20161bd 100644
+index 50f2a3fcb7..e34801390b 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -212,6 +212,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
+@@ -220,6 +220,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
  	--with-long-double-128
  endif
  
