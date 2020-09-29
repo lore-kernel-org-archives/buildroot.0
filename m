@@ -1,35 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 29 Sep 2020 18:49:53 +0000
-Subject: [Buildroot] [Bug 13216] [Documentation] 2020.02.6 requires GNU find
- utils
-In-Reply-To: <bug-13216-163@https.bugs.busybox.net/>
-References: <bug-13216-163@https.bugs.busybox.net/>
-Message-ID: <bug-13216-163-yRsgNzQITx@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Sep 2020 20:54:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/quagga: fix build with gcc 10
+In-Reply-To: <20200921213030.57054-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 21 Sep 2020 23:30:30 +0200")
+References: <20200921213030.57054-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pn64v2g2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13216
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/82b15cff3f7b943eb93d8270790f1b8561d31d6a
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Thanks for the report, I have added the 2020.02.6 release now, I must have
-missed adding it when I made the release.
-
-The -print0 option is used in quite a lot of places (and may be used by the
-build system of various packages as well), so I guess the only sensible
-solution is to update our documentation.
-
-Out of interest, what find implementation are you using? Even the busybox
-applet supports it.
+Committed to 2020.08.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
