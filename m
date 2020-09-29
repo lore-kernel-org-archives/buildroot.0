@@ -1,74 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:20:20 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ympd: fix build
+Date: Tue, 29 Sep 2020 17:37:42 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/w_scan: fix build
  with gcc 10
-Message-ID: <20200929152738.D9C647FC8C@busybox.osuosl.org>
+Message-ID: <20200929152739.2F82182D9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27e28fd479741e540b6b52c79a7fc55910a4b4c9
+commit: https://git.buildroot.net/buildroot/commit/?id=13353e411c567b954c1e86c3f8341fc086222083
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/ea4b96ba8d4a398515ed349e8304a656b684f718
+ - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9a0b2d3738d850cd110707d971c817cb2079c06f)
+(cherry picked from commit af388e4dda9480fe90554cef74509e61768f32b2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ympd/0002-added-forward-declarations.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ .../0002-si_types-h-fix-build-with-gcc-10.patch    | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/ympd/0002-added-forward-declarations.patch b/package/ympd/0002-added-forward-declarations.patch
+diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..90ee1eae68
+index 0000000000..50d2488190
 --- /dev/null
-+++ b/package/ympd/0002-added-forward-declarations.patch
-@@ -0,0 +1,43 @@
-+From 2268e0f0f372a61827b912155a1796490968b3ff Mon Sep 17 00:00:00 2001
-+From: SuperBFG7 <daniel@despite.ch>
-+Date: Tue, 2 Jun 2020 12:41:52 +0200
-+Subject: [PATCH] added forward declarations
++++ b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
+@@ -0,0 +1,37 @@
++si_types.h: fix build with gcc 10
 +
++Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
++the following build failure with gcc 10 (which defaults to -fno-common):
 +
-+[Retrieved (and slightly updated to remove update of dirble_api_token)
-+from:
-+https://github.com/notandy/ympd/pull/191/commits/2268e0f0f372a61827b912155a1796490968b3ff]
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/mpd_client.c | 2 ++
-+ src/mpd_client.h | 6 ++++--
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/mpd_client.c b/src/mpd_client.c
-+index 2911e461..9f003ab0 100644
-+--- a/src/mpd_client.c
-++++ b/src/mpd_client.c
-+@@ -30,6 +30,8 @@
-+ 
-+ /* forward declaration */
-+ static int mpd_notify_callback(struct mg_connection *c, enum mg_event ev);
-++char dirble_api_token[28];
-++struct t_mpd mpd;
-+ 
-+ const char * mpd_cmd_strs[] = {
-+     MPD_CMDS(GEN_STR)
-+diff --git a/src/mpd_client.h b/src/mpd_client.h
-+index 447dd563..9342c550 100644
-+--- a/src/mpd_client.h
-++++ b/src/mpd_client.h
-+@@ -96,6 +96,8 @@ struct t_mpd {
-+ 
-+     int song_id;
-+     unsigned queue_version;
-+-} mpd;
++diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
++--- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
+++++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
++@@ -114,7 +114,7 @@
++   uint32_t logical_channel_number;
++   uint8_t  running;
++   void   * priv;
++-} service_t, * p_service_t;
 ++};
-++
-++extern struct t_mpd mpd;
 + 
-+ struct t_mpd_client_session {
-+     int song_id;
++ /*******************************************************************************
++ /* transponder type.
++@@ -201,7 +201,7 @@
++   /*----------------------------*/
++   char * network_name;
++   network_change_t network_change;
++-} __attribute__((packed))  transponder_t, * p_transponder_t;
+++} __attribute__((packed));
++ 
++ /*******************************************************************************
++ /* satellite channel routing type.
