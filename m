@@ -1,68 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:37:42 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/w_scan: fix build
- with gcc 10
-Message-ID: <20200929152739.2F82182D9D@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 17:20:14 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/ympd: renumber
+ patch
+Message-ID: <20200929152738.CECD482D9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13353e411c567b954c1e86c3f8341fc086222083
+commit: https://git.buildroot.net/buildroot/commit/?id=4a5d1b79e3e44cccfc2a48db2841b93a5f51e9de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
-
-Fixes:
- - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit af388e4dda9480fe90554cef74509e61768f32b2)
+(cherry picked from commit 7018cacaf8be43c69730efc2ee73a07b91def10d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-si_types-h-fix-build-with-gcc-10.patch    | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/ympd/{0002-only-c-language.patch => 0001-only-c-language.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..50d2488190
---- /dev/null
-+++ b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,37 @@
-+si_types.h: fix build with gcc 10
-+
-+Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
-+the following build failure with gcc 10 (which defaults to -fno-common):
-+
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
-+--- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
-++++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
-+@@ -114,7 +114,7 @@
-+   uint32_t logical_channel_number;
-+   uint8_t  running;
-+   void   * priv;
-+-} service_t, * p_service_t;
-++};
-+ 
-+ /*******************************************************************************
-+ /* transponder type.
-+@@ -201,7 +201,7 @@
-+   /*----------------------------*/
-+   char * network_name;
-+   network_change_t network_change;
-+-} __attribute__((packed))  transponder_t, * p_transponder_t;
-++} __attribute__((packed));
-+ 
-+ /*******************************************************************************
-+ /* satellite channel routing type.
+diff --git a/package/ympd/0002-only-c-language.patch b/package/ympd/0001-only-c-language.patch
+similarity index 100%
+rename from package/ympd/0002-only-c-language.patch
+rename to package/ympd/0001-only-c-language.patch
