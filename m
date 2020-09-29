@@ -1,53 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:35:20 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cifs-utils:
- security bump to version 6.11
-Message-ID: <20200929152803.39A4981585@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 17:29:25 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
+ to 7.4.10
+Message-ID: <20200929152803.148748E1C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e76e4273a3ba4610a3db9d89a6a4959b5c484618
+commit: https://git.buildroot.net/buildroot/commit/?id=4c220c7b6ca2517814d09f6ebb219f1fdb74168e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix CVE-2020-14342: It was found that cifs-utils' mount.cifs was
-invoking a shell when requesting the Samba password, which could be used
-to inject arbitrary commands. An attacker able to invoke mount.cifs with
-special permission, such as via sudo rules, could use this flaw to
-escalate their privileges.
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.10
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Rebased patches 0002 & 0003.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ce0e86b293018279416213a56db56c6cfa548402)
+(cherry picked from commit 4fecbce9535b2169381a0b92ccd218dba03fefd8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cifs-utils/cifs-utils.hash | 2 +-
- package/cifs-utils/cifs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/0002-iconv-tweak-iconv-detection.patch     | 4 +++-
+ package/php/0003-configure-disable-the-phar-tool.patch | 4 +++-
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index 5eaa84f370..ca97eb8e56 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index 1aa8400136..a12041603d 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for 5.6.10]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  build/php.m4        |  2 +-
+  ext/iconv/config.m4 | 22 ----------------------
+@@ -24,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1971,7 +1971,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
+  
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index 7cc3637973..aface92d77 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -12,6 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for autoreconf/configure.in]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [Aduskett: update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  configure.ac | 9 ++-------
+  1 file changed, 2 insertions(+), 7 deletions(-)
+@@ -20,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1430,13 +1430,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
++@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d648d90c04..c383c471eb 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  92fc29c8e9039637f3344267500f1fa381e2cccd7d10142f0c1676fa575904a7  cifs-utils-6.10.tar.bz2
-+sha256  b859239a3f204f8220d3e54ed43bf8109e1ef202042dd87ba87492f8878728d9  cifs-utils-6.11.tar.bz2
+ # From https://www.php.net/downloads.php
+-sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
++sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
  
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index b59a54d987..b06ce7dddf 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5417a82cf4..7b59ac654d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CIFS_UTILS_VERSION = 6.10
-+CIFS_UTILS_VERSION = 6.11
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+-PHP_VERSION = 7.4.9
++PHP_VERSION = 7.4.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
