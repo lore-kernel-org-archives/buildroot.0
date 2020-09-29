@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 16:19:34 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/libxml2: fix
+Date: Tue, 29 Sep 2020 16:19:22 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libxml2: fix
  CVE-2020-24977
-Message-ID: <20200929140959.997048E1A8@busybox.osuosl.org>
+Message-ID: <20200929141005.8F8718E1A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=619cf774f137d0db9ef31a75b3306551be1bb476
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fe5d770bac7c091683952e5b80ce2b628937499a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 GNOME project libxml2 v2.9.10 and earlier have a global Buffer Overflow
 vulnerability in xmlEncodeEntitiesInternal at libxml2/entities.c.
