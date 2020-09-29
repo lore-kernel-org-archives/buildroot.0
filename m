@@ -1,43 +1,53 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 29 Sep 2020 13:03:10 +0200
-Subject: [Buildroot] [PATCH] package/liberation: bump to version 2.1.1 lib
-Message-ID: <20200929110310.2259238-1-francois.perrad@gadz.org>
+From: daggs <daggs@gmx.com>
+Date: Tue, 29 Sep 2020 14:31:25 +0200
+Subject: [Buildroot] [PATCH] dvb-apps: fix build failure with glibc 2.31
+In-Reply-To: <20200928212227.0daf8624@windsurf.home>
+References: <20200926095550.27437-1-daggs@gmx.com>
+ <20200926153910.009ca5ed@windsurf.hq.k.grp>
+ <trinity-191718b2-1823-476c-b87e-3f66019aba4b-1601136385289@3c-app-mailcom-bs14>
+ <20200928212227.0daf8624@windsurf.home>
+Message-ID: <trinity-293ff829-b3f4-4c77-826a-1e8fc810bfdd-1601382685330@3c-app-mailcom-bs14>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/liberation/liberation.hash | 4 ++--
- package/liberation/liberation.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Greetings Thomas,
 
-diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
-index a15dc2351..f8b0bdac5 100644
---- a/package/liberation/liberation.hash
-+++ b/package/liberation/liberation.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	f14ff0a0be87b5aeb672e669363b5a699db76feb1144b06798261c0fdcd2b24d	liberation-fonts-ttf-2.00.5.tar.gz
--sha256	93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b	LICENSE
-+sha256  8ee2c16fe0f055e60dd8375449aff72d25dd623b9cc6f24790ce9d2e91446fca  liberation-fonts-ttf-2.1.1.tar.gz
-+sha256  93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b  LICENSE
-diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
-index 495a1ffa6..061830a92 100644
---- a/package/liberation/liberation.mk
-+++ b/package/liberation/liberation.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBERATION_VERSION = 2.00.5
--LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/2926169
-+LIBERATION_VERSION = 2.1.1
-+LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/4743886
- LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
- LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
- LIBERATION_LICENSE = OFL-1.1
--- 
-2.25.1
+> Sent: Monday, September 28, 2020 at 10:22 PM
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "daggs" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH] dvb-apps: fix build failure with glibc 2.31
+>
+> Hello,
+>
+> On Sat, 26 Sep 2020 18:06:25 +0200
+> daggs <daggs@gmx.com> wrote:
+>
+> > > Fixes:
+> > >
+> > >   http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/
+> >
+> > frankly speaking, I had no idea this issue was marked by the
+> > autobuilder, I've encountered it when trying to build an image with
+> > dvb-apps installed.
+>
+> No problem. But when you have a failure, it makes sense to check if we
+> have encountered it in the autobuilders. You can easily search by doing
+> this:
+>
+> 	http://autobuild.buildroot.org/?reason=dvb-apps%
+>
+> The % at the end is important, as it acts as a wildcard.
+>
+> And if the failure was not found by the autobuilders, it is interesting
+> to investigate why. Is it because the failure is related to a very
+> specific system configuration? Or an architecture/toolchain combination
+> we are not testing?
+>
+
+I'll take that under advisement for the future
+
+Dagg
