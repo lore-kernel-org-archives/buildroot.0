@@ -1,235 +1,224 @@
 From: Qais Yousef <qais.yousef@arm.com>
-Date: Tue, 29 Sep 2020 11:26:16 +0100
-Subject: [Buildroot] [RFC PATCH 2/4] Add BPF Compiler Collection (BCC)
- Package
+Date: Tue, 29 Sep 2020 11:26:17 +0100
+Subject: [Buildroot] [RFC PATCH 3/4] Add bpftrace package
 In-Reply-To: <20200929102618.28571-1-qais.yousef@arm.com>
 References: <20200929102618.28571-1-qais.yousef@arm.com>
-Message-ID: <20200929102618.28571-3-qais.yousef@arm.com>
+Message-ID: <20200929102618.28571-4-qais.yousef@arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BCC is a toolkit for creating efficient kernel tracing and manipulation
-programs, and includes several useful tools and examples.
+bpftrace is a high-level tracing language for Linux enhanced Berkeley
+Packet Filter (eBPF) available in recent Linux kernels (4.x).
 
-Only tested to work on x86_64 and aarch64.
-
-I had issues getting i386 and aarch32 to work. More archs support can be
-added later hopefully after this initial support.
+Only tested on x86_64 and aarch64. The package doesn't support i386 and
+aarch32.
 
 Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 ---
  package/Config.in                             |  1 +
- package/bcc/0001-fix-dlinfo.patch             | 17 ++++++++++
- .../0002-fix-undefined-gzgets-runtime.patch   | 15 ++++++++
- .../0003-fix-loading-libc-python-perf.patch   | 17 ++++++++++
- .../0004-fix-loading-librt-python-init.patch  | 17 ++++++++++
- .../0005-fix-python-installation-path.patch   | 15 ++++++++
- package/bcc/Config.in                         | 34 +++++++++++++++++++
- package/bcc/bcc.mk                            | 25 ++++++++++++++
- 8 files changed, 141 insertions(+)
- create mode 100644 package/bcc/0001-fix-dlinfo.patch
- create mode 100644 package/bcc/0002-fix-undefined-gzgets-runtime.patch
- create mode 100644 package/bcc/0003-fix-loading-libc-python-perf.patch
- create mode 100644 package/bcc/0004-fix-loading-librt-python-init.patch
- create mode 100644 package/bcc/0005-fix-python-installation-path.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.mk
+ .../0001-fix-no-sys-auxv-header.patch         | 22 +++++++++++++++
+ ...02-fix-missing-def-ADDR_NO_RANDOMIZE.patch | 13 +++++++++
+ package/bpftrace/0003-install-libparser.patch | 12 +++++++++
+ .../bpftrace/0004-install-libresources.patch  | 12 +++++++++
+ package/bpftrace/0005-install-libarch.patch   | 10 +++++++
+ package/bpftrace/0006-install-libast.patch    | 11 ++++++++
+ package/bpftrace/Config.in                    | 27 +++++++++++++++++++
+ package/bpftrace/bpftrace.mk                  | 17 ++++++++++++
+ 9 files changed, 125 insertions(+)
+ create mode 100644 package/bpftrace/0001-fix-no-sys-auxv-header.patch
+ create mode 100644 package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch
+ create mode 100644 package/bpftrace/0003-install-libparser.patch
+ create mode 100644 package/bpftrace/0004-install-libresources.patch
+ create mode 100644 package/bpftrace/0005-install-libarch.patch
+ create mode 100644 package/bpftrace/0006-install-libast.patch
+ create mode 100644 package/bpftrace/Config.in
+ create mode 100644 package/bpftrace/bpftrace.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d7e79f4795..03ed3e5874 100644
+index 03ed3e5874..c7e352be82 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -84,6 +84,7 @@ endmenu
- 
- menu "Debugging, profiling and benchmark"
+@@ -86,6 +86,7 @@ menu "Debugging, profiling and benchmark"
  	source "package/blktrace/Config.in"
-+	source "package/bcc/Config.in"
+ 	source "package/bcc/Config.in"
  	source "package/bonnie/Config.in"
++	source "package/bpftrace/Config.in"
  	source "package/cache-calibrator/Config.in"
  	source "package/clinfo/Config.in"
-diff --git a/package/bcc/0001-fix-dlinfo.patch b/package/bcc/0001-fix-dlinfo.patch
+ 	source "package/dacapo/Config.in"
+diff --git a/package/bpftrace/0001-fix-no-sys-auxv-header.patch b/package/bpftrace/0001-fix-no-sys-auxv-header.patch
 new file mode 100644
-index 0000000000..b3aed784fc
+index 0000000000..c89fbe51ee
 --- /dev/null
-+++ b/package/bcc/0001-fix-dlinfo.patch
-@@ -0,0 +1,17 @@
++++ b/package/bpftrace/0001-fix-no-sys-auxv-header.patch
+@@ -0,0 +1,22 @@
 +Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 +
-+--- ./tests/cc/test_c_api.cc.old	2020-07-27 00:57:13.681656086 +0100
-++++ ./tests/cc/test_c_api.cc	2020-07-27 00:57:25.258110970 +0100
-+@@ -151,10 +151,12 @@
-+     return -1;
-+   }
-+ 
-++  /*
-+   if (dlinfo(dlhdl, RTLD_DI_LINKMAP, &lm) < 0) {
-+     fprintf(stderr, "Unable to find origin of libz.so.1: %s\n", dlerror());
-+     return -1;
-+   }
-++  */
-+ 
-+   strncpy(libpath, lm->l_name, 1024);
-+   dlclose(dlhdl);
-diff --git a/package/bcc/0002-fix-undefined-gzgets-runtime.patch b/package/bcc/0002-fix-undefined-gzgets-runtime.patch
++--- ./src/attached_probe.cpp.old	2020-07-28 13:23:20.599528129 +0100
+++++ ./src/attached_probe.cpp	2020-07-28 13:23:49.199715578 +0100
++@@ -8,7 +8,7 @@
++ #include <linux/limits.h>
++ #include <linux/perf_event.h>
++ #include <regex>
++-#include <sys/auxv.h>
+++//#include <sys/auxv.h>
++ #include <sys/utsname.h>
++ #include <tuple>
++ #include <unistd.h>
++@@ -612,7 +612,7 @@
++       // the build-time constant if unavailable. This always matches the
++       // running kernel, but is not supported on arm32.
++       unsigned code = 0;
++-      unsigned long base = getauxval(AT_SYSINFO_EHDR);
+++      unsigned long base = 0; //getauxval(AT_SYSINFO_EHDR);
++       if (base && !memcmp(reinterpret_cast<void *>(base), ELFMAG, 4))
++         code = _find_version_note(base);
++       if (! code)
+diff --git a/package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch b/package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch
 new file mode 100644
-index 0000000000..eb85493eab
+index 0000000000..0481348068
 --- /dev/null
-+++ b/package/bcc/0002-fix-undefined-gzgets-runtime.patch
-@@ -0,0 +1,15 @@
++++ b/package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch
+@@ -0,0 +1,13 @@
 +Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 +
-+--- ./src/cc/CMakeLists.txt.old	2020-08-02 19:32:16.502841991 +0100
-++++ ./src/cc/CMakeLists.txt	2020-08-02 19:32:47.263965564 +0100
-+@@ -136,8 +136,8 @@
-+ add_subdirectory(frontends)
++--- ./src/bpftrace.cpp.old	2020-07-28 13:24:42.322117517 +0100
+++++ ./src/bpftrace.cpp	2020-07-28 13:25:08.651880968 +0100
++@@ -37,6 +37,8 @@
++ #include "triggers.h"
++ #include "utils.h"
 + 
-+ # Link against LLVM libraries
-+-target_link_libraries(bcc-shared ${bcc_common_libs_for_s})
-+-target_link_libraries(bcc-static ${bcc_common_libs_for_a} bcc-loader-static)
-++target_link_libraries(bcc-shared ${bcc_common_libs_for_s} z)
-++target_link_libraries(bcc-static ${bcc_common_libs_for_a} bcc-loader-static z)
-+ set(bcc-lua-static ${bcc-lua-static} ${bcc_common_libs_for_lua})
-+ 
-+ if(LIBBPF_FOUND)
-diff --git a/package/bcc/0003-fix-loading-libc-python-perf.patch b/package/bcc/0003-fix-loading-libc-python-perf.patch
+++#define ADDR_NO_RANDOMIZE	0x0040000
+++
++ namespace libbpf {
++ #define __BPF_NAME_FN(x) #x
++ const char *bpf_func_name[] = { __BPF_FUNC_MAPPER(__BPF_NAME_FN) };
+diff --git a/package/bpftrace/0003-install-libparser.patch b/package/bpftrace/0003-install-libparser.patch
 new file mode 100644
-index 0000000000..0460889f39
+index 0000000000..9cf368cb7a
 --- /dev/null
-+++ b/package/bcc/0003-fix-loading-libc-python-perf.patch
-@@ -0,0 +1,17 @@
++++ b/package/bpftrace/0003-install-libparser.patch
+@@ -0,0 +1,12 @@
 +Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 +
-+--- ./src/python/bcc/perf.py.old	2020-08-02 20:29:54.769226300 +0100
-++++ ./src/python/bcc/perf.py	2020-08-02 20:32:13.130379117 +0100
-+@@ -64,7 +64,11 @@
-+         PERF_EVENT_IOC_ENABLE = 9216
++--- ./CMakeLists.txt.old	2020-07-28 23:08:33.068910392 +0100
+++++ ./CMakeLists.txt	2020-07-28 23:08:41.529166766 +0100
++@@ -94,6 +94,7 @@
++ add_library(parser ${BISON_bison_parser_OUTPUTS} ${FLEX_flex_lexer_OUTPUTS})
++ target_compile_options(parser PRIVATE "-w")
++ target_include_directories(parser PUBLIC src src/ast ${CMAKE_BINARY_DIR})
+++install(TARGETS parser LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 + 
-+         # fetch syscall routines
-+-        libc = ct.CDLL('libc.so.6', use_errno=True)
-++        try:
-++            libc = ct.CDLL('libc.so.6', use_errno=True)
-++        except:
-++            # Try lower versions; works for uClibc
-++            libc = ct.CDLL('libc.so.1', use_errno=True)
-+         syscall = libc.syscall          # not declaring vararg types
-+         ioctl = libc.ioctl              # not declaring vararg types
-+ 
-diff --git a/package/bcc/0004-fix-loading-librt-python-init.patch b/package/bcc/0004-fix-loading-librt-python-init.patch
++ include(CheckSymbolExists)
++ set(CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
+diff --git a/package/bpftrace/0004-install-libresources.patch b/package/bpftrace/0004-install-libresources.patch
 new file mode 100644
-index 0000000000..dda1810d1e
+index 0000000000..4c1902e2b3
 --- /dev/null
-+++ b/package/bcc/0004-fix-loading-librt-python-init.patch
-@@ -0,0 +1,17 @@
++++ b/package/bpftrace/0004-install-libresources.patch
+@@ -0,0 +1,12 @@
 +Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 +
-+--- ./src/python/bcc/__init__.py.old	2020-08-02 20:29:51.817116507 +0100
-++++ ./src/python/bcc/__init__.py	2020-08-02 20:30:47.971206447 +0100
-+@@ -200,7 +200,11 @@
-+     class timespec(ct.Structure):
-+         _fields_ = [('tv_sec', ct.c_long), ('tv_nsec', ct.c_long)]
++--- ./resources/CMakeLists.txt.old	2020-07-28 23:08:53.037515482 +0100
+++++ ./resources/CMakeLists.txt	2020-07-28 23:09:24.934482032 +0100
++@@ -1,6 +1,7 @@
++ add_library(resources headers.cpp)
 + 
-+-    _librt = ct.CDLL('librt.so.1', use_errno=True)
-++    try:
-++        _librt = ct.CDLL('librt.so.1', use_errno=True)
-++    except:
-++        # In some embedded systems (uClibc), libc contains librt
-++        _librt = ct.CDLL('libc.so.1', use_errno=True)
-+     _clock_gettime = _librt.clock_gettime
-+     _clock_gettime.argtypes = [ct.c_int, ct.POINTER(timespec)]
++ target_include_directories(resources PUBLIC ../src)
+++install(TARGETS resources LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 + 
-diff --git a/package/bcc/0005-fix-python-installation-path.patch b/package/bcc/0005-fix-python-installation-path.patch
++ function(embed_headers output)
++   file(WRITE ${output} "#include \"headers.h\"\n\nnamespace bpftrace {\n")
+diff --git a/package/bpftrace/0005-install-libarch.patch b/package/bpftrace/0005-install-libarch.patch
 new file mode 100644
-index 0000000000..b61df6ca48
+index 0000000000..04812ff313
 --- /dev/null
-+++ b/package/bcc/0005-fix-python-installation-path.patch
-@@ -0,0 +1,15 @@
++++ b/package/bpftrace/0005-install-libarch.patch
+@@ -0,0 +1,10 @@
 +Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 +
-+--- ./src/python/CMakeLists.txt.old	2020-08-06 22:04:15.400347699 +0100
-++++ ./src/python/CMakeLists.txt	2020-08-06 22:04:28.012820888 +0100
-+@@ -5,10 +5,6 @@
-+   set(PYTHON_CMD "python")
++--- ./src/arch/CMakeLists.txt.old	2020-07-28 23:01:18.283735497 +0100
+++++ ./src/arch/CMakeLists.txt	2020-07-28 23:02:13.865419746 +0100
++@@ -11,3 +11,5 @@
++ else()
++   message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 + endif()
-+ 
-+-if(EXISTS "/etc/debian_version")
-+-  set(PYTHON_FLAGS "${PYTHON_FLAGS} --install-layout deb")
-+-endif()
-+-
-+ file(GLOB_RECURSE PYTHON_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-+   ${CMAKE_CURRENT_SOURCE_DIR}/*.py)
-+ file(GLOB_RECURSE PYTHON_INCLUDES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+++
+++install(TARGETS arch LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+diff --git a/package/bpftrace/0006-install-libast.patch b/package/bpftrace/0006-install-libast.patch
 new file mode 100644
-index 0000000000..6c332977f9
+index 0000000000..c84991d360
 --- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
++++ b/package/bpftrace/0006-install-libast.patch
+@@ -0,0 +1,11 @@
++Signed-off-by: Qais Yousef <qais.yousef@arm.com>
++
++--- ./src/ast/CMakeLists.txt.old	2020-07-28 23:00:16.837873565 +0100
+++++ ./src/ast/CMakeLists.txt	2020-07-28 23:04:08.320887977 +0100
++@@ -67,4 +67,6 @@
++     target_link_libraries(ast ${llvm_libs})
++   endif()
++   target_link_libraries(ast libclang)
+++
+++  install(TARGETS ast LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++ endif()
+diff --git a/package/bpftrace/Config.in b/package/bpftrace/Config.in
+new file mode 100644
+index 0000000000..a4bae478dc
+--- /dev/null
++++ b/package/bpftrace/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_BPFTRACE
++	bool "bpftrace"
 +	depends on BR2_aarch64 || BR2_aarch64_be || BR2_x86_64
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on (BR2_TOOLCHAIN_USES_GLIBC && (BR2_aarch64 || BR2_aarch64_be)) || (!BR2_aarch64 && !BR2_aarch64_be)
-+	depends on BR2_PACKAGE_ELFUTILS
-+	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_CLANG
-+	depends on BR2_PACKAGE_LLVM
-+	depends on BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_TAR
++	depends on BR2_PACKAGE_BCC
++	depends on BR2_PACKAGE_LLVM_RTTI
 +	help
-+	  BPF Compiler Collection
++	  BPFTrace
 +
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples.
++	  bpftrace is a high-level tracing language for Linux enhanced
++	  Berkeley Packet Filter (eBPF) available in recent Linux
++	  kernels (4.x).
 +
-+	  BCC makes BPF programs easier to write, with kernel
-+	  instrumentation in C (and includes a C wrapper around LLVM),
-+	  and front-ends in Python and lua. It is suited for many tasks,
-+	  including performance analysis and network traffic control.
++	  bpftrace uses LLVM as a backend to compile scripts to
++	  BPF-bytecode and makes use of BCC for interacting with the
++	  Linux BPF system, as well as existing Linux tracing
++	  capabilities: kernel dynamic tracing (kprobes), user-level
++	  dynamic tracing (uprobes), and tracepoints. The bpftrace
++	  language is inspired by awk and C, and predecessor tracers
++	  such as DTrace and SystemTap.
 +
-+	  https://www.github.com/iovisor/bcc
++	  https://www.github.com/iovisor/bpftrace
 +
-+comment "bcc supported on aarch64 and x86_64"
++comment "bpftrace supported on aarch64 and x86_64"
 +	depends on !(BR2_aarch64 || BR2_aarch64_be || BR2_x86_64)
 +
-+comment "bcc requires glibc on aarch64"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC && (BR2_aarch64 || BR2_aarch64_be)
-+
-+comment "bcc needs a toolchain w/ C++, elfutils, python, clang, llvm, llvm-bpf"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_ELFUTILS || (!BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3) || !BR2_PACKAGE_CLANG || !BR2_PACKAGE_LLVM || !BR2_PACKAGE_LLVM_BPF
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
++comment "bpftrace needs bcc, llvm-rtti"
++	depends on !BR2_PACKAGE_BCC || !BR2_PACKAGE_LLVM_RTTI
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
 new file mode 100644
-index 0000000000..b83924aa93
+index 0000000000..d5975618f1
 --- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,25 @@
++++ b/package/bpftrace/bpftrace.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# BPF Compiler Collection (BCC)
++# BPFTrace
 +#
 +################################################################################
 +
-+BCC_VERSION = v0.15.0
-+BCC_SITE = https://github.com/iovisor/bcc
-+BCC_SITE_METHOD = git
-+BCC_GIT_SUBMODULES = YES
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+BCC_INSTALL_STAGING = YES
-+BCC_DEPENDENCIES = host-bison host-flex host-zlib zlib tar elfutils clang llvm
++BPFTRACE_VERSION = v0.11.0
++BPFTRACE_SITE = https://github.com/iovisor/bpftrace
++BPFTRACE_SITE_METHOD = git
++BPFTRACE_LICENSE = Apache-2.0
++BPFTRACE_LICENSE_FILES = LICENSE
++BPFTRACE_INSTALL_STAGING = YES
++BPFTRACE_DEPENDENCIES = bcc
 +
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+BCC_DEPENDENCIES += python
-+else
-+BCC_DEPENDENCIES += python3
-+endif
-+
-+BCC_CONF_OPTS += \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -isystem $(HOST_DIR)/include"
++BPFTRACE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
 +
 +$(eval $(cmake-package))
 -- 
