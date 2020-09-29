@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 18:02:42 +0200
-Subject: [Buildroot] [PATCH v2 2/3] package/fbterm: remove fontconfig fix
-In-Reply-To: <20200920115816.1567616-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 20 Sep 2020 13:58:15 +0200")
+Date: Tue, 29 Sep 2020 18:02:48 +0200
+Subject: [Buildroot] [PATCH 3/3] package/ffmpeg: fix static build with
+ wavpack support enabled
+In-Reply-To: <20200920115816.1567616-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 20 Sep 2020 13:58:16 +0200")
 References: <20200920115816.1567616-1-bernd.kuhls@t-online.de>
- <20200920115816.1567616-2-bernd.kuhls@t-online.de>
-Message-ID: <87ft70woyl.fsf@dell.be.48ers.dk>
+ <20200920115816.1567616-3-bernd.kuhls@t-online.de>
+Message-ID: <87blhowoyf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +15,12 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The previous patch added a fix for fontconfig.pc.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d2d/d2d73f3c7075ca6e9782b9bb591dae40ab56b6a2/
+
+ > Please note that the wavpack error only occurs after fixing fontconfig.
+
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: no changes
 
 Committed to 2020.08.x, thanks.
 
