@@ -1,43 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Sep 2020 21:09:09 +0200
-Subject: [Buildroot] [PATCH] package/qt5: allow to use imx-gpu-viv as
- GBM provider
-In-Reply-To: <20200929082017.19485-1-gary.bisson@boundarydevices.com>
-References: <20200929082017.19485-1-gary.bisson@boundarydevices.com>
-Message-ID: <20200929210909.1765d117@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Sep 2020 21:09:16 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/gcc: transition
+ PowerPC 32 to secureplt
+Message-ID: <20200929185921.6E8E5842DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d4dcb655eea4965412adffdd80565b8e7ba09a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-On Tue, 29 Sep 2020 10:20:17 +0200, Gary Bisson <gary.bisson@boundarydevices.com> wrote:
+PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
+runtime code generation to generate the PLT stubs. Secure-PLT was
+introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
+Binutils 2.17), and is a more secure PLT format, using a read-only
+linkage table, with the dynamic linker populating a non-executable
+index table.
 
-> Needed in order to use eglfs_kms platform backend.
->
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
->  package/qt5/qt5base/qt5base.mk | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 359a380075..1232a03778 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -79,6 +79,9 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
->  else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
->  QT5BASE_CONFIGURE_OPTS += -gbm
->  QT5BASE_DEPENDENCIES += ti-sgx-libgbm
-> +else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
-> +QT5BASE_CONFIGURE_OPTS += -gbm
-> +QT5BASE_DEPENDENCIES += imx-gpu-viv
->  else
->  QT5BASE_CONFIGURE_OPTS += -no-gbm
->  endif
+References to other distro/BSD transitions:
+  https://patchwork.openembedded.org/patch/106621/
+  https://reviews.freebsd.org/D20598
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Fixes a bug observed when creating SELinux policy where all apps
+require execmem because the heap requires execute before this change.
 
-Regards,
-Peter
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f9b539bf4054d55da69280b19f4b99a91cbe6e0b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index b834269adc..df5bf22b96 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -223,6 +223,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
++# Set default to Secure-PLT to prevent run-time
++# generation of PLT stubs (supports RELRO and
++# SELinux non-exemem capabilities)
++ifeq ($(BR2_powerpc),y)
++HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
++endif
++
+ # PowerPC64 big endian by default uses the elfv1 ABI, and PowerPC 64
+ # little endian by default uses the elfv2 ABI. However, musl has
+ # decided to use the elfv2 ABI for both, so we force the elfv2 ABI for
