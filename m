@@ -1,51 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 21:01:51 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/live555: bump to
- version 2020.08.19
-Message-ID: <20200929185628.614A88E42A@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 20:35:07 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/vsftpd: renumber
+ patches
+Message-ID: <20200929185632.B77568E226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e83d25e0180d53da2471b64467ace0a141fb176b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3dfb0e0775e82e3d8951072874bba6dd05b90275
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-According to changelog this version fixes memory leaks and buffer overflows.
-- http://live555.com/liveMedia/public/changelog.txt
+Commit 415765b5a8861f3b7e86e9786bf903a5a4d09e73 removed the second patch
+without renumbering the remaining ones
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8489c6d80654b4c0ecb629f1e5b606140394006c)
+(cherry picked from commit cd847f0986580c0ca4263ce6ae2cc57d26275820)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../vsftpd/{0003-fix-CVE-2015-1419.patch => 0002-fix-CVE-2015-1419.patch} | 0
+ ...n-SIGCHLD-handler.patch => 0003-Prevent-hang-in-SIGCHLD-handler.patch} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 52ca068288..5e65cacd7b 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://www.live555.com/liveMedia/public/live555-latest-md5.txt
--md5  327bc53f60361c6d703d52e86f476f11  live.2020.06.25.tar.gz
-+md5  4645d2a0c865505c85b48af5317bcb4a  live.2020.08.19.tar.gz
- # Locally generated
--sha256  f206309f10d281990889b7a0c92c26a7fa55ac0e8568bf594b9b27433b4db585  live.2020.06.25.tar.gz
-+sha256  af3af7f2510b0b45f38892c232abca2cee2ab36a62503e7085b47ed2c3c2c537  live.2020.08.19.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LESSER
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index e7be6024c9..4bbe35d6ea 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2020.06.25
-+LIVE555_VERSION = 2020.08.19
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- # There is a COPYING file with the GPL-3.0 license text, but none of
+diff --git a/package/vsftpd/0003-fix-CVE-2015-1419.patch b/package/vsftpd/0002-fix-CVE-2015-1419.patch
+similarity index 100%
+rename from package/vsftpd/0003-fix-CVE-2015-1419.patch
+rename to package/vsftpd/0002-fix-CVE-2015-1419.patch
+diff --git a/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
+similarity index 100%
+rename from package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
+rename to package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
