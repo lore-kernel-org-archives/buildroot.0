@@ -1,54 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 21:08:49 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: transition
- PowerPC 32 to secureplt
-Message-ID: <20200929185938.6BB6B8CA3F@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 29 Sep 2020 21:35:47 +0200
+Subject: [Buildroot] [RFC PATCH 1/4] llvm: Add BPF backend
+In-Reply-To: <20200929102618.28571-2-qais.yousef@arm.com>
+References: <20200929102618.28571-1-qais.yousef@arm.com>
+ <20200929102618.28571-2-qais.yousef@arm.com>
+Message-ID: <93a07382-c0a6-841e-b54a-2f2a7d6af600@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85b5f2c6ff79a283b752e292685cd825293993b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Hello Qais,
 
-PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
-runtime code generation to generate the PLT stubs. Secure-PLT was
-introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
-Binutils 2.17), and is a more secure PLT format, using a read-only
-linkage table, with the dynamic linker populating a non-executable
-index table.
+Le 29/09/2020 ? 12:26, Qais Yousef a ?crit?:
+> We need BPF backend to enable BPF Compiler Collection (BCC) and bpftrace
+> packager in later commits.
+> 
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 
-References to other distro/BSD transitions:
-  https://patchwork.openembedded.org/patch/106621/
-  https://reviews.freebsd.org/D20598
+There is already a pending patch to review enabling BPF backend in llvm.
+http://patchwork.ozlabs.org/project/buildroot/patch/20200824181740.12878-1-jugurtha.belkalem at smile.fr/
 
-Fixes a bug observed when creating SELinux policy where all apps
-require execmem because the heap requires execute before this change.
+Your patch appears to be the same as the one we published with Jugurtha.
+You are welcome to review and tests patches available from patchwork, see the
+manual: http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9b539bf4054d55da69280b19f4b99a91cbe6e0b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/gcc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+The bcc patch series is present in patchwork since a long time due to lack of
+review, see the first submission back in January 2019:
+http://patchwork.ozlabs.org/project/buildroot/patch/20190113212118.14512-1-romain.naour at gmail.com/
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 50f2a3fcb7..e34801390b 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -220,6 +220,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
-+# Set default to Secure-PLT to prevent run-time
-+# generation of PLT stubs (supports RELRO and
-+# SELinux non-exemem capabilities)
-+ifeq ($(BR2_powerpc),y)
-+HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
-+endif
-+
- # PowerPC64 big endian by default uses the elfv1 ABI, and PowerPC 64
- # little endian by default uses the elfv2 ABI. However, musl has
- # decided to use the elfv2 ABI for both, so we force the elfv2 ABI for
+So, Your help to review is really important :)
+
+Best regards,
+Romain
+
+> ---
+>  package/llvm/Config.in | 6 ++++++
+>  package/llvm/llvm.mk   | 5 +++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+> index 1d21d879da..22d51b4e3c 100644
+> --- a/package/llvm/Config.in
+> +++ b/package/llvm/Config.in
+> @@ -34,6 +34,12 @@ config BR2_PACKAGE_LLVM_AMDGPU
+>  	  Build AMDGPU target. Select this option if you are going
+>  	  to install mesa3d with llvm and use Gallium Radeon driver.
+>  
+> +config BR2_PACKAGE_LLVM_BPF
+> +	bool "BPF backend"
+> +	help
+> +	  Build BPF target. Select this option if you want to use BPF tools
+> +	  like BCC on the target.
+> +
+>  config BR2_PACKAGE_LLVM_RTTI
+>  	bool "enable rtti"
+>  	help
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 24d033d124..48a298191c 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+>  LLVM_TARGETS_TO_BUILD += AMDGPU
+>  endif
+>  
+> +# Build BPF backend
+> +ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
+> +LLVM_TARGETS_TO_BUILD += BPF
+> +endif
+> +
+>  # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+>  LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+>  
+> 
