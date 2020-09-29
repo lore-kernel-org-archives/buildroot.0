@@ -1,48 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 17:22:36 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/acpica: bump
- version to 20200717
-Message-ID: <20200929152738.E6EC08E1EE@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 17:29:06 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/php: bump version
+ to 7.4.10
+Message-ID: <20200929152738.F199885EF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7b120916f67523e61d56f38742ee9be027d8e16
+commit: https://git.buildroot.net/buildroot/commit/?id=1d07e5185b641ae8a8e41030b868d7eba6643133
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
-	https://github.com/acpica/acpica/issues/630
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.10
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Rebased patches 0002 & 0003.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8ba52666dc9aaa928b50526aa43a22a051c65113)
+(cherry picked from commit 4fecbce9535b2169381a0b92ccd218dba03fefd8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acpica/acpica.hash | 2 +-
- package/acpica/acpica.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/0002-iconv-tweak-iconv-detection.patch     | 4 +++-
+ package/php/0003-configure-disable-the-phar-tool.patch | 4 +++-
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 961ee9dbe3..a2fdfe602e 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  ad8a7b1571ec94d8c1837cf0c89ff33ea820780362fbb3e26adbde96beed5205  acpica-unix2-20200528.tar.gz
-+sha256  8a49904744a8159b7f325ed941b56968ba37a0371c634036628064f97538de4b  acpica-unix2-20200717.tar.gz
- sha256  cb17c679d3291eba1a70a1336062fb07eec2e839b0821b443b24f41de18c5218  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 8f1a36fbb7..21ecc155be 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index 1aa8400136..a12041603d 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -15,6 +15,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for 5.6.10]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  build/php.m4        |  2 +-
+  ext/iconv/config.m4 | 22 ----------------------
+@@ -24,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1971,7 +1971,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
+  
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index 7cc3637973..aface92d77 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -12,6 +12,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Gustavo: update for autoreconf/configure.in]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [Aduskett: update for 7.3.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for 7.4.10]
+ ---
+  configure.ac | 9 ++-------
+  1 file changed, 2 insertions(+), 7 deletions(-)
+@@ -20,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1430,13 +1430,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
++@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d648d90c04..c383c471eb 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  23733f4a608ad1bebdcecf0138ebc5fd57cf20d6e0915f98a9444c3f747dc57b  php-7.4.9.tar.xz
++sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d9516ae127..3047bfe94d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ACPICA_VERSION = 20200528
-+ACPICA_VERSION = 20200717
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+-PHP_VERSION = 7.4.9
++PHP_VERSION = 7.4.10
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
