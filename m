@@ -1,11 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 29 Sep 2020 22:59:28 +0200
-Subject: [Buildroot] [RFC PATCH 4/4] clang: Fix undefined reference to
- dladdr error
-In-Reply-To: <20200929102618.28571-5-qais.yousef@arm.com>
+Date: Tue, 29 Sep 2020 23:08:34 +0200
+Subject: [Buildroot] [RFC PATCH 0/4] add BCC and bpftrace packages
+In-Reply-To: <20200929102618.28571-1-qais.yousef@arm.com>
 References: <20200929102618.28571-1-qais.yousef@arm.com>
- <20200929102618.28571-5-qais.yousef@arm.com>
-Message-ID: <9384100b-8c1d-9982-cd27-b2f6ed03dddf@gmail.com>
+Message-ID: <b25b6c1c-b013-9a84-8a57-bd44738c6453@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +13,94 @@ To: buildroot@busybox.net
 Hi Qais,
 
 Le 29/09/2020 ? 12:26, Qais Yousef a ?crit?:
-> For some reason the cmake::find_library() can't detect the path to dl,
-> so we end up not including the right library when linking, hence the
-> error above.
+> *** RESEND AFTER SUBSCRIBING TO THE LIST ***
 > 
-> Could be a hack/workaround to the real problem.
+> The following series adds 2 new packages:
+> 
+> 	* BPF Compiler Collection (BCC)
+> 	* bpftrace
+> 
+> It is based on 2020.08 tag. Can rebase on tip of master after this initial RFC
+> review.
+> 
+> The support was validated on x86_64 and aarch64 (little endian). Hence
+> restricted to these 2 archs only. aarch64 big endian is set as valid, but when
+> I tried to compile that I think LLVM or clang support for aarch64_be + BPF was
+> generating some errors; or something else was missing. So it might be a better
+> idea to remove BR2_aarch64_be from Config.in dependency.
+> 
+> I tried to enable i386 and arm (aarch32); but I encountered some issues and
+> decided to narrow the initial support to what I got working in hope that other
+> archs support can follow through later if people are interested.
+> 
+> IIRC the issues were:
+> 
+> 	* bpftrace doesn't support these 2 archs.
+> 	* BCC had some build failures on arm.
+> 	* BCC had runtime issues on i386.
+> 
+> Marking this as RFC as it is something that was done over several weekends and
+> my last contribution to buildroot was many many years ago. So I am sure there
+> are many rough edges to tackle. Beside from my vague description above, you
+> might have gotten the hint it's been a while since I last touched it. But I'd
+> like to get the support merged, so hopefully starting a discussion with what
+> I have now is a better start.
 
-I'm not sure about this patch. Can you describe how to reproduce the issue?
+I reviewed your RFC series. I'm agree that bcc is difficult to cross-compile...
+
+I suggest adding bpftrace to the bcc series from Jugurtha and keeping you as
+author of this package.
+
+@jugurtha can you have a look at bpftrace package ?
+
+I'll mark your RFC series "Changes requested" in patchwork.
+Thanks!
 
 Best regards,
 Romain
 
+
 > 
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  .../0001-fix-undefined-reference-to-dladdr.patch    | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+> Qais Yousef (4):
+>   llvm: Add BPF backend
+>   Add BPF Compiler Collection (BCC) Package
+>   Add bpftrace package
+>   clang: Fix undefined reference to dladdr error
+> 
+>  package/Config.in                             |  2 ++
+>  package/bcc/0001-fix-dlinfo.patch             | 17 ++++++++++
+>  .../0002-fix-undefined-gzgets-runtime.patch   | 15 ++++++++
+>  .../0003-fix-loading-libc-python-perf.patch   | 17 ++++++++++
+>  .../0004-fix-loading-librt-python-init.patch  | 17 ++++++++++
+>  .../0005-fix-python-installation-path.patch   | 15 ++++++++
+>  package/bcc/Config.in                         | 34 +++++++++++++++++++
+>  package/bcc/bcc.mk                            | 25 ++++++++++++++
+>  .../0001-fix-no-sys-auxv-header.patch         | 22 ++++++++++++
+>  ...02-fix-missing-def-ADDR_NO_RANDOMIZE.patch | 13 +++++++
+>  package/bpftrace/0003-install-libparser.patch | 12 +++++++
+>  .../bpftrace/0004-install-libresources.patch  | 12 +++++++
+>  package/bpftrace/0005-install-libarch.patch   | 10 ++++++
+>  package/bpftrace/0006-install-libast.patch    | 11 ++++++
+>  package/bpftrace/Config.in                    | 27 +++++++++++++++
+>  package/bpftrace/bpftrace.mk                  | 17 ++++++++++
+>  ...01-fix-undefined-reference-to-dladdr.patch | 13 +++++++
+>  package/llvm/Config.in                        |  6 ++++
+>  package/llvm/llvm.mk                          |  5 +++
+>  19 files changed, 290 insertions(+)
+>  create mode 100644 package/bcc/0001-fix-dlinfo.patch
+>  create mode 100644 package/bcc/0002-fix-undefined-gzgets-runtime.patch
+>  create mode 100644 package/bcc/0003-fix-loading-libc-python-perf.patch
+>  create mode 100644 package/bcc/0004-fix-loading-librt-python-init.patch
+>  create mode 100644 package/bcc/0005-fix-python-installation-path.patch
+>  create mode 100644 package/bcc/Config.in
+>  create mode 100644 package/bcc/bcc.mk
+>  create mode 100644 package/bpftrace/0001-fix-no-sys-auxv-header.patch
+>  create mode 100644 package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch
+>  create mode 100644 package/bpftrace/0003-install-libparser.patch
+>  create mode 100644 package/bpftrace/0004-install-libresources.patch
+>  create mode 100644 package/bpftrace/0005-install-libarch.patch
+>  create mode 100644 package/bpftrace/0006-install-libast.patch
+>  create mode 100644 package/bpftrace/Config.in
+>  create mode 100644 package/bpftrace/bpftrace.mk
 >  create mode 100644 package/clang/0001-fix-undefined-reference-to-dladdr.patch
-> 
-> diff --git a/package/clang/0001-fix-undefined-reference-to-dladdr.patch b/package/clang/0001-fix-undefined-reference-to-dladdr.patch
-> new file mode 100644
-> index 0000000000..b28c6a463c
-> --- /dev/null
-> +++ b/package/clang/0001-fix-undefined-reference-to-dladdr.patch
-> @@ -0,0 +1,13 @@
-> +--- ./tools/libclang/CMakeLists.txt.old	2020-08-02 10:17:54.995944248 +0100
-> ++++ ./tools/libclang/CMakeLists.txt	2020-08-02 10:20:56.150147251 +0100
-> +@@ -58,10 +58,7 @@
-> +   endif()
-> + endif ()
-> + 
-> +-find_library(DL_LIBRARY_PATH dl)
-> +-if (DL_LIBRARY_PATH)
-> +   list(APPEND LIBS dl)
-> +-endif()
-> + 
-> + option(LIBCLANG_BUILD_STATIC
-> +   "Build libclang as a static library (in addition to a shared one)" OFF)
 > 
