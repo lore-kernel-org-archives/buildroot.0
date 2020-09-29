@@ -1,52 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 16:18:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/efl: needs host
- gcc >= 4.9
-Message-ID: <20200929140956.2F57D8E1A8@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 16:19:34 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/libxml2: fix
+ CVE-2020-24977
+Message-ID: <20200929140959.997048E1A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50ea613163963be6ddff0d0e90fc7d04a05bb5cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=619cf774f137d0db9ef31a75b3306551be1bb476
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Commit dbe2d2e686281c19739824d4d4faec62187d1779 forgot to add a
-host gcc >= 4.9 dependency on efl (because of host-efl)
-
-Fixes:
- - http://autobuild.buildroot.org/results/f627d44919c20e068e377d7fe113833e2d4d0ad3
+GNOME project libxml2 v2.9.10 and earlier have a global Buffer Overflow
+vulnerability in xmlEncodeEntitiesInternal at libxml2/entities.c.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 60cd158f0eb323c479f3d2b212261276410c5669)
+(cherry picked from commit a530ca6bd9039ae3d021e32e12ea5f3b3e23ff11)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...-out-of-bounds-read-with-xmllint--htmlout.patch | 40 ++++++++++++++++++++++
+ package/libxml2/libxml2.mk                         |  2 ++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cf4976f66d..ce1e51e2f2 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EFL
- 	bool "efl"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-efl
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
- 	depends on BR2_USE_MMU
-@@ -300,8 +301,9 @@ comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+diff --git a/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch b/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
+new file mode 100644
+index 0000000000..460f2a3ae6
+--- /dev/null
++++ b/package/libxml2/0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
+@@ -0,0 +1,40 @@
++From 50f06b3efb638efb0abd95dc62dca05ae67882c2 Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Fri, 7 Aug 2020 21:54:27 +0200
++Subject: [PATCH] Fix out-of-bounds read with 'xmllint --htmlout'
++
++Make sure that truncated UTF-8 sequences don't cause an out-of-bounds
++array access.
++
++Thanks to @SuhwanSong and the Agency for Defense Development (ADD) for
++the report.
++
++Fixes #178.
++
++[Retrieved from:
++https://gitlab.gnome.org/GNOME/libxml2/-/commit/50f06b3efb638efb0abd95dc62dca05ae67882c2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ xmllint.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/xmllint.c b/xmllint.c
++index f6a8e4636..c647486f3 100644
++--- a/xmllint.c
+++++ b/xmllint.c
++@@ -528,6 +528,12 @@ static void
++ xmlHTMLEncodeSend(void) {
++     char *result;
++ 
+++    /*
+++     * xmlEncodeEntitiesReentrant assumes valid UTF-8, but the buffer might
+++     * end with a truncated UTF-8 sequence. This is a hack to at least avoid
+++     * an out-of-bounds read.
+++     */
+++    memset(&buffer[sizeof(buffer)-4], 0, 4);
++     result = (char *) xmlEncodeEntitiesReentrant(NULL, BAD_CAST buffer);
++     if (result) {
++ 	xmlGenericError(xmlGenericErrorContext, "%s", result);
++-- 
++GitLab
++
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index acbdfb7728..e9379b05ae 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -13,6 +13,8 @@ LIBXML2_LICENSE_FILES = COPYING
+ LIBXML2_IGNORE_CVES += CVE-2020-7595
+ # 0002-Fix-memory-leak-in-xmlSchemaValidateStream.patch
+ LIBXML2_IGNORE_CVES += CVE-2019-20388
++# 0003-Fix-out-of-bounds-read-with-xmllint--htmlout.patch
++LIBXML2_IGNORE_CVES += CVE-2020-24977
+ LIBXML2_CONFIG_SCRIPTS = xml2-config
  
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, threads, wchar"
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
+ # relocation truncated to fit: R_68K_GOT16O
