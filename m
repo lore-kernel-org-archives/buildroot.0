@@ -1,42 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 21:09:23 +0200
-Subject: [Buildroot] [PATCH] gcc: powerpc32 transition to secureplt
-In-Reply-To: <CANQCQpY+au2CO5iLonnz7cUc8L-1C=XhL2pWAZ=bJBQUZ=K23g@mail.gmail.com>
- (Matthew Weber's message of "Wed, 23 Sep 2020 14:01:44 -0500")
-References: <20200923152908.21153-1-matthew.weber@rockwellcollins.com>
- <CANQCQpY+au2CO5iLonnz7cUc8L-1C=XhL2pWAZ=bJBQUZ=K23g@mail.gmail.com>
-Message-ID: <87d024v1r0.fsf@dell.be.48ers.dk>
+Date: Tue, 29 Sep 2020 21:09:11 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/gcc: transition
+ PowerPC 32 to secureplt
+Message-ID: <20200929185926.5D9D685296@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0bfc3e915d0d5866dcd33e3a964c924f3a9da16b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
- > Peter,
- > On Wed, Sep 23, 2020 at 10:29 AM Matt Weber
- > <matthew.weber@rockwellcollins.com> wrote:
- >> 
- >> PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
- >> runtime code generation to generate the PLT stubs. Secure-PLT was
- >> introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
- >> Binutils 2.17), and is a more secure PLT format, using a read-only
- >> linkage table, with the dynamic linker populating a non-executable
- >> index table.
- >> 
- >> Ref to other distro/BSD transitions
- >> https://patchwork.openembedded.org/patch/106621/
- >> https://reviews.freebsd.org/D20598
- >> 
- >> Fixes a bug observed when creating SELinux policy where all apps
- >> require execmem because the heap requires execute before this
- >> change.
- >> 
+PowerPC has two PLT models: BSS-PLT and Secure-PLT. BSS-PLT uses
+runtime code generation to generate the PLT stubs. Secure-PLT was
+introduced with GCC 4.1 and Binutils 2.17 (base has GCC 4.2.1 and
+Binutils 2.17), and is a more secure PLT format, using a read-only
+linkage table, with the dynamic linker populating a non-executable
+index table.
 
- > This also applies to 2020.02.x and the previous release 2020.08.
+References to other distro/BSD transitions:
+  https://patchwork.openembedded.org/patch/106621/
+  https://reviews.freebsd.org/D20598
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+Fixes a bug observed when creating SELinux policy where all apps
+require execmem because the heap requires execute before this change.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f9b539bf4054d55da69280b19f4b99a91cbe6e0b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index af25d268a7..a0d20161bd 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -212,6 +212,13 @@ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--with-long-double-128
+ endif
+ 
++# Set default to Secure-PLT to prevent run-time
++# generation of PLT stubs (supports RELRO and
++# SELinux non-exemem capabilities)
++ifeq ($(BR2_powerpc),y)
++HOST_GCC_COMMON_CONF_OPTS += --enable-secureplt
++endif
++
+ # PowerPC64 big endian by default uses the elfv1 ABI, and PowerPC 64
+ # little endian by default uses the elfv2 ABI. However, musl has
+ # decided to use the elfv2 ABI for both, so we force the elfv2 ABI for
