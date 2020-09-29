@@ -1,70 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Sep 2020 20:42:23 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- package/x11r7/xserver_xorg-server: fix segfault on brcm platforms
-Message-ID: <20200929185632.C24B68E226@busybox.osuosl.org>
+Date: Tue, 29 Sep 2020 20:35:12 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/vsftpd: renumber
+ patches
+Message-ID: <20200929185638.7DFF88E226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c7f4873e2a7eaffed8717bb60a438ba8530ad30
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=803b26b798c4358c13895712b67c69bd2f322004
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-According to the original patch message:
-    Some Broadcom set-top-box boards have PCI busses, but the GPU is
-    still probed through DT.  We would dereference a null busid here
-    in that case.
+Commit 415765b5a8861f3b7e86e9786bf903a5a4d09e73 removed the second patch
+without renumbering the remaining ones
 
-Fixes a segfault on at least the RPi 4 w/ xserver 1.20.9, probably
-others as well.
-
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6427ede939ca38199a2fcd253a2a214db8b43972)
-[Peter: move to 1.20.9 subdir]
+(cherry picked from commit cd847f0986580c0ca4263ce6ae2cc57d26275820)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-on-probing-a-non-PCI-platform-device-on.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ .../vsftpd/{0003-fix-CVE-2015-1419.patch => 0002-fix-CVE-2015-1419.patch} | 0
+ ...n-SIGCHLD-handler.patch => 0003-Prevent-hang-in-SIGCHLD-handler.patch} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-new file mode 100644
-index 0000000000..7802fd96c9
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-@@ -0,0 +1,33 @@
-+From e50c85f4ebf559a3bac4817b41074c43d4691779 Mon Sep 17 00:00:00 2001
-+From: Eric Anholt <eric@anholt.net>
-+Date: Fri, 26 Oct 2018 17:47:30 -0700
-+Subject: [PATCH] Fix segfault on probing a non-PCI platform device on a system
-+ with PCI.
-+
-+Some Broadcom set-top-box boards have PCI busses, but the GPU is still
-+probed through DT.  We would dereference a null busid here in that
-+case.
-+
-+Signed-off-by: Eric Anholt <eric@anholt.net>
-+Backported from: e50c85f4ebf559a3bac4817b41074c43d4691779
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ hw/xfree86/common/xf86platformBus.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/hw/xfree86/common/xf86platformBus.c b/hw/xfree86/common/xf86platformBus.c
-+index cef47da03..dadbac6c8 100644
-+--- a/hw/xfree86/common/xf86platformBus.c
-++++ b/hw/xfree86/common/xf86platformBus.c
-+@@ -289,7 +289,7 @@ xf86platformProbe(void)
-+     for (i = 0; i < xf86_num_platform_devices; i++) {
-+         char *busid = xf86_platform_odev_attributes(i)->busid;
-+
-+-        if (pci && (strncmp(busid, "pci:", 4) == 0)) {
-++        if (pci && busid && (strncmp(busid, "pci:", 4) == 0)) {
-+             platform_find_pci_info(&xf86_platform_devices[i], busid);
-+         }
-+
-+--
-+2.24.1
-+
+diff --git a/package/vsftpd/0003-fix-CVE-2015-1419.patch b/package/vsftpd/0002-fix-CVE-2015-1419.patch
+similarity index 100%
+rename from package/vsftpd/0003-fix-CVE-2015-1419.patch
+rename to package/vsftpd/0002-fix-CVE-2015-1419.patch
+diff --git a/package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch b/package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
+similarity index 100%
+rename from package/vsftpd/0004-Prevent-hang-in-SIGCHLD-handler.patch
+rename to package/vsftpd/0003-Prevent-hang-in-SIGCHLD-handler.patch
