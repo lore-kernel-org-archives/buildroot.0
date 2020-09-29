@@ -1,88 +1,56 @@
 From: Qais Yousef <qais.yousef@arm.com>
-Date: Tue, 29 Sep 2020 11:26:14 +0100
-Subject: [Buildroot] [RFC PATCH 0/4] add BCC and bpftrace packages
-Message-ID: <20200929102618.28571-1-qais.yousef@arm.com>
+Date: Tue, 29 Sep 2020 11:26:15 +0100
+Subject: [Buildroot] [RFC PATCH 1/4] llvm: Add BPF backend
+In-Reply-To: <20200929102618.28571-1-qais.yousef@arm.com>
+References: <20200929102618.28571-1-qais.yousef@arm.com>
+Message-ID: <20200929102618.28571-2-qais.yousef@arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-*** RESEND AFTER SUBSCRIBING TO THE LIST ***
+We need BPF backend to enable BPF Compiler Collection (BCC) and bpftrace
+packager in later commits.
 
-The following series adds 2 new packages:
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+---
+ package/llvm/Config.in | 6 ++++++
+ package/llvm/llvm.mk   | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-	* BPF Compiler Collection (BCC)
-	* bpftrace
-
-It is based on 2020.08 tag. Can rebase on tip of master after this initial RFC
-review.
-
-The support was validated on x86_64 and aarch64 (little endian). Hence
-restricted to these 2 archs only. aarch64 big endian is set as valid, but when
-I tried to compile that I think LLVM or clang support for aarch64_be + BPF was
-generating some errors; or something else was missing. So it might be a better
-idea to remove BR2_aarch64_be from Config.in dependency.
-
-I tried to enable i386 and arm (aarch32); but I encountered some issues and
-decided to narrow the initial support to what I got working in hope that other
-archs support can follow through later if people are interested.
-
-IIRC the issues were:
-
-	* bpftrace doesn't support these 2 archs.
-	* BCC had some build failures on arm.
-	* BCC had runtime issues on i386.
-
-Marking this as RFC as it is something that was done over several weekends and
-my last contribution to buildroot was many many years ago. So I am sure there
-are many rough edges to tackle. Beside from my vague description above, you
-might have gotten the hint it's been a while since I last touched it. But I'd
-like to get the support merged, so hopefully starting a discussion with what
-I have now is a better start.
-
-Qais Yousef (4):
-  llvm: Add BPF backend
-  Add BPF Compiler Collection (BCC) Package
-  Add bpftrace package
-  clang: Fix undefined reference to dladdr error
-
- package/Config.in                             |  2 ++
- package/bcc/0001-fix-dlinfo.patch             | 17 ++++++++++
- .../0002-fix-undefined-gzgets-runtime.patch   | 15 ++++++++
- .../0003-fix-loading-libc-python-perf.patch   | 17 ++++++++++
- .../0004-fix-loading-librt-python-init.patch  | 17 ++++++++++
- .../0005-fix-python-installation-path.patch   | 15 ++++++++
- package/bcc/Config.in                         | 34 +++++++++++++++++++
- package/bcc/bcc.mk                            | 25 ++++++++++++++
- .../0001-fix-no-sys-auxv-header.patch         | 22 ++++++++++++
- ...02-fix-missing-def-ADDR_NO_RANDOMIZE.patch | 13 +++++++
- package/bpftrace/0003-install-libparser.patch | 12 +++++++
- .../bpftrace/0004-install-libresources.patch  | 12 +++++++
- package/bpftrace/0005-install-libarch.patch   | 10 ++++++
- package/bpftrace/0006-install-libast.patch    | 11 ++++++
- package/bpftrace/Config.in                    | 27 +++++++++++++++
- package/bpftrace/bpftrace.mk                  | 17 ++++++++++
- ...01-fix-undefined-reference-to-dladdr.patch | 13 +++++++
- package/llvm/Config.in                        |  6 ++++
- package/llvm/llvm.mk                          |  5 +++
- 19 files changed, 290 insertions(+)
- create mode 100644 package/bcc/0001-fix-dlinfo.patch
- create mode 100644 package/bcc/0002-fix-undefined-gzgets-runtime.patch
- create mode 100644 package/bcc/0003-fix-loading-libc-python-perf.patch
- create mode 100644 package/bcc/0004-fix-loading-librt-python-init.patch
- create mode 100644 package/bcc/0005-fix-python-installation-path.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.mk
- create mode 100644 package/bpftrace/0001-fix-no-sys-auxv-header.patch
- create mode 100644 package/bpftrace/0002-fix-missing-def-ADDR_NO_RANDOMIZE.patch
- create mode 100644 package/bpftrace/0003-install-libparser.patch
- create mode 100644 package/bpftrace/0004-install-libresources.patch
- create mode 100644 package/bpftrace/0005-install-libarch.patch
- create mode 100644 package/bpftrace/0006-install-libast.patch
- create mode 100644 package/bpftrace/Config.in
- create mode 100644 package/bpftrace/bpftrace.mk
- create mode 100644 package/clang/0001-fix-undefined-reference-to-dladdr.patch
-
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 1d21d879da..22d51b4e3c 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -34,6 +34,12 @@ config BR2_PACKAGE_LLVM_AMDGPU
+ 	  Build AMDGPU target. Select this option if you are going
+ 	  to install mesa3d with llvm and use Gallium Radeon driver.
+ 
++config BR2_PACKAGE_LLVM_BPF
++	bool "BPF backend"
++	help
++	  Build BPF target. Select this option if you want to use BPF tools
++	  like BCC on the target.
++
+ config BR2_PACKAGE_LLVM_RTTI
+ 	bool "enable rtti"
+ 	help
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 24d033d124..48a298191c 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build BPF backend
++ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
++LLVM_TARGETS_TO_BUILD += BPF
++endif
++
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
 2.17.1
