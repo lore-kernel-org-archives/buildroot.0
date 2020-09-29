@@ -1,46 +1,43 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Tue, 29 Sep 2020 11:26:18 +0100
-Subject: [Buildroot] [RFC PATCH 4/4] clang: Fix undefined reference to
- dladdr error
-In-Reply-To: <20200929102618.28571-1-qais.yousef@arm.com>
-References: <20200929102618.28571-1-qais.yousef@arm.com>
-Message-ID: <20200929102618.28571-5-qais.yousef@arm.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 29 Sep 2020 13:03:10 +0200
+Subject: [Buildroot] [PATCH] package/liberation: bump to version 2.1.1 lib
+Message-ID: <20200929110310.2259238-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason the cmake::find_library() can't detect the path to dl,
-so we end up not including the right library when linking, hence the
-error above.
-
-Could be a hack/workaround to the real problem.
-
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-fix-undefined-reference-to-dladdr.patch    | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/clang/0001-fix-undefined-reference-to-dladdr.patch
+ package/liberation/liberation.hash | 4 ++--
+ package/liberation/liberation.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/clang/0001-fix-undefined-reference-to-dladdr.patch b/package/clang/0001-fix-undefined-reference-to-dladdr.patch
-new file mode 100644
-index 0000000000..b28c6a463c
---- /dev/null
-+++ b/package/clang/0001-fix-undefined-reference-to-dladdr.patch
-@@ -0,0 +1,13 @@
-+--- ./tools/libclang/CMakeLists.txt.old	2020-08-02 10:17:54.995944248 +0100
-++++ ./tools/libclang/CMakeLists.txt	2020-08-02 10:20:56.150147251 +0100
-+@@ -58,10 +58,7 @@
-+   endif()
-+ endif ()
-+ 
-+-find_library(DL_LIBRARY_PATH dl)
-+-if (DL_LIBRARY_PATH)
-+   list(APPEND LIBS dl)
-+-endif()
-+ 
-+ option(LIBCLANG_BUILD_STATIC
-+   "Build libclang as a static library (in addition to a shared one)" OFF)
+diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
+index a15dc2351..f8b0bdac5 100644
+--- a/package/liberation/liberation.hash
++++ b/package/liberation/liberation.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	f14ff0a0be87b5aeb672e669363b5a699db76feb1144b06798261c0fdcd2b24d	liberation-fonts-ttf-2.00.5.tar.gz
+-sha256	93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b	LICENSE
++sha256  8ee2c16fe0f055e60dd8375449aff72d25dd623b9cc6f24790ce9d2e91446fca  liberation-fonts-ttf-2.1.1.tar.gz
++sha256  93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b  LICENSE
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 495a1ffa6..061830a92 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBERATION_VERSION = 2.00.5
+-LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/2926169
++LIBERATION_VERSION = 2.1.1
++LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/4743886
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
+ LIBERATION_LICENSE = OFL-1.1
 -- 
-2.17.1
+2.25.1
