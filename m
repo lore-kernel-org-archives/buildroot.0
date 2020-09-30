@@ -1,43 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 30 Sep 2020 22:03:24 +0200
-Subject: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
- add missing glibc toolchain dependencies
-In-Reply-To: <20200928222330.395b681a@windsurf.home>
-References: <20200927143752.1498115-1-romain.naour@gmail.com>
- <20200927143752.1498115-2-romain.naour@gmail.com>
- <20200928222330.395b681a@windsurf.home>
-Message-ID: <37e6d195-4919-d6e8-56a7-356ac81d750b@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 Sep 2020 22:06:32 +0200
+Subject: [Buildroot] [PATCH v2] package/python-txtorcon.mk: drop _py3
+ file for python 2.x to fix pycompile issue
+In-Reply-To: <20200930191254.GQ11621@scaer> (Yann E. MORIN's message of "Wed, 
+ 30 Sep 2020 21:12:54 +0200")
+References: <20200930073157.24001-1-peter@korsgaard.com>
+ <20200930191254.GQ11621@scaer>
+Message-ID: <871rijuj07.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Le 28/09/2020 ? 22:23, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Sun, 27 Sep 2020 16:37:51 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> glibc toolchains must be disabled for MMU less configuration.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> I am wondering if this one really makes sense. If there is a Bootlin
-> toolchain that exists for a given architecture, then it really does
-> exist. So adding another BR2_USE_MMU dependency here feels useless, no?
+Hi,
 
-Indeed, It just about being in sync with BR2_TOOLCHAIN_BUILDROOT_GLIBC dependencies.
+ >> ../scripts/pycompile.py ..
+ >> error:   File "/usr/lib/python2.7/site-packages/txtorcon/controller_py3.py", line 13
+ >> async def __aenter__(self):
+ >> ^
+ >> SyntaxError: invalid syntax
+ >> 
+ >> As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+ >> building for python 2.x.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Ok if you want to drop it.
+ > Applied to master, thanks.
 
-Best regards,
-Romain
+Thanks.
 
+ > BTW, next time, can you update patchwork to mark the previous one as
+ > superseded (or changes-requested), please? ;-]
 
-> 
-> Thomas
-> 
+Sure, just got sidetracked by real life stuff (tm) after sending v2.
+
+-- 
+Bye, Peter Korsgaard
