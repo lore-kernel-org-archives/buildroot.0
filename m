@@ -1,75 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2020 22:26:40 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: XCB support needs
- xcb-util-renderutil
-In-Reply-To: <20200927212000.16959-1-ps.report@gmx.net>
-References: <20200927212000.16959-1-ps.report@gmx.net>
-Message-ID: <20200930202640.GV11621@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Sep 2020 22:31:42 +0200
+Subject: [Buildroot] [PATCHv2] infra: add the transient download
+ mechanism
+In-Reply-To: <20200930201303.GU11621@scaer>
+References: <20200930173030.2461586-1-yann.morin.1998@free.fr>
+ <20200930214530.6b964a45@windsurf.home>
+ <20200930201303.GU11621@scaer>
+Message-ID: <20200930223142.681174c0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On Wed, 30 Sep 2020 22:13:03 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2020-09-27 23:20 +0200, Peter Seiderer spake thusly:
-> The qt5base feature 'xcb_syslibs' is a compile check
-> using a xcb_render_util call (see qt5base-5.15.1/src/gui/configure.json).
+> I think it is important to stress that, though, because people can be
+> very confused but the outcome, one way or the other.
 > 
-> Fixes:
->   - http://autobuild.buildroot.net/results/3c05e597c073b823f8b091e17b676ed3ecf6b5b3
+> For example, let's assume that I push my branch, that triggers a
+> pipeline in the CI, the pipeline uses my branch as expected. Then I
+> repush a modified branch, the new pipeline uses the new HEAD of the
+> branch, and again this is as expected..
 > 
->   ERROR: Feature 'xcb' was enabled, but the pre-condition 'features.thread && libs.xcb && tests.xcb_syslibs && features.xkbcommon-x11' failed.
+> But now consider the following scenario:
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>   - I push my branch, a pipeline is triggered;
+>   - before the pipeline has a chance to git-fetch, I do a quick change
+>     and repush, a second pipeline is triggered;
+>   - the first pipeline uses the code from the second push.
+> 
+> However, my change was intentional, and I was expecting the CI to test
+> the two changes, and I wanted to have the results of both to decide
+> which to keep.
+> 
+> This for example, is very interesting because the CI can do tests I
+> can't always do locally, like reproducibility test for performance, for
+> example, or test on hardware I don't have at hand (when working from
+> home for example), and so on.
+> 
+> Thus my case is borked. Yeah, I could do two branches, but the fact is
+> that if I wait "just enough" between the pushes, it works, while if I
+> don't wait "just enough" it does not work.
+> 
+> Conversely, if I notice that I forgot to commit part of the changes, and
+> amend my commit and repush, I don't care what the first pipeline gets;
+> I only care about the second.
+> 
+> So, this is a pitfall: behaviours that may or may not match your
+> expectations, depending on what your expectations are, because this
+> mechanism caters to both antagonist cases where expectations are
+> opposite one from the other.
 
-Applied to master, thanks.
+I understand what you're describing here, and I understand that it
+indeed should be explained. Then, it shouldn't be presented as a
+"pitfall", but really as an explanation of the consequences.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/qt5/qt5base/Config.in  | 1 +
->  package/qt5/qt5base/qt5base.mk | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-> index 28b03f5438..ce7230c728 100644
-> --- a/package/qt5/qt5base/Config.in
-> +++ b/package/qt5/qt5base/Config.in
-> @@ -192,6 +192,7 @@ config BR2_PACKAGE_QT5BASE_XCB
->  	select BR2_PACKAGE_LIBXCB
->  	select BR2_PACKAGE_XCB_UTIL_IMAGE
->  	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-> +	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
->  	select BR2_PACKAGE_XCB_UTIL_WM
->  	select BR2_PACKAGE_LIBXKBCOMMON
->  
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 359a380075..321b8ae48b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -174,6 +174,7 @@ QT5BASE_DEPENDENCIES   += \
->  	xcb-util-wm \
->  	xcb-util-image \
->  	xcb-util-keysyms \
-> +	xcb-util-renderutil \
->  	xlib_libX11 \
->  	libxkbcommon
->  ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
