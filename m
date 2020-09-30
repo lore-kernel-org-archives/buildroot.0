@@ -1,12 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 30 Sep 2020 23:04:22 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: Disable
- -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
-In-Reply-To: <20200930225921.39dbe8a5@windsurf.home>
-References: <20200926191330.96074-1-romain.naour@gmail.com>
- <20200926191330.96074-2-romain.naour@gmail.com>
- <20200930225921.39dbe8a5@windsurf.home>
-Message-ID: <2efd6cda-edbf-bb5e-d7d7-89ca4491f0f0@gmail.com>
+Date: Wed, 30 Sep 2020 23:05:59 +0200
+Subject: [Buildroot] [PATCH] package/gcc: drop leftovers from PowerPC
+ conditional patching
+In-Reply-To: <20200924102219.3443175-1-thomas.petazzoni@bootlin.com>
+References: <20200924102219.3443175-1-thomas.petazzoni@bootlin.com>
+Message-ID: <3d467d45-7d9b-db82-8945-421b1eb4eff3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +13,41 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Le 30/09/2020 ? 22:59, Thomas Petazzoni a ?crit?:
-> On Sat, 26 Sep 2020 21:13:30 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
+Le 24/09/2020 ? 12:22, Thomas Petazzoni a ?crit?:
+> We used to have a conditional patch applied on PowerPC soft-float, but
+> this logic was dropped in commit
+> 0c82f3f63563c4d4d7e034d0e9e4ceb766d92322 ("package/gcc: remove powerpc
+> conditional patching logic"). However, we still have some related
+> leftovers in the calculation of the hashes for ccache, which can now
+> be dropped.
 > 
->> +# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
->> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
->> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10)$(BR2_microblaze),yy)
->> +LINUX_KCFLAGS += -fno-tree-loop-distribute-patterns
->> +endif
-> 
-> I am wondering if this is the right approach. If the
-> -ftree-loop-distribute-patterns breaks stuff for the kernel, presumably
-> it could also break stuff for user-space software. So I guess we should
-> instead disable it entirely in TARGET_CFLAGS.
-> 
-> The gotcha being of course that we don't pass TARGET_CFLAGS to the
-> Linux package...
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Indeed, I have no ideas if the userspace built with this toolchain is really
-working... except for busybox which was used by qemu_microblazeel_mmu_defconfig
+Acked-by: Romain Naour <romain.naour@gmail.com>
 
 Best regards,
 Romain
 
+> ---
+>  package/gcc/gcc.mk | 5 -----
+>  1 file changed, 5 deletions(-)
 > 
-> Thomas
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index d9c4b4ef83..cc1dbbcf3a 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -279,11 +279,6 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
+>  ifeq ($(BR2_xtensa),y)
+>  HOST_GCC_COMMON_CCACHE_HASH_FILES += $(ARCH_XTENSA_OVERLAY_TAR)
+>  endif
+> -ifeq ($(ARCH),powerpc)
+> -ifneq ($(BR2_SOFT_FLOAT),)
+> -HOST_GCC_COMMON_CCACHE_HASH_FILES += package/gcc/$(GCC_VERSION)/1000-powerpc-link-with-math-lib.patch.conditional
+> -endif
+> -endif
+>  
+>  # _CONF_OPTS contains some references to the absolute path of $(HOST_DIR)
+>  # and a reference to the Buildroot git revision (BR2_VERSION_FULL),
 > 
