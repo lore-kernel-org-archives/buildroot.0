@@ -1,60 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Wed, 30 Sep 2020 21:48:04 +0200
-Subject: [Buildroot] [git commit] package/open2300: switch to github
-Message-ID: <20200930193757.6DC7C8E55C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.30.1
+Message-ID: <20200930193757.7B96D8E1C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d0b9e2fb32f999d7f9b0bf9b85aca5522ac0c7a
+commit: https://git.buildroot.net/buildroot/commit/?id=24a92fad2e8bed6a92c3c2fbf9e7666c976593a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream repository has been dead for quite a while now, and in fact
-we are using s.b.o as the "official" location now.
+This is a minor release which fixes a regression found in 2.30.0.
+Release notes:
 
-There however exists a Github repository, which is still alive. That
-repository has not been touched in a looooong while, but it's still
-up, and there is a revision which actually gives the exact same
-content (although the hash changes, because the directory name has
-changed, from open2300-12/ to open2300-f2198.../).
+  https://webkitgtk.org/2020/09/21/webkitgtk2.30.1-released.html
 
-Also fix spaces in hash file.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/open2300/open2300.hash | 6 ++----
- package/open2300/open2300.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 7 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
-index 414041b923..f8b1150694 100644
---- a/package/open2300/open2300.hash
-+++ b/package/open2300/open2300.hash
-@@ -1,6 +1,4 @@
- # Localy computed
--# Note: open2300's upstream svn tree is off-line, so this tarball is
--# served from s.b.o. instead, which actually makes it stable.
--sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
-+sha256  ffa7f8d35b16abfbf5e52285cb21f2a7fc6afb901abb40c0c80eef9d23d08aab  open2300-f21982e0b1f8321561e5ad1668307fde97700e1b.tar.gz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 31e30997e2..0098fe1a66 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.0.tar.xz.sums
+-md5  71428fefd33f40583465649baf05ceb5  webkitgtk-2.30.0.tar.xz
+-sha1  60407e68b5452b5fd90ab1c03d8cc844bb68b590  webkitgtk-2.30.0.tar.xz
+-sha256  caf3dbf2d2383072614e34281f2fffb6331faf92f4ecf215f6f6a5a57f755d11  webkitgtk-2.30.0.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.30.1.tar.xz.sums
++md5  de0f910d60de88273ffde7b4bb88bd42  webkitgtk-2.30.1.tar.xz
++sha1  23dd526e95399f97c758f8796e8cb184e9465eb7  webkitgtk-2.30.1.tar.xz
++sha256  17c59dfdadb7377192e9b59bc56c8a029c9fad4f38ed732b652bf33d0bd5d6b1  webkitgtk-2.30.1.tar.xz
  
--sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index 0ffb8b5046..9fb7dbc2fd 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -4,9 +4,8 @@
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index b4623a407a..5293d2d0ff 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk
--OPEN2300_SITE_METHOD = svn
--OPEN2300_VERSION = 12
-+OPEN2300_VERSION = f21982e0b1f8321561e5ad1668307fde97700e1b
-+OPEN2300_SITE = $(call github,wezm,open2300,$(OPEN2300_VERSION))
- OPEN2300_LICENSE = GPL-2.0
- OPEN2300_LICENSE_FILES = COPYING
- 
+-WEBKITGTK_VERSION = 2.30.0
++WEBKITGTK_VERSION = 2.30.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
