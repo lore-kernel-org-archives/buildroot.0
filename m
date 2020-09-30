@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 22:57:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: fix tests with
- uclibc
-In-Reply-To: <20200926201817.996329-1-fontaine.fabrice@gmail.com>
-References: <20200926201817.996329-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200930225726.1982f143@windsurf.home>
+Date: Wed, 30 Sep 2020 22:59:21 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: Disable
+ -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
+In-Reply-To: <20200926191330.96074-2-romain.naour@gmail.com>
+References: <20200926191330.96074-1-romain.naour@gmail.com>
+ <20200926191330.96074-2-romain.naour@gmail.com>
+Message-ID: <20200930225921.39dbe8a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Sep 2020 22:18:17 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 26 Sep 2020 21:13:30 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> It should be noted that upstream does not want to add a --disable-tests
-> option: https://review.lttng.org/c/babeltrace/+/4075
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1e50e1ff90c1ac2af2223365dc0cd6e1914bcd75
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...trace_ir_ref.c-rename-user-structure.patch | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
+> +# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10)$(BR2_microblaze),yy)
+> +LINUX_KCFLAGS += -fno-tree-loop-distribute-patterns
+> +endif
 
-Applied to master, thanks.
+I am wondering if this is the right approach. If the
+-ftree-loop-distribute-patterns breaks stuff for the kernel, presumably
+it could also break stuff for user-space software. So I guess we should
+instead disable it entirely in TARGET_CFLAGS.
+
+The gotcha being of course that we don't pass TARGET_CFLAGS to the
+Linux package...
 
 Thomas
 -- 
