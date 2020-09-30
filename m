@@ -1,85 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 22:50:05 +0200
-Subject: [Buildroot] [git commit] package/log4cxx: fix build without wchar
-Message-ID: <20200930204222.D8D6C862D4@busybox.osuosl.org>
+Date: Wed, 30 Sep 2020 22:52:45 +0200
+Subject: [Buildroot] [git commit] package/rsh-redone: disable rlogind on musl
+Message-ID: <20200930204235.581DE8E1C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afcd6d92beb6d18fcc904d3a59f388809bc12b08
+commit: https://git.buildroot.net/buildroot/commit/?id=14532e4fc6e02a755b30e634fd60f53b92655bcd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build with log4cxx in version 0.11.0
+Commit f89ca996b6deb660b53c33196b8b309fac659bf9 enabled linux-pam on
+musl however rlogind fails to build on musl because it uses logwtmp:
+
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: rlogind.c:(.text.startup+0x9ec): undefined reference to `logwtmp'
+
+As this package is unmaintained, just disable back rlogind on musl
 
 Fixes:
- - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
+ - http://autobuild.buildroot.org/results/f2eb1c0bab7c6c32d6c561da0f85a530bd419206
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/log4cxx/0001-fix-build-without-wchar.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/rsh-redone/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/log4cxx/0001-fix-build-without-wchar.patch b/package/log4cxx/0001-fix-build-without-wchar.patch
-new file mode 100644
-index 0000000000..fc0e7be5c9
---- /dev/null
-+++ b/package/log4cxx/0001-fix-build-without-wchar.patch
-@@ -0,0 +1,55 @@
-+From 1fa70eaf24d75e84625f22779ec347fd29bf1ae6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Sep 2020 08:47:37 +0200
-+Subject: [PATCH] fix build without wchar
-+
-+Disable wencode without wchar or the build will fail on:
-+
-+odbcappender.cpp: In static member function 'static void log4cxx::db::ODBCAppender::encode(wchar_t**, const LogString&, log4cxx::helpers::Pool&)':
-+odbcappender.cpp:362:22: error: 'wencode' is not a member of 'log4cxx::helpers::Transcoder'
-+  *dest = Transcoder::wencode(src, p);
-+                      ^~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/apache/logging-log4cxx/commit/f171f818c798d48631d5b45851e4593953f31d9c]
-+---
-+ src/main/cpp/odbcappender.cpp              | 2 ++
-+ src/main/include/log4cxx/db/odbcappender.h | 2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/src/main/cpp/odbcappender.cpp b/src/main/cpp/odbcappender.cpp
-+index 6bfa519e..218df132 100644
-+--- a/src/main/cpp/odbcappender.cpp
-++++ b/src/main/cpp/odbcappender.cpp
-+@@ -357,10 +357,12 @@ void ODBCAppender::setSql(const LogString& s)
-+ 	}
-+ }
-+ 
-++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
-+ void ODBCAppender::encode(wchar_t** dest, const LogString& src, Pool& p)
-+ {
-+ 	*dest = Transcoder::wencode(src, p);
-+ }
-++#endif
-+ 
-+ void ODBCAppender::encode(unsigned short** dest,
-+ 	const LogString& src, Pool& p)
-+diff --git a/src/main/include/log4cxx/db/odbcappender.h b/src/main/include/log4cxx/db/odbcappender.h
-+index a26bc35b..fdc144ff 100644
-+--- a/src/main/include/log4cxx/db/odbcappender.h
-++++ b/src/main/include/log4cxx/db/odbcappender.h
-+@@ -300,8 +300,10 @@ class LOG4CXX_EXPORT ODBCAppender : public AppenderSkeleton
-+ 	private:
-+ 		ODBCAppender(const ODBCAppender&);
-+ 		ODBCAppender& operator=(const ODBCAppender&);
-++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
-+ 		static void encode(wchar_t** dest, const LogString& src,
-+ 			log4cxx::helpers::Pool& p);
-++#endif
-+ 		static void encode(unsigned short** dest, const LogString& src,
-+ 			log4cxx::helpers::Pool& p);
-+ }; // class ODBCAppender
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 5647d7edef..53ff2bea7f 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -17,12 +17,13 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	bool "rlogind"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
+ 
+-comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
++comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_RSH_REDONE_RSH
+ 	bool "rsh"
