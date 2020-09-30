@@ -1,47 +1,158 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 30 Sep 2020 12:23:19 +0200
-Subject: [Buildroot] [PATCH] ruby: update to 2.7.1
-Message-ID: <20200930102319.wj7h72pq7aqcykec@waldemar-brodkorb.de>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 30 Sep 2020 12:30:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/trace-cmd: bump to version 2.9.1
+Message-ID: <20200930103028.612014-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Drop upstreamed patch.
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 89cab3fcd3..e9f53879b1 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-4-10-released/
--sha256 d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df  ruby-2.4.10.tar.xz
-+# Locally calculated
-+sha256 b224f9844646cc92765df8288a46838511c1cec5b550d8874bd4686a904fcee7  ruby-2.7.1.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 6f8cb319cb..02f43814fd 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
+Remove now unneeded option -fcommon.
+
+Rearrange the CFLAGS, dont know if the
+_LARGEFILE64_SOURCE filter is still needed.
+
+use install_cmd target for installation,
+which also installs bash-completion files.
+
+Directory structure changed, in the future the all target
+might build kernelshark. so specify the *cmd targets.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v1->v2
+*   specify prefix to /usr
+---
+ ...0001-trace-listen-add-missing-header.patch | 38 -------------------
+ package/trace-cmd/trace-cmd.hash              |  6 +--
+ package/trace-cmd/trace-cmd.mk                | 28 +++++++-------
+ 3 files changed, 17 insertions(+), 55 deletions(-)
+ delete mode 100644 package/trace-cmd/0001-trace-listen-add-missing-header.patch
+
+diff --git a/package/trace-cmd/0001-trace-listen-add-missing-header.patch b/package/trace-cmd/0001-trace-listen-add-missing-header.patch
+deleted file mode 100644
+index 350e523025..0000000000
+--- a/package/trace-cmd/0001-trace-listen-add-missing-header.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From c68c868b573acc73e144312326750be2ed96632f Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Thu, 29 Jun 2017 14:43:19 +0300
+-Subject: [PATCH] trace-listen: add missing header
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The PATH_MAX macro requires the limits.h header. This fixes build with musl
+-libc:
+-
+-.../trace-cmd-trace-cmd-v2.6.1/trace-listen.c: In function ?make_pid_name?:
+-.../trace-cmd-trace-cmd-v2.6.1/trace-listen.c:167:16: error: ?PATH_MAX? undeclared (first use in this function)
+-  snprintf(buf, PATH_MAX, VAR_RUN_DIR "/trace-cmd-net.pid");
+-                ^~~~~~~~
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://lkml.org/lkml/2017/6/29/286
+-
+- trace-listen.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/trace-listen.c b/trace-listen.c
+-index 17ff9d8c160c..838d6bcf3649 100644
+---- a/trace-listen.c
+-+++ b/trace-listen.c
+-@@ -31,6 +31,7 @@
+- #include <fcntl.h>
+- #include <signal.h>
+- #include <errno.h>
+-+#include <limits.h>
+- 
+- #include "trace-local.h"
+- #include "trace-msg.h"
+--- 
+-2.11.0
+-
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index c6447f34d4..d1e7f2dbb2 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 3b3f564cc6ee30341051ccb7589b42f3abe4e676a21c029c7c127c7edf5bdcf0  trace-cmd-trace-cmd-v2.7.tar.gz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+-sha256 70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
++sha256  9404fc3cf540ea795304608068c9db6cdb38b90584c7f3c43249785913d54b38  trace-cmd-v2.9.1.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 5d58203cbf..b092310956 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).10
--RUBY_VERSION_EXT = 2.4.0
-+RUBY_VERSION_MAJOR = 2.7
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-+RUBY_VERSION_EXT = 2.7.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
+-TRACE_CMD_VERSION = trace-cmd-v2.7
+-TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
+-TRACE_CMD_SITE_METHOD = git
++TRACE_CMD_VERSION = 2.9.1
++TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
++TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/snapshot
+ TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+@@ -17,19 +17,21 @@ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ TRACE_CMD_DEPENDENCIES += audit
+ endif
+ 
++TRACE_CMD_MAKE_OPTS = prefix=/usr
++
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ TRACE_CMD_DEPENDENCIES += python host-swig
+-TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
++TRACE_CMD_MAKE_OPTS += PYTHON_VERS=python
+ else ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ TRACE_CMD_DEPENDENCIES += python3 host-swig
+-TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python3
++TRACE_CMD_MAKE_OPTS += PYTHON_VERS=python3
+ else
+ TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
+ endif
+ 
+ # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
+ # redefining it on the command line causes build problems.
+-TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -fcommon
++TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
+ 
+ # trace-cmd use CPPFLAGS to add some extra flags.
+ # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
+@@ -37,17 +39,15 @@ TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -fcommon
+ TRACE_CMD_CPPFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CPPFLAGS))
+ 
+ define TRACE_CMD_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		CFLAGS="$(TRACE_CMD_CFLAGS)" \
+-		CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
+-		$(TRACE_CMD_MAKE_OPTS) \
+-		-C $(@D) all
++	$(TARGET_CONFIGURE_OPTS) \
++	CFLAGS="$(TRACE_CMD_CFLAGS)" \
++	CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
++		$(MAKE) $(TRACE_CMD_MAKE_OPTS) \
++			-C $(@D) trace-cmd
+ endef
+ 
+ define TRACE_CMD_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/trace-cmd $(TARGET_DIR)/usr/bin/trace-cmd
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/trace-cmd/plugins
+-	$(INSTALL) -D -m 0755 $(@D)/plugin_*.so $(TARGET_DIR)/usr/lib/trace-cmd/plugins
++	DESTDIR=$(TARGET_DIR) $(MAKE) $(TRACE_CMD_MAKE_OPTS) -C $(@D) install_cmd
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-2.11.0
+2.28.0
