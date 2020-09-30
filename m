@@ -1,75 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:50:38 +0200
-Subject: [Buildroot] [git commit] package/linuxptp: bump version to 3.1
-Message-ID: <20200930194131.978C68E520@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Sep 2020 21:56:46 +0200
+Subject: [Buildroot] [PATCH] package/python-werkzeug: bump version to
+ 1.0.1
+In-Reply-To: <20200930073204.32070-1-buildroot@heine.tech>
+References: <20200930073204.32070-1-buildroot@heine.tech>
+Message-ID: <20200930195646.GT11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7e23ecd442032cc860b77135eda8bb8888d8f70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Michael, All,
 
-From release note:
+On 2020-09-30 09:32 +0200, Michael Nosthoff via buildroot spake thusly:
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/python-werkzeug/python-werkzeug.hash | 6 +++---
+>  package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+> index cc90fe140b..1d6de8a0c7 100644
+> --- a/package/python-werkzeug/python-werkzeug.hash
+> +++ b/package/python-werkzeug/python-werkzeug.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+> -md5	5b23b4953efc4f52b1d0b33af6f7cd2d  Werkzeug-0.16.0.tar.gz
+> -sha256	7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7  Werkzeug-0.16.0.tar.gz
+> +md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
+> +sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
+>  # Locally computed sha256 checksums
+> -sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+> +sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+> diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+> index fea25f8ee8..1013f8af80 100644
+> --- a/package/python-werkzeug/python-werkzeug.mk
+> +++ b/package/python-werkzeug/python-werkzeug.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_WERKZEUG_VERSION = 0.16.0
+> +PYTHON_WERKZEUG_VERSION = 1.0.1
 
-Version 3.1 - September 2020
+It's been pointed out on IRC that "there were a number of breaking
+changes in that jump", further pointing to the release notes:
 
-This release offers substantial new functionality. Users are encouraged
-to upgrade. The most notable changes are as follows.
+    https://werkzeug.palletsprojects.com/en/1.0.x/changes/#version-1-0-0
 
-* Fixes non-functional NMEA mode of the ts2phc program (since 3.0)
-* Improves system time synchronization via the PTP_SYS_OFFSET_PRECISE
-  and PTP_SYS_OFFSET_EXTENDED ioctls.
-* Supports implementing a PTP GM clock by using a GPS radio or other
-  PPS time source.
-* Provides per-port statistics via the management interface.
-* Implements IEEE 1588 v2.1 slave event monitoring.
-* Adds Automotive Profile support.y
+We have two packages in Buildroot, that use werkzeug: crossbar and
+flask.
 
- utils/test-pkg -p linuxptp
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 0 skipped, 0 build failed, 0 legal-info failed
+Could you investigate how they are both impacted, if at all, by this
+bump, please?
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linuxptp/linuxptp.hash | 6 +++---
- package/linuxptp/linuxptp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Note that your patch has already been applied, and we'd like to know
+if we also need to update crossbar or flask, or if we need to revert.
 
-diff --git a/package/linuxptp/linuxptp.hash b/package/linuxptp/linuxptp.hash
-index de82ff2b84..4f8a1f89fc 100644
---- a/package/linuxptp/linuxptp.hash
-+++ b/package/linuxptp/linuxptp.hash
-@@ -1,9 +1,9 @@
- # From https://sourceforge.net/projects/linuxptp/files/v3.0/
--sha1  cf56f1ab6c622a569be8c14d2cb121f0183affc9  linuxptp-3.0.tgz
--md5  1318805702eb6d59f9f247e1dd5ce12a  linuxptp-3.0.tgz
-+sha1  9a3869dbd322252c9a6bc0dbdfe8941586810a7f  linuxptp-3.1.tgz
-+md5  2264cb69c9af947028835c12c89a7572  linuxptp-3.1.tgz
- 
- # Locally computed:
--sha256  d74ceca722c75bfff53c633425f926dd48eb04f4a089451b855155c016d15785  linuxptp-3.0.tgz
-+sha256  f58f5b11cf14dc7c4f7c9efdfb27190e43d02cf20c3525f6639edac10528ce7d  linuxptp-3.1.tgz
- 
- # Hash for license file:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/linuxptp/linuxptp.mk b/package/linuxptp/linuxptp.mk
-index 3d018a4657..f91be921af 100644
---- a/package/linuxptp/linuxptp.mk
-+++ b/package/linuxptp/linuxptp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINUXPTP_VERSION = 3.0
-+LINUXPTP_VERSION = 3.1
- LINUXPTP_SOURCE = linuxptp-$(LINUXPTP_VERSION).tgz
- LINUXPTP_SITE = http://downloads.sourceforge.net/linuxptp
- LINUXPTP_LICENSE = GPL-2.0+
+Regards,
+Yann E. MORIN.
+
+>  PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+> -PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/5e/fd/eb19e4f6a806cd6ee34900a687f181001c7a0059ff914752091aba84681f
+> +PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
+>  PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+>  PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+>  PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
