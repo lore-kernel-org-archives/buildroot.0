@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 23:01:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ipmiutil: bump to version 3.1.7
-In-Reply-To: <20200926195335.771505-1-fontaine.fabrice@gmail.com>
-References: <20200926195335.771505-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200930230100.2dd2808f@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Sep 2020 23:01:33 +0200
+Subject: [Buildroot] [git commit] package/ruby: drop useless SuperH CFLAGS
+ tweaks
+Message-ID: <20200930205128.91CFD87588@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 26 Sep 2020 21:53:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c2b4070026bac40beb610504348dd3cc2af337b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop patch (not needed since
->   https://github.com/arcress0/ipmiutil/commit/32b6e5634d773150338b60585e9c258cd575e3d9)
-> - Drop autoreconf
-> - Update indentation in hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/ipmiutil/0001-no-build-doc.patch | 31 ------------------------
->  package/ipmiutil/ipmiutil.hash           |  8 +++---
->  package/ipmiutil/ipmiutil.mk             |  4 +--
->  3 files changed, 5 insertions(+), 38 deletions(-)
->  delete mode 100644 package/ipmiutil/0001-no-build-doc.patch
+We dropped the CodeBench 2012.09 toolchain for SuperH a long time,
+and with recent toolchains, Ruby at -Os builds perfectly fine, so
+there's no reason to keep this work-around.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: slight rewording in the commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/ruby/ruby.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 6f8cb319cb..d138aaaa1a 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -20,15 +20,6 @@ HOST_RUBY_CONF_OPTS = \
+ RUBY_LICENSE = Ruby or BSD-2-Clause, BSD-3-Clause, others
+ RUBY_LICENSE_FILES = LEGAL COPYING BSDL
+ 
+-RUBY_CFLAGS = $(TARGET_CFLAGS)
+-# With some SuperH toolchains (like Sourcery CodeBench 2012.09), ruby fails to
+-# build with 'pcrel too far'. This seems to be caused by the -Os option we pass
+-# by default. To fix the problem, use standard -O2 optimization instead.
+-ifeq ($(BR2_sh),y)
+-RUBY_CFLAGS += -O2
+-endif
+-RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+-
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # On uClibc, finite, isinf and isnan are not directly implemented as
+ # functions.  Instead math.h #define's these to __finite, __isinf and
