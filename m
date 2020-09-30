@@ -1,47 +1,43 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 30 Sep 2020 09:32:03 +0200
-Subject: [Buildroot] [PATCH] package/python-werkzeug: bump version to 1.0.1
-Message-ID: <20200930073204.32070-1-buildroot@heine.tech>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 30 Sep 2020 10:03:52 +0200
+Subject: [Buildroot] [PATCH] package/pango: bump to version 1.46.2
+Message-ID: <20200930080353.2288535-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index cc90fe140b..1d6de8a0c7 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 95999bcf8..32808c6ca 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/werkzeug/json
--md5	5b23b4953efc4f52b1d0b33af6f7cd2d  Werkzeug-0.16.0.tar.gz
--sha256	7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7  Werkzeug-0.16.0.tar.gz
-+md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
-+sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-+sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index fea25f8ee8..1013f8af80 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.1.sha256sum
+-sha256  fe516b10711bbb6fd75011d66dd08fabfce18f7931aed7415136d53c4aadf1c5  pango-1.46.1.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.2.sha256sum
++sha256  d89fab5f26767261b493279b65cfb9eb0955cd44c07c5628d36094609fc51841  pango-1.46.2.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 9d2d88ec0..92bd6c3ea 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.16.0
-+PYTHON_WERKZEUG_VERSION = 1.0.1
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/5e/fd/eb19e4f6a806cd6ee34900a687f181001c7a0059ff914752091aba84681f
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+ PANGO_VERSION_MAJOR = 1.46
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.25.1
