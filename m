@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 22:49:21 +0200
-Subject: [Buildroot] [PATCH] package/luarocks: refactor infrastructure
- with DEPS_DIR
-In-Reply-To: <20200928154349.2193859-1-francois.perrad@gadz.org>
-References: <20200928154349.2193859-1-francois.perrad@gadz.org>
-Message-ID: <20200930224921.29352fa0@windsurf.home>
+Date: Wed, 30 Sep 2020 22:50:18 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/log4cxx: fix build without wchar
+In-Reply-To: <20200928191730.36288-1-fontaine.fabrice@gmail.com>
+References: <20200928191730.36288-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200930225018.30454a80@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 28 Sep 2020 17:43:49 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Mon, 28 Sep 2020 21:17:30 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> DEPS_DIR is a new CLI option introduced by the version 3.4.0,
-> which avoids the use of `external_deps_dirs` in the config files.
+> Fix build with log4cxx in version 0.11.0
 > 
-> now, the host config doesn't need to be altered.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/luarocks/luarocks-br-config.lua      | 5 -----
->  package/luarocks/luarocks-br-host-config.lua | 3 ---
->  package/luarocks/luarocks.mk                 | 9 +++++----
->  package/pkg-luarocks.mk                      | 2 ++
->  4 files changed, 7 insertions(+), 12 deletions(-)
->  delete mode 100644 package/luarocks/luarocks-br-config.lua
->  delete mode 100644 package/luarocks/luarocks-br-host-config.lua
+> Changes v1 -> v2:
+>  - Retrieve upstream patch
 
 Applied to master, thanks.
 
