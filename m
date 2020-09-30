@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 22:43:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sentry-cli: fix dependency
-In-Reply-To: <20200928193304.81313-1-fontaine.fabrice@gmail.com>
-References: <20200928193304.81313-1-fontaine.fabrice@gmail.com>
-Message-ID: <20200930224339.3a919e22@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Sep 2020 22:47:10 +0200
+Subject: [Buildroot] [git commit] package/gdb: also disable gprof
+Message-ID: <20200930203715.5BF608E5FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 28 Sep 2020 21:33:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=71719b91ee17fb99135a32c1d2504c57a329084a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Replace SENTRY_CLI_DEPENDENCIES by HOST_SENTRY_CLI_DEPENDENCIES as
-> sentry-cli is a host-generic-package
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ce566ec91a8f7d69f2525892a7a034c829db9dad
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/sentry-cli/sentry-cli.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+When gdb is built from sources fetched from Git, it contains both the
+gdb and the binutils code base. In order to really build only gdb, we
+disable a number of binutils components in the
+GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
+--disable-ld, --disable-gas, etc. However, gprof was still being
+built, so disable it as well.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gdb/gdb.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 2e5588bfbc..f31b168bf1 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -81,7 +81,8 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
+ 	--disable-binutils \
+ 	--disable-install-libbfd \
+ 	--disable-ld \
+-	--disable-gas
++	--disable-gas \
++	--disable-gprof
+ 
+ GDB_CONF_ENV = \
+ 	ac_cv_type_uintptr_t=yes \
