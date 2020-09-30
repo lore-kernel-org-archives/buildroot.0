@@ -1,67 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:33:09 +0200
-Subject: [Buildroot] [git commit] arch: add the basic IBM s390x and Z
- arch support
-In-Reply-To: <20200924213039.9A20F83786@busybox.osuosl.org>
-References: <20200924213039.9A20F83786@busybox.osuosl.org>
-Message-ID: <20200930213309.4f9b8063@windsurf.home>
+Date: Wed, 30 Sep 2020 21:33:25 +0200
+Subject: [Buildroot] [git commit] support/config-fragments: add s390x z13 to
+ autobuild configs
+Message-ID: <20200930192400.83F028CA3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f5ce9b12f5504c782609b929297eb637e31b583
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Sep 2020 22:02:03 +0200
-Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Add a minimal s390x s13 autobuild configuration for the
+internal toolchain with glibc.
 
-> +config BR2_s390x_z13
-> +	bool "z13"
-> +	depends on BR2_s390x
-> +
-> +config BR2_s390x_z14
-> +	bool "z14"
-> +	depends on BR2_s390x
-> +
-> +config BR2_s390x_z15
-> +	bool "z15"
-> +	depends on BR2_s390x
-> +
-> +endchoice
-> +
-> +config BR2_ARCH
-> +	default "s390x"	if BR2_s390x
-> +
-> +config BR2_ENDIAN
-> +	default "BIG"
-> +
-> +config BR2_GCC_TARGET_ARCH
-> +	default "arch11" if BR2_s390x_z13
-> +	default "arch12" if BR2_s390x_z14
-> +	default "arch13" if BR2_s390x_z15
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config | 4 ++++
+ support/config-fragments/autobuild/toolchain-configs.csv              | 1 +
+ 2 files changed, 5 insertions(+)
 
-I was looking at this, together with the gcc documentation, and I was
-surprised to see that arch13/z15 are not mentioned anywhere. My gcc
-10.x documentation says:
-
-     Generate code that runs on CPU-TYPE, which is the name of a system
-     representing a certain processor type.  Possible values for
-     CPU-TYPE are 'z900'/'arch5', 'z990'/'arch6', 'z9-109',
-     'z9-ec'/'arch7', 'z10'/'arch8', 'z196'/'arch9', 'zEC12',
-     'z13'/'arch11', 'z14'/'arch12', and 'native'.
-
-But looking at the gcc source code, the z15/arch13 -march values are
-indeed supported.
-
-Perhaps the gcc documentation should be updated. Alexander, as it seems
-you're working on S390 support in general, maybe you could take care of
-this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
+new file mode 100644
+index 0000000000..56af5fb1ba
+--- /dev/null
++++ b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
+@@ -0,0 +1,4 @@
++BR2_s390x=y
++BR2_s390x_z13=y
++BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 5b8b9da7e7..f84f27ddcd 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -56,6 +56,7 @@ support/config-fragments/autobuild/br-riscv32.config,x86_64
+ support/config-fragments/autobuild/br-riscv64.config,x86_64
+ support/config-fragments/autobuild/br-riscv64-full-internal.config,any
+ support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
++support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
