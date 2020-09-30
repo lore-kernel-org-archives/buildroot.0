@@ -1,82 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:45:30 +0200
-Subject: [Buildroot] [PATCHv2] infra: add the transient download
- mechanism
-In-Reply-To: <20200930173030.2461586-1-yann.morin.1998@free.fr>
-References: <20200930173030.2461586-1-yann.morin.1998@free.fr>
-Message-ID: <20200930214530.6b964a45@windsurf.home>
+Date: Wed, 30 Sep 2020 21:48:04 +0200
+Subject: [Buildroot] [git commit] package/open2300: switch to github
+Message-ID: <20200930193757.6DC7C8E55C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d0b9e2fb32f999d7f9b0bf9b85aca5522ac0c7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Sep 2020 19:30:30 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Upstream repository has been dead for quite a while now, and in fact
+we are using s.b.o as the "official" location now.
 
-> People have been hollering for a long time, asking for a way to be able
-> to trigger a build that will always get the current HEAD (or whatever it
-> is called outside of git) of a branch, whatever the conditions, so that
-> they can trigger automated builds (e.g. in a CI or whatever) to test
-> their greatest and latest changes, by pushing again and again ad libitum
-> on the same branch, without having the need to update the sha1 in the
-> .mk of the affected package.
+There however exists a Github repository, which is still alive. That
+repository has not been touched in a looooong while, but it's still
+up, and there is a revision which actually gives the exact same
+content (although the hash changes, because the directory name has
+changed, from open2300-12/ to open2300-f2198.../).
 
-[...]
+Also fix spaces in hash file.
 
-I'm all happy with the implementation, but I still disagree on one bit,
-which is present in both the commit log and the documentation, so I'll
-comment on the documentation.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/open2300/open2300.hash | 6 ++----
+ package/open2300/open2300.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-> +  obvious being the *lack of reproducibility*. Besides, it has its own
-> +  pitfalls that one must be aware of as well:
-> +  ** when two builds are running in parallel on the same machine, there
-> +     is a TOCTOU race for each build to download and extract the archive,
-> +     so each build may not get what it downloaded, but what the other
-> +     build did download;
-
-This is not a pitfall, it is what we expect from the feature. The
-feature is "grab" whatever is currently available on the Git repository
-for that package. It is pretty clear that it is not guarantee that we
-grab what existed in the Git repository at the moment the user hits
-"Enter" after typing the make command. There is no way we could
-atomically snapshot all Git trees of all packages to ensure that what
-we build is a consistent view of what existed at the moment the build
-was started.
-
-So I think this pitfall is needlessly worrying, and does not actually
-point to an actual problem. Or more precisely, the problem you're
-pointing is *exactly* what the transient download mechanism aims at
-doing.
-
-So to me, the wording of your pitfall is a bit as if the wget(1) man
-page had an entry like this:
-
-BUGS
-
-	WARNING: wget might download data from remote servers to your
-	local machine!!
-
-> +  ** as a consequence, legal-info is not reliable when a package is
-> +     transient;
-
-*That* I believe is the real pitfall.
-
-> +  ** if a branch is pushed to an automated build bot (in a CI for
-> +     example), and then re-pushed to while the build is still in
-> +     progress, the build may get the wrong version of the branch.
-
-This is also *NOT* a pitfall, it is what we ask the transient download
-mechanism to do.
-
-Once this is fixed, I'll be happy to apply the patch!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/open2300/open2300.hash b/package/open2300/open2300.hash
+index 414041b923..f8b1150694 100644
+--- a/package/open2300/open2300.hash
++++ b/package/open2300/open2300.hash
+@@ -1,6 +1,4 @@
+ # Localy computed
+-# Note: open2300's upstream svn tree is off-line, so this tarball is
+-# served from s.b.o. instead, which actually makes it stable.
+-sha256	f4239d2f16d52156586d06be38f06a3eb58168377e243a8de8720b66e33ddb8f  open2300-12.tar.gz
++sha256  ffa7f8d35b16abfbf5e52285cb21f2a7fc6afb901abb40c0c80eef9d23d08aab  open2300-f21982e0b1f8321561e5ad1668307fde97700e1b.tar.gz
+ 
+-sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+index 0ffb8b5046..9fb7dbc2fd 100644
+--- a/package/open2300/open2300.mk
++++ b/package/open2300/open2300.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk
+-OPEN2300_SITE_METHOD = svn
+-OPEN2300_VERSION = 12
++OPEN2300_VERSION = f21982e0b1f8321561e5ad1668307fde97700e1b
++OPEN2300_SITE = $(call github,wezm,open2300,$(OPEN2300_VERSION))
+ OPEN2300_LICENSE = GPL-2.0
+ OPEN2300_LICENSE_FILES = COPYING
+ 
