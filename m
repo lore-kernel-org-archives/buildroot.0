@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:33:25 +0200
-Subject: [Buildroot] [git commit] support/config-fragments: add s390x z13 to
- autobuild configs
-Message-ID: <20200930192400.83F028CA3F@busybox.osuosl.org>
+Date: Wed, 30 Sep 2020 21:35:44 +0200
+Subject: [Buildroot] [git commit] package/pango: bump to version 1.46.2
+Message-ID: <20200930192534.B01E88E0BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f5ce9b12f5504c782609b929297eb637e31b583
+commit: https://git.buildroot.net/buildroot/commit/?id=f1ae341b41ce852bb193f73fed5f56c16941a710
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a minimal s390x s13 autobuild configuration for the
-internal toolchain with glibc.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config | 4 ++++
- support/config-fragments/autobuild/toolchain-configs.csv              | 1 +
- 2 files changed, 5 insertions(+)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-new file mode 100644
-index 0000000000..56af5fb1ba
---- /dev/null
-+++ b/support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config
-@@ -0,0 +1,4 @@
-+BR2_s390x=y
-+BR2_s390x_z13=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 5b8b9da7e7..f84f27ddcd 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -56,6 +56,7 @@ support/config-fragments/autobuild/br-riscv32.config,x86_64
- support/config-fragments/autobuild/br-riscv64.config,x86_64
- support/config-fragments/autobuild/br-riscv64-full-internal.config,any
- support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
-+support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
- support/config-fragments/autobuild/br-sh4-full.config,x86_64
- support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 95999bcf81..32808c6ca5 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.1.sha256sum
+-sha256  fe516b10711bbb6fd75011d66dd08fabfce18f7931aed7415136d53c4aadf1c5  pango-1.46.1.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.2.sha256sum
++sha256  d89fab5f26767261b493279b65cfb9eb0955cd44c07c5628d36094609fc51841  pango-1.46.2.tar.xz
+ 
+ # Locally computed
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 9d2d88ec06..92bd6c3ea7 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PANGO_VERSION_MAJOR = 1.46
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
