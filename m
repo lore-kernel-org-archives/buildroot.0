@@ -1,67 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:57:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: custom configuration
- file
-In-Reply-To: <20200928092945.584196-1-pieter.degendt@basalte.be>
-References: <20200928092945.584196-1-pieter.degendt@basalte.be>
-Message-ID: <20200930215728.181df33f@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 30 Sep 2020 22:03:24 +0200
+Subject: [Buildroot] [PATCH 2/3] support/scripts/gen-bootlin-toolchains:
+ add missing glibc toolchain dependencies
+In-Reply-To: <20200928222330.395b681a@windsurf.home>
+References: <20200927143752.1498115-1-romain.naour@gmail.com>
+ <20200927143752.1498115-2-romain.naour@gmail.com>
+ <20200928222330.395b681a@windsurf.home>
+Message-ID: <37e6d195-4919-d6e8-56a7-356ac81d750b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pieter,
+Hello Thomas,
 
-Thanks for the proposal. See below for some questions/comments.
+Le 28/09/2020 ? 22:23, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sun, 27 Sep 2020 16:37:51 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> glibc toolchains must be disabled for MMU less configuration.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> I am wondering if this one really makes sense. If there is a Bootlin
+> toolchain that exists for a given architecture, then it really does
+> exist. So adding another BR2_USE_MMU dependency here feels useless, no?
 
-On Mon, 28 Sep 2020 11:29:45 +0200
-Pieter De Gendt <pieter.degendt@gmail.com> wrote:
+Indeed, It just about being in sync with BR2_TOOLCHAIN_BUILDROOT_GLIBC dependencies.
 
-> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-> index 5094434e6c..fa74197004 100644
-> --- a/package/mbedtls/mbedtls.mk
-> +++ b/package/mbedtls/mbedtls.mk
-> @@ -68,4 +68,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
->  MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
->  endif
->  
-> +define MBEDTLS_OVERRIDE_CONFIG
-> +	cp $(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG) $(@D)/include/mbedtls/config.h
-> +endef
-> +
-> +ifneq ($(call qstrip,$(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG)),)
-> +MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_OVERRIDE_CONFIG
-> +endif
+Ok if you want to drop it.
 
-We prefer to enclose everything in the conditional block, and do the
-qstripping once:
+Best regards,
+Romain
 
-MBEDTLS_CUSTOM_CONFIG = $(call qstrip,$(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG))
 
-ifneq ($(MBEDTLS_CUSTOM_CONFIG),)
-define MBEDTLS_OVERRIDE_CONFIG
-	..
-endef
-MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_OVERRIDE_CONFIG
-endif
-
-However, what bothers me a bit is how it completely overrides all the
-configuration logic that takes place before in mbedtls.mk. For example,
-if you enable BR2_PACKAGE_MBEDTLS_COMPRESSION=y and use your option to
-have a custom configuration file, then what
-BR2_PACKAGE_MBEDTLS_COMPRESSION=y does will be ignored.
-
-So, we would have to make BR2_PACKAGE_MBEDTLS_COMPRESSION disappear
-when BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG, but then, how do you bring zlib
-as a build dependency of mbedtls ?
-
-We need to decide if the custom configuration file should override all
-tweaks, or if all tweaks should be applied on top of the custom
-configuration file.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> Thomas
+> 
