@@ -1,67 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Michael Nosthoff <buildroot@heine.tech>
 Date: Wed, 30 Sep 2020 09:32:03 +0200
-Subject: [Buildroot] [PATCH] package/python-txtorcon.mk: drop _py3 file
- for python 2.x to fix pycompile issue
-In-Reply-To: <871rij7nw4.fsf@tarshish> (Baruch Siach's message of "Wed, 30 Sep
- 2020 09:57:15 +0300")
-References: <20200930065120.17466-1-peter@korsgaard.com>
- <871rij7nw4.fsf@tarshish>
-Message-ID: <875z7vvhxo.fsf@dell.be.48ers.dk>
+Subject: [Buildroot] [PATCH] package/python-werkzeug: bump version to 1.0.1
+Message-ID: <20200930073204.32070-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/python-werkzeug/python-werkzeug.hash | 6 +++---
+ package/python-werkzeug/python-werkzeug.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > Hi Peter,
- > On Wed, Sep 30 2020, Peter Korsgaard wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/76b580000e6311e88584874f942517badd6fadf6/
- >> 
- >> python-txtorcon DOES support python 2.x, but it contains some optional
- >> python 3 / async code in controller_py3.py which is conditionally used from
- >> controller.py:
- >> 
- >> try:
- >> from .controller_py3 import _AsyncOnionAuthContext
- >> HAVE_ASYNC = True
- >> except Exception:
- >> HAVE_ASYNC = False
- >> 
- >> pycompile unfortunately errors out on the async code:
- >> 
- >> ../scripts/pycompile.py ..
- >> error:   File "/usr/lib/python2.7/site-packages/txtorcon/controller_py3.py", line 13
- >> async def __aenter__(self):
- >> ^
- >> SyntaxError: invalid syntax
- >> 
- >> As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
- >> building for python 2.x.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> package/python-txtorcon/python-txtorcon.mk | 9 +++++++++
- >> 1 file changed, 9 insertions(+)
- >> 
- >> diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
- >> index a01c0b2511..e25ce8ba38 100644
- >> --- a/package/python-txtorcon/python-txtorcon.mk
- >> +++ b/package/python-txtorcon/python-txtorcon.mk
- >> @@ -11,4 +11,13 @@ PYTHON_TXTORCON_SETUP_TYPE = setuptools
- >> PYTHON_TXTORCON_LICENSE = MIT
- >> PYTHON_TXTORCON_LICENSE_FILES = LICENSE
- >> 
- >> +ifeq ($(BR2_PACKAGE_PYTHON),y)
- >> +# only needed/valid for python 3.x
- >> +define PYTHON_TXTORCON_RM_PY3_FILE
- >> +	rm -f $(TARGET_DIR)//usr/lib/python*/site-packages/txtorcon/controller_py3.py
-
- > Redundant '/' before 'usr/'.
-
-Ups, indeed - Will fix.
-
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index cc90fe140b..1d6de8a0c7 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/werkzeug/json
+-md5	5b23b4953efc4f52b1d0b33af6f7cd2d  Werkzeug-0.16.0.tar.gz
+-sha256	7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7  Werkzeug-0.16.0.tar.gz
++md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
++sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
++sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index fea25f8ee8..1013f8af80 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WERKZEUG_VERSION = 0.16.0
++PYTHON_WERKZEUG_VERSION = 1.0.1
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/5e/fd/eb19e4f6a806cd6ee34900a687f181001c7a0059ff914752091aba84681f
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+ PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
 -- 
-Bye, Peter Korsgaard
+2.25.1
