@@ -1,50 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 21:35:03 +0200
-Subject: [Buildroot] [git commit] package/python-werkzeug: bump version to
- 1.0.1
-Message-ID: <20200930192534.A181B8756A@busybox.osuosl.org>
+Date: Wed, 30 Sep 2020 21:34:51 +0200
+Subject: [Buildroot] [git commit] package/elfutils: bump to version 0.181
+Message-ID: <20200930192534.959048756A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1494533a5c174c7e73d947ecd6143eb73fb07aee
+commit: https://git.buildroot.net/buildroot/commit/?id=52c5c6050c5359288ca48c85024aebd169fab258
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Refreshed patch #1 and disable debuginfod.
+
+The debuginfod tools needs to hook into serverinfrastructure,
+this currently only exists for Fedora.
+
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 6 +++---
- package/python-werkzeug/python-werkzeug.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...d-a-enable-disable-progs-configure-option.patch | 25 +++++++++++-----------
+ package/elfutils/elfutils.hash                     | 12 +++++------
+ package/elfutils/elfutils.mk                       |  5 ++++-
+ 3 files changed, 21 insertions(+), 21 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index cc90fe140b..1d6de8a0c7 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/werkzeug/json
--md5	5b23b4953efc4f52b1d0b33af6f7cd2d  Werkzeug-0.16.0.tar.gz
--sha256	7280924747b5733b246fe23972186c6b348f9ae29724135a6dfc1e53cea433e7  Werkzeug-0.16.0.tar.gz
-+md5  5d499cfdd30de5d9c946994783772efd  Werkzeug-1.0.1.tar.gz
-+sha256  6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c  Werkzeug-1.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-+sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index fea25f8ee8..1013f8af80 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+index 36bd462175..7b3c459321 100644
+--- a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
++++ b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+@@ -27,29 +27,28 @@ diff --git a/Makefile.am b/Makefile.am
+ index 2ff444e7bf1d..70443abb4fb6 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -26,9 +26,13 @@ AM_MAKEFLAGS = --no-print-directory
+- 
++@@ -26,8 +26,12 @@ AM_MAKEFLAGS = --no-print-directory
++
+  pkginclude_HEADERS = version.h
+- 
++
+ +if ENABLE_PROGS
+ +PROGS_SUBDIR = src
+ +endif
+ +
+- # Add doc back when we have some real content.
+- SUBDIRS = config m4 lib libelf libebl libdwelf libdwfl libdw libcpu libasm \
+--	  backends src po tests
+-+	  backends $(PROGS_SUBDIR) po tests
+- 
++ SUBDIRS = config m4 lib libelf libcpu backends libebl libdwelf libdwfl libdw \
++-	  libasm debuginfod src po doc tests
+++	  libasm debuginfod $(PROGS_SUBDIR) po doc tests
++
+  EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+  	     COPYING COPYING-GPLV2 COPYING-LGPLV3
+ diff --git a/configure.ac b/configure.ac
+ index c2c1d90b2133..7b4c38381cca 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -345,6 +345,12 @@ AC_SUBST([LIBEBL_SUBDIR])
+- AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
+- AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
+- 
++@@ -390,6 +390,12 @@
++ 	       [tests_use_rpath=$enableval], [tests_use_rpath=no])
++ AM_CONDITIONAL(TESTS_RPATH, test "$tests_use_rpath" = yes)
++
+ +AC_ARG_ENABLE([progs],
+ +	AS_HELP_STRING([--enable-progs], [enable progs]),
+ +	enable_progs=$enableval,
+@@ -59,6 +58,6 @@ index c2c1d90b2133..7b4c38381cca 100644
+  dnl zlib is mandatory.
+  save_LIBS="$LIBS"
+  LIBS=
+--- 
++--
+ 2.11.0
+ 
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index d8a1ce3915..65ee764bcb 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,8 +1,6 @@
+-# From https://sourceware.org/elfutils/ftp/0.177/md5.sum
+-md5 0b583722f911e1632544718d502aab87  elfutils-0.177.tar.bz2
+-# From https://sourceware.org/elfutils/ftp/0.177/sha512.sum
+-sha512 2779987463a22ed220759e25a09c9a1eb84c0f36db37675136e59aa55c7f8f90b7a7d34ffc4e6a4291d7fa73692a1bd1a303a74270b11d1623b4f9868d19498f  elfutils-0.177.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.181/sha512.sum
++sha512  d565541d5817f409dc89ebb1ee593366f69c371a1531308eeb67ff934b14a0fab0c9009fd7c23240efbaa1b4e04edac5c425e47d80e3e66ba03dcaf000afea36  elfutils-0.181.tar.bz2
+ # Locally calculated
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
+-sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING-LGPLV3
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING-LGPLV3
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index c3df7303b7..3615a16cd0 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.16.0
-+PYTHON_WERKZEUG_VERSION = 1.0.1
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/5e/fd/eb19e4f6a806cd6ee34900a687f181001c7a0059ff914752091aba84681f
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a33329150147594eff0ea4c33c2036c0eadd933141055be0ff911f7f8d04
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
+-ELFUTILS_VERSION = 0.177
++ELFUTILS_VERSION = 0.181
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+@@ -48,6 +48,9 @@ ELFUTILS_DEPENDENCIES += musl-fts
+ ELFUTILS_LDFLAGS += -lfts
+ endif
+ 
++# disable for now, needs "distro" support
++ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
++
+ ELFUTILS_CONF_ENV += \
+ 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
+ 
