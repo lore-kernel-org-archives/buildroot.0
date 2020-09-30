@@ -1,63 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2020 22:52:24 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gdb: also disable gprof
-In-Reply-To: <20200928201128.78005-2-thomas.petazzoni@bootlin.com>
-References: <20200928201128.78005-1-thomas.petazzoni@bootlin.com>
- <20200928201128.78005-2-thomas.petazzoni@bootlin.com>
-Message-ID: <20200930205224.GX11621@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Sep 2020 22:50:05 +0200
+Subject: [Buildroot] [git commit] package/log4cxx: fix build without wchar
+Message-ID: <20200930204222.D8D6C862D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=afcd6d92beb6d18fcc904d3a59f388809bc12b08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-28 22:11 +0200, Thomas Petazzoni spake thusly:
-> When gdb is built from sources fetched from Git, it contains both the
-> gdb and the binutils code base. In order to really build only gdb, we
-> disable a number of binutils components in the
-> GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
-> --disable-ld, --disable-gas, etc. However, gprof was still being
-> built, so disable it as well.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fix build with log4cxx in version 0.11.0
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/log4cxx/0001-fix-build-without-wchar.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-> ---
->  package/gdb/gdb.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 2e5588bfbc..f31b168bf1 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -81,7 +81,8 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
->  	--disable-binutils \
->  	--disable-install-libbfd \
->  	--disable-ld \
-> -	--disable-gas
-> +	--disable-gas \
-> +	--disable-gprof
->  
->  GDB_CONF_ENV = \
->  	ac_cv_type_uintptr_t=yes \
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/log4cxx/0001-fix-build-without-wchar.patch b/package/log4cxx/0001-fix-build-without-wchar.patch
+new file mode 100644
+index 0000000000..fc0e7be5c9
+--- /dev/null
++++ b/package/log4cxx/0001-fix-build-without-wchar.patch
+@@ -0,0 +1,55 @@
++From 1fa70eaf24d75e84625f22779ec347fd29bf1ae6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Sep 2020 08:47:37 +0200
++Subject: [PATCH] fix build without wchar
++
++Disable wencode without wchar or the build will fail on:
++
++odbcappender.cpp: In static member function 'static void log4cxx::db::ODBCAppender::encode(wchar_t**, const LogString&, log4cxx::helpers::Pool&)':
++odbcappender.cpp:362:22: error: 'wencode' is not a member of 'log4cxx::helpers::Transcoder'
++  *dest = Transcoder::wencode(src, p);
++                      ^~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/bab5329fdeb894471bfd5192ce04d3fbd2f9be5c
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/apache/logging-log4cxx/commit/f171f818c798d48631d5b45851e4593953f31d9c]
++---
++ src/main/cpp/odbcappender.cpp              | 2 ++
++ src/main/include/log4cxx/db/odbcappender.h | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/src/main/cpp/odbcappender.cpp b/src/main/cpp/odbcappender.cpp
++index 6bfa519e..218df132 100644
++--- a/src/main/cpp/odbcappender.cpp
+++++ b/src/main/cpp/odbcappender.cpp
++@@ -357,10 +357,12 @@ void ODBCAppender::setSql(const LogString& s)
++ 	}
++ }
++ 
+++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
++ void ODBCAppender::encode(wchar_t** dest, const LogString& src, Pool& p)
++ {
++ 	*dest = Transcoder::wencode(src, p);
++ }
+++#endif
++ 
++ void ODBCAppender::encode(unsigned short** dest,
++ 	const LogString& src, Pool& p)
++diff --git a/src/main/include/log4cxx/db/odbcappender.h b/src/main/include/log4cxx/db/odbcappender.h
++index a26bc35b..fdc144ff 100644
++--- a/src/main/include/log4cxx/db/odbcappender.h
+++++ b/src/main/include/log4cxx/db/odbcappender.h
++@@ -300,8 +300,10 @@ class LOG4CXX_EXPORT ODBCAppender : public AppenderSkeleton
++ 	private:
++ 		ODBCAppender(const ODBCAppender&);
++ 		ODBCAppender& operator=(const ODBCAppender&);
+++#if LOG4CXX_WCHAR_T_API || LOG4CXX_LOGCHAR_IS_WCHAR_T || defined(WIN32) || defined(_WIN32)
++ 		static void encode(wchar_t** dest, const LogString& src,
++ 			log4cxx::helpers::Pool& p);
+++#endif
++ 		static void encode(unsigned short** dest, const LogString& src,
++ 			log4cxx::helpers::Pool& p);
++ }; // class ODBCAppender
