@@ -1,49 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2020 21:09:24 +0200
-Subject: [Buildroot] [git commit] package/python-tinyrpc: not available for
- python 2.x
-Message-ID: <20200930190053.81C0087660@busybox.osuosl.org>
+Date: Wed, 30 Sep 2020 21:10:06 +0200
+Subject: [Buildroot] [git commit] package/python-txtorcon.mk: drop _py3 file
+ for python 2.x to fix pycompile issue
+Message-ID: <20200930190053.9141A8041C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d87acc19f1cd0bc738bf920b775caf96d7c3c4e
+commit: https://git.buildroot.net/buildroot/commit/?id=6728c67307858a103456a05a3daaddbbb49dba36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-http://autobuild.buildroot.net/results/eef0969bac04800cec51fa27f1e1ecd3a4c8211e/
+http://autobuild.buildroot.net/results/76b580000e6311e88584874f942517badd6fadf6/
 
-tinyrpc 1.x is not compatible with python 2.x, leading to errors during the
-pycompile step:
+python-txtorcon DOES support python 2.x, but it contains some optional
+python 3 / async code in controller_py3.py which is conditionally used from
+controller.py:
 
-error:   File "/usr/lib/python2.7/site-packages/tinyrpc/client.py", line 37
-    self, protocol: RPCProtocol, transport: ClientTransport
-                  ^
+try:
+    from .controller_py3 import _AsyncOnionAuthContext
+    HAVE_ASYNC = True
+except Exception:
+    HAVE_ASYNC = False
+
+pycompile unfortunately errors out on the async code:
+
+../scripts/pycompile.py ..
+error:   File "/usr/lib/python2.7/site-packages/txtorcon/controller_py3.py", line 13
+    async def __aenter__(self):
+            ^
 SyntaxError: invalid syntax
 
-As also documented in the README:
-The current version will support Python3 only.  Have a look at the 0.9.x
-version if you need Python2 support
-
-https://github.com/mbr/tinyrpc/blob/1.0.4/README.rst
+As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+building for python 2.x.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-tinyrpc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-txtorcon/python-txtorcon.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/python-tinyrpc/Config.in b/package/python-tinyrpc/Config.in
-index 3c643c754a..3194b7825a 100644
---- a/package/python-tinyrpc/Config.in
-+++ b/package/python-tinyrpc/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_TINYRPC
- 	bool "python-tinyrpc"
-+	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  A small, modular, transport and protocol neutral RPC
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index a01c0b2511..4df400c3e7 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -11,4 +11,13 @@ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_TXTORCON_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/txtorcon/controller_py3.py
++endef
++
++PYTHON_TXTORCON_POST_INSTALL_TARGET_HOOKS += PYTHON_TXTORCON_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
