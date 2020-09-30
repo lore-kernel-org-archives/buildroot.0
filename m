@@ -1,158 +1,96 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 30 Sep 2020 12:30:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/trace-cmd: bump to version 2.9.1
-Message-ID: <20200930103028.612014-1-nolange79@gmail.com>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Wed, 30 Sep 2020 15:38:34 +0100
+Subject: [Buildroot] [RFC PATCH 1/4] llvm: Add BPF backend
+In-Reply-To: <93a07382-c0a6-841e-b54a-2f2a7d6af600@gmail.com>
+References: <20200929102618.28571-1-qais.yousef@arm.com>
+ <20200929102618.28571-2-qais.yousef@arm.com>
+ <93a07382-c0a6-841e-b54a-2f2a7d6af600@gmail.com>
+Message-ID: <20200930143833.ucrbumeuo3iy6poh@e107158-lin.cambridge.arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstreamed patch.
+Hi Romain
 
-Remove now unneeded option -fcommon.
+On 09/29/20 21:35, Romain Naour wrote:
+> Hello Qais,
+> 
+> Le 29/09/2020 ? 12:26, Qais Yousef a ?crit?:
+> > We need BPF backend to enable BPF Compiler Collection (BCC) and bpftrace
+> > packager in later commits.
+> > 
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> 
+> There is already a pending patch to review enabling BPF backend in llvm.
+> http://patchwork.ozlabs.org/project/buildroot/patch/20200824181740.12878-1-jugurtha.belkalem at smile.fr/
+> 
+> Your patch appears to be the same as the one we published with Jugurtha.
+> You are welcome to review and tests patches available from patchwork, see the
+> manual: http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+> 
+> The bcc patch series is present in patchwork since a long time due to lack of
+> review, see the first submission back in January 2019:
+> http://patchwork.ozlabs.org/project/buildroot/patch/20190113212118.14512-1-romain.naour at gmail.com/
+> 
+> So, Your help to review is really important :)
 
-Rearrange the CFLAGS, dont know if the
-_LARGEFILE64_SOURCE filter is still needed.
+Yes sure. I actually picked it up and applied and managed to build it and test
+for x86_64 and aach64 (little endian) on qemu. I had to apply the weird fix in
+patch 4. And remove the dependency on compiling the kernel in buildroot as
+I compile my own kernels. It did work :)
 
-use install_cmd target for installation,
-which also installs bash-completion files.
+I'll add these comments to the patch once I figure out how I can comment.
+I hope I don't have to create a patchwork account for this. Hopefully I can
+use the message-id to respond via email.
 
-Directory structure changed, in the future the all target
-might build kernelshark. so specify the *cmd targets.
+Thanks
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
-v1->v2
-*   specify prefix to /usr
----
- ...0001-trace-listen-add-missing-header.patch | 38 -------------------
- package/trace-cmd/trace-cmd.hash              |  6 +--
- package/trace-cmd/trace-cmd.mk                | 28 +++++++-------
- 3 files changed, 17 insertions(+), 55 deletions(-)
- delete mode 100644 package/trace-cmd/0001-trace-listen-add-missing-header.patch
+--
+Qais Yousef
 
-diff --git a/package/trace-cmd/0001-trace-listen-add-missing-header.patch b/package/trace-cmd/0001-trace-listen-add-missing-header.patch
-deleted file mode 100644
-index 350e523025..0000000000
---- a/package/trace-cmd/0001-trace-listen-add-missing-header.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From c68c868b573acc73e144312326750be2ed96632f Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Thu, 29 Jun 2017 14:43:19 +0300
--Subject: [PATCH] trace-listen: add missing header
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The PATH_MAX macro requires the limits.h header. This fixes build with musl
--libc:
--
--.../trace-cmd-trace-cmd-v2.6.1/trace-listen.c: In function ?make_pid_name?:
--.../trace-cmd-trace-cmd-v2.6.1/trace-listen.c:167:16: error: ?PATH_MAX? undeclared (first use in this function)
--  snprintf(buf, PATH_MAX, VAR_RUN_DIR "/trace-cmd-net.pid");
--                ^~~~~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://lkml.org/lkml/2017/6/29/286
--
-- trace-listen.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/trace-listen.c b/trace-listen.c
--index 17ff9d8c160c..838d6bcf3649 100644
----- a/trace-listen.c
--+++ b/trace-listen.c
--@@ -31,6 +31,7 @@
-- #include <fcntl.h>
-- #include <signal.h>
-- #include <errno.h>
--+#include <limits.h>
-- 
-- #include "trace-local.h"
-- #include "trace-msg.h"
---- 
--2.11.0
--
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index c6447f34d4..d1e7f2dbb2 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 3b3f564cc6ee30341051ccb7589b42f3abe4e676a21c029c7c127c7edf5bdcf0  trace-cmd-trace-cmd-v2.7.tar.gz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
--sha256 70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
-+sha256  9404fc3cf540ea795304608068c9db6cdb38b90584c7f3c43249785913d54b38  trace-cmd-v2.9.1.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 5d58203cbf..b092310956 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--TRACE_CMD_VERSION = trace-cmd-v2.7
--TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
--TRACE_CMD_SITE_METHOD = git
-+TRACE_CMD_VERSION = 2.9.1
-+TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
-+TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git/snapshot
- TRACE_CMD_INSTALL_STAGING = YES
- TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
-@@ -17,19 +17,21 @@ ifeq ($(BR2_PACKAGE_AUDIT),y)
- TRACE_CMD_DEPENDENCIES += audit
- endif
- 
-+TRACE_CMD_MAKE_OPTS = prefix=/usr
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- TRACE_CMD_DEPENDENCIES += python host-swig
--TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
-+TRACE_CMD_MAKE_OPTS += PYTHON_VERS=python
- else ifeq ($(BR2_PACKAGE_PYTHON3),y)
- TRACE_CMD_DEPENDENCIES += python3 host-swig
--TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python3
-+TRACE_CMD_MAKE_OPTS += PYTHON_VERS=python3
- else
- TRACE_CMD_MAKE_OPTS += NO_PYTHON=1
- endif
- 
- # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
- # redefining it on the command line causes build problems.
--TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -fcommon
-+TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
- 
- # trace-cmd use CPPFLAGS to add some extra flags.
- # But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
-@@ -37,17 +39,15 @@ TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -fcommon
- TRACE_CMD_CPPFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CPPFLAGS))
- 
- define TRACE_CMD_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(TRACE_CMD_CFLAGS)" \
--		CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
--		$(TRACE_CMD_MAKE_OPTS) \
--		-C $(@D) all
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TRACE_CMD_CFLAGS)" \
-+	CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
-+		$(MAKE) $(TRACE_CMD_MAKE_OPTS) \
-+			-C $(@D) trace-cmd
- endef
- 
- define TRACE_CMD_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/trace-cmd $(TARGET_DIR)/usr/bin/trace-cmd
--	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/lib/trace-cmd/plugins
--	$(INSTALL) -D -m 0755 $(@D)/plugin_*.so $(TARGET_DIR)/usr/lib/trace-cmd/plugins
-+	DESTDIR=$(TARGET_DIR) $(MAKE) $(TRACE_CMD_MAKE_OPTS) -C $(@D) install_cmd
- endef
- 
- $(eval $(generic-package))
--- 
-2.28.0
+> 
+> Best regards,
+> Romain
+> 
+> > ---
+> >  package/llvm/Config.in | 6 ++++++
+> >  package/llvm/llvm.mk   | 5 +++++
+> >  2 files changed, 11 insertions(+)
+> > 
+> > diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+> > index 1d21d879da..22d51b4e3c 100644
+> > --- a/package/llvm/Config.in
+> > +++ b/package/llvm/Config.in
+> > @@ -34,6 +34,12 @@ config BR2_PACKAGE_LLVM_AMDGPU
+> >  	  Build AMDGPU target. Select this option if you are going
+> >  	  to install mesa3d with llvm and use Gallium Radeon driver.
+> >  
+> > +config BR2_PACKAGE_LLVM_BPF
+> > +	bool "BPF backend"
+> > +	help
+> > +	  Build BPF target. Select this option if you want to use BPF tools
+> > +	  like BCC on the target.
+> > +
+> >  config BR2_PACKAGE_LLVM_RTTI
+> >  	bool "enable rtti"
+> >  	help
+> > diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> > index 24d033d124..48a298191c 100644
+> > --- a/package/llvm/llvm.mk
+> > +++ b/package/llvm/llvm.mk
+> > @@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+> >  LLVM_TARGETS_TO_BUILD += AMDGPU
+> >  endif
+> >  
+> > +# Build BPF backend
+> > +ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
+> > +LLVM_TARGETS_TO_BUILD += BPF
+> > +endif
+> > +
+> >  # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+> >  LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+> >  
+> > 
+> 
