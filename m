@@ -1,36 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Sep 2020 22:57:19 +0200
-Subject: [Buildroot] [PATCH] package/bison: disable libtextstyle
-In-Reply-To: <2768149d816c4106d4fe2c1b8753c3487555901b.1601183309.git.baruch@tkos.co.il>
-References: <2768149d816c4106d4fe2c1b8753c3487555901b.1601183309.git.baruch@tkos.co.il>
-Message-ID: <20200930225719.44720e48@windsurf.home>
+Date: Wed, 30 Sep 2020 22:57:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: fix tests with
+ uclibc
+In-Reply-To: <20200926201817.996329-1-fontaine.fabrice@gmail.com>
+References: <20200926201817.996329-1-fontaine.fabrice@gmail.com>
+Message-ID: <20200930225726.1982f143@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Sep 2020 08:08:29 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Sat, 26 Sep 2020 22:18:17 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Recent bison versions added support for fancy error output using gettext
-> provided libtextstyle. The Buildroot gettext version does not provided
-> all needed features. However host-bison might detect host installed
-> libtextstyle at configure time, but fail at run time because of missing
-> symbols in Buildroot provided libtextstyle.
+> It should be noted that upstream does not want to add a --disable-tests
+> option: https://review.lttng.org/c/babeltrace/+/4075
 > 
-> We don't really need fancy output of host packages, so just disable
-> libtextstyle support.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1e50e1ff90c1ac2af2223365dc0cd6e1914bcd75
 > 
-> Fixes (libpcap):
-> http://autobuild.buildroot.net/results/058e8ec90da3c06e31b31eb94541331cced44db3/
-> http://autobuild.buildroot.net/results/d99dda99722c53730b5964bd4ff1e1281c4ad759/
-> http://autobuild.buildroot.net/results/056fd1246554fe7def416429620175e86530c0a7/
-> 
-> Cc: Xogium <contact@xogium.me>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Hi Xogium,
+>  ...trace_ir_ref.c-rename-user-structure.patch | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 package/babeltrace2/0002-tests-lib-test_trace_ir_ref.c-rename-user-structure.patch
 
 Applied to master, thanks.
 
