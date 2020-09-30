@@ -1,183 +1,95 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Sep 2020 22:47:09 +0200
-Subject: [Buildroot] [git commit] package/gdb: fix build of gdbserver-only
- on the ARC gdb version
-Message-ID: <20200930203715.4B9F38E5FB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Sep 2020 22:48:31 +0200
+Subject: [Buildroot] [git commit] package/keyutils: bump to version 1.6.3
+Message-ID: <20200930203824.2497C8E3AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81ef52b6306651559fa269b34ef79b1e42141f98
+commit: https://git.buildroot.net/buildroot/commit/?id=ebce1630442fa1656dd315a6b5b431642fd58b3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The GDB version used on ARC is based on a recent gdb code base, post
-gdb 9.2. This recent gdb code base, which pre-figures what will be in
-gdb 10, has a significant change: gdbserver is not longer in
-gdb/gdbserver, but at the top-level, and the mechanism to build
-gdbserver only has changed. Due to this change, a build of ARC GDB for
-gdbserver only fails with:
+- update home page URL
+- change download to new location
 
-/bin/bash: line 0: cd: /opt/output/build/gdb-arc-2020.03-release-gdb/gdb/gdbserver: No such file or directory
-
-This commit adjusts gdb.mk to support four cases:
-
- - "old" gdb, gdbserver only
- - "old" gdb, with the gdb debugger (and optionally gdbserver as well)
- - "new" gdb, gdbserver only
- - "new" gdb, with the gdb debugger (and optionally gdbserver as well)
-
-A boolean GDB_GDBSERVER_TOPLEVEL is introduced to differentiate
-between the old and new gdb, it is set to "y" for gdb versions that
-have the gdbserver code at the top-level. For now, only the ARC
-version sets it, but in the future, upstream gdb version 10 will also
-have to set it.
-
-Here is the behavior, for each case:
-
- (1) "old" gdb, gdbserver only
-
-     We set GDB_SUBDIR to gdb/gdbserver, so only the configure script
-     in this folder gets called.
-
-     --enable-gdbserver --disable-gdb are passed in CONF_OPTS.
-
- (2) "old" gdb, with the gdb debugger (and optionally gdbserver as well)
-
-     We set GDB_SUBDIR to build/, an empty directory which allows to
-     do an out of tree build, which is mandatory for a full gdb build
-     since gdb 9.x.
-
-     --enable-gdb is passed in CONF_OPTS as well as --enable-gdbserver
-     or --disable-gdbserver depending on whether gdbserver is enabled
-     as well.
-
- (3) "new" gdb, gdbserver only
-
-     We set GDB_SUBDIR to build/, an empty directory which allows to
-     do an out of tree build, which is mandatory for a full gdb build
-     since gdb 9.x.
-
-     --enable-gdbserver --disable-gdb are passed in CONF_OPTS.
-
- (4) "new" gdb, with the gdb debugger (and optionally gdbserver as well)
-
-     We set GDB_SUBDIR to build/, an empty directory which allows to
-     do an out of tree build, which is mandatory for a full gdb build
-     since gdb 9.x.
-
-     --enable-gdb is passed in CONF_OPTS as well as --enable-gdbserver
-     or --disable-gdbserver depending on whether gdbserver is enabled
-     as well.
-
-In addition to these changes, some related changes are done as well:
-
- - We re-enable building both gdb and gdbserver on ARC, as it works
-   again.
-
- - We only pass --with-curses when curses is really provided, i.e when
-   the full debugger is being built.
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gdb/Config.in |  5 -----
- package/gdb/gdb.mk    | 40 +++++++++++++++++++++++++++++-----------
- 2 files changed, 29 insertions(+), 16 deletions(-)
+ package/keyutils/0001-fix-install-rule.patch | 2 +-
+ package/keyutils/0002-cifs.patch             | 4 ++--
+ package/keyutils/Config.in                   | 2 +-
+ package/keyutils/keyutils.hash               | 6 +++---
+ package/keyutils/keyutils.mk                 | 5 ++---
+ 5 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 4c787d49a1..48ec3e0202 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -49,11 +49,6 @@ config BR2_PACKAGE_GDB_SERVER
- 	bool "gdbserver"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
- 	depends on !BR2_riscv
--	# Simultaneous build of gdbserver and full gdb is not possible
--	# with arc-2019.09. This bug comes from upstream GDB. So
--	# simultaneous usage of full gdb and gdbserver is temporaly
--	# disabled for ARC until a fix becomes available.
--	depends on !(BR2_arc && BR2_PACKAGE_GDB_DEBUGGER)
- 	help
- 	  Build the gdbserver stub to run on the target.
- 	  A full gdb is needed to debug the progam.
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 6b63a6214b..2e5588bfbc 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -12,6 +12,9 @@ ifeq ($(BR2_arc),y)
- GDB_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(GDB_VERSION))
- GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
-+# recent gdb versions (>= 10) have gdbserver moved at the top-level,
-+# which requires a different build logic.
-+GDB_GDBSERVER_TOPLEVEL = y
- endif
+diff --git a/package/keyutils/0001-fix-install-rule.patch b/package/keyutils/0001-fix-install-rule.patch
+index 26545716cb..b8bad533b2 100644
+--- a/package/keyutils/0001-fix-install-rule.patch
++++ b/package/keyutils/0001-fix-install-rule.patch
+@@ -11,7 +11,7 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
  
- ifeq ($(BR2_csky),y)
-@@ -23,23 +26,22 @@ endif
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ --- keyutils-1.5.9/Makefile.orig	2014-09-22 16:13:41.593562765 +0100
+ +++ keyutils-1.5.9/Makefile	2014-09-22 16:14:05.377963952 +0100
+-@@ -184,7 +184,7 @@ ifeq ($(NO_SOLIB),0)
++@@ -200,7 +200,7 @@ ifeq ($(NO_SOLIB),0)
+  	$(INSTALL) -D $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME)
+  	$(LNS) $(LIBNAME) $(DESTDIR)$(LIBDIR)/$(SONAME)
+  	mkdir -p $(DESTDIR)$(USRLIBDIR)
+diff --git a/package/keyutils/0002-cifs.patch b/package/keyutils/0002-cifs.patch
+index b2903f971f..23f8e33126 100644
+--- a/package/keyutils/0002-cifs.patch
++++ b/package/keyutils/0002-cifs.patch
+@@ -6,8 +6,8 @@ Description: Added 2 cifs helpers to request-key.conf (for CIFS DFS support)
+ diff -Naurp keyutils.orig/request-key.conf keyutils/request-key.conf
+ --- keyutils.orig/request-key.conf	2008-09-07 23:53:10.000000000 +0000
+ +++ keyutils/request-key.conf	2009-02-05 00:53:00.000000000 +0000
+-@@ -34,4 +34,6 @@
+- create	user	debug:*		negate		/bin/keyctl negate %k 30 %S
++@@ -38,4 +38,6 @@
++ create  user    debug:*         revoked         /bin/keyctl reject %k 30 %c %S
+  create	user	debug:loop:*	*		|/bin/cat
+  create	user	debug:*		*		/usr/share/keyutils/request-key-debug.sh %k %d %c %S
+ +create	cifs.spnego	*	*		/usr/sbin/cifs.upcall -c %k
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 7813de3799..e4a2e846a1 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_KEYUTILS
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
  
--# We only want gdbserver and not the entire debugger.
--ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),)
-+# On gdb < 10, if you want to build only gdbserver, you need to
-+# configure only gdb/gdbserver.
-+ifeq ($(BR2_PACKAGE_GDB_DEBUGGER)$(GDB_GDBSERVER_TOPLEVEL),)
- GDB_SUBDIR = gdb/gdbserver
-+
-+# When we want to build the full gdb, or for very recent versions of
-+# gdb with gdbserver at the top-level, out of tree build is mandatory,
-+# so we create a 'build' subdirectory in the gdb sources, and build
-+# from there.
- else
--GDB_DEPENDENCIES = ncurses \
--	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- GDB_SUBDIR = build
--
--# Since gdb 9, in-tree builds for GDB are not allowed anymore,
--# so we create a 'build' subdirectory in the gdb sources, and
--# build from there.
- define GDB_CONFIGURE_SYMLINK
- 	mkdir -p $(@D)/$(GDB_SUBDIR)
- 	ln -sf ../configure $(@D)/$(GDB_SUBDIR)/configure
- endef
- GDB_PRE_CONFIGURE_HOOKS += GDB_CONFIGURE_SYMLINK
--
- endif
+-	  http://people.redhat.com/~dhowells/keyutils/
++	  https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/
  
- # For the host variant, we really want to build with XML support,
-@@ -137,13 +139,29 @@ GDB_CONF_OPTS = \
- 	--without-x \
- 	--disable-sim \
- 	$(GDB_DISABLE_BINUTILS_CONF_OPTS) \
--	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver,--disable-gdbserver) \
--	--with-curses \
- 	--without-included-gettext \
- 	--disable-werror \
- 	--enable-static \
- 	--without-mpfr
+ comment "keyutils needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+diff --git a/package/keyutils/keyutils.hash b/package/keyutils/keyutils.hash
+index d6781628cd..35de0c7829 100644
+--- a/package/keyutils/keyutils.hash
++++ b/package/keyutils/keyutils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 d3aef20cec0005c0fa6b4be40079885567473185b1a57b629b030e67942c7115  keyutils-1.6.tar.bz2
+-sha256 f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d  LICENCE.GPL
+-sha256 0d15593e3a8ad90917f8509b5ac1e4b5e5d196434a68029aa9dc0858a4a4c521  LICENCE.LGPL
++sha256  a61d5706136ae4c05bd48f86186bcfdbd88dd8bd5107e3e195c924cfc1b39bb4  keyutils-1.6.3.tar.gz
++sha256  f46409d4822b2457b39bbd0e7881eecb396130eb8320b7748fa7e9488970aa6d  LICENCE.GPL
++sha256  0d15593e3a8ad90917f8509b5ac1e4b5e5d196434a68029aa9dc0858a4a4c521  LICENCE.LGPL
+diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
+index c8de3a0dfc..46f06531ce 100644
+--- a/package/keyutils/keyutils.mk
++++ b/package/keyutils/keyutils.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GDB_DEBUGGER),y)
-+GDB_CONF_OPTS += \
-+	--enable-gdb \
-+	--with-curses
-+GDB_DEPENDENCIES = ncurses \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+else
-+GDB_CONF_OPTS += \
-+	--disable-gdb \
-+	--without-curses
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
-+GDB_CONF_OPTS += --enable-gdbserver
-+else
-+GDB_CONF_OPTS += --disable-gdbserver
-+endif
-+
- # When gdb is built as C++ application for ARC it segfaults@runtime
- # So we pass --disable-build-with-cxx config option to force gdb not to
- # be built as C++ app.
+-KEYUTILS_VERSION = 1.6
+-KEYUTILS_SOURCE = keyutils-$(KEYUTILS_VERSION).tar.bz2
+-KEYUTILS_SITE = http://people.redhat.com/~dhowells/keyutils
++KEYUTILS_VERSION = 1.6.3
++KEYUTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot
+ KEYUTILS_LICENSE = GPL-2.0+, LGPL-2.1+
+ KEYUTILS_LICENSE_FILES = LICENCE.GPL LICENCE.LGPL
+ KEYUTILS_INSTALL_STAGING = YES
