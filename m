@@ -1,58 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2020 21:51:40 +0200
-Subject: [Buildroot] [git commit] boot/barebox: bump version to 2020.09.0
-Message-ID: <20201001194509.583548E6B6@busybox.osuosl.org>
+Date: Thu, 1 Oct 2020 22:03:40 +0200
+Subject: [Buildroot] [PATCH v1] boot/barebox: fix target bareboxenv
+ command compile
+In-Reply-To: <20200107195026.25413-1-ps.report@gmx.net>
+References: <20200107195026.25413-1-ps.report@gmx.net>
+Message-ID: <20201001200340.GE11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0281811d37dae4a88b36e903390cc53fb610ab1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Sorry to come back so late on that patch.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 9948a249a0..3b354e64d0 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2020.08.1"
-+	bool "2020.09.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2020.08.1"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2020.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 4bccdf9e03..77c75b6b5b 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2020.08.1.tar.bz2.md5
--md5  d57031878390cb267f6641aedffcda9f  barebox-2020.08.1.tar.bz2
-+# From https://www.barebox.org/download/barebox-2020.09.0.tar.bz2.md5
-+md5  907dc813298fcded06fa9c788d3fb6c8  barebox-2020.09.0.tar.bz2
- 
- # Locally calculated
--sha256  8e6d413f1083ae0974b11a381369a3bac83e798a99830a1de128c950fef047e6  barebox-2020.08.1.tar.bz2
-+sha256  aad3b0736aa8d368d185736260d81fb3785251f376897be3cec745182fd51869  barebox-2020.09.0.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+On 2020-01-07 20:50 +0100, Peter Seiderer spake thusly:
+> The buildroot custom bareboxenv compile command
+> needs the additional include path 'scripts/include'
+> to gain access to the local copy of the kernel header
+> files.
+> 
+> Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
+> 
+>   build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
+> 
+> Reported-by: Frederick Gotham <cauldwell.thomas@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  boot/barebox/barebox.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 52178d89c8..67fd125578 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -82,7 +82,8 @@ $(1)_KCONFIG_DEPENDENCIES = \
+>  
+>  ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+>  define $(1)_BUILD_BAREBOXENV_CMDS
+> -	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+> +	$$(TARGET_CC) $$(TARGET_CFLAGS) -I$$(@D)/scripts/include \
+> +		$$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+
+Although this is techniocally,  correct, I wonder why we do not use
+BAREBOX_KONFIG_FIXUP_CMDS to enabler CONFIG_BAREBOXENV_TARGET in the
+barebox configuration, for example:
+
+    diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+    index 422f27312d..5eaeb7db4c 100644
+    --- a/boot/barebox/barebox.mk
+    +++ b/boot/barebox/barebox.mk
+    @@ -112,6 +112,9 @@ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
+     define $(1)_KCONFIG_FIXUP_CMDS
+     	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
+     	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
+    +	$$(if $$(BAREBOX_KONFIG_FIXUP_CMDS),\
+    +		$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET),\
+    +		$$(call KCONFIG_DISABLE_OPT,CONFIG_BAREBOXENV_TARGET))
+     endef
+     endif
+     
+
+And then we candrop our custom build command for it...
+
+CONFIG_BAREBOXENV_TARGET has existed since commit afb03d7a55, in April
+2012, so virtually all barebox versions that are recent have it.
+
+Regards,
+Yann E. MORIN.
+
+>  		$$(@D)/scripts/bareboxenv.c
+>  endef
+>  endif
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
