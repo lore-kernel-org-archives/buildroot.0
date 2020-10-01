@@ -1,52 +1,34 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 1 Oct 2020 15:17:50 +0200
-Subject: [Buildroot] [PATCH buildroot-test v2] scripts/autobuild-run:
- create host-distro file
-In-Reply-To: <20200914205201.GA19902@scaer>
-References: <20200914204101.16172-1-heiko.thiery@gmail.com>
- <20200914205201.GA19902@scaer>
-Message-ID: <CAEyMn7abATBZTkH1wqg+JXcmd9_paGWTO4GCd=ZWZ_WJAwJrNA@mail.gmail.com>
+From: Touhtarian, Eric <etouhtarian@distech-controls.com>
+Date: Thu, 1 Oct 2020 14:47:54 +0000
+Subject: [Buildroot] [PATCH 1/1] Get git version and transfer it to build
+ target
+In-Reply-To: <20200917153353.8824-1-etouhtarian@distech-controls.com>
+References: <20200917153353.8824-1-etouhtarian@distech-controls.com>
+Message-ID: <DM6PR01MB4137A236093298F048094EAC8A300@DM6PR01MB4137.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Hi Thomas,
+Signed-off-by: Eric Touhtarian <etouhtarian@distech-controls.com>
+---
+ linux/linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Am Mo., 14. Sept. 2020 um 22:52 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Heiko, Thomas, All,
->
-> On 2020-09-14 22:41 +0200, Heiko Thiery spake thusly:
-> > Sometimes autobuilder failures occur only on a specific distribution. To
-> > ease the research for the maintainer/developers add the host distribution
-> > information to the result archive.
-> >
-> > The distribution information comes from '/etc/os-release' (or
-> > '/usr/lib/os-release') that seems to be present on the most common distros:
-> >
-> > Debian: https://manpages.debian.org/buster/systemd/os-release.5.en.html
-> > Ubuntu: http://manpages.ubuntu.com/manpages/bionic/man5/os-release.5.html
-> > Red Red: https://www.freedesktop.org/software/systemd/man/os-release.html
-> > Open-Suse: https://en.opensuse.org/SDB:Find_openSUSE_version
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
->
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> Regards,
-> Yann E. MORIN.
->
-
-I'm hunting an issue with building libnetconf2 in autobuilder [1].
-Meanwhile I think I figured out the issue. But it would be great to
-know the host system and version used by the autobuilder. Any chance
-to get this patch in?
-
-[1] http://autobuild.buildroot.net/results/2be8b4c60a618ab58590c1fe2d470efa06f6460f/
-[2] http://autobuild.buildroot.net/results/bc494a109899f423293d079ae817e69dc52b809e/
-
+diff --git a/linux/linux.mk b/linux/linux.mk index b9f2052ee7..36f98dd704 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -538,6 +538,13 @@ $(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL sett  endif  endif
+ 
++ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
++define LINUX_GIT_VERSION
++	$(TOPDIR)/support/scripts/setlocalversion $(LINUX_DL_DIR)/git > 
++$(@D)/.scmversion endef LINUX_PRE_BUILD_HOOKS += LINUX_GIT_VERSION 
++endif
++
+ ifeq ($(BR_BUILDING),y)
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
 --
-Heiko
+2.17.1
