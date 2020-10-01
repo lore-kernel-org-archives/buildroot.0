@@ -1,25 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2020 21:23:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: needs host-pkgconf
-In-Reply-To: <20201001171153.528731-1-fontaine.fabrice@gmail.com>
-References: <20201001171153.528731-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201001192337.GA11621@scaer>
+Date: Thu, 1 Oct 2020 21:23:53 +0200
+Subject: [Buildroot] [PATCH] package/nodejs: security bump to version
+ 12.18.4
+In-Reply-To: <20201001184922.18748-1-peter@korsgaard.com>
+References: <20201001184922.18748-1-peter@korsgaard.com>
+Message-ID: <20201001192353.GB11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Peter, All,
 
-On 2020-10-01 19:11 +0200, Fabrice Fontaine spake thusly:
-> host-pkgconf is a mandatory dependency since version 0.180 and
-> https://sourceware.org/git/?p=elfutils.git;a=commit;h=f7f0cdc59a13780938ae3f578955737a75e60ea9
+On 2020-10-01 20:49 +0200, Peter Korsgaard spake thusly:
+> Fixes the following security issues:
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/123bdb3e7244800e1717f968c1d371e51f7fff2b
+> - CVE-2020-8201: HTTP Request Smuggling due to CR-to-Hyphen conversion
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>   Affected Node.js versions converted carriage returns in HTTP request
+>   headers to a hyphen before parsing.  This can lead to HTTP Request
+>   Smuggling as it is a non-standard interpretation of the header.
+> 
+>   Impacts:
+>     All versions of the 14.x and 12.x releases line
+> 
+> - CVE-2020-8252: fs.realpath.native may cause buffer overflow
+> 
+>   libuv's realpath implementation incorrectly determined the buffer size
+>   which can result in a buffer overflow if the resolved path is longer than
+>   256 bytes.
+> 
+>   Impacts:
+>     All versions of the 10.x release line
+>     All versions of the 12.x release line
+> 
+> For more details, see the advisory:
+> https://nodejs.org/en/blog/vulnerability/september-2020-security-releases/
+> 
+> Adjust license hash for the addition of the BSD-3c licensed highlight.js:
+> https://github.com/nodejs/node/commit/6f8b7a85d239129273948386c34775810f2dc4a3
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Applied to master, thanks.
 
@@ -27,26 +49,38 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/elfutils/elfutils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/nodejs/nodejs.hash | 6 +++---
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-> index 28f86c2fab..3d37c4634b 100644
-> --- a/package/elfutils/elfutils.mk
-> +++ b/package/elfutils/elfutils.mk
-> @@ -10,8 +10,8 @@ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
->  ELFUTILS_INSTALL_STAGING = YES
->  ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
->  ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
-> -ELFUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
-> -HOST_ELFUTILS_DEPENDENCIES = host-zlib host-bzip2 host-xz
-> +ELFUTILS_DEPENDENCIES = host-pkgconf zlib $(TARGET_NLS_DEPENDENCIES)
-> +HOST_ELFUTILS_DEPENDENCIES = host-pkgconf host-zlib host-bzip2 host-xz
+> diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+> index 60d69a8638..33fb407882 100644
+> --- a/package/nodejs/nodejs.hash
+> +++ b/package/nodejs/nodejs.hash
+> @@ -1,5 +1,5 @@
+> -# From https://nodejs.org/dist/v12.18.0/SHASUMS256.txt
+> -sha256  d4688636a378367f5157f02bd5c13902f5c193356f8f7a35c99dfa383b03b13f  node-v12.18.0.tar.xz
+> +# From https://nodejs.org/dist/v12.18.4/SHASUMS256.txt
+> +sha256  25f03cb18e53b6d0959d0c219e701a85eb4693f526bdda7c72bc6199b364f609  node-v12.18.4.tar.xz
 >  
->  # We patch configure.ac
->  ELFUTILS_AUTORECONF = YES
+>  # Hash for license file
+> -sha256  cd2e5817a25d7d28efba927b01056cae04a616b673014159f9eafeb008a0e747  LICENSE
+> +sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index e384d4c8a0..b159b10253 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -NODEJS_VERSION = 12.18.0
+> +NODEJS_VERSION = 12.18.4
+>  NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+>  NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+>  NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 > -- 
-> 2.28.0
+> 2.20.1
 > 
 > _______________________________________________
 > buildroot mailing list
