@@ -1,57 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2020 19:30:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sentry-cli: needs host-zlib
-In-Reply-To: <20201001171441.529114-1-fontaine.fabrice@gmail.com>
-References: <20201001171441.529114-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201001173016.GZ11621@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  1 Oct 2020 20:34:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cppzmq: bump to version 4.7.0
+Message-ID: <20201001183423.749130-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+https://github.com/zeromq/cppzmq/releases/tag/v4.7.0
 
-On 2020-10-01 19:14 +0200, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/bca6f0ef30bc8fdfa98f48c96de368dc4644a1f5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update indentation in hash file (two spaces)
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cppzmq/cppzmq.hash | 4 ++--
+ package/cppzmq/cppzmq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/sentry-cli/sentry-cli.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
-> index 56b787c31f..c4dbc5ebfd 100644
-> --- a/package/sentry-cli/sentry-cli.mk
-> +++ b/package/sentry-cli/sentry-cli.mk
-> @@ -9,7 +9,7 @@ SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
->  SENTRY_CLI_LICENSE = BSD-3-clause
->  SENTRY_CLI_LICENSE_FILES = LICENSE
->  
-> -HOST_SENTRY_CLI_DEPENDENCIES = host-rustc
-> +HOST_SENTRY_CLI_DEPENDENCIES = host-rustc host-zlib
->  
->  HOST_SENTRY_CLI_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
->  
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/cppzmq/cppzmq.hash b/package/cppzmq/cppzmq.hash
+index f0e256dc14..7e40d4e32f 100644
+--- a/package/cppzmq/cppzmq.hash
++++ b/package/cppzmq/cppzmq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e9203391a0b913576153a2ad22a2dc1479b1ec325beb6c46a3237c669aef5a52  cppzmq-4.6.0.tar.gz
+-sha256 7e6db90e2e805c72b3daa77849d1cb5f1f92da0e69750c8a4aa1d86d70704748  LICENSE
++sha256  ffbedc8ffb95caea0b82f9be208c8ac5d6040870b63f2a9c780ccff681d5464c  cppzmq-4.7.0.tar.gz
++sha256  7e6db90e2e805c72b3daa77849d1cb5f1f92da0e69750c8a4aa1d86d70704748  LICENSE
+diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
+index c2994ecfcb..0f0ace2541 100644
+--- a/package/cppzmq/cppzmq.mk
++++ b/package/cppzmq/cppzmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPPZMQ_VERSION = 4.6.0
++CPPZMQ_VERSION = 4.7.0
+ CPPZMQ_SITE = $(call github,zeromq,cppzmq,v$(CPPZMQ_VERSION))
+ CPPZMQ_INSTALL_STAGING = YES
+ CPPZMQ_DEPENDENCIES = host-pkgconf zeromq
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
