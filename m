@@ -1,87 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2020 21:31:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: custom configuration
- file
-In-Reply-To: <CAFfn7Uk3-cwCEs=TeP5jLvUgyk3Hf0E8KjiY0z2MKda+AtBKiQ@mail.gmail.com>
-References: <20200928092945.584196-1-pieter.degendt@basalte.be>
- <20200930215728.181df33f@windsurf.home>
- <CAFfn7Uk3-cwCEs=TeP5jLvUgyk3Hf0E8KjiY0z2MKda+AtBKiQ@mail.gmail.com>
-Message-ID: <20201001193142.GC11621@scaer>
+Date: Thu, 1 Oct 2020 21:33:11 +0200
+Subject: [Buildroot] [git commit] package/cppzmq: bump to version 4.7.0
+Message-ID: <20201001192357.E0B57826D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pieter, Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0039c783a254468f1b1da775a08900473729826
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-10-01 09:29 +0200, Pieter De Gendt spake thusly:
-> On Wed, Sep 30, 2020 at 9:57 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > On Mon, 28 Sep 2020 11:29:45 +0200
-> > Pieter De Gendt <pieter.degendt@gmail.com> wrote:
-> > > diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-> > > index 5094434e6c..fa74197004 100644
-> > > --- a/package/mbedtls/mbedtls.mk
-> > > +++ b/package/mbedtls/mbedtls.mk
-> > > @@ -68,4 +68,12 @@ else ifeq ($(BR2_microblaze)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-> > >  MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_DISABLE_ASM
-> > >  endif
-> > >
-> > > +define MBEDTLS_OVERRIDE_CONFIG
-> > > +     cp $(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG) $(@D)/include/mbedtls/config.h
-> > > +endef
-> > > +
-> > > +ifneq ($(call qstrip,$(BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG)),)
-> > > +MBEDTLS_POST_CONFIGURE_HOOKS += MBEDTLS_OVERRIDE_CONFIG
-> > > +endif
-[--SNIP--]
-> > However, what bothers me a bit is how it completely overrides all the
-> > configuration logic that takes place before in mbedtls.mk. For example,
-> > if you enable BR2_PACKAGE_MBEDTLS_COMPRESSION=y and use your option to
-> > have a custom configuration file, then what
-> > BR2_PACKAGE_MBEDTLS_COMPRESSION=y does will be ignored.
-> >
-> > So, we would have to make BR2_PACKAGE_MBEDTLS_COMPRESSION disappear
-> > when BR2_PACKAGE_MBEDTLS_CUSTOM_CONFIG, but then, how do you bring zlib
-> > as a build dependency of mbedtls ?
-> >
-> > We need to decide if the custom configuration file should override all
-> > tweaks, or if all tweaks should be applied on top of the custom
-> > configuration file.
-> 
-> I understand why you are bothered with completely overriding the configuration,
-> however I couldn't think of a workable alternative. There are a lot of
-> settings in the
-> config.h file. See: https://tls.mbed.org/api/config_8h.html
-> 
-> Agreed, there are more settings that don't require altering the
-> dependency chain,
-> but exposing all in buildroot would be a lot of work and hard to maintain?
-> 
-> Applying tweaks on the custom config also feels a bit awkward, since
-> you already
-> took the effort of creating the custom config and the "sed" commands might not
-> even apply.
+https://github.com/zeromq/cppzmq/releases/tag/v4.7.0
 
-But that is what we are doing with the user-provided configuration files
-for:
-  - uClibc-ng
-  - the linux kernel
-  - busybox
-  - uboot
-  - and probably a few others as well...
+Update indentation in hash file (two spaces)
 
-So it would feel natural that we do the same for mbedtls, so that there
-is a consistent behaviour across the board.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/cppzmq/cppzmq.hash | 4 ++--
+ package/cppzmq/cppzmq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cppzmq/cppzmq.hash b/package/cppzmq/cppzmq.hash
+index f0e256dc14..7e40d4e32f 100644
+--- a/package/cppzmq/cppzmq.hash
++++ b/package/cppzmq/cppzmq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 e9203391a0b913576153a2ad22a2dc1479b1ec325beb6c46a3237c669aef5a52  cppzmq-4.6.0.tar.gz
+-sha256 7e6db90e2e805c72b3daa77849d1cb5f1f92da0e69750c8a4aa1d86d70704748  LICENSE
++sha256  ffbedc8ffb95caea0b82f9be208c8ac5d6040870b63f2a9c780ccff681d5464c  cppzmq-4.7.0.tar.gz
++sha256  7e6db90e2e805c72b3daa77849d1cb5f1f92da0e69750c8a4aa1d86d70704748  LICENSE
+diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
+index c2994ecfcb..0f0ace2541 100644
+--- a/package/cppzmq/cppzmq.mk
++++ b/package/cppzmq/cppzmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPPZMQ_VERSION = 4.6.0
++CPPZMQ_VERSION = 4.7.0
+ CPPZMQ_SITE = $(call github,zeromq,cppzmq,v$(CPPZMQ_VERSION))
+ CPPZMQ_INSTALL_STAGING = YES
+ CPPZMQ_DEPENDENCIES = host-pkgconf zeromq
