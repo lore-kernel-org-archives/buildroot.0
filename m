@@ -1,54 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Oct 2020 22:57:19 +0200
-Subject: [Buildroot] [git commit] package/freetype: drop libpng workaround
-Message-ID: <20201001204733.4D7138E6E9@busybox.osuosl.org>
+Date: Thu, 1 Oct 2020 22:57:23 +0200
+Subject: [Buildroot] [git commit] package/freetype: add brotli optional
+ dependency
+Message-ID: <20201001204733.6743F836D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=005a3437a5eee0300f6a8d9974d7a94e5ef723ac
+commit: https://git.buildroot.net/buildroot/commit/?id=81ada4dff4334a6fbb7ae3a547de4cf6aab54a91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libpng workaround which has been added with commit
-f7313cadf2ca9e0195a873f62f6b6c38a58a3630 is not needed since version
-2.5.3 and
-https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=00c79ed9680a0d7a367c6914adc7485391299542
+brotli is an optional dependency (enabled by default) since version
+2.10.2 and
+https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=9443a1bc3e6cfa315db976ff80f6c5e91b12b387
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freetype/freetype.mk | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ package/freetype/freetype.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 516d1c0cfc..428531ed08 100644
+index b0aba78c51..e6463c30b6 100644
 --- a/package/freetype/freetype.mk
 +++ b/package/freetype/freetype.mk
-@@ -37,9 +37,7 @@ endif
+@@ -16,6 +16,7 @@ FREETYPE_CONFIG_SCRIPTS = freetype-config
  
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREETYPE_DEPENDENCIES += libpng
--FREETYPE_CONF_OPTS += LIBPNG_CFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --cflags`" \
--	LIBPNG_LDFLAGS="`$(STAGING_DIR)/usr/bin/libpng-config --ldflags`"
--FREETYPE_LIBPNG_LIBS = "`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
-+FREETYPE_CONF_OPTS += --with-png
- else
- FREETYPE_CONF_OPTS += --without-png
+ HOST_FREETYPE_DEPENDENCIES = host-pkgconf
+ HOST_FREETYPE_CONF_OPTS = \
++	--without-brotli \
+ 	--without-bzip2 \
+ 	--without-harfbuzz \
+ 	--without-png \
+@@ -32,6 +33,13 @@ else
+ FREETYPE_CONF_OPTS += --without-zlib
  endif
-@@ -52,14 +50,5 @@ define FREETYPE_FIX_CONFIG_FILE
- endef
- FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE
  
--# libpng isn't included in freetype-config & freetype2.pc :-/
--define FREETYPE_FIX_CONFIG_FILE_LIBS
--	$(SED) "s,^Libs.private:,& $(FREETYPE_LIBPNG_LIBS)," \
--		$(STAGING_DIR)/usr/lib/pkgconfig/freetype2.pc
--	$(SED) "s,-lfreetype,& $(FREETYPE_LIBPNG_LIBS)," \
--		$(STAGING_DIR)/usr/bin/freetype-config
--endef
--FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++ifeq ($(BR2_PACKAGE_BROTLI),y)
++FREETYPE_DEPENDENCIES += brotli
++FREETYPE_CONF_OPTS += --with-brotli
++else
++FREETYPE_CONF_OPTS += --without-brotli
++endif
++
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ FREETYPE_DEPENDENCIES += bzip2
+ FREETYPE_CONF_OPTS += --with-bzip2
