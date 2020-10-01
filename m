@@ -1,74 +1,141 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Thu, 1 Oct 2020 21:46:59 +0100
-Subject: [Buildroot] [RFC PATCH 0/4] add BCC and bpftrace packages
-In-Reply-To: <b25b6c1c-b013-9a84-8a57-bd44738c6453@gmail.com>
-References: <20200929102618.28571-1-qais.yousef@arm.com>
- <b25b6c1c-b013-9a84-8a57-bd44738c6453@gmail.com>
-Message-ID: <20201001204658.p3glxx22kevypsiw@e107158-lin.cambridge.arm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Oct 2020 22:50:54 +0200
+Subject: [Buildroot] TR: [PATCH 1/1] Set external version into os-release
+In-Reply-To: <DM6PR01MB4137169BE8F2D5C93A2D89DA8A300@DM6PR01MB4137.prod.exchangelabs.com>
+References: <20200917153243.8745-1-etouhtarian@distech-controls.com>
+ <DM6PR01MB4137169BE8F2D5C93A2D89DA8A300@DM6PR01MB4137.prod.exchangelabs.com>
+Message-ID: <20201001205054.GH11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain
+Eric, All,
 
-On 09/29/20 23:08, Romain Naour wrote:
-> Hi Qais,
+Thanks again for your contribution. :-)
+
+On 2020-10-01 14:49 +0000, Touhtarian, Eric via buildroot spake thusly:
+> Signed-off-by: Eric Touhtarian <etouhtarian@distech-controls.com>
+> ---
+>  Makefile                        | 16 ++++++++++++++--
+>  support/scripts/setlocalversion | 15 ++++++++++++---
+>  2 files changed, 26 insertions(+), 5 deletions(-)
 > 
-> Le 29/09/2020 ? 12:26, Qais Yousef a ?crit?:
-> > *** RESEND AFTER SUBSCRIBING TO THE LIST ***
-> > 
-> > The following series adds 2 new packages:
-> > 
-> > 	* BPF Compiler Collection (BCC)
-> > 	* bpftrace
-> > 
-> > It is based on 2020.08 tag. Can rebase on tip of master after this initial RFC
-> > review.
-> > 
-> > The support was validated on x86_64 and aarch64 (little endian). Hence
-> > restricted to these 2 archs only. aarch64 big endian is set as valid, but when
-> > I tried to compile that I think LLVM or clang support for aarch64_be + BPF was
-> > generating some errors; or something else was missing. So it might be a better
-> > idea to remove BR2_aarch64_be from Config.in dependency.
-> > 
-> > I tried to enable i386 and arm (aarch32); but I encountered some issues and
-> > decided to narrow the initial support to what I got working in hope that other
-> > archs support can follow through later if people are interested.
-> > 
-> > IIRC the issues were:
-> > 
-> > 	* bpftrace doesn't support these 2 archs.
-> > 	* BCC had some build failures on arm.
-> > 	* BCC had runtime issues on i386.
-> > 
-> > Marking this as RFC as it is something that was done over several weekends and
-> > my last contribution to buildroot was many many years ago. So I am sure there
-> > are many rough edges to tackle. Beside from my vague description above, you
-> > might have gotten the hint it's been a while since I last touched it. But I'd
-> > like to get the support merged, so hopefully starting a discussion with what
-> > I have now is a better start.
+> diff --git a/Makefile b/Makefile
+> index b2afe5bcfb..e6693d2f45 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -111,9 +111,12 @@ CONFIG_CONFIG_IN = Config.in  CONFIG = support/kconfig  DATE := $(shell date +%Y%m%d)
+>  
+> +define setlocalversion
+> +$(shell $(TOPDIR)/support/scripts/setlocalversion $(1) $(2)) endef
+>  # Compute the full local version string so packages can use it as-is  # Need to export it, so it can be got from environment in children (eg. mconf) -export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+> +export BR2_VERSION_FULL := $(BR2_VERSION)$(call setlocalversion)
+
+This patch is also badly mangled. Please use git send-email.
+
+Also, this part of the Makefile has silghtly changed recently, with
+commit 98c99556e3e (Makefile: properly account for custom tags in
+BR2_VERSION_FULL), that was applied two months ago (July 27th).
+
+>  # List of targets and target patterns for which .config doesn't need to be read in  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \ @@ -740,6 +743,14 @@ host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>  .PHONY: staging-finalize
+>  staging-finalize: $(STAGING_DIR_SYMLINK)
+>  
+> +define set-external-info
+> +index=1; \
+> +$(foreach ext, $(BR2_EXTERNAL_DIRS), \
+> +	echo "EXTERNAL_$${index}_PATH=$(ext)"; \
+> +	echo "EXTERNAL_$${index}_VERSION=\"$(call setlocalversion,"--unmodify-version", $(ext))\""; \
+> +	index=$$(expr $$index + 1); )
+
+The set of fields in the os-release file is predefined by the spec:
+
+    https://www.freedesktop.org/software/systemd/man/os-release.html
+
+Extensions are allowed, but "[i]t is highly recommended to prefix new
+fields with an OS specific name in order to avoid name clashes". In our
+case, that prefix would probably have to be 'BR2_EXTERNAL_'.
+
+Still, I am not 100% sure we want that... What would be the use-case to
+have the versions of all br2-external trees?
+
+Usually, there is a "main" repository, which has buildroot and all
+br2-external trees as sub-modules, or in a manifest file. The version
+of that "main: repo is then sufficient to derive the versions of all
+the others.
+
+In which case it would be simple to provide a post-build script that
+basically echoes that version in os-release.
+
+If you can come up with a good commit log that makes a point that the
+versions of all br2-external trees is important, I would not mind having
+it too much either.
+
+Ergo, at your keyboard, and go for some poesy. ;-)
+
+[--SNIP--]
+> diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion index b39b751f03..459b4765fa 100755
+> --- a/support/scripts/setlocalversion
+> +++ b/support/scripts/setlocalversion
+> @@ -10,10 +10,16 @@
+>  #
+>  
+>  usage() {
+> -	echo "Usage: $0 [srctree]" >&2
+> +	echo "Usage: $0 [--unmodify-version] [srctree]" >&2
+
+What is the purpose of this new option? You need to explain it in the
+commit log, and a comment in the script would bbe nice too.
+
+>  	exit 1
+>  }
+>  
+> +original_ver=false
+> +if test "$1" = "--unmodify-version"; then
+> +	original_ver=true
+> +	shift
+> +fi
+> +
+>  cd "${1:-.}" || usage
+>  
+>  # Check for git and a git repo.
+> @@ -26,8 +32,11 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+>  		# If we are past a tagged commit (like "v2.6.30-rc5-302-g72357d5"),
+>  		# we pretty print it.
+>  		if atag="`git describe 2>/dev/null`"; then
+> -			echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+> -
+> +			if $original_ver; then
+> +				printf $atag
+> +			else
+> +				echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+> +			fi
+
+This part of the scripr also changed with commit 98c99556e3e, and so
+your '--unmodify-version' option is maybe no longer required.
+
+I've now marked your patch as "changes requested" in patchwork.
+
+Regards,
+Yann E. MORIN.
+
+>  		# If we don't have a tag at all we print -g{commitish}.
+>  		else
+>  			printf '%s%s' -g $head
+> --
+> 2.17.1
 > 
-> I reviewed your RFC series. I'm agree that bcc is difficult to cross-compile...
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks a lot for your review! I will try to address as much as I can over the
-weekend and either post a new series or get back to you with more info.
-
-> 
-> I suggest adding bpftrace to the bcc series from Jugurtha and keeping you as
-> author of this package.
-
-I did test it and I think using it as a base makes sense. I will try to review
-it over the weekend too.
-
-> 
-> @jugurtha can you have a look at bpftrace package ?
-> 
-> I'll mark your RFC series "Changes requested" in patchwork.
-> Thanks!
-
-Thanks!
-
---
-Qais Yousef
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
