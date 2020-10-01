@@ -1,55 +1,154 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  1 Oct 2020 23:33:53 +0200
-Subject: [Buildroot] [PATCH] package/python3: bump to version 3.8.6
-Message-ID: <20201001213354.29150-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 1 Oct 2020 23:42:07 +0200
+Subject: [Buildroot] [PATCH v1] boot/barebox: fix target bareboxenv
+ command compile
+In-Reply-To: <20201001210838.GJ11621@scaer>
+References: <20200107195026.25413-1-ps.report@gmx.net>
+ <20201001200340.GE11621@scaer> <20201001230211.5fbd3602@gmx.net>
+ <20201001210838.GJ11621@scaer>
+Message-ID: <20201001234207.53cba558@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a number of bugfixes. For details, see the changelog:
+Hello Yann,
 
-https://docs.python.org/release/3.8.6/whatsnew/changelog.html#changelog
+On Thu, 1 Oct 2020 23:08:38 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Update the license hash for the addition of a note stating that the examples
-and documentation is now dual licensed under the PSF and a Zero-Clause BSD
-license since:
+> Peter, All,
+>
+> On 2020-10-01 23:02 +0200, Peter Seiderer spake thusly:
+> > On Thu, 1 Oct 2020 22:03:40 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > On 2020-01-07 20:50 +0100, Peter Seiderer spake thusly:
+> > > > The buildroot custom bareboxenv compile command
+> > > > needs the additional include path 'scripts/include'
+> > > > to gain access to the local copy of the kernel header
+> > > > files.
+> > > >
+> > > > Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
+> > > >
+> > > >   build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
+> [--SNIP--]
+> > > Although this is techniocally,  correct, I wonder why we do not use
+> > > BAREBOX_KONFIG_FIXUP_CMDS to enabler CONFIG_BAREBOXENV_TARGET in the
+> > > barebox configuration, for example:
+> > >
+> > >     diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> > >     index 422f27312d..5eaeb7db4c 100644
+> > >     --- a/boot/barebox/barebox.mk
+> > >     +++ b/boot/barebox/barebox.mk
+> > >     @@ -112,6 +112,9 @@ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
+> > Seems the wrong place as BR2_TARGET_BAREBOX_BAREBOXENV is/should be independent
+> > of BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
+>
+> Yes, but it was just to give the overall idea. Of course, that part will
+> have to be refactored.
+>
+> > >      define $(1)_KCONFIG_FIXUP_CMDS
+> > >      	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
+> > >      	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
+> > >     +	$$(if $$(BAREBOX_KONFIG_FIXUP_CMDS),\
+> > Did you mean '$$(if $$(BR2_TARGET_BAREBOX_BAREBOXENV),' ???
+>
+> Arg, almost, yes. I really meant $$(BR2_TARGET_$(1)_BAREBOXENV) ;-)
+>
 
-https://github.com/python/cpython/commit/9fef7c54a0adfade5ec94259d97f22e05fe9e3e3
+The following patch seems to work:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python3/python3.hash | 8 ++++----
- package/python3/python3.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 422f27312d..d47a47966c 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -88,13 +88,6 @@ $(1)_KCONFIG_DEPENDENCIES = \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 0a08d04b3f..4c03293dd1 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-385/
--md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
-+# From https://www.python.org/downloads/release/python-386/
-+md5  69e73c49eeb1a853cefd26d18c9d069d  Python-3.8.6.tar.xz
- # Locally computed
--sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
--sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
-+sha256  a9e0b79d27aa056eb9cce8d63a427b5f9bab1465dee3f942dcfdb25a82f4ab8a  Python-3.8.6.tar.xz
-+sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 017dbd40da..af1e5e50d9 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.8
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
--- 
-2.20.1
+-ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+-define $(1)_BUILD_BAREBOXENV_CMDS
+-	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+-		$$(@D)/scripts/bareboxenv.c
+-endef
+-endif
+-
+ ifeq ($$(BR2_TARGET_$(1)_CUSTOM_ENV),y)
+ $(1)_ENV_NAME = $$(notdir $$(call qstrip,\
+ 	$$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)))
+@@ -109,12 +102,23 @@ endef
+ endif
+
+ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
+-define $(1)_KCONFIG_FIXUP_CMDS
++define $(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH
+ 	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
+ 	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
+ endef
+ endif
+
++ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
++define $(1)_KCONFIG_FIXUP_BAREBOXENV
++	$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET)
++endef
++endif
++
++define $(1)_KCONFIG_FIXUP_CMDS
++	$$($(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH)
++	$$($(1)_KCONFIG_FIXUP_BAREBOXENV)
++endef
++
+ define $(1)_BUILD_CMDS
+ 	$$($(1)_BUILD_BAREBOXENV_CMDS)
+ 	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
+@@ -136,7 +140,7 @@ endef
+
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_INSTALL_TARGET_CMDS
+-	cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
++	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
+ endef
+ endif
+
+
+
+	$ file target/usr/bin/bareboxenv
+target/usr/bin/bareboxenv: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 5.4.0, not stripped
+
+
+Regards,
+Peter
+
+
+> Regards,
+> Yann E. MORIN.
+>
+> > Regards,
+> > Peter
+> >
+> > >     +		$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET),\
+> > >     +		$$(call KCONFIG_DISABLE_OPT,CONFIG_BAREBOXENV_TARGET))
+> > >      endef
+> > >      endif
+> > >
+> > >
+> > > And then we candrop our custom build command for it...
+> > >
+> > > CONFIG_BAREBOXENV_TARGET has existed since commit afb03d7a55, in April
+> > > 2012, so virtually all barebox versions that are recent have it.
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > >  		$$(@D)/scripts/bareboxenv.c
+> > > >  endef
+> > > >  endif
+> > > > --
+> > > > 2.24.1
+> > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> >
+>
