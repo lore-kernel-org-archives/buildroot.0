@@ -1,154 +1,78 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 1 Oct 2020 23:42:07 +0200
-Subject: [Buildroot] [PATCH v1] boot/barebox: fix target bareboxenv
- command compile
-In-Reply-To: <20201001210838.GJ11621@scaer>
-References: <20200107195026.25413-1-ps.report@gmx.net>
- <20201001200340.GE11621@scaer> <20201001230211.5fbd3602@gmx.net>
- <20201001210838.GJ11621@scaer>
-Message-ID: <20201001234207.53cba558@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  2 Oct 2020 00:06:24 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{4, 8}.x series
+Message-ID: <20201001220624.32250-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-On Thu, 1 Oct 2020 23:08:38 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-
-> Peter, All,
->
-> On 2020-10-01 23:02 +0200, Peter Seiderer spake thusly:
-> > On Thu, 1 Oct 2020 22:03:40 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > On 2020-01-07 20:50 +0100, Peter Seiderer spake thusly:
-> > > > The buildroot custom bareboxenv compile command
-> > > > needs the additional include path 'scripts/include'
-> > > > to gain access to the local copy of the kernel header
-> > > > files.
-> > > >
-> > > > Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
-> > > >
-> > > >   build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
-> [--SNIP--]
-> > > Although this is techniocally,  correct, I wonder why we do not use
-> > > BAREBOX_KONFIG_FIXUP_CMDS to enabler CONFIG_BAREBOXENV_TARGET in the
-> > > barebox configuration, for example:
-> > >
-> > >     diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> > >     index 422f27312d..5eaeb7db4c 100644
-> > >     --- a/boot/barebox/barebox.mk
-> > >     +++ b/boot/barebox/barebox.mk
-> > >     @@ -112,6 +112,9 @@ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
-> > Seems the wrong place as BR2_TARGET_BAREBOX_BAREBOXENV is/should be independent
-> > of BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
->
-> Yes, but it was just to give the overall idea. Of course, that part will
-> have to be refactored.
->
-> > >      define $(1)_KCONFIG_FIXUP_CMDS
-> > >      	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
-> > >      	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
-> > >     +	$$(if $$(BAREBOX_KONFIG_FIXUP_CMDS),\
-> > Did you mean '$$(if $$(BR2_TARGET_BAREBOX_BAREBOXENV),' ???
->
-> Arg, almost, yes. I really meant $$(BR2_TARGET_$(1)_BAREBOXENV) ;-)
->
-
-The following patch seems to work:
-
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 422f27312d..d47a47966c 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -88,13 +88,6 @@ $(1)_KCONFIG_DEPENDENCIES = \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
-
--ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
--define $(1)_BUILD_BAREBOXENV_CMDS
--	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
--		$$(@D)/scripts/bareboxenv.c
--endef
--endif
--
- ifeq ($$(BR2_TARGET_$(1)_CUSTOM_ENV),y)
- $(1)_ENV_NAME = $$(notdir $$(call qstrip,\
- 	$$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)))
-@@ -109,12 +102,23 @@ endef
- endif
-
- ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
--define $(1)_KCONFIG_FIXUP_CMDS
-+define $(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH
- 	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
- 	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
- endef
- endif
-
-+ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
-+define $(1)_KCONFIG_FIXUP_BAREBOXENV
-+	$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET)
-+endef
-+endif
-+
-+define $(1)_KCONFIG_FIXUP_CMDS
-+	$$($(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH)
-+	$$($(1)_KCONFIG_FIXUP_BAREBOXENV)
-+endef
-+
- define $(1)_BUILD_CMDS
- 	$$($(1)_BUILD_BAREBOXENV_CMDS)
- 	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
-@@ -136,7 +140,7 @@ endef
-
- ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
- define $(1)_INSTALL_TARGET_CMDS
--	cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
-+	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
- endef
- endif
-
-
-
-	$ file target/usr/bin/bareboxenv
-target/usr/bin/bareboxenv: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 5.4.0, not stripped
-
-
-Regards,
-Peter
-
-
-> Regards,
-> Yann E. MORIN.
->
-> > Regards,
-> > Peter
-> >
-> > >     +		$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET),\
-> > >     +		$$(call KCONFIG_DISABLE_OPT,CONFIG_BAREBOXENV_TARGET))
-> > >      endef
-> > >      endif
-> > >
-> > >
-> > > And then we candrop our custom build command for it...
-> > >
-> > > CONFIG_BAREBOXENV_TARGET has existed since commit afb03d7a55, in April
-> > > 2012, so virtually all barebox versions that are recent have it.
-> > >
-> > > Regards,
-> > > Yann E. MORIN.
-> > >
-> > > >  		$$(@D)/scripts/bareboxenv.c
-> > > >  endef
-> > > >  endif
-> > > > --
-> > > > 2.24.1
-> > > >
-> > > > _______________________________________________
-> > > > buildroot mailing list
-> > > > buildroot at busybox.net
-> > > > http://lists.busybox.net/mailman/listinfo/buildroot
-> > >
-> >
->
+diff --git a/linux/Config.in b/linux/Config.in
+index ec74e1e65a..619fed86dc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -124,7 +124,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.8.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5393b27f14..b1bd51e668 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  7b0bf5029c94df72d1244b6b77e79e376cff2817a782c3ac50767a4121fd17fe  linux-5.8.7.tar.xz
+-sha256  e0260dae0da01163b1a3289ad9c5cc6ee4226720e199e8a1d982e24efda7ffc0  linux-5.4.63.tar.xz
++sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
++sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  0dfb86052e7405692e29f8db2f5b480ed972d93b615ffb24d4607d33d29eb770  linux-4.4.235.tar.xz
+-sha256  e625a6212695efe5deeab5844e47404841fb1bf755f85eba818614c2ff580cc3  linux-4.9.235.tar.xz
+-sha256  5e61b2f58d4c930c3567821aeeb6f688554dca61454646d54711bfc9abc7b09a  linux-4.14.196.tar.xz
+-sha256  2a4335c66f0ea8cc49d89ab25e5e00d75fcb33fe638d5584855598b4b8f3038d  linux-4.19.143.tar.xz
++sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
++sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
++sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
++sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
+ # Locally computed
+ sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
+ sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0d92dfada7..1fe7d05da0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -338,12 +338,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.235"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.235"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.196"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.143"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.63"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.8.7"		if BR2_KERNEL_HEADERS_5_8
++	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
++	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.20.1
