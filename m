@@ -1,52 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Oct 2020 23:09:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netatalk: fix build with gcc 10
-Message-ID: <20201001210908.2025791-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  1 Oct 2020 23:33:53 +0200
+Subject: [Buildroot] [PATCH] package/python3: bump to version 3.8.6
+Message-ID: <20201001213354.29150-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/c3381fd3072901871fdd491dc3d4f66e403c7a70
+Contains a number of bugfixes. For details, see the changelog:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://docs.python.org/release/3.8.6/whatsnew/changelog.html#changelog
+
+Update the license hash for the addition of a note stating that the examples
+and documentation is now dual licensed under the PSF and a Zero-Clause BSD
+license since:
+
+https://github.com/python/cpython/commit/9fef7c54a0adfade5ec94259d97f22e05fe9e3e3
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...iple-def-of-invalid_dircache_entries.patch | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
+ package/python3/python3.hash | 8 ++++----
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-new file mode 100644
-index 0000000000..e7ccc52553
---- /dev/null
-+++ b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-@@ -0,0 +1,25 @@
-+From 32df6e155ccfc83216321925273c3e75e631ebe6 Mon Sep 17 00:00:00 2001
-+From: Andrew Bauer <zonexpertconsulting@outlook.com>
-+Date: Wed, 22 Jan 2020 09:59:47 -0600
-+Subject: [PATCH] fix ftbs multiple def of invalid_dircache_entries
-+
-+[Retrieved from:
-+https://github.com/Netatalk/Netatalk/pull/125/commits/32df6e155ccfc83216321925273c3e75e631ebe6]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ etc/afpd/directory.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/etc/afpd/directory.h b/etc/afpd/directory.h
-+index eb89c606..81bfa9cb 100644
-+--- a/etc/afpd/directory.h
-++++ b/etc/afpd/directory.h
-+@@ -91,7 +91,7 @@ struct maccess {
-+ #define	AR_UWRITE	(1<<2)
-+ #define	AR_UOWN		(1<<7)
-+ 
-+-q_t *invalid_dircache_entries;
-++extern q_t *invalid_dircache_entries;
-+ 
-+ typedef int (*dir_loop)(struct dirent *, char *, void *);
-+ 
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 0a08d04b3f..4c03293dd1 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-385/
+-md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
++# From https://www.python.org/downloads/release/python-386/
++md5  69e73c49eeb1a853cefd26d18c9d069d  Python-3.8.6.tar.xz
+ # Locally computed
+-sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
+-sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
++sha256  a9e0b79d27aa056eb9cce8d63a427b5f9bab1465dee3f942dcfdb25a82f4ab8a  Python-3.8.6.tar.xz
++sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 017dbd40da..af1e5e50d9 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.8
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 -- 
-2.28.0
+2.20.1
