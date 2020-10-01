@@ -1,39 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Oct 2020 10:48:47 +0200
-Subject: [Buildroot] [git commit] package/elfutils: fix host build
-Message-ID: <20201001083844.A81C28E6F3@busybox.osuosl.org>
+Date: Thu, 1 Oct 2020 10:49:17 +0200
+Subject: [Buildroot] [git commit] package/stellarium: bump version to 0.20.3
+Message-ID: <20201001083935.A175E83902@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=226af868146f7dfc557e3eadbb16ed16ec5896b7
+commit: https://git.buildroot.net/buildroot/commit/?id=982ab7bde3f82036b80b7419d3e71b0b1453f484
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 52c5c6050c5359288ca48c85024aebd169fab258 disabled debuginfod on
-target but not on host resulting in the following build failure:
+Removed md5 hash.
 
-configure: error: dependencies not found, use --disable-libdebuginfod to disable or --enable-libdebuginfod=dummy to build a (bootstrap) dummy library.
+Release notes:
+http://stellarium.org/release/2020/09/27/stellarium-0.20.3.html
 
-Fixes:
- - http://autobuild.buildroot.org/results/97713c7e281313826067af559337832f22c3cb09
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/elfutils/elfutils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/stellarium/stellarium.hash | 5 ++---
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 3615a16cd0..28f86c2fab 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -50,6 +50,7 @@ endif
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index 7f29290aee..4f0ee7e12f 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,6 +1,5 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-md5  12b87785efdc52c1682bb6f3c37bd85d  stellarium-0.20.2.tar.gz
+-sha1  308fd0878d2126878d769d66cac1f00b3dccf819   stellarium-0.20.2.tar.gz
+-sha256 400ef964c2a1612157a4b219464ea919b4e330322a0db894835b6e11c4af5e9b  stellarium-0.20.2.tar.gz
++sha1  a3de40d74b2dcf8c9a7c6220de3d9e951e5b06c8    stellarium-0.20.3.tar.gz
++sha256 2781a364d14c203c21a11ef528d541559ed749e1b6c3dbc1187410a6c23ab97c  stellarium-0.20.3.tar.gz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index 543e6fa23d..d9ba29c8b5 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # disable for now, needs "distro" support
- ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
-+HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
- 
- ELFUTILS_CONF_ENV += \
- 	LDFLAGS="$(ELFUTILS_LDFLAGS)"
+-STELLARIUM_VERSION = 0.20.2
++STELLARIUM_VERSION = 0.20.3
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
