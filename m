@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Oct 2020 10:05:26 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gdb: fix build of
- gdbserver-only on the ARC gdb version
-In-Reply-To: <20200930205203.GW11621@scaer>
-References: <20200928201128.78005-1-thomas.petazzoni@bootlin.com>
- <20200930205203.GW11621@scaer>
-Message-ID: <20201001100526.103bcfab@windsurf.home>
+Date: Thu, 1 Oct 2020 10:06:16 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: Disable
+ -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
+In-Reply-To: <2efd6cda-edbf-bb5e-d7d7-89ca4491f0f0@gmail.com>
+References: <20200926191330.96074-1-romain.naour@gmail.com>
+ <20200926191330.96074-2-romain.naour@gmail.com>
+ <20200930225921.39dbe8a5@windsurf.home>
+ <2efd6cda-edbf-bb5e-d7d7-89ca4491f0f0@gmail.com>
+Message-ID: <20201001100616.2cb75cc9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 30 Sep 2020 22:52:03 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Wed, 30 Sep 2020 23:04:22 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> I was wondering if that should not instead be defined in Config.in, and
-> have the various gdb versions select it.
+> > The gotcha being of course that we don't pass TARGET_CFLAGS to the
+> > Linux package...  
 > 
-> But it turns out that we do not have a version choice for the target
-> variant of gdb; it's really onlythe arc fork, and then gdb-10 when we
-> bump it, that have it.
-> 
-> So, it is easier to handle from gdb.mk, indeed.
+> Indeed, I have no ideas if the userspace built with this toolchain is really
+> working... except for busybox which was used by qemu_microblazeel_mmu_defconfig
 
-Yes, our mess of having a version selection when host-gdb is enabled,
-but not when host-gdb is disabled makes that a bit difficult to achieve.
+I think we should be passing this flag in TARGET_CFLAGS. What bothers
+me is that passing it in TARGET_CFLAGS would not resolve the Linux
+build issue, as Linux isn't built with TARGET_CFLAGS...
 
 Thomas
 -- 
