@@ -1,39 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:39:58 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/pkg-meson.mk: fix
- generation of pkg_config_static prop
-Message-ID: <20201002085245.480FE8E7D9@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:55:37 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/zstd: avoid
+ compilation during host-zstd install step
+Message-ID: <20201002085245.57CC18E818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d950796a967c07ba12fa6e1d041ed852972be490
+commit: https://git.buildroot.net/buildroot/commit/?id=72dcbcf42c4f5f2f04cea78436907386464de26a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-fixes following in the generated cross-complation.conf file:
-pkg_config_static = '$(if $(BR2_STATIC_LIBS),true,false)'
+The host-zstd-build step was not actually compiling the library:
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+make[1]: Entering directory '/buildroot/output/build/host-zstd-1.4.5/lib'
+make[1]: Nothing to be done for 'default'.
+make[1]: Leaving directory '/buildroot/output/build/host-zstd-1.4.5/lib'
+
+and the actual compilation was part of the install step.
+This is not how other Buildroot packages work.
+
+Make sure to specify which library targets we want instead. The total amount
+of compiled files does not change with this patch.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 78da84eca9a4a5d584369b10792253a80c37a8f9)
+(cherry picked from commit 2e8bf36dc4421f2213f8fa6de91b2c9bf3d64e45)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 2 +-
+ package/zstd/zstd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 70f1d88d92..52119723c0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -195,7 +195,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
- 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
- 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
- 	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
--	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
-+	    -e 's%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g' \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index e2ba12b058..35002da332 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -71,7 +71,7 @@ endef
+ # note: no 'HAVE_...' options for host library build only
+ define HOST_ZSTD_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+-		-C $(@D)/lib
++		-C $(@D)/lib libzstd.a libzstd
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		-C $(@D) zstd
+ endef
