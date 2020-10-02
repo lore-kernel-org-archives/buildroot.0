@@ -1,76 +1,106 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 2 Oct 2020 14:51:53 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] package/live555: fix static build with openssl
-In-Reply-To: <20200713155135.1214109-1-fontaine.fabrice@gmail.com>
-References: <20200713155135.1214109-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201002125153.GA4477@SC-R90HHAJ6-1.goiba.net>
+From: Touhtarian, Eric <etouhtarian@distech-controls.com>
+Date: Fri, 2 Oct 2020 13:07:37 +0000
+Subject: [Buildroot] [PATCH 1/1] Get git version and transfer it to
+ build target
+In-Reply-To: <20201001201449.GG11621@scaer>
+References: <20200917153353.8824-1-etouhtarian@distech-controls.com>
+ <DM6PR01MB4137A236093298F048094EAC8A300@DM6PR01MB4137.prod.exchangelabs.com>,
+ <20201001201449.GG11621@scaer>
+Message-ID: <DM6PR01MB4137985B03967C77A9A6E6008A310@DM6PR01MB4137.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 13, 2020 at 05:51:34PM +0200, Fabrice Fontaine wrote:
-> Use pkg-config to retrieve openssl static dependencies such as -lz or
-> -latomic.
-> 
-> Moreover, don't pass the openssl libraries to LIBS_FOR_LIVEMEDIA_LIB
-> when linking statically with ar or the build will break on:
-> 
-> /home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar cr libliveMedia.a  \
-> 	Media.o MediaSource.o FramedSource.o FramedFileSource.o FramedFilter.o ByteStreamFileSource.o ByteStreamMultiFileSource.o ByteStreamMemoryBufferSource.o BasicUDPSource.o DeviceSource.o AudioInputDevice.o WAVAudioFileSource.o MPEG1or2Demux.o MPEG1or2DemuxedElementaryStream.o MPEGVideoStreamFramer.o MPEG1or2VideoStreamFramer.o MPEG1or2VideoStreamDiscreteFramer.o MPEG4VideoStreamFramer.o MPEG4VideoStreamDiscreteFramer.o H264or5VideoStreamFramer.o H264or5VideoStreamDiscreteFramer.o H264VideoStreamFramer.o H264VideoStreamDiscreteFramer.o H265VideoStreamFramer.o H265VideoStreamDiscreteFramer.o MPEGVideoStreamParser.o MPEG1or2AudioStreamFramer.o MPEG1or2AudioRTPSource.o MPEG4LATMAudioRTPSource.o MPEG4ESVideoRTPSource.o MPEG4GenericRTPSource.o MP3FileSource.o MP3Transcoder.o MP3ADU.o MP3ADUdescriptor.o MP3ADUinterleaving.o MP3ADUTranscoder.o MP3StreamState.o MP3Internals.o MP3InternalsHuffman.o MP3InternalsHuffmanTable.o MP3ADURTPSource.o MPEG1or2VideoRTPSource.o MPEG2TransportStrea
->  mMultiplexor.o MPEG2TransportStreamFromPESSource.o MPEG2TransportStreamFromESSource.o MPEG2TransportStreamFramer.o MPEG2TransportStreamAccumulator.o ADTSAudioFileSource.o ADTSAudioStreamDiscreteFramer.o JPEGVideoSource.o JPEGVideoRTPSource.o JPEG2000VideoRTPSource.o H263plusVideoRTPSource.o H263plusVideoStreamFramer.o H263plusVideoStreamParser.o AC3AudioStreamFramer.o AC3AudioRTPSource.o DVVideoStreamFramer.o DVVideoRTPSource.o AMRAudioSource.o AMRAudioFileSource.o InputFile.o StreamReplicator.o MediaSink.o FileSink.o BasicUDPSink.o AMRAudioFileSink.o H264or5VideoFileSink.o H264VideoFileSink.o H265VideoFileSink.o OggFileSink.o MPEG1or2AudioRTPSink.o MP3ADURTPSink.o MPEG1or2VideoRTPSink.o MPEG4LATMAudioRTPSink.o MPEG4GenericRTPSink.o MPEG4ESVideoRTPSink.o JPEGVideoRTPSink.o JPEG2000VideoRTPSink.o H263plusVideoRTPSink.o H264or5VideoRTPSink.o H264VideoRTPSink.o H265VideoRTPSink.o DVVideoRTPSink.o AC3AudioRTPSink.o VorbisAudioRTPSink.o TheoraVideoRTPSink.o VP8VideoRTPSink.o VP9V
->  ideoRTPSink.o GSMAudioRTPSink.o SimpleRTPSink.o AMRAudioRTPSink.o T140TextRTPSink.o OutputFile.o RawVideoRTPSink.o uLawAudioFilter.o RTPSource.o MultiFramedRTPSource.o SimpleRTPSource.o H261VideoRTPSource.o H264VideoRTPSource.o H265VideoRTPSource.o QCELPAudioRTPSource.o AMRAudioRTPSource.o VorbisAudioRTPSource.o TheoraVideoRTPSource.o VP8VideoRTPSource.o VP9VideoRTPSource.o RawVideoRTPSource.o RTPSink.o MultiFramedRTPSink.o AudioRTPSink.o VideoRTPSink.o TextRTPSink.o RTPInterface.o RTCP.o rtcp_from_spec.o GenericMediaServer.o RTSPServer.o RTSPServerRegister.o RTSPClient.o RTSPCommon.o RTSPRegisterSender.o SIPClient.o MediaSession.o ServerMediaSession.o PassiveServerMediaSubsession.o OnDemandServerMediaSubsession.o FileServerMediaSubsession.o MPEG4VideoFileServerMediaSubsession.o H264VideoFileServerMediaSubsession.o H265VideoFileServerMediaSubsession.o H263plusVideoFileServerMediaSubsession.o WAVAudioFileServerMediaSubsession.o AMRAudioFileServerMediaSubsession.o MP3AudioFile
->  ServerMediaSubsession.o MPEG1or2VideoFileServerMediaSubsession.o MPEG1or2FileServerDemux.o MPEG1or2DemuxedServerMediaSubsession.o MPEG2TransportFileServerMediaSubsession.o ADTSAudioFileServerMediaSubsession.o DVVideoFileServerMediaSubsession.o AC3AudioFileServerMediaSubsession.o MPEG2TransportUDPServerMediaSubsession.o ProxyServerMediaSession.o QuickTimeFileSink.o QuickTimeGenericRTPSource.o AVIFileSink.o MPEG2IndexFromTransportStream.o MPEG2TransportStreamIndexFile.o MPEG2TransportStreamTrickModeFilter.o MatroskaFile.o MatroskaFileParser.o EBMLNumber.o MatroskaDemuxedTrack.o MatroskaFileServerDemux.o MatroskaFileServerMediaSubsession.o MP3AudioMatroskaFileServerMediaSubsession.o OggFile.o OggFileParser.o OggDemuxedTrack.o OggFileServerDemux.o OggFileServerMediaSubsession.o MPEG2TransportStreamDemux.o MPEG2TransportStreamDemuxedTrack.o MPEG2TransportStreamParser.o MPEG2TransportStreamParser_PAT.o MPEG2TransportStreamParser_PMT.o MPEG2TransportStreamParser_STREAM.o HLSSegment
->  er.o TLSState.o MIKEY.o SRTPCryptographicContext.o HMAC_SHA1.o BitVector.o StreamParser.o DigestAuthentication.o ourMD5.o Base64.o Locale.o -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssl -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -latomic -lpthread -lcrypto -lz -latomic -lpthread
-> /home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar: invalid option -- 'L'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1299a05cfaabccc45e2878e969b443a973ec4c9e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Hi Yann,
 
-Had submitted a pretty similar Patch [0]. But this one is much more
-elegant.
+Sorry for bad email format for this request.
 
-Reviewed-by: Michael Nosthoff<buildroot@heine.tech>
+The issue is the kernel version, like using "uname -r" command, doesn't reflect the real git commit.
 
-[0] http://patchwork.ozlabs.org/project/buildroot/patch/20200917214317.23734-1-buildroot at heine.tech/
+In case there are 6 commits after the release tag, we should return version like "v5.4.55-6-g10df54acb4be" but currently we always return the release version "v5.4.55".
+We would prefer having the commit version to identify the right used kernel on target.
 
+The problem is "setlocalversion" script from kernel is called within buildroot/output/build/ linux-<xxxx> folder which doesn't contain git repository information and 
+so it doesn't set the committed version.
+
+Regards
+Eric
+
+
+
+________________________________________
+De : Yann E. MORIN <yann.morin.1998@free.fr>
+Envoy? : jeudi 1 octobre 2020 22:14
+? : Touhtarian, Eric <etouhtarian@distech-controls.com>
+Cc?: buildroot at buildroot.org <buildroot@buildroot.org>
+Objet : Re: [Buildroot] [PATCH 1/1] Get git version and transfer it to build target 
+?
+Eric, All,
+
+Thanks for your contribution.
+
+On 2020-10-01 14:47 +0000, Touhtarian, Eric via buildroot spake thusly:
+> Signed-off-by: Eric Touhtarian <etouhtarian@distech-controls.com>
 > ---
-> Changes v1 -> v2:
->  - Enhance patch to avoid a build failure when building dynamically
+>? linux/linux.mk | 7 +++++++
+>? 1 file changed, 7 insertions(+)
 > 
->  package/live555/live555.mk | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-> index b2313886b1..0453b19751 100644
-> --- a/package/live555/live555.mk
-> +++ b/package/live555/live555.mk
-> @@ -23,8 +23,11 @@ LIVE555_CFLAGS += -fPIC
->  endif
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -LIVE555_DEPENDENCIES += openssl
-> -LIVE555_LIBS = -lssl -lcrypto
-> +LIVE555_DEPENDENCIES += host-pkgconf openssl
-> +LIVE555_CONSOLE_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
-> +ifneq ($(BR2_STATIC_LIBS),y)
-> +LIVE555_LIVEMEDIA_LIBS = $(LIVE555_CONSOLE_LIBS)
+> diff --git a/linux/linux.mk b/linux/linux.mk index b9f2052ee7..36f98dd704 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -538,6 +538,13 @@ $(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL sett? endif? endif
+>? 
+> +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+> +define LINUX_GIT_VERSION
+> +???? $(TOPDIR)/support/scripts/setlocalversion $(LINUX_DL_DIR)/git > 
+> +$(@D)/.scmversion endef LINUX_PRE_BUILD_HOOKS += LINUX_GIT_VERSION 
+
+This patch is badly mangled , probably by your email client. Be sure to
+use 'git send-email' to send your patches, as this generates proper
+emails. See the manual:
+
+??? https://urldefense.com/v3/__https:/buildroot.org/downloads/manual/manual.html*submitting-patches__;Iw!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJ56K-sRu$ 
+
 > +endif
->  else
->  LIVE555_CFLAGS += -DNO_OPENSSL
->  endif
-> @@ -44,8 +47,8 @@ define LIVE555_CONFIGURE_CMDS
->  	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
->  	# fails
->  	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> -	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> -	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_CONSOLE_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-> +	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIVEMEDIA_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
->  	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
->  endef
->  
+
+Why would we store the Linux kernel version on the target? If we were to
+do so, why would we not do that for all other packages as well?
+
+Besides, the kernel version is already included in the kernel binary
+itself, if you set CONFIG_LOCALVERSION_AUTO=y in your kernel config
+file.
+
+If what you need is accountability, then 'make show-info' will dump a
+json blurb with a lot of metadata about all packages in your build,
+including the kernel version.
+
+Finally, if you need traceability, you probbly already have your kernel
+version string in your Buildroot configuration file.
+
+I'll mark this patch as rejected. If you still think there is a valid
+use-case for it, that is not covered by one of the above, then please
+respin and provide a commit log that explains that use-case.
+
+Regards,
+Yann E. MORIN.
+
+>? ifeq ($(BR_BUILDING),y)
+>? 
+>? ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+> --
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> https://urldefense.com/v3/__http:/lists.busybox.net/mailman/listinfo/buildroot__;!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJz9E4NdN$ 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software? Designer | \ / CAMPAIGN???? |? ___?????????????? |
+| +33 561 099 427 `------------.-------:? X? AGAINST????? |? \e/? There is no? |
+| https://urldefense.com/v3/__http:/ymorin.is-a-geek.org/__;!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJ1R7rICb$? | _/*\_ | / \ HTML MAIL??? |?? v?? conspiracy.? |
+'------------------------------^-------^------------------^--------------------'
