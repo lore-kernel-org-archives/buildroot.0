@@ -1,52 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 22:39:20 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/rsh-redone:
- disable rlogind on musl
-Message-ID: <20201002204714.A67BE8E7D9@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 21:48:07 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/qt5/qt5base:
+ allow to use imx-gpu-viv as GBM provider
+Message-ID: <20201002204714.90215861C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50ebf8d3325f746da71a6f1b62f455662dd81eaa
+commit: https://git.buildroot.net/buildroot/commit/?id=11ab49f43e0c9e83bab5d23c90acbb71795ace96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Commit f89ca996b6deb660b53c33196b8b309fac659bf9 enabled linux-pam on
-musl however rlogind fails to build on musl because it uses logwtmp:
+Needed in order to use eglfs_kms platform backend.
 
-/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: rlogind.c:(.text.startup+0x9ec): undefined reference to `logwtmp'
-
-As this package is unmaintained, just disable back rlogind on musl
-
-Fixes:
- - http://autobuild.buildroot.org/results/f2eb1c0bab7c6c32d6c561da0f85a530bd419206
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 14532e4fc6e02a755b30e634fd60f53b92655bcd)
+(cherry picked from commit 82fb51d3b51685ebf2b7c5f3a1b1d749231e12a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsh-redone/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index 5647d7edef..53ff2bea7f 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -17,12 +17,13 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	bool "rlogind"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU # linux-pam
- 	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
-+comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
- 
- config BR2_PACKAGE_RSH_REDONE_RSH
- 	bool "rsh"
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index ec56287ed0..689b28a986 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -80,6 +80,9 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
+ else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += ti-sgx-libgbm
++else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++QT5BASE_CONFIGURE_OPTS += -gbm
++QT5BASE_DEPENDENCIES += imx-gpu-viv
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
