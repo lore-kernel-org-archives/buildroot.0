@@ -1,59 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:02:57 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-texttable:
- bump version to 1.6.3
-Message-ID: <20201002082529.31E3D8B86E@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:19:13 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/lua: bump to
+ version 5.3.6
+Message-ID: <20201002082529.6A50B8152D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6865aa62dcc940b90540fc0814a9ec1b3ac651fe
+commit: https://git.buildroot.net/buildroot/commit/?id=596aef22da14fa1506925bfdbeb7047ec16eb9f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Bugfix release, fixing an issue with integer/float handling:
-https://github.com/foutaise/texttable/issues/70
+Bugfix release.
 
-Adjust the .hash spacing and update the license hash for a copyright year
-change:
-https://github.com/foutaise/texttable/commit/13ff0b57d3f727a266ce45f86642f0458257bb8e
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dc68be69440f3d5e7a8d5fc2c25597ddbbe1473b)
+(cherry picked from commit 86a6eb872c2f97310e6389905620312cd6675b5b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-texttable/python-texttable.hash | 6 +++---
- package/python-texttable/python-texttable.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/lua/5.3.5/0003-fix-revision-number.patch   | 31 ----------------------
+ package/lua/{5.3.5 => 5.3.6}/0001-root-path.patch  |  0
+ .../0002-shared-libs-for-lua.patch                 |  0
+ .../0003-linenoise.patch}                          |  0
+ package/lua/lua.hash                               |  5 ++--
+ package/lua/lua.mk                                 |  2 +-
+ 6 files changed, 4 insertions(+), 34 deletions(-)
 
-diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
-index 367eb8d60f..a69e8ed465 100644
---- a/package/python-texttable/python-texttable.hash
-+++ b/package/python-texttable/python-texttable.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/texttable/json
--md5	763141f0bdf598cdc5cf780ed4d2eb94  texttable-1.6.2.tar.gz
--sha256	eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4  texttable-1.6.2.tar.gz
-+md5  68e6b31d36f5c20221da7d5db3eca772  texttable-1.6.3.tar.gz
-+sha256  ce0faf21aa77d806bbff22b107cc22cce68dc9438f97a2df32c93e9afa4ce436  texttable-1.6.3.tar.gz
- # Locally computed sha256 checksums
--sha256	181d0c3366cc36fd6ae7d023b23a743581003fd42974c8983ea40f7161faeaf3  LICENSE
-+sha256	4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
-diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
-index 3b173a35ee..6af23917b9 100644
---- a/package/python-texttable/python-texttable.mk
-+++ b/package/python-texttable/python-texttable.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/lua/5.3.5/0003-fix-revision-number.patch b/package/lua/5.3.5/0003-fix-revision-number.patch
+deleted file mode 100644
+index ed2e0460eb..0000000000
+--- a/package/lua/5.3.5/0003-fix-revision-number.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-Fix revision number
+-
+-In 0002-shared-libs-for-lua.patch, revision number is used to set 
+-library name:
+-TO_SOLIB = liblua.so.$(R)
+-
+-However, library is built using PKG_VERSION which is passed only during
+-build step:
+-$(CC) -o $@.$(PKG_VERSION) -shared -Wl,-soname="$@.$(PKG_VERSION)" $?
+-
+-As a result, dynamic library is not installed in staging or target paths
+-since bump to lua 5.3.5
+-
+-So, instead of replacing R by PKG_VERSION and passing this variable in
+-all steps, simply update R to 5
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -47,6 +47,6 @@
+-
+- # Lua version and release.
+- V= 5.3
+--R= $V.4
+-+R= $V.5
+-
+- # Targets start here.
+- all:    $(PLAT)
+diff --git a/package/lua/5.3.5/0001-root-path.patch b/package/lua/5.3.6/0001-root-path.patch
+similarity index 100%
+rename from package/lua/5.3.5/0001-root-path.patch
+rename to package/lua/5.3.6/0001-root-path.patch
+diff --git a/package/lua/5.3.5/0002-shared-libs-for-lua.patch b/package/lua/5.3.6/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.3.5/0002-shared-libs-for-lua.patch
+rename to package/lua/5.3.6/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.3.5/0011-linenoise.patch b/package/lua/5.3.6/0003-linenoise.patch
+similarity index 100%
+rename from package/lua/5.3.5/0011-linenoise.patch
+rename to package/lua/5.3.6/0003-linenoise.patch
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+index 3e7812b7dc..319d305692 100644
+--- a/package/lua/lua.hash
++++ b/package/lua/lua.hash
+@@ -1,8 +1,9 @@
+ # Hashes from: http://www.lua.org/ftp/
+-md5 4f4b4f323fd3514a68e0ab3da8ce3455           lua-5.3.5.tar.gz
+-sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
++md5 83f23dbd5230140a3770d5f54076948d           lua-5.3.6.tar.gz
++sha1 f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
+ 
+ md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
+ sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
++
+ # Locally computed
+ sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 8a5f9258a0..83637caf07 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_TEXTTABLE_VERSION = 1.6.2
-+PYTHON_TEXTTABLE_VERSION = 1.6.3
- PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
--PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/82/a8/60df592e3a100a1f83928795aca210414d72cebdc6e4e0c95a6d8ac632fe
-+PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/f5/be/716342325d6d6e05608e3a10e15f192f3723e454a25ce14bc9b9d1332772
- PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
- PYTHON_TEXTTABLE_LICENSE = MIT
- PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+-LUA_VERSION = 5.3.5
++LUA_VERSION = 5.3.6
+ else
+ LUA_VERSION = 5.1.5
+ endif
