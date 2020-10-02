@@ -1,54 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:14:27 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-semver:
- bump version to 2.10.1
-Message-ID: <20201002082529.520758152D@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:02:57 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-texttable:
+ bump version to 1.6.3
+Message-ID: <20201002082529.31E3D8B86E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e679087e814d34cc65dbfab6facea98594c7cc9
+commit: https://git.buildroot.net/buildroot/commit/?id=6865aa62dcc940b90540fc0814a9ec1b3ac651fe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-And adjust the .hash spacing.
+Bugfix release, fixing an issue with integer/float handling:
+https://github.com/foutaise/texttable/issues/70
+
+Adjust the .hash spacing and update the license hash for a copyright year
+change:
+https://github.com/foutaise/texttable/commit/13ff0b57d3f727a266ce45f86642f0458257bb8e
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 63a3b012bae967a3000e888b34b7a1a799cc058c)
+(cherry picked from commit dc68be69440f3d5e7a8d5fc2c25597ddbbe1473b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-semver/python-semver.hash | 6 +++---
- package/python-semver/python-semver.mk   | 4 ++--
+ package/python-texttable/python-texttable.hash | 6 +++---
+ package/python-texttable/python-texttable.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
-index 60aaa6b8c4..510b42cac9 100644
---- a/package/python-semver/python-semver.hash
-+++ b/package/python-semver/python-semver.hash
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
+index 367eb8d60f..a69e8ed465 100644
+--- a/package/python-texttable/python-texttable.hash
++++ b/package/python-texttable/python-texttable.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/semver/json
--md5	a411b305a3f6714bca126a0b59dc4429  semver-2.9.0.tar.gz
--sha256	ed1edeaa0c27f68feb74f09f715077fd07b728446dc2bb7fc470fc0f737873a0  semver-2.9.0.tar.gz
-+md5  a8466a3a0487a90e97a4199ad174d3e9  semver-2.10.1.tar.gz
-+sha256  b08a84f604ef579e474ce448672a05c8d50d1ee0b24cee9fb58a12b260e4d0dc  semver-2.10.1.tar.gz
- # Locally computed
--sha256	cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
-+sha256  cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
-diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
-index 6e1faef126..fec02546ba 100644
---- a/package/python-semver/python-semver.mk
-+++ b/package/python-semver/python-semver.mk
+ # md5, sha256 from https://pypi.org/pypi/texttable/json
+-md5	763141f0bdf598cdc5cf780ed4d2eb94  texttable-1.6.2.tar.gz
+-sha256	eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4  texttable-1.6.2.tar.gz
++md5  68e6b31d36f5c20221da7d5db3eca772  texttable-1.6.3.tar.gz
++sha256  ce0faf21aa77d806bbff22b107cc22cce68dc9438f97a2df32c93e9afa4ce436  texttable-1.6.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256	181d0c3366cc36fd6ae7d023b23a743581003fd42974c8983ea40f7161faeaf3  LICENSE
++sha256	4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
+index 3b173a35ee..6af23917b9 100644
+--- a/package/python-texttable/python-texttable.mk
++++ b/package/python-texttable/python-texttable.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SEMVER_VERSION = 2.9.0
-+PYTHON_SEMVER_VERSION = 2.10.1
- PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
--PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/be/c8/392e3c1c4080202b99e8b3b5d0ab6cbcfc4b25d50031c2c21d130871bf88
-+PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/bc/82/5a9ee107810deb6cb142ea3b07aba619d6b6c0bd74c9e276b2b48b62696e
- PYTHON_SEMVER_SETUP_TYPE = setuptools
- PYTHON_SEMVER_LICENSE = BSD-3-Clause
- PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
+-PYTHON_TEXTTABLE_VERSION = 1.6.2
++PYTHON_TEXTTABLE_VERSION = 1.6.3
+ PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
+-PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/82/a8/60df592e3a100a1f83928795aca210414d72cebdc6e4e0c95a6d8ac632fe
++PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/f5/be/716342325d6d6e05608e3a10e15f192f3723e454a25ce14bc9b9d1332772
+ PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
+ PYTHON_TEXTTABLE_LICENSE = MIT
+ PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
