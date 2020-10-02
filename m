@@ -1,623 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:07:34 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/netsniff-ng: fix
+Date: Fri, 2 Oct 2020 10:28:19 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/openswan: fix
  build with gcc 10
-Message-ID: <20201002082506.DF1EE81429@busybox.osuosl.org>
+Message-ID: <20201002082507.22B6A81429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20f92d1d32956d0dc58ea3f8f907a1bfd8d63bbf
+commit: https://git.buildroot.net/buildroot/commit/?id=1723fce030989aa4a145d5d173d7a16cef0fb071
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/811b9eada9558bafde4e4ed824b36239c72e0501
+ - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d0f0d368acc67b6c291618ca1f7e89fc75959a39)
+(cherry picked from commit a2f69b8cc4d34521abfaafc61aeb5b5e7154cf6d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch |  41 +++++
- ...n-make-needlessly-global-variables-static.patch | 139 ++++++++++++++++
- ...-move-variable-definitions-cli-h-to-cli-c.patch |  77 +++++++++
- ...ariable-definitions-from-mops-h-to-mops-c.patch |  69 ++++++++
- ...iable-definitions-from-llist-h-to-llist-c.patch |  47 ++++++
- ...able-definitions-from-mz-h-to-mausezahn-c.patch | 184 +++++++++++++++++++++
- 6 files changed, 557 insertions(+)
+ package/openswan/0001-fix-build-with-gcc-10.patch | 49 +++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch b/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch
+diff --git a/package/openswan/0001-fix-build-with-gcc-10.patch b/package/openswan/0001-fix-build-with-gcc-10.patch
 new file mode 100644
-index 0000000000..b07682a76d
+index 0000000000..eb474b56aa
 --- /dev/null
-+++ b/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch
-@@ -0,0 +1,41 @@
-+From c6dd9abd8d7a5332d0c1078196528926054791ae Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Mon, 15 Jun 2020 18:05:09 +0200
-+Subject: [PATCH] mausezahn: remove unused MZ_SIZE_LONG_INT
++++ b/package/openswan/0001-fix-build-with-gcc-10.patch
+@@ -0,0 +1,49 @@
++From 3324d5ab1d00920ea46f453240da1356e0639e98 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 24 Sep 2020 21:55:31 +0200
++Subject: [PATCH] fix build with gcc 10
 +
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/c6dd9abd8d7a5332d0c1078196528926054791ae]
++Define kw_host_list and kw_connaddrfamily_list as extern to avoid the following
++build failure with gcc 10 (which defaults to -fno-common):
++
++/home/peko/autobuild/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: initiate.o:/home/peko/autobuild/instance-1/output-1/build/openswan-2.6.51.5/include/pluto_constants.h:650: multiple definition of `kw_host_list'; connections.o:/home/peko/autobuild/instance-1/output-1/build/openswan-2.6.51.5/include/pluto_constants.h:650: first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/xelerance/Openswan/pull/444]
 +---
-+ staging/mausezahn.c | 3 ---
-+ staging/mz.h        | 2 --
-+ 2 files changed, 5 deletions(-)
++ include/ipsecconf/keywords.h | 2 +-
++ include/pluto_constants.h    | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/staging/mausezahn.c b/staging/mausezahn.c
-+index 6c36166e..19d2937a 100644
-+--- a/staging/mausezahn.c
-++++ b/staging/mausezahn.c
-+@@ -192,9 +192,6 @@ int reset(void)
-+    int i;
-+    time_t t;
-+ 
-+-   // Determine platform type sizes:
-+-   MZ_SIZE_LONG_INT = sizeof(long int);	     
-+-
-+    mz_default_config_path[0] = 0x00;
-+    mz_default_log_path[0] = 0x00;
-+ 
-+diff --git a/staging/mz.h b/staging/mz.h
-+index 5afe57d1..c7a131d8 100644
-+--- a/staging/mz.h
-++++ b/staging/mz.h
-+@@ -108,8 +108,6 @@ static inline void verbose_l2(const char *format, ...)
-+ #define IPADDRSIZE 46
-+ 
-+ 
-+-int MZ_SIZE_LONG_INT;
-+-
-+ char mz_default_config_path[256];
-+ char mz_default_log_path[256];
-+ 
-diff --git a/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch b/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch
-new file mode 100644
-index 0000000000..d944406f37
---- /dev/null
-+++ b/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch
-@@ -0,0 +1,139 @@
-+From bfa3c89317869ffe1e90b7e01e7cacad7a7ea10e Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Thu, 13 Aug 2020 12:09:28 +0200
-+Subject: [PATCH] mausezahn: make needlessly global variables static
-+
-+Move variables only used withing a single compilation unit from mz.h and
-+make them static. This avoids "multiple definition of symbol" linker
-+errors with gcc-10.
-+
-+Updates #216
-+
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/bfa3c89317869ffe1e90b7e01e7cacad7a7ea10e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ staging/dns.c     |  2 ++
-+ staging/mz.h      | 28 +---------------------------
-+ staging/rcv_rtp.c | 19 +++++++++++++++++++
-+ staging/rtp.c     |  1 -
-+ 4 files changed, 22 insertions(+), 28 deletions(-)
-+
-+diff --git a/staging/dns.c b/staging/dns.c
-+index bfa61d84..83227e25 100644
-+--- a/staging/dns.c
-++++ b/staging/dns.c
-+@@ -89,6 +89,8 @@
-+ 		"|   arcount (or arc) ........... Number of RRs in additional records section  0  / 0\n" \
-+ 		"\n"
-+ 
-++static u_int8_t  gbuf[MAX_PAYLOAD_SIZE];  // This is only a generic global buffer to handover data more easily
-++static u_int32_t gbuf_s;
-+ 
-+ int dns_get_query (char* argval);
-+ int dns_get_answer (char* argval);
-+diff --git a/staging/mz.h b/staging/mz.h
-+index c7a131d8..42e64cfc 100644
-+--- a/staging/mz.h
-++++ b/staging/mz.h
-+@@ -285,11 +285,6 @@ FILE *fp, *fp2;             // global multipurpose file pointer
-+ long double total_d;
-+ clock_t mz_start, mz_stop;
-+ 
-+-enum rtp_display_mode {
-+-	BAR, NCURSES, TEXT
-+-} rtp_dm;
-+-	
-+-
-+ int mz_rand;
-+ int bwidth;
-+ 
-+@@ -298,14 +293,7 @@ struct mz_timestamp {
-+ 	u_int32_t nsec;
++diff --git a/include/ipsecconf/keywords.h b/include/ipsecconf/keywords.h
++index e32be7968..02e8e073e 100644
++--- a/include/ipsecconf/keywords.h
+++++ b/include/ipsecconf/keywords.h
++@@ -314,7 +314,7 @@ struct config_parsed {
++     bool                got_default;
 + };
 + 
-+-struct mz_timestamp 
-+-	tv, 
-+-	timeTX[TIME_COUNT_MAX],  
-+-	timeRX[TIME_COUNT_MAX];
-+-
-+ int32_t
-+-  time0,
-+-  jitter_rfc,
-+   jitter[TIME_COUNT_MAX];   
++-const struct keyword_enum_values kw_connaddrfamily_list;
+++extern const struct keyword_enum_values kw_connaddrfamily_list;
 + 
-+ int 
-+@@ -322,14 +310,8 @@ u_int16_t
-+   sqnr_next;
-+ 
-+ u_int32_t
-+-  drop,    // packet drop count
-+-  dis,     // packet disorder count
-+   gind,      // a global index to run through deltaRX, deltaTX, and jitter
-+-  gind_max,  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-+-  gtotal;    // counts number of file write cycles (see "got_rtp_packet()") 
-+-
-+-
-+-char rtp_filter_str[64];
-++  gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-+ 
-+ struct tx_struct
-+ {
-+@@ -496,14 +478,6 @@ struct tx_struct
-+    
-+ } tx;  // NOTE: tx elements are considered as default values for MOPS
-+ 
-+-
-+-
-+-
-+-
-+-u_int8_t  gbuf[MAX_PAYLOAD_SIZE];  // This is only a generic global buffer to handover data more easily
-+-u_int32_t gbuf_s;                  //
-+-
-+-
-+ // ************************************
-+ // 
-+ //  Prototypes: General Tools
-+diff --git a/staging/rcv_rtp.c b/staging/rcv_rtp.c
-+index 0a911552..f43b92cd 100644
-+--- a/staging/rcv_rtp.c
-++++ b/staging/rcv_rtp.c
-+@@ -39,6 +39,25 @@
-+ #include "mz.h"
-+ #include "mops.h"
-+ 
-++static enum rtp_display_mode {
-++	BAR, NCURSES, TEXT
-++} rtp_dm;
-++
-++static int32_t
-++  time0,
-++  jitter_rfc;
-++
-++static struct mz_timestamp
-++  timeTX[TIME_COUNT_MAX],
-++  timeRX[TIME_COUNT_MAX];
-++
-++static u_int32_t
-++  drop,    // packet drop count
-++  dis,     // packet disorder count
-++  gtotal;    // counts number of file write cycles (see "got_rtp_packet()")
-++
-++static char rtp_filter_str[64];
-++
-+ // Initialize the rcv_rtp process: Read user parameters and initialize globals
-+ int rcv_rtp_init(void)
-+ {
-+diff --git a/staging/rtp.c b/staging/rtp.c
-+index 54a195eb..da40884b 100644
-+--- a/staging/rtp.c
-++++ b/staging/rtp.c
-+@@ -56,7 +56,6 @@
-+ 		"|\n"
-+ 
-+ 
-+-
-+ int create_rtp_packet(void)
-+ {
-+ 	u_int8_t byte1,	byte2;
-diff --git a/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch b/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch
-new file mode 100644
-index 0000000000..12662d78fc
---- /dev/null
-+++ b/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch
-@@ -0,0 +1,77 @@
-+From 0d5aa3246c20dad2d76165559fb575136b7216e8 Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Wed, 19 Aug 2020 12:04:47 +0200
-+Subject: [PATCH] mausezahn: move variable definitions cli.h to cli.c
-+
-+Move variable definitions to avoid "multiple definition of symbol"
-+linker errors with gcc-10.
-+
-+Updates #216
-+
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/0d5aa3246c20dad2d76165559fb575136b7216e8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ staging/cli.c | 13 +++++++++++++
-+ staging/cli.h | 20 ++++++++++----------
-+ 2 files changed, 23 insertions(+), 10 deletions(-)
-+
-+diff --git a/staging/cli.c b/staging/cli.c
-+index 5b5a1592..dbfdb550 100644
-+--- a/staging/cli.c
-++++ b/staging/cli.c
-+@@ -23,6 +23,19 @@
-+ #include "mops.h"
-+ #include "llist.h"
-+ 
-++struct cli_def *gcli;
-++
-++char mz_username[32];
-++char mz_password[32];
-++char mz_enable[32];
-++char mz_listen_addr[16];
-++int mz_port;
-++struct mops *clipkt; // actual packet used by CLI thread
-++
-++int clidev;
-++
-++int cli_debug;
-++
-+ void mz_cli_init(void)
-+ {
-+ 	amp_head = automops_init();
-+diff --git a/staging/cli.h b/staging/cli.h
-+index 1a0156fd..2ec153a0 100644
-+--- a/staging/cli.h
-++++ b/staging/cli.h
-+@@ -54,19 +54,19 @@
-+ #define MZ_DEFAULT_ENABLE_PASSWORD "mops"
-+ #define MZ_DEFAULT_PORT     25542     // Towel day and 42
-+ 
-+-struct cli_def *gcli;
-+-
-+-char mz_username[32];
-+-char mz_password[32];
-+-char mz_enable[32];
-+-char mz_listen_addr[16];
-+-int mz_port;
-+-struct mops *clipkt; // actual packet used by CLI thread
-++extern struct cli_def *gcli;
-++
-++extern char mz_username[32];
-++extern char mz_password[32];
-++extern char mz_enable[32];
-++extern char mz_listen_addr[16];
-++extern int mz_port;
-++extern struct mops *clipkt; // actual packet used by CLI thread
-+ 	
-+-int clidev;
-++extern int clidev;
-+ 
-+ // =================================================================
-+-int cli_debug;
-++extern int cli_debug;
-+ 
-+ // Flags from 0x0000 to 0xFFFF
-+ // cli_debug & 8000  => Developer specific debugs
-diff --git a/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch b/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch
-new file mode 100644
-index 0000000000..834ee93a9b
---- /dev/null
-+++ b/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch
-@@ -0,0 +1,69 @@
-+From 3178ceb8c7e0a94ed29bbd1e277f03bb0d5a3d44 Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Wed, 19 Aug 2020 12:58:51 +0200
-+Subject: [PATCH] mausezahn: move variable definitions from mops.h to mops.c
-+
-+Move variable definitions to avoid "multiple definition of symbol"
-+linker errors with gcc-10.
-+
-+Updates #216
-+
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/3178ceb8c7e0a94ed29bbd1e277f03bb0d5a3d44]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ staging/mops.c | 5 ++++-
-+ staging/mops.h | 8 ++++----
-+ 2 files changed, 8 insertions(+), 5 deletions(-)
-+
-+diff --git a/staging/mops.c b/staging/mops.c
-+index 599d317f..fc00e29a 100644
-+--- a/staging/mops.c
-++++ b/staging/mops.c
-+@@ -46,8 +46,11 @@
-+ #include "mz.h"
-+ #include "mops.h"
-+ 
-++unsigned int min_frame_s;
-++unsigned int max_frame_s;
-+ 
-+-
-++struct automops * amp_head;
-++struct mops *mp_head; // This global will point to the head of the mops list
-+ 
-+ // Creates first element, aka "head" element
-+ // This element can also be used! See mops_alloc_packet!
-+diff --git a/staging/mops.h b/staging/mops.h
-+index 96953e66..cf19f098 100644
-+--- a/staging/mops.h
-++++ b/staging/mops.h
-+@@ -114,8 +114,8 @@
-+ // These are initialized with the definitions MIN_MOPS_FRAME_SIZE and 
-+ // MAX_MOPS_FRAME_SIZE above but can be overridden by the user (without
-+ // extending these limits)
-+-unsigned int min_frame_s;
-+-unsigned int max_frame_s;
-++extern unsigned int min_frame_s;
-++extern unsigned int max_frame_s;
-+ 
-+ struct mops_counter
-+ {
-+@@ -246,7 +246,7 @@ struct automops {
++ extern struct keyword_def ipsec_conf_keywords_v2[];
++ extern const int ipsec_conf_keywords_v2_count;
++diff --git a/include/pluto_constants.h b/include/pluto_constants.h
++index c35dd9576..dcbd3b5b4 100644
++--- a/include/pluto_constants.h
+++++ b/include/pluto_constants.h
++@@ -665,7 +665,7 @@ enum keyword_host {
++     KH_IPADDR       = LOOSE_ENUM_OTHER,
 + };
++ /* keyword_name(&kw_host_list, type, buffer[KEYWORD_NAME_BUFLEN]) */
++-struct keyword_enum_values kw_host_list;
+++extern struct keyword_enum_values kw_host_list;
++ #define KH_ISWILDCARD(type)  ((type) == KH_ANY || (type) == KH_DEFAULTROUTE)
++ #define KH_ISKNOWNADDR(type) ((type) == KH_IPADDR || (type)==KH_IFACE)
 + 
-+ 
-+-struct automops * amp_head;
-++extern struct automops * amp_head;
-+ 
-+ 
-+ struct mops
-+@@ -688,7 +688,7 @@ struct mops_ext_syslog //TODO
-+    
-+ /////////////////////////////////////////////////////////////////
-+ 
-+-struct mops *mp_head; // This global will point to the head of the mops list
-++extern struct mops *mp_head; // This global will point to the head of the mops list
-+ 
-+ /////////////////////////////////////////////////////////////////
-+ // MOPS Prototypes:
-diff --git a/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch b/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch
-new file mode 100644
-index 0000000000..99eba8e7da
---- /dev/null
-+++ b/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch
-@@ -0,0 +1,47 @@
-+From 6f20cd366ea73b8b9cf49568e9b95cd79922daed Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Wed, 19 Aug 2020 13:13:34 +0200
-+Subject: [PATCH] mausezahn: move variable definitions from llist.h to llist.c
++-- 
++2.28.0
 +
-+Move variable definitions to avoid "multiple definition of symbol"
-+linker errors with gcc-10.
-+
-+Updates #216
-+
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/6f20cd366ea73b8b9cf49568e9b95cd79922daed]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ staging/llist.c | 2 ++
-+ staging/llist.h | 4 ++--
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/staging/llist.c b/staging/llist.c
-+index d729e465..9ef2d1a2 100644
-+--- a/staging/llist.c
-++++ b/staging/llist.c
-+@@ -40,6 +40,8 @@
-+  * 
-+  */ 
-+ 
-++struct mz_ll *packet_sequences;
-++struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
-+ 
-+ // Create new list element - may be the first one (list==NULL)
-+ //
-+diff --git a/staging/llist.h b/staging/llist.h
-+index 49a87c7d..d9e59b86 100644
-+--- a/staging/llist.h
-++++ b/staging/llist.h
-+@@ -49,8 +49,8 @@ struct mz_ll {
-+ 	void *data; // points to your data
-+ };
-+ 
-+-struct mz_ll *packet_sequences;
-+-struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
-++extern struct mz_ll *packet_sequences;
-++extern struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
-+ 
-+ // prototypes
-+ struct mz_ll * mz_ll_create_new_element(struct mz_ll *list);
-diff --git a/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch b/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch
-new file mode 100644
-index 0000000000..d8db7dffdd
---- /dev/null
-+++ b/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch
-@@ -0,0 +1,184 @@
-+From 56f8f399a20275a4a73ebc4450bd8eeba7ee1656 Mon Sep 17 00:00:00 2001
-+From: Tobias Klauser <tklauser@distanz.ch>
-+Date: Wed, 19 Aug 2020 13:13:54 +0200
-+Subject: [PATCH] mausezahn: move variable definitions from mz.h to mausezahn.c
-+
-+Move variable definitions to avoid "multiple definition of symbol"
-+linker errors with gcc-10.
-+
-+Fixes #216
-+
-+Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-+[Retrieved from:
-+https://github.com/netsniff-ng/netsniff-ng/commit/56f8f399a20275a4a73ebc4450bd8eeba7ee1656]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ staging/mausezahn.c | 46 ++++++++++++++++++++++++++++++++++++++++
-+ staging/mz.h        | 51 +++++++++++++++++++++++++--------------------
-+ 2 files changed, 74 insertions(+), 23 deletions(-)
-+
-+diff --git a/staging/mausezahn.c b/staging/mausezahn.c
-+index 19d2937a..cae57a1b 100644
-+--- a/staging/mausezahn.c
-++++ b/staging/mausezahn.c
-+@@ -32,8 +32,54 @@
-+ #include "die.h"
-+ #include "dev.h"
-+ 
-++enum operating_modes mode;
-++
-++int ipv6_mode;
-++int quiet;           // don't even print 'important standard short messages'
-++int verbose;         // report character
-++int simulate;        // if 1 then don't really send frames
-++
-++char path[256];
-++char filename[256];
-++FILE *fp, *fp2;             // global multipurpose file pointer
-++
-++long double total_d;
-++clock_t mz_start, mz_stop;
-++
-++int mz_rand;
-++int bwidth;
-++
-++int32_t
-++  jitter[TIME_COUNT_MAX];
-++
-++int
-++  rtp_log,
-++  time0_flag,        // If set then time0 has valid data
-++  sqnr0_flag;
-++
-++u_int8_t
-++  mz_ssrc[4];     // holds RTP stream identifier for rcv_rtp()
-++
-++u_int16_t
-++  sqnr_cur,
-++  sqnr_last,
-++  sqnr_next;
-++
-++u_int32_t
-++  gind,      // a global index to run through deltaRX, deltaTX, and jitter
-++  gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-++
-++struct tx_struct tx;  // NOTE: tx elements are considered as default values for MOPS
-++
-++struct device_struct device_list[MZ_MAX_DEVICES];
-++
-++int device_list_entries;
-++
-+ int verbose_level = 0;
-+ 
-++char mz_default_config_path[256];
-++char mz_default_log_path[256];
-++
-+ static const char *short_options = "46hqvVSxra:A:b:B:c:d:E:f:F:l:p:P:R:t:T:M:Q:X:";
-+ 
-+ static void signal_handler(int number)
-+diff --git a/staging/mz.h b/staging/mz.h
-+index 42e64cfc..33e74e60 100644
-+--- a/staging/mz.h
-++++ b/staging/mz.h
-+@@ -108,8 +108,8 @@ static inline void verbose_l2(const char *format, ...)
-+ #define IPADDRSIZE 46
-+ 
-+ 
-+-char mz_default_config_path[256];
-+-char mz_default_log_path[256];
-++extern char mz_default_config_path[256];
-++extern char mz_default_log_path[256];
-+ 
-+ 
-+ struct arp_table_struct {
-+@@ -159,9 +159,11 @@ struct device_struct
-+    	struct pcap     *p_arp;                  // pcap handle
-+ 	struct arp_table_struct *arp_table; // dedicated ARP table
-+ 	int        ps;                    // packet socket
-+-} device_list[MZ_MAX_DEVICES];
-++};
-++
-++extern struct device_struct device_list[MZ_MAX_DEVICES];
-+ 
-+-int device_list_entries;
-++extern int device_list_entries;
-+                
-+ 
-+ #pragma pack(1)
-+@@ -270,46 +272,47 @@ enum operating_modes
-+ 	SYSLOG,
-+ 	LLDP,
-+ 	IGMP
-+-} mode;
-++};
-+ 
-++extern enum operating_modes mode;
-+ 
-+-int ipv6_mode;
-+-int quiet;           // don't even print 'important standard short messages'
-+-int verbose;         // report character
-+-int simulate;        // if 1 then don't really send frames
-++extern int ipv6_mode;
-++extern int quiet;           // don't even print 'important standard short messages'
-++extern int verbose;         // report character
-++extern int simulate;        // if 1 then don't really send frames
-+ 
-+-char path[256];
-+-char filename[256];
-+-FILE *fp, *fp2;             // global multipurpose file pointer
-++extern char path[256];
-++extern char filename[256];
-++extern FILE *fp, *fp2;             // global multipurpose file pointer
-+ 
-+-long double total_d;
-+-clock_t mz_start, mz_stop;
-++extern long double total_d;
-++extern clock_t mz_start, mz_stop;
-+ 
-+-int mz_rand;
-+-int bwidth;
-++extern int mz_rand;
-++extern int bwidth;
-+ 
-+ struct mz_timestamp {
-+ 	u_int32_t sec; 
-+ 	u_int32_t nsec;
-+ };
-+ 
-+-int32_t
-+-  jitter[TIME_COUNT_MAX];   
-++extern int32_t
-++  jitter[TIME_COUNT_MAX];
-+ 
-+-int 
-++extern int
-+   rtp_log,
-+   time0_flag,        // If set then time0 has valid data
-+   sqnr0_flag;  
-+ 
-+-u_int8_t
-++extern u_int8_t
-+   mz_ssrc[4];     // holds RTP stream identifier for rcv_rtp()
-+ 
-+-u_int16_t 
-++extern u_int16_t
-+   sqnr_cur,
-+   sqnr_last, 
-+   sqnr_next;
-+ 
-+-u_int32_t
-++extern u_int32_t
-+   gind,      // a global index to run through deltaRX, deltaTX, and jitter
-+   gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-+ 
-+@@ -476,7 +479,9 @@ struct tx_struct
-+      rtp_sqnr,
-+      rtp_stmp;
-+    
-+-} tx;  // NOTE: tx elements are considered as default values for MOPS
-++};
-++
-++extern struct tx_struct tx;  // NOTE: tx elements are considered as default values for MOPS
-+ 
-+ // ************************************
-+ // 
