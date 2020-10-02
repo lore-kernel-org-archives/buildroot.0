@@ -1,43 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 22:33:00 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gdb: also disable
- gprof
-Message-ID: <20201002204734.D9DD28E7D9@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 21:48:28 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5/qt5base:
+ allow to use imx-gpu-viv as GBM provider
+Message-ID: <20201002204734.CFA9D8E1E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5bc68f7b777c4a81c5ecb78b08bee87f023c930
+commit: https://git.buildroot.net/buildroot/commit/?id=985512051e8851c4c16c68f6c68daad5d228e792
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-When gdb is built from sources fetched from Git, it contains both the
-gdb and the binutils code base. In order to really build only gdb, we
-disable a number of binutils components in the
-GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
---disable-ld, --disable-gas, etc. However, gprof was still being
-built, so disable it as well.
+Needed in order to use eglfs_kms platform backend.
 
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71719b91ee17fb99135a32c1d2504c57a329084a)
+(cherry picked from commit 82fb51d3b51685ebf2b7c5f3a1b1d749231e12a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 46d745a897..469f25ff90 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -67,7 +67,8 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
- 	--disable-binutils \
- 	--disable-install-libbfd \
- 	--disable-ld \
--	--disable-gas
-+	--disable-gas \
-+	--disable-gprof
- 
- GDB_CONF_ENV = \
- 	ac_cv_type_uintptr_t=yes \
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 774c771bc9..f8f50530bc 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -84,6 +84,9 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
+ else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += ti-sgx-libgbm
++else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++QT5BASE_CONFIGURE_OPTS += -gbm
++QT5BASE_DEPENDENCIES += imx-gpu-viv
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
