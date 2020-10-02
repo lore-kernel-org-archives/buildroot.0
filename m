@@ -1,60 +1,72 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri,  2 Oct 2020 17:59:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to glibc-2.31-54
-Message-ID: <20201002155931.1529915-1-romain.naour@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri,  2 Oct 2020 17:59:54 +0200
+Subject: [Buildroot] [PATCH 1/3] configs/mx6cubox: use recommended layout
+Message-ID: <20201002155956.18228-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-resync the version with glibc package.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-HACK-only-build-and-install-localedef.patch            | 0
- ...02-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 0
- .../localedef.hash                                              | 2 +-
- package/localedef/localedef.mk                                  | 2 +-
- 4 files changed, 2 insertions(+), 2 deletions(-)
- rename package/localedef/{2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e => 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d}/0001-HACK-only-build-and-install-localedef.patch (100%)
- rename package/localedef/{2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e => 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
- rename package/localedef/{2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e => 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d}/localedef.hash (70%)
+ configs/mx6cubox_defconfig | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch
-similarity index 100%
-rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0001-HACK-only-build-and-install-localedef.patch
-rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch
-diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-similarity index 100%
-rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
-similarity index 70%
-rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash
-rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
-index 01c48b74b5..a1b2ae12fd 100644
---- a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash
-+++ b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  a105837271b66e92f1ed4a5f10f3bb9e993842d592f67d352c6637126bd3d58c  glibc-2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e.tar.gz
-+sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 8eefb84a29..413e3acb65 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e
-+LOCALEDEF_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 7e9b16bd2..18e06fea8 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -1,15 +1,34 @@
++# Architecture
+ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
++
++# Toolchain
+ # Linux headers same as kernel, a 5.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# System configuration
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem images
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+@@ -17,14 +36,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
+-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-2.25.4
+2.25.1
