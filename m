@@ -1,24 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2020 10:28:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openswan: fix build with gcc 10
-In-Reply-To: <20200924203133.2031332-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 24 Sep 2020 22:31:33 +0200")
-References: <20200924203133.2031332-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eemh2frh.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Oct 2020 10:32:18 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-ugly:
+ add missing comma in license variable
+In-Reply-To: <20200926134452.3DD258DA2D@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 26 Sep 2020 15:54:39 +0200")
+References: <20200926134452.3DD258DA2D@busybox.osuosl.org>
+Message-ID: <87a6x52fl9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/650fc0046fd063c70e17ce5ebd9592195657434d
+ > commit: https://git.buildroot.net/buildroot/commit/?id=4626bafe5ccd91fdcc84f2413ad23404942672f4
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > When one GPL-licensed plugin was enabled, the license of
+ > gst1-plugins-ugly would be "LGPL-2.1+ GPL-2.0", but licenses should be
+ > comma separated, not space separated. So let's fix that to get the
+ > expected value of "LGPL-2.1+, GPL-2.0".
 
-Committed to 2020.08.x, thanks.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
