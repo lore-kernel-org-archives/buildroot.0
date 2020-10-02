@@ -1,55 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 21:54:46 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/qt5base: XCB
- support needs xcb-util-renderutil
-Message-ID: <20201002204644.A2E6182128@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 21:46:58 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/qt5/qt5base:
+ allow to use imx-gpu-viv as GBM provider
+Message-ID: <20201002204644.9C9F88E7D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8058cae2af16b72918533d510f7ca7f9587a37f4
+commit: https://git.buildroot.net/buildroot/commit/?id=89e4b8479c6debdb7cc8fffc25fb8579a0357830
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The qt5base feature 'xcb_syslibs' is a compile check
-using a xcb_render_util call (see qt5base-5.15.1/src/gui/configure.json).
+Needed in order to use eglfs_kms platform backend.
 
-Fixes:
-  - http://autobuild.buildroot.net/results/3c05e597c073b823f8b091e17b676ed3ecf6b5b3
-
-  ERROR: Feature 'xcb' was enabled, but the pre-condition 'features.thread && libs.xcb && tests.xcb_syslibs && features.xkbcommon-x11' failed.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d4f7da760a63d629e8c78f6466e0550a045a0780)
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 82fb51d3b51685ebf2b7c5f3a1b1d749231e12a9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5base/Config.in  | 1 +
- package/qt5/qt5base/qt5base.mk | 1 +
- 2 files changed, 2 insertions(+)
+ package/qt5/qt5base/qt5base.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 28b03f5438..ce7230c728 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -192,6 +192,7 @@ config BR2_PACKAGE_QT5BASE_XCB
- 	select BR2_PACKAGE_LIBXCB
- 	select BR2_PACKAGE_XCB_UTIL_IMAGE
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
-+	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
- 	select BR2_PACKAGE_XCB_UTIL_WM
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 1232a03778..e0189599a7 100644
+index 359a380075..1232a03778 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -177,6 +177,7 @@ QT5BASE_DEPENDENCIES   += \
- 	xcb-util-wm \
- 	xcb-util-image \
- 	xcb-util-keysyms \
-+	xcb-util-renderutil \
- 	xlib_libX11 \
- 	libxkbcommon
- ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
+@@ -79,6 +79,9 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
+ else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += ti-sgx-libgbm
++else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++QT5BASE_CONFIGURE_OPTS += -gbm
++QT5BASE_DEPENDENCIES += imx-gpu-viv
+ else
+ QT5BASE_CONFIGURE_OPTS += -no-gbm
+ endif
