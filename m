@@ -1,142 +1,83 @@
-From: Shlomi Vaknin <shlomi.39sd@gmail.com>
-Date: Fri,  2 Oct 2020 17:24:26 +0300
-Subject: [Buildroot] [PATCH v2 4/4] configs/stm32mp157c-dk2: add support for
- wifi
-In-Reply-To: <20201002142426.1375026-1-shlomi.39sd@gmail.com>
-References: <20200927061606.10239-1-shlomi.39sd@gmail.com>
- <20201002142426.1375026-1-shlomi.39sd@gmail.com>
-Message-ID: <20201002142426.1375026-4-shlomi.39sd@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 2 Oct 2020 15:16:31 +0000
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
+ of build results
+In-Reply-To: <20200911103913.381a29c6@windsurf.hq.k.grp>
+References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
+ <20200816000914.5ad801d9@windsurf.home>
+ <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
+ <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>,
+ <20200911103913.381a29c6@windsurf.hq.k.grp>
+Message-ID: <BN8PR12MB3330D7EE79CE6EB08E3F2B26A1310@BN8PR12MB3330.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding support for wifi for stm32mp157c-dk2 is achieved by using
-another dts which includes the bindings for the wifi module.
-In addition, a txt file for the wifi firmware. This was copied from the yocto bsp layer of st.
 
-Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
----
- .../overlay/boot/extlinux/extlinux.conf       |  2 +-
- .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
- .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
- 3 files changed, 92 insertions(+), 1 deletion(-)
- create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
- create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
+Hi Thomas, all,
 
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-index 5b7f56ee77..a6595971a8 100644
---- a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-@@ -1,4 +1,4 @@
- label stm32mp157c-dk2-buildroot
-   kernel /boot/zImage
--  devicetree /boot/stm32mp157c-dk2.dtb
-+  devicetree /boot/stm32mp157c-dk2-wifi.dtb
-   append root=/dev/mmcblk0p4 rootwait
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
-new file mode 100644
-index 0000000000..b36de8837f
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
-@@ -0,0 +1,59 @@
-+# NVRAM file for BCM943430WLSELG
-+# 2.4 GHz, 20 MHz BW mode
-+
-+# The following parameter values are just placeholders, need to be updated.
-+manfid=0x2d0
-+prodid=0x0726
-+vendid=0x14e4
-+devid=0x43e2
-+boardtype=0x0726
-+boardrev=0x1202
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+sromrev=11
-+boardflags=0x00404201
-+boardflags3=0x08000000
-+xtalfreq=37400
-+#xtalfreq=19200
-+nocrc=1
-+ag0=255
-+aa2g=1
-+ccode=ALL
-+
-+pa0itssit=0x20
-+extpagain2g=0
-+
-+#PA parameters for 2.4GHz, measured at CHIP OUTPUT
-+pa2ga0=-168,7161,-820
-+AvVmid_c0=0x0,0xc8
-+cckpwroffset0=5
-+
-+# PPR params
-+maxp2ga0=84
-+txpwrbckof=6
-+cckbw202gpo=0
-+legofdmbw202gpo=0x66111111
-+mcsbw202gpo=0x77711111
-+propbw202gpo=0xdd
-+
-+# OFDM IIR :
-+ofdmdigfilttype=18
-+ofdmdigfilttypebe=18
-+# PAPD mode:
-+papdmode=1
-+papdvalidtest=1
-+pacalidx2g=32
-+papdepsoffset=-36
-+papdendidx=61
-+
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+
-+deadman_to=0xffffffff
-+# muxenab: 0x1 for UART enable, 0x2 for GPIOs, 0x8 for JTAG
-+muxenab=0x1
-+# CLDO PWM voltage settings - 0x4 - 1.1 volt
-+#cldo_pwm=0x4
-+
-+#VCO freq 326.4MHz
-+spurconfig=0x3
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
-new file mode 100644
-index 0000000000..89747d2b5f
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
-@@ -0,0 +1,32 @@
-+/dts-v1/;
-+
-+#include "stm32mp157c-dk2.dts"
-+
-+/ {
-+	wifi_pwrseq: wifi-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+/* Wifi */
-+&sdmmc2 {
-+	arm,primecell-periphid = <0x10153180>;
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc2_b4_pins_a>;
-+	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
-+	non-removable;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&v3v3>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	brcmf: bcrmf at 1 {
-+		reg = <1>;
-+		compatible = "brcm,bcm4329-fmac";
-+	};
-+};
--- 
-2.25.1
+> > Ok so that happens because of misconfiguration of libstdc++.
+> > 
+> > When it gets configured we use not true final Buildroot's GCC (read-on...)
+> > but just an intermediate "xgcc". And so when libstdc++ is checking for
+> > atomics support it gets this:
+> > -------------------------------->8-----------------------------  
+> > cat << EOF > /tmp/yourfilehere
+> > int
+> > main ()
+> > {
+> >   #if __GCC_ATOMIC_INT_LOCK_FREE <= 1
+> >   # error atomic int not always lock free
+> >   #endif
+> >   return 0;
+> > }
+> > EOF
+> > 
+> > configure:81594: .../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/xgcc \
+> > -B.../output/build/host-gcc-final-arc-2020.03-release/build/./gcc/ \
+> > -B.../output/host/arc-buildroot-linux-uclibc/bin/ \
+> > -B.../output/host/arc-buildroot-linux-uclibc/lib/ \
+> > -isystem .../output/host/arc-buildroot-linux-uclibc/include \
+> > -isystem .../output/host/arc-buildroot-linux-uclibc/sys-include \
+> > -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os conftest.c >&5
+> > conftest.c: In function 'main':
+> > conftest.c:240:13: error: #error atomic int not always lock free
+> >   240 |           # error atomic int not always lock free
+> >       |             ^~~~~
+> > -------------------------------->8-----------------------------  
+> > 
+> > And that's because "xgcc" uses its default configuration, i.e. "-mcpu=arc700",
+> > and this one is w/o atomics. To make GCC using atomics we need to pass an extra option
+> > to the driver with "-matomics" and... we do it via wrapper, see:
+> > -------------------------------->8-----------------------------  
+> > strace -s 1000 .../output/host/bin/arc-linux-gcc -c test.c 2> >(grep execve)
+> > execve(".../output/host/bin/arc-linux-gcc", [".../output/host/bin/arc-linux-gcc", "-c", "test.c"], [/* 136 vars */]) = 0
+> > execve(".../output/host/bin/arc-linux-gcc.br_real", [".../output/host/bin/arc-linux-gcc.br_real", "--sysroot", ".../output/host/arc-buildroot-linux-uclibc/sysroot", "-matomic", "-Wl,-z,max-page-size=8192", "-c", "test.c"], [/* 136 vars */]) = 0
+> > -------------------------------->8-----------------------------  
+> > 
+> > Note how "arc-linux-gcc" nicely takes care of implicit handling of extra options.
+> > 
+> > So I guess it's clear what was the reason. What's not clear is how to solve
+> > that problem properly, any guesses/hints?
+> 
+> Thanks for the research!
+> 
+> Wouldn't this be normally handled by having a --with-atomic option
+> passed to gcc, which would ensure that the compiler enables -matomic,
+> without having to pass this flag explicitly ?
+
+Finally I was able to spend some more time on that. So it looks like a kind of
+regression due to https://git.buildroot.org/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+where we moved "-matomic" from TARGET_ABI to ARCH_TOOLCHAIN_WRAPPER_OPTS.
+
+The point is (and it could be seen from my previous explanation above) libstdc++ is being built by
+temporary cross-compiler (xgcc) instead of preperly installed wrappers for real tools.
+That's why whatever we put in ARCH_TOOLCHAIN_WRAPPER_OPTS makes no sense, while CFLAGS_FOR_TARGET
+where we add contents of TARGET_ABI do make "xgcc" using "-matomic".
+
+So far we know what's wrong. The question now what could be a good solution?
+Revert offending commit?
+
+-Alexey
