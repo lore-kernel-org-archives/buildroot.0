@@ -1,43 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 22:14:10 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/gdb: also disable
- gprof
-Message-ID: <20201002204644.B68DD8E8F1@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 21:54:46 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/qt5base: XCB
+ support needs xcb-util-renderutil
+Message-ID: <20201002204644.A2E6182128@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1c13ab06593eb9b457a6fd4703d5046f4908822
+commit: https://git.buildroot.net/buildroot/commit/?id=8058cae2af16b72918533d510f7ca7f9587a37f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-When gdb is built from sources fetched from Git, it contains both the
-gdb and the binutils code base. In order to really build only gdb, we
-disable a number of binutils components in the
-GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
---disable-ld, --disable-gas, etc. However, gprof was still being
-built, so disable it as well.
+The qt5base feature 'xcb_syslibs' is a compile check
+using a xcb_render_util call (see qt5base-5.15.1/src/gui/configure.json).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+  - http://autobuild.buildroot.net/results/3c05e597c073b823f8b091e17b676ed3ecf6b5b3
+
+  ERROR: Feature 'xcb' was enabled, but the pre-condition 'features.thread && libs.xcb && tests.xcb_syslibs && features.xkbcommon-x11' failed.
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71719b91ee17fb99135a32c1d2504c57a329084a)
+(cherry picked from commit d4f7da760a63d629e8c78f6466e0550a045a0780)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/qt5/qt5base/Config.in  | 1 +
+ package/qt5/qt5base/qt5base.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 8c74a0e2f6..4bd0187343 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -69,7 +69,8 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
- 	--disable-binutils \
- 	--disable-install-libbfd \
- 	--disable-ld \
--	--disable-gas
-+	--disable-gas \
-+	--disable-gprof
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 28b03f5438..ce7230c728 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -192,6 +192,7 @@ config BR2_PACKAGE_QT5BASE_XCB
+ 	select BR2_PACKAGE_LIBXCB
+ 	select BR2_PACKAGE_XCB_UTIL_IMAGE
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	select BR2_PACKAGE_XCB_UTIL_RENDERUTIL
+ 	select BR2_PACKAGE_XCB_UTIL_WM
+ 	select BR2_PACKAGE_LIBXKBCOMMON
  
- GDB_CONF_ENV = \
- 	ac_cv_type_uintptr_t=yes \
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1232a03778..e0189599a7 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -177,6 +177,7 @@ QT5BASE_DEPENDENCIES   += \
+ 	xcb-util-wm \
+ 	xcb-util-image \
+ 	xcb-util-keysyms \
++	xcb-util-renderutil \
+ 	xlib_libX11 \
+ 	libxkbcommon
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
