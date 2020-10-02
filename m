@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2020 10:58:42 +0200
-Subject: [Buildroot] [PATCH v2] package/python-txtorcon.mk: drop _py3
- file for python 2.x to fix pycompile issue
-In-Reply-To: <20200930073157.24001-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 30 Sep 2020 09:31:57 +0200")
-References: <20200930073157.24001-1-peter@korsgaard.com>
-Message-ID: <87sgax0zst.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Oct 2020 10:59:10 +0200
+Subject: [Buildroot] [PATCH] package/python-tinyrpc: not available for
+ python 2.x
+In-Reply-To: <20200929204557.28901-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 29 Sep 2020 22:45:57 +0200")
+References: <20200929204557.28901-1-peter@korsgaard.com>
+Message-ID: <87o8ll0zs1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,21 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/76b580000e6311e88584874f942517badd6fadf6/
+ > http://autobuild.buildroot.net/results/eef0969bac04800cec51fa27f1e1ecd3a4c8211e/
 
- > python-txtorcon DOES support python 2.x, but it contains some optional
- > python 3 / async code in controller_py3.py which is conditionally used from
- > controller.py:
+ > tinyrpc 1.x is not compatible with python 2.x, leading to errors during the
+ > pycompile step:
 
- > try:
- >     from .controller_py3 import _AsyncOnionAuthContext
- >     HAVE_ASYNC = True
- > except Exception:
- >     HAVE_ASYNC = False
-
- > pycompile unfortunately errors out on the async code:
-
- > ../scripts/pycompile.py ..
- > error:   File "/usr/lib/python2.7/site-packages/txtorcon/controller_py3.py", line 13
- >     async def __aenter__(self):
- >             ^
+ > error:   File "/usr/lib/python2.7/site-packages/tinyrpc/client.py", line 37
+ >     self, protocol: RPCProtocol, transport: ClientTransport
+ >                   ^
  > SyntaxError: invalid syntax
 
- > As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
- > building for python 2.x.
+ > As also documented in the README:
+ > The current version will support Python3 only.  Have a look at the 0.9.x
+ > version if you need Python2 support
+
+ > https://github.com/mbr/tinyrpc/blob/1.0.4/README.rst
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
