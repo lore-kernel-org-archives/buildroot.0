@@ -1,80 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:05:21 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/read-edid: fix
- build with gcc 10
-Message-ID: <20201002082506.CC3428E6B7@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:02:35 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-texttable:
+ bump version to 1.6.3
+Message-ID: <20201002082506.B758A8E7E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1399c9d85bff61a4dadb75779927d7e6d29c7b8d
+commit: https://git.buildroot.net/buildroot/commit/?id=d09a19dfee326f81c39f2adec6f2af4b00c25ee0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/28bde8049b6610273bceae26eca407c819a37dcd
+Bugfix release, fixing an issue with integer/float handling:
+https://github.com/foutaise/texttable/issues/70
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Adjust the .hash spacing and update the license hash for a copyright year
+change:
+https://github.com/foutaise/texttable/commit/13ff0b57d3f727a266ce45f86642f0458257bb8e
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6ecad89a450eba790404ea25977a2e03129b6a81)
+(cherry picked from commit dc68be69440f3d5e7a8d5fc2c25597ddbbe1473b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/read-edid/0003-fix-build-with-gcc-10.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/python-texttable/python-texttable.hash | 6 +++---
+ package/python-texttable/python-texttable.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/read-edid/0003-fix-build-with-gcc-10.patch b/package/read-edid/0003-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..713b09aa8d
---- /dev/null
-+++ b/package/read-edid/0003-fix-build-with-gcc-10.patch
-@@ -0,0 +1,49 @@
-+fix build with gcc 10
-+
-+Define quiet as static to avoid the following build failure with gcc 10
-+(which defaults to -fno-common):
-+
-+/home/naourr/work/instance-2/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: CMakeFiles/get-edid.dir/i2c.c.o:(.bss+0x0): multiple definition of `quiet'; CMakeFiles/get-edid.dir/get-edid.c.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/28bde8049b6610273bceae26eca407c819a37dcd
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to pyrophobicman at gmail.com]
-+
-+diff -Nura read-edid-3.0.2.orig/get-edid/classic.c read-edid-3.0.2/get-edid/classic.c
-+--- read-edid-3.0.2.orig/get-edid/classic.c	2020-09-25 23:25:01.928805414 +0200
-++++ read-edid-3.0.2/get-edid/classic.c	2020-09-25 23:26:37.440807301 +0200
-+@@ -26,7 +26,7 @@
-+ #define dosmemput(buffer,length,offset) memcpy(offset,buffer,length)
-+ 
-+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
-+-int quiet;
-++static int quiet;
-+ 
-+ real_ptr far_ptr_to_real_ptr( uint32 farptr )
-+ {
-+diff -Nura read-edid-3.0.2.orig/get-edid/get-edid.c read-edid-3.0.2/get-edid/get-edid.c
-+--- read-edid-3.0.2.orig/get-edid/get-edid.c	2020-09-25 23:25:01.928805414 +0200
-++++ read-edid-3.0.2/get-edid/get-edid.c	2020-09-25 23:28:20.740809341 +0200
-+@@ -9,7 +9,7 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ 
-+-int quiet=0;
-++static int quiet=0;
-+ int i2conly=0; //0=both, 1=i2conly, 2=classiconly
-+ int i2cbus=-1;
-+ int classmon=0;
-+diff -Nura read-edid-3.0.2.orig/get-edid/i2c.c read-edid-3.0.2/get-edid/i2c.c
-+--- read-edid-3.0.2.orig/get-edid/i2c.c	2020-09-25 23:25:01.928805414 +0200
-++++ read-edid-3.0.2/get-edid/i2c.c	2020-09-25 23:28:32.152809567 +0200
-+@@ -15,7 +15,7 @@
-+ 
-+ //Ideas (but not too much actual code) taken from i2c-tools. Thanks guys.
-+ 
-+-int quiet;
-++static int quiet;
-+ 
-+ #define display(...) if (quiet == 0) { fprintf(stderr, __VA_ARGS__); }
-+ 
+diff --git a/package/python-texttable/python-texttable.hash b/package/python-texttable/python-texttable.hash
+index 367eb8d60f..a69e8ed465 100644
+--- a/package/python-texttable/python-texttable.hash
++++ b/package/python-texttable/python-texttable.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/texttable/json
+-md5	763141f0bdf598cdc5cf780ed4d2eb94  texttable-1.6.2.tar.gz
+-sha256	eff3703781fbc7750125f50e10f001195174f13825a92a45e9403037d539b4f4  texttable-1.6.2.tar.gz
++md5  68e6b31d36f5c20221da7d5db3eca772  texttable-1.6.3.tar.gz
++sha256  ce0faf21aa77d806bbff22b107cc22cce68dc9438f97a2df32c93e9afa4ce436  texttable-1.6.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256	181d0c3366cc36fd6ae7d023b23a743581003fd42974c8983ea40f7161faeaf3  LICENSE
++sha256	4ba7bdab54504a3bc44eb33ecca873a26a63ab902822101a87bb46235da63594  LICENSE
+diff --git a/package/python-texttable/python-texttable.mk b/package/python-texttable/python-texttable.mk
+index 3b173a35ee..6af23917b9 100644
+--- a/package/python-texttable/python-texttable.mk
++++ b/package/python-texttable/python-texttable.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TEXTTABLE_VERSION = 1.6.2
++PYTHON_TEXTTABLE_VERSION = 1.6.3
+ PYTHON_TEXTTABLE_SOURCE = texttable-$(PYTHON_TEXTTABLE_VERSION).tar.gz
+-PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/82/a8/60df592e3a100a1f83928795aca210414d72cebdc6e4e0c95a6d8ac632fe
++PYTHON_TEXTTABLE_SITE = https://files.pythonhosted.org/packages/f5/be/716342325d6d6e05608e3a10e15f192f3723e454a25ce14bc9b9d1332772
+ PYTHON_TEXTTABLE_SETUP_TYPE = setuptools
+ PYTHON_TEXTTABLE_LICENSE = MIT
+ PYTHON_TEXTTABLE_LICENSE_FILES = LICENSE
