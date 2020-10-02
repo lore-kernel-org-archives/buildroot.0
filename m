@@ -1,54 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:37:34 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] fs/common.mk: move
- BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
-Message-ID: <20201002085305.818838444A@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:58:10 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/python-txtorcon.mk: drop _py3 file for python 2.x to fix pycompile
+ issue
+Message-ID: <20201002085305.B50998444A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39403f58ed50f64129cac73675c3892f390babba
+commit: https://git.buildroot.net/buildroot/commit/?id=a4494d489720bf1c74e0e70a3bb7b3d6de8a28bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The fakeroot script does not appear to be used in any of the checked
-in defconfig targets, but it seems that most often the post
-fakeroot script should be done after all the packages rules have
-been applied instead of before.
+Fixes:
+http://autobuild.buildroot.net/results/76b580000e6311e88584874f942517badd6fadf6/
 
-Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
-a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
-to disable a service or fixup a systemd configuration. The systemd
-move makes sense, and this just tries to preserve the same ability
-to fixup a rootfs after all the cmd hooks are processed.
+python-txtorcon DOES support python 2.x, but it contains some optional
+python 3 / async code in controller_py3.py which is conditionally used from
+controller.py:
 
-Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
-the change that instigated this reordering.
+try:
+    from .controller_py3 import _AsyncOnionAuthContext
+    HAVE_ASYNC = True
+except Exception:
+    HAVE_ASYNC = False
 
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
+pycompile unfortunately errors out on the async code:
+
+../scripts/pycompile.py ..
+error:   File "/usr/lib/python2.7/site-packages/txtorcon/controller_py3.py", line 13
+    async def __aenter__(self):
+            ^
+SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+building for python 2.x.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4bc4dbd630b50ce077f60d4ebbcb33e6b55fe15a)
+(cherry picked from commit 6728c67307858a103456a05a3daaddbbb49dba36)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-txtorcon/python-txtorcon.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 842ea924a5..5e790365d6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -163,11 +163,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
- 	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
--	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
--		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+diff --git a/package/python-txtorcon/python-txtorcon.mk b/package/python-txtorcon/python-txtorcon.mk
+index a01c0b2511..4df400c3e7 100644
+--- a/package/python-txtorcon/python-txtorcon.mk
++++ b/package/python-txtorcon/python-txtorcon.mk
+@@ -11,4 +11,13 @@ PYTHON_TXTORCON_SETUP_TYPE = setuptools
+ PYTHON_TXTORCON_LICENSE = MIT
+ PYTHON_TXTORCON_LICENSE_FILES = LICENSE
  
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_TXTORCON_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/txtorcon/controller_py3.py
++endef
++
++PYTHON_TXTORCON_POST_INSTALL_TARGET_HOOKS += PYTHON_TXTORCON_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
