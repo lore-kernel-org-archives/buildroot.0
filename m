@@ -1,82 +1,177 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 2 Oct 2020 11:50:37 +0200
-Subject: [Buildroot] [PATCH] package/python-werkzeug: bump version to
- 1.0.1
-In-Reply-To: <20200930195646.GT11621@scaer>
-References: <20200930073204.32070-1-buildroot@heine.tech>
- <20200930195646.GT11621@scaer>
-Message-ID: <9cf9f937-5fc2-fab2-354a-6c59705de401@heine.tech>
+From: Leonid Yuriev <leo@yuriev.ru>
+Date: Fri,  2 Oct 2020 14:03:36 +0300
+Subject: [Buildroot] [PATCH] package/libmdbx: new package (library/database).
+Message-ID: <20201002110337.17140-1-leo@yuriev.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This patch adds libmdbx v0.9.1:
+ - libmdbx is one of the fastest compact embeddable key-value ACID database.
+ - libmdbx has a specific set of properties and capabilities,
+   focused on creating unique lightweight solutions.
+ - libmdbx surpasses the legendary LMDB (Lightning Memory-Mapped Database)
+   in terms of reliability, features and performance.
 
-On 30.09.2020 21:56, Yann E. MORIN wrote:
-> Michael, All,
-> 
->>  #
->>  ################################################################################
->>  
->> -PYTHON_WERKZEUG_VERSION = 0.16.0
->> +PYTHON_WERKZEUG_VERSION = 1.0.1
-> 
-> It's been pointed out on IRC that "there were a number of breaking
-> changes in that jump", further pointing to the release notes:
-> 
->     https://werkzeug.palletsprojects.com/en/1.0.x/changes/#version-1-0-0
-> 
-> We have two packages in Buildroot, that use werkzeug: crossbar and
-> flask.
-> 
-> Could you investigate how they are both impacted, if at all, by this
-> bump, please?
-> 
-> Note that your patch has already been applied, and we'd like to know
-> if we also need to update crossbar or flask, or if we need to revert.
-> 
+https://github.com/erthink/libmdbx
 
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
 
-We already discussed this on IRC. But for documentation a short write-up:
+---
+Changes v1 -> v2:
+  - libmdbx version v0.8.2 -> v0.9.1 (released 2020-09-30)
 
-Werkzeug 1.0.1 was released on 2020-03-31.
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+---
+ DEVELOPERS                   |  3 ++
+ package/Config.in            |  1 +
+ package/libmdbx/Config.in    | 35 ++++++++++++++++++++++
+ package/libmdbx/libmdbx.hash |  2 ++
+ package/libmdbx/libmdbx.mk   | 57 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 98 insertions(+)
+ create mode 100644 package/libmdbx/Config.in
+ create mode 100644 package/libmdbx/libmdbx.hash
+ create mode 100644 package/libmdbx/libmdbx.mk
 
-Flask in BR is on 1.1.2 which was released on 2020-04-03
-Crossbar in BR is on  20.4.2 released on 2020-04-14
-
-So both releases were after the Werkzeug Release and for Flask we even
-are on the latest version.
-
-I can't say much about crossbar as I don't use it. But at least their
-issue tracker [0] and their changelog [1] have no mentions of any
-Werkzeug related issues.
-
-
-For Flask I can say: the package itself works fine on my target.
-
-Things that actually broke:
-
-* my local package for flask-wtf which could be fixed with a version bump.
-
-* my own code using flask which I had to update. Werkzeug 0.16.0 shows
-deprecation warnings like
-
-DeprecationWarning: The import 'werkzeug.secure_filename' is deprecated
-and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import
-secure_filename' instead.
-
-but running in gunicorn they are lost somewhere...
-
-So it might be an issue for some user code or external packages but the
-depending packages seem to be fine.
-
-Bonus: I actually found some other deprecations my code uses from other
-packages while checking this ;)
-
-Regards,
-Michael
-
-[0] https://github.com/crossbario/crossbar/issues?q=is%3Aissue+werkzeug
-[1] https://crossbar.io/docs/changelog/
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9352d891d3..301372fc40 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1544,6 +1544,9 @@ N:	Leon Anavi <leon.anavi@konsulko.com>
+ F:	board/olimex/a10_olinuxino
+ F:	configs/olimex_a10_olinuxino_lime_defconfig
+ 
++N:	Leonid Yuriev <leo@yuriev.ru>
++F:	package/libmdbx
++
+ N:	Lionel Flandrin <lionel@svkt.org>
+ F:	package/python-babel/
+ F:	package/python-daemonize/
+diff --git a/package/Config.in b/package/Config.in
+index 51583d07d6..f87e0388a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1370,6 +1370,7 @@ menu "Database"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libgit2/Config.in"
++	source "package/libmdbx/Config.in"
+ 	source "package/libodb/Config.in"
+ 	source "package/libodb-boost/Config.in"
+ 	source "package/libodb-mysql/Config.in"
+diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+new file mode 100644
+index 0000000000..7d2d321095
+--- /dev/null
++++ b/package/libmdbx/Config.in
+@@ -0,0 +1,35 @@
++config BR2_PACKAGE_LIBMDBX
++	bool "libmdbx"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	help
++	  One of the fastest compact key-value ACID database
++	  without WAL. libmdbx has a specific set of properties
++	  and capabilities, focused on creating unique lightweight
++	  solutions.
++
++	  libmdbx surpasses the legendary legendary LMDB in terms of
++	  reliability, features and performance.
++
++	  https://github.com/erthink/libmdbx
++
++if BR2_PACKAGE_LIBMDBX
++
++config BR2_PACKAGE_LIBMDBX_TOOLS
++	bool "install tools"
++	help
++	  Install libmdbx tools for checking, dump, restore
++	  and show statistics of databases.
++
++# C++ API is preliminary for now
++#config BR2_PACKAGE_LIBMDBX_CXX
++#	bool "C++ API"
++#	select BR2_INSTALL_LIBSTDCPP
++#	help
++#	  Enable modern C++ API for libmdbx.
++
++endif
++
++comment "libmdbx needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+new file mode 100644
+index 0000000000..f48cd81a7d
+--- /dev/null
++++ b/package/libmdbx/libmdbx.hash
+@@ -0,0 +1,2 @@
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
++sha256  c7fb24381eb4d92f2e2edc17e577cb721269683c816c6cca307c58f6f346e786  libmdbx-amalgamated-0.9.1.tar.gz
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+new file mode 100644
+index 0000000000..894b7f0838
+--- /dev/null
++++ b/package/libmdbx/libmdbx.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# libmdbx
++#
++# One of the fastest embeddable key-value ACID database without WAL. libmdbx is
++# superior to legendary LMDB in terms of reliability, features and performance.
++#
++################################################################################
++
++LIBMDBX_VERSION = 0.9.1
++LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
++LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
++LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBMDBX_LICENSE = OLDAP-2.8
++LIBMDBX_LICENSE_FILES = LICENSE
++LIBMDBX_REDISTRIBUTE = YES
++LIBMDBX_STRIP_COMPONENTS = 0
++LIBMDBX_INSTALL_STAGING = YES
++
++LIBMDBX_CONF_OPTS = -DMDBX_INSTALL_MANPAGES:BOOL=OFF -DBUILD_FOR_NATIVE_CPU:BOOL=OFF
++
++# C++ API is preliminary for now
++#ifeq ($(BR2_PACKAGE_LIBMDBX_CXX),y)
++#LIBMDBX_CONF_OPTS += -DMDBX_BUILD_CXX:BOOL=ON
++#else
++#LIBMDBX_CONF_OPTS += -DMDBX_BUILD_CXX:BOOL=OFF
++#endif
++
++ifeq ($(BR2_STATIC_LIBS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC:BOOL=ON
++else
++LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC:BOOL=OFF
++endif
++
++ifeq ($(BR2_SHARED_LIBS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY:BOOL=ON
++LIBMDBX_INSTALL_TARGET = YES
++ifeq ($(BR2_PACKAGE_LIBMDBX_TOOLS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_TOOLS:BOOL=ON -DMDBX_LINK_TOOLS_NONSTATIC:BOOL=ON
++else
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_TOOLS:BOOL=OFF
++endif
++
++else
++
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY:BOOL=OFF
++ifeq ($(BR2_PACKAGE_LIBMDBX_TOOLS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_TOOLS:BOOL=ON -DMDBX_LINK_TOOLS_NONSTATIC:BOOL=OFF
++LIBMDBX_INSTALL_TARGET = YES
++else
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_TOOLS:BOOL=OFF
++LIBMDBX_INSTALL_TARGET = NO
++endif
++
++endif
++
++$(eval $(cmake-package))
+-- 
+2.28.0
