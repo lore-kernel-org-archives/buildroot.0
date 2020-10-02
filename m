@@ -1,43 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 22:32:54 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/gdb: also disable
- gprof
-Message-ID: <20201002204714.99E948E7D9@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 22:39:20 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/rsh-redone:
+ disable rlogind on musl
+Message-ID: <20201002204714.A67BE8E7D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ada76af1e968197b703e51ec15ec5d9f99a4b827
+commit: https://git.buildroot.net/buildroot/commit/?id=50ebf8d3325f746da71a6f1b62f455662dd81eaa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-When gdb is built from sources fetched from Git, it contains both the
-gdb and the binutils code base. In order to really build only gdb, we
-disable a number of binutils components in the
-GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
---disable-ld, --disable-gas, etc. However, gprof was still being
-built, so disable it as well.
+Commit f89ca996b6deb660b53c33196b8b309fac659bf9 enabled linux-pam on
+musl however rlogind fails to build on musl because it uses logwtmp:
 
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: rlogind.c:(.text.startup+0x9ec): undefined reference to `logwtmp'
+
+As this package is unmaintained, just disable back rlogind on musl
+
+Fixes:
+ - http://autobuild.buildroot.org/results/f2eb1c0bab7c6c32d6c561da0f85a530bd419206
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71719b91ee17fb99135a32c1d2504c57a329084a)
+(cherry picked from commit 14532e4fc6e02a755b30e634fd60f53b92655bcd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/rsh-redone/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 8c74a0e2f6..4bd0187343 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -69,7 +69,8 @@ GDB_DISABLE_BINUTILS_CONF_OPTS = \
- 	--disable-binutils \
- 	--disable-install-libbfd \
- 	--disable-ld \
--	--disable-gas
-+	--disable-gas \
-+	--disable-gprof
+diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
+index 5647d7edef..53ff2bea7f 100644
+--- a/package/rsh-redone/Config.in
++++ b/package/rsh-redone/Config.in
+@@ -17,12 +17,13 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIND
+ 	bool "rlogind"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU # linux-pam
+ 	select BR2_PACKAGE_LINUX_PAM
  
- GDB_CONF_ENV = \
- 	ac_cv_type_uintptr_t=yes \
+-comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
++comment "rlogind needs a uClibc or glibc toolchain w/ wchar, locale, dynamic library"
+ 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
+ 
+ config BR2_PACKAGE_RSH_REDONE_RSH
+ 	bool "rsh"
