@@ -1,106 +1,157 @@
 From: Touhtarian, Eric <etouhtarian@distech-controls.com>
-Date: Fri, 2 Oct 2020 13:07:37 +0000
-Subject: [Buildroot] [PATCH 1/1] Get git version and transfer it to
- build target
-In-Reply-To: <20201001201449.GG11621@scaer>
-References: <20200917153353.8824-1-etouhtarian@distech-controls.com>
- <DM6PR01MB4137A236093298F048094EAC8A300@DM6PR01MB4137.prod.exchangelabs.com>,
- <20201001201449.GG11621@scaer>
-Message-ID: <DM6PR01MB4137985B03967C77A9A6E6008A310@DM6PR01MB4137.prod.exchangelabs.com>
+Date: Fri, 2 Oct 2020 13:07:39 +0000
+Subject: [Buildroot] TR: [PATCH 1/1] Set external version into os-release
+In-Reply-To: <20201001205054.GH11621@scaer>
+References: <20200917153243.8745-1-etouhtarian@distech-controls.com>
+ <DM6PR01MB4137169BE8F2D5C93A2D89DA8A300@DM6PR01MB4137.prod.exchangelabs.com>,
+ <20201001205054.GH11621@scaer>
+Message-ID: <DM6PR01MB413787A929C5DC1300BC0BA38A310@DM6PR01MB4137.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Yann,
 
-Sorry for bad email format for this request.
-
-The issue is the kernel version, like using "uname -r" command, doesn't reflect the real git commit.
-
-In case there are 6 commits after the release tag, we should return version like "v5.4.55-6-g10df54acb4be" but currently we always return the release version "v5.4.55".
-We would prefer having the commit version to identify the right used kernel on target.
-
-The problem is "setlocalversion" script from kernel is called within buildroot/output/build/ linux-<xxxx> folder which doesn't contain git repository information and 
-so it doesn't set the committed version.
+Actually, we have in our structure a repo containing our external tree and submodule of buildroot.
+So we have buildroot version but we would prefer get our "main repo" in /Etc/os-release
 
 Regards
 Eric
 
-
-
 ________________________________________
 De : Yann E. MORIN <yann.morin.1998@free.fr>
-Envoy? : jeudi 1 octobre 2020 22:14
+Envoy? : jeudi 1 octobre 2020 22:50
 ? : Touhtarian, Eric <etouhtarian@distech-controls.com>
 Cc?: buildroot at buildroot.org <buildroot@buildroot.org>
-Objet : Re: [Buildroot] [PATCH 1/1] Get git version and transfer it to build target 
+Objet : Re: [Buildroot] TR: [PATCH 1/1] Set external version into os-release 
 ?
 Eric, All,
 
-Thanks for your contribution.
+Thanks again for your contribution. :-)
 
-On 2020-10-01 14:47 +0000, Touhtarian, Eric via buildroot spake thusly:
+On 2020-10-01 14:49 +0000, Touhtarian, Eric via buildroot spake thusly:
 > Signed-off-by: Eric Touhtarian <etouhtarian@distech-controls.com>
 > ---
->? linux/linux.mk | 7 +++++++
->? 1 file changed, 7 insertions(+)
+>? Makefile??????????????????????? | 16 ++++++++++++++--
+>? support/scripts/setlocalversion | 15 ++++++++++++---
+>? 2 files changed, 26 insertions(+), 5 deletions(-)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk index b9f2052ee7..36f98dd704 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -538,6 +538,13 @@ $(error No custom repo URL set. Check your BR2_LINUX_KERNEL_CUSTOM_REPO_URL sett? endif? endif
+> diff --git a/Makefile b/Makefile
+> index b2afe5bcfb..e6693d2f45 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -111,9 +111,12 @@ CONFIG_CONFIG_IN = Config.in? CONFIG = support/kconfig? DATE := $(shell date +%Y%m%d)
 >? 
-> +ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-> +define LINUX_GIT_VERSION
-> +???? $(TOPDIR)/support/scripts/setlocalversion $(LINUX_DL_DIR)/git > 
-> +$(@D)/.scmversion endef LINUX_PRE_BUILD_HOOKS += LINUX_GIT_VERSION 
+> +define setlocalversion
+> +$(shell $(TOPDIR)/support/scripts/setlocalversion $(1) $(2)) endef
+>? # Compute the full local version string so packages can use it as-is? # Need to export it, so it can be got from environment in children (eg. mconf) -export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+> +export BR2_VERSION_FULL := $(BR2_VERSION)$(call setlocalversion)
 
-This patch is badly mangled , probably by your email client. Be sure to
-use 'git send-email' to send your patches, as this generates proper
-emails. See the manual:
+This patch is also badly mangled. Please use git send-email.
 
-??? https://urldefense.com/v3/__https:/buildroot.org/downloads/manual/manual.html*submitting-patches__;Iw!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJ56K-sRu$ 
+Also, this part of the Makefile has silghtly changed recently, with
+commit 98c99556e3e (Makefile: properly account for custom tags in
+BR2_VERSION_FULL), that was applied two months ago (July 27th).
 
-> +endif
+>? # List of targets and target patterns for which .config doesn't need to be read in? noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \ @@ -740,6 +743,14 @@ host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>? .PHONY: staging-finalize
+>? staging-finalize: $(STAGING_DIR_SYMLINK)
+>? 
+> +define set-external-info
+> +index=1; \
+> +$(foreach ext, $(BR2_EXTERNAL_DIRS), \
+> +???? echo "EXTERNAL_$${index}_PATH=$(ext)"; \
+> +???? echo "EXTERNAL_$${index}_VERSION=\"$(call setlocalversion,"--unmodify-version", $(ext))\""; \
+> +???? index=$$(expr $$index + 1); )
 
-Why would we store the Linux kernel version on the target? If we were to
-do so, why would we not do that for all other packages as well?
+The set of fields in the os-release file is predefined by the spec:
 
-Besides, the kernel version is already included in the kernel binary
-itself, if you set CONFIG_LOCALVERSION_AUTO=y in your kernel config
-file.
+??? https://urldefense.com/v3/__https:/www.freedesktop.org/software/systemd/man/os-release.html__;!!Po4YltK3bPMkYw!gJ8RpNC2442nn2dlFXtaaPWmgtb78Sfin82rlcGqrPl8D6ajSpImfMJ2JI9g3iGNiZcEiyHb$ 
 
-If what you need is accountability, then 'make show-info' will dump a
-json blurb with a lot of metadata about all packages in your build,
-including the kernel version.
+Extensions are allowed, but "[i]t is highly recommended to prefix new
+fields with an OS specific name in order to avoid name clashes". In our
+case, that prefix would probably have to be 'BR2_EXTERNAL_'.
 
-Finally, if you need traceability, you probbly already have your kernel
-version string in your Buildroot configuration file.
+Still, I am not 100% sure we want that... What would be the use-case to
+have the versions of all br2-external trees?
 
-I'll mark this patch as rejected. If you still think there is a valid
-use-case for it, that is not covered by one of the above, then please
-respin and provide a commit log that explains that use-case.
+Usually, there is a "main" repository, which has buildroot and all
+br2-external trees as sub-modules, or in a manifest file. The version
+of that "main: repo is then sufficient to derive the versions of all
+the others.
+
+In which case it would be simple to provide a post-build script that
+basically echoes that version in os-release.
+
+If you can come up with a good commit log that makes a point that the
+versions of all br2-external trees is important, I would not mind having
+it too much either.
+
+Ergo, at your keyboard, and go for some poesy. ;-)
+
+[--SNIP--]
+> diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion index b39b751f03..459b4765fa 100755
+> --- a/support/scripts/setlocalversion
+> +++ b/support/scripts/setlocalversion
+> @@ -10,10 +10,16 @@
+>? #
+>? 
+>? usage() {
+> -???? echo "Usage: $0 [srctree]" >&2
+> +???? echo "Usage: $0 [--unmodify-version] [srctree]" >&2
+
+What is the purpose of this new option? You need to explain it in the
+commit log, and a comment in the script would bbe nice too.
+
+>??????? exit 1
+>? }
+>? 
+> +original_ver=false
+> +if test "$1" = "--unmodify-version"; then
+> +???? original_ver=true
+> +???? shift
+> +fi
+> +
+>? cd "${1:-.}" || usage
+>? 
+>? # Check for git and a git repo.
+> @@ -26,8 +32,11 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+>??????????????? # If we are past a tagged commit (like "v2.6.30-rc5-302-g72357d5"),
+>??????????????? # we pretty print it.
+>??????????????? if atag="`git describe 2>/dev/null`"; then
+> -???????????????????? echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+> -
+> +???????????????????? if $original_ver; then
+> +???????????????????????????? printf $atag
+> +???????????????????? else
+> +???????????????????????????? echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+> +???????????????????? fi
+
+This part of the scripr also changed with commit 98c99556e3e, and so
+your '--unmodify-version' option is maybe no longer required.
+
+I've now marked your patch as "changes requested" in patchwork.
 
 Regards,
 Yann E. MORIN.
 
->? ifeq ($(BR_BUILDING),y)
->? 
->? ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+>??????????????? # If we don't have a tag at all we print -g{commitish}.
+>??????????????? else
+>??????????????????????? printf '%s%s' -g $head
 > --
 > 2.17.1
 > 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
-> https://urldefense.com/v3/__http:/lists.busybox.net/mailman/listinfo/buildroot__;!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJz9E4NdN$ 
+> https://urldefense.com/v3/__http:/lists.busybox.net/mailman/listinfo/buildroot__;!!Po4YltK3bPMkYw!gJ8RpNC2442nn2dlFXtaaPWmgtb78Sfin82rlcGqrPl8D6ajSpImfMJ2JI9g3iGNiSQh4ynY$ 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
 |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
 | +33 662 376 056 | Software? Designer | \ / CAMPAIGN???? |? ___?????????????? |
 | +33 561 099 427 `------------.-------:? X? AGAINST????? |? \e/? There is no? |
-| https://urldefense.com/v3/__http:/ymorin.is-a-geek.org/__;!!Po4YltK3bPMkYw!hfkAz-K0QIf2YfE5FsVWnOLkmhiLRJj1KPj8ZiScTbirmmhVnVFLP93Ld_LqP0-jJ1R7rICb$? | _/*\_ | / \ HTML MAIL??? |?? v?? conspiracy.? |
+| https://urldefense.com/v3/__http:/ymorin.is-a-geek.org/__;!!Po4YltK3bPMkYw!gJ8RpNC2442nn2dlFXtaaPWmgtb78Sfin82rlcGqrPl8D6ajSpImfMJ2JI9g3iGNiXnpP7mO$? | _/*\_ | / \ HTML MAIL??? |?? v?? conspiracy.? |
 '------------------------------^-------^------------------^--------------------'
