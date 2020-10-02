@@ -1,44 +1,35 @@
 From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Fri, 02 Oct 2020 11:03:40 +0200
-Subject: [Buildroot] [git commit] arch: add the basic IBM s390x and Z
- arch support
-In-Reply-To: <20200930213309.4f9b8063@windsurf.home>
-References: <20200924213039.9A20F83786@busybox.osuosl.org>
- <20200930213309.4f9b8063@windsurf.home>
-Message-ID: <87eemh6lub.fsf@oc8242746057.ibm.com>
+Date: Fri,  2 Oct 2020 11:19:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/go: fix GO_ARCH for s390x arch
+Message-ID: <20201002091945.305239-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Fixes:
+- http://autobuild.buildroot.net/results/82c440825290804c2fd6a92d916c93d2934e0a95
+- http://autobuild.buildroot.net/results/e8f8e232fb6bf6167f25c82026f4e2321cca9c26
+- http://autobuild.buildroot.net/results/7d4137c439ade81ab7bf141ad6504a69746d6dbc
 
->
-> I was looking at this, together with the gcc documentation, and I was
-> surprised to see that arch13/z15 are not mentioned anywhere. My gcc
-> 10.x documentation says:
->
->      Generate code that runs on CPU-TYPE, which is the name of a system
->      representing a certain processor type.  Possible values for
->      CPU-TYPE are 'z900'/'arch5', 'z990'/'arch6', 'z9-109',
->      'z9-ec'/'arch7', 'z10'/'arch8', 'z196'/'arch9', 'zEC12',
->      'z13'/'arch11', 'z14'/'arch12', and 'native'.
->
-> But looking at the gcc source code, the z15/arch13 -march values are
-> indeed supported.
->
-> Perhaps the gcc documentation should be updated. Alexander, as it seems
-> you're working on S390 support in general, maybe you could take care of
-> this ?
->
-> Thanks!
->
-> Thomas
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ package/go/go.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Thomas,
-thank you for reporting this, i'll forward your message to the
-responsible one.
-
-Regards
-Alex
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a9f2613fdb..edc44d2378 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -54,6 +54,8 @@ else ifeq ($(BR2_mips64),y)
+ GO_GOARCH = mips64
+ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
++else ifeq ($(BR2_s390x),y)
++GO_GOARCH = s390x
+ endif
+ 
+ # For the convienience of target packages.
+-- 
+2.26.2
