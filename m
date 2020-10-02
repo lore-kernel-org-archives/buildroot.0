@@ -1,78 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  2 Oct 2020 00:06:24 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 8}.x series
-Message-ID: <20201001220624.32250-1-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  2 Oct 2020 08:34:47 +0300
+Subject: [Buildroot] [PATCH] package/i2c-tools: bump to version 4.2
+Message-ID: <1d84b7c48c4b2035dd4b03f058d1cefd1e1afb18.1601616887.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+Use upstream provided hash.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ec74e1e65a..619fed86dc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -124,7 +124,7 @@ endif
+Update README hash because of unrelated content changes.
+
+Format hashes with two spaces delimiter.
+
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/i2c-tools/i2c-tools.hash | 10 +++++-----
+ package/i2c-tools/i2c-tools.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
+index 280a139c00dd..150bdb2e6341 100644
+--- a/package/i2c-tools/i2c-tools.hash
++++ b/package/i2c-tools/i2c-tools.hash
+@@ -1,7 +1,7 @@
+-# Locally computed
+-sha256 57b219efd183795bd545dd5a60d9eabbe9dcb6f8fb92bc7ba2122b87f98527d5  i2c-tools-4.1.tar.xz
++# From https://www.kernel.org/pub/software/utils/i2c-tools/sha256sums.asc
++sha256  37f2dabc7082d185903ff21d1f584b5dcb4dd2eb2c879bbd8d7c50ae900dacd6  i2c-tools-4.2.tar.xz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5393b27f14..b1bd51e668 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  7b0bf5029c94df72d1244b6b77e79e376cff2817a782c3ac50767a4121fd17fe  linux-5.8.7.tar.xz
--sha256  e0260dae0da01163b1a3289ad9c5cc6ee4226720e199e8a1d982e24efda7ffc0  linux-5.4.63.tar.xz
-+sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
-+sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  0dfb86052e7405692e29f8db2f5b480ed972d93b615ffb24d4607d33d29eb770  linux-4.4.235.tar.xz
--sha256  e625a6212695efe5deeab5844e47404841fb1bf755f85eba818614c2ff580cc3  linux-4.9.235.tar.xz
--sha256  5e61b2f58d4c930c3567821aeeb6f688554dca61454646d54711bfc9abc7b09a  linux-4.14.196.tar.xz
--sha256  2a4335c66f0ea8cc49d89ab25e5e00d75fcb33fe638d5584855598b4b8f3038d  linux-4.19.143.tar.xz
-+sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
-+sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
-+sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
-+sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0d92dfada7..1fe7d05da0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -338,12 +338,12 @@ endchoice
+ # License files
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+-sha256 b75b04b46320dff5e2b50a9c69b8e526b7db5087083ea3ba65533f08fc11b9f0  README
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256  370e8bc3d45744170cc4b12dc5135b107fa40a00179a19973fbd714146dec04c  README
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index d4d9c012fa87..c1770cf63627 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.235"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.235"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.196"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.143"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.63"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.7"		if BR2_KERNEL_HEADERS_5_8
-+	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-I2C_TOOLS_VERSION = 4.1
++I2C_TOOLS_VERSION = 4.2
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+ I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+ I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
 -- 
-2.20.1
+2.28.0
