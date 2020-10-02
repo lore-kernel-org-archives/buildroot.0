@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2020 10:59:10 +0200
-Subject: [Buildroot] [PATCH] package/python-tinyrpc: not available for
- python 2.x
-In-Reply-To: <20200929204557.28901-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 29 Sep 2020 22:45:57 +0200")
-References: <20200929204557.28901-1-peter@korsgaard.com>
-Message-ID: <87o8ll0zs1.fsf@dell.be.48ers.dk>
+Date: Fri, 2 Oct 2020 10:40:12 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson.mk: fix
+ generation of pkg_config_static prop
+Message-ID: <20201002085241.0CEB88E818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6d661ac8480c1976785afec8dbe39dad63449238
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fixes:
- > http://autobuild.buildroot.net/results/eef0969bac04800cec51fa27f1e1ecd3a4c8211e/
+fixes following in the generated cross-complation.conf file:
+pkg_config_static = '$(if $(BR2_STATIC_LIBS),true,false)'
 
- > tinyrpc 1.x is not compatible with python 2.x, leading to errors during the
- > pycompile step:
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 78da84eca9a4a5d584369b10792253a80c37a8f9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > error:   File "/usr/lib/python2.7/site-packages/tinyrpc/client.py", line 37
- >     self, protocol: RPCProtocol, transport: ClientTransport
- >                   ^
- > SyntaxError: invalid syntax
-
- > As also documented in the README:
- > The current version will support Python3 only.  Have a look at the 0.9.x
- > version if you need Python2 support
-
- > https://github.com/mbr/tinyrpc/blob/1.0.4/README.rst
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 188cc17409..185832bd0c 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -193,7 +193,7 @@ define PKG_MESON_INSTALL_CROSS_CONF
+ 	    -e 's%@TARGET_CXXFLAGS@%$(call make-comma-list,$(TARGET_CXXFLAGS))@PKG_TARGET_CFLAGS@%g' \
+ 	    -e 's%@HOST_DIR@%$(HOST_DIR)%g' \
+ 	    -e 's%@STAGING_DIR@%$(STAGING_DIR)%g' \
+-	    -e 's%@STATIC@%$$(if $$(BR2_STATIC_LIBS),true,false)%g' \
++	    -e 's%@STATIC@%$(if $(BR2_STATIC_LIBS),true,false)%g' \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+ 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ 	sed -e 's%@PKG_TARGET_CFLAGS@%%g' \
