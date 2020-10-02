@@ -1,54 +1,110 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Oct 2020 07:44:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freetype: unconditionally disable
- harfbuzz
-Message-ID: <20201002054429.2285564-1-fontaine.fabrice@gmail.com>
+Date: Fri,  2 Oct 2020 08:42:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xfsprogs: fix build with gcc 10
+Message-ID: <20201002064233.2820543-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 939e714393e9d7f60f3a198d831608b08a25662e added an optional
-harfbuzz dependency to freetype but this creates a circular dependency
-so unconditionally disable it
-
 Fixes:
- - http://autobuild.buildroot.org/results/3cc4ce3207a253186a9c4f8f5151ea0fc0854a28
+ - http://autobuild.buildroot.org/results/18455090605f3691282778b6a64a624b109037d6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/freetype/freetype.mk | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ ...eclare-globals-provided-by-libraries.patch | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+ create mode 100644 package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index e6463c30b6..f4d71bedf7 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -14,6 +14,10 @@ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_DEPENDENCIES = host-pkgconf
- FREETYPE_CONFIG_SCRIPTS = freetype-config
- 
-+# harfbuzz already depends on freetype so disable harfbuzz in freetype to avoid
-+# a circular dependency
-+FREETYPE_CONF_OPTS = --without-harfbuzz
+diff --git a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+new file mode 100644
+index 0000000000..ef2053e9bb
+--- /dev/null
++++ b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+@@ -0,0 +1,83 @@
++From 123b851389ef9a012a469ef982ac7b819db59342 Mon Sep 17 00:00:00 2001
++From: Eric Sandeen <sandeen@redhat.com>
++Date: Thu, 30 Jan 2020 13:34:17 -0500
++Subject: xfsprogs: do not redeclare globals provided by libraries
 +
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- HOST_FREETYPE_CONF_OPTS = \
- 	--without-brotli \
-@@ -47,13 +51,6 @@ else
- FREETYPE_CONF_OPTS += --without-bzip2
- endif
- 
--ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
--FREETYPE_DEPENDENCIES += harfbuzz
--FREETYPE_CONF_OPTS += --with-harbuzz
--else
--FREETYPE_CONF_OPTS += --without-harfbuzz
--endif
--
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREETYPE_DEPENDENCIES += libpng
- FREETYPE_CONF_OPTS += --with-png
++In each of these cases, db, logprint, and mdrestore are redeclaring
++as a global variable something which was already provided by a
++library they link with.
++
++gcc now defaults to -fno-common and trips over these global variables
++which are declared in utilities as well as in libxfs and libxlog, and
++it causes the build to fail.
++
++Signed-off-by: Eric Sandeen <sandeen@redhat.com>
++Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
++Reviewed-by: Christoph Hellwig <hch@lst.de>
++Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
++
++[Retrieved from:
++https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=123b851389ef9a012a469ef982ac7b819db59342]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ db/init.c                 | 1 -
++ logprint/logprint.c       | 4 ++--
++ mdrestore/xfs_mdrestore.c | 1 -
++ 3 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/db/init.c b/db/init.c
++index 455220a86..0ac373685 100644
++--- a/db/init.c
+++++ b/db/init.c
++@@ -27,7 +27,6 @@ static int		force;
++ static struct xfs_mount	xmount;
++ struct xfs_mount	*mp;
++ static struct xlog	xlog;
++-libxfs_init_t		x;
++ xfs_agnumber_t		cur_agno = NULLAGNUMBER;
++ 
++ static void
++diff --git a/logprint/logprint.c b/logprint/logprint.c
++index 7754a2a6e..511a32aca 100644
++--- a/logprint/logprint.c
+++++ b/logprint/logprint.c
++@@ -24,7 +24,6 @@ int	print_buffer;
++ int	print_overwrite;
++ int     print_no_data;
++ int     print_no_print;
++-int     print_exit = 1; /* -e is now default. specify -c to override */
++ static int	print_operation = OP_PRINT;
++ 
++ static void
++@@ -132,6 +131,7 @@ main(int argc, char **argv)
++ 	bindtextdomain(PACKAGE, LOCALEDIR);
++ 	textdomain(PACKAGE);
++ 	memset(&mount, 0, sizeof(mount));
+++	print_exit = 1; /* -e is now default. specify -c to override */
++ 
++ 	progname = basename(argv[0]);
++ 	while ((c = getopt(argc, argv, "bC:cdefl:iqnors:tDVv")) != EOF) {
++@@ -152,7 +152,7 @@ main(int argc, char **argv)
++ 			case 'e':
++ 			    /* -e is now default
++ 			     */
++-				print_exit++;
+++				print_exit = 1;
++ 				break;
++ 			case 'C':
++ 				print_operation = OP_COPY;
++diff --git a/mdrestore/xfs_mdrestore.c b/mdrestore/xfs_mdrestore.c
++index 3375e0806..1cd399dbc 100644
++--- a/mdrestore/xfs_mdrestore.c
+++++ b/mdrestore/xfs_mdrestore.c
++@@ -7,7 +7,6 @@
++ #include "libxfs.h"
++ #include "xfs_metadump.h"
++ 
++-char 		*progname;
++ static int	show_progress = 0;
++ static int	show_info = 0;
++ static int	progress_since_warning = 0;
++-- 
++cgit 1.2.3-1.el7
++
 -- 
 2.28.0
