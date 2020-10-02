@@ -1,39 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Oct 2020 10:31:53 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/gstreamer1/gst1-plugins-ugly: add missing comma in license variable
-Message-ID: <20201002082529.747098E7E0@busybox.osuosl.org>
+Date: Fri, 2 Oct 2020 10:14:32 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-semver:
+ bump version to 2.10.2
+Message-ID: <20201002082529.5E7EA8152D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95a6c9b48ccceb506d5153798980d2f2bac17cda
+commit: https://git.buildroot.net/buildroot/commit/?id=91348417e726d16beb1d3330430ebf26a8368af6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-When one GPL-licensed plugin was enabled, the license of
-gst1-plugins-ugly would be "LGPL-2.1+ GPL-2.0", but licenses should be
-comma separated, not space separated. So let's fix that to get the
-expected value of "LGPL-2.1+, GPL-2.0".
+Bugfix release, fixing an issue with version fields containing '0'.  For
+details, see the changelog:
 
+https://python-semver.readthedocs.io/en/2.10.2/changelog.html#version-2-10-2
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4626bafe5ccd91fdcc84f2413ad23404942672f4)
+(cherry picked from commit 2be774303dc14be8f80eeac3f9a0a9cb10fb51e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-semver/python-semver.hash | 4 ++--
+ package/python-semver/python-semver.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 9f8b1d3359..0261dc3233 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -89,7 +89,7 @@ endif
+diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
+index 510b42cac9..5c13764e57 100644
+--- a/package/python-semver/python-semver.hash
++++ b/package/python-semver/python-semver.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/semver/json
+-md5  a8466a3a0487a90e97a4199ad174d3e9  semver-2.10.1.tar.gz
+-sha256  b08a84f604ef579e474ce448672a05c8d50d1ee0b24cee9fb58a12b260e4d0dc  semver-2.10.1.tar.gz
++md5  3e11ae9782121e8ffe9f8a8b763a8cb5  semver-2.10.2.tar.gz
++sha256  c0a4a9d1e45557297a722ee9bac3de2ec2ea79016b6ffcaca609b0bc62cf4276  semver-2.10.2.tar.gz
+ # Locally computed
+ sha256  cda490c32e61d3884dc17791fc8078f2a3e564fba98dd18b4dc64eb2720b2b6f  LICENSE.txt
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
+index fec02546ba..32ed6b971f 100644
+--- a/package/python-semver/python-semver.mk
++++ b/package/python-semver/python-semver.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Add GPL license if GPL plugins enabled.
- ifeq ($(GST1_PLUGINS_UGLY_HAS_GPL_LICENSE),y)
--GST1_PLUGINS_UGLY_LICENSE += GPL-2.0
-+GST1_PLUGINS_UGLY_LICENSE += , GPL-2.0
- endif
- 
- # Use the following command to extract license info for plugins.
+-PYTHON_SEMVER_VERSION = 2.10.1
++PYTHON_SEMVER_VERSION = 2.10.2
+ PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
+-PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/bc/82/5a9ee107810deb6cb142ea3b07aba619d6b6c0bd74c9e276b2b48b62696e
++PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/aa/e8/cb894f70a52887f001aff5f264f68272c21fa58268495aca17df396c161f
+ PYTHON_SEMVER_SETUP_TYPE = setuptools
+ PYTHON_SEMVER_LICENSE = BSD-3-Clause
+ PYTHON_SEMVER_LICENSE_FILES = LICENSE.txt
