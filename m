@@ -1,110 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Oct 2020 08:42:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xfsprogs: fix build with gcc 10
-Message-ID: <20201002064233.2820543-1-fontaine.fabrice@gmail.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Fri,  2 Oct 2020 09:47:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: Use start-stop-daemon to
+ perform start/stop actions
+Message-ID: <20201002064721.1641311-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/18455090605f3691282778b6a64a624b109037d6
+Using 'start-stop-daemon' prevents multiple instances creation by '/etc/init.d/S60openvpnv start'.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 ---
- ...eclare-globals-provided-by-libraries.patch | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+ package/openvpn/S60openvpn | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
-new file mode 100644
-index 0000000000..ef2053e9bb
---- /dev/null
-+++ b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
-@@ -0,0 +1,83 @@
-+From 123b851389ef9a012a469ef982ac7b819db59342 Mon Sep 17 00:00:00 2001
-+From: Eric Sandeen <sandeen@redhat.com>
-+Date: Thu, 30 Jan 2020 13:34:17 -0500
-+Subject: xfsprogs: do not redeclare globals provided by libraries
-+
-+In each of these cases, db, logprint, and mdrestore are redeclaring
-+as a global variable something which was already provided by a
-+library they link with.
-+
-+gcc now defaults to -fno-common and trips over these global variables
-+which are declared in utilities as well as in libxfs and libxlog, and
-+it causes the build to fail.
-+
-+Signed-off-by: Eric Sandeen <sandeen@redhat.com>
-+Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-+Reviewed-by: Christoph Hellwig <hch@lst.de>
-+Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=123b851389ef9a012a469ef982ac7b819db59342]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ db/init.c                 | 1 -
-+ logprint/logprint.c       | 4 ++--
-+ mdrestore/xfs_mdrestore.c | 1 -
-+ 3 files changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/db/init.c b/db/init.c
-+index 455220a86..0ac373685 100644
-+--- a/db/init.c
-++++ b/db/init.c
-+@@ -27,7 +27,6 @@ static int		force;
-+ static struct xfs_mount	xmount;
-+ struct xfs_mount	*mp;
-+ static struct xlog	xlog;
-+-libxfs_init_t		x;
-+ xfs_agnumber_t		cur_agno = NULLAGNUMBER;
-+ 
-+ static void
-+diff --git a/logprint/logprint.c b/logprint/logprint.c
-+index 7754a2a6e..511a32aca 100644
-+--- a/logprint/logprint.c
-++++ b/logprint/logprint.c
-+@@ -24,7 +24,6 @@ int	print_buffer;
-+ int	print_overwrite;
-+ int     print_no_data;
-+ int     print_no_print;
-+-int     print_exit = 1; /* -e is now default. specify -c to override */
-+ static int	print_operation = OP_PRINT;
-+ 
-+ static void
-+@@ -132,6 +131,7 @@ main(int argc, char **argv)
-+ 	bindtextdomain(PACKAGE, LOCALEDIR);
-+ 	textdomain(PACKAGE);
-+ 	memset(&mount, 0, sizeof(mount));
-++	print_exit = 1; /* -e is now default. specify -c to override */
-+ 
-+ 	progname = basename(argv[0]);
-+ 	while ((c = getopt(argc, argv, "bC:cdefl:iqnors:tDVv")) != EOF) {
-+@@ -152,7 +152,7 @@ main(int argc, char **argv)
-+ 			case 'e':
-+ 			    /* -e is now default
-+ 			     */
-+-				print_exit++;
-++				print_exit = 1;
-+ 				break;
-+ 			case 'C':
-+ 				print_operation = OP_COPY;
-+diff --git a/mdrestore/xfs_mdrestore.c b/mdrestore/xfs_mdrestore.c
-+index 3375e0806..1cd399dbc 100644
-+--- a/mdrestore/xfs_mdrestore.c
-++++ b/mdrestore/xfs_mdrestore.c
-+@@ -7,7 +7,6 @@
-+ #include "libxfs.h"
-+ #include "xfs_metadump.h"
-+ 
-+-char 		*progname;
-+ static int	show_progress = 0;
-+ static int	show_info = 0;
-+ static int	progress_since_warning = 0;
-+-- 
-+cgit 1.2.3-1.el7
-+
+diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
+index bc1ab01c1a..63530a6f13 100644
+--- a/package/openvpn/S60openvpn
++++ b/package/openvpn/S60openvpn
+@@ -11,13 +11,14 @@ CONFIG_DIR=/etc/openvpn
+ test -d $CONFIG_DIR || exit 0
+ 
+ start_vpn () {
+-    /usr/sbin/openvpn --daemon --writepid /var/run/openvpn.$NAME.pid \
+-            --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR || printf " FAILED->"
+-    printf " $NAME"
++    printf " $NAME "
++    start-stop-daemon -S -p /var/run/openvpn.$NAME.pid -x /usr/sbin/openvpn -- --daemon --writepid /var/run/openvpn.$NAME.pid \
++            --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop_vpn () {
+-   kill `cat $PIDFILE` || true
+-  rm $PIDFILE
++    printf " $NAME "
++    start-stop-daemon -K -p /var/run/openvpn.$NAME.pid -x /usr/sbin/openvpn
+ }
+ 
+ case "$1" in
+@@ -48,7 +49,6 @@ stop)
+       NAME=`echo $PIDFILE | cut -c18-`
+       NAME=${NAME%%.pid}
+       stop_vpn
+-      printf " $NAME"
+     done
+   else
+     if test -e /var/run/openvpn.$2.pid ; then
+@@ -56,7 +56,6 @@ stop)
+       NAME=`echo $PIDFILE | cut -c18-`
+       NAME=${NAME%%.pid}
+       stop_vpn
+-      printf " $NAME"
+     else
+       printf " No such VPN: $2"
+     fi
 -- 
-2.28.0
+2.27.0
