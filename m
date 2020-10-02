@@ -1,171 +1,262 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 2 Oct 2020 23:57:02 +0200
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
- 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
-In-Reply-To: <20201002155931.1529915-2-romain.naour@gmail.com>
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
- <20201002155931.1529915-2-romain.naour@gmail.com>
-Message-ID: <6998c0d3-b227-4a9b-48f3-522fa6546efe@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sat,  3 Oct 2020 00:10:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Fix m68k build
+Message-ID: <20201002221032.5627-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Backport upstream proposal for fix.
 
-Le 02/10/2020 ? 17:59, Romain Naour a ?crit?:
-> - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
->   Remove the ARC specific version.
-> 
-> - Remove --enable-obsolete-rpc configure option.
+Fixes: br-m68k-68040-full failure.
 
-I believe we need to be careful with this change:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+I haven't found this in autobuild [1], there are just problems with
+fanotify tests missing MAX_HANDLE_SZ, which are fixed in next version
+(second patch).
 
-* Remove configure option --enable-obsolete-rpc.  Sun RPC is removed
-  from glibc.  This includes the rpcgen program, librpcsvc, and the Sun
-  RPC header files.  Backward compatibility for old programs is kept
-  only for architectures and ABIs that have been added in or before
-  glibc 2.31.  New programs need to use TI-RPC
-  <http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary> and
-  rpcsvc-proto <https://github.com/thkukuk/rpcsvc-proto>.
+Kind regards,
+Petr
 
-First because we don't have rpcsvc-proto package
+[1] http://autobuild.buildroot.net/index.php?reason=ltp-testsuite-20200515
 
-Second, because our toolchain-external infra select by default
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC for external glibc toolchains.
-If not disabled, the check_glibc_rpc_feature check will stop the build:
+ ...01-cacheflush01-Rewrite-into-new-API.patch | 225 ++++++++++++++++++
+ 1 file changed, 225 insertions(+)
+ create mode 100644 package/ltp-testsuite/0001-cacheflush01-Rewrite-into-new-API.patch
 
-https://git.buildroot.net/buildroot/tree/toolchain/toolchain-external/toolchain-external-custom/Config.in.options#n445
-
-Finally, our internal toolchain backend select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-unconditionally:
-
-https://git.buildroot.net/buildroot/tree/toolchain/toolchain-buildroot/Config.in#n61
-
-This patch needs to be updated with those changes.
-
-Best regards,
-Romain
-
-> 
-> Security related changes:
-> 
->   CVE-2016-10228: An infinite loop has been fixed in the iconv program when
->   invoked with the -c option and when processing invalid multi-byte input
->   sequences.  Reported by Jan Engelhardt.
-> 
->   CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
->   corruption when they were passed a pseudo-zero argument.  Reported by Guido
->   Vranken / ForAllSecure Mayhem.
-> 
->   CVE-2020-1752: A use-after-free vulnerability in the glob function when
->   expanding ~user has been fixed.
-> 
->   CVE-2020-6096: A signed comparison vulnerability in the ARMv7 memcpy and
->   memmove functions has been fixed.  Discovered by Jason Royes and Samual
->   Dytrych of the Cisco Security Assessment and Penetration Team (See
->   TALOS-2020-1019).
-> 
-> See:
-> https://sourceware.org/pipermail/libc-announce/2020/000029.html
-> 
-> Tested by https://gitlab.com/kubu93/buildroot/-/jobs/769818674
-> (Only boot tested with busybox)
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  .../glibc.hash                                           | 7 -------
->  .../glibc.hash                                           | 2 +-
->  package/glibc/glibc.mk                                   | 9 ++-------
->  .../0001-HACK-only-build-and-install-localedef.patch     | 0
->  ...x-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 0
->  .../localedef.hash                                       | 2 +-
->  6 files changed, 4 insertions(+), 16 deletions(-)
->  delete mode 100644 package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
->  rename package/glibc/{2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5 => 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07}/glibc.hash (72%)
->  rename package/localedef/{2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d => 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07}/0001-HACK-only-build-and-install-localedef.patch (100%)
->  rename package/localedef/{2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d => 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07}/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch (100%)
->  rename package/localedef/{2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d => 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07}/localedef.hash (70%)
-> 
-> diff --git a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash b/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-> deleted file mode 100644
-> index a1b2ae12fd..0000000000
-> --- a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-> +++ /dev/null
-> @@ -1,7 +0,0 @@
-> -# Locally calculated (fetched from Github)
-> -sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
-> -
-> -# Hashes for license files
-> -sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> -sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> -sha256  b33d0bd9f685b46853548814893a6135e74430d12f6d94ab3eba42fc591f83bc  LICENSES
-> diff --git a/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash b/package/glibc/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/glibc.hash
-> similarity index 72%
-> rename from package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
-> rename to package/glibc/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/glibc.hash
-> index c6259a4745..f6dd527aae 100644
-> --- a/package/glibc/2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5/glibc.hash
-> +++ b/package/glibc/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  07f3804abbc6a23315f09568686c0e5bb81d714251cf537d25a36f826cae540b  glibc-2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5.tar.gz
-> +sha256  8695cbca28015df9cda59b2755822d009f615dd47490c8f8f653354ebd087bd2  glibc-2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07.tar.gz
->  
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 4721177d83..bf0966cbd4 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -11,16 +11,12 @@ else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
->  # When updating the version, please also update localedef
-> -ifeq ($(BR2_arc),y)
-> -# ARC support in upstream was merged in 2.32 release
-> -# This can be removed once BR upgrades to 2.32 or later
-> -GLIBC_VERSION = 2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5
-> -else ifeq ($(BR2_RISCV_32),y)
-> +ifeq ($(BR2_RISCV_32),y)
->  # RISC-V 32-bit (RV32) requires glibc 2.33 or newer
->  # Until 2.33 is released, just use master
->  GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
->  else
-> -GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
-> +GLIBC_VERSION = 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
->  endif
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
-> @@ -137,7 +133,6 @@ define GLIBC_CONFIGURE_CMDS
->  		--disable-profile \
->  		--disable-werror \
->  		--without-gd \
-> -		--enable-obsolete-rpc \
->  		--enable-kernel=$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)) \
->  		--with-headers=$(STAGING_DIR)/usr/include)
->  	$(GLIBC_ADD_MISSING_STUB_H)
-> diff --git a/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/0001-HACK-only-build-and-install-localedef.patch
-> similarity index 100%
-> rename from package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch
-> rename to package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/0001-HACK-only-build-and-install-localedef.patch
-> diff --git a/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-> similarity index 100%
-> rename from package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-> rename to package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-> diff --git a/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash b/package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/localedef.hash
-> similarity index 70%
-> rename from package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
-> rename to package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/localedef.hash
-> index a1b2ae12fd..f6dd527aae 100644
-> --- a/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
-> +++ b/package/localedef/2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07/localedef.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
-> +sha256  8695cbca28015df9cda59b2755822d009f615dd47490c8f8f653354ebd087bd2  glibc-2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07.tar.gz
->  
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> 
+diff --git a/package/ltp-testsuite/0001-cacheflush01-Rewrite-into-new-API.patch b/package/ltp-testsuite/0001-cacheflush01-Rewrite-into-new-API.patch
+new file mode 100644
+index 0000000000..f9815624b9
+--- /dev/null
++++ b/package/ltp-testsuite/0001-cacheflush01-Rewrite-into-new-API.patch
+@@ -0,0 +1,225 @@
++From 48edd768850825a4d01e5e5e737122333fc55cdf Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Fri, 2 Oct 2020 21:29:58 +0200
++Subject: [PATCH] cacheflush01: Rewrite into new API
++
++This syscall is currently (v5.9) supported on these architectures:
++arc, csky, mips, m68k, nds32, sh
++
++constants are missing for m68k, not sure if the testcase is valid for it.
++Untested.
++
++Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
++<asm/cachectl.h>.
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++---
++[ upstream status: https://patchwork.ozlabs.org/project/ltp/patch/20201002202416.28972-1-petr.vorel at gmail.com/ ]
++ .../kernel/syscalls/cacheflush/cacheflush01.c | 173 ++++--------------
++ 1 file changed, 40 insertions(+), 133 deletions(-)
++
++diff --git a/testcases/kernel/syscalls/cacheflush/cacheflush01.c b/testcases/kernel/syscalls/cacheflush/cacheflush01.c
++index 29cf2014a..6ad8b953a 100644
++--- a/testcases/kernel/syscalls/cacheflush/cacheflush01.c
+++++ b/testcases/kernel/syscalls/cacheflush/cacheflush01.c
++@@ -1,157 +1,64 @@
++-/******************************************************************************/
++-/* Copyright (c) Maxin John <maxin.john@gmail.com>, 2009                      */
++-/* LKML Reference: http://lkml.org/lkml/2009/4/9/203                          */
++-/* This program is free software;  you can redistribute it and/or modify      */
++-/* it under the terms of the GNU General Public License as published by       */
++-/* the Free Software Foundation; either version 2 of the License, or          */
++-/* (at your option) any later version.                                        */
++-/*                                                                            */
++-/* This program is distributed in the hope that it will be useful,            */
++-/* but WITHOUT ANY WARRANTY;  without even the implied warranty of            */
++-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See                  */
++-/* the GNU General Public License for more details.                           */
++-/*                                                                            */
++-/* You should have received a copy of the GNU General Public License          */
++-/* along with this program;  if not, write to the Free Software               */
++-/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
++-/*                                                                            */
++-/******************************************************************************/
++-/******************************************************************************/
++-/*                                                                            */
++-/* File:        cacheflush01.c                                                */
++-/*                                                                            */
++-/* Description: The cacheflush_check() syscall                     	      */
++-/*		Tests EINVAL error of cacheflush system call.		      */
++-/* 		Its expected behaviour is cacheflush() should return -EINVAL  */
++-/*		when cache parameter is not one of ICACHE, DCACHE, or BCACHE. */
++-/*                                                                            */
++-/* Usage:  <for command-line>                                                 */
++-/* cacheflush01 [-c n] [-e][-i n] [-I x] [-p x] [-t]                          */
++-/*      where,  -c n : Run n copies concurrently.                             */
++-/*              -e   : Turn on errno logging.                                 */
++-/*              -i n : Execute test n times.                                  */
++-/*              -I x : Execute test for x seconds.                            */
++-/*              -P x : Pause for x seconds between iterations.                */
++-/*              -t   : Turn on syscall timing.                                */
++-/*                                                                            */
++-/* Total Tests: 1                                                             */
++-/*                                                                            */
++-/* Test Name:   cacheflush01                                                  */
++-/******************************************************************************/
+++// SPDX-License-Identifier: GPL-2.0-or-later
++ 
++-#include <unistd.h>
++-#include <stdio.h>
++-#include <stdlib.h>
++-#include <errno.h>
++-
++-#include "test.h"
+++#include "tst_test.h"
++ #include "lapi/syscalls.h"
++ 
++ #if __NR_cacheflush != __LTP__NR_INVALID_SYSCALL
+++
++ #include <asm/cachectl.h>
++-#else
+++
+++/*
+++ * m68k does not have these constants
+++ */
+++
++ #ifndef   ICACHE
++-#define   ICACHE   (1<<0)	/* flush instruction cache        */
+++# define   ICACHE   (1<<0)
++ #endif
+++
++ #ifndef   DCACHE
++-#define   DCACHE   (1<<1)	/* writeback and flush data cache */
+++# define   DCACHE   (1<<1)
++ #endif
+++
++ #ifndef   BCACHE
++-#define   BCACHE   (ICACHE|DCACHE)	/* flush both caches              */
++-#endif
+++# define   BCACHE   (ICACHE|DCACHE)
++ #endif
++ 
++-char *TCID = "cacheflush01";
++-int TST_TOTAL = 1;
+++#define CACHE_DESC(x) .cache = x, .desc = #x
++ 
++-/* Extern Global Functions */
++-/******************************************************************************/
++-/*                                                                            */
++-/* Function:    cleanup                                                       */
++-/*                                                                            */
++-/* Description: Performs all one time clean up for this test on successful    */
++-/*              completion,  premature exit or  failure. Closes all temporary */
++-/*              files, removes all temporary directories exits the test with  */
++-/*              appropriate return code by calling tst_exit() function.       */
++-/*                                                                            */
++-/* Input:       None.                                                         */
++-/*                                                                            */
++-/* Output:      None.                                                         */
++-/*                                                                            */
++-/* Return:      On failure - Exits calling tst_exit(). Non '0' return code.   */
++-/*              On success - Exits calling tst_exit(). With '0' return code.  */
++-/*                                                                            */
++-/******************************************************************************/
++-void cleanup(void)
++-{
+++static struct test_case_t {
+++	int cache;
+++	const char *desc;
+++} test_cases[] = {
+++	{ CACHE_DESC(ICACHE) },
+++	{ CACHE_DESC(DCACHE) },
+++	{ CACHE_DESC(BCACHE) },
+++};
++ 
++-	tst_rmdir();
++-}
+++static char *addr;
++ 
++-/* Local  Functions */
++-/******************************************************************************/
++-/*                                                                            */
++-/* Function:    setup                                                         */
++-/*                                                                            */
++-/* Description: Performs all one time setup for this test. This function is   */
++-/*              typically used to capture signals, create temporary dirs      */
++-/*              and temporary files that may be used in the course of this    */
++-/*              test.                                                         */
++-/*                                                                            */
++-/* Input:       None.                                                         */
++-/*                                                                            */
++-/* Output:      None.                                                         */
++-/*                                                                            */
++-/* Return:      On failure - Exits by calling cleanup().                      */
++-/*              On success - returns 0.                                       */
++-/*                                                                            */
++-/******************************************************************************/
++-void setup(void)
+++static void setup(void)
++ {
++-	/* Capture signals if any */
++-	/* Create temporary directories */
++-	TEST_PAUSE;
++-	tst_tmpdir();
+++	addr = SAFE_MALLOC(getpagesize());
++ }
++ 
++-int main(int ac, char **av)
+++static void test_cacheflush(unsigned int i)
++ {
+++	struct test_case_t *tc = &test_cases[i];
++ 
++-	char *addr = NULL;
++-
++-	tst_parse_opts(ac, av, NULL, NULL);
++-
++-	setup();
++-
++-	tst_count = 0;
++-	/* Create some user address range */
++-	addr = malloc(getpagesize());
++-	if (addr == NULL) {
++-		tst_brkm(TFAIL | TTERRNO, cleanup, "malloc failed");
++-	}
++-
++-	/* Invokes cacheflush() with proper parameters */
++-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), ICACHE));
++-	if (TEST_RETURN == 0) {
++-		tst_resm(TPASS, "passed with no errno");
++-	} else {
++-		tst_resm(TFAIL, "failed with unexpected errno");
++-	}
++-
++-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), DCACHE));
++-	if (TEST_RETURN == 0) {
++-		tst_resm(TPASS, "passed with no errno");
+++	TEST(tst_syscall(__NR_cacheflush, addr, getpagesize(), tc->cache));
+++	if (TST_RET == 0) {
+++		tst_res(TPASS, "%s passed", tc->desc);
++ 	} else {
++-		tst_resm(TFAIL, "failed with unexpected errno");
+++		tst_res(TFAIL | TTERRNO, "%s failed", tc->desc);
++ 	}
+++}
++ 
++-	TEST(ltp_syscall(__NR_cacheflush, addr, getpagesize(), BCACHE));
++-	if (TEST_RETURN == 0) {
++-		tst_resm(TPASS, "passed with no errno");
++-	} else {
++-		tst_resm(TFAIL, "failed with unexpected errno");
++-	}
+++static struct tst_test test = {
+++	.setup = setup,
+++	.test = test_cacheflush,
+++	.tcnt = ARRAY_SIZE(test_cases),
+++};
++ 
++-	cleanup();
++-	tst_exit();
++-}
+++#else
+++	TST_TEST_TCONF("system doesn't support cacheflush()");
+++#endif
++-- 
++2.28.0
++
+-- 
+2.28.0
