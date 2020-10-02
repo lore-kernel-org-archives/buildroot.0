@@ -1,35 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Oct 2020 22:28:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librelp: needs threads
-Message-ID: <20201002202831.2844845-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Oct 2020 22:33:30 +0200
+Subject: [Buildroot] [PATCH 2/2] package/gdb: also disable gprof
+In-Reply-To: <20200928201128.78005-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 28 Sep 2020 22:11:27 +0200")
+References: <20200928201128.78005-1-thomas.petazzoni@bootlin.com>
+ <20200928201128.78005-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87blhk1i79.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e09f6eb989388cec2dab06391a8b6580aa0ff118
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/librelp/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > When gdb is built from sources fetched from Git, it contains both the
+ > gdb and the binutils code base. In order to really build only gdb, we
+ > disable a number of binutils components in the
+ > GDB_DISABLE_BINUTILS_CONF_OPTS variable: --disable-binutils,
+ > --disable-ld, --disable-gas, etc. However, gprof was still being
+ > built, so disable it as well.
 
-diff --git a/package/librelp/Config.in b/package/librelp/Config.in
-index d1f1f9ed7e..c0ae5fbe89 100644
---- a/package/librelp/Config.in
-+++ b/package/librelp/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_LIBRELP
- 	bool "librelp"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Reliable Event Logging Protocol library
- 
- 	  https://www.rsyslog.com/librelp/
-+
-+comment "librelp needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
