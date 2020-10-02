@@ -1,25 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Oct 2020 10:07:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: fix build with gcc
- 10
-In-Reply-To: <20200926081001.3995795-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 26 Sep 2020 10:10:01 +0200")
-References: <20200926081001.3995795-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9ft2gq4.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Oct 2020 10:12:31 +0200
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 1.0.20200908
+In-Reply-To: <20200926133318.6BD3882876@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 26 Sep 2020 15:42:08 +0200")
+References: <20200926133318.6BD3882876@busybox.osuosl.org>
+Message-ID: <87r1qh2gi8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/811b9eada9558bafde4e4ed824b36239c72e0501
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d8cb637442861985a05efcfff4ca9ce99dfb3f4c
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes a race condition. For details, see the announcement:
+ > https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
 
-Committed to 2020.08.x, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
