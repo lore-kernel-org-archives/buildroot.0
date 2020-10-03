@@ -1,62 +1,110 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Oct 2020 11:19:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ti-utils: fix build with gcc 10
-Message-ID: <20201003091956.3662866-1-fontaine.fabrice@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sat, 3 Oct 2020 11:36:18 +0200
+Subject: [Buildroot] [PATCH v2 3/4] configs/stm32mp157*: bump kernel
+ version
+In-Reply-To: <CALxJ29RWRdx3RCJW1tx7P_J7ynow=X97OWVvZSZXRTvC_2KKSg@mail.gmail.com>
+References: <20200927061606.10239-1-shlomi.39sd@gmail.com>
+ <20201002142426.1375026-1-shlomi.39sd@gmail.com>
+ <20201002142426.1375026-3-shlomi.39sd@gmail.com>
+ <b458e2d5-5f1e-b9c2-1265-046971b6e0b4@grinn-global.com>
+ <CALxJ29RWRdx3RCJW1tx7P_J7ynow=X97OWVvZSZXRTvC_2KKSg@mail.gmail.com>
+Message-ID: <f3356cb8-d4a3-33f6-3d83-cdb861620648@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e96c70910544085dc5299fa59f80ab9c5922fde2
+Hi Shlomi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-plt.h-fix-build-with-gcc-10.patch    | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch
+please remember about buildroot at buildroot.org in Cc when you answer 
+because you've missed that so your answer isn't visible in 
+patchwork/mailing list.
 
-diff --git a/package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch b/package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..e36b735e89
---- /dev/null
-+++ b/package/ti-utils/0001-plt.h-fix-build-with-gcc-10.patch
-@@ -0,0 +1,35 @@
-+From 9ed1946cef876acd5346ae806eecd7fc2e1e5341 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 3 Oct 2020 10:32:48 +0200
-+Subject: [PATCH] plt.h: fix build with gcc 10
-+
-+Drop EFUSE_PARAMETER_TYPE_ENM to avoid the following build failure with
-+gcc 10 (which defaults to -fno-common):
-+
-+/home/naourr/work/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: misc_cmds.o:(.bss+0x0): multiple definition of `EFUSE_PARAMETER_TYPE_ENM'; nvs.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e96c70910544085dc5299fa59f80ab9c5922fde2
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gxk/ti-utils/pull/2]
-+---
-+ plt.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/plt.h b/plt.h
-+index 523fded..8ba01c9 100644
-+--- a/plt.h
-++++ b/plt.h
-+@@ -363,7 +363,7 @@ enum EFUSE_PARAMETER_TYPE_ENMT {
-+ 	TX_BIP_PD_BUFFER_VBIAS_ERROR_E,
-+ 	EFUSE_NUMBER_OF_PARAMETERS_E,
-+ 	EFUSE_LAST_PARAMETER_E = (EFUSE_NUMBER_OF_PARAMETERS_E - 1)
-+-} EFUSE_PARAMETER_TYPE_ENM;
-++};
-+ 
-+ int get_mac_addr(int ifc_num, unsigned char *mac_addr);
-+ 
-+-- 
-+2.28.0
-+
--- 
-2.28.0
+On 02.10.2020 22:32, Shlomi Vaknin wrote:
+> Hi!
+>
+> What I did was to enable?BR2_LINUX_KERNEL_LATEST_VERSION in the 
+> menuconfig. This is the default by buildroot so it was removed from 
+> the defconfig. Is it still preferable?to change it to a custom version?
+
+Yup, it's.
+
+Best
+Bartek
+>
+> ??????? ??? ??, 2 ????? 2020 ?-22:26 ??? ?Bartosz Bilas?? 
+> <?b.bilas at grinn-global.com <mailto:b.bilas@grinn-global.com>??>:?
+>
+>     Hello Shlomi,
+>
+>     On 02.10.2020 16:24, Shlomi Vaknin wrote:
+>     > Since kernel 5.7 is EOL now, this upgrades it to the latest version
+>     > which is the default by buildroot.
+>     >
+>     > Signed-off-by: Shlomi Vaknin<shlomi.39sd@gmail.com
+>     <mailto:shlomi.39sd@gmail.com>>
+>     > ---
+>     >? ?configs/stm32mp157a_dk1_defconfig | 3 ---
+>     >? ?configs/stm32mp157c_dk2_defconfig | 3 ---
+>     >? ?2 files changed, 6 deletions(-)
+>     >
+>     > diff --git a/configs/stm32mp157a_dk1_defconfig
+>     b/configs/stm32mp157a_dk1_defconfig
+>     > index 8197fcc31b..f72bdb49ed 100644
+>     > --- a/configs/stm32mp157a_dk1_defconfig
+>     > +++ b/configs/stm32mp157a_dk1_defconfig
+>     > @@ -1,12 +1,9 @@
+>     >? ?BR2_arm=y
+>     >? ?BR2_cortex_a7=y
+>     > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+>     >
+>     ?BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+>     > ?BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>     >? ?BR2_ROOTFS_POST_SCRIPT_ARGS="-c
+>     board/stmicroelectronics/stm32mp157a-dk1/genimage.cfg"
+>     >? ?BR2_LINUX_KERNEL=y
+>     > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>     > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+>     That's not a correct way to do that. You always have to specify
+>     kernel
+>     headers and kernel version, the current latest version
+>     is 5.8.13 so if you wanna use this one you should set:
+>
+>
+>     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+>     BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>     BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+>     >? ?BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>     >
+>     ?BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
+>     >? ?BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>     > diff --git a/configs/stm32mp157c_dk2_defconfig
+>     b/configs/stm32mp157c_dk2_defconfig
+>     > index 15e1e85f69..9c688c6688 100644
+>     > --- a/configs/stm32mp157c_dk2_defconfig
+>     > +++ b/configs/stm32mp157c_dk2_defconfig
+>     > @@ -1,12 +1,9 @@
+>     >? ?BR2_arm=y
+>     >? ?BR2_cortex_a7=y
+>     > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+>     same here
+>     >
+>     ?BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+>     > ?BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>     >? ?BR2_ROOTFS_POST_SCRIPT_ARGS="-c
+>     board/stmicroelectronics/stm32mp157c-dk2/genimage.cfg"
+>     >? ?BR2_LINUX_KERNEL=y
+>     > -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>     > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+>     and here
+>     >? ?BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>     >
+>     ?BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+>     >? ?BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>     Best
+>     Bartek
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201003/737442a3/attachment.html>
