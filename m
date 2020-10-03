@@ -1,43 +1,35 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sat,  3 Oct 2020 17:11:21 +0200
-Subject: [Buildroot] [PATCH] package/libmbim: bump to version 1.24.4
-Message-ID: <20201003151121.28965-1-aleksander@aleksander.es>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  3 Oct 2020 19:08:24 +0200
+Subject: [Buildroot] [PATCH] package/python-cycler: drop redundant
+ python|python3 dependencies
+Message-ID: <20201003170825.8873-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://lists.freedesktop.org/archives/libmbim-devel/2020-October/001127.html
+All the python packages are inside a
 
-Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+
+conditional, so no need to repeat it in the Config.in.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbim/libmbim.hash | 2 +-
- package/libmbim/libmbim.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-cycler/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 5cd1e51ffd..7ce1a2e7ae 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  32198c099987849c5f442d1cbf4b6e43e645cbdbe9cfdc197b19ddd63c6981e4  libmbim-1.24.2.tar.xz
-+sha256  dd488ee6176243a6adb27a5872897336272ea7bea33a3ad501ba268e5a58b285  libmbim-1.24.4.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index f9c1ec9953..05345623bd 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMBIM_VERSION = 1.24.2
-+LIBMBIM_VERSION = 1.24.4
- LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+diff --git a/package/python-cycler/Config.in b/package/python-cycler/Config.in
+index 854873c969..813bc69dd4 100644
+--- a/package/python-cycler/Config.in
++++ b/package/python-cycler/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_CYCLER
+ 	bool "python-cycler"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Creates a Cycler objects much like cycler, but
+ 	  includes input validation.
 -- 
-2.28.0
+2.20.1
