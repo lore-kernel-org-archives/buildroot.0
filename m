@@ -1,22 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Oct 2020 08:52:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netatalk: fix build with gcc 10
-In-Reply-To: <20201001210908.2025791-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 1 Oct 2020 23:09:08 +0200")
-References: <20201001210908.2025791-1-fontaine.fabrice@gmail.com>
-Message-ID: <87362vztr4.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Oct 2020 08:52:30 +0200
+Subject: [Buildroot] [PATCH] package/python3: bump to version 3.8.6
+In-Reply-To: <20201001213354.29150-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 1 Oct 2020 23:33:53 +0200")
+References: <20201001213354.29150-1-peter@korsgaard.com>
+Message-ID: <87y2knyf69.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c3381fd3072901871fdd491dc3d4f66e403c7a70
+ > Contains a number of bugfixes. For details, see the changelog:
+ > https://docs.python.org/release/3.8.6/whatsnew/changelog.html#changelog
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Update the license hash for the addition of a note stating that the examples
+ > and documentation is now dual licensed under the PSF and a Zero-Clause BSD
+ > license since:
+
+ > https://github.com/python/cpython/commit/9fef7c54a0adfade5ec94259d97f22e05fe9e3e3
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
