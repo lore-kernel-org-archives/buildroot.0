@@ -1,76 +1,149 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:17:29 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/nodejs: security
- bump to version 12.18.4
-Message-ID: <20201003061930.B645C8121C@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:00:12 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ghostscript: bump
+ to version 9.53.2
+Message-ID: <20201003061937.AC6CD8E10C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f17f8f1d6541ee779035df25c4204dd55c138e5d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5d0fad8d0d9ee03c0d52279a5de7f04527a78807
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issues:
+- Drop first patch (already in version)
+- Drop second patch (not needed since
+  https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=f0d19bf181a156d011dba422ae4d165b36b0af7e)
+- Drop autoreconf
 
-- CVE-2020-8201: HTTP Request Smuggling due to CR-to-Hyphen conversion
+https://www.ghostscript.com/doc/9.53.2/News.htm
 
-  Affected Node.js versions converted carriage returns in HTTP request
-  headers to a hyphen before parsing.  This can lead to HTTP Request
-  Smuggling as it is a non-standard interpretation of the header.
-
-  Impacts:
-    All versions of the 14.x and 12.x releases line
-
-- CVE-2020-8252: fs.realpath.native may cause buffer overflow
-
-  libuv's realpath implementation incorrectly determined the buffer size
-  which can result in a buffer overflow if the resolved path is longer than
-  256 bytes.
-
-  Impacts:
-    All versions of the 10.x release line
-    All versions of the 12.x release line
-
-For more details, see the advisory:
-https://nodejs.org/en/blog/vulnerability/september-2020-security-releases/
-
-Adjust license hash for the addition of the BSD-3c licensed highlight.js:
-https://github.com/nodejs/node/commit/6f8b7a85d239129273948386c34775810f2dc4a3
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b6d64d7fa43a5b823915b4a898af25bf4dde5194)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 56b6908bf68069e1ff42e86145d3658bc8a64d56)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-Fix-cross-compilation-issue.patch         | 36 --------------------
+ .../0002-configure.ac-fix-cross-compilation.patch  | 39 ----------------------
+ package/ghostscript/ghostscript.hash               |  4 +--
+ package/ghostscript/ghostscript.mk                 |  4 +--
+ 4 files changed, 3 insertions(+), 80 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 60d69a8638..33fb407882 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
+diff --git a/package/ghostscript/0001-Fix-cross-compilation-issue.patch b/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+deleted file mode 100644
+index a13c7f8381..0000000000
+--- a/package/ghostscript/0001-Fix-cross-compilation-issue.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 5fed765abb8ff07c381cc3ebb9367e9560f7a658 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 20 Mar 2017 23:43:03 +0100
+-Subject: [PATCH] Fix cross compilation issue
+-
+-Without this patch unsafe paths are used:
+-x86_64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '/libtiff'
+-
+-Downloaded from
+-http://bugs.ghostscript.com/show_bug.cgi?id=696508#c3
+-
+-Slightly updated to work with 9.23
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d0f62d7..0d49344 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1173,7 +1173,7 @@ XPSWRITEDEVICE=''
+- 
+- 
+- LIBTIFFDIR='src'
+--LIBTIFFCONFDIR=''
+-+LIBTIFFCONFDIR='src'
+- TIFFCFLAGS=''
+- 
+- TIFFDEVS_ALL='tiffs tiff12nc tiff24nc tiff48nc tiff32nc tiff64nc tiffcrle tifflzw tiffpack tiffgray tiffsep tiffsep1 tiffscaled tiffscaled4 tiffscaled8 tiffscaled24 tiffscaled32'
+- FAX_DEVS_ALL='cfax dfaxlow dfaxhigh fax faxg3 faxg32d faxg4 tiffg3 tiffg32d tiffg4 tfax'
+--- 
+-2.7.4
+-
+diff --git a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch b/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
+deleted file mode 100644
+index 2bbff431ec..0000000000
+--- a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 579f2e089b9502e48222ab85d342128857bf20c3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 12 Sep 2020 11:38:01 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation
+-
+-Cross-compilation fails since version 9.53.0 and
+-https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=3ff82b33f24ed54c2d3bb88ec31da7d2f9fd2765
+-
+-Indeed, when x"$host" != x"$build", a recursive call to configure script
+-(for auxiliary tools) is being made. In this call,
+---enable-auxtools_only and --without-libtiff are passed which will
+-result in the following build failure because SHARE_LIBTIFF is not set
+-and SHARE_LIBJPEG is set to 0:
+-
+-checking for local lcms2mt library source... configure: error: Mixing local libtiff with shared libjpeg not supported
+-configure: error: Recursive call to configure script failed
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=702897]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d4f56fdea..6ae3c2cc1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1618,7 +1618,7 @@ case "x$with_system_libtiff" in
+- esac
+- 
+- 
+--if test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
+-+if test x"$SHARE_LIBTIFF" != x"" && test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
+-     AC_MSG_ERROR([Mixing local libtiff with shared libjpeg not supported])
+- fi
+- 
+--- 
+-2.28.0
+-
+diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
+index 102e5355a5..143b28014d 100644
+--- a/package/ghostscript/ghostscript.hash
++++ b/package/ghostscript/ghostscript.hash
 @@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.18.0/SHASUMS256.txt
--sha256  d4688636a378367f5157f02bd5c13902f5c193356f8f7a35c99dfa383b03b13f  node-v12.18.0.tar.xz
-+# From https://nodejs.org/dist/v12.18.4/SHASUMS256.txt
-+sha256  25f03cb18e53b6d0959d0c219e701a85eb4693f526bdda7c72bc6199b364f609  node-v12.18.4.tar.xz
+-# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/SHA512SUMS
+-sha512  fe73842339bee7aa6d0f177be7733b97b9394dafe69b122645c9c80de763214ffb6735b961ff5bf97146b29c2d0e9b4b9cfaee60baf77a1c280bcf651d789982  ghostscript-9.53.0.tar.gz
++# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9532/SHA512SUMS
++sha512  73aa6013aeecbd1345317a40349089a2f19a2205fc11b8ca0b619df1e91f2ca8b03efc09be9e079cb5ab8e1b838aa2236349cd1c177217c14308242f99138ae4  ghostscript-9.53.2.tar.gz
  
- # Hash for license file
--sha256  cd2e5817a25d7d28efba927b01056cae04a616b673014159f9eafeb008a0e747  LICENSE
-+sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e384d4c8a0..b159b10253 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
+ # Hash for license file:
+ sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
+diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
+index beaf030699..31d23fd20e 100644
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 12.18.0
-+NODEJS_VERSION = 12.18.4
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-GHOSTSCRIPT_VERSION = 9.53.0
++GHOSTSCRIPT_VERSION = 9.53.2
+ GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+-# 0001-Fix-cross-compilation-issue.patch
+-GHOSTSCRIPT_AUTORECONF = YES
+ GHOSTSCRIPT_DEPENDENCIES = \
+ 	host-lcms2 \
+ 	host-libjpeg \
