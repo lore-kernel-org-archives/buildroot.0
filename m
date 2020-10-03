@@ -1,57 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:34:19 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/freetype: add
- harfbuzz optional dependency
-Message-ID: <20201003063959.6ECD08FBAD@busybox.osuosl.org>
+Date: Sat, 03 Oct 2020 08:52:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netatalk: fix build with gcc 10
+In-Reply-To: <20201001210908.2025791-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 1 Oct 2020 23:09:08 +0200")
+References: <20201001210908.2025791-1-fontaine.fabrice@gmail.com>
+Message-ID: <87362vztr4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d78ea69cebfc1be512a9c410922bb12b31f0c367
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-harfbuzz is an optional dependency (enabled by default) since version
-2.5.3 and
-https://git.savannah.gnu.org/cgit/freetype/freetype2.git/commit/?id=86026a47b345a8c254dd5e6be77bf116737cdafb
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c3381fd3072901871fdd491dc3d4f66e403c7a70
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 939e714393e9d7f60f3a198d831608b08a25662e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freetype/freetype.mk | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 0a86277515..6658f18ccc 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -15,7 +15,11 @@ FREETYPE_DEPENDENCIES = host-pkgconf
- FREETYPE_CONFIG_SCRIPTS = freetype-config
- 
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
--HOST_FREETYPE_CONF_OPTS = --without-zlib --without-bzip2 --without-png
-+HOST_FREETYPE_CONF_OPTS = \
-+	--without-bzip2 \
-+	--without-harfbuzz \
-+	--without-png \
-+	--without-zlib
- 
- # since 2.9.1 needed for freetype-config install
- FREETYPE_CONF_OPTS += --enable-freetype-config
-@@ -35,6 +39,13 @@ else
- FREETYPE_CONF_OPTS += --without-bzip2
- endif
- 
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+FREETYPE_DEPENDENCIES += harfbuzz
-+FREETYPE_CONF_OPTS += --with-harbuzz
-+else
-+FREETYPE_CONF_OPTS += --without-harfbuzz
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREETYPE_DEPENDENCIES += libpng
- FREETYPE_CONF_OPTS += --with-png
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
