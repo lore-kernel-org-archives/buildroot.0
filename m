@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 22:52:39 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python3: bump to
+Date: Sat, 3 Oct 2020 22:52:33 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python3: bump to
  version 3.8.6
-Message-ID: <20201003204318.D2B9F8E4F9@busybox.osuosl.org>
+Message-ID: <20201003204323.02BE98E4F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0f20de05ee4b4a3e72eaa96058fc356cba350c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e58ed72f45fc34bd5ece8e07a38f11c3b752424
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Contains a number of bugfixes. For details, see the changelog:
 
