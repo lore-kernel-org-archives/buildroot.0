@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 10:39:59 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/freetype:
+Date: Sat, 3 Oct 2020 10:39:53 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/freetype:
  unconditionally disable harfbuzz
-Message-ID: <20201003082946.CE79A847B6@busybox.osuosl.org>
+Message-ID: <20201003082951.E5529847B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0749af79b095e22da5efc282cc5ea4404360798f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=10b27e62885afbcb65b5b82453a4de9d85a80aed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Commit 939e714393e9d7f60f3a198d831608b08a25662e added an optional
 harfbuzz dependency to freetype but this creates a circular dependency
