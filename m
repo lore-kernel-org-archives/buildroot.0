@@ -1,56 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:53:34 +0200
-Subject: [Buildroot] [git commit] package/freetype: unconditionally disable
- harfbuzz
-Message-ID: <20201003065707.8586F8E1C9@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:52:26 +0200
+Subject: [Buildroot] [git commit] package/python3: bump to version 3.8.6
+Message-ID: <20201003065707.5F78A81262@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a98b79e2e6e1b786adb26b111b4da9c8189d59bc
+commit: https://git.buildroot.net/buildroot/commit/?id=3469e6e46bac858f826c33f9a637402e9d76c27a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 939e714393e9d7f60f3a198d831608b08a25662e added an optional
-harfbuzz dependency to freetype but this creates a circular dependency
-so unconditionally disable it
+Contains a number of bugfixes. For details, see the changelog:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3cc4ce3207a253186a9c4f8f5151ea0fc0854a28
+https://docs.python.org/release/3.8.6/whatsnew/changelog.html#changelog
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Update the license hash for the addition of a note stating that the examples
+and documentation is now dual licensed under the PSF and a Zero-Clause BSD
+license since:
+
+https://github.com/python/cpython/commit/9fef7c54a0adfade5ec94259d97f22e05fe9e3e3
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.mk | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ package/python3/python3.hash | 8 ++++----
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index e6463c30b6..f4d71bedf7 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -14,6 +14,10 @@ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_DEPENDENCIES = host-pkgconf
- FREETYPE_CONFIG_SCRIPTS = freetype-config
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 0a08d04b3f..4c03293dd1 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-385/
+-md5  35b5a3d0254c1c59be9736373d429db7  Python-3.8.5.tar.xz
++# From https://www.python.org/downloads/release/python-386/
++md5  69e73c49eeb1a853cefd26d18c9d069d  Python-3.8.6.tar.xz
+ # Locally computed
+-sha256  e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0  Python-3.8.5.tar.xz
+-sha256  de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23  LICENSE
++sha256  a9e0b79d27aa056eb9cce8d63a427b5f9bab1465dee3f942dcfdb25a82f4ab8a  Python-3.8.6.tar.xz
++sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 017dbd40da..af1e5e50d9 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# harfbuzz already depends on freetype so disable harfbuzz in freetype to avoid
-+# a circular dependency
-+FREETYPE_CONF_OPTS = --without-harfbuzz
-+
- HOST_FREETYPE_DEPENDENCIES = host-pkgconf
- HOST_FREETYPE_CONF_OPTS = \
- 	--without-brotli \
-@@ -47,13 +51,6 @@ else
- FREETYPE_CONF_OPTS += --without-bzip2
- endif
- 
--ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
--FREETYPE_DEPENDENCIES += harfbuzz
--FREETYPE_CONF_OPTS += --with-harbuzz
--else
--FREETYPE_CONF_OPTS += --without-harfbuzz
--endif
--
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREETYPE_DEPENDENCIES += libpng
- FREETYPE_CONF_OPTS += --with-png
+ PYTHON3_VERSION_MAJOR = 3.8
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
