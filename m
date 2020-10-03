@@ -1,45 +1,356 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Oct 2020 10:20:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/links: bump to version 2.21
-Message-ID: <20201003082043.3004907-1-fontaine.fabrice@gmail.com>
+Date: Sat,  3 Oct 2020 10:25:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/memcached: bump to version 1.6.7
+Message-ID: <20201003082556.3007179-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
-
-http://links.twibright.com/download/ChangeLog
+- Drop patches (already in version) and so autoreconf
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/links/links.hash | 4 ++--
- package/links/links.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...nfigure-Fix-cross-compilation-errors.patch | 142 ------------------
+ ...onfigure-Simplify-pointer-size-check.patch |  76 ----------
+ ...ash-fix-build-failure-against-gcc-10.patch |  56 -------
+ package/memcached/memcached.hash              |   8 +-
+ package/memcached/memcached.mk                |   5 +-
+ 5 files changed, 5 insertions(+), 282 deletions(-)
+ delete mode 100644 package/memcached/0001-configure-Fix-cross-compilation-errors.patch
+ delete mode 100644 package/memcached/0002-configure-Simplify-pointer-size-check.patch
+ delete mode 100644 package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index a23adc087e..3176653f6f 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 4b4f07d0e6261118d1365a5a5bfa31e1eafdbd280cfae6f0e9eedfea51a2f424  links-2.20.2.tar.bz2
--sha256 92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-+sha256  4b4f07d0e6261118d1365a5a5bfa31e1eafdbd280cfae6f0e9eedfea51a2f424  links-2.21.tar.bz2
-+sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 228a8ed0ee..815b4dd733 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/memcached/0001-configure-Fix-cross-compilation-errors.patch b/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
+deleted file mode 100644
+index 5c5d948325..0000000000
+--- a/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
++++ /dev/null
+@@ -1,142 +0,0 @@
+-From 1146bf07624b5820b942b84b68e66f0d3dd25914 Mon Sep 17 00:00:00 2001
+-From: Ola Jeppsson <ola.jeppsson@gmail.com>
+-Date: Mon, 7 Oct 2019 18:07:30 -0400
+-Subject: [PATCH] configure: Fix cross-compilation errors
+-
+-AC_RUN_IFELSE does not work when cross-compiling so we need to provide
+-fallback methods for those cases.
+-
+-I tried to use constructs that work with Autoconf 2.52.
+-Alas, I wasn't able to generate a working build system with that version.
+-
+-Autoconf 2.58 / Automake 1.7.9 is the earliest combo that I could get
+-to work (with and without this patch).
+-Perhaps it's time for a slight bump for the required version numbers?
+-
+-Cross-compiles sucessfully against:
+-riscv64-unknown-linux-gnu
+-
+-Downloaded from upstream PR:
+-https://github.com/memcached/memcached/pull/552
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac | 80 +++++++++++++++++++++++++++-------------------------
+- 1 file changed, 41 insertions(+), 39 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index fb78fc5..27dc939 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -264,23 +264,42 @@ return sizeof(void*) == 8 ? 0 : 1;
+-     ],[
+-       CFLAGS="-m64 $org_cflags"
+-     ],[
+--    AC_MSG_ERROR([Don't know how to build a 64-bit object.])
+-+      AC_MSG_ERROR([Don't know how to build a 64-bit object.])
+-+    ],[
+-+       dnl cross compile
+-+       AC_MSG_WARN([Assuming no extra CFLAGS are required for cross-compiling 64bit version.])
+-     ])
+- fi
+- 
+- dnl If data pointer is 64bit or not.
+--AC_RUN_IFELSE(
+--  [AC_LANG_PROGRAM([], [dnl
+--return sizeof(void*) == 8 ? 0 : 1;
+--  ])
+--],[
+--  have_64bit_ptr=yes
+--],[
+-+AC_CHECK_HEADERS([stdint.h])
+-+AS_IF([test -z "$have_64bit_ptr"],
+-+  [AC_RUN_IFELSE(
+-+     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
+-+     [have_64bit_ptr=yes ],
+-+     [have_64bit_ptr=no],
+-+     [dnl cross compile (this test requires C99)
+-+      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
+-+        [AC_COMPILE_IFELSE(
+-+           [AC_LANG_PROGRAM([
+-+              #include <stdint.h>
+-+              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
+-+              /* 64 bit pointer */
+-+              #else
+-+              #error 32 bit pointer
+-+              #endif
+-+            ], [])],
+-+            [have_64bit_ptr=yes],
+-+            [have_64bit_ptr=no])],
+-+        [have_64bit_ptr=unknown])
+-+     ])
+- ])
+--
+--if test $have_64bit_ptr = yes; then
+-+AS_IF([test "$have_64bit_ptr" = "unknown" ],[
+-+  AC_MSG_ERROR([Cannot detect pointer size. Must pass have_64bit_ptr={yes,no} to configure.])
+-+])
+-+AS_IF([test "$have_64bit_ptr" = yes],[
+-   AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
+--fi
+-+])
+- 
+- # Issue 213: Search for clock_gettime to help people linking
+- #            with a static version of libevent
+-@@ -570,30 +589,10 @@ fi
+- AC_C_SOCKLEN_T
+- 
+- dnl Check if we're a little-endian or a big-endian system, needed by hash code
+--AC_DEFUN([AC_C_ENDIAN],
+--[AC_CACHE_CHECK(for endianness, ac_cv_c_endian,
+--[
+--  AC_RUN_IFELSE(
+--    [AC_LANG_PROGRAM([], [dnl
+--        long val = 1;
+--        char *c = (char *) &val;
+--        exit(*c == 1);
+--    ])
+--  ],[
+--    ac_cv_c_endian=big
+--  ],[
+--    ac_cv_c_endian=little
+--  ])
+--])
+--if test $ac_cv_c_endian = big; then
+--  AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])
+--fi
+--if test $ac_cv_c_endian = little; then
+--  AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])
+--fi
+--])
+--
+--AC_C_ENDIAN
+-+AC_C_BIGENDIAN(
+-+  [AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])],
+-+  [AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])],
+-+  [AC_MSG_ERROR([Cannot detect endianness. Must pass ac_cv_c_bigendian={yes,no} to configure.])])
+- 
+- AC_DEFUN([AC_C_HTONLL],
+- [
+-@@ -670,12 +669,15 @@ AC_DEFUN([AC_C_ALIGNMENT],
+-   ],[
+-     ac_cv_c_alignment=need
+-   ],[
+--    ac_cv_c_alignment=need
+-+    dnl cross compile
+-+    ac_cv_c_alignment=maybe
+-   ])
+- ])
+--if test $ac_cv_c_alignment = need; then
+--  AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])
+--fi
+-+AS_IF([test $ac_cv_c_alignment = need],
+-+  [AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
+-+AS_IF([test $ac_cv_c_alignment = maybe],
+-+  [AC_MSG_WARN([Assuming aligned access is required when cross-compiling])
+-+   AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
+- ])
+- 
+- AC_C_ALIGNMENT
+--- 
+-2.20.1
+-
+diff --git a/package/memcached/0002-configure-Simplify-pointer-size-check.patch b/package/memcached/0002-configure-Simplify-pointer-size-check.patch
+deleted file mode 100644
+index 1a5dc31963..0000000000
+--- a/package/memcached/0002-configure-Simplify-pointer-size-check.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-From ec7f3bc97c53578d5ca332b9e86c4d08d155c5a0 Mon Sep 17 00:00:00 2001
+-From: Ola Jeppsson <ola.jeppsson@gmail.com>
+-Date: Mon, 7 Oct 2019 19:57:46 -0400
+-Subject: [PATCH] configure: Simplify pointer size check
+-
+-Tested with:
+-Autoconf 2.59 / Automake 1.7.9
+-Autoconf 2.69 / Automake 1.16.1
+-
+-Downloaded from upstream PR:
+-https://github.com/memcached/memcached/pull/552
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac | 31 ++-----------------------------
+- restart.h    |  2 +-
+- 2 files changed, 3 insertions(+), 30 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 27dc939..7e5bd5d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -271,35 +271,8 @@ return sizeof(void*) == 8 ? 0 : 1;
+-     ])
+- fi
+- 
+--dnl If data pointer is 64bit or not.
+--AC_CHECK_HEADERS([stdint.h])
+--AS_IF([test -z "$have_64bit_ptr"],
+--  [AC_RUN_IFELSE(
+--     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
+--     [have_64bit_ptr=yes ],
+--     [have_64bit_ptr=no],
+--     [dnl cross compile (this test requires C99)
+--      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
+--        [AC_COMPILE_IFELSE(
+--           [AC_LANG_PROGRAM([
+--              #include <stdint.h>
+--              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
+--              /* 64 bit pointer */
+--              #else
+--              #error 32 bit pointer
+--              #endif
+--            ], [])],
+--            [have_64bit_ptr=yes],
+--            [have_64bit_ptr=no])],
+--        [have_64bit_ptr=unknown])
+--     ])
+--])
+--AS_IF([test "$have_64bit_ptr" = "unknown" ],[
+--  AC_MSG_ERROR([Cannot detect pointer size. Must pass have_64bit_ptr={yes,no} to configure.])
+--])
+--AS_IF([test "$have_64bit_ptr" = yes],[
+--  AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
+--])
+-+dnl Check if data pointer is 64bit or not
+-+AC_CHECK_SIZEOF([void *])
+- 
+- # Issue 213: Search for clock_gettime to help people linking
+- #            with a static version of libevent
+-diff --git a/restart.h b/restart.h
+-index 76cd0a8..9de5096 100644
+---- a/restart.h
+-+++ b/restart.h
+-@@ -4,7 +4,7 @@
+- #define RESTART_TAG_MAXLEN 255
+- 
+- // Track the pointer size for restart fiddling.
+--#ifdef HAVE_64BIT_PTR
+-+#if SIZEOF_VOID_P == 8
+-     typedef uint64_t mc_ptr_t;
+- #else
+-     typedef uint32_t mc_ptr_t;
+--- 
+-2.20.1
+-
+diff --git a/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch b/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
+deleted file mode 100644
+index 564b191c1b..0000000000
+--- a/package/memcached/0003-hash-fix-build-failure-against-gcc-10.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 0447ae4cbbebb87d3f28bb92f7e219a47263b889 Mon Sep 17 00:00:00 2001
+-From: Sergei Trofimovich <slyfox@gentoo.org>
+-Date: Thu, 23 Jan 2020 22:16:36 +0000
+-Subject: [PATCH] hash: fix build failure against gcc-10
+-
+-On gcc-10 (and gcc-9 -fno-common) build fails as:
+-
+-```
+-gcc  -g -O2 -pthread -pthread -Wall -Werror -pedantic -Wmissing-prototypes \
+-  -Wmissing-declarations -Wredundant-decls   -o memcached ... -levent
+-ld: memcached-hash.o:memcached/hash.h:5:
+-  multiple definition of `hash'; memcached-memcached.o:memcached/hash.h:5: first defined here
+-```
+-
+-gcc-10 will change the default from -fcommon to fno-common:
+-https://gcc.gnu.org/PR85678.
+-
+-The error also happens if CFLAGS=-fno-common passed explicitly.
+-
+-Reported-by: Brian Evans
+-Bug: https://bugs.gentoo.org/706196
+-Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
+-[Retrieved from:
+-https://github.com/memcached/memcached/commit/0447ae4cbbebb87d3f28bb92f7e219a47263b889]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- hash.c | 2 ++
+- hash.h | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/hash.c b/hash.c
+-index a0c30369f..b5ff28ae4 100644
+---- a/hash.c
+-+++ b/hash.c
+-@@ -4,6 +4,8 @@
+- #include "jenkins_hash.h"
+- #include "murmur3_hash.h"
+- 
+-+hash_func hash;
+-+
+- int hash_init(enum hashfunc_type type) {
+-     switch(type) {
+-         case JENKINS_HASH:
+-diff --git a/hash.h b/hash.h
+-index 059d1e2a6..3b2a98478 100644
+---- a/hash.h
+-+++ b/hash.h
+-@@ -2,7 +2,7 @@
+- #define    HASH_H
+- 
+- typedef uint32_t (*hash_func)(const void *key, size_t length);
+--hash_func hash;
+-+extern hash_func hash;
+- 
+- enum hashfunc_type {
+-     JENKINS_HASH=0, MURMUR3_HASH
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 98e47d6c07..d616c856b1 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.5.19.tar.gz.sha1
+-sha1 14e6a02e743838696fcb620edf6a2fd7e60cabec  memcached-1.5.19.tar.gz
++# From http://www.memcached.org/files/memcached-1.6.7.tar.gz.sha1
++sha1  49336bb0a4b7ad296422b08148581ed54edf32d0  memcached-1.6.7.tar.gz
+ 
+ # Locally computed
+-sha256 3ddcdaa2d14d215f3111a7448b79c889c57618a26e97ad989581f1880a5a4be0  memcached-1.5.19.tar.gz
+-sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
++sha256  7bbdac9b031d8cfca4a1207f28df598b90ee2e9b44667f7eabd0fe1a59ca5173  memcached-1.6.7.tar.gz
++sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 8bf637868e..ff3c3a1c62 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,16 +4,13 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.20.2
-+LINKS_VERSION = 2.21
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+-MEMCACHED_VERSION = 1.5.19
++MEMCACHED_VERSION = 1.6.7
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ MEMCACHED_CONF_OPTS = --disable-coverage
+ MEMCACHED_LICENSE = BSD-3-Clause
+ MEMCACHED_LICENSE_FILES = COPYING
+-# 0001-configure-Fix-cross-compilation-errors.patch
+-# 0002-configure-Simplify-pointer-size-check.patch
+-MEMCACHED_AUTORECONF = YES
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MEMCACHED_CONF_ENV += ac_cv_c_endian=big
 -- 
 2.28.0
