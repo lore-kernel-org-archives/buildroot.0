@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 22:59:02 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] {linux,
+Date: Sat, 3 Oct 2020 22:55:39 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] {linux,
  linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 8}.x series
-Message-ID: <20201003205350.76E7E8E1BE@busybox.osuosl.org>
+Message-ID: <20201003205355.AF5008E1BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=746379d7bdcab2029568e0ef0f4a098c649a06a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1df42db2d4d0cad2961ee896252c804fb4601243
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit a6e8e8fae7b30b5b449ec8ab12f20d5fb80181ca)
@@ -22,13 +22,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 8606d69215..8a96660fe5 100644
+index a04dd4395b..2d656630c5 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
+@@ -1,11 +1,11 @@
  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  62532fb257fe98a68601e4ca36bd3d34300b4f26f447bf495df4693442601ee8  linux-5.6.19.tar.xz
- sha256  1448334371fb52f511255726832464d33877a210a7350260fb18eb225ae211eb  linux-5.5.19.tar.xz
+ sha256  419c6248b9ae4dfead4599787aecbfd202e88bc4124523adfa6dd2d642b99fe7  linux-5.7.19.tar.xz
 -sha256  e0260dae0da01163b1a3289ad9c5cc6ee4226720e199e8a1d982e24efda7ffc0  linux-5.4.63.tar.xz
 +sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
@@ -44,7 +43,7 @@ index 8606d69215..8a96660fe5 100644
  sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
  sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0c6f791f2f..26370d3456 100644
+index 4f31521e0f..81f9fa299a 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
 @@ -334,11 +334,11 @@ endchoice
@@ -61,6 +60,6 @@ index 0c6f791f2f..26370d3456 100644
 +	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
 +	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
 +	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.5.19"	if BR2_KERNEL_HEADERS_5_5
- 	default "5.6.19"	if BR2_KERNEL_HEADERS_5_6
+ 	default "5.7.19"	if BR2_KERNEL_HEADERS_5_7
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
