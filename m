@@ -1,149 +1,78 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:00:12 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/ghostscript: bump
- to version 9.53.2
-Message-ID: <20201003061937.AC6CD8E10C@busybox.osuosl.org>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  3 Oct 2020 08:45:26 +0200
+Subject: [Buildroot] [PATCH] package/lua: split hash files
+Message-ID: <20201003064526.84901-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d0fad8d0d9ee03c0d52279a5de7f04527a78807
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-- Drop first patch (already in version)
-- Drop second patch (not needed since
-  https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=f0d19bf181a156d011dba422ae4d165b36b0af7e)
-- Drop autoreconf
-
-https://www.ghostscript.com/doc/9.53.2/News.htm
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 56b6908bf68069e1ff42e86145d3658bc8a64d56)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../0001-Fix-cross-compilation-issue.patch         | 36 --------------------
- .../0002-configure.ac-fix-cross-compilation.patch  | 39 ----------------------
- package/ghostscript/ghostscript.hash               |  4 +--
- package/ghostscript/ghostscript.mk                 |  4 +--
- 4 files changed, 3 insertions(+), 80 deletions(-)
+ package/lua/5.1.5/lua.hash |  6 ++++++
+ package/lua/5.3.6/lua.hash |  6 ++++++
+ package/lua/5.4.0/lua.hash |  6 ++++++
+ package/lua/lua.hash       | 12 ------------
+ 4 files changed, 18 insertions(+), 12 deletions(-)
+ create mode 100644 package/lua/5.1.5/lua.hash
+ create mode 100644 package/lua/5.3.6/lua.hash
+ create mode 100644 package/lua/5.4.0/lua.hash
+ delete mode 100644 package/lua/lua.hash
 
-diff --git a/package/ghostscript/0001-Fix-cross-compilation-issue.patch b/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+diff --git a/package/lua/5.1.5/lua.hash b/package/lua/5.1.5/lua.hash
+new file mode 100644
+index 000000000..22ff8b7da
+--- /dev/null
++++ b/package/lua/5.1.5/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: http://www.lua.org/ftp/
++md5  2e115fe26e435e33b0d5c022e4490567  lua-5.1.5.tar.gz
++sha1  b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
++
++# Locally computed
++sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
+diff --git a/package/lua/5.3.6/lua.hash b/package/lua/5.3.6/lua.hash
+new file mode 100644
+index 000000000..74849b310
+--- /dev/null
++++ b/package/lua/5.3.6/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: http://www.lua.org/ftp/
++md5  83f23dbd5230140a3770d5f54076948d  lua-5.3.6.tar.gz
++sha1  f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
++
++# Locally computed
++sha256  2ddff2161e0c4487d744943565538743c0721485873092f6809d072a983b06ef  doc/readme.html
+diff --git a/package/lua/5.4.0/lua.hash b/package/lua/5.4.0/lua.hash
+new file mode 100644
+index 000000000..ac8639c4e
+--- /dev/null
++++ b/package/lua/5.4.0/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: http://www.lua.org/ftp/
++md5  dbf155764e5d433fc55ae80ea7060b60  lua-5.4.0.tar.gz
++sha1  8cdbffa8a214a23d190d7c45f38c19518ae62e89  lua-5.4.0.tar.gz
++
++# Locally computed
++sha256  1a579d0a1b8c5d19acd034c97c03bacc928fc23a0d7fde88488c2d0e3241094a  doc/readme.html
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
 deleted file mode 100644
-index a13c7f8381..0000000000
---- a/package/ghostscript/0001-Fix-cross-compilation-issue.patch
+index 5ace44458..000000000
+--- a/package/lua/lua.hash
 +++ /dev/null
-@@ -1,36 +0,0 @@
--From 5fed765abb8ff07c381cc3ebb9367e9560f7a658 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Mon, 20 Mar 2017 23:43:03 +0100
--Subject: [PATCH] Fix cross compilation issue
+@@ -1,12 +0,0 @@
+-# Hashes from: http://www.lua.org/ftp/
+-md5 dbf155764e5d433fc55ae80ea7060b60           lua-5.4.0.tar.gz
+-sha1 8cdbffa8a214a23d190d7c45f38c19518ae62e89  lua-5.4.0.tar.gz
 -
--Without this patch unsafe paths are used:
--x86_64-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '/libtiff'
+-md5 83f23dbd5230140a3770d5f54076948d           lua-5.3.6.tar.gz
+-sha1 f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
 -
--Downloaded from
--http://bugs.ghostscript.com/show_bug.cgi?id=696508#c3
+-md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
+-sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
 -
--Slightly updated to work with 9.23
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index d0f62d7..0d49344 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1173,7 +1173,7 @@ XPSWRITEDEVICE=''
-- 
-- 
-- LIBTIFFDIR='src'
---LIBTIFFCONFDIR=''
--+LIBTIFFCONFDIR='src'
-- TIFFCFLAGS=''
-- 
-- TIFFDEVS_ALL='tiffs tiff12nc tiff24nc tiff48nc tiff32nc tiff64nc tiffcrle tifflzw tiffpack tiffgray tiffsep tiffsep1 tiffscaled tiffscaled4 tiffscaled8 tiffscaled24 tiffscaled32'
-- FAX_DEVS_ALL='cfax dfaxlow dfaxhigh fax faxg3 faxg32d faxg4 tiffg3 tiffg32d tiffg4 tfax'
---- 
--2.7.4
--
-diff --git a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch b/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
-deleted file mode 100644
-index 2bbff431ec..0000000000
---- a/package/ghostscript/0002-configure.ac-fix-cross-compilation.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 579f2e089b9502e48222ab85d342128857bf20c3 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 12 Sep 2020 11:38:01 +0200
--Subject: [PATCH] configure.ac: fix cross-compilation
--
--Cross-compilation fails since version 9.53.0 and
--https://git.ghostscript.com/?p=ghostpdl.git;a=commit;h=3ff82b33f24ed54c2d3bb88ec31da7d2f9fd2765
--
--Indeed, when x"$host" != x"$build", a recursive call to configure script
--(for auxiliary tools) is being made. In this call,
----enable-auxtools_only and --without-libtiff are passed which will
--result in the following build failure because SHARE_LIBTIFF is not set
--and SHARE_LIBJPEG is set to 0:
--
--checking for local lcms2mt library source... configure: error: Mixing local libtiff with shared libjpeg not supported
--configure: error: Recursive call to configure script failed
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://bugs.ghostscript.com/show_bug.cgi?id=702897]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index d4f56fdea..6ae3c2cc1 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1618,7 +1618,7 @@ case "x$with_system_libtiff" in
-- esac
-- 
-- 
---if test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
--+if test x"$SHARE_LIBTIFF" != x"" && test x"$SHARE_LIBTIFF" != x"$SHARE_LIBJPEG" ; then
--     AC_MSG_ERROR([Mixing local libtiff with shared libjpeg not supported])
-- fi
-- 
---- 
--2.28.0
--
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 102e5355a5..143b28014d 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/SHA512SUMS
--sha512  fe73842339bee7aa6d0f177be7733b97b9394dafe69b122645c9c80de763214ffb6735b961ff5bf97146b29c2d0e9b4b9cfaee60baf77a1c280bcf651d789982  ghostscript-9.53.0.tar.gz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9532/SHA512SUMS
-+sha512  73aa6013aeecbd1345317a40349089a2f19a2205fc11b8ca0b619df1e91f2ca8b03efc09be9e079cb5ab8e1b838aa2236349cd1c177217c14308242f99138ae4  ghostscript-9.53.2.tar.gz
- 
- # Hash for license file:
- sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index beaf030699..31d23fd20e 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 9.53.0
-+GHOSTSCRIPT_VERSION = 9.53.2
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
--# 0001-Fix-cross-compilation-issue.patch
--GHOSTSCRIPT_AUTORECONF = YES
- GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
- 	host-libjpeg \
+-# Locally computed
+-sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
+-- 
+2.25.1
