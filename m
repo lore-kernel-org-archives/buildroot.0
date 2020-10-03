@@ -1,57 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Oct 2020 22:21:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.4.11
-Message-ID: <20201003202131.288348-1-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat,  3 Oct 2020 22:28:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/numactl: bump to version 2.0.14
+Message-ID: <1601756890-7566-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-7069: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when AES-CCM mode is used with
-  openssl_encrypt() function with 12 bytes IV, only first 7 bytes of the
-  IV is actually used. This can lead to both decreased security and
-  incorrect encryption data.
-- Fix CVE-2020-7070: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when PHP is processing incoming HTTP
-  cookie values, the cookie names are url-decoded. This may lead to
-  cookies with prefixes like __Host confused with cookies that decode to
-  such prefix, thus leading to an attacker being able to forge cookie
-  which is supposed to be secure. See also CVE-2020-8184 for more
-  information.
+Also update hash file formatting (2 spaces)
 
-https://www.php.net/ChangeLog-7.php#7.4.11
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/numactl/numactl.hash | 4 ++--
+ package/numactl/numactl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c383c471eb..77a0feb555 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
-+sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3047bfe94d..6b528cdc33 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
+index 61cb94b..802175d 100644
+--- a/package/numactl/numactl.hash
++++ b/package/numactl/numactl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 97ee012b2f294903530424b4ff7f28bcaad6a356897ce8777383f87e5c2e325d        numactl-2.0.13.tar.gz
+-sha256 e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575        README.md
++sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
++sha256  e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575  README.md
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index 4d3ceeb..d0dd5c2 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.10
-+PHP_VERSION = 7.4.11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-NUMACTL_VERSION = 2.0.13
++NUMACTL_VERSION = 2.0.14
+ NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
+ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+ NUMACTL_LICENSE_FILES = README.md
 -- 
-2.28.0
+2.7.4
