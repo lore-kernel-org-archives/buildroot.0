@@ -1,79 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:52:39 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 8}.x series
-Message-ID: <20201003065707.6FB498E1C9@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:56:01 +0200
+Subject: [Buildroot] [git commit] package/go: fix GO_ARCH for s390x arch
+Message-ID: <20201003065707.97E898E1C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6e8e8fae7b30b5b449ec8ab12f20d5fb80181ca
+commit: https://git.buildroot.net/buildroot/commit/?id=e013029b17618a88ede9da42ea1eee826442f22b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+- http://autobuild.buildroot.net/results/82c440825290804c2fd6a92d916c93d2934e0a95
+- http://autobuild.buildroot.net/results/e8f8e232fb6bf6167f25c82026f4e2321cca9c26
+- http://autobuild.buildroot.net/results/7d4137c439ade81ab7bf141ad6504a69746d6dbc
+
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/go/go.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ec74e1e65a..619fed86dc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -124,7 +124,7 @@ endif
+diff --git a/package/go/go.mk b/package/go/go.mk
+index a9f2613fdb..edc44d2378 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -54,6 +54,8 @@ else ifeq ($(BR2_mips64),y)
+ GO_GOARCH = mips64
+ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
++else ifeq ($(BR2_s390x),y)
++GO_GOARCH = s390x
+ endif
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5393b27f14..b1bd51e668 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  7b0bf5029c94df72d1244b6b77e79e376cff2817a782c3ac50767a4121fd17fe  linux-5.8.7.tar.xz
--sha256  e0260dae0da01163b1a3289ad9c5cc6ee4226720e199e8a1d982e24efda7ffc0  linux-5.4.63.tar.xz
-+sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
-+sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  0dfb86052e7405692e29f8db2f5b480ed972d93b615ffb24d4607d33d29eb770  linux-4.4.235.tar.xz
--sha256  e625a6212695efe5deeab5844e47404841fb1bf755f85eba818614c2ff580cc3  linux-4.9.235.tar.xz
--sha256  5e61b2f58d4c930c3567821aeeb6f688554dca61454646d54711bfc9abc7b09a  linux-4.14.196.tar.xz
--sha256  2a4335c66f0ea8cc49d89ab25e5e00d75fcb33fe638d5584855598b4b8f3038d  linux-4.19.143.tar.xz
-+sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
-+sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
-+sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
-+sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0d92dfada7..1fe7d05da0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -338,12 +338,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.235"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.235"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.196"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.143"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.63"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.7"		if BR2_KERNEL_HEADERS_5_8
-+	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ # For the convienience of target packages.
