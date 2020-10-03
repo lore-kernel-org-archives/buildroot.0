@@ -1,49 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 07:57:02 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/bison: disable
- libtextstyle
-Message-ID: <20201003061930.7E39985EFB@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:08:40 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/gcc: help
+ libbacktrace detection of sync builtins
+Message-ID: <20201003061930.9A9058121C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1172a76773da402e73674d74a28fc6efdd0a5e7a
+commit: https://git.buildroot.net/buildroot/commit/?id=d83e1902a8d8e53ffe620d6d1ba793e0825b09c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Recent bison versions added support for fancy error output using gettext
-provided libtextstyle. The Buildroot gettext version does not provided
-all needed features. However host-bison might detect host installed
-libtextstyle at configure time, but fail at run time because of missing
-symbols in Buildroot provided libtextstyle.
+The logic in libbacktrace/configure.ac to detect if __sync builtins
+are available assumes they are as soon as target_subdir is not
+empty, i.e when cross-compiling. However, some platforms do not have
+__sync builtins, so help the configure script a bit.
 
-We don't really need fancy output of host packages, so just disable
-libtextstyle support.
+"libbacktrace_cv_sys_sync=no" is lost when it is added to
+HOST_GCC_COMMON_CONF_ENV because the environment is not exported
+when executing the libbacktrace configure script.
 
-Fixes (libpcap):
-http://autobuild.buildroot.net/results/058e8ec90da3c06e31b31eb94541331cced44db3/
-http://autobuild.buildroot.net/results/d99dda99722c53730b5964bd4ff1e1281c4ad759/
-http://autobuild.buildroot.net/results/056fd1246554fe7def416429620175e86530c0a7/
+Use target_configargs to force "libbacktrace_cv_sys_sync=no" when
+executiong the libbacktrace configure script.
 
-Cc: Xogium <contact@xogium.me>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Xogium <contact@xogium.me>
+Fixes:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359681
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8d389c521cebdaee04519a09a003b7b7592f40d1)
+[Romain: use target_configargs="libbacktrace_cv_sys_sync=no"]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0bec4c8a4a90cde57ccd46dcad4b9a860c71ffde)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bison/bison.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gcc/gcc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 4cc635c445..738052096a 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -13,5 +13,6 @@ BISON_LICENSE_FILES = COPYING
- BISON_MAKE = $(MAKE1)
- HOST_BISON_DEPENDENCIES = host-m4
- HOST_BISON_CONF_OPTS = --enable-relocatable
-+HOST_BISON_CONF_ENV = ac_cv_libtextstyle=no
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index a0d20161bd..36d8c1793c 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -130,6 +130,14 @@ ifeq ($(BR2_sparc)$(BR2_sparc64),y)
+ HOST_GCC_COMMON_CONF_OPTS += --disable-libsanitizer
+ endif
  
- $(eval $(host-autotools-package))
++# The logic in libbacktrace/configure.ac to detect if __sync builtins
++# are available assumes they are as soon as target_subdir is not
++# empty, i.e when cross-compiling. However, some platforms do not have
++# __sync builtins, so help the configure script a bit.
++ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_4),)
++HOST_GCC_COMMON_CONF_ENV += target_configargs="libbacktrace_cv_sys_sync=no"
++endif
++
+ # TLS support is not needed on uClibc/no-thread and
+ # uClibc/linux-threads, otherwise, for all other situations (glibc,
+ # musl and uClibc/NPTL), we need it.
