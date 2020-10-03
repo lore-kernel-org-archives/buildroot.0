@@ -1,53 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:52:04 +0200
-Subject: [Buildroot] [git commit] package/netatalk: fix build with gcc 10
-Message-ID: <20201003065707.53AF08E1C9@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:53:34 +0200
+Subject: [Buildroot] [git commit] package/freetype: unconditionally disable
+ harfbuzz
+Message-ID: <20201003065707.8586F8E1C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de12c0118767eb908a322141798671a867b71edd
+commit: https://git.buildroot.net/buildroot/commit/?id=a98b79e2e6e1b786adb26b111b4da9c8189d59bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit 939e714393e9d7f60f3a198d831608b08a25662e added an optional
+harfbuzz dependency to freetype but this creates a circular dependency
+so unconditionally disable it
+
 Fixes:
- - http://autobuild.buildroot.org/results/c3381fd3072901871fdd491dc3d4f66e403c7a70
+ - http://autobuild.buildroot.org/results/3cc4ce3207a253186a9c4f8f5151ea0fc0854a28
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-multiple-def-of-invalid_dircache_entries.patch | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ package/freetype/freetype.mk | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-new file mode 100644
-index 0000000000..e7ccc52553
---- /dev/null
-+++ b/package/netatalk/0002-fix-ftbs-multiple-def-of-invalid_dircache_entries.patch
-@@ -0,0 +1,25 @@
-+From 32df6e155ccfc83216321925273c3e75e631ebe6 Mon Sep 17 00:00:00 2001
-+From: Andrew Bauer <zonexpertconsulting@outlook.com>
-+Date: Wed, 22 Jan 2020 09:59:47 -0600
-+Subject: [PATCH] fix ftbs multiple def of invalid_dircache_entries
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index e6463c30b6..f4d71bedf7 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -14,6 +14,10 @@ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
+ FREETYPE_DEPENDENCIES = host-pkgconf
+ FREETYPE_CONFIG_SCRIPTS = freetype-config
+ 
++# harfbuzz already depends on freetype so disable harfbuzz in freetype to avoid
++# a circular dependency
++FREETYPE_CONF_OPTS = --without-harfbuzz
 +
-+[Retrieved from:
-+https://github.com/Netatalk/Netatalk/pull/125/commits/32df6e155ccfc83216321925273c3e75e631ebe6]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ etc/afpd/directory.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/etc/afpd/directory.h b/etc/afpd/directory.h
-+index eb89c606..81bfa9cb 100644
-+--- a/etc/afpd/directory.h
-++++ b/etc/afpd/directory.h
-+@@ -91,7 +91,7 @@ struct maccess {
-+ #define	AR_UWRITE	(1<<2)
-+ #define	AR_UOWN		(1<<7)
-+ 
-+-q_t *invalid_dircache_entries;
-++extern q_t *invalid_dircache_entries;
-+ 
-+ typedef int (*dir_loop)(struct dirent *, char *, void *);
-+ 
+ HOST_FREETYPE_DEPENDENCIES = host-pkgconf
+ HOST_FREETYPE_CONF_OPTS = \
+ 	--without-brotli \
+@@ -47,13 +51,6 @@ else
+ FREETYPE_CONF_OPTS += --without-bzip2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
+-FREETYPE_DEPENDENCIES += harfbuzz
+-FREETYPE_CONF_OPTS += --with-harbuzz
+-else
+-FREETYPE_CONF_OPTS += --without-harfbuzz
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ FREETYPE_DEPENDENCIES += libpng
+ FREETYPE_CONF_OPTS += --with-png
