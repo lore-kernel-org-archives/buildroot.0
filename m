@@ -1,58 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 08:53:04 +0200
-Subject: [Buildroot] [git commit] package/i2c-tools: bump to version 4.2
-Message-ID: <20201003065707.7A01A81262@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 08:57:42 +0200
+Subject: [Buildroot] [git commit] package/python-fire.mk: drop
+ test_components_py3.py file for python 2.x to fix pyfile issue
+Message-ID: <20201003065707.AF3578E1C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d9ea09bc959a22a32765b89379b6481773de1dc
+commit: https://git.buildroot.net/buildroot/commit/?id=6bfedaf57798c12f0e6279b8361fd5ec4244db8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use upstream provided hash.
+Fixes:
+http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
 
-Update README hash because of unrelated content changes.
+fire has conditional logic to load test_components_py3.py when running under
+Python 3.x:
 
-Format hashes with two spaces delimiter.
+if six.PY3:
+  from fire import test_components_py3 as py3
 
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+pycompile unfortunately errors out on it:
+
+../scripts/pycompile.py ..
+
+error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
+    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
+                           ^
+SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+building for python 2.x.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/i2c-tools/i2c-tools.hash | 10 +++++-----
- package/i2c-tools/i2c-tools.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-fire/python-fire.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index 280a139c00..150bdb2e63 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,7 +1,7 @@
--# Locally computed
--sha256 57b219efd183795bd545dd5a60d9eabbe9dcb6f8fb92bc7ba2122b87f98527d5  i2c-tools-4.1.tar.xz
-+# From https://www.kernel.org/pub/software/utils/i2c-tools/sha256sums.asc
-+sha256  37f2dabc7082d185903ff21d1f584b5dcb4dd2eb2c879bbd8d7c50ae900dacd6  i2c-tools-4.2.tar.xz
+diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+index 343abbca7d..f6a2e073f0 100644
+--- a/package/python-fire/python-fire.mk
++++ b/package/python-fire/python-fire.mk
+@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
+ PYTHON_FIRE_LICENSE = Apache-2.0
+ PYTHON_FIRE_LICENSE_FILES = LICENSE
  
- # License files
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256 b75b04b46320dff5e2b50a9c69b8e526b7db5087083ea3ba65533f08fc11b9f0  README
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256  370e8bc3d45744170cc4b12dc5135b107fa40a00179a19973fbd714146dec04c  README
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index d4d9c012fa..c1770cf636 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2C_TOOLS_VERSION = 4.1
-+I2C_TOOLS_VERSION = 4.2
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
- I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_FIRE_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
++endef
++
++PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
