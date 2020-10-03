@@ -1,76 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Oct 2020 09:11:03 +0200
-Subject: [Buildroot] [git commit] support/scripts/setlocalversion:
- fix/improve Mercurial output
-Message-ID: <20201003070254.D007885AB8@busybox.osuosl.org>
+Date: Sat, 3 Oct 2020 09:12:49 +0200
+Subject: [Buildroot] [git commit] package/powerpc-utils: bump to version
+ 1.3.8
+Message-ID: <20201003070254.DBAFF85AB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32eb5a1d16559d147e610e5158154ed9518f63e1
+commit: https://git.buildroot.net/buildroot/commit/?id=98c80a4754a35f4bb8306235ca4ef0c18fbd09e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 modified the output of
-'setlocalversion' so that the Buildroot version tag is included in the
-output, the version part was added in Makefile.
+Set --disable-werror which has been added with
+https://github.com/ibm-power-utilities/powerpc-utils/commit/3d8a7f5e2e3b735570ab99bb3a340ff7e0c14841
 
-Due to differences in behavior of the used git and Mercurial commands, this
-caused different output for the Mercurial case, in BR2_VERSION_FULL and thus
-/etc/os-release and 'make print-version'. Assuming the official Buildroot
-releases are tagged and no project-specific tags are present, the output
-after commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 is:
-    -hg<commit>
-whereas it is expected to be something like:
-    2020.02.6-hg<commit>
+https://github.com/ibm-power-utilities/powerpc-utils/blob/v1.3.8/Changelog
 
-Change the Mercurial case in setlocalversion to behave similar to git,
-looking up the latest tag if the current revision is not itself tagged.
-
-The number of commits after the latest tag is not added, unlike in git, as
-this value is not commonly present in Mercurial output, and its added value
-can be disputed in this context. Even one commit could bring a huge change
-to the sources, so in order to interpret the number one has to look at the
-repository anyhow, in which case the commit ID can just be used.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ package/powerpc-utils/powerpc-utils.hash | 2 +-
+ package/powerpc-utils/powerpc-utils.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index e04c955d9e..d492f2db2f 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -48,14 +48,28 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
+diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
+index 5cf790aa87..8d0b10425b 100644
+--- a/package/powerpc-utils/powerpc-utils.hash
++++ b/package/powerpc-utils/powerpc-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bb48758bca3b9d056141b522e700218ee4e814b517aadf5a01f53b970ad1d3c3  powerpc-utils-1.3.7.tar.gz
++sha256  4e3a21419863c08adde49f0795eff0fbfe4597ce82593fa5fe1f1177913fb7b9  powerpc-utils-1.3.8.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+index 8697daf194..cd96435a78 100644
+--- a/package/powerpc-utils/powerpc-utils.mk
++++ b/package/powerpc-utils/powerpc-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Check for mercurial and a mercurial repo.
-+# In the git case, 'git describe' will show the latest tag, and unless we are
-+# exactly on that tag, the number of commits since then, and last commit id.
-+# Mimic something similar in the Mercurial case.
- if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+-POWERPC_UTILS_VERSION = 1.3.7
++POWERPC_UTILS_VERSION = 1.3.8
+ POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,v$(POWERPC_UTILS_VERSION))
+ POWERPC_UTILS_DEPENDENCIES = zlib
+ POWERPC_UTILS_AUTORECONF = YES
+@@ -13,12 +13,13 @@ POWERPC_UTILS_LICENSE_FILES = COPYING
  
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
-+		# current revision is not tagged, determine latest tag
-+		latesttag=`HGRCPATH= hg log -r. -T '{latesttag}' 2>/dev/null`
-+		# In case there is more than one tag on the latest tagged commit,
-+		# 'latesttag' will separate them by colon (:). We'll retain this.
-+		# In case there is no tag at all, 'null' will be returned.
-+		if [ "$latesttag" = "null" ]; then
-+			latesttag=''
-+		fi
-+
-+		# add the commit id
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
--		printf '%s%s' -hg "$id"
-+		printf '%s%s%s' "${latesttag}" -hg "$id"
- 	else
-+		# current revision is tagged, just print the tag
- 		printf ${tag}
- 	fi
+ POWERPC_UTILS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++POWERPC_UTILS_CONF_OPTS = --disable-werror
  
+ ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
+ POWERPC_UTILS_DEPENDENCIES += librtas
+-POWERPC_UTILS_CONF_OPTS = --with-librtas
++POWERPC_UTILS_CONF_OPTS += --with-librtas
+ else
+-POWERPC_UTILS_CONF_OPTS = --without-librtas
++POWERPC_UTILS_CONF_OPTS += --without-librtas
+ endif
+ 
+ $(eval $(autotools-package))
