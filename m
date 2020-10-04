@@ -1,30 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2020 11:27:49 +0200
-Subject: [Buildroot] [PATCH] package/gcc: remove gcc 7.5.0
-In-Reply-To: <20201003091704.1537916-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sat, 3 Oct 2020 11:17:04 +0200")
-References: <20201003091704.1537916-1-romain.naour@gmail.com>
-Message-ID: <87362uuyqy.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Oct 2020 11:28:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/links: bump to version 2.21
+In-Reply-To: <20201003082043.3004907-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 3 Oct 2020 10:20:43 +0200")
+References: <20201003082043.3004907-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2kmtk5p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > gcc 10.2 is around, gcc 9.3 is the default version, so drop
- > 7.5 in order to reduce the gcc choice.
+ > Update indentation in hash file (two spaces)
+ > http://links.twibright.com/download/ChangeLog
 
- > See:
- > https://gcc.gnu.org/legacy-ml/gcc/2019-11/msg00099.html
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > The last defconfig using gcc 7 (roseapplepi_defconfig) has been
- > updated by 9cd065438020582011f393bd71308717b07c5a71.
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
-Committed after adding a Config.in.legacy entry for it, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
