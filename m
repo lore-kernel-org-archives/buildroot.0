@@ -1,142 +1,127 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:32:26 +0200
-Subject: [Buildroot] [git commit] package/xfsprogs: bump to version 5.8.0
-Message-ID: <20201004094312.937898125A@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:38:01 +0200
+Subject: [Buildroot] [git commit] package/elfutils: needs threads
+Message-ID: <20201004094312.BD3218D696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05d8bca6a412b66822c35d009c4ab10a0db05f9e
+commit: https://git.buildroot.net/buildroot/commit/?id=7154fb480488721e1884dcf3cb84ac04ab450a4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update hash of GPL-2.0 file because spdx tags have been updated by
-  https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=c7498b6911d03f2bd7f74e9f9862d8d5fbd5b5da
-- Drop third patch (already in version)
-- Update indentation in hash file (two spaces)
+threads is a mandatory dependency since version 0.178 and
+https://sourceware.org/git/?p=elfutils.git;a=commitdiff;h=e9d4067a15eb100c0598a9895567aac6e9ed6a10
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1c818a50530816ba80864efaacb724cb4bdeebf9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-redeclare-globals-provided-by-libraries.patch | 83 ----------------------
- package/xfsprogs/xfsprogs.hash                     |  6 +-
- package/xfsprogs/xfsprogs.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 87 deletions(-)
+ package/elfutils/Config.in   | 4 +++-
+ package/kexec-lite/Config.in | 4 +++-
+ package/ltrace/Config.in     | 4 +++-
+ package/racehound/Config.in  | 4 +++-
+ package/sysdig/Config.in     | 2 +-
+ 5 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
-deleted file mode 100644
-index ef2053e9bb..0000000000
---- a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
-+++ /dev/null
-@@ -1,83 +0,0 @@
--From 123b851389ef9a012a469ef982ac7b819db59342 Mon Sep 17 00:00:00 2001
--From: Eric Sandeen <sandeen@redhat.com>
--Date: Thu, 30 Jan 2020 13:34:17 -0500
--Subject: xfsprogs: do not redeclare globals provided by libraries
--
--In each of these cases, db, logprint, and mdrestore are redeclaring
--as a global variable something which was already provided by a
--library they link with.
--
--gcc now defaults to -fno-common and trips over these global variables
--which are declared in utilities as well as in libxfs and libxlog, and
--it causes the build to fail.
--
--Signed-off-by: Eric Sandeen <sandeen@redhat.com>
--Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
--Reviewed-by: Christoph Hellwig <hch@lst.de>
--Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=123b851389ef9a012a469ef982ac7b819db59342]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- db/init.c                 | 1 -
-- logprint/logprint.c       | 4 ++--
-- mdrestore/xfs_mdrestore.c | 1 -
-- 3 files changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/db/init.c b/db/init.c
--index 455220a86..0ac373685 100644
----- a/db/init.c
--+++ b/db/init.c
--@@ -27,7 +27,6 @@ static int		force;
-- static struct xfs_mount	xmount;
-- struct xfs_mount	*mp;
-- static struct xlog	xlog;
---libxfs_init_t		x;
-- xfs_agnumber_t		cur_agno = NULLAGNUMBER;
-- 
-- static void
--diff --git a/logprint/logprint.c b/logprint/logprint.c
--index 7754a2a6e..511a32aca 100644
----- a/logprint/logprint.c
--+++ b/logprint/logprint.c
--@@ -24,7 +24,6 @@ int	print_buffer;
-- int	print_overwrite;
-- int     print_no_data;
-- int     print_no_print;
---int     print_exit = 1; /* -e is now default. specify -c to override */
-- static int	print_operation = OP_PRINT;
-- 
-- static void
--@@ -132,6 +131,7 @@ main(int argc, char **argv)
-- 	bindtextdomain(PACKAGE, LOCALEDIR);
-- 	textdomain(PACKAGE);
-- 	memset(&mount, 0, sizeof(mount));
--+	print_exit = 1; /* -e is now default. specify -c to override */
-- 
-- 	progname = basename(argv[0]);
-- 	while ((c = getopt(argc, argv, "bC:cdefl:iqnors:tDVv")) != EOF) {
--@@ -152,7 +152,7 @@ main(int argc, char **argv)
-- 			case 'e':
-- 			    /* -e is now default
-- 			     */
---				print_exit++;
--+				print_exit = 1;
-- 				break;
-- 			case 'C':
-- 				print_operation = OP_COPY;
--diff --git a/mdrestore/xfs_mdrestore.c b/mdrestore/xfs_mdrestore.c
--index 3375e0806..1cd399dbc 100644
----- a/mdrestore/xfs_mdrestore.c
--+++ b/mdrestore/xfs_mdrestore.c
--@@ -7,7 +7,6 @@
-- #include "libxfs.h"
-- #include "xfs_metadump.h"
-- 
---char 		*progname;
-- static int	show_progress = 0;
-- static int	show_info = 0;
-- static int	progress_since_warning = 0;
---- 
--cgit 1.2.3-1.el7
--
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index 629d6fcf9d..79f953b33c 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/sha256sums.asc
--sha256 7b500e148cebd08f99e37cf744c7843817b37e7be2a32c4dc57d6ea16e3019ae  xfsprogs-5.2.1.tar.xz
-+sha256  8ef46ed9e6bb927f407f541dc4324857c908ddf1374265edc910d23724048c6b  xfsprogs-5.8.0.tar.xz
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index f094e7b865..5f45de14ab 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -1,11 +1,13 @@
+-comment "elfutils needs a uClibc or glibc toolchain w/ wchar, dynamic library"
++comment "elfutils needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
  
- # Hash for license files
--sha256 7ae50a5344af14d6231aff6814632a220b3127da4099aea2c6070fd79c407c1a  LICENSES/GPL-2.0
--sha256 0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-+sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 43c921aa17..bfaf9fd712 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_PACKAGE_ELFUTILS
+ 	bool "elfutils"
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# Only glibc and uClibc implement the myriad of required GNUisms
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_ZLIB
+diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
+index 3e84f90d57..abfa95ab36 100644
+--- a/package/kexec-lite/Config.in
++++ b/package/kexec-lite/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KEXEC_LITE
+ 	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+ 	depends on !BR2_STATIC_LIBS # dtc, elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+ 	select BR2_PACKAGE_ELFUTILS
+ 	select BR2_PACKAGE_DTC
+@@ -17,7 +18,8 @@ config BR2_PACKAGE_KEXEC_LITE
  
--XFSPROGS_VERSION = 5.2.1
-+XFSPROGS_VERSION = 5.8.0
- XFSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/fs/xfs/xfsprogs
- XFSPROGS_SOURCE = xfsprogs-$(XFSPROGS_VERSION).tar.xz
- XFSPROGS_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1 (libhandle, few headers)
+ 	  https://github.com/antonblanchard/kexec-lite
+ 
+-comment "kexec-lite needs a uClibc or glibc toolchain w/ wchar, dynamic library"
++comment "kexec-lite needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
+ 	depends on BR2_powerpc || BR2_powerpc64
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 667338a26e..ce5a85edcf 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on !BR2_STATIC_LIBS # elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+ 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ELFUTILS
+@@ -25,7 +26,8 @@ config BR2_PACKAGE_LTRACE
+ 
+ 	  http://ltrace.org
+ 
+-comment "ltrace needs a uClibc or glibc toolchain w/ wchar, dynamic library"
++comment "ltrace needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
+ 	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/racehound/Config.in b/package/racehound/Config.in
+index 2d1ccb8381..d13f90adb4 100644
+--- a/package/racehound/Config.in
++++ b/package/racehound/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_RACEHOUND
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on !BR2_STATIC_LIBS # elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+ 	# only x86/x86_64 supported
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -29,7 +30,8 @@ comment "racehound needs an Linux kernel >= 3.14 to be built"
+ 	depends on !BR2_LINUX_KERNEL
+ 	depends on BR2_i386 || BR2_x86_64
+ 
+-comment "racehound needs a uClibc or glibc toolchain w/ C++, wchar, dynamic library"
++comment "racehound needs a uClibc or glibc toolchain w/ C++, wchar, dynamic library, threads"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 0ca468c396..7d3c570392 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # jq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils, jq
+ 	depends on !BR2_STATIC_LIBS # elfutils
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
