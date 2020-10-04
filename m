@@ -1,39 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:37:11 +0200
-Subject: [Buildroot] [git commit] package/makedumpfile: add threads
- dependency in comment
-Message-ID: <20201004094312.B40358125A@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:40:53 +0200
+Subject: [Buildroot] [git commit] package/supertux: build squirrel builtin
+ library with fPIC
+Message-ID: <20201004094312.E46AA84777@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=049e4fc9d852eef1d947a3ed2e72d12bcd8f3b14
+commit: https://git.buildroot.net/buildroot/commit/?id=4473c41941158dfc3f0b05c335c50ae94cc41e48
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit adb64a97e79bcb4e28450dd858654003ec8706c3 forgot to add threads
-dependency in comment
+Ensure that squirrel is compiled with -fPIC to allow linking the static
+libraries with dynamically linked programs. This is not a requirement
+for most architectures but is mandatory for ARM.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
+http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/makedumpfile/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...CMakeLists.txt-compile-squirrel-with-fPIC.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
-index e41c4641a2..d5af38b598 100644
---- a/package/makedumpfile/Config.in
-+++ b/package/makedumpfile/Config.in
-@@ -7,9 +7,10 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
- 	default y if BR2_s390x
- 	default y if BR2_sparc64
- 
--comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
-+comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
- 	depends on BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
- 
- config BR2_PACKAGE_MAKEDUMPFILE
+diff --git a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+new file mode 100644
+index 0000000000..9fac20a3f8
+--- /dev/null
++++ b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+@@ -0,0 +1,35 @@
++From 23d0bb0ef0fde52d1cffe235edead09287326fb4 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 4 Oct 2020 01:11:30 +0200
++Subject: [PATCH] CMakeLists.txt: compile squirrel with -fPIC
++
++Ensure that squirrel is compiled with -fPIC to allow linking the static
++libraries with dynamically linked programs. This is not a requirement
++for most architectures but is mandatory for ARM.
++
++Fixes:
++x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
++x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ CMakeLists.txt | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 8b1dafa1e..07c603cce 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -412,7 +412,8 @@ ExternalProject_Add(squirrel
++   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
++   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
++   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
++-  -DINSTALL_INC_DIR=include)
+++  -DINSTALL_INC_DIR=include
+++  -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
++ 
++ if(WIN32)
++   add_library(squirrel_lib SHARED IMPORTED)
++-- 
++2.25.4
++
