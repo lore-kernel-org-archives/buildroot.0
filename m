@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 20:42:29 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/memcached:
+Date: Sun, 4 Oct 2020 20:42:13 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/memcached:
  security bump to version 1.5.22
-Message-ID: <20201004183232.88AE3821BF@busybox.osuosl.org>
+Message-ID: <20201004183242.35FE38232C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8ef4e3f21229fc4145370190c5aaaeb4e2c5760
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=422fe3eb8249e887a2dde23302f74e1e7b9e4595
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 - Fix a security issue: When enabling SASL authentication for binary
   protocol, enabling UDP mode would allow bypassing SASL. Now refuses
