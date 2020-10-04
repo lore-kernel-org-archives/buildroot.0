@@ -1,47 +1,106 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Oct 2020 15:07:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/hiawatha: bump to version 10.11
-Message-ID: <20201004130755.519924-1-fontaine.fabrice@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun,  4 Oct 2020 15:10:49 +0200
+Subject: [Buildroot] [PATCH] boot/uboot/Config.in: sort uboot's format
+ extensions alphabetically
+Message-ID: <20201004131049.412030-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Default value of MinTLSversion set to 1.2.
-- mbed TLS updated to 2.23.0.
-- Small bugfixes.
+It's easier to locate given format when it's sorted.
 
-- Update indentation in hash file (two spaces)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/hiawatha/hiawatha.hash | 4 ++--
- package/hiawatha/hiawatha.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/uboot/Config.in | 54 ++++++++++++++++++++++----------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
-index 359a435420..2fba5600a2 100644
---- a/package/hiawatha/hiawatha.hash
-+++ b/package/hiawatha/hiawatha.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 b5e46f5757fa647e77d21d24f7eea912d59f26a75558cba780b45c1c3a33a4d9  hiawatha-10.10.tar.gz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-+sha256  79d85d165d68dd7043bbd337f5bc7dd10d8632d68ba61d0e557f84bd687c9727  hiawatha-10.11.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 01b9292035..126cb71105 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index a87a642581..63291c9a0f 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -245,47 +245,31 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
+ config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
+ 	bool "u-boot-dtb.bin"
  
--HIAWATHA_VERSION = 10.10
-+HIAWATHA_VERSION = 10.11
- HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPL-2.0
+-config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
+-	bool "u-boot-dtb.img"
++config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
++	bool "u-boot-nand.bin"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+-	bool "u-boot-dtb.imx"
++config BR2_TARGET_UBOOT_FORMAT_ELF
++	bool "u-boot.elf"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_ITB
+-	bool "u-boot.itb"
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
++	bool "u-boot-dtb.img"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_IMX
+ 	bool "u-boot.imx"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
+-	bool "u-boot-nand.bin"
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
++	bool "u-boot-dtb.imx"
++
++config BR2_TARGET_UBOOT_FORMAT_ITB
++	bool "u-boot.itb"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_KWB
+ 	bool "u-boot.kwb (Marvell)"
+ 	depends on BR2_arm
+ 
+-config BR2_TARGET_UBOOT_FORMAT_ELF
+-	bool "u-boot.elf"
+-
+-config BR2_TARGET_UBOOT_FORMAT_SB
+-	bool "u-boot.sb (Freescale i.MX28)"
+-	depends on BR2_arm
+-
+-config BR2_TARGET_UBOOT_FORMAT_SD
+-	bool "u-boot.sd (Freescale i.MX28)"
+-	depends on BR2_arm
+-	help
+-	  This is Freescale i.MX28 SB format, with a header for booting
+-	  from an SD card.
+-
+-	  U-Boot includes an mxsboot tool to generate this format,
+-	  starting from 2011.12.
+-
+-	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+-
+ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	bool "u-boot.nand (Freescale i.MX28)"
+ 	depends on BR2_arm
+@@ -343,6 +327,22 @@ config BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE
+ 
+ endif
+ 
++config BR2_TARGET_UBOOT_FORMAT_SB
++	bool "u-boot.sb (Freescale i.MX28)"
++	depends on BR2_arm
++
++config BR2_TARGET_UBOOT_FORMAT_SD
++	bool "u-boot.sd (Freescale i.MX28)"
++	depends on BR2_arm
++	help
++	  This is Freescale i.MX28 SB format, with a header for booting
++	  from an SD card.
++
++	  U-Boot includes an mxsboot tool to generate this format,
++	  starting from 2011.12.
++
++	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
++
+ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	bool "Custom (specify below)"
+ 	help
 -- 
 2.28.0
