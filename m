@@ -1,42 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:35:47 +0200
-Subject: [Buildroot] [git commit] package/altera-stapl: change to tagged
- version 0.3.3
-Message-ID: <20201004094312.9CAC78125A@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:39:17 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver-xf86-video-ati: Fix
+ link failure with gcc 10
+Message-ID: <20201004094312.CF49384777@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09340dd5bc12edf2fa50048ea54539d820e0fce7
+commit: https://git.buildroot.net/buildroot/commit/?id=d4d0a036701b9418c59c0a251d2af45e5b8569d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Backport an upstream patch.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/altera-stapl/altera-stapl.hash | 2 +-
- package/altera-stapl/altera-stapl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-Fix-link-failure-with-gcc-10.patch        | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/altera-stapl/altera-stapl.hash b/package/altera-stapl/altera-stapl.hash
-index 29e62b9d44..c3af649c40 100644
---- a/package/altera-stapl/altera-stapl.hash
-+++ b/package/altera-stapl/altera-stapl.hash
-@@ -1,2 +1,2 @@
--sha256  7f72c234f2fd0181140b6f1f09fc272eae07f20622cec7f26e3b3499ff69825a  altera-stapl-7044a63b7d1a3fc6840cd3130ec984454f1559c0.tar.gz
-+sha256  a4d85a79790eab851399132fce4524979fe764d5297413b2445673e6a190bb42  altera-stapl-0.3.3.tar.gz
- sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
-diff --git a/package/altera-stapl/altera-stapl.mk b/package/altera-stapl/altera-stapl.mk
-index 189b6c4ced..afafbe2d08 100644
---- a/package/altera-stapl/altera-stapl.mk
-+++ b/package/altera-stapl/altera-stapl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ALTERA_STAPL_VERSION = 7044a63b7d1a3fc6840cd3130ec984454f1559c0
-+ALTERA_STAPL_VERSION = 0.3.3
- ALTERA_STAPL_SITE = $(call github,kontron,altera-stapl,$(ALTERA_STAPL_VERSION))
- ALTERA_STAPL_LICENSE = GPLv2+
- ALTERA_STAPL_LICENSE_FILES = COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
+new file mode 100644
+index 0000000000..b7a66c5c27
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From f223035f4ffcff2a9296d1e907a5193f8e8845a3 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 4 Feb 2020 16:38:06 -0500
++Subject: [PATCH xf86-video-ati] Fix link failure with gcc 10
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Without the 'extern' this looks like a definition not just a
++declaration, in every file that includes the header. gcc 10 is stricter
++about this kind of multiple definition.
++
++Reviewed-by: Michel D??nzer <mdaenzer@redhat.com>
++[backport from upstream: f223035f4ffcff2a9296d1e907a5193f8e8845a3]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/drmmode_display.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/drmmode_display.h b/src/drmmode_display.h
++index 96eaef0a..8cd8a0a6 100644
++--- a/src/drmmode_display.h
+++++ b/src/drmmode_display.h
++@@ -262,7 +262,7 @@ Bool drmmode_wait_vblank(xf86CrtcPtr crtc, drmVBlankSeqType type,
++ 			 uint64_t *ust, uint32_t *result_seq);
++ 
++ 
++-miPointerSpriteFuncRec drmmode_sprite_funcs;
+++extern miPointerSpriteFuncRec drmmode_sprite_funcs;
++ 
++ 
++ #endif
++-- 
++2.25.4
++
