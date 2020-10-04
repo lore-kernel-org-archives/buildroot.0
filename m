@@ -1,70 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:40:53 +0200
-Subject: [Buildroot] [git commit] package/supertux: build squirrel builtin
- library with fPIC
-Message-ID: <20201004094312.E46AA84777@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:20:41 +0200
+Subject: [Buildroot] [git commit] package/fluidsynth: bump to version 2.1.5
+Message-ID: <20201004094312.3EEBC8125A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4473c41941158dfc3f0b05c335c50ae94cc41e48
+commit: https://git.buildroot.net/buildroot/commit/?id=680f3442b77c79d5e0eb3c34942ef1288009bf11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ensure that squirrel is compiled with -fPIC to allow linking the static
-libraries with dynamically linked programs. This is not a requirement
-for most architectures but is mandatory for ARM.
+Drop patch (already in version)
 
-Fixes:
-http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
-http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
+https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.5
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...CMakeLists.txt-compile-squirrel-with-fPIC.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ ...001-CMakeLists.txt-fix-build-with-gcc-4.8.patch | 49 ----------------------
+ package/fluidsynth/fluidsynth.hash                 |  2 +-
+ package/fluidsynth/fluidsynth.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
 
-diff --git a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-new file mode 100644
-index 0000000000..9fac20a3f8
---- /dev/null
-+++ b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
-@@ -0,0 +1,35 @@
-+From 23d0bb0ef0fde52d1cffe235edead09287326fb4 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 4 Oct 2020 01:11:30 +0200
-+Subject: [PATCH] CMakeLists.txt: compile squirrel with -fPIC
-+
-+Ensure that squirrel is compiled with -fPIC to allow linking the static
-+libraries with dynamically linked programs. This is not a requirement
-+for most architectures but is mandatory for ARM.
-+
-+Fixes:
-+x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
-+x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ CMakeLists.txt | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 8b1dafa1e..07c603cce 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -412,7 +412,8 @@ ExternalProject_Add(squirrel
-+   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
-+   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
-+   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
-+-  -DINSTALL_INC_DIR=include)
-++  -DINSTALL_INC_DIR=include
-++  -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
-+ 
-+ if(WIN32)
-+   add_library(squirrel_lib SHARED IMPORTED)
-+-- 
-+2.25.4
-+
+diff --git a/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch b/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 1e906f53bb..0000000000
+--- a/package/fluidsynth/0001-CMakeLists.txt-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From a810e30a3d560d3e6ced41c74032c54ea365a88e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 16 Aug 2020 20:17:26 +0200
+-Subject: [PATCH] CMakeLists.txt: fix build with gcc 4.8
+-
+--Werror=incompatible-pointer-types is unconditionally used since version
+-2.1.4 and 137a14e106d75d1260f78acc1a19c5a936ef75b2. This will raise a
+-build failure when checking for threads on gcc 4.8:
+-
+-/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-none-linux-gnueabi-gcc --sysroot=/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-gnueabi/sysroot -DTESTKEYWORD=inline  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration -Werror=incompatible-pointer-types -Wbad-function-cast -Wcast-align   -DNDEBUG -fPIE   -o CMakeFiles/cmTC_98946.dir/CheckIncludeFile.c.o   -c /home/buildroot/autobuild/run/instance-3/output-1/build/fluidsynth-2.1.4/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+-cc1: error: -Werror=incompatible-pointer-types: no option -Wincompatible-pointer-types
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/13cbba871db56ef8657a3d13c6ac8e1b4da0d244
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/FluidSynth/fluidsynth/pull/661]
+----
+- CMakeLists.txt | 7 ++++++-
+- 1 file changed, 6 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 7844889..0f6c169 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -146,6 +146,7 @@ endif ( POLICY CMP0063 )
+- include ( DefaultDirs )
+- 
+- # Basic C library checks
+-+include ( CheckCCompilerFlag )
+- include ( CheckSTDC )
+- include ( CheckIncludeFile )
+- include ( CheckFunctionExists )
+-@@ -196,7 +197,11 @@ if ( CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_C_C
+-   endif ( NOT APPLE AND NOT OS2 )
+- 
+-   # define some warning flags
+--  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration -Werror=incompatible-pointer-types" )
+-+  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -W -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wno-unused-parameter -Wdeclaration-after-statement -Werror=implicit-function-declaration" )
+-+  check_c_compiler_flag ( "-Werror=incompatible-pointer-types" HAVE_INCOMPATIBLE_POINTER_TYPES )
+-+  if ( HAVE_INCOMPATIBLE_POINTER_TYPES )
+-+    set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=incompatible-pointer-types" )
+-+  endif ( HAVE_INCOMPATIBLE_POINTER_TYPES ) 
+- 
+-   # prepend to build type specific flags, to allow users to override
+-   set ( CMAKE_C_FLAGS_DEBUG "-g ${CMAKE_C_FLAGS_DEBUG}" )
+--- 
+-2.27.0
+-
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 9469305cdc..17e37e2479 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6e4f3e4a957d03812765bd0e400f61cd6c9fdb4bf10970e5cdaea8487d54b250  fluidsynth-2.1.4.tar.gz
++sha256  b539b7c65a650b56f01cd60a4e83c6125c217c5a63c0c214ef6274894a677d00  fluidsynth-2.1.5.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index 828a5cab8f..5756df544c 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUIDSYNTH_VERSION = 2.1.4
++FLUIDSYNTH_VERSION = 2.1.5
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
