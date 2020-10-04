@@ -1,60 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:19:51 +0200
-Subject: [Buildroot] [git commit] package/php: security bump to version
- 7.4.11
-Message-ID: <20201004094312.287318E516@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:37:11 +0200
+Subject: [Buildroot] [git commit] package/makedumpfile: add threads
+ dependency in comment
+Message-ID: <20201004094312.B40358125A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51d9617474db14e4757ca3a340deccc1dc3df6c7
+commit: https://git.buildroot.net/buildroot/commit/?id=049e4fc9d852eef1d947a3ed2e72d12bcd8f3b14
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix CVE-2020-7069: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when AES-CCM mode is used with
-  openssl_encrypt() function with 12 bytes IV, only first 7 bytes of the
-  IV is actually used. This can lead to both decreased security and
-  incorrect encryption data.
-- Fix CVE-2020-7070: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when PHP is processing incoming HTTP
-  cookie values, the cookie names are url-decoded. This may lead to
-  cookies with prefixes like __Host confused with cookies that decode to
-  such prefix, thus leading to an attacker being able to forge cookie
-  which is supposed to be secure. See also CVE-2020-8184 for more
-  information.
-
-https://www.php.net/ChangeLog-7.php#7.4.11
+Commit adb64a97e79bcb4e28450dd858654003ec8706c3 forgot to add threads
+dependency in comment
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/makedumpfile/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c383c471eb..77a0feb555 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
-+sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
+diff --git a/package/makedumpfile/Config.in b/package/makedumpfile/Config.in
+index e41c4641a2..d5af38b598 100644
+--- a/package/makedumpfile/Config.in
++++ b/package/makedumpfile/Config.in
+@@ -7,9 +7,10 @@ config BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+ 	default y if BR2_s390x
+ 	default y if BR2_sparc64
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3047bfe94d..6b528cdc33 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library"
++comment "makedumpfile needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
+ 	depends on BR2_PACKAGE_MAKEDUMPFILE_ARCH_SUPPORTS
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
  
--PHP_VERSION = 7.4.10
-+PHP_VERSION = 7.4.11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ config BR2_PACKAGE_MAKEDUMPFILE
