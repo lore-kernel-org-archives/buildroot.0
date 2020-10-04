@@ -1,22 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2020 11:47:01 +0200
-Subject: [Buildroot] [PATCH 1/2] package/localedef: bump to glibc-2.31-54
-In-Reply-To: <20201002155931.1529915-1-romain.naour@gmail.com> (Romain Naour's
- message of "Fri, 2 Oct 2020 17:59:30 +0200")
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
-Message-ID: <87imbqs4q2.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Oct 2020 11:52:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.3.1
+In-Reply-To: <202010041453412491074@gmail.com> (Jianhui Zhao's message of
+ "Sun, 4 Oct 2020 14:53:42 +0800")
+References: <202010041453412491074@gmail.com>
+Message-ID: <87eemes4g4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Jianhui" == Jianhui Zhao <zhaojh329@gmail.com> writes:
 
- > resync the version with glibc package.
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+ > ---
+ > ?package/libuhttpd/libuhttpd.hash | 2 +-
+ > ?package/libuhttpd/libuhttpd.mk ? | 2 +-
+ > ?2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
+Your mailer unfortunately does something odd with whitespace, so the
+patch was corrupted :/
+
+I've fixed it up manually and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
