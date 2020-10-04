@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2020 20:45:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: bump to version
- 5.44
-In-Reply-To: <20201004154215.1321728-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Oct 2020 17:42:15 +0200")
-References: <20201004154215.1321728-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8lhrft4.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Oct 2020 20:45:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/links: fix hash
+In-Reply-To: <20201004154301.1321856-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 4 Oct 2020 17:43:01 +0200")
+References: <20201004154301.1321856-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0w5rfsa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Update indentation in hash file (two spaces)
+ > Hash was not updated by commit d133d33586c9a06d837d5db42a6f9046156034c6
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c8333bb3c1abda67dadda203beb9b69fb0e1a080
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
