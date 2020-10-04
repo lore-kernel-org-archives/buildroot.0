@@ -1,42 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:51:47 +0200
-Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.3.1
-Message-ID: <20201004094313.05C2784777@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:46:54 +0200
+Subject: [Buildroot] [git commit] package/localedef: bump to glibc-2.31-54
+Message-ID: <20201004094312.EDE638D696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d4f7fe429194ec57c4a65fe82e4539084e40b21
+commit: https://git.buildroot.net/buildroot/commit/?id=d03f5a4dda29bf16a8ba00f44fd9da5b3e660958
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+resync the version with glibc package.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-HACK-only-build-and-install-localedef.patch                    | 0
+ .../0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch      | 0
+ .../localedef.hash                                                      | 2 +-
+ package/localedef/localedef.mk                                          | 2 +-
+ 4 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index b7c839a5f0..e52b13bb2e 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  161aac7a09ed143278804f8f55ed3c1dd3c813cd68418325ca8862acdaf8a163  libuhttpd-3.3.0.tar.gz
-+sha256  970d79e064c294fa5798c67e2a20bbd22317a69225e0478399460fa64aa36894  libuhttpd-3.3.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index f2cb6e650e..29e1c97d69 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch
+similarity index 100%
+rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0001-HACK-only-build-and-install-localedef.patch
+rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0001-HACK-only-build-and-install-localedef.patch
+diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+similarity index 100%
+rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+diff --git a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
+similarity index 70%
+rename from package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash
+rename to package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
+index 01c48b74b5..a1b2ae12fd 100644
+--- a/package/localedef/2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e/localedef.hash
++++ b/package/localedef/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/localedef.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  a105837271b66e92f1ed4a5f10f3bb9e993842d592f67d352c6637126bd3d58c  glibc-2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e.tar.gz
++sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
  
--LIBUHTTPD_VERSION = 3.3.0
-+LIBUHTTPD_VERSION = 3.3.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 8eefb84a29..413e3acb65 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.31-49-g6f3459f9859a7b506c64fa1823769ab631072c6e
++LOCALEDEF_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
