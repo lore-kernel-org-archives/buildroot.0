@@ -1,46 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Oct 2020 21:40:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.4
-Message-ID: <20201004194030.1508768-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Oct 2020 21:43:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbedtls: custom configuration
+ file
+In-Reply-To: <CAFfn7UnFz=5Da91iWqwyE9m6VWpiOUsstGWe4mp3FpgE==UQ7w@mail.gmail.com>
+References: <20200928092945.584196-1-pieter.degendt@basalte.be>
+ <20200930215728.181df33f@windsurf.home>
+ <CAFfn7Uk3-cwCEs=TeP5jLvUgyk3Hf0E8KjiY0z2MKda+AtBKiQ@mail.gmail.com>
+ <20201001193142.GC11621@scaer>
+ <CAFfn7UnFz=5Da91iWqwyE9m6VWpiOUsstGWe4mp3FpgE==UQ7w@mail.gmail.com>
+Message-ID: <20201004194321.GL11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.mail-archive.com/haproxy at formilux.org/msg38543.html
-http://www.haproxy.org/download/2.2/src/CHANGELOG
+Pieter, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2020-10-02 09:16 +0200, Pieter De Gendt spake thusly:
+> On Thu, Oct 1, 2020 at 9:31 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2020-10-01 09:29 +0200, Pieter De Gendt spake thusly:
+> > > Applying tweaks on the custom config also feels a bit awkward, since
+> > > you already
+> > > took the effort of creating the custom config and the "sed" commands might not
+> > > even apply.
+> > But that is what we are doing with the user-provided configuration files
+> > for:
+> >   - uClibc-ng
+> >   - the linux kernel
+> >   - busybox
+> >   - uboot
+> >   - and probably a few others as well...
+[--SNIP--]
+> The packages you list have a kconfig provided by the package itself,
+> for mbedtls it's
+> simply a header file. Do you suggest adding this, and maintaining it
+> within buildroot?
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index a1da516b0b..a127af9195 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.2.tar.gz.sha256
--sha256  391c705a46c6208a63a67ea842c6600146ca24618531570c89c7915b0c6a54d6  haproxy-2.2.2.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
-+sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 3ceb761c94..70ff997fbe 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+What I suggest, and what I think Thomas would also suggest, is that the
+user-supplied configuration file is copied over the one bundled in the
+mbedtls source tree, then our tweaks are applied.
+
+If the user does not supply any configuration file, we do as we do
+today.
+
+Basically, tht would be that patch (mbedtls.mk only):
+
+    diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+    index 5094434e6c..487fe9a310 100644
+    --- a/package/mbedtls/mbedtls.mk
+    +++ b/package/mbedtls/mbedtls.mk
+    @@ -13,6 +13,14 @@ MBEDTLS_INSTALL_STAGING = YES
+     MBEDTLS_LICENSE = Apache-2.0
+     MBEDTLS_LICENSE_FILES = apache-2.0.txt
+     
+    +MBEDTLS_CONFIG_H = $(call qstrip,$(BR2_PACKAGE_MBEDTLS_CONFIG_H))
+    +ifneq ($(MBEDTLS_CONFIG_H),)
+    +define MBEDTLS_INSTALL_CONFIG_H
+    +	cp $(MBEDTLS_INSTALL_CONFIG_H) $(@D)/include/mbedtls/config.h
+    +endef
+    +MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_INSTALL_CONFIG_H
+    +endif
+    +
+     # This is mandatory for hiawatha
+     ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+     define MBEDTLS_ENABLE_THREADING
+
+Note however, that mbedtls uses a mix of _POST_PATCH and _POST_CONFIGURE
+hooks to tweak config.h; this is not very sound. Instead, they should all
+be switched over to using _POST_CONFIGURE hooks, except for hte copy of
+the user supplied file, which should stay a post-patch hook.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
