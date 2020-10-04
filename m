@@ -1,63 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 11:39:17 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver-xf86-video-ati: Fix
- link failure with gcc 10
-Message-ID: <20201004094312.CF49384777@busybox.osuosl.org>
+Date: Sun, 4 Oct 2020 11:19:57 +0200
+Subject: [Buildroot] [git commit] package/numactl: bump to version 2.0.14
+Message-ID: <20201004094312.32A8C8D696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4d0a036701b9418c59c0a251d2af45e5b8569d9
+commit: https://git.buildroot.net/buildroot/commit/?id=6ec31130740b3317ea5b5f5b5fcd6ba13f973822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport an upstream patch.
+Also update hash file formatting (2 spaces)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Fix-link-failure-with-gcc-10.patch        | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/numactl/numactl.hash | 4 ++--
+ package/numactl/numactl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
-new file mode 100644
-index 0000000000..b7a66c5c27
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
-@@ -0,0 +1,35 @@
-+From f223035f4ffcff2a9296d1e907a5193f8e8845a3 Mon Sep 17 00:00:00 2001
-+From: Adam Jackson <ajax@redhat.com>
-+Date: Tue, 4 Feb 2020 16:38:06 -0500
-+Subject: [PATCH xf86-video-ati] Fix link failure with gcc 10
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Without the 'extern' this looks like a definition not just a
-+declaration, in every file that includes the header. gcc 10 is stricter
-+about this kind of multiple definition.
-+
-+Reviewed-by: Michel D??nzer <mdaenzer@redhat.com>
-+[backport from upstream: f223035f4ffcff2a9296d1e907a5193f8e8845a3]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/drmmode_display.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/drmmode_display.h b/src/drmmode_display.h
-+index 96eaef0a..8cd8a0a6 100644
-+--- a/src/drmmode_display.h
-++++ b/src/drmmode_display.h
-+@@ -262,7 +262,7 @@ Bool drmmode_wait_vblank(xf86CrtcPtr crtc, drmVBlankSeqType type,
-+ 			 uint64_t *ust, uint32_t *result_seq);
-+ 
-+ 
-+-miPointerSpriteFuncRec drmmode_sprite_funcs;
-++extern miPointerSpriteFuncRec drmmode_sprite_funcs;
-+ 
-+ 
-+ #endif
-+-- 
-+2.25.4
-+
+diff --git a/package/numactl/numactl.hash b/package/numactl/numactl.hash
+index 61cb94b3b3..802175d360 100644
+--- a/package/numactl/numactl.hash
++++ b/package/numactl/numactl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 97ee012b2f294903530424b4ff7f28bcaad6a356897ce8777383f87e5c2e325d        numactl-2.0.13.tar.gz
+-sha256 e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575        README.md
++sha256  1ee27abd07ff6ba140aaf9bc6379b37825e54496e01d6f7343330cf1a4487035  numactl-2.0.14.tar.gz
++sha256  e2b738b1303c088421b09933a78c1326fe43692e2c05a7c510a2eb7e7a8eb575  README.md
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index 4d3ceeb6c7..d0dd5c26f4 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NUMACTL_VERSION = 2.0.13
++NUMACTL_VERSION = 2.0.14
+ NUMACTL_SITE = $(call github,numactl,numactl,v$(NUMACTL_VERSION))
+ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+ NUMACTL_LICENSE_FILES = README.md
