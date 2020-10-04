@@ -1,68 +1,299 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 12:44:18 +0200
-Subject: [Buildroot] [git commit] package/live555: fix static build with
- openssl
-Message-ID: <20201004103503.4586A8105D@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Oct 2020 12:50:38 +0200
+Subject: [Buildroot] [PATCH 2020.02.x,
+ 1/1] package/memcached: security bump to version 1.5.22
+Message-ID: <20201004105038.407926-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb7a22db6bcfce89848540e5f3a1618fedb54eef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Fix a security issue: When enabling SASL authentication for binary
+  protocol, enabling UDP mode would allow bypassing SASL. Now refuses
+  to start with both UDP and SASL enabled. Text mode authentication was
+  not vulnerable.
+- Drop patches (already in version) and so autoreconf
+- Update indentation in hash file (two spaces)
 
-Use pkg-config to retrieve openssl static dependencies such as -lz or
--latomic.
-
-Moreover, don't pass the openssl libraries to LIBS_FOR_LIVEMEDIA_LIB
-when linking statically with ar or the build will break on:
-
-/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar cr libliveMedia.a  \
-	Media.o MediaSource.o FramedSource.o FramedFileSource.o FramedFilter.o ByteStreamFileSource.o ByteStreamMultiFileSource.o ByteStreamMemoryBufferSource.o BasicUDPSource.o DeviceSource.o AudioInputDevice.o WAVAudioFileSource.o MPEG1or2Demux.o MPEG1or2DemuxedElementaryStream.o MPEGVideoStreamFramer.o MPEG1or2VideoStreamFramer.o MPEG1or2VideoStreamDiscreteFramer.o MPEG4VideoStreamFramer.o MPEG4VideoStreamDiscreteFramer.o H264or5VideoStreamFramer.o H264or5VideoStreamDiscreteFramer.o H264VideoStreamFramer.o H264VideoStreamDiscreteFramer.o H265VideoStreamFramer.o H265VideoStreamDiscreteFramer.o MPEGVideoStreamParser.o MPEG1or2AudioStreamFramer.o MPEG1or2AudioRTPSource.o MPEG4LATMAudioRTPSource.o MPEG4ESVideoRTPSource.o MPEG4GenericRTPSource.o MP3FileSource.o MP3Transcoder.o MP3ADU.o MP3ADUdescriptor.o MP3ADUinterleaving.o MP3ADUTranscoder.o MP3StreamState.o MP3Internals.o MP3InternalsHuffman.o MP3InternalsHuffmanTable.o MP3ADURTPSource.o MPEG1or2VideoRTPSource.o MPEG2TransportStrea
- mMultiplexor.o MPEG2TransportStreamFromPESSource.o MPEG2TransportStreamFromESSource.o MPEG2TransportStreamFramer.o MPEG2TransportStreamAccumulator.o ADTSAudioFileSource.o ADTSAudioStreamDiscreteFramer.o JPEGVideoSource.o JPEGVideoRTPSource.o JPEG2000VideoRTPSource.o H263plusVideoRTPSource.o H263plusVideoStreamFramer.o H263plusVideoStreamParser.o AC3AudioStreamFramer.o AC3AudioRTPSource.o DVVideoStreamFramer.o DVVideoRTPSource.o AMRAudioSource.o AMRAudioFileSource.o InputFile.o StreamReplicator.o MediaSink.o FileSink.o BasicUDPSink.o AMRAudioFileSink.o H264or5VideoFileSink.o H264VideoFileSink.o H265VideoFileSink.o OggFileSink.o MPEG1or2AudioRTPSink.o MP3ADURTPSink.o MPEG1or2VideoRTPSink.o MPEG4LATMAudioRTPSink.o MPEG4GenericRTPSink.o MPEG4ESVideoRTPSink.o JPEGVideoRTPSink.o JPEG2000VideoRTPSink.o H263plusVideoRTPSink.o H264or5VideoRTPSink.o H264VideoRTPSink.o H265VideoRTPSink.o DVVideoRTPSink.o AC3AudioRTPSink.o VorbisAudioRTPSink.o TheoraVideoRTPSink.o VP8VideoRTPSink.o VP9V
- ideoRTPSink.o GSMAudioRTPSink.o SimpleRTPSink.o AMRAudioRTPSink.o T140TextRTPSink.o OutputFile.o RawVideoRTPSink.o uLawAudioFilter.o RTPSource.o MultiFramedRTPSource.o SimpleRTPSource.o H261VideoRTPSource.o H264VideoRTPSource.o H265VideoRTPSource.o QCELPAudioRTPSource.o AMRAudioRTPSource.o VorbisAudioRTPSource.o TheoraVideoRTPSource.o VP8VideoRTPSource.o VP9VideoRTPSource.o RawVideoRTPSource.o RTPSink.o MultiFramedRTPSink.o AudioRTPSink.o VideoRTPSink.o TextRTPSink.o RTPInterface.o RTCP.o rtcp_from_spec.o GenericMediaServer.o RTSPServer.o RTSPServerRegister.o RTSPClient.o RTSPCommon.o RTSPRegisterSender.o SIPClient.o MediaSession.o ServerMediaSession.o PassiveServerMediaSubsession.o OnDemandServerMediaSubsession.o FileServerMediaSubsession.o MPEG4VideoFileServerMediaSubsession.o H264VideoFileServerMediaSubsession.o H265VideoFileServerMediaSubsession.o H263plusVideoFileServerMediaSubsession.o WAVAudioFileServerMediaSubsession.o AMRAudioFileServerMediaSubsession.o MP3AudioFile
- ServerMediaSubsession.o MPEG1or2VideoFileServerMediaSubsession.o MPEG1or2FileServerDemux.o MPEG1or2DemuxedServerMediaSubsession.o MPEG2TransportFileServerMediaSubsession.o ADTSAudioFileServerMediaSubsession.o DVVideoFileServerMediaSubsession.o AC3AudioFileServerMediaSubsession.o MPEG2TransportUDPServerMediaSubsession.o ProxyServerMediaSession.o QuickTimeFileSink.o QuickTimeGenericRTPSource.o AVIFileSink.o MPEG2IndexFromTransportStream.o MPEG2TransportStreamIndexFile.o MPEG2TransportStreamTrickModeFilter.o MatroskaFile.o MatroskaFileParser.o EBMLNumber.o MatroskaDemuxedTrack.o MatroskaFileServerDemux.o MatroskaFileServerMediaSubsession.o MP3AudioMatroskaFileServerMediaSubsession.o OggFile.o OggFileParser.o OggDemuxedTrack.o OggFileServerDemux.o OggFileServerMediaSubsession.o MPEG2TransportStreamDemux.o MPEG2TransportStreamDemuxedTrack.o MPEG2TransportStreamParser.o MPEG2TransportStreamParser_PAT.o MPEG2TransportStreamParser_PMT.o MPEG2TransportStreamParser_STREAM.o HLSSegment
- er.o TLSState.o MIKEY.o SRTPCryptographicContext.o HMAC_SHA1.o BitVector.o StreamParser.o DigestAuthentication.o ourMD5.o Base64.o Locale.o -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssl -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -latomic -lpthread -lcrypto -lz -latomic -lpthread
-/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar: invalid option -- 'L'
-
-Fixes:
- - http://autobuild.buildroot.org/results/1299a05cfaabccc45e2878e969b443a973ec4c9e
+https://github.com/memcached/memcached/wiki/ReleaseNotes1522
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Michael Nosthoff<buildroot@heine.tech>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/live555/live555.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ ...nfigure-Fix-cross-compilation-errors.patch | 142 ------------------
+ ...onfigure-Simplify-pointer-size-check.patch |  76 ----------
+ package/memcached/memcached.hash              |   8 +-
+ package/memcached/memcached.mk                |   5 +-
+ 4 files changed, 5 insertions(+), 226 deletions(-)
+ delete mode 100644 package/memcached/0001-configure-Fix-cross-compilation-errors.patch
+ delete mode 100644 package/memcached/0002-configure-Simplify-pointer-size-check.patch
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 4bbe35d6ea..6218126954 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -27,8 +27,12 @@ LIVE555_CFLAGS += -fPIC
- endif
+diff --git a/package/memcached/0001-configure-Fix-cross-compilation-errors.patch b/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
+deleted file mode 100644
+index 5c5d948325..0000000000
+--- a/package/memcached/0001-configure-Fix-cross-compilation-errors.patch
++++ /dev/null
+@@ -1,142 +0,0 @@
+-From 1146bf07624b5820b942b84b68e66f0d3dd25914 Mon Sep 17 00:00:00 2001
+-From: Ola Jeppsson <ola.jeppsson@gmail.com>
+-Date: Mon, 7 Oct 2019 18:07:30 -0400
+-Subject: [PATCH] configure: Fix cross-compilation errors
+-
+-AC_RUN_IFELSE does not work when cross-compiling so we need to provide
+-fallback methods for those cases.
+-
+-I tried to use constructs that work with Autoconf 2.52.
+-Alas, I wasn't able to generate a working build system with that version.
+-
+-Autoconf 2.58 / Automake 1.7.9 is the earliest combo that I could get
+-to work (with and without this patch).
+-Perhaps it's time for a slight bump for the required version numbers?
+-
+-Cross-compiles sucessfully against:
+-riscv64-unknown-linux-gnu
+-
+-Downloaded from upstream PR:
+-https://github.com/memcached/memcached/pull/552
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac | 80 +++++++++++++++++++++++++++-------------------------
+- 1 file changed, 41 insertions(+), 39 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index fb78fc5..27dc939 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -264,23 +264,42 @@ return sizeof(void*) == 8 ? 0 : 1;
+-     ],[
+-       CFLAGS="-m64 $org_cflags"
+-     ],[
+--    AC_MSG_ERROR([Don't know how to build a 64-bit object.])
+-+      AC_MSG_ERROR([Don't know how to build a 64-bit object.])
+-+    ],[
+-+       dnl cross compile
+-+       AC_MSG_WARN([Assuming no extra CFLAGS are required for cross-compiling 64bit version.])
+-     ])
+- fi
+- 
+- dnl If data pointer is 64bit or not.
+--AC_RUN_IFELSE(
+--  [AC_LANG_PROGRAM([], [dnl
+--return sizeof(void*) == 8 ? 0 : 1;
+--  ])
+--],[
+--  have_64bit_ptr=yes
+--],[
+-+AC_CHECK_HEADERS([stdint.h])
+-+AS_IF([test -z "$have_64bit_ptr"],
+-+  [AC_RUN_IFELSE(
+-+     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
+-+     [have_64bit_ptr=yes ],
+-+     [have_64bit_ptr=no],
+-+     [dnl cross compile (this test requires C99)
+-+      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
+-+        [AC_COMPILE_IFELSE(
+-+           [AC_LANG_PROGRAM([
+-+              #include <stdint.h>
+-+              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
+-+              /* 64 bit pointer */
+-+              #else
+-+              #error 32 bit pointer
+-+              #endif
+-+            ], [])],
+-+            [have_64bit_ptr=yes],
+-+            [have_64bit_ptr=no])],
+-+        [have_64bit_ptr=unknown])
+-+     ])
+- ])
+--
+--if test $have_64bit_ptr = yes; then
+-+AS_IF([test "$have_64bit_ptr" = "unknown" ],[
+-+  AC_MSG_ERROR([Cannot detect pointer size. Must pass have_64bit_ptr={yes,no} to configure.])
+-+])
+-+AS_IF([test "$have_64bit_ptr" = yes],[
+-   AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
+--fi
+-+])
+- 
+- # Issue 213: Search for clock_gettime to help people linking
+- #            with a static version of libevent
+-@@ -570,30 +589,10 @@ fi
+- AC_C_SOCKLEN_T
+- 
+- dnl Check if we're a little-endian or a big-endian system, needed by hash code
+--AC_DEFUN([AC_C_ENDIAN],
+--[AC_CACHE_CHECK(for endianness, ac_cv_c_endian,
+--[
+--  AC_RUN_IFELSE(
+--    [AC_LANG_PROGRAM([], [dnl
+--        long val = 1;
+--        char *c = (char *) &val;
+--        exit(*c == 1);
+--    ])
+--  ],[
+--    ac_cv_c_endian=big
+--  ],[
+--    ac_cv_c_endian=little
+--  ])
+--])
+--if test $ac_cv_c_endian = big; then
+--  AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])
+--fi
+--if test $ac_cv_c_endian = little; then
+--  AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])
+--fi
+--])
+--
+--AC_C_ENDIAN
+-+AC_C_BIGENDIAN(
+-+  [AC_DEFINE(ENDIAN_BIG, 1, [machine is bigendian])],
+-+  [AC_DEFINE(ENDIAN_LITTLE, 1, [machine is littleendian])],
+-+  [AC_MSG_ERROR([Cannot detect endianness. Must pass ac_cv_c_bigendian={yes,no} to configure.])])
+- 
+- AC_DEFUN([AC_C_HTONLL],
+- [
+-@@ -670,12 +669,15 @@ AC_DEFUN([AC_C_ALIGNMENT],
+-   ],[
+-     ac_cv_c_alignment=need
+-   ],[
+--    ac_cv_c_alignment=need
+-+    dnl cross compile
+-+    ac_cv_c_alignment=maybe
+-   ])
+- ])
+--if test $ac_cv_c_alignment = need; then
+--  AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])
+--fi
+-+AS_IF([test $ac_cv_c_alignment = need],
+-+  [AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
+-+AS_IF([test $ac_cv_c_alignment = maybe],
+-+  [AC_MSG_WARN([Assuming aligned access is required when cross-compiling])
+-+   AC_DEFINE(NEED_ALIGN, 1, [Machine need alignment])])
+- ])
+- 
+- AC_C_ALIGNMENT
+--- 
+-2.20.1
+-
+diff --git a/package/memcached/0002-configure-Simplify-pointer-size-check.patch b/package/memcached/0002-configure-Simplify-pointer-size-check.patch
+deleted file mode 100644
+index 1a5dc31963..0000000000
+--- a/package/memcached/0002-configure-Simplify-pointer-size-check.patch
++++ /dev/null
+@@ -1,76 +0,0 @@
+-From ec7f3bc97c53578d5ca332b9e86c4d08d155c5a0 Mon Sep 17 00:00:00 2001
+-From: Ola Jeppsson <ola.jeppsson@gmail.com>
+-Date: Mon, 7 Oct 2019 19:57:46 -0400
+-Subject: [PATCH] configure: Simplify pointer size check
+-
+-Tested with:
+-Autoconf 2.59 / Automake 1.7.9
+-Autoconf 2.69 / Automake 1.16.1
+-
+-Downloaded from upstream PR:
+-https://github.com/memcached/memcached/pull/552
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure.ac | 31 ++-----------------------------
+- restart.h    |  2 +-
+- 2 files changed, 3 insertions(+), 30 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 27dc939..7e5bd5d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -271,35 +271,8 @@ return sizeof(void*) == 8 ? 0 : 1;
+-     ])
+- fi
+- 
+--dnl If data pointer is 64bit or not.
+--AC_CHECK_HEADERS([stdint.h])
+--AS_IF([test -z "$have_64bit_ptr"],
+--  [AC_RUN_IFELSE(
+--     [AC_LANG_PROGRAM([], [return sizeof(void*) == 8 ? 0 : 1;])],
+--     [have_64bit_ptr=yes ],
+--     [have_64bit_ptr=no],
+--     [dnl cross compile (this test requires C99)
+--      AS_IF([test "x$ac_cv_header_stdint_h" = xyes],
+--        [AC_COMPILE_IFELSE(
+--           [AC_LANG_PROGRAM([
+--              #include <stdint.h>
+--              #if UINTPTR_MAX == 0xFFFFFFFFFFFFFFFFUL
+--              /* 64 bit pointer */
+--              #else
+--              #error 32 bit pointer
+--              #endif
+--            ], [])],
+--            [have_64bit_ptr=yes],
+--            [have_64bit_ptr=no])],
+--        [have_64bit_ptr=unknown])
+--     ])
+--])
+--AS_IF([test "$have_64bit_ptr" = "unknown" ],[
+--  AC_MSG_ERROR([Cannot detect pointer size. Must pass have_64bit_ptr={yes,no} to configure.])
+--])
+--AS_IF([test "$have_64bit_ptr" = yes],[
+--  AC_DEFINE(HAVE_64BIT_PTR, 1, [data pointer is 64bit])
+--])
+-+dnl Check if data pointer is 64bit or not
+-+AC_CHECK_SIZEOF([void *])
+- 
+- # Issue 213: Search for clock_gettime to help people linking
+- #            with a static version of libevent
+-diff --git a/restart.h b/restart.h
+-index 76cd0a8..9de5096 100644
+---- a/restart.h
+-+++ b/restart.h
+-@@ -4,7 +4,7 @@
+- #define RESTART_TAG_MAXLEN 255
+- 
+- // Track the pointer size for restart fiddling.
+--#ifdef HAVE_64BIT_PTR
+-+#if SIZEOF_VOID_P == 8
+-     typedef uint64_t mc_ptr_t;
+- #else
+-     typedef uint32_t mc_ptr_t;
+--- 
+-2.20.1
+-
+diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
+index 98e47d6c07..e599cd2fa2 100644
+--- a/package/memcached/memcached.hash
++++ b/package/memcached/memcached.hash
+@@ -1,6 +1,6 @@
+-# From http://www.memcached.org/files/memcached-1.5.19.tar.gz.sha1
+-sha1 14e6a02e743838696fcb620edf6a2fd7e60cabec  memcached-1.5.19.tar.gz
++# From http://www.memcached.org/files/memcached-1.5.22.tar.gz.sha1
++sha1  3fe5d3929130e860efcfde18d4d396a29db006b7  memcached-1.5.22.tar.gz
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIVE555_DEPENDENCIES += openssl
--LIVE555_LIBS = -lssl -lcrypto
-+LIVE555_DEPENDENCIES += host-pkgconf openssl
-+LIVE555_CONSOLE_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
-+# passed to ar for static linking, which gets confused by -L<dir>
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LIVE555_LIVEMEDIA_LIBS = $(LIVE555_CONSOLE_LIBS)
-+endif
- else
- LIVE555_CFLAGS += -DNO_OPENSSL
- endif
-@@ -48,8 +52,8 @@ define LIVE555_CONFIGURE_CMDS
- 	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
- 	# fails
- 	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_CONSOLE_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIVEMEDIA_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
- 	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
- endef
+ # Locally computed
+-sha256 3ddcdaa2d14d215f3111a7448b79c889c57618a26e97ad989581f1880a5a4be0  memcached-1.5.19.tar.gz
+-sha256 bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
++sha256  c2b47e9d20575a2367087c229636ffc3fb699a6c3a7f3a22f44402f25f5f1f93  memcached-1.5.22.tar.gz
++sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 9b362d2a36..8a980677ce 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -4,16 +4,13 @@
+ #
+ ################################################################################
  
+-MEMCACHED_VERSION = 1.5.19
++MEMCACHED_VERSION = 1.5.22
+ MEMCACHED_SITE = http://www.memcached.org/files
+ MEMCACHED_DEPENDENCIES = libevent
+ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ MEMCACHED_CONF_OPTS = --disable-coverage
+ MEMCACHED_LICENSE = BSD-3-Clause
+ MEMCACHED_LICENSE_FILES = COPYING
+-# 0001-configure-Fix-cross-compilation-errors.patch
+-# 0002-configure-Simplify-pointer-size-check.patch
+-MEMCACHED_AUTORECONF = YES
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MEMCACHED_CONF_ENV += ac_cv_c_endian=big
+-- 
+2.28.0
