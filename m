@@ -1,29 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2020 12:45:18 +0200
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/vlc: fix build with live555 and without openssl
-In-Reply-To: <20200713155135.1214109-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 13 Jul 2020 17:51:35 +0200")
-References: <20200713155135.1214109-1-fontaine.fabrice@gmail.com>
- <20200713155135.1214109-2-fontaine.fabrice@gmail.com>
-Message-ID: <871ries20x.fsf@dell.be.48ers.dk>
+Date: Sun, 4 Oct 2020 12:45:09 +0200
+Subject: [Buildroot] [git commit] package/vlc: fix build with live555 and
+ without openssl
+Message-ID: <20201004103503.549A28E4F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e0fb418f781b69b8a0a0c953bf00a2965d675c43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Pass -DNO_OPENSSL to avoid a build failure with live555 but without
- > openssl
+Pass -DNO_OPENSSL to avoid a build failure with live555 but without
+openssl
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/70ca93aa5c9488a4657c7bcafa40bfb2e974a5b3
+Fixes:
+ - http://autobuild.buildroot.org/results/70ca93aa5c9488a4657c7bcafa40bfb2e974a5b3
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vlc/vlc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 38d9751690..ccaaa6cd6d 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -440,6 +440,9 @@ endif
+ ifeq ($(BR2_PACKAGE_LIVE555),y)
+ VLC_CONF_OPTS += --enable-live555
+ VLC_DEPENDENCIES += live555
++ifneq ($(BR2_PACKAGE_OPENSSL),y)
++VLC_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DNO_OPENSSL"
++endif
+ else
+ VLC_CONF_OPTS += --disable-live555
+ endif
