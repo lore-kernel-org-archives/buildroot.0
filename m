@@ -1,20 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Oct 2020 20:45:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.9
-In-Reply-To: <20201004155650.1613501-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 4 Oct 2020 17:56:50 +0200")
-References: <20201004155650.1613501-1-bernd.kuhls@t-online.de>
-Message-ID: <87sgatrfta.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Oct 2020 20:45:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: bump to version
+ 5.44
+In-Reply-To: <20201004154215.1321728-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 4 Oct 2020 17:42:15 +0200")
+References: <20201004154215.1321728-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8lhrft4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > - Update indentation in hash file (two spaces)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
