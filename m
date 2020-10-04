@@ -1,63 +1,47 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun, 4 Oct 2020 13:59:46 +0200
-Subject: [Buildroot] [PATCH v2 1/4] boot/uboot: add stm32 binary format
-In-Reply-To: <20201002142426.1375026-1-shlomi.39sd@gmail.com>
-References: <20200927061606.10239-1-shlomi.39sd@gmail.com>
- <20201002142426.1375026-1-shlomi.39sd@gmail.com>
-Message-ID: <a059c60c-b081-7753-50b3-e6f4d5533022@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Oct 2020 15:07:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hiawatha: bump to version 10.11
+Message-ID: <20201004130755.519924-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Shlomi,
+- Default value of MinTLSversion set to 1.2.
+- mbed TLS updated to 2.23.0.
+- Small bugfixes.
 
-On 02.10.2020 16:24, Shlomi Vaknin wrote:
-> Add `.stm32` binary format that uboot generates for the trusted configuration.
->
-> Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
-> ---
->   boot/uboot/Config.in | 4 ++++
->   boot/uboot/uboot.mk  | 5 +++++
->   2 files changed, 9 insertions(+)
->
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index a87a642581..d317624fb6 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -267,6 +267,10 @@ config BR2_TARGET_UBOOT_FORMAT_KWB
->   	bool "u-boot.kwb (Marvell)"
->   	depends on BR2_arm
->   
-> +config BR2_TARGET_UBOOT_FORMAT_STM32
-> +        bool "u-boot.stm32"
-> +        depends on BR2_arm
-> +
-The indents seem to be wrong and that option is not sorted alphabetically.
+- Update indentation in hash file (two spaces)
 
-Anyway here is my:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/hiawatha/hiawatha.hash | 4 ++--
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested-by: Bartosz Bilas <b.bilas@grinn-global.com>
-
-Best
-Bartek
->   config BR2_TARGET_UBOOT_FORMAT_ELF
->   	bool "u-boot.elf"
->   
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 1831466780..080e6beb08 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -62,6 +62,11 @@ UBOOT_BINS += u-boot.kwb
->   UBOOT_MAKE_TARGET += u-boot.kwb
->   endif
->   
-> +ifeq ($(BR2_TARGET_UBOOT_FORMAT_STM32),y)
-> +UBOOT_BINS += u-boot.stm32
-> +UBOOT_MAKE_TARGET += u-boot.stm32
-> +endif
-> +
->   ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
->   UBOOT_BINS += u-boot.ais
->   UBOOT_MAKE_TARGET += u-boot.ais
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 359a435420..2fba5600a2 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b5e46f5757fa647e77d21d24f7eea912d59f26a75558cba780b45c1c3a33a4d9  hiawatha-10.10.tar.gz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
++sha256  79d85d165d68dd7043bbd337f5bc7dd10d8632d68ba61d0e557f84bd687c9727  hiawatha-10.11.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 01b9292035..126cb71105 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HIAWATHA_VERSION = 10.10
++HIAWATHA_VERSION = 10.11
+ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
+-- 
+2.28.0
