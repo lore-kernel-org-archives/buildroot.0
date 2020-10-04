@@ -1,62 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Oct 2020 20:44:03 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.9
-Message-ID: <20201004190202.BC9338E1BE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Oct 2020 21:30:36 +0200
+Subject: [Buildroot] [git commit] boot/barebox: fix target bareboxenv
+ command compile
+Message-ID: <20201004192026.749E987660@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e56dbc12c39c2225eb69322cc8d414089ac580bb
+commit: https://git.buildroot.net/buildroot/commit/?id=3cc2534b577eb453c50a4b3386d88a006007a9d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+The buildroot custom bareboxenv compile command misses the additional
+include path 'scripts/include' to gain access to the local copy of the
+kernel header files (which leads to compile error when using an older
+toolchain).
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 663667ed4d..ee0afd0c47 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+This could be fixed by enhancing the custom bareboxenv compile command
+(see [1]) or by using the barebox build system by simply enabling the
+CONFIG_BAREBOXENV_TARGET option (available since April 2012, see [2])
+instead (as suggested by Yann E. MORIN).
+
+Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
+
+  build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-January/270942.html
+[2] https://git.pengutronix.de/cgit/barebox/commit/?id=afb03d7a554a2911a3742e316f011319fcb416f1
+
+Note: a user who would previously provide a barebox config file which
+had CONFIG_BAREBOXENV_TARGET=y, but a Buildroot config file which did
+not have BR2_TARGET_BAREBOX_BAREBOXENV=y, would have bareboxenv-target
+built, but it would not be installed in the target. Now, and unset
+BR2_TARGET_BAREBOX_BAREBOXENV will not even build it, but his is not a
+regression: it was anyway previously not installed.
+
+Reported-by: Frederick Gotham <cauldwell.thomas@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - also explicitly disable it when not selected
+  - rewrap commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/barebox/barebox.mk | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
+
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 422f27312d..9d62037e7a 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -88,13 +88,6 @@ $(1)_KCONFIG_DEPENDENCIES = \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.1.8
-+MESA3D_HEADERS_VERSION = 20.1.9
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 9d640295df..eb7676e564 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000599.html
--sha256 df21351494f7caaec5a3ccc16f14f15512e98d2ecde178bba1d134edc899b961  mesa-20.1.8.tar.xz
--sha512 519b0e2837982d097c362d974a90c94efd1cdf14505fc43eaa740a23c042bc0c3f04d0edaf6b371966d82667cade6d0c68c92528e1be6c12884b38c67fd064c1  mesa-20.1.8.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000601.html
-+sha256  b251ca0769b722058986640d48f8457c596142cfbee1a83cba91b83391427382  mesa-20.1.9.tar.xz
-+sha512  0fb8ceff3c91ad2076efb0b2ac7e95d2d72ff1df955eb8fedf712ceaa7f49184eae9958072edd872f5c38adbaeb867988f67627b33da8b208706f69325d7e260  mesa-20.1.9.tar.xz
+-ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+-define $(1)_BUILD_BAREBOXENV_CMDS
+-	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+-		$$(@D)/scripts/bareboxenv.c
+-endef
+-endif
+-
+ ifeq ($$(BR2_TARGET_$(1)_CUSTOM_ENV),y)
+ $(1)_ENV_NAME = $$(notdir $$(call qstrip,\
+ 	$$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)))
+@@ -109,12 +102,23 @@ endef
+ endif
  
- # License
- sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 55c0ebd86a..96ed3037b4 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
+-define $(1)_KCONFIG_FIXUP_CMDS
++define $(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH
+ 	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
+ 	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
+ endef
+ endif
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.1.8
-+MESA3D_VERSION = 20.1.9
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
++define $(1)_KCONFIG_FIXUP_BAREBOXENV
++	$$(if $$(BR2_TARGET_$(1)_BAREBOXENV),\
++		$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET),\
++		$$(call KCONFIG_DISABLE_OPT,CONFIG_BAREBOXENV_TARGET))
++endef
++
++define $(1)_KCONFIG_FIXUP_CMDS
++	$$($(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH)
++	$$($(1)_KCONFIG_FIXUP_BAREBOXENV)
++endef
++
+ define $(1)_BUILD_CMDS
+ 	$$($(1)_BUILD_BAREBOXENV_CMDS)
+ 	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
+@@ -136,7 +140,7 @@ endef
+ 
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_INSTALL_TARGET_CMDS
+-	cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
++	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
+ endef
+ endif
+ 
