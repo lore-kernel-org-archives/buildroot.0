@@ -1,35 +1,61 @@
 From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Mon,  5 Oct 2020 13:19:49 +0300
-Subject: [Buildroot] [PATCH 0/2] package/timescaledb: new package
-Message-ID: <20201005101951.3112095-1-fido_max@inbox.ru>
+Date: Mon,  5 Oct 2020 13:19:50 +0300
+Subject: [Buildroot] [PATCH 1/2] package/postgresql: add configure and
+ includedir-server output to pg_config
+In-Reply-To: <20201005101951.3112095-1-fido_max@inbox.ru>
+References: <20201005101951.3112095-1-fido_max@inbox.ru>
+Message-ID: <20201005101951.3112095-2-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds timescaledb v1.7.4:
+Some external packages call pg_config to determine the installed PostgreSQL
+version. Add this output to Buildroots own pg_config, so these packages
+correctly compile.
 
-TimescaleDB is an open-source database designed to make SQL scalable
-for time-series data. It is engineered up from PostgreSQL and packaged
-as a PostgreSQL extension, providing automatic partitioning across time
-and space (partitioning key), as well as full SQL support.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/postgresql/pg_config     | 8 +++++++-
+ package/postgresql/postgresql.mk | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-Maxim Kochetkov (2):
-  package/postgresql: add configure and includedir-server output to
-    pg_config
-  package/timescaledb: new package
-
- package/Config.in                    |  1 +
- package/postgresql/pg_config         |  8 +++++++-
- package/postgresql/postgresql.mk     |  1 +
- package/timescaledb/Config.in        | 11 +++++++++++
- package/timescaledb/timescaledb.hash |  3 +++
- package/timescaledb/timescaledb.mk   | 22 ++++++++++++++++++++++
- 6 files changed, 45 insertions(+), 1 deletion(-)
- create mode 100644 package/timescaledb/Config.in
- create mode 100644 package/timescaledb/timescaledb.hash
- create mode 100644 package/timescaledb/timescaledb.mk
-
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+index 642252f27f..59a9e6cfad 100644
+--- a/package/postgresql/pg_config
++++ b/package/postgresql/pg_config
+@@ -11,12 +11,18 @@ case "$1" in
+   --includedir)
+ 	echo "$prefix/include"
+ 	;;
++  --includedir-server)
++	echo "$prefix/include/postgresql/server"
++	;;
+   --libdir)
+ 	echo "$prefix/lib"
+ 	;;
+   --version)
+ 	echo "PostgreSQL @POSTGRESQL_VERSION@"
+ 	;;
++  --configure)
++	echo "@POSTGRESQL_CONF_OPTIONS@"
++	;;
+   *)
+-	echo "Usage: $0 {--includedir|--libdir|--version}"
++	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
+ esac
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 18c7b2ade4..3630b5a385 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -115,6 +115,7 @@ POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
+ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+ 	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
+ 		$(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
+ 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
+ endef
+ 
 -- 
 2.27.0
