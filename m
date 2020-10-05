@@ -1,78 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:09:43 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x]
- support/scripts/setlocalversion: fix/improve Mercurial output
-Message-ID: <20201005060154.44F8F8EB9E@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:06:50 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/lua: split hash
+ files, add license hash for 5.3 / 5.4
+Message-ID: <20201005060154.3A2B88EBA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f15df857d06d55ba9d5e58d0b21dbe9a42dbf39c
+commit: https://git.buildroot.net/buildroot/commit/?id=ef72ebf3aaec4a78cc247a942162518dbd195e20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 modified the output of
-'setlocalversion' so that the Buildroot version tag is included in the
-output, the version part was added in Makefile.
+The content of the license file (doc/readme.html) differs between lua 5.3
+and 5.4, so we cannot use a shared .hash file for all versions.
 
-Due to differences in behavior of the used git and Mercurial commands, this
-caused different output for the Mercurial case, in BR2_VERSION_FULL and thus
-/etc/os-release and 'make print-version'. Assuming the official Buildroot
-releases are tagged and no project-specific tags are present, the output
-after commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 is:
-    -hg<commit>
-whereas it is expected to be something like:
-    2020.02.6-hg<commit>
-
-Change the Mercurial case in setlocalversion to behave similar to git,
-looking up the latest tag if the current revision is not itself tagged.
-
-The number of commits after the latest tag is not added, unlike in git, as
-this value is not commonly present in Mercurial output, and its added value
-can be disputed in this context. Even one commit could bring a huge change
-to the sources, so in order to interpret the number one has to look at the
-repository anyhow, in which case the commit ID can just be used.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Peter: extend commit message]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 32eb5a1d16559d147e610e5158154ed9518f63e1)
+(cherry picked from commit 036c41db1ad0132063eaf76701719ffffe3f973c)
+[Peter: drop 5.4]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ package/lua/5.1.5/lua.hash | 6 ++++++
+ package/lua/5.3.6/lua.hash | 6 ++++++
+ package/lua/lua.hash       | 9 ---------
+ 3 files changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index e04c955d9e..d492f2db2f 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -48,14 +48,28 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
- 
- # Check for mercurial and a mercurial repo.
-+# In the git case, 'git describe' will show the latest tag, and unless we are
-+# exactly on that tag, the number of commits since then, and last commit id.
-+# Mimic something similar in the Mercurial case.
- if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
- 
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
-+		# current revision is not tagged, determine latest tag
-+		latesttag=`HGRCPATH= hg log -r. -T '{latesttag}' 2>/dev/null`
-+		# In case there is more than one tag on the latest tagged commit,
-+		# 'latesttag' will separate them by colon (:). We'll retain this.
-+		# In case there is no tag at all, 'null' will be returned.
-+		if [ "$latesttag" = "null" ]; then
-+			latesttag=''
-+		fi
+diff --git a/package/lua/5.1.5/lua.hash b/package/lua/5.1.5/lua.hash
+new file mode 100644
+index 0000000000..22ff8b7dad
+--- /dev/null
++++ b/package/lua/5.1.5/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: http://www.lua.org/ftp/
++md5  2e115fe26e435e33b0d5c022e4490567  lua-5.1.5.tar.gz
++sha1  b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
 +
-+		# add the commit id
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
--		printf '%s%s' -hg "$id"
-+		printf '%s%s%s' "${latesttag}" -hg "$id"
- 	else
-+		# current revision is tagged, just print the tag
- 		printf ${tag}
- 	fi
- 
++# Locally computed
++sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
+diff --git a/package/lua/5.3.6/lua.hash b/package/lua/5.3.6/lua.hash
+new file mode 100644
+index 0000000000..74849b3101
+--- /dev/null
++++ b/package/lua/5.3.6/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: http://www.lua.org/ftp/
++md5  83f23dbd5230140a3770d5f54076948d  lua-5.3.6.tar.gz
++sha1  f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
++
++# Locally computed
++sha256  2ddff2161e0c4487d744943565538743c0721485873092f6809d072a983b06ef  doc/readme.html
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+deleted file mode 100644
+index 319d305692..0000000000
+--- a/package/lua/lua.hash
++++ /dev/null
+@@ -1,9 +0,0 @@
+-# Hashes from: http://www.lua.org/ftp/
+-md5 83f23dbd5230140a3770d5f54076948d           lua-5.3.6.tar.gz
+-sha1 f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
+-
+-md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
+-sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
+-
+-# Locally computed
+-sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
