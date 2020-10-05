@@ -1,78 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:09:33 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x]
- support/scripts/setlocalversion: fix/improve Mercurial output
-Message-ID: <20201005060211.432278EB9E@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:04:04 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-fire.mk:
+ drop test_components_py3.py file for python 2.x to fix pyfile issue
+Message-ID: <20201005060211.28C2A8EB9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b59dc03544f773b1103e8db3c9df591a8dfe9b0
+commit: https://git.buildroot.net/buildroot/commit/?id=9e5f973ea79f5de7963434ca3df6fd224878a1f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 modified the output of
-'setlocalversion' so that the Buildroot version tag is included in the
-output, the version part was added in Makefile.
+Fixes:
+http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
 
-Due to differences in behavior of the used git and Mercurial commands, this
-caused different output for the Mercurial case, in BR2_VERSION_FULL and thus
-/etc/os-release and 'make print-version'. Assuming the official Buildroot
-releases are tagged and no project-specific tags are present, the output
-after commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 is:
-    -hg<commit>
-whereas it is expected to be something like:
-    2020.02.6-hg<commit>
+fire has conditional logic to load test_components_py3.py when running under
+Python 3.x:
 
-Change the Mercurial case in setlocalversion to behave similar to git,
-looking up the latest tag if the current revision is not itself tagged.
+if six.PY3:
+  from fire import test_components_py3 as py3
 
-The number of commits after the latest tag is not added, unlike in git, as
-this value is not commonly present in Mercurial output, and its added value
-can be disputed in this context. Even one commit could bring a huge change
-to the sources, so in order to interpret the number one has to look at the
-repository anyhow, in which case the commit ID can just be used.
+pycompile unfortunately errors out on it:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+../scripts/pycompile.py ..
+
+error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
+    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
+                           ^
+SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+building for python 2.x.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 32eb5a1d16559d147e610e5158154ed9518f63e1)
+(cherry picked from commit 6bfedaf57798c12f0e6279b8361fd5ec4244db8c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ package/python-fire/python-fire.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index e04c955d9e..d492f2db2f 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -48,14 +48,28 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
+diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+index 6471a4d143..5f41a83f75 100644
+--- a/package/python-fire/python-fire.mk
++++ b/package/python-fire/python-fire.mk
+@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
+ PYTHON_FIRE_LICENSE = Apache-2.0
+ PYTHON_FIRE_LICENSE_FILES = LICENSE
  
- # Check for mercurial and a mercurial repo.
-+# In the git case, 'git describe' will show the latest tag, and unless we are
-+# exactly on that tag, the number of commits since then, and last commit id.
-+# Mimic something similar in the Mercurial case.
- if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
- 
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
-+		# current revision is not tagged, determine latest tag
-+		latesttag=`HGRCPATH= hg log -r. -T '{latesttag}' 2>/dev/null`
-+		# In case there is more than one tag on the latest tagged commit,
-+		# 'latesttag' will separate them by colon (:). We'll retain this.
-+		# In case there is no tag at all, 'null' will be returned.
-+		if [ "$latesttag" = "null" ]; then
-+			latesttag=''
-+		fi
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_FIRE_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
++endef
 +
-+		# add the commit id
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
--		printf '%s%s' -hg "$id"
-+		printf '%s%s%s' "${latesttag}" -hg "$id"
- 	else
-+		# current revision is tagged, just print the tag
- 		printf ${tag}
- 	fi
- 
++PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
