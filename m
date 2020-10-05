@@ -1,78 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:09:38 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
- support/scripts/setlocalversion: fix/improve Mercurial output
-Message-ID: <20201005060201.1E06F8D696@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:10:52 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/php: security
+ bump to version 7.4.11
+Message-ID: <20201005060201.345AA8D696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29b869162b7ef3c1dd625602708e097ecd03c722
+commit: https://git.buildroot.net/buildroot/commit/?id=32cec2af363db4c0a9cfcdbc1d28a69760371014
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 modified the output of
-'setlocalversion' so that the Buildroot version tag is included in the
-output, the version part was added in Makefile.
+- Fix CVE-2020-7069: In PHP versions 7.2.x below 7.2.34, 7.3.x below
+  7.3.23 and 7.4.x below 7.4.11, when AES-CCM mode is used with
+  openssl_encrypt() function with 12 bytes IV, only first 7 bytes of the
+  IV is actually used. This can lead to both decreased security and
+  incorrect encryption data.
+- Fix CVE-2020-7070: In PHP versions 7.2.x below 7.2.34, 7.3.x below
+  7.3.23 and 7.4.x below 7.4.11, when PHP is processing incoming HTTP
+  cookie values, the cookie names are url-decoded. This may lead to
+  cookies with prefixes like __Host confused with cookies that decode to
+  such prefix, thus leading to an attacker being able to forge cookie
+  which is supposed to be secure. See also CVE-2020-8184 for more
+  information.
 
-Due to differences in behavior of the used git and Mercurial commands, this
-caused different output for the Mercurial case, in BR2_VERSION_FULL and thus
-/etc/os-release and 'make print-version'. Assuming the official Buildroot
-releases are tagged and no project-specific tags are present, the output
-after commit 9e4ffdc8cfdf4c73f4fa8c66259a5aadaee4ae88 is:
-    -hg<commit>
-whereas it is expected to be something like:
-    2020.02.6-hg<commit>
+https://www.php.net/ChangeLog-7.php#7.4.11
 
-Change the Mercurial case in setlocalversion to behave similar to git,
-looking up the latest tag if the current revision is not itself tagged.
-
-The number of commits after the latest tag is not added, unlike in git, as
-this value is not commonly present in Mercurial output, and its added value
-can be disputed in this context. Even one commit could bring a huge change
-to the sources, so in order to interpret the number one has to look at the
-repository anyhow, in which case the commit ID can just be used.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 32eb5a1d16559d147e610e5158154ed9518f63e1)
+(cherry picked from commit 51d9617474db14e4757ca3a340deccc1dc3df6c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/setlocalversion | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index e04c955d9e..d492f2db2f 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -48,14 +48,28 @@ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
- fi
+diff --git a/package/php/php.hash b/package/php/php.hash
+index c383c471eb..77a0feb555 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
++sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
  
- # Check for mercurial and a mercurial repo.
-+# In the git case, 'git describe' will show the latest tag, and unless we are
-+# exactly on that tag, the number of commits since then, and last commit id.
-+# Mimic something similar in the Mercurial case.
- if hgid=`HGRCPATH= hg id --id --tags 2>/dev/null`; then
- 	tag=`printf '%s' "$hgid" | cut -d' ' -f2 --only-delimited`
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 7b59ac654d..011c9019c5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	# Do we have an untagged version?
- 	if [ -z "$tag" -o "$tag" = tip ]; then
-+		# current revision is not tagged, determine latest tag
-+		latesttag=`HGRCPATH= hg log -r. -T '{latesttag}' 2>/dev/null`
-+		# In case there is more than one tag on the latest tagged commit,
-+		# 'latesttag' will separate them by colon (:). We'll retain this.
-+		# In case there is no tag at all, 'null' will be returned.
-+		if [ "$latesttag" = "null" ]; then
-+			latesttag=''
-+		fi
-+
-+		# add the commit id
- 		id=`printf '%s' "$hgid" | sed 's/[+ ].*//'`
--		printf '%s%s' -hg "$id"
-+		printf '%s%s%s' "${latesttag}" -hg "$id"
- 	else
-+		# current revision is tagged, just print the tag
- 		printf ${tag}
- 	fi
- 
+-PHP_VERSION = 7.4.10
++PHP_VERSION = 7.4.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
