@@ -1,38 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:10:11 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python-cycler:
- drop redundant python|python3 dependencies
-Message-ID: <20201005060154.4EBB984C70@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:03:41 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-fire.mk:
+ drop test_components_py3.py file for python 2.x to fix pyfile issue
+Message-ID: <20201005060154.2ED4284C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aaf3bb1cee87cd7180bc32f0766edee5d625f93
+commit: https://git.buildroot.net/buildroot/commit/?id=e048b0d362b0714da35b10ea92d3ec4dbeeea1f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-All the python packages are inside a
+Fixes:
+http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
 
-if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+fire has conditional logic to load test_components_py3.py when running under
+Python 3.x:
 
-conditional, so no need to repeat it in the Config.in.
+if six.PY3:
+  from fire import test_components_py3 as py3
+
+pycompile unfortunately errors out on it:
+
+../scripts/pycompile.py ..
+
+error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
+    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
+                           ^
+SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+building for python 2.x.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 36031fd91da499b9b01fc189d1ffad78d89a1f84)
+(cherry picked from commit 6bfedaf57798c12f0e6279b8361fd5ec4244db8c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cycler/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-fire/python-fire.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/python-cycler/Config.in b/package/python-cycler/Config.in
-index 854873c969..813bc69dd4 100644
---- a/package/python-cycler/Config.in
-+++ b/package/python-cycler/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_CYCLER
- 	bool "python-cycler"
--	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- 	help
- 	  Creates a Cycler objects much like cycler, but
- 	  includes input validation.
+diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+index 343abbca7d..f6a2e073f0 100644
+--- a/package/python-fire/python-fire.mk
++++ b/package/python-fire/python-fire.mk
+@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
+ PYTHON_FIRE_LICENSE = Apache-2.0
+ PYTHON_FIRE_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_FIRE_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
++endef
++
++PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
