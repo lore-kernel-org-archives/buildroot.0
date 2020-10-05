@@ -1,23 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Oct 2020 08:12:17 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xdriver-xf86-video-ati: Fix
- link failure with gcc 10
-In-Reply-To: <20201003232946.550242-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 4 Oct 2020 01:29:46 +0200")
-References: <20201003232946.550242-1-romain.naour@gmail.com>
-Message-ID: <878sclp5fi.fsf@dell.be.48ers.dk>
+Date: Mon, 5 Oct 2020 08:10:11 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-cycler:
+ drop redundant python|python3 dependencies
+Message-ID: <20201005060154.4EBB984C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4aaf3bb1cee87cd7180bc32f0766edee5d625f93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > Backport an upstream patch.
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+All the python packages are inside a
 
-Committed to 2020.08.x, thanks.
+if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
 
--- 
-Bye, Peter Korsgaard
+conditional, so no need to repeat it in the Config.in.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 36031fd91da499b9b01fc189d1ffad78d89a1f84)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-cycler/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/python-cycler/Config.in b/package/python-cycler/Config.in
+index 854873c969..813bc69dd4 100644
+--- a/package/python-cycler/Config.in
++++ b/package/python-cycler/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_CYCLER
+ 	bool "python-cycler"
+-	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Creates a Cycler objects much like cycler, but
+ 	  includes input validation.
