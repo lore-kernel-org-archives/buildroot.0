@@ -1,43 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  5 Oct 2020 10:45:45 +0300
-Subject: [Buildroot] [PATCH] package/18xx-ti-utils: bump to version R8.8
-Message-ID: <9dc5d63276d0be129546a0b8211f1eb3d6e69d1a.1601883945.git.baruch@tkos.co.il>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Mon,  5 Oct 2020 13:19:49 +0300
+Subject: [Buildroot] [PATCH 0/2] package/timescaledb: new package
+Message-ID: <20201005101951.3112095-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Format hashes with two spaces delimiter.
+This patch adds timescaledb v1.7.4:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/18xx-ti-utils/18xx-ti-utils.hash | 4 ++--
- package/18xx-ti-utils/18xx-ti-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+TimescaleDB is an open-source database designed to make SQL scalable
+for time-series data. It is engineered up from PostgreSQL and packaged
+as a PostgreSQL extension, providing automatic partitioning across time
+and space (partitioning key), as well as full SQL support.
 
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
-index faa23d0b3edc..a7d4068fa75f 100644
---- a/package/18xx-ti-utils/18xx-ti-utils.hash
-+++ b/package/18xx-ti-utils/18xx-ti-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9ce2c7228dd0ac8d3cc530a32bb92b532bdbc5dfb6a405c245abee678d878697  18xx-ti-utils-R8.7_SP3.tar.gz
--sha256 363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
-+sha256  32ca7f1ca72b82ffb2acbee4bbe4de049af1da681421be0f2f595952761f29ee  18xx-ti-utils-R8.8.tar.gz
-+sha256  363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
-index 625127d70944..0985c9735b3d 100644
---- a/package/18xx-ti-utils/18xx-ti-utils.mk
-+++ b/package/18xx-ti-utils/18xx-ti-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--18XX_TI_UTILS_VERSION = R8.7_SP3
-+18XX_TI_UTILS_VERSION = R8.8
- 18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
- 18XX_TI_UTILS_DEPENDENCIES = libnl
- 18XX_TI_UTILS_LICENSE = BSD-3-Clause
+Maxim Kochetkov (2):
+  package/postgresql: add configure and includedir-server output to
+    pg_config
+  package/timescaledb: new package
+
+ package/Config.in                    |  1 +
+ package/postgresql/pg_config         |  8 +++++++-
+ package/postgresql/postgresql.mk     |  1 +
+ package/timescaledb/Config.in        | 11 +++++++++++
+ package/timescaledb/timescaledb.hash |  3 +++
+ package/timescaledb/timescaledb.mk   | 22 ++++++++++++++++++++++
+ 6 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 package/timescaledb/Config.in
+ create mode 100644 package/timescaledb/timescaledb.hash
+ create mode 100644 package/timescaledb/timescaledb.mk
+
 -- 
-2.28.0
+2.27.0
