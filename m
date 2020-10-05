@@ -1,68 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:06:50 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/lua: split hash
- files, add license hash for 5.3 / 5.4
-Message-ID: <20201005060154.3A2B88EBA5@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:03:33 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-aenum:
+ drop test_v3.py file for python 2.x to fix pycompile issue
+Message-ID: <20201005060154.2B2968216C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef72ebf3aaec4a78cc247a942162518dbd195e20
+commit: https://git.buildroot.net/buildroot/commit/?id=6356b2277059218c713a37220690d3bd068ece2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The content of the license file (doc/readme.html) differs between lua 5.3
-and 5.4, so we cannot use a shared .hash file for all versions.
+Fixes:
+http://autobuild.buildroot.net/results/4ca459d54545c0e20b0f0cdc63bd81844ecd7f36/
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Peter: extend commit message]
+aenum has conditional logic to load python 3.x code located in test_v3.py:
+
+if pyver >= 3.0:
+    from aenum.test_v3 import TestEnumV3, TestOrderV3, TestNamedTupleV3
+
+And contains logic in setup.py to drop that file during setup.py install if
+building for python 2.x:
+
+py3_only = ('aenum/test_v3.py', )
+..
+if __name__ == '__main__':
+    if 'install' in sys.argv:
+        import os, sys
+	..
+        if sys.version_info[0] != 3:
+            for file in py3_only:
+                try:
+                    os.unlink(file)
+
+But this doesn't work in Buildroot as pkg-python.dk first does setup.py
+build (which copies test_v3.py to the build directory) before setup.py
+install, so test_v3.py gets installed, leading to errors from pycompile:
+
+error:   File "/usr/lib/python2.7/site-packages/aenum/test_v3.py", line 12
+    class MagicAutoNumberEnum(Enum, settings=AutoNumber):
+                                            ^
+SyntaxError: invalid syntax
+
+As a workaround, add a hook to drop it from the target directory when
+building for python 2.x.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 036c41db1ad0132063eaf76701719ffffe3f973c)
-[Peter: drop 5.4]
+(cherry picked from commit 753c031977cfda84237366a98098bde828692f33)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua/5.1.5/lua.hash | 6 ++++++
- package/lua/5.3.6/lua.hash | 6 ++++++
- package/lua/lua.hash       | 9 ---------
- 3 files changed, 12 insertions(+), 9 deletions(-)
+ package/python-aenum/python-aenum.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/lua/5.1.5/lua.hash b/package/lua/5.1.5/lua.hash
-new file mode 100644
-index 0000000000..22ff8b7dad
---- /dev/null
-+++ b/package/lua/5.1.5/lua.hash
-@@ -0,0 +1,6 @@
-+# Hashes from: http://www.lua.org/ftp/
-+md5  2e115fe26e435e33b0d5c022e4490567  lua-5.1.5.tar.gz
-+sha1  b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 1d5322ef41..97fcbb5e86 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
+@@ -11,4 +11,13 @@ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_AENUM_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/aenum/test_v3.py
++endef
 +
-+# Locally computed
-+sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
-diff --git a/package/lua/5.3.6/lua.hash b/package/lua/5.3.6/lua.hash
-new file mode 100644
-index 0000000000..74849b3101
---- /dev/null
-+++ b/package/lua/5.3.6/lua.hash
-@@ -0,0 +1,6 @@
-+# Hashes from: http://www.lua.org/ftp/
-+md5  83f23dbd5230140a3770d5f54076948d  lua-5.3.6.tar.gz
-+sha1  f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
++PYTHON_AENUM_POST_INSTALL_TARGET_HOOKS += PYTHON_AENUM_RM_PY3_FILE
++endif
 +
-+# Locally computed
-+sha256  2ddff2161e0c4487d744943565538743c0721485873092f6809d072a983b06ef  doc/readme.html
-diff --git a/package/lua/lua.hash b/package/lua/lua.hash
-deleted file mode 100644
-index 319d305692..0000000000
---- a/package/lua/lua.hash
-+++ /dev/null
-@@ -1,9 +0,0 @@
--# Hashes from: http://www.lua.org/ftp/
--md5 83f23dbd5230140a3770d5f54076948d           lua-5.3.6.tar.gz
--sha1 f27d20d6c81292149bc4308525a9d6733c224fa5  lua-5.3.6.tar.gz
--
--md5 2e115fe26e435e33b0d5c022e4490567           lua-5.1.5.tar.gz
--sha1 b3882111ad02ecc6b972f8c1241647905cb2e3fc  lua-5.1.5.tar.gz
--
--# Locally computed
--sha256  ee5e3e82af1e1b543c4f216e399d7c8cfee797711913f349e385101c4ae60a79  COPYRIGHT
+ $(eval $(python-package))
