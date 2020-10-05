@@ -1,62 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:10:56 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/php: security
- bump to version 7.4.11
-Message-ID: <20201005060154.5A6BF84C70@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:03:53 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python-aenum:
+ drop test_v3.py file for python 2.x to fix pycompile issue
+Message-ID: <20201005060200.E40688D696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7e2701040b4f34ff48d5a92cbbe160645e5df36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=01f3310569e502aeb6f412efb13e362f3225e65d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-- Fix CVE-2020-7069: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when AES-CCM mode is used with
-  openssl_encrypt() function with 12 bytes IV, only first 7 bytes of the
-  IV is actually used. This can lead to both decreased security and
-  incorrect encryption data.
-- Fix CVE-2020-7070: In PHP versions 7.2.x below 7.2.34, 7.3.x below
-  7.3.23 and 7.4.x below 7.4.11, when PHP is processing incoming HTTP
-  cookie values, the cookie names are url-decoded. This may lead to
-  cookies with prefixes like __Host confused with cookies that decode to
-  such prefix, thus leading to an attacker being able to forge cookie
-  which is supposed to be secure. See also CVE-2020-8184 for more
-  information.
+Fixes:
+http://autobuild.buildroot.net/results/4ca459d54545c0e20b0f0cdc63bd81844ecd7f36/
 
-https://www.php.net/ChangeLog-7.php#7.4.11
+aenum has conditional logic to load python 3.x code located in test_v3.py:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+if pyver >= 3.0:
+    from aenum.test_v3 import TestEnumV3, TestOrderV3, TestNamedTupleV3
+
+And contains logic in setup.py to drop that file during setup.py install if
+building for python 2.x:
+
+py3_only = ('aenum/test_v3.py', )
+..
+if __name__ == '__main__':
+    if 'install' in sys.argv:
+        import os, sys
+	..
+        if sys.version_info[0] != 3:
+            for file in py3_only:
+                try:
+                    os.unlink(file)
+
+But this doesn't work in Buildroot as pkg-python.dk first does setup.py
+build (which copies test_v3.py to the build directory) before setup.py
+install, so test_v3.py gets installed, leading to errors from pycompile:
+
+error:   File "/usr/lib/python2.7/site-packages/aenum/test_v3.py", line 12
+    class MagicAutoNumberEnum(Enum, settings=AutoNumber):
+                                            ^
+SyntaxError: invalid syntax
+
+As a workaround, add a hook to drop it from the target directory when
+building for python 2.x.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 51d9617474db14e4757ca3a340deccc1dc3df6c7)
+(cherry picked from commit 753c031977cfda84237366a98098bde828692f33)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aenum/python-aenum.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index c383c471eb..77a0feb555 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
-+sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 1d5322ef41..97fcbb5e86 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
+@@ -11,4 +11,13 @@ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3047bfe94d..6b528cdc33 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.10
-+PHP_VERSION = 7.4.11
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_AENUM_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/aenum/test_v3.py
++endef
++
++PYTHON_AENUM_POST_INSTALL_TARGET_HOOKS += PYTHON_AENUM_RM_PY3_FILE
++endif
++
+ $(eval $(python-package))
