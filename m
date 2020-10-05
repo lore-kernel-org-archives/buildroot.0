@@ -1,60 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:03:55 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python-fire.mk:
- drop test_components_py3.py file for python 2.x to fix pyfile issue
-Message-ID: <20201005060201.013188D696@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:04:02 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-aenum:
+ drop test_v3.py file for python 2.x to fix pycompile issue
+Message-ID: <20201005060211.1E0248EB9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89051f8f2157107b5f84a67398abbaf5a3623e7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fc8b89bced91d90e448eb95eb805a2b296014618
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
-http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
+http://autobuild.buildroot.net/results/4ca459d54545c0e20b0f0cdc63bd81844ecd7f36/
 
-fire has conditional logic to load test_components_py3.py when running under
-Python 3.x:
+aenum has conditional logic to load python 3.x code located in test_v3.py:
 
-if six.PY3:
-  from fire import test_components_py3 as py3
+if pyver >= 3.0:
+    from aenum.test_v3 import TestEnumV3, TestOrderV3, TestNamedTupleV3
 
-pycompile unfortunately errors out on it:
+And contains logic in setup.py to drop that file during setup.py install if
+building for python 2.x:
 
-../scripts/pycompile.py ..
+py3_only = ('aenum/test_v3.py', )
+..
+if __name__ == '__main__':
+    if 'install' in sys.argv:
+        import os, sys
+	..
+        if sys.version_info[0] != 3:
+            for file in py3_only:
+                try:
+                    os.unlink(file)
 
-error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
-    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
-                           ^
+But this doesn't work in Buildroot as pkg-python.dk first does setup.py
+build (which copies test_v3.py to the build directory) before setup.py
+install, so test_v3.py gets installed, leading to errors from pycompile:
+
+error:   File "/usr/lib/python2.7/site-packages/aenum/test_v3.py", line 12
+    class MagicAutoNumberEnum(Enum, settings=AutoNumber):
+                                            ^
 SyntaxError: invalid syntax
 
-As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
+As a workaround, add a hook to drop it from the target directory when
 building for python 2.x.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bfedaf57798c12f0e6279b8361fd5ec4244db8c)
+(cherry picked from commit 753c031977cfda84237366a98098bde828692f33)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-fire/python-fire.mk | 9 +++++++++
+ package/python-aenum/python-aenum.mk | 9 +++++++++
  1 file changed, 9 insertions(+)
 
-diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-index 343abbca7d..f6a2e073f0 100644
---- a/package/python-fire/python-fire.mk
-+++ b/package/python-fire/python-fire.mk
-@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
- PYTHON_FIRE_LICENSE = Apache-2.0
- PYTHON_FIRE_LICENSE_FILES = LICENSE
+diff --git a/package/python-aenum/python-aenum.mk b/package/python-aenum/python-aenum.mk
+index 1d5322ef41..97fcbb5e86 100644
+--- a/package/python-aenum/python-aenum.mk
++++ b/package/python-aenum/python-aenum.mk
+@@ -11,4 +11,13 @@ PYTHON_AENUM_SETUP_TYPE = setuptools
+ PYTHON_AENUM_LICENSE = BSD-3-Clause
+ PYTHON_AENUM_LICENSE_FILES = aenum/LICENSE
  
 +ifeq ($(BR2_PACKAGE_PYTHON),y)
 +# only needed/valid for python 3.x
-+define PYTHON_FIRE_RM_PY3_FILE
-+	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
++define PYTHON_AENUM_RM_PY3_FILE
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/aenum/test_v3.py
 +endef
 +
-+PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
++PYTHON_AENUM_POST_INSTALL_TARGET_HOOKS += PYTHON_AENUM_RM_PY3_FILE
 +endif
 +
  $(eval $(python-package))
