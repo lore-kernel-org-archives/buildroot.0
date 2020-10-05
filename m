@@ -1,18 +1,26 @@
 From: Leonid Yuriev <leo@yuriev.ru>
-Date: Mon,  5 Oct 2020 23:15:53 +0300
-Subject: [Buildroot] [PATCH v3 0/1] package/libmdbx: new package
- (library/database)
+Date: Mon,  5 Oct 2020 23:15:54 +0300
+Subject: [Buildroot] [PATCH v3 1/1] package/libmdbx: new package
+ (library/database).
 In-Reply-To: <CAEyMn7ahanh2zR83cTNa_ZzdxCY5YL25z+wtA6gO4k32FXAXpA@mail.gmail.com>
 References: <CAEyMn7ahanh2zR83cTNa_ZzdxCY5YL25z+wtA6gO4k32FXAXpA@mail.gmail.com>
-Message-ID: <20201005201554.1071637-1-leo@yuriev.ru>
+Message-ID: <20201005201554.1071637-2-leo@yuriev.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds libmdbx v0.9.1 and below is a brief overview of libmdbx.
+This patch adds libmdbx v0.9.1:
+ - libmdbx is one of the fastest compact embeddable key-value ACID database.
+ - libmdbx has a specific set of properties and capabilities,
+   focused on creating unique lightweight solutions.
+ - libmdbx surpasses the legendary LMDB (Lightning Memory-Mapped Database)
+   in terms of reliability, features and performance.
 
+https://github.com/erthink/libmdbx
+
+---
 Changes v1 -> v2:
   - libmdbx version v0.8.2 -> v0.9.1 (released 2020-09-30)
 
@@ -26,205 +34,8 @@ Changes v2 -> v3:
   - passed `utils/check-package package/libmdbx/*` (suggested by Heiko Thiery).
   - passed `utils/test-pkg -a -p libmdbx` (suggested by Heiko Thiery).
 
-Please merge.
-
-Regards,
-Leonid.
-
---
-
-libmdbx is an extremely fast, compact, powerful, embedded, transactional
-key-value database, with permissive license. libmdbx has a specific set
-of properties and capabilities, focused on creating unique lightweight
-solutions.
-
-Historically, libmdbx (MDBX) is a deeply revised and extended descendant
-of the legendary LMDB (Lightning Memory-Mapped Database). libmdbx
-inherits all benefits from LMDB, but resolves some issues and adds a set
-of improvements.
-
-According to developers, for now libmdbx surpasses the LMDB in terms of
-reliability, features and performance.
-
-
-The most important differences MDBX from LMDB:
-==============================================
-
-1. More attention is paid to the quality of the code, to an
-"unbreakability" of the API, to testing and automatic checks (i.e.
-sanitizers, etc). So there:
- - more control during operation;
- - more checking parameters, internal audit of database structures;
- - no warnings from compiler;
- - no issues from ASAN, UBSAN, Valgrind, Coverity;
- - etc.
-
-2. Keys could be more than 2 times longer than LMDB.
-
-3. Up to 20% faster than LMDB in CRUD benchmarks.
-
-4. Automatic on-the-fly database size adjustment,
-both increment and reduction.
-
-5. Automatic continuous zero-overhead database compactification.
-
-6. The same database format for 32- and 64-bit builds.
-
-7. LIFO policy for Garbage Collection recycling (this can significantly
-increase write performance due write-back disk cache up to several times
-in a best case scenario).
-
-8. Range query estimation.
-
-9. Utility for checking the integrity of the database structure with
-some recovery capabilities.
-
-For more info please refer:
- - https://github.com/erthink/libmdbx for source code and README.
- - https://erthink.github.io/libmdbx for API description.
-
---
-
-MDBX is a Btree-based database management library modeled loosely on the
-BerkeleyDB API, but much simplified. The entire database (aka
-"environment") is exposed in a memory map, and all data fetches return
-data directly from the mapped memory, so no malloc's or memcpy's occur
-during data fetches. As such, the library is extremely simple because it
-requires no page caching layer of its own, and it is extremely high
-performance and memory-efficient. It is also fully transactional with
-full ACID semantics, and when the memory map is read-only, the database
-integrity cannot be corrupted by stray pointer writes from application
-code.
-
-The library is fully thread-aware and supports concurrent read/write
-access from multiple processes and threads. Data pages use a
-copy-on-write strategy so no active data pages are ever overwritten,
-which also provides resistance to corruption and eliminates the need of
-any special recovery procedures after a system crash. Writes are fully
-serialized; only one write transaction may be active at a time, which
-guarantees that writers can never deadlock. The database structure is
-multi-versioned so readers run with no locks; writers cannot block
-readers, and readers don't block writers.
-
-Unlike other well-known database mechanisms which use either write-ahead
-transaction logs or append-only data writes, MDBX requires no
-maintenance during operation. Both write-ahead loggers and append-only
-databases require periodic checkpointing and/or compaction of their log
-or database files otherwise they grow without bound. MDBX tracks
-retired/freed pages within the database and re-uses them for new write
-operations, so the database size does not grow without bound in normal
-use.
-
-The memory map can be used as a read-only or read-write map. It is
-read-only by default as this provides total immunity to corruption.
-Using read-write mode offers much higher write performance, but adds the
-possibility for stray application writes thru pointers to silently
-corrupt the database.
-
-
-Features
-========
-
-- Key-value data model, keys are always sorted.
-
-- Fully ACID-compliant, through to MVCC and CoW.
-
-- Multiple key-value sub-databases within a single datafile.
-
-- Range lookups, including range query estimation.
-
-- Efficient support for short fixed length keys, including native
-  32/64-bit integers.
-
-- Ultra-efficient support for multimaps. Multi-values sorted, searchable
-  and iterable. Keys stored without duplication.
-
-- Data is memory-mapped and accessible directly/zero-copy. Traversal of
-  database records is extremely-fast.
-
-- Transactions for readers and writers, ones do not block others.
-
-- Writes are strongly serialized. No transaction conflicts nor
-  deadlocks.
-
-- Readers are non-blocking, notwithstanding snapshot isolation.
-
-- Nested write transactions.
-
-- Reads scale linearly across CPUs.
-
-- Continuous zero-overhead database compactification.
-
-- Automatic on-the-fly database size adjustment.
-
-- Customizable database page size.
-
-- Olog(N) cost of lookup, insert, update, and delete operations by
-  virtue of B+ tree characteristics.
-
-- Online hot backup.
-
-- Append operation for efficient bulk insertion of pre-sorted data.
-
-- No WAL nor any transaction journal. No crash recovery needed. No
-  maintenance is required.
-
-- No internal cache and/or memory management, all done by basic OS
-  services.
-
-
-Limitations
-===========
-
-- Page size: a power of 2, maximum 65536 bytes, default 4096 bytes.
-
-- Key size: minimum 0, maximum ?? pagesize (1300 bytes for default 4K
-  pagesize, 21780 bytes for 64K pagesize).
-
-- Value size: minimum 0, maximum 2146435072 (0x7FF00000) bytes for maps,
-  ?? pagesize for multimaps (1348 bytes default 4K pagesize, 21828 bytes
-  for 64K pagesize).
-
-- Write transaction size: up to 4194301 (0x3FFFFD) pages (16 GiB for
-  default 4K pagesize, 256 GiB for 64K pagesize).
-
-- Database size: up to 2147483648 pages (8 TiB for default 4K pagesize,
-  128 TiB for 64K pagesize).
-
-- Maximum sub-databases: 32765.
-
-
-Gotchas
-=======
-
-- There cannot be more than one writer at a time, i.e. no more than one
-  write transaction at a time.
-
-- libmdbx is based on B+ tree, so access to database pages is mostly
-  random. Thus SSDs provide a significant performance boost over
-  spinning disks for large databases.
-
-- libmdbx uses shadow paging instead of WAL. Thus syncing data to disk
-  might be a bottleneck for write intensive workload.
-
-- libmdbx uses copy-on-write for snapshot isolation during updates, but
-  read transactions prevents recycling an old retired/freed pages, since
-  it read ones. Thus altering of data during a parallel long-lived read
-  operation will increase the process work set, may exhaust entire free
-  database space, the database can grow quickly, and result in
-  performance degradation. Try to avoid long running read transactions.
-
-- libmdbx is extraordinarily fast and provides minimal overhead for data
-  access, so you should reconsider using brute force techniques and
-  double check your code. On the one hand, in the case of libmdbx, a
-  simple linear search may be more profitable than complex indexes. On
-  the other hand, if you make something suboptimally, you can notice
-  detrimentally only on sufficiently large data.
-
---
-Leonid Yuriev (1):
-  package/libmdbx: new package (library/database).
-
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+---
  DEVELOPERS                                    |  3 +
  package/Config.in                             |  1 +
  .../0001-mdbx-fix-minor-copy-paste-typo.patch | 27 ++++++++
@@ -249,5 +60,421 @@ Leonid Yuriev (1):
  create mode 100644 package/libmdbx/libmdbx.hash
  create mode 100644 package/libmdbx/libmdbx.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 95942cbeee..7ac362fbe1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1545,6 +1545,9 @@ N:	Leon Anavi <leon.anavi@konsulko.com>
+ F:	board/olimex/a10_olinuxino
+ F:	configs/olimex_a10_olinuxino_lime_defconfig
+ 
++N:	Leonid Yuriev <leo@yuriev.ru>
++F:	package/libmdbx
++
+ N:	Lionel Flandrin <lionel@svkt.org>
+ F:	package/python-babel/
+ F:	package/python-daemonize/
+diff --git a/package/Config.in b/package/Config.in
+index 51583d07d6..f87e0388a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1370,6 +1370,7 @@ menu "Database"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libgit2/Config.in"
++	source "package/libmdbx/Config.in"
+ 	source "package/libodb/Config.in"
+ 	source "package/libodb-boost/Config.in"
+ 	source "package/libodb-mysql/Config.in"
+diff --git a/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch b/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
+new file mode 100644
+index 0000000000..d9ff3c5e71
+--- /dev/null
++++ b/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
+@@ -0,0 +1,27 @@
++From 5807e2eda046bff35946972289236bbef5c0c597 Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Thu, 1 Oct 2020 02:27:29 +0300
++Subject: [PATCH] mdbx++: fix minor copy&paste typo.
++
++Change-Id: I0af3e7ffbbd1231069a60f9f48880df3df2141d7
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ mdbx.h++ | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mdbx.h++ b/mdbx.h++
++index 095ff9abb..2050f4b92 100644
++--- a/mdbx.h++
+++++ b/mdbx.h++
++@@ -538,7 +538,7 @@ struct LIBMDBX_API_TYPE slice : public ::MDBX_val {
++   byte *from_base58(byte *dest, size_t dest_size,
++                     bool ignore_spaces = false) const;
++ 
++-  /// vReturns the buffer size in bytes needed for conversion
+++  /// \brief Returns the buffer size in bytes needed for conversion
++   /// [Base58](https://en.wikipedia.org/wiki/Base58) dump to data.
++   MDBX_CXX11_CONSTEXPR size_t from_base58_bytes() const noexcept {
++     return length() / 11 * 8 + length() % 11 * 32 / 43;
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch b/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
+new file mode 100644
+index 0000000000..df49342ccb
+--- /dev/null
++++ b/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
+@@ -0,0 +1,54 @@
++From dc2cd19d566e84451ee47cf04277f97bc22771c5 Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Fri, 2 Oct 2020 00:05:02 +0300
++Subject: [PATCH] mdbx-cmake: fix missing installation of `mdbx.h++`
++
++Change-Id: I41975e4eeff6583a266b273b9a4f8486982ede90
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ CMakeLists.txt | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 28db425c5..95f116521 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -485,7 +485,8 @@ fetch_version(MDBX "${CMAKE_CURRENT_SOURCE_DIR}" FALSE)
++ message(STATUS "libmdbx version is ${MDBX_VERSION}")
++ 
++ # sources list
++-set(LIBMDBX_SOURCES mdbx.h "${CMAKE_CURRENT_BINARY_DIR}/config.h" )
+++set(LIBMDBX_PUBLIC_HEADERS mdbx.h)
+++set(LIBMDBX_SOURCES mdbx.h "${CMAKE_CURRENT_BINARY_DIR}/config.h")
++ if(MDBX_AMALGAMATED_SOURCE)
++   list(APPEND LIBMDBX_SOURCES mdbx.c)
++ else()
++@@ -511,6 +512,7 @@ else()
++ endif(MDBX_AMALGAMATED_SOURCE)
++ if(MDBX_BUILD_CXX)
++   message(STATUS "Use C${MDBX_C_STANDARD} and C++${MDBX_CXX_STANDARD} for libmdbx")
+++  list(APPEND LIBMDBX_PUBLIC_HEADERS mdbx.h++)
++   list(APPEND LIBMDBX_SOURCES "${MDBX_SOURCE_DIR}/mdbx.c++" mdbx.h++)
++ else()
++   message(STATUS "Use C${MDBX_C_STANDARD} for libmdbx but C++ portion is disabled")
++@@ -561,7 +563,7 @@ if(MDBX_INSTALL_STATIC)
++ else()
++   add_library(mdbx-static STATIC EXCLUDE_FROM_ALL ${LIBMDBX_SOURCES})
++ endif()
++-set_target_properties(mdbx-static PROPERTIES PUBLIC_HEADER mdbx.h)
+++set_target_properties(mdbx-static PROPERTIES PUBLIC_HEADER "${LIBMDBX_PUBLIC_HEADERS}")
++ target_compile_definitions(mdbx-static PRIVATE MDBX_BUILD_SHARED_LIBRARY=0)
++ target_setup_options(mdbx-static)
++ libmdbx_setup_libs(mdbx-static INTERFACE)
++@@ -576,7 +578,7 @@ endif()
++ # build shared library
++ if(MDBX_BUILD_SHARED_LIBRARY)
++   add_library(mdbx SHARED ${LIBMDBX_SOURCES})
++-  set_target_properties(mdbx PROPERTIES PUBLIC_HEADER mdbx.h)
+++  set_target_properties(mdbx PROPERTIES PUBLIC_HEADER "${LIBMDBX_PUBLIC_HEADERS}")
++   target_compile_definitions(mdbx PRIVATE LIBMDBX_EXPORTS MDBX_BUILD_SHARED_LIBRARY=1 INTERFACE LIBMDBX_IMPORTS)
++   target_setup_options(mdbx)
++   libmdbx_setup_libs(mdbx PRIVATE)
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch b/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
+new file mode 100644
+index 0000000000..cb04334220
+--- /dev/null
++++ b/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
+@@ -0,0 +1,27 @@
++From 280ed17ea2dff464c9688fcc92079f36d8b74621 Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Sat, 3 Oct 2020 11:35:26 +0300
++Subject: [PATCH] mdbx: fix obsolete `__noreturn`.
++
++Change-Id: Ic78843d6f16de2a409c16ceecc7acb2ed8aa3e68
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ mdbx.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mdbx.c b/mdbx.c
++index 04ea5140d..9212640fe 100644
++--- a/mdbx.c
+++++ b/mdbx.c
++@@ -141,7 +141,7 @@ __extern_C void __assert(const char *, const char *, unsigned int, const char *)
++ #else
++     __nothrow
++ #endif /* __THROW */
++-    __noreturn;
+++    MDBX_NORETURN;
++ #define __assert_fail(assertion, file, line, function)                         \
++   __assert(assertion, file, line, function)
++ 
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch b/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
+new file mode 100644
+index 0000000000..23f91d859b
+--- /dev/null
++++ b/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
+@@ -0,0 +1,28 @@
++From 70b615e8d4d10cda2d961a815dd15eb87a1f3925 Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Sun, 4 Oct 2020 14:54:11 +0300
++Subject: [PATCH] mdbx: don't use `yield` instruction on ARM if unsupported.
++
++Change-Id: I0b01d783fe4336b089f4b051fb61c203b5879aa5
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ mdbx.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/mdbx.c b/mdbx.c
++index aba445424..a9ba1ee85 100644
++--- a/mdbx.c
+++++ b/mdbx.c
++@@ -763,7 +763,8 @@ static __always_inline void atomic_yield(void) {
++ #else
++   __asm__ __volatile__("hint @pause");
++ #endif
++-#elif defined(__arm__) || defined(__aarch64__)
+++#elif defined(__aarch64__) || (defined(__ARM_ARCH) && __ARM_ARCH > 6) ||       \
+++    defined(__ARM_ARCH_6K__)
++ #ifdef __CC_ARM
++   __yield();
++ #else
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch b/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
+new file mode 100644
+index 0000000000..29d69e3faa
+--- /dev/null
++++ b/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
+@@ -0,0 +1,27 @@
++From 8d4e7994c0c5c0cf69326139717e324f90bff65b Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Mon, 5 Oct 2020 15:09:10 +0300
++Subject: [PATCH] mdbx-load: fix minor false-positive GCC warning.
++
++Change-Id: Ie75c793712d050e8d3da76a4d0a8df9b81dc5275
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ mdbx_load.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mdbx_load.c b/mdbx_load.c
++index e5e72fc8f..54e179553 100644
++--- a/mdbx_load.c
+++++ b/mdbx_load.c
++@@ -318,7 +318,7 @@ static int readhdr(void) {
++     }
++ 
++     for (int i = 0; dbflags[i].bit; i++) {
++-      bool value;
+++      bool value = false;
++       if (valbool(dbuf.iov_base, dbflags[i].name, &value)) {
++         if (value)
++           dbi_flags |= dbflags[i].bit;
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch b/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
+new file mode 100644
+index 0000000000..37525cf0d5
+--- /dev/null
++++ b/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
+@@ -0,0 +1,65 @@
++From 787eaaa373073e17f3a53658b085c255bc2c8ff8 Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Mon, 5 Oct 2020 19:12:20 +0300
++Subject: [PATCH] mdbx-cmake: pthread workaround for buggy
++ toolchain/cmake/buildroot.
++
++Change-Id: I0d95e783abbd10a63cd1595a9de50593e814a967
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ CMakeLists.txt | 21 ++++++++++++++++++---
++ 1 file changed, 18 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 95f116521..20a50a453 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -173,10 +173,27 @@ if(NOT CMAKE_BUILD_TYPE)
++ endif()
++ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPERCASE)
++ 
+++set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+++set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+++find_package(Threads REQUIRED)
+++
++ include(cmake/utils.cmake)
++ include(cmake/compiler.cmake)
++ include(cmake/profile.cmake)
++ 
+++# Workaround for `-pthread` toolchain/cmake bug
+++if(NOT APPLE AND NOT MSVC
+++    AND CMAKE_USE_PTHREADS_INIT AND NOT CMAKE_THREAD_LIBS_INIT
+++    AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG))
+++  check_compiler_flag("-pthread" CC_HAS_PTHREAD)
+++  if(CC_HAS_PTHREAD AND NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-pthread")
+++    message(STATUS "Force add -pthread for linker flags to avoid troubles")
+++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+++    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pthread")
+++    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -pthread")
+++  endif()
+++endif()
+++
++ CHECK_FUNCTION_EXISTS(pow NOT_NEED_LIBM)
++ if(NOT_NEED_LIBM)
++   set(LIB_MATH "")
++@@ -190,8 +207,6 @@ else()
++   endif()
++ endif()
++ 
++-find_package(Threads REQUIRED)
++-
++ if(SUBPROJECT)
++   if(NOT DEFINED BUILD_SHARED_LIBS)
++     option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)" OFF)
++@@ -541,7 +556,7 @@ macro(target_setup_options TARGET)
++ endmacro()
++ 
++ macro(libmdbx_setup_libs TARGET MODE)
++-  target_link_libraries(${TARGET} ${MODE} ${CMAKE_THREAD_LIBS_INIT})
+++  target_link_libraries(${TARGET} ${MODE} Threads::Threads)
++   if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
++     target_link_libraries(${TARGET} ${MODE} ntdll.lib)
++     if(MDBX_NTDLL_EXTRA_IMPLIB AND MDBX_AVOID_CRT)
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch b/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
+new file mode 100644
+index 0000000000..5d7e83d4c7
+--- /dev/null
++++ b/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
+@@ -0,0 +1,42 @@
++From 16d43332a9d28ba27aa3d127e8f6b77a87b2f5eb Mon Sep 17 00:00:00 2001
++From: Leonid Yuriev <leo@yuriev.ru>
++Date: Mon, 5 Oct 2020 21:08:09 +0300
++Subject: [PATCH] mdbx: fix `pthread_yield()` for non-GLIBC.
++
++Change-Id: I080e37a42b62e524896dea8747e9f23e2fcd584f
++Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
++---
++ mdbx.c | 4 +++-
++ mdbx.c | 1 +
++ 2 files changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/mdbx.c b/mdbx.c
++index a9ba1ee85..ace6f2756 100644
++--- a/mdbx.c
+++++ b/mdbx.c
++@@ -777,7 +777,9 @@ static __always_inline void atomic_yield(void) {
++     defined(__mips64__) || defined(_M_MRX000) || defined(_MIPS_) ||            \
++     defined(__MWERKS__) || defined(__sgi)
++   __asm__ __volatile__(".word 0x00000140");
++-#else
+++#elif defined(__linux__) || defined(__gnu_linux__) || defined(_UNIX03_SOURCE)
+++  sched_yield();
+++#elif (defined(_GNU_SOURCE) &&  __GLIBC_PREREQ(2, 1)) || defined(_OPEN_THREADS)
++   pthread_yield();
++ #endif
++ }
++diff --git a/mdbx.c b/mdbx.c
++index 3509942dc..3af23ce0b 100644
++--- a/mdbx.c
+++++ b/mdbx.c
++@@ -119,6 +119,7 @@
++ 
++ #if defined(__linux__) || defined(__gnu_linux__)
++ #include <linux/sysctl.h>
+++#include <sched.h>
++ #include <sys/sendfile.h>
++ #include <sys/statfs.h>
++ #endif /* Linux */
++-- 
++2.28.0
++
+diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+new file mode 100644
+index 0000000000..3d21ca4cb1
+--- /dev/null
++++ b/package/libmdbx/Config.in
+@@ -0,0 +1,35 @@
++config BR2_PACKAGE_LIBMDBX
++	bool "libmdbx"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	help
++	  One of the fastest compact key-value ACID database
++	  without WAL. libmdbx has a specific set of properties
++	  and capabilities, focused on creating unique lightweight
++	  solutions.
++
++	  libmdbx surpasses the legendary legendary LMDB in terms of
++	  reliability, features and performance.
++
++	  https://github.com/erthink/libmdbx
++
++if BR2_PACKAGE_LIBMDBX
++
++config BR2_PACKAGE_LIBMDBX_TOOLS
++	bool "install tools"
++	help
++	  Install libmdbx tools for checking, dump, restore
++	  and show statistics of databases.
++
++config BR2_PACKAGE_LIBMDBX_CXX
++	bool "C++ API"
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Enable modern C++ API for libmdbx.
++
++endif
++
++comment "libmdbx needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+new file mode 100644
+index 0000000000..f48cd81a7d
+--- /dev/null
++++ b/package/libmdbx/libmdbx.hash
+@@ -0,0 +1,2 @@
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
++sha256  c7fb24381eb4d92f2e2edc17e577cb721269683c816c6cca307c58f6f346e786  libmdbx-amalgamated-0.9.1.tar.gz
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+new file mode 100644
+index 0000000000..06aa0fc051
+--- /dev/null
++++ b/package/libmdbx/libmdbx.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# libmdbx
++#
++################################################################################
++
++LIBMDBX_VERSION = 0.9.1
++LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
++LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
++LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBMDBX_LICENSE = OLDAP-2.8
++LIBMDBX_LICENSE_FILES = LICENSE
++LIBMDBX_REDISTRIBUTE = YES
++LIBMDBX_STRIP_COMPONENTS = 0
++LIBMDBX_INSTALL_STAGING = YES
++
++LIBMDBX_CONF_OPTS = -DMDBX_INSTALL_MANPAGES=OFF -DBUILD_FOR_NATIVE_CPU=OFF \
++	-DMDBX_INSTALL_STATIC=$(if $(BR2_STATIC_LIBS),ON,OFF) \
++	-DMDBX_BUILD_SHARED_LIBRARY=$(if $(BR2_SHARED_LIBS),ON,OFF) \
++	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
++	-DMDBX_LINK_TOOLS_NONSTATIC=$(if $(BR2_SHARED_LIBS),ON,OFF)
++
++$(eval $(cmake-package))
 -- 
 2.28.0
