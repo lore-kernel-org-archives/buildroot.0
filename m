@@ -1,60 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:04:04 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-fire.mk:
- drop test_components_py3.py file for python 2.x to fix pyfile issue
-Message-ID: <20201005060211.28C2A8EB9E@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:10:47 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: security
+ bump to version 7.4.11
+Message-ID: <20201005060211.5BAB58EB9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e5f973ea79f5de7963434ca3df6fd224878a1f3
+commit: https://git.buildroot.net/buildroot/commit/?id=74d60d39af2f91921777abba19fed5c737f48a86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
+- Fix CVE-2020-7069: In PHP versions 7.2.x below 7.2.34, 7.3.x below
+  7.3.23 and 7.4.x below 7.4.11, when AES-CCM mode is used with
+  openssl_encrypt() function with 12 bytes IV, only first 7 bytes of the
+  IV is actually used. This can lead to both decreased security and
+  incorrect encryption data.
+- Fix CVE-2020-7070: In PHP versions 7.2.x below 7.2.34, 7.3.x below
+  7.3.23 and 7.4.x below 7.4.11, when PHP is processing incoming HTTP
+  cookie values, the cookie names are url-decoded. This may lead to
+  cookies with prefixes like __Host confused with cookies that decode to
+  such prefix, thus leading to an attacker being able to forge cookie
+  which is supposed to be secure. See also CVE-2020-8184 for more
+  information.
 
-fire has conditional logic to load test_components_py3.py when running under
-Python 3.x:
+https://www.php.net/ChangeLog-7.php#7.4.11
 
-if six.PY3:
-  from fire import test_components_py3 as py3
-
-pycompile unfortunately errors out on it:
-
-../scripts/pycompile.py ..
-
-error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
-    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
-                           ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
-building for python 2.x.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bfedaf57798c12f0e6279b8361fd5ec4244db8c)
+(cherry picked from commit 51d9617474db14e4757ca3a340deccc1dc3df6c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-fire/python-fire.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-index 6471a4d143..5f41a83f75 100644
---- a/package/python-fire/python-fire.mk
-+++ b/package/python-fire/python-fire.mk
-@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
- PYTHON_FIRE_LICENSE = Apache-2.0
- PYTHON_FIRE_LICENSE_FILES = LICENSE
+diff --git a/package/php/php.hash b/package/php/php.hash
+index c383c471eb..77a0feb555 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010  php-7.4.10.tar.xz
++sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
  
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_FIRE_RM_PY3_FILE
-+	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
-+endef
-+
-+PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
-+endif
-+
- $(eval $(python-package))
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 7b59ac654d..011c9019c5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.10
++PHP_VERSION = 7.4.11
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
