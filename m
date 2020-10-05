@@ -1,114 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:02:53 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/xfsprogs: fix
- build with gcc 10
-Message-ID: <20201005060154.2168B8EB9E@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:11:58 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/x11r7/xdriver-xf86-video-ati: Fix link failure with gcc 10
+Message-ID: <20201005060154.643358216C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=300e1976d89843a1fceb37362344eb3a01b11e24
+commit: https://git.buildroot.net/buildroot/commit/?id=adf1da01e4ccd7db8d7c4585e7562e4f8539a479
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/18455090605f3691282778b6a64a624b109037d6
+Backport an upstream patch.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62ef85fce97e749be170bde426f273539fd064bd)
+(cherry picked from commit d4d0a036701b9418c59c0a251d2af45e5b8569d9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-redeclare-globals-provided-by-libraries.patch | 83 ++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+ .../0001-Fix-link-failure-with-gcc-10.patch        | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+diff --git a/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
 new file mode 100644
-index 0000000000..ef2053e9bb
+index 0000000000..b7a66c5c27
 --- /dev/null
-+++ b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
-@@ -0,0 +1,83 @@
-+From 123b851389ef9a012a469ef982ac7b819db59342 Mon Sep 17 00:00:00 2001
-+From: Eric Sandeen <sandeen@redhat.com>
-+Date: Thu, 30 Jan 2020 13:34:17 -0500
-+Subject: xfsprogs: do not redeclare globals provided by libraries
++++ b/package/x11r7/xdriver_xf86-video-ati/0001-Fix-link-failure-with-gcc-10.patch
+@@ -0,0 +1,35 @@
++From f223035f4ffcff2a9296d1e907a5193f8e8845a3 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Tue, 4 Feb 2020 16:38:06 -0500
++Subject: [PATCH xf86-video-ati] Fix link failure with gcc 10
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+In each of these cases, db, logprint, and mdrestore are redeclaring
-+as a global variable something which was already provided by a
-+library they link with.
++Without the 'extern' this looks like a definition not just a
++declaration, in every file that includes the header. gcc 10 is stricter
++about this kind of multiple definition.
 +
-+gcc now defaults to -fno-common and trips over these global variables
-+which are declared in utilities as well as in libxfs and libxlog, and
-+it causes the build to fail.
-+
-+Signed-off-by: Eric Sandeen <sandeen@redhat.com>
-+Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
-+Reviewed-by: Christoph Hellwig <hch@lst.de>
-+Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
-+
-+[Retrieved from:
-+https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=123b851389ef9a012a469ef982ac7b819db59342]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Reviewed-by: Michel D??nzer <mdaenzer@redhat.com>
++[backport from upstream: f223035f4ffcff2a9296d1e907a5193f8e8845a3]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ db/init.c                 | 1 -
-+ logprint/logprint.c       | 4 ++--
-+ mdrestore/xfs_mdrestore.c | 1 -
-+ 3 files changed, 2 insertions(+), 4 deletions(-)
++ src/drmmode_display.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/db/init.c b/db/init.c
-+index 455220a86..0ac373685 100644
-+--- a/db/init.c
-++++ b/db/init.c
-+@@ -27,7 +27,6 @@ static int		force;
-+ static struct xfs_mount	xmount;
-+ struct xfs_mount	*mp;
-+ static struct xlog	xlog;
-+-libxfs_init_t		x;
-+ xfs_agnumber_t		cur_agno = NULLAGNUMBER;
++diff --git a/src/drmmode_display.h b/src/drmmode_display.h
++index 96eaef0a..8cd8a0a6 100644
++--- a/src/drmmode_display.h
+++++ b/src/drmmode_display.h
++@@ -262,7 +262,7 @@ Bool drmmode_wait_vblank(xf86CrtcPtr crtc, drmVBlankSeqType type,
++ 			 uint64_t *ust, uint32_t *result_seq);
 + 
-+ static void
-+diff --git a/logprint/logprint.c b/logprint/logprint.c
-+index 7754a2a6e..511a32aca 100644
-+--- a/logprint/logprint.c
-++++ b/logprint/logprint.c
-+@@ -24,7 +24,6 @@ int	print_buffer;
-+ int	print_overwrite;
-+ int     print_no_data;
-+ int     print_no_print;
-+-int     print_exit = 1; /* -e is now default. specify -c to override */
-+ static int	print_operation = OP_PRINT;
 + 
-+ static void
-+@@ -132,6 +131,7 @@ main(int argc, char **argv)
-+ 	bindtextdomain(PACKAGE, LOCALEDIR);
-+ 	textdomain(PACKAGE);
-+ 	memset(&mount, 0, sizeof(mount));
-++	print_exit = 1; /* -e is now default. specify -c to override */
++-miPointerSpriteFuncRec drmmode_sprite_funcs;
+++extern miPointerSpriteFuncRec drmmode_sprite_funcs;
 + 
-+ 	progname = basename(argv[0]);
-+ 	while ((c = getopt(argc, argv, "bC:cdefl:iqnors:tDVv")) != EOF) {
-+@@ -152,7 +152,7 @@ main(int argc, char **argv)
-+ 			case 'e':
-+ 			    /* -e is now default
-+ 			     */
-+-				print_exit++;
-++				print_exit = 1;
-+ 				break;
-+ 			case 'C':
-+ 				print_operation = OP_COPY;
-+diff --git a/mdrestore/xfs_mdrestore.c b/mdrestore/xfs_mdrestore.c
-+index 3375e0806..1cd399dbc 100644
-+--- a/mdrestore/xfs_mdrestore.c
-++++ b/mdrestore/xfs_mdrestore.c
-+@@ -7,7 +7,6 @@
-+ #include "libxfs.h"
-+ #include "xfs_metadump.h"
 + 
-+-char 		*progname;
-+ static int	show_progress = 0;
-+ static int	show_info = 0;
-+ static int	progress_since_warning = 0;
++ #endif
 +-- 
-+cgit 1.2.3-1.el7
++2.25.4
 +
