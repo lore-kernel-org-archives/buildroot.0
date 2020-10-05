@@ -1,44 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Oct 2020 08:04:30 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-fire.mk: drop
- test_components_py3.py file for python 2.x to fix pyfile issue
-In-Reply-To: <20201002134048.24473-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 2 Oct 2020 15:40:48 +0200")
-References: <20201002134048.24473-1-peter@korsgaard.com>
- <20201002134048.24473-2-peter@korsgaard.com>
-Message-ID: <87tuv9p5sh.fsf@dell.be.48ers.dk>
+Date: Mon, 05 Oct 2020 08:09:15 +0200
+Subject: [Buildroot] [PATCH] package/lua: split hash files
+In-Reply-To: <20201003064526.84901-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sat, 3 Oct 2020 08:45:26 +0200")
+References: <20201003064526.84901-1-francois.perrad@gadz.org>
+Message-ID: <87pn5xp5kk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- > fire has conditional logic to load test_components_py3.py when running under
- > Python 3.x:
-
- > if six.PY3:
- >   from fire import test_components_py3 as py3
-
- > pycompile unfortunately errors out on it:
-
- > ../scripts/pycompile.py ..
-
- > error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
- >     def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
- >                            ^
- > SyntaxError: invalid syntax
-
- > As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
- > building for python 2.x.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
+Committed to 2020.02.x, 2020.05.x and 2020.08.x after dropping the 5.4.0
+file, thanks.
 
 -- 
 Bye, Peter Korsgaard
