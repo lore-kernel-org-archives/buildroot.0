@@ -1,60 +1,114 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Oct 2020 08:03:41 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python-fire.mk:
- drop test_components_py3.py file for python 2.x to fix pyfile issue
-Message-ID: <20201005060154.2ED4284C70@busybox.osuosl.org>
+Date: Mon, 5 Oct 2020 08:02:53 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/xfsprogs: fix
+ build with gcc 10
+Message-ID: <20201005060154.2168B8EB9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e048b0d362b0714da35b10ea92d3ec4dbeeea1f0
+commit: https://git.buildroot.net/buildroot/commit/?id=300e1976d89843a1fceb37362344eb3a01b11e24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
-http://autobuild.buildroot.net/results/72e0cc78194a1b93bf26a50742e59a1e93bde1d1/
+ - http://autobuild.buildroot.org/results/18455090605f3691282778b6a64a624b109037d6
 
-fire has conditional logic to load test_components_py3.py when running under
-Python 3.x:
-
-if six.PY3:
-  from fire import test_components_py3 as py3
-
-pycompile unfortunately errors out on it:
-
-../scripts/pycompile.py ..
-
-error:   File "/usr/lib/python2.7/site-packages/fire/test_components_py3.py", line 18
-    def identity(arg1, arg2: int, arg3=10, arg4: int = 20, *arg5,
-                           ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable _py3 file from TARGET_DIR if
-building for python 2.x.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6bfedaf57798c12f0e6279b8361fd5ec4244db8c)
+(cherry picked from commit 62ef85fce97e749be170bde426f273539fd064bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-fire/python-fire.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ ...t-redeclare-globals-provided-by-libraries.patch | 83 ++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
-diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-index 343abbca7d..f6a2e073f0 100644
---- a/package/python-fire/python-fire.mk
-+++ b/package/python-fire/python-fire.mk
-@@ -11,4 +11,13 @@ PYTHON_FIRE_SETUP_TYPE = setuptools
- PYTHON_FIRE_LICENSE = Apache-2.0
- PYTHON_FIRE_LICENSE_FILES = LICENSE
- 
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_FIRE_RM_PY3_FILE
-+	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/fire/test_components_py3.py
-+endef
+diff --git a/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+new file mode 100644
+index 0000000000..ef2053e9bb
+--- /dev/null
++++ b/package/xfsprogs/0003-xfsprogs-do-not-redeclare-globals-provided-by-libraries.patch
+@@ -0,0 +1,83 @@
++From 123b851389ef9a012a469ef982ac7b819db59342 Mon Sep 17 00:00:00 2001
++From: Eric Sandeen <sandeen@redhat.com>
++Date: Thu, 30 Jan 2020 13:34:17 -0500
++Subject: xfsprogs: do not redeclare globals provided by libraries
 +
-+PYTHON_FIRE_POST_INSTALL_TARGET_HOOKS += PYTHON_FIRE_RM_PY3_FILE
-+endif
++In each of these cases, db, logprint, and mdrestore are redeclaring
++as a global variable something which was already provided by a
++library they link with.
 +
- $(eval $(python-package))
++gcc now defaults to -fno-common and trips over these global variables
++which are declared in utilities as well as in libxfs and libxlog, and
++it causes the build to fail.
++
++Signed-off-by: Eric Sandeen <sandeen@redhat.com>
++Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
++Reviewed-by: Christoph Hellwig <hch@lst.de>
++Signed-off-by: Eric Sandeen <sandeen@sandeen.net>
++
++[Retrieved from:
++https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git/commit/?id=123b851389ef9a012a469ef982ac7b819db59342]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ db/init.c                 | 1 -
++ logprint/logprint.c       | 4 ++--
++ mdrestore/xfs_mdrestore.c | 1 -
++ 3 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/db/init.c b/db/init.c
++index 455220a86..0ac373685 100644
++--- a/db/init.c
+++++ b/db/init.c
++@@ -27,7 +27,6 @@ static int		force;
++ static struct xfs_mount	xmount;
++ struct xfs_mount	*mp;
++ static struct xlog	xlog;
++-libxfs_init_t		x;
++ xfs_agnumber_t		cur_agno = NULLAGNUMBER;
++ 
++ static void
++diff --git a/logprint/logprint.c b/logprint/logprint.c
++index 7754a2a6e..511a32aca 100644
++--- a/logprint/logprint.c
+++++ b/logprint/logprint.c
++@@ -24,7 +24,6 @@ int	print_buffer;
++ int	print_overwrite;
++ int     print_no_data;
++ int     print_no_print;
++-int     print_exit = 1; /* -e is now default. specify -c to override */
++ static int	print_operation = OP_PRINT;
++ 
++ static void
++@@ -132,6 +131,7 @@ main(int argc, char **argv)
++ 	bindtextdomain(PACKAGE, LOCALEDIR);
++ 	textdomain(PACKAGE);
++ 	memset(&mount, 0, sizeof(mount));
+++	print_exit = 1; /* -e is now default. specify -c to override */
++ 
++ 	progname = basename(argv[0]);
++ 	while ((c = getopt(argc, argv, "bC:cdefl:iqnors:tDVv")) != EOF) {
++@@ -152,7 +152,7 @@ main(int argc, char **argv)
++ 			case 'e':
++ 			    /* -e is now default
++ 			     */
++-				print_exit++;
+++				print_exit = 1;
++ 				break;
++ 			case 'C':
++ 				print_operation = OP_COPY;
++diff --git a/mdrestore/xfs_mdrestore.c b/mdrestore/xfs_mdrestore.c
++index 3375e0806..1cd399dbc 100644
++--- a/mdrestore/xfs_mdrestore.c
+++++ b/mdrestore/xfs_mdrestore.c
++@@ -7,7 +7,6 @@
++ #include "libxfs.h"
++ #include "xfs_metadump.h"
++ 
++-char 		*progname;
++ static int	show_progress = 0;
++ static int	show_info = 0;
++ static int	progress_since_warning = 0;
++-- 
++cgit 1.2.3-1.el7
++
