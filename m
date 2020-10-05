@@ -1,41 +1,49 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  5 Oct 2020 20:28:42 +0200
-Subject: [Buildroot] [PATCH] package/ccache: bump to version 3.7.12
-Message-ID: <20201005182842.283847-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Oct 2020 20:40:57 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libmaxminddb: bump to version 1.4.3
+Message-ID: <20201005184057.2643387-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/ccache/ccache.hash | 2 +-
- package/ccache/ccache.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Update indentation in hash file (two spaces)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 4058ada34..16cfad602 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  8d450208099a4d202bd7df87caaec81baee20ce9dd62da91e9ea7b95a9072f68  ccache-3.7.11.tar.xz
-+sha256  a02f4e8360dc6618bc494ca35b0ae21cea080f804a4898eab1ad3fcd108eb400  ccache-3.7.12.tar.xz
- sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
- sha256  4f63223bcdee822d55a6768cc8399ffe06401d7a03cfe79e1dc305f50dc22c59  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 732ecf45f..97aa8b1c7 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
+https://github.com/maxmind/libmaxminddb/releases/tag/1.4.3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Update tarball hash
+
+ package/libmaxminddb/libmaxminddb.hash | 4 ++--
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index a3ca682c2a..b83a8d133d 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	dd582aa971be23dee960ec33c67fb5fd38affba508e6f00ea75959dbd5aad156	libmaxminddb-1.4.2.tar.gz
+-sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	LICENSE
++sha256  a5fdf6c7b4880fdc7620f8ace5bd5cbe9f65650c9493034b5b9fc7d83551a439  libmaxminddb-1.4.3.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index 18e2eaee7d..eb28c99a4a 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 3.7.11
-+CCACHE_VERSION = 3.7.12
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
+-LIBMAXMINDDB_VERSION = 1.4.2
++LIBMAXMINDDB_VERSION = 1.4.3
+ LIBMAXMINDDB_SITE = \
+ 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
+ LIBMAXMINDDB_INSTALL_STAGING = YES
 -- 
-2.25.1
+2.28.0
