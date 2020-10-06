@@ -1,27 +1,80 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 6 Oct 2020 09:24:39 -0300
-Subject: [Buildroot] [PATCH v2 4/4] configs/mx6cubox: bump Linux and
- U-Boot versions
-In-Reply-To: <CAB0FRstDzgLnG+rNyhZoxr8QE2JnukJekOQGAp0448Ox0vBYrQ@mail.gmail.com>
-References: <20201006103955.464562-1-francois.perrad@gadz.org>
- <20201006103955.464562-4-francois.perrad@gadz.org>
- <CAOMZO5A8cxt2maWjEzL98E8w5+ZkLeQK+Gr=BFTDjmC6s+hn1w@mail.gmail.com>
- <CAB0FRstDzgLnG+rNyhZoxr8QE2JnukJekOQGAp0448Ox0vBYrQ@mail.gmail.com>
-Message-ID: <CAOMZO5AiKB7zU37=EnWoj=4e8CremLoTMV=OXh5obug8e6rx-Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Oct 2020 15:30:12 +0200
+Subject: [Buildroot] [git commit]
+ support/testing/tests/core/test_selinux.py: new test for
+ BR2_REFPOLICY_EXTRA_MODULES
+Message-ID: <20201006132255.F3C998EB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=e383f2835f4ee765be3b57d164cda4a63662bd31
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Oct 6, 2020 at 8:59 AM Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+This patch adds a test for the BR2_REFPOLICY_EXTRA_MODULES
+functionality (which allows to select extra modules within the SELinux
+refpolicy using Kconfig).
 
-> With 2020.07 (or 2020.04 or 2020.10), something goes wrong
-> I think it is related to https://gitlab.denx.de/u-boot/u-boot/-/commit/6c3fbf3e456c49c2f43c0c286106a0d4b099b67b
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/core/test_selinux.py | 36 ++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-Care to report it to the U-Boot list with the author of such commit on
-Cc, please?
-
-Thanks
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3aed57dbc5..ba96174670 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -255,6 +255,7 @@ F:	package/gnuplot/
+ 
+ N:	Antoine T??nart <antoine.tenart@bootlin.com>
+ F:	package/wf111/
++F:	support/testing/tests/core/test_selinux.py
+ F:	support/testing/tests/init/test_systemd_selinux/
+ F:	support/testing/tests/init/test_systemd_selinux.py
+ 
+diff --git a/support/testing/tests/core/test_selinux.py b/support/testing/tests/core/test_selinux.py
+new file mode 100644
+index 0000000000..10be30d791
+--- /dev/null
++++ b/support/testing/tests/core/test_selinux.py
+@@ -0,0 +1,36 @@
++import os
++
++import infra.basetest
++
++
++class TestSELinuxInfra(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG +\
++             """
++             BR2_PACKAGE_REFPOLICY=y
++             BR2_PACKAGE_PYTHON3=y
++             BR2_PACKAGE_SETOOLS=y
++             BR2_TARGET_ROOTFS_CPIO=y
++             """
++
++    def base_test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5", kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++class TestSELinuxExtraModules(TestSELinuxInfra):
++    config = TestSELinuxInfra.config + \
++             """
++             BR2_REFPOLICY_EXTRA_MODULES="ntp tor"
++             """
++
++    def test_run(self):
++        TestSELinuxInfra.base_test_run(self)
++
++        out, ret = self.emulator.run("seinfo -t ntpd_t", 15)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[2].strip(), "ntpd_t")
++
++        out, ret = self.emulator.run("seinfo -t tor_t", 15)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[2].strip(), "tor_t")
