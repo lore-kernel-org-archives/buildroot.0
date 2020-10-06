@@ -1,23 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 21:00:22 +0200
-Subject: [Buildroot] [PATCH] package/prosody: bump to version 0.11.7
-In-Reply-To: <20201005194223.462274-1-francois.perrad@gadz.org>
-References: <20201005194223.462274-1-francois.perrad@gadz.org>
-Message-ID: <20201006210022.57806bd8@windsurf.home>
+Date: Tue, 6 Oct 2020 21:00:37 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libmaxminddb: bump to version 1.4.3
+In-Reply-To: <20201005184057.2643387-1-fontaine.fabrice@gmail.com>
+References: <20201005184057.2643387-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201006210037.24e424ac@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  5 Oct 2020 21:42:23 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+On Mon,  5 Oct 2020 20:40:57 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Update indentation in hash file (two spaces)
+> 
+> https://github.com/maxmind/libmaxminddb/releases/tag/1.4.3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/prosody/prosody.hash | 8 ++++----
->  package/prosody/prosody.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Changes v1 -> v2:
+>  - Update tarball hash
 
 Applied to master, thanks.
 
