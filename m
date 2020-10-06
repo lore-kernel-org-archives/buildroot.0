@@ -1,59 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 23:40:12 +0200
-Subject: [Buildroot] [PATCH v2 1/6] toolchain/buildroot: allow uclibc-ng
- for riscv
-In-Reply-To: <20200908113324.1022230-2-damien.lemoal@wdc.com>
-References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
- <20200908113324.1022230-2-damien.lemoal@wdc.com>
-Message-ID: <20201006234012.6b3c2697@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 6 Oct 2020 23:40:25 +0200
+Subject: [Buildroot] [git commit] support/scripts/apply-patches.sh: do not
+ blindly remove *.orig files
+Message-ID: <20201006212952.A59208EC6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=42f61e759a977d75a2c8a1580c3187c92e155b04
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  8 Sep 2020 20:33:19 +0900
-Damien Le Moal <damien.lemoal@wdc.com> wrote:
+apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
+by default writes these as backup files when patches only apply with fuzz.
 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index de2885bc92..35b1cb8e2f 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -106,6 +106,8 @@ config BR2_UCLIBC_TARGET_ARCH
->  	default "xtensa"   if BR2_xtensa
->  	default "i386"	   if BR2_i386
->  	default "x86_64"   if BR2_x86_64
-> +	default "riscv64"  if BR2_riscv && BR2_ARCH_IS_64
-> +	default "riscv32"  if BR2_riscv && !BR2_ARCH_IS_6
+This is unfortunate as package sources may contain files ending in .orig as
+well, breaking the build.  Luckily GNU patch can be told to not write these
+backup files using the --no-backup-if-mismatch option, so used that instead
+of the .orig removal step.
 
-There was a typo here: BR2_ARCH_IS_6 was truncated.
+--no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
+busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
+BSD patch, so add logic to dependencies.sh to error out if patch doesn't
+support the flag.
 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 418d5cb387..49f67c7348 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -32,7 +32,9 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
->  		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
->  		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
-> -		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
-> +		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64  || \
-> +		   BR2_riscv
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/dependencies/dependencies.sh | 6 ++++++
+ support/scripts/apply-patches.sh     | 5 +----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-I fixed the alphabetic ordering.
-
-> +
-
-Dropped the empty new line.
-
-And applied with some small improvements to the commit log as well.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index c1bd614edf..b44d28682c 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -180,6 +180,12 @@ if test "${missing_progs}" = "yes" ; then
+ 	exit 1
+ fi
+ 
++# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
++if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
++	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
++	exit 1
++fi
++
+ if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
+ 	if ! which locale > /dev/null ; then
+ 		echo
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 66fef262ee..2d39d63da1 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -119,7 +119,7 @@ function apply_patch {
+         exit 1
+     fi
+     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
++    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+         exit 1
+@@ -168,6 +168,3 @@ if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+     echo "Aborting.  Reject files found."
+     exit 1
+ fi
+-
+-# Remove backup files
+-find $builddir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
