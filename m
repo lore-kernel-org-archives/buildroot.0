@@ -1,47 +1,63 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 6 Oct 2020 10:36:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: bump to version
- 0.32.0
-In-Reply-To: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
-References: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
-Message-ID: <60c2ecab-ad01-7770-d432-640a0d639626@lucaceresoli.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  6 Oct 2020 12:37:06 +0200
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot versions
+Message-ID: <20201006103706.464439-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
+ configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 04/10/20 22:00, Fabrice Fontaine wrote:
-> - Update site to get latest version
-> - Remove all patches (already in version)
-> - License file has been renamed and slightly updated to change paths
->   since version 0.23.0 and
->   https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
-> - Add a patch to disable tests
-> - Remove BUILD_{JAVA,JAVASCRIPT,PERL,PHP} as those bindings don't exist
->   anymore
-> - Disable go binding
-> - Disable fuzz testing
-> - Add new optional libuv and jsoncpp dependencies
-> - Update QPID_PROTON_REMOVE_USELESS_FILES
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Thank you very much for taking care of upgrading this package. I tried a
-while back but gave up as it was taking too much time for a package I am
-not actively using.
-
-The patch content looks good, but I'm getting a build failure after a
-simple 'make clean && make' with this defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_QPID_PROTON=y
-
-Can you check that?
-
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 81777056e..40c6dc112 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.50"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 8e2b4feda..753d3aa7c 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.50"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -- 
-Luca
+2.25.1
