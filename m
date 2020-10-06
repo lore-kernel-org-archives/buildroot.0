@@ -1,62 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Oct 2020 22:34:34 +0200
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not
- blindly remove *.orig files
-In-Reply-To: <20201006201422.GP11621@scaer> (Yann E. MORIN's message of "Tue, 
- 6 Oct 2020 22:14:23 +0200")
-References: <20201006185604.11311-1-peter@korsgaard.com>
- <20201006201422.GP11621@scaer>
-Message-ID: <87v9fn3xgl.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 6 Oct 2020 22:36:55 +0200
+Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
+ 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
+In-Reply-To: <87mu12s4rz.fsf@dell.be.48ers.dk>
+References: <20201002155931.1529915-1-romain.naour@gmail.com>
+ <20201002155931.1529915-2-romain.naour@gmail.com>
+ <87mu12s4rz.fsf@dell.be.48ers.dk>
+Message-ID: <def26807-e0af-5a4a-787d-a3ec2807cc21@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello Peter,
 
- > Peter, All,
- > On 2020-10-06 20:56 +0200, Peter Korsgaard spake thusly:
- >> apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
- >> by default writes these as backup files when patches only apply with fuzz.
- >> 
- >> This is unfortunate as package sources may contain files ending in .orig as
- >> well, breaking the build.  Luckily GNU patch can be told to not write these
- >> backup files using the --no-backup-if-mismatch option, so used that instead
- >> of the .orig removal step.
- >> 
- >> --no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
- >> busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
- >> BSD patch, so add logic to detect support for the flag and only use it if
- >> supported.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> Do we care about BSD patch / busybox patch w/ DESKTOP?  Should we just
- >> unconditionally use the flag?
- >> 
- >> We have a similar issue with *.rej.  GNU patch can be told to not write
- >> those with the -r - option (since GNU patch 2.6, Nov 2009), but it should
- >> normally also exit with a non-zero exit code for such sitations, so I am not
- >> sure the check is needed?
+Le 04/10/2020 ? 11:45, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
+>  >   Remove the ARC specific version.
+> 
+>  > - Remove --enable-obsolete-rpc configure option.
+> 
+>  > Security related changes:
+> 
+>  >   CVE-2016-10228: An infinite loop has been fixed in the iconv program when
+>  >   invoked with the -c option and when processing invalid multi-byte input
+>  >   sequences.  Reported by Jan Engelhardt.
+> 
+>  >   CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
+>  >   corruption when they were passed a pseudo-zero argument.  Reported by Guido
+>  >   Vranken / ForAllSecure Mayhem.
+> 
+>  >   CVE-2020-1752: A use-after-free vulnerability in the glob function when
+>  >   expanding ~user has been fixed.
+> 
+>  >   CVE-2020-6096: A signed comparison vulnerability in the ARMv7 memcpy and
+>  >   memmove functions has been fixed.  Discovered by Jason Royes and Samual
+>  >   Dytrych of the Cisco Security Assessment and Penetration Team (See
+>  >   TALOS-2020-1019).
+> 
+> These security fixes were already in 2.31.1, E.G. what we are currently
+> using, right?
+> 
 
- > As discussed on IRC: I think we should require that patch suppot
- > --no-backup-if-mismatch, and bail out if not:
+Indeed, they has been added to glibc 2.32 and backported to stable branches.
+It's just a copy from the release announcement... we can drop it if you prefer.
 
- >   - check for that in support/dependencies/check-host-patch.{mk.sh}
-
-You mean we should build our own host-patch? Sorry, I really find that
-overkill. People are very unlikely to use anything else than GNU patch,
-and the option is supported for more than 20 years.
-
-But Ok, we can add a check for it in dependencies.sh, just like we do
-for the availability of patch.
-
- >   - always use --no-backup-if-mismatch in apply-patch.sh
-
-Ok.
-
-I'll send a v2 doing that.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
