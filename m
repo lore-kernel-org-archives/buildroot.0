@@ -1,71 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Oct 2020 22:42:17 +0200
-Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: include
- Branches workflow
-In-Reply-To: <20200830155953.1650346-1-arnout@mind.be>
-References: <20200830155953.1650346-1-arnout@mind.be>
-Message-ID: <20201006204217.GS11621@scaer>
+Date: Tue, 6 Oct 2020 22:44:38 +0200
+Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not
+ blindly remove *.orig files
+In-Reply-To: <87v9fn3xgl.fsf@dell.be.48ers.dk>
+References: <20201006185604.11311-1-peter@korsgaard.com>
+ <20201006201422.GP11621@scaer> <87v9fn3xgl.fsf@dell.be.48ers.dk>
+Message-ID: <20201006204438.GT11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Peter, All,
 
-On 2020-08-30 17:59 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> Recently, gitlab-ci has gained a lot more flexibility in when pipelines
-> are created. As a side-effect of this, double pipelines may be created
-> when a `when` clause is used in some job. Avoid this by adding a
-> workflow that launches it only on branches. See [1] and [2].
-> 
-> Note that in reality, the duplicate pipelines only occur for merge
-> requests. Since we don't have merge requests, we don't have this
-> problem. Howver, gitlab also displays an annoying error message on the
-> pipeline page [3], and it sends an error mail to the triggerer (i.e.,
-> Arnout), so it's still useful to do this.
-> 
-> [1] https://docs.gitlab.com/ee/ci/yaml/README.html#prevent-duplicate-pipelines
-> [2] https://docs.gitlab.com/ee/ci/yaml/README.html#workflowrules-templates
-> [3] https://gitlab.com/buildroot.org/buildroot/-/pipelines/183589361/builds
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 2020-10-06 22:34 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  > Peter, All,
+>  > On 2020-10-06 20:56 +0200, Peter Korsgaard spake thusly:
+>  >> apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
+>  >> by default writes these as backup files when patches only apply with fuzz.
+>  >> 
+>  >> This is unfortunate as package sources may contain files ending in .orig as
+>  >> well, breaking the build.  Luckily GNU patch can be told to not write these
+>  >> backup files using the --no-backup-if-mismatch option, so used that instead
+>  >> of the .orig removal step.
+>  >> 
+>  >> --no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
+>  >> busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
+>  >> BSD patch, so add logic to detect support for the flag and only use it if
+>  >> supported.
+>  >> 
+>  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  >> ---
+>  >> Do we care about BSD patch / busybox patch w/ DESKTOP?  Should we just
+>  >> unconditionally use the flag?
+>  > As discussed on IRC: I think we should require that patch suppot
+>  > --no-backup-if-mismatch, and bail out if not:
+>  >   - check for that in support/dependencies/check-host-patch.{mk.sh}
+> You mean we should build our own host-patch? Sorry, I really find that
+> overkill. People are very unlikely to use anything else than GNU patch,
+> and the option is supported for more than 20 years.
 
-We've no merged a better script that contains all the logic about
-generating the child pipeline, so I believe this patch of yours is no
-longer needed.
+No, sorry, I was thinking about dependencies.sh
 
-Regards,
+> But Ok, we can add a check for it in dependencies.sh, just like we do
+> for the availability of patch.
+
+Yes.
+
+>  >   - always use --no-backup-if-mismatch in apply-patch.sh
+> Ok.
+> I'll send a v2 doing that.
+
+Thanks.
+
+\Regards,
 Yann E. MORIN.
-
-> ---
-> I'd like to get this one in master, because the e-mails are annoying me
-> :-)
-> ---
->  support/misc/gitlab-ci.yml.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
-> index dddebf09e9..8a031898ef 100644
-> --- a/support/misc/gitlab-ci.yml.in
-> +++ b/support/misc/gitlab-ci.yml.in
-> @@ -1,6 +1,9 @@
->  # Configuration for Gitlab-CI.
->  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
->  
-> +include:
-> +  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
-> +
->  image: buildroot/base:20200814.2228
->  
->  .check_base:
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
