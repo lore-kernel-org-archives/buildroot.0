@@ -1,42 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 21:04:37 +0200
-Subject: [Buildroot] [git commit] package/pigpio: bump to version 78
-Message-ID: <20201006185723.D9FBD7FB2F@busybox.osuosl.org>
+Date: Tue, 6 Oct 2020 21:04:41 +0200
+Subject: [Buildroot] [git commit] package/python-pigpio: bump to version 1.78
+Message-ID: <20201006185723.E4F007FB2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a8e0567d6785695ec3d8ee8324ce3e120f96254
+commit: https://git.buildroot.net/buildroot/commit/?id=899c7c5a257995077a8e8accf691e9b7a1d3f37e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pigpio/pigpio.hash | 2 +-
- package/pigpio/pigpio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pigpio/python-pigpio.hash | 4 ++--
+ package/python-pigpio/python-pigpio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
-index 4c8205ea4c..b6de0c19f6 100644
---- a/package/pigpio/pigpio.hash
-+++ b/package/pigpio/pigpio.hash
+diff --git a/package/python-pigpio/python-pigpio.hash b/package/python-pigpio/python-pigpio.hash
+index dd7b7954a7..7e02054b23 100644
+--- a/package/python-pigpio/python-pigpio.hash
++++ b/package/python-pigpio/python-pigpio.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fe0cd66c0277a71fbbde1adff196a570870dad1de8dfe51f7e35f5b8d545206f  pigpio-77.tar.gz
-+sha256  ef4a4dc7ca8ca2f97fbdb9fd75586f61be7222d0f6c14e58af6c9192ad42f682  pigpio-78.tar.gz
- sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 64d0587077..345b315c42 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pigpio/json
+-md5  5247f61642f14f65c2b42e130d49ab50  pigpio-1.46.tar.gz
+-sha256  f5f2562f8f7aab0c6cf7235e501e72bedbf063efda725c6086c352b5e4b2f59d  pigpio-1.46.tar.gz
++md5  e05e3f5cb6c50f4b3eeb4ac50627507e  pigpio-1.78.tar.gz
++sha256  91efa50e4990649da97408a384782d6ccf58342fc59cdfe21ed7a42911569975  pigpio-1.78.tar.gz
+diff --git a/package/python-pigpio/python-pigpio.mk b/package/python-pigpio/python-pigpio.mk
+index fda5efb1ae..73e326cba1 100644
+--- a/package/python-pigpio/python-pigpio.mk
++++ b/package/python-pigpio/python-pigpio.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PIGPIO_VERSION = 77
-+PIGPIO_VERSION = 78
- PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
- PIGPIO_LICENSE = Unlicense
- PIGPIO_LICENSE_FILES = UNLICENCE
+-PYTHON_PIGPIO_VERSION = 1.46
++PYTHON_PIGPIO_VERSION = 1.78
+ PYTHON_PIGPIO_SOURCE = pigpio-$(PYTHON_PIGPIO_VERSION).tar.gz
+-PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/5d/ad/75966e59159a64f3d496bf730c54d6222d69a72261f1556232e25ce59edf
++PYTHON_PIGPIO_SITE = https://files.pythonhosted.org/packages/a9/4a/3ebdfd90906553fb5420e80a475eb52f0809f2a29b547ba3b260db0cbc8f
+ PYTHON_PIGPIO_SETUP_TYPE = setuptools
+ PYTHON_PIGPIO_LICENSE = Unlicense
+ 
