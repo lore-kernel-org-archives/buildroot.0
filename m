@@ -1,56 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Oct 2020 20:57:43 +0200
-Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
- of build results
-In-Reply-To: <BN8PR12MB3330D7EE79CE6EB08E3F2B26A1310@BN8PR12MB3330.namprd12.prod.outlook.com>
-References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
- <20200816000914.5ad801d9@windsurf.home>
- <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
- <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
- <20200911103913.381a29c6@windsurf.hq.k.grp>
- <BN8PR12MB3330D7EE79CE6EB08E3F2B26A1310@BN8PR12MB3330.namprd12.prod.outlook.com>
-Message-ID: <19c5ef98-b775-2dec-480b-d7c897a4e0fd@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Oct 2020 20:58:12 +0200
+Subject: [Buildroot] CMake issue with pthread library (bug report)
+In-Reply-To: <CAO2+NUABZp7JAY=yNDegsQCcRZhaHhg9kGmcyKWbddiGdckSFA@mail.gmail.com>
+References: <CAO2+NUABZp7JAY=yNDegsQCcRZhaHhg9kGmcyKWbddiGdckSFA@mail.gmail.com>
+Message-ID: <20201006205812.3cc979a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Leonid,
 
+On Tue, 6 Oct 2020 01:12:10 +0300
+?????? ????? <leo@yuriev.ru> wrote:
 
-On 02/10/2020 17:16, Alexey Brodkin wrote:
+> The reason is that CMake doesn't link executables and so-libraries
+> with the pthread library and doesn't use the '-pthread' flag either.
+> If you dig a little deeper, you can see that the Assembly always
+> breaks when the code of pthreads functions is in the separate library
+> (which should be linked explicitly).
 > 
-> Hi Thomas, all,
+> I observe this behavior with cmake 3.17.4 on Fedora 32 and with cmake
+> 3.16.3 on Ubuntu 20.04.
+> At the same time, I am sure that everything is correct in my CMakefiles.
+> In particular, when building locally for a host system, I see the
+> `-pthread` flag in the linking commands (or linking with a pthread
+> library on the other host).
 > 
->>> Ok so that happens because of misconfiguration of libstdc++.
+> I looked at support/misc/toolchainfile.cmake.in and
+> package/pkg-cmake.mk but I didn't notice any errors.
+> So, it would be nice for someone else to pay attention to this problem.
 
-[snip]
->> Wouldn't this be normally handled by having a --with-atomic option
->> passed to gcc, which would ensure that the compiler enables -matomic,
->> without having to pass this flag explicitly ?
-> 
-> Finally I was able to spend some more time on that. So it looks like a kind of
-> regression due to https://git.buildroot.org/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
-> where we moved "-matomic" from TARGET_ABI to ARCH_TOOLCHAIN_WRAPPER_OPTS.
-> 
-> The point is (and it could be seen from my previous explanation above) libstdc++ is being built by
-> temporary cross-compiler (xgcc) instead of preperly installed wrappers for real tools.
-> That's why whatever we put in ARCH_TOOLCHAIN_WRAPPER_OPTS makes no sense, while CFLAGS_FOR_TARGET
-> where we add contents of TARGET_ABI do make "xgcc" using "-matomic".
-> 
-> So far we know what's wrong. The question now what could be a good solution?
+I don't immediately have a good suggestion, I didn't try to reproduce
+the issue. However, CMake/pthread issues remind me of
+-DTHREADS_PTHREAD_ARG=OFF that we are passing to a number of packages.
+But it seems to be there to work around issues with CMake versions
+older than 3.10, so it doesn't seem to be related to what you're seeing.
 
- The good solution is to add the -matomic explicitly in host-gcc-final's
-CFLAGS_FOR_TARGET.
-
- Regards,
- Arnout
-
-> Revert offending commit?
-> 
-> -Alexey
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
