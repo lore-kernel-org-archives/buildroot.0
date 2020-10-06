@@ -1,58 +1,76 @@
-From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-Date: Tue, 6 Oct 2020 10:00:42 -0500
-Subject: [Buildroot] [PATCH 1/1] package/patchelf: Pull in upstream
- bugfixes
-In-Reply-To: <20201006163354.4c6ea501@windsurf.home>
-References: <20201005185034.37131-1-conrad.ratschan@rockwellcollins.com>
- <20201006163354.4c6ea501@windsurf.home>
-Message-ID: <CADDqnyLa4TxhrktC4bM19BaS6X84E6m+-U-UCraCUt3U8gg8ZA@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 6 Oct 2020 17:29:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: bump to version
+ 0.32.0
+In-Reply-To: <CAPi7W82bZs54aj3+7_a76SZ8wbXtoB7=jxqq7gqA68Cij1WZtw@mail.gmail.com>
+References: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
+ <60c2ecab-ad01-7770-d432-640a0d639626@lucaceresoli.net>
+ <CAPi7W82bZs54aj3+7_a76SZ8wbXtoB7=jxqq7gqA68Cij1WZtw@mail.gmail.com>
+Message-ID: <1b36a5c1-e0f6-ef4d-dc13-8aa2340c9449@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+On 06/10/20 13:57, Fabrice Fontaine wrote:
+> Hi Luca,
+> 
+> Le mar. 6 oct. 2020 ? 10:36, Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+>>
+>> Hi Fabrice,
+>>
+>> On 04/10/20 22:00, Fabrice Fontaine wrote:
+>>> - Update site to get latest version
+>>> - Remove all patches (already in version)
+>>> - License file has been renamed and slightly updated to change paths
+>>>   since version 0.23.0 and
+>>>   https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
+>>> - Add a patch to disable tests
+>>> - Remove BUILD_{JAVA,JAVASCRIPT,PERL,PHP} as those bindings don't exist
+>>>   anymore
+>>> - Disable go binding
+>>> - Disable fuzz testing
+>>> - Add new optional libuv and jsoncpp dependencies
+>>> - Update QPID_PROTON_REMOVE_USELESS_FILES
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> Thank you very much for taking care of upgrading this package. I tried a
+>> while back but gave up as it was taking too much time for a package I am
+>> not actively using.
+>>
+>> The patch content looks good, but I'm getting a build failure after a
+>> simple 'make clean && make' with this defconfig:
+>>
+>> BR2_arm=y
+>> BR2_cortex_a8=y
+>> BR2_TOOLCHAIN_EXTERNAL=y
+>> BR2_PACKAGE_QPID_PROTON=y
+>>
+>> Can you check that?
+> This defconfig is building fine on my side. What kind of error do you get?
 
-On Tue, Oct 6, 2020 at 9:34 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon,  5 Oct 2020 13:50:34 -0500
-> Conrad Ratschan <conrad.ratschan@rockwellcollins.com> wrote:
->
-> > On Buildroot 2020.02.6 when building iputils for powerpc with
-> > BR2_PIC_PIE enabled, the arping/rdisc/tftpd binaries will segfault at
-> > runtime. This can be traced back to a few bugs in patchelf corrupting
-> > the ELFs when resizing the RPATH to replace "$ORIGIN/" with "/usr/sbin".
-> >
-> > This patch pulls in upstream fixes to prevent the binaries from being
-> > needlessly inflated, prevent the startPage from always being adjusted,
-> > fix a few minor bugs, and fix incorrect endianness handling.
-> >
-> > Signed-off-by: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
->
-> So the idea of backporting all those changes for patchelf 0.9 instead
-> of bumping to patchelf 0.12 is to minimize the changes for Buildroot's
-> LTS 2020.02.x branch ?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Here's the snippet with the initial errors:
 
-Yes, there are a number of open issues on patchelf's issue tracker
-that I did not necessarily want to run into on the LTS branch. The
-0.12 approach may be better for master, but as a minimum, the
-0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch would
-need to be updated to apply on the latest version as the related PR
-has not merged yet, and my
-0010-Fix-endianness-issues-for-powerpc-PIE.patch would need to be
-pulled in as that just merged yesterday.
+[ 78%] Building CXX object
+cpp/examples/CMakeFiles/scheduled_send.dir/scheduled_send.cpp.o
+[ 79%] Linking CXX executable ssl_client_cert
+/home/murray/devel/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld:
+warning: libqpid-proton-proactor.so.1, needed by
+../libqpid-proton-cpp.so.12.7.1, not found (try using -rpath or -rpath-link)
+/home/murray/devel/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld:
+warning: libqpid-proton-core.so.10, needed by
+../libqpid-proton-cpp.so.12.7.1, not found (try using -rpath or -rpath-link)
+/home/murray/devel/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld:
+../libqpid-proton-cpp.so.12.7.1: undefined reference to
+`pn_connection_attachments'
+/home/murray/devel/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld:
+../libqpid-proton-cpp.so.12.7.1: undefined reference to `pn_ssl_domain_free'
+/home/murray/devel/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld:
+../libqpid-proton-cpp.so.12.7.1: undefined reference to `pn_data_get_string'
 
---
-Conrad Ratschan | Software Engineer | Commercial Avionics
-COLLINS AEROSPACE
-400 Collins Road NE, Cedar Rapids, IA 52498, USA
+Complete log on https://pastebin.com/v1f6H1LG
+
+-- 
+Luca
