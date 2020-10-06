@@ -1,52 +1,76 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 6 Oct 2020 22:36:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
- 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
-In-Reply-To: <87mu12s4rz.fsf@dell.be.48ers.dk>
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
- <20201002155931.1529915-2-romain.naour@gmail.com>
- <87mu12s4rz.fsf@dell.be.48ers.dk>
-Message-ID: <def26807-e0af-5a4a-787d-a3ec2807cc21@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 6 Oct 2020 22:42:17 +0200
+Subject: [Buildroot] [PATCH] support/misc/gitlab-ci.yml.in: include
+ Branches workflow
+In-Reply-To: <20200830155953.1650346-1-arnout@mind.be>
+References: <20200830155953.1650346-1-arnout@mind.be>
+Message-ID: <20201006204217.GS11621@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Arnout, All,
 
-Le 04/10/2020 ? 11:45, Peter Korsgaard a ?crit?:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+On 2020-08-30 17:59 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> Recently, gitlab-ci has gained a lot more flexibility in when pipelines
+> are created. As a side-effect of this, double pipelines may be created
+> when a `when` clause is used in some job. Avoid this by adding a
+> workflow that launches it only on branches. See [1] and [2].
 > 
->  > - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
->  >   Remove the ARC specific version.
+> Note that in reality, the duplicate pipelines only occur for merge
+> requests. Since we don't have merge requests, we don't have this
+> problem. Howver, gitlab also displays an annoying error message on the
+> pipeline page [3], and it sends an error mail to the triggerer (i.e.,
+> Arnout), so it's still useful to do this.
 > 
->  > - Remove --enable-obsolete-rpc configure option.
+> [1] https://docs.gitlab.com/ee/ci/yaml/README.html#prevent-duplicate-pipelines
+> [2] https://docs.gitlab.com/ee/ci/yaml/README.html#workflowrules-templates
+> [3] https://gitlab.com/buildroot.org/buildroot/-/pipelines/183589361/builds
 > 
->  > Security related changes:
-> 
->  >   CVE-2016-10228: An infinite loop has been fixed in the iconv program when
->  >   invoked with the -c option and when processing invalid multi-byte input
->  >   sequences.  Reported by Jan Engelhardt.
-> 
->  >   CVE-2020-10029: Trigonometric functions on x86 targets suffered from stack
->  >   corruption when they were passed a pseudo-zero argument.  Reported by Guido
->  >   Vranken / ForAllSecure Mayhem.
-> 
->  >   CVE-2020-1752: A use-after-free vulnerability in the glob function when
->  >   expanding ~user has been fixed.
-> 
->  >   CVE-2020-6096: A signed comparison vulnerability in the ARMv7 memcpy and
->  >   memmove functions has been fixed.  Discovered by Jason Royes and Samual
->  >   Dytrych of the Cisco Security Assessment and Penetration Team (See
->  >   TALOS-2020-1019).
-> 
-> These security fixes were already in 2.31.1, E.G. what we are currently
-> using, right?
-> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Indeed, they has been added to glibc 2.32 and backported to stable branches.
-It's just a copy from the release announcement... we can drop it if you prefer.
+We've no merged a better script that contains all the logic about
+generating the child pipeline, so I believe this patch of yours is no
+longer needed.
 
-Best regards,
-Romain
+Regards,
+Yann E. MORIN.
+
+> ---
+> I'd like to get this one in master, because the e-mails are annoying me
+> :-)
+> ---
+>  support/misc/gitlab-ci.yml.in | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/support/misc/gitlab-ci.yml.in b/support/misc/gitlab-ci.yml.in
+> index dddebf09e9..8a031898ef 100644
+> --- a/support/misc/gitlab-ci.yml.in
+> +++ b/support/misc/gitlab-ci.yml.in
+> @@ -1,6 +1,9 @@
+>  # Configuration for Gitlab-CI.
+>  # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
+>  
+> +include:
+> +  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+> +
+>  image: buildroot/base:20200814.2228
+>  
+>  .check_base:
+> -- 
+> 2.26.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
