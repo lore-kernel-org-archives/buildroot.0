@@ -1,83 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 21:45:37 +0200
-Subject: [Buildroot] [git commit] package/kmod: add compression support for
- the host variant
-Message-ID: <20201006193503.357BC817AA@busybox.osuosl.org>
+Date: Tue, 6 Oct 2020 21:43:35 +0200
+Subject: [Buildroot] [git commit] package/kmod: add option for host variant
+Message-ID: <20201006193503.2714C80E36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49547ea2ab173e60c274f2cf8fba3fc49158df1a
+commit: https://git.buildroot.net/buildroot/commit/?id=4ca9edaad2fae69ebe02b70065808b44b98c9d4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel may install compressed modules. At the end of the build, we
-then run depmod, to generate modules.dep and a few assorted files, so
-that loading modules works properly on the target (loading by alias,
-loading dependencies...)
+Curently, host-kmod has no option to enable it, because only
+the kernel depends on it, and this is unconditional (because
+we can't know if modules will be enabled in the kernel config).
 
-However, depmod needs support for compressed modules, or it would
-generate empty modules.dep et al.
+But we're soon to add options to enable various features of
+kmod, so we'll need a place where to show those features.
 
-Uconditionally adding support for gz and xz, and the required deps,
-was deemed too much of a burden [0], so we add options to enable
-either or both compression.
-
-[0] http://lists.busybox.net/pipermail/buildroot/2018-April/218410.html
-
-Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Cc: Lucian Buga <lucianbuga@gmail.com>
 Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kmod/Config.in.host | 10 ++++++++++
- package/kmod/kmod.mk        | 14 ++++++++++++++
- 2 files changed, 24 insertions(+)
+ linux/Config.in             | 1 +
+ package/Config.in.host      | 1 +
+ package/kmod/Config.in.host | 6 ++++++
+ 3 files changed, 8 insertions(+)
 
-diff --git a/package/kmod/Config.in.host b/package/kmod/Config.in.host
-index ea99a790f6..9dbbcea782 100644
---- a/package/kmod/Config.in.host
-+++ b/package/kmod/Config.in.host
-@@ -4,3 +4,13 @@ config BR2_PACKAGE_HOST_KMOD
- 	  kmod is a set of tools to handle common tasks with Linux
- 	  kernel modules like insert, remove, list, check properties,
- 	  resolve dependencies and aliases.
-+
-+if BR2_PACKAGE_HOST_KMOD
-+
-+config BR2_PACKAGE_HOST_KMOD_GZ
-+	bool "support gzip-compressed modules"
-+
-+config BR2_PACKAGE_HOST_KMOD_XZ
-+	bool "support xz-compressed modules"
-+
-+endif
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index b27447192c..69615452cf 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -82,6 +82,20 @@ else
- KMOD_CONF_OPTS += --disable-tools
- endif
+diff --git a/linux/Config.in b/linux/Config.in
+index 619fed86dc..5bd3cdb59b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -2,6 +2,7 @@ menu "Kernel"
  
-+ifeq ($(BR2_PACKAGE_HOST_KMOD_GZ),y)
-+HOST_KMOD_DEPENDENCIES += host-zlib
-+HOST_KMOD_CONF_OPTS += --with-zlib
-+else
-+HOST_KMOD_CONF_OPTS += --without-zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HOST_KMOD_XZ),y)
-+HOST_KMOD_DEPENDENCIES += host-xz
-+HOST_KMOD_CONF_OPTS += --with-xz
-+else
-+HOST_KMOD_CONF_OPTS += --without-xz
-+endif
-+
- # We only install depmod, since that's the only tool used for the
- # host.
- define HOST_KMOD_INSTALL_TOOLS
+ config BR2_LINUX_KERNEL
+ 	bool "Linux Kernel"
++	select BR2_PACKAGE_HOST_KMOD # Unconditional, even if modules not enabled
+ 	select BR2_PACKAGE_HOST_IMAGEMAGICK if BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH != ""
+ 	help
+ 	  Enable this option if you want to build a Linux kernel for
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 58b600d948..546f1c226d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -39,6 +39,7 @@ menu "Host utilities"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+ 	source "package/jsmin/Config.in.host"
++	source "package/kmod/Config.in.host"
+ 	source "package/libp11/Config.in.host"
+ 	source "package/lld/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+diff --git a/package/kmod/Config.in.host b/package/kmod/Config.in.host
+new file mode 100644
+index 0000000000..ea99a790f6
+--- /dev/null
++++ b/package/kmod/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_KMOD
++	bool "host kmod"
++	help
++	  kmod is a set of tools to handle common tasks with Linux
++	  kernel modules like insert, remove, list, check properties,
++	  resolve dependencies and aliases.
