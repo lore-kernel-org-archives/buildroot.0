@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 23:14:02 +0200
-Subject: [Buildroot] [PATCH v2 2/2] fs/jffs2: copy xattrs
-In-Reply-To: <20201006210902.GV11621@scaer>
-References: <20201006153726.790986-1-antoine.tenart@bootlin.com>
- <20201006153726.790986-2-antoine.tenart@bootlin.com>
- <20201006210902.GV11621@scaer>
-Message-ID: <20201006231402.710d1b52@windsurf.home>
+Date: Tue, 6 Oct 2020 23:20:20 +0200
+Subject: [Buildroot] [PATCH v2] package/qt5: add qt5remoteobjects module
+In-Reply-To: <20200412212328.8843-1-mb@mbno.org>
+References: <20200409154435.8222-1-mb@mbno.org>
+ <20200412212328.8843-1-mb@mbno.org>
+Message-ID: <20201006232020.3f7f5c3d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 6 Oct 2020 23:09:02 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hello Mister Benjamin,
 
-> Does that means that, if people are using extended attributes in their
-> device tables [0], then their jffs2 filesystem will not carry those
-> xattrs?
+On Sun, 12 Apr 2020 23:23:28 +0200
+Mister Benjamin <mb@mbno.org> wrote:
 
-Correct.
+> Signed-off-by: Mister Benjamin <mb@mbno.org>
 
-> Basically, I fiond it dubious that a filesystem option depens on a
-> package being enabled or not.
+Thanks for your contribution, and sorry for the long delay in getting
+back to you. However, there was an earlier patch posted by Sven
+Fischer, implementing the same package.
 
-True, but what do you suggest? That we unconditionally enable xattr
-support when generating a JFFS2 image?
+In addition, we do not accept anonymous contributions, for legal
+reasons. Since Sven's contribution was made before, I applied his patch
+instead, with some changes.
+
+Best regards,
 
 Thomas
 -- 
