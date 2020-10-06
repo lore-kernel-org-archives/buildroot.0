@@ -1,47 +1,42 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue,  6 Oct 2020 17:44:30 +0200
-Subject: [Buildroot] [PATCH] package/libselinux: fix the selinuxfs mount
- point
-Message-ID: <20201006154430.792940-1-antoine.tenart@bootlin.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  6 Oct 2020 18:24:26 +0200
+Subject: [Buildroot] [PATCH] package/btrfs-progs: bump to version 5.7
+Message-ID: <20201006162426.650576-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For 9 years the recommended mount point for selinuxfs has been
-/sys/fs/selinux, as stated in Linux kernel commit 7a627e3b9a2b:
-
-"""
-For selinuxfs, this mount point should be in /sys/fs/selinux/
-"""
-
-As other projects follow this convention, not doing so result in
-potential issues. One of them is the refpolicy not correctly labelling
-and supporting the mount point.
-
-Fix this by using /sys/fs/selinux as of now in Buildroot.
-
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libselinux/libselinux.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-index c96b5a443109..8087af539af0 100644
---- a/package/libselinux/libselinux.mk
-+++ b/package/libselinux/libselinux.mk
-@@ -70,10 +70,8 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
- 		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
--	# Create the selinuxfs mount point
--	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
- 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
--		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
-+		echo "none /sys/fs/selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
- endef
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index f5ad74ae6..900851363 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 a1321c77521dfa6cac41d0d030358e9c74bcf650afd6a9c1c7d531e6cd112f6b  btrfs-progs-v5.6.tar.xz
++sha256 5c2f048b8c814852614b0b262ab2d468ea02774ef01124ebc0ab708df262de5c  btrfs-progs-v5.7.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index b77745dd2..22e1e330c 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_LIBSELINUX_DEPENDENCIES = \
+-BTRFS_PROGS_VERSION = 5.6
++BTRFS_PROGS_VERSION = 5.7
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
 -- 
-2.26.2
+2.25.1
