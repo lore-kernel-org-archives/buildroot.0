@@ -1,24 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 20:55:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.22
-In-Reply-To: <20201006072749.11275-2-jubalh@iodoru.org>
-References: <20201006072749.11275-1-jubalh@iodoru.org>
- <20201006072749.11275-2-jubalh@iodoru.org>
-Message-ID: <20201006205513.12cc4fee@windsurf.home>
+Date: Tue, 6 Oct 2020 20:54:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minissdpd: bump to version
+ 1.5.20200928
+In-Reply-To: <20201006053705.26007-1-fontaine.fabrice@gmail.com>
+References: <20201006053705.26007-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201006205417.5e3333a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  6 Oct 2020 09:27:49 +0200
-Michael Vetter <jubalh@iodoru.org> wrote:
+On Tue,  6 Oct 2020 07:37:05 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+> Update indentation in hash file (two spaces)
+> 
+> http://miniupnp.free.fr/files/changelog.php?file=minissdpd-1.5.20200928.tar.gz
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/jasper/jasper.hash | 2 +-
->  package/jasper/jasper.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/minissdpd/minissdpd.hash | 4 ++--
+>  package/minissdpd/minissdpd.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
