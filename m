@@ -1,72 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  6 Oct 2020 20:56:03 +0200
-Subject: [Buildroot] [PATCH] support/scripts/apply-patches.sh: do not
- blindly remove *.orig files
-Message-ID: <20201006185604.11311-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Oct 2020 20:57:43 +0200
+Subject: [Buildroot] [arc-buildroot] [autobuild.buildroot.net] Analysis
+ of build results
+In-Reply-To: <BN8PR12MB3330D7EE79CE6EB08E3F2B26A1310@BN8PR12MB3330.namprd12.prod.outlook.com>
+References: <20200815080146.EBD3186EA1@fraxinus.osuosl.org>
+ <20200816000914.5ad801d9@windsurf.home>
+ <CAPi7W80bHF=CHbQOoA_h5CJm+nXdiQBZasCJAdeYPnJ97kfdpg@mail.gmail.com>
+ <BN8PR12MB3330A6ED2C32729E6833FFEDA15D0@BN8PR12MB3330.namprd12.prod.outlook.com>
+ <20200911103913.381a29c6@windsurf.hq.k.grp>
+ <BN8PR12MB3330D7EE79CE6EB08E3F2B26A1310@BN8PR12MB3330.namprd12.prod.outlook.com>
+Message-ID: <19c5ef98-b775-2dec-480b-d7c897a4e0fd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
-by default writes these as backup files when patches only apply with fuzz.
 
-This is unfortunate as package sources may contain files ending in .orig as
-well, breaking the build.  Luckily GNU patch can be told to not write these
-backup files using the --no-backup-if-mismatch option, so used that instead
-of the .orig removal step.
 
---no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
-busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
-BSD patch, so add logic to detect support for the flag and only use it if
-supported.
+On 02/10/2020 17:16, Alexey Brodkin wrote:
+> 
+> Hi Thomas, all,
+> 
+>>> Ok so that happens because of misconfiguration of libstdc++.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-Do we care about BSD patch / busybox patch w/ DESKTOP?  Should we just
-unconditionally use the flag?
+[snip]
+>> Wouldn't this be normally handled by having a --with-atomic option
+>> passed to gcc, which would ensure that the compiler enables -matomic,
+>> without having to pass this flag explicitly ?
+> 
+> Finally I was able to spend some more time on that. So it looks like a kind of
+> regression due to https://git.buildroot.org/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+> where we moved "-matomic" from TARGET_ABI to ARCH_TOOLCHAIN_WRAPPER_OPTS.
+> 
+> The point is (and it could be seen from my previous explanation above) libstdc++ is being built by
+> temporary cross-compiler (xgcc) instead of preperly installed wrappers for real tools.
+> That's why whatever we put in ARCH_TOOLCHAIN_WRAPPER_OPTS makes no sense, while CFLAGS_FOR_TARGET
+> where we add contents of TARGET_ABI do make "xgcc" using "-matomic".
+> 
+> So far we know what's wrong. The question now what could be a good solution?
 
-We have a similar issue with *.rej.  GNU patch can be told to not write
-those with the -r - option (since GNU patch 2.6, Nov 2009), but it should
-normally also exit with a non-zero exit code for such sitations, so I am not
-sure the check is needed?
+ The good solution is to add the -matomic explicitly in host-gcc-final's
+CFLAGS_FOR_TARGET.
 
- support/scripts/apply-patches.sh | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 66fef262ee..be61a94529 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -40,6 +40,12 @@ if [ "$1" = "-s" ] ; then
-     shift
- fi
- 
-+# does patch support --no-backup-if-mismatch (GNU, busybox w/DESKTOP)
-+if patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
-+    # don't write backup files
-+    PATCH_ARGS="--no-backup-if-mismatch"
-+fi
-+
- # Set directories from arguments, or use defaults.
- builddir=${1-.}
- patchdir=${2-../kernel-patches}
-@@ -119,7 +125,7 @@ function apply_patch {
-         exit 1
-     fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E $PATCH_ARGS -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-         exit 1
-@@ -168,6 +174,3 @@ if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-     echo "Aborting.  Reject files found."
-     exit 1
- fi
--
--# Remove backup files
--find $builddir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
--- 
-2.20.1
+> Revert offending commit?
+> 
+> -Alexey
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
