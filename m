@@ -1,25 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 20:54:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.7
-In-Reply-To: <20201006060027.36227-1-fontaine.fabrice@gmail.com>
-References: <20201006060027.36227-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201006205424.5af70e69@windsurf.home>
+Date: Tue, 6 Oct 2020 20:55:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.21
+In-Reply-To: <20201006072749.11275-1-jubalh@iodoru.org>
+References: <20201006072749.11275-1-jubalh@iodoru.org>
+Message-ID: <20201006205506.70b29abc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  6 Oct 2020 08:00:27 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue,  6 Oct 2020 09:27:48 +0200
+Michael Vetter <jubalh@iodoru.org> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 > ---
->  package/whois/whois.hash | 4 ++--
->  package/whois/whois.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/jasper/jasper.hash | 2 +-
+>  package/jasper/jasper.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Buildroot master already had jasper at 2.0.21, and seeing that you also
+sent a bump to 2.0.22, I assume this particular patch was a mistake ?
+
+Thanks!
 
 Thomas
 -- 
