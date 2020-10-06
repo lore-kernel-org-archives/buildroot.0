@@ -1,48 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 22:24:32 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/ebtables: bump to version
- 2.0.11
-In-Reply-To: <20200427212653.29933-1-ryanbarnett3@gmail.com>
-References: <20200427212653.29933-1-ryanbarnett3@gmail.com>
-Message-ID: <20201006222432.378c0385@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue,  6 Oct 2020 22:29:20 +0200
+Subject: [Buildroot] [PATCHv2] toolchain-wrapper: Disable
+ -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
+Message-ID: <20201006202920.592493-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 27 Apr 2020 16:26:52 -0500
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+GCC 10 now enable by default -ftree-loop-distribute-patterns at -O2 or -Os
+optimization level instead of -O3, see commit [1].
 
-> With the version bump to 2.0.11, ebtables switch to autotools build
-> system. In addition, ebtables-{restore/save} moved to being installed
-> as ebtables-legacy-{restore/save}.
-> 
-> Changes to support this version bump include:
-> 
->  * Remove dependency on !BR2_STATIC_LIBS for ebtables-restore as the
->    switch to autotools supports compiling with static libraries.
->  * Update ebtables-save script patch to use /usr/sbin/ebtables-legacy
->  * Remove 0001-*-ethernetdb*.patch as it was merged with commit:
->      http://git.netfilter.org/ebtables/commit/?id=f8079671326e9fd079391d24911a9a8a77f1d6fd
->  * Remove 0002-*-musl-*.patch as support was added with commit:
->      http://git.netfilter.org/ebtables/commit/?id=9fff3d5f9da00255463d28b38d688c25025b7fb1
-> 
-> Tested with test-pkg with BR2_PACKAGE_EBTABLES=y:
-> 
->                              br-arm-full [1/6]: OK
->                   br-arm-cortex-a9-glibc [2/6]: OK
->                    br-arm-cortex-m4-full [3/6]: SKIPPED
->                           br-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
-> 
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Due to this change, the microblaze kernel doesn't boot (as reported by
+toolchain-builder project).
 
-Thanks, both patches applied!
+The gcc docs between version 9 and 10 has been updated accordingly [2] [3]
+but there no word about this change in the gcc 10 changelog [4].
 
-Thomas
+Fixes microblazebe:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359536 (glibc)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359538 (musl)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359540 (uClubc-ng)
+
+Fixes microblazeel:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359542 (glibc)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359544 (musl)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359546 (uClibc-ng)
+
+This has been reported upsteam [5].
+
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
+[2] https://gcc.gnu.org/onlinedocs/gcc-9.3.0/gcc/Optimize-Options.html#Optimize-Options
+[3] https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Optimize-Options.html#Optimize-Options
+[4] https://gcc.gnu.org/gcc-10/changes.html
+[5] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+It's not clear if building the kernel with gcc 9 and -O3 trigger this issue.
+It has been noticed by the change from [1].
+
+v2: move -fno-tree-loop-distribute-patterns to the toolchain-wrapper (Arnout).
+---
+ toolchain/toolchain-wrapper.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index f1312c5c7f..8b551e3a18 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -33,6 +33,14 @@ TOOLCHAIN_WRAPPER_OPTS += -DBR_NEED_SOURCE_DATE_EPOCH
+ endif
+ endif
+ 
++# Disable -ftree-loop-distribute-patterns on microblaze to
++# workaround a compiler bug with gcc 10 and -O2, -Os or -O3.
++# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10)$(BR2_microblaze),yy)
++TOOLCHAIN_WRAPPER_OPTS += -fno-tree-loop-distribute-patterns
++endif
++
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+ # separate argument when used in execv() by the toolchain wrapper.
+ TOOLCHAIN_WRAPPER_ARGS += \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.4
