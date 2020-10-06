@@ -1,71 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 6 Oct 2020 23:31:39 +0200
-Subject: [Buildroot] [PATCH] package/libselinux: fix the selinuxfs mount
- point
-In-Reply-To: <20201006154430.792940-1-antoine.tenart@bootlin.com>
-References: <20201006154430.792940-1-antoine.tenart@bootlin.com>
-Message-ID: <20201006213139.GX11621@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Oct 2020 23:32:49 +0200
+Subject: [Buildroot] [git commit] toolchain/toolchain-buildroot: allow
+ uclibc-ng for riscv
+Message-ID: <20201006212213.004408E999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Antoine, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=209a082478fca143394512bb9a6c0822f12cfe2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-10-06 17:44 +0200, Antoine Tenart spake thusly:
-> For 9 years the recommended mount point for selinuxfs has been
-> /sys/fs/selinux, as stated in Linux kernel commit 7a627e3b9a2b:
-> 
-> """
-> For selinuxfs, this mount point should be in /sys/fs/selinux/
-> """
-> 
-> As other projects follow this convention, not doing so result in
-> potential issues. One of them is the refpolicy not correctly labelling
-> and supporting the mount point.
-> 
-> Fix this by using /sys/fs/selinux as of now in Buildroot.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+uclibc-ng supports the RISC-V architecture since version 1.0.31, so
+let's allow selecting this C library when RISC-V is used.
 
-Applied to master, thanks.
+There was a previous attempt in commit
+bd9810e176273914eca1208bcba23f0de9e446b3, which was reverted in
+e7d631c0df1698b4edc94f148e7247869430e108, due to uClibc-ng not
+implementing the __riscv_flush_icache() which is needed by
+gcc. However this function has been implemented in upstream uClibc-ng
+as of 1.0.35, so we can now safely re-enable uClibc-ng on RISC-V.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uclibc/Config.in                | 2 ++
+ toolchain/toolchain-buildroot/Config.in | 5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-> ---
->  package/libselinux/libselinux.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
-> index c96b5a443109..8087af539af0 100644
-> --- a/package/libselinux/libselinux.mk
-> +++ b/package/libselinux/libselinux.mk
-> @@ -70,10 +70,8 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
->  		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
-> -	# Create the selinuxfs mount point
-> -	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
->  	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
-> -		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
-> +		echo "none /sys/fs/selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
->  endef
->  
->  HOST_LIBSELINUX_DEPENDENCIES = \
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index de2885bc92..918c5813f2 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -106,6 +106,8 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "xtensa"   if BR2_xtensa
+ 	default "i386"	   if BR2_i386
+ 	default "x86_64"   if BR2_x86_64
++	default "riscv64"  if BR2_riscv && BR2_ARCH_IS_64
++	default "riscv32"  if BR2_riscv && !BR2_ARCH_IS_64
+ 
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 1c4705600e..f34dd84c29 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -31,8 +31,9 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_arm     || BR2_armeb    || \
+ 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_or1k    || BR2_powerpc || BR2_sh2a   || BR2_sh4	   || \
+-		   BR2_sh4eb   || BR2_sparc   || BR2_xtensa || BR2_x86_64
++		   BR2_or1k    || BR2_powerpc || BR2_riscv || BR2_sh2a   || \
++		   BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
++		   BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
+ 	help
+ 	  This option selects uClibc-ng as the C library for the
