@@ -1,42 +1,47 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Tue,  6 Oct 2020 09:27:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump to version 2.0.22
-In-Reply-To: <20201006072749.11275-1-jubalh@iodoru.org>
-References: <20201006072749.11275-1-jubalh@iodoru.org>
-Message-ID: <20201006072749.11275-2-jubalh@iodoru.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 6 Oct 2020 10:36:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: bump to version
+ 0.32.0
+In-Reply-To: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
+References: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
+Message-ID: <60c2ecab-ad01-7770-d432-640a0d639626@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
----
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Fabrice,
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index df8ac8c9c7..bb660e3c5d 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 2482def06dfaa33b8d93cbe992a29723309f3c2b6e75674423a52fc82be10418  jasper-2.0.21.tar.gz
-+sha256 afc4166bff29b8a0dc46ed5e8d6a208d7976fccfd0b1146e3400c8b2948794a2  jasper-2.0.21.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 1351efa563..ab7cb933bc 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.21
-+JASPER_VERSION = 2.0.22
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+On 04/10/20 22:00, Fabrice Fontaine wrote:
+> - Update site to get latest version
+> - Remove all patches (already in version)
+> - License file has been renamed and slightly updated to change paths
+>   since version 0.23.0 and
+>   https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
+> - Add a patch to disable tests
+> - Remove BUILD_{JAVA,JAVASCRIPT,PERL,PHP} as those bindings don't exist
+>   anymore
+> - Disable go binding
+> - Disable fuzz testing
+> - Add new optional libuv and jsoncpp dependencies
+> - Update QPID_PROTON_REMOVE_USELESS_FILES
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Thank you very much for taking care of upgrading this package. I tried a
+while back but gave up as it was taking too much time for a package I am
+not actively using.
+
+The patch content looks good, but I'm getting a build failure after a
+simple 'make clean && make' with this defconfig:
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_QPID_PROTON=y
+
+Can you check that?
+
 -- 
-2.26.2
+Luca
