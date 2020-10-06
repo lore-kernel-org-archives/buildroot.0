@@ -1,148 +1,128 @@
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Tue,  6 Oct 2020 15:42:49 +0200
-Subject: [Buildroot] [PATCH 16/17] support/script/cve-checker: Allow to use
- cpeid
+Date: Tue,  6 Oct 2020 15:42:41 +0200
+Subject: [Buildroot] [PATCH 08/17] support/scripts/cpe-report: new script
 In-Reply-To: <20201006134250.22738-1-gregory.clement@bootlin.com>
 References: <20201006134250.22738-1-gregory.clement@bootlin.com>
-Message-ID: <20201006134250.22738-17-gregory.clement@bootlin.com>
+Message-ID: <20201006134250.22738-9-gregory.clement@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a argument to cve-checker allowing to use the cpeid instead of the
-internal name and version from buildroot. It should allow to have
-more accurate CVE status.
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+The script supports looking up all the CPEs provided in a
+make cpe-info csv file export from a target Buildroot build.
+It checks the current version and suggests a CPE needs update
+or possibly an initial submission is required to NIST.
+
+Adds option to allow alternate locations for the dictionary
+URL and caching of a processed dictionary to speed up execution.
+
+Outputs a cpe/ folder with propsed xml generated from the
+dictionary contents to propose updated versions to NIST.
+
+For missing CPE matches, a cpe-report-missing.txt is created
+by the script that can be used later to manually create proposed
+new NIST dictionary entries.
+
+Ref: NIST has a group email (cpe_dictionary at nist.gov) used to
+recieve these version update and new entry xml files.  They do
+process the XML and provide feedback. In some cases they will
+propose back something different where the vendor or version is
+slightly different.
+
+Limitations
+ - Currently any use of non-number version identifiers isn't
+   supported by NIST as they use ranges to determine impact
+   of a CVE
+ - Any Linux version from a non-upstream is also not supported
+   without manually adjusting the information as the custom
+   kernel will more then likely not match the upstream version
+   used in the dictionary
+
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- support/scripts/cve-checker | 48 +++++++++++++++++++++++++++++++------
- 1 file changed, 41 insertions(+), 7 deletions(-)
+ support/scripts/cpe-report | 70 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100755 support/scripts/cpe-report
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-index b32e036d76..d1bce65b0c 100755
---- a/support/scripts/cve-checker
-+++ b/support/scripts/cve-checker
-@@ -26,23 +26,26 @@ import cve as cvecheck
- 
- 
- class Package:
--    def __init__(self, name, version, ignored_cves):
-+    def __init__(self, name, version, cpeid, ignored_cves):
-         self.name = name
-         self.version = version
-+        self.cpeid = cpeid
-         self.cves = list()
-         self.cves_to_check = list()
-         self.ignored_cves = ignored_cves
- 
- 
--def check_package_cves(nvd_path, packages):
-+def check_package_cves(nvd_path, packages, use_cpeid):
-     if not os.path.isdir(nvd_path):
-         os.makedirs(nvd_path)
--
-     for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
-         for pkg_name in cve.pkg_names:
-             pkg = packages.get(pkg_name, '')
-             if pkg:
--                affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
-+                if use_cpeid:
-+                    affected = cve.affects_cpeid(pkg.cpeid, pkg.ignored_cves)
-+                else:
-+                    affected = cve.affects(pkg.name, pkg.version, pkg.ignored_cves)
-                 if (affected == cve.CVE_UNKNOWN):
-                     pkg.cves_to_check.append(cve.identifier)
-                 elif affected == cve.CVE_AFFECTS:
-@@ -91,7 +94,14 @@ if (typeof sorttable === \"object\") {
- 
- def dump_html_pkg(f, pkg):
-     f.write(" <tr>\n")
--    f.write("  <td>%s</td>\n" % pkg.name)
-+    td_class = ["left"]
-+    if len(pkg.cpeid) != 0:
-+        td_class.append("correct")
-+    else:
-+        td_class.append("wrong")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    f.write("  %s\n" % pkg.name)
-+    f.write("  </td>\n")
- 
-     # Current version
-     if len(pkg.version) > 20:
-@@ -122,6 +132,16 @@ def dump_html_pkg(f, pkg):
-         f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-     f.write("  </td>\n")
- 
-+    # CPEID valid
-+    td_class = ["left"]
-+    if len(pkg.cpeid) != 0:
-+        td_class.append("correct")
-+    else:
-+        td_class.append("wrong")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    f.write("  %s\n" % pkg.cpeid)
-+    f.write("  </td>\n")
+diff --git a/support/scripts/cpe-report b/support/scripts/cpe-report
+new file mode 100755
+index 0000000000..7242a372b2
+--- /dev/null
++++ b/support/scripts/cpe-report
+@@ -0,0 +1,70 @@
++#!/usr/bin/env python
 +
-     f.write(" </tr>\n")
- 
- 
-@@ -133,6 +153,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">Version</td>
- <td class=\"centered\">CVEs</td>
- <td class=\"centered\">CVEs to check</td>
-+<td class=\"centered\">CPEID valid</td>
- </tr>
- """)
-     for pkg in packages:
-@@ -158,6 +179,7 @@ def dump_json(packages, date, output):
-         pkg.name: {
-             "version": pkg.version,
-             "cves": pkg.cves,
-+            "cpeid": pkg.cpeid,
-         } for pkg in packages
-     }
-     # The actual structure to dump, add date to it
-@@ -182,25 +204,37 @@ def parse_args():
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath,
-                         required=True)
-+    parser.add_argument("--cpeid", action='store_true')
-     args = parser.parse_args()
-     if not args.html and not args.json:
-         parser.error('at least one of --html or --json (or both) is required')
-     return args
- 
-+def cpeid_name(pkg):
++import argparse
++import sys
++import csv
++from cpedb import CPEDB
++
++CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
++
++
++def get_target_cpe_report(cpe_report_file, cpedb):
++    report_cpe_exact_match = ""
++    report_cpe_needing_update = ""
++    report_cpe_needing_update_list = ""
++    report_cpe_missing = ""
++
++    print("CPE: Checking for matches...")
 +    try:
-+        return pkg.cpeid.split(':')[1]
-+    except:
-+        return ''
- 
- def __main__():
-     packages = list()
-     content = json.load(sys.stdin)
-     for item in content:
-         pkg = content[item]
--        p = Package(item, pkg.get('version', ''), pkg.get('ignore_cves', ''))
-+        p = Package(item, pkg.get('version', ''), pkg.get('cpeid', ''), pkg.get('ignore_cves', ''))
-         packages.append(p)
- 
-     args = parse_args()
-+    if args.cpeid:
-+        print("going to use strict cpeid")
-     date = datetime.datetime.utcnow()
- 
-     print("Checking packages CVEs")
--    check_package_cves(args.nvd_path, {p.name: p for p in packages})
-+    if args.cpeid:
-+        check_package_cves(args.nvd_path, {cpeid_name(p): p for p in packages}, args.cpeid)
-+    else:
-+        check_package_cves(args.nvd_path, {p.name: p for p in packages}, args.cpeid)
++        with open(cpe_report_file) as cpe_file:
++            cpe_list = csv.reader(cpe_file)
++            next(cpe_list)  # make cpe-info has a one line header
++            for cpe in cpe_list:
++                result = cpedb.find(cpe[0])
++                if not result:
++                    result = cpedb.find_partial(cpedb.get_cpe_no_version(cpe[0]))
++                    if not result:
++                        report_cpe_missing += cpe[0] + "," + cpe[1] + "," + cpe[3] + "\n"
++                    else:
++                        latest_version = cpedb.find_partial_latest_version(cpedb.get_cpe_no_version(cpe[0]))
++                        report_cpe_needing_update += cpe[0] + ", Latest Version Guess from Dict[" + latest_version + "]\n"
++                        report_cpe_needing_update_list += cpe[0] + "\n"
++                else:
++                    report_cpe_exact_match += cpe[0] + "\n"
++    except (OSError, IOError) as e:
++        print("CPE: report csv file (%s): %s" % (e.errno, e.strerror))
++        sys.exit(1)
 +
- 
-     if args.html:
-         print("Write HTML")
++    print("CPE: Found but may REQUIRE an UPDATE:\n" + report_cpe_needing_update)
++    print("CPE: Not found:\n" + report_cpe_missing)
++
++    fp = open('cpe-report-missing.txt', 'w+')
++    fp.write(report_cpe_missing)
++    fp.close()
++
++    for cpe in report_cpe_needing_update_list.splitlines():
++        cpedb.update(cpe)
++    print("XML Generation Complete of NIST update files, see ./cpe/*")
++
++
++def parse_args():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('-c', dest='cpe_report', action='store', required=True,
++                        help='CPE Report generated by make cpe-info (csv format)')
++    parser.add_argument('-u', dest='url', action='store', required=False,
++                        help='(optional)URL to the NIST dict (official-cpe-dictionary_v2.3.xml.gz)')
++    return parser.parse_args()
++
++
++def __main__():
++    args = parse_args()
++    cpedb = CPEDB()
++    url = CPE_XML_URL
++    if args.url:
++        url = args.url
++    cpedb.get_xml_dict(url)
++    print("Performing Target CPE Report Analysis...")
++    get_target_cpe_report(args.cpe_report, cpedb)
++
++
++__main__()
 -- 
 2.28.0
