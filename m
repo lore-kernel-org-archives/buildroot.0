@@ -1,27 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 21:10:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.2.10
-In-Reply-To: <20201005171642.2612627-1-fontaine.fabrice@gmail.com>
-References: <20201005171642.2612627-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201006211011.595dc467@windsurf.home>
+Date: Tue, 6 Oct 2020 21:13:19 +0200
+Subject: [Buildroot] [git commit] boot/uboot/Config.in: sort uboot's format
+ extensions alphabetically
+Message-ID: <20201006190248.A75258EB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  5 Oct 2020 19:16:42 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=61484dd823a03e3e2d23a8c640e5c1fd6e916cb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +# From https://sourceforge.net/projects/expat/files/expat/2.2.10/
-> +md5  e0fe49a6b3480827c9455e4cfc799133  expat-2.2.9.tar.xz
-> +sha1  a333b95121a718a77ee481dbade5efcd72a32eb8  expat-2.2.9.tar.xz
+It's easier to locate given format when it's sorted.
 
-You forgot to update the filenames here. The hashes were correct, but
-not the filenames. I fixed that and applied to master. Thanks!
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/uboot/Config.in | 54 ++++++++++++++++++++++++++--------------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index a87a642581..63291c9a0f 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -245,47 +245,31 @@ config BR2_TARGET_UBOOT_FORMAT_BIN
+ config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
+ 	bool "u-boot-dtb.bin"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
+-	bool "u-boot-dtb.img"
++config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
++	bool "u-boot-nand.bin"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+-	bool "u-boot-dtb.imx"
++config BR2_TARGET_UBOOT_FORMAT_ELF
++	bool "u-boot.elf"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_ITB
+-	bool "u-boot.itb"
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
++	bool "u-boot-dtb.img"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_IMX
+ 	bool "u-boot.imx"
+ 
+-config BR2_TARGET_UBOOT_FORMAT_NAND_BIN
+-	bool "u-boot-nand.bin"
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
++	bool "u-boot-dtb.imx"
++
++config BR2_TARGET_UBOOT_FORMAT_ITB
++	bool "u-boot.itb"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_KWB
+ 	bool "u-boot.kwb (Marvell)"
+ 	depends on BR2_arm
+ 
+-config BR2_TARGET_UBOOT_FORMAT_ELF
+-	bool "u-boot.elf"
+-
+-config BR2_TARGET_UBOOT_FORMAT_SB
+-	bool "u-boot.sb (Freescale i.MX28)"
+-	depends on BR2_arm
+-
+-config BR2_TARGET_UBOOT_FORMAT_SD
+-	bool "u-boot.sd (Freescale i.MX28)"
+-	depends on BR2_arm
+-	help
+-	  This is Freescale i.MX28 SB format, with a header for booting
+-	  from an SD card.
+-
+-	  U-Boot includes an mxsboot tool to generate this format,
+-	  starting from 2011.12.
+-
+-	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+-
+ config BR2_TARGET_UBOOT_FORMAT_NAND
+ 	bool "u-boot.nand (Freescale i.MX28)"
+ 	depends on BR2_arm
+@@ -343,6 +327,22 @@ config BR2_TARGET_UBOOT_FORMAT_NAND_ERASE_SIZE
+ 
+ endif
+ 
++config BR2_TARGET_UBOOT_FORMAT_SB
++	bool "u-boot.sb (Freescale i.MX28)"
++	depends on BR2_arm
++
++config BR2_TARGET_UBOOT_FORMAT_SD
++	bool "u-boot.sd (Freescale i.MX28)"
++	depends on BR2_arm
++	help
++	  This is Freescale i.MX28 SB format, with a header for booting
++	  from an SD card.
++
++	  U-Boot includes an mxsboot tool to generate this format,
++	  starting from 2011.12.
++
++	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
++
+ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	bool "Custom (specify below)"
+ 	help
