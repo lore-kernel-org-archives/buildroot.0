@@ -1,7 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  6 Oct 2020 12:39:52 +0200
-Subject: [Buildroot] [PATCH v2 1/4] configs/mx6cubox: use recommended layout
-Message-ID: <20201006103955.464562-1-francois.perrad@gadz.org>
+Date: Tue,  6 Oct 2020 12:39:53 +0200
+Subject: [Buildroot] [PATCH v2 2/4] configs/mx6cubox: switch uboot to
+ Kconfig build system
+In-Reply-To: <20201006103955.464562-1-francois.perrad@gadz.org>
+References: <20201006103955.464562-1-francois.perrad@gadz.org>
+Message-ID: <20201006103955.464562-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,63 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- configs/mx6cubox_defconfig | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+ configs/mx6cubox_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index 7e9b16bd2..18e06fea8 100644
+index 18e06fea8..3c45198ce 100644
 --- a/configs/mx6cubox_defconfig
 +++ b/configs/mx6cubox_defconfig
-@@ -1,15 +1,34 @@
-+# Architecture
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
-+
-+# Toolchain
- # Linux headers same as kernel, a 5.4 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+
-+# System configuration
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/mx6cubox/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# Filesystem images
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Bootloaders
+@@ -30,9 +30,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ 
+ # Bootloaders
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
+-BR2_TARGET_UBOOT_BOARDNAME="mx6cuboxi"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-@@ -17,14 +36,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
  BR2_TARGET_UBOOT_FORMAT_IMG=y
  BR2_TARGET_UBOOT_SPL=y
  BR2_TARGET_UBOOT_SPL_NAME="SPL"
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
--BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-cubox-i imx6dl-cubox-i imx6q-hummingboard imx6dl-hummingboard"
--BR2_LINUX_KERNEL_INSTALL_TARGET=y
--BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
- # required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.25.1
