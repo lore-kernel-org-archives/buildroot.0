@@ -1,40 +1,47 @@
 From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Tue,  6 Oct 2020 17:37:25 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/mtd: add host-acl dependency for
- host
-Message-ID: <20201006153726.790986-1-antoine.tenart@bootlin.com>
+Date: Tue,  6 Oct 2020 17:44:30 +0200
+Subject: [Buildroot] [PATCH] package/libselinux: fix the selinuxfs mount
+ point
+Message-ID: <20201006154430.792940-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling the host version of mtd, --with-jffs and --with-ubifs are
-always set, meaning --with-xattr is set by default. The xattr support
-only work if 'sys/acl.h' is available, otherwise the feature is silently
-dropped (a warning is shown during the configuration step).
+For 9 years the recommended mount point for selinuxfs has been
+/sys/fs/selinux, as stated in Linux kernel commit 7a627e3b9a2b:
 
-This patch adds a dependency on host-acl for host-mtd, so that the xattr
-feature is correctly supported. Logic to have xattr support is already
-there and working for the non-host flavour.
+"""
+For selinuxfs, this mount point should be in /sys/fs/selinux/
+"""
+
+As other projects follow this convention, not doing so result in
+potential issues. One of them is the refpolicy not correctly labelling
+and supporting the mount point.
+
+Fix this by using /sys/fs/selinux as of now in Buildroot.
 
 Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 ---
- package/mtd/mtd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libselinux/libselinux.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 1186fa52d552..9f259b35d906 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -53,7 +53,7 @@ else
- MTD_CONF_OPTS += --without-xattr
- endif
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index c96b5a443109..8087af539af0 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -70,10 +70,8 @@ define LIBSELINUX_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(LIBSELINUX_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
+ 		$(LIBSELINUX_MAKE_INSTALL_TARGETS)
+-	# Create the selinuxfs mount point
+-	if [ ! -d "$(TARGET_DIR)/selinux" ]; then mkdir $(TARGET_DIR)/selinux; fi
+ 	if ! grep -q "selinuxfs" $(TARGET_DIR)/etc/fstab; then \
+-		echo "none /selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
++		echo "none /sys/fs/selinux selinuxfs noauto 0 0" >> $(TARGET_DIR)/etc/fstab ; fi
+ endef
  
--HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
-+HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
- HOST_MTD_CONF_OPTS = \
- 	--with-jffs \
- 	--with-ubifs \
+ HOST_LIBSELINUX_DEPENDENCIES = \
 -- 
 2.26.2
