@@ -1,520 +1,233 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 6 Oct 2020 08:40:19 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/libmdbx: new package
- (library/database).
-In-Reply-To: <20201005201554.1071637-2-leo@yuriev.ru>
-References: <CAEyMn7ahanh2zR83cTNa_ZzdxCY5YL25z+wtA6gO4k32FXAXpA@mail.gmail.com>
- <20201005201554.1071637-2-leo@yuriev.ru>
-Message-ID: <CAEyMn7Z_ThRrPqAPdn0X9N6LVHGiDNLT2oF=FpiDaeoWAGXBgw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 06 Oct 2020 07:10:20 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-10-05
+Message-ID: <20201006071028.49DE020337@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Leonid,
+Hello,
 
-thank you for the new version. Some comments below.
+Autobuild statistics for 2020-10-05
+===================================
 
-Am Mo., 5. Okt. 2020 um 22:16 Uhr schrieb Leonid Yuriev <leo@yuriev.ru>:
->
-> This patch adds libmdbx v0.9.1:
->  - libmdbx is one of the fastest compact embeddable key-value ACID database.
->  - libmdbx has a specific set of properties and capabilities,
->    focused on creating unique lightweight solutions.
->  - libmdbx surpasses the legendary LMDB (Lightning Memory-Mapped Database)
->    in terms of reliability, features and performance.
->
-> https://github.com/erthink/libmdbx
->
-> ---
-> Changes v1 -> v2:
->   - libmdbx version v0.8.2 -> v0.9.1 (released 2020-09-30)
->
-> Changes v2 -> v3:
->   - removed outcommented stuff (suggested by Heiko Thiery).
->   - cleaned up and simplified the makefile (suggested by Heiko Thiery).
->   - added patch for C++ header installation.
->   - added patch with fix minor copy&paste typo.
->   - added patch with pthread workaround for buggy toolchain/cmake/buildroot.
->   - added patch for `pthread_yield()`.
->   - passed `utils/check-package package/libmdbx/*` (suggested by Heiko Thiery).
->   - passed `utils/test-pkg -a -p libmdbx` (suggested by Heiko Thiery).
->
-> Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> ---
->  DEVELOPERS                                    |  3 +
->  package/Config.in                             |  1 +
->  .../0001-mdbx-fix-minor-copy-paste-typo.patch | 27 ++++++++
->  ...e-fix-missing-installation-of-mdbx.h.patch | 54 +++++++++++++++
->  .../0003-mdbx-fix-obsolete-__noreturn.patch   | 27 ++++++++
->  ...ield-instruction-on-ARM-if-unsupport.patch | 28 ++++++++
->  ...fix-minor-false-positive-GCC-warning.patch | 27 ++++++++
->  ...ad-workaround-for-buggy-toolchain-cm.patch | 65 +++++++++++++++++++
->  ...mdbx-fix-pthread_yield-for-non-GLIBC.patch | 42 ++++++++++++
->  package/libmdbx/Config.in                     | 35 ++++++++++
->  package/libmdbx/libmdbx.hash                  |  2 +
->  package/libmdbx/libmdbx.mk                    | 23 +++++++
->  12 files changed, 334 insertions(+)
->  create mode 100644 package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
->  create mode 100644 package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
->  create mode 100644 package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
->  create mode 100644 package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
->  create mode 100644 package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
->  create mode 100644 package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
->  create mode 100644 package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 21  | 10  |  0  | 31  |
+  2020.05.x  | 11  |  6  |  0  | 17  |
+  2020.08.x  | 28  |  6  |  0  | 34  |
+    master   | 169 | 77  |  0  | 246 |
 
-Is it required to add all these patches? They seem all to be in the
-upstream repo. So you could also set the version to the last commit id
-that contains all these changes.
+Classification of failures by reason for master
+-----------------------------------------------
 
->  create mode 100644 package/libmdbx/Config.in
->  create mode 100644 package/libmdbx/libmdbx.hash
->  create mode 100644 package/libmdbx/libmdbx.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 95942cbeee..7ac362fbe1 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1545,6 +1545,9 @@ N:        Leon Anavi <leon.anavi@konsulko.com>
->  F:     board/olimex/a10_olinuxino
->  F:     configs/olimex_a10_olinuxino_lime_defconfig
->
-> +N:     Leonid Yuriev <leo@yuriev.ru>
-> +F:     package/libmdbx
-> +
->  N:     Lionel Flandrin <lionel@svkt.org>
->  F:     package/python-babel/
->  F:     package/python-daemonize/
-> diff --git a/package/Config.in b/package/Config.in
-> index 51583d07d6..f87e0388a0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1370,6 +1370,7 @@ menu "Database"
->         source "package/kompexsqlite/Config.in"
->         source "package/leveldb/Config.in"
->         source "package/libgit2/Config.in"
-> +       source "package/libmdbx/Config.in"
->         source "package/libodb/Config.in"
->         source "package/libodb-boost/Config.in"
->         source "package/libodb-mysql/Config.in"
-> diff --git a/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch b/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
-> new file mode 100644
-> index 0000000000..d9ff3c5e71
-> --- /dev/null
-> +++ b/package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
-> @@ -0,0 +1,27 @@
-> +From 5807e2eda046bff35946972289236bbef5c0c597 Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Thu, 1 Oct 2020 02:27:29 +0300
-> +Subject: [PATCH] mdbx++: fix minor copy&paste typo.
-> +
-> +Change-Id: I0af3e7ffbbd1231069a60f9f48880df3df2141d7
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + mdbx.h++ | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/mdbx.h++ b/mdbx.h++
-> +index 095ff9abb..2050f4b92 100644
-> +--- a/mdbx.h++
-> ++++ b/mdbx.h++
-> +@@ -538,7 +538,7 @@ struct LIBMDBX_API_TYPE slice : public ::MDBX_val {
-> +   byte *from_base58(byte *dest, size_t dest_size,
-> +                     bool ignore_spaces = false) const;
-> +
-> +-  /// vReturns the buffer size in bytes needed for conversion
-> ++  /// \brief Returns the buffer size in bytes needed for conversion
-> +   /// [Base58](https://en.wikipedia.org/wiki/Base58) dump to data.
-> +   MDBX_CXX11_CONSTEXPR size_t from_base58_bytes() const noexcept {
-> +     return length() / 11 * 8 + length() % 11 * 32 / 43;
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch b/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
-> new file mode 100644
-> index 0000000000..df49342ccb
-> --- /dev/null
-> +++ b/package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
-> @@ -0,0 +1,54 @@
-> +From dc2cd19d566e84451ee47cf04277f97bc22771c5 Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Fri, 2 Oct 2020 00:05:02 +0300
-> +Subject: [PATCH] mdbx-cmake: fix missing installation of `mdbx.h++`
-> +
-> +Change-Id: I41975e4eeff6583a266b273b9a4f8486982ede90
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + CMakeLists.txt | 8 +++++---
-> + 1 file changed, 5 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 28db425c5..95f116521 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -485,7 +485,8 @@ fetch_version(MDBX "${CMAKE_CURRENT_SOURCE_DIR}" FALSE)
-> + message(STATUS "libmdbx version is ${MDBX_VERSION}")
-> +
-> + # sources list
-> +-set(LIBMDBX_SOURCES mdbx.h "${CMAKE_CURRENT_BINARY_DIR}/config.h" )
-> ++set(LIBMDBX_PUBLIC_HEADERS mdbx.h)
-> ++set(LIBMDBX_SOURCES mdbx.h "${CMAKE_CURRENT_BINARY_DIR}/config.h")
-> + if(MDBX_AMALGAMATED_SOURCE)
-> +   list(APPEND LIBMDBX_SOURCES mdbx.c)
-> + else()
-> +@@ -511,6 +512,7 @@ else()
-> + endif(MDBX_AMALGAMATED_SOURCE)
-> + if(MDBX_BUILD_CXX)
-> +   message(STATUS "Use C${MDBX_C_STANDARD} and C++${MDBX_CXX_STANDARD} for libmdbx")
-> ++  list(APPEND LIBMDBX_PUBLIC_HEADERS mdbx.h++)
-> +   list(APPEND LIBMDBX_SOURCES "${MDBX_SOURCE_DIR}/mdbx.c++" mdbx.h++)
-> + else()
-> +   message(STATUS "Use C${MDBX_C_STANDARD} for libmdbx but C++ portion is disabled")
-> +@@ -561,7 +563,7 @@ if(MDBX_INSTALL_STATIC)
-> + else()
-> +   add_library(mdbx-static STATIC EXCLUDE_FROM_ALL ${LIBMDBX_SOURCES})
-> + endif()
-> +-set_target_properties(mdbx-static PROPERTIES PUBLIC_HEADER mdbx.h)
-> ++set_target_properties(mdbx-static PROPERTIES PUBLIC_HEADER "${LIBMDBX_PUBLIC_HEADERS}")
-> + target_compile_definitions(mdbx-static PRIVATE MDBX_BUILD_SHARED_LIBRARY=0)
-> + target_setup_options(mdbx-static)
-> + libmdbx_setup_libs(mdbx-static INTERFACE)
-> +@@ -576,7 +578,7 @@ endif()
-> + # build shared library
-> + if(MDBX_BUILD_SHARED_LIBRARY)
-> +   add_library(mdbx SHARED ${LIBMDBX_SOURCES})
-> +-  set_target_properties(mdbx PROPERTIES PUBLIC_HEADER mdbx.h)
-> ++  set_target_properties(mdbx PROPERTIES PUBLIC_HEADER "${LIBMDBX_PUBLIC_HEADERS}")
-> +   target_compile_definitions(mdbx PRIVATE LIBMDBX_EXPORTS MDBX_BUILD_SHARED_LIBRARY=1 INTERFACE LIBMDBX_IMPORTS)
-> +   target_setup_options(mdbx)
-> +   libmdbx_setup_libs(mdbx PRIVATE)
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch b/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
-> new file mode 100644
-> index 0000000000..cb04334220
-> --- /dev/null
-> +++ b/package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
-> @@ -0,0 +1,27 @@
-> +From 280ed17ea2dff464c9688fcc92079f36d8b74621 Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Sat, 3 Oct 2020 11:35:26 +0300
-> +Subject: [PATCH] mdbx: fix obsolete `__noreturn`.
-> +
-> +Change-Id: Ic78843d6f16de2a409c16ceecc7acb2ed8aa3e68
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + mdbx.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/mdbx.c b/mdbx.c
-> +index 04ea5140d..9212640fe 100644
-> +--- a/mdbx.c
-> ++++ b/mdbx.c
-> +@@ -141,7 +141,7 @@ __extern_C void __assert(const char *, const char *, unsigned int, const char *)
-> + #else
-> +     __nothrow
-> + #endif /* __THROW */
-> +-    __noreturn;
-> ++    MDBX_NORETURN;
-> + #define __assert_fail(assertion, file, line, function)                         \
-> +   __assert(assertion, file, line, function)
-> +
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch b/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
-> new file mode 100644
-> index 0000000000..23f91d859b
-> --- /dev/null
-> +++ b/package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
-> @@ -0,0 +1,28 @@
-> +From 70b615e8d4d10cda2d961a815dd15eb87a1f3925 Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Sun, 4 Oct 2020 14:54:11 +0300
-> +Subject: [PATCH] mdbx: don't use `yield` instruction on ARM if unsupported.
-> +
-> +Change-Id: I0b01d783fe4336b089f4b051fb61c203b5879aa5
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + mdbx.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/mdbx.c b/mdbx.c
-> +index aba445424..a9ba1ee85 100644
-> +--- a/mdbx.c
-> ++++ b/mdbx.c
-> +@@ -763,7 +763,8 @@ static __always_inline void atomic_yield(void) {
-> + #else
-> +   __asm__ __volatile__("hint @pause");
-> + #endif
-> +-#elif defined(__arm__) || defined(__aarch64__)
-> ++#elif defined(__aarch64__) || (defined(__ARM_ARCH) && __ARM_ARCH > 6) ||       \
-> ++    defined(__ARM_ARCH_6K__)
-> + #ifdef __CC_ARM
-> +   __yield();
-> + #else
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch b/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
-> new file mode 100644
-> index 0000000000..29d69e3faa
-> --- /dev/null
-> +++ b/package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
-> @@ -0,0 +1,27 @@
-> +From 8d4e7994c0c5c0cf69326139717e324f90bff65b Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Mon, 5 Oct 2020 15:09:10 +0300
-> +Subject: [PATCH] mdbx-load: fix minor false-positive GCC warning.
-> +
-> +Change-Id: Ie75c793712d050e8d3da76a4d0a8df9b81dc5275
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + mdbx_load.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/mdbx_load.c b/mdbx_load.c
-> +index e5e72fc8f..54e179553 100644
-> +--- a/mdbx_load.c
-> ++++ b/mdbx_load.c
-> +@@ -318,7 +318,7 @@ static int readhdr(void) {
-> +     }
-> +
-> +     for (int i = 0; dbflags[i].bit; i++) {
-> +-      bool value;
-> ++      bool value = false;
-> +       if (valbool(dbuf.iov_base, dbflags[i].name, &value)) {
-> +         if (value)
-> +           dbi_flags |= dbflags[i].bit;
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch b/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
-> new file mode 100644
-> index 0000000000..37525cf0d5
-> --- /dev/null
-> +++ b/package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
-> @@ -0,0 +1,65 @@
-> +From 787eaaa373073e17f3a53658b085c255bc2c8ff8 Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Mon, 5 Oct 2020 19:12:20 +0300
-> +Subject: [PATCH] mdbx-cmake: pthread workaround for buggy
-> + toolchain/cmake/buildroot.
-> +
-> +Change-Id: I0d95e783abbd10a63cd1595a9de50593e814a967
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + CMakeLists.txt | 21 ++++++++++++++++++---
-> + 1 file changed, 18 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 95f116521..20a50a453 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -173,10 +173,27 @@ if(NOT CMAKE_BUILD_TYPE)
-> + endif()
-> + string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_UPPERCASE)
-> +
-> ++set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
-> ++set(THREADS_PREFER_PTHREAD_FLAG TRUE)
-> ++find_package(Threads REQUIRED)
-> ++
-> + include(cmake/utils.cmake)
-> + include(cmake/compiler.cmake)
-> + include(cmake/profile.cmake)
-> +
-> ++# Workaround for `-pthread` toolchain/cmake bug
-> ++if(NOT APPLE AND NOT MSVC
-> ++    AND CMAKE_USE_PTHREADS_INIT AND NOT CMAKE_THREAD_LIBS_INIT
-> ++    AND (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_CLANG))
-> ++  check_compiler_flag("-pthread" CC_HAS_PTHREAD)
-> ++  if(CC_HAS_PTHREAD AND NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-pthread")
-> ++    message(STATUS "Force add -pthread for linker flags to avoid troubles")
-> ++    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
-> ++    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pthread")
-> ++    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -pthread")
-> ++  endif()
-> ++endif()
-> ++
-> + CHECK_FUNCTION_EXISTS(pow NOT_NEED_LIBM)
-> + if(NOT_NEED_LIBM)
-> +   set(LIB_MATH "")
-> +@@ -190,8 +207,6 @@ else()
-> +   endif()
-> + endif()
-> +
-> +-find_package(Threads REQUIRED)
-> +-
-> + if(SUBPROJECT)
-> +   if(NOT DEFINED BUILD_SHARED_LIBS)
-> +     option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)" OFF)
-> +@@ -541,7 +556,7 @@ macro(target_setup_options TARGET)
-> + endmacro()
-> +
-> + macro(libmdbx_setup_libs TARGET MODE)
-> +-  target_link_libraries(${TARGET} ${MODE} ${CMAKE_THREAD_LIBS_INIT})
-> ++  target_link_libraries(${TARGET} ${MODE} Threads::Threads)
-> +   if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-> +     target_link_libraries(${TARGET} ${MODE} ntdll.lib)
-> +     if(MDBX_NTDLL_EXTRA_IMPLIB AND MDBX_AVOID_CRT)
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch b/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
-> new file mode 100644
-> index 0000000000..5d7e83d4c7
-> --- /dev/null
-> +++ b/package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
-> @@ -0,0 +1,42 @@
-> +From 16d43332a9d28ba27aa3d127e8f6b77a87b2f5eb Mon Sep 17 00:00:00 2001
-> +From: Leonid Yuriev <leo@yuriev.ru>
-> +Date: Mon, 5 Oct 2020 21:08:09 +0300
-> +Subject: [PATCH] mdbx: fix `pthread_yield()` for non-GLIBC.
-> +
-> +Change-Id: I080e37a42b62e524896dea8747e9f23e2fcd584f
-> +Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
-> +---
-> + mdbx.c | 4 +++-
-> + mdbx.c | 1 +
-> + 2 files changed, 4 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/mdbx.c b/mdbx.c
-> +index a9ba1ee85..ace6f2756 100644
-> +--- a/mdbx.c
-> ++++ b/mdbx.c
-> +@@ -777,7 +777,9 @@ static __always_inline void atomic_yield(void) {
-> +     defined(__mips64__) || defined(_M_MRX000) || defined(_MIPS_) ||            \
-> +     defined(__MWERKS__) || defined(__sgi)
-> +   __asm__ __volatile__(".word 0x00000140");
-> +-#else
-> ++#elif defined(__linux__) || defined(__gnu_linux__) || defined(_UNIX03_SOURCE)
-> ++  sched_yield();
-> ++#elif (defined(_GNU_SOURCE) &&  __GLIBC_PREREQ(2, 1)) || defined(_OPEN_THREADS)
-> +   pthread_yield();
-> + #endif
-> + }
-> +diff --git a/mdbx.c b/mdbx.c
-> +index 3509942dc..3af23ce0b 100644
-> +--- a/mdbx.c
-> ++++ b/mdbx.c
-> +@@ -119,6 +119,7 @@
-> +
-> + #if defined(__linux__) || defined(__gnu_linux__)
-> + #include <linux/sysctl.h>
-> ++#include <sched.h>
-> + #include <sys/sendfile.h>
-> + #include <sys/statfs.h>
-> + #endif /* Linux */
-> +--
-> +2.28.0
-> +
-> diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
-> new file mode 100644
-> index 0000000000..3d21ca4cb1
-> --- /dev/null
-> +++ b/package/libmdbx/Config.in
-> @@ -0,0 +1,35 @@
-> +config BR2_PACKAGE_LIBMDBX
-> +       bool "libmdbx"
-> +       depends on BR2_USE_MMU
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +       help
-> +         One of the fastest compact key-value ACID database
-> +         without WAL. libmdbx has a specific set of properties
-> +         and capabilities, focused on creating unique lightweight
-> +         solutions.
-> +
-> +         libmdbx surpasses the legendary legendary LMDB in terms of
-> +         reliability, features and performance.
-> +
-> +         https://github.com/erthink/libmdbx
-> +
-> +if BR2_PACKAGE_LIBMDBX
-> +
-> +config BR2_PACKAGE_LIBMDBX_TOOLS
-> +       bool "install tools"
-> +       help
-> +         Install libmdbx tools for checking, dump, restore
-> +         and show statistics of databases.
+              asterisk-16.13.0 | 9 
+                  pango-1.46.2 | 4 
+                  uhd-3.15.0.0 | 4 
+               apparmor-2.13.4 | 3 
+                  boost-1.74.0 | 3 
+                 fwts-19.09.00 | 3 
+                   guile-3.0.4 | 3 
+        host-sentry-cli-1.57.0 | 3 
+                rocksdb-6.10.1 | 3 
+                       unknown | 3 
+             kismet-2016-07-R1 | 2 
+                   libcap-2.43 | 2 
+ Makefile:753: target-finalize | 2 
+                minidlna-1.2.1 | 2 
+                    mpv-0.32.0 | 2 
+                 uclibc-1.0.35 | 2 
+               apcupsd-3.14.14 | 1 
+                  autofs-5.1.6 | 1 
+         conntrack-tools-1.4.6 | 1 
+                 dc3dd-7.2.641 | 1 
+                     efivar-37 | 1 
+                  fbterm-1.7.0 | 1 
+                  ffmpeg-4.3.1 | 1 
+  gobject-introspection-1.64.1 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+         libcpprestsdk-2.10.16 | 1 
+               libupnpp-0.19.4 | 1 
+                  luajit-2.1.2 | 1 
+              micropython-1.13 | 1 
+                  monkey-1.6.9 | 1 
+                  ndisc6-1.0.4 | 1 
+                 opencv3-3.4.9 | 1 
+                openntpd-6.2p3 | 1 
+piglit-2affee53f3ad7a96f5b3... | 1 
+       python-matplotlib-3.0.3 | 1 
+                samba4-4.11.13 | 1 
+               target-finalize | 1 
+                    vlc-3.0.11 | 1 
+                    wampcc-1.6 | 1 
+               wireshark-3.2.6 | 1 
+                    xen-4.14.0 | 1 
+                  zeromq-4.3.3 | 1 
 
-This config option is nowhere used? Do you miss to add it in the
-makefile or is it still a leftover?
 
-> +
-> +config BR2_PACKAGIBMDBX_CXX
-> +       bool "C++ API"
-> +       select BR2_INSTALL_LIBSTDCPP
-> +       help
-> +         Enable modern C++ API for libmdbx.
-> +
+Detail of failures for master
+-----------------------------
 
-When enabling CXX support you could add a comment that a toolchain
-with cpp support is required and not enable it by selecting this
-option.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arc      |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/eb6b2d667d6f6de1c813d54c06aae112da4908bd |     
+  powerpc    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/f6f2c2fee87adef3723e85a6174717b9f5862e2f |     
+   mipsel    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/86f3c13e463e2296b8fc642e6e1f5b15a1d72bab |     
+   x86_64    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/523993df1d25e96b8bebe7bdd1d4af8b487223cb |     
+    mips     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/7606a4c557d8227eed91faf40498bdb02e432ec1 |     
+   s390x     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/9f20851e941fe03626ab0cb45dd186feda0dd0dd |     
+  aarch64    |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/fa89f6ba7341b34541d4422ca677b2d22c5b84af |     
+    mips     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/f1619138ef7ad6b4ef671aab7e2c60caefe1cfa0 |     
+  powerpc    |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/2f77134dc7d7d7a0ced7b50466447cfab9afc478 |     
+    arm      |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/1564cea18c8a3d94fe50460e1e3620167d95364a |     
+    mips     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/7f36daac2f1f8e9bf5f6e7753033714b989e7426 |     
+  powerpc    |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/086f8bfd6118ee24eb038f9bc840c1967df4c987 |     
+   s390x     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/0a722d99c5b8dccab3254a5877a921df2be9ce53 |     
+    arc      |          autofs-5.1.6          | NOK | http://autobuild.buildroot.net/results/1d8c09265fc404eb5b67ccc14305959634dd6f7d |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/74e11f7026257e6cc76c865adfadefcc6e80713a |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/7a0fa12c57a6b646a6763ce19a1d8f562c240550 |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/919f698b25fefde9cce89241fb263562321e5345 |     
+    arc      |     conntrack-tools-1.4.6      | NOK | http://autobuild.buildroot.net/results/b431a263ddaeef0c709b26860707f6cf1dae42d8 | ORPH
+    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/58ae8cdec61fcf324e4dcb9ead61831ac0fb32a9 | ORPH
+    arm      |           efivar-37            | NOK | http://autobuild.buildroot.net/results/7c59b8d1485c9d1c20144ece5e70d4de135aaa18 |     
+    arm      |          fbterm-1.7.0          | NOK | http://autobuild.buildroot.net/results/21ede59686d4998c9e643ea874396a11b1c0df93 | ORPH
+    arm      |          ffmpeg-4.3.1          | NOK | http://autobuild.buildroot.net/results/b5ff3ce8b80e6f3833aa0db49c5d9502619258b8 |     
+  aarch64    |         fwts-19.09.00          | NOK | http://autobuild.buildroot.net/results/69eba6754e306ce8001baf80edce37b1419c33d1 |     
+  aarch64    |         fwts-19.09.00          | NOK | http://autobuild.buildroot.net/results/78d8c248871b41ff5a99f79d7861a11414f1681b |     
+  aarch64    |         fwts-19.09.00          | NOK | http://autobuild.buildroot.net/results/52f21fcfcc75c213fb0fc97b07ce75c24b5589ea |     
+   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/b41d0a55e8a841f4eb9931dcf5b9e1a9c859136b |     
+  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/a8aea14f2bf14ab215c0db715207f467dfb253d0 |     
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/b9c5336526be0367ffad2d40b0c497aaaa2b35de | ORPH
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/f49df8ebdfdd08f99f58cb96e6bd0832a5143d33 | ORPH
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/bb8a1db3b832b81a8691a4a49ae7d4528a541b68 | ORPH
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/1e1951738510162defeeaddbdfc8da1121333dec |     
+  mips64el   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/94a9e5a2060929e3f1ce6697147fb8fb8187d4fe |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/c5a109baa20565f9c8050cd59a631de8efee935a |     
+    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/043a696618f5b8b676ad6cf5bcfa8537391833b4 | ORPH
+    arc      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/411e0109884098844d1fa8e53a923eec215f39cd | ORPH
+   x86_64    | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/f743c08b2be90dd77d93a51c8dd258014fc3cc5b |     
+    arm      |          libcap-2.43           | NOK | http://autobuild.buildroot.net/results/2430583d85d7d813986f70bb59c7da381f59594d |     
+    arm      |          libcap-2.43           | NOK | http://autobuild.buildroot.net/results/4f35f3124dcbad2daef1d625f9959979d2275269 |     
+   s390x     |     libcpprestsdk-2.10.16      | NOK | http://autobuild.buildroot.net/results/d5565b2189d7ec516687f6dd7f716fd05269f7b7 |     
+    arc      |        libupnpp-0.19.4         | NOK | http://autobuild.buildroot.net/results/d9ba6f445b2b238fcfddcc7fa17691b872fb20af |     
+    arm      |          luajit-2.1.2          | NOK | http://autobuild.buildroot.net/results/5b9eb4c7e393c35fb36e2959183df4783a231e68 |     
+    arc      | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/6da3177c78c2c573d093450a49c4a2c0adb68f29 |     
+  powerpc    | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/cd1b787da33b92f49daed7d2e208965947889cc5 |     
+   xtensa    |        micropython-1.13        | NOK | http://autobuild.buildroot.net/results/4b30feac3bbb70e65079b8befe9ba06e20b27f18 |     
+    arm      |         minidlna-1.2.1         | NOK | http://autobuild.buildroot.net/results/ce1de60788eacee7dab4e90d0f1a2b5b3fffa4b5 |     
+    arm      |         minidlna-1.2.1         | NOK | http://autobuild.buildroot.net/results/5d363bbbcc503e8fa853b5253bbf168f2381dd88 |     
+    arm      |          monkey-1.6.9          | NOK | http://autobuild.buildroot.net/results/a53a7df2b2b351cae5c20e83bf4e3147430d2607 | ORPH
+    arm      |           mpv-0.32.0           | NOK | http://autobuild.buildroot.net/results/b83fe6acc10f882077dd9885a6c75cb3b1c934bd |     
+    arm      |           mpv-0.32.0           | NOK | http://autobuild.buildroot.net/results/38c73275fa5e5fd2cf96522a235c41718bcea9c1 |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/95a69947577e2822582d4fcb5b59d90d8ce70d92 | ORPH
+    mips     |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/2b4ba55241e95466f5f0fc34994b594c4adb1c02 |     
+    arm      |         openntpd-6.2p3         | NOK | http://autobuild.buildroot.net/results/abd36b4f4484fceb98daf4b56c9edbc979141787 | ORPH
+  riscv64    |          pango-1.46.2          | NOK | http://autobuild.buildroot.net/results/bd2bef19e496a8244c2fd10de98caef1d241b646 | ORPH
+  riscv64    |          pango-1.46.2          | NOK | http://autobuild.buildroot.net/results/aeb841b9ae5e27fdd792fbd39f0d9b809c14b2bf | ORPH
+    arm      |          pango-1.46.2          | NOK | http://autobuild.buildroot.net/results/d17de7fde9747008ac611981408e94ac4f336cdc | ORPH
+  aarch64    |          pango-1.46.2          | NOK | http://autobuild.buildroot.net/results/a9100f4b8ef84bb578120a10ed10224ffa99a917 | ORPH
+    arm      | piglit-2affee53f3ad7a96f5b3... | NOK | http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0 |     
+    arm      |    python-matplotlib-3.0.3     | NOK | http://autobuild.buildroot.net/results/aebefdfaa4075986eac4b832c683ae4e541aee94 |     
+    arm      |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/364d827b7f5f7daa3d405e7da90c1e1ff64cddb6 |     
+    arm      |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/a0d61e0c135fb0cc8d5d020702a892ccd8bab351 |     
+    arm      |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/61b2d99f8b30524178c89663ab6c065782ab148f |     
+    arc      |         samba4-4.11.13         | NOK | http://autobuild.buildroot.net/results/3010730107a48c4cfdbd01080e7a955ccd972c55 |     
+  powerpc    |        target-finalize         | NOK | http://autobuild.buildroot.net/results/18bdeac94e86ec3e31bb8ab5090aa5e4ac93758f |     
+microblazeel |         uclibc-1.0.35          | NOK | http://autobuild.buildroot.net/results/0b411e24240ff357950e1635de06c72028b9b3b8 |     
+    arc      |         uclibc-1.0.35          | NOK | http://autobuild.buildroot.net/results/ed3503ad302cee59fc2d75090c49cf1bfec38a6b |     
+    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/dd982f488eab381bf94d0f1b70201d471c37c460 |     
+    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/13b67e0ac6d1783d2ce14eb66593feb22c516b12 |     
+    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/0bbec30ceada2cdc2b7347b71df1cee4499246d8 |     
+    arm      |          uhd-3.15.0.0          | NOK | http://autobuild.buildroot.net/results/ad6d1ac59a635799e3064e2e79513de51e95b770 |     
+  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/3f5e1bf52886cda85024585d25fe59b9de1f8207 |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/3992f682e5fe6b857638484bd23077b16f400d0e |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/1adb38dfd5f64a3aee1ba5f18cd99474ce9570e1 |     
+    sh4      |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/9085a40b705afeaeef7070b8d6351737fa51e8a7 |     
+    arc      |           wampcc-1.6           | NOK | http://autobuild.buildroot.net/results/8e58296a7904d969545651f0884811876634328d | ORPH
+  powerpc    |        wireshark-3.2.6         | NOK | http://autobuild.buildroot.net/results/b6d3430e6b02894104e86f85f2b17833213a25d5 | ORPH
+    arm      |           xen-4.14.0           | NOK | http://autobuild.buildroot.net/results/1ce8aea5ed688a40cc4650edac93d25a46bebb60 |     
+  mips64el   |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/7d8a04d5254ec4a62ca279ec7fe1e46e67367d6e |     
 
-config BR2_PACKAGIBMDBX_CXX
-       bool "C++ API"
-       help
-         Enable modern C++ API for libmdbx.
 
-comment "libmdbx c++ support needs a toolchain w/ C++"
-                 depends on !BR2_INSTALL_LIBSTDCPP
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
 
-See also: https://git.buildroot.net/buildroot/tree/package/rrdtool/Config.in#n31
+                  ndisc6-1.0.4 | 3 
+gr-osmosdr-46698a67e7e06419... | 1 
+ Makefile:753: target-finalize | 1 
+                   mimic-1.1.0 | 1 
+               protobuf-3.11.0 | 1 
+                qt5base-5.12.8 | 1 
+                       unknown | 1 
+                  zeromq-4.3.3 | 1 
 
-> +endif
-> +
-> +comment "libmdbx needs a toolchain w/ threads"
-> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-Here you the comment should look something like:
-comment "libmdbx needs a toolchain w/ threads, gcc >= 4.8"
-        depends on BR2_USE_MMU
-        depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
+Detail of failures for 2020.02.x
+--------------------------------
 
-> diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-> new file mode 100644
-> index 0000000000..f48cd81a7d
-> --- /dev/null
-> +++ b/package/libmdbx/libmdbx.hash
-> @@ -0,0 +1,2 @@
-> +sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-> +sha256  c7fb24381eb4d92f2e2edc17e577cb721269683c816c6cca307c58f6f346e786  libmdbx-amalgamated-0.9.1.tar.gz
-> diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-> new file mode 100644
-> index 0000000000..06aa0fc051
-> --- /dev/null
-> +++ b/package/libmdbx/libmdbx.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# libmdbx
-> +#
-> +################################################################################
-> +
-> +LIBMDBX_VERSION = 0.9.1
-> +LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
-> +LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
-> +LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-> +LIBMDBX_LICENSE = OLDAP-2.8
-> +LIBMDBX_LICENSE_FILES = LICENSE
-> +LIBMDBX_REDISTRIBUTE = YES
-> +LIBMDBX_STRIP_COMPONENTS = 0
-> +LIBMDBX_INSTALL_STAGING = YES
-> +
-> +LIBMDBX_CONF_OPTS = -DMDBX_INSTALL_MANPAGES=OFF -DBUILD_FOR_NATIVE_CPU=OFF \
-> +       -DMDBX_INSTALL_STATIC=$(if $(BR2_STATIC_LIBS),ON,OFF) \
-> +       -DMDBX_BUILD_SHARED_LIBRARY=$(if $(BR2_SHARED_LIBS),ON,OFF) \
-> +       -DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
-> +       -DMDBX_LINK_TOOLS_NONSTATIC=$(if $(BR2_SHARED_LIBS),ON,OFF)
-> +
-> +$(eval $(cmake-package))
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+powerpc64le  | gr-osmosdr-46698a67e7e06419... | NOK | http://autobuild.buildroot.net/results/473c08584dbb3f840feaa37d03f2f8eaac88ea23 |     
+    arc      | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/748d4213eb71319fecb88294f5210060de23eb68 |     
+    m68k     |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/847ac4e38dc0806a3727dca8f85ec1430b3d8b3b |     
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/6b8c45f686a45324243be59d8c178e8257f9ce51 | ORPH
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/f97b01df2f5f0ebf8e80860a50446aad4d067d4e | ORPH
+    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/f0ca03b5514d6683f124e52d57d13d2d9fa4eb24 | ORPH
+    or1k     |        protobuf-3.11.0         | NOK | http://autobuild.buildroot.net/results/f65462a6cf717b2a6d4564f3cd428a0c9c7caf8c |     
+ aarch64_be  |         qt5base-5.12.8         | NOK | http://autobuild.buildroot.net/results/d6686d55ec210d83facf01f505777f8a6cb418e4 |     
+microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/50f199bfe06d054cc6770760e73ac0de594a0670 |     
+    or1k     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/70a363e687aa80862c2ab1c768fe96aa9893315e |     
 
-Thank you
+
+Classification of failures by reason for 2020.05.x
+--------------------------------------------------
+
+              host-grpc-1.25.0 | 1 
+             host-pango-1.44.6 | 1 
+kvm-unit-tests-kvm-unit-tes... | 1 
+         libcpprestsdk-2.10.15 | 1 
+               log4cplus-2.0.5 | 1 
+                  zeromq-4.3.3 | 1 
+
+
+Detail of failures for 2020.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |        host-grpc-1.25.0        | NOK | http://autobuild.buildroot.net/results/8d617d8850270b4b2df56e9bcb928c7ab6d4a330 |     
+  riscv32    |       host-pango-1.44.6        | NOK | http://autobuild.buildroot.net/results/44f657ad0e1dc623b008abfea25c1180bb9a293b | ORPH
+   x86_64    | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/0df4ea9535f41c05f06b812df7ea6505fb180a94 |     
+    arm      |     libcpprestsdk-2.10.15      | NOK | http://autobuild.buildroot.net/results/fcee308b81e25a2c808f70a74ee9ae0de8de0436 |     
+    arc      |        log4cplus-2.0.5         | NOK | http://autobuild.buildroot.net/results/561f61b7879df1c9dad5b055831a70bcd90be9b5 |     
+    or1k     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/ec1c131e3e77e0df189a73423baa62b0d69549a8 |     
+
+
+Classification of failures by reason for 2020.08.x
+--------------------------------------------------
+
+               apparmor-2.13.4 | 2 
+                 midori-0.5.11 | 1 
+                minidlna-1.2.1 | 1 
+                 opencv3-3.4.9 | 1 
+                    vlc-3.0.11 | 1 
+
+
+Detail of failures for 2020.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  powerpc    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/26fec2bf7cd5dc75b04bca040f6cd5c06e8d2e9a |     
+  riscv64    |        apparmor-2.13.4         | NOK | http://autobuild.buildroot.net/results/df81fef4f48fcb51a33382a2dae485efad56c4c2 |     
+   mipsel    |         midori-0.5.11          | NOK | http://autobuild.buildroot.net/results/5bc970bb5bf044f31c7fcd2eec94725aa1b1d2cc | ORPH
+    arm      |         minidlna-1.2.1         | NOK | http://autobuild.buildroot.net/results/23fc157fda7dba79ff7740516ed42cd68e047f31 |     
+    arm      |         opencv3-3.4.9          | NOK | http://autobuild.buildroot.net/results/e9b290167975bb9e5d788cf9c31cc8af5f3a04d3 |     
+    sh4      |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/ff19c7652a7f293adfd8d17ff4e31a70f277234d |     
+
+
 
 -- 
-Heiko
+http://autobuild.buildroot.net
