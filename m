@@ -1,307 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 6 Oct 2020 23:37:47 +0200
-Subject: [Buildroot] [git commit] package/uboot-tools: migrate
- BR2_TARGET_UBOOT_ENVIMAGE from U-Boot pkg
-Message-ID: <20201006212728.4D6108EC62@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Oct 2020 23:39:16 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: reenable riscv64
+In-Reply-To: <20200908145346.198693-1-petr.vorel@gmail.com>
+References: <20200908145346.198693-1-petr.vorel@gmail.com>
+Message-ID: <20201006233916.4365cd35@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78559d699ae4b5c22ae77cfb7994560e0267be96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  8 Sep 2020 16:53:46 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-Migrating the support for this feature to uboot-tools to gain the
-ability to build env files when BR2_TARGET_UBOOT isn't selected.
+> Missing __riscv_flush_icache() (reason for the revert) was implemented
+> in 1.0.35 in commit 8b1f6b2e0 "riscv64: add __riscv_flush_icache".
+> 
+> Revert "Revert "toolchain/toolchain-buildroot: enable uclibc for riscv64""
+> This reverts commit e7d631c0df1698b4edc94f148e7247869430e108.
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+>  package/uclibc/Config.in                |  1 +
+>  toolchain/toolchain-buildroot/Config.in | 13 +++++++------
+>  2 files changed, 8 insertions(+), 6 deletions(-)
 
-When _ENVIMAGE_SOURCE is not set, we generate a default environment.
-However, this default depends on the U-Boot configuration. Therefore,
-this can only be done if uboot itself is built as well, and
-host-uboot-tools needs to depend on uboot.
+Thanks, but there was another patch from Damien Le Moal, which also
+enabled it for RISC-V 32-bit, so I've applied his patch instead.
 
-For the same reason, the commands for creating the environment have to
-be adapted a little. Take this occasion to drastically simplify them.
+Thanks!
 
-Note: This patch creates a circular dependency with uboot until the
-similar migration patch is merged for uboot scripts
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in.legacy                   | 34 +++++++++++++++++++++++
- boot/uboot/Config.in               | 43 -----------------------------
- boot/uboot/uboot.mk                | 25 -----------------
- package/uboot-tools/Config.in.host | 56 ++++++++++++++++++++++++++++++++++++--
- package/uboot-tools/uboot-tools.mk | 39 ++++++++++++++++++++++++++
- 5 files changed, 127 insertions(+), 70 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b80b645819..d39f50a800 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,40 @@ endif
- 
- comment "Legacy options removed in 2020.11"
- 
-+config BR2_TARGET_UBOOT_ENVIMAGE
-+	bool "u-boot env generation was moved"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-+	help
-+	  Migrated U-Boot env generation to uboot-tools
-+
-+# Note: BR2_TARGET_UBOOT_ENVIMAGE_SOURCE is still referenced from
-+# package/uboot-tools/Config.in
-+config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
-+	string "The uboot env image source string has been renamed"
-+	depends on BR2_TARGET_UBOOT_ENVIMAGE
-+	help
-+	  Migrated U-Boot env generation to uboot-tools.
-+	  New option is named
-+	  BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE
-+
-+# Note: BR2_TARGET_UBOOT_ENVIMAGE_SIZE is still referenced from
-+# package/uboot-tools/Config.in
-+config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
-+	string "The uboot env image size string has been renamed"
-+	depends on BR2_TARGET_UBOOT_ENVIMAGE
-+	help
-+	  Migrated U-Boot env generation to uboot-tools.
-+	  New option is named BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
-+	bool "u-boot env generation was moved"
-+	depends on BR2_TARGET_UBOOT_ENVIMAGE
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT
-+	help
-+	  Migrated U-Boot env generation to uboot-tools
-+
- config BR2_GCC_VERSION_7_X
- 	bool "gcc 7.x support removed"
- 	select BR2_LEGACY
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 63291c9a0f..2bda0619a4 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -533,49 +533,6 @@ config BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC
- 	  In either case the resulting file will be given a .crc
- 	  extension.
- 
--menuconfig BR2_TARGET_UBOOT_ENVIMAGE
--	bool "Environment image"
--	help
--	  Generate a valid binary environment image from a text file
--	  describing the key=value pairs of the environment.
--
--	  The environment image will be called uboot-env.bin.
--
--if BR2_TARGET_UBOOT_ENVIMAGE
--
--config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
--	string "Source files for environment"
--	help
--	  Text files describing the environment. Files should have
--	  lines of the form var=value, one per line. Blank lines and
--	  lines starting with a # are ignored.
--
--	  Multiple source files are concatenated in the order listed.
--
--	  Leave empty to generate image from compiled-in env.
--
--config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
--	string "Size of environment"
--	help
--	  Size of envronment, can be prefixed with 0x for hexadecimal
--	  values.
--
--config BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT
--	bool "Environment has two copies"
--	help
--	  Some platforms define in their U-Boot configuration that the
--	  U-Boot environment should be duplicated in two locations (for
--	  extra safety). Check your U-Boot configuration for the
--	  CONFIG_ENV_ADDR_REDUND and CONFIG_ENV_SIZE_REDUND settings to
--	  see if this is the case for your platform.
--
--	  If it is the case, then you should enable this option to
--	  ensure that the U-Boot environment image generated by
--	  Buildroot is compatible with the "redundant environment"
--	  mechanism of U-Boot.
--
--endif # BR2_TARGET_UBOOT_ENVIMAGE
--
- config BR2_TARGET_UBOOT_BOOT_SCRIPT
- 	bool "Generate a U-Boot boot script"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 1831466780..9dbd06b64b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -312,21 +312,6 @@ define UBOOT_BUILD_OMAP_IFT
- 		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
- endef
- 
--ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
--UBOOT_GENERATE_ENV_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
--define UBOOT_GENERATE_ENV_IMAGE
--	$(if $(UBOOT_GENERATE_ENV_FILE), \
--		cat $(UBOOT_GENERATE_ENV_FILE), \
--		CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D)) \
--		>$(@D)/buildroot-env.txt
--	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
--		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
--		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
--		-o $(BINARIES_DIR)/uboot-env.bin \
--		$(@D)/buildroot-env.txt
--endef
--endif
--
- define UBOOT_INSTALL_IMAGES_CMDS
- 	$(foreach f,$(UBOOT_BINS), \
- 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
-@@ -338,7 +323,6 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 			cp -dpf $(@D)/$(f) $(BINARIES_DIR)/
- 		)
- 	)
--	$(UBOOT_GENERATE_ENV_IMAGE)
- 	$(if $(BR2_TARGET_UBOOT_BOOT_SCRIPT),
- 		$(MKIMAGE) -C none -A $(MKIMAGE_ARCH) -T script \
- 			-d $(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)) \
-@@ -443,15 +427,6 @@ define UBOOT_KCONFIG_FIXUP_CMDS
- 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
- endef
- 
--ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
--ifeq ($(BR_BUILDING),y)
--ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
--$(error Please provide U-Boot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
--endif
--endif
--UBOOT_DEPENDENCIES += host-uboot-tools
--endif
--
- ifeq ($(BR2_TARGET_UBOOT_BOOT_SCRIPT),y)
- ifeq ($(BR_BUILDING),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE)),)
-diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
-index 52a4c2ec30..a10835c589 100644
---- a/package/uboot-tools/Config.in.host
-+++ b/package/uboot-tools/Config.in.host
-@@ -37,6 +37,58 @@ config BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
- 	  public key is stored in a non-volatile place, any image can
- 	  be verified in this way.
- 
--endif
-+endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT
- 
--endif
-+config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-+	bool "Environment image"
-+	help
-+	  Generate a valid binary environment image from a text file
-+	  describing the key=value pairs of the environment.
-+
-+	  This option can be useful to build enviornment configurations
-+	  as part of a Linux / rootfs only defconfig instead of using
-+	  post scripts. This supports a hardware use case of a single
-+	  bootloader only defconfig but multiple Linux / rootfs
-+	  defconfigs with different boot environments.
-+
-+	  The environment image will be called uboot-env.bin.
-+
-+if BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-+
-+config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE
-+	string "Source files for environment"
-+	default BR2_TARGET_UBOOT_ENVIMAGE_SOURCE if BR2_TARGET_UBOOT_ENVIMAGE_SOURCE != "" # legacy
-+	help
-+	  Text files describing the environment. Files should have
-+	  lines of the form var=value, one per line. Blank lines and
-+	  lines starting with a # are ignored.
-+
-+	  Multiple source files are concatenated in the order listed.
-+
-+	  Leave empty to generate image from compiled-in env if a U-boot
-+	  target build is configured (BR2_TARGET_UBOOT)
-+
-+config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE
-+	string "Size of environment"
-+	default BR2_TARGET_UBOOT_ENVIMAGE_SIZE if BR2_TARGET_UBOOT_ENVIMAGE_SIZE != "" # legacy
-+	help
-+	  Size of envronment, can be prefixed with 0x for hexadecimal
-+	  values.
-+
-+config BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT
-+	bool "Environment has two copies"
-+	help
-+	  Some platforms define in their U-Boot configuration that the
-+	  U-Boot environment should be duplicated in two locations (for
-+	  extra safety). Check your U-Boot configuration for the
-+	  CONFIG_ENV_ADDR_REDUND and CONFIG_ENV_SIZE_REDUND settings to
-+	  see if this is the case for your platform.
-+
-+	  If it is the case, then you should enable this option to
-+	  ensure that the U-Boot environment image generated by
-+	  Buildroot is compatible with the "redundant environment"
-+	  mechanism of U-Boot.
-+
-+endif # BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-+
-+endif # BR2_PACKAGE_HOST_UBOOT_TOOLS
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a06c25998f..f4480aa585 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -110,10 +110,49 @@ define HOST_UBOOT_TOOLS_BUILD_CMDS
- 	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
- endef
- 
-+ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
-+
-+UBOOT_TOOLS_GENERATE_ENV_FILE = $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE))
-+ifeq ($(UBOOT_TOOLS_GENERATE_ENV_FILE):$(BR2_TARGET_UBOOT),:y)
-+UBOOT_TOOLS_GENERATE_ENV_FILE = $(@D)/boot-env-defaults.txt
-+define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+		$(UBOOT_SRCDIR)/scripts/get_default_envs.sh \
-+		$(UBOOT_SRCDIR) \
-+		> $(UBOOT_TOOLS_GENERATE_ENV_FILE)
-+endef
-+HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
-+endif
-+
-+define HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE
-+	$(HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS)
-+	$(HOST_DIR)/bin/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
-+		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
-+		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
-+		-o $(BINARIES_DIR)/uboot-env.bin \
-+		$(UBOOT_TOOLS_GENERATE_ENV_FILE)
-+endef
-+
-+ifeq ($(BR_BUILDING),y)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE)),)
-+$(error Please provide U-Boot environment size (BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE setting))
-+endif
-+# If U-Boot is available, ENVIMAGE_SOURCE is optional because the default can
-+# be taken from U-Boot.
-+ifeq ($(BR2_TARGET_UBOOT),)
-+ifeq ($(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE),)
-+$(error Please provide U-Boot environment file BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE setting))
-+endif
-+endif #BR2_TARGET_UBOOT
-+endif #BR_BUILDING
-+
-+endif #BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
-+
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/bin/mkimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/bin/mkenvimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/bin/dumpimage
-+	$(HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE)
- endef
- 
- $(eval $(generic-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
