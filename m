@@ -1,46 +1,56 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Tue, 6 Oct 2020 08:23:09 -0300
-Subject: [Buildroot] [PATCH v2 4/4] configs/mx6cubox: bump Linux and
- U-Boot versions
-In-Reply-To: <20201006103955.464562-4-francois.perrad@gadz.org>
-References: <20201006103955.464562-1-francois.perrad@gadz.org>
- <20201006103955.464562-4-francois.perrad@gadz.org>
-Message-ID: <CAOMZO5A8cxt2maWjEzL98E8w5+ZkLeQK+Gr=BFTDjmC6s+hn1w@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 6 Oct 2020 13:57:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: bump to version
+ 0.32.0
+In-Reply-To: <60c2ecab-ad01-7770-d432-640a0d639626@lucaceresoli.net>
+References: <20201004200050.1737235-1-fontaine.fabrice@gmail.com>
+ <60c2ecab-ad01-7770-d432-640a0d639626@lucaceresoli.net>
+Message-ID: <CAPi7W82bZs54aj3+7_a76SZ8wbXtoB7=jxqq7gqA68Cij1WZtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+Hi Luca,
 
-On Tue, Oct 6, 2020 at 7:40 AM Francois Perrad <fperrad@gmail.com> wrote:
+Le mar. 6 oct. 2020 ? 10:36, Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
 >
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  configs/mx6cubox_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Hi Fabrice,
 >
-> diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-> index 91848bc07..dc26758ef 100644
-> --- a/configs/mx6cubox_defconfig
-> +++ b/configs/mx6cubox_defconfig
-> @@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.8"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
->  BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
-> @@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+> On 04/10/20 22:00, Fabrice Fontaine wrote:
+> > - Update site to get latest version
+> > - Remove all patches (already in version)
+> > - License file has been renamed and slightly updated to change paths
+> >   since version 0.23.0 and
+> >   https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
+> > - Add a patch to disable tests
+> > - Remove BUILD_{JAVA,JAVASCRIPT,PERL,PHP} as those bindings don't exist
+> >   anymore
+> > - Disable go binding
+> > - Disable fuzz testing
+> > - Add new optional libuv and jsoncpp dependencies
+> > - Update QPID_PROTON_REMOVE_USELESS_FILES
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Thank you very much for taking care of upgrading this package. I tried a
+> while back but gave up as it was taking too much time for a package I am
+> not actively using.
+>
+> The patch content looks good, but I'm getting a build failure after a
+> simple 'make clean && make' with this defconfig:
+>
+> BR2_arm=y
+> BR2_cortex_a8=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_PACKAGE_QPID_PROTON=y
+>
+> Can you check that?
+This defconfig is building fine on my side. What kind of error do you get?
+>
+> --
+> Luca
+Best Regards,
 
-What about using 2020.07?
-
-Thanks
+Fabrice
