@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 23:20:20 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5: add qt5remoteobjects module
-In-Reply-To: <20200412212328.8843-1-mb@mbno.org>
-References: <20200409154435.8222-1-mb@mbno.org>
- <20200412212328.8843-1-mb@mbno.org>
-Message-ID: <20201006232020.3f7f5c3d@windsurf.home>
+Date: Tue, 6 Oct 2020 23:21:06 +0200
+Subject: [Buildroot] [PATCH v5 1/1] qt5remoteobjects: new package
+In-Reply-To: <20200309120024.1182-1-sven@leiderfischer.de>
+References: <20200309120024.1182-1-sven@leiderfischer.de>
+Message-ID: <20201006232106.2281985f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mister Benjamin,
+Hello Sven,
 
-On Sun, 12 Apr 2020 23:23:28 +0200
-Mister Benjamin <mb@mbno.org> wrote:
+On Mon,  9 Mar 2020 13:00:24 +0100
+Sven Fischer <sven@leiderfischer.de> wrote:
 
-> Signed-off-by: Mister Benjamin <mb@mbno.org>
+> Qt 5.12 adds a library for IPC.
+> 
+> Dependency on qtdeclarative is optional.
+> 
+> Signed-off-by: Sven Fischer <sven@leiderfischer.de>
+> ---
+> Suggested by Peter Seiderer:
+> * help text changes
+> * install order changed
 
-Thanks for your contribution, and sorry for the long delay in getting
-back to you. However, there was an earlier patch posted by Sven
-Fischer, implementing the same package.
+Sorry for the long delay, I have now applied your patch! Of course, I
+had to update it to Qt 5.15.1, to use the qmake-package infrastructure,
+and a few other tweaks.
 
-In addition, we do not accept anonymous contributions, for legal
-reasons. Since Sven's contribution was made before, I applied his patch
-instead, with some changes.
+Don't hesitate to check the latest master, and see if it works for you.
 
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
