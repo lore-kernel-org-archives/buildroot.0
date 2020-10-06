@@ -1,76 +1,42 @@
-From: =?UTF-8?B?0JvQtdC+0L3QuNC0INCu0YDRjNC10LI=?= <leo@yuriev.ru>
-Date: Tue, 6 Oct 2020 22:06:18 +0300
-Subject: [Buildroot] [PATCH v3 1/1] package/libmdbx: new package
- (library/database).
-In-Reply-To: <CAEyMn7Z_ThRrPqAPdn0X9N6LVHGiDNLT2oF=FpiDaeoWAGXBgw@mail.gmail.com>
-References: <CAEyMn7ahanh2zR83cTNa_ZzdxCY5YL25z+wtA6gO4k32FXAXpA@mail.gmail.com>
- <20201005201554.1071637-2-leo@yuriev.ru>
- <CAEyMn7Z_ThRrPqAPdn0X9N6LVHGiDNLT2oF=FpiDaeoWAGXBgw@mail.gmail.com>
-Message-ID: <CAO2+NUDJUL_FYfQ3E_cmmu20F3VOagxDpy_243a6mU3oAeASNA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 6 Oct 2020 21:04:37 +0200
+Subject: [Buildroot] [git commit] package/pigpio: bump to version 78
+Message-ID: <20201006185723.D9FBD7FB2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Heiko.
+commit: https://git.buildroot.net/buildroot/commit/?id=2a8e0567d6785695ec3d8ee8324ce3e120f96254
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for comments.
-I will send an updated (hope final) version of the patch soon.
-And here are the answers to some of your questions/comments below.
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pigpio/pigpio.hash | 2 +-
+ package/pigpio/pigpio.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Oct 6, 2020 at 9:40 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> Hi Leonid,
->
-> thank you for the new version. Some comments below.
-[...]
-
-> >  create mode 100644 package/libmdbx/0001-mdbx-fix-minor-copy-paste-typo.patch
-> >  create mode 100644 package/libmdbx/0002-mdbx-cmake-fix-missing-installation-of-mdbx.h.patch
-> >  create mode 100644 package/libmdbx/0003-mdbx-fix-obsolete-__noreturn.patch
-> >  create mode 100644 package/libmdbx/0004-mdbx-don-t-use-yield-instruction-on-ARM-if-unsupport.patch
-> >  create mode 100644 package/libmdbx/0005-mdbx-load-fix-minor-false-positive-GCC-warning.patch
-> >  create mode 100644 package/libmdbx/0006-mdbx-cmake-pthread-workaround-for-buggy-toolchain-cm.patch
-> >  create mode 100644 package/libmdbx/0007-mdbx-fix-pthread_yield-for-non-GLIBC.patch
->
-> Is it required to add all these patches? They seem all to be in the
-> upstream repo. So you could also set the version to the last commit id
-> that contains all these changes.
-
-Yes, these patches are required for amalgamated source code which is
-available only for a releases (i.e. github's tags).
-
-> > +config BR2_PACKAGE_LIBMDBX_TOOLS
-> > +       bool "install tools"
->
-> This config option is nowhere used? Do you miss to add it in the
-> makefile or is it still a leftover?
-
-This is my mistake.
-Now fixed in the makefile.
-
-> > +config BR2_PACKAGE_LIBMDBX_CXX
-> > +       bool "C++ API"
-> > +       select BR2_INSTALL_LIBSTDCPP
->
-> When enabling CXX support you could add a comment that a toolchain
-> with cpp support is required and not enable it by selecting this
-> option.
-[..]
-> comment "libmdbx c++ support needs a toolchain w/ C++"
->                  depends on !BR2_INSTALL_LIBSTDCPP
-[..]
-> > +comment "libmdbx needs a toolchain w/ threads"
-> > +       depends on !BR2_TOOLCHAIN_HAS_THREADS
->
-> Here you the comment should look something like:
-> comment "libmdbx needs a toolchain w/ threads, gcc >= 4.8"
->         depends on BR2_USE_MMU
->         depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
-
-Done.
-I also clarified these dependencies.
-
-Regards,
-Leonid.
+diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
+index 4c8205ea4c..b6de0c19f6 100644
+--- a/package/pigpio/pigpio.hash
++++ b/package/pigpio/pigpio.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fe0cd66c0277a71fbbde1adff196a570870dad1de8dfe51f7e35f5b8d545206f  pigpio-77.tar.gz
++sha256  ef4a4dc7ca8ca2f97fbdb9fd75586f61be7222d0f6c14e58af6c9192ad42f682  pigpio-78.tar.gz
+ sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
+diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
+index 64d0587077..345b315c42 100644
+--- a/package/pigpio/pigpio.mk
++++ b/package/pigpio/pigpio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIGPIO_VERSION = 77
++PIGPIO_VERSION = 78
+ PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
+ PIGPIO_LICENSE = Unlicense
+ PIGPIO_LICENSE_FILES = UNLICENCE
