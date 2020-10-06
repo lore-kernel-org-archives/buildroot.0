@@ -1,69 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  6 Oct 2020 22:46:20 +0200
-Subject: [Buildroot] [PATCH v2] support/scripts/apply-patches.sh: do not
- blindly remove *.orig files
-Message-ID: <20201006204620.21044-1-peter@korsgaard.com>
+Date: Tue, 06 Oct 2020 22:51:41 +0200
+Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
+ 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
+In-Reply-To: <def26807-e0af-5a4a-787d-a3ec2807cc21@gmail.com> (Romain Naour's
+ message of "Tue, 6 Oct 2020 22:36:55 +0200")
+References: <20201002155931.1529915-1-romain.naour@gmail.com>
+ <20201002155931.1529915-2-romain.naour@gmail.com>
+ <87mu12s4rz.fsf@dell.be.48ers.dk>
+ <def26807-e0af-5a4a-787d-a3ec2807cc21@gmail.com>
+Message-ID: <87r1qb3wo2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
-by default writes these as backup files when patches only apply with fuzz.
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-This is unfortunate as package sources may contain files ending in .orig as
-well, breaking the build.  Luckily GNU patch can be told to not write these
-backup files using the --no-backup-if-mismatch option, so used that instead
-of the .orig removal step.
+Hi,
 
---no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
-busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
-BSD patch, so add logic to dependencies.sh to error out if patch doesn't
-support the flag.
+ >> These security fixes were already in 2.31.1, E.G. what we are currently
+ >> using, right?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/dependencies.sh | 6 ++++++
- support/scripts/apply-patches.sh     | 5 +----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ > Indeed, they has been added to glibc 2.32 and backported to stable branches.
+ > It's just a copy from the release announcement... we can drop it if you prefer.
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index c1bd614edf..b44d28682c 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -180,6 +180,12 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
- 
-+# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
-+if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
-+	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
-+	exit 1
-+fi
-+
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 66fef262ee..2d39d63da1 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -119,7 +119,7 @@ function apply_patch {
-         exit 1
-     fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-         exit 1
-@@ -168,6 +168,3 @@ if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-     echo "Aborting.  Reject files found."
-     exit 1
- fi
--
--# Remove backup files
--find $builddir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+I indeed think it makes sense to drop it, as it doesn't describe the
+delta from our current version and this one.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
