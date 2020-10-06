@@ -1,56 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 6 Oct 2020 21:05:54 +0200
-Subject: [Buildroot] [git commit] package/expat: bump to version 2.2.10
-Message-ID: <20201006185724.0968A8ED88@busybox.osuosl.org>
+Date: Tue, 6 Oct 2020 21:05:07 +0200
+Subject: [Buildroot] [git commit] package/brotli: fix pkg-config
+Message-ID: <20201006185723.EF5597FB2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b340a257359fec6f57a82d370e608281fad3d67
+commit: https://git.buildroot.net/buildroot/commit/?id=35a451d98776af56c1913e100e21a2b8392c6162
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update hash of COPYING (update in year:
-  https://github.com/libexpat/libexpat/commit/8a93b41a8a4cc2610eb21764047989250544436f)
-- Update indentation in hash file (two spaces)
+brotli pkg-config files are broken since version 1.0.8 and
+https://github.com/google/brotli/commit/31754d4ffce14153b5c2addf7a11019ec23f51c1
 
-https://github.com/libexpat/libexpat/blob/R_2_2_10/expat/Changes
+This raise static build failures with all packages using brotli,
+fontconfig or freetype such as fbterm:
+
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static  -static -o fbterm fbterm-fbconfig.o fbterm-fbio.o fbterm-fbshell.o fbterm-fbshellman.o fbterm-fbterm.o fbterm-font.o fbterm-input.o fbterm-mouse.o fbterm-screen.o fbterm-improxy.o fbterm-screen_render.o fbterm-fbdev.o fbterm-vesadev.o lib/libshell.a -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lfreetype -lbz2 -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lz -lpng16 -lz -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlidec -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../
+ arm-buil
+ droot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlicommon  -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lfontconfig -lfreetype -lbz2 -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lz -lpng16 -lz -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlidec -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlicommon -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -luuid -lexpat   -lutil -lutil
+arm-linux-g++.br_real: error: unrecognized command line option '-R'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/21ede59686d4998c9e643ea874396a11b1c0df93
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/expat/expat.hash | 10 +++++-----
- package/expat/expat.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ ...d-runtime-linker-path-to-pkg-config-files.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 588e881d0d..5a8dd41280 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.9/
--md5	d2384fa607223447e713e1b9bd272376		expat-2.2.9.tar.xz
--sha1	90a361e4c97f8c469479ffadc0de0b121a911fb5	expat-2.2.9.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.10/
-+md5  e0fe49a6b3480827c9455e4cfc799133  expat-2.2.10.tar.xz
-+sha1  a333b95121a718a77ee481dbade5efcd72a32eb8  expat-2.2.10.tar.xz
- 
- # Locally calculated
--sha256	1ea6965b15c2106b6bbe883397271c80dfa0331cdf821b2c319591b55eadc0a4	expat-2.2.9.tar.xz
--sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-+sha256  5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2  expat-2.2.10.tar.xz
-+sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 38e5dee75d..bb04ab1a90 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.9
-+EXPAT_VERSION = 2.2.10
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+diff --git a/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch b/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch
+new file mode 100644
+index 0000000000..892aa1da15
+--- /dev/null
++++ b/package/brotli/0002-Revert-Add-runtime-linker-path-to-pkg-config-files.patch
+@@ -0,0 +1,51 @@
++From 09b0992b6acb7faa6fd3b23f9bc036ea117230fc Mon Sep 17 00:00:00 2001
++From: Eugene Kliuchnikov <eustas.ru@gmail.com>
++Date: Wed, 2 Sep 2020 11:38:26 +0200
++Subject: [PATCH] Revert "Add runtime linker path to pkg-config files (#740)"
++ (#838)
++
++This reverts commit 31754d4ffce14153b5c2addf7a11019ec23f51c1.
++[Retrieved from:
++https://github.com/google/brotli/commit/09b0992b6acb7faa6fd3b23f9bc036ea117230fc]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ scripts/libbrotlicommon.pc.in | 2 +-
++ scripts/libbrotlidec.pc.in    | 2 +-
++ scripts/libbrotlienc.pc.in    | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/scripts/libbrotlicommon.pc.in b/scripts/libbrotlicommon.pc.in
++index 10ca969e..2a8cf7a3 100644
++--- a/scripts/libbrotlicommon.pc.in
+++++ b/scripts/libbrotlicommon.pc.in
++@@ -7,5 +7,5 @@ Name: libbrotlicommon
++ URL: https://github.com/google/brotli
++ Description: Brotli common dictionary library
++ Version: @PACKAGE_VERSION@
++-Libs: -L${libdir} -R${libdir} -lbrotlicommon
+++Libs: -L${libdir} -lbrotlicommon
++ Cflags: -I${includedir}
++diff --git a/scripts/libbrotlidec.pc.in b/scripts/libbrotlidec.pc.in
++index e7c3124f..6f8ef2e4 100644
++--- a/scripts/libbrotlidec.pc.in
+++++ b/scripts/libbrotlidec.pc.in
++@@ -7,6 +7,6 @@ Name: libbrotlidec
++ URL: https://github.com/google/brotli
++ Description: Brotli decoder library
++ Version: @PACKAGE_VERSION@
++-Libs: -L${libdir} -R${libdir} -lbrotlidec
+++Libs: -L${libdir} -lbrotlidec
++ Requires.private: libbrotlicommon >= 1.0.2
++ Cflags: -I${includedir}
++diff --git a/scripts/libbrotlienc.pc.in b/scripts/libbrotlienc.pc.in
++index 4dd0811b..2098afe2 100644
++--- a/scripts/libbrotlienc.pc.in
+++++ b/scripts/libbrotlienc.pc.in
++@@ -7,6 +7,6 @@ Name: libbrotlienc
++ URL: https://github.com/google/brotli
++ Description: Brotli encoder library
++ Version: @PACKAGE_VERSION@
++-Libs: -L${libdir} -R${libdir} -lbrotlienc
+++Libs: -L${libdir} -lbrotlienc
++ Requires.private: libbrotlicommon >= 1.0.2
++ Cflags: -I${includedir}
