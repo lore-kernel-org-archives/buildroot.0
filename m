@@ -1,48 +1,46 @@
-From: Damien Le Moal <Damien.LeMoal@wdc.com>
-Date: Tue, 6 Oct 2020 23:14:54 +0000
-Subject: [Buildroot] [PATCH v2 5/6] package/uclibc: fix compilation
- errors
-References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
- <20200908113324.1022230-6-damien.lemoal@wdc.com>
- <20201006234919.7eb7e2e1@windsurf.home>
-Message-ID: <CY4PR04MB3751721039AB61D8297A7326E70D0@CY4PR04MB3751.namprd04.prod.outlook.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Oct 2020 08:02:45 +0200
+Subject: [Buildroot] [PATCH v2] support/scripts/apply-patches.sh: do not
+ blindly remove *.orig files
+In-Reply-To: <20201006214124.GZ11621@scaer> (Yann E. MORIN's message of "Tue, 
+ 6 Oct 2020 23:41:24 +0200")
+References: <20201006204620.21044-1-peter@korsgaard.com>
+ <20201006214124.GZ11621@scaer>
+Message-ID: <87mu0y4lq2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020/10/07 6:49, Thomas Petazzoni wrote:
-> On Tue,  8 Sep 2020 20:33:23 +0900
-> Damien Le Moal <damien.lemoal@wdc.com> wrote:
-> 
->> Add four patches to fix compilation errors when building static no MMU
->> uclibc. The first two patches are upstream uclibc patches on top of
->> version 1.0.35 tag. The following two patches are added here as
->> additional fixes.
->>
->> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
->> ---
->>  ...evert-Fix-static-linking-with-GCC-10.patch |  43 ++++++++
->>  ...0002-fix-static-builds-with-gcc-10.x.patch |  25 +++++
->>  ...-utils-getconf-Fix-compilation-error.patch | 103 ++++++++++++++++++
->>  .../0004-librt-avoid-compilation-error.patch  |  42 +++++++
->>  4 files changed, 213 insertions(+)
->>  create mode 100644 package/uclibc/0001-Revert-Fix-static-linking-with-GCC-10.patch
->>  create mode 100644 package/uclibc/0002-fix-static-builds-with-gcc-10.x.patch
->>  create mode 100644 package/uclibc/0003-utils-getconf-Fix-compilation-error.patch
->>  create mode 100644 package/uclibc/0004-librt-avoid-compilation-error.patch
-> 
-> I believe all of those patches are upstream as of uclibc-ng 1.0.35, so
-> I've marked this patch as Rejected.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Yes, they were all accepted. Thanks !
+ > Peter, All,
+ > On 2020-10-06 22:46 +0200, Peter Korsgaard spake thusly:
+ >> apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
+ >> by default writes these as backup files when patches only apply with fuzz.
+ >> 
+ >> This is unfortunate as package sources may contain files ending in .orig as
+ >> well, breaking the build.  Luckily GNU patch can be told to not write these
+ >> backup files using the --no-backup-if-mismatch option, so used that instead
+ >> of the .orig removal step.
+ >> 
+ >> --no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
+ >> busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
+ >> BSD patch, so add logic to dependencies.sh to error out if patch doesn't
+ >> support the flag.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> 
-> Thomas
-> 
+ > Applied to master, thanks.
 
+ > However, does that make sense to also use --no-backup-if-mismatch in our
+ > LIBTOOL_PATCH_HOOK ?
+
+We don't do any cleanup after that, but yes - I indeed think it makes
+sense to ensure patch don't write out ltmain.sh.orig files.
+
+I'll send a patch.
 
 -- 
-Damien Le Moal
-Western Digital Research
+Bye, Peter Korsgaard
