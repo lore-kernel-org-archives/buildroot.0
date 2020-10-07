@@ -1,106 +1,102 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 7 Oct 2020 11:12:22 +0200
-Subject: [Buildroot] [PATCH 11/17] Support/scripts/cpedb.py: Convert to
- Python 3
-In-Reply-To: <20201006134250.22738-12-gregory.clement@bootlin.com>
-References: <20201006134250.22738-1-gregory.clement@bootlin.com>
- <20201006134250.22738-12-gregory.clement@bootlin.com>
-Message-ID: <CAEyMn7Ym5OAfxk71B9_QGpkO7ttC7FwTr9SJjMvV8hMODKMR7g@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 07 Oct 2020 09:39:13 +0000
+Subject: [Buildroot] [Bug 13241] New: CMake miss linking with pthread library
+Message-ID: <bug-13241-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gregory, Hi Matt,
+https://bugs.busybox.net/show_bug.cgi?id=13241
 
-Am Di., 6. Okt. 2020 um 15:43 Uhr schrieb Gregory CLEMENT
-<gregory.clement@bootlin.com>:
->
-> Switch the script to be used with pyhton 3
+            Bug ID: 13241
+           Summary: CMake miss linking with pthread library
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: leo at yuriev.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I tried to use the cpe-report script with python 3 but get some errors
-with the urllib3. It seems that this lib does not provide the urlopen
-methods compared to the urllib2.
+When testing my package, I found a series of similar problems when building
+(current master branch) for some platforms.
 
-I added a new function that replaces the download, decompress and xml
-parse stuff and now it works for me with python3.
+For instance:
+$ utils/test-pkg -k -a -p libmdbx
+                             andes-nds32 [ 1/45]: FAILED
+                             arm-aarch64 [ 2/45]: FAILED
+                    bootlin-x86-64-glibc [ 3/45]: FAILED
+                        br-aarch64-glibc [ 4/45]: FAILED
+                           br-arcle-hs38 [ 5/45]: OK
+                            br-arm-basic [ 6/45]: OK
+                  br-arm-cortex-a9-glibc [ 7/45]: FAILED
+                   br-arm-cortex-a9-musl [ 8/45]: OK
+                   br-arm-cortex-m4-full [ 9/45]: SKIPPED
+                             br-arm-full [10/45]: OK
+                    br-arm-full-nothread [11/45]: SKIPPED
+                      br-arm-full-static [12/45]: OK
+                   br-i386-pentium4-full [13/45]: OK
+                br-i386-pentium-mmx-musl [14/45]: OK
+                       br-m68k-5208-full [15/45]: SKIPPED
+                      br-m68k-68040-full [16/45]: OK
+                    br-microblazeel-full [17/45]: FAILED
+                 br-mips32r6-el-hf-glibc [18/45]: FAILED
+                      br-mips64-n64-full [19/45]: OK
+                 br-mips64r6-el-hf-glibc [20/45]: FAILED
+                      br-mipsel-o32-full [21/45]: OK
+                          br-nios2-glibc [22/45]: FAILED
+                      br-openrisc-uclibc [23/45]: OK
+               br-powerpc-603e-basic-cpp [24/45]: OK
+             br-powerpc64le-power8-glibc [25/45]: FAILED
+               br-powerpc64-power7-glibc [26/45]: FAILED
+                  br-powerpc-e500mc-full [27/45]: OK
+                              br-riscv32 [28/45]: FAILED
+                              br-riscv64 [29/45]: FAILED
+                         br-riscv64-musl [30/45]: OK
+                             br-sh4-full [31/45]: OK
+                        br-sparc64-glibc [32/45]: FAILED
+                         br-sparc-uclibc [33/45]: SKIPPED
+                    br-x86-64-core2-full [34/45]: OK
+                          br-x86-64-musl [35/45]: OK
+                          br-xtensa-full [36/45]: OK
+                       linaro-aarch64-be [37/45]: FAILED
+                          linaro-aarch64 [38/45]: FAILED
+                              linaro-arm [39/45]: FAILED
+                     sourcery-arm-armv4t [40/45]: FAILED
+                            sourcery-arm [41/45]: FAILED
+                     sourcery-arm-thumb2 [42/45]: FAILED
+                         sourcery-mips64 [43/45]: FAILED
+                           sourcery-mips [44/45]: FAILED
+                          sourcery-nios2 [45/45]: FAILED
+45 builds, 4 skipped, 23 build failed, 0 legal-info failed
 
---- [snip ---
-    def _get_cpedb(self, url):
-        print("CPE: Fetching xml manifest from [" + url + "]")
-        c = urllib3.PoolManager()
-        try:
-            rsp = c.request('GET', url)
-        except urllib3.exceptions.HTTPError:
-            print("CPE: HTTP Error: %s" % url)
-            sys.exit(1)
+The reason is that CMake doesn't link executables and so-libraries with the
+pthread library and doesn't use the '-pthread' flag either.
+Digging a little deeper, I saw that the build always breaks when the code of
+pthread's functions is in the separate library, i.e. when the libpthread should
+be linked explicitly.
 
-        print("CPE: Unzipping xml manifest...")
-        nist_cpe_file = gzip.decompress(rsp.data)
+I observe this behavior with cmake 3.17.4 on Fedora 32 and with cmake 3.16.3 on
+Ubuntu 20.04.
+At the same time, I am sure that everything is correct in my CMakefiles.
+In particular, when building locally for a host system, I see the `-pthread`
+flag in the linking commands (or linking with a libpthread on the other host).
 
-        print("CPE: Converting xml manifest to dict...")
-        all_cpedb = xmltodict.parse(nist_cpe_file)
+--
 
-        return all_cpedb
---- [snip ---]
+I looked at support/misc/toolchainfile.cmake.in and package/pkg-cmake.mk but I
+didn't notice any errors.
+As a workaround, I temporarily added a patch to my package that forcibly adds
+the `-pthread` flag for linking executables and so-libraries.
+https://github.com/erthink/libmdbx/commit/787eaaa373073e17f3a53658b085c255bc2c8ff8
 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  support/scripts/cpedb.py | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-> index 0369536f6f..6e48772b5e 100644
-> --- a/support/scripts/cpedb.py
-> +++ b/support/scripts/cpedb.py
-> @@ -1,9 +1,9 @@
->  import sys
-> -import urllib2
-> +import urllib3
->  from collections import OrderedDict
->  import xmltodict
->  import gzip
-> -from StringIO import StringIO
-> +from io import StringIO
->  import os
->  import pickle
->
-> @@ -65,7 +65,7 @@ class CPEDB:
->      def get_new_xml_dict(self, url):
->          print("CPE: Fetching xml manifest from [" + url + "]")
->          try:
-> -            compressed_cpe_file = urllib2.urlopen(url)
-> +            compressed_cpe_file = urllib3.urlopen(url)
->              print("CPE: Unzipping xml manifest...")
->              nist_cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
->              print("CPE: Converting xml manifest to dict...")
-> @@ -113,10 +113,10 @@ class CPEDB:
->                  # latest version in the NIST dict)
->                  self.all_cpes_no_version.update({cpe_str_no_version: item})
->
-> -        except urllib2.HTTPError:
-> +        except urllib3.HTTPError:
->              print("CPE: HTTP Error: %s" % url)
->              sys.exit(1)
-> -        except urllib2.URLError:
-> +        except urllib3.URLError:
->              print("CPE: URL Error: %s" % url)
->              sys.exit(1)
->
-> @@ -156,7 +156,7 @@ class CPEDB:
->
->      def get_nvd_url(self, cpe_str):
->          return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
-> -                urllib2.quote(cpe_str) + \
-> +                urllib3.quote(cpe_str) + \
->                  "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
->
->      def get_cpe_no_version(self, cpe):
-> --
-> 2.28.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
