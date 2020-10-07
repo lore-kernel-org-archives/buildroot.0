@@ -1,54 +1,51 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 7 Oct 2020 08:21:42 -0500
-Subject: [Buildroot] [PATCH v2 1/3] package/uboot-tools: migrate
- BR2_TARGET_UBOOT_ENVIMAGE from U-Boot pkg
-In-Reply-To: <CANQCQpYJxsgXvkySKQEiiOrbfmCKEM9VU-3i04KZxPC=pmTejQ@mail.gmail.com>
-References: <20200924192912.51913-1-matthew.weber@rockwellcollins.com>
- <20200924192912.51913-2-matthew.weber@rockwellcollins.com>
- <aae92521-2c14-ff28-b092-6f3e89ae2b50@mind.be>
- <CANQCQpYJxsgXvkySKQEiiOrbfmCKEM9VU-3i04KZxPC=pmTejQ@mail.gmail.com>
-Message-ID: <CANQCQpbNPFjL=0_fOvq69WfnU5AYBepvnh8QFqZZKO+foe1gbg@mail.gmail.com>
+From: Shlomi Vaknin <shlomi.39sd@gmail.com>
+Date: Wed,  7 Oct 2020 17:49:42 +0300
+Subject: [Buildroot] [PATCH v3 1/4] boot/uboot: add stm32 binary format
+Message-ID: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Add `.stm32` binary format that uboot generates for the trusted configuration.
 
-On Wed, Oct 7, 2020 at 7:44 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Arnout,
->
->
-> On Tue, Oct 6, 2020 at 4:42 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 24/09/2020 21:29, Matt Weber wrote:
-> > > Migrating the support for this feature to uboot-tools to gain the
-> > > ability to build env files when BR2_TARGET_UBOOT isn't selected.
-> > >
-> > > Note: This patch creates a circular dependency with uboot until the
-> > > similar migration patch is merged for uboot scripts
-> > >
-> > > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >
-> >  Series applied with the changes as explained in my reply to patch 1, and a few
-> > additional changes. Please have a got with current master to check if I broke
-> > anything.
-> >
->
-> Changes looked good, however I forgot to also include a fixup for all
-> the defconfigs using the feature.  I'll get a patch ready this morning
-> and sent out.
->
+Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
+---
+ boot/uboot/Config.in | 4 ++++
+ boot/uboot/uboot.mk  | 5 +++++
+ 2 files changed, 9 insertions(+)
 
-Here's the bugfix.  My bad on this one.
-
-http://patchwork.ozlabs.org/project/buildroot/list/?series=206474
-
-Best Regards,
-Matt
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 9e44daffab..01dea01764 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -343,6 +343,10 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ 
++config BR2_TARGET_UBOOT_FORMAT_STM32
++	bool "u-boot.stm32"
++	depends on BR2_arm
++
+ config BR2_TARGET_UBOOT_FORMAT_CUSTOM
+ 	bool "Custom (specify below)"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index f27abbd5ba..72d5df412d 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -121,6 +121,11 @@ UBOOT_MAKE_TARGET += u-boot.sb
+ UBOOT_DEPENDENCIES += host-elftosb host-openssl
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_STM32),y)
++UBOOT_BINS += u-boot.stm32
++UBOOT_MAKE_TARGET += u-boot.stm32
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_CUSTOM),y)
+ UBOOT_BINS += $(call qstrip,$(BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME))
+ endif
+-- 
+2.25.1
