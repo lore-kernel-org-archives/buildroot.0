@@ -1,192 +1,345 @@
 From: Shlomi Vaknin <shlomi.39sd@gmail.com>
-Date: Wed,  7 Oct 2020 17:49:45 +0300
-Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support for
- wifi
+Date: Wed,  7 Oct 2020 17:49:43 +0300
+Subject: [Buildroot] [PATCH v3 2/4] configs/stm32mp157*: use trusted
+ configuration
 In-Reply-To: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
 References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
-Message-ID: <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+Message-ID: <20201007144945.1697081-2-shlomi.39sd@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding support for wifi for stm32mp157c-dk2 is achieved by using
-another dts which includes the bindings for the wifi module.
-In addition, a txt file for the wifi firmware was added.
-This was copied from the yocto bsp layer of st.
+Adding support for trusted configuration for stm32mp157c-dk2 and stm32mp157a-dk1.
+This patch change using uboot spl as fsbl to using arm trusted firmware.
+The reason for this change is that st recommends to use this configuration (or optee)
+and not the basic.
+In addition, this commit enables gadget support in `linux.config`.
+
+In addition, removing partition-type from genimage.cfg is mandatory,
+since it creates a hybrid MBR partition table which causes ATF to not find ssbl parition.
 
 Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
 ---
- .../stm32mp157c-dk2/linux.config              |  4 +-
- .../overlay/boot/extlinux/extlinux.conf       |  2 +-
- .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
- .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
- configs/stm32mp157c_dk2_defconfig             |  7 ++-
- 5 files changed, 100 insertions(+), 4 deletions(-)
- create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
- create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
+ .../{genimage.cfg => genimage.cfg.template}   |  7 ++-
+ .../common/stm32mp157/post-image.sh           | 43 +++++++++++++++++++
+ .../stm32mp157a-dk1/linux.config              | 24 ++++-------
+ .../stm32mp157c-dk2/linux.config              | 20 ++++-----
+ configs/stm32mp157a_dk1_defconfig             | 14 +++---
+ configs/stm32mp157c_dk2_defconfig             | 14 +++---
+ 6 files changed, 78 insertions(+), 44 deletions(-)
+ rename board/stmicroelectronics/common/stm32mp157/{genimage.cfg => genimage.cfg.template} (63%)
+ create mode 100755 board/stmicroelectronics/common/stm32mp157/post-image.sh
 
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/linux.config b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
-index c03eb748b4..4beee3a708 100644
---- a/board/stmicroelectronics/stm32mp157c-dk2/linux.config
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
-@@ -24,8 +24,6 @@ CONFIG_HIGHMEM=y
- CONFIG_FORCE_MAX_ZONEORDER=12
- CONFIG_SECCOMP=y
- # CONFIG_ATAGS is not set
--CONFIG_ZBOOT_ROM_TEXT=0x0
--CONFIG_ZBOOT_ROM_BSS=0x0
- CONFIG_ARM_APPENDED_DTB=y
- CONFIG_ARM_ATAG_DTB_COMPAT=y
- CONFIG_VFP=y
-@@ -45,6 +43,7 @@ CONFIG_UNIX=y
- CONFIG_INET=y
- CONFIG_CAN=y
+diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+similarity index 63%
+rename from board/stmicroelectronics/common/stm32mp157/genimage.cfg
+rename to board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+index d1ce530cc5..f341c19f2f 100644
+--- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg
++++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+@@ -4,20 +4,19 @@ image sdcard.img {
+ 	}
+ 
+ 	partition fsbl1 {
+-		image = "u-boot-spl.stm32"
++		image = "%ATFBIN%"
+ 	}
+ 
+ 	partition fsbl2 {
+-		image = "u-boot-spl.stm32"
++		image = "%ATFBIN%"
+ 	}
+ 
+ 	partition ssbl {
+-		image = "u-boot.img"
++		image = "u-boot.stm32"
+ 	}
+ 
+ 	partition rootfs {
+ 		image = "rootfs.ext4"
+-		partition-type = 0x83
+ 		bootable = "yes"
+ 	}
+ }
+diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+new file mode 100755
+index 0000000000..c00a5c6f6c
+--- /dev/null
++++ b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+@@ -0,0 +1,43 @@
++#!/usr/bin/env bash
++
++#
++# atf_image extracts the ATF binary image from DTB_FILE_NAME that appears in
++# BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES in ${BR_CONFIG},
++# then prints the corresponding file name for the genimage
++# configuration file
++#
++atf_image()
++{
++	local ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
++
++	if grep -Eq "DTB_FILE_NAME=stm32mp157c-dk2.dtb" <<< ${ATF_VARIABLES}; then
++		echo "tf-a-stm32mp157c-dk2.stm32"
++	elif grep -Eq "DTB_FILE_NAME=stm32mp157a-dk1.dtb" <<< ${ATF_VARIABLES}; then
++                echo "tf-a-stm32mp157a-dk1.stm32"
++	fi
++}
++
++main()
++{
++	local ATFBIN="$(atf_image)"
++	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
++	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++	sed -e "s/%ATFBIN%/${ATFBIN}/" \
++		board/stmicroelectronics/common/stm32mp157/genimage.cfg.template > ${GENIMAGE_CFG}
++
++	rm -rf "${GENIMAGE_TMP}"
++
++	genimage \
++		--rootpath "${TARGET_DIR}" \
++		--tmppath "${GENIMAGE_TMP}" \
++		--inputpath "${BINARIES_DIR}" \
++		--outputpath "${BINARIES_DIR}" \
++		--config "${GENIMAGE_CFG}"
++
++	rm -f ${GENIMAGE_CFG}
++
++	exit $?
++}
++
++main $@
+diff --git a/board/stmicroelectronics/stm32mp157a-dk1/linux.config b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+index 95c834e431..47729ea97c 100644
+--- a/board/stmicroelectronics/stm32mp157a-dk1/linux.config
++++ b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+@@ -47,15 +47,10 @@ CONFIG_CAN=y
  CONFIG_CAN_M_CAN=y
-+CONFIG_CFG80211=m
  CONFIG_DEVTMPFS=y
  CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_DMA_CMA=y
+-CONFIG_CMA_SIZE_MBYTES=128
  CONFIG_SIMPLE_PM_BUS=y
-@@ -66,6 +65,7 @@ CONFIG_SMSC911X=y
- CONFIG_STMMAC_ETH=y
- CONFIG_DWMAC_DWC_QOS_ETH=y
- CONFIG_MDIO_BITBANG=y
-+CONFIG_BRCMFMAC=m
- CONFIG_INPUT_JOYDEV=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_INPUT_TOUCHSCREEN=y
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-index 5b7f56ee77..a6595971a8 100644
---- a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
-@@ -1,4 +1,4 @@
- label stm32mp157c-dk2-buildroot
-   kernel /boot/zImage
--  devicetree /boot/stm32mp157c-dk2.dtb
-+  devicetree /boot/stm32mp157c-dk2-wifi.dtb
-   append root=/dev/mmcblk0p4 rootwait
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
-new file mode 100644
-index 0000000000..b36de8837f
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
-@@ -0,0 +1,59 @@
-+# NVRAM file for BCM943430WLSELG
-+# 2.4 GHz, 20 MHz BW mode
-+
-+# The following parameter values are just placeholders, need to be updated.
-+manfid=0x2d0
-+prodid=0x0726
-+vendid=0x14e4
-+devid=0x43e2
-+boardtype=0x0726
-+boardrev=0x1202
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+sromrev=11
-+boardflags=0x00404201
-+boardflags3=0x08000000
-+xtalfreq=37400
-+#xtalfreq=19200
-+nocrc=1
-+ag0=255
-+aa2g=1
-+ccode=ALL
-+
-+pa0itssit=0x20
-+extpagain2g=0
-+
-+#PA parameters for 2.4GHz, measured at CHIP OUTPUT
-+pa2ga0=-168,7161,-820
-+AvVmid_c0=0x0,0xc8
-+cckpwroffset0=5
-+
-+# PPR params
-+maxp2ga0=84
-+txpwrbckof=6
-+cckbw202gpo=0
-+legofdmbw202gpo=0x66111111
-+mcsbw202gpo=0x77711111
-+propbw202gpo=0xdd
-+
-+# OFDM IIR :
-+ofdmdigfilttype=18
-+ofdmdigfilttypebe=18
-+# PAPD mode:
-+papdmode=1
-+papdvalidtest=1
-+pacalidx2g=32
-+papdepsoffset=-36
-+papdendidx=61
-+
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+
-+deadman_to=0xffffffff
-+# muxenab: 0x1 for UART enable, 0x2 for GPIOs, 0x8 for JTAG
-+muxenab=0x1
-+# CLDO PWM voltage settings - 0x4 - 1.1 volt
-+#cldo_pwm=0x4
-+
-+#VCO freq 326.4MHz
-+spurconfig=0x3
-diff --git a/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
-new file mode 100644
-index 0000000000..89747d2b5f
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
-@@ -0,0 +1,32 @@
-+/dts-v1/;
-+
-+#include "stm32mp157c-dk2.dts"
-+
-+/ {
-+	wifi_pwrseq: wifi-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+/* Wifi */
-+&sdmmc2 {
-+	arm,primecell-periphid = <0x10153180>;
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc2_b4_pins_a>;
-+	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
-+	non-removable;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&v3v3>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	brcmf: bcrmf at 1 {
-+		reg = <1>;
-+		compatible = "brcm,bcm4329-fmac";
-+	};
-+};
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index bf7b9868b1..9c2e436244 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -9,8 +9,13 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-dk2"
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
-+BR2_PACKAGE_WIRELESS_REGDB=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
- BR2_TARGET_ROOTFS_EXT2=y
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_M25P80=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_STM32_FMC2=y
+ CONFIG_MTD_SPI_NOR=y
+ # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+ CONFIG_MTD_UBI=y
+@@ -107,13 +102,6 @@ CONFIG_REGULATOR_STPMIC1=y
+ CONFIG_DRM=y
+ CONFIG_DRM_STM=y
+ CONFIG_DRM_STM_DSI=y
+-# CONFIG_DRM_PANEL_ORISETECH_OTM8009A is not set
+-# CONFIG_DRM_SII902X is not set
+-# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
+-# CONFIG_LCD_CLASS_DEVICE is not set
+-# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+-# CONFIG_BACKLIGHT_GENERIC is not set
+-# CONFIG_FRAMEBUFFER_CONSOLE_ROTATION is not set
+ CONFIG_SOUND=y
+ CONFIG_SND=y
+ CONFIG_SND_DYNAMIC_MINORS=y
+@@ -129,12 +117,17 @@ CONFIG_USB_DWC2=y
+ CONFIG_USB_CHIPIDEA=y
+ CONFIG_USB_CHIPIDEA_HOST=y
+ CONFIG_USB_ISP1760=y
++CONFIG_USB_ISP1760_HOST_ROLE=y
+ CONFIG_USB_HSIC_USB3503=y
+ CONFIG_USB_GPIO_VBUS=y
+ CONFIG_USB_ISP1301=y
+ CONFIG_USB_ULPI=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_CONFIGFS=m
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_ECM=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+ CONFIG_TYPEC=y
+-CONFIG_TYPEC_STUSB=y
+ CONFIG_MMC=y
+ CONFIG_MMC_BLOCK_MINORS=16
+ CONFIG_MMC_ARMMMCI=y
+@@ -157,15 +150,12 @@ CONFIG_STM32_IPCC=y
+ CONFIG_REMOTEPROC=y
+ CONFIG_STM32_RPROC=y
+ CONFIG_RPMSG_VIRTIO=y
+-CONFIG_RPMSG_TTY=y
+ CONFIG_IIO=y
+ CONFIG_IIO_SW_TRIGGER=y
+ CONFIG_SD_ADC_MODULATOR=y
+ CONFIG_STM32_ADC_CORE=y
+ CONFIG_STM32_ADC=y
+-CONFIG_STM32_ADC_TEMP=y
+ CONFIG_STM32_DFSDM_ADC=y
+-CONFIG_STM32_LPTIMER_CNT=y
+ CONFIG_STM32_DAC=y
+ CONFIG_IIO_HRTIMER_TRIGGER=y
+ CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
+@@ -179,4 +169,6 @@ CONFIG_MSDOS_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=128
+ CONFIG_PRINTK_TIME=y
+diff --git a/board/stmicroelectronics/stm32mp157c-dk2/linux.config b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+index 878a0c39f1..c03eb748b4 100644
+--- a/board/stmicroelectronics/stm32mp157c-dk2/linux.config
++++ b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+@@ -47,15 +47,10 @@ CONFIG_CAN=y
+ CONFIG_CAN_M_CAN=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+-CONFIG_DMA_CMA=y
+-CONFIG_CMA_SIZE_MBYTES=128
+ CONFIG_SIMPLE_PM_BUS=y
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_M25P80=y
+-CONFIG_MTD_NAND=y
+-CONFIG_MTD_NAND_STM32_FMC2=y
+ CONFIG_MTD_SPI_NOR=y
+ # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+ CONFIG_MTD_UBI=y
+@@ -82,7 +77,6 @@ CONFIG_SERIAL_STM32_CONSOLE=y
+ CONFIG_SERIAL_DEV_BUS=y
+ CONFIG_HW_RANDOM=y
+ CONFIG_I2C_CHARDEV=y
+-CONFIG_I2C_MUX=y
+ CONFIG_I2C_STM32F7=y
+ CONFIG_SPI=y
+ CONFIG_SPI_STM32=y
+@@ -109,8 +103,6 @@ CONFIG_DRM_STM=y
+ CONFIG_DRM_STM_DSI=y
+ CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
+ CONFIG_DRM_SII902X=y
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+-# CONFIG_LCD_CLASS_DEVICE is not set
+ CONFIG_BACKLIGHT_CLASS_DEVICE=y
+ # CONFIG_BACKLIGHT_GENERIC is not set
+ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+@@ -129,12 +121,17 @@ CONFIG_USB_DWC2=y
+ CONFIG_USB_CHIPIDEA=y
+ CONFIG_USB_CHIPIDEA_HOST=y
+ CONFIG_USB_ISP1760=y
++CONFIG_USB_ISP1760_HOST_ROLE=y
+ CONFIG_USB_HSIC_USB3503=y
+ CONFIG_USB_GPIO_VBUS=y
+ CONFIG_USB_ISP1301=y
+ CONFIG_USB_ULPI=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_CONFIGFS=m
++CONFIG_USB_CONFIGFS_ACM=y
++CONFIG_USB_CONFIGFS_ECM=y
++CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+ CONFIG_TYPEC=y
+-CONFIG_TYPEC_STUSB=y
+ CONFIG_MMC=y
+ CONFIG_MMC_BLOCK_MINORS=16
+ CONFIG_MMC_ARMMMCI=y
+@@ -157,15 +154,12 @@ CONFIG_STM32_IPCC=y
+ CONFIG_REMOTEPROC=y
+ CONFIG_STM32_RPROC=y
+ CONFIG_RPMSG_VIRTIO=y
+-CONFIG_RPMSG_TTY=y
+ CONFIG_IIO=y
+ CONFIG_IIO_SW_TRIGGER=y
+ CONFIG_SD_ADC_MODULATOR=y
+ CONFIG_STM32_ADC_CORE=y
+ CONFIG_STM32_ADC=y
+-CONFIG_STM32_ADC_TEMP=y
+ CONFIG_STM32_DFSDM_ADC=y
+-CONFIG_STM32_LPTIMER_CNT=y
+ CONFIG_STM32_DAC=y
+ CONFIG_IIO_HRTIMER_TRIGGER=y
+ CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
+@@ -179,4 +173,6 @@ CONFIG_MSDOS_FS=y
+ CONFIG_VFAT_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=128
+ CONFIG_PRINTK_TIME=y
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index f172539c02..cdbb5a8cdf 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -2,8 +2,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+@@ -16,15 +15,18 @@ BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.stm32"
++BR2_TARGET_UBOOT_FORMAT_STM32=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157a-dk1"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index 49cfb0733c..6251491e0f 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -2,8 +2,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+@@ -16,15 +15,18 @@ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.stm32"
++BR2_TARGET_UBOOT_FORMAT_STM32=y
+ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.25.1
