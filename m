@@ -1,53 +1,249 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Oct 2020 21:25:47 +0200
-Subject: [Buildroot] [PATCH 1/2] defconfigs: use
- BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_
-In-Reply-To: <20201007132052.29560-1-matthew.weber@rockwellcollins.com>
-References: <20201007132052.29560-1-matthew.weber@rockwellcollins.com>
-Message-ID: <fa555322-e273-94ff-0f36-b22e579eaeb1@mind.be>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed, 7 Oct 2020 21:27:02 +0200
+Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
+ for wifi
+In-Reply-To: <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
+References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
+ <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+ <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
+Message-ID: <e9f06c52-191f-887b-2d8e-4d76acb277d0@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Shlomi,
 
+On 07.10.2020 21:13, Bartosz Bilas wrote:
+>
+> Hi Shlomi,
+>
+> On 07.10.2020 16:49, Shlomi Vaknin wrote:
+>> Adding support for wifi for stm32mp157c-dk2 is achieved by using
+>> another dts which includes the bindings for the wifi module.
+>> In addition, a txt file for the wifi firmware was added.
+>> This was copied from the yocto bsp layer of st.
+>>
+>> Signed-off-by: Shlomi Vaknin<shlomi.39sd@gmail.com>
+>> ---
+>>   .../stm32mp157c-dk2/linux.config              |  4 +-
+>>   .../overlay/boot/extlinux/extlinux.conf       |  2 +-
+>>   .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
+>>   .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
+>>   configs/stm32mp157c_dk2_defconfig             |  7 ++-
+>>   5 files changed, 100 insertions(+), 4 deletions(-)
+>>   create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
+>>   create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
+>>
+>> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/linux.config b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>> index c03eb748b4..4beee3a708 100644
+>> --- a/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>> +++ b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>> @@ -24,8 +24,6 @@ CONFIG_HIGHMEM=y
+>>   CONFIG_FORCE_MAX_ZONEORDER=12
+>>   CONFIG_SECCOMP=y
+>>   # CONFIG_ATAGS is not set
+>> -CONFIG_ZBOOT_ROM_TEXT=0x0
+>> -CONFIG_ZBOOT_ROM_BSS=0x0
+>>   CONFIG_ARM_APPENDED_DTB=y
+>>   CONFIG_ARM_ATAG_DTB_COMPAT=y
+>>   CONFIG_VFP=y
+>> @@ -45,6 +43,7 @@ CONFIG_UNIX=y
+>>   CONFIG_INET=y
+>>   CONFIG_CAN=y
+>>   CONFIG_CAN_M_CAN=y
+>> +CONFIG_CFG80211=m
+>>   CONFIG_DEVTMPFS=y
+>>   CONFIG_DEVTMPFS_MOUNT=y
+>>   CONFIG_SIMPLE_PM_BUS=y
+>> @@ -66,6 +65,7 @@ CONFIG_SMSC911X=y
+>>   CONFIG_STMMAC_ETH=y
+>>   CONFIG_DWMAC_DWC_QOS_ETH=y
+>>   CONFIG_MDIO_BITBANG=y
+>> +CONFIG_BRCMFMAC=m
+>>   CONFIG_INPUT_JOYDEV=y
+>>   CONFIG_INPUT_EVDEV=y
+>>   CONFIG_INPUT_TOUCHSCREEN=y
+>> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
+>> index 5b7f56ee77..a6595971a8 100644
+>> --- a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
+>> +++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
+>> @@ -1,4 +1,4 @@
+>>   label stm32mp157c-dk2-buildroot
+>>     kernel /boot/zImage
+>> -  devicetree /boot/stm32mp157c-dk2.dtb
+>> +  devicetree /boot/stm32mp157c-dk2-wifi.dtb
+>>     append root=/dev/mmcblk0p4 rootwait
+>> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
+>> new file mode 100644
+>> index 0000000000..b36de8837f
+>> --- /dev/null
+>> +++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
+>> @@ -0,0 +1,59 @@
+>> +# NVRAM file for BCM943430WLSELG
+>> +# 2.4 GHz, 20 MHz BW mode
+>> +
+>> +# The following parameter values are just placeholders, need to be updated.
+>> +manfid=0x2d0
+>> +prodid=0x0726
+>> +vendid=0x14e4
+>> +devid=0x43e2
+>> +boardtype=0x0726
+>> +boardrev=0x1202
+>> +boardnum=22
+>> +macaddr=00:90:4c:c5:12:38
+>> +sromrev=11
+>> +boardflags=0x00404201
+>> +boardflags3=0x08000000
+>> +xtalfreq=37400
+>> +#xtalfreq=19200
+>> +nocrc=1
+>> +ag0=255
+>> +aa2g=1
+>> +ccode=ALL
+>> +
+>> +pa0itssit=0x20
+>> +extpagain2g=0
+>> +
+>> +#PA parameters for 2.4GHz, measured at CHIP OUTPUT
+>> +pa2ga0=-168,7161,-820
+>> +AvVmid_c0=0x0,0xc8
+>> +cckpwroffset0=5
+>> +
+>> +# PPR params
+>> +maxp2ga0=84
+>> +txpwrbckof=6
+>> +cckbw202gpo=0
+>> +legofdmbw202gpo=0x66111111
+>> +mcsbw202gpo=0x77711111
+>> +propbw202gpo=0xdd
+>> +
+>> +# OFDM IIR :
+>> +ofdmdigfilttype=18
+>> +ofdmdigfilttypebe=18
+>> +# PAPD mode:
+>> +papdmode=1
+>> +papdvalidtest=1
+>> +pacalidx2g=32
+>> +papdepsoffset=-36
+>> +papdendidx=61
+>> +
+>> +il0macaddr=00:90:4c:c5:12:38
+>> +wl0id=0x431b
+>> +
+>> +deadman_to=0xffffffff
+>> +# muxenab: 0x1 for UART enable, 0x2 for GPIOs, 0x8 for JTAG
+>> +muxenab=0x1
+>> +# CLDO PWM voltage settings - 0x4 - 1.1 volt
+>> +#cldo_pwm=0x4
+>> +
+>> +#VCO freq 326.4MHz
+>> +spurconfig=0x3
+>> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
+>> new file mode 100644
+>> index 0000000000..89747d2b5f
+>> --- /dev/null
+>> +++ b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
+>> @@ -0,0 +1,32 @@
+>> +/dts-v1/;
+>> +
+>> +#include "stm32mp157c-dk2.dts"
+>> +
+>> +/ {
+>> +	wifi_pwrseq: wifi-pwrseq {
+>> +		compatible = "mmc-pwrseq-simple";
+>> +		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
+>> +	};
+>> +};
+>> +
+>> +/* Wifi */
+>> +&sdmmc2 {
+>> +	arm,primecell-periphid = <0x10153180>;
+>> +	pinctrl-names = "default", "opendrain", "sleep";
+>> +	pinctrl-0 = <&sdmmc2_b4_pins_a>;
+>> +	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
+>> +	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
+>> +	non-removable;
+>> +	st,neg-edge;
+>> +	bus-width = <4>;
+>> +	vmmc-supply = <&v3v3>;
+>> +	mmc-pwrseq = <&wifi_pwrseq>;
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	status = "okay";
+>> +
+>> +	brcmf: bcrmf at 1 {
+>> +		reg = <1>;
+>> +		compatible = "brcm,bcm4329-fmac";
+>> +	};
+>> +};
+>> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+>> index bf7b9868b1..9c2e436244 100644
+>> --- a/configs/stm32mp157c_dk2_defconfig
+>> +++ b/configs/stm32mp157c_dk2_defconfig
+>> @@ -9,8 +9,13 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+>>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+>>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-dk2"
+>> +BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts"
+>>   BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>> +BR2_PACKAGE_LINUX_FIRMWARE=y
+>> +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
+>> +BR2_PACKAGE_WIRELESS_REGDB=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+>>   BR2_TARGET_ROOTFS_EXT2=y
+>>   BR2_TARGET_ROOTFS_EXT2_4=y
+>>   BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 
-On 07/10/2020 15:20, Matt Weber wrote:
-> --- a/configs/bananapi_m1_defconfig
-> +++ b/configs/bananapi_m1_defconfig
-> @@ -21,8 +21,9 @@ BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->  BR2_TARGET_UBOOT_SPL=y
->  BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-> -BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-> -BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m1/boot.cmd"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+I suggest to add BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV to load 
+firmware and driver automatically on boot.
 
- Just appending it at the end is not so nice (especially for the defconfigs that
-are manually formatted). So I've moved it to just before the existing location,
-with a few exceptions. This is the addition to the commit message:
+Unfortunately it doesn't work for me, see:
 
-    Add BR2_PACKAGE_HOST_UBOOT_TOOLS=y just before the existing
-    BR2_TARGET_UBOOT_BOOT_SCRIPT option. Note that for the defconfigs that
-    are not manually formatted (i.e. just the result of 'make
-    savedefconfig'), this puts them in the wrong place. However, it's easier
-    this way, and it's more consistent in general to have the definition of
-    the script close to BR2_TARGET_UBOOT itself.
+[??? 4.186415] cfg80211: Loading compiled-in X.509 certificates for 
+regulatory database
+[??? 4.237180] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[??? 4.300765] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43430-sdio for chip BCM43430/1
+[??? 5.389412] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000): 
+clkctl 0x50
+[??? 6.407710] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000): 
+clkctl 0x50
 
-    Special cases:
-    - nanopi_* had the definition of the _SCRIPT variable in a weird place.
-      These are moved to close to BR2_TARGET_UBOOT.
-    - Same for orangepi_plus.
-    - orangpi_pc_* already had BR2_PACKAGE_HOST_UBOOT_TOOLS=y so it's not
-      added there.
+Google says that it could be due to wrong nvram file configuration but I 
+assume that you have run it successfully?
 
- Applied with those changes, thanks.
+# ifconfig -a
+eth0????? Link encap:Ethernet? HWaddr 00:80:E1:42:56:44
+ ????????? BROADCAST MULTICAST? MTU:1500? Metric:1
+ ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+ ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+ ????????? collisions:0 txqueuelen:1000
+ ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
+ ????????? Interrupt:49 Base address:0xe000
 
- Regards,
- Arnout
+lo??????? Link encap:Local Loopback
+ ????????? inet addr:127.0.0.1? Mask:255.0.0.0
+ ????????? inet6 addr: ::1/128 Scope:Host
+ ????????? UP LOOPBACK RUNNING? MTU:65536? Metric:1
+ ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+ ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+ ????????? collisions:0 txqueuelen:1000
+ ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
+
+sit0????? Link encap:IPv6-in-IPv4
+ ????????? NOARP? MTU:1480? Metric:1
+ ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+ ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+ ????????? collisions:0 txqueuelen:1000
+ ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
+
+#
+
+As you can see there is no wlan0 interface.
+
+Best
+Bartek
