@@ -1,249 +1,124 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed, 7 Oct 2020 21:27:02 +0200
-Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
- for wifi
-In-Reply-To: <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
-References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
- <20201007144945.1697081-4-shlomi.39sd@gmail.com>
- <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
-Message-ID: <e9f06c52-191f-887b-2d8e-4d76acb277d0@grinn-global.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 7 Oct 2020 21:27:17 +0200
+Subject: [Buildroot] [git commit] defconfigs: use
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_
+Message-ID: <20201007191800.0437186B2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Shlomi,
+commit: https://git.buildroot.net/buildroot/commit/?id=b4ad2183018b782d1beecf0eae89b33ab4b60eec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 07.10.2020 21:13, Bartosz Bilas wrote:
->
-> Hi Shlomi,
->
-> On 07.10.2020 16:49, Shlomi Vaknin wrote:
->> Adding support for wifi for stm32mp157c-dk2 is achieved by using
->> another dts which includes the bindings for the wifi module.
->> In addition, a txt file for the wifi firmware was added.
->> This was copied from the yocto bsp layer of st.
->>
->> Signed-off-by: Shlomi Vaknin<shlomi.39sd@gmail.com>
->> ---
->>   .../stm32mp157c-dk2/linux.config              |  4 +-
->>   .../overlay/boot/extlinux/extlinux.conf       |  2 +-
->>   .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
->>   .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
->>   configs/stm32mp157c_dk2_defconfig             |  7 ++-
->>   5 files changed, 100 insertions(+), 4 deletions(-)
->>   create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
->>   create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
->>
->> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/linux.config b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
->> index c03eb748b4..4beee3a708 100644
->> --- a/board/stmicroelectronics/stm32mp157c-dk2/linux.config
->> +++ b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
->> @@ -24,8 +24,6 @@ CONFIG_HIGHMEM=y
->>   CONFIG_FORCE_MAX_ZONEORDER=12
->>   CONFIG_SECCOMP=y
->>   # CONFIG_ATAGS is not set
->> -CONFIG_ZBOOT_ROM_TEXT=0x0
->> -CONFIG_ZBOOT_ROM_BSS=0x0
->>   CONFIG_ARM_APPENDED_DTB=y
->>   CONFIG_ARM_ATAG_DTB_COMPAT=y
->>   CONFIG_VFP=y
->> @@ -45,6 +43,7 @@ CONFIG_UNIX=y
->>   CONFIG_INET=y
->>   CONFIG_CAN=y
->>   CONFIG_CAN_M_CAN=y
->> +CONFIG_CFG80211=m
->>   CONFIG_DEVTMPFS=y
->>   CONFIG_DEVTMPFS_MOUNT=y
->>   CONFIG_SIMPLE_PM_BUS=y
->> @@ -66,6 +65,7 @@ CONFIG_SMSC911X=y
->>   CONFIG_STMMAC_ETH=y
->>   CONFIG_DWMAC_DWC_QOS_ETH=y
->>   CONFIG_MDIO_BITBANG=y
->> +CONFIG_BRCMFMAC=m
->>   CONFIG_INPUT_JOYDEV=y
->>   CONFIG_INPUT_EVDEV=y
->>   CONFIG_INPUT_TOUCHSCREEN=y
->> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
->> index 5b7f56ee77..a6595971a8 100644
->> --- a/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
->> +++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/boot/extlinux/extlinux.conf
->> @@ -1,4 +1,4 @@
->>   label stm32mp157c-dk2-buildroot
->>     kernel /boot/zImage
->> -  devicetree /boot/stm32mp157c-dk2.dtb
->> +  devicetree /boot/stm32mp157c-dk2-wifi.dtb
->>     append root=/dev/mmcblk0p4 rootwait
->> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
->> new file mode 100644
->> index 0000000000..b36de8837f
->> --- /dev/null
->> +++ b/board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
->> @@ -0,0 +1,59 @@
->> +# NVRAM file for BCM943430WLSELG
->> +# 2.4 GHz, 20 MHz BW mode
->> +
->> +# The following parameter values are just placeholders, need to be updated.
->> +manfid=0x2d0
->> +prodid=0x0726
->> +vendid=0x14e4
->> +devid=0x43e2
->> +boardtype=0x0726
->> +boardrev=0x1202
->> +boardnum=22
->> +macaddr=00:90:4c:c5:12:38
->> +sromrev=11
->> +boardflags=0x00404201
->> +boardflags3=0x08000000
->> +xtalfreq=37400
->> +#xtalfreq=19200
->> +nocrc=1
->> +ag0=255
->> +aa2g=1
->> +ccode=ALL
->> +
->> +pa0itssit=0x20
->> +extpagain2g=0
->> +
->> +#PA parameters for 2.4GHz, measured at CHIP OUTPUT
->> +pa2ga0=-168,7161,-820
->> +AvVmid_c0=0x0,0xc8
->> +cckpwroffset0=5
->> +
->> +# PPR params
->> +maxp2ga0=84
->> +txpwrbckof=6
->> +cckbw202gpo=0
->> +legofdmbw202gpo=0x66111111
->> +mcsbw202gpo=0x77711111
->> +propbw202gpo=0xdd
->> +
->> +# OFDM IIR :
->> +ofdmdigfilttype=18
->> +ofdmdigfilttypebe=18
->> +# PAPD mode:
->> +papdmode=1
->> +papdvalidtest=1
->> +pacalidx2g=32
->> +papdepsoffset=-36
->> +papdendidx=61
->> +
->> +il0macaddr=00:90:4c:c5:12:38
->> +wl0id=0x431b
->> +
->> +deadman_to=0xffffffff
->> +# muxenab: 0x1 for UART enable, 0x2 for GPIOs, 0x8 for JTAG
->> +muxenab=0x1
->> +# CLDO PWM voltage settings - 0x4 - 1.1 volt
->> +#cldo_pwm=0x4
->> +
->> +#VCO freq 326.4MHz
->> +spurconfig=0x3
->> diff --git a/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
->> new file mode 100644
->> index 0000000000..89747d2b5f
->> --- /dev/null
->> +++ b/board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
->> @@ -0,0 +1,32 @@
->> +/dts-v1/;
->> +
->> +#include "stm32mp157c-dk2.dts"
->> +
->> +/ {
->> +	wifi_pwrseq: wifi-pwrseq {
->> +		compatible = "mmc-pwrseq-simple";
->> +		reset-gpios = <&gpioh 4 GPIO_ACTIVE_LOW>;
->> +	};
->> +};
->> +
->> +/* Wifi */
->> +&sdmmc2 {
->> +	arm,primecell-periphid = <0x10153180>;
->> +	pinctrl-names = "default", "opendrain", "sleep";
->> +	pinctrl-0 = <&sdmmc2_b4_pins_a>;
->> +	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
->> +	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a>;
->> +	non-removable;
->> +	st,neg-edge;
->> +	bus-width = <4>;
->> +	vmmc-supply = <&v3v3>;
->> +	mmc-pwrseq = <&wifi_pwrseq>;
->> +	#address-cells = <1>;
->> +	#size-cells = <0>;
->> +	status = "okay";
->> +
->> +	brcmf: bcrmf at 1 {
->> +		reg = <1>;
->> +		compatible = "brcm,bcm4329-fmac";
->> +	};
->> +};
->> diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
->> index bf7b9868b1..9c2e436244 100644
->> --- a/configs/stm32mp157c_dk2_defconfig
->> +++ b/configs/stm32mp157c_dk2_defconfig
->> @@ -9,8 +9,13 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
->>   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
->>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157c-dk2"
->> +BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts"
->>   BR2_LINUX_KERNEL_INSTALL_TARGET=y
->> +BR2_PACKAGE_LINUX_FIRMWARE=y
->> +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
->> +BR2_PACKAGE_WIRELESS_REGDB=y
->> +BR2_PACKAGE_WPA_SUPPLICANT=y
->> +BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
->>   BR2_TARGET_ROOTFS_EXT2=y
->>   BR2_TARGET_ROOTFS_EXT2_4=y
->>   BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+For defconfigs that create a boot envimage, add the host package
+uboot-tools and update the script variable names.
 
-I suggest to add BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV to load 
-firmware and driver automatically on boot.
+Add BR2_PACKAGE_HOST_UBOOT_TOOLS=y just before the existing
+BR2_TARGET_UBOOT_ENVIMAGE option. Note that for the defconfigs that are
+not manually formatted (i.e. just the result of 'make savedefconfig'),
+this puts them in the wrong place. However, it's easier this way, and
+it's more consistent in general to have the definition of the envimage
+close to BR2_TARGET_UBOOT itself.
 
-Unfortunately it doesn't work for me, see:
+Related to 78559d699ae4b5c22ae77cfb7994560e0267be96
 
-[??? 4.186415] cfg80211: Loading compiled-in X.509 certificates for 
-regulatory database
-[??? 4.237180] cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-[??? 4.300765] brcmfmac: brcmf_fw_alloc_request: using 
-brcm/brcmfmac43430-sdio for chip BCM43430/1
-[??? 5.389412] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000): 
-clkctl 0x50
-[??? 6.407710] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000): 
-clkctl 0x50
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ configs/at91sam9x5ek_mmc_defconfig     | 7 ++++---
+ configs/at91sam9x5ek_mmc_dev_defconfig | 7 ++++---
+ configs/ci20_defconfig                 | 7 ++++---
+ configs/snps_archs38_hsdk_defconfig    | 7 ++++---
+ configs/socrates_cyclone5_defconfig    | 7 ++++---
+ 5 files changed, 20 insertions(+), 15 deletions(-)
 
-Google says that it could be due to wrong nvram file configuration but I 
-assume that you have run it successfully?
-
-# ifconfig -a
-eth0????? Link encap:Ethernet? HWaddr 00:80:E1:42:56:44
- ????????? BROADCAST MULTICAST? MTU:1500? Metric:1
- ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
- ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
- ????????? collisions:0 txqueuelen:1000
- ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
- ????????? Interrupt:49 Base address:0xe000
-
-lo??????? Link encap:Local Loopback
- ????????? inet addr:127.0.0.1? Mask:255.0.0.0
- ????????? inet6 addr: ::1/128 Scope:Host
- ????????? UP LOOPBACK RUNNING? MTU:65536? Metric:1
- ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
- ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
- ????????? collisions:0 txqueuelen:1000
- ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
-
-sit0????? Link encap:IPv6-in-IPv4
- ????????? NOARP? MTU:1480? Metric:1
- ????????? RX packets:0 errors:0 dropped:0 overruns:0 frame:0
- ????????? TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
- ????????? collisions:0 txqueuelen:1000
- ????????? RX bytes:0 (0.0 B)? TX bytes:0 (0.0 B)
-
-#
-
-As you can see there is no wlan0 interface.
-
-Best
-Bartek
+diff --git a/configs/at91sam9x5ek_mmc_defconfig b/configs/at91sam9x5ek_mmc_defconfig
+index 633ca8e1cc..63a537bd9c 100644
+--- a/configs/at91sam9x5ek_mmc_defconfig
++++ b/configs/at91sam9x5ek_mmc_defconfig
+@@ -35,9 +35,10 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_ENVIMAGE=y
+-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
+-BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x4000"
+ 
+ # Host packages
+ # Needed to generate the SD card image
+diff --git a/configs/at91sam9x5ek_mmc_dev_defconfig b/configs/at91sam9x5ek_mmc_dev_defconfig
+index e8246c8d50..698cb9230a 100644
+--- a/configs/at91sam9x5ek_mmc_dev_defconfig
++++ b/configs/at91sam9x5ek_mmc_dev_defconfig
+@@ -95,9 +95,10 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.1"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="at91sam9x5ek_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_ENVIMAGE=y
+-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
+-BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/atmel/at91sam9x5ek_mmc/uboot-env.txt"
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x4000"
+ 
+ # Host packages
+ # Needed to generate the SD card image
+diff --git a/configs/ci20_defconfig b/configs/ci20_defconfig
+index 076f21bdfe..09eddc4e68 100644
+--- a/configs/ci20_defconfig
++++ b/configs/ci20_defconfig
+@@ -28,9 +28,10 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ci20_mmc"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
+-BR2_TARGET_UBOOT_ENVIMAGE=y
+-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/ci20/uboot-env.txt"
+-BR2_TARGET_UBOOT_ENVIMAGE_SIZE="32768"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/ci20/uboot-env.txt"
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="32768"
+ 
+ # host
+ BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index af7cba6c2e..9a9d57b325 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -35,6 +35,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="hsdk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_ELF=y
+-BR2_TARGET_UBOOT_ENVIMAGE=y
+-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/synopsys/hsdk/uboot.env.txt"
+-BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x4000"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/synopsys/hsdk/uboot.env.txt"
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="0x4000"
+diff --git a/configs/socrates_cyclone5_defconfig b/configs/socrates_cyclone5_defconfig
+index 4c659263df..6ecbf05d8c 100644
+--- a/configs/socrates_cyclone5_defconfig
++++ b/configs/socrates_cyclone5_defconfig
+@@ -23,9 +23,10 @@ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_ALTERA_SOCFPGA_IMAGE_CRC=y
+-BR2_TARGET_UBOOT_ENVIMAGE=y
+-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/altera/socrates_cyclone5/boot-env.txt"
+-BR2_TARGET_UBOOT_ENVIMAGE_SIZE="8192"
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/altera/socrates_cyclone5/boot-env.txt"
++BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE="8192"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
