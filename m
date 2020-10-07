@@ -1,55 +1,51 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed,  7 Oct 2020 22:03:28 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/warp7: bump Kernel and U-Boot
- version
-In-Reply-To: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
-References: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <1602101008-3479-2-git-send-email-pjtexier@koncepto.io>
+Date: Wed,  7 Oct 2020 22:03:27 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2020.10
+Message-ID: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2020.10 and kernel to version 5.8.13
+See: https://lists.denx.de/pipermail/u-boot/2020-October/428516.html
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- configs/warp7_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ boot/uboot/Config.in  | 4 ++--
+ boot/uboot/uboot.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-index 76d2801..5f9d973 100644
---- a/configs/warp7_defconfig
-+++ b/configs/warp7_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 9e44daf..41cc1e1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -41,7 +41,7 @@ choice
+ 	  Select the specific U-Boot version you want to use
  
--# Linux headers same as kernel, a 5.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
-+# Linux headers same as kernel, a 5.8 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ config BR2_TARGET_UBOOT_LATEST_VERSION
+-	bool "2020.07"
++	bool "2020.10"
  
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
-@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="warp7"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -85,7 +85,7 @@ endif
  
- # wifi firmware for brcm43430
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
+-	default "2020.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
++	default "2020.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+index 4b660dd..ba6ea0b 100644
+--- a/boot/uboot/uboot.hash
++++ b/boot/uboot/uboot.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c1f5bf9ee6bb6e648edbf19ce2ca9452f614b08a9f886f1a566aa42e8cf05f6a  u-boot-2020.07.tar.bz2
++sha256  0d481bbdc05c0ee74908ec2f56a6daa53166cc6a78a0e4fac2ac5d025770a622  u-boot-2020.10.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
 -- 
 2.7.4
