@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 23:28:46 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libhtp: bump to version 0.5.35
-In-Reply-To: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
-References: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201008232846.13103e56@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 23:29:11 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2020.10
+In-Reply-To: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
+References: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20201008232911.4416ff57@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  8 Oct 2020 22:00:15 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed,  7 Oct 2020 22:03:27 +0200
+Pierre-Jean Texier via buildroot <buildroot@busybox.net> wrote:
 
-> Drop patch (already in version)
+> See: https://lists.denx.de/pipermail/u-boot/2020-October/428516.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  ...001-htp.pc.in-add-lz-to-Libs.private.patch | 29 -------------------
->  package/libhtp/libhtp.hash                    |  2 +-
->  package/libhtp/libhtp.mk                      |  2 +-
->  3 files changed, 2 insertions(+), 31 deletions(-)
->  delete mode 100644 package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
+>  boot/uboot/Config.in  | 4 ++--
+>  boot/uboot/uboot.hash | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Series applied. Thanks!
 
