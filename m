@@ -1,35 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Oct 2020 22:05:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5remoteobjects: fix license files
-Message-ID: <20201008200536.548390-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Oct 2020 22:05:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.4
+In-Reply-To: <20201004194030.1508768-1-fontaine.fabrice@gmail.com>
+References: <20201004194030.1508768-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201008220551.68a40ad2@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no LICENSE.FDL
+On Sun,  4 Oct 2020 21:40:30 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/486563913e0fd4add2350f3c352db94ed86bce55
+> https://www.mail-archive.com/haproxy at formilux.org/msg38543.html
+> http://www.haproxy.org/download/2.2/src/CHANGELOG
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/haproxy/haproxy.hash | 4 ++--
+>  package/haproxy/haproxy.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/qt5/qt5remoteobjects/qt5remoteobjects.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-index 4b03a09d7f..a6b5f0954c 100644
---- a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-+++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
-@@ -10,7 +10,7 @@ QT5REMOTEOBJECTS_SOURCE = qtremoteobjects-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5REMO
- QT5REMOTEOBJECTS_DEPENDENCIES = qt5base
- QT5REMOTEOBJECTS_INSTALL_STAGING = YES
- QT5REMOTEOBJECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
--QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
-+QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
- 
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
- QT5REMOTEOBJECTS_DEPENDENCIES += qt5declarative
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
