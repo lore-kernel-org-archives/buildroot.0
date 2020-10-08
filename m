@@ -1,32 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:01:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Fix m68k build
-In-Reply-To: <20201002221032.5627-1-petr.vorel@gmail.com>
-References: <20201002221032.5627-1-petr.vorel@gmail.com>
-Message-ID: <20201008220130.042fe7ff@windsurf.hq.k.grp>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Oct 2020 22:05:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5remoteobjects: fix license files
+Message-ID: <20201008200536.548390-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  3 Oct 2020 00:10:31 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+There is no LICENSE.FDL
 
-> Backport upstream proposal for fix.
-> 
-> Fixes: br-m68k-68040-full failure.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> I haven't found this in autobuild [1], there are just problems with
-> fanotify tests missing MAX_HANDLE_SZ, which are fixed in next version
-> (second patch).
+Fixes:
+ - http://autobuild.buildroot.org/results/486563913e0fd4add2350f3c352db94ed86bce55
 
-Series applied, thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qt5/qt5remoteobjects/qt5remoteobjects.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
+index 4b03a09d7f..a6b5f0954c 100644
+--- a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
++++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
+@@ -10,7 +10,7 @@ QT5REMOTEOBJECTS_SOURCE = qtremoteobjects-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5REMO
+ QT5REMOTEOBJECTS_DEPENDENCIES = qt5base
+ QT5REMOTEOBJECTS_INSTALL_STAGING = YES
+ QT5REMOTEOBJECTS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception (tools), GFDL-1.3 (docs)
+-QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
++QT5REMOTEOBJECTS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5REMOTEOBJECTS_DEPENDENCIES += qt5declarative
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
