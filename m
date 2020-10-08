@@ -1,64 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 21:33:44 +0200
-Subject: [Buildroot] [PATCH v2 1/6] toolchain/buildroot: allow uclibc-ng
- for riscv
-In-Reply-To: <20201006234012.6b3c2697@windsurf.home>
-References: <20200908113324.1022230-1-damien.lemoal@wdc.com>
- <20200908113324.1022230-2-damien.lemoal@wdc.com>
- <20201006234012.6b3c2697@windsurf.home>
-Message-ID: <20201008213344.3eb95689@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 21:47:28 +0200
+Subject: [Buildroot] [git commit] package/cukinia: fix dependency on gawk
+Message-ID: <20201008193644.6F8D88EB59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Damien,
+commit: https://git.buildroot.net/buildroot/commit/?id=14d76a9bb2e470ea0a79c2bde8c39913d55680f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 6 Oct 2020 23:40:12 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+gawk can't be selected when busybox is not available as gawk needs
+wchar:
 
-> And applied with some small improvements to the commit log as well.
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_GAWK
+  Depends on [n]: BR2_USE_WCHAR [=n] && BR2_USE_MMU [=y] && BR2_PACKAGE_BUSYBOX_SHOW_OTHERS [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_CUKINIA [=y] && !BR2_PACKAGE_BUSYBOX [=n]
 
-So it turns out that the riscv32 uClibc-ng toolchain doesn't build. It
-fails in the uClibc-ng build with:
+So replace this "select" by a "depends on", as already done by
+BR2_PACKAGE_APPARMOR_UTILS_EXTRA
 
-In file included from ./include/sys/procfs.h:34,
-                 from ./libpthread/nptl/../nptl_db/thread_db.h:28,
-                 from ./libpthread/nptl/descr.h:30,
-                 from ./libpthread/nptl/pthreadP.h:25,
-                 from <stdin>:2:
-./include/sys/user.h:32:3: error: unknown type name '__uint128_t'
-   32 |   __uint128_t  vregs[32];
-      |   ^~~~~~~~~~~
+Fixes:
+ - http://autobuild.buildroot.org/results/66dacfe7b0783c7df29052fff20f3e79ecbcf054
 
-You can see a more complete build log at:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cukinia/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-https://gitlab.com/bootlin/toolchains-builder/-/jobs/776340188
-
-The defconfig being built is just:
-
-BR2_riscv=y
-BR2_RISCV_32=y
-BR2_KERNEL_HEADERS_5_4=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_PTHREAD_DEBUG=y
-BR2_BINUTILS_VERSION_2_34_X=y
-BR2_GCC_VERSION_10_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GDB=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Do you have some idea of what could be wrong here ?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
+index 37373e9a08..20d0820a70 100644
+--- a/package/cukinia/Config.in
++++ b/package/cukinia/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_CUKINIA
+ 	bool "cukinia"
+-	select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
++	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK
+ 	help
+ 	  Cukinia is designed to help Linux-based embedded firmware
+ 	  developers run system-level validation tests on their product.
+@@ -13,3 +13,6 @@ config BR2_PACKAGE_CUKINIA
+ 	  integration with CI systems such as Jenkins.
+ 
+ 	  https://github.com/savoirfairelinux/cukinia
++
++comment "cukinia needs busybox or gawk"
++	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK)
