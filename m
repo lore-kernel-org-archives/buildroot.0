@@ -1,71 +1,190 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:07:14 +0200
-Subject: [Buildroot] [git commit] package/python-engineio: drop asyncio
- files for python 2.x to fix pycompile issue
-Message-ID: <20201008195635.13E2D7FC34@busybox.osuosl.org>
+Date: Thu, 8 Oct 2020 22:04:19 +0200
+Subject: [Buildroot] [git commit] package/motion: bump to version 4.3.1
+Message-ID: <20201008195634.DCAEA7FC34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8ae383dd3a94f79530e98c1b658eaf214db9d07
+commit: https://git.buildroot.net/buildroot/commit/?id=8d971bc3284952d9f3bdf12ae901e1b107c26ebd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-engineio has conditional logic to load asyncio files when running under
-Python 3.x:
+- Drop patch (already in version)
+- Call gettextsize and add a non upstreamable patch to remove
+  po/Makefile.in: https://github.com/Motion-Project/motion/issues/1028
+- --with-mysql-{include,lib} and --with-pgsql-{include,lib} have been
+  dropped since version 4.3.0 and
+  https://github.com/Motion-Project/motion/commit/0dc2ae9372cfd2705110ef25c8c85b246adb2dc6
+- Update indentation in hash file (two spaces)
 
-if sys.version_info >= (3, 5):  # pragma: no cover
-    from .asyncio_server import AsyncServer
-    from .asyncio_client import AsyncClient
-    from .async_drivers.asgi import ASGIApp
-    try:
-        from .async_drivers.tornado import get_tornado_handler
-    except ImportError:
-        get_tornado_handler = None
-else:  # pragma: no cover
-    AsyncServer = None
-    AsyncClient = None
-    get_tornado_handler = None
-    ASGIApp = None
-
-pycompile unfortunately errors out on these files when running under Python
-2.x:
-
-../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/engineio/asyncio_socket.py", line 13
-    async def poll(self):
-            ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable file from TARGET_DIR if building
-for python 2.x.
-
-Fixes:
-http://autobuild.buildroot.net/results/72c/72cfdffeb4d0fb7c3032b52f0a26a4758eea6762/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-engineio/python-engineio.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/motion/0001-Fix-build-with-GCC-10.patch    | 53 ----------------------
+ .../0001-configure.ac-remove-po-Makefile.in.patch  | 29 ++++++++++++
+ package/motion/motion.hash                         |  4 +-
+ package/motion/motion.mk                           | 19 +++-----
+ 4 files changed, 38 insertions(+), 67 deletions(-)
 
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 36ca326877..d0e073fa95 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -10,4 +10,14 @@ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+diff --git a/package/motion/0001-Fix-build-with-GCC-10.patch b/package/motion/0001-Fix-build-with-GCC-10.patch
+deleted file mode 100644
+index a5684db965..0000000000
+--- a/package/motion/0001-Fix-build-with-GCC-10.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From a4a48baf86b18b792fb5e53648b4efd02b3db7b7 Mon Sep 17 00:00:00 2001
+-From: Vasiliy Glazov <vascom2@gmail.com>
+-Date: Sun, 8 Mar 2020 03:00:21 +0300
+-Subject: [PATCH] Fix build with GCC 10.
+-
+-[Retrieved (and backported) from:
+-https://github.com/Motion-Project/motion/commit/a4a48baf86b18b792fb5e53648b4efd02b3db7b7]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/netcam.h    | 2 +-
+- src/translate.c | 2 ++
+- src/translate.h | 2 +-
+- 3 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/netcam.h b/netcam.h
+-index 2951d917..4ee0e1c8 100644
+---- a/netcam.h
+-+++ b/netcam.h
+-@@ -113,7 +113,7 @@ typedef struct netcam_image_buff {
+- } netcam_buff;
+- typedef netcam_buff *netcam_buff_ptr;
+- 
+--struct netcam_caps {                    /* netcam capabilities: */
+-+extern struct netcam_caps {                    /* netcam capabilities: */
+-         unsigned char streaming;        /*  See the NCS_* defines */
+-         unsigned char content_length;   /*  0 - unsupported     */
+- } caps;
+-diff --git a/translate.c b/translate.c
+-index 0c9f1105..a212d9de 100644
+---- a/translate.c
+-+++ b/translate.c
+-@@ -10,6 +10,8 @@
+- #include "motion.h"
+- #include "translate.h"
+- 
+-+int nls_enabled;
+-+
+- void translate_locale_chg(const char *langcd){
+- #ifdef HAVE_GETTEXT
+-     /* This routine is for development testing only.  It is not used for
+-diff --git a/translate.h b/translate.h
+-index 0832ffd8..eeba3745 100644
+---- a/translate.h
+-+++ b/translate.h
+-@@ -10,7 +10,7 @@
+- #ifndef _INCLUDE_TRANSLATE_H_
+- #define _INCLUDE_TRANSLATE_H_
+- 
+--int nls_enabled;
+-+extern int nls_enabled;
+- 
+- #ifdef HAVE_GETTEXT
+- #   include <libintl.h>
+diff --git a/package/motion/0001-configure.ac-remove-po-Makefile.in.patch b/package/motion/0001-configure.ac-remove-po-Makefile.in.patch
+new file mode 100644
+index 0000000000..9b514bafcd
+--- /dev/null
++++ b/package/motion/0001-configure.ac-remove-po-Makefile.in.patch
+@@ -0,0 +1,29 @@
++From 0e05d4116678de3a7d913177a8fc63f10e58ad24 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 18 Jan 2020 00:00:21 +0100
++Subject: [PATCH] configure.ac: remove po/Makefile.in
++
++The file po/Makefile.in is automatically added to AC_OUTPUT while using
++gettexize
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable]
++---
++ configure.ac | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 3876adb..221dacf 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -471,7 +471,6 @@ LDFLAGS="$TEMP_LDFLAGS"
++ AC_CONFIG_FILES([
++ 	Makefile
++ 	src/Makefile
++-  po/Makefile.in
++   man/Makefile
++   data/camera1-dist.conf
++   data/camera2-dist.conf
++-- 
++2.24.1
++
+diff --git a/package/motion/motion.hash b/package/motion/motion.hash
+index 2b25d0a52c..6e8dd699e1 100644
+--- a/package/motion/motion.hash
++++ b/package/motion/motion.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c8d40976b41da8eb9f9f7128599403a312fc26b7226bf3787d75f78cb5a6cc6e	motion-4.2.2.tar.gz
+-sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
++sha256  545712b10fc4a0134e994b7d8a3773c1c22f0bf4bd7afea7d7ffff357aca9ea5  motion-4.3.1.tar.gz
++sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  doc/COPYING
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index ae58c54935..17a48d42ac 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_ENGINEIO_RM_PY3_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/engineio/async_drivers \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/engineio/asyncio_*.py
-+endef
-+
-+PYTHON_ENGINEIO_POST_INSTALL_TARGET_HOOKS += PYTHON_ENGINEIO_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+-MOTION_VERSION = 4.2.2
++MOTION_VERSION = 4.3.1
+ MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
+ MOTION_LICENSE = GPL-2.0
+-MOTION_LICENSE_FILES = COPYING
++MOTION_LICENSE_FILES = doc/COPYING
+ MOTION_DEPENDENCIES = host-pkgconf jpeg libmicrohttpd $(TARGET_NLS_DEPENDENCIES)
+ # From git
+ MOTION_AUTORECONF = YES
++MOTION_GETTEXTIZE = YES
+ 
+ MOTION_CONF_OPTS += --without-optimizecpu
+ 
+@@ -23,20 +24,14 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MYSQL),y)
+ MOTION_DEPENDENCIES += mysql
+-MOTION_CONF_OPTS += \
+-	--with-mysql \
+-	--with-mysql-include=$(STAGING_DIR)/usr/include/mysql \
+-	--with-mysql-lib=$(STAGING_DIR)/usr/lib
++MOTION_CONF_OPTS += --with-mysql
+ else
+ MOTION_CONF_OPTS += --without-mysql
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
+ MOTION_DEPENDENCIES += postgresql
+-MOTION_CONF_OPTS += \
+-	--with-pgsql \
+-	--with-pgsql-include=$(STAGING_DIR)/usr/include \
+-	--with-pgsql-lib=$(STAGING_DIR)/usr/lib
++MOTION_CONF_OPTS += --with-pgsql
+ else
+ MOTION_CONF_OPTS += --without-pgsql
+ endif
+@@ -58,9 +53,9 @@ endif
+ # Do not use default install target as it installs many unneeded files and
+ # directories: docs, examples and init scripts
+ define MOTION_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 0644 $(@D)/motion-dist.conf \
++	$(INSTALL) -D -m 0644 $(@D)/data/motion-dist.conf \
+ 		$(TARGET_DIR)/etc/motion/motion.conf
+-	$(INSTALL) -D -m 0755 $(@D)/motion $(TARGET_DIR)/usr/bin/motion
++	$(INSTALL) -D -m 0755 $(@D)/src/motion $(TARGET_DIR)/usr/bin/motion
+ endef
+ 
+ define MOTION_INSTALL_INIT_SYSV
