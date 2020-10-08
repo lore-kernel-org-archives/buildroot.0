@@ -1,55 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 23:26:59 +0200
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.2
-Message-ID: <20201009075442.708B48218E@busybox.osuosl.org>
+Date: Thu, 8 Oct 2020 23:27:25 +0200
+Subject: [Buildroot] [git commit] configs/warp7: bump Kernel and U-Boot
+ version
+Message-ID: <20201009075442.8841D8F12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cbe60dc96102996f44b52e552eafa9185924251
+commit: https://git.buildroot.net/buildroot/commit/?id=a4782c708ec8db0ec1ff4c1907f441707168be34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+Bump U-Boot to 2020.10 and kernel to version 5.8.13
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ configs/warp7_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index dad9f875fd..0c8084a8c4 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
--md5  51454993fcc576f4480aba8c1c3232ac  libinput-1.16.1.tar.xz
--sha1  7f5df6d17e9a06b6a28ce9eea0a11cf8555b63dd  libinput-1.16.1.tar.xz
--sha256  7ba7d1aeedd15168bb21d17e9e628aa1c27957963a423a3fea3938a501758539  libinput-1.16.1.tar.xz
--sha512  86b2d563c2cff2b3d3cae3acdd399030cc785cc9859a06357a99565ef51f95122a8427c8c0883121fb0760613460a29c8cd8c7a7e3ac68115c10330b3b75cbe0  libinput-1.16.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
-+md5  7c0aca7bba3e8559a869ed15b2173b2e  libinput-1.16.2.tar.xz
-+sha1  bff5e91ea0ea45509532aaa3e1a876d476e3e82e  libinput-1.16.2.tar.xz
-+sha256  fc3d8c50fe7abc4dc4406bc01262a3f8149864557f87279adcf300e523c160a9  libinput-1.16.2.tar.xz
-+sha512  3394faeb0cdb0a543624e150f04a98f3bce8d67438e47455808bde8eec8ea9cdafb86056e5f8d3431352ae33714e490c55edeb51e0af1972c68fca07c1ef1daa  libinput-1.16.2.tar.xz
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 76d2801b7a..5f9d973663 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 3c6873d7fd..f8a58a0fcf 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# Linux headers same as kernel, a 5.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++# Linux headers same as kernel, a 5.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
  
--LIBINPUT_VERSION = 1.16.1
-+LIBINPUT_VERSION = 1.16.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # wifi firmware for brcm43430
