@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 13:58:20 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: Fix warning with get-developers
-In-Reply-To: <1602101419-7932-1-git-send-email-pjtexier@koncepto.io>
-References: <1602101419-7932-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20201008135820.156c3759@windsurf.hq.k.grp>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 08 Oct 2020 13:13:26 +0000
+Subject: [Buildroot] [Bug 13256] New: CMAKE_GENERATOR environment variable
+ makes CMake based builds fail
+Message-ID: <bug-13256-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  7 Oct 2020 22:10:19 +0200
-Pierre-Jean Texier via buildroot <buildroot@busybox.net> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=13256
 
-> There is a typo between 'N' (for Firstname Lastname <email>) & 'F'
-> (for file pattern or directory)
-> 
-> $: ./utils/get-developers outgoing/*
-> WARNING: 'Sven Fischer <sven@leiderfischer.de>' doesn't match any file
-> 
-> Fixes: e7ebc7cd0905d7 ("package/qt5/qt5remoteobjects: new package")
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  DEVELOPERS | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+            Bug ID: 13256
+           Summary: CMAKE_GENERATOR environment variable makes CMake based
+                    builds fail
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: sven.fischer at effeffcee.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Applied to master, thanks.
+If the CMAKE_GENERATOR environment variable is set to e.g. Ninja, CMake based
+build will fail because CMake generates Ninja build files instead of Makefiles. 
 
-Thomas
+To fix this use either
+
+a) explicitly set -G"Unix Makefiles" in package/pkg-cmake.mk
+b) (better) use "cmake --build ." instead of make
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
