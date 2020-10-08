@@ -1,27 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 08 Oct 2020 08:58:54 +0000
-Subject: [Buildroot] [Bug 13241] CMake miss linking with pthread library
-In-Reply-To: <bug-13241-163@https.bugs.busybox.net/>
-References: <bug-13241-163@https.bugs.busybox.net/>
-Message-ID: <bug-13241-163-FaGA13Ir5f@https.bugs.busybox.net/>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Thu,  8 Oct 2020 11:08:35 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mtd: add host-acl dependency for
+ host
+Message-ID: <20201008090836.2670553-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13241
+When compiling the host version of mtd, --with-jffs and --with-ubifs are
+always set, meaning --with-xattr is set by default. The xattr support
+only work if 'sys/acl.h' is available, otherwise the feature is silently
+dropped (a warning is shown during the configuration step).
 
---- Comment #2 from Leonid Yuriev <leo@yuriev.ru> ---
-Created attachment 8601
-  --> https://bugs.busybox.net/attachment.cgi?id=8601&action=edit
-patch with libmdbx package as a testcase
+This patch adds a dependency on host-acl for host-mtd, so that the xattr
+feature is correctly supported. Logic to have xattr support is already
+there and working for the non-host flavour.
 
-Basically this is identical to patch with libmdbx-package submission,
-but WITHOUT workaround for https://bugs.busybox.net/show_bug.cgi?id=13241
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ package/mtd/mtd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So it could be used as a testcase.
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 1186fa52d552..9f259b35d906 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -53,7 +53,7 @@ else
+ MTD_CONF_OPTS += --without-xattr
+ endif
+ 
+-HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
++HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
