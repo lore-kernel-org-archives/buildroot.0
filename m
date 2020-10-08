@@ -1,23 +1,31 @@
-From: mattwood2000 at gmail.com <mattwood2000@gmail.com>
-Date: Thu, 8 Oct 2020 16:51:27 -0400
-Subject: [Buildroot] Separate Host and Target patches
-Message-ID: <CADjezmY7Zy6kUVa-dULzzLTdph_tQC26VXNKMDpWdO9jYAUWPg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Oct 2020 23:01:45 +0200
+Subject: [Buildroot] [PATCH] package/fail2ban: fix fail2ban-python
+ symlink
+In-Reply-To: <20201008221344.1543e09d@windsurf.hq.k.grp> (Thomas Petazzoni's
+ message of "Thu, 8 Oct 2020 22:13:44 +0200")
+References: <20201005055809.24044-1-peter@korsgaard.com>
+ <20201008221344.1543e09d@windsurf.hq.k.grp>
+Message-ID: <87a6ww4ekm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+
 Hi,
 
-is it possible to separate host and target patches?  For example, lets say
-I have a package foo that has a dependency of host-foo.  But, I need to
-apply different patches against the package Makefile for the host and
-target builds.
+ > It would have been nicer to have something supported by upstream
+ > fail2ban. I guess like me you looked at the setup.py logic, and
+ > realized that it was too convoluted to find a reasonably simple fix?
 
-I didn't really see this usecase in the docs or in other package examples.
+Indeed ;)
 
-Thanks, Matt.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201008/27fd76a4/attachment.html>
+ > So applied to master. Thanks!
+
+Thanks!
+
+-- 
+Bye, Peter Korsgaard
