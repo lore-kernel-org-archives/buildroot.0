@@ -1,62 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:07:47 +0200
-Subject: [Buildroot] [PATCH 1/2] python-socketio: drop asgi/asyncio
- files for python 2.x to fix pycompile issue
-In-Reply-To: <20201004214903.32309-1-peter@korsgaard.com>
-References: <20201004214903.32309-1-peter@korsgaard.com>
-Message-ID: <20201008220747.31d5dede@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 22:12:58 +0200
+Subject: [Buildroot] [git commit] package/fail2ban: fix fail2ban-python
+ symlink
+Message-ID: <20201008200209.72DFE8865F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Oct 2020 23:49:01 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=084ffc69be6836fef071782943102fe1bbe4956d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
-> 
-> socketio has conditional logic to load asgi/asyncio files when running under
-> Python 3.x:
-> 
-> if sys.version_info >= (3, 5):  # pragma: no cover
->     from .asyncio_client import AsyncClient
->     from .asyncio_server import AsyncServer
->     from .asyncio_manager import AsyncManager
->     from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
->     from .asyncio_redis_manager import AsyncRedisManager
->     from .asyncio_aiopika_manager import AsyncAioPikaManager
->     from .asgi import ASGIApp
-> else:  # pragma: no cover
->     AsyncClient = None
->     AsyncServer = None
->     AsyncManager = None
->     AsyncNamespace = None
->     AsyncRedisManager = None
->     AsyncAioPikaManager = None
-> 
-> pycompile unfortunately errors out on these files when running under Python
-> 2.x:
-> 
-> ../scripts/pycompile.py ..
-> error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
->     async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
->             ^
-> SyntaxError: invalid syntax
-> 
-> As a workaround, simply drop the unusable file from TARGET_DIR if building
-> for python 2.x.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/python-socketio/python-socketio.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+Fixes (reproducible):
+http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
 
-Thanks, both applied.
+Fail2ban installs the fail2ban-python symlink pointing to the host python
+intepreter used to run setup.py, which is naturally not valid at runtime and
+breaks the reproducible tests as shown in the diffoscope results:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+??? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
+??? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
+
+As a workaround, update the symlink after installation to point to the
+correct target python.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fail2ban/fail2ban.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index a0a2dc704b..a4ee0852cc 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
+@@ -27,6 +27,13 @@ define FAIL2BAN_FIX_DEFAULT_CONFIG
+ endef
+ FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_DEFAULT_CONFIG
+ 
++# fail2ban-python points to host python
++define FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
++	ln -snf $(if $(BR2_PACKAGE_PYTHON),python,python3) \
++		$(TARGET_DIR)/usr/bin/fail2ban-python
++endef
++FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
++
+ define FAIL2BAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
+ 		$(TARGET_DIR)/etc/init.d/S60fail2ban
