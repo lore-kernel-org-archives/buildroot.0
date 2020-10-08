@@ -1,42 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:13:44 +0200
-Subject: [Buildroot] [PATCH] package/fail2ban: fix fail2ban-python
- symlink
-In-Reply-To: <20201005055809.24044-1-peter@korsgaard.com>
-References: <20201005055809.24044-1-peter@korsgaard.com>
-Message-ID: <20201008221344.1543e09d@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 22:14:05 +0200
+Subject: [Buildroot] [PATCH] package/18xx-ti-utils: bump to version R8.8
+In-Reply-To: <9dc5d63276d0be129546a0b8211f1eb3d6e69d1a.1601883945.git.baruch@tkos.co.il>
+References: <9dc5d63276d0be129546a0b8211f1eb3d6e69d1a.1601883945.git.baruch@tkos.co.il>
+Message-ID: <20201008221405.1ed7c3f2@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  5 Oct 2020 07:58:08 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon,  5 Oct 2020 10:45:45 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Fixes (reproducible):
-> http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
+> Format hashes with two spaces delimiter.
 > 
-> Fail2ban installs the fail2ban-python symlink pointing to the host python
-> intepreter used to run setup.py, which is naturally not valid at runtime and
-> breaks the reproducible tests as shown in the diffoscope results:
-> 
-> ? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
-> ? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
-> 
-> As a workaround, update the symlink after installation to point to the
-> correct target python.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/fail2ban/fail2ban.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/18xx-ti-utils/18xx-ti-utils.hash | 4 ++--
+>  package/18xx-ti-utils/18xx-ti-utils.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-It would have been nicer to have something supported by upstream
-fail2ban. I guess like me you looked at the setup.py logic, and
-realized that it was too convoluted to find a reasonably simple fix?
-
-So applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
