@@ -1,45 +1,53 @@
-From: Shyam Saini <mayhs11saini@gmail.com>
-Date: Thu, 8 Oct 2020 21:03:41 +0530
-Subject: [Buildroot] [V4 PATCH 1/1] cukinia: new package
-In-Reply-To: <20201006213715.18669cd8@windsurf.home>
-References: <20200505132243.16773-1-shyam.saini@savoirfairelinux.com>
- <20200505132243.16773-2-shyam.saini@savoirfairelinux.com>
- <20201006213715.18669cd8@windsurf.home>
-Message-ID: <CAOfkYf4=PMhgJPB7BCw_rTce_e1pLdDVUA6fTU_TFwkDU2magQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Oct 2020 19:13:09 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/cukinia: fix dependency
+Message-ID: <20201008171309.368294-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+gawk can't be selected when busybox is not available as gawk needs
+wchar:
 
-> Hello Shyam,
->
-> On Tue,  5 May 2020 09:22:43 -0400
-> Shyam Saini <mayhs11saini@gmail.com> wrote:
->
-> > From: Shyam Saini <mayhs11saini@gmail.com>
-> >
-> > Cukinia is a test framework designed to help Linux-based embedded
-> > systems developers run simple system-level validation tests on their
-> > firmware.
-> >
-> > It is designed to integrate well with embedded Linux systems
-> > generation tools, and can be run manually (providing a quick
-> > colourized summary to eye-catch regressions), or any of continuous
-> > available integration framework, by generating Junit-XML or CSV test
-> > reports.
-> >
-> > Signed-off-by: J?r?me Oufella <jerome.oufella@savoirfairelinux.com>
-> > Signed-off-by: Shyam Saini <shyam.saini@savoirfairelinux.com>
-> > Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->
-> Thanks, I have applied your patch! The only minor mistake was that you
-> didn't use tabs in the INSTALL_TARGET_CMDS, which was reported by "make
-> check-package". The commit title should also have had a package/cukinia
-> prefix.
->
-> I fixed those minor details when applying. Thanks!
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_GAWK
+  Depends on [n]: BR2_USE_WCHAR [=n] && BR2_USE_MMU [=y] && BR2_PACKAGE_BUSYBOX_SHOW_OTHERS [=y]
+  Selected by [y]:
+  - BR2_PACKAGE_CUKINIA [=y] && !BR2_PACKAGE_BUSYBOX [=n]
 
-Thanks a lot for fixing these minor issues. Will take extra care next time.
+So replace this "select" by a "depends on", as already done by
+BR2_PACKAGE_APPARMOR_UTILS_EXTRA
+
+Fixes:
+ - http://autobuild.buildroot.org/results/66dacfe7b0783c7df29052fff20f3e79ecbcf054
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Add a comment
+
+ package/cukinia/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/cukinia/Config.in b/package/cukinia/Config.in
+index 37373e9a08..20d0820a70 100644
+--- a/package/cukinia/Config.in
++++ b/package/cukinia/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_CUKINIA
+ 	bool "cukinia"
+-	select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
++	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK
+ 	help
+ 	  Cukinia is designed to help Linux-based embedded firmware
+ 	  developers run system-level validation tests on their product.
+@@ -13,3 +13,6 @@ config BR2_PACKAGE_CUKINIA
+ 	  integration with CI systems such as Jenkins.
+ 
+ 	  https://github.com/savoirfairelinux/cukinia
++
++comment "cukinia needs busybox or gawk"
++	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK)
+-- 
+2.28.0
