@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 23:30:13 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.2
-In-Reply-To: <20201008212425.11042-1-ps.report@gmx.net>
-References: <20201008212425.11042-1-ps.report@gmx.net>
-Message-ID: <20201008233013.1dce7324@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 23:30:25 +0200
+Subject: [Buildroot] [PATCH 1/2] package/c-periphery: bump to v2.2.4
+In-Reply-To: <20201006230353.173982-1-ryanbarnett3@gmail.com>
+References: <20201006230353.173982-1-ryanbarnett3@gmail.com>
+Message-ID: <20201008233025.2936e89e@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  8 Oct 2020 23:24:25 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Tue,  6 Oct 2020 18:03:52 -0500
+Ryan Barnett <ryanbarnett3@gmail.com> wrote:
 
-> For details see [1].
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 > ---
->  package/libinput/libinput.hash | 10 +++++-----
->  package/libinput/libinput.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  ...01-CMakeLists.txt-fix-gpio-detection.patch | 41 -------------------
+>  package/c-periphery/c-periphery.hash          |  2 +-
+>  package/c-periphery/c-periphery.mk            |  2 +-
+>  3 files changed, 2 insertions(+), 43 deletions(-)
+>  delete mode 100644 package/c-periphery/0001-CMakeLists.txt-fix-gpio-detection.patch
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
