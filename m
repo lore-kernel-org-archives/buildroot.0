@@ -1,79 +1,51 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Oct 2020 22:00:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libhtp: bump to version 0.5.35
-Message-ID: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
+Date: Thu,  8 Oct 2020 22:00:16 +0200
+Subject: [Buildroot] [PATCH 2/2] package/suricata: security bump to version
+ 4.1.9
+In-Reply-To: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
+References: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201008200016.546304-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (already in version)
+These are the second releases after Suricata joined the Oss-Fuzz
+program, leading to discovery of a number of (potential) security
+issues. We recommend upgrading as soon as possible.
+
+https://suricata-ids.org/2020/10/08/suricata-4-1-9-and-5-0-4-released
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...001-htp.pc.in-add-lz-to-Libs.private.patch | 29 -------------------
- package/libhtp/libhtp.hash                    |  2 +-
- package/libhtp/libhtp.mk                      |  2 +-
- 3 files changed, 2 insertions(+), 31 deletions(-)
- delete mode 100644 package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-deleted file mode 100644
-index b21ea6053a..0000000000
---- a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 39e534ab696157b244ec226d649c789dcf423e42 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 24 Apr 2019 20:48:57 +0200
--Subject: [PATCH] htp.pc.in: add -lz to Libs.private
--
--zlib is a mandatory dependency so add it to Libs.private otherwise
--static linking of packages linking with htp (e.g. suricata) will fail.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OISF/libhtp/pull/294]
-----
-- htp.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/htp.pc.in b/htp.pc.in
--index 2fec995..9b1a6cc 100644
----- a/htp.pc.in
--+++ b/htp.pc.in
--@@ -7,6 +7,6 @@ Name: @PACKAGE_NAME@
-- Description: A security-aware HTTP parser, designed for use in IDS/IPS and WAF products.
-- Version: @PACKAGE_VERSION@
-- Libs: -L${libdir} -lhtp
---Libs.private: @LIBICONV@
--+Libs.private: -lz @LIBICONV@
-- Cflags: -I${includedir} -I${libdir}/htp/include
-- 
---- 
--2.20.1
--
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index 765acd5bf9..df75336df6 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 05e3593c3b..9e79f3a96c 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
  # Locally computed:
--sha256  953651fdfe828805bb82dc1aa8b56187b0e2f80781727343e68ccf8afd6a9122  libhtp-0.5.33.tar.gz
-+sha256  4c3ac4c6027710455ffe725f24ac6a83b2c13fe0afc83b74df2cca78ba46976a  libhtp-0.5.35.tar.gz
- sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index b77d8715f9..c402cf750e 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
+-sha256  c8a83a05f57cedc0ef81d833ddcfdbbfdcdb6f459a91b1b15dc2d5671f1aecbb  suricata-4.1.8.tar.gz
++sha256  3440cd1065b1b3999dc101a37c49321fab2791b38f16e2f7fe27369dd007eea7  suricata-4.1.9.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 8dd23bf2f5..d6ae48c1f5 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHTP_VERSION = 0.5.33
-+LIBHTP_VERSION = 0.5.35
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+-SURICATA_VERSION = 4.1.8
++SURICATA_VERSION = 4.1.9
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
 -- 
 2.28.0
