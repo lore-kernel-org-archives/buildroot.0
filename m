@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:06:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/motion: bump to version 4.3.1
-In-Reply-To: <20201004210807.2084836-1-fontaine.fabrice@gmail.com>
-References: <20201004210807.2084836-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201008220616.4d9604d0@windsurf.hq.k.grp>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Oct 2020 22:06:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: update architectures
+Message-ID: <20201008200611.548512-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Oct 2020 23:08:07 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+- aarch64, powerpc64le and s390x are supported since version 2.5.0 and
+  https://github.com/randombit/botan/commit/5f55f0eac95cd6f1c2962aef261af285bf37bfb6
+- sparc64 is supported since version 2.5.0 and
+  https://github.com/randombit/botan/commit/7e6aea7a9bff0714756aff5c7470c5c55cb31e0c
+- riscv is supported since version 2.8.0 and
+  https://github.com/randombit/botan/commit/b9aafd67002be96bf00eea4e7791804693ba4b1f
 
-> - Drop patch (already in version)
-> - Call gettextsize and add a non upstreamable patch to remove
->   po/Makefile.in: https://github.com/Motion-Project/motion/issues/1028
-> - --with-mysql-{include,lib} and --with-pgsql-{include,lib} have been
->   dropped since version 4.3.0 and
->   https://github.com/Motion-Project/motion/commit/0dc2ae9372cfd2705110ef25c8c85b246adb2dc6
-> - Update indentation in hash file (two spaces)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../motion/0001-Fix-build-with-GCC-10.patch   | 53 -------------------
->  ...1-configure.ac-remove-po-Makefile.in.patch | 29 ++++++++++
->  package/motion/motion.hash                    |  4 +-
->  package/motion/motion.mk                      | 19 +++----
->  4 files changed, 38 insertions(+), 67 deletions(-)
->  delete mode 100644 package/motion/0001-Fix-build-with-GCC-10.patch
->  create mode 100644 package/motion/0001-configure.ac-remove-po-Makefile.in.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/Config.in | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-Thanks. I really find the whole gettext story a bit horrible, but well,
-applied to master anyway. Thanks!
-
-Thomas
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index a242a38efc..95367b9000 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -1,9 +1,15 @@
+ config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_m68k    || \
+-		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		BR2_powerpc || BR2_powerpc64 || BR2_sparc || BR2_sh  || \
+-		BR2_x86_64
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386 || BR2_x86_64
++	default y if BR2_m68k
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_riscv
++	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_s390x
++	default y if BR2_sh
+ 
+ config BR2_PACKAGE_BOTAN
+ 	bool "botan"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
