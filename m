@@ -1,108 +1,305 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:05:39 +0200
-Subject: [Buildroot] [git commit] package/strongswan: bump to version 5.9.0
-Message-ID: <20201008195634.E804982875@busybox.osuosl.org>
+Date: Thu, 8 Oct 2020 22:00:59 +0200
+Subject: [Buildroot] [git commit] package/ltp-testsuite: bump to version
+ 20200930
+Message-ID: <20201008195634.BE8C87FC34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da912a3d2abe2eb2b338c03ec56c7e39a4d640f9
+commit: https://git.buildroot.net/buildroot/commit/?id=adb62874425dd15f9cf43719bb510db25b1cbabc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patches (already in version)
-- wolfssl is an optional dependency since version 5.8.0 and
-  https://github.com/strongswan/strongswan/commit/c92eade82c814e9f6b55f80d715bb51d28d5e1fb
-- Update indentation of hash file (two spaces)
+Drop patch form this version add 2 new patches for fixing build.
 
-https://wiki.strongswan.org/versions/78
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/strongswan/Config.in       |  4 ++++
- package/strongswan/strongswan.hash | 12 +++++-------
- package/strongswan/strongswan.mk   | 14 ++++----------
- 3 files changed, 13 insertions(+), 17 deletions(-)
+ .../0001-fanotify.h-fix-build-with-uclibc.patch    |  41 -----
+ ...Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch | 203 +++++++++++++++++++++
+ package/ltp-testsuite/ltp-testsuite.hash           |   4 +-
+ package/ltp-testsuite/ltp-testsuite.mk             |   2 +-
+ 4 files changed, 206 insertions(+), 44 deletions(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index 0438eeced6..47c7107f59 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -44,6 +44,10 @@ config BR2_PACKAGE_STRONGSWAN_GMP
- 	bool "GNU MP (libgmp)"
- 	select BR2_PACKAGE_GMP
- 
-+config BR2_PACKAGE_STRONGSWAN_WOLFSSL
-+	bool "wolfssl"
-+	select BR2_PACKAGE_WOLFSSL
+diff --git a/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch b/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
+deleted file mode 100644
+index 5531756970..0000000000
+--- a/package/ltp-testsuite/0001-fanotify.h-fix-build-with-uclibc.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From cb11e718ce04261cb6ff4c09442b949da33b8797 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 5 Sep 2020 17:55:45 +0200
+-Subject: [PATCH] fanotify.h: fix build with uclibc
+-
+-MAX_HANDLE_SZ is used since version 20200515 and
+-https://github.com/linux-test-project/ltp/commit/d20a3e8f9a794e0659277acfa9fbcf7454ba4631
+-
+-However, it is not defined by uclibc, so define it if needed to avoid
+-the following build failure:
+-
+-fanotify.h:171:11: error: 'MAX_HANDLE_SZ' undeclared here (not in a function)
+-  171 |  char buf[MAX_HANDLE_SZ];
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/fb0a67b15482e76b379b4b4d9c43b45bb0fccae1
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
+-[Retrieved from:
+-https://github.com/linux-test-project/ltp/commit/cb11e718ce04261cb6ff4c09442b949da33b8797]
+----
+- testcases/kernel/syscalls/fanotify/fanotify.h | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/testcases/kernel/syscalls/fanotify/fanotify.h b/testcases/kernel/syscalls/fanotify/fanotify.h
+-index a9a431ca2f..d271578e97 100644
+---- a/testcases/kernel/syscalls/fanotify/fanotify.h
+-+++ b/testcases/kernel/syscalls/fanotify/fanotify.h
+-@@ -139,6 +139,11 @@ struct fanotify_event_info_fid {
+- #endif /* HAVE_STRUCT_FANOTIFY_EVENT_INFO_FID_FSID___VAL */
+- 
+- #ifdef HAVE_NAME_TO_HANDLE_AT
+-+
+-+#ifndef MAX_HANDLE_SZ
+-+#define MAX_HANDLE_SZ		128
+-+#endif
+-+
+- /*
+-  * Helper function used to obtain fsid and file_handle for a given path.
+-  * Used by test files correlated to FAN_REPORT_FID functionality.
+diff --git a/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
+new file mode 100644
+index 0000000000..f1b6743f21
+--- /dev/null
++++ b/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
+@@ -0,0 +1,203 @@
++From ac3e262cba81889c0bb04ce87a50a1709f2726e7 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Thu, 1 Oct 2020 23:28:39 +0200
++Subject: [PATCH] lapi: Add sysinfo.h to fix build with MUSL libc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- endchoice
- 
- config BR2_PACKAGE_STRONGSWAN_AF_ALG
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index 4d1a593a5c..aa25d81f46 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,9 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.6.3.tar.bz2.md5
--md5	a6a28eeb22aa58080a7581771a5b63f9	strongswan-5.6.3.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.9.0.tar.bz2.md5
-+md5  705628cddd5b7683ef8a688acd9514d8  strongswan-5.9.0.tar.bz2
- # Calculated based on the hash above
--sha256	c3c7dc8201f40625bba92ffd32eb602a8909210d8b3fac4d214c737ce079bf24	strongswan-5.6.3.tar.bz2
-+sha256  72b47a385da5d1532b816d9fe04c50d074c29ed42ea3f0878fbd66335917bb66  strongswan-5.9.0.tar.bz2
- # Locally calculated
--sha256	e66c243593ee0713f5fd13bcd7f624bc50eebc54bf87f790ced429ff698077e7  strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
--sha256	415d104717cb0781770e9077d00b3df310b11e65e4b9c1d35b62fbba04549263  strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256	2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 7f1752ce57..a0290c5bf6 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,12 +4,9 @@
++The reason is to avoid indirect <linux/sysinfo.h> include when using
++some network headers: <linux/netlink.h> or others -> <linux/kernel.h>
++-> <linux/sysinfo.h>
++
++This indirect include causes on MUSL redefinition of struct sysinfo when
++included both <sys/sysinfo.h> and some of UAPI headers:
++
++In file included from x86_64-buildroot-linux-musl/sysroot/usr/include/linux/kernel.h:5,
++                 from x86_64-buildroot-linux-musl/sysroot/usr/include/linux/netlink.h:5,
++                 from ../include/tst_netlink.h:14,
++                 from tst_crypto.c:13:
++x86_64-buildroot-linux-musl/sysroot/usr/include/linux/sysinfo.h:8:8: error: redefinition of ???struct sysinfo???
++ struct sysinfo {
++        ^~~~~~~
++In file included from ../include/tst_safe_macros.h:15,
++                 from ../include/tst_test.h:93,
++                 from tst_crypto.c:11:
++x86_64-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++[ upstream status: https://patchwork.ozlabs.org/project/ltp/patch/20201001231256.6930-1-petr.vorel at gmail.com/ ]
++---
++ include/lapi/sysinfo.h                        | 22 +++++++++++++++++++
++ include/tst_safe_macros.h                     |  2 +-
++ lib/safe_macros.c                             |  2 +-
++ lib/tst_memutils.c                            |  2 +-
++ testcases/kernel/mem/mtest01/mtest01.c        |  2 +-
++ testcases/kernel/syscalls/madvise/madvise06.c |  2 +-
++ testcases/kernel/syscalls/sysinfo/sysinfo01.c |  2 +-
++ testcases/kernel/syscalls/sysinfo/sysinfo02.c |  2 +-
++ testcases/kernel/syscalls/sysinfo/sysinfo03.c |  2 +-
++ 9 files changed, 30 insertions(+), 8 deletions(-)
++ create mode 100644 include/lapi/sysinfo.h
++
++diff --git a/include/lapi/sysinfo.h b/include/lapi/sysinfo.h
++new file mode 100644
++index 000000000..d0e0e93d7
++--- /dev/null
+++++ b/include/lapi/sysinfo.h
++@@ -0,0 +1,22 @@
+++// SPDX-License-Identifier: GPL-2.0-or-later
+++/*
+++ * Copyright (c) 2020 Petr Vorel <petr.vorel@gmail.com>
+++ */
+++
+++#ifndef SYSINFO_H__
+++
+++/*
+++ * Don't use <sys/sysinfo.h> as it breaks build MUSL toolchain.
+++ * Use <linux/sysinfo.h> instead.
+++ *
+++ * Some kernel UAPI headers do indirect <linux/sysinfo.h> include:
+++ * <linux/netlink.h> or others -> <linux/kernel.h> -> <linux/sysinfo.h>
+++ *
+++ * This indirect include causes on MUSL redefinition of struct sysinfo when
+++ * included both <sys/sysinfo.h> and some of UAPI headers:
+++ */
+++#include <linux/sysinfo.h>
+++
+++#define SYSINFO_H__
+++
+++#endif /* SYSINFO_H__ */
++diff --git a/include/tst_safe_macros.h b/include/tst_safe_macros.h
++index 053c3bcf9..61ea2076d 100644
++--- a/include/tst_safe_macros.h
+++++ b/include/tst_safe_macros.h
++@@ -12,7 +12,7 @@
++ #include <sys/resource.h>
++ #include <sys/stat.h>
++ #include <sys/vfs.h>
++-#include <sys/sysinfo.h>
+++#include <linux/sysinfo.h>
++ #include <fcntl.h>
++ #include <libgen.h>
++ #include <signal.h>
++diff --git a/lib/safe_macros.c b/lib/safe_macros.c
++index 4f48d7529..d8ee03dae 100644
++--- a/lib/safe_macros.c
+++++ b/lib/safe_macros.c
++@@ -11,7 +11,6 @@
++ #include <sys/wait.h>
++ #include <sys/mount.h>
++ #include <sys/xattr.h>
++-#include <sys/sysinfo.h>
++ #include <errno.h>
++ #include <fcntl.h>
++ #include <libgen.h>
++@@ -23,6 +22,7 @@
++ #include <malloc.h>
++ #include "test.h"
++ #include "safe_macros.h"
+++#include "lapi/sysinfo.h"
++
++ char *safe_basename(const char *file, const int lineno,
++ 		    void (*cleanup_fn) (void), char *path)
++diff --git a/lib/tst_memutils.c b/lib/tst_memutils.c
++index f134d90c9..647db951e 100644
++--- a/lib/tst_memutils.c
+++++ b/lib/tst_memutils.c
++@@ -5,11 +5,11 @@
++
++ #include <unistd.h>
++ #include <limits.h>
++-#include <sys/sysinfo.h>
++ #include <stdlib.h>
++
++ #define TST_NO_DEFAULT_MAIN
++ #include "tst_test.h"
+++#include "lapi/sysinfo.h"
++
++ #define BLOCKSIZE (16 * 1024 * 1024)
++
++diff --git a/testcases/kernel/mem/mtest01/mtest01.c b/testcases/kernel/mem/mtest01/mtest01.c
++index f08d3943f..9b4d856f8 100644
++--- a/testcases/kernel/mem/mtest01/mtest01.c
+++++ b/testcases/kernel/mem/mtest01/mtest01.c
++@@ -20,7 +20,6 @@
++  */
++
++ #include <sys/types.h>
++-#include <sys/sysinfo.h>
++ #include <sys/wait.h>
++ #include <limits.h>
++ #include <signal.h>
++@@ -29,6 +28,7 @@
++ #include <unistd.h>
++
++ #include "lapi/abisize.h"
+++#include "lapi/sysinfo.h"
++ #include "tst_test.h"
++
++ #define FIVE_HUNDRED_MB         (500ULL*1024*1024)
++diff --git a/testcases/kernel/syscalls/madvise/madvise06.c b/testcases/kernel/syscalls/madvise/madvise06.c
++index f76f3f6aa..b2613670b 100644
++--- a/testcases/kernel/syscalls/madvise/madvise06.c
+++++ b/testcases/kernel/syscalls/madvise/madvise06.c
++@@ -24,8 +24,8 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <sys/mount.h>
++-#include <sys/sysinfo.h>
++ #include "tst_test.h"
+++#include "lapi/sysinfo.h"
++
++ #define CHUNK_SZ (400*1024*1024L)
++ #define CHUNK_PAGES (CHUNK_SZ / pg_sz)
++diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo01.c b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
++index 2ea44a2be..a95066bf5 100644
++--- a/testcases/kernel/syscalls/sysinfo/sysinfo01.c
+++++ b/testcases/kernel/syscalls/sysinfo/sysinfo01.c
++@@ -69,9 +69,9 @@
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <sys/signal.h>
++-#include <sys/sysinfo.h>
++
++ #include "test.h"
+++#include "lapi/sysinfo.h"
++
++ void setup();
++ void cleanup();
++diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo02.c b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
++index 678b8f1d3..5ce65d20e 100644
++--- a/testcases/kernel/syscalls/sysinfo/sysinfo02.c
+++++ b/testcases/kernel/syscalls/sysinfo/sysinfo02.c
++@@ -65,10 +65,10 @@
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <sys/signal.h>
++-#include <sys/sysinfo.h>
++ #include <stdint.h>
++
++ #include "test.h"
+++#include "lapi/sysinfo.h"
++
++ #define INVALID_ADDRESS ((uintptr_t)-1)
++
++diff --git a/testcases/kernel/syscalls/sysinfo/sysinfo03.c b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
++index af7cb6421..3b61a05b1 100644
++--- a/testcases/kernel/syscalls/sysinfo/sysinfo03.c
+++++ b/testcases/kernel/syscalls/sysinfo/sysinfo03.c
++@@ -13,9 +13,9 @@
++
++  */
++
++-#include <sys/sysinfo.h>
++ #include "lapi/namespaces_constants.h"
++ #include "lapi/posix_clocks.h"
+++#include "lapi/sysinfo.h"
++ #include "tst_test.h"
++
++ static int offsets[] = {
++--
++2.28.0
++
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index eb349e2929..9dce0405df 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,4 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20200515/ltp-full-20200515.tar.xz.sha1
+-sha1 7b3932b46295328c64d6f235bc54fa68806b9ede  ltp-full-20200515.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20200930/ltp-full-20200930.tar.xz.sha1
++sha1 f380c7afe71e03eabb1de668c0399267042cb0f7  ltp-full-20200930.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 4cee77bcd0..a9a3173c4b 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRONGSWAN_VERSION = 5.6.3
-+STRONGSWAN_VERSION = 5.9.0
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
--STRONGSWAN_PATCH = \
--	$(STRONGSWAN_SITE)/patches/27_gmp_pkcs1_verify_patch/strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch \
--	$(STRONGSWAN_SITE)/patches/28_gmp_pkcs1_overflow_patch/strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
- STRONGSWAN_LICENSE = GPL-2.0+
- STRONGSWAN_LICENSE_FILES = COPYING LICENSE
- STRONGSWAN_DEPENDENCIES = host-pkgconf
-@@ -38,16 +35,12 @@ STRONGSWAN_CONF_OPTS += \
- 	--enable-scripts=$(if $(BR2_PACKAGE_STRONGSWAN_SCRIPTS),yes,no) \
- 	--enable-vici=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
- 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
-+	--enable-wolfssl=$(if $(BR2_PACKAGE_STRONGSWAN_WOLFSSL),yes,no) \
- 	--with-ipseclibdir=/usr/lib \
- 	--with-plugindir=/usr/lib/ipsec/plugins \
- 	--with-imcvdir=/usr/lib/ipsec/imcvs \
- 	--with-dev-headers=/usr/include
- 
--# strongswan-5.6.1-5.6.3_gmp-pkcs1-verify.patch
--STRONGSWAN_IGNORE_CVES += CVE-2018-16151 CVE-2018-16152
--# strongswan-4.4.0-5.7.0_gmp-pkcs1-overflow.patch
--STRONGSWAN_IGNORE_CVES += CVE-2018-17540
--
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- STRONGSWAN_CONF_ENV += LIBS='-latomic'
- endif
-@@ -80,7 +73,8 @@ STRONGSWAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_STRONGSWAN_GMP),gmp) \
- 	$(if $(BR2_PACKAGE_STRONGSWAN_CURL),libcurl) \
- 	$(if $(BR2_PACKAGE_STRONGSWAN_TNCCS_11),libxml2) \
--	$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC),pcsc-lite)
-+	$(if $(BR2_PACKAGE_STRONGSWAN_EAP_SIM_PCSC),pcsc-lite) \
-+	$(if $(BR2_PACKAGE_STRONGSWAN_WOLFSSL),wolfssl)
- 
- ifeq ($(BR2_PACKAGE_STRONGSWAN_SQL),y)
- STRONGSWAN_DEPENDENCIES += \
+-LTP_TESTSUITE_VERSION = 20200515
++LTP_TESTSUITE_VERSION = 20200930
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
