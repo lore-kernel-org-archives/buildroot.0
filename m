@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 13:56:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cukinia: fix dependency
-In-Reply-To: <20201008101519.7463-1-fontaine.fabrice@gmail.com>
-References: <20201008101519.7463-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201008135657.1e1167ab@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 13:58:07 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: Fix warning with get-developers
+Message-ID: <20201008114720.F14318E184@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d7249f2f76f9fdcc2cf8a4490061b439c90186b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  8 Oct 2020 12:15:19 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+There is a typo between 'N' (for Firstname Lastname <email>) & 'F'
+(for file pattern or directory)
 
-> gawk can't be selected when busybox is not available as gawk needs
-> wchar:
-> 
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_GAWK
->   Depends on [n]: BR2_USE_WCHAR [=n] && BR2_USE_MMU [=y] && BR2_PACKAGE_BUSYBOX_SHOW_OTHERS [=y]
->   Selected by [y]:
->   - BR2_PACKAGE_CUKINIA [=y] && !BR2_PACKAGE_BUSYBOX [=n]
-> 
-> So replace this "select" by a "depends on", as already done by
-> BR2_PACKAGE_APPARMOR_UTILS_EXTRA
+$: ./utils/get-developers outgoing/*
+WARNING: 'Sven Fischer <sven@leiderfischer.de>' doesn't match any file
 
-Sorry, I missed this.
+Fixes: e7ebc7cd0905d7 ("package/qt5/qt5remoteobjects: new package")
 
-> -	select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
-> +	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-It's not really nice that users have to know that either busybox or
-gawk have to be enabled. Perhaps something like this would work:
-
-	depends on BR2_USE_MMU || BR2_PACKAGE_BUSYBOX
-	depends on BR2_USE_WCHAR || BR2_PACKAGE_BUSYBOX
-	select BR2_PACKAGE_GAWK if !BR2_PACKAGE_BUSYBOX
-
-But I agree it's a bit crappy/complex.
-
-Or maybe do what you propose, but like apparmor, also add a comment:
-
-comment "utils (extras) need bash and perl, and busybox or gawk"
-        depends on !BR2_PACKAGE_BASH || !BR2_PACKAGE_PERL \
-                || !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_GAWK)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 354b85605f..3eceebfcbd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2538,8 +2538,8 @@ F:	configs/rock_pi_n10_defconfig
+ F:	configs/rockpro64_defconfig
+ F:	package/arm-gnu-a-toolchain/
+ 
+-F:	Sven Fischer <sven@leiderfischer.de>
+-N:	package/qt5/qt5remoteobjects/
++N:	Sven Fischer <sven@leiderfischer.de>
++F:	package/qt5/qt5remoteobjects/
+ 
+ N:	Sven Haardiek <sven.haardiek@iotec-gmbh.de>
+ F:	package/lcdproc/
