@@ -1,53 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu,  8 Oct 2020 23:24:25 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.2
-Message-ID: <20201008212425.11042-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 8 Oct 2020 23:24:44 +0200
+Subject: [Buildroot] [git commit] package/openvpn: use start-stop-daemon to
+ perform start/stop actions
+Message-ID: <20201008211358.0664A881B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e68597a78218d3d9c5cc53b8da0ddfe21f34d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
+Using 'start-stop-daemon' prevents multiple instances creation by
+'/etc/init.d/S60openvpn start'.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/openvpn/S60openvpn | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index dad9f875fd..0c8084a8c4 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-August/041590.html
--md5  51454993fcc576f4480aba8c1c3232ac  libinput-1.16.1.tar.xz
--sha1  7f5df6d17e9a06b6a28ce9eea0a11cf8555b63dd  libinput-1.16.1.tar.xz
--sha256  7ba7d1aeedd15168bb21d17e9e628aa1c27957963a423a3fea3938a501758539  libinput-1.16.1.tar.xz
--sha512  86b2d563c2cff2b3d3cae3acdd399030cc785cc9859a06357a99565ef51f95122a8427c8c0883121fb0760613460a29c8cd8c7a7e3ac68115c10330b3b75cbe0  libinput-1.16.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
-+md5  7c0aca7bba3e8559a869ed15b2173b2e  libinput-1.16.2.tar.xz
-+sha1  bff5e91ea0ea45509532aaa3e1a876d476e3e82e  libinput-1.16.2.tar.xz
-+sha256  fc3d8c50fe7abc4dc4406bc01262a3f8149864557f87279adcf300e523c160a9  libinput-1.16.2.tar.xz
-+sha512  3394faeb0cdb0a543624e150f04a98f3bce8d67438e47455808bde8eec8ea9cdafb86056e5f8d3431352ae33714e490c55edeb51e0af1972c68fca07c1ef1daa  libinput-1.16.2.tar.xz
+diff --git a/package/openvpn/S60openvpn b/package/openvpn/S60openvpn
+index bc1ab01c1a..f097cf11ec 100644
+--- a/package/openvpn/S60openvpn
++++ b/package/openvpn/S60openvpn
+@@ -11,13 +11,15 @@ CONFIG_DIR=/etc/openvpn
+ test -d $CONFIG_DIR || exit 0
  
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 3c6873d7fd..f8a58a0fcf 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ start_vpn () {
+-    /usr/sbin/openvpn --daemon --writepid /var/run/openvpn.$NAME.pid \
+-            --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR || printf " FAILED->"
+-    printf " $NAME"
++    printf " $NAME "
++    start-stop-daemon -S -p /var/run/openvpn.$NAME.pid -x /usr/sbin/openvpn -- \
++	      --daemon --writepid /var/run/openvpn.$NAME.pid \
++	      --config $CONFIG_DIR/$NAME.conf --cd $CONFIG_DIR
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
+ }
+ stop_vpn () {
+-   kill `cat $PIDFILE` || true
+-  rm $PIDFILE
++    printf " $NAME "
++    start-stop-daemon -K -p /var/run/openvpn.$NAME.pid -x /usr/sbin/openvpn
+ }
  
--LIBINPUT_VERSION = 1.16.1
-+LIBINPUT_VERSION = 1.16.2
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
--- 
-2.28.0
+ case "$1" in
+@@ -48,7 +50,6 @@ stop)
+       NAME=`echo $PIDFILE | cut -c18-`
+       NAME=${NAME%%.pid}
+       stop_vpn
+-      printf " $NAME"
+     done
+   else
+     if test -e /var/run/openvpn.$2.pid ; then
+@@ -56,7 +57,6 @@ stop)
+       NAME=`echo $PIDFILE | cut -c18-`
+       NAME=${NAME%%.pid}
+       stop_vpn
+-      printf " $NAME"
+     else
+       printf " No such VPN: $2"
+     fi
