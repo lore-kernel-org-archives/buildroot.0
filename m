@@ -1,47 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 21:59:31 +0200
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
- 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
-In-Reply-To: <20201002155931.1529915-2-romain.naour@gmail.com>
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
- <20201002155931.1529915-2-romain.naour@gmail.com>
-Message-ID: <20201008215931.0a4056cd@windsurf.hq.k.grp>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  8 Oct 2020 22:00:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libhtp: bump to version 0.5.35
+Message-ID: <20201008200016.546304-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+Drop patch (already in version)
 
-On Fri,  2 Oct 2020 17:59:31 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-htp.pc.in-add-lz-to-Libs.private.patch | 29 -------------------
+ package/libhtp/libhtp.hash                    |  2 +-
+ package/libhtp/libhtp.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 31 deletions(-)
+ delete mode 100644 package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
 
-> - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
->   Remove the ARC specific version.
-> 
-> - Remove --enable-obsolete-rpc configure option.
-
-If I read this, and upstream glibc commit
-5500cdba4018ddbda7909bc7f4f9718610b43cf0, it's not just the
---enable-obsolete-rpc flag that has been removed, but really all the
-RPC code.
-
-Therefore, with glibc 2.32, this is no longer true:
-
-config BR2_TOOLCHAIN_BUILDROOT_GLIBC
-        bool "glibc"
-	[...]
-        # our glibc.mk enables RPC support
-        select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-
-So to me, it seems like this needs a bit more work. Could you for
-example try to build libnfs, with glibc 2.32, and libtirpc disabled ?
-
-Thanks,
-
-Thomas
+diff --git a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
+deleted file mode 100644
+index b21ea6053a..0000000000
+--- a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 39e534ab696157b244ec226d649c789dcf423e42 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 24 Apr 2019 20:48:57 +0200
+-Subject: [PATCH] htp.pc.in: add -lz to Libs.private
+-
+-zlib is a mandatory dependency so add it to Libs.private otherwise
+-static linking of packages linking with htp (e.g. suricata) will fail.
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/OISF/libhtp/pull/294]
+----
+- htp.pc.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/htp.pc.in b/htp.pc.in
+-index 2fec995..9b1a6cc 100644
+---- a/htp.pc.in
+-+++ b/htp.pc.in
+-@@ -7,6 +7,6 @@ Name: @PACKAGE_NAME@
+- Description: A security-aware HTTP parser, designed for use in IDS/IPS and WAF products.
+- Version: @PACKAGE_VERSION@
+- Libs: -L${libdir} -lhtp
+--Libs.private: @LIBICONV@
+-+Libs.private: -lz @LIBICONV@
+- Cflags: -I${includedir} -I${libdir}/htp/include
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index 765acd5bf9..df75336df6 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  953651fdfe828805bb82dc1aa8b56187b0e2f80781727343e68ccf8afd6a9122  libhtp-0.5.33.tar.gz
++sha256  4c3ac4c6027710455ffe725f24ac6a83b2c13fe0afc83b74df2cca78ba46976a  libhtp-0.5.35.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index b77d8715f9..c402cf750e 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBHTP_VERSION = 0.5.33
++LIBHTP_VERSION = 0.5.35
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
