@@ -1,27 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 23:29:11 +0200
-Subject: [Buildroot] [PATCH 1/2] boot/uboot: bump to version 2020.10
-In-Reply-To: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
-References: <1602101008-3479-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20201008232911.4416ff57@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 23:30:13 +0200
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.2
+In-Reply-To: <20201008212425.11042-1-ps.report@gmx.net>
+References: <20201008212425.11042-1-ps.report@gmx.net>
+Message-ID: <20201008233013.1dce7324@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  7 Oct 2020 22:03:27 +0200
-Pierre-Jean Texier via buildroot <buildroot@busybox.net> wrote:
+On Thu,  8 Oct 2020 23:24:25 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> See: https://lists.denx.de/pipermail/u-boot/2020-October/428516.html
+> For details see [1].
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libinput/libinput.hash | 10 +++++-----
+>  package/libinput/libinput.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-Series applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
