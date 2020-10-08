@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 22:12:58 +0200
-Subject: [Buildroot] [git commit] package/fail2ban: fix fail2ban-python
+Date: Thu, 8 Oct 2020 22:13:44 +0200
+Subject: [Buildroot] [PATCH] package/fail2ban: fix fail2ban-python
  symlink
-Message-ID: <20201008200209.72DFE8865F@busybox.osuosl.org>
+In-Reply-To: <20201005055809.24044-1-peter@korsgaard.com>
+References: <20201005055809.24044-1-peter@korsgaard.com>
+Message-ID: <20201008221344.1543e09d@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=084ffc69be6836fef071782943102fe1bbe4956d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  5 Oct 2020 07:58:08 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Fixes (reproducible):
-http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
+> Fixes (reproducible):
+> http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
+> 
+> Fail2ban installs the fail2ban-python symlink pointing to the host python
+> intepreter used to run setup.py, which is naturally not valid at runtime and
+> breaks the reproducible tests as shown in the diffoscope results:
+> 
+> ? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
+> ? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
+> 
+> As a workaround, update the symlink after installation to point to the
+> correct target python.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/fail2ban/fail2ban.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-Fail2ban installs the fail2ban-python symlink pointing to the host python
-intepreter used to run setup.py, which is naturally not valid at runtime and
-breaks the reproducible tests as shown in the diffoscope results:
+It would have been nicer to have something supported by upstream
+fail2ban. I guess like me you looked at the setup.py logic, and
+realized that it was too convoluted to find a reasonably simple fix?
 
-??? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
-??? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
+So applied to master. Thanks!
 
-As a workaround, update the symlink after installation to point to the
-correct target python.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fail2ban/fail2ban.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index a0a2dc704b..a4ee0852cc 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -27,6 +27,13 @@ define FAIL2BAN_FIX_DEFAULT_CONFIG
- endef
- FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_DEFAULT_CONFIG
- 
-+# fail2ban-python points to host python
-+define FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
-+	ln -snf $(if $(BR2_PACKAGE_PYTHON),python,python3) \
-+		$(TARGET_DIR)/usr/bin/fail2ban-python
-+endef
-+FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
-+
- define FAIL2BAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
- 		$(TARGET_DIR)/etc/init.d/S60fail2ban
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
