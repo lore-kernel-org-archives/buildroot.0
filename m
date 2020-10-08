@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Oct 2020 21:48:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nut: use pkg-config to find gd
-In-Reply-To: <20201007202443.2998-1-fontaine.fabrice@gmail.com>
-References: <20201007202443.2998-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201008214836.69304fde@windsurf.hq.k.grp>
+Date: Thu, 8 Oct 2020 21:48:55 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/mtd: add host-acl dependency
+ for host
+In-Reply-To: <20201008090836.2670553-1-antoine.tenart@bootlin.com>
+References: <20201008090836.2670553-1-antoine.tenart@bootlin.com>
+Message-ID: <20201008214855.236f859f@windsurf.hq.k.grp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  7 Oct 2020 22:24:43 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu,  8 Oct 2020 11:08:35 +0200
+Antoine Tenart <antoine.tenart@bootlin.com> wrote:
 
-> Drop gdlib-config and use pkg-config to find gd because gdlib-config
-> has been dropped from version 2.3.0
+> When compiling the host version of mtd, --with-jffs and --with-ubifs are
+> always set, meaning --with-xattr is set by default. The xattr support
+> only work if 'sys/acl.h' is available, otherwise the feature is silently
+> dropped (a warning is shown during the configuration step).
 > 
-> gdlib.pc is available since version 2.1.0
+> This patch adds a dependency on host-acl for host-mtd, so that the xattr
+> feature is correctly supported. Logic to have xattr support is already
+> there and working for the non-host flavour.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
->  ...m4-try-to-find-gd-through-pkg-config.patch | 120 ++++++++++++++++++
->  package/nut/nut.mk                            |   4 +-
->  2 files changed, 121 insertions(+), 3 deletions(-)
->  create mode 100644 package/nut/0004-nut_check_libgd.m4-try-to-find-gd-through-pkg-config.patch
+>  package/mtd/mtd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Series applied. Thanks!
 
 Thomas
 -- 
