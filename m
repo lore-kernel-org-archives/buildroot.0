@@ -1,274 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:10:00 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mraa: drop C++ dependency
-In-Reply-To: <20201004111029.515430-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Oct 2020 13:10:29 +0200")
-References: <20201004111029.515430-1-fontaine.fabrice@gmail.com>
- <20201004111029.515430-2-fontaine.fabrice@gmail.com>
-Message-ID: <875z7hg7vr.fsf@dell.be.48ers.dk>
+Date: Fri, 9 Oct 2020 23:04:14 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/supertux: build
+ squirrel builtin library with fPIC
+Message-ID: <20201010195946.EBA9A8E21A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b10247ecb718ae1e9a0243819a90277daccbb863
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Ensure that squirrel is compiled with -fPIC to allow linking the static
+libraries with dynamically linked programs. This is not a requirement
+for most architectures but is mandatory for ARM.
 
-Committed to 2020.08.x, thanks.
+Fixes:
+http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
+http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
 
- > ---
- >  ...2-CMakeLists.txt-add-BUILDCPP-option.patch | 193 ++++++++++++++++++
- >  package/mraa/Config.in                        |   6 +-
- >  package/mraa/mraa.mk                          |   3 +-
- >  3 files changed, 197 insertions(+), 5 deletions(-)
- >  create mode 100644 package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4473c41941158dfc3f0b05c335c50ae94cc41e48)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...CMakeLists.txt-compile-squirrel-with-fPIC.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
- > diff --git a/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
- > new file mode 100644
- > index 0000000000..fbadfe79ef
- > --- /dev/null
- > +++ b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
- > @@ -0,0 +1,193 @@
- > +From cb88e4dd1fbbb9d24e625dba2768b88ed99da309 Mon Sep 17 00:00:00 2001
- > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +Date: Sat, 13 Jun 2020 22:51:37 +0200
- > +Subject: [PATCH] CMakeLists.txt: add BUILDCPP option
- > +
- > +C++ is a mandatory dependency since version 1.4.0 and
- > +https://github.com/eclipse/mraa/commit/122cab1f1e53b7c9c7cd82905b962071f9bad9dc
- > +
- > +As a result, build on embedded toolchains that do not support C++ fails
- > +on:
- > +
- > +CMake Error at CMakeLists.txt:2 (project):
- > +  The CMAKE_CXX_COMPILER:
- > +
- > +    /home/naourr/work/instance-1/output-1/per-package/mraa/host/bin/arm-linux-g++
- > +
- > +  is not a full path to an existing compiler tool.
- > +
- > +Fixes:
- > + - http://autobuild.buildroot.org/results/31086422e03611c16ab59c4418e3669b580bc0c0
- > +
- > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > +[Retrieved from:
- > +https://github.com/eclipse/mraa/commit/cb88e4dd1fbbb9d24e625dba2768b88ed99da309]
- > +---
- > + CMakeLists.txt                | 69 +++++++++++++++++++----------------
- > + src/java/CMakeLists.txt       |  4 +-
- > + src/javascript/CMakeLists.txt | 34 +++++++++--------
- > + 3 files changed, 59 insertions(+), 48 deletions(-)
- > +
- > +diff --git a/CMakeLists.txt b/CMakeLists.txt
- > +index 250d9106e..90c0dc920 100644
- > +--- a/CMakeLists.txt
- > ++++ b/CMakeLists.txt
- > +@@ -1,5 +1,5 @@
- > + cmake_minimum_required (VERSION 2.8.11)
- > +-project (mraa C CXX)
- > ++project (mraa C)
- > + 
- > + FIND_PACKAGE (Threads REQUIRED)
- > + 
- > +@@ -11,6 +11,8 @@ else ()
- > +   set (CMAKE_C_STANDARD 99)
- > + endif ()
- > + 
- > ++option (BUILDCPP "Enable C++ (needed by FTDI4222 and tests)" ON)
- > ++
- > + ###############################################################################
- > + # Detect supported warning flags
- > + # Modified from work By Dan Liew (fpbench - MIT)
- > +@@ -33,15 +35,18 @@ set (MRAA_C_WARNING_FLAGS
- > +   -Werror=missing-parameter-type
- > + )
- > + 
- > +-# Warning flags for the C++ compiler only
- > +-set (MRAA_CXX_WARNING_FLAGS
- > +-  -Wnon-virtual-dtor
- > +-  -Woverloaded-virtual
- > +-  -Wreorder
- > +-)
- > +-
- > + include (CheckCCompilerFlag)
- > +-include (CheckCXXCompilerFlag)
- > ++if (BUILDCPP)
- > ++  # Warning flags for the C++ compiler only
- > ++  set (MRAA_CXX_WARNING_FLAGS
- > ++    -Wnon-virtual-dtor
- > ++    -Woverloaded-virtual
- > ++    -Wreorder
- > ++  )
- > ++
- > ++  enable_language (CXX)
- > ++  include (CheckCXXCompilerFlag)
- > ++endif ()
- > + function (MRAA_SANITIZE_FLAG_NAME OUTPUT_VAR FLAG)
- > +   string (REPLACE "-" "_" SANITIZED_FLAG_NAME "${FLAG}")
- > +   string (REPLACE "/" "_" SANITIZED_FLAG_NAME "${SANITIZED_FLAG_NAME}")
- > +@@ -62,28 +67,30 @@ foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_C_WARNING_FLAGS})
- > +   endif ()
- > + endforeach ()
- > + 
- > +-# Globally set C++ compiler warning flags that are supported and emit
- > +-# a warning about unsupported flags
- > +-foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
- > +-  MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
- > +-  CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
- > +-  if (HAS_CXX_${SANITIZED_FLAG_NAME})
- > +-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
- > +-  else ()
- > +-    message (WARNING "C++ compiler does not support flag \"${flag}\"")
- > +-  endif ()
- > +-endforeach ()
- > +-
- > +-# This function adds the c++11 flag to a c++ target (if supported)
- > +-function(use_cxx_11 targetname)
- > +-  include(CheckCXXCompilerFlag)
- > +-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
- > +-  if (COMPILER_SUPPORTS_CXX11)
- > +-    set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
- > +-  else()
- > +-    message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
- > +-  endif()
- > +-endfunction()
- > ++if (BUILDCPP)
- > ++  # Globally set C++ compiler warning flags that are supported and emit
- > ++  # a warning about unsupported flags
- > ++  foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
- > ++    MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
- > ++    CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
- > ++    if (HAS_CXX_${SANITIZED_FLAG_NAME})
- > ++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
- > ++    else ()
- > ++      message (WARNING "C++ compiler does not support flag \"${flag}\"")
- > ++    endif ()
- > ++  endforeach ()
- > ++
- > ++  # This function adds the c++11 flag to a c++ target (if supported)
- > ++  function(use_cxx_11 targetname)
- > ++    include(CheckCXXCompilerFlag)
- > ++    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
- > ++    if (COMPILER_SUPPORTS_CXX11)
- > ++      set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
- > ++    else()
- > ++      message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
- > ++    endif()
- > ++  endfunction()
- > ++endif()
- > + 
- > + # Set CMAKE_INSTALL_LIBDIR if not defined
- > + include(GNUInstallDirs)
- > +diff --git a/src/java/CMakeLists.txt b/src/java/CMakeLists.txt
- > +index 231c755fa..cfa72a0df 100644
- > +--- a/src/java/CMakeLists.txt
- > ++++ b/src/java/CMakeLists.txt
- > +@@ -16,7 +16,9 @@ include_directories (
- > + set_source_files_properties (mraajava.i PROPERTIES SWIG_FLAGS ";-package;mraa;-I${CMAKE_BINARY_DIR}/src")
- > + set_source_files_properties (mraajava.i PROPERTIES CPLUSPLUS ON)
- > + 
- > +-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
- > ++if (BUILDCPP)
- > ++  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
- > ++endif()
- > + set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DJAVACALLBACK")
- > + 
- > + if (NOT DEFINED ENV{JAVA_HOME_NATIVE})
- > +diff --git a/src/javascript/CMakeLists.txt b/src/javascript/CMakeLists.txt
- > +index 25fd36275..99a96b49d 100644
- > +--- a/src/javascript/CMakeLists.txt
- > ++++ b/src/javascript/CMakeLists.txt
- > +@@ -36,25 +36,27 @@ set_target_properties (mraajs PROPERTIES
- > + )
- > + 
- > + message (STATUS "INFO - swig Version ${SWIG_VERSION}")
- > +-message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
- > ++if (BUILDCPP)
- > ++  message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
- > + 
- > +-if (${V8_VERSION_MAJOR} GREATER 3)
- > +-  message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
- > +-  # Node 0.12.x V8 engine major version is '3'.
- > +-  # Node 2.1.0  V8 engine major version is '4'.
- > +-  set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
- > +-  set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
- > +-  if (CMAKE_VERSION VERSION_LESS "3.1")
- > +-    message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
- > +-    if (CMAKE_COMPILER_IS_GNUCXX)
- > +-      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
- > +-        message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
- > ++  if (${V8_VERSION_MAJOR} GREATER 3)
- > ++    message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
- > ++    # Node 0.12.x V8 engine major version is '3'.
- > ++    # Node 2.1.0  V8 engine major version is '4'.
- > ++    set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
- > ++    set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
- > ++    if (CMAKE_VERSION VERSION_LESS "3.1")
- > ++      message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
- > ++      if (CMAKE_COMPILER_IS_GNUCXX)
- > ++        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
- > ++          message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
- > ++        endif ()
- > ++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
- > ++      else ()
- > ++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
- > +       endif ()
- > +-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
- > +-    else ()
- > +-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
- > ++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
- > +     endif ()
- > +-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
- > +   endif ()
- > + endif ()
- > + 
- > diff --git a/package/mraa/Config.in b/package/mraa/Config.in
- > index 745b235cb3..c845fe9f99 100644
- > --- a/package/mraa/Config.in
- > +++ b/package/mraa/Config.in
- > @@ -9,7 +9,6 @@ config BR2_PACKAGE_MRAA
- >  	bool "mraa"
- >  	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
- >  	depends on !BR2_STATIC_LIBS
- > -	depends on BR2_INSTALL_LIBSTDCPP
- >  	depends on BR2_TOOLCHAIN_HAS_THREADS
- >  	help
- >  	  mraa is a C/C++ library with bindings to javascript & python
- > @@ -19,7 +18,6 @@ config BR2_PACKAGE_MRAA
- 
- >  	  http://iotdk.intel.com/docs/master/mraa
- 
- > -comment "mraa needs a toolchain w/ C++, threads, dynamic library"
- > +comment "mraa needs a toolchain w/ threads, dynamic library"
- >  	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
- > -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- > -		|| BR2_STATIC_LIBS
- > +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- > diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
- > index 89c539e793..910339b386 100644
- > --- a/package/mraa/mraa.mk
- > +++ b/package/mraa/mraa.mk
- > @@ -24,9 +24,10 @@ endif
- 
- >  # USBPLAT only makes sense with FTDI4222, which requires the ftd2xx library,
- >  # which doesn't exist in buildroot
- > -
- > +# Disable C++ as it is used only by FTDI4222 and tests
- >  MRAA_CONF_OPTS += \
- >  	-DBUILDARCH=$(MRAA_ARCH) \
- > +	-DBUILDCPP=OFF \
- >  	-DBUILDSWIG=OFF \
- >  	-DUSBPLAT=OFF \
- >  	-DFTDI4222=OFF \
- > -- 
- > 2.28.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+new file mode 100644
+index 0000000000..9fac20a3f8
+--- /dev/null
++++ b/package/supertux/0001-CMakeLists.txt-compile-squirrel-with-fPIC.patch
+@@ -0,0 +1,35 @@
++From 23d0bb0ef0fde52d1cffe235edead09287326fb4 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 4 Oct 2020 01:11:30 +0200
++Subject: [PATCH] CMakeLists.txt: compile squirrel with -fPIC
++
++Ensure that squirrel is compiled with -fPIC to allow linking the static
++libraries with dynamically linked programs. This is not a requirement
++for most architectures but is mandatory for ARM.
++
++Fixes:
++x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
++x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ CMakeLists.txt | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 8b1dafa1e..07c603cce 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -412,7 +412,8 @@ ExternalProject_Add(squirrel
++   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
++   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
++   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
++-  -DINSTALL_INC_DIR=include)
+++  -DINSTALL_INC_DIR=include
+++  -DCMAKE_POSITION_INDEPENDENT_CODE=ON)
++ 
++ if(WIN32)
++   add_library(squirrel_lib SHARED IMPORTED)
++-- 
++2.25.4
++
