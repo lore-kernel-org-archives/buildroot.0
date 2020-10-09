@@ -1,29 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 09 Oct 2020 16:08:42 +0000
-Subject: [Buildroot] [Bug 13241] CMake miss linking with pthread library
-In-Reply-To: <bug-13241-163@https.bugs.busybox.net/>
-References: <bug-13241-163@https.bugs.busybox.net/>
-Message-ID: <bug-13241-163-7yAB6b5pkr@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  9 Oct 2020 18:10:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: security bump to version 2.16
+Message-ID: <20201009161036.1043301-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13241
+Fix a memory leak in GCM where if passed an unsuitable block cipher (eg
+not 128 bit) it would throw an exception and leak the cipher object.
 
---- Comment #3 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-I build-tested v4 (i.e.
-https://patchwork.ozlabs.org/project/buildroot/patch/20201006192709.8265-2-leo at yuriev.ru/mbox/)
-and every configuration is building fine with cmake 3.18.2.
+https://github.com/randombit/botan/blob/2.16.0/news.rst
 
-I also tried to build test it with host-cmake (i.e cmake 3.15.5) and it also
-seems to build fine so I don't know if there is anything that could be done on
-buildroot side.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-You can send a v5 with your workaround or we can also wait to see if there is
-any autobuilder failures after v4 is merged.
-
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index e8d62aa98c..003dd13e9c 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  d88af1307f1fefac79aa4f2f524699478d69ce15a857cf2d0a90ac6bf2a50009  Botan-2.15.0.tar.xz
++sha256  92ed6ebc918d86bd1b04221ca518af4cf29cc326c4760740bd2d22e61cea2628  Botan-2.16.0.tar.xz
+ # Locally computed
+ sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 19677a40e0..d36324c7f7 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOTAN_VERSION = 2.15.0
++BOTAN_VERSION = 2.16.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.28.0
