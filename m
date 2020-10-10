@@ -1,64 +1,43 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 10 Oct 2020 11:04:52 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/e2fsprogs: disable e2scrub
-In-Reply-To: <1600656534.31411.3.camel@aliyun.com>
-References: <1600333425.32426.1.camel@aliyun.com>
- <20200917213935.67fc4894@windsurf.hq.k.grp>
- <1600394250.18560.2.camel@aliyun.com> <20200920211236.GK2422@scaer>
- <1600656534.31411.3.camel@aliyun.com>
-Message-ID: <CADvTj4qKpm9OjF=-HchedZYEJLXT7uTuC5NdvYw2xf_TCo8jwA@mail.gmail.com>
+From: Shlomi Vaknin <shlomi.39sd@gmail.com>
+Date: Sat, 10 Oct 2020 21:08:42 +0300
+Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
+ for wifi
+In-Reply-To: <181128db-472e-a47c-74ac-9a01d18665da@grinn-global.com>
+References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
+ <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+ <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
+ <e9f06c52-191f-887b-2d8e-4d76acb277d0@grinn-global.com>
+ <CALxJ29RjdYFrkX9B+dQ8xi7LhGaCCVXRVWz-b6+hQw_oy1Qidg@mail.gmail.com>
+ <21173a82-a49b-f89f-8530-2f86656bc285@grinn-global.com>
+ <CALxJ29SkXuxpJmNyCO61aF_ur+fL_4tQ-NFiZuDEg8aZSOA9og@mail.gmail.com>
+ <efe16945-0124-b38a-0546-c135755d3cce@grinn-global.com>
+ <CALxJ29QfbGjQwELFeaKdBhdPbFRjyB=31S3oU8uU1KzCnsYFvw@mail.gmail.com>
+ <181128db-472e-a47c-74ac-9a01d18665da@grinn-global.com>
+Message-ID: <CALxJ29QzYHOVoc812jGmzUmn2qSGKzxMkLFT_UOU+wCYghy1cQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 20, 2020 at 8:49 PM Tian Yuanhao via buildroot
-<buildroot@busybox.net> wrote:
->
-> e2scrub_all depends on coreutils' readlink. If you use busybox's
-> readlink, you will see the following error:
->
->         readlink: invalid option -- 'e'
->
-> Embedded systems usually don't install e2scrub, which is useless without
-> LVM.
->
-> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/e2fsprogs/e2fsprogs.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-> index eb82a55..44413ba 100644
-> --- a/package/e2fsprogs/e2fsprogs.mk
-> +++ b/package/e2fsprogs/e2fsprogs.mk
-> @@ -73,6 +73,10 @@ E2FSPROGS_INSTALL_STAGING_OPTS = \
->         DESTDIR=$(STAGING_DIR) \
->         install-libs
->
-> +# Disable e2scrub as we don't need it.
-> +E2FSPROGS_MAKE_OPTS = E2SCRUB_DIR=
-> +E2FSPROGS_INSTALL_TARGET_OPTS = E2SCRUB_DIR= DESTDIR=$(TARGET_DIR) install
-> +
-We want to disable e2scrub from running when it will fail but I'm not sure
-we should unconditionally disable it for cases when it would function.
-Can we make the cron/udev/service installation conditional on e2scrub
-dependencies being present.
+Hi!
 
-I think you can disable it from running with these configure options, these
-should probably also be conditional and depend on systemd crond and udev
-support:
---with-crond-dir=no
---with-udev-rules-dir=no
---with-systemd-unit-dir=no
->  # Package does not build in parallel due to improper make rules
->  define HOST_E2FSPROGS_INSTALL_CMDS
->         $(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install install-libs
-> --
-> 2.7.4
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I still don't know why it works only for me, but I discovered the
+following: st doesn't use the firmware from the official linux-firmware
+repo. They are using the firmware from Murata github. In addition, the
+nvram file that I supplied was copied from st, which means that it matches
+the murata firmware they use. So I suggest the following:
+
+1. Take the nvram file from the official linux-firmware repository (worked
+for me as well). Btw, should it be installed by default by the
+linux-firmware package?
+2. Use more recent firmware from murata.
+
+I would be happy if you can test these. Do you have another idea or
+something that I can try by myself?
+
+Thanks,
+Shlomi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201010/102035f2/attachment.html>
