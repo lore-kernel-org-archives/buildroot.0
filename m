@@ -1,261 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:09:30 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/mraa: drop C++
- dependency
-Message-ID: <20201010195947.4D43E82D9B@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 21:42:41 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/vlc: fix build
+ with live555 and without openssl
+Message-ID: <20201010195952.457F481015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18cc573d9fc209727cd94bc68f26b5fc265c6916
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b7b3c1f6720e2df3e224ed5ea3e17afcdd831aa2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+
+Pass -DNO_OPENSSL to avoid a build failure with live555 but without
+openssl
+
+Fixes:
+ - http://autobuild.buildroot.org/results/70ca93aa5c9488a4657c7bcafa40bfb2e974a5b3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit edf71857f1827d7b0a6f3073147189e7f9e2573b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e0fb418f781b69b8a0a0c953bf00a2965d675c43)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-CMakeLists.txt-add-BUILDCPP-option.patch  | 193 +++++++++++++++++++++
- package/mraa/Config.in                             |   6 +-
- package/mraa/mraa.mk                               |   3 +-
- 3 files changed, 197 insertions(+), 5 deletions(-)
+ package/vlc/vlc.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
-new file mode 100644
-index 0000000000..fbadfe79ef
---- /dev/null
-+++ b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
-@@ -0,0 +1,193 @@
-+From cb88e4dd1fbbb9d24e625dba2768b88ed99da309 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 13 Jun 2020 22:51:37 +0200
-+Subject: [PATCH] CMakeLists.txt: add BUILDCPP option
-+
-+C++ is a mandatory dependency since version 1.4.0 and
-+https://github.com/eclipse/mraa/commit/122cab1f1e53b7c9c7cd82905b962071f9bad9dc
-+
-+As a result, build on embedded toolchains that do not support C++ fails
-+on:
-+
-+CMake Error at CMakeLists.txt:2 (project):
-+  The CMAKE_CXX_COMPILER:
-+
-+    /home/naourr/work/instance-1/output-1/per-package/mraa/host/bin/arm-linux-g++
-+
-+  is not a full path to an existing compiler tool.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/31086422e03611c16ab59c4418e3669b580bc0c0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/eclipse/mraa/commit/cb88e4dd1fbbb9d24e625dba2768b88ed99da309]
-+---
-+ CMakeLists.txt                | 69 +++++++++++++++++++----------------
-+ src/java/CMakeLists.txt       |  4 +-
-+ src/javascript/CMakeLists.txt | 34 +++++++++--------
-+ 3 files changed, 59 insertions(+), 48 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 250d9106e..90c0dc920 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+ cmake_minimum_required (VERSION 2.8.11)
-+-project (mraa C CXX)
-++project (mraa C)
-+ 
-+ FIND_PACKAGE (Threads REQUIRED)
-+ 
-+@@ -11,6 +11,8 @@ else ()
-+   set (CMAKE_C_STANDARD 99)
-+ endif ()
-+ 
-++option (BUILDCPP "Enable C++ (needed by FTDI4222 and tests)" ON)
-++
-+ ###############################################################################
-+ # Detect supported warning flags
-+ # Modified from work By Dan Liew (fpbench - MIT)
-+@@ -33,15 +35,18 @@ set (MRAA_C_WARNING_FLAGS
-+   -Werror=missing-parameter-type
-+ )
-+ 
-+-# Warning flags for the C++ compiler only
-+-set (MRAA_CXX_WARNING_FLAGS
-+-  -Wnon-virtual-dtor
-+-  -Woverloaded-virtual
-+-  -Wreorder
-+-)
-+-
-+ include (CheckCCompilerFlag)
-+-include (CheckCXXCompilerFlag)
-++if (BUILDCPP)
-++  # Warning flags for the C++ compiler only
-++  set (MRAA_CXX_WARNING_FLAGS
-++    -Wnon-virtual-dtor
-++    -Woverloaded-virtual
-++    -Wreorder
-++  )
-++
-++  enable_language (CXX)
-++  include (CheckCXXCompilerFlag)
-++endif ()
-+ function (MRAA_SANITIZE_FLAG_NAME OUTPUT_VAR FLAG)
-+   string (REPLACE "-" "_" SANITIZED_FLAG_NAME "${FLAG}")
-+   string (REPLACE "/" "_" SANITIZED_FLAG_NAME "${SANITIZED_FLAG_NAME}")
-+@@ -62,28 +67,30 @@ foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_C_WARNING_FLAGS})
-+   endif ()
-+ endforeach ()
-+ 
-+-# Globally set C++ compiler warning flags that are supported and emit
-+-# a warning about unsupported flags
-+-foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
-+-  MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
-+-  CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
-+-  if (HAS_CXX_${SANITIZED_FLAG_NAME})
-+-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
-+-  else ()
-+-    message (WARNING "C++ compiler does not support flag \"${flag}\"")
-+-  endif ()
-+-endforeach ()
-+-
-+-# This function adds the c++11 flag to a c++ target (if supported)
-+-function(use_cxx_11 targetname)
-+-  include(CheckCXXCompilerFlag)
-+-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-+-  if (COMPILER_SUPPORTS_CXX11)
-+-    set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
-+-  else()
-+-    message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
-+-  endif()
-+-endfunction()
-++if (BUILDCPP)
-++  # Globally set C++ compiler warning flags that are supported and emit
-++  # a warning about unsupported flags
-++  foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
-++    MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
-++    CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
-++    if (HAS_CXX_${SANITIZED_FLAG_NAME})
-++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
-++    else ()
-++      message (WARNING "C++ compiler does not support flag \"${flag}\"")
-++    endif ()
-++  endforeach ()
-++
-++  # This function adds the c++11 flag to a c++ target (if supported)
-++  function(use_cxx_11 targetname)
-++    include(CheckCXXCompilerFlag)
-++    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-++    if (COMPILER_SUPPORTS_CXX11)
-++      set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
-++    else()
-++      message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
-++    endif()
-++  endfunction()
-++endif()
-+ 
-+ # Set CMAKE_INSTALL_LIBDIR if not defined
-+ include(GNUInstallDirs)
-+diff --git a/src/java/CMakeLists.txt b/src/java/CMakeLists.txt
-+index 231c755fa..cfa72a0df 100644
-+--- a/src/java/CMakeLists.txt
-++++ b/src/java/CMakeLists.txt
-+@@ -16,7 +16,9 @@ include_directories (
-+ set_source_files_properties (mraajava.i PROPERTIES SWIG_FLAGS ";-package;mraa;-I${CMAKE_BINARY_DIR}/src")
-+ set_source_files_properties (mraajava.i PROPERTIES CPLUSPLUS ON)
-+ 
-+-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
-++if (BUILDCPP)
-++  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
-++endif()
-+ set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DJAVACALLBACK")
-+ 
-+ if (NOT DEFINED ENV{JAVA_HOME_NATIVE})
-+diff --git a/src/javascript/CMakeLists.txt b/src/javascript/CMakeLists.txt
-+index 25fd36275..99a96b49d 100644
-+--- a/src/javascript/CMakeLists.txt
-++++ b/src/javascript/CMakeLists.txt
-+@@ -36,25 +36,27 @@ set_target_properties (mraajs PROPERTIES
-+ )
-+ 
-+ message (STATUS "INFO - swig Version ${SWIG_VERSION}")
-+-message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
-++if (BUILDCPP)
-++  message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
-+ 
-+-if (${V8_VERSION_MAJOR} GREATER 3)
-+-  message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
-+-  # Node 0.12.x V8 engine major version is '3'.
-+-  # Node 2.1.0  V8 engine major version is '4'.
-+-  set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
-+-  set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
-+-  if (CMAKE_VERSION VERSION_LESS "3.1")
-+-    message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
-+-    if (CMAKE_COMPILER_IS_GNUCXX)
-+-      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
-+-        message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
-++  if (${V8_VERSION_MAJOR} GREATER 3)
-++    message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
-++    # Node 0.12.x V8 engine major version is '3'.
-++    # Node 2.1.0  V8 engine major version is '4'.
-++    set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
-++    set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
-++    if (CMAKE_VERSION VERSION_LESS "3.1")
-++      message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
-++      if (CMAKE_COMPILER_IS_GNUCXX)
-++        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
-++          message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
-++        endif ()
-++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
-++      else ()
-++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
-+       endif ()
-+-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
-+-    else ()
-+-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
-++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
-+     endif ()
-+-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
-+   endif ()
-+ endif ()
-+ 
-diff --git a/package/mraa/Config.in b/package/mraa/Config.in
-index 745b235cb3..c845fe9f99 100644
---- a/package/mraa/Config.in
-+++ b/package/mraa/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_MRAA
- 	bool "mraa"
- 	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  mraa is a C/C++ library with bindings to javascript & python
-@@ -19,7 +18,6 @@ config BR2_PACKAGE_MRAA
- 
- 	  http://iotdk.intel.com/docs/master/mraa
- 
--comment "mraa needs a toolchain w/ C++, threads, dynamic library"
-+comment "mraa needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
-index 89c539e793..910339b386 100644
---- a/package/mraa/mraa.mk
-+++ b/package/mraa/mraa.mk
-@@ -24,9 +24,10 @@ endif
- 
- # USBPLAT only makes sense with FTDI4222, which requires the ftd2xx library,
- # which doesn't exist in buildroot
--
-+# Disable C++ as it is used only by FTDI4222 and tests
- MRAA_CONF_OPTS += \
- 	-DBUILDARCH=$(MRAA_ARCH) \
-+	-DBUILDCPP=OFF \
- 	-DBUILDSWIG=OFF \
- 	-DUSBPLAT=OFF \
- 	-DFTDI4222=OFF \
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 38d9751690..ccaaa6cd6d 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -440,6 +440,9 @@ endif
+ ifeq ($(BR2_PACKAGE_LIVE555),y)
+ VLC_CONF_OPTS += --enable-live555
+ VLC_DEPENDENCIES += live555
++ifneq ($(BR2_PACKAGE_OPENSSL),y)
++VLC_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DNO_OPENSSL"
++endif
+ else
+ VLC_CONF_OPTS += --disable-live555
+ endif
