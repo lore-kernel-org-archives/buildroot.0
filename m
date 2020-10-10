@@ -1,24 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:56:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Fix m68k build
-In-Reply-To: <20201002221032.5627-1-petr.vorel@gmail.com> (Petr Vorel's
- message of "Sat, 3 Oct 2020 00:10:31 +0200")
-References: <20201002221032.5627-1-petr.vorel@gmail.com>
-Message-ID: <87blh9er6i.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Oct 2020 22:59:34 +0200
+Subject: [Buildroot] [PATCH 1/2] python-socketio: drop asgi/asyncio
+ files for python 2.x to fix pycompile issue
+In-Reply-To: <20201004214903.32309-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 4 Oct 2020 23:49:01 +0200")
+References: <20201004214903.32309-1-peter@korsgaard.com>
+Message-ID: <877drxer0p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Backport upstream proposal for fix.
- > Fixes: br-m68k-68040-full failure.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > socketio has conditional logic to load asgi/asyncio files when running under
+ > Python 3.x:
 
-Committed to 2020.08.x, thanks.
+ > if sys.version_info >= (3, 5):  # pragma: no cover
+ >     from .asyncio_client import AsyncClient
+ >     from .asyncio_server import AsyncServer
+ >     from .asyncio_manager import AsyncManager
+ >     from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
+ >     from .asyncio_redis_manager import AsyncRedisManager
+ >     from .asyncio_aiopika_manager import AsyncAioPikaManager
+ >     from .asgi import ASGIApp
+ > else:  # pragma: no cover
+ >     AsyncClient = None
+ >     AsyncServer = None
+ >     AsyncManager = None
+ >     AsyncNamespace = None
+ >     AsyncRedisManager = None
+ >     AsyncAioPikaManager = None
+
+ > pycompile unfortunately errors out on these files when running under Python
+ > 2.x:
+
+ > ../scripts/pycompile.py ..
+ > error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
+ >     async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
+ >             ^
+ > SyntaxError: invalid syntax
+
+ > As a workaround, simply drop the unusable file from TARGET_DIR if building
+ > for python 2.x.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
