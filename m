@@ -1,40 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:59:15 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/python-engineio:
- drop asyncio files for python 2.x to fix pycompile issue
-Message-ID: <20201010204953.4005B8E8E6@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:59:14 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python-socketio:
+ drop asgi/asyncio files for python 2.x to fix pycompile issue
+Message-ID: <20201010204953.2751688061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d81ac76d9c822826e7c41ced6107c4dacb6509a2
+commit: https://git.buildroot.net/buildroot/commit/?id=0ac0490aa02c809bc01f501d84922a9805982cc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-engineio has conditional logic to load asyncio files when running under
+socketio has conditional logic to load asgi/asyncio files when running under
 Python 3.x:
 
 if sys.version_info >= (3, 5):  # pragma: no cover
-    from .asyncio_server import AsyncServer
     from .asyncio_client import AsyncClient
-    from .async_drivers.asgi import ASGIApp
-    try:
-        from .async_drivers.tornado import get_tornado_handler
-    except ImportError:
-        get_tornado_handler = None
+    from .asyncio_server import AsyncServer
+    from .asyncio_manager import AsyncManager
+    from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
+    from .asyncio_redis_manager import AsyncRedisManager
+    from .asyncio_aiopika_manager import AsyncAioPikaManager
+    from .asgi import ASGIApp
 else:  # pragma: no cover
-    AsyncServer = None
     AsyncClient = None
-    get_tornado_handler = None
-    ASGIApp = None
+    AsyncServer = None
+    AsyncManager = None
+    AsyncNamespace = None
+    AsyncRedisManager = None
+    AsyncAioPikaManager = None
 
 pycompile unfortunately errors out on these files when running under Python
 2.x:
 
 ../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/engineio/asyncio_socket.py", line 13
-    async def poll(self):
+error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
+    async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
             ^
 SyntaxError: invalid syntax
 
@@ -42,32 +44,32 @@ As a workaround, simply drop the unusable file from TARGET_DIR if building
 for python 2.x.
 
 Fixes:
-http://autobuild.buildroot.net/results/72c/72cfdffeb4d0fb7c3032b52f0a26a4758eea6762/
+http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b8ae383dd3a94f79530e98c1b658eaf214db9d07)
+(cherry picked from commit 6beb6dd5c6d6232b2ff6f2ca983c5cb99a4ca9ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-engineio/python-engineio.mk | 10 ++++++++++
+ package/python-socketio/python-socketio.mk | 10 ++++++++++
  1 file changed, 10 insertions(+)
 
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 36ca326877..d0e073fa95 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -10,4 +10,14 @@ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index ece4f65b78..73dab26f3c 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -10,4 +10,14 @@ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
  
 +ifeq ($(BR2_PACKAGE_PYTHON),y)
 +# only needed/valid for python 3.x
-+define PYTHON_ENGINEIO_RM_PY3_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/engineio/async_drivers \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/engineio/asyncio_*.py
++define PYTHON_SOCKETIO_RM_PY3_FILES
++	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asgi.py \
++		$(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asyncio_*.py
 +endef
 +
-+PYTHON_ENGINEIO_POST_INSTALL_TARGET_HOOKS += PYTHON_ENGINEIO_RM_PY3_FILES
++PYTHON_SOCKETIO_POST_INSTALL_TARGET_HOOKS += PYTHON_SOCKETIO_RM_PY3_FILES
 +endif
 +
  $(eval $(python-package))
