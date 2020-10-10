@@ -1,46 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:06:14 +0200
-Subject: [Buildroot] [PATCH v2] boot/barebox: fix target bareboxenv
- command compile
-In-Reply-To: <20201003095902.16248-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 3 Oct 2020 11:59:02 +0200")
-References: <20201003095902.16248-1-ps.report@gmx.net>
-Message-ID: <87eem5g821.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Oct 2020 22:06:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to version
+ 3.2.7
+Message-ID: <20201010200646.1606023-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+- Fix CVE-2020-25862: In Wireshark 3.2.0 to 3.2.6, 3.0.0 to 3.0.13, and
+  2.6.0 to 2.6.20, the TCP dissector could crash. This was addressed in
+  epan/dissectors/packet-tcp.c by changing the handling of the invalid
+  0xFFFF checksum.
+- Fix CVE-2020-25863: In Wireshark 3.2.0 to 3.2.6, 3.0.0 to 3.0.13, and
+  2.6.0 to 2.6.20, the MIME Multipart dissector could crash. This was
+  addressed in epan/dissectors/packet-multipart.c by correcting the
+  deallocation of invalid MIME parts.
+- Fix CVE-2020-25866: In Wireshark 3.2.0 to 3.2.6 and 3.0.0 to 3.0.13,
+  the BLIP protocol dissector has a NULL pointer dereference because a
+  buffer was sized for compressed (not uncompressed) messages. This was
+  addressed in epan/dissectors/packet-blip.c by allowing reasonable
+  compression ratios and rejecting ZIP bombs.
 
- > The buildroot custom bareboxenv compile command
- > misses the additional include path 'scripts/include'
- > to gain access to the local copy of the kernel header
- > files (which leads to compile error when using an
- > older toolchain).
+https://www.wireshark.org/docs/relnotes/wireshark-3.2.7.html
 
- > This could be fixed by enhancing the custom bareboxenv
- > compile command (see [1]) or by using the barebox
- > build system by simply enabling the CONFIG_BAREBOXENV_TARGET
- > option (available since April 2012, see [2]) instead (as
- > suggested by Yann E. MORIN).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
-
- >   build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
-
- > [1] http://lists.busybox.net/pipermail/buildroot/2020-January/270942.html
- > [2] https://git.pengutronix.de/cgit/barebox/commit/?id=afb03d7a554a2911a3742e316f011319fcb416f1
-
- > Reported-by: Frederick Gotham <cauldwell.thomas@gmail.com>
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Changes v1 -> v2:
- >   - change to barebox CONFIG_BAREBOXENV_TARGET config option
- >     (suggested by Yann E. MORIN)
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index c9f62ad1a8..16866d96b4 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.6.txt
+-sha1  e8f3e6cb9072670c8bdbbff7e5fe3ccd5203d35e  wireshark-3.2.6.tar.xz
+-sha256  ebb1eebe39bcecee02195dc328dd25f6862fc9e9dea4c2e29eae50537d5eb4f2  wireshark-3.2.6.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.7.txt
++sha1  b564c2e729066cb7c952463fef6163e23a5fea1e  wireshark-3.2.7.tar.xz
++sha256  be832fb86d9c455c5be8b225a755cdc77cb0e92356bdfc1fe4b000d93f7d70da  wireshark-3.2.7.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 04e3e13ff1..354f008250 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.2.6
++WIRESHARK_VERSION = 3.2.7
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-Bye, Peter Korsgaard
+2.28.0
