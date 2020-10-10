@@ -1,42 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:39:34 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d: add
- missing depends and driver name to r100 driver
-Message-ID: <20201010203809.E1BC0875AF@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:39:37 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mesa3d: drop r100
+ dependency on _HAS_ATOMIC
+Message-ID: <20201010203810.0AA187FD5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e9e5bbc80353318ae3ee9b71a85a7156ef8d328
+commit: https://git.buildroot.net/buildroot/commit/?id=439447d1eb1811f6b4c2881dafeec97c6ee31bb5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Propagate libdrm dependencies.
+This partially reverts commit a3aac6d84713db7e6d2683eabf965eae21ce48bf,
+just dropping the atomic dependency.
 
-Add r100 to menu name to differentiate from r200 dri driver.
+That dependency would introduce a "recursive dependency" chain in
+Kconfig.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+However, r100 is only available on i386 and x86-64, and they both have
+sync4, which means libdrm's HAS_ATOMICS is always 'y' when r100 is
+available.
+
+So, like we did in 00c1a8c34f7 (package/mesa3d: propagate missing
+libdrm-freedreno deps), we just add a fat comment that explains why the
+dependency is not propagated.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a3aac6d84713db7e6d2683eabf965eae21ce48bf)
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+(cherry picked from commit 0b029cac1bcacc957407e6437ffd371171f0607a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 2d6aa3565c..475a984285 100644
+index 475a984285..f65ccbb1f6 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -370,7 +370,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
- 	  Support for Nvidia-based GPUs.
- 
+@@ -372,7 +372,11 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
  config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
--	bool "DRI radeon driver"
-+	bool "DRI radeon r100 driver"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
+ 	bool "DRI radeon r100 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
++	# libdrm's radeon option depends on LIBDRM_HAS_ATOMIC. Propagating
++	# that dependency here causes a circular dependency that Kconfig
++	# can't see is just spurious. However, that dependency is about
++	# the toolchain having sync4 primitives, which is always a given
++	# for i386 and x86_64.
  	select BR2_PACKAGE_MESA3D_DRI_DRIVER
  	select BR2_PACKAGE_LIBDRM_RADEON
  	help
