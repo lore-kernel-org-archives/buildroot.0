@@ -1,53 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:59:59 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/fail2ban: fix
- fail2ban-python symlink
-Message-ID: <20201010204953.52F6988061@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:59:15 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python-engineio:
+ drop asyncio files for python 2.x to fix pycompile issue
+Message-ID: <20201010204953.4005B8E8E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0953cb557e06d2ecb959d77068297d60f69adf63
+commit: https://git.buildroot.net/buildroot/commit/?id=d81ac76d9c822826e7c41ced6107c4dacb6509a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Fixes (reproducible):
-http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
+engineio has conditional logic to load asyncio files when running under
+Python 3.x:
 
-Fail2ban installs the fail2ban-python symlink pointing to the host python
-intepreter used to run setup.py, which is naturally not valid at runtime and
-breaks the reproducible tests as shown in the diffoscope results:
+if sys.version_info >= (3, 5):  # pragma: no cover
+    from .asyncio_server import AsyncServer
+    from .asyncio_client import AsyncClient
+    from .async_drivers.asgi import ASGIApp
+    try:
+        from .async_drivers.tornado import get_tornado_handler
+    except ImportError:
+        get_tornado_handler = None
+else:  # pragma: no cover
+    AsyncServer = None
+    AsyncClient = None
+    get_tornado_handler = None
+    ASGIApp = None
 
-??? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
-??? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
+pycompile unfortunately errors out on these files when running under Python
+2.x:
 
-As a workaround, update the symlink after installation to point to the
-correct target python.
+../scripts/pycompile.py ..
+error:   File "/usr/lib/python2.7/site-packages/engineio/asyncio_socket.py", line 13
+    async def poll(self):
+            ^
+SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable file from TARGET_DIR if building
+for python 2.x.
+
+Fixes:
+http://autobuild.buildroot.net/results/72c/72cfdffeb4d0fb7c3032b52f0a26a4758eea6762/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 084ffc69be6836fef071782943102fe1bbe4956d)
+(cherry picked from commit b8ae383dd3a94f79530e98c1b658eaf214db9d07)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fail2ban/fail2ban.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/python-engineio/python-engineio.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index a0a2dc704b..a4ee0852cc 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -27,6 +27,13 @@ define FAIL2BAN_FIX_DEFAULT_CONFIG
- endef
- FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_DEFAULT_CONFIG
+diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
+index 36ca326877..d0e073fa95 100644
+--- a/package/python-engineio/python-engineio.mk
++++ b/package/python-engineio/python-engineio.mk
+@@ -10,4 +10,14 @@ PYTHON_ENGINEIO_SETUP_TYPE = setuptools
+ PYTHON_ENGINEIO_LICENSE = MIT
+ PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
  
-+# fail2ban-python points to host python
-+define FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
-+	ln -snf $(if $(BR2_PACKAGE_PYTHON),python,python3) \
-+		$(TARGET_DIR)/usr/bin/fail2ban-python
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_ENGINEIO_RM_PY3_FILES
++	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/engineio/async_drivers \
++		$(TARGET_DIR)/usr/lib/python*/site-packages/engineio/asyncio_*.py
 +endef
-+FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
 +
- define FAIL2BAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
- 		$(TARGET_DIR)/etc/init.d/S60fail2ban
++PYTHON_ENGINEIO_POST_INSTALL_TARGET_HOOKS += PYTHON_ENGINEIO_RM_PY3_FILES
++endif
++
+ $(eval $(python-package))
