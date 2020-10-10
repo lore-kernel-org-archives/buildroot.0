@@ -1,40 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:40:02 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: drop r100 dependency
- on _HAS_ATOMIC
-In-Reply-To: <20201006205232.9EA258EB92@busybox.osuosl.org> (Yann E. MORIN's
- message of "Tue, 6 Oct 2020 23:01:28 +0200")
-References: <20201006205232.9EA258EB92@busybox.osuosl.org>
-Message-ID: <87sgalerx9.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Oct 2020 22:44:01 +0200
+Subject: [Buildroot] [PATCH v2] support/scripts/apply-patches.sh: do not
+ blindly remove *.orig files
+In-Reply-To: <20201006204620.21044-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 6 Oct 2020 22:46:20 +0200")
+References: <20201006204620.21044-1-peter@korsgaard.com>
+Message-ID: <87o8l9erqm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=0b029cac1bcacc957407e6437ffd371171f0607a
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
+ > by default writes these as backup files when patches only apply with fuzz.
 
- > This partially reverts commit a3aac6d84713db7e6d2683eabf965eae21ce48bf,
- > just dropping the atomic dependency.
+ > This is unfortunate as package sources may contain files ending in .orig as
+ > well, breaking the build.  Luckily GNU patch can be told to not write these
+ > backup files using the --no-backup-if-mismatch option, so used that instead
+ > of the .orig removal step.
 
- > That dependency would introduce a "recursive dependency" chain in
- > Kconfig.
+ > --no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
+ > busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
+ > BSD patch, so add logic to dependencies.sh to error out if patch doesn't
+ > support the flag.
 
- > However, r100 is only available on i386 and x86-64, and they both have
- > sync4, which means libdrm's HAS_ATOMICS is always 'y' when r100 is
- > available.
-
- > So, like we did in 00c1a8c34f7 (package/mesa3d: propagate missing
- > libdrm-freedreno deps), we just add a fat comment that explains why the
- > dependency is not propagated.
-
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: James Hilliard <james.hilliard1@gmail.com>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
 
