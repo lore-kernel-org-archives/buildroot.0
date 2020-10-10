@@ -1,35 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:44:01 +0200
-Subject: [Buildroot] [PATCH v2] support/scripts/apply-patches.sh: do not
- blindly remove *.orig files
-In-Reply-To: <20201006204620.21044-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 6 Oct 2020 22:46:20 +0200")
-References: <20201006204620.21044-1-peter@korsgaard.com>
-Message-ID: <87o8l9erqm.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Oct 2020 22:39:07 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/mesa3d: add
+ missing depends and driver name to r100 driver
+Message-ID: <20201010203757.022318EB7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4acbe31d6c58163e8f37b0d42ed3a0342e5552b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
- > by default writes these as backup files when patches only apply with fuzz.
+Propagate libdrm dependencies.
 
- > This is unfortunate as package sources may contain files ending in .orig as
- > well, breaking the build.  Luckily GNU patch can be told to not write these
- > backup files using the --no-backup-if-mismatch option, so used that instead
- > of the .orig removal step.
+Add r100 to menu name to differentiate from r200 dri driver.
 
- > --no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
- > busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
- > BSD patch, so add logic to dependencies.sh to error out if patch doesn't
- > support the flag.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a3aac6d84713db7e6d2683eabf965eae21ce48bf)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mesa3d/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a12ed641a6..5b9fbc64cc 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -370,7 +370,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+ 	  Support for Nvidia-based GPUs.
+ 
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+-	bool "DRI radeon driver"
++	bool "DRI radeon r100 driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	help
