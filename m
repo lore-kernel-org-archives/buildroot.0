@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:59:34 +0200
-Subject: [Buildroot] [PATCH 1/2] python-socketio: drop asgi/asyncio
- files for python 2.x to fix pycompile issue
-In-Reply-To: <20201004214903.32309-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 4 Oct 2020 23:49:01 +0200")
+Date: Sat, 10 Oct 2020 22:59:40 +0200
+Subject: [Buildroot] [PATCH 2/2] python-engineio: drop asyncio files for
+ python 2.x to fix pycompile issue
+In-Reply-To: <20201004214903.32309-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 4 Oct 2020 23:49:02 +0200")
 References: <20201004214903.32309-1-peter@korsgaard.com>
-Message-ID: <877drxer0p.fsf@dell.be.48ers.dk>
+ <20201004214903.32309-2-peter@korsgaard.com>
+Message-ID: <87362ler0j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +16,31 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes:
- > http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
+ > http://autobuild.buildroot.net/results/72c/72cfdffeb4d0fb7c3032b52f0a26a4758eea6762/
 
- > socketio has conditional logic to load asgi/asyncio files when running under
+ > engineio has conditional logic to load asyncio files when running under
  > Python 3.x:
 
  > if sys.version_info >= (3, 5):  # pragma: no cover
- >     from .asyncio_client import AsyncClient
  >     from .asyncio_server import AsyncServer
- >     from .asyncio_manager import AsyncManager
- >     from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
- >     from .asyncio_redis_manager import AsyncRedisManager
- >     from .asyncio_aiopika_manager import AsyncAioPikaManager
- >     from .asgi import ASGIApp
+ >     from .asyncio_client import AsyncClient
+ >     from .async_drivers.asgi import ASGIApp
+ >     try:
+ >         from .async_drivers.tornado import get_tornado_handler
+ >     except ImportError:
+ >         get_tornado_handler = None
  > else:  # pragma: no cover
- >     AsyncClient = None
  >     AsyncServer = None
- >     AsyncManager = None
- >     AsyncNamespace = None
- >     AsyncRedisManager = None
- >     AsyncAioPikaManager = None
+ >     AsyncClient = None
+ >     get_tornado_handler = None
+ >     ASGIApp = None
 
  > pycompile unfortunately errors out on these files when running under Python
  > 2.x:
 
  > ../scripts/pycompile.py ..
- > error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
- >     async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
+ > error:   File "/usr/lib/python2.7/site-packages/engineio/asyncio_socket.py", line 13
+ >     async def poll(self):
  >             ^
  > SyntaxError: invalid syntax
 
