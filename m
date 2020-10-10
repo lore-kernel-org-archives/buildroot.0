@@ -1,73 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:43:24 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x]
- support/scripts/apply-patches.sh: do not blindly remove *.orig files
-Message-ID: <20201010203757.219517FD9F@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:39:24 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/mesa3d: add
+ missing depends and driver name to r100 driver
+Message-ID: <20201010203802.31F538EB7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=187186fc1070d0137b6d73981555780201fcd41a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=950cbfaa8ae3df19b06104ba9d97aa3ffdc038b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-apply-patches currently blindly removes *.orig / .*.orig files as GNU patch
-by default writes these as backup files when patches only apply with fuzz.
+Propagate libdrm dependencies.
 
-This is unfortunate as package sources may contain files ending in .orig as
-well, breaking the build.  Luckily GNU patch can be told to not write these
-backup files using the --no-backup-if-mismatch option, so used that instead
-of the .orig removal step.
+Add r100 to menu name to differentiate from r200 dri driver.
 
---no-backup-if-mismatch is supported since GNU patch 2.3.8 (1997-06-17) and
-busybox patch if built with CONFIG_DESKTOP, but E.G.  isn't supported by the
-BSD patch, so add logic to dependencies.sh to error out if patch doesn't
-support the flag.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 42f61e759a977d75a2c8a1580c3187c92e155b04)
+(cherry picked from commit a3aac6d84713db7e6d2683eabf965eae21ce48bf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 6 ++++++
- support/scripts/apply-patches.sh     | 5 +----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index c1bd614edf..b44d28682c 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -180,6 +180,12 @@ if test "${missing_progs}" = "yes" ; then
- 	exit 1
- fi
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a12ed641a6..5b9fbc64cc 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -370,7 +370,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
+ 	  Support for Nvidia-based GPUs.
  
-+# apply-patches.sh needs patch with --no-backup-if-mismatch support (GNU, busybox w/DESKTOP)
-+if ! patch --no-backup-if-mismatch </dev/null 2>/dev/null; then
-+	echo "Your patch program does not support the --no-backup-if-mismatch option. Install GNU patch"
-+	exit 1
-+fi
-+
- if grep ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG > /dev/null; then
- 	if ! which locale > /dev/null ; then
- 		echo
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 66fef262ee..2d39d63da1 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -119,7 +119,7 @@ function apply_patch {
-         exit 1
-     fi
-     echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E --no-backup-if-mismatch -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-         exit 1
-@@ -168,6 +168,3 @@ if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-     echo "Aborting.  Reject files found."
-     exit 1
- fi
--
--# Remove backup files
--find $builddir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+-	bool "DRI radeon driver"
++	bool "DRI radeon r100 driver"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_LIBDRM_HAS_ATOMIC
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+ 	help
