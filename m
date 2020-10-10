@@ -1,32 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:53:52 +0200
-Subject: [Buildroot] [PATCH v3 2/2] fs/jffs2: copy xattrs
-In-Reply-To: <20201008090836.2670553-2-antoine.tenart@bootlin.com> (Antoine
- Tenart's message of "Thu, 8 Oct 2020 11:08:36 +0200")
-References: <20201008090836.2670553-1-antoine.tenart@bootlin.com>
- <20201008090836.2670553-2-antoine.tenart@bootlin.com>
-Message-ID: <87ft6lera7.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Oct 2020 22:56:05 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ltp-testsuite: Fix m68k build
+In-Reply-To: <20201002221032.5627-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Sat, 3 Oct 2020 00:10:31 +0200")
+References: <20201002221032.5627-1-petr.vorel@gmail.com>
+Message-ID: <87blh9er6i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Antoine" == Antoine Tenart <antoine.tenart@bootlin.com> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > This patch sets the --with-xattr option when generating an image with
- > mkfs.jffs2, so that SELinux security contexts and other extended
- > attributes will be kept and available in jffs2 images.
+ > Backport upstream proposal for fix.
+ > Fixes: br-m68k-68040-full failure.
 
- > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
- > ---
-
- > Since v2:
- >   - Removed condition on BR2_PACKAGE_LIBSELINUX.
-
- > Since v1:
- >   - s/BR2_PACKAGE_REFPOLICY/BR2_PACKAGE_LIBSELINUX/
-
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
 Committed to 2020.08.x, thanks.
 
