@@ -1,70 +1,261 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 21:38:22 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/live555: fix
- static build with openssl
-Message-ID: <20201010195947.1718D81585@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:09:30 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/mraa: drop C++
+ dependency
+Message-ID: <20201010195947.4D43E82D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d0bfdf74167942835bc73a76ec3e65c89569d2c
+commit: https://git.buildroot.net/buildroot/commit/?id=18cc573d9fc209727cd94bc68f26b5fc265c6916
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Use pkg-config to retrieve openssl static dependencies such as -lz or
--latomic.
-
-Moreover, don't pass the openssl libraries to LIBS_FOR_LIVEMEDIA_LIB
-when linking statically with ar or the build will break on:
-
-/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar cr libliveMedia.a  \
-	Media.o MediaSource.o FramedSource.o FramedFileSource.o FramedFilter.o ByteStreamFileSource.o ByteStreamMultiFileSource.o ByteStreamMemoryBufferSource.o BasicUDPSource.o DeviceSource.o AudioInputDevice.o WAVAudioFileSource.o MPEG1or2Demux.o MPEG1or2DemuxedElementaryStream.o MPEGVideoStreamFramer.o MPEG1or2VideoStreamFramer.o MPEG1or2VideoStreamDiscreteFramer.o MPEG4VideoStreamFramer.o MPEG4VideoStreamDiscreteFramer.o H264or5VideoStreamFramer.o H264or5VideoStreamDiscreteFramer.o H264VideoStreamFramer.o H264VideoStreamDiscreteFramer.o H265VideoStreamFramer.o H265VideoStreamDiscreteFramer.o MPEGVideoStreamParser.o MPEG1or2AudioStreamFramer.o MPEG1or2AudioRTPSource.o MPEG4LATMAudioRTPSource.o MPEG4ESVideoRTPSource.o MPEG4GenericRTPSource.o MP3FileSource.o MP3Transcoder.o MP3ADU.o MP3ADUdescriptor.o MP3ADUinterleaving.o MP3ADUTranscoder.o MP3StreamState.o MP3Internals.o MP3InternalsHuffman.o MP3InternalsHuffmanTable.o MP3ADURTPSource.o MPEG1or2VideoRTPSource.o MPEG2TransportStrea
- mMultiplexor.o MPEG2TransportStreamFromPESSource.o MPEG2TransportStreamFromESSource.o MPEG2TransportStreamFramer.o MPEG2TransportStreamAccumulator.o ADTSAudioFileSource.o ADTSAudioStreamDiscreteFramer.o JPEGVideoSource.o JPEGVideoRTPSource.o JPEG2000VideoRTPSource.o H263plusVideoRTPSource.o H263plusVideoStreamFramer.o H263plusVideoStreamParser.o AC3AudioStreamFramer.o AC3AudioRTPSource.o DVVideoStreamFramer.o DVVideoRTPSource.o AMRAudioSource.o AMRAudioFileSource.o InputFile.o StreamReplicator.o MediaSink.o FileSink.o BasicUDPSink.o AMRAudioFileSink.o H264or5VideoFileSink.o H264VideoFileSink.o H265VideoFileSink.o OggFileSink.o MPEG1or2AudioRTPSink.o MP3ADURTPSink.o MPEG1or2VideoRTPSink.o MPEG4LATMAudioRTPSink.o MPEG4GenericRTPSink.o MPEG4ESVideoRTPSink.o JPEGVideoRTPSink.o JPEG2000VideoRTPSink.o H263plusVideoRTPSink.o H264or5VideoRTPSink.o H264VideoRTPSink.o H265VideoRTPSink.o DVVideoRTPSink.o AC3AudioRTPSink.o VorbisAudioRTPSink.o TheoraVideoRTPSink.o VP8VideoRTPSink.o VP9V
- ideoRTPSink.o GSMAudioRTPSink.o SimpleRTPSink.o AMRAudioRTPSink.o T140TextRTPSink.o OutputFile.o RawVideoRTPSink.o uLawAudioFilter.o RTPSource.o MultiFramedRTPSource.o SimpleRTPSource.o H261VideoRTPSource.o H264VideoRTPSource.o H265VideoRTPSource.o QCELPAudioRTPSource.o AMRAudioRTPSource.o VorbisAudioRTPSource.o TheoraVideoRTPSource.o VP8VideoRTPSource.o VP9VideoRTPSource.o RawVideoRTPSource.o RTPSink.o MultiFramedRTPSink.o AudioRTPSink.o VideoRTPSink.o TextRTPSink.o RTPInterface.o RTCP.o rtcp_from_spec.o GenericMediaServer.o RTSPServer.o RTSPServerRegister.o RTSPClient.o RTSPCommon.o RTSPRegisterSender.o SIPClient.o MediaSession.o ServerMediaSession.o PassiveServerMediaSubsession.o OnDemandServerMediaSubsession.o FileServerMediaSubsession.o MPEG4VideoFileServerMediaSubsession.o H264VideoFileServerMediaSubsession.o H265VideoFileServerMediaSubsession.o H263plusVideoFileServerMediaSubsession.o WAVAudioFileServerMediaSubsession.o AMRAudioFileServerMediaSubsession.o MP3AudioFile
- ServerMediaSubsession.o MPEG1or2VideoFileServerMediaSubsession.o MPEG1or2FileServerDemux.o MPEG1or2DemuxedServerMediaSubsession.o MPEG2TransportFileServerMediaSubsession.o ADTSAudioFileServerMediaSubsession.o DVVideoFileServerMediaSubsession.o AC3AudioFileServerMediaSubsession.o MPEG2TransportUDPServerMediaSubsession.o ProxyServerMediaSession.o QuickTimeFileSink.o QuickTimeGenericRTPSource.o AVIFileSink.o MPEG2IndexFromTransportStream.o MPEG2TransportStreamIndexFile.o MPEG2TransportStreamTrickModeFilter.o MatroskaFile.o MatroskaFileParser.o EBMLNumber.o MatroskaDemuxedTrack.o MatroskaFileServerDemux.o MatroskaFileServerMediaSubsession.o MP3AudioMatroskaFileServerMediaSubsession.o OggFile.o OggFileParser.o OggDemuxedTrack.o OggFileServerDemux.o OggFileServerMediaSubsession.o MPEG2TransportStreamDemux.o MPEG2TransportStreamDemuxedTrack.o MPEG2TransportStreamParser.o MPEG2TransportStreamParser_PAT.o MPEG2TransportStreamParser_PMT.o MPEG2TransportStreamParser_STREAM.o HLSSegment
- er.o TLSState.o MIKEY.o SRTPCryptographicContext.o HMAC_SHA1.o BitVector.o StreamParser.o DigestAuthentication.o ourMD5.o Base64.o Locale.o -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lssl -L/home/fabrice/buildroot/output/per-package/live555/host/bin/../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lz -latomic -lpthread -lcrypto -lz -latomic -lpthread
-/home/fabrice/buildroot/output/per-package/live555/host/bin/arm-linux-ar: invalid option -- 'L'
-
-Fixes:
- - http://autobuild.buildroot.org/results/1299a05cfaabccc45e2878e969b443a973ec4c9e
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Michael Nosthoff<buildroot@heine.tech>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cb7a22db6bcfce89848540e5f3a1618fedb54eef)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit edf71857f1827d7b0a6f3073147189e7f9e2573b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/live555/live555.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ .../0002-CMakeLists.txt-add-BUILDCPP-option.patch  | 193 +++++++++++++++++++++
+ package/mraa/Config.in                             |   6 +-
+ package/mraa/mraa.mk                               |   3 +-
+ 3 files changed, 197 insertions(+), 5 deletions(-)
 
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 4bbe35d6ea..6218126954 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -27,8 +27,12 @@ LIVE555_CFLAGS += -fPIC
- endif
+diff --git a/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
+new file mode 100644
+index 0000000000..fbadfe79ef
+--- /dev/null
++++ b/package/mraa/0002-CMakeLists.txt-add-BUILDCPP-option.patch
+@@ -0,0 +1,193 @@
++From cb88e4dd1fbbb9d24e625dba2768b88ed99da309 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 13 Jun 2020 22:51:37 +0200
++Subject: [PATCH] CMakeLists.txt: add BUILDCPP option
++
++C++ is a mandatory dependency since version 1.4.0 and
++https://github.com/eclipse/mraa/commit/122cab1f1e53b7c9c7cd82905b962071f9bad9dc
++
++As a result, build on embedded toolchains that do not support C++ fails
++on:
++
++CMake Error at CMakeLists.txt:2 (project):
++  The CMAKE_CXX_COMPILER:
++
++    /home/naourr/work/instance-1/output-1/per-package/mraa/host/bin/arm-linux-g++
++
++  is not a full path to an existing compiler tool.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/31086422e03611c16ab59c4418e3669b580bc0c0
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/eclipse/mraa/commit/cb88e4dd1fbbb9d24e625dba2768b88ed99da309]
++---
++ CMakeLists.txt                | 69 +++++++++++++++++++----------------
++ src/java/CMakeLists.txt       |  4 +-
++ src/javascript/CMakeLists.txt | 34 +++++++++--------
++ 3 files changed, 59 insertions(+), 48 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 250d9106e..90c0dc920 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required (VERSION 2.8.11)
++-project (mraa C CXX)
+++project (mraa C)
++ 
++ FIND_PACKAGE (Threads REQUIRED)
++ 
++@@ -11,6 +11,8 @@ else ()
++   set (CMAKE_C_STANDARD 99)
++ endif ()
++ 
+++option (BUILDCPP "Enable C++ (needed by FTDI4222 and tests)" ON)
+++
++ ###############################################################################
++ # Detect supported warning flags
++ # Modified from work By Dan Liew (fpbench - MIT)
++@@ -33,15 +35,18 @@ set (MRAA_C_WARNING_FLAGS
++   -Werror=missing-parameter-type
++ )
++ 
++-# Warning flags for the C++ compiler only
++-set (MRAA_CXX_WARNING_FLAGS
++-  -Wnon-virtual-dtor
++-  -Woverloaded-virtual
++-  -Wreorder
++-)
++-
++ include (CheckCCompilerFlag)
++-include (CheckCXXCompilerFlag)
+++if (BUILDCPP)
+++  # Warning flags for the C++ compiler only
+++  set (MRAA_CXX_WARNING_FLAGS
+++    -Wnon-virtual-dtor
+++    -Woverloaded-virtual
+++    -Wreorder
+++  )
+++
+++  enable_language (CXX)
+++  include (CheckCXXCompilerFlag)
+++endif ()
++ function (MRAA_SANITIZE_FLAG_NAME OUTPUT_VAR FLAG)
++   string (REPLACE "-" "_" SANITIZED_FLAG_NAME "${FLAG}")
++   string (REPLACE "/" "_" SANITIZED_FLAG_NAME "${SANITIZED_FLAG_NAME}")
++@@ -62,28 +67,30 @@ foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_C_WARNING_FLAGS})
++   endif ()
++ endforeach ()
++ 
++-# Globally set C++ compiler warning flags that are supported and emit
++-# a warning about unsupported flags
++-foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
++-  MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
++-  CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
++-  if (HAS_CXX_${SANITIZED_FLAG_NAME})
++-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
++-  else ()
++-    message (WARNING "C++ compiler does not support flag \"${flag}\"")
++-  endif ()
++-endforeach ()
++-
++-# This function adds the c++11 flag to a c++ target (if supported)
++-function(use_cxx_11 targetname)
++-  include(CheckCXXCompilerFlag)
++-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
++-  if (COMPILER_SUPPORTS_CXX11)
++-    set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
++-  else()
++-    message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
++-  endif()
++-endfunction()
+++if (BUILDCPP)
+++  # Globally set C++ compiler warning flags that are supported and emit
+++  # a warning about unsupported flags
+++  foreach (flag ${MRAA_BOTH_WARNING_FLAGS} ${MRAA_CXX_WARNING_FLAGS})
+++    MRAA_SANITIZE_FLAG_NAME (SANITIZED_FLAG_NAME "${flag}")
+++    CHECK_CXX_COMPILER_FLAG ("${flag}" HAS_CXX_${SANITIZED_FLAG_NAME})
+++    if (HAS_CXX_${SANITIZED_FLAG_NAME})
+++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}")
+++    else ()
+++      message (WARNING "C++ compiler does not support flag \"${flag}\"")
+++    endif ()
+++  endforeach ()
+++
+++  # This function adds the c++11 flag to a c++ target (if supported)
+++  function(use_cxx_11 targetname)
+++    include(CheckCXXCompilerFlag)
+++    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+++    if (COMPILER_SUPPORTS_CXX11)
+++      set_target_properties(${targetname} PROPERTIES COMPILE_FLAGS "-std=c++11")
+++    else()
+++      message(FATAL_ERROR "Target '${targetname}' requires c++11 which is not supported by this compiler")
+++    endif()
+++  endfunction()
+++endif()
++ 
++ # Set CMAKE_INSTALL_LIBDIR if not defined
++ include(GNUInstallDirs)
++diff --git a/src/java/CMakeLists.txt b/src/java/CMakeLists.txt
++index 231c755fa..cfa72a0df 100644
++--- a/src/java/CMakeLists.txt
+++++ b/src/java/CMakeLists.txt
++@@ -16,7 +16,9 @@ include_directories (
++ set_source_files_properties (mraajava.i PROPERTIES SWIG_FLAGS ";-package;mraa;-I${CMAKE_BINARY_DIR}/src")
++ set_source_files_properties (mraajava.i PROPERTIES CPLUSPLUS ON)
++ 
++-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
+++if (BUILDCPP)
+++  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -DJAVACALLBACK")
+++endif()
++ set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DJAVACALLBACK")
++ 
++ if (NOT DEFINED ENV{JAVA_HOME_NATIVE})
++diff --git a/src/javascript/CMakeLists.txt b/src/javascript/CMakeLists.txt
++index 25fd36275..99a96b49d 100644
++--- a/src/javascript/CMakeLists.txt
+++++ b/src/javascript/CMakeLists.txt
++@@ -36,25 +36,27 @@ set_target_properties (mraajs PROPERTIES
++ )
++ 
++ message (STATUS "INFO - swig Version ${SWIG_VERSION}")
++-message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+++if (BUILDCPP)
+++  message (STATUS "INFO - CXX compiler Version ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
++ 
++-if (${V8_VERSION_MAJOR} GREATER 3)
++-  message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
++-  # Node 0.12.x V8 engine major version is '3'.
++-  # Node 2.1.0  V8 engine major version is '4'.
++-  set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
++-  set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
++-  if (CMAKE_VERSION VERSION_LESS "3.1")
++-    message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
++-    if (CMAKE_COMPILER_IS_GNUCXX)
++-      if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
++-        message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
+++  if (${V8_VERSION_MAJOR} GREATER 3)
+++    message (STATUS "INFO - Using V8 version > 3 so requiring C++11 compiler")
+++    # Node 0.12.x V8 engine major version is '3'.
+++    # Node 2.1.0  V8 engine major version is '4'.
+++    set_property (TARGET mraajs PROPERTY CXX_STANDARD 11)
+++    set_property (TARGET mraajs PROPERTY CXX_STANDARD_REQUIRED ON)
+++    if (CMAKE_VERSION VERSION_LESS "3.1")
+++      message (WARNING "Need to use CMAKE version 3.1+, but it is ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}, using a workaround.")
+++      if (CMAKE_COMPILER_IS_GNUCXX)
+++        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7")
+++          message (FATAL_ERROR "GNU gcc compiler is also too old (need 4.7+, but ${CMAKE_CXX_COMPILER_VERSION}) and does not support C++11 standard.")
+++        endif ()
+++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
+++      else ()
+++        set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
++       endif ()
++-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=gnu++11")
++-    else ()
++-      set (MRAA_CXX11_WORKAROUND_OPTION "-std=c++11")
+++      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
++     endif ()
++-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MRAA_CXX11_WORKAROUND_OPTION} ")
++   endif ()
++ endif ()
++ 
+diff --git a/package/mraa/Config.in b/package/mraa/Config.in
+index 745b235cb3..c845fe9f99 100644
+--- a/package/mraa/Config.in
++++ b/package/mraa/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_MRAA
+ 	bool "mraa"
+ 	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  mraa is a C/C++ library with bindings to javascript & python
+@@ -19,7 +18,6 @@ config BR2_PACKAGE_MRAA
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIVE555_DEPENDENCIES += openssl
--LIVE555_LIBS = -lssl -lcrypto
-+LIVE555_DEPENDENCIES += host-pkgconf openssl
-+LIVE555_CONSOLE_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
-+# passed to ar for static linking, which gets confused by -L<dir>
-+ifneq ($(BR2_STATIC_LIBS),y)
-+LIVE555_LIVEMEDIA_LIBS = $(LIVE555_CONSOLE_LIBS)
-+endif
- else
- LIVE555_CFLAGS += -DNO_OPENSSL
- endif
-@@ -48,8 +52,8 @@ define LIVE555_CONFIGURE_CMDS
- 	# Must have a whitespace at the end of LIBRARY_LINK, otherwise static link
- 	# fails
- 	echo 'LIBRARY_LINK = $(LIVE555_LIBRARY_LINK) ' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
--	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LIBS_FOR_CONSOLE_APPLICATION = $(LIVE555_CONSOLE_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
-+	echo 'LIBS_FOR_LIVEMEDIA_LIB = $(LIVE555_LIVEMEDIA_LIBS)' >> $(@D)/config.$(LIVE555_CONFIG_TARGET)
- 	(cd $(@D); ./genMakefiles $(LIVE555_CONFIG_TARGET))
- endef
+ 	  http://iotdk.intel.com/docs/master/mraa
  
+-comment "mraa needs a toolchain w/ C++, threads, dynamic library"
++comment "mraa needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_PACKAGE_MRAA_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+index 89c539e793..910339b386 100644
+--- a/package/mraa/mraa.mk
++++ b/package/mraa/mraa.mk
+@@ -24,9 +24,10 @@ endif
+ 
+ # USBPLAT only makes sense with FTDI4222, which requires the ftd2xx library,
+ # which doesn't exist in buildroot
+-
++# Disable C++ as it is used only by FTDI4222 and tests
+ MRAA_CONF_OPTS += \
+ 	-DBUILDARCH=$(MRAA_ARCH) \
++	-DBUILDCPP=OFF \
+ 	-DBUILDSWIG=OFF \
+ 	-DUSBPLAT=OFF \
+ 	-DFTDI4222=OFF \
