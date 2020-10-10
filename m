@@ -1,75 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:58:52 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python-socketio:
- drop asgi/asyncio files for python 2.x to fix pycompile issue
-Message-ID: <20201010204949.27DE481121@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:59:59 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/fail2ban: fix
+ fail2ban-python symlink
+Message-ID: <20201010204953.52F6988061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd19ee84cab19d9387f39bf887db68e63186abfd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0953cb557e06d2ecb959d77068297d60f69adf63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-socketio has conditional logic to load asgi/asyncio files when running under
-Python 3.x:
+Fixes (reproducible):
+http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
 
-if sys.version_info >= (3, 5):  # pragma: no cover
-    from .asyncio_client import AsyncClient
-    from .asyncio_server import AsyncServer
-    from .asyncio_manager import AsyncManager
-    from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
-    from .asyncio_redis_manager import AsyncRedisManager
-    from .asyncio_aiopika_manager import AsyncAioPikaManager
-    from .asgi import ASGIApp
-else:  # pragma: no cover
-    AsyncClient = None
-    AsyncServer = None
-    AsyncManager = None
-    AsyncNamespace = None
-    AsyncRedisManager = None
-    AsyncAioPikaManager = None
+Fail2ban installs the fail2ban-python symlink pointing to the host python
+intepreter used to run setup.py, which is naturally not valid at runtime and
+breaks the reproducible tests as shown in the diffoscope results:
 
-pycompile unfortunately errors out on these files when running under Python
-2.x:
+??? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
+??? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
 
-../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
-    async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
-            ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable file from TARGET_DIR if building
-for python 2.x.
-
-Fixes:
-http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
+As a workaround, update the symlink after installation to point to the
+correct target python.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6beb6dd5c6d6232b2ff6f2ca983c5cb99a4ca9ab)
+(cherry picked from commit 084ffc69be6836fef071782943102fe1bbe4956d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-socketio/python-socketio.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/fail2ban/fail2ban.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index ece4f65b78..73dab26f3c 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
-@@ -10,4 +10,14 @@ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index a0a2dc704b..a4ee0852cc 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
+@@ -27,6 +27,13 @@ define FAIL2BAN_FIX_DEFAULT_CONFIG
+ endef
+ FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_DEFAULT_CONFIG
  
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_SOCKETIO_RM_PY3_FILES
-+	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asgi.py \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asyncio_*.py
++# fail2ban-python points to host python
++define FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
++	ln -snf $(if $(BR2_PACKAGE_PYTHON),python,python3) \
++		$(TARGET_DIR)/usr/bin/fail2ban-python
 +endef
++FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
 +
-+PYTHON_SOCKETIO_POST_INSTALL_TARGET_HOOKS += PYTHON_SOCKETIO_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+ define FAIL2BAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
+ 		$(TARGET_DIR)/etc/init.d/S60fail2ban
