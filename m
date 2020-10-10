@@ -1,33 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 21:44:07 +0200
-Subject: [Buildroot] [git commit] package/vlc: fix build with live555
- and without openssl
-In-Reply-To: <20201004103503.549A28E4F9@busybox.osuosl.org> (Peter Korsgaard's
- message of "Sun, 4 Oct 2020 12:45:09 +0200")
-References: <20201004103503.549A28E4F9@busybox.osuosl.org>
-Message-ID: <87imbhg92w.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 10 Oct 2020 21:46:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/jansson: bump to version 2.13.1
+Message-ID: <20201010194629.1434731-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+- Update hash of LICENSE file (update in year:
+  https://github.com/akheron/jansson/commit/2882ead5bb90cf12a01b07b2c2361e24960fae02)
+- Update indentation in hash file (two spaces)
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=e0fb418f781b69b8a0a0c953bf00a2965d675c43
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://jansson.readthedocs.io/en/2.13/changes.html#version-2-13-1
 
- > Pass -DNO_OPENSSL to avoid a build failure with live555 but without
- > openssl
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jansson/jansson.hash | 4 ++--
+ package/jansson/jansson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/70ca93aa5c9488a4657c7bcafa40bfb2e974a5b3
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x, 2020.05.x and 2020.08.x, thanks.
-
+diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
+index 5baec1968d..5c19316981 100644
+--- a/package/jansson/jansson.hash
++++ b/package/jansson/jansson.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256	5f8dec765048efac5d919aded51b26a32a05397ea207aa769ff6b53c7027d2c9	jansson-2.12.tar.gz
+-sha256	f0a0c95c64e9f49ec4cbfac8e7fee06823c85ee8ba4af5d57aaabb372347adc2	LICENSE
++sha256  f4f377da17b10201a60c1108613e78ee15df6b12016b116b6de42209f47a474f  jansson-2.13.1.tar.gz
++sha256  1fff7d37d22157bcd81ab53b6c54da755d7c2f868f15807d9bde920f10730da0  LICENSE
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index b53381d465..83fb370160 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANSSON_VERSION = 2.12
++JANSSON_VERSION = 2.13.1
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.28.0
