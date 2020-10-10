@@ -1,53 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 23:00:03 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/fail2ban: fix
- fail2ban-python symlink
-Message-ID: <20201010204949.418B0803DA@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 22:52:28 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/mtd: add host-acl
+ dependency for host
+Message-ID: <20201010204948.EE0B581121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d93f9cc3ec72a2add887c712d4b91b1ef1bd545
+commit: https://git.buildroot.net/buildroot/commit/?id=7c38dfb58eee1c235d4d5444c7ad3dd56a35b895
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes (reproducible):
-http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
+When compiling the host version of mtd, --with-jffs and --with-ubifs are
+always set, meaning --with-xattr is set by default. The xattr support
+only work if 'sys/acl.h' is available, otherwise the feature is silently
+dropped (a warning is shown during the configuration step).
 
-Fail2ban installs the fail2ban-python symlink pointing to the host python
-intepreter used to run setup.py, which is naturally not valid at runtime and
-breaks the reproducible tests as shown in the diffoscope results:
+This patch adds a dependency on host-acl for host-mtd, so that the xattr
+feature is correctly supported. Logic to have xattr support is already
+there and working for the non-host flavour.
 
-??? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
-??? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
-
-As a workaround, update the symlink after installation to point to the
-correct target python.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 084ffc69be6836fef071782943102fe1bbe4956d)
+(cherry picked from commit c3902e6e2e8ff5fe6a516b060819c60951c406f4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fail2ban/fail2ban.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/mtd/mtd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index a0a2dc704b..a4ee0852cc 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -27,6 +27,13 @@ define FAIL2BAN_FIX_DEFAULT_CONFIG
- endef
- FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_DEFAULT_CONFIG
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 1186fa52d5..9f259b35d9 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -53,7 +53,7 @@ else
+ MTD_CONF_OPTS += --without-xattr
+ endif
  
-+# fail2ban-python points to host python
-+define FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
-+	ln -snf $(if $(BR2_PACKAGE_PYTHON),python,python3) \
-+		$(TARGET_DIR)/usr/bin/fail2ban-python
-+endef
-+FAIL2BAN_POST_INSTALL_TARGET_HOOKS += FAIL2BAN_FIX_FAIL2BAN_PYTHON_SYMLINK
-+
- define FAIL2BAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/fail2ban/S60fail2ban \
- 		$(TARGET_DIR)/etc/init.d/S60fail2ban
+-HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
++HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
