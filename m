@@ -1,8 +1,8 @@
 From: Shlomi Vaknin <shlomi.39sd@gmail.com>
-Date: Sat, 10 Oct 2020 21:08:42 +0300
+Date: Sat, 10 Oct 2020 21:59:28 +0300
 Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
  for wifi
-In-Reply-To: <181128db-472e-a47c-74ac-9a01d18665da@grinn-global.com>
+In-Reply-To: <CALxJ29QzYHOVoc812jGmzUmn2qSGKzxMkLFT_UOU+wCYghy1cQ@mail.gmail.com>
 References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
  <20201007144945.1697081-4-shlomi.39sd@gmail.com>
  <15798cdd-e335-a291-53d4-1ac03d1bbd6c@grinn-global.com>
@@ -13,31 +13,45 @@ References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
  <efe16945-0124-b38a-0546-c135755d3cce@grinn-global.com>
  <CALxJ29QfbGjQwELFeaKdBhdPbFRjyB=31S3oU8uU1KzCnsYFvw@mail.gmail.com>
  <181128db-472e-a47c-74ac-9a01d18665da@grinn-global.com>
-Message-ID: <CALxJ29QzYHOVoc812jGmzUmn2qSGKzxMkLFT_UOU+wCYghy1cQ@mail.gmail.com>
+ <CALxJ29QzYHOVoc812jGmzUmn2qSGKzxMkLFT_UOU+wCYghy1cQ@mail.gmail.com>
+Message-ID: <CALxJ29SJfq0OWbbeT499=w6F6wa21tcY0mgqOt8uMfdOOOeM+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi,
 
-I still don't know why it works only for me, but I discovered the
-following: st doesn't use the firmware from the official linux-firmware
-repo. They are using the firmware from Murata github. In addition, the
-nvram file that I supplied was copied from st, which means that it matches
-the murata firmware they use. So I suggest the following:
+I succeeded in reproducing the issue with my board. All I needed to do is
+to make a hard reset. I don't know why rebooting does not reproduce it as
+well. I will update later
 
-1. Take the nvram file from the official linux-firmware repository (worked
-for me as well). Btw, should it be installed by default by the
-linux-firmware package?
-2. Use more recent firmware from murata.
-
-I would be happy if you can test these. Do you have another idea or
-something that I can try by myself?
-
-Thanks,
+Regards,
 Shlomi
+
+??????? ???, 10 ????? 2020 ?-21:08 ??? ?Shlomi Vaknin?? <?
+shlomi.39sd@gmail.com??>:?
+
+> Hi!
+>
+> I still don't know why it works only for me, but I discovered the
+> following: st doesn't use the firmware from the official linux-firmware
+> repo. They are using the firmware from Murata github. In addition, the
+> nvram file that I supplied was copied from st, which means that it matches
+> the murata firmware they use. So I suggest the following:
+>
+> 1. Take the nvram file from the official linux-firmware repository (worked
+> for me as well). Btw, should it be installed by default by the
+> linux-firmware package?
+> 2. Use more recent firmware from murata.
+>
+> I would be happy if you can test these. Do you have another idea or
+> something that I can try by myself?
+>
+> Thanks,
+> Shlomi
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201010/102035f2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201010/d61c5888/attachment.html>
