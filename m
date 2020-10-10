@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:24:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/brotli: fix
+Date: Sat, 10 Oct 2020 22:24:03 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/brotli: fix
  pkg-config
-Message-ID: <20201010201423.9D0BE88D22@busybox.osuosl.org>
+Message-ID: <20201010201428.6916B88D22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94d7c1485f0906483261d0434b5963c62f5b91ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b10a8d39b17a3337ea6117f029f45ef356a227ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 brotli pkg-config files are broken since version 1.0.8 and
 https://github.com/google/brotli/commit/31754d4ffce14153b5c2addf7a11019ec23f51c1
@@ -18,8 +18,7 @@ https://github.com/google/brotli/commit/31754d4ffce14153b5c2addf7a11019ec23f51c1
 This raise static build failures with all packages using brotli,
 fontconfig or freetype such as fbterm:
 
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static  -static -o fbterm fbterm-fbconfig.o fbterm-fbio.o fbterm-fbshell.o fbterm-fbshellman.o fbterm-fbterm.o fbterm-font.o fbterm-input.o fbterm-mouse.o fbterm-screen.o fbterm-improxy.o fbterm-screen_render.o fbterm-fbdev.o fbterm-vesadev.o lib/libshell.a -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lfreetype -lbz2 -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lz -lpng16 -lz -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlidec -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../
- arm-buil
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static  -static -o fbterm fbterm-fbconfig.o fbterm-fbio.o fbterm-fbshell.o fbterm-fbshellman.o fbterm-fbterm.o fbterm-font.o fbterm-input.o fbterm-mouse.o fbterm-screen.o fbterm-improxy.o fbterm-screen_render.o fbterm-fbdev.o fbterm-vesadev.o lib/libshell.a -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lfreetype -lbz2 -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lz -lpng16 -lz -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlidec -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buil
  droot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlicommon  -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lfontconfig -lfreetype -lbz2 -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lz -lpng16 -lz -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlidec -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -R/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -lbrotlicommon -L/srv/storage/autobuild/run/instance-1/output-1/host/bin/../arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -luuid -lexpat   -lutil -lutil
 arm-linux-g++.br_real: error: unrecognized command line option '-R'
 
