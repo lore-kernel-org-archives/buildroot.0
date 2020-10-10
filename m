@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:59:40 +0200
-Subject: [Buildroot] [PATCH 2/2] python-engineio: drop asyncio files for
- python 2.x to fix pycompile issue
-In-Reply-To: <20201004214903.32309-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 4 Oct 2020 23:49:02 +0200")
-References: <20201004214903.32309-1-peter@korsgaard.com>
- <20201004214903.32309-2-peter@korsgaard.com>
-Message-ID: <87362ler0j.fsf@dell.be.48ers.dk>
+Date: Sat, 10 Oct 2020 23:00:20 +0200
+Subject: [Buildroot] [PATCH] package/fail2ban: fix fail2ban-python
+ symlink
+In-Reply-To: <20201005055809.24044-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 5 Oct 2020 07:58:08 +0200")
+References: <20201005055809.24044-1-peter@korsgaard.com>
+Message-ID: <87y2kddcez.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/72c/72cfdffeb4d0fb7c3032b52f0a26a4758eea6762/
+ > Fixes (reproducible):
+ > http://autobuild.buildroot.net/results/50f/50f199bfe06d054cc6770760e73ac0de594a0670/diffoscope-results.txt
 
- > engineio has conditional logic to load asyncio files when running under
- > Python 3.x:
+ > Fail2ban installs the fail2ban-python symlink pointing to the host python
+ > intepreter used to run setup.py, which is naturally not valid at runtime and
+ > breaks the reproducible tests as shown in the diffoscope results:
 
- > if sys.version_info >= (3, 5):  # pragma: no cover
- >     from .asyncio_server import AsyncServer
- >     from .asyncio_client import AsyncClient
- >     from .async_drivers.asgi import ASGIApp
- >     try:
- >         from .async_drivers.tornado import get_tornado_handler
- >     except ImportError:
- >         get_tornado_handler = None
- > else:  # pragma: no cover
- >     AsyncServer = None
- >     AsyncClient = None
- >     get_tornado_handler = None
- >     ASGIApp = None
+ > ? -lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-1/host/bin/python
+ > ? +lrwxrwxrwx   0        0        0        0 2020-10-04 10:50:38.000000 ./usr/bin/fail2ban-python -> /home/naourr/work/instance-0/output-2/host/bin/python
 
- > pycompile unfortunately errors out on these files when running under Python
- > 2.x:
-
- > ../scripts/pycompile.py ..
- > error:   File "/usr/lib/python2.7/site-packages/engineio/asyncio_socket.py", line 13
- >     async def poll(self):
- >             ^
- > SyntaxError: invalid syntax
-
- > As a workaround, simply drop the unusable file from TARGET_DIR if building
- > for python 2.x.
+ > As a workaround, update the symlink after installation to point to the
+ > correct target python.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
