@@ -1,84 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 08:51:10 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] Revert "package/supertux:
- fix build with RELRO"
-Message-ID: <20201010195952.2771D814F0@busybox.osuosl.org>
+Date: Sat, 10 Oct 2020 21:51:13 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] boot/barebox: fix target
+ bareboxenv command compile
+Message-ID: <20201010195952.5153B81015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18e6e05cdcba89928c7f1e57f99cc5f8e572f1a8
+commit: https://git.buildroot.net/buildroot/commit/?id=53d619667e3d1e4ead262980e24c986b274cc026
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-This reverts commit 80be040817e008a021219bf4423df7550723d912 because
-libsquirrel.so.0 and libsqstdlib.so.0 are missing in TARGET_DIR.
+The buildroot custom bareboxenv compile command misses the additional
+include path 'scripts/include' to gain access to the local copy of the
+kernel header files (which leads to compile error when using an older
+toolchain).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7d85d5e5ed9544b5ebecd63824df13df920a0573)
+This could be fixed by enhancing the custom bareboxenv compile command
+(see [1]) or by using the barebox build system by simply enabling the
+CONFIG_BAREBOXENV_TARGET option (available since April 2012, see [2])
+instead (as suggested by Yann E. MORIN).
+
+Fixes (with BR2_TARGET_BAREBOX_BAREBOXENV enabled):
+
+  build/barebox-2019.12.0/scripts/bareboxenv.c:100:10: fatal error: linux/list.h: No such file or directory
+
+[1] http://lists.busybox.net/pipermail/buildroot/2020-January/270942.html
+[2] https://git.pengutronix.de/cgit/barebox/commit/?id=afb03d7a554a2911a3742e316f011319fcb416f1
+
+Note: a user who would previously provide a barebox config file which
+had CONFIG_BAREBOXENV_TARGET=y, but a Buildroot config file which did
+not have BR2_TARGET_BAREBOX_BAREBOXENV=y, would have bareboxenv-target
+built, but it would not be installed in the target. Now, and unset
+BR2_TARGET_BAREBOX_BAREBOXENV will not even build it, but his is not a
+regression: it was anyway previously not installed.
+
+Reported-by: Frederick Gotham <cauldwell.thomas@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - also explicitly disable it when not selected
+  - rewrap commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3cc2534b577eb453c50a4b3386d88a006007a9d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...txt-pass-DISABLE_STATIC-to-external-squir.patch | 52 ----------------------
- 1 file changed, 52 deletions(-)
+ boot/barebox/barebox.mk | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch b/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch
-deleted file mode 100644
-index 43652d0906..0000000000
---- a/package/supertux/0001-CMakeLists.txt-pass-DISABLE_STATIC-to-external-squir.patch
-+++ /dev/null
-@@ -1,52 +0,0 @@
--From 95590485d7cd95611eeac1fc06226d45f235c63a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 13 Sep 2020 22:09:49 +0200
--Subject: [PATCH] CMakeLists.txt: pass DISABLE_STATIC to external/squirrel
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 422f27312d..9d62037e7a 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -88,13 +88,6 @@ $(1)_KCONFIG_DEPENDENCIES = \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+ 
+-ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+-define $(1)_BUILD_BAREBOXENV_CMDS
+-	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+-		$$(@D)/scripts/bareboxenv.c
+-endef
+-endif
 -
--external/squirrel will always build a static binary and library except
--if DISABLE_STATIC is defined so define it to avoid the following build
--failure with RELRO_FULL:
--
--/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: CMakeFiles/sq_static.dir/sq.c.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIC
--/home/peko/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: final link failed: nonrepresentable section on output
--collect2: error: ld returned 1 exit status
--
--Fixes:
-- - http://autobuild.buildroot.org/results/46e8f5e622ce450a89bc6d70f4bfd38182557901
-- - http://autobuild.buildroot.org/results/a43720492d817e4555d728546da9114e3ccba952
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeLists.txt | 9 +++++----
-- 1 file changed, 5 insertions(+), 4 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 1ae0d653b..bb4358b01 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -411,6 +411,7 @@ ExternalProject_Add(squirrel
--   -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
--   -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
--   -DCMAKE_INSTALL_PREFIX=${SQUIRREL_PREFIX}
--+  -DDISABLE_STATIC=ON
--   -DINSTALL_INC_DIR=include)
-- 
-- if(WIN32)
--@@ -424,10 +425,10 @@ if(WIN32)
--   #For debug run purposes
--   configure_file("${CMAKE_CURRENT_SOURCE_DIR}/mk/msvc/run_supertux.bat.in" "${PROJECT_BINARY_DIR}/run_supertux.bat")
-- else()
---  add_library(squirrel_lib STATIC IMPORTED)
---  set_target_properties(squirrel_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}squirrel_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
---  add_library(sqstdlib_lib STATIC IMPORTED)
---  set_target_properties(sqstdlib_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}sqstdlib_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
--+  add_library(squirrel_lib SHARED IMPORTED)
--+  set_target_properties(squirrel_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}squirrel${CMAKE_SHARED_LIBRARY_SUFFIX}")
--+  add_library(sqstdlib_lib SHARED IMPORTED)
--+  set_target_properties(sqstdlib_lib PROPERTIES IMPORTED_LOCATION "${SQUIRREL_PREFIX}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}sqstdlib${CMAKE_SHARED_LIBRARY_SUFFIX}")
-- endif()
-- 
-- include_directories(SYSTEM ${SQUIRREL_PREFIX}/include)
---- 
--2.28.0
--
+ ifeq ($$(BR2_TARGET_$(1)_CUSTOM_ENV),y)
+ $(1)_ENV_NAME = $$(notdir $$(call qstrip,\
+ 	$$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)))
+@@ -109,12 +102,23 @@ endef
+ endif
+ 
+ ifneq ($$($(1)_CUSTOM_EMBEDDED_ENV_PATH),)
+-define $(1)_KCONFIG_FIXUP_CMDS
++define $(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH
+ 	$$(call KCONFIG_ENABLE_OPT,CONFIG_DEFAULT_ENVIRONMENT)
+ 	$$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,"$$($(1)_CUSTOM_EMBEDDED_ENV_PATH)")
+ endef
+ endif
+ 
++define $(1)_KCONFIG_FIXUP_BAREBOXENV
++	$$(if $$(BR2_TARGET_$(1)_BAREBOXENV),\
++		$$(call KCONFIG_ENABLE_OPT,CONFIG_BAREBOXENV_TARGET),\
++		$$(call KCONFIG_DISABLE_OPT,CONFIG_BAREBOXENV_TARGET))
++endef
++
++define $(1)_KCONFIG_FIXUP_CMDS
++	$$($(1)_KCONFIG_FIXUP_CUSTOM_EMBEDDED_ENV_PATH)
++	$$($(1)_KCONFIG_FIXUP_BAREBOXENV)
++endef
++
+ define $(1)_BUILD_CMDS
+ 	$$($(1)_BUILD_BAREBOXENV_CMDS)
+ 	$$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
+@@ -136,7 +140,7 @@ endef
+ 
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_INSTALL_TARGET_CMDS
+-	cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
++	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
+ endef
+ endif
+ 
