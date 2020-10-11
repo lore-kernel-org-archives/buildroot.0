@@ -1,49 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 18:57:55 +0200
-Subject: [Buildroot] [git commit] package/jansson: bump to version 2.13.1
-Message-ID: <20201011165039.67F3C8B82B@busybox.osuosl.org>
+Date: Sun, 11 Oct 2020 19:05:40 +0200
+Subject: [Buildroot] Issue Building gdbserver in Buildroot 2019.02.7
+In-Reply-To: <DM6PR12MB41534F87E9A4D9CCED3057B1AA080@DM6PR12MB4153.namprd12.prod.outlook.com>
+ (Sam Tennent's message of "Fri, 9 Oct 2020 15:58:19 +0000")
+References: <DM6PR12MB41534F87E9A4D9CCED3057B1AA080@DM6PR12MB4153.namprd12.prod.outlook.com>
+Message-ID: <87v9fgvgkb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbe7ef1922b42dd81d5c8015455f39eb5bdb2e1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sam" == Sam Tennent <Sam.Tennent@synopsys.com> writes:
 
-- Update hash of LICENSE file (update in year:
-  https://github.com/akheron/jansson/commit/2882ead5bb90cf12a01b07b2c2361e24960fae02)
-- Update indentation in hash file (two spaces)
+ > Hi Folks,
+ > I'm seeing an issue when trying to build gdbserver for our ARMv8 based Virtual Prototype.
 
-https://jansson.readthedocs.io/en/2.13/changes.html#version-2-13-1
+ > I can do this successfully for an older revision of Buildroot (
+ > 2018.02.1) but for 2019.02.7 I can't get it to build.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jansson/jansson.hash | 4 ++--
- package/jansson/jansson.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+2019.02.x is EOL, could you give 2020.02.6, 2020.08 or current master a
+try?
 
-diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
-index 5baec1968d..5c19316981 100644
---- a/package/jansson/jansson.hash
-+++ b/package/jansson/jansson.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256	5f8dec765048efac5d919aded51b26a32a05397ea207aa769ff6b53c7027d2c9	jansson-2.12.tar.gz
--sha256	f0a0c95c64e9f49ec4cbfac8e7fee06823c85ee8ba4af5d57aaabb372347adc2	LICENSE
-+sha256  f4f377da17b10201a60c1108613e78ee15df6b12016b116b6de42209f47a474f  jansson-2.13.1.tar.gz
-+sha256  1fff7d37d22157bcd81ab53b6c54da755d7c2f868f15807d9bde920f10730da0  LICENSE
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index b53381d465..83fb370160 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JANSSON_VERSION = 2.12
-+JANSSON_VERSION = 2.13.1
- JANSSON_SITE = http://www.digip.org/jansson/releases
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
+A quick test on current master works here (external toolchain for
+speed):
+
+cat defconfig
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_GDB=y
+
+ls -lah target/usr/bin/gdbserver
+-rwxr-xr-x 1 peko peko 507K Oct 11 19:04 target/usr/bin/gdbserver
+
+ > I realize that these builds a quite different since they are before
+ > and after gdbserver switched from a C app to C++ but I think I have
+ > taken this into account in my defconfig.
+
+ > Here's my defconfig
+
+ > BR2_aarch64=y
+ > BR2_GLOBAL_PATCH_DIR="$(TOPDIR)/../input/patches/"
+
+Are you patching anything in the toolchain?
+
+-- 
+Bye, Peter Korsgaard
