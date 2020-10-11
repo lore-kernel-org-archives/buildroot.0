@@ -1,51 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 11:09:30 +0200
-Subject: [Buildroot] [PATCH] package/python-pymodbus: drop asyncio files for
- python 2.x to fix pycompile issue
-Message-ID: <20201011090930.24271-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Oct 2020 12:16:59 +0200
+Subject: [Buildroot] How to get wireless networking working on PC x86_64
+ EFI?
+In-Reply-To: <CAKA8WzJpp2Qi=1PLtuEPrs+nDGLg7aeqCR70_RScqn9ZG+0=ww@mail.gmail.com>
+References: <CAKA8WzJpp2Qi=1PLtuEPrs+nDGLg7aeqCR70_RScqn9ZG+0=ww@mail.gmail.com>
+Message-ID: <20201011121659.365a5400@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pymodbus has optional support for asyncio.  Pycompile unfortunately errors
-out on these files when running under Python 2.x:
+Hello,
 
-../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/pymodbus/client/asynchronous/asyncio/__init__.py", line 257
-    yield from self._connect()
-             ^
-SyntaxError: invalid syntax
+On Sat, 10 Oct 2020 18:10:58 -0700
+Noah Cain <nmcain@gmail.com> wrote:
 
-As a workaround, simply drop the unusable files from TARGET_DIR if building
-for python 2.x.
+> I am trying to setup networking on the PC x86_64 EFI configuration, but I
+> can't seem to get it connecting. Ideally, I want it to connect to the
+> network specified in wpa_supplicant (which I have installed), but I feel
+> like I am missing drivers. What packages, drivers, and configuration files
+> do I need to get wifi working? I am kind of a beginner to this whole
+> embedded Linux thing, I have never had to do this by myself but I would
+> like to learn.
 
-Fixes:
-http://autobuild.buildroot.net/results/cc4/cc48927cbe9ae6c2d8b12d65467ec40df82febf6/
+It entirely depends on what Wireless hardware/chip you're using, and
+since you're not giving any information about this, there is no way
+anybody can help you.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pymodbus/python-pymodbus.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Could you give more details ?
 
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index d96e21a55c..9135a4d0c4 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -11,4 +11,13 @@ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
- 
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_PYMODBUS_RM_PY3_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pymodbus/client/asynchronous/asyncio
-+endef
-+
-+PYTHON_PYMODBUS_POST_INSTALL_TARGET_HOOKS += PYTHON_PYMODBUS_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
