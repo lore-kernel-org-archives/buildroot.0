@@ -1,66 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 10:43:14 +0200
-Subject: [Buildroot] [PATCH-2020.0{2, 5,
- 8}.x] python-scapy: add upstream patch fixing python 2.x
- compatibility
-Message-ID: <20201011084314.16335-1-peter@korsgaard.com>
+Date: Sun, 11 Oct 2020 11:09:30 +0200
+Subject: [Buildroot] [PATCH] package/python-pymodbus: drop asyncio files for
+ python 2.x to fix pycompile issue
+Message-ID: <20201011090930.24271-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/829/8293529a72ac4c8e93919b8bc0ea758fbb4bc444/
+Pymodbus has optional support for asyncio.  Pycompile unfortunately errors
+out on these files when running under Python 2.x:
 
-Python 2.x gets confused by rb"string", but not br"string", so add an
-upstream patch changing the former to the latter to fix a pycompile issue
-with python 2.x:
-
-error:   File "/usr/lib/python2.7/site-packages/scapy/tools/generate_ethertypes.py", line 23
-    reg = rb".*ETHERTYPE_([^\s]+)\s.0x([0-9A-Fa-f]+).*\/\*(.*)\*\/"
-                                                                  ^
+../scripts/pycompile.py ..
+error:   File "/usr/lib/python2.7/site-packages/pymodbus/client/asynchronous/asyncio/__init__.py", line 257
+    yield from self._connect()
+             ^
 SyntaxError: invalid syntax
+
+As a workaround, simply drop the unusable files from TARGET_DIR if building
+for python 2.x.
+
+Fixes:
+http://autobuild.buildroot.net/results/cc4/cc48927cbe9ae6c2d8b12d65467ec40df82febf6/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Fix is included in 2.4.4, so not for master
----
- .../0001-Small-Python-2-fix.patch             | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/python-scapy/0001-Small-Python-2-fix.patch
+ package/python-pymodbus/python-pymodbus.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/python-scapy/0001-Small-Python-2-fix.patch b/package/python-scapy/0001-Small-Python-2-fix.patch
-new file mode 100644
-index 0000000000..562838d53b
---- /dev/null
-+++ b/package/python-scapy/0001-Small-Python-2-fix.patch
-@@ -0,0 +1,26 @@
-+From 0c3d5e417bbd923c4729d15572c3d693d58aff81 Mon Sep 17 00:00:00 2001
-+From: Gabriel <gabriel@potter.fr>
-+Date: Wed, 21 Aug 2019 18:18:14 +0800
-+Subject: [PATCH] Small Python 2 fix
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index d96e21a55c..9135a4d0c4 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -11,4 +11,13 @@ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++# only needed/valid for python 3.x
++define PYTHON_PYMODBUS_RM_PY3_FILES
++	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pymodbus/client/asynchronous/asyncio
++endef
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ scapy/tools/generate_ethertypes.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++PYTHON_PYMODBUS_POST_INSTALL_TARGET_HOOKS += PYTHON_PYMODBUS_RM_PY3_FILES
++endif
 +
-+diff --git a/scapy/tools/generate_ethertypes.py b/scapy/tools/generate_ethertypes.py
-+index 5bc5cdf9..47c38c4f 100644
-+--- a/scapy/tools/generate_ethertypes.py
-++++ b/scapy/tools/generate_ethertypes.py
-+@@ -20,7 +20,7 @@ URL = "https://raw.githubusercontent.com/openbsd/src/master/sys/net/ethertypes.h
-+ with urllib.request.urlopen(URL) as stream:
-+     DATA = stream.read()
-+ 
-+-reg = rb".*ETHERTYPE_([^\s]+)\s.0x([0-9A-Fa-f]+).*\/\*(.*)\*\/"
-++reg = br".*ETHERTYPE_([^\s]+)\s.0x([0-9A-Fa-f]+).*\/\*(.*)\*\/"
-+ COMPILED = b"""#
-+ # Ethernet frame types
-+ #       This file describes some of the various Ethernet
-+-- 
-+2.20.1
-+
+ $(eval $(python-package))
 -- 
 2.20.1
