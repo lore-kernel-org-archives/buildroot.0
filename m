@@ -1,86 +1,34 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 12 Oct 2020 00:21:57 +0200
-Subject: [Buildroot] [PATCH] package/htpdate: bump to version 1.2.5
-Message-ID: <20201011222157.795168-1-angelo@amarulasolutions.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 11 Oct 2020 19:57:52 -0300
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump U-Boot version
+In-Reply-To: <87r1q4y77n.fsf@tarshish>
+References: <20201011153251.660778-1-francois.perrad@gadz.org>
+ <CAOMZO5B=88j7qCKzMgWf9PEWqqDKASRw4HVa_QJcGrWh2tswSA@mail.gmail.com>
+ <CAB0FRstpJscCj3vtxasqcnKLHKj9KcOLjpZHPBHLk1POK5=Ftw@mail.gmail.com>
+ <87r1q4y77n.fsf@tarshish>
+Message-ID: <CAOMZO5A6j1-0p-OYDbQgo7g8Rp+cwOXhZmq-_TkgEM_vN=nwEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bump htpdate to version v1.2.5
+Hi Baruch,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- ...-config-to-determine-openssl-LDFLAGS.patch | 36 -------------------
- package/htpdate/htpdate.hash                  |  2 +-
- package/htpdate/htpdate.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
+On Sun, Oct 11, 2020 at 2:59 PM Baruch Siach <baruch@tkos.co.il> wrote:
 
-diff --git a/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch b/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-deleted file mode 100644
-index 2dad41ad37..0000000000
---- a/package/htpdate/0001-Use-pkg-config-to-determine-openssl-LDFLAGS.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 32d6cec3be361c3d2228967d41b868b7b3b910c0 Mon Sep 17 00:00:00 2001
--From: Titouan Christophe <titouan.christophe@railnova.eu>
--Date: Sat, 12 Sep 2020 16:49:57 +0200
--Subject: [PATCH] Use pkg-config to determine openssl LDFLAGS
--
--Depending on its build configuration, openssl might not be compiled with
--dynamic zlib support, and programs that link against openssl need to link
--against zlib as well, as illustrated in this build failure:
--http://autobuild.buildroot.net/results/ae9/ae946ca72238840b3eaa5fe823e8d620618f7462/
--
--Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
--[upstream status: https://github.com/angeloc/htpdate/pull/1]
-----
-- Makefile | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 09eea4a..21668a6 100644
----- a/Makefile
--+++ b/Makefile
--@@ -4,10 +4,11 @@ mandir = ${prefix}/share/man
-- 
-- CC ?= gcc
-- CFLAGS += -Wall -std=c99 -pedantic -O2
--+PKG_CONFIG ?= pkg-config
-- 
-- ifdef ENABLE_HTTPS
-- CFLAGS += -DENABLE_HTTPS
---LDFLAGS += -lssl -lcrypto
--+LDFLAGS += $(shell $(PKG_CONFIG) --libs openssl)
-- endif
-- 
-- INSTALL = install -c
---- 
--2.25.3
--
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-index 282bcbe7ed..b82b2bfa08 100644
---- a/package/htpdate/htpdate.hash
-+++ b/package/htpdate/htpdate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256 08aee5132b0c73ba01485b907d037fd676d0ad89d2736bbf117ec5c5035b513a  htpdate-1.2.4.tar.gz
-+sha256 267003ca4d5d191122bfd8f85a0fd2d0b7d751f7b04f5fde4e8f51e570c98d0b  htpdate-1.2.5.tar.gz
- sha256 b1c8d41afde943cacedab52cbb44ef7ffb7026e738b9c891009e89559fe31c20  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-index ed74830494..7a08738d29 100644
---- a/package/htpdate/htpdate.mk
-+++ b/package/htpdate/htpdate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HTPDATE_VERSION = 1.2.4
-+HTPDATE_VERSION = 1.2.5
- HTPDATE_SITE = $(call github,angeloc,htpdate,v$(HTPDATE_VERSION))
- HTPDATE_LICENSE = GPL-2.0+
- HTPDATE_LICENSE_FILES = LICENSE
--- 
-2.25.1
+> > No. At this time, I cannot build uboot 2020.10
+> > It seems there is a new dependency on host-swig.
+>
+> Try enabling BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
+
+Yes, that should fix the build problem, thanks.
+
+Hi Fran?ois,
+
+Please try Baruch's suggestion and if it works, please upgrade U-Boot
+to 2020.10 instead.
+
+Thanks,
+
+Fabio Estevam
