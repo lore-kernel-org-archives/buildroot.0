@@ -1,34 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 18:11:31 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: add
- c-periphery to my package watch list
-Message-ID: <20201011160109.765738EB9E@busybox.osuosl.org>
+Date: Sun, 11 Oct 2020 18:07:06 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/suricata:
+ security bump to version 4.1.9
+Message-ID: <20201011160109.6803A8EFFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a6a5688ce5c2edea22979c151936241ce06756
+commit: https://git.buildroot.net/buildroot/commit/?id=02bd74eced68f80e491d4cc0c95b5a47bff42208
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+These are the second releases after Suricata joined the Oss-Fuzz
+program, leading to discovery of a number of (potential) security
+issues. We recommend upgrading as soon as possible.
+
+https://suricata-ids.org/2020/10/08/suricata-4-1-9-and-5-0-4-released
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 071a369c3d78b0e552680dbba04ffa0947f4c93e)
+(cherry picked from commit 1bfc53289aabe967f75f92eb1e89f1d59abf5632)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 02cbad1e58..fdea766e09 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2257,6 +2257,7 @@ F:	package/davfs2/
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 05e3593c3b..9e79f3a96c 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  c8a83a05f57cedc0ef81d833ddcfdbbfdcdb6f459a91b1b15dc2d5671f1aecbb  suricata-4.1.8.tar.gz
++sha256  3440cd1065b1b3999dc101a37c49321fab2791b38f16e2f7fe27369dd007eea7  suricata-4.1.9.tar.gz
  
- N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
- F:	package/atftp/
-+F:	package/c-periphery/
- F:	package/miraclecast/
- F:	package/python-pysnmp/
- F:	package/python-pysnmp-mibs/
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 8dd23bf2f5..d6ae48c1f5 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 4.1.8
++SURICATA_VERSION = 4.1.9
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
