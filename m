@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 17:52:21 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/postgresql: add
+Date: Sun, 11 Oct 2020 17:52:46 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/postgresql: add
  configure and includedir-server output to pg_config
-Message-ID: <20201011160109.4BA448EF68@busybox.osuosl.org>
+Message-ID: <20201011160114.3A2E08EF68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7327e65aeaf9861531bf8fbedafac94569ff5b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8d3243493b7c9c6405e39c4d05f66abbf79befc3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
 Some external packages call pg_config to determine the installed
 PostgreSQL server includedir and configure options. Add this output to
