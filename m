@@ -1,73 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 19:08:52 +0200
-Subject: [Buildroot] [git commit] package/lua: bump to version 5.4.1
-Message-ID: <20201011165957.E5FC888734@busybox.osuosl.org>
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Sun, 11 Oct 2020 19:12:59 +0200
+Subject: [Buildroot] [PATCH] package/quazip: bump to 1.1
+Message-ID: <20201011171259.2156928-1-zgyarmati@zgyarmati.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c56b7639953c04765955c785ede706393d1f0845
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Also dropping upstream patch.
+With this release quazip drops the qmake build in favour of cmake.
+It still ships the pkgconfig .pc file, so it's possible to link to
+it by using CMake's find_package() or with pkgconfig.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 ---
- package/lua/5.4.0/lua.hash                                  | 6 ------
- package/lua/{5.4.0 => 5.4.1}/0001-root-path.patch           | 0
- package/lua/{5.4.0 => 5.4.1}/0002-shared-libs-for-lua.patch | 0
- package/lua/{5.4.0 => 5.4.1}/0011-linenoise.patch           | 0
- package/lua/5.4.1/lua.hash                                  | 6 ++++++
- package/lua/lua.mk                                          | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ .../quazip/0001-fix-qztest-build-error.patch  | 36 -------------------
+ package/quazip/quazip.hash                    |  2 +-
+ package/quazip/quazip.mk                      | 19 ++--------
+ 3 files changed, 3 insertions(+), 54 deletions(-)
+ delete mode 100644 package/quazip/0001-fix-qztest-build-error.patch
 
-diff --git a/package/lua/5.4.0/lua.hash b/package/lua/5.4.0/lua.hash
+diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
 deleted file mode 100644
-index ac8639c4ed..0000000000
---- a/package/lua/5.4.0/lua.hash
+index 6bbe820a0d..0000000000
+--- a/package/quazip/0001-fix-qztest-build-error.patch
 +++ /dev/null
-@@ -1,6 +0,0 @@
--# Hashes from: http://www.lua.org/ftp/
--md5  dbf155764e5d433fc55ae80ea7060b60  lua-5.4.0.tar.gz
--sha1  8cdbffa8a214a23d190d7c45f38c19518ae62e89  lua-5.4.0.tar.gz
+@@ -1,36 +0,0 @@
+-From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
+-From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
+-Date: Tue, 9 Jul 2019 16:42:28 -0600
+-Subject: [PATCH] fix qztest build error.
 -
--# Locally computed
--sha256  1a579d0a1b8c5d19acd034c97c03bacc928fc23a0d7fde88488c2d0e3241094a  doc/readme.html
-diff --git a/package/lua/5.4.0/0001-root-path.patch b/package/lua/5.4.1/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.4.0/0001-root-path.patch
-rename to package/lua/5.4.1/0001-root-path.patch
-diff --git a/package/lua/5.4.0/0002-shared-libs-for-lua.patch b/package/lua/5.4.1/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.4.0/0002-shared-libs-for-lua.patch
-rename to package/lua/5.4.1/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.4.0/0011-linenoise.patch b/package/lua/5.4.1/0011-linenoise.patch
-similarity index 100%
-rename from package/lua/5.4.0/0011-linenoise.patch
-rename to package/lua/5.4.1/0011-linenoise.patch
-diff --git a/package/lua/5.4.1/lua.hash b/package/lua/5.4.1/lua.hash
-new file mode 100644
-index 0000000000..82347ef99e
---- /dev/null
-+++ b/package/lua/5.4.1/lua.hash
-@@ -0,0 +1,6 @@
-+# Hashes from: http://www.lua.org/ftp/
-+md5  1d575faef1c907292edd79e7a2784d30  lua-5.4.1.tar.gz
-+sha1  88961e7d4fda58ca2c6163938fd48db8880e803d  lua-5.4.1.tar.gz
-+
-+# Locally computed
-+sha256  c202c5ff3b0c7a0ff2b215fff534c4b4018554843d23ac6eca3d97533b3ad97f  doc/readme.html
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 9ff738656d..287c3b2adc 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
+-If int is bigger than quint16 then you will get the following
+-linker error:
+-
+-.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
+-testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
+-collect2: error: ld returned 1 exit status
+-
+-This error indicates the two parameters of QCOMPARE do not have the same type.
+-
+-This occurs because integral promotions can be applied to fi.versionCreated.
+-
+-[Retrieved from:
+-https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- qztest/testquazip.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
+-index 70a64fc..86f6556 100644
+---- a/qztest/testquazip.cpp
+-+++ b/qztest/testquazip.cpp
+-@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
+-     checkZip.goToFirstFile();
+-     QuaZipFileInfo64 fi;
+-     QVERIFY(checkZip.getCurrentFileInfo(&fi));
+--    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
+-+    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
+- }
+- 
+- void TestQuaZip::setDataDescriptorWritingEnabled()
+diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
+index e0a8206c52..8fab64b453 100644
+--- a/package/quazip/quazip.hash
++++ b/package/quazip/quazip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 4fda4d4248e08015b5090d0369ef9e68bdc4475aa12494f7c0f6d79e43270d14 quazip-0.8.1.tar.gz
++sha256 54edce9c11371762bd4f0003c2937b5d8806a2752dd9c0fd9085e90792612ad0 quazip-1.1.tar.gz
+ sha256 d2a653b46b87963f29a7f1523e7c39bafdbb3592dfa01725e61a523387148e72 COPYING
+diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
+index 53042f6c4c..428084a78e 100644
+--- a/package/quazip/quazip.mk
++++ b/package/quazip/quazip.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
--LUA_VERSION = 5.4.0
-+LUA_VERSION = 5.4.1
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.6
- else
+-QUAZIP_VERSION = 0.8.1
++QUAZIP_VERSION = 1.1
+ QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
+ QUAZIP_INSTALL_STAGING = YES
+ QUAZIP_DEPENDENCIES = \
+@@ -13,20 +13,5 @@ QUAZIP_DEPENDENCIES = \
+ QUAZIP_LICENSE = LGPL-2.1
+ QUAZIP_LICENSE_FILES = COPYING
+ 
+-define QUAZIP_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
+-endef
+ 
+-define QUAZIP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define QUAZIP_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
+-endef
+-
+-define QUAZIP_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
+-- 
+2.28.0
