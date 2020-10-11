@@ -1,75 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 10 Oct 2020 22:59:22 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-socketio:
- drop asgi/asyncio files for python 2.x to fix pycompile issue
-Message-ID: <20201010205005.6AAA488061@busybox.osuosl.org>
+From: Noah Cain <nmcain@gmail.com>
+Date: Sat, 10 Oct 2020 18:10:58 -0700
+Subject: [Buildroot] How to get wireless networking working on PC x86_64 EFI?
+Message-ID: <CAKA8WzJpp2Qi=1PLtuEPrs+nDGLg7aeqCR70_RScqn9ZG+0=ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=160faed799bfd32e9fbdf90b0adda7932ef5fe4b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-socketio has conditional logic to load asgi/asyncio files when running under
-Python 3.x:
-
-if sys.version_info >= (3, 5):  # pragma: no cover
-    from .asyncio_client import AsyncClient
-    from .asyncio_server import AsyncServer
-    from .asyncio_manager import AsyncManager
-    from .asyncio_namespace import AsyncNamespace, AsyncClientNamespace
-    from .asyncio_redis_manager import AsyncRedisManager
-    from .asyncio_aiopika_manager import AsyncAioPikaManager
-    from .asgi import ASGIApp
-else:  # pragma: no cover
-    AsyncClient = None
-    AsyncServer = None
-    AsyncManager = None
-    AsyncNamespace = None
-    AsyncRedisManager = None
-    AsyncAioPikaManager = None
-
-pycompile unfortunately errors out on these files when running under Python
-2.x:
-
-../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/socketio/asyncio_server.py", line 84
-    async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
-            ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable file from TARGET_DIR if building
-for python 2.x.
-
-Fixes:
-http://autobuild.buildroot.net/results/455f3e09a590f7a6724ab8cd1b86bdf2bba8071a/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6beb6dd5c6d6232b2ff6f2ca983c5cb99a4ca9ab)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-socketio/python-socketio.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index ece4f65b78..73dab26f3c 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
-@@ -10,4 +10,14 @@ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
- 
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_SOCKETIO_RM_PY3_FILES
-+	rm -f $(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asgi.py \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/socketio/asyncio_*.py
-+endef
-+
-+PYTHON_SOCKETIO_POST_INSTALL_TARGET_HOOKS += PYTHON_SOCKETIO_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+Hi,
+I am trying to setup networking on the PC x86_64 EFI configuration, but I
+can't seem to get it connecting. Ideally, I want it to connect to the
+network specified in wpa_supplicant (which I have installed), but I feel
+like I am missing drivers. What packages, drivers, and configuration files
+do I need to get wifi working? I am kind of a beginner to this whole
+embedded Linux thing, I have never had to do this by myself but I would
+like to learn.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201010/f5262410/attachment.html>
