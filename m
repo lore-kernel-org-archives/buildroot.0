@@ -1,63 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 17:52:46 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/postgresql: add
- configure and includedir-server output to pg_config
-Message-ID: <20201011160114.3A2E08EF68@busybox.osuosl.org>
+Date: Sun, 11 Oct 2020 18:09:42 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/suricata:
+ security bump to version 4.1.9
+Message-ID: <20201011160114.636558EF68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d3243493b7c9c6405e39c4d05f66abbf79befc3
+commit: https://git.buildroot.net/buildroot/commit/?id=e7432e05795c0a324426c07ec2b5e4473db96b2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-Some external packages call pg_config to determine the installed
-PostgreSQL server includedir and configure options. Add this output to
-Buildroots own pg_config, so these packages correctly compile.
+These are the second releases after Suricata joined the Oss-Fuzz
+program, leading to discovery of a number of (potential) security
+issues. We recommend upgrading as soon as possible.
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+https://suricata-ids.org/2020/10/08/suricata-4-1-9-and-5-0-4-released
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 787ad0b35d0d5d38b5e3da473fb861f903ba65bd)
+(cherry picked from commit 1bfc53289aabe967f75f92eb1e89f1d59abf5632)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/pg_config     | 8 +++++++-
- package/postgresql/postgresql.mk | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
-index 642252f27f..59a9e6cfad 100644
---- a/package/postgresql/pg_config
-+++ b/package/postgresql/pg_config
-@@ -11,12 +11,18 @@ case "$1" in
-   --includedir)
- 	echo "$prefix/include"
- 	;;
-+  --includedir-server)
-+	echo "$prefix/include/postgresql/server"
-+	;;
-   --libdir)
- 	echo "$prefix/lib"
- 	;;
-   --version)
- 	echo "PostgreSQL @POSTGRESQL_VERSION@"
- 	;;
-+  --configure)
-+	echo "@POSTGRESQL_CONF_OPTIONS@"
-+	;;
-   *)
--	echo "Usage: $0 {--includedir|--libdir|--version}"
-+	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
- esac
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 18c7b2ade4..3630b5a385 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -115,6 +115,7 @@ POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
- define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
- 	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
- 		$(STAGING_DIR)/usr/bin/pg_config
-+	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
- 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
- endef
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index 05e3593c3b..9e79f3a96c 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  c8a83a05f57cedc0ef81d833ddcfdbbfdcdb6f459a91b1b15dc2d5671f1aecbb  suricata-4.1.8.tar.gz
++sha256  3440cd1065b1b3999dc101a37c49321fab2791b38f16e2f7fe27369dd007eea7  suricata-4.1.9.tar.gz
  
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 8dd23bf2f5..d6ae48c1f5 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SURICATA_VERSION = 4.1.8
++SURICATA_VERSION = 4.1.9
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
