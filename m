@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 11 Oct 2020 22:56:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: security bump to
- version 4.2.10
-In-Reply-To: <20201011193551.1916306-1-fontaine.fabrice@gmail.com>
-References: <20201011193551.1916306-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201011225648.2e597ee8@windsurf.home>
+Date: Sun, 11 Oct 2020 22:57:02 +0200
+Subject: [Buildroot] [PATCH 1/2] package/zlib-ng: drop unrecognized CC
+ variable
+In-Reply-To: <20201011194357.1923003-1-fontaine.fabrice@gmail.com>
+References: <20201011194357.1923003-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201011225702.0826bdc2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 11 Oct 2020 21:35:51 +0200
+On Sun, 11 Oct 2020 21:43:56 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> SERVER-50463 Make PooledLDAPConnection::refresh take self-ownership
+> Drop unneeded CC variable which is not recognized by cmake:
 > 
-> https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
+> CMake Warning:
+>   Manually-specified variables were not used by the project:
+> 
+>     BUILD_DOC
+>     BUILD_DOCS
+>     BUILD_EXAMPLE
+>     BUILD_EXAMPLES
+>     BUILD_TEST
+>     BUILD_TESTING
+>     BUILD_TESTS
+>     CC
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/mongodb/mongodb.hash | 2 +-
->  package/mongodb/mongodb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/zlib-ng/zlib-ng.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied to master. Thanks!
 
 Thomas
 -- 
