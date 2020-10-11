@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 23:11:22 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] python-scapy: add
+Date: Sun, 11 Oct 2020 23:11:10 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] python-scapy: add
  upstream patch fixing python 2.x compatibility
-Message-ID: <20201011210123.9375A8EB9E@busybox.osuosl.org>
+Message-ID: <20201011210131.3B78B80046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0d8882e5ec3c07dd439d1e14e749fef9924393d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6cfc64df27813bfc8a7ca144720c7d28eb034f07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/829/8293529a72ac4c8e93919b8bc0ea758fbb4bc444/
