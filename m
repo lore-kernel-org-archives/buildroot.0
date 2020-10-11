@@ -1,111 +1,69 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Sun, 11 Oct 2020 19:12:59 +0200
-Subject: [Buildroot] [PATCH] package/quazip: bump to 1.1
-Message-ID: <20201011171259.2156928-1-zgyarmati@zgyarmati.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 Oct 2020 19:13:51 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 8}.x series
+Message-ID: <20201011171351.6351-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also dropping upstream patch.
-With this release quazip drops the qmake build in favour of cmake.
-It still ships the pkgconfig .pc file, so it's possible to link to
-it by using CMake's find_package() or with pkgconfig.
-
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../quazip/0001-fix-qztest-build-error.patch  | 36 -------------------
- package/quazip/quazip.hash                    |  2 +-
- package/quazip/quazip.mk                      | 19 ++--------
- 3 files changed, 3 insertions(+), 54 deletions(-)
- delete mode 100644 package/quazip/0001-fix-qztest-build-error.patch
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/quazip/0001-fix-qztest-build-error.patch b/package/quazip/0001-fix-qztest-build-error.patch
-deleted file mode 100644
-index 6bbe820a0d..0000000000
---- a/package/quazip/0001-fix-qztest-build-error.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From df8a2c4f18293cb2eafcf81e5dc169a06dccf304 Mon Sep 17 00:00:00 2001
--From: tsteven4 <13596209+tsteven4@users.noreply.github.com>
--Date: Tue, 9 Jul 2019 16:42:28 -0600
--Subject: [PATCH] fix qztest build error.
--
--If int is bigger than quint16 then you will get the following
--linker error:
--
--.obj/testquazip.o: In function `TestQuaZip::setOsCode()':
--testquazip.cpp:(.text+0x42bd): undefined reference to `bool QTest::qCompare<int, unsigned short>(int const&, unsigned short const&, char const*, char const*, char const*, int)'
--collect2: error: ld returned 1 exit status
--
--This error indicates the two parameters of QCOMPARE do not have the same type.
--
--This occurs because integral promotions can be applied to fi.versionCreated.
--
--[Retrieved from:
--https://github.com/stachenov/quazip/commit/df8a2c4f18293cb2eafcf81e5dc169a06dccf304]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- qztest/testquazip.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/qztest/testquazip.cpp b/qztest/testquazip.cpp
--index 70a64fc..86f6556 100644
----- a/qztest/testquazip.cpp
--+++ b/qztest/testquazip.cpp
--@@ -233,7 +233,7 @@ void TestQuaZip::setOsCode()
--     checkZip.goToFirstFile();
--     QuaZipFileInfo64 fi;
--     QVERIFY(checkZip.getCurrentFileInfo(&fi));
---    QCOMPARE(fi.versionCreated >> 8, static_cast<quint16>(osCode));
--+    QCOMPARE(static_cast<uint>(fi.versionCreated) >> 8, osCode);
-- }
-- 
-- void TestQuaZip::setDataDescriptorWritingEnabled()
-diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-index e0a8206c52..8fab64b453 100644
---- a/package/quazip/quazip.hash
-+++ b/package/quazip/quazip.hash
-@@ -1,3 +1,3 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index 5bd3cdb59b..309abb9fc6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index b1bd51e668..ccb8d7fa4c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
+-sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
++sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
++sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
+ sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
+ sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
+-sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
++sha256  f2f709ef086a4d8cb3c15a857daa44dfecf1b88d7d7c53c980fb180f6dccbace  linux-4.19.150.tar.xz
  # Locally computed
--sha256 4fda4d4248e08015b5090d0369ef9e68bdc4475aa12494f7c0f6d79e43270d14 quazip-0.8.1.tar.gz
-+sha256 54edce9c11371762bd4f0003c2937b5d8806a2752dd9c0fd9085e90792612ad0 quazip-1.1.tar.gz
- sha256 d2a653b46b87963f29a7f1523e7c39bafdbb3592dfa01725e61a523387148e72 COPYING
-diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-index 53042f6c4c..428084a78e 100644
---- a/package/quazip/quazip.mk
-+++ b/package/quazip/quazip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QUAZIP_VERSION = 0.8.1
-+QUAZIP_VERSION = 1.1
- QUAZIP_SITE = $(call github,stachenov,quazip,v$(QUAZIP_VERSION))
- QUAZIP_INSTALL_STAGING = YES
- QUAZIP_DEPENDENCIES = \
-@@ -13,20 +13,5 @@ QUAZIP_DEPENDENCIES = \
- QUAZIP_LICENSE = LGPL-2.1
- QUAZIP_LICENSE_FILES = COPYING
- 
--define QUAZIP_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE) PREFIX=/usr)
--endef
- 
--define QUAZIP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define QUAZIP_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
--endef
--
--define QUAZIP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
--endef
--
--$(eval $(generic-package))
-+$(eval $(cmake-package))
+ sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
+ sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1fe7d05da0..dacd3f86ea 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -341,9 +341,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
++	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
++	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.28.0
+2.20.1
