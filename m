@@ -1,45 +1,48 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 11 Oct 2020 23:34:39 +0200
-Subject: [Buildroot] [PATCH] package/grep: bbump to version 3.5
-Message-ID: <20201011213439.696819-1-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 11 Oct 2020 22:31:20 +0200
+Subject: [Buildroot] [git commit] package/mongodb: security bump to version
+ 4.2.10
+Message-ID: <20201011215040.371CF8AC05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps grep to version 3.5
+commit: https://git.buildroot.net/buildroot/commit/?id=a836c09a8faba46bde6b91179c809c31335e9611
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+SERVER-50463 Make PooledLDAPConnection::refresh take self-ownership
+
+https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/grep/grep.hash | 4 ++--
- package/grep/grep.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 47bf550a20..fae3b73e80 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature
--# http://ftp.gnu.org/gnu/grep/grep-3.4.tar.xz.sig
-+# http://ftp.gnu.org/gnu/grep/grep-3.5.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  58e6751c41a7c25bfc6e9363a41786cff3ba5709cf11d5ad903cf7cce31cc3fb  grep-3.4.tar.xz
-+sha256  b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a  grep-3.5.tar.xz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index ef1bbb4487..bdc22fa46c 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index efbdf33e79..ab13d77651 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
++sha256  f44a846514f8db8be2a662210ad7fefc059d8e17ab2c59aceeae8b0b173d8286  mongodb-src-r4.2.10.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index d4af320105..6a1caf4fcb 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GREP_VERSION = 3.4
-+GREP_VERSION = 3.5
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPL-3.0+
--- 
-2.25.1
+-MONGODB_VERSION = 4.2.9
++MONGODB_VERSION = 4.2.10
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+ 
