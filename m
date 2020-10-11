@@ -1,48 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 19:05:40 +0200
-Subject: [Buildroot] Issue Building gdbserver in Buildroot 2019.02.7
-In-Reply-To: <DM6PR12MB41534F87E9A4D9CCED3057B1AA080@DM6PR12MB4153.namprd12.prod.outlook.com>
- (Sam Tennent's message of "Fri, 9 Oct 2020 15:58:19 +0000")
-References: <DM6PR12MB41534F87E9A4D9CCED3057B1AA080@DM6PR12MB4153.namprd12.prod.outlook.com>
-Message-ID: <87v9fgvgkb.fsf@dell.be.48ers.dk>
+Date: Sun, 11 Oct 2020 19:07:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: security bump to version
+ 2.16
+In-Reply-To: <20201009161036.1043301-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 9 Oct 2020 18:10:36 +0200")
+References: <20201009161036.1043301-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1q4vgh6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sam" == Sam Tennent <Sam.Tennent@synopsys.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Hi Folks,
- > I'm seeing an issue when trying to build gdbserver for our ARMv8 based Virtual Prototype.
+ > Fix a memory leak in GCM where if passed an unsuitable block cipher (eg
+ > not 128 bit) it would throw an exception and leak the cipher object.
 
- > I can do this successfully for an older revision of Buildroot (
- > 2018.02.1) but for 2019.02.7 I can't get it to build.
+ > https://github.com/randombit/botan/blob/2.16.0/news.rst
 
-2019.02.x is EOL, could you give 2020.02.6, 2020.08 or current master a
-try?
+I wonder in what use case this would be a security issue, E.G. where the
+cipher would be provided by an untrusted user?
 
-A quick test on current master works here (external toolchain for
-speed):
-
-cat defconfig
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_GDB=y
-
-ls -lah target/usr/bin/gdbserver
--rwxr-xr-x 1 peko peko 507K Oct 11 19:04 target/usr/bin/gdbserver
-
- > I realize that these builds a quite different since they are before
- > and after gdbserver switched from a C app to C++ but I think I have
- > taken this into account in my defconfig.
-
- > Here's my defconfig
-
- > BR2_aarch64=y
- > BR2_GLOBAL_PATCH_DIR="$(TOPDIR)/../input/patches/"
-
-Are you patching anything in the toolchain?
+Oh well, committed - Thanks.
 
 -- 
 Bye, Peter Korsgaard
