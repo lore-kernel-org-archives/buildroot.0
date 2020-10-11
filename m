@@ -1,69 +1,158 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 19:13:51 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 8}.x series
-Message-ID: <20201011171351.6351-1-peter@korsgaard.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 11 Oct 2020 19:34:20 +0200
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump U-Boot version
+In-Reply-To: <CAOMZO5B=88j7qCKzMgWf9PEWqqDKASRw4HVa_QJcGrWh2tswSA@mail.gmail.com>
+References: <20201011153251.660778-1-francois.perrad@gadz.org>
+ <CAOMZO5B=88j7qCKzMgWf9PEWqqDKASRw4HVa_QJcGrWh2tswSA@mail.gmail.com>
+Message-ID: <CAB0FRstpJscCj3vtxasqcnKLHKj9KcOLjpZHPBHLk1POK5=Ftw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Le dim. 11 oct. 2020 ? 17:58, Fabio Estevam <festevam@gmail.com> a ?crit :
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5bd3cdb59b..309abb9fc6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b1bd51e668..ccb8d7fa4c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
--sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
-+sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
-+sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
- sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
- sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
--sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
-+sha256  f2f709ef086a4d8cb3c15a857daa44dfecf1b88d7d7c53c980fb180f6dccbace  linux-4.19.150.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1fe7d05da0..dacd3f86ea 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -341,9 +341,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
-+	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.20.1
+> Hi Francois,
+>
+> On Sun, Oct 11, 2020 at 12:33 PM Francois Perrad <fperrad@gmail.com>
+> wrote:
+> >
+> > since 2020.04 version, the enumeration of MMC has changed,
+> > so the boot script must be updated
+> >
+> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> Thanks for the fix!
+>
+> > ---
+> >  board/solidrun/mx6cubox/boot.scr.txt | 6 +++---
+> >  configs/mx6cubox_defconfig           | 2 +-
+> >  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/board/solidrun/mx6cubox/boot.scr.txt
+> b/board/solidrun/mx6cubox/boot.scr.txt
+> > index 7a8aa4bd5..e4cf81478 100644
+> > --- a/board/solidrun/mx6cubox/boot.scr.txt
+> > +++ b/board/solidrun/mx6cubox/boot.scr.txt
+> > @@ -1,7 +1,7 @@
+> > -setenv finduuid "part uuid mmc 0:1 uuid"
+> > +setenv finduuid "part uuid mmc 1:1 uuid"
+> >  run finduuid
+> >  run findfdt
+> >  setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait
+> rootfstype=ext4"
+> > -load mmc 0:1 ${fdt_addr} boot/${fdtfile}
+> > -load mmc 0:1 ${loadaddr} boot/zImage
+> > +load mmc 1:1 ${fdt_addr} boot/${fdtfile}
+> > +load mmc 1:1 ${loadaddr} boot/zImage
+> >  bootz ${loadaddr} - ${fdt_addr}
+> > diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+> > index dc26758ef..2d711dc56 100644
+> > --- a/configs/mx6cubox_defconfig
+> > +++ b/configs/mx6cubox_defconfig
+> > @@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+> >  BR2_TARGET_UBOOT=y
+> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
+> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>
+> I suppose 2020.10 also works, right?
+>
+>
+No. At this time, I cannot build uboot 2020.10
+It seems there is a new dependency on host-swig.
+
+>>> uboot 2020.10 Configuring
+>>> uboot 2020.10 Building
+PATH="/home/dev/checkout/BR/build/cubox/host/bin:/home/dev/checkout/BR/build/cubox/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+AR="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ar"
+AS="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-as"
+LD="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ld"
+NM="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-nm"
+CC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gcc"
+GCC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gcc"
+CPP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-cpp"
+CXX="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-g++"
+FC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gfortran"
+F77="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gfortran"
+RANLIB="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ranlib"
+READELF="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-readelf"
+STRIP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-strip"
+OBJCOPY="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-objcopy"
+OBJDUMP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-objdump"
+AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
+CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
+CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld"
+CPPFLAGS_FOR_BUILD="-I/home/dev/checkout/BR/build/cubox/host/include"
+CFLAGS_FOR_BUILD="-O2 -I/home/dev/checkout/BR/build/cubox/host/include"
+CXXFLAGS_FOR_BUILD="-O2 -I/home/dev/checkout/BR/build/cubox/host/include"
+LDFLAGS_FOR_BUILD="-L/home/dev/checkout/BR/build/cubox/host/lib
+-Wl,-rpath,/home/dev/checkout/BR/build/cubox/host/lib" FCFLAGS_FOR_BUILD=""
+DEFAULT_ASSEMBLER="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-as"
+DEFAULT_LINKER="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ld"
+CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ -Os  " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os "
+PKG_CONFIG="/home/dev/checkout/BR/build/cubox/host/bin/pkg-config"
+STAGING_DIR="/home/dev/checkout/BR/build/cubox/host/arm-buildroot-linux-gnueabihf/sysroot"
+INTLTOOL_PERL=/usr/bin/perl /usr/bin/make -j5 -C
+/home/dev/checkout/BR/build/cubox/build/uboot-2020.10
+CROSS_COMPILE="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-"
+ARCH=arm HOSTCC="/usr/bin/gcc -O2 -isystem
+/home/dev/checkout/BR/build/cubox/host/include"
+HOSTLDFLAGS="-L/home/dev/checkout/BR/build/cubox/host/lib
+-Wl,-rpath,/home/dev/checkout/BR/build/cubox/host/lib"  all u-boot.img
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/zconf.tab.o
+  HOSTLD  scripts/kconfig/conf
+scripts/kconfig/conf  --syncconfig Kconfig
+  UPD     include/config.h
+  CFG     u-boot.cfg
+  GEN     include/autoconf.mk.dep
+  CFG     spl/u-boot.cfg
+  GEN     spl/include/autoconf.mk
+  GEN     include/autoconf.mk
+  UPD     include/generated/dt.h
+  UPD     include/generated/timestamp_autogenerated.h
+  HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/dtc/flattree.o
+  HOSTCC  scripts/dtc/fstree.o
+  SHIPPED scripts/dtc/pylibfdt/libfdt.i
+rm -f scripts/dtc/pylibfdt/_libfdt*.so
+  PYMOD   scripts/dtc/pylibfdt/_libfdt.so
+  HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/dtc/livetree.o
+unable to execute 'swig': No such file or directory
+error: command 'swig' failed with exit status 1
+make[5]: *** [scripts/dtc/pylibfdt/Makefile:30:
+scripts/dtc/pylibfdt/_libfdt.so] Error 1
+make[4]: *** [scripts/Makefile.build:419: scripts/dtc/pylibfdt] Error 2
+make[4]: *** Waiting for unfinished jobs....
+  CFGCHK  u-boot.cfg
+make[3]: *** [scripts/Makefile.build:419: scripts/dtc] Error 2
+  UPD     include/config/uboot.release
+make[2]: *** [Makefile:577: scripts] Error 2
+make[1]: *** [package/pkg-generic.mk:250:
+/home/dev/checkout/BR/build/cubox/build/uboot-2020.10/.stamp_built] Error 2
+make: *** [Makefile:84: _all] Error 2
+
+Fran?ois
+
+
+> Thanks,
+>
+> Fabio Estevam
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201011/82ab020d/attachment.html>
