@@ -1,156 +1,46 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 11 Oct 2020 20:59:24 +0300
-Subject: [Buildroot] [PATCH] configs/mx6cubox: bump U-Boot version
-In-Reply-To: <CAB0FRstpJscCj3vtxasqcnKLHKj9KcOLjpZHPBHLk1POK5=Ftw@mail.gmail.com>
-References: <20201011153251.660778-1-francois.perrad@gadz.org>
- <CAOMZO5B=88j7qCKzMgWf9PEWqqDKASRw4HVa_QJcGrWh2tswSA@mail.gmail.com>
- <CAB0FRstpJscCj3vtxasqcnKLHKj9KcOLjpZHPBHLk1POK5=Ftw@mail.gmail.com>
-Message-ID: <87r1q4y77n.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 11 Oct 2020 21:35:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mongodb: security bump to version
+ 4.2.10
+Message-ID: <20201011193551.1916306-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fran?ois
+SERVER-50463 Make PooledLDAPConnection::refresh take self-ownership
 
-On Sun, Oct 11 2020, Fran?ois Perrad wrote:
-> Le dim. 11 oct. 2020 ? 17:58, Fabio Estevam <festevam@gmail.com> a ?crit :
->
->> Hi Francois,
->>
->> On Sun, Oct 11, 2020 at 12:33 PM Francois Perrad <fperrad@gmail.com>
->> wrote:
->> >
->> > since 2020.04 version, the enumeration of MMC has changed,
->> > so the boot script must be updated
->> >
->> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->>
->> Thanks for the fix!
->>
->> > ---
->> >  board/solidrun/mx6cubox/boot.scr.txt | 6 +++---
->> >  configs/mx6cubox_defconfig           | 2 +-
->> >  2 files changed, 4 insertions(+), 4 deletions(-)
->> >
->> > diff --git a/board/solidrun/mx6cubox/boot.scr.txt
->> b/board/solidrun/mx6cubox/boot.scr.txt
->> > index 7a8aa4bd5..e4cf81478 100644
->> > --- a/board/solidrun/mx6cubox/boot.scr.txt
->> > +++ b/board/solidrun/mx6cubox/boot.scr.txt
->> > @@ -1,7 +1,7 @@
->> > -setenv finduuid "part uuid mmc 0:1 uuid"
->> > +setenv finduuid "part uuid mmc 1:1 uuid"
->> >  run finduuid
->> >  run findfdt
->> >  setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait
->> rootfstype=ext4"
->> > -load mmc 0:1 ${fdt_addr} boot/${fdtfile}
->> > -load mmc 0:1 ${loadaddr} boot/zImage
->> > +load mmc 1:1 ${fdt_addr} boot/${fdtfile}
->> > +load mmc 1:1 ${loadaddr} boot/zImage
->> >  bootz ${loadaddr} - ${fdt_addr}
->> > diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
->> > index dc26758ef..2d711dc56 100644
->> > --- a/configs/mx6cubox_defconfig
->> > +++ b/configs/mx6cubox_defconfig
->> > @@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->> >  BR2_TARGET_UBOOT=y
->> >  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->> >  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->> > -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
->> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
->>
->> Reviewed-by: Fabio Estevam <festevam@gmail.com>
->>
->> I suppose 2020.10 also works, right?
->>
->>
-> No. At this time, I cannot build uboot 2020.10
-> It seems there is a new dependency on host-swig.
+https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
 
-Try enabling BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-baruch
-
->>>> uboot 2020.10 Configuring
->>>> uboot 2020.10 Building
-> PATH="/home/dev/checkout/BR/build/cubox/host/bin:/home/dev/checkout/BR/build/cubox/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-> AR="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ar"
-> AS="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-as"
-> LD="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ld"
-> NM="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-nm"
-> CC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gcc"
-> GCC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gcc"
-> CPP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-cpp"
-> CXX="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-g++"
-> FC="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gfortran"
-> F77="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-gfortran"
-> RANLIB="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ranlib"
-> READELF="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-readelf"
-> STRIP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-strip"
-> OBJCOPY="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-objcopy"
-> OBJDUMP="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-objdump"
-> AR_FOR_BUILD="/usr/bin/ar" AS_FOR_BUILD="/usr/bin/as"
-> CC_FOR_BUILD="/usr/bin/gcc" GCC_FOR_BUILD="/usr/bin/gcc"
-> CXX_FOR_BUILD="/usr/bin/g++" LD_FOR_BUILD="/usr/bin/ld"
-> CPPFLAGS_FOR_BUILD="-I/home/dev/checkout/BR/build/cubox/host/include"
-> CFLAGS_FOR_BUILD="-O2 -I/home/dev/checkout/BR/build/cubox/host/include"
-> CXXFLAGS_FOR_BUILD="-O2 -I/home/dev/checkout/BR/build/cubox/host/include"
-> LDFLAGS_FOR_BUILD="-L/home/dev/checkout/BR/build/cubox/host/lib
-> -Wl,-rpath,/home/dev/checkout/BR/build/cubox/host/lib" FCFLAGS_FOR_BUILD=""
-> DEFAULT_ASSEMBLER="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-as"
-> DEFAULT_LINKER="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-ld"
-> CPPFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-> CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->  -Os  " CXXFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -Os  " LDFLAGS="" FCFLAGS=" -Os " FFLAGS=" -Os "
-> PKG_CONFIG="/home/dev/checkout/BR/build/cubox/host/bin/pkg-config"
-> STAGING_DIR="/home/dev/checkout/BR/build/cubox/host/arm-buildroot-linux-gnueabihf/sysroot"
-> INTLTOOL_PERL=/usr/bin/perl /usr/bin/make -j5 -C
-> /home/dev/checkout/BR/build/cubox/build/uboot-2020.10
-> CROSS_COMPILE="/home/dev/checkout/BR/build/cubox/host/bin/arm-none-linux-gnueabihf-"
-> ARCH=arm HOSTCC="/usr/bin/gcc -O2 -isystem
-> /home/dev/checkout/BR/build/cubox/host/include"
-> HOSTLDFLAGS="-L/home/dev/checkout/BR/build/cubox/host/lib
-> -Wl,-rpath,/home/dev/checkout/BR/build/cubox/host/lib"  all u-boot.img
->   HOSTCC  scripts/basic/fixdep
->   HOSTCC  scripts/kconfig/conf.o
->   HOSTCC  scripts/kconfig/zconf.tab.o
->   HOSTLD  scripts/kconfig/conf
-> scripts/kconfig/conf  --syncconfig Kconfig
->   UPD     include/config.h
->   CFG     u-boot.cfg
->   GEN     include/autoconf.mk.dep
->   CFG     spl/u-boot.cfg
->   GEN     spl/include/autoconf.mk
->   GEN     include/autoconf.mk
->   UPD     include/generated/dt.h
->   UPD     include/generated/timestamp_autogenerated.h
->   HOSTCC  scripts/dtc/dtc.o
->   HOSTCC  scripts/dtc/flattree.o
->   HOSTCC  scripts/dtc/fstree.o
->   SHIPPED scripts/dtc/pylibfdt/libfdt.i
-> rm -f scripts/dtc/pylibfdt/_libfdt*.so
->   PYMOD   scripts/dtc/pylibfdt/_libfdt.so
->   HOSTCC  scripts/dtc/data.o
->   HOSTCC  scripts/dtc/livetree.o
-> unable to execute 'swig': No such file or directory
-> error: command 'swig' failed with exit status 1
-> make[5]: *** [scripts/dtc/pylibfdt/Makefile:30:
-> scripts/dtc/pylibfdt/_libfdt.so] Error 1
-> make[4]: *** [scripts/Makefile.build:419: scripts/dtc/pylibfdt] Error 2
-> make[4]: *** Waiting for unfinished jobs....
->   CFGCHK  u-boot.cfg
-> make[3]: *** [scripts/Makefile.build:419: scripts/dtc] Error 2
->   UPD     include/config/uboot.release
-> make[2]: *** [Makefile:577: scripts] Error 2
-> make[1]: *** [package/pkg-generic.mk:250:
-> /home/dev/checkout/BR/build/cubox/build/uboot-2020.10/.stamp_built] Error 2
-> make: *** [Makefile:84: _all] Error 2
-
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index efbdf33e79..ab13d77651 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  4a8633ec92383864bb4b791f9776ef6f4652bf36b2c5a73557d1217ba85bca2b  mongodb-src-r4.2.9.tar.gz
++sha256  f44a846514f8db8be2a662210ad7fefc059d8e17ab2c59aceeae8b0b173d8286  mongodb-src-r4.2.10.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index d4af320105..6a1caf4fcb 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION = 4.2.9
++MONGODB_VERSION = 4.2.10
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+ 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.28.0
