@@ -1,54 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 23:10:56 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-autobahn:
- drop asyncio files for python 2.x to fix pycompile issu
-Message-ID: <20201011210131.2F0B98EB9E@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 11 Oct 2020 23:28:44 +0200
+Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.4
+Message-ID: <20201011212844.666330-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74aed8308047b1048e5725c4de5857f566c0cb8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+This patch bumps cups to evrsion 1.28.4
 
-Fixes:
-http://autobuild.buildroot.net/results/234/234913f86da45df0708bbe3bf7361169e2398c9f
-
-Autobahn contains optional logic using asyncio, which causes pycompile
-issues when running in python 2.x:
-
-pycompile.py --strip-root /srv/storage/autobuild/run/instance-1/output-1/target /srv/storage/autobuild/run/instance-1/output-1/target/usr/lib/python2.7
-error:   File "/usr/lib/python2.7/site-packages/autobahn/xbr/_blockchain.py", line 97
-    async def get_market_status(self, market_id):
-            ^
-SyntaxError: invalid syntax
-
-As a workaround, simply drop the unusable files from TARGET_DIR if building
-for python 2.x.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-autobahn/python-autobahn.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ ...fix-cross-compilation-without-dejavu.patch | 41 -------------------
+ package/cups-filters/S82cups-browsed          |  2 +-
+ package/cups-filters/cups-filters.hash        |  2 +-
+ package/cups-filters/cups-filters.mk          |  2 +-
+ 4 files changed, 3 insertions(+), 44 deletions(-)
+ delete mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
 
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 6c5c608b9a..4b367177a6 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -11,4 +11,15 @@ PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+deleted file mode 100644
+index 650b90a89b..0000000000
+--- a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Jul 2020 23:02:50 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
+-
+-Cross-compilation is broken since commit 1d66106. Indeed, when
+-cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
+-path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
+-provided through --with-test-font-path which will fix the build failure
+-but will result in broken test programs.
+-
+-So when cross-compiling don't try to check if the test-font-path is
+-valid or not and just use the one provided by the user or the default
+-one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
+-
+-Fix #262
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index aa905cf5d..4cc4fd6e5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
+- 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
+- )
+- 
+--AS_IF([test -f "$with_test_font_path"],
+--	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+-+AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
+- 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
+- )
+-+AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
+- 
+- # ================
+- # Check for cflags
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+index 08909c7f98..f17bbe7465 100644
+--- a/package/cups-filters/S82cups-browsed
++++ b/package/cups-filters/S82cups-browsed
+@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- -c /etc/cups/cups-browsed.conf
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 61cb42a438..e36a00ab46 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
++sha256 cf90b96b5c7a906a05070e757ee5566d9680db98a279e60567ea5421c38f11de  cups-filters-1.28.4.tar.gz
+ sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 237d8afe62..cf5eefa67f 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_AUTOBAHN_RM_PY3_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/autobahn/asyncio \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/autobahn/xbr \
-+		$(TARGET_DIR)/usr/lib/python*/site-packages/autobahn/twisted/xbr.py
-+endef
-+
-+PYTHON_AUTOBAHN_POST_INSTALL_TARGET_HOOKS += PYTHON_AUTOBAHN_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+-CUPS_FILTERS_VERSION = 1.27.5
++CUPS_FILTERS_VERSION = 1.28.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+-- 
+2.25.1
