@@ -1,83 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 Oct 2020 18:07:03 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libhtp: bump to
- version 0.5.35
-Message-ID: <20201011160109.55AB38E3AE@busybox.osuosl.org>
+Date: Sun, 11 Oct 2020 18:11:31 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: add
+ c-periphery to my package watch list
+Message-ID: <20201011160109.765738EB9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b1cce704fa38bbc57aaac000fff375a7269ca60
+commit: https://git.buildroot.net/buildroot/commit/?id=a0a6a5688ce5c2edea22979c151936241ce06756
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Drop patch (already in version)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5f5fe7de52d47c9f6940c7b6856d1d8e4765be58)
+(cherry picked from commit 071a369c3d78b0e552680dbba04ffa0947f4c93e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-htp.pc.in-add-lz-to-Libs.private.patch    | 29 ----------------------
- package/libhtp/libhtp.hash                         |  2 +-
- package/libhtp/libhtp.mk                           |  2 +-
- 3 files changed, 2 insertions(+), 31 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-deleted file mode 100644
-index b21ea6053a..0000000000
---- a/package/libhtp/0001-htp.pc.in-add-lz-to-Libs.private.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 39e534ab696157b244ec226d649c789dcf423e42 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 24 Apr 2019 20:48:57 +0200
--Subject: [PATCH] htp.pc.in: add -lz to Libs.private
--
--zlib is a mandatory dependency so add it to Libs.private otherwise
--static linking of packages linking with htp (e.g. suricata) will fail.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OISF/libhtp/pull/294]
-----
-- htp.pc.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/htp.pc.in b/htp.pc.in
--index 2fec995..9b1a6cc 100644
----- a/htp.pc.in
--+++ b/htp.pc.in
--@@ -7,6 +7,6 @@ Name: @PACKAGE_NAME@
-- Description: A security-aware HTTP parser, designed for use in IDS/IPS and WAF products.
-- Version: @PACKAGE_VERSION@
-- Libs: -L${libdir} -lhtp
---Libs.private: @LIBICONV@
--+Libs.private: -lz @LIBICONV@
-- Cflags: -I${includedir} -I${libdir}/htp/include
-- 
---- 
--2.20.1
--
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index 765acd5bf9..df75336df6 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  953651fdfe828805bb82dc1aa8b56187b0e2f80781727343e68ccf8afd6a9122  libhtp-0.5.33.tar.gz
-+sha256  4c3ac4c6027710455ffe725f24ac6a83b2c13fe0afc83b74df2cca78ba46976a  libhtp-0.5.35.tar.gz
- sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index b77d8715f9..c402cf750e 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 02cbad1e58..fdea766e09 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2257,6 +2257,7 @@ F:	package/davfs2/
  
--LIBHTP_VERSION = 0.5.33
-+LIBHTP_VERSION = 0.5.35
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+ N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
+ F:	package/atftp/
++F:	package/c-periphery/
+ F:	package/miraclecast/
+ F:	package/python-pysnmp/
+ F:	package/python-pysnmp-mibs/
