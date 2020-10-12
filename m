@@ -1,66 +1,141 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 09:19:13 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark:
- security bump to version 3.2.7
-Message-ID: <20201012071817.54F4B8F368@busybox.osuosl.org>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Mon, 12 Oct 2020 15:44:26 +0800
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: add version 5.9
+Message-ID: <1602488666.22960.2.camel@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bd0f60d7ebc52fe2fab791a9cd803f2465895ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-- Fix CVE-2020-25862: In Wireshark 3.2.0 to 3.2.6, 3.0.0 to 3.0.13, and
-  2.6.0 to 2.6.20, the TCP dissector could crash. This was addressed in
-  epan/dissectors/packet-tcp.c by changing the handling of the invalid
-  0xFFFF checksum.
-- Fix CVE-2020-25863: In Wireshark 3.2.0 to 3.2.6, 3.0.0 to 3.0.13, and
-  2.6.0 to 2.6.20, the MIME Multipart dissector could crash. This was
-  addressed in epan/dissectors/packet-multipart.c by correcting the
-  deallocation of invalid MIME parts.
-- Fix CVE-2020-25866: In Wireshark 3.2.0 to 3.2.6 and 3.0.0 to 3.0.13,
-  the BLIP protocol dissector has a NULL pointer dereference because a
-  buffer was sized for compressed (not uncompressed) messages. This was
-  addressed in epan/dissectors/packet-blip.c by allowing reasonable
-  compression ratios and rejecting ZIP bombs.
-
-https://www.wireshark.org/docs/relnotes/wireshark-3.2.7.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d9521e04471fd3420b1b9fcb265425c3a49c574f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+?linux/Config.in?????????????????????????????????????????????|??4 ++--
+?linux/linux.hash????????????????????????????????????????????|??1 +
+?package/linux-headers/Config.in.host????????????????????????| 13 +++++++++++--
+?toolchain/Config.in?????????????????????????????????????????|??5 +++++
+?.../toolchain-external-custom/Config.in.options?????????????|??6 +++++-
+?5 files changed, 24 insertions(+), 5 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index c9f62ad1a8..16866d96b4 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.6.txt
--sha1  e8f3e6cb9072670c8bdbbff7e5fe3ccd5203d35e  wireshark-3.2.6.tar.xz
--sha256  ebb1eebe39bcecee02195dc328dd25f6862fc9e9dea4c2e29eae50537d5eb4f2  wireshark-3.2.6.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.7.txt
-+sha1  b564c2e729066cb7c952463fef6163e23a5fea1e  wireshark-3.2.7.tar.xz
-+sha256  be832fb86d9c455c5be8b225a755cdc77cb0e92356bdfc1fe4b000d93f7d70da  wireshark-3.2.7.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 04e3e13ff1..354f008250 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.2.6
-+WIRESHARK_VERSION = 3.2.7
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/linux/Config.in b/linux/Config.in
+index 309abb9..6d9d0af 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,7 +28,7 @@ choice
+?	prompt "Kernel version"
+?
+?config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (5.8)"
++	bool "Latest version (5.9)"
+?
+?config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+?	bool "Latest CIP SLTS version (4.19.132-cip30)"
+@@ -125,7 +125,7 @@ endif
+?
+?config BR2_LINUX_KERNEL_VERSION
+?	string
+-	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+?	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+?	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+?	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index ccb8d7f..4b76398 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+?# From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
++sha256??3239a4ee1250bf2048be988cc8cb46c487b2c8a0de5b1b032d38394d5c6b1a06??linux-5.9.tar.xz
+?sha256??ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af??linux-5.8.14.tar.xz
+?sha256??c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007??linux-5.4.70.tar.xz
+?# From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index dacd3f8..16af044 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+?choice
+?	prompt "Kernel Headers"
+?	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_5_8
++	default BR2_KERNEL_HEADERS_5_9
+?	help
+?	??Select the kernel version to get headers from.
+?
+@@ -57,6 +57,10 @@ config BR2_KERNEL_HEADERS_5_4
+?config BR2_KERNEL_HEADERS_5_8
+?	bool "Linux 5.8.x kernel headers"
+?	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
++
++config BR2_KERNEL_HEADERS_5_9
++	bool "Linux 5.9.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+?	select BR2_KERNEL_HEADERS_LATEST
+?
+?config BR2_KERNEL_HEADERS_VERSION
+@@ -131,8 +135,12 @@ choice
+?	??If your kernel headers are more recent than the latest version
+?	??in the choice, then select the latest version.
+?
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
++	bool "5.9.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++
+?config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
+-	bool "5.8.x or later"
++	bool "5.8.x"
+?	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+?
+?config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7
+@@ -344,6 +352,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+?	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
+?	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
+?	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
++	default "5.9"		if BR2_KERNEL_HEADERS_5_9
+?	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+?	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+?	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 6e2befe..db2ab0f 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -484,6 +484,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+?config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+?	bool
+?	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+?	select BR2_TOOLCHAIN_HEADERS_LATEST
+?
+?# This should be selected by the latest version, above, to indicate that
+@@ -497,6 +501,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+?# stops affecting a value on the first matching default.
+?config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+?	string
++	default "5.9"??if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+?	default "5.8"??if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+?	default "5.7"??if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
+?	default "5.6"??if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index d69db68..f7aa545 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -119,8 +119,12 @@ choice
+?	??If your toolchain uses headers newer than the latest version
+?	??in the choice, then select the latest version.
+?
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
++	bool "5.9.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++
+?config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_8
+-	bool "5.8.x or later"
++	bool "5.8.x"
+?	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+?
+?config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_7
+--?
+2.7.4
