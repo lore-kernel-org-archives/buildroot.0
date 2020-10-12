@@ -1,83 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 23:05:39 +0200
-Subject: [Buildroot] [git commit] Update for 2020.05.3
-Message-ID: <20201012205853.A4DF18AC05@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 23:09:40 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.05.3
+Message-ID: <20201012205853.B0DAC82794@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41e799c45d3c7101e714ebfb111b98d4e7dbf60
+commit: https://git.buildroot.net/buildroot/commit/?id=6e40f0000ff10c7b93afdf10d0d3a47bcaf315aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0269b2e6e224bd0ca04e4f25ccef86809108df0c)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 31a9d1aede..8e81edbb69 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -188,6 +188,57 @@
- 	#13081: host-e2fsprogs attempts to create udev  rules.d on build host if not exists
- 	#13101: BR audit2allow support
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 4dbb78458e..838d904b7c 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
-+2020.05.3, released October 12th, 2020
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.05.3 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 October 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.05.3 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.05.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.3">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-October/294446.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.05.3.tar.bz2">2020.05.3 release</a>.</p>
 +
-+	Important / security related fixes.
++	  <p>Notice that the 2020.05.x series is now end of life. Please migrate to
++	  the 2020.08 series instead which will be supported until December 2020.</p>
++      </div>
++    </div>
++  </li>
 +
-+	meson: Correct SDK cross-compilation.conf file when
-+	per-package builds were used to build SDK.
-+
-+	systemd: Use /run rather than /var/run for PID files in units.
-+
-+	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
-+
-+	Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
-+	after all finalization hooks (including pre-rootfs) to ensure
-+	they can override any late configuration done by packages.
-+
-+	support/script/pycompile: Rework logic to ensure .pyc files
-+	contain absolute target paths, fixing code inspection at
-+	runtime when executed with cwd != '/'.
-+
-+	support/scripts/setlocalversion: Correct Mercurial output to
-+	match behaviour with Git.
-+
-+	support/scripts/apply-patches.sh: Use patch
-+	--no-backup-if-mismatch, so we no longer blindly have to
-+	remove *.orig files after patching, fixing issues with
-+	packages containing such files.
-+
-+	Updated/fixed packages: alsa-utils, apparmor, avahi,
-+	bandwidthd, barebox, bash, bison, brotli, busybox, cifs-utils,
-+	cryptsetup, cups, dhcpcd, dhcpdump, docker-cli, docker-engine,
-+	ecryptfs-utils, efl, fail2ban, freetype, gcc, gdb,
-+	ghostscript, gnutls, go, graphite2, gst1-plugins-base,
-+	gst1-plugins-ugly, imagemagick, ipmitool, jbig2dec, libhtp,
-+	libraw, libssh, libxml2, libxml-parser-perl, linux-headers,
-+	localedef, lua, mbedtls, memcached, mesa3d, meson, minidlna,
-+	mongodb, nginx, nodejs, nss-pam-ldapd, openvmtools,
-+	paho-mqtt-c, php, postgresql, python, python-aenum,
-+	python-django, python-engineio, python-fire, python-pymodbus,
-+	python-scapy, python-semver, python-sentry-sdk,
-+	python-socketio, python-texttable, python-tinyrpc,
-+	python-txtorcon, python3, qt5base, rsh-redone, runc, samba4,
-+	strace, supertux, suricata, systemd, uclibc, usb_modeswitch,
-+	vlc, vsftpd, wayland-protocols, wireguard-linux-compat,
-+	wireshark, wlroots, wolfssl, xserver_xorg-server, ympd,
-+	zeromq, zstd
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12911: usb_modeswitch installation race condition
-+	#13251: cryptsetup does not work on branch 2020.02 following..
-+
- 2020.05.2, released August 29th, 2020
- 
- 	Important / security related fixes.
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
