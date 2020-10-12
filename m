@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:09:35 +0200
-Subject: [Buildroot] [PATCH 2/2] package/zlib-ng: disable tests
-In-Reply-To: <20201011194357.1923003-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 11 Oct 2020 21:43:57 +0200")
-References: <20201011194357.1923003-1-fontaine.fabrice@gmail.com>
- <20201011194357.1923003-2-fontaine.fabrice@gmail.com>
-Message-ID: <877drvuaps.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Oct 2020 10:15:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mongodb: security bump to
+ version 4.2.10
+In-Reply-To: <20201011193551.1916306-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 11 Oct 2020 21:35:51 +0200")
+References: <20201011193551.1916306-1-fontaine.fabrice@gmail.com>
+Message-ID: <87362juag6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Tests are enabled by default and can be disabled since
- > https://github.com/zlib-ng/zlib-ng/commit/b0730d030a9ce5c53faa88bd8259c9afccce6881
+ > SERVER-50463 Make PooledLDAPConnection::refresh take self-ownership
+ > https://docs.mongodb.com/manual/release-notes/4.2-changelog/#id1
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Committed to 2020.05.x and 2020.08.x, thanks.
 
-Committed to 2020.08.x, thanks.
+2020.02.x uses mongodb 4.0.x, which does not have a fix yet.
 
 -- 
 Bye, Peter Korsgaard
