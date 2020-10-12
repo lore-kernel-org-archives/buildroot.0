@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:37:49 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/bash: update to
+Date: Mon, 12 Oct 2020 10:37:41 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/bash: update to
  patch level 18
-Message-ID: <20201012084427.7B30A8D368@busybox.osuosl.org>
+Message-ID: <20201012084444.468DD813C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=474a939072a212ddd3d25ab3b577c3dcba95921e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3b6156bd4f79b291188d267d60e6fc3ceb81d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes a regression introduced in patch level 16.
 
