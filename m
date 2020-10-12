@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:57:23 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x]
+Date: Mon, 12 Oct 2020 10:57:18 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x]
  package/python-sentry-sdk: drop asyncio files for python 2.x to fix
  pycompile issue
-Message-ID: <20201012084703.22E248F3B1@busybox.osuosl.org>
+Message-ID: <20201012084707.69D7F826D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d3331f3e0fd9264e74a11eef022ef9c74715cb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5489b3a6c8c615ba06c1d5357ab584daba08e01b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 sentry-sdk has a set of optional "integrations", some of which use asyncio.
 
