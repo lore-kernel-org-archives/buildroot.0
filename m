@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:22:29 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 8}.x series
-In-Reply-To: <20201011171351.6351-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 11 Oct 2020 19:13:51 +0200")
-References: <20201011171351.6351-1-peter@korsgaard.com>
-Message-ID: <87y2kbsvju.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Oct 2020 10:23:00 +0200
+Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.4
+In-Reply-To: <875z7guf62.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 12 Oct 2020 08:33:25 +0200")
+References: <20201011212844.666330-1-angelo@amarulasolutions.com>
+ <875z7guf62.fsf@dell.be.48ers.dk>
+Message-ID: <87tuuzsviz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+ >> This patch bumps cups to evrsion 1.28.4
 
-Committed to 2020.02.x, 2020.05.x and 2020.08.x after dropping the 5.8.x
-bump, thanks.
+ > Instead of repeating yourself, please explain why you are dropping the
+ > patch and changing the init script?
+
+Ups, didn't plan on applying this to the tree (yet), will revert.
 
 -- 
 Bye, Peter Korsgaard
