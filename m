@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Oct 2020 22:29:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zlib: update architectures for
- zlib-ng
-In-Reply-To: <20201012065456.2599019-1-fontaine.fabrice@gmail.com>
-References: <20201012065456.2599019-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201012222946.20640b92@windsurf.home>
+Date: Mon, 12 Oct 2020 22:29:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zlib-ng: bump to version
+ 1.9.9-b1
+In-Reply-To: <20201012065543.2599688-1-fontaine.fabrice@gmail.com>
+References: <20201012065543.2599688-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201012222951.2bbf048a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Oct 2020 08:54:56 +0200
+On Mon, 12 Oct 2020 08:55:43 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - powerpc is supported since
->   https://github.com/zlib-ng/zlib-ng/commit/b81f4ee96dcbdf1db34b00727b6f1829a2ba1edb
-> - s390x is supported since
->   https://github.com/zlib-ng/zlib-ng/commit/8e30d1173699412c11880db10de2bc10893a2448
+> Update indentation in hash file (two spaces)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/zlib/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/zlib-ng/zlib-ng.hash | 4 ++--
+>  package/zlib-ng/zlib-ng.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
