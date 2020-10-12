@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 08:33:25 +0200
-Subject: [Buildroot] [PATCH] package/cups-filters: bump to version 1.28.4
-In-Reply-To: <20201011212844.666330-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 11 Oct 2020 23:28:44 +0200")
-References: <20201011212844.666330-1-angelo@amarulasolutions.com>
-Message-ID: <875z7guf62.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Oct 2020 08:34:05 +0200
+Subject: [Buildroot] [PATCH] package/grep: bbump to version 3.5
+In-Reply-To: <20201011213439.696819-1-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Sun, 11 Oct 2020 23:34:39 +0200")
+References: <20201011213439.696819-1-angelo@amarulasolutions.com>
+Message-ID: <871ri4uf4y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- > This patch bumps cups to evrsion 1.28.4
+ > This patch bumps grep to version 3.5
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Instead of repeating yourself, please explain why you are dropping the
-patch and changing the init script?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
