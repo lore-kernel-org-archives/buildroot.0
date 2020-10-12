@@ -1,100 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 16:04:37 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.08.1
-Message-ID: <20201012135443.F1DE37FDA6@busybox.osuosl.org>
+From: Bilal Wasim <bilalwasim676@gmail.com>
+Date: Mon, 12 Oct 2020 19:33:14 +0500
+Subject: [Buildroot] [PATCH 1/1] configs/chromebook_elm: Updating to Linux
+ v5.9
+Message-ID: <20201012143314.674328-1-bilal.wasim@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3345caa907c24f3cddcb8af71cea53e49ae8f72c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Updating the chromebook elm configuration to use v5.9 instead of
+an intermediate release candidate.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+At the latter stages of the v5.9 release, a patch was added which
+broke the Chromebook Elm HDMI. Therefore add a revert patch to
+get rid of this problem. The fix (and the revert) are already on
+the mailing list (https://lkml.org/lkml/2020/10/10/32) and should
+become available with v5.10
+
+Signed-off-by: Bilal Wasim <bilal.wasim@imgtec.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ ...tek-dsi-Fix-scrolling-of-panel-with-.patch | 41 +++++++++++++++++++
+ configs/chromebook_elm_defconfig              |  2 +-
+ 2 files changed, 42 insertions(+), 1 deletion(-)
+ create mode 100644 board/chromebook/elm/patches/linux/0006-Revert-drm-mediatek-dsi-Fix-scrolling-of-panel-with-.patch
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index ac7c287199..353b092975 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2020.08</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.08.tar.gz">buildroot-2020.08.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.08.tar.bz2">buildroot-2020.08.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c6b2e65d8b..4dbb78458e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.08.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 October 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.08.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.08 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-October/294407.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.08.1.tar.bz2">2020.08.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/board/chromebook/elm/patches/linux/0006-Revert-drm-mediatek-dsi-Fix-scrolling-of-panel-with-.patch b/board/chromebook/elm/patches/linux/0006-Revert-drm-mediatek-dsi-Fix-scrolling-of-panel-with-.patch
+new file mode 100644
+index 0000000000..43bffe5261
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/0006-Revert-drm-mediatek-dsi-Fix-scrolling-of-panel-with-.patch
+@@ -0,0 +1,41 @@
++From 51109530891c981b681816152bd205724deabcca Mon Sep 17 00:00:00 2001
++From: Jitao Shi <jitao.shi@mediatek.com>
++Date: Sat, 10 Oct 2020 15:09:09 +0800
++Subject: [PATCH] Revert "drm/mediatek: dsi: Fix scrolling of panel with small
++ hfp or hbp"
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++This reverts commit 35bf948f1edbf507f6e57e0879fa6ea36d2d2930.
++
++Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
++Reviewed-by: Bilal Wasim <bilal.wasim@imgtec.com>
++Tested-by: Bilal Wasim <bilal.wasim@imgtec.com>
++---
++ drivers/gpu/drm/mediatek/mtk_dsi.c | 9 +++++----
++ 1 file changed, 5 insertions(+), 4 deletions(-)
++
++diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
++index 80b7a082e874..16fd99dcdacf 100644
++--- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+++++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
++@@ -466,13 +466,14 @@ static void mtk_dsi_config_vdo_timing(struct mtk_dsi *dsi)
++ 	horizontal_sync_active_byte = (vm->hsync_len * dsi_tmp_buf_bpp - 10);
++ 
++ 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO_SYNC_PULSE)
++-		horizontal_backporch_byte = vm->hback_porch * dsi_tmp_buf_bpp;
+++		horizontal_backporch_byte =
+++			(vm->hback_porch * dsi_tmp_buf_bpp - 10);
++ 	else
++-		horizontal_backporch_byte = (vm->hback_porch + vm->hsync_len) *
++-					    dsi_tmp_buf_bpp;
+++		horizontal_backporch_byte = ((vm->hback_porch + vm->hsync_len) *
+++			dsi_tmp_buf_bpp - 10);
++ 
++ 	data_phy_cycles = timing->lpx + timing->da_hs_prepare +
++-			  timing->da_hs_zero + timing->da_hs_exit;
+++			  timing->da_hs_zero + timing->da_hs_exit + 3;
++ 
++ 	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO_BURST) {
++ 		if ((vm->hfront_porch + vm->hback_porch) * dsi_tmp_buf_bpp >
++-- 
++2.25.1
++
+diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
+index 0c8e0a42bf..05e82ffc31 100644
+--- a/configs/chromebook_elm_defconfig
++++ b/configs/chromebook_elm_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9-rc5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9"
+ 
+ # Build Kernel with a Custom config.
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-- 
+2.25.1
