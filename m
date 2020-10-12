@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 09:19:30 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] package/wireshark:
+Date: Mon, 12 Oct 2020 09:19:13 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark:
  security bump to version 3.2.7
-Message-ID: <20201012071746.B346285EF8@busybox.osuosl.org>
+Message-ID: <20201012071817.54F4B8F368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=848352fe7917167fa8eb90dbe5b930e7a4fd1d47
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2bd0f60d7ebc52fe2fab791a9cd803f2465895ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 - Fix CVE-2020-25862: In Wireshark 3.2.0 to 3.2.6, 3.0.0 to 3.0.13, and
   2.6.0 to 2.6.20, the TCP dissector could crash. This was addressed in
