@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Oct 2020 22:33:11 +0200
-Subject: [Buildroot] [git commit] configs/mx6cubox: bump U-Boot version
-Message-ID: <20201012202210.5D8DA814CD@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 22:40:48 +0200
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: add version 5.9
+In-Reply-To: <1602488666.22960.2.camel@aliyun.com>
+References: <1602488666.22960.2.camel@aliyun.com>
+Message-ID: <20201012224048.3522fb29@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a59973f116c6a360ed787ae9e7a00fc54a3df20a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Tian,
 
-Since 2020.04 version, the enumeration of MMC has changed, so the boot
-script must be updated
+On Mon, 12 Oct 2020 15:44:26 +0800
+Tian Yuanhao via buildroot <buildroot@busybox.net> wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/solidrun/mx6cubox/boot.scr.txt | 6 +++---
- configs/mx6cubox_defconfig           | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 
-diff --git a/board/solidrun/mx6cubox/boot.scr.txt b/board/solidrun/mx6cubox/boot.scr.txt
-index 7a8aa4bd54..e4cf814783 100644
---- a/board/solidrun/mx6cubox/boot.scr.txt
-+++ b/board/solidrun/mx6cubox/boot.scr.txt
-@@ -1,7 +1,7 @@
--setenv finduuid "part uuid mmc 0:1 uuid"
-+setenv finduuid "part uuid mmc 1:1 uuid"
- run finduuid
- run findfdt
- setenv bootargs "console=ttymxc0,115200 root=PARTUUID=${uuid} rootwait rootfstype=ext4"
--load mmc 0:1 ${fdt_addr} boot/${fdtfile}
--load mmc 0:1 ${loadaddr} boot/zImage
-+load mmc 1:1 ${fdt_addr} boot/${fdtfile}
-+load mmc 1:1 ${loadaddr} boot/zImage
- bootz ${loadaddr} - ${fdt_addr}
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index dc26758efb..2d711dc568 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+Thanks a lot for your contribution. I wanted to apply it, but
+unfortunately your patch was damaged, and therefore it didn't apply. So
+I've used the same patch proposed a few hours later by Michael Walle.
+
+Could you try to use "git send-email" to send your patches ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
