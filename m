@@ -1,140 +1,390 @@
-From: Michael Walle <michael@walle.cc>
-Date: Mon, 12 Oct 2020 10:33:16 +0200
-Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.9
-Message-ID: <20201012083317.11732-1-michael@walle.cc>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Oct 2020 10:37:59 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/bash: update to
+ patch level 18
+Message-ID: <20201012084422.ED1CF8E4FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- linux/Config.in                                     |  4 ++--
- linux/linux.hash                                    |  1 +
- package/linux-headers/Config.in.host                | 13 +++++++++++--
- toolchain/Config.in                                 |  5 +++++
- .../toolchain-external-custom/Config.in.options     |  6 +++++-
- 5 files changed, 24 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=4b7c4b4236a7d1e864a5fe0674e2ba035d73a273
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 309abb9fc6..6d9d0af067 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,7 +28,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (5.8)"
-+	bool "Latest version (5.9)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (4.19.132-cip30)"
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ccb8d7fa4c..4b76398c5d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256  3239a4ee1250bf2048be988cc8cb46c487b2c8a0de5b1b032d38394d5c6b1a06  linux-5.9.tar.xz
- sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
- sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index dacd3f86ea..16af0449a5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_8
-+	default BR2_KERNEL_HEADERS_5_9
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -57,6 +57,10 @@ config BR2_KERNEL_HEADERS_5_4
- config BR2_KERNEL_HEADERS_5_8
- 	bool "Linux 5.8.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+Fixes a regression introduced in patch level 16.
+
+Rename the 2 uClibc patches so the upstream patch numbering matches ours.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d73ec6e0ab40675604d735536f67d43b967cb529)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bash/0017-bash50-017.patch                 | 293 +++++++++++++++++++++
+ package/bash/0018-bash50-018.patch                 |  49 ++++
+ ...9-input.h-add-missing-include-on-stdio.h.patch} |   0
+ ...=> 0020-locale.c-fix-build-without-wchar.patch} |   0
+ 4 files changed, 342 insertions(+)
+
+diff --git a/package/bash/0017-bash50-017.patch b/package/bash/0017-bash50-017.patch
+new file mode 100644
+index 0000000000..6758b203f8
+--- /dev/null
++++ b/package/bash/0017-bash50-017.patch
+@@ -0,0 +1,293 @@
++From https://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash55-017
 +
-+config BR2_KERNEL_HEADERS_5_9
-+	bool "Linux 5.9.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -131,8 +135,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
-+	bool "5.9.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
--	bool "5.8.x or later"
-+	bool "5.8.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7
-@@ -344,6 +352,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
-+	default "5.9"		if BR2_KERNEL_HEADERS_5_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 6e2befed20..db2ab0f059 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -484,6 +484,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
++			     BASH PATCH REPORT
++			     =================
 +
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -497,6 +501,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	default "5.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	default "5.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- 	default "5.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index d69db68a23..f7aa5454e3 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -119,8 +119,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
-+	bool "5.9.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++Bash-Release:	5.0
++Patch-ID:	bash50-017
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_8
--	bool "5.8.x or later"
-+	bool "5.8.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_7
--- 
-2.20.1
++Bug-Reported-by:	Valentin Lab <valentin.lab@kalysto.org>
++Bug-Reference-ID:	<ab981b9c-60a5-46d0-b7e6-a6d88b80df50@kalysto.org>
++Bug-Reference-URL:	https://lists.gnu.org/archive/html/bug-bash/2020-03/msg00062.html
++
++Bug-Description:
++
++There were cases where patch 16 reaped process substitution file descriptors
++(or FIFOs) and processes to early. This is a better fix for the problem that
++bash50-016 attempted to solve.
++
++Patch (apply with `patch -p0'):
++
++*** bash-5.0-patched/subst.c	2019-08-29 11:16:49.000000000 -0400
++--- b/subst.c	2020-04-02 16:24:19.000000000 -0400
++***************
++*** 5337,5341 ****
++  }
++  
++! char *
++  copy_fifo_list (sizep)
++       int *sizep;
++--- b/5337,5341 ----
++  }
++  
++! void *
++  copy_fifo_list (sizep)
++       int *sizep;
++***************
++*** 5343,5347 ****
++    if (sizep)
++      *sizep = 0;
++!   return (char *)NULL;
++  }
++  
++--- b/5343,5347 ----
++    if (sizep)
++      *sizep = 0;
++!   return (void *)NULL;
++  }
++  
++***************
++*** 5409,5414 ****
++  	if (fifo_list[i].file)
++  	  {
++! 	    fifo_list[j].file = fifo_list[i].file;
++! 	    fifo_list[j].proc = fifo_list[i].proc;
++  	    j++;
++  	  }
++--- b/5409,5419 ----
++  	if (fifo_list[i].file)
++  	  {
++! 	    if (i != j)
++! 	      {
++! 		fifo_list[j].file = fifo_list[i].file;
++! 		fifo_list[j].proc = fifo_list[i].proc;
++! 		fifo_list[i].file = (char *)NULL;
++! 		fifo_list[i].proc = 0;
++! 	      }
++  	    j++;
++  	  }
++***************
++*** 5426,5433 ****
++  void
++  close_new_fifos (list, lsize)
++!      char *list;
++       int lsize;
++  {
++    int i;
++  
++    if (list == 0)
++--- b/5431,5439 ----
++  void
++  close_new_fifos (list, lsize)
++!      void *list;
++       int lsize;
++  {
++    int i;
+++   char *plist;
++  
++    if (list == 0)
++***************
++*** 5437,5442 ****
++      }
++  
++!   for (i = 0; i < lsize; i++)
++!     if (list[i] == 0 && i < fifo_list_size && fifo_list[i].proc != -1)
++        unlink_fifo (i);
++  
++--- b/5443,5448 ----
++      }
++  
++!   for (plist = (char *)list, i = 0; i < lsize; i++)
++!     if (plist[i] == 0 && i < fifo_list_size && fifo_list[i].proc != -1)
++        unlink_fifo (i);
++  
++***************
++*** 5560,5568 ****
++  }
++  
++! char *
++  copy_fifo_list (sizep)
++       int *sizep;
++  {
++!   char *ret;
++  
++    if (nfds == 0 || totfds == 0)
++--- b/5566,5574 ----
++  }
++  
++! void *
++  copy_fifo_list (sizep)
++       int *sizep;
++  {
++!   void *ret;
++  
++    if (nfds == 0 || totfds == 0)
++***************
++*** 5570,5579 ****
++        if (sizep)
++  	*sizep = 0;
++!       return (char *)NULL;
++      }
++  
++    if (sizep)
++      *sizep = totfds;
++!   ret = (char *)xmalloc (totfds * sizeof (pid_t));
++    return (memcpy (ret, dev_fd_list, totfds * sizeof (pid_t)));
++  }
++--- b/5576,5585 ----
++        if (sizep)
++  	*sizep = 0;
++!       return (void *)NULL;
++      }
++  
++    if (sizep)
++      *sizep = totfds;
++!   ret = xmalloc (totfds * sizeof (pid_t));
++    return (memcpy (ret, dev_fd_list, totfds * sizeof (pid_t)));
++  }
++***************
++*** 5648,5655 ****
++  void
++  close_new_fifos (list, lsize)
++!      char *list;
++       int lsize;
++  {
++    int i;
++  
++    if (list == 0)
++--- b/5654,5662 ----
++  void
++  close_new_fifos (list, lsize)
++!      void *list;
++       int lsize;
++  {
++    int i;
+++   pid_t *plist;
++  
++    if (list == 0)
++***************
++*** 5659,5664 ****
++      }
++  
++!   for (i = 0; i < lsize; i++)
++!     if (list[i] == 0 && i < totfds && dev_fd_list[i])
++        unlink_fifo (i);
++  
++--- b/5666,5671 ----
++      }
++  
++!   for (plist = (pid_t *)list, i = 0; i < lsize; i++)
++!     if (plist[i] == 0 && i < totfds && dev_fd_list[i])
++        unlink_fifo (i);
++  
++*** bash-5.0-patched/subst.h	2018-10-21 18:46:09.000000000 -0400
++--- b/subst.h	2020-04-02 16:29:28.000000000 -0400
++***************
++*** 274,280 ****
++  extern void unlink_fifo __P((int));
++  
++! extern char *copy_fifo_list __P((int *));
++! extern void unlink_new_fifos __P((char *, int));
++! extern void close_new_fifos __P((char *, int));
++  
++  extern void clear_fifo_list __P((void));
++--- b/274,279 ----
++  extern void unlink_fifo __P((int));
++  
++! extern void *copy_fifo_list __P((int *));
++! extern void close_new_fifos __P((void *, int));
++  
++  extern void clear_fifo_list __P((void));
++*** bash-5.0-patched/execute_cmd.c	2020-02-06 20:16:48.000000000 -0500
++--- b/execute_cmd.c	2020-04-02 17:00:10.000000000 -0400
++***************
++*** 565,569 ****
++  #if defined (PROCESS_SUBSTITUTION)
++    volatile int ofifo, nfifo, osize, saved_fifo;
++!   volatile char *ofifo_list;
++  #endif
++  
++--- b/565,569 ----
++  #if defined (PROCESS_SUBSTITUTION)
++    volatile int ofifo, nfifo, osize, saved_fifo;
++!   volatile void *ofifo_list;
++  #endif
++  
++***************
++*** 751,760 ****
++  #  endif
++  
++!   if (variable_context != 0)	/* XXX - also if sourcelevel != 0? */
++      {
++        ofifo = num_fifos ();
++        ofifo_list = copy_fifo_list ((int *)&osize);
++        begin_unwind_frame ("internal_fifos");
++!       add_unwind_protect (xfree, ofifo_list);
++        saved_fifo = 1;
++      }
++--- b/751,762 ----
++  #  endif
++  
++!   /* XXX - also if sourcelevel != 0? */
++!   if (variable_context != 0)
++      {
++        ofifo = num_fifos ();
++        ofifo_list = copy_fifo_list ((int *)&osize);
++        begin_unwind_frame ("internal_fifos");
++!       if (ofifo_list)
++! 	add_unwind_protect (xfree, ofifo_list);
++        saved_fifo = 1;
++      }
++***************
++*** 1100,1123 ****
++        nfifo = num_fifos ();
++        if (nfifo > ofifo)
++! 	close_new_fifos ((char *)ofifo_list, osize);
++        free ((void *)ofifo_list);
++        discard_unwind_frame ("internal_fifos");
++      }
++- # if defined (HAVE_DEV_FD)
++-   /* Reap process substitutions at the end of loops */
++-   switch (command->type)
++-     {
++-     case cm_while:
++-     case cm_until:
++-     case cm_for:
++-     case cm_group:
++- #    if defined (ARITH_FOR_COMMAND)
++-     case cm_arith_for:
++- #    endif
++-       reap_procsubs ();
++-     default:
++-       break;
++-     }
++- #  endif /* HAVE_DEV_FD */
++  #endif
++  
++--- b/1102,1109 ----
++        nfifo = num_fifos ();
++        if (nfifo > ofifo)
++! 	close_new_fifos ((void *)ofifo_list, osize);
++        free ((void *)ofifo_list);
++        discard_unwind_frame ("internal_fifos");
++      }
++  #endif
++  
++
++*** bash-5.0/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
++--- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
++***************
++*** 26,30 ****
++     looks for to find the patch level (for the sccs version string). */
++  
++! #define PATCHLEVEL 16
++  
++  #endif /* _PATCHLEVEL_H_ */
++--- b/26,30 ----
++     looks for to find the patch level (for the sccs version string). */
++  
++! #define PATCHLEVEL 17
++  
++  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0018-bash50-018.patch b/package/bash/0018-bash50-018.patch
+new file mode 100644
+index 0000000000..efecb1897d
+--- /dev/null
++++ b/package/bash/0018-bash50-018.patch
+@@ -0,0 +1,49 @@
++From https://ftp.gnu.org/gnu/bash/bash-5.0-patches/bash55-018
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++
++			     BASH PATCH REPORT
++			     =================
++
++Bash-Release:	5.0
++Patch-ID:	bash50-018
++
++Bug-Reported-by:	oguzismailuysal at gmail.com
++Bug-Reference-ID:
++Bug-Reference-URL:	https://lists.gnu.org/archive/html/bug-bash/2019-10/msg00098.html
++
++Bug-Description:
++
++In certain cases, bash does not perform quoted null removal on patterns
++that are used as part of word expansions such as ${parameter##pattern}, so
++empty patterns are treated as non-empty.
++
++Patch (apply with `patch -p0'):
++
++*** bash-5.0.17/subst.c	2020-04-02 17:14:58.000000000 -0400
++--- b/subst.c	2020-07-09 15:28:19.000000000 -0400
++***************
++*** 5113,5116 ****
++--- b/5113,5118 ----
++  				      (int *)NULL, (int *)NULL)
++  	     : (WORD_LIST *)0;
+++   if (l)
+++     word_list_remove_quoted_nulls (l);
++    pat = string_list (l);
++    dispose_words (l);
++
++*** bash-5.0/patchlevel.h	2016-06-22 14:51:03.000000000 -0400
++--- b/patchlevel.h	2016-10-01 11:01:28.000000000 -0400
++***************
++*** 26,30 ****
++     looks for to find the patch level (for the sccs version string). */
++  
++! #define PATCHLEVEL 17
++  
++  #endif /* _PATCHLEVEL_H_ */
++--- b/26,30 ----
++     looks for to find the patch level (for the sccs version string). */
++  
++! #define PATCHLEVEL 18
++  
++  #endif /* _PATCHLEVEL_H_ */
+diff --git a/package/bash/0017-input.h-add-missing-include-on-stdio.h.patch b/package/bash/0019-input.h-add-missing-include-on-stdio.h.patch
+similarity index 100%
+rename from package/bash/0017-input.h-add-missing-include-on-stdio.h.patch
+rename to package/bash/0019-input.h-add-missing-include-on-stdio.h.patch
+diff --git a/package/bash/0018-locale.c-fix-build-without-wchar.patch b/package/bash/0020-locale.c-fix-build-without-wchar.patch
+similarity index 100%
+rename from package/bash/0018-locale.c-fix-build-without-wchar.patch
+rename to package/bash/0020-locale.c-fix-build-without-wchar.patch
