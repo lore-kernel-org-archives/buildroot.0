@@ -1,89 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 16:00:53 +0200
-Subject: [Buildroot] [git commit] Update for 2020.08.1
-Message-ID: <20201012135443.E70398B8DF@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 16:04:37 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.08.1
+Message-ID: <20201012135443.F1DE37FDA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17032420a75b57108134e34026923aa9054210c1
+commit: https://git.buildroot.net/buildroot/commit/?id=3345caa907c24f3cddcb8af71cea53e49ae8f72c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 91107e16a7c2fcbd0b1b73e5a46d295fd9190d17)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 715bbaa79f..31a9d1aede 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,63 @@
-+2020.08.1, released October 12th, 2020
-+
-+	Important / security related fixes.
-+
-+	Fixes for various compilation issues with GCC 10.x.
-+
-+	meson: Correct SDK cross-compilation.conf file when
-+	per-package builds were used to build SDK.
-+
-+	systemd: Use /run rather than /var/run for PID files in units.
-+
-+	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
-+
-+	Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
-+	after all finalization hooks (including pre-rootfs) to ensure
-+	they can override any late configuration done by packages.
-+
-+	support/script/pycompile: Rework logic to ensure .pyc files
-+	contain absolute target paths, fixing code inspection at
-+	runtime when executed with cwd != '/'.
-+
-+	support/scripts/setlocalversion: Correct Mercurial output to
-+	match behaviour with Git.
-+
-+	support/scripts/apply-patches.sh: Use patch
-+	--no-backup-if-mismatch, so we no longer blindly have to
-+	remove *.orig files after patching, fixing issues with
-+	packages containing such files.
-+
-+	fs/jffs2: Now correctly handles xattrs
-+
-+	Updated/fixed packages: acpica, afboot-stm32, alsa-utils,
-+	apparmor, bandwidthd, barebox, bash, bison, brotli,
-+	cifs-utils, cups, dhcpcd, dhcpdump, docker-cli, docker-engine,
-+	ecryptfs-utils, efl, fail2ban, fbterm, ffmpeg, fontconfig,
-+	freetype, gcc, gdb, ghostscript, gnupg2, gnutls, go, gqview,
-+	gst1-plugins-base, gst1-plugins-ugly, ipmitool, jbig2dec,
-+	kexec, lcdproc, libcamera, libhtp, libnetconf2, libraw,
-+	libssh, libxml2, libxml-parser-perl, libzip, linux-headers,
-+	live555, localedef, ltp-testsuite, lua, matchbox, memcached,
-+	memtester, mesa3d, meson, minidlna, mongodb, mongrel2, motion,
-+	mraa, mtd, musepack, neardal, netatalk, netperf, netsniff-ng,
-+	nginx, nodejs, nss-pam-ldapd, open-plc-utils, openswan,
-+	opentyrian, openvmtools, php, postgresql, python,
-+	python-aenum, python-cycler, python-engineio, python-fire,
-+	python-pymodbus, python-scapy, python-semver,
-+	python-sentry-sdk, python-socketio, python-texttable,
-+	python-tinyrpc, python-txtorcon, python3, qt5base, quagga,
-+	read-edid, redis, rsh-redone, runc, samba4, socketcand,
-+	strace, supertux, suricata, systemd, ti-utils, trinity,
-+	uclibc, usb_modeswitch, vlc, vsftpd, wampcc,
-+	wayland-protocols, wireguard-linux-compat, wireshark, wlroots,
-+	wolfssl, w_scan, xerces, xfsprogs, xdriver-xf86-video-ati,
-+	xserver_xorg-server, ympd, zeromq, zlib-ng, zstd
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12911: usb_modeswitch installation race condition
-+	#13236: Can't compile linux 5.4.8 (with gcc 10 on host)
-+
- 2020.08, released September 1st, 2020
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ac7c287199..353b092975 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Various fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2020.08</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.08.tar.gz">buildroot-2020.08.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.08.tar.bz2">buildroot-2020.08.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c6b2e65d8b..4dbb78458e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.08.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 October 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.08.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.08 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-October/294407.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.08.1.tar.bz2">2020.08.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
