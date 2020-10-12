@@ -1,43 +1,125 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 12 Oct 2020 15:48:44 +0200
-Subject: [Buildroot] [PATCH] ruby: update to 2.7.2
-Message-ID: <20201012134844.z3cq4b7zdhsxjb7k@waldemar-brodkorb.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Oct 2020 15:57:24 +0200
+Subject: [Buildroot] Buildroot 2020.08.1 released
+Message-ID: <874kmzsg1n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 45e93b8a70..80ffb00c0f 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/
--sha256  b224f9844646cc92765df8288a46838511c1cec5b550d8874bd4686a904fcee7  ruby-2.7.1.tar.xz
-+# https://www.ruby-lang.org/en/news/2020/10/02/ruby-2-7-2-released/
-+sha256  1b95ab193cc8f5b5e59d2686cb3d5dcf1ddf2a86cb6950e0b4bdaae5040ec0d6  ruby-2.7.2.tar.xz
- # License files, Locally calculated
- sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
- sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 919d032806..341943c4a5 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.7
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
- RUBY_VERSION_EXT = 2.7.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
+
+Buildroot 2020.08.1 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2020.08.1.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.08.1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.08.1 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2020.08 release.
+
+- Fixes for various compilation issues with GCC 10.x.
+
+- meson: Correct SDK cross-compilation.conf file when per-package builds
+  were used to build SDK.
+
+- systemd: Use /run rather than /var/run for PID files in units.
+
+- Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
+
+- Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
+  after all finalization hooks (including pre-rootfs) to ensure
+  they can override any late configuration done by packages.
+
+- support/script/pycompile: Rework logic to ensure .pyc files contain
+  absolute target paths, fixing code inspection at runtime when
+  executed with cwd != '/'.
+
+- support/scripts/setlocalversion: Correct Mercurial output to match
+  behaviour with Git.
+
+- support/scripts/apply-patches.sh: Use patch --no-backup-if-mismatch,
+  so we no longer blindly have to remove *.orig files after patching,
+  fixing issues with packages containing such files.
+
+- fs/jffs2: Now correctly handle xattrs
+
+- Security fixes for brotli, cifs-utils, ghostscript, gnupg2, gnutls,
+  go, ipmitool, libraw, libssh, libxml2, live555, memcached, mongodb,
+  nodejs, php, redis, runc, samba4, suricata, wireshark, zeromq
+
+- Fixes for download/compilation/runtime/license issues in acpica,
+  afboot-stm32, alsa-utils, apparmor, bandwidthd, barebox, bash, bison,
+  cups, dhcpcd, dhcpdump, docker-cli, docker-engine, ecryptfs-utils,
+  efl, fail2ban, fbterm, ffmpeg, fontconfig, freetype, gcc, gdb,
+  ghostscript, gst1-plugins-base, gst1-plugins-ugly, gqview, kexec,
+  lcdproc, libxml-parser-perl, libzip, linux-headers, live555,
+  localedef, ltp-testsuite, lua, matchbox, memcached, memtester, mesa3d,
+  meson, minidlna, mongrel2, motion, mraa, mtd, musepack, neardal,
+  netatalk, netperf, netsniff-ng, nginx, nss-pam-ldapd, open-plc-utils,
+  openswan, opentyrian, openvmtools, php, postgresql, python,
+  python-aenum, python-engineio, python-fire, python-pymodbus,
+  python-scapy, python-semver, python-sentry-sdk, python-socketio,
+  python-texttable, python-tinyrpc, python-txtorcon, python3, qt5base,
+  quagga, read-edid, rsh-redone, socketcand, strace, supertux, systemd,
+  ti-utils, trinity, uclibc, usb_modeswitch, vlc, wampcc,
+  wayland-protocols, wireguard-linux-compat, wlroots, wolfssl, w_scan,
+  xerces, xfsprogs, xdriver-xf86-video-ati, xserver_xorg-server, ympd,
+  zlib-ng, zstd
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.1
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.08..
+
+    70  Fabrice Fontaine
+    25  Peter Korsgaard
+     9  Michael Nosthoff
+     9  Thomas Petazzoni
+     5  Bernd Kuhls
+     4  Heiko Thiery
+     4  Norbert Lange
+     4  Titouan Christophe
+     3  Antoine Tenart
+     3  Christian Stewart
+     3  Peter Seiderer
+     3  Robin Jarry
+     3  Romain Naour
+     2  Adrian Perez de Castro
+     2  Angelo Compagnucci
+     2  Francois Perrad
+     2  James Hilliard
+     2  Petr Vorel
+     2  Thomas De Schampheleire
+     2  Yann E. MORIN
+     1  Andy Shevchenko
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Baruch Siach
+     1  Brandon Maier
+     1  Charles Hardin
+     1  Gary Bisson
+     1  John Keeping
+     1  Joseph Kogut
+     1  Kieran Bingham
+     1  Matt Weber
+     1  Maxim Kochetkov
+     1  Paul Cercueil
+     1  Ryan Barnett
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
