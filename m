@@ -1,70 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 08:31:31 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 8}.x series
-Message-ID: <20201012062532.50C0C87632@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 08:31:53 +0200
+Subject: [Buildroot] [git commit] package/cups-filters: bump to version
+ 1.28.4
+Message-ID: <20201012062532.60D0088FD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dbae8ed2c0161caecf6ccfd5fe288e1517550ac
+commit: https://git.buildroot.net/buildroot/commit/?id=6afc5eb69649f1629111b47f76bc15bff48a552b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ ...e.ac-fix-cross-compilation-without-dejavu.patch | 41 ----------------------
+ package/cups-filters/S82cups-browsed               |  2 +-
+ package/cups-filters/cups-filters.hash             |  2 +-
+ package/cups-filters/cups-filters.mk               |  2 +-
+ 4 files changed, 3 insertions(+), 44 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5bd3cdb59b..309abb9fc6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+deleted file mode 100644
+index 650b90a89b..0000000000
+--- a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Jul 2020 23:02:50 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
+-
+-Cross-compilation is broken since commit 1d66106. Indeed, when
+-cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
+-path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
+-provided through --with-test-font-path which will fix the build failure
+-but will result in broken test programs.
+-
+-So when cross-compiling don't try to check if the test-font-path is
+-valid or not and just use the one provided by the user or the default
+-one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
+-
+-Fix #262
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index aa905cf5d..4cc4fd6e5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
+- 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
+- )
+- 
+--AS_IF([test -f "$with_test_font_path"],
+--	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+-+AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
+- 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
+- )
+-+AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
+- 
+- # ================
+- # Check for cflags
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+index 08909c7f98..f17bbe7465 100644
+--- a/package/cups-filters/S82cups-browsed
++++ b/package/cups-filters/S82cups-browsed
+@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- -c /etc/cups/cups-browsed.conf
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 61cb42a438..e36a00ab46 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
++sha256 cf90b96b5c7a906a05070e757ee5566d9680db98a279e60567ea5421c38f11de  cups-filters-1.28.4.tar.gz
+ sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 237d8afe62..cf5eefa67f 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.13" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b1bd51e668..ccb8d7fa4c 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f25936177edd183dd0645dce1d81873bcfc0bab1ff1586df75d95cd12723320d  linux-5.8.13.tar.xz
--sha256  a8b31d716b397303a183e42ad525ff2871024a43e3ea530d0fdf73b7f9d27da7  linux-5.4.69.tar.xz
-+sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
-+sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
- sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
- sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
--sha256  d9cdcb9a66942a56b91c8d4b273d15a3c5b8e59fad44b79e03362cfffaa62a00  linux-4.19.149.tar.xz
-+sha256  f2f709ef086a4d8cb3c15a857daa44dfecf1b88d7d7c53c980fb180f6dccbace  linux-4.19.150.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1fe7d05da0..dacd3f86ea 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -341,9 +341,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.149"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.69"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.13"	if BR2_KERNEL_HEADERS_5_8
-+	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-CUPS_FILTERS_VERSION = 1.27.5
++CUPS_FILTERS_VERSION = 1.28.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
