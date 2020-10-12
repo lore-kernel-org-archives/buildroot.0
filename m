@@ -1,143 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 12 Oct 2020 22:36:28 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: add version 5.9
-Message-ID: <20201012202547.3815E8EB7C@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 22:36:52 +0200
+Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: remove kernel
+ config fragment
+Message-ID: <20201012202547.4391B7FACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e517479d8eee9db46a36a30bc2722011c7be87f
+commit: https://git.buildroot.net/buildroot/commit/?id=e2f8ec5e840848e0fefb4d5d721b4f75298b9a43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Starting with linux kernel v5.9 all required configuration options are
+available in the default config.
+
 Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Bilal Wasim <bilal.wasim@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                                             |  4 ++--
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 5 files changed, 24 insertions(+), 5 deletions(-)
+ board/kontron/smarc-sal28/linux.fragment | 18 ------------------
+ configs/kontron_smarc_sal28_defconfig    |  1 -
+ 2 files changed, 19 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 309abb9fc6..6d9d0af067 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,7 +28,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (5.8)"
-+	bool "Latest version (5.9)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (4.19.132-cip30)"
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.8.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ccb8d7fa4c..4b76398c5d 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256  3239a4ee1250bf2048be988cc8cb46c487b2c8a0de5b1b032d38394d5c6b1a06  linux-5.9.tar.xz
- sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
- sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index dacd3f86ea..16af0449a5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_8
-+	default BR2_KERNEL_HEADERS_5_9
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -57,6 +57,10 @@ config BR2_KERNEL_HEADERS_5_4
- config BR2_KERNEL_HEADERS_5_8
- 	bool "Linux 5.8.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
-+
-+config BR2_KERNEL_HEADERS_5_9
-+	bool "Linux 5.9.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -131,8 +135,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
-+	bool "5.9.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
--	bool "5.8.x or later"
-+	bool "5.8.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7
-@@ -344,6 +352,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
-+	default "5.9"		if BR2_KERNEL_HEADERS_5_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 6e2befed20..db2ab0f059 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -484,6 +484,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -497,6 +501,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	default "5.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	default "5.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
- 	default "5.6"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index d69db68a23..f7aa5454e3 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -119,8 +119,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
-+	bool "5.9.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_8
--	bool "5.8.x or later"
-+	bool "5.8.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_7
+diff --git a/board/kontron/smarc-sal28/linux.fragment b/board/kontron/smarc-sal28/linux.fragment
+deleted file mode 100644
+index 00bbcc0923..0000000000
+--- a/board/kontron/smarc-sal28/linux.fragment
++++ /dev/null
+@@ -1,18 +0,0 @@
+-CONFIG_NET_DSA=m
+-CONFIG_NET_DSA_TAG_OCELOT=m
+-CONFIG_NET_DSA_MSCC_FELIX=m
+-CONFIG_NET_SCHED=y
+-CONFIG_NET_SCH_CBS=m
+-CONFIG_NET_SCH_ETF=m
+-CONFIG_NET_SCH_TAPRIO=m
+-CONFIG_CAN_FLEXCAN=m
+-CONFIG_FSL_ENETC=y
+-CONFIG_FSL_ENETC_VF=m
+-CONFIG_FSL_ENETC_QOS=y
+-CONFIG_MSCC_OCELOT_SWITCH=m
+-CONFIG_PCIE_DW_PLAT_HOST=y
+-CONFIG_GPIO_MPC8XXX=y
+-CONFIG_SND_SOC_FSL_SAI=m
+-CONFIG_SND_SOC_WM8904=m
+-CONFIG_RTC_DRV_RV8803=y
+-CONFIG_COMMON_CLK_FSL_SAI=y
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index 9eaea2a636..53cb776a58 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -8,7 +8,6 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/kontron/smarc-sal28/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
+ BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
