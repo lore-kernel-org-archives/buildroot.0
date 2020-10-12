@@ -1,103 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 14:55:06 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x] Update for 2020.08.1
-Message-ID: <20201012124432.D849C86E51@busybox.osuosl.org>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 12 Oct 2020 15:48:44 +0200
+Subject: [Buildroot] [PATCH] ruby: update to 2.7.2
+Message-ID: <20201012134844.z3cq4b7zdhsxjb7k@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91107e16a7c2fcbd0b1b73e5a46d295fd9190d17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- CHANGES  | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 62 insertions(+), 2 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index fc51a0d0c9..570be1f7dc 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,63 @@
-+2020.08.1, released October 12th, 2020
-+
-+	Important / security related fixes.
-+
-+	Fixes for various compilation issues with GCC 10.x.
-+
-+	meson: Correct SDK cross-compilation.conf file when
-+	per-package builds were used to build SDK.
-+
-+	systemd: Use /run rather than /var/run for PID files in units.
-+
-+	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
-+
-+	Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
-+	after all finalization hooks (including pre-rootfs) to ensure
-+	they can override any late configuration done by packages.
-+
-+	support/script/pycompile: Rework logic to ensure .pyc files
-+	contain absolute target paths, fixing code inspection at
-+	runtime when executed with cwd != '/'.
-+
-+	support/scripts/setlocalversion: Correct Mercurial output to
-+	match behaviour with Git.
-+
-+	support/scripts/apply-patches.sh: Use patch
-+	--no-backup-if-mismatch, so we no longer blindly have to
-+	remove *.orig files after patching, fixing issues with
-+	packages containing such files.
-+
-+	fs/jffs2: Now correcly handle xattrs
-+
-+	Updated/fixed packages: acpica, afboot-stm32, alsa-utils,
-+	apparmor, bandwidthd, barebox, bash, bison, brotli,
-+	cifs-utils, cups, dhcpcd, dhcpdump, docker-cli, docker-engine,
-+	ecryptfs-utils, efl, fail2ban, fbterm, ffmpeg, fontconfig,
-+	freetype, gcc, gdb, ghostscript, gnupg2, gnutls, go, gqview,
-+	gst1-plugins-base, gst1-plugins-ugly, ipmitool, jbig2dec,
-+	kexec, lcdproc, libcamera, libhtp, libnetconf2, libraw,
-+	libssh, libxml2, libxml-parser-perl, libzip, linux-headers,
-+	live555, localedef, ltp-testsuite, lua, matchbox, memcached,
-+	memtester, mesa3d, meson, minidlna, mongodb, mongrel2, motion,
-+	mraa, mtd, musepack, neardal, netatalk, netperf, netsniff-ng,
-+	nginx, nodejs, nss-pam-ldapd, open-plc-utils, openswan,
-+	opentyrian, openvmtools, php, postgresql, python,
-+	python-aenum, python-cycler, python-engineio, python-fire,
-+	python-pymodbus, python-scapy, python-semver,
-+	python-sentry-sdk, python-socketio, python-texttable,
-+	python-tinyrpc, python-txtorcon, python3, qt5base, quagga,
-+	read-edid, redis, rsh-redone, runc, samba4, socketcand,
-+	strace, supertux, suricata, systemd, ti-utils, trinity,
-+	uclibc, usb_modeswitch, vlc, vsftpd, wampcc,
-+	wayland-protocols, wireguard-linux-compat, wireshark, wlroots,
-+	wolfssl, w_scan, xerces, xfsprogs, xdriver-xf86-video-ati,
-+	xserver_xorg-server, ympd, zeromq, zlib-ng, zstd
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#12911: usb_modeswitch installation race condition
-+	#13236: Can't compile linux 5.4.8 (with gcc 10 on host)
-+
- 2020.08, released September 1st, 2020
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 45e93b8a70..80ffb00c0f 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2020/03/31/ruby-2-7-1-released/
+-sha256  b224f9844646cc92765df8288a46838511c1cec5b550d8874bd4686a904fcee7  ruby-2.7.1.tar.xz
++# https://www.ruby-lang.org/en/news/2020/10/02/ruby-2-7-2-released/
++sha256  1b95ab193cc8f5b5e59d2686cb3d5dcf1ddf2a86cb6950e0b4bdaae5040ec0d6  ruby-2.7.2.tar.xz
+ # License files, Locally calculated
+ sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 919d032806..341943c4a5 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index a6b99d0868..4ebf671af2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.08
-+export BR2_VERSION := 2020.08.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1598992000
-+BR2_VERSION_EPOCH = 1602507000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+ RUBY_VERSION_MAJOR = 2.7
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
+ RUBY_VERSION_EXT = 2.7.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-- 
+2.11.0
