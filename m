@@ -1,54 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:57:03 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pymodbus:
- drop asyncio files for python 2.x to fix pycompile issue
-Message-ID: <20201012084707.5B7498278F@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 10:59:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/easy-rsa: bump to version 3.0.8
+In-Reply-To: <20201007104902.17406-1-julien@vdg.name> (Julien Viard de
+ Galbert's message of "Wed, 7 Oct 2020 12:49:02 +0200")
+References: <20201007104902.17406-1-julien@vdg.name>
+Message-ID: <87d01nsttn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7306650bcf96b7fafd019568f531ce11a4c16918
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Julien" == Julien Viard de Galbert <julien@vdg.name> writes:
 
-Pymodbus has optional support for asyncio.  Pycompile unfortunately errors
-out on these files when running under Python 2.x:
+ > https://github.com/OpenVPN/easy-rsa/releases/tag/v3.0.8
+ > Signed-off-by: Julien Viard de Galbert <julien@vdg.name>
 
-../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/pymodbus/client/asynchronous/asyncio/__init__.py", line 257
-    yield from self._connect()
-             ^
-SyntaxError: invalid syntax
+Committed, thanks.
 
-As a workaround, simply drop the unusable files from TARGET_DIR if building
-for python 2.x.
-
-Fixes:
-http://autobuild.buildroot.net/results/cc4/cc48927cbe9ae6c2d8b12d65467ec40df82febf6/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7d417ed7f3c5979a50ca97bdeeb8f97ba9394586)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pymodbus/python-pymodbus.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
-index d96e21a55c..9135a4d0c4 100644
---- a/package/python-pymodbus/python-pymodbus.mk
-+++ b/package/python-pymodbus/python-pymodbus.mk
-@@ -11,4 +11,13 @@ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
- PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
- PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
- 
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# only needed/valid for python 3.x
-+define PYTHON_PYMODBUS_RM_PY3_FILES
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pymodbus/client/asynchronous/asyncio
-+endef
-+
-+PYTHON_PYMODBUS_POST_INSTALL_TARGET_HOOKS += PYTHON_PYMODBUS_RM_PY3_FILES
-+endif
-+
- $(eval $(python-package))
+-- 
+Bye, Peter Korsgaard
