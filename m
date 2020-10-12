@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 08:37:39 +0200
-Subject: [Buildroot] [PATCH] package/python-pymodbus: drop asyncio files
- for python 2.x to fix pycompile issue
-In-Reply-To: <20201011090930.24271-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 11 Oct 2020 11:09:30 +0200")
-References: <20201011090930.24271-1-peter@korsgaard.com>
-Message-ID: <87sgakt0ek.fsf@dell.be.48ers.dk>
+Date: Mon, 12 Oct 2020 08:37:43 +0200
+Subject: [Buildroot] [PATCH] package/bash: update to patch level 18
+In-Reply-To: <20201011123759.22380-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 11 Oct 2020 14:37:58 +0200")
+References: <20201011123759.22380-1-peter@korsgaard.com>
+Message-ID: <87o8l8t0eg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,8 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Pymodbus has optional support for asyncio.  Pycompile unfortunately errors
- > out on these files when running under Python 2.x:
-
- > ../scripts/pycompile.py ..
- > error:   File "/usr/lib/python2.7/site-packages/pymodbus/client/asynchronous/asyncio/__init__.py", line 257
- >     yield from self._connect()
- >              ^
- > SyntaxError: invalid syntax
-
- > As a workaround, simply drop the unusable files from TARGET_DIR if building
- > for python 2.x.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/cc4/cc48927cbe9ae6c2d8b12d65467ec40df82febf6/
+ > Fixes a regression introduced in patch level 16.
+ > Rename the 2 uClibc patches so the upstream patch numbering matches ours.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
