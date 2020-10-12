@@ -1,87 +1,100 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 12 Oct 2020 23:16:17 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5lottie: new package
-Message-ID: <20201012211617.27121-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 Oct 2020 23:33:22 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.7
+Message-ID: <20201012212410.E1F818F6C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/Config.in                |  1 +
- package/qt5/qt5lottie/Config.in      | 12 ++++++++++++
- package/qt5/qt5lottie/qt5lottie.hash |  6 ++++++
- package/qt5/qt5lottie/qt5lottie.mk   | 16 ++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/qt5/qt5lottie/Config.in
- create mode 100644 package/qt5/qt5lottie/qt5lottie.hash
- create mode 100644 package/qt5/qt5lottie/qt5lottie.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=d8082db677046e004a6537828b3e4f4b9a818a4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index c31f8267f3..fc0e68e8b7 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -46,6 +46,7 @@ source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5location/Config.in"
-+source "package/qt5/qt5lottie/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5quickcontrols2/Config.in"
-diff --git a/package/qt5/qt5lottie/Config.in b/package/qt5/qt5lottie/Config.in
-new file mode 100644
-index 0000000000..de5f16d5ea
---- /dev/null
-+++ b/package/qt5/qt5lottie/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QT5LOTTIE
-+	bool "qt5lottie"
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 43 +++++++++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 46 insertions(+), 3 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 370becaf20..77e274f5ce 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,46 @@
++2020.02.7, released October 12th, 2020
 +
-+	  This package corresponds to the qt5lottie module.
++	Important / security related fixes.
 +
-+	  https://doc.qt.io/qt-5/qtlottieanimation-index.html
-diff --git a/package/qt5/qt5lottie/qt5lottie.hash b/package/qt5/qt5lottie/qt5lottie.hash
-new file mode 100644
-index 0000000000..3af1c6de31
---- /dev/null
-+++ b/package/qt5/qt5lottie/qt5lottie.hash
-@@ -0,0 +1,6 @@
-+# Hash from: http://download.qt.io/official_releases/qt/5.15/5.15.1/submodules/qtlottie-everywhere-src-5.15.1.tar.xz.sha256
-+sha256  845987860c7990035a7cd9a0e7581d210f786e551882df8b5be69f08987f2ba0  qtlottie-everywhere-src-5.15.1.tar.xz
++	meson: Correct SDK cross-compilation.conf file when
++	per-package builds were used to build SDK.
 +
-+# Hashes for license files:
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-diff --git a/package/qt5/qt5lottie/qt5lottie.mk b/package/qt5/qt5lottie/qt5lottie.mk
-new file mode 100644
-index 0000000000..1423a629b9
---- /dev/null
-+++ b/package/qt5/qt5lottie/qt5lottie.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# qt5lottie
-+#
-+################################################################################
++	systemd: Use /run rather than /var/run for PID files in units.
 +
-+QT5LOTTIE_VERSION = $(QT5_VERSION)
-+QT5LOTTIE_SITE = $(QT5_SITE)
-+QT5LOTTIE_SOURCE = qtlottie-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5LOTTIE_VERSION).tar.xz
-+QT5LOTTIE_DEPENDENCIES = qt5declarative
-+QT5LOTTIE_INSTALL_STAGING = YES
++	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
 +
-+QT5LOTTIE_LICENSE = GPL-3.0
-+QT5LOTTIE_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
++	support/script/pycompile: Rework logic to ensure .pyc files
++	contain absolute target paths, fixing code inspection at
++	runtime when executed with cwd != '/'.
 +
-+$(eval $(qmake-package))
--- 
-2.28.0
++	support/scripts/setlocalversion: Correct Mercurial output to
++	match behaviour with Git.
++
++	support/scripts/apply-patches.sh: Use patch
++	--no-backup-if-mismatch, so we no longer blindly have to
++	remove *.orig files after patching, fixing issues with
++	packages containing such files.
++
++	Updated/fixed packages: bandwidthd, barebox, bash, bison,
++	brotli, cifs-utils, cryptsetup, dhcpcd, dhcpdump, docker-cli,
++	docker-engine, ecryptfs-utils, efl, fail2ban, freetype, gcc,
++	gdb, ghostscript, gnutls, go, gst1-plugins-base,
++	gst1-plugins-ugly, ipmitool, libhtp, libraw, libssh, libxml2,
++	libxml-parser-perl, localedef, lua, memcached, mesa3d, meson,
++	minidlna, nginx, nodejs, nss-pam-ldapd, openvmtools, php,
++	postgresql, python, python-aenum, python-autobahn,
++	python-engineio, python-fire, python-pymodbus, python-scapy,
++	python-semver, python-sentry-sdk, python-socketio,
++	python-texttable, python-tinyrpc, python-txtorcon, python3,
++	qt5base, runc, samba4, strace, supertux, suricata, systemd,
++	vlc, wayland-protocols, wireguard-linux-compat, wireshark,
++	xserver_xorg-server, zeromq, zstd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12911: usb_modeswitch installation race condition
++	#13251: cryptsetup does not work on branch 2020.02 following..
++
+ 2020.02.6, released September 5th, 2020
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 1778ae8671..bf17f52f8a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.02.6
++export BR2_VERSION := 2020.02.7
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1599333000
++BR2_VERSION_EPOCH = 1602538000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index bbb66a5c24..f08806df97 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.02'
++RELEASE='2020.02.7'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
