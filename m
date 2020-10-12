@@ -1,58 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 10:57:26 +0200
-Subject: [Buildroot] [git commit branch/2020.08.x]
- package/python-sentry-sdk: drop asyncio files for python 2.x to fix
- pycompile issue
-Message-ID: <20201012084659.0D7CD8F3F6@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 10:56:54 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] package/python-pymodbus:
+ drop asyncio files for python 2.x to fix pycompile issue
+Message-ID: <20201012084703.150E38F3B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c23f2bda4889b354fcf34691330f55406ab8ef0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4314768295b523ead53eb2678df3f277edd202b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-sentry-sdk has a set of optional "integrations", some of which use asyncio.
-
-pycompile unfortunately errors out on these files when running under Python
-2.x:
+Pymodbus has optional support for asyncio.  Pycompile unfortunately errors
+out on these files when running under Python 2.x:
 
 ../scripts/pycompile.py ..
-error:   File "/usr/lib/python2.7/site-packages/sentry_sdk/integrations/sanic.py", line 64
-    async def sentry_handle_request(self, request, *args, **kwargs):
-            ^
+error:   File "/usr/lib/python2.7/site-packages/pymodbus/client/asynchronous/asyncio/__init__.py", line 257
+    yield from self._connect()
+             ^
 SyntaxError: invalid syntax
 
 As a workaround, simply drop the unusable files from TARGET_DIR if building
 for python 2.x.
 
 Fixes:
-http://autobuild.buildroot.net/results/9e4/9e47ee2a56153379e4e7bc839be5972a2302ba9f/
+http://autobuild.buildroot.net/results/cc4/cc48927cbe9ae6c2d8b12d65467ec40df82febf6/
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d62f0042e85c8a39608dc7ad6a491460791dfbfa)
+(cherry picked from commit 7d417ed7f3c5979a50ca97bdeeb8f97ba9394586)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/python-pymodbus/python-pymodbus.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 13495047b9..3bfd95a47f 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -11,4 +11,14 @@ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index d96e21a55c..9135a4d0c4 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -11,4 +11,13 @@ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = doc/LICENSE
  
 +ifeq ($(BR2_PACKAGE_PYTHON),y)
 +# only needed/valid for python 3.x
-+define PYTHON_SENTRY_SDK_RM_PY3_FILES
-+	rm -f $(addprefix $(TARGET_DIR)/usr/lib/python*/site-packages/sentry_sdk/integrations/,\
-+		aiohttp.py asgi.py django/asgi.py sanic.py tornado.py)
++define PYTHON_PYMODBUS_RM_PY3_FILES
++	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pymodbus/client/asynchronous/asyncio
 +endef
 +
-+PYTHON_SENTRY_SDK_POST_INSTALL_TARGET_HOOKS += PYTHON_SENTRY_SDK_RM_PY3_FILES
++PYTHON_PYMODBUS_POST_INSTALL_TARGET_HOOKS += PYTHON_PYMODBUS_RM_PY3_FILES
 +endif
 +
  $(eval $(python-package))
