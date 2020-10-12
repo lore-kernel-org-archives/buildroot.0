@@ -1,54 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 19:55:35 +0200
-Subject: [Buildroot] [git commit branch/2020.05.x] fs/common.mk: move
- BR2_ROOTFS_POST_FAKEROOT_SCRIPT after pre cmd hooks
-Message-ID: <20201012174613.EEF3682AEE@busybox.osuosl.org>
+Date: Mon, 12 Oct 2020 19:56:39 +0200
+Subject: [Buildroot] [git commit branch/2020.05.x] Update for 2020.05.3
+Message-ID: <20201012174614.075AB811C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6b64eeea6ece6449fce618699e774d81536830f
+commit: https://git.buildroot.net/buildroot/commit/?id=0269b2e6e224bd0ca04e4f25ccef86809108df0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.05.x
 
-The fakeroot script does not appear to be used in any of the checked
-in defconfig targets, but it seems that most often the post
-fakeroot script should be done after all the packages rules have
-been applied instead of before.
-
-Given that a change in systemd moved the SYSTEMD_PRESET_ALL hook to
-a ROOTFS_PRE_CMD_HOOKS, there was no way to use a FAKEROOT script
-to disable a service or fixup a systemd configuration. The systemd
-move makes sense, and this just tries to preserve the same ability
-to fixup a rootfs after all the cmd hooks are processed.
-
-Refer to commit 65b63785a642bbc565924edf365b5d7c080f961c for
-the change that instigated this reordering.
-
-Signed-off-by: Charles Hardin <ckhardin@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4bc4dbd630b50ce077f60d4ebbcb33e6b55fe15a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ CHANGES  | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 53 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 842ea924a5..5e790365d6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -163,11 +163,11 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(ROOTFS_FULL_USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
- 	echo "$$(HOST_DIR)/bin/makedevs -d $$(ROOTFS_FULL_DEVICES_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-+	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
-+		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
- 	$$(foreach s,$$(call qstrip,$$(BR2_ROOTFS_POST_FAKEROOT_SCRIPT)),\
- 		echo "echo '$$(TERM_BOLD)>>>   Executing fakeroot script $$(s)$$(TERM_RESET)'" >> $$(FAKEROOT_SCRIPT); \
- 		echo $$(EXTRA_ENV) $$(s) $$(TARGET_DIR) $$(BR2_ROOTFS_POST_SCRIPT_ARGS) >> $$(FAKEROOT_SCRIPT)$$(sep))
--	$$(foreach hook,$$(ROOTFS_PRE_CMD_HOOKS),\
--		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+diff --git a/CHANGES b/CHANGES
+index be4508c3c3..eefa1c9b67 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,54 @@
++2020.05.3, released October 12th, 2020
++
++	Important / security related fixes.
++
++	meson: Correct SDK cross-compilation.conf file when
++	per-package builds were used to build SDK.
++
++	systemd: Use /run rather than /var/run for PID files in units.
++
++	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC 32.
++
++	Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
++	after all finalization hooks (including pre-rootfs) to ensure
++	they can override any late configuration done by packages.
++
++	support/script/pycompile: Rework logic to ensure .pyc files
++	contain absolute target paths, fixing code inspection at
++	runtime when executed with cwd != '/'.
++
++	support/scripts/setlocalversion: Correct Mercurial output to
++	match behaviour with Git.
++
++	support/scripts/apply-patches.sh: Use patch
++	--no-backup-if-mismatch, so we no longer blindly have to
++	remove *.orig files after patching, fixing issues with
++	packages containing such files.
++
++	Updated/fixed packages: alsa-utils, apparmor, avahi,
++	bandwidthd, barebox, bash, bison, brotli, busybox, cifs-utils,
++	cryptsetup, cups, dhcpcd, dhcpdump, docker-cli, docker-engine,
++	ecryptfs-utils, efl, fail2ban, freetype, gcc, gdb,
++	ghostscript, gnutls, go, graphite2, gst1-plugins-base,
++	gst1-plugins-ugly, imagemagick, ipmitool, jbig2dec, libhtp,
++	libraw, libssh, libxml2, libxml-parser-perl, linux-headers,
++	localedef, lua, mbedtls, memcached, mesa3d, meson, minidlna,
++	mongodb, nginx, nodejs, nss-pam-ldapd, openvmtools,
++	paho-mqtt-c, php, postgresql, python, python-aenum,
++	python-django, python-engineio, python-fire, python-pymodbus,
++	python-scapy, python-semver, python-sentry-sdk,
++	python-socketio, python-texttable, python-tinyrpc,
++	python-txtorcon, python3, qt5base, rsh-redone, runc, samba4,
++	strace, supertux, suricata, systemd, uclibc, usb_modeswitch,
++	vlc, vsftpd, wayland-protocols, wireguard-linux-compat,
++	wireshark, wlroots, wolfssl, xserver_xorg-server, ympd,
++	zeromq, zstd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#12911: usb_modeswitch installation race condition
++	#13251: cryptsetup does not work on branch 2020.02 following..
++
+ 2020.05.2, released August 29th, 2020
  
- 	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),\
- 		$$(call PRINTF,$$($$(hook))) >> $$(FAKEROOT_SCRIPT)$$(sep))
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index c2bf3db79e..5c02a8e6bc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.05.2
++export BR2_VERSION := 2020.05.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1598724000
++BR2_VERSION_EPOCH = 1602525000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
