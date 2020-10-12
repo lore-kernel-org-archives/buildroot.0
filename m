@@ -1,51 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 Oct 2020 23:09:40 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.05.3
-Message-ID: <20201012205853.B0DAC82794@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 12 Oct 2020 23:16:17 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5lottie: new package
+Message-ID: <20201012211617.27121-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e40f0000ff10c7b93afdf10d0d3a47bcaf315aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ package/qt5/Config.in                |  1 +
+ package/qt5/qt5lottie/Config.in      | 12 ++++++++++++
+ package/qt5/qt5lottie/qt5lottie.hash |  6 ++++++
+ package/qt5/qt5lottie/qt5lottie.mk   | 16 ++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/qt5/qt5lottie/Config.in
+ create mode 100644 package/qt5/qt5lottie/qt5lottie.hash
+ create mode 100644 package/qt5/qt5lottie/qt5lottie.mk
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 4dbb78458e..838d904b7c 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.05.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>12 October 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.05.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.05.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.05.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-October/294446.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.05.3.tar.bz2">2020.05.3 release</a>.</p>
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index c31f8267f3..fc0e68e8b7 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -46,6 +46,7 @@ source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
++source "package/qt5/qt5lottie/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+diff --git a/package/qt5/qt5lottie/Config.in b/package/qt5/qt5lottie/Config.in
+new file mode 100644
+index 0000000000..de5f16d5ea
+--- /dev/null
++++ b/package/qt5/qt5lottie/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_QT5LOTTIE
++	bool "qt5lottie"
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
-+	  <p>Notice that the 2020.05.x series is now end of life. Please migrate to
-+	  the 2020.08 series instead which will be supported until December 2020.</p>
-+      </div>
-+    </div>
-+  </li>
++	  This package corresponds to the qt5lottie module.
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	  https://doc.qt.io/qt-5/qtlottieanimation-index.html
+diff --git a/package/qt5/qt5lottie/qt5lottie.hash b/package/qt5/qt5lottie/qt5lottie.hash
+new file mode 100644
+index 0000000000..3af1c6de31
+--- /dev/null
++++ b/package/qt5/qt5lottie/qt5lottie.hash
+@@ -0,0 +1,6 @@
++# Hash from: http://download.qt.io/official_releases/qt/5.15/5.15.1/submodules/qtlottie-everywhere-src-5.15.1.tar.xz.sha256
++sha256  845987860c7990035a7cd9a0e7581d210f786e551882df8b5be69f08987f2ba0  qtlottie-everywhere-src-5.15.1.tar.xz
++
++# Hashes for license files:
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
+diff --git a/package/qt5/qt5lottie/qt5lottie.mk b/package/qt5/qt5lottie/qt5lottie.mk
+new file mode 100644
+index 0000000000..1423a629b9
+--- /dev/null
++++ b/package/qt5/qt5lottie/qt5lottie.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# qt5lottie
++#
++################################################################################
++
++QT5LOTTIE_VERSION = $(QT5_VERSION)
++QT5LOTTIE_SITE = $(QT5_SITE)
++QT5LOTTIE_SOURCE = qtlottie-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5LOTTIE_VERSION).tar.xz
++QT5LOTTIE_DEPENDENCIES = qt5declarative
++QT5LOTTIE_INSTALL_STAGING = YES
++
++QT5LOTTIE_LICENSE = GPL-3.0
++QT5LOTTIE_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
++
++$(eval $(qmake-package))
+-- 
+2.28.0
