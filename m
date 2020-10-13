@@ -1,41 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 13 Oct 2020 14:28:34 +0200
-Subject: [Buildroot] [git commit] config/odroidc2: force host kernel version
- to 5.7
-Message-ID: <20201013121733.6F0AB8AA9C@busybox.osuosl.org>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 13 Oct 2020 10:28:58 -0300
+Subject: [Buildroot] [PATCH 0/5] board/udoo: bsp updates and cleanup
+In-Reply-To: <20201010063022.448414-1-geomatsi@gmail.com>
+References: <20201010063022.448414-1-geomatsi@gmail.com>
+Message-ID: <CAOMZO5BgpZ8zaF-5rHTjZL5AHJ2o3J1Aq7wsNEpnUzcmMY-qWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30b0218b08d0b9b9d6545edadc8659d5d2514f65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Sergey,
 
-as the current kernel version used for this board is 5.7,
-make sure that the host kernel version is the same to prevent
-build failure due to version miss match.
+On Sat, Oct 10, 2020 at 3:24 AM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+>
+> Hi Fabio and all,
+>
+> Here is a patch series for Udoo boards with BSP updates and several minor
+> cleanups required to make updated BSP work out of the box.
+> Major changes include:
+>
+> - bump Linux kernel to 5.8.13
+> - bump U-Boot to 2020.10
+> - udoo/mx6qdl: disable usbh1 in dts rather than in kernel configuration
+> - use common image generation files for udoo boards
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/779210973
+Thanks for the series:
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/odroidc2_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-index 3ed08710e9..5f97fc3dd8 100644
---- a/configs/odroidc2_defconfig
-+++ b/configs/odroidc2_defconfig
-@@ -1,6 +1,9 @@
- # Architecture
- BR2_aarch64=y
- 
-+# Linux headers same as kernel, a 5.7 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
-+
- # System
- BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAML0"
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
