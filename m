@@ -1,82 +1,113 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue, 13 Oct 2020 17:16:48 +0200
-Subject: [Buildroot] [PATCH] systemd: add option to enable
- systemd-journal-remote
-In-Reply-To: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
-References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
-Message-ID: <905ca80c-acb2-3118-f829-baeb175e4a6a@heine.tech>
+From: Maurice Smulders <maurice.smulders@genevatech.net>
+Date: Tue, 13 Oct 2020 09:25:53 -0600
+Subject: [Buildroot] ELFUTILS - only build for the target architecture...
+In-Reply-To: <20201013134712.023269ac@windsurf>
+References: <CACxOKoKEi0OnY+aq1i6S=zX5XnDnu_pMVWtGmEpnDB7CrdW2cw@mail.gmail.com>
+ <20201013134712.023269ac@windsurf>
+Message-ID: <CACxOKo+x_2v9eF0TukkToGBi4Ng6Hf=LGnWSFDrFY3BQez69wA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Thomas,
 
-sorry, I didn't have the original mail thread so I'm responding to the
-initial patch from patchwork.
+I am using a (slightly) modified version of 2020.02. It is a hybrid
+form of a custom tree and a few patches.
 
-Since this issue is still unresolved I did have a second look and found
-that the decision tree that systemd does for this options is even
-trickier than everyone assumed.
+I patched the crosstool section to allow GLIBC to be used for our PPC
+e500v2 architecture - isn't that hard, but it requires an older
+version of GLIBC (2.29.1) - as the newest version doesn't support PPC
+e500 anymore - just like GCC 7.5 is the end of the line for it too
+and I made a patch to support compiling cborruby - as the ruby
+developers haven't thought at all about cross compiling for other than
+Windows on Linux...
+
+I can likely upgrade buildroot to the latest LTS and apply these
+patches to be at the same state...
+
+[~/build/buildroot-top/buildroot-customization/package/minicoredumper]$
+cat Config.in
+              *[master]
+config BR2_PACKAGE_MINICOREDUMPER
+        bool "MiniCoreDumper"
+        select BR2_PACKAGE_ELFUTILS
+        help
+          MiniCoredumper handler to create limited size core dumps.
+
+          https://www.linutronix.de/minicoredumper
+
+[~/build/buildroot-top/buildroot-customization/package/minicoredumper]$
+cat minicoredumper.mk
+              *[master]
+################################################################################
+#
+# minicoredumper
+#
+################################################################################
+
+MINICOREDUMPER_VERSION = 2.0.1
+MINICOREDUMPER_SITE = https://www.linutronix.de/minicoredumper/files
+MINICOREDUMPER_SOURCE = minicoredumper-$(MINICOREDUMPER_VERSION).tar.xz
+MINICOREDUMPER_LICENSE_FILES = COPYING COPYING.BSD COPYING.LGPLv2.1
+MINICOREDUMPER_DEPENDENCIES = json-c elfutils
+
+$(eval $(autotools-package))
+
+Maurice
+
+On Tue, Oct 13, 2020 at 5:47 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Maurice,
+>
+> On Mon, 12 Oct 2020 17:06:26 -0600
+> Maurice Smulders via buildroot <buildroot@busybox.net> wrote:
+>
+> > Currently, ELFUTILS gets built for all architectures it looks like.
+> >
+> > safe:/usr/lib/elfutils> ls
+> > libebl_aarch64-0.177.so  libebl_i386.so           libebl_s390-0.177.so
+> > libebl_aarch64.so        libebl_ia64-0.177.so     libebl_s390.so
+> > libebl_alpha-0.177.so    libebl_ia64.so           libebl_sh-0.177.so
+> > libebl_alpha.so          libebl_m68k-0.177.so     libebl_sh.so
+> > libebl_arm-0.177.so      libebl_m68k.so           libebl_sparc-0.177.so
+> > libebl_arm.so            libebl_ppc-0.177.so      libebl_sparc.so
+> > libebl_bpf-0.177.so      libebl_ppc.so            libebl_tilegx-0.177.so
+> > libebl_bpf.so            libebl_ppc64-0.177.so    libebl_tilegx.so
+> > libebl_csky-0.177.so     libebl_ppc64.so          libebl_x86_64-0.177.so
+> > libebl_csky.so           libebl_riscv-0.177.so    libebl_x86_64.so
+> > libebl_i386-0.177.so     libebl_riscv.so
+>
+> I don't see these shared libraries when building elfutils with the
+> current Buildroot. Could you give more details about your Buildroot
+> version and configuration ?
+>
+> > Is there a way to get it built just for the target architecture - in
+> > our case PowerPC (ppc)? I have added minicoredumper to the
+> > customization packages, and it requires elfutils....
+>
+> I think these files are all probably built for your target
+> architecture, but have support for inspecting ELF files from other CPU
+> architectures? For example, even if you're on PPC system, you may want
+> to inspect x86 or ARM binaries. But I'm really just guessing here since
+> I don't have those shared libraries installed when I build elfutils.
+>
+> And I see in the libebl/Makefile.am that it's a noinst library, so
+> libebl should not even be installed. That being said, I admit I'm
+> building with the latest Buildroot, which has elfutils 0.181 and you're
+> using elfutils 0.177.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 
-As Jeremy already explained there are three binaries that depend on this
--Dremote switch.
 
-What has been slighty incorrect is that not only
-systemd-journal-gatewayd but also systemd-journal-remoted depend on
-libmicrohttpd see [0].
-For as systemd-journal-upload depends on libcurl [1].
-
-
-Now for the really strange part:
-
-systemd-journald-gateway and systemd-journald-remote are always built
-together. There is no switch.
-But there is some more logic to the -remote flag besides true and false.
-If you don't specify its value is 'auto'.
-And this is where [2] comes into play. It depends on the availability of
-libcurl and/or libmicrohttp which of the 3 binaries is built.
-
--remote=auto && libcurl=y && libmicrohttpd=n? builds systemd-journal-upload
--remote=auto && libcurl=n && libmicrohttpd=y? builds
-systemd-journal-gatewayd and systemd-journal-remoted
-
-But if you specify -remote=true you are REQUIRED to have libcurl AND
-libmicrohttp and all three binaries are build.
-
-So this is pretty messy and I can think two ways of getting this at
-least a bit more consistent.
-
-
-The all or nothing solution could be something like this:
-
-|config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE bool "journal events remote
-tools" select BR2_PACKAGE_LIBMICROHTTPD |||select BR2_PACKAGE_LIBCURL| help installs systemd-journal-gatewayd, |||systemd-journal-remote| and |||systemd-journal-upload|
-http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
-|||https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
-https://www.freedesktop.org/software/systemd/man/systemd-journal-upload.html||
-
-which would set -Dremote=true -Dmicrohttpd=true -Dlibcurl=true
-
-The other solution would be omitting the -remote= flag all together (defaulting it to auto) and steering the tool compilation via depending on -Dlibcurl=true and/or -Dlibmicrohttpd=true.
-This would give the possibility to build systemd-journal-gatewayd and systemd-journal-remote without systemd-journal-upload and vice versa.
-This would actually be the way it was before applying this patch but the descriptions were at least a bit misleading.
-
-Also I'm not sure if the libcurl dependency might be needed for something else in systemd (at least importd also needs it).
-
-
-I'm tending to the first (simpler) solution. Which is actually how it is
-currently as you need to enable both Options now to get all three tools.
-Else you get none.
-
-I hope that wasn't to confusing. What do you think?
-
-Regards,
-Michael
-
-
-[0] https://github.com/systemd/systemd/blob/master/meson.build#L2653
-[1] https://github.com/systemd/systemd/blob/master/meson.build#L2635
-[2] https://github.com/systemd/systemd/blob/master/meson.build#L1422
+-- 
+Maurice Smulders, GTI
