@@ -1,60 +1,67 @@
 From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 13 Oct 2020 17:36:02 -0500
-Subject: [Buildroot] [PATCH v2 2/5] docs/manual: add section about
- br2-external skeleton
+Date: Tue, 13 Oct 2020 17:36:01 -0500
+Subject: [Buildroot] [PATCH v2 1/5] system: support br2-external skeleton
+ packages
 In-Reply-To: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
 References: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20201013223605.188920-2-brandon.maier@rockwellcollins.com>
+Message-ID: <20201013223605.188920-1-brandon.maier@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Today, the BR2_ROOTFS_SKELETON_CUSTOM is the only way to build a custom
+skeleton. But it's limiting as users must provide a pre-built skeleton
+for each target. Supporting a br2-external package allows users to build
+up a skeleton and customize it with their own KConfig options.
+
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 ---
- docs/manual/customize-outside-br.txt | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ support/scripts/br2-external | 9 +++++++++
+ system/Config.in             | 3 +++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 5f7d623aea..c24516680c 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -202,6 +202,7 @@ a set of files that define those alternatives:
-   will then be listed in the toolchain selection;
- * +provides/jpeg.in+ defines the alternative libjpeg implementations;
- * +provides/openssl.in+ defines the alternative openssl implementations.
-+* +provides/skeleton.in+ defines the alternative skeleton implementations.
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index ededd2d900..01804e1220 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -161,6 +161,7 @@ do_kconfig() {
+         toolchains
+         jpeg
+         openssl
++        skeleton
+     )
  
- ===== Free-form content
+     for br2 in "${items[@]}"; do
+@@ -224,6 +225,14 @@ do_kconfig() {
+         else
+             printf '# No openssl from: %s\n\n' "${br2_desc}"
+         fi >>"${outputdir}/.br2-external.in.openssl"
++
++        if [ -f "${br2_ext}/provides/skeleton.in" ]; then
++            printf 'comment "skeleton from: %s"\n' "${br2_desc}"
++            printf 'source "%s/provides/skeleton.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No skeleton from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.skeleton"
+     done
  
-@@ -321,6 +322,27 @@ illustration, of course):
-   |     |$(eval $(toolchain-external-package))
-   |     `----
-   |
-+  |- provides/skeleton.in
-+  |     |config BR2_ROOTFS_SKELETON_MINE
-+  |     |    bool "my custom skeleton"
-+  |     |    select BR2_PACKAGE_SKELETON_MINE
-+  |     `----
-+  |- package/skeleton-mine/Config.in
-+  |     |config BR2_PACKAGE_SKELETON_MINE
-+  |     |    bool
-+  |     |    select BR2_PACKAGE_HAS_SKELETON
-+  |     |
-+  |     |config BR2_PACKAGE_PROVIDES_SKELETON
-+  |     |    default "skeleton-mine" if BR2_PACKAGE_SKELETON_MINE
-+  |     `----
-+  |- package/skeleton-mine/skeleton-mine.mk
-+  |     |SKELETON_MINE_ADD_TOOLCHAIN_DEPENDENCY = NO
-+  |     |SKELETON_MINE_ADD_SKELETON_DEPENDENCY = NO
-+  |     |SKELETON_MINE_PROVIDES = skeleton
-+  |     |SKELETON_MINE_INSTALL_STAGING = YES
-+  |     |$(eval $(generic-package))
-+  |     `----
-+  |
-   |- linux/Config.ext.in
-   |     |config BR2_LINUX_KERNEL_EXT_EXAMPLE_DRIVER
-   |     |    bool "example-external-driver"
+     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
+diff --git a/system/Config.in b/system/Config.in
+index b8b7c16529..a363e099e5 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -23,6 +23,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	help
+ 	  Use custom target skeleton.
+ 
++# skeleton from br2-external trees, if any
++source "$BR2_BASE_DIR/.br2-external.in.skeleton"
++
+ endchoice
+ 
+ if BR2_ROOTFS_SKELETON_CUSTOM
 -- 
 2.28.0
