@@ -1,95 +1,53 @@
-From: Maurice Smulders <maurice.smulders@genevatech.net>
-Date: Tue, 13 Oct 2020 10:11:57 -0600
-Subject: [Buildroot] ELFUTILS - only build for the target architecture...
-In-Reply-To: <20201013175655.307a62f3@windsurf>
-References: <CACxOKoKEi0OnY+aq1i6S=zX5XnDnu_pMVWtGmEpnDB7CrdW2cw@mail.gmail.com>
- <20201013134712.023269ac@windsurf>
- <CACxOKo+x_2v9eF0TukkToGBi4Ng6Hf=LGnWSFDrFY3BQez69wA@mail.gmail.com>
- <20201013175655.307a62f3@windsurf>
-Message-ID: <CACxOKoJn9=DETk8nj6FZ85t=NqFKPqf5AnGhdcAXXVsOttk6dg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Oct 2020 18:15:45 +0200
+Subject: [Buildroot] [git commit] configs/mx6sx_udoo_neo: bump kernel and
+ U-Boot versions
+Message-ID: <20201013160440.5ED6A8F7D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=8cd4aa8fde83841219c5eb807ec162b3b0f6f5cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I am rebuilding with a patched br to use 0.188 of Elfutils. I have
-started a discussion subject in the elfutils discussion list too - and
-there is some agreement that it is really should support selective
-targets, I'll forward you that thread.
+Bump Linux kernel to 5.8.13 and U-Boot to 2020.10.
 
-And yes, the processor I am using (MPC8548E) is a SPE processor, with
-it's funky partial APU (FP primitives only). I currently have no
-choice to go to another one for our application.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx6sx_udoo_neo_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Maurice
-
-On Tue, Oct 13, 2020 at 9:56 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 13 Oct 2020 09:25:53 -0600
-> Maurice Smulders <maurice.smulders@genevatech.net> wrote:
->
-> > I am using a (slightly) modified version of 2020.02. It is a hybrid
-> > form of a custom tree and a few patches.
-> >
-> > I patched the crosstool section to allow GLIBC to be used for our PPC
-> > e500v2 architecture - isn't that hard, but it requires an older
-> > version of GLIBC (2.29.1) - as the newest version doesn't support PPC
-> > e500 anymore - just like GCC 7.5 is the end of the line for it too
-> > and I made a patch to support compiling cborruby - as the ruby
-> > developers haven't thought at all about cross compiling for other than
-> > Windows on Linux...
->
-> Hm, we still have e500v2 supported in Buildroot but indeed only in the
-> "Classic" PowerPC ABI, and not the SPE ABI which indeed is no longer
-> supported since gcc 8.x.
->
-> I assume you're not able to use the Classic PowerPC ABI for some reason?
->
-> > I can likely upgrade buildroot to the latest LTS and apply these
-> > patches to be at the same state...
->
-> So indeed, in elfutils 0.177, I do see all those per-architecture
-> shared libraries. I looked at upstream elfutils, and they changed
-> things in commit 4f937e24dc7ad1820fc7c99a6dd6422657f14666, which says:
->
->     Don't use dlopen() for libebl modules
->
->     Currently, architecture-specific code for libebl exists in separate
->     libebl_$ARCH.so libraries which libebl loads with dlopen() at runtime.
->     This makes it impossible to have standalone, statically-linked binaries
->     which use libdwfl if they depend on any architecture-specific
->     functionality. Additionally, when these libraries cannot be found, the
->     failure modes are non-obvious. So, let's get rid of libebl_$arch.so and
->     move it all into libdw.so/libdw.a, which simplifies things considerably.
->
->     Signed-off-by: Omar Sandoval <osandov@fb.com>
->
-> So prior to that commit (for example elfutils 0.177), libebl what
-> dlopen-ing those per-architecture .so files. Now, all the code is built
-> into the libebl library directly.
->
-> And there's indeed no way to selectively compile support for only a
-> subset of the CPU architectures. But again, this is not about the CPU
-> architecture we run on: all those shared libraries are compiled for
-> your selected CPU architecture. However, they contain code to
-> manipulate ELF binaries that have been compiled for other CPU
-> architectures.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
--- 
-Maurice Smulders, GTI
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index e2e36b907b..57b9562c06 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++# Linux headers same as kernel, a 5.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/neo/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/udoo/neo/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -12,13 +12,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="udoo_neo"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.09"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
