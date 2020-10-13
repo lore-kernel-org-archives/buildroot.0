@@ -1,67 +1,95 @@
 From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 13 Oct 2020 17:36:01 -0500
-Subject: [Buildroot] [PATCH v2 1/5] system: support br2-external skeleton
- packages
+Date: Tue, 13 Oct 2020 17:36:03 -0500
+Subject: [Buildroot] [PATCH v2 3/5] system: Move skeleton-init-* selection
+ to init
 In-Reply-To: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
 References: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20201013223605.188920-1-brandon.maier@rockwellcollins.com>
+Message-ID: <20201013223605.188920-3-brandon.maier@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Today, the BR2_ROOTFS_SKELETON_CUSTOM is the only way to build a custom
-skeleton. But it's limiting as users must provide a pre-built skeleton
-for each target. Supporting a br2-external package allows users to build
-up a skeleton and customize it with their own KConfig options.
+In preparation for supporting br2-external inits, move the 'select' for
+the BR2_PACKAGE_SKELETON_INIT_* to their respective init systems. This
+will allow a br2-external init to 'select' which skeleton it needs.
 
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 ---
- support/scripts/br2-external | 9 +++++++++
- system/Config.in             | 3 +++
- 2 files changed, 12 insertions(+)
+ system/Config.in | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index ededd2d900..01804e1220 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -161,6 +161,7 @@ do_kconfig() {
-         toolchains
-         jpeg
-         openssl
-+        skeleton
-     )
- 
-     for br2 in "${items[@]}"; do
-@@ -224,6 +225,14 @@ do_kconfig() {
-         else
-             printf '# No openssl from: %s\n\n' "${br2_desc}"
-         fi >>"${outputdir}/.br2-external.in.openssl"
-+
-+        if [ -f "${br2_ext}/provides/skeleton.in" ]; then
-+            printf 'comment "skeleton from: %s"\n' "${br2_desc}"
-+            printf 'source "%s/provides/skeleton.in"\n' "${br2_ext}"
-+            printf '\n'
-+        else
-+            printf '# No skeleton from: %s\n\n' "${br2_desc}"
-+        fi >>"${outputdir}/.br2-external.in.skeleton"
-     done
- 
-     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
 diff --git a/system/Config.in b/system/Config.in
-index b8b7c16529..a363e099e5 100644
+index a363e099e5..f062e5be93 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -23,6 +23,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+@@ -1,21 +1,17 @@
+ menu "System configuration"
+ 
+-# Note: usually, it is not possible to select a provider of a virtual
+-# package. But here we have an exception: there are only four providers
+-# and they only get selected by separate entries in this choice and
+-# under different, exclusive conditions. So this is a safe situation.
++# Note on package/skeleton: usually, it is not safe to 'select' a
++# provider of a virtual package. But below we have an exception: each
++# init system may select one of the virtual skeleton-init-* packages. As
++# only one init system may be enabled, only one skeleton-init-* may be
++# selected. So this is a safe situation.
+ choice
+ 	prompt "Root FS skeleton"
+ 
+ config BR2_ROOTFS_SKELETON_DEFAULT
+ 	bool "default target skeleton"
+-	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_SYSV
+-	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_BUSYBOX
+-	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_INIT_OPENRC
+-	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_INIT_SYSTEMD
+-	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
  	help
- 	  Use custom target skeleton.
+-	  Use default target skeleton
++	  Use default target skeleton for selected init system.
  
-+# skeleton from br2-external trees, if any
-+source "$BR2_BASE_DIR/.br2-external.in.skeleton"
-+
- endchoice
+ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	bool "custom target skeleton"
+@@ -94,6 +90,7 @@ config BR2_INIT_BUSYBOX
+ 	bool "BusyBox"
+ 	select BR2_PACKAGE_BUSYBOX
+ 	select BR2_PACKAGE_INITSCRIPTS
++	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
  
- if BR2_ROOTFS_SKELETON_CUSTOM
+ config BR2_INIT_SYSV
+ 	bool "systemV"
+@@ -101,12 +98,14 @@ config BR2_INIT_SYSV
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
+ 	select BR2_PACKAGE_INITSCRIPTS
+ 	select BR2_PACKAGE_SYSVINIT
++	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ config BR2_INIT_OPENRC
+ 	bool "OpenRC"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_OPENRC
++	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ comment "openrc needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+@@ -129,6 +128,7 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_HOST_GCC_AT_LEAST_5
+ 	select BR2_ROOTFS_MERGED_USR
+ 	select BR2_PACKAGE_SYSTEMD
++	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and target gcc >= 5"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+@@ -141,6 +141,7 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and targe
+ 
+ config BR2_INIT_NONE
+ 	bool "None"
++	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
+ 	help
+ 	  Buildroot will not install any init system. You will
+ 	  have to provide your own, either with a new package
 -- 
 2.28.0
