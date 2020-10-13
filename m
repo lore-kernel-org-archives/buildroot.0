@@ -1,63 +1,58 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 13 Oct 2020 22:16:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
- build issue with Wayland backend
-In-Reply-To: <20201013200732.GA167901@p1g2>
-References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
- <20200402130842.918696-3-gary.bisson@boundarydevices.com>
- <20200402162543.595ed9e7@windsurf.home>
- <20200402151026.GA934730@p1g2> <20200708122048.GB331830@p1g2>
- <CAEyMn7ZM4Stiud_M2tnK=t-Z7Azot5LxBX9_kzxFUXgFqxikpg@mail.gmail.com>
- <20201013200732.GA167901@p1g2>
-Message-ID: <CAEyMn7ZLAvBensxtLxwLyozAg_ZUBGhGTDQFEBqzG7WA=31aUQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 13 Oct 2020 23:04:30 +0200
+Subject: [Buildroot] [git commit] configs/stm32mp157*: bump kernel version
+Message-ID: <20201013205326.272CE8F5C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=06eb11e03fb1ccb5a99eb59d20266686c1b7c7e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Am Di., 13. Okt. 2020 um 22:07 Uhr schrieb Gary Bisson
-<gary.bisson@boundarydevices.com>:
->
-> Hi Heiko,
->
-> On Tue, Oct 13, 2020 at 08:30:50PM +0200, Heiko Thiery wrote:
-> > Hi Gary, Hi Thomas,
-> >
-> > Am Mi., 8. Juli 2020 um 14:20 Uhr schrieb Gary Bisson
-> > <gary.bisson@boundarydevices.com>:
-> > >
-> > > Hi Thomas,
-> > >
-> > > Gentle ping on this, let me know if you see another approach that would
-> > > be better, I'm open to suggestions.
-> > >
-> > > I'd love to have Weston support for i.MX8M* fixed for next release and
-> > > my other series [1] depends on this patch.
-> > >
-> > > Then I am preparing patches to have VPU support using GStreamer-imx V2
-> > > for i.MX8M* as well.
-> >
-> > Any news on that? I also would like to see weston support for imx8m in
-> > buildroot.
->
-> No, a Tested-by and/or Reviewed-by would definitely help the patch
-> getting further. Have you tried it?
+Since kernel 5.7 is EOL now, this upgrades it to version 5.8.13.
 
-I'm in progress and hopefully have a running system in the next few
-days. If I get a running version I will do so.
+Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/stm32mp157a_dk1_defconfig | 4 ++--
+ configs/stm32mp157c_dk2_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
->
-> > @Gary: did you try to fix that upstream?
->
-> What upstream? There's none to my knowledge. As mentioned in the commit
-> log, even NXP doesn't have a real solution for this.
-
-I have to admit I'm just at the beginning of that topic and have no
-experience yet ;-/
-
->
-> Regards,
-> Gary
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index b00c068698..6883aaba7b 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index d89dd180b2..50d875749b 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
