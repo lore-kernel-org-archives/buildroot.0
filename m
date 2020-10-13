@@ -1,157 +1,380 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 13 Oct 2020 19:17:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3: bump to version 3.9.0
-In-Reply-To: <20201006222422.874760-1-james.hilliard1@gmail.com>
-References: <20201006222422.874760-1-james.hilliard1@gmail.com>
-Message-ID: <20201013171709.GC3466@scaer>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 13 Oct 2020 19:29:01 +0200
+Subject: [Buildroot] [PATCH v3 2/4] configs/stm32mp157*: use trusted
+ configuration
+In-Reply-To: <CALxJ29TwPNPcimJX9v9RL+fwbfYOh6FjaKzPgc=JxnJmo0WGMg@mail.gmail.com>
+References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
+ <20201007144945.1697081-2-shlomi.39sd@gmail.com>
+ <a43d507a-7dfb-e063-7869-f4f73dc28907@grinn-global.com>
+ <CALxJ29TwPNPcimJX9v9RL+fwbfYOh6FjaKzPgc=JxnJmo0WGMg@mail.gmail.com>
+Message-ID: <56b2695a-78ca-8102-1be8-a8713ffcf709@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Hi Shlomi,
 
-On 2020-10-06 16:24 -0600, James Hilliard spake thusly:
-> Rebased patches on 3.9.0
-
-Unless the patches do not apply, I find rebasing, when all it does is
-fixup the offsets, to add too much noise, so much so that I almost
-missed actual changes in a few of the paatches, see below...
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...e-the-build-of-pyc-files-conditional.patch | 14 +++++-----
->  ...taddrinfo-configure-test-when-cross-.patch |  8 +++---
->  ...re-to-disable-the-build-of-certain-e.patch | 20 ++++++-------
->  ...y-header-paths-for-cross-compilation.patch | 12 ++++----
->  ...ook-in-usr-lib-termcap-for-libraries.patch |  8 +++---
->  .../0006-Don-t-add-multiarch-paths.patch      |  8 +++---
->  .../0007-Abort-on-failed-module-build.patch   |  8 +++---
->  .../0008-Serial-ioctl-workaround.patch        |  6 ++--
->  ...e-shebang-of-Python-scripts-for-cros.patch |  4 +--
->  ...ig.sh.in-ensure-sed-invocations-only.patch |  4 +--
->  ...locale-and-set-to-default-when-addin.patch | 12 ++++----
-
-This one has an actual change.
-
->  ...Add-importlib-fix-for-PEP-3147-issue.patch | 12 ++++----
->  ...-disable-installation-of-test-module.patch | 27 ++++++++++--------
-
-This one too.
-
->  .../0014-Add-an-option-to-disable-pydoc.patch | 28 +++++++++----------
->  ...015-Add-an-option-to-disable-lib2to3.patch | 24 ++++++++--------
->  ...option-to-disable-the-sqlite3-module.patch | 16 +++++------
->  ...d-an-option-to-disable-the-tk-module.patch | 20 ++++++-------
->  ...-option-to-disable-the-curses-module.patch | 26 ++++++++---------
->  .../0019-Add-an-option-to-disable-expat.patch | 20 ++++++-------
->  ...-Add-an-option-to-disable-CJK-codecs.patch |  8 +++---
->  .../0021-Add-an-option-to-disable-NIS.patch   |  8 +++---
->  ...Add-an-option-to-disable-unicodedata.patch |  8 +++---
->  .../0023-Add-an-option-to-disable-IDLE.patch  | 20 ++++++-------
->  ...024-Add-an-option-to-disable-decimal.patch | 14 +++++-----
-
-The third and final one.
-
-[--SNIP--]
-> diff --git a/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch b/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-> index 1a40b74d21..00db527c8a 100644
-> --- a/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-> +++ b/package/python3/0011-Override-system-locale-and-set-to-default-when-addin.patch
-> @@ -1,4 +1,4 @@
-> -From a9affe1f3f98342b682848c9b3f862ee194ff625 Mon Sep 17 00:00:00 2001
-> +From e4ae670e3489544a49dabd1618c32fe73504a7ba Mon Sep 17 00:00:00 2001
->  From: Samuel Cabrero <samuelcabrero@gmail.com>
->  Date: Wed, 23 Dec 2015 11:45:48 +0100
->  Subject: [PATCH] Override system locale and set to default when adding gcc
-> @@ -20,18 +20,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->   1 file changed, 1 insertion(+), 1 deletion(-)
->  
->  diff --git a/setup.py b/setup.py
-> -index 8fda3b4d47..bb7eb44213 100644
-> +index d3f0e663f2..926c16f58f 100644
->  --- a/setup.py
->  +++ b/setup.py
-> -@@ -600,7 +600,7 @@ class PyBuildExt(build_ext):
-> +@@ -695,7 +695,7 @@ class PyBuildExt(build_ext):
->           tmpfile = os.path.join(self.build_temp, 'ccpaths')
->           if not os.path.exists(self.build_temp):
->               os.makedirs(self.build_temp)
-> --        ret = os.system('%s -E -v - </dev/null 2>%s 1>/dev/null' % (cc, tmpfile))
-> -+        ret = os.system('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (cc, tmpfile))
-> +-        ret = run_command('%s -E -v - </dev/null 2>%s 1>/dev/null' % (cc, tmpfile))
-> ++        ret = run_command('LC_ALL=C %s -E -v - </dev/null 2>%s 1>/dev/null' % (cc, tmpfile))
-
-You should add your Signed-off-by on this patch, as you are doing really
-more than just fixing the offsets:
-
-    [your-email: adapt to python 3.9]
-    Signed-off-by: Your NAME <your-email>
-
-[--SNIP--]
-> diff --git a/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch b/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-> index 675c2c1abf..6c14d84e47 100644
-> --- a/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-> +++ b/package/python3/0013-Add-an-option-to-disable-installation-of-test-module.patch
-> @@ -1,4 +1,4 @@
-> -From 5ee3e5ad62919c431b1f7b5ff91ddf606582df0e Mon Sep 17 00:00:00 2001
-> +From 0337342d413d13f437fd089de91faee70a8bf3f9 Mon Sep 17 00:00:00 2001
->  From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  Date: Wed, 22 Feb 2017 17:01:18 -0800
->  Subject: [PATCH] Add an option to disable installation of test modules
-> @@ -11,15 +11,15 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->  [ Andrey Smirnov: ported to Python 3.6 ]
->  Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-
-Ditto for this one; see also how Andrey noted his own contribution.
-
-[--SNIP--]
-> diff --git a/package/python3/0024-Add-an-option-to-disable-decimal.patch b/package/python3/0024-Add-an-option-to-disable-decimal.patch
-> index 5906f9d385..7e822f3720 100644
-> --- a/package/python3/0024-Add-an-option-to-disable-decimal.patch
-> +++ b/package/python3/0024-Add-an-option-to-disable-decimal.patch
-> @@ -1,4 +1,4 @@
-> -From c82efeabd2f9b89ff2ecd5261eceeeb3af022ae8 Mon Sep 17 00:00:00 2001
-> +From d5fe81cbd51da2a84ed89d1e4c80d921d4efce26 Mon Sep 17 00:00:00 2001
->  From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  Date: Wed, 23 Dec 2015 11:51:31 +0100
->  Subject: [PATCH] Add an option to disable decimal
-> @@ -17,16 +17,16 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
->   2 files changed, 13 insertions(+), 6 deletions(-)
->  
->  diff --git a/configure.ac b/configure.ac
-> -index 8c9706582e..e6255babb6 100644
-> +index 7bd4623ccd..e513ef6a20 100644
->  --- a/configure.ac
->  +++ b/configure.ac
-> -@@ -3012,13 +3012,20 @@ fi
-> +@@ -3106,13 +3106,20 @@ fi
->   AC_SUBST(LIBFFI_INCLUDEDIR)
->   
->   # Check for use of the system libmpdec library
->  -AC_MSG_CHECKING(for --with-system-libmpdec)
->  -AC_ARG_WITH(system_libmpdec,
-> --            AS_HELP_STRING([--with-system-libmpdec], [build _decimal module using an installed libmpdec library]),
-> +-            AS_HELP_STRING([--with-system-libmpdec], [build _decimal module using an installed libmpdec library, see Doc/library/decimal.rst (default is no)]),
-
-Ditto again.
-
-I agree that offset-free patches are better, but in this case, this is
-adding too much noise to the commit.
-
-Just do two commits:
-
- 1. just do the bump and just the fixes required for the bump
- 2. rebase all the patches
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 12.10.2020 22:11, Shlomi Vaknin wrote:
+> Hi Bartek,
+>
+> ??????? ??? ??, 12 ????? 2020 ?-21:08 ??? ?Bartosz Bilas?? 
+> <?b.bilas at grinn-global.com <mailto:b.bilas@grinn-global.com>??>:?
+>
+>     Hi Shlomi,
+>
+>     On 07.10.2020 16:49, Shlomi Vaknin wrote:
+>>     Adding support for trusted configuration for stm32mp157c-dk2 and stm32mp157a-dk1.
+>>     This patch change using uboot spl as fsbl to using arm trusted firmware.
+>>     The reason for this change is that st recommends to use this configuration (or optee)
+>>     and not the basic.
+>
+>>     In addition, this commit enables gadget support in `linux.config`.
+>     This should be committed as a separate patch because it's not
+>     related to the trusted configuration at all.
+>>     In addition, removing partition-type from genimage.cfg is mandatory,
+>>     since it creates a hybrid MBR partition table which causes ATF to not find ssbl parition.
+>>
+>>     Signed-off-by: Shlomi Vaknin<shlomi.39sd@gmail.com>  <mailto:shlomi.39sd@gmail.com>
+>>     ---
+>>       .../{genimage.cfg => genimage.cfg.template}   |  7 ++-
+>>       .../common/stm32mp157/post-image.sh           | 43 +++++++++++++++++++
+>>       .../stm32mp157a-dk1/linux.config              | 24 ++++-------
+>>       .../stm32mp157c-dk2/linux.config              | 20 ++++-----
+>>       configs/stm32mp157a_dk1_defconfig             | 14 +++---
+>>       configs/stm32mp157c_dk2_defconfig             | 14 +++---
+>>       6 files changed, 78 insertions(+), 44 deletions(-)
+>>       rename board/stmicroelectronics/common/stm32mp157/{genimage.cfg => genimage.cfg.template} (63%)
+>>       create mode 100755 board/stmicroelectronics/common/stm32mp157/post-image.sh
+>>
+>>     diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+>>     similarity index 63%
+>>     rename from board/stmicroelectronics/common/stm32mp157/genimage.cfg
+>>     rename to board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+>>     index d1ce530cc5..f341c19f2f 100644
+>>     --- a/board/stmicroelectronics/common/stm32mp157/genimage.cfg
+>>     +++ b/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+>>     @@ -4,20 +4,19 @@ image sdcard.img {
+>>       	}
+>>       
+>>       	partition fsbl1 {
+>>     -		image = "u-boot-spl.stm32"
+>>     +		image = "%ATFBIN%"
+>>       	}
+>>       
+>>       	partition fsbl2 {
+>>     -		image = "u-boot-spl.stm32"
+>>     +		image = "%ATFBIN%"
+>>       	}
+>>       
+>>       	partition ssbl {
+>>     -		image = "u-boot.img"
+>>     +		image = "u-boot.stm32"
+>>       	}
+>>       
+>>       	partition rootfs {
+>>       		image = "rootfs.ext4"
+>>     -		partition-type = 0x83
+>>       		bootable = "yes"
+>>       	}
+>>       }
+>>     diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+>>     new file mode 100755
+>>     index 0000000000..c00a5c6f6c
+>>     --- /dev/null
+>>     +++ b/board/stmicroelectronics/common/stm32mp157/post-image.sh
+>>     @@ -0,0 +1,43 @@
+>>     +#!/usr/bin/env bash
+>>     +
+>>     +#
+>>     +# atf_image extracts the ATF binary image from DTB_FILE_NAME that appears in
+>>     +# BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES in ${BR_CONFIG},
+>>     +# then prints the corresponding file name for the genimage
+>>     +# configuration file
+>>     +#
+>>     +atf_image()
+>>     +{
+>>     +	local ATF_VARIABLES="$(sed -n 's/^BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="\([\/a-zA-Z0-9_=. \-]*\)"$/\1/p' ${BR2_CONFIG})"
+>>     +
+>>     +	if grep -Eq "DTB_FILE_NAME=stm32mp157c-dk2.dtb" <<< ${ATF_VARIABLES}; then
+>>     +		echo "tf-a-stm32mp157c-dk2.stm32"
+>>     +	elif grep -Eq "DTB_FILE_NAME=stm32mp157a-dk1.dtb" <<< ${ATF_VARIABLES}; then
+>>     +                echo "tf-a-stm32mp157a-dk1.stm32"
+>>     +	fi
+>>     +}
+>>     +
+>>     +main()
+>>     +{
+>>     +	local ATFBIN="$(atf_image)"
+>>     +	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+>>     +	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>>     +
+>>     +	sed -e "s/%ATFBIN%/${ATFBIN}/" \
+>>     +		board/stmicroelectronics/common/stm32mp157/genimage.cfg.template > ${GENIMAGE_CFG}
+>>     +
+>>     +	rm -rf "${GENIMAGE_TMP}"
+>>     +
+>>     +	genimage \
+>>     +		--rootpath "${TARGET_DIR}" \
+>>     +		--tmppath "${GENIMAGE_TMP}" \
+>>     +		--inputpath "${BINARIES_DIR}" \
+>>     +		--outputpath "${BINARIES_DIR}" \
+>>     +		--config "${GENIMAGE_CFG}"
+>>     +
+>>     +	rm -f ${GENIMAGE_CFG}
+>>     +
+>>     +	exit $?
+>>     +}
+>>     +
+>>     +main $@
+>>     diff --git a/board/stmicroelectronics/stm32mp157a-dk1/linux.config b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+>>     index 95c834e431..47729ea97c 100644
+>>     --- a/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+>>     +++ b/board/stmicroelectronics/stm32mp157a-dk1/linux.config
+>>     @@ -47,15 +47,10 @@ CONFIG_CAN=y
+>>       CONFIG_CAN_M_CAN=y
+>>       CONFIG_DEVTMPFS=y
+>>       CONFIG_DEVTMPFS_MOUNT=y
+>>     -CONFIG_DMA_CMA=y
+>>     -CONFIG_CMA_SIZE_MBYTES=128
+>>       CONFIG_SIMPLE_PM_BUS=y
+>>       CONFIG_MTD=y
+>>       CONFIG_MTD_CMDLINE_PARTS=y
+>>       CONFIG_MTD_BLOCK=y
+>>     -CONFIG_MTD_M25P80=y
+>>     -CONFIG_MTD_NAND=y
+>>     -CONFIG_MTD_NAND_STM32_FMC2=y
+>>       CONFIG_MTD_SPI_NOR=y
+>>       # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+>>       CONFIG_MTD_UBI=y
+>>     @@ -107,13 +102,6 @@ CONFIG_REGULATOR_STPMIC1=y
+>>       CONFIG_DRM=y
+>>       CONFIG_DRM_STM=y
+>>       CONFIG_DRM_STM_DSI=y
+>>     -# CONFIG_DRM_PANEL_ORISETECH_OTM8009A is not set
+>>     -# CONFIG_DRM_SII902X is not set
+>>     -# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
+>>     -# CONFIG_LCD_CLASS_DEVICE is not set
+>>     -# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+>>     -# CONFIG_BACKLIGHT_GENERIC is not set
+>>     -# CONFIG_FRAMEBUFFER_CONSOLE_ROTATION is not set
+>>       CONFIG_SOUND=y
+>>       CONFIG_SND=y
+>>       CONFIG_SND_DYNAMIC_MINORS=y
+>>     @@ -129,12 +117,17 @@ CONFIG_USB_DWC2=y
+>>       CONFIG_USB_CHIPIDEA=y
+>>       CONFIG_USB_CHIPIDEA_HOST=y
+>>       CONFIG_USB_ISP1760=y
+>>     +CONFIG_USB_ISP1760_HOST_ROLE=y
+>>       CONFIG_USB_HSIC_USB3503=y
+>>       CONFIG_USB_GPIO_VBUS=y
+>>       CONFIG_USB_ISP1301=y
+>>       CONFIG_USB_ULPI=y
+>>     +CONFIG_USB_GADGET=y
+>>     +CONFIG_USB_CONFIGFS=m
+>>     +CONFIG_USB_CONFIGFS_ACM=y
+>>     +CONFIG_USB_CONFIGFS_ECM=y
+>>     +CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+>>       CONFIG_TYPEC=y
+>>     -CONFIG_TYPEC_STUSB=y
+>>       CONFIG_MMC=y
+>>       CONFIG_MMC_BLOCK_MINORS=16
+>>       CONFIG_MMC_ARMMMCI=y
+>>     @@ -157,15 +150,12 @@ CONFIG_STM32_IPCC=y
+>>       CONFIG_REMOTEPROC=y
+>>       CONFIG_STM32_RPROC=y
+>>       CONFIG_RPMSG_VIRTIO=y
+>>     -CONFIG_RPMSG_TTY=y
+>>       CONFIG_IIO=y
+>>       CONFIG_IIO_SW_TRIGGER=y
+>>       CONFIG_SD_ADC_MODULATOR=y
+>>       CONFIG_STM32_ADC_CORE=y
+>>       CONFIG_STM32_ADC=y
+>>     -CONFIG_STM32_ADC_TEMP=y
+>>       CONFIG_STM32_DFSDM_ADC=y
+>>     -CONFIG_STM32_LPTIMER_CNT=y
+>>       CONFIG_STM32_DAC=y
+>>       CONFIG_IIO_HRTIMER_TRIGGER=y
+>>       CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
+>>     @@ -179,4 +169,6 @@ CONFIG_MSDOS_FS=y
+>>       CONFIG_VFAT_FS=y
+>>       CONFIG_TMPFS=y
+>>       CONFIG_TMPFS_POSIX_ACL=y
+>>     +CONFIG_DMA_CMA=y
+>>     +CONFIG_CMA_SIZE_MBYTES=128
+>>       CONFIG_PRINTK_TIME=y
+>     Are these changes related to the trusted configuration or it's a
+>     result of resync with newer kernel configuration?
+>
+>
+> The changes are the effect of running linux-update-defconfig after 
+> adding the gadget support. I remember that I looked at some of the 
+> variables that were removed, and found out that they are no longer 
+> exist in the kernel.
+So this patch shouldn't be within this series because it isn't related 
+to trusted configuration ;) Please send a separate patch where you add 
+gadget support in the kernel configuration.
+>
+>>     diff --git a/board/stmicroelectronics/stm32mp157c-dk2/linux.config b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>>     index 878a0c39f1..c03eb748b4 100644
+>>     --- a/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>>     +++ b/board/stmicroelectronics/stm32mp157c-dk2/linux.config
+>>     @@ -47,15 +47,10 @@ CONFIG_CAN=y
+>>       CONFIG_CAN_M_CAN=y
+>>       CONFIG_DEVTMPFS=y
+>>       CONFIG_DEVTMPFS_MOUNT=y
+>>     -CONFIG_DMA_CMA=y
+>>     -CONFIG_CMA_SIZE_MBYTES=128
+>>       CONFIG_SIMPLE_PM_BUS=y
+>>       CONFIG_MTD=y
+>>       CONFIG_MTD_CMDLINE_PARTS=y
+>>       CONFIG_MTD_BLOCK=y
+>>     -CONFIG_MTD_M25P80=y
+>>     -CONFIG_MTD_NAND=y
+>>     -CONFIG_MTD_NAND_STM32_FMC2=y
+>>       CONFIG_MTD_SPI_NOR=y
+>>       # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
+>>       CONFIG_MTD_UBI=y
+>>     @@ -82,7 +77,6 @@ CONFIG_SERIAL_STM32_CONSOLE=y
+>>       CONFIG_SERIAL_DEV_BUS=y
+>>       CONFIG_HW_RANDOM=y
+>>       CONFIG_I2C_CHARDEV=y
+>>     -CONFIG_I2C_MUX=y
+>>       CONFIG_I2C_STM32F7=y
+>>       CONFIG_SPI=y
+>>       CONFIG_SPI_STM32=y
+>>     @@ -109,8 +103,6 @@ CONFIG_DRM_STM=y
+>>       CONFIG_DRM_STM_DSI=y
+>>       CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
+>>       CONFIG_DRM_SII902X=y
+>>     -CONFIG_BACKLIGHT_LCD_SUPPORT=y
+>>     -# CONFIG_LCD_CLASS_DEVICE is not set
+>>       CONFIG_BACKLIGHT_CLASS_DEVICE=y
+>>       # CONFIG_BACKLIGHT_GENERIC is not set
+>>       CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+>>     @@ -129,12 +121,17 @@ CONFIG_USB_DWC2=y
+>>       CONFIG_USB_CHIPIDEA=y
+>>       CONFIG_USB_CHIPIDEA_HOST=y
+>>       CONFIG_USB_ISP1760=y
+>>     +CONFIG_USB_ISP1760_HOST_ROLE=y
+>>       CONFIG_USB_HSIC_USB3503=y
+>>       CONFIG_USB_GPIO_VBUS=y
+>>       CONFIG_USB_ISP1301=y
+>>       CONFIG_USB_ULPI=y
+>>     +CONFIG_USB_GADGET=y
+>>     +CONFIG_USB_CONFIGFS=m
+>>     +CONFIG_USB_CONFIGFS_ACM=y
+>>     +CONFIG_USB_CONFIGFS_ECM=y
+>>     +CONFIG_USB_CONFIGFS_MASS_STORAGE=y
+>>       CONFIG_TYPEC=y
+>>     -CONFIG_TYPEC_STUSB=y
+>>       CONFIG_MMC=y
+>>       CONFIG_MMC_BLOCK_MINORS=16
+>>       CONFIG_MMC_ARMMMCI=y
+>>     @@ -157,15 +154,12 @@ CONFIG_STM32_IPCC=y
+>>       CONFIG_REMOTEPROC=y
+>>       CONFIG_STM32_RPROC=y
+>>       CONFIG_RPMSG_VIRTIO=y
+>>     -CONFIG_RPMSG_TTY=y
+>>       CONFIG_IIO=y
+>>       CONFIG_IIO_SW_TRIGGER=y
+>>       CONFIG_SD_ADC_MODULATOR=y
+>>       CONFIG_STM32_ADC_CORE=y
+>>       CONFIG_STM32_ADC=y
+>>     -CONFIG_STM32_ADC_TEMP=y
+>>       CONFIG_STM32_DFSDM_ADC=y
+>>     -CONFIG_STM32_LPTIMER_CNT=y
+>>       CONFIG_STM32_DAC=y
+>>       CONFIG_IIO_HRTIMER_TRIGGER=y
+>>       CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
+>>     @@ -179,4 +173,6 @@ CONFIG_MSDOS_FS=y
+>>       CONFIG_VFAT_FS=y
+>>       CONFIG_TMPFS=y
+>>       CONFIG_TMPFS_POSIX_ACL=y
+>>     +CONFIG_DMA_CMA=y
+>>     +CONFIG_CMA_SIZE_MBYTES=128
+>>       CONFIG_PRINTK_TIME=y
+>     same here.
+>>     diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+>>     index f172539c02..cdbb5a8cdf 100644
+>>     --- a/configs/stm32mp157a_dk1_defconfig
+>>     +++ b/configs/stm32mp157a_dk1_defconfig
+>>     @@ -2,8 +2,7 @@ BR2_arm=y
+>>       BR2_cortex_a7=y
+>>       BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+>>       BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+>>     -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>>     -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
+>>     +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+>>       BR2_LINUX_KERNEL=y
+>>       BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>       BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+>>     @@ -16,15 +15,18 @@ BR2_TARGET_ROOTFS_EXT2=y
+>>       BR2_TARGET_ROOTFS_EXT2_4=y
+>>       BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>>       # BR2_TARGET_ROOTFS_TAR is not set
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157a-dk1.dtb"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+>>       BR2_TARGET_UBOOT=y
+>>       BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>>       BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>>       BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+>>     -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
+>>     +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+>>       BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157a-dk1/uboot-fragment.config"
+>>       # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+>>     -BR2_TARGET_UBOOT_FORMAT_IMG=y
+>>     -BR2_TARGET_UBOOT_SPL=y
+>>     -BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.stm32"
+>>     +BR2_TARGET_UBOOT_FORMAT_STM32=y
+>>       BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157a-dk1"
+>>       BR2_PACKAGE_HOST_GENIMAGE=y
+>>     diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+>>     index 49cfb0733c..6251491e0f 100644
+>>     --- a/configs/stm32mp157c_dk2_defconfig
+>>     +++ b/configs/stm32mp157c_dk2_defconfig
+>>     @@ -2,8 +2,7 @@ BR2_arm=y
+>>       BR2_cortex_a7=y
+>>       BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+>>       BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+>>     -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+>>     -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/common/stm32mp157/genimage.cfg"
+>>     +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
+>>       BR2_LINUX_KERNEL=y
+>>       BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>       BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.10"
+>>     @@ -16,15 +15,18 @@ BR2_TARGET_ROOTFS_EXT2=y
+>>       BR2_TARGET_ROOTFS_EXT2_4=y
+>>       BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>>       # BR2_TARGET_ROOTFS_TAR is not set
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 AARCH32_SP=sp_min DTB_FILE_NAME=stm32mp157c-dk2.dtb"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="*.stm32"
+>>     +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
+>>       BR2_TARGET_UBOOT=y
+>>       BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>>       BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>>       BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
+>>     -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_basic"
+>>     +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
+>>       BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32mp157c-dk2/uboot-fragment.config"
+>>       # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+>>     -BR2_TARGET_UBOOT_FORMAT_IMG=y
+>>     -BR2_TARGET_UBOOT_SPL=y
+>>     -BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.stm32"
+>>     +BR2_TARGET_UBOOT_FORMAT_STM32=y
+>>       BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp157c-dk2"
+>>       BR2_PACKAGE_HOST_GENIMAGE=y
+>     Best
+>     Bartek
+>
+Best
+Bartek
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201013/b6efc7cc/attachment.html>
