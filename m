@@ -1,10 +1,10 @@
 From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 13 Oct 2020 17:36:05 -0500
-Subject: [Buildroot] [PATCH v2 5/5] docs/manual: add section about
- br2-external init
+Date: Tue, 13 Oct 2020 17:36:02 -0500
+Subject: [Buildroot] [PATCH v2 2/5] docs/manual: add section about
+ br2-external skeleton
 In-Reply-To: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
 References: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20201013223605.188920-5-brandon.maier@rockwellcollins.com>
+Message-ID: <20201013223605.188920-2-brandon.maier@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 ---
- docs/manual/customize-outside-br.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ docs/manual/customize-outside-br.txt | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index c24516680c..59a01f278d 100644
+index 5f7d623aea..c24516680c 100644
 --- a/docs/manual/customize-outside-br.txt
 +++ b/docs/manual/customize-outside-br.txt
-@@ -203,6 +203,8 @@ a set of files that define those alternatives:
+@@ -202,6 +202,7 @@ a set of files that define those alternatives:
+   will then be listed in the toolchain selection;
  * +provides/jpeg.in+ defines the alternative libjpeg implementations;
  * +provides/openssl.in+ defines the alternative openssl implementations.
- * +provides/skeleton.in+ defines the alternative skeleton implementations.
-+* +provides/init.in+ defines the alternative init system implementations, this
-+  can be used to select a default skeleton for your init.
++* +provides/skeleton.in+ defines the alternative skeleton implementations.
  
  ===== Free-form content
  
-@@ -343,6 +345,13 @@ illustration, of course):
-   |     |$(eval $(generic-package))
+@@ -321,6 +322,27 @@ illustration, of course):
+   |     |$(eval $(toolchain-external-package))
    |     `----
    |
-+  |- provides/init.in
-+  |     |config BR2_INIT_MINE
-+  |     |    bool "my custom init"
-+  |     |    select BR2_PACKAGE_MY_INIT
-+  |     |    select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
++  |- provides/skeleton.in
++  |     |config BR2_ROOTFS_SKELETON_MINE
++  |     |    bool "my custom skeleton"
++  |     |    select BR2_PACKAGE_SKELETON_MINE
++  |     `----
++  |- package/skeleton-mine/Config.in
++  |     |config BR2_PACKAGE_SKELETON_MINE
++  |     |    bool
++  |     |    select BR2_PACKAGE_HAS_SKELETON
++  |     |
++  |     |config BR2_PACKAGE_PROVIDES_SKELETON
++  |     |    default "skeleton-mine" if BR2_PACKAGE_SKELETON_MINE
++  |     `----
++  |- package/skeleton-mine/skeleton-mine.mk
++  |     |SKELETON_MINE_ADD_TOOLCHAIN_DEPENDENCY = NO
++  |     |SKELETON_MINE_ADD_SKELETON_DEPENDENCY = NO
++  |     |SKELETON_MINE_PROVIDES = skeleton
++  |     |SKELETON_MINE_INSTALL_STAGING = YES
++  |     |$(eval $(generic-package))
 +  |     `----
 +  |
    |- linux/Config.ext.in
