@@ -1,49 +1,53 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 13 Oct 2020 22:07:32 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
- build issue with Wayland backend
-In-Reply-To: <CAEyMn7ZM4Stiud_M2tnK=t-Z7Azot5LxBX9_kzxFUXgFqxikpg@mail.gmail.com>
-References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
- <20200402130842.918696-3-gary.bisson@boundarydevices.com>
- <20200402162543.595ed9e7@windsurf.home>
- <20200402151026.GA934730@p1g2> <20200708122048.GB331830@p1g2>
- <CAEyMn7ZM4Stiud_M2tnK=t-Z7Azot5LxBX9_kzxFUXgFqxikpg@mail.gmail.com>
-Message-ID: <20201013200732.GA167901@p1g2>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Tue, 13 Oct 2020 23:16:19 +0300
+Subject: [Buildroot] [PATCH v2 1/3] configs/mx6udoo_defconfig: bump kernel
+ and U-Boot versions
+In-Reply-To: <20201013201621.910051-1-geomatsi@gmail.com>
+References: <20201013201621.910051-1-geomatsi@gmail.com>
+Message-ID: <20201013201621.910051-2-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Heiko,
+Bump Linux kernel to 5.8.13 and U-Boot to 2020.10.
 
-On Tue, Oct 13, 2020 at 08:30:50PM +0200, Heiko Thiery wrote:
-> Hi Gary, Hi Thomas,
-> 
-> Am Mi., 8. Juli 2020 um 14:20 Uhr schrieb Gary Bisson
-> <gary.bisson@boundarydevices.com>:
-> >
-> > Hi Thomas,
-> >
-> > Gentle ping on this, let me know if you see another approach that would
-> > be better, I'm open to suggestions.
-> >
-> > I'd love to have Weston support for i.MX8M* fixed for next release and
-> > my other series [1] depends on this patch.
-> >
-> > Then I am preparing patches to have VPU support using GStreamer-imx V2
-> > for i.MX8M* as well.
-> 
-> Any news on that? I also would like to see weston support for imx8m in
-> buildroot.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ configs/mx6udoo_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-No, a Tested-by and/or Reviewed-by would definitely help the patch
-getting further. Have you tried it?
-
-> @Gary: did you try to fix that upstream?
-
-What upstream? There's none to my knowledge. As mentioned in the commit
-log, even NXP doesn't have a real solution for this.
-
-Regards,
-Gary
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index 86ad13bbf3..d208f5846e 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 5.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -12,13 +12,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="udoo"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.13"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/udoo/mx6qdl/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-- 
+2.28.0
