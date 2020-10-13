@@ -1,95 +1,130 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 13 Oct 2020 17:36:03 -0500
-Subject: [Buildroot] [PATCH v2 3/5] system: Move skeleton-init-* selection
- to init
-In-Reply-To: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
-References: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
-Message-ID: <20201013223605.188920-3-brandon.maier@rockwellcollins.com>
+From: Derrick Pallas <derrick@meter.com>
+Date: Tue, 13 Oct 2020 15:23:20 -0700
+Subject: [Buildroot] [PATCH 1/1] package: add ipcalc at version 1.0.0
+Message-ID: <11d2e50c-7cdb-fbcd-f833-4d8f3da9c979@meter.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for supporting br2-external inits, move the 'select' for
-the BR2_PACKAGE_SKELETON_INIT_* to their respective init systems. This
-will allow a br2-external init to 'select' which skeleton it needs.
+ipcalc is an ancient and venerable tool for manipulating IP addresses,
+networks, & interfaces from shell scripts.  There is a subtool in 
+busybox, but it does not support everything the upstream tool [1] supports.
 
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+[1] https://gitlab.com/ipcalc/ipcalc
+
+Signed-off-by: Derrick Lyndon Pallas <derrick@meter.com>
 ---
- system/Config.in | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+  package/Config.in                           |  1 +
+  package/ipcalc/0001-disable-man-build.patch | 33 +++++++++++++++++++++
+  package/ipcalc/Config.in                    |  7 +++++
+  package/ipcalc/ipcalc.hash                  |  3 ++
+  package/ipcalc/ipcalc.mk                    | 17 +++++++++++
+  5 files changed, 61 insertions(+)
+  create mode 100644 package/ipcalc/0001-disable-man-build.patch
+  create mode 100644 package/ipcalc/Config.in
+  create mode 100644 package/ipcalc/ipcalc.hash
+  create mode 100644 package/ipcalc/ipcalc.mk
 
-diff --git a/system/Config.in b/system/Config.in
-index a363e099e5..f062e5be93 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,21 +1,17 @@
- menu "System configuration"
- 
--# Note: usually, it is not possible to select a provider of a virtual
--# package. But here we have an exception: there are only four providers
--# and they only get selected by separate entries in this choice and
--# under different, exclusive conditions. So this is a safe situation.
-+# Note on package/skeleton: usually, it is not safe to 'select' a
-+# provider of a virtual package. But below we have an exception: each
-+# init system may select one of the virtual skeleton-init-* packages. As
-+# only one init system may be enabled, only one skeleton-init-* may be
-+# selected. So this is a safe situation.
- choice
- 	prompt "Root FS skeleton"
- 
- config BR2_ROOTFS_SKELETON_DEFAULT
- 	bool "default target skeleton"
--	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_SYSV
--	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_BUSYBOX
--	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_INIT_OPENRC
--	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_INIT_SYSTEMD
--	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
- 	help
--	  Use default target skeleton
-+	  Use default target skeleton for selected init system.
- 
- config BR2_ROOTFS_SKELETON_CUSTOM
- 	bool "custom target skeleton"
-@@ -94,6 +90,7 @@ config BR2_INIT_BUSYBOX
- 	bool "BusyBox"
- 	select BR2_PACKAGE_BUSYBOX
- 	select BR2_PACKAGE_INITSCRIPTS
-+	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_INIT_SYSV
- 	bool "systemV"
-@@ -101,12 +98,14 @@ config BR2_INIT_SYSV
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
- 	select BR2_PACKAGE_INITSCRIPTS
- 	select BR2_PACKAGE_SYSVINIT
-+	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_INIT_OPENRC
- 	bool "OpenRC"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENRC
-+	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_ROOTFS_SKELETON_DEFAULT
- 
- comment "openrc needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-@@ -129,6 +128,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_HOST_GCC_AT_LEAST_5
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
- comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and target gcc >= 5"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-@@ -141,6 +141,7 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and targe
- 
- config BR2_INIT_NONE
- 	bool "None"
-+	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
- 	help
- 	  Buildroot will not install any init system. You will
- 	  have to provide your own, either with a new package
--- 
+diff --git a/package/Config.in b/package/Config.in
+index 09a332e3b9..56508bbc46 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1702,6 +1702,7 @@ menu "Networking"
+  	source "package/gupnp-dlna/Config.in"
+  	source "package/ibrcommon/Config.in"
+  	source "package/ibrdtn/Config.in"
++	source "package/ipcalc/Config.in"
+  	source "package/libcgi/Config.in"
+  	source "package/libcgicc/Config.in"
+  	source "package/libcoap/Config.in"
+diff --git a/package/ipcalc/0001-disable-man-build.patch 
+b/package/ipcalc/0001-disable-man-build.patch
+new file mode 100644
+index 0000000000..767b78162a
+--- /dev/null
++++ b/package/ipcalc/0001-disable-man-build.patch
+@@ -0,0 +1,33 @@
++diff --git a/meson.build b/meson.build
++index a2169fc..4ac9f46 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -72,16 +72,17 @@ ipcalc = executable('ipcalc',
++ 	install : true
++ )
++
++-ronn = find_program('ronn', required: true)
++-
++-ipcalc_1 = custom_target(
++-	'ipcalc.1',
++-	output : 'ipcalc.1',
++-	input : 'ipcalc.1.md',
++-	command : [ronn, '--pipe', '-r', '@INPUT@'],
++-	capture: true,
++-	install_dir: join_paths(get_option('mandir'), 'man1'),
++-	install: true
++-)
+++ronn = find_program('ronn', required: false)
+++if ronn.found()
+++	ipcalc_1 = custom_target(
+++		'ipcalc.1',
+++		output : 'ipcalc.1',
+++		input : 'ipcalc.1.md',
+++		command : [ronn, '--pipe', '-r', '@INPUT@'],
+++		capture: true,
+++		install_dir: join_paths(get_option('mandir'), 'man1'),
+++		install: true
+++	)
+++endif
++
++ subdir('tests')
+diff --git a/package/ipcalc/Config.in b/package/ipcalc/Config.in
+new file mode 100644
+index 0000000000..74cf84f4a4
+--- /dev/null
++++ b/package/ipcalc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_IPCALC
++	bool "ipcalc"
++	help
++	  A modern IPv4/IPv6 ipcalc tool, assisting in network calculations
++	  in command line and as a tool for scripts.
++
++	  https://gitlab.com/ipcalc/ipcalc
+diff --git a/package/ipcalc/ipcalc.hash b/package/ipcalc/ipcalc.hash
+new file mode 100644
+index 0000000000..df610eb693
+--- /dev/null
++++ b/package/ipcalc/ipcalc.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 d7aca371335ab3e35364bcfe34cd0229db005be8bebb9236608ec318cb3f7748 
+  ipcalc-1.0.0.tar.bz2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 
+  COPYING
+diff --git a/package/ipcalc/ipcalc.mk b/package/ipcalc/ipcalc.mk
+new file mode 100644
+index 0000000000..c4ce8b9ceb
+--- /dev/null
++++ b/package/ipcalc/ipcalc.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# ipcalc
++#
++################################################################################
++
++IPCALC_VERSION = 1.0.0
++IPCALC_SITE = https://gitlab.com/ipcalc/ipcalc/-/archive/$(IPCALC_VERSION)
++IPCALC_SOURCE = ipcalc-$(IPCALC_VERSION).tar.bz2
++IPCALC_LICENSE = GPL-2.0+
++IPCALC_LICENSE_FILES = COPYING
++
++IPCALC_CONF_OPTS = \
++	-Duse_maxminddb=disabled \
++	-Duse_geoip=disabled
++
++$(eval $(meson-package))
+--
 2.28.0
