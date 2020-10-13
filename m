@@ -1,54 +1,46 @@
-From: David GOUARIN <dgouarin@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Tue, 13 Oct 2020 18:28:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/librelp: bump to version 1.8.0
-Message-ID: <20201013162845.29622-1-dgouarin@gmail.com>
+Subject: [Buildroot] [PATCH] systemd: add option to enable
+ systemd-journal-remote
+In-Reply-To: <20201013174915.44cf492e@windsurf>
+References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+ <905ca80c-acb2-3118-f829-baeb175e4a6a@heine.tech>
+ <20201013173524.56b78792@windsurf>
+ <2fe4a385-5157-bbb0-2cb7-f9af26881b44@heine.tech>
+ <20201013174915.44cf492e@windsurf>
+Message-ID: <20201013162845.GA3466@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-1.8.0 adds support for both openssl and gnutls
+Michael, Thomas, All,
 
-Signed-off-by: David GOUARIN <dgouarin@gmail.com>
----
- package/librelp/librelp.hash | 2 +-
- package/librelp/librelp.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+On 2020-10-13 17:49 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 13 Oct 2020 17:40:19 +0200
+> Michael Nosthoff <buildroot@heine.tech> wrote:
+> > # ls -la /usr/lib/systemd/systemd-journal-*
+> > -rwxr-xr-x 1 root root  25964 Oct 13 14:57
+> > /usr/lib/systemd/systemd-journal-gatewayd
+> > -rwxr-xr-x 1 root root  46508 Oct 13 14:57
+> > /usr/lib/systemd/systemd-journal-remote
+> > -rwxr-xr-x 1 root root  34144 Oct 13 14:57
+> > /usr/lib/systemd/systemd-journal-upload
+> 
+> In the context of systemd, these sizes are definitely in the noise
+> compared to everything else. So I'm fine with a single option that
+> would enable all 3 tools in one go.
 
-diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
-index ac08039b53..bd66ad7db0 100644
---- a/package/librelp/librelp.hash
-+++ b/package/librelp/librelp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a34c8fc98bf8eef2a5baf635a0f71813cce93b1185aa03648e31b5af60b7393f  librelp-1.2.18.tar.gz
-+sha256  cdbf49115fa530247358489864c5971c9f5a6442d19490e38f4c4ef844f1c264  librelp-1.8.0.tar.gz
- sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
-diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
-index bcb4fe0ea1..e9e879d1f6 100644
---- a/package/librelp/librelp.mk
-+++ b/package/librelp/librelp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRELP_VERSION = 1.2.18
-+LIBRELP_VERSION = 1.8.0
- LIBRELP_SITE = http://download.rsyslog.com/librelp
- LIBRELP_LICENSE = GPL-3.0+
- LIBRELP_LICENSE_FILES = COPYING
-@@ -17,4 +17,11 @@ else
- LIBRELP_CONF_OPTS += --disable-tls
- endif
- 
-+ifeq ($(BR2_PACKAGE_HAS_OPENSSL),y)
-+LIBRELP_DEPENDENCIES += openssl host-pkgconf
-+LIBRELP_CONF_OPTS += --enable-tls-openssl
-+else
-+LIBRELP_CONF_OPTS += --disable-tls-openssl
-+endif
-+
- $(eval $(autotools-package))
+10% in-line with that.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
