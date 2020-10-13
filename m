@@ -1,36 +1,52 @@
-From: Maurice Smulders <maurice.smulders@genevatech.net>
-Date: Mon, 12 Oct 2020 17:06:26 -0600
-Subject: [Buildroot] ELFUTILS - only build for the target architecture...
-Message-ID: <CACxOKoKEi0OnY+aq1i6S=zX5XnDnu_pMVWtGmEpnDB7CrdW2cw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 Oct 2020 08:20:17 +0200
+Subject: [Buildroot] make creates a memory overflow
+In-Reply-To: <003941d3da6d442c9a6740bfda3dd956@go-sys.de> (Michael Fischer's
+ message of "Fri, 9 Oct 2020 13:55:38 +0000")
+References: <003941d3da6d442c9a6740bfda3dd956@go-sys.de>
+Message-ID: <87r1q2r6ji.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, ELFUTILS gets built for all architectures it looks like.
+>>>>> "Michael" == Michael Fischer <mf@go-sys.de> writes:
 
-safe:/usr/lib/elfutils> ls
-libebl_aarch64-0.177.so  libebl_i386.so           libebl_s390-0.177.so
-libebl_aarch64.so        libebl_ia64-0.177.so     libebl_s390.so
-libebl_alpha-0.177.so    libebl_ia64.so           libebl_sh-0.177.so
-libebl_alpha.so          libebl_m68k-0.177.so     libebl_sh.so
-libebl_arm-0.177.so      libebl_m68k.so           libebl_sparc-0.177.so
-libebl_arm.so            libebl_ppc-0.177.so      libebl_sparc.so
-libebl_bpf-0.177.so      libebl_ppc.so            libebl_tilegx-0.177.so
-libebl_bpf.so            libebl_ppc64-0.177.so    libebl_tilegx.so
-libebl_csky-0.177.so     libebl_ppc64.so          libebl_x86_64-0.177.so
-libebl_csky.so           libebl_riscv-0.177.so    libebl_x86_64.so
-libebl_i386-0.177.so     libebl_riscv.so
+ > Hello all,
+ > I use VirtualBox with SuSE linux to compile Buildroot.
 
-Is there a way to get it built just for the target architecture - in
-our case PowerPC (ppc)? I have added minicoredumper to the
-customization packages, and it requires elfutils....
+ > For my other projects I use the default make settings -j
 
-This is a lot of extra stuff needed just to support this one architecture...
-I can obviously clean it up in the cleanup script, or create a patch
-for backends/Makefile.in and or Makefile.am - but this might make
-stuff dependent on the actual elfutils release...
+ > /etc/environment
+ > export MAKEOPTS='-j'
+ > export MAKEFLAGS='-j'
+
+That is not a safe setting. -j without a number tells make to use as
+many processes as it wants to use, which for a big thing like Buildroot
+can be a LOT. A more sensible setting is nr-of-CPUs (+1), which matches
+the default logic we have for BR2_JLEVEL.
+
+ > When I use this, than buildroot crashes the Virtualbox with a memory overflow. > 8GB
+
+ > I found this in the /package/Makefile
+
+ > MAKE1 := $(HOSTMAKE) -j1
+ > override MAKE = $(HOSTMAKE) \
+ >         $(if $(findstring j,$(filter-out --%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+
+
+ > I'm not sure but I think this should be 
+
+ >         $(if $(findstring j,$(filter-out -j%,$(MAKEFLAGS))),,-j$(PARALLEL_JOBS))
+
+
+No, the intention is for the logic to not get confused about variables
+passed on the make command line, as they are added to MAKEFLAGS after
+a -- seperator, E.G.:
+
+make -k foo=j
+MAKEFLAGS='k -- foo=j'
 
 -- 
-Maurice Smulders
+Bye, Peter Korsgaard
