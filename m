@@ -1,93 +1,80 @@
 From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Tue, 13 Oct 2020 14:41:48 -0500
-Subject: [Buildroot] [PATCH 1/2] system: Move skeleton-init-* selection to
- init
-Message-ID: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
+Date: Tue, 13 Oct 2020 14:41:49 -0500
+Subject: [Buildroot] [PATCH 2/2] system: support br2-external init systems
+In-Reply-To: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
+References: <20201013194149.171518-1-brandon.maier@rockwellcollins.com>
+Message-ID: <20201013194149.171518-2-brandon.maier@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for supporting br2-external inits, move the 'select' for
-the BR2_PACKAGE_SKELETON_INIT_* to their respective init systems. This
-will allow a br2-external init to 'select' which skeleton it needs.
+Some externals may wish to provide custom init systems for tightly
+integrated boot. This has been supported through the BR2_INIT_NONE,
+however a downside to the BR2_INIT_NONE is it forces the custom init
+system to use either skeleton-custom and roll a custom skeleton for
+each target, or skeleton-init-none which isn't a complete skeleton.
+
+Allowing br2-external to define custom BR2_INIT_* means they can now
+safely 'select' the BR2_PACKAGE_SKELETON_INIT_* and use a sysv style
+skeleton if they want.
 
 Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
 ---
- system/Config.in | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ support/scripts/br2-external | 17 +++++++++++++++++
+ system/Config.in             |  3 +++
+ 2 files changed, 20 insertions(+)
 
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index ededd2d900..f6ad722f72 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -161,6 +161,7 @@ do_kconfig() {
+         toolchains
+         jpeg
+         openssl
++        init
+     )
+ 
+     for br2 in "${items[@]}"; do
+@@ -224,7 +225,23 @@ do_kconfig() {
+         else
+             printf '# No openssl from: %s\n\n' "${br2_desc}"
+         fi >>"${outputdir}/.br2-external.in.openssl"
++
++        if [ -f "${br2_ext}/provides/init.in" ]; then
++            printf 'comment "init from: %s"\n' "${br2_desc}"
++            printf 'source "%s/provides/init.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No init from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.init"
+     done
++        if [ -f "${br2_ext}/provides/toolchains.in" ]; then
++            printf 'comment "Toolchains from: %s"\n' "${br2_desc}"
++            printf 'source "%s/provides/toolchains.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No toolchain from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.toolchains"
++
+ 
+     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
+ }
 diff --git a/system/Config.in b/system/Config.in
-index b8b7c16529..ec61fac781 100644
+index ec61fac781..ff7a470561 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -1,21 +1,17 @@
- menu "System configuration"
- 
--# Note: usually, it is not possible to select a provider of a virtual
--# package. But here we have an exception: there are only four providers
--# and they only get selected by separate entries in this choice and
--# under different, exclusive conditions. So this is a safe situation.
-+# Note on package/skeleton: usually, it is not safe to 'select' a
-+# provider of a virtual package. But below we have an exception: each
-+# init system may select one of the virtual skeleton-init-* packages. As
-+# only one init system may be enabled, only one skeleton-init-* may be
-+# selected. So this is a safe situation.
- choice
- 	prompt "Root FS skeleton"
- 
- config BR2_ROOTFS_SKELETON_DEFAULT
- 	bool "default target skeleton"
--	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_SYSV
--	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_BUSYBOX
--	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_INIT_OPENRC
--	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_INIT_SYSTEMD
--	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
- 	help
--	  Use default target skeleton
-+	  Use default target skeleton for selected init system.
- 
- config BR2_ROOTFS_SKELETON_CUSTOM
- 	bool "custom target skeleton"
-@@ -91,6 +87,7 @@ config BR2_INIT_BUSYBOX
- 	bool "BusyBox"
- 	select BR2_PACKAGE_BUSYBOX
- 	select BR2_PACKAGE_INITSCRIPTS
-+	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_INIT_SYSV
- 	bool "systemV"
-@@ -98,12 +95,14 @@ config BR2_INIT_SYSV
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # sysvinit
- 	select BR2_PACKAGE_INITSCRIPTS
- 	select BR2_PACKAGE_SYSVINIT
-+	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_INIT_OPENRC
- 	bool "OpenRC"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENRC
-+	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_ROOTFS_SKELETON_DEFAULT
- 
- comment "openrc needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-@@ -126,6 +125,7 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_HOST_GCC_AT_LEAST_5
- 	select BR2_ROOTFS_MERGED_USR
- 	select BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
- comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and target gcc >= 5"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
-@@ -138,6 +138,7 @@ comment "systemd needs a glibc toolchain w/ SSP, headers >= 3.10, host and targe
- 
- config BR2_INIT_NONE
- 	bool "None"
-+	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_ROOTFS_SKELETON_DEFAULT
- 	help
- 	  Buildroot will not install any init system. You will
+@@ -144,6 +144,9 @@ config BR2_INIT_NONE
  	  have to provide your own, either with a new package
+ 	  or with a rootfs-overlay.
+ 
++# Init systems from br2-external trees, if any
++source "$BR2_BASE_DIR/.br2-external.in.init"
++
+ endchoice
+ 
+ choice
 -- 
 2.28.0
