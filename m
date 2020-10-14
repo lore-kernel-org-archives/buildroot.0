@@ -1,124 +1,57 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 14 Oct 2020 17:12:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/systemd: group all journal-remote
- tools
-In-Reply-To: <20201014151249.18330-1-buildroot@heine.tech>
-References: <20201014151249.18330-1-buildroot@heine.tech>
-Message-ID: <20201014151249.18330-3-buildroot@heine.tech>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 14 Oct 2020 18:02:42 +0200
+Subject: [Buildroot] [PATCH v5] package/openrc: add patch to create
+ /run/lock/subsys
+Message-ID: <20201014160243.616162-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The -Dremote=true flag enables three tools.
-systemd-journal-gatewayd, systemd-journal-remote and
-systemd-journal-upload.
+Together with changes to sysv/busybox init, this directory
+will already exist before any service scripts are run.
 
-It is not possible with simple means to install them seperately. So use
-the systemd-journal-remote option do enable or disable them all together.
-
-Drop systemd-journal-gatewayd option and add it to legacy.
-
-Fixes: #12301
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- Config.in.legacy           |  7 +++++++
- package/systemd/Config.in  | 28 ++++++++++++----------------
- package/systemd/systemd.mk | 13 ++++---------
- 3 files changed, 23 insertions(+), 25 deletions(-)
+ ...lso-create-run-lock-subsys-directory.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/openrc/0006-Also-create-run-lock-subsys-directory.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 95c2fb33b3..f6c3c626e8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2020.11"
- 
-+config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
-+	bool "systemd-journal-gatewayd now in systemd-journal-remote"
-+	select BR2_PACKAGE_LIBMICROHTTPD
-+	help
-+	  all system journal remote programs are now
-+	  grouped in systemd-journal-remote
+diff --git a/package/openrc/0006-Also-create-run-lock-subsys-directory.patch b/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+new file mode 100644
+index 0000000000..58ea25d920
+--- /dev/null
++++ b/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+@@ -0,0 +1,29 @@
++From fd0e837f023c887b60934328f3e99c87b99ce568 Mon Sep 17 00:00:00 2001
++From: Norbert Lange <nolange79@gmail.com>
++Date: Thu, 8 Oct 2020 11:54:40 +0200
++Subject: [PATCH] Also create /run/lock/subsys directory
 +
- config BR2_TARGET_UBOOT_BOOT_SCRIPT
- 	bool "u-boot script generation was moved"
- 	select BR2_LEGACY
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 7956370b83..ec34478e3d 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -141,29 +141,25 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
- 	default "x64"   if BR2_x86_64
- 	depends on BR2_PACKAGE_SYSTEMD_BOOT
- 
--config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
--	bool "HTTP server for journal events"
-+config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
-+	bool "enable journal remote tools"
-+	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	help
--	  systemd-journal-gatewayd serves journal events over the
--	  network. Clients must connect using HTTP. The server
--	  listens on port 19531 by default.
-+	  journal remote functionality adds three tools:
- 
--	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
-+	  systemd-journal-gatewayd serves journal events over the
-+	  network.
- 
--config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
--	bool "enable systemd-journal-remote"
--	depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
--	select BR2_PACKAGE_LIBCURL
--	help
- 	  systemd-journal-remote is a command to receive serialized
--	  journal events and store them to journal files. Input
--	  streams are in the Journal Export Format[1], i.e. like the
--	  output from journalctl --output=export. For transport over
--	  the network, this serialized stream is usually carried over
--	  an HTTPS connection.
-+	  journal events and store them to journal files.
++Buildroot service scripts regularly use this directory, so
++create it in the most appropriate spot.
 +
-+	  systemd-journal-upload will upload journal entries to the
-+	  URL specified with --url=.
- 
-+	  https://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
- 	  https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
-+	  https://www.freedesktop.org/software/systemd/man/systemd-journal-upload.html
- 
- config BR2_PACKAGE_SYSTEMD_BACKLIGHT
- 	bool "enable backlight support"
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index b684f538a8..6f04283bdc 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -240,18 +240,13 @@ else
- SYSTEMD_CONF_OPTS += -Danalyze=false
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
--SYSTEMD_DEPENDENCIES += libmicrohttpd
--SYSTEMD_CONF_OPTS += -Dmicrohttpd=true
--else
--SYSTEMD_CONF_OPTS += -Dmicrohttpd=false
--endif
--
- ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
--SYSTEMD_CONF_OPTS += -Dremote=true
-+# remote also depends on libcurl, this is already added above.
-+SYSTEMD_DEPENDENCIES += libmicrohttpd
-+SYSTEMD_CONF_OPTS += -Dremote=true -Dmicrohttpd=true
- SYSTEMD_REMOTE_USER = systemd-journal-remote -1 systemd-journal-remote -1 * - - - systemd Journal Remote
- else
--SYSTEMD_CONF_OPTS += -Dremote=false
-+SYSTEMD_CONF_OPTS += -Dremote=false -Dmicrohttpd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBQRENCODE),y)
++Signed-off-by: Norbert Lange <nolange79@gmail.com>
++---
++ sh/init.sh.Linux.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
++index 222bbd3b..e56367c5 100644
++--- a/sh/init.sh.Linux.in
+++++ b/sh/init.sh.Linux.in
++@@ -85,7 +85,7 @@ fi
++
++ [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
++ checkpath -d $RC_SVCDIR
++-checkpath -d -m 0775 -o root:daemon /run/lock
+++checkpath -d -m 0775 -o root:daemon /run/lock /run/lock/subsys
++
++ # Try to mount xenfs as early as possible, otherwise rc_sys() will always
++ # return RC_SYS_XENU and will think that we are in a domU while it's not.
++--
++2.28.0
++
 -- 
-2.25.1
+2.28.0
