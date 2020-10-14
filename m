@@ -1,59 +1,118 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 23:34:47 +0200
-Subject: [Buildroot] [git commit] package/spice-protocol: bump to version
- 0.14.3
-Message-ID: <20201014212350.672788125A@busybox.osuosl.org>
+Date: Wed, 14 Oct 2020 23:35:08 +0200
+Subject: [Buildroot] [git commit] package/spice: bump to version 0.14.3
+Message-ID: <20201014212350.7DB5F81290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1fe8a00ee6c09c990b9670e4b68588d7907f08f
+commit: https://git.buildroot.net/buildroot/commit/?id=0238dce6bbefcdbee5f430056cdedadac1b0f6ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add link to upstream sha256
-- Switch to meson-package
+- Drop patch (already in version) and so autoreconf
 - Update indentation in hash file
 
-https://github.com/freedesktop/spice-protocol/blob/v0.14.3/CHANGELOG.md
+https://github.com/freedesktop/spice/blob/v0.14.3/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/spice-protocol/spice-protocol.hash | 6 +++---
- package/spice-protocol/spice-protocol.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../spice/0001-configure.ac-add-enable-tests.patch | 54 ----------------------
+ package/spice/spice.hash                           |  4 +-
+ package/spice/spice.mk                             |  4 +-
+ 3 files changed, 3 insertions(+), 59 deletions(-)
 
-diff --git a/package/spice-protocol/spice-protocol.hash b/package/spice-protocol/spice-protocol.hash
-index c23135141a..f02cf7f0e2 100644
---- a/package/spice-protocol/spice-protocol.hash
-+++ b/package/spice-protocol/spice-protocol.hash
-@@ -1,5 +1,5 @@
--# Locally calculated after checking pgp signature
--sha256	b6a4aa1ca32668790b45a494bbd000e9d05797b391d5a5d4b91adf1118216eac	spice-protocol-0.14.0.tar.bz2
-+# From https://www.spice-space.org/download/releases/spice-protocol-0.14.3.tar.xz.sha256sum
-+sha256  f986e5bc2a1598532c4897f889afb0df9257ac21c160c083703ae7c8de99487a  spice-protocol-0.14.3.tar.xz
- 
- # Hash for license file
--sha256	eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92	COPYING
-+sha256  eb55ea746be694c449224c7ddce6340648b075fd377281712a19094e7fb7ef92  COPYING
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
-index f8c55c7b01..172d45687d 100644
---- a/package/spice-protocol/spice-protocol.mk
-+++ b/package/spice-protocol/spice-protocol.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/spice/0001-configure.ac-add-enable-tests.patch b/package/spice/0001-configure.ac-add-enable-tests.patch
+deleted file mode 100644
+index 668dea1ca3..0000000000
+--- a/package/spice/0001-configure.ac-add-enable-tests.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From 1b6eaf5589a14763452cbe53382cc699cdeca141 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 15 Nov 2019 11:36:14 +0100
+-Subject: [PATCH] configure.ac: add --enable-tests
+-
+-Allow the user to disable tests through --disable-tests, this is
+-especially useful for example to disable gdk-pixbuf dependency
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/spice/spice-common/merge_requests/6]
+----
+- Makefile.am  | 6 +++++-
+- configure.ac | 7 +++++++
+- 2 files changed, 12 insertions(+), 1 deletion(-)
+-
+-diff --git a/subprojects/spice-common/Makefile.am b/subprojects/spice-common/Makefile.am
+-index 5402499..00623a1 100644
+---- a/subprojects/spice-common/Makefile.am
+-+++ b/subprojects/spice-common/Makefile.am
+-@@ -1,7 +1,11 @@
+- NULL =
+- ACLOCAL_AMFLAGS = -I m4
+- 
+--SUBDIRS = python_modules common tests docs
+-+SUBDIRS = python_modules common docs
+-+
+-+if ENABLE_TESTS
+-+SUBDIRS += tests
+-+endif
+- 
+- EXTRA_DIST =				\
+- 	meson.build			\
+-diff --git a/subprojects/spice-common/configure.ac b/subprojects/spice-common/configure.ac
+-index 9d10287..2dba7c8 100644
+---- a/subprojects/spice-common/configure.ac
+-+++ b/subprojects/spice-common/configure.ac
+-@@ -33,6 +33,13 @@ AC_SEARCH_LIBS(regcomp, [regex rx])
+- SPICE_CHECK_SYSDEPS
+- SPICE_EXTRA_CHECKS
+- 
+-+AC_ARG_ENABLE([tests],
+-+  AS_HELP_STRING([--enable-tests],
+-+                 [Enable tests @<:@default=yes@:>@]),
+-+  [],
+-+  enable_tests="yes")
+-+AM_CONDITIONAL(ENABLE_TESTS, test "x$enable_tests" = "xyes")
+-+
+- AC_ARG_ENABLE([alignment-checks],
+-   AS_HELP_STRING([--enable-alignment-checks],
+-                  [Enable runtime checks for cast alignment @<:@default=no@:>@]),
+--- 
+-2.23.0
+-
+diff --git a/package/spice/spice.hash b/package/spice/spice.hash
+index 4243244129..8f84c2321f 100644
+--- a/package/spice/spice.hash
++++ b/package/spice/spice.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	b203b3882e06f4c7249a3150d90c84e1a90490d41ead255a3d2cede46f4a29a7	spice-0.14.2.tar.bz2
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
++sha256  551d4be4a07667cf0543f3c895beb6da8a93ef5a9829f2ae47817be5e616a114  spice-0.14.3.tar.bz2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index bed6931c2e..78d397bdc0 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPICE_PROTOCOL_VERSION = 0.14.0
--SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
-+SPICE_PROTOCOL_VERSION = 0.14.3
-+SPICE_PROTOCOL_SOURCE = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.xz
- SPICE_PROTOCOL_SITE = http://www.spice-space.org/download/releases
- SPICE_PROTOCOL_LICENSE = BSD-3-Clause
- SPICE_PROTOCOL_LICENSE_FILES = COPYING
- SPICE_PROTOCOL_INSTALL_STAGING = YES
+-SPICE_VERSION = 0.14.2
++SPICE_VERSION = 0.14.3
+ SPICE_SOURCE = spice-$(SPICE_VERSION).tar.bz2
+ SPICE_SITE = http://www.spice-space.org/download/releases/spice-server
+ SPICE_LICENSE = LGPL-2.1+
+@@ -17,8 +17,6 @@ SPICE_DEPENDENCIES = \
+ 	openssl \
+ 	pixman \
+ 	spice-protocol
+-# We're patching subprojects/spice-common/configure.ac
+-SPICE_AUTORECONF = YES
  
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ # We disable everything for now, because the dependency tree can become
+ # quite deep if we try to enable some features, and I have not tested that.
