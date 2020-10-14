@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 00:09:34 +0200
-Subject: [Buildroot] [PATCH 1/4]
- toolchain/toolchain-external/toolchain-external-bootlin: update to
- 2020.08-1 toolchains
-In-Reply-To: <20201001155621.367441-1-thomas.petazzoni@bootlin.com>
-References: <20201001155621.367441-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201015000934.6d936897@windsurf>
+Date: Thu, 15 Oct 2020 00:09:25 +0200
+Subject: [Buildroot] [PATCH 1/3] support/scripts/gen-bootlin-toolchains:
+ add missing glibc toolchain dependencies
+In-Reply-To: <20200927143752.1498115-1-romain.naour@gmail.com>
+References: <20200927143752.1498115-1-romain.naour@gmail.com>
+Message-ID: <20201015000925.39e32d47@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  1 Oct 2020 17:56:17 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sun, 27 Sep 2020 16:37:50 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> Bootlin toolchains in version 2020.08-1 have just been released, so
-> let's update the toolchain-external-bootlin package to those new
-> toolchains.
+> glibc toolchains must be disabled for static only configuration.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  .../Config.in.options                         | 1057 ++++++++++-------
->  .../toolchain-external-bootlin.hash           |  612 +++++-----
->  .../toolchain-external-bootlin.mk             |  306 ++---
->  3 files changed, 1071 insertions(+), 904 deletions(-)
+>  support/scripts/gen-bootlin-toolchains | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 
-Series applied.
+Thanks, series applied!
 
 Thomas
 -- 
