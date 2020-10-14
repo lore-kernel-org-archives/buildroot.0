@@ -1,37 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 19:37:36 +0200
-Subject: [Buildroot] [PATCH] package/18xx-ti-utils: use short version
- string
-In-Reply-To: <450c6a5e75a1f9769671e4b32c9e041120867db3.1602678577.git.baruch@tkos.co.il>
-References: <450c6a5e75a1f9769671e4b32c9e041120867db3.1602678577.git.baruch@tkos.co.il>
-Message-ID: <20201014193736.2d3386f7@windsurf>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Wed, 14 Oct 2020 19:38:50 +0200
+Subject: [Buildroot] [PATCH v5] package/openrc: add patch to create
+ /run/lock/subsys
+In-Reply-To: <20201014160243.616162-1-nolange79@gmail.com>
+References: <20201014160243.616162-1-nolange79@gmail.com>
+Message-ID: <CADYdroMSCnTFKDd2+dB9z9cmD=3MUYoq-X_jf+WSFdt+bPKzSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Oct 2020 15:29:37 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+Actually ignore this. Sent wrong patch (twice today)
 
-> This is compatible with release-monitoring.org, so it allows easier
-> tracking of update status.
-> 
-> There appears to be no easy way to use anything other than tag/commit
-> for _VERSION with the git download method. git.ti.com offers snapshot
-> download over https, so use use that instead. As added bonus, the https
-> download method is more firewall friendly.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Norbert Lange <nolange79@gmail.com> schrieb am Mi., 14. Okt. 2020, 18:02:
+
+> Together with changes to sysv/busybox init, this directory
+> will already exist before any service scripts are run.
+>
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  package/18xx-ti-utils/18xx-ti-utils.hash | 2 +-
->  package/18xx-ti-utils/18xx-ti-utils.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>  ...lso-create-run-lock-subsys-directory.patch | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644
+> package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+>
+> diff --git
+> a/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+> b/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+> new file mode 100644
+> index 0000000000..58ea25d920
+> --- /dev/null
+> +++ b/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
+> @@ -0,0 +1,29 @@
+> +From fd0e837f023c887b60934328f3e99c87b99ce568 Mon Sep 17 00:00:00 2001
+> +From: Norbert Lange <nolange79@gmail.com>
+> +Date: Thu, 8 Oct 2020 11:54:40 +0200
+> +Subject: [PATCH] Also create /run/lock/subsys directory
+> +
+> +Buildroot service scripts regularly use this directory, so
+> +create it in the most appropriate spot.
+> +
+> +Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> +---
+> + sh/init.sh.Linux.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
+> +index 222bbd3b..e56367c5 100644
+> +--- a/sh/init.sh.Linux.in
+> ++++ b/sh/init.sh.Linux.in
+> +@@ -85,7 +85,7 @@ fi
+> +
+> + [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
+> + checkpath -d $RC_SVCDIR
+> +-checkpath -d -m 0775 -o root:daemon /run/lock
+> ++checkpath -d -m 0775 -o root:daemon /run/lock /run/lock/subsys
+> +
+> + # Try to mount xenfs as early as possible, otherwise rc_sys() will always
+> + # return RC_SYS_XENU and will think that we are in a domU while it's not.
+> +--
+> +2.28.0
+> +
+> --
+> 2.28.0
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201014/a0dd0d31/attachment.html>
