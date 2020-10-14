@@ -1,41 +1,50 @@
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Date: Wed, 14 Oct 2020 14:39:43 +0200
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Wed, 14 Oct 2020 14:49:41 +0200
 Subject: [Buildroot] [PATCH 0/1] jquery: bump to version 3.5.1
 In-Reply-To: <20201014133713.07b6eea7@windsurf>
 References: <20201014110819.udxf25qnvs56nmmo@zenon.in.qult.net>
  <20201014133713.07b6eea7@windsurf>
-Message-ID: <20201014123943.6rbwy64up6drs2g4@zenon.in.qult.net>
+Message-ID: <f2ea6740-af9e-1b0b-c82a-31791de4f538@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 14, 2020 at 01:37:13PM +0200, thus spake Thomas Petazzoni:
+Hi,
+
+On 14.10.2020 13:37, Thomas Petazzoni wrote:
 > On Wed, 14 Oct 2020 13:08:19 +0200
 > Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr> wrote:
-> 
-> > It seems at least some packaged jQuery plugins are not necessarily
-> > adapted to support jQuery version 3+.  It seems jquery-datetimepicker
-> > may not be compatible, while jquery-sidebar declares no dependency on
-> > any jquery version, but has not been updated for the past five years.
-> 
+>
+>> It seems at least some packaged jQuery plugins are not necessarily
+>> adapted to support jQuery version 3+.  It seems jquery-datetimepicker
+>> may not be compatible, while jquery-sidebar declares no dependency on
+>> any jquery version, but has not been updated for the past five years.
 > So perhaps we should drop those jquery plugins from Buildroot before
 > updating, no? Or you're just not sure that they are not compatible ?
 
-If I were to choose between dropping those packages vs. being stuck
-with the old jQuery, I would definitely prefer the former.  Most of
-the plugins seem to support jQuery 3.5.1 and for those that don't out
-of the box, anyone interested can later dig them out, adapt them and
-repackage them.
 
-Another package that depends on the old jQuery and that hasn't been
-bumped for a long time is flot (0.8.3 dates back to 2014).  It looks
-like the project has since been taken over and migrated to Github,
-were it is currently released as version 4.2.1.  I can attempt a
-repackaging myself and submit a patch here.
 
--- 
-Ignacy Gaw?dzki
-R&D Engineer
-Green Communications
+jquery-datetimepicker seems to still be alive. see [0]. If I look at the
+npm page [1] it seems to have some dependencies which makes me wonder if
+this package was ever actually usable in BR.
+
+And as this is a pretty niche plugin I'm also wondering: the tendency in
+the js ecosystem is to use npm for everything. If you look at the
+install instructions it's for most packets "do npm -i packagename".
+So with the fast pace the js world is going I would be really surprised
+if anybody would still use packages that haven't been updated for 5+ years.
+
+I have myself a jquery application on my BR target. But i just deploy
+jquery with the rest of my application package.
+
+So we should maybe just drop most of the jquery-* packages. (jquery
+itself might be useful though)
+
+Regards,
+Michael
+
+[0] https://github.com/xdan/datetimepicker/commits/master
+[1]
+https://www.npmjs.com/package/jquery-datetimepicker?activeTab=dependencies
