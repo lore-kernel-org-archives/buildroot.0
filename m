@@ -1,28 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 23:33:33 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5lottie: new package
-In-Reply-To: <20201012211617.27121-1-ps.report@gmx.net>
-References: <20201012211617.27121-1-ps.report@gmx.net>
-Message-ID: <20201014233333.1d78394e@windsurf>
+Date: Wed, 14 Oct 2020 23:33:48 +0200
+Subject: [Buildroot] [PATCH] package/unrar: bump to version 5.9.4
+In-Reply-To: <20201013154749.696403-1-francois.perrad@gadz.org>
+References: <20201013154749.696403-1-francois.perrad@gadz.org>
+Message-ID: <20201014233348.0c960a14@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 12 Oct 2020 23:16:17 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Tue, 13 Oct 2020 17:47:49 +0200
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/qt5/Config.in                |  1 +
->  package/qt5/qt5lottie/Config.in      | 12 ++++++++++++
->  package/qt5/qt5lottie/qt5lottie.hash |  6 ++++++
->  package/qt5/qt5lottie/qt5lottie.mk   | 16 ++++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 package/qt5/qt5lottie/Config.in
->  create mode 100644 package/qt5/qt5lottie/qt5lottie.hash
->  create mode 100644 package/qt5/qt5lottie/qt5lottie.mk
+>  package/unrar/unrar.hash | 2 +-
+>  package/unrar/unrar.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
