@@ -1,37 +1,67 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 14 Oct 2020 21:40:00 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gcc: use binutils wrappers for
- target libs
-In-Reply-To: <20201014194002.9753-1-nolange79@gmail.com>
-References: <20201014194002.9753-1-nolange79@gmail.com>
-Message-ID: <20201014194002.9753-2-nolange79@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 14 Oct 2020 22:30:56 +0200
+Subject: [Buildroot] [git commit] system: support br2-external skeleton
+ packages
+Message-ID: <20201014210410.228718F95A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will use gcc-ar, gcc-nm and gcc-ranlib instead of the
-normal binutils tools. The difference is that with the
-wrappers, gcc plugins will be automatically picked up,
-which might be necessary with some flags.
+commit: https://git.buildroot.net/buildroot/commit/?id=8a06daa1a04d9c1d6a18f869df48f0bf51100dcb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Today, the BR2_ROOTFS_SKELETON_CUSTOM is the only way to build a custom
+skeleton. But it's limiting as users must provide a pre-built skeleton
+for each target. Supporting a br2-external package allows users to build
+up a skeleton and customize it with their own KConfig options.
+
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gcc/gcc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/scripts/br2-external | 9 +++++++++
+ system/Config.in             | 3 +++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 114c2887a0..9be155c3ff 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -99,6 +99,7 @@ GCC_COMMON_TARGET_CFLAGS += -Wno-error
- endif
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index ededd2d900..01804e1220 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -161,6 +161,7 @@ do_kconfig() {
+         toolchains
+         jpeg
+         openssl
++        skeleton
+     )
  
- # Propagate options used for target software building to GCC target libs
-+HOST_GCC_COMMON_CONF_ENV += AR_FOR_TARGET=gcc-ar NM_FOR_TARGET=gcc-nm RANLIB_FOR_TARGET=gcc-ranlib
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+     for br2 in "${items[@]}"; do
+@@ -224,6 +225,14 @@ do_kconfig() {
+         else
+             printf '# No openssl from: %s\n\n' "${br2_desc}"
+         fi >>"${outputdir}/.br2-external.in.openssl"
++
++        if [ -f "${br2_ext}/provides/skeleton.in" ]; then
++            printf 'comment "skeleton from: %s"\n' "${br2_desc}"
++            printf 'source "%s/provides/skeleton.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No skeleton from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.skeleton"
+     done
  
--- 
-2.28.0
+     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
+diff --git a/system/Config.in b/system/Config.in
+index b8b7c16529..a363e099e5 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -23,6 +23,9 @@ config BR2_ROOTFS_SKELETON_CUSTOM
+ 	help
+ 	  Use custom target skeleton.
+ 
++# skeleton from br2-external trees, if any
++source "$BR2_BASE_DIR/.br2-external.in.skeleton"
++
+ endchoice
+ 
+ if BR2_ROOTFS_SKELETON_CUSTOM
