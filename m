@@ -1,29 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 19:02:33 +0200
-Subject: [Buildroot] [PATCH v3 3/4] configs/stm32mp157*: bump kernel
- version
-In-Reply-To: <20201007144945.1697081-3-shlomi.39sd@gmail.com>
+Date: Wed, 14 Oct 2020 19:02:48 +0200
+Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
+ for wifi
+In-Reply-To: <20201007144945.1697081-4-shlomi.39sd@gmail.com>
 References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
- <20201007144945.1697081-3-shlomi.39sd@gmail.com>
-Message-ID: <20201014190233.6471fef5@windsurf>
+ <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+Message-ID: <20201014190248.2d91b51f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  7 Oct 2020 17:49:44 +0300
+On Wed,  7 Oct 2020 17:49:45 +0300
 Shlomi Vaknin <shlomi.39sd@gmail.com> wrote:
 
-> Since kernel 5.7 is EOL now, this upgrades it to version 5.8.13.
+> Adding support for wifi for stm32mp157c-dk2 is achieved by using
+> another dts which includes the bindings for the wifi module.
+> In addition, a txt file for the wifi firmware was added.
+> This was copied from the yocto bsp layer of st.
 > 
 > Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
 > ---
->  configs/stm32mp157a_dk1_defconfig | 4 ++--
->  configs/stm32mp157c_dk2_defconfig | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  .../stm32mp157c-dk2/linux.config              |  4 +-
+>  .../overlay/boot/extlinux/extlinux.conf       |  2 +-
+>  .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
+>  .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
+>  configs/stm32mp157c_dk2_defconfig             |  7 ++-
+>  5 files changed, 100 insertions(+), 4 deletions(-)
+>  create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
+>  create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
 
-Applied to master, thanks.
+Since there are still some issues apparently with this patch, I marked
+it as Changes Requested.
+
+Thanks,
 
 Thomas
 -- 
