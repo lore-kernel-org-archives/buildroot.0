@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 19:21:59 +0200
-Subject: [Buildroot] [PATCH v4] package/fakeroot: bump version to 1.25.3
-In-Reply-To: <20201014145809.367553-1-nolange79@gmail.com>
-References: <20201014145809.367553-1-nolange79@gmail.com>
-Message-ID: <20201014192159.6df8c19f@windsurf>
+Date: Wed, 14 Oct 2020 19:26:34 +0200
+Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.4.0
+Message-ID: <20201014172338.0BC778F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+commit: https://git.buildroot.net/buildroot/commit/?id=d093629f31fa490227981221e980ba91bffd985a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 14 Oct 2020 16:58:09 +0200
-Norbert Lange <nolange79@gmail.com> wrote:
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> This version adds wrappers for getgroups and statx,
-> the latter is used by coreutils 8.32.
-> 
-> Removed patches that are now in upstream.
-> 
-> Added a patch to fix failure when installing.
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
-> v1->v2
-> -   rebased on master (instead of my private branch)
-> v2->v3
-> -   use debian.snapshot as source URL
-> v3->v4
-> -   bump version to 1.25.3 (aka desperation ping)
-
-It seems like this v4, in a desperate ping, was not sufficiently
-tested, as the hash in the .hash file was not correct:
-
-ERROR: No hash found for fakeroot_1.25.3.orig.tar.gz
-
-Indeed, the hash file still contained the hash of 1.25.1 :-)
-
-I fixed this up, and applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index e52b13bb2e..bcded4a983 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  970d79e064c294fa5798c67e2a20bbd22317a69225e0478399460fa64aa36894  libuhttpd-3.3.1.tar.gz
++sha256  c77a404e2a666dda6c731cee977cfa8c2aa433e167222cbd28dd0c91a5c80570  libuhttpd-3.4.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 29e1c97d69..71e7754bab 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUHTTPD_VERSION = 3.3.1
++LIBUHTTPD_VERSION = 3.4.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
