@@ -1,48 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 00:09:52 +0200
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.9.0
-Message-ID: <20201014215852.584128F359@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 00:11:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: add introspection
+ support
+In-Reply-To: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
+References: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201015001142.2b65a115@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ea380129dc083bfb3953c4cd0769138fe522dee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 24 Sep 2020 21:06:14 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Changelog: https://github.com/intel/libva/blob/master/NEWS
+> Add introspection support to harfbuzz otherwise activation of
+> introspection in pango 1.46.1 will fail on:
+> 
+> Couldn't find include 'HarfBuzz-0.0.gir' (search path: '['/home/naourr/work/instance-2/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share', '/home/naourr/.local/share/flatpak/exports/share/gir-1.0', '/var/lib/flatpak/exports/share/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3357225ee2d8392bfd57af91cde04a1113e03493
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...allow-introspection-when-cross-compi.patch | 33 +++++++++++++++++++
+>  package/harfbuzz/harfbuzz.mk                  | 13 ++++++--
+>  2 files changed, 44 insertions(+), 2 deletions(-)
+>  create mode 100644 package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 083c949147..f40599c719 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.8.0/libva-2.8.0.tar.bz2.sha1sum
--sha1  9fb5df0e511c4aa918f9e8cd2be072cb3bb5040c  libva-2.8.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.9.0/libva-2.9.0.tar.bz2.sha1sum
-+sha1  3e20605243096b4e935e1ef6ac7797efbacc44f6  libva-2.9.0.tar.bz2
- # Locally computed
--sha256  adbb1244d278908f89ccfcf254a442de6d71934565a492cb6f03caf2ed4d1ec3  libva-2.8.0.tar.bz2
-+sha256  e344c1392dde92696c9ffd9cb3c7277d0a3b912236eb4e0fdedf7f375434584b  libva-2.9.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index c4778e9d73..75d26fa7fa 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBVA_VERSION = 2.8.0
-+LIBVA_VERSION = 2.9.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
