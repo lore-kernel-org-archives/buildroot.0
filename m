@@ -1,51 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Oct 2020 15:29:37 +0300
-Subject: [Buildroot] [PATCH] package/18xx-ti-utils: use short version string
-Message-ID: <450c6a5e75a1f9769671e4b32c9e041120867db3.1602678577.git.baruch@tkos.co.il>
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Date: Wed, 14 Oct 2020 14:39:43 +0200
+Subject: [Buildroot] [PATCH 0/1] jquery: bump to version 3.5.1
+In-Reply-To: <20201014133713.07b6eea7@windsurf>
+References: <20201014110819.udxf25qnvs56nmmo@zenon.in.qult.net>
+ <20201014133713.07b6eea7@windsurf>
+Message-ID: <20201014123943.6rbwy64up6drs2g4@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is compatible with release-monitoring.org, so it allows easier
-tracking of update status.
+On Wed, Oct 14, 2020 at 01:37:13PM +0200, thus spake Thomas Petazzoni:
+> On Wed, 14 Oct 2020 13:08:19 +0200
+> Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr> wrote:
+> 
+> > It seems at least some packaged jQuery plugins are not necessarily
+> > adapted to support jQuery version 3+.  It seems jquery-datetimepicker
+> > may not be compatible, while jquery-sidebar declares no dependency on
+> > any jquery version, but has not been updated for the past five years.
+> 
+> So perhaps we should drop those jquery plugins from Buildroot before
+> updating, no? Or you're just not sure that they are not compatible ?
 
-There appears to be no easy way to use anything other than tag/commit
-for _VERSION with the git download method. git.ti.com offers snapshot
-download over https, so use use that instead. As added bonus, the https
-download method is more firewall friendly.
+If I were to choose between dropping those packages vs. being stuck
+with the old jQuery, I would definitely prefer the former.  Most of
+the plugins seem to support jQuery 3.5.1 and for those that don't out
+of the box, anyone interested can later dig them out, adapt them and
+repackage them.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/18xx-ti-utils/18xx-ti-utils.hash | 2 +-
- package/18xx-ti-utils/18xx-ti-utils.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Another package that depends on the old jQuery and that hasn't been
+bumped for a long time is flot (0.8.3 dates back to 2014).  It looks
+like the project has since been taken over and migrated to Github,
+were it is currently released as version 4.2.1.  I can attempt a
+repackaging myself and submit a patch here.
 
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
-index a7d4068fa75f..7ecca54b9b22 100644
---- a/package/18xx-ti-utils/18xx-ti-utils.hash
-+++ b/package/18xx-ti-utils/18xx-ti-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  32ca7f1ca72b82ffb2acbee4bbe4de049af1da681421be0f2f595952761f29ee  18xx-ti-utils-R8.8.tar.gz
-+sha256  ce0185ba8a9bf456cc94a798bf66903775065e337e53ff812f18a6d88f5bac13  18xx-ti-utils-R8.8.tar.xz
- sha256  363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
-diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
-index 0985c9735b3d..5d45191cdeca 100644
---- a/package/18xx-ti-utils/18xx-ti-utils.mk
-+++ b/package/18xx-ti-utils/18xx-ti-utils.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--18XX_TI_UTILS_VERSION = R8.8
--18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
-+18XX_TI_UTILS_VERSION = 8.8
-+18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot
-+18XX_TI_UTILS_SOURCE = 18xx-ti-utils-R$(18XX_TI_UTILS_VERSION).tar.xz
- 18XX_TI_UTILS_DEPENDENCIES = libnl
- 18XX_TI_UTILS_LICENSE = BSD-3-Clause
- 18XX_TI_UTILS_LICENSE_FILES = COPYING
 -- 
-2.28.0
+Ignacy Gaw?dzki
+R&D Engineer
+Green Communications
