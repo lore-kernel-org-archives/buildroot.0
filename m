@@ -1,148 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 14 Oct 2020 16:51:14 +0300
-Subject: [Buildroot] [PATCH 1/1 v2] tpm2-tss: bump version to 3.0.1
-In-Reply-To: <3Th9t2mBSy5hkEHAI2UZCRoYJOft59QKd_WOQIvhfqFXB55dW3m-jYlZyEsr9m4ap_o4muM43xth7yHKaIMn-g2uRp_IbDmHCcjfbb9oc0s=@protonmail.com>
-References: <3Th9t2mBSy5hkEHAI2UZCRoYJOft59QKd_WOQIvhfqFXB55dW3m-jYlZyEsr9m4ap_o4muM43xth7yHKaIMn-g2uRp_IbDmHCcjfbb9oc0s=@protonmail.com>
-Message-ID: <87a6wovru5.fsf@tarshish>
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Date: Wed, 14 Oct 2020 15:55:26 +0200
+Subject: [Buildroot] [PATCH 0/1] jquery: bump to version 3.5.1
+In-Reply-To: <20201014123943.6rbwy64up6drs2g4@zenon.in.qult.net>
+References: <20201014110819.udxf25qnvs56nmmo@zenon.in.qult.net>
+ <20201014133713.07b6eea7@windsurf>
+ <20201014123943.6rbwy64up6drs2g4@zenon.in.qult.net>
+Message-ID: <20201014135526.pu6l2pf5dpzposu7@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yair,
+On Wed, Oct 14, 2020 at 02:39:44PM +0200, thus spake Ignacy Gawedzki:
+> On Wed, Oct 14, 2020 at 01:37:13PM +0200, thus spake Thomas Petazzoni:
+> > On Wed, 14 Oct 2020 13:08:19 +0200
+> > Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr> wrote:
+> > 
+> > > It seems at least some packaged jQuery plugins are not necessarily
+> > > adapted to support jQuery version 3+.  It seems jquery-datetimepicker
+> > > may not be compatible, while jquery-sidebar declares no dependency on
+> > > any jquery version, but has not been updated for the past five years.
+> > 
+> > So perhaps we should drop those jquery plugins from Buildroot before
+> > updating, no? Or you're just not sure that they are not compatible ?
+> 
+> If I were to choose between dropping those packages vs. being stuck
+> with the old jQuery, I would definitely prefer the former.  Most of
+> the plugins seem to support jQuery 3.5.1 and for those that don't out
+> of the box, anyone interested can later dig them out, adapt them and
+> repackage them.
+> 
+> Another package that depends on the old jQuery and that hasn't been
+> bumped for a long time is flot (0.8.3 dates back to 2014).  It looks
+> like the project has since been taken over and migrated to Github,
+> were it is currently released as version 4.2.1.  I can attempt a
+> repackaging myself and submit a patch here.
 
-On Wed, Oct 14 2020, Yair Ben-Avraham via buildroot wrote:
-> - 0001-Temporary-fix-for-build-without-C.patch, AC_PROG_CXX line
->   number changed.
-> - Makefile-fuzz-generated.am now in size zero.
-> - json-c, libcurl: new dependencies since tpm2-tss version 2.4.0
->
-> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-> ---
->  ...0001-Temporary-fix-for-build-without-C.patch | 17 +++++++++--------
->  package/tpm2-tss/Config.in                      |  2 ++
->  package/tpm2-tss/tpm2-tss.hash                  |  4 ++--
->  package/tpm2-tss/tpm2-tss.mk                    | 13 ++-----------
->  4 files changed, 15 insertions(+), 21 deletions(-)
->
-> diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-> index b2a9cb4f78..52599c59b5 100644
-> --- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-> +++ b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-> @@ -1,6 +1,6 @@
-> -From 158d0bc3a2a7a93090cc12c5b0dd3c27e6f44d61 Mon Sep 17 00:00:00 2001
-> -From: Carlos Santos <unixmania@gmail.com>
-> -Date: Mon, 23 Dec 2019 08:02:19 -0300
-> +From 1b6cf0cac181b96a7454b79fc15b7e5dd138129f Mon Sep 17 00:00:00 2001
-> +From: Yair Ben-Avraham <yairba@protonmail.com>
-> +Date: Wed, 14 Oct 2020 09:12:29 +0200
+I'm having an issue with the packaging of flot 4.2.1.  From the
+beginning, flot is being shipped with its own jQuery source (actually
+it's been v1.8.3 all the way).  The original packager for Buildroot
+decided not to install this source and use the one from the jquery
+package instead.
 
-You should keep the original patch author.
-
->  Subject: [PATCH] Temporary fix for build without C++
->
->  C++ is required only for the fuzzing tests but AC_PROG_CXX is included
-> @@ -23,22 +23,23 @@ Fixes:
->  1. https://github.com/tpm2-software/tpm2-tss/commit/60c26e4c4faba6ba12469485653e17092b510840
->
->  Signed-off-by: Carlos Santos <unixmania@gmail.com>
-
-Add here a comment like:
-
-[yairba: rebase on version 3.0.1]
-
-> +Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
->  ---
->   configure.ac | 1 -
->   1 file changed, 1 deletion(-)
->
->  diff --git a/configure.ac b/configure.ac
-> -index cd50451d..a3bd7144 100644
-> +index a4365886..d87058cf 100755
->  --- a/configure.ac
->  +++ b/configure.ac
-> -@@ -25,7 +25,6 @@ AC_CANONICAL_HOST
-> - AX_IS_RELEASE(dash-version)
-> +@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
->   AX_CHECK_ENABLE_DEBUG([info])
->
-> --AC_PROG_CXX
->   AC_PROG_CC
-> +-AC_PROG_CXX
->   AC_PROG_LN_S
->   AC_USE_SYSTEM_EXTENSIONS
-> + LT_INIT()
->  --
-> -2.18.1
-> +2.20.1
->
-> diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-> index 2d619750f8..bb49c0a008 100644
-> --- a/package/tpm2-tss/Config.in
-> +++ b/package/tpm2-tss/Config.in
-> @@ -1,6 +1,8 @@
->  config BR2_PACKAGE_TPM2_TSS
->  	bool "tpm2-tss"
->  	depends on !BR2_STATIC_LIBS # dlfcn.h
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_JSON_C
-
-You need to propagate json-c dependency on BR2_TOOLCHAIN_HAS_SYNC_4.
-
-Otherwise, looks good to me.
-
-baruch
-
->  	select BR2_PACKAGE_LIBURIPARSER
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-> index 3b778d4f1e..49432314d0 100644
-> --- a/package/tpm2-tss/tpm2-tss.hash
-> +++ b/package/tpm2-tss/tpm2-tss.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256 9d8c8866829e3ff5e1649ecd82498cb1329e0691139458e53b69e6061febe3d3  tpm2-tss-2.3.3.tar.gz
-> -sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-> +sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
-> +sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-> diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-> index 470020857a..64eb161b70 100644
-> --- a/package/tpm2-tss/tpm2-tss.mk
-> +++ b/package/tpm2-tss/tpm2-tss.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
->
-> -TPM2_TSS_VERSION = 2.3.3
-> +TPM2_TSS_VERSION = 3.0.1
->  TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
->  TPM2_TSS_LICENSE = BSD-2-Clause
->  TPM2_TSS_LICENSE_FILES = LICENSE
->  TPM2_TSS_INSTALL_STAGING = YES
-> -TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf
-> +TPM2_TSS_DEPENDENCIES = liburiparser openssl host-pkgconf json-c libcurl
->  TPM2_TSS_CONF_OPTS = --with-crypto=ossl --disable-doxygen-doc --disable-defaultflags
->  # 0001-configure-Only-use-CXX-when-fuzzing.patch
->  TPM2_TSS_AUTORECONF = YES
-> @@ -17,13 +17,4 @@ TPM2_TSS_AUTORECONF = YES
->  # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
->  TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
->
-> -# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
-> -# with content from a fuzz testing run rather than an empty file,
-> -# confusing autoreconf with
-> -# 0001-configure-Only-use-CXX-when-fuzzing.patch
-> -define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
-> -	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
-> -endef
-> -TPM2_TSS_POST_PATCH_HOOKS += TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
-> -
->  $(eval $(autotools-package))
-
+I have currently no way to test whether flot works properly with
+jQuery 3.5.1 and cannot recommend anything but to drop this package
+as well.  Unless we make it depend on !BR2_PACKAGE_JQUERY and make it
+install its own source of jQuery.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Ignacy Gaw?dzki
+R&D Engineer
+Green Communications
