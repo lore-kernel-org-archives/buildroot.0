@@ -1,103 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 00:11:12 +0200
-Subject: [Buildroot] [git commit] package/harfbuzz: add introspection support
-Message-ID: <20201014220007.B7FCE8FB73@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 00:09:52 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.9.0
+Message-ID: <20201014215852.584128F359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f41ae56c653958a951954b702fc028d2c7e6d95b
+commit: https://git.buildroot.net/buildroot/commit/?id=6ea380129dc083bfb3953c4cd0769138fe522dee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add introspection support to harfbuzz otherwise activation of
-introspection in pango 1.46.1 will fail on:
+Changelog: https://github.com/intel/libva/blob/master/NEWS
 
-Couldn't find include 'HarfBuzz-0.0.gir' (search path: '['/home/naourr/work/instance-2/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share', '/home/naourr/.local/share/flatpak/exports/share/gir-1.0', '/var/lib/flatpak/exports/share/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
-
-Fixes:
- - http://autobuild.buildroot.org/results/3357225ee2d8392bfd57af91cde04a1113e03493
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...uild-allow-introspection-when-cross-compi.patch | 33 ++++++++++++++++++++++
- package/harfbuzz/harfbuzz.mk                       | 13 +++++++--
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-new file mode 100644
-index 0000000000..700f6f85e4
---- /dev/null
-+++ b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-@@ -0,0 +1,33 @@
-+From 432dfd0a1d8fe0a8df89e7ce828c520c7758f10c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 24 Sep 2020 21:00:34 +0200
-+Subject: [PATCH] src/meson.build: allow introspection when cross-compiling
-+
-+introspection can be enabled when cross-compiling on certains conditions
-+(for example it is supported by buildroot)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/harfbuzz/harfbuzz/pull/2692]
-+---
-+ src/meson.build | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/src/meson.build b/src/meson.build
-+index 19290245..7db43508 100644
-+--- a/src/meson.build
-++++ b/src/meson.build
-+@@ -637,11 +637,6 @@ if have_gobject
-+   gir = find_program('g-ir-scanner', required: get_option('introspection'))
-+   build_gir = gir.found()
-+ 
-+-  build_gir = build_gir and not meson.is_cross_build()
-+-  if not build_gir and get_option('introspection').enabled()
-+-    error('Introspection support is requested but it isn\'t available in cross builds')
-+-  endif
-+-
-+   build_gir = build_gir and get_option('default_library') != 'static'
-+   if not build_gir and get_option('introspection').enabled()
-+     error('Introspection support is requested but the default library option should be shared or both')
-+-- 
-+2.28.0
-+
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 6d35e8b65e..fae9278b7c 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -11,13 +11,11 @@ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
- HARFBUZZ_LICENSE_FILES = COPYING
- HARFBUZZ_INSTALL_STAGING = YES
- HARFBUZZ_CONF_OPTS = \
--	-Dgobject=disabled \
- 	-Dfontconfig=disabled \
- 	-Dgdi=disabled \
- 	-Ddirectwrite=disabled \
- 	-Dcoretext=disabled \
- 	-Dtests=disabled \
--	-Dintrospection=disabled \
- 	-Ddocs=disabled \
- 	-Dbenchmark=disabled \
- 	-Dicu_builtin=false \
-@@ -61,6 +59,17 @@ else
- HARFBUZZ_CONF_OPTS += -Dfreetype=disabled
- endif
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 083c949147..f40599c719 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva/releases/download/2.8.0/libva-2.8.0.tar.bz2.sha1sum
+-sha1  9fb5df0e511c4aa918f9e8cd2be072cb3bb5040c  libva-2.8.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.9.0/libva-2.9.0.tar.bz2.sha1sum
++sha1  3e20605243096b4e935e1ef6ac7797efbacc44f6  libva-2.9.0.tar.bz2
+ # Locally computed
+-sha256  adbb1244d278908f89ccfcf254a442de6d71934565a492cb6f03caf2ed4d1ec3  libva-2.8.0.tar.bz2
++sha256  e344c1392dde92696c9ffd9cb3c7277d0a3b912236eb4e0fdedf7f375434584b  libva-2.9.0.tar.bz2
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index c4778e9d73..75d26fa7fa 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+HARFBUZZ_DEPENDENCIES += gobject-introspection
-+HARFBUZZ_CONF_OPTS += \
-+	-Dgobject=enabled \
-+	-Dintrospection=enabled
-+else
-+HARFBUZZ_CONF_OPTS += \
-+	-Dgobject=disabled \
-+	-Dintrospection=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GRAPHITE2),y)
- HARFBUZZ_DEPENDENCIES += graphite2
- HARFBUZZ_CONF_OPTS += -Dgraphite=enabled
+-LIBVA_VERSION = 2.8.0
++LIBVA_VERSION = 2.9.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
