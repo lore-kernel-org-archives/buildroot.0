@@ -1,41 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 Oct 2020 19:37:20 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/python3: bump to version
- 3.9.0
-In-Reply-To: <20201014101848.972915-1-james.hilliard1@gmail.com>
-References: <20201014101848.972915-1-james.hilliard1@gmail.com>
-Message-ID: <20201014193720.2cfa2a5c@windsurf>
+Date: Wed, 14 Oct 2020 19:37:29 +0200
+Subject: [Buildroot] [git commit] package/18xx-ti-utils: use short version
+ string
+Message-ID: <20201014172612.BF0618F6E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 14 Oct 2020 04:18:48 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=cde2daaee373251b899ea1620af7b0ae8eb0e769
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Minimal rebase of patches on 3.9.0.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - minimal patch set require for bump
->   - add signed off by to patches with syntax changes
-> ---
->  ...locale-and-set-to-default-when-addin.patch | 14 +++++----
->  ...-disable-installation-of-test-module.patch | 29 +++++++++++--------
->  .../0014-Add-an-option-to-disable-pydoc.patch | 28 +++++++++---------
->  ...-option-to-disable-the-curses-module.patch | 26 ++++++++---------
->  .../0019-Add-an-option-to-disable-expat.patch | 20 ++++++-------
->  ...024-Add-an-option-to-disable-decimal.patch | 16 +++++-----
->  package/python3/python3.hash                  |  6 ++--
->  package/python3/python3.mk                    |  4 +--
->  8 files changed, 75 insertions(+), 68 deletions(-)
+This is compatible with release-monitoring.org, so it allows easier
+tracking of update status.
 
-Applied to master, thanks.
+There appears to be no easy way to use anything other than tag/commit
+for _VERSION with the git download method. git.ti.com offers snapshot
+download over https, so use use that instead. As added bonus, the https
+download method is more firewall friendly.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/18xx-ti-utils/18xx-ti-utils.hash | 2 +-
+ package/18xx-ti-utils/18xx-ti-utils.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.hash b/package/18xx-ti-utils/18xx-ti-utils.hash
+index a7d4068fa7..7ecca54b9b 100644
+--- a/package/18xx-ti-utils/18xx-ti-utils.hash
++++ b/package/18xx-ti-utils/18xx-ti-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  32ca7f1ca72b82ffb2acbee4bbe4de049af1da681421be0f2f595952761f29ee  18xx-ti-utils-R8.8.tar.gz
++sha256  ce0185ba8a9bf456cc94a798bf66903775065e337e53ff812f18a6d88f5bac13  18xx-ti-utils-R8.8.tar.xz
+ sha256  363cef40b276a7a91ebcff3f78626d9cfe5e5a51927c725236007259403d5fc4  COPYING
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+index 0985c9735b..5d45191cde 100644
+--- a/package/18xx-ti-utils/18xx-ti-utils.mk
++++ b/package/18xx-ti-utils/18xx-ti-utils.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-18XX_TI_UTILS_VERSION = R8.8
+-18XX_TI_UTILS_SITE = git://git.ti.com/wilink8-wlan/18xx-ti-utils
++18XX_TI_UTILS_VERSION = 8.8
++18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/snapshot
++18XX_TI_UTILS_SOURCE = 18xx-ti-utils-R$(18XX_TI_UTILS_VERSION).tar.xz
+ 18XX_TI_UTILS_DEPENDENCIES = libnl
+ 18XX_TI_UTILS_LICENSE = BSD-3-Clause
+ 18XX_TI_UTILS_LICENSE_FILES = COPYING
