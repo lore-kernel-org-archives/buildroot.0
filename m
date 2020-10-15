@@ -1,70 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 22:28:44 +0200
-Subject: [Buildroot] [git commit] package/libapparmor: fix build on uclibc
-Message-ID: <20201015204335.3814E8FD2C@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 22:56:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libapparmor: fix build on musl
+In-Reply-To: <20201015162413.916731-1-fontaine.fabrice@gmail.com>
+References: <20201015162413.916731-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201015225609.0a9f6631@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b22a190333d32d47458dd045e74ac16c3d57de33
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 15 Oct 2020 18:24:13 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fix build of version 3.0.0 with uclibc. While the patch is added in
-package/libapparmor, it in fact fixes a build issue that only occurs
-when building package/apparmor, but as both packages share the same
-source, they also share the same patches.
+> Fix build of version 3.0.0 with musl
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/22fb440240aa698acc68f026be790d5366c8f908
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/aea20bd5539fad35385565ffeb7e6ac566507017
+After discussing with Yann, I in fact changing something when applying:
+I moved the patch in package/libapparmor/3.0.0 and made
+package/apparmor/3.0.0 a symlink to package/libapparmor/3.0.0.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ont-force-host-cpp-to-detect-reallocarray.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+Indeed, both apparmor and libapparmor use the same source tarball, so
+it makes sense for them to share the patches.
 
-diff --git a/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch b/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
-new file mode 100644
-index 0000000000..0510489d55
---- /dev/null
-+++ b/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
-@@ -0,0 +1,37 @@
-+From 0dbcbee70097ecde66708064ec1dedfa64e581e8 Mon Sep 17 00:00:00 2001
-+From: Armin Kuster <akuster@mvista.com>
-+Date: Wed, 7 Oct 2020 20:50:38 -0700
-+Subject: [PATCH] parser/Makefile: dont force host cpp to detect reallocarray
-+
-+In cross build environments, using the hosts cpp gives incorrect
-+detection of reallocarray. Change cpp to a variable.
-+
-+fixes:
-+parser_misc.c: In function 'int capable_add_cap(const char*, int, unsigned int, capability_flags)':
-+| parser_misc.c:297:37: error: 'reallocarray' was not declared in this scope
-+|   297 |   tmp = (struct capability_table *) reallocarray(cap_table, sizeof(struct capability_table), cap_table_size+1);
-+
-+Signed-off-by: Armin Kuster <akuster808@gmail.com>
-+[Retrieved from:
-+https://gitlab.com/ffontaine/apparmor/-/commit/0dbcbee70097ecde66708064ec1dedfa64e581e8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ parser/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/parser/Makefile b/parser/Makefile
-+index acef3d77a..8250ac451 100644
-+--- a/parser/Makefile
-++++ b/parser/Makefile
-+@@ -54,7 +54,7 @@ endif
-+ CPPFLAGS += -D_GNU_SOURCE
-+ 
-+ STDLIB_INCLUDE:="\#include <stdlib.h>"
-+-HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | cpp ${CPPFLAGS} | grep -q reallocarray && echo true)
-++HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | ${CPP} ${CPPFLAGS} | grep -q reallocarray && echo true)
-+ 
-+ WARNINGS = -Wall
-+ CXX_WARNINGS = ${WARNINGS} ${EXTRA_WARNINGS}
-+-- 
-+GitLab
-+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
