@@ -1,62 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Oct 2020 18:24:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libapparmor: fix build on musl
-Message-ID: <20201015162413.916731-1-fontaine.fabrice@gmail.com>
+Date: Thu, 15 Oct 2020 18:46:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apparmor: fix build on uclibc
+Message-ID: <20201015164604.963072-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of version 3.0.0 with musl
+Fix build of version 3.0.0 with uclibc
 
 Fixes:
- - http://autobuild.buildroot.org/results/22fb440240aa698acc68f026be790d5366c8f908
+ - http://autobuild.buildroot.org/results/aea20bd5539fad35385565ffeb7e6ac566507017
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...or-add-missing-include-for-socklen_t.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/libapparmor/0001-libapparmor-add-missing-include-for-socklen_t.patch
+ ...orce-host-cpp-to-detect-reallocarray.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
 
-diff --git a/package/libapparmor/0001-libapparmor-add-missing-include-for-socklen_t.patch b/package/libapparmor/0001-libapparmor-add-missing-include-for-socklen_t.patch
+diff --git a/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch b/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
 new file mode 100644
-index 0000000000..2d5114337e
+index 0000000000..0510489d55
 --- /dev/null
-+++ b/package/libapparmor/0001-libapparmor-add-missing-include-for-socklen_t.patch
-@@ -0,0 +1,35 @@
-+From 47263a3a74d7973e7a54b17db6aa903701468ffd Mon Sep 17 00:00:00 2001
-+From: Patrick Steinhardt <ps@pks.im>
-+Date: Sat, 3 Oct 2020 20:37:55 +0200
-+Subject: [PATCH] libapparmor: add missing include for `socklen_t`
++++ b/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
+@@ -0,0 +1,37 @@
++From 0dbcbee70097ecde66708064ec1dedfa64e581e8 Mon Sep 17 00:00:00 2001
++From: Armin Kuster <akuster@mvista.com>
++Date: Wed, 7 Oct 2020 20:50:38 -0700
++Subject: [PATCH] parser/Makefile: dont force host cpp to detect reallocarray
 +
-+While `include/sys/apparmor.h` makes use of `socklen_t`, it doesn't
-+include the `<sys/socket.h>` header to make its declaration available.
-+While this works on systems using glibc via transitive includes, it
-+breaks compilation on musl libc.
++In cross build environments, using the hosts cpp gives incorrect
++detection of reallocarray. Change cpp to a variable.
 +
-+Fix the issue by including the header.
++fixes:
++parser_misc.c: In function 'int capable_add_cap(const char*, int, unsigned int, capability_flags)':
++| parser_misc.c:297:37: error: 'reallocarray' was not declared in this scope
++|   297 |   tmp = (struct capability_table *) reallocarray(cap_table, sizeof(struct capability_table), cap_table_size+1);
 +
-+Signed-off-by: Patrick Steinhardt <ps@pks.im>
++Signed-off-by: Armin Kuster <akuster808@gmail.com>
 +[Retrieved from:
-+https://gitlab.com/apparmor/apparmor/-/commit/47263a3a74d7973e7a54b17db6aa903701468ffd]
++https://gitlab.com/ffontaine/apparmor/-/commit/0dbcbee70097ecde66708064ec1dedfa64e581e8]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ libraries/libapparmor/include/sys/apparmor.h | 1 +
-+ 1 file changed, 1 insertion(+)
++ parser/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/libraries/libapparmor/include/sys/apparmor.h b/libraries/libapparmor/include/sys/apparmor.h
-+index 32892d065..d70eff947 100644
-+--- a/libraries/libapparmor/include/sys/apparmor.h
-++++ b/libraries/libapparmor/include/sys/apparmor.h
-+@@ -21,6 +21,7 @@
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+ #include <unistd.h>
-++#include <sys/socket.h>
-+ #include <sys/types.h>
++diff --git a/parser/Makefile b/parser/Makefile
++index acef3d77a..8250ac451 100644
++--- a/parser/Makefile
+++++ b/parser/Makefile
++@@ -54,7 +54,7 @@ endif
++ CPPFLAGS += -D_GNU_SOURCE
 + 
-+ #ifdef __cplusplus
++ STDLIB_INCLUDE:="\#include <stdlib.h>"
++-HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | cpp ${CPPFLAGS} | grep -q reallocarray && echo true)
+++HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | ${CPP} ${CPPFLAGS} | grep -q reallocarray && echo true)
++ 
++ WARNINGS = -Wall
++ CXX_WARNINGS = ${WARNINGS} ${EXTRA_WARNINGS}
 +-- 
 +GitLab
 +
