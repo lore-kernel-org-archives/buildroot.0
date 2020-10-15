@@ -1,63 +1,48 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 15 Oct 2020 00:16:46 -0600
-Subject: [Buildroot] [PATCH 1/1] package/mpdecimal: bump to version 2.5.0
-Message-ID: <20201015061646.1011712-1-james.hilliard1@gmail.com>
+Date: Thu, 15 Oct 2020 00:25:48 -0600
+Subject: [Buildroot] [PATCH 1/1] package/python-frozenlist: bump to version
+ 1.1.0
+Message-ID: <20201015062548.1397867-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update license hash due to date update.
-
-Tweak patch so that it applies still.
-
-Fixes:
-http://autobuild.buildroot.net/results/b73/b7384312567825e6f4ddbd7c08c1b8e44c7f1f9b
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- ...Add-minimal-support-for-enable-disable-shared-static.patch | 2 +-
- package/mpdecimal/mpdecimal.hash                              | 4 ++--
- package/mpdecimal/mpdecimal.mk                                | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-frozenlist/python-frozenlist.hash | 6 +++---
+ package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-index 630bbd6642..4b60013840 100644
---- a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-+++ b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-@@ -37,7 +37,7 @@ index 2c91891..0c44f36 100644
- +endif
- +ifeq ($(BUILD_SHARED),yes)
-  	$(INSTALL) -m 755 libmpdec/$(LIBSHARED) $(DESTDIR)$(libdir)
-- 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED) $(LIBSONAME) && ln -sf $(LIBSHARED) libmpdec.so
-+ 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED) $(LIBSONAME) && ln -sf $(LIBSHARED) $(LIBNAME)
- +endif
-  	$(INSTALL) -d -m 755 $(DESTDIR)$(docdir)
-  	cp -R doc/* $(DESTDIR)$(docdir)
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index e152243230..c931ee4a6d 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,4 +1,4 @@
- # From http://www.bytereef.org/mpdecimal/download.html
--sha256 83c628b90f009470981cf084c5418329c88b19835d8af3691b930afccb7d79c7 mpdecimal-2.4.2.tar.gz
-+sha256  15417edc8e12a57d1d9d75fa7e3f22b158a3b98f44db9d694cfd2acde8dfa0ca  mpdecimal-2.5.0.tar.gz
- # Locally computed
--sha256 e384413a13f061a50f6fadceefc0f326c22d83c13ae94978e1f86d0468332c19 LICENSE.txt
-+sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index 2d06d0f6b4..00aa98e693 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
+index 4a006586d2..0ecc5f9cdf 100644
+--- a/package/python-frozenlist/python-frozenlist.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/frozenlist/json
+-md5	7d493070a7fe12b6be753585c1995abe  frozenlist-1.0.0.tar.gz
+-sha256	d1076a40cd1bef6edf148cc05aecce52a11c9bbd2a3d60ce37cc07e03c8dc6c7  frozenlist-1.0.0.tar.gz
++md5  2a83a520014203d0a56993c332ff7e23  frozenlist-1.1.0.tar.gz
++sha256  d167a5050628323fcb3db410375eb06390ab135454fd85fd79c5832f5ec2b8ed  frozenlist-1.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
++sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 1d36b4df51..b113c38080 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--MPDECIMAL_VERSION = 2.4.2
-+MPDECIMAL_VERSION = 2.5.0
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2-Clause
- MPDECIMAL_LICENSE_FILES = LICENSE.txt
+-PYTHON_FROZENLIST_VERSION = 1.0.0
++PYTHON_FROZENLIST_VERSION = 1.1.0
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+-PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/85/32/12f1247bf4915b74a00264aa0033745ee871759daee47499641bd13aeee7
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/12/0e/119f1f186e93c21d078db1ddd7b21247a8a49261689d9284dec28be3b08e
+ PYTHON_FROZENLIST_SETUP_TYPE = setuptools
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE.txt
 -- 
 2.25.1
