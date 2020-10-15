@@ -1,47 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Oct 2020 18:06:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libblockdev: fs needs mount
-Message-ID: <20201015160622.846446-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Oct 2020 18:08:25 +0200
+Subject: [Buildroot] [PATCH v2 0/3] board/udoo: bsp updates and cleanup
+In-Reply-To: <20201013201621.910051-1-geomatsi@gmail.com>
+References: <20201013201621.910051-1-geomatsi@gmail.com>
+Message-ID: <20201015180825.0ff60685@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1f83436a84046da753a2ebf2aac7c0f0cc188fe0
+On Tue, 13 Oct 2020 23:16:18 +0300
+Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libblockdev/Config.in      | 2 ++
- package/libblockdev/libblockdev.mk | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+> Sergey Matyukevich (3):
+>   configs/mx6udoo_defconfig: bump kernel and U-Boot versions
+>   board/udoo/mx6qdl: disable usb host in device tree
+>   board/udoo: use common freescale infrastructure
 
-diff --git a/package/libblockdev/Config.in b/package/libblockdev/Config.in
-index 3c501b7871..5836fa6cf2 100644
---- a/package/libblockdev/Config.in
-+++ b/package/libblockdev/Config.in
-@@ -28,6 +28,8 @@ config BR2_PACKAGE_LIBBLOCKDEV_CRYPTO
- config BR2_PACKAGE_LIBBLOCKDEV_FS
- 	bool "filesystem"
- 	depends on BR2_ENABLE_LOCALE # parted
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_PARTED
- 
- comment "filesystem plugin needs a toolchain w/ locale"
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 1b094555d2..a38912514c 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
-@@ -39,7 +39,7 @@ LIBBLOCKDEV_CONF_OPTS += --without-crypto
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBBLOCKDEV_FS),y)
--LIBBLOCKDEV_DEPENDENCIES += parted
-+LIBBLOCKDEV_DEPENDENCIES += parted util-linux
- LIBBLOCKDEV_CONF_OPTS += --with-fs
- else
- LIBBLOCKDEV_CONF_OPTS += --without-fs
+Thanks, applied!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
