@@ -1,63 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 23:06:48 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/opensc: new package
-In-Reply-To: <vtnyOPUcLKKBUVjtW_D5JrRC5N5DfTiqL8Iyiu1KSPxzgvAFbo61ULCtztMd-suIPR7Ab8eYMjQH6-XBjDs3Uxakebo-SY4fQhRhwBQ7u-g=@protonmail.com>
-References: <vtnyOPUcLKKBUVjtW_D5JrRC5N5DfTiqL8Iyiu1KSPxzgvAFbo61ULCtztMd-suIPR7Ab8eYMjQH6-XBjDs3Uxakebo-SY4fQhRhwBQ7u-g=@protonmail.com>
-Message-ID: <20201015230648.4e448ed8@windsurf>
+Date: Thu, 15 Oct 2020 23:10:24 +0200
+Subject: [Buildroot] [git commit] package/kismet: add python tools support
+Message-ID: <20201015205920.6087A82AD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=105c65c0a95ab62e452943a636fdbf96ee1aa2ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 15 Oct 2020 15:01:36 +0000
-Yair Ben-Avraham via buildroot <buildroot@busybox.net> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kismet/Config.in | 28 ++++++++++++++++++++++++++++
+ package/kismet/kismet.mk | 11 ++++++++++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
 
-> Open source smart card tools and middleware.
-> OpenSC provides a set of libraries and utilities to work with smart cards. Its
-> main focus is on cards that support cryptographic operations, and facilitate
-> their use in security applications such as authentication, mail encryption and
-> digital signatures. OpenSC implements the standard APIs to smart cards, e.g.
-> PKCS#11 API, Windows? Smart Card Minidriver and macOS CryptoTokenKit.
-> 
-> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-
-I was about to apply, but unfortunately the build fails with the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2020.02.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_OPENSC=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-The failure is:
-
-pkcs15-asepcos.c: In function ?asepcos_do_store_pin.isra.3?:
-pkcs15-asepcos.c:307:33: error: ?akn? may be used uninitialized in this function [-Werror=maybe-uninitialized]
-  auth_info->attrs.pin.reference = akn;
-                                 ^
-cc1: all warnings being treated as errors
-
-Since you're going to send a new iteration for this, could you also
-make sure to update the DEVELOPERS file in the same patch to add
-yourself as a maintainer for this package ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 8c4c63d9ed..4ef84731da 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -26,6 +26,34 @@ config BR2_PACKAGE_KISMET
+ 
+ if BR2_PACKAGE_KISMET
+ 
++config BR2_PACKAGE_KISMET_PYTHON_TOOLS
++	bool "Install python tools"
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_PACKAGE_PYTHON3
++	depends on !BR2_STATIC_LIBS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	select BR2_PACKAGE_PROTOBUF
++	select BR2_PACKAGE_PYTHON_NUMPY # runtime for RTLAMR and RTLADSB
++	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
++	select BR2_PACKAGE_PYTHON_SERIAL # runtime for Freaklabs Zigbee
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	help
++	  Enable Python and Python-related tools (RTL_433, RTLAMR,
++	  RTLADSB and Freaklabs Zigbee)
++
++comment "python tools needs python3"
++	depends on !BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++
++comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 4.8"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++
+ config BR2_PACKAGE_KISMET_SERVER
+ 	bool "Install server"
+ 	default y
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 99adf6afaf..723ce9c02b 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -17,7 +17,7 @@ KISMET_DEPENDENCIES = \
+ 	zlib
+ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
+-KISMET_CONF_OPTS = --disable-debuglibs --disable-python-tools
++KISMET_CONF_OPTS = --disable-debuglibs
+ 
+ KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+@@ -55,6 +55,15 @@ else
+ KISMET_CONF_OPTS += --disable-pcre
+ endif
+ 
++ifeq ($(BR2_PACKAGE_KISMET_PYTHON_TOOLS),y)
++KISMET_DEPENDENCIES += python3 python-setuptools
++KISMET_CONF_OPTS += \
++	--enable-python-tools \
++	--with-python-interpreter=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
++else
++KISMET_CONF_OPTS += --disable-python-tools
++endif
++
+ KISMET_INSTALL_TARGET_OPTS += \
+ 	DESTDIR=$(TARGET_DIR) \
+ 	INSTUSR=$(shell id -u) \
