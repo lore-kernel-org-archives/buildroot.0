@@ -1,66 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Oct 2020 19:02:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/oniguruma: fix CVE-2020-26159
-Message-ID: <20201015170253.968250-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 15 Oct 2020 19:15:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.1.10
+Message-ID: <20201015171518.13674-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-26159: In Oniguruma 6.9.5_rev1, an attacker able to supply
-a regular expression for compilation may be able to overflow a buffer by
-one byte in concat_opt_exact_str in src/regcomp.c.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-207-Out-of-bounds-write.patch        | 25 +++++++++++++++++++
- package/oniguruma/oniguruma.mk                |  3 +++
- 2 files changed, 28 insertions(+)
- create mode 100644 package/oniguruma/0001-207-Out-of-bounds-write.patch
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/oniguruma/0001-207-Out-of-bounds-write.patch b/package/oniguruma/0001-207-Out-of-bounds-write.patch
-new file mode 100644
-index 0000000000..3317449702
---- /dev/null
-+++ b/package/oniguruma/0001-207-Out-of-bounds-write.patch
-@@ -0,0 +1,25 @@
-+From cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0 Mon Sep 17 00:00:00 2001
-+From: "K.Kosako" <kkosako0@gmail.com>
-+Date: Mon, 21 Sep 2020 12:58:29 +0900
-+Subject: [PATCH] #207: Out-of-bounds write
-+
-+[Retrieved from:
-+https://github.com/kkos/oniguruma/commit/cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/regcomp.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/regcomp.c b/src/regcomp.c
-+index f6494b6d..a0a68561 100644
-+--- a/src/regcomp.c
-++++ b/src/regcomp.c
-+@@ -6257,7 +6257,7 @@ concat_opt_exact_str(OptStr* to, UChar* s, UChar* end, OnigEncoding enc)
-+ 
-+   for (i = to->len, p = s; p < end && i < OPT_EXACT_MAXLEN; ) {
-+     len = enclen(enc, p);
-+-    if (i + len > OPT_EXACT_MAXLEN) break;
-++    if (i + len >= OPT_EXACT_MAXLEN) break;
-+     for (j = 0; j < len && p < end; j++)
-+       to->s[i++] = *p++;
-+   }
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index d1ff1f115f..c2330c7380 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
-@@ -12,4 +12,7 @@ ONIGURUMA_LICENSE = BSD-2-Clause
- ONIGURUMA_LICENSE_FILES = COPYING
- ONIGURUMA_INSTALL_STAGING = YES
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index ee0afd0c47..572b7ccc8c 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
-+# 0001-207-Out-of-bounds-write.patch
-+ONIGURUMA_IGNORE_CVES += CVE-2020-26159
-+
- $(eval $(autotools-package))
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.1.9
++MESA3D_HEADERS_VERSION = 20.1.10
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index eb7676e564..69f387a45e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000601.html
+-sha256  b251ca0769b722058986640d48f8457c596142cfbee1a83cba91b83391427382  mesa-20.1.9.tar.xz
+-sha512  0fb8ceff3c91ad2076efb0b2ac7e95d2d72ff1df955eb8fedf712ceaa7f49184eae9958072edd872f5c38adbaeb867988f67627b33da8b208706f69325d7e260  mesa-20.1.9.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-October/000603.html
++sha256  b1dba69910adac9fcb4cbdfd7833d99a4a8c75b91f3d2e97f0fd0a3cd8c6ee9f  mesa-20.1.10.tar.xz
++sha512  0d4016abfcc733c853d7b6c3c997ddc554a44088c0a4d9a7edb51ab5ad7d9e1234728b61ffcb9c82a6c5fee1429091a1c31cbeabcb1b50411337b99ee550d28a  mesa-20.1.10.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 96ed3037b4..4a1939f1f6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.1.9
++MESA3D_VERSION = 20.1.10
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-2.28.0
+2.27.0
