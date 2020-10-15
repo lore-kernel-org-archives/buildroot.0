@@ -1,78 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 22:27:31 +0200
-Subject: [Buildroot] [git commit] package/libapparmor: fix build on musl
-Message-ID: <20201015204335.2A23C817DF@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 22:29:25 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.1.10
+Message-ID: <20201015204335.604AF87B6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dad3f09b6b22a3a76dcfb2065e633fab4fc131f0
+commit: https://git.buildroot.net/buildroot/commit/?id=90434a14193dca9e8eb11274a0b6c93d9ab70651
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build of version 3.0.0 with musl. Since the apparmor and
-libapparmor packages share the same sources, we also share their
-patches: this is why the patch is added in package/libapparmor/3.0.0,
-and a symlink package/apparmor/3.0.0 -> package/libapparmor/3.0.0 is
-added.
-
-Fixes:
- - http://autobuild.buildroot.org/results/22fb440240aa698acc68f026be790d5366c8f908
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/apparmor/3.0.0                             |  1 +
- ...pparmor-add-missing-include-for-socklen_t.patch | 35 ++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/apparmor/3.0.0 b/package/apparmor/3.0.0
-new file mode 120000
-index 0000000000..eb1e43a572
---- /dev/null
-+++ b/package/apparmor/3.0.0
-@@ -0,0 +1 @@
-+../libapparmor/3.0.0/
-\ No newline at end of file
-diff --git a/package/libapparmor/3.0.0/0001-libapparmor-add-missing-include-for-socklen_t.patch b/package/libapparmor/3.0.0/0001-libapparmor-add-missing-include-for-socklen_t.patch
-new file mode 100644
-index 0000000000..2d5114337e
---- /dev/null
-+++ b/package/libapparmor/3.0.0/0001-libapparmor-add-missing-include-for-socklen_t.patch
-@@ -0,0 +1,35 @@
-+From 47263a3a74d7973e7a54b17db6aa903701468ffd Mon Sep 17 00:00:00 2001
-+From: Patrick Steinhardt <ps@pks.im>
-+Date: Sat, 3 Oct 2020 20:37:55 +0200
-+Subject: [PATCH] libapparmor: add missing include for `socklen_t`
-+
-+While `include/sys/apparmor.h` makes use of `socklen_t`, it doesn't
-+include the `<sys/socket.h>` header to make its declaration available.
-+While this works on systems using glibc via transitive includes, it
-+breaks compilation on musl libc.
-+
-+Fix the issue by including the header.
-+
-+Signed-off-by: Patrick Steinhardt <ps@pks.im>
-+[Retrieved from:
-+https://gitlab.com/apparmor/apparmor/-/commit/47263a3a74d7973e7a54b17db6aa903701468ffd]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libraries/libapparmor/include/sys/apparmor.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libraries/libapparmor/include/sys/apparmor.h b/libraries/libapparmor/include/sys/apparmor.h
-+index 32892d065..d70eff947 100644
-+--- a/libraries/libapparmor/include/sys/apparmor.h
-++++ b/libraries/libapparmor/include/sys/apparmor.h
-+@@ -21,6 +21,7 @@
-+ #include <stdbool.h>
-+ #include <stdint.h>
-+ #include <unistd.h>
-++#include <sys/socket.h>
-+ #include <sys/types.h>
-+ 
-+ #ifdef __cplusplus
-+-- 
-+GitLab
-+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index ee0afd0c47..572b7ccc8c 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.1.9
++MESA3D_HEADERS_VERSION = 20.1.10
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index eb7676e564..69f387a45e 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000601.html
+-sha256  b251ca0769b722058986640d48f8457c596142cfbee1a83cba91b83391427382  mesa-20.1.9.tar.xz
+-sha512  0fb8ceff3c91ad2076efb0b2ac7e95d2d72ff1df955eb8fedf712ceaa7f49184eae9958072edd872f5c38adbaeb867988f67627b33da8b208706f69325d7e260  mesa-20.1.9.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-October/000603.html
++sha256  b1dba69910adac9fcb4cbdfd7833d99a4a8c75b91f3d2e97f0fd0a3cd8c6ee9f  mesa-20.1.10.tar.xz
++sha512  0d4016abfcc733c853d7b6c3c997ddc554a44088c0a4d9a7edb51ab5ad7d9e1234728b61ffcb9c82a6c5fee1429091a1c31cbeabcb1b50411337b99ee550d28a  mesa-20.1.10.tar.xz
+ 
+ # License
+ sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 96ed3037b4..4a1939f1f6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.1.9
++MESA3D_VERSION = 20.1.10
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
