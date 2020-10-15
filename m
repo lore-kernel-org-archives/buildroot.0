@@ -1,38 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 00:11:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: add introspection
- support
-In-Reply-To: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
-References: <20200924190614.1409319-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201015001142.2b65a115@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 14 Oct 2020 22:49:00 -0300
+Subject: [Buildroot] [PATCH 1/3] configs/freescale_imx8: Use NXP specific
+ defconfig
+Message-ID: <20201015014902.3486-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Sep 2020 21:06:14 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+When using the imx8 NXP kernel, it is preferred to use the imx_v8_defconfig
+instead of the generic arm64 defconfig, as the NXP defconfig selects more
+imx8 specific drivers.
 
-> Add introspection support to harfbuzz otherwise activation of
-> introspection in pango 1.46.1 will fail on:
-> 
-> Couldn't find include 'HarfBuzz-0.0.gir' (search path: '['/home/naourr/work/instance-2/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/../share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share', '/home/naourr/.local/share/flatpak/exports/share/gir-1.0', '/var/lib/flatpak/exports/share/gir-1.0', '/usr/local/share/gir-1.0', '/usr/share/gir-1.0', '/home/naourr/work/instance-2/output-1/host/share/gir-1.0', '/usr/share/gir-1.0']')
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/3357225ee2d8392bfd57af91cde04a1113e03493
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...allow-introspection-when-cross-compi.patch | 33 +++++++++++++++++++
->  package/harfbuzz/harfbuzz.mk                  | 13 ++++++--
->  2 files changed, 44 insertions(+), 2 deletions(-)
->  create mode 100644 package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/freescale_imx8mmevk_defconfig  | 2 +-
+ configs/freescale_imx8mnevk_defconfig  | 2 +-
+ configs/freescale_imx8mqevk_defconfig  | 2 +-
+ configs/freescale_imx8qmmek_defconfig  | 2 +-
+ configs/freescale_imx8qxpmek_defconfig | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index 7bce834ab8..508bcd32cd 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
+@@ -8,7 +8,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mm-evk"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
+index e1804fad4c..8c795fe217 100644
+--- a/configs/freescale_imx8mnevk_defconfig
++++ b/configs/freescale_imx8mnevk_defconfig
+@@ -8,7 +8,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index 62e530840d..ffdc23bc26 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -8,7 +8,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.19.35_1.1.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mq-evk"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
+index 2c55b3cd9f..45b4dbd1b9 100644
+--- a/configs/freescale_imx8qmmek_defconfig
++++ b/configs/freescale_imx8qmmek_defconfig
+@@ -7,7 +7,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
+index 2c35055565..7c4a456c2a 100644
+--- a/configs/freescale_imx8qxpmek_defconfig
++++ b/configs/freescale_imx8qxpmek_defconfig
+@@ -9,7 +9,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
+-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
