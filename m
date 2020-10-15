@@ -1,36 +1,47 @@
-From: Magnus Armholt <magnus.armholt@wapice.com>
-Date: Thu, 15 Oct 2020 04:31:11 +0000
-Subject: [Buildroot] pkg-stats support for external tree?
-Message-ID: <HE1PR03MB298830C6E778223631A2A08AF0020@HE1PR03MB2988.eurprd03.prod.outlook.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 15 Oct 2020 07:46:00 +0200
+Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version min
+ to 3.15
+Message-ID: <20201015054600.90183-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-We are using a setup with an external tree holding our specific packages (br2_external).
-The renewed pkg-stats is a nice tool and we would like to cover also our specific packages in br2_external.
-Is this possible?
+quazip requires cmake 3.15 since version 1.0 and
+https://github.com/stachenov/quazip/commit/89e7c201f0215032d347eef6fc0c671a1845738b
+https://github.com/stachenov/quazip/commit/818adc82246cefffa2e8851534016cf1db349da7
 
-I tried running the pkg-stats from our base directory (parent of buildroot) but this fails due to how the utils/getdeveloperlib is included.
+The rationale for this requirement is that "default locations for the
+install(TARGETS command based on the GNUInstallDirs package were only
+added in 3.14" and "3.15 is not that much of a difference from 3.14 and
+it introduced a lot of useful UI improvements.":
+https://github.com/stachenov/quazip/issues/82
 
-Our directory layout
+Fixes:
+ - http://autobuild.buildroot.org/results/5d848a46109aef448ea1d1b857a500d9461dc2d9
 
-project-base/
-| - buildroot/
-| - br2_external/
-     | - board/
-     | - configs/
-     | - Config.in
-     | - external.desc
-     | - external.mk
-     | - package/
-| - local_site/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ support/dependencies/check-host-cmake.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-BR,
-Magnus
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201015/5d4300da/attachment.html>
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+index 01f38da376..e1bbcd62c8 100644
+--- a/support/dependencies/check-host-cmake.mk
++++ b/support/dependencies/check-host-cmake.mk
+@@ -1,9 +1,9 @@
+-# Set this to either 3.10 or higher, depending on the highest minimum
++# Set this to either 3.15 or higher, depending on the highest minimum
+ # version required by any of the packages bundled in Buildroot. If a
+ # package is bumped or a new one added, and it requires a higher
+ # version, our cmake infra will catch it and build its own.
+ #
+-BR2_CMAKE_VERSION_MIN = 3.10
++BR2_CMAKE_VERSION_MIN = 3.15
+ 
+ BR2_CMAKE_CANDIDATES ?= cmake cmake3
+ BR2_CMAKE ?= $(call suitable-host-package,cmake,\
+-- 
+2.28.0
