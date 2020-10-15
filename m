@@ -1,119 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 23:14:25 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1-editing-services: bump
- version to 1.18.0 and convert to meson
-Message-ID: <20201015212340.4B14083461@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 23:16:41 +0200
+Subject: [Buildroot] [git commit] package/gst1-libav: bump version to 1.18.0
+ and convert to meson
+Message-ID: <20201015212340.74DE78160D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08a213c1a532de783a7cedaa29088ffb736827bd
+commit: https://git.buildroot.net/buildroot/commit/?id=15dc48ca9becafec6ba11b08af18453bc0e40c9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - change home page url to https
 
-- change download url to https
-
-- download source renamed from gstreamer-editing-services to
-  gst-editing-services
-
 - convert to meson build
 
-- use BR2_PACKAGE_GST1_DEVTOOLS/gst1-devtools instead of legacy
-  BR2_PACKAGE_GST1_VALIDATE/gst1-validate
+- drop all libav extra options as the internal libav is
+  gone since commit [1]
 
-- drop examples support
+- meson options: add doc=disabled
+
+[1] https://gitlab.freedesktop.org/gstreamer/gst-libav/-/commit/ca478e7546c059574e0f134125deb38c8cbc9111
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../gstreamer1-editing-services/Config.in          |  2 +-
- .../gstreamer1-editing-services.hash               |  8 ++---
- .../gstreamer1-editing-services.mk                 | 36 ++++++++++------------
- 3 files changed, 21 insertions(+), 25 deletions(-)
+ package/gstreamer1/gst1-libav/Config.in       |  2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash |  6 ++---
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 35 +++------------------------
+ 3 files changed, 8 insertions(+), 35 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/Config.in b/package/gstreamer1/gstreamer1-editing-services/Config.in
-index fe46870491..9c41e8142b 100644
---- a/package/gstreamer1/gstreamer1-editing-services/Config.in
-+++ b/package/gstreamer1/gstreamer1-editing-services/Config.in
-@@ -15,4 +15,4 @@ config BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 	  GStreamer Editing Services is a high-level library for
- 	  facilitating the creation of audio/video non-linear editors.
+diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
+index 23d78b6ad1..e58a3532f0 100644
+--- a/package/gstreamer1/gst1-libav/Config.in
++++ b/package/gstreamer1/gst1-libav/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_GST1_LIBAV
+ 	  The codecs, muxers, bitstreams and filters to build can be
+ 	  selected in the ffmpeg package.
  
--	  http://gstreamer.freedesktop.org
-+	  https://gstreamer.freedesktop.org
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 8724f39498..7ac263f978 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,6 +1,6 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.2.tar.xz.sha256sum
--sha256 0e06a6191a0c6c16e16272bf2573cecaeb245f10629486ad940a299bef700c16 gstreamer-editing-services-1.16.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.0.tar.xz.sha256sum
-+sha256  4daef0d4875415ea262f7fb1287d4a33939a9594f3c1e661f8587ab00f7000a8  gst-editing-services-1.18.0.tar.xz
- 
- # Hashes for license files:
--sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
--sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-+sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-+sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING.LIB
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 4b0b61e877..9ea7817f0a 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,9 +4,9 @@
+-	  http://gstreamer.freedesktop.org/
++	  https://gstreamer.freedesktop.org/
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index 15e4d859ee..9a74465e09 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.2.tar.xz.sha256sum
+-sha256 c724f612700c15a933c7356fbeabb0bb9571fb5538f8b1b54d4d2d94188deef2 gst-libav-1.16.2.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.18.0.tar.xz.sha256sum
++sha256  42f93f5ce9a3fc22051e5f783a4574b56ebf213f331f75dcbc3552459bd3a06a  gst-libav-1.18.0.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index fdd4d6cc2e..3fd23b8185 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -4,39 +4,12 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.2
--GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
--GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.0
-+GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
-+GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
- GSTREAMER1_EDITING_SERVICES_LICENSE_FILES = COPYING COPYING.LIB
- GSTREAMER1_EDITING_SERVICES_INSTALL_STAGING = YES
-@@ -15,27 +15,23 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	gst1-plugins-good \
--	$(if $(BR2_PACKAGE_GST1_VALIDATE),gst1-validate) \
- 	libxml2
- 
- GSTREAMER1_EDITING_SERVICES_CONF_OPTS = \
--	--disable-benchmarks \
--	--disable-introspection
+-GST1_LIBAV_VERSION = 1.16.2
++GST1_LIBAV_VERSION = 1.18.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
 -
--# examples need GTK2/3 with X11 backend
--ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_LIBGTK3_X11),)
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --enable-examples
+-GST1_LIBAV_DEPENDENCIES = \
+-	host-pkgconf ffmpeg gstreamer1 gst1-plugins-base \
+-	$(if $(BR2_PACKAGE_BZIP2),bzip2) \
+-	$(if $(BR2_PACKAGE_XZ),xz)
+ GST1_LIBAV_LICENSE = GPL-2.0+
+ GST1_LIBAV_LICENSE_FILES = COPYING
+-GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
 -
--ifeq ($(BR2_PACKAGE_LIBGTK2),y)
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-gtk=2.0
--GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += libgtk2
--else
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --with-gtk=3.0
--GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += libgtk3
+-# fixes arm build: https://bugzilla.gnome.org/show_bug.cgi?id=694416
+-ifeq ($(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be),y)
+-GST1_LIBAV_CONF_ENV = AS="$(TARGET_CROSS)gcc"
 -endif
-+	-Ddoc=disabled \
-+	-Dexamples=disabled \
-+	-Dintrospection=disabled \
-+	-Dtests=disabled \
-+	-Dtools=enabled \
-+	-Dbash-completion=disabled \
-+	-Dxptv=disabled \
-+	-Dpython=disabled
- 
-+ifeq ($(BR2_PACKAGE_GST1_DEVTOOLS),y)
-+GSTREAMER1_EDITING_SERVICES_DEPENDENCIES += gst1-devtools
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS += -Dvalidate=enabled
- else
--GSTREAMER1_EDITING_SERVICES_CONF_OPTS += --disable-examples
-+GSTREAMER1_EDITING_SERVICES_CONF_OPTS += -Dvalidate=disabled
- endif
+-
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-zlib
+-GST1_LIBAV_DEPENDENCIES += zlib
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-zlib
+-endif
+-
+-ifeq ($(BR2_PACKAGE_BZIP2),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-bzlib
+-GST1_LIBAV_DEPENDENCIES += bzip2
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
+-endif
+-
+-GST1_LIBAV_CONF_OPTS = \
+-	--with-system-libav \
+-	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPTS)"
++GST1_LIBAV_DEPENDENCIES =  host-pkgconf ffmpeg gstreamer1 gst1-plugins-base
++GST1_LIBAV_CONF_OPTS = -Ddoc=disabled
  
 -$(eval $(autotools-package))
 +$(eval $(meson-package))
