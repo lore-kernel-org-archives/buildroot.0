@@ -1,48 +1,66 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Oct 2020 18:57:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/duktape: bump to version 2.6.0
-Message-ID: <20201015165721.967230-1-fontaine.fabrice@gmail.com>
+Date: Thu, 15 Oct 2020 19:02:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/oniguruma: fix CVE-2020-26159
+Message-ID: <20201015170253.968250-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use official tarball instead of github helper
-- Update indentation in hash file (two spaces)
+Fix CVE-2020-26159: In Oniguruma 6.9.5_rev1, an attacker able to supply
+a regular expression for compilation may be able to overflow a buffer by
+one byte in concat_opt_exact_str in src/regcomp.c.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/duktape/duktape.hash | 4 ++--
- package/duktape/duktape.mk   | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../0001-207-Out-of-bounds-write.patch        | 25 +++++++++++++++++++
+ package/oniguruma/oniguruma.mk                |  3 +++
+ 2 files changed, 28 insertions(+)
+ create mode 100644 package/oniguruma/0001-207-Out-of-bounds-write.patch
 
-diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
-index b50ae7329c..4c55e39888 100644
---- a/package/duktape/duktape.hash
-+++ b/package/duktape/duktape.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	810e1dab50dfd3040cac4bb18b96d749a5fdebfd898a7bfe74512044c1a89880	duktape-2.5.0.tar.gz
--sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
-+sha256  96f4a05a6c84590e53b18c59bb776aaba80a205afbbd92b82be609ba7fe75fa7  duktape-2.6.0.tar.xz
-+sha256  5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8  LICENSE.txt
-diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
-index 0047571883..aadd609248 100644
---- a/package/duktape/duktape.mk
-+++ b/package/duktape/duktape.mk
-@@ -4,8 +4,10 @@
- #
- ################################################################################
+diff --git a/package/oniguruma/0001-207-Out-of-bounds-write.patch b/package/oniguruma/0001-207-Out-of-bounds-write.patch
+new file mode 100644
+index 0000000000..3317449702
+--- /dev/null
++++ b/package/oniguruma/0001-207-Out-of-bounds-write.patch
+@@ -0,0 +1,25 @@
++From cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0 Mon Sep 17 00:00:00 2001
++From: "K.Kosako" <kkosako0@gmail.com>
++Date: Mon, 21 Sep 2020 12:58:29 +0900
++Subject: [PATCH] #207: Out-of-bounds write
++
++[Retrieved from:
++https://github.com/kkos/oniguruma/commit/cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/regcomp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/regcomp.c b/src/regcomp.c
++index f6494b6d..a0a68561 100644
++--- a/src/regcomp.c
+++++ b/src/regcomp.c
++@@ -6257,7 +6257,7 @@ concat_opt_exact_str(OptStr* to, UChar* s, UChar* end, OnigEncoding enc)
++ 
++   for (i = to->len, p = s; p < end && i < OPT_EXACT_MAXLEN; ) {
++     len = enclen(enc, p);
++-    if (i + len > OPT_EXACT_MAXLEN) break;
+++    if (i + len >= OPT_EXACT_MAXLEN) break;
++     for (j = 0; j < len && p < end; j++)
++       to->s[i++] = *p++;
++   }
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index d1ff1f115f..c2330c7380 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -12,4 +12,7 @@ ONIGURUMA_LICENSE = BSD-2-Clause
+ ONIGURUMA_LICENSE_FILES = COPYING
+ ONIGURUMA_INSTALL_STAGING = YES
  
--DUKTAPE_VERSION = 2.5.0
--DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
-+DUKTAPE_VERSION = 2.6.0
-+DUKTAPE_SOURCE = duktape-$(DUKTAPE_VERSION).tar.xz
-+DUKTAPE_SITE = \
-+	https://github.com/svaarala/duktape/releases/download/v$(DUKTAPE_VERSION)
- DUKTAPE_LICENSE = MIT
- DUKTAPE_LICENSE_FILES = LICENSE.txt
- DUKTAPE_INSTALL_STAGING = YES
++# 0001-207-Out-of-bounds-write.patch
++ONIGURUMA_IGNORE_CVES += CVE-2020-26159
++
+ $(eval $(autotools-package))
 -- 
 2.28.0
