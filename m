@@ -1,61 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 20:10:20 +0200
-Subject: [Buildroot] [git commit] package/botan: fix build with aarch64_be
-Message-ID: <20201015204335.238B08F81E@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 22:28:44 +0200
+Subject: [Buildroot] [git commit] package/libapparmor: fix build on uclibc
+Message-ID: <20201015204335.3814E8FD2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a13999718d9368e71474d724a383f5098da5c490
+commit: https://git.buildroot.net/buildroot/commit/?id=b22a190333d32d47458dd045e74ac16c3d57de33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-aarch64_be support was added by commit 3e3b524883cebf190099c72d41c817baa8192589
+Fix build of version 3.0.0 with uclibc. While the patch is added in
+package/libapparmor, it in fact fixes a build issue that only occurs
+when building package/apparmor, but as both packages share the same
+source, they also share the same patches.
 
 Fixes:
- - http://autobuild.buildroot.org/results/69ebf03c59b2af4140a39bc26f17d0396b6ec15d
+ - http://autobuild.buildroot.org/results/aea20bd5539fad35385565ffeb7e6ac566507017
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-build-data-arch-arm64.txt-add-aarch64_be.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ ...ont-force-host-cpp-to-detect-reallocarray.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch b/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
+diff --git a/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch b/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
 new file mode 100644
-index 0000000000..fd6a2ffddd
+index 0000000000..0510489d55
 --- /dev/null
-+++ b/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
-@@ -0,0 +1,31 @@
-+From a93bc8503649028852402c61bdda531af2872d0e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 15 Oct 2020 09:15:06 +0200
-+Subject: [PATCH] src/build-data/arch/arm64.txt: add aarch64_be
++++ b/package/libapparmor/3.0.0/0002-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
+@@ -0,0 +1,37 @@
++From 0dbcbee70097ecde66708064ec1dedfa64e581e8 Mon Sep 17 00:00:00 2001
++From: Armin Kuster <akuster@mvista.com>
++Date: Wed, 7 Oct 2020 20:50:38 -0700
++Subject: [PATCH] parser/Makefile: dont force host cpp to detect reallocarray
 +
-+Allow the user to set cpu value to aarch64_be.
-+Endianness will be correctly guessed by choose_endian function because
-+this alias ends with "be"
++In cross build environments, using the hosts cpp gives incorrect
++detection of reallocarray. Change cpp to a variable.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/69ebf03c59b2af4140a39bc26f17d0396b6ec15d
++fixes:
++parser_misc.c: In function 'int capable_add_cap(const char*, int, unsigned int, capability_flags)':
++| parser_misc.c:297:37: error: 'reallocarray' was not declared in this scope
++|   297 |   tmp = (struct capability_table *) reallocarray(cap_table, sizeof(struct capability_table), cap_table_size+1);
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Armin Kuster <akuster808@gmail.com>
 +[Retrieved from:
-+https://github.com/randombit/botan/commit/a93bc8503649028852402c61bdda531af2872d0e]
++https://gitlab.com/ffontaine/apparmor/-/commit/0dbcbee70097ecde66708064ec1dedfa64e581e8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ src/build-data/arch/arm64.txt | 1 +
-+ 1 file changed, 1 insertion(+)
++ parser/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/build-data/arch/arm64.txt b/src/build-data/arch/arm64.txt
-+index 056c5318ff..5205295125 100644
-+--- a/src/build-data/arch/arm64.txt
-++++ b/src/build-data/arch/arm64.txt
-+@@ -5,6 +5,7 @@ family arm
++diff --git a/parser/Makefile b/parser/Makefile
++index acef3d77a..8250ac451 100644
++--- a/parser/Makefile
+++++ b/parser/Makefile
++@@ -54,7 +54,7 @@ endif
++ CPPFLAGS += -D_GNU_SOURCE
 + 
-+ <aliases>
-+ aarch64
-++aarch64_be
-+ armv8
-+ armv8-a
-+ </aliases>
++ STDLIB_INCLUDE:="\#include <stdlib.h>"
++-HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | cpp ${CPPFLAGS} | grep -q reallocarray && echo true)
+++HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | ${CPP} ${CPPFLAGS} | grep -q reallocarray && echo true)
++ 
++ WARNINGS = -Wall
++ CXX_WARNINGS = ${WARNINGS} ${EXTRA_WARNINGS}
++-- 
++GitLab
++
