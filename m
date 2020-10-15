@@ -1,62 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 22:29:25 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 20.1.10
-Message-ID: <20201015204335.604AF87B6B@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 20:10:20 +0200
+Subject: [Buildroot] [git commit] package/botan: fix build with aarch64_be
+Message-ID: <20201015204335.238B08F81E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90434a14193dca9e8eb11274a0b6c93d9ab70651
+commit: https://git.buildroot.net/buildroot/commit/?id=a13999718d9368e71474d724a383f5098da5c490
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+aarch64_be support was added by commit 3e3b524883cebf190099c72d41c817baa8192589
+
+Fixes:
+ - http://autobuild.buildroot.org/results/69ebf03c59b2af4140a39bc26f17d0396b6ec15d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...-build-data-arch-arm64.txt-add-aarch64_be.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index ee0afd0c47..572b7ccc8c 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.1.9
-+MESA3D_HEADERS_VERSION = 20.1.10
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index eb7676e564..69f387a45e 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-September/000601.html
--sha256  b251ca0769b722058986640d48f8457c596142cfbee1a83cba91b83391427382  mesa-20.1.9.tar.xz
--sha512  0fb8ceff3c91ad2076efb0b2ac7e95d2d72ff1df955eb8fedf712ceaa7f49184eae9958072edd872f5c38adbaeb867988f67627b33da8b208706f69325d7e260  mesa-20.1.9.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-October/000603.html
-+sha256  b1dba69910adac9fcb4cbdfd7833d99a4a8c75b91f3d2e97f0fd0a3cd8c6ee9f  mesa-20.1.10.tar.xz
-+sha512  0d4016abfcc733c853d7b6c3c997ddc554a44088c0a4d9a7edb51ab5ad7d9e1234728b61ffcb9c82a6c5fee1429091a1c31cbeabcb1b50411337b99ee550d28a  mesa-20.1.10.tar.xz
- 
- # License
- sha256  1ddae7da415352a5b5360ff3a9d7ecf23ba81408f62eeecce0011f32e3ef9da6  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 96ed3037b4..4a1939f1f6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.1.9
-+MESA3D_VERSION = 20.1.10
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch b/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
+new file mode 100644
+index 0000000000..fd6a2ffddd
+--- /dev/null
++++ b/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
+@@ -0,0 +1,31 @@
++From a93bc8503649028852402c61bdda531af2872d0e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 15 Oct 2020 09:15:06 +0200
++Subject: [PATCH] src/build-data/arch/arm64.txt: add aarch64_be
++
++Allow the user to set cpu value to aarch64_be.
++Endianness will be correctly guessed by choose_endian function because
++this alias ends with "be"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/69ebf03c59b2af4140a39bc26f17d0396b6ec15d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/randombit/botan/commit/a93bc8503649028852402c61bdda531af2872d0e]
++---
++ src/build-data/arch/arm64.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/build-data/arch/arm64.txt b/src/build-data/arch/arm64.txt
++index 056c5318ff..5205295125 100644
++--- a/src/build-data/arch/arm64.txt
+++++ b/src/build-data/arch/arm64.txt
++@@ -5,6 +5,7 @@ family arm
++ 
++ <aliases>
++ aarch64
+++aarch64_be
++ armv8
++ armv8-a
++ </aliases>
