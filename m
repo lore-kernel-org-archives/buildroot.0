@@ -1,71 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 13:54:21 +0200
-Subject: [Buildroot] [git commit] package/sslh: fix static build with pcre
-Message-ID: <20201015120553.AD1B18FB6C@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 14:17:10 +0200
+Subject: [Buildroot] [git commit] package/tpm2-tss: bump version to 3.0.1
+Message-ID: <20201015120553.BF0C78FB6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee2101789111c9cd8befe4f218055fef3a4a2259
+commit: https://git.buildroot.net/buildroot/commit/?id=89f3d90e24bb24b70fc4a37bf8cff6186672475c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix static build failure with sslh version 1.19b and above
+- 0001-Temporary-fix-for-build-without-C.patch, AC_PROG_CXX line
+  number changed.
+- Makefile-fuzz-generated.am now in size zero.
+- json-c, libcurl: new (FAPI) dependencies since tpm2-tss version 2.4.0
 
-Fixes:
- - http://autobuild.buildroot.org/results/a601824fc0c205a6a940e0f9f079ce2c39840605
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-Makefile-fix-static-linking-with-pcre.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ .../0001-Temporary-fix-for-build-without-C.patch    | 12 ++++++------
+ package/tpm2-tss/Config.in                          | 21 +++++++++++++++++++++
+ package/tpm2-tss/tpm2-tss.hash                      |  4 ++--
+ package/tpm2-tss/tpm2-tss.mk                        | 16 +++++++---------
+ 4 files changed, 36 insertions(+), 17 deletions(-)
 
-diff --git a/package/sslh/0001-Makefile-fix-static-linking-with-pcre.patch b/package/sslh/0001-Makefile-fix-static-linking-with-pcre.patch
-new file mode 100644
-index 0000000000..5fc3296da5
---- /dev/null
-+++ b/package/sslh/0001-Makefile-fix-static-linking-with-pcre.patch
-@@ -0,0 +1,41 @@
-+From 0d9e004d324cc030c173de04c40db51a0f22bb5c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 15 Oct 2020 07:58:05 +0200
-+Subject: [PATCH] Makefile: fix static linking with pcre
+diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+index b2a9cb4f78..812c753ffb 100644
+--- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
++++ b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+@@ -1,4 +1,4 @@
+-From 158d0bc3a2a7a93090cc12c5b0dd3c27e6f44d61 Mon Sep 17 00:00:00 2001
++From 7dc753ad27a8cd14c9b00be94ca89b847cf05ce9 Mon Sep 17 00:00:00 2001
+ From: Carlos Santos <unixmania@gmail.com>
+ Date: Mon, 23 Dec 2019 08:02:19 -0300
+ Subject: [PATCH] Temporary fix for build without C++
+@@ -28,17 +28,17 @@ Signed-off-by: Carlos Santos <unixmania@gmail.com>
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index cd50451d..a3bd7144 100644
++index ff59dd7c..3e4028fb 100755
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -25,7 +25,6 @@ AC_CANONICAL_HOST
+- AX_IS_RELEASE(dash-version)
++@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
+  AX_CHECK_ENABLE_DEBUG([info])
+  
+--AC_PROG_CXX
+  AC_PROG_CC
++-AC_PROG_CXX
+  AC_PROG_LN_S
+  AC_USE_SYSTEM_EXTENSIONS
++ LT_INIT()
+ -- 
+-2.18.1
++2.26.2
+ 
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 2d619750f8..2fc56dbd76 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -33,5 +33,26 @@ config BR2_PACKAGE_TPM2_TSS
+ 
+ 	  https://github.com/tpm2-software/tpm2-tss
+ 
++if BR2_PACKAGE_TPM2_TSS
 +
-+Static build with pcre is broken since version 1.19b and
-+https://github.com/yrutschle/sslh/commit/cb90cc97ae64a445242e517847c6e44b7003eda4
-+because -lpcre has been replaced by -lpcreposix which will result in
-+the following static build failure:
++config BR2_PACKAGE_TPM2_TSS_FAPI
++	bool "fapi support"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_LIBCURL
++	help
++	  This option allows to enable Feature API (FAPI).  Feature
++	  API (FAPI) as described in the "TSS 2.0 Feature API
++	  Specification" along with "TSS 2.0 JSON Data Types and
++	  Policy Language Specification" This API is designed to be
++	  very high-level API, intended to make programming with the
++	  TPM as simple as possible. The API functions are exposed
++	  through a single library: libtss2-fapi.
 +
-+/srv/storage/autobuild/run/instance-1/output-1/host/bin/mipsel-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -static -o echosrv echosrv.o probe.o common.o tls.o  -lpcreposix -lconfig -lcap
-+/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/8.3.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpcreposix.a(libpcreposix_la-pcreposix.o): in function `regfree':
-+pcreposix.c:(.text+0x120): undefined reference to `pcre_free'
++	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_FAPI_v0.94_r04_pubrev.pdf
++	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_JSON_Policy_v0.7_r04_pubrev.pdf
 +
-+So append -lpcre after -lpcreposix
++endif
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a601824fc0c205a6a940e0f9f079ce2c39840605
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/yrutschle/sslh/pull/280]
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 986cf1c..ecadc22 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -43,7 +43,7 @@ endif
-+ 
-+ ifneq ($(strip $(USELIBPCRE)),)
-+ 	CPPFLAGS+=-DLIBPCRE
-+-	LIBS:=$(LIBS) -lpcreposix
-++	LIBS:=$(LIBS) -lpcreposix -lpcre
-+ endif
-+ 
-+ ifneq ($(strip $(USELIBCONFIG)),)
-+-- 
-+2.28.0
-+
+ comment "tpm2-tss needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index 3b778d4f1e..49432314d0 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 9d8c8866829e3ff5e1649ecd82498cb1329e0691139458e53b69e6061febe3d3  tpm2-tss-2.3.3.tar.gz
+-sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
++sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
++sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 470020857a..70e39bc2b3 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_TSS_VERSION = 2.3.3
++TPM2_TSS_VERSION = 3.0.1
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
+@@ -17,13 +17,11 @@ TPM2_TSS_AUTORECONF = YES
+ # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
+ TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+ 
+-# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
+-# with content from a fuzz testing run rather than an empty file,
+-# confusing autoreconf with
+-# 0001-configure-Only-use-CXX-when-fuzzing.patch
+-define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
+-	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
+-endef
+-TPM2_TSS_POST_PATCH_HOOKS += TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
++ifeq ($(BR2_PACKAGE_TPM2_TSS_FAPI),y)
++TPM2_TSS_DEPENDENCIES += json-c libcurl
++TPM2_TSS_CONF_OPTS += --enable-fapi
++else
++TPM2_TSS_CONF_OPTS += --disable-fapi
++endif
+ 
+ $(eval $(autotools-package))
