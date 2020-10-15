@@ -1,78 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 22:16:57 +0200
-Subject: [Buildroot] [PATCH v4] package/libtalloc: new package
-In-Reply-To: <20201015200609.20205-1-dgouarin@gmail.com>
-References: <20201014170254.6184-1-dgouarin@gmail.com>
- <20201015200609.20205-1-dgouarin@gmail.com>
-Message-ID: <20201015221657.7a224c6a@windsurf>
+Date: Thu, 15 Oct 2020 22:29:25 +0200
+Subject: [Buildroot] [git commit] package/duktape: bump to version 2.6.0
+Message-ID: <20201015204335.46A33817DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+commit: https://git.buildroot.net/buildroot/commit/?id=dfda62d326d9fe77dc46429a398824b3405d042e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new iteration!
+- Use official tarball instead of github helper
+- Update indentation in hash file (two spaces)
 
-On Thu, 15 Oct 2020 22:06:08 +0200
-David GOUARIN <dgouarin@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/duktape/duktape.hash | 4 ++--
+ package/duktape/duktape.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-> talloc is a hierarchical, reference counted memory pool system with destructors.
-> It is the core memory allocator used in Samba.
-> 
-> Signed-off-by: David GOUARIN <dgouarin@thalesgroup.com>
-> 
-> Change v1 -> v2:
->   - merge with work from jared.bents at rockwellcollins.com, as sujested by Matthew Weber
->     http://patchwork.ozlabs.org/project/buildroot/patch/20200327150225.15277-1-jared.bents at rockwellcollins.com
-> 
-> Change v2 -> v4: (no v3, resubmitting the whole patch series)
->   - fix build with BR2_PARANOID_UNSAFE_PATH (Thomas review)
->   - add hashes of license files (Thomas)
->   - license is GPL-3.0+ for both talloc and pytalloc (Thomas)
->   - remove useless --prefix and --libdir (Thomas)
-
-Your changelog should be below the --- sign...
-
-> 
-> ---
-
-... here.
-
-
-> +LIBTALLOC_VERSION = 2.3.1
-> +LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
-> +LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
-> +LIBTALLOC_LICENSE = GPL-3.0+
-> +LIBTALLOC_LICENSE_FILES = talloc.h pytalloc.h
-> +LIBTALLOC_INSTALL_STAGING = YES
-> +
-> +LIBTALLOC_CONF_OPTS += --cross-compile \
-> +		--cross-answers=$(@D)/cache.txt \
-> +		--hostcc=gcc \
-> +		--with-libiconv=$(HOST_DIR)/usr # waf will search by default in /usr/local with causes an error at configure step when BR2_COMPILER_PARANOID_UNSAFE_PATH is set
-
-This is almost certainly not correct: HOST_DIR/usr contains libraries
-compiled for the host... but you're building libtalloc for the target.
-
-So unless libiconv is only used by libtalloc to build host binaries,
-this looks wrong. If it's using the target libiconv, you should use
---with-libiconv=$(STAGING_DIR)/usr. However, keep in mind that libiconv
-is not provided by all C libraries: with the uClibc C library built
-without locale support, you would have to enable the
-BR2_PACKAGE_LIBICONV option, and depend on libiconv. See for example
-the package/acsccid package.
-
-Other than this issue, the rest looks good.
-
-However, please send libtalloc and freeradius-server as a series: the
-latter depends on the former.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
+index b50ae7329c..4c55e39888 100644
+--- a/package/duktape/duktape.hash
++++ b/package/duktape/duktape.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	810e1dab50dfd3040cac4bb18b96d749a5fdebfd898a7bfe74512044c1a89880	duktape-2.5.0.tar.gz
+-sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
++sha256  96f4a05a6c84590e53b18c59bb776aaba80a205afbbd92b82be609ba7fe75fa7  duktape-2.6.0.tar.xz
++sha256  5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8  LICENSE.txt
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+index 0047571883..aadd609248 100644
+--- a/package/duktape/duktape.mk
++++ b/package/duktape/duktape.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
+ 
+-DUKTAPE_VERSION = 2.5.0
+-DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
++DUKTAPE_VERSION = 2.6.0
++DUKTAPE_SOURCE = duktape-$(DUKTAPE_VERSION).tar.xz
++DUKTAPE_SITE = \
++	https://github.com/svaarala/duktape/releases/download/v$(DUKTAPE_VERSION)
+ DUKTAPE_LICENSE = MIT
+ DUKTAPE_LICENSE_FILES = LICENSE.txt
+ DUKTAPE_INSTALL_STAGING = YES
