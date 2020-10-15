@@ -1,66 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 15 Oct 2020 18:46:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/apparmor: fix build on uclibc
-Message-ID: <20201015164604.963072-1-fontaine.fabrice@gmail.com>
+Date: Thu, 15 Oct 2020 18:57:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/duktape: bump to version 2.6.0
+Message-ID: <20201015165721.967230-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of version 3.0.0 with uclibc
-
-Fixes:
- - http://autobuild.buildroot.org/results/aea20bd5539fad35385565ffeb7e6ac566507017
+- Use official tarball instead of github helper
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...orce-host-cpp-to-detect-reallocarray.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
+ package/duktape/duktape.hash | 4 ++--
+ package/duktape/duktape.mk   | 6 ++++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch b/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
-new file mode 100644
-index 0000000000..0510489d55
---- /dev/null
-+++ b/package/apparmor/0001-parser-Makefile-dont-force-host-cpp-to-detect-reallocarray.patch
-@@ -0,0 +1,37 @@
-+From 0dbcbee70097ecde66708064ec1dedfa64e581e8 Mon Sep 17 00:00:00 2001
-+From: Armin Kuster <akuster@mvista.com>
-+Date: Wed, 7 Oct 2020 20:50:38 -0700
-+Subject: [PATCH] parser/Makefile: dont force host cpp to detect reallocarray
-+
-+In cross build environments, using the hosts cpp gives incorrect
-+detection of reallocarray. Change cpp to a variable.
-+
-+fixes:
-+parser_misc.c: In function 'int capable_add_cap(const char*, int, unsigned int, capability_flags)':
-+| parser_misc.c:297:37: error: 'reallocarray' was not declared in this scope
-+|   297 |   tmp = (struct capability_table *) reallocarray(cap_table, sizeof(struct capability_table), cap_table_size+1);
-+
-+Signed-off-by: Armin Kuster <akuster808@gmail.com>
-+[Retrieved from:
-+https://gitlab.com/ffontaine/apparmor/-/commit/0dbcbee70097ecde66708064ec1dedfa64e581e8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ parser/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/parser/Makefile b/parser/Makefile
-+index acef3d77a..8250ac451 100644
-+--- a/parser/Makefile
-++++ b/parser/Makefile
-+@@ -54,7 +54,7 @@ endif
-+ CPPFLAGS += -D_GNU_SOURCE
-+ 
-+ STDLIB_INCLUDE:="\#include <stdlib.h>"
-+-HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | cpp ${CPPFLAGS} | grep -q reallocarray && echo true)
-++HAVE_REALLOCARRAY:=$(shell echo $(STDLIB_INCLUDE) | ${CPP} ${CPPFLAGS} | grep -q reallocarray && echo true)
-+ 
-+ WARNINGS = -Wall
-+ CXX_WARNINGS = ${WARNINGS} ${EXTRA_WARNINGS}
-+-- 
-+GitLab
-+
+diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
+index b50ae7329c..4c55e39888 100644
+--- a/package/duktape/duktape.hash
++++ b/package/duktape/duktape.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	810e1dab50dfd3040cac4bb18b96d749a5fdebfd898a7bfe74512044c1a89880	duktape-2.5.0.tar.gz
+-sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
++sha256  96f4a05a6c84590e53b18c59bb776aaba80a205afbbd92b82be609ba7fe75fa7  duktape-2.6.0.tar.xz
++sha256  5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8  LICENSE.txt
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+index 0047571883..aadd609248 100644
+--- a/package/duktape/duktape.mk
++++ b/package/duktape/duktape.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
+ 
+-DUKTAPE_VERSION = 2.5.0
+-DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
++DUKTAPE_VERSION = 2.6.0
++DUKTAPE_SOURCE = duktape-$(DUKTAPE_VERSION).tar.xz
++DUKTAPE_SITE = \
++	https://github.com/svaarala/duktape/releases/download/v$(DUKTAPE_VERSION)
+ DUKTAPE_LICENSE = MIT
+ DUKTAPE_LICENSE_FILES = LICENSE.txt
+ DUKTAPE_INSTALL_STAGING = YES
 -- 
 2.28.0
