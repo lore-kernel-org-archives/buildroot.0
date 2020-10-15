@@ -1,88 +1,101 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 15 Oct 2020 14:42:35 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: create /var/lock
- directory for fw_printenv
-In-Reply-To: <20201014235531.301aa821@windsurf>
-References: <20201004125538.15161-1-aleontiev@elvees.com>
- <20201014235531.301aa821@windsurf>
-Message-ID: <CADYdroNTfe-CMVv+vvSqdq5WuAMU4LUP4pFktgR3YUAOpxDcFg@mail.gmail.com>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Thu, 15 Oct 2020 13:29:16 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/opensc: new package
+Message-ID: <EoHQ0C-Dvp4Cia0SheSoUxrsbGY8PqLc0VwsEXEVIbzeFmLwuA4h4gQTp7eGKuIqb9TX6g2Apca783OZnilduGGOI99CzvA5jtVnT2DV66E=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd init will not create /run/lock and the /var/lock symlink anymore,
-this was caused by one of my changes. Still need some feedback for the
-correct solution
+Open source smart card tools and middleware.
+OpenSC provides a set of libraries and utilities to work with smart cards. Its
+main focus is on cards that support cryptographic operations, and facilitate
+their use in security applications such as authentication, mail encryption and
+digital signatures. OpenSC implements the standard APIs to smart cards, e.g.
+PKCS#11 API, Windows? Smart Card Minidriver and macOS CryptoTokenKit.
 
-1) copy over the old legacy.conf. Patch is at [1]
-    (would be a quick temporary solution)
-2) create a own buildroot.conf in the systemd-skeleton, adding those dirs
-there (and in the future potentially other stuff)
-3) Add some variable BR_SKELETON_LOCKDIR that uboot-tools selects (aswell
-as sysv and busybox init)
-    Only do 1 or2 if that variable is set.
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+---
+ package/Config.in          |  1 +
+ package/opensc/Config.in   | 24 ++++++++++++++++++++++++
+ package/opensc/opensc.hash |  3 +++
+ package/opensc/opensc.mk   | 14 ++++++++++++++
+ 4 files changed, 42 insertions(+)
+ create mode 100644 package/opensc/Config.in
+ create mode 100644 package/opensc/opensc.hash
+ create mode 100644 package/opensc/opensc.mk
 
-At any rate, systemd-tmpfiles tool should be mandatory for systemd.
-
-And if there's the will to drop the legacy /var/lock directory, then
-packages like uboot-tools should be configured or
-patched to use /run/lock, and that directory should exist for all init
-systems [2].
-
-Norbert
-
-[1] - https://patchwork.ozlabs.org/project/buildroot/list/?series=197464
-[2] - https://patchwork.ozlabs.org/project/buildroot/list/?series=205918
-
-
-Am Mi., 14. Okt. 2020 um 23:55 Uhr schrieb Thomas Petazzoni <
-thomas.petazzoni@bootlin.com>:
-
-> Hello Anton,
->
-> Thanks for your patch, I'm adding Norbert in Cc. See below for some
-> comments.
->
-> On Sun,  4 Oct 2020 15:55:38 +0300
-> Anton Leontiev <aleontiev@elvees.com> wrote:
->
-> > fw_setenv/fw_printenv create lock-files in /var/lock. If this directory
-> > doesn't exist tools fail with following error:
-> >
-> >   Error opening lock file /var/lock/fw_printenv.lock
-> >
-> > Signed-off-by: Anton Leontiev <aleontiev@elvees.com>
-> > ---
-> >  package/uboot-tools/uboot-tools.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/
-> uboot-tools.mk
-> > index a06c25998f..578702f04e 100644
-> > --- a/package/uboot-tools/uboot-tools.mk
-> > +++ b/package/uboot-tools/uboot-tools.mk
-> > @@ -65,6 +65,7 @@ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV),y)
-> >  define UBOOT_TOOLS_INSTALL_FWPRINTENV
-> >       $(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv
-> $(TARGET_DIR)/usr/sbin/fw_printenv
-> >       ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
-> > +     $(INSTALL) -m 0755 -d $(TARGET_DIR)/var/lock
->
-> Unfortunately, this cannot be the correct solution: the
-> skeleton-init-sysv package already creates /var/lock, as a symlink to
-> /tmp, so your patch would clash with that. So I suppose you have a
-> systemd init?
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201015/52e126d3/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 09a332e3b9..1a697352c9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1353,6 +1353,7 @@ menu "Crypto"
+ 	source "package/libuecc/Config.in"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
++	source "package/opensc/Config.in"
+ 	source "package/openssl/Config.in"
+ 	source "package/pkcs11-helper/Config.in"
+ 	source "package/rhash/Config.in"
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+new file mode 100644
+index 0000000000..596f50aa65
+--- /dev/null
++++ b/package/opensc/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_OPENSC
++	bool "opensc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
++	depends on BR2_USE_MMU # pcsc-lite
++	depends on BR2_USE_WCHAR # wprintf
++	depends on !BR2_STATIC_LIBS # pcsc-lite
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_PCSC_LITE
++	help
++	  Open source smart card tools and middleware.
++	  OpenSC provides a set of libraries and utilities to work with smart
++	  cards. Its main focus is on cards that support cryptographic
++	  operations, and facilitate their use in security applications such as
++	  authentication, mail encryption and digital signatures. OpenSC
++	  implements the standard APIs to smart cards, e.g. PKCS#11 API,
++	  Windows? Smart Card Minidriver and macOS CryptoTokenKit.
++
++	  https://github.com/OpenSC/OpenSC
++
++comment "opensc needs a toolchain w/ wchar threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+new file mode 100644
+index 0000000000..aceb51e2de
+--- /dev/null
++++ b/package/opensc/opensc.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  bbf4b4f4a44463645c90a525e820a8059b2f742a53b7b944f941de3c97ba4863  opensc-0.20.0.tar.gz
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+new file mode 100644
+index 0000000000..8bd6fceece
+--- /dev/null
++++ b/package/opensc/opensc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# opensc
++#
++################################################################################
++
++OPENSC_VERSION = 0.20.0
++OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
++OPENSC_LICENSE = LGPL-2.1+
++OPENSC_LICENSE_FILES = COPYING
++OPENSC_INSTALL_STAGING = YES
++OPENSC_DEPENDENCIES = libusb pcsc-lite
++
++$(eval $(autotools-package))
+--
+2.20.1
