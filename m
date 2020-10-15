@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 23:11:03 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/2] package/kismet: bump to version 2020-09-R3
-In-Reply-To: <20201004155004.1374536-1-fontaine.fabrice@gmail.com>
-References: <20201004155004.1374536-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201015231103.498a19ae@windsurf>
+Date: Thu, 15 Oct 2020 23:11:24 +0200
+Subject: [Buildroot] [git commit] package/dvb-apps: fix build failure with
+ glibc 2.31
+Message-ID: <20201015210004.C8C0D831C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  4 Oct 2020 17:50:03 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=bbe170dbcf4ddb63e76299214e2c18b16e5cf016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop all patches (not needed anymore)
-> - Update help message of Config.in: kismet does not support only WiFi
->   but also Bluetooth, SDR ...
-> - Remove ncurses dependency
-> - libnl is now optional
-> - Drop --with-netlink-version (not available anymore)
-> - Add protobuf, protobuf-c, sqlite and zlib mandatory dependencies
-> - kismet_client and kismet_drone have been dropped since version 2019-04-R1
-> - Select libmicrohttpd for kismet_server
-> - Add optional libusb and lm-sensors dependencies
-> - Use --{enable,disable}-{libcap,pcre} options
-> - Use the new LICENSE file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3:
->  - Bump to version 2020-09-R3
+dvb-apps fails to build with glibc 2.31 with the following error:
+| dvbdate.c: In function set_time:
+| dvbdate.c:312:6: warning: implicit declaration of function stime; did you mean ctime? [-Wimplicit-function-declaration]
+| 312 | if (stime(new_time)) {
+| | ^~~~~
+| | ctime
 
-Both applied. Thanks!
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/
+
+references:
+1. https://gitweb.gentoo.org/repo/gentoo.git/commit/media-tv/linuxtv-dvb-apps/files/linuxtv-dvb-apps-glibc-2.31.patch?id=eb705f892eae45b93306c1de1407c1c22ac23956
+2. https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=964223
+
+Signed-off-by: Dagg Stompler <daggs@gmx.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dvb-apps/0006-fix-glibc-2.31.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/package/dvb-apps/0006-fix-glibc-2.31.patch b/package/dvb-apps/0006-fix-glibc-2.31.patch
+new file mode 100644
+index 0000000000..079a24f149
+--- /dev/null
++++ b/package/dvb-apps/0006-fix-glibc-2.31.patch
+@@ -0,0 +1,21 @@
++dvbdate: fix compilation error with glibc 2.31
++
++as stime func doesn't exists anymore in newer versions of glibc >= 2.31 due
++to obseletion, a replacment with clock_settime is inorder to fix the issue.
++
++Signed-off-by: Dagg Stompler <daggs@gmx.com>
++
++--- a/util/dvbdate/dvbdate.c
+++++ b/util/dvbdate/dvbdate.c
++@@ -309,7 +309,10 @@
++  */
++ int set_time(time_t * new_time)
++ {
++-	if (stime(new_time)) {
+++	struct timespec s = {0};
+++	s.tv_sec = new_time;
+++
+++	if (clock_settime(CLOCK_REALTIME, &s)) {
++ 		perror("Unable to set time");
++ 		return -1;
++ 	}
