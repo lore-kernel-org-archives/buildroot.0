@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 13:53:54 +0200
-Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: pin kernel
- version to 5.9
-In-Reply-To: <20201015073954.1413-1-michael@walle.cc>
-References: <20201015073954.1413-1-michael@walle.cc>
-Message-ID: <20201015135354.0a941cc4@windsurf>
+Date: Thu, 15 Oct 2020 13:54:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sslh: fix static build with pcre
+In-Reply-To: <20201015060901.137916-1-fontaine.fabrice@gmail.com>
+References: <20201015060901.137916-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201015135430.400d62ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Oct 2020 09:39:54 +0200
-Michael Walle <michael@walle.cc> wrote:
+On Thu, 15 Oct 2020 08:09:01 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Use a fixed kernel version to have a reproducible and tested
-> configuration.
+> Fix static build failure with sslh version 1.19b and above
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a601824fc0c205a6a940e0f9f079ce2c39840605
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  configs/kontron_smarc_sal28_defconfig | 3 +++
->  1 file changed, 3 insertions(+)
+>  ...akefile-fix-static-linking-with-pcre.patch | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/sslh/0001-Makefile-fix-static-linking-with-pcre.patch
 
 Applied to master, thanks.
 
