@@ -1,43 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 13:49:19 +0200
-Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: pin kernel
- version to 5.9
-Message-ID: <20201015113802.2BFD381F58@busybox.osuosl.org>
+Date: Thu, 15 Oct 2020 13:46:13 +0200
+Subject: [Buildroot] [git commit] package/python-frozenlist: bump to version
+ 1.1.0
+Message-ID: <20201015113802.219BC8FD8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90e9d953ec62c6f40344881d07805f2787c5602c
+commit: https://git.buildroot.net/buildroot/commit/?id=86df72823442268fed7eb607ef16503d4272656a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a fixed kernel version to have a reproducible and tested
-configuration.
-
-Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/kontron_smarc_sal28_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-frozenlist/python-frozenlist.hash | 6 +++---
+ package/python-frozenlist/python-frozenlist.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index 53cb776a58..d4b2387e34 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -1,5 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
-@@ -7,6 +8,8 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
+diff --git a/package/python-frozenlist/python-frozenlist.hash b/package/python-frozenlist/python-frozenlist.hash
+index 4a006586d2..0ecc5f9cdf 100644
+--- a/package/python-frozenlist/python-frozenlist.hash
++++ b/package/python-frozenlist/python-frozenlist.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/frozenlist/json
+-md5	7d493070a7fe12b6be753585c1995abe  frozenlist-1.0.0.tar.gz
+-sha256	d1076a40cd1bef6edf148cc05aecce52a11c9bbd2a3d60ce37cc07e03c8dc6c7  frozenlist-1.0.0.tar.gz
++md5  2a83a520014203d0a56993c332ff7e23  frozenlist-1.1.0.tar.gz
++sha256  d167a5050628323fcb3db410375eb06390ab135454fd85fd79c5832f5ec2b8ed  frozenlist-1.1.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
++sha256  6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
+diff --git a/package/python-frozenlist/python-frozenlist.mk b/package/python-frozenlist/python-frozenlist.mk
+index 1d36b4df51..b113c38080 100644
+--- a/package/python-frozenlist/python-frozenlist.mk
++++ b/package/python-frozenlist/python-frozenlist.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FROZENLIST_VERSION = 1.0.0
++PYTHON_FROZENLIST_VERSION = 1.1.0
+ PYTHON_FROZENLIST_SOURCE = frozenlist-$(PYTHON_FROZENLIST_VERSION).tar.gz
+-PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/85/32/12f1247bf4915b74a00264aa0033745ee871759daee47499641bd13aeee7
++PYTHON_FROZENLIST_SITE = https://files.pythonhosted.org/packages/12/0e/119f1f186e93c21d078db1ddd7b21247a8a49261689d9284dec28be3b08e
+ PYTHON_FROZENLIST_SETUP_TYPE = setuptools
+ PYTHON_FROZENLIST_LICENSE = Apache-2.0
+ PYTHON_FROZENLIST_LICENSE_FILES = LICENSE.txt
