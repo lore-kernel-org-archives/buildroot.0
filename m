@@ -1,64 +1,43 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 15 Oct 2020 12:11:36 +0200
-Subject: [Buildroot] [PATCH] package/nginx: use /run instead of /var/run
-Message-ID: <20201015101137.32333-1-buildroot@heine.tech>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 15 Oct 2020 13:49:19 +0200
+Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: pin kernel
+ version to 5.9
+Message-ID: <20201015113802.2BFD381F58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
-PIDFile").
+commit: https://git.buildroot.net/buildroot/commit/?id=90e9d953ec62c6f40344881d07805f2787c5602c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I missed that nginx is still built with /var/run paths.
+Use a fixed kernel version to have a reproducible and tested
+configuration.
 
-This commit changes the compile options to use /run instead of /var/run
-for pid and lock file to make it consistent.
-
-Further dropping the passing of the pid option in the service file as
-this isn't neccessary. Neither debian nor nginx default .service does
-it.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nginx/nginx.mk      | 4 ++--
- package/nginx/nginx.service | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ configs/kontron_smarc_sal28_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 1f896bc377..00fb147682 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -49,8 +49,8 @@ NGINX_CONF_OPTS += \
- 	--prefix=/usr \
- 	--conf-path=/etc/nginx/nginx.conf \
- 	--sbin-path=/usr/sbin/nginx \
--	--pid-path=/var/run/nginx.pid \
--	--lock-path=/var/run/lock/nginx.lock \
-+	--pid-path=/run/nginx.pid \
-+	--lock-path=/run/lock/nginx.lock \
- 	--user=www-data \
- 	--group=www-data \
- 	--error-log-path=/var/log/nginx/error.log \
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 9fd215fd3e..f203cecdc0 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -6,10 +6,10 @@ After=syslog.target network.target
- Type=forking
- PIDFile=/run/nginx.pid
- ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
--ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
--ExecStop=/usr/sbin/nginx -g 'pid /var/run/nginx.pid;' -s quit
-+ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
-+ExecStart=/usr/sbin/nginx -g 'daemon on; master_process on;'
-+ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
-+ExecStop=/usr/sbin/nginx -s quit
- PrivateDevices=yes
- 
- [Install]
--- 
-2.25.1
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index 53cb776a58..d4b2387e34 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -1,5 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
+@@ -7,6 +8,8 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/kontron/smarc-sal28/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
+ BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
