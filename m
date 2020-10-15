@@ -1,54 +1,140 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 10:17:54 +0200
-Subject: [Buildroot] pkg-stats support for external tree?
-In-Reply-To: <HE1PR03MB29888EA331AFE5BEE506CD53F0020@HE1PR03MB2988.eurprd03.prod.outlook.com>
-References: <HE1PR03MB298830C6E778223631A2A08AF0020@HE1PR03MB2988.eurprd03.prod.outlook.com>
- <20201015085753.33f3b15e@windsurf>
- <HE1PR03MB29888EA331AFE5BEE506CD53F0020@HE1PR03MB2988.eurprd03.prod.outlook.com>
-Message-ID: <20201015101754.55fb29c6@windsurf>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Thu, 15 Oct 2020 09:00:13 +0000
+Subject: [Buildroot] [PATCH v4 1/1] tpm2-tss: bump version to 3.0.1
+Message-ID: <yb7k-xY0l_p3TTfxxlrtmwPBuBcgKRJ4AbluBXMvh1W73w6ul6tSw_Bwltz1CQlJKUIGcM_Y0T9GUpU92ttmWI1gHlw2C8VUGa-FfIaGioQ=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+- 0001-Temporary-fix-for-build-without-C.patch, AC_PROG_CXX line
+  number changed.
+- Makefile-fuzz-generated.am now in size zero.
+- json-c, libcurl: new (FAPI) dependencies since tpm2-tss version 2.4.0
 
-On Thu, 15 Oct 2020 07:49:30 +0000
-Magnus Armholt <magnus.armholt@wapice.com> wrote:
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+---
+ ...01-Temporary-fix-for-build-without-C.patch | 14 +++++++-----
+ package/tpm2-tss/Config.in                    | 22 +++++++++++++++++++
+ package/tpm2-tss/tpm2-tss.hash                |  4 ++--
+ package/tpm2-tss/tpm2-tss.mk                  | 16 ++++++--------
+ 4 files changed, 39 insertions(+), 17 deletions(-)
 
-> The cve-checker sounds exactly what we are looking for.
-> We are still using the 2020.02.x release, so I havent notice it.
-> I need to check it out.
-> 
-> Actually, i was about to submit a patch for the pkg-stats which adds the functionality to parse the package list from the manifest file, but now there is no need to do that =)
-> 
-> The CVE listing in the pkg-stats output  is a very (if not the most) important feature.
-> The pkg-stats is also very useful as a reminder to update the packages (current version vs latest version).
-> This is the main reason why I was asking about the support for external tree, so we get a CI reminder to update our project specific packages when new versions are available.
+diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+index b2a9cb4f78..463053aaad 100644
+--- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
++++ b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
+@@ -1,4 +1,4 @@
+-From 158d0bc3a2a7a93090cc12c5b0dd3c27e6f44d61 Mon Sep 17 00:00:00 2001
++From c648387ff073cd8da6553b82a879d29a14ae1782 Mon Sep 17 00:00:00 2001
+ From: Carlos Santos <unixmania@gmail.com>
+ Date: Mon, 23 Dec 2019 08:02:19 -0300
+ Subject: [PATCH] Temporary fix for build without C++
+@@ -23,22 +23,24 @@ Fixes:
+ 1. https://github.com/tpm2-software/tpm2-tss/commit/60c26e4c4faba6ba12469485653e17092b510840
 
-Perhaps we should changes things a bit and simple make "pkg-stats"
-capable of generating its output based on *all* packages or only on the
-packages enabled in your current configuration.
+ Signed-off-by: Carlos Santos <unixmania@gmail.com>
++[yairba: rebase on version 3.0.1]
++Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+ ---
+  configure.ac | 1 -
+  1 file changed, 1 deletion(-)
 
-However, I am wondering whether the "latest upstream version"
-information for each package really makes a lot of sense in your case.
-If you are using the LTS branch 2020.02.x, then inevitably, lots of
-packages will be older than there latest upstream release: you're not
-using Buildroot master, so packages obviously will not be the latest.
-But that's also what you want by using an LTS release of Buildroot: to
-not update packages to keep your well-tested and production-ready
-system stable, while benefiting from security updates/fixes.
+ diff --git a/configure.ac b/configure.ac
+-index cd50451d..a3bd7144 100644
++index a4365886..d87058cf 100755
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -25,7 +25,6 @@ AC_CANONICAL_HOST
+- AX_IS_RELEASE(dash-version)
++@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
+  AX_CHECK_ENABLE_DEBUG([info])
 
-So to me, the "latest upstream version" information really only makes
-sense for the pkg-stats on all Buildroot packages, i.e a tool for the
-Buildroot community/maintainers rather than a tool for Buildoot
-end-users.
+--AC_PROG_CXX
+  AC_PROG_CC
++-AC_PROG_CXX
+  AC_PROG_LN_S
+  AC_USE_SYSTEM_EXTENSIONS
++ LT_INIT()
+ --
+-2.18.1
++2.20.1
 
-Or do you see it differently?
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 2d619750f8..344dabd504 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -33,5 +33,27 @@ config BR2_PACKAGE_TPM2_TSS
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ 	  https://github.com/tpm2-software/tpm2-tss
+
++if BR2_PACKAGE_TPM2_TSS
++
++config TPM2_TSS_FAPI
++	bool "tpm2-tss with fapi"
++	default n
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
++	select BR2_PACKAGE_JSON_C
++	select BR2_PACKAGE_LIBCURL
++	help
++	  This option allows to enable Feature API (FAPI).
++	  Feature API (FAPI) as described in the "TSS 2.0 Feature API
++	  Specification" [1] along with "TSS 2.0 JSON Data Types and Policy
++	  Language Specification" [2] This API is designed to be very
++	  high-level API, intended to make programming with the TPM as
++	  simple as possible. The API functions are exposed through a
++	  single library: libtss2-fapi.
++
++	  [1] https://trustedcomputinggroup.org/wp-content/uploads/TSS_FAPI_v0.94_r04_pubrev.pdf
++	  [2] https://trustedcomputinggroup.org/wp-content/uploads/TSS_JSON_Policy_v0.7_r04_pubrev.pdf
++
++endif
++
+ comment "tpm2-tss needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index 3b778d4f1e..49432314d0 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 9d8c8866829e3ff5e1649ecd82498cb1329e0691139458e53b69e6061febe3d3  tpm2-tss-2.3.3.tar.gz
+-sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
++sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
++sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 470020857a..80e1c9048b 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+
+-TPM2_TSS_VERSION = 2.3.3
++TPM2_TSS_VERSION = 3.0.1
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
+@@ -17,13 +17,11 @@ TPM2_TSS_AUTORECONF = YES
+ # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
+ TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
+
+-# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
+-# with content from a fuzz testing run rather than an empty file,
+-# confusing autoreconf with
+-# 0001-configure-Only-use-CXX-when-fuzzing.patch
+-define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
+-	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
+-endef
+-TPM2_TSS_POST_PATCH_HOOKS += TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
++ifeq ($(TPM2_TSS_FAPI),y)
++TPM2_TSS_DEPENDENCIES += json-c libcurl
++TPM2_TSS_CONF_OPTS += --enable-fapi
++else
++TPM2_TSS_CONF_OPTS += --disable-fapi
++endif
+
+ $(eval $(autotools-package))
+--
+2.20.1
