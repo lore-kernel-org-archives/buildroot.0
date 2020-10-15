@@ -1,24 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 13:53:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to
- version 5.0.0
-In-Reply-To: <20201015063007.1651564-1-james.hilliard1@gmail.com>
-References: <20201015063007.1651564-1-james.hilliard1@gmail.com>
-Message-ID: <20201015135340.6bb6e6a4@windsurf>
+Date: Thu, 15 Oct 2020 13:53:54 +0200
+Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: pin kernel
+ version to 5.9
+In-Reply-To: <20201015073954.1413-1-michael@walle.cc>
+References: <20201015073954.1413-1-michael@walle.cc>
+Message-ID: <20201015135354.0a941cc4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 15 Oct 2020 00:30:07 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Thu, 15 Oct 2020 09:39:54 +0200
+Michael Walle <michael@walle.cc> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Use a fixed kernel version to have a reproducible and tested
+> configuration.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->  package/python-multidict/python-multidict.hash | 4 ++--
->  package/python-multidict/python-multidict.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  configs/kontron_smarc_sal28_defconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
