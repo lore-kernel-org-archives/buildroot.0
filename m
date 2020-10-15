@@ -1,134 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 15 Oct 2020 14:17:10 +0200
-Subject: [Buildroot] [git commit] package/tpm2-tss: bump version to 3.0.1
-Message-ID: <20201015120553.BF0C78FB6C@busybox.osuosl.org>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Thu, 15 Oct 2020 12:23:24 +0000
+Subject: [Buildroot] [PATCH 1/1] opensc: new package
+Message-ID: <HTWQnJ0gT9IYyrHRALoef3ZjeiElmsAU9i55-sqSxBQ5ZyngPz7qhxmskaI-ATuoiCd2BDsDq1CTS01wtL_ZGkCyR3RcGrXRaNbYiFE-sbw=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89f3d90e24bb24b70fc4a37bf8cff6186672475c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-- 0001-Temporary-fix-for-build-without-C.patch, AC_PROG_CXX line
-  number changed.
-- Makefile-fuzz-generated.am now in size zero.
-- json-c, libcurl: new (FAPI) dependencies since tpm2-tss version 2.4.0
+Open source smart card tools and middleware.
+OpenSC provides a set of libraries and utilities to work with smart cards. Its
+main focus is on cards that support cryptographic operations, and facilitate
+their use in security applications such as authentication, mail encryption and
+digital signatures. OpenSC implements the standard APIs to smart cards, e.g.
+PKCS#11 API, Windows? Smart Card Minidriver and macOS CryptoTokenKit.
 
 Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Temporary-fix-for-build-without-C.patch    | 12 ++++++------
- package/tpm2-tss/Config.in                          | 21 +++++++++++++++++++++
- package/tpm2-tss/tpm2-tss.hash                      |  4 ++--
- package/tpm2-tss/tpm2-tss.mk                        | 16 +++++++---------
- 4 files changed, 36 insertions(+), 17 deletions(-)
+ ...icit-declaration-of-function-wprintf.patch | 26 +++++++++++++++++++
+ package/opensc/Config.in                      | 22 ++++++++++++++++
+ package/opensc/opensc.hash                    |  3 +++
+ package/opensc/opensc.mk                      | 14 ++++++++++
+ 4 files changed, 65 insertions(+)
+ create mode 100644 package/opensc/0001-Comment-implicit-declaration-of-function-wprintf.patch
+ create mode 100644 package/opensc/Config.in
+ create mode 100644 package/opensc/opensc.hash
+ create mode 100644 package/opensc/opensc.mk
 
-diff --git a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-index b2a9cb4f78..812c753ffb 100644
---- a/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-+++ b/package/tpm2-tss/0001-Temporary-fix-for-build-without-C.patch
-@@ -1,4 +1,4 @@
--From 158d0bc3a2a7a93090cc12c5b0dd3c27e6f44d61 Mon Sep 17 00:00:00 2001
-+From 7dc753ad27a8cd14c9b00be94ca89b847cf05ce9 Mon Sep 17 00:00:00 2001
- From: Carlos Santos <unixmania@gmail.com>
- Date: Mon, 23 Dec 2019 08:02:19 -0300
- Subject: [PATCH] Temporary fix for build without C++
-@@ -28,17 +28,17 @@ Signed-off-by: Carlos Santos <unixmania@gmail.com>
-  1 file changed, 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index cd50451d..a3bd7144 100644
-+index ff59dd7c..3e4028fb 100755
- --- a/configure.ac
- +++ b/configure.ac
--@@ -25,7 +25,6 @@ AC_CANONICAL_HOST
-- AX_IS_RELEASE(dash-version)
-+@@ -26,7 +26,6 @@ AX_IS_RELEASE(dash-version)
-  AX_CHECK_ENABLE_DEBUG([info])
-  
---AC_PROG_CXX
-  AC_PROG_CC
-+-AC_PROG_CXX
-  AC_PROG_LN_S
-  AC_USE_SYSTEM_EXTENSIONS
-+ LT_INIT()
- -- 
--2.18.1
-+2.26.2
- 
-diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-index 2d619750f8..2fc56dbd76 100644
---- a/package/tpm2-tss/Config.in
-+++ b/package/tpm2-tss/Config.in
-@@ -33,5 +33,26 @@ config BR2_PACKAGE_TPM2_TSS
- 
- 	  https://github.com/tpm2-software/tpm2-tss
- 
-+if BR2_PACKAGE_TPM2_TSS
+diff --git a/package/opensc/0001-Comment-implicit-declaration-of-function-wprintf.patch b/package/opensc/0001-Comment-implicit-declaration-of-function-wprintf.patch
+new file mode 100644
+index 0000000000..48a8dedd92
+--- /dev/null
++++ b/package/opensc/0001-Comment-implicit-declaration-of-function-wprintf.patch
+@@ -0,0 +1,26 @@
++From 8ad8030732544f4eb94e9f0d55a3878842737928 Mon Sep 17 00:00:00 2001
++From: Yair Ben-Avraham <yairba@protonmail.com>
++Date: Wed, 14 Oct 2020 13:28:23 +0200
++Subject: [PATCH 1/1] Comment implicit declaration of function wprintf
 +
-+config BR2_PACKAGE_TPM2_TSS_FAPI
-+	bool "fapi support"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
-+	select BR2_PACKAGE_JSON_C
-+	select BR2_PACKAGE_LIBCURL
++Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
++---
++ src/tools/gids-tool.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/tools/gids-tool.c b/src/tools/gids-tool.c
++index 53203f22..3a58b007 100644
++--- a/src/tools/gids-tool.c
+++++ b/src/tools/gids-tool.c
++@@ -419,7 +419,7 @@ static int print_info(sc_card_t *card) {
++ 				}
++ 				for (i = 0; i < cmaprecordnum; i++) {
++ 					printf("   container:                  %d\n", i);
++-					wprintf(L"      guid:                    %ls\n", cmaprecords[i].wszGuid);
+++					// wprintf(L"      guid:                    %ls\n", cmaprecords[i].wszGuid);
++ 					printf("      bFlags:                  ");
++ 					if (cmaprecords[i].bFlags & CONTAINER_MAP_VALID_CONTAINER) {
++ 						printf("Valid container");
++--
++2.20.1
++
+diff --git a/package/opensc/Config.in b/package/opensc/Config.in
+new file mode 100644
+index 0000000000..98581c0a7c
+--- /dev/null
++++ b/package/opensc/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_OPENSC
++	bool "opensc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
++	depends on BR2_USE_MMU # pcsc-lite
++	depends on !BR2_STATIC_LIBS # pcsc-lite
++	select BR2_PACKAGE_PCSC_LITE
++	select BR2_PACKAGE_LIBUSB
 +	help
-+	  This option allows to enable Feature API (FAPI).  Feature
-+	  API (FAPI) as described in the "TSS 2.0 Feature API
-+	  Specification" along with "TSS 2.0 JSON Data Types and
-+	  Policy Language Specification" This API is designed to be
-+	  very high-level API, intended to make programming with the
-+	  TPM as simple as possible. The API functions are exposed
-+	  through a single library: libtss2-fapi.
++	  Open source smart card tools and middleware.
++	  OpenSC provides a set of libraries and utilities to work with smart
++	  cards. Its main focus is on cards that support cryptographic
++	  operations, and facilitate their use in security applications such as
++	  authentication, mail encryption and digital signatures. OpenSC
++	  implements the standard APIs to smart cards, e.g. PKCS#11 API,
++	  Windows? Smart Card Minidriver and macOS CryptoTokenKit.
 +
-+	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_FAPI_v0.94_r04_pubrev.pdf
-+	  https://trustedcomputinggroup.org/wp-content/uploads/TSS_JSON_Policy_v0.7_r04_pubrev.pdf
++	  https://github.com/OpenSC/OpenSC
 +
-+endif
++comment "opensc needs a toolchain w/ wchar threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
+new file mode 100644
+index 0000000000..aceb51e2de
+--- /dev/null
++++ b/package/opensc/opensc.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  bbf4b4f4a44463645c90a525e820a8059b2f742a53b7b944f941de3c97ba4863  opensc-0.20.0.tar.gz
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
+new file mode 100644
+index 0000000000..f01acbbb3d
+--- /dev/null
++++ b/package/opensc/opensc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# opensc
++#
++################################################################################
 +
- comment "tpm2-tss needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index 3b778d4f1e..49432314d0 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 9d8c8866829e3ff5e1649ecd82498cb1329e0691139458e53b69e6061febe3d3  tpm2-tss-2.3.3.tar.gz
--sha256 18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-+sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
-+sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 470020857a..70e39bc2b3 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TPM2_TSS_VERSION = 2.3.3
-+TPM2_TSS_VERSION = 3.0.1
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
-@@ -17,13 +17,11 @@ TPM2_TSS_AUTORECONF = YES
- # uses C99 code but forgets to pass -std=c99 when --disable-defaultflags is used
- TPM2_TSS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=c99"
- 
--# The 2.3.3 tarball accidently contains a Makefile-fuzz-generated.am
--# with content from a fuzz testing run rather than an empty file,
--# confusing autoreconf with
--# 0001-configure-Only-use-CXX-when-fuzzing.patch
--define TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
--	truncate -s 0 $(@D)/Makefile-fuzz-generated.am
--endef
--TPM2_TSS_POST_PATCH_HOOKS += TPM2_TSS_TRUNCATE_MAKEFILE_FUZZ_GENERATED_AM
-+ifeq ($(BR2_PACKAGE_TPM2_TSS_FAPI),y)
-+TPM2_TSS_DEPENDENCIES += json-c libcurl
-+TPM2_TSS_CONF_OPTS += --enable-fapi
-+else
-+TPM2_TSS_CONF_OPTS += --disable-fapi
-+endif
- 
- $(eval $(autotools-package))
++OPENSC_VERSION = 0.20.0
++OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
++OPENSC_LICENSE = LGPLv2.1+
++OPENSC_LICENSE_FILES = COPYING
++OPENSC_INSTALL_STAGING = YES
++OPENSC_DEPENDENCIES = pcsc-lite
++
++$(eval $(autotools-package))
+--
+2.20.1
