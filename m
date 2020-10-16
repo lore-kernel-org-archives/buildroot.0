@@ -1,31 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Oct 2020 20:07:53 +0200
-Subject: [Buildroot] [PATCH] package/keepalived: make suport for Linux
- headers >= 3.2
-In-Reply-To: <20201016135120.GA4852@plvision.eu>
-References: <20201016122240.4235-1-vadim4j@gmail.com>
- <20201016142757.1849f560@windsurf>
- <20201016135120.GA4852@plvision.eu>
-Message-ID: <20201016200753.400e6757@windsurf>
+Date: Fri, 16 Oct 2020 20:11:02 +0200
+Subject: [Buildroot] [git commit] package/mksh: update to R59b
+Message-ID: <20201016175939.7420E82618@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 16 Oct 2020 16:51:20 +0300
-Vadym Kochan <vadym.kochan@plvision.eu> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b6b5981f704ff1196f44835c18c245d5e964b2ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Was the kernel headers check in keepalived mentioned in the commit log
-> > fixed later on ?
-> >   
-> 
-> Looks like the original issue was related to ipset.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mksh/mksh.hash | 2 +-
+ package/mksh/mksh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Right, and ? Why has the issue disappeared ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 4e71a42634..61a3acdc12 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-sha256  3d101154182d52ae54ef26e1360c95bc89c929d28859d378cc1c84f3439dbe75  mksh-R57.tgz
++sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
+ # Locally computed
+ sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 2aa8f70ff9..05ddc3f4c9 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MKSH_VERSION = 57
++MKSH_VERSION = 59b
+ MKSH_SOURCE = mksh-R$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
