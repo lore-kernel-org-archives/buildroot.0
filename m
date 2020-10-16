@@ -1,124 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Oct 2020 07:52:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcroco: drop package
-Message-ID: <20201016055248.1968370-1-fontaine.fabrice@gmail.com>
+From: david gouarin <dgouarin@gmail.com>
+Date: Fri, 16 Oct 2020 08:25:26 +0200
+Subject: [Buildroot] [PATCH v4] package/libtalloc: new package
+In-Reply-To: <20201015221657.7a224c6a@windsurf>
+References: <20201014170254.6184-1-dgouarin@gmail.com>
+ <20201015200609.20205-1-dgouarin@gmail.com>
+ <20201015221657.7a224c6a@windsurf>
+Message-ID: <CAH3uZAwsvcv5kNFCi_fHgoszzbvKGbh52OeX1eqPbWEpfzYoVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop libcrococo as it is affected by several security issues such as
-CVE-2020-12825 which will never be fixed as this project has been
-archived:
-https://gitlab.gnome.org/Archive/libcroco/-/issues/8
+Thank you Thomas,
+I agree, HOST_DIR is completely wrong here, I totally missed that, and I
+admit I still have difficulties formatting my patches, mainly because I
+have to work in an isolated network :)
+I have however sent a new revision for both freeradius and libtalloc as a
+series using git send-email as described in the documentation,  I don't
+understand what is wrong ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy               |  8 ++++++++
- package/Config.in              |  1 -
- package/libcroco/Config.in     | 20 --------------------
- package/libcroco/libcroco.hash |  5 -----
- package/libcroco/libcroco.mk   | 21 ---------------------
- 5 files changed, 8 insertions(+), 47 deletions(-)
- delete mode 100644 package/libcroco/Config.in
- delete mode 100644 package/libcroco/libcroco.hash
- delete mode 100644 package/libcroco/libcroco.mk
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index da48757143..a620005d2e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2020.11"
- 
-+config BR2_PACKAGE_LIBCROCO
-+	bool "libcroco package was removed"
-+	select BR2_LEGACY
-+	help
-+	  This package has been removed as it is affected by several
-+	  security issues such as CVE-2020-12825 which will never be
-+	  fixed as libcroco has been archived.
-+
- config BR2_PACKAGE_BELLAGIO
- 	bool "bellagio package was removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 357c9e1097..673ececf37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1863,7 +1863,6 @@ menu "Other"
- 	source "package/libclc/Config.in"
- 	source "package/libcofi/Config.in"
- 	source "package/libcorrect/Config.in"
--	source "package/libcroco/Config.in"
- 	source "package/libcrossguid/Config.in"
- 	source "package/libcsv/Config.in"
- 	source "package/libdaemon/Config.in"
-diff --git a/package/libcroco/Config.in b/package/libcroco/Config.in
-deleted file mode 100644
-index ad78a147e4..0000000000
---- a/package/libcroco/Config.in
-+++ /dev/null
-@@ -1,20 +0,0 @@
--config BR2_PACKAGE_LIBCROCO
--	bool "libcroco"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBXML2
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  Libcroco is a standalone css2 parsing and manipulation
--	  library. The parser provides a low level event driven SAC
--	  like api and a css object model like api.
--
--	  Libcroco provides a CSS2 selection engine and an
--	  experimental xml/css rendering engine.
--
--	  https://github.com/GNOME/libcroco
--
--comment "libcroco needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
-deleted file mode 100644
-index b998206422..0000000000
---- a/package/libcroco/libcroco.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.13.sha256sum
--sha256	767ec234ae7aa684695b3a735548224888132e063f92db585759b422570621d4	libcroco-0.6.13.tar.xz
--
--# Hash for license file:
--sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING.LIB
-diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
-deleted file mode 100644
-index c717c9a212..0000000000
---- a/package/libcroco/libcroco.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# libcroco
--#
--################################################################################
--
--LIBCROCO_VERSION_MAJOR = 0.6
--LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).13
--LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSION_MAJOR)
--LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
--LIBCROCO_INSTALL_STAGING = YES
--LIBCROCO_DEPENDENCIES = host-pkgconf libglib2 libxml2
--HOST_LIBCROCO_DEPENDENCIES = host-pkgconf host-libglib2 host-libxml2
--LIBCROCO_CONFIG_SCRIPTS = croco-$(LIBCROCO_VERSION_MAJOR)-config
--# NEWS states that it's only LGPL
--# Source code says v2.1+ even though COPYING.LIB is v2
--LIBCROCO_LICENSE = LGPL-2.1+
--LIBCROCO_LICENSE_FILES = COPYING.LIB
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
--- 
-2.28.0
+Le jeu. 15 oct. 2020 ? 22:16, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
+
+> Hello David,
+>
+> Thanks for this new iteration!
+>
+> On Thu, 15 Oct 2020 22:06:08 +0200
+> David GOUARIN <dgouarin@gmail.com> wrote:
+>
+> > talloc is a hierarchical, reference counted memory pool system with
+> destructors.
+> > It is the core memory allocator used in Samba.
+> >
+> > Signed-off-by: David GOUARIN <dgouarin@thalesgroup.com>
+> >
+> > Change v1 -> v2:
+> >   - merge with work from jared.bents at rockwellcollins.com, as sujested
+> by Matthew Weber
+> >
+> http://patchwork.ozlabs.org/project/buildroot/patch/20200327150225.15277-1-jared.bents at rockwellcollins.com
+> >
+> > Change v2 -> v4: (no v3, resubmitting the whole patch series)
+> >   - fix build with BR2_PARANOID_UNSAFE_PATH (Thomas review)
+> >   - add hashes of license files (Thomas)
+> >   - license is GPL-3.0+ for both talloc and pytalloc (Thomas)
+> >   - remove useless --prefix and --libdir (Thomas)
+>
+> Your changelog should be below the --- sign...
+>
+> >
+> > ---
+>
+> ... here.
+>
+>
+> > +LIBTALLOC_VERSION = 2.3.1
+> > +LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
+> > +LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
+> > +LIBTALLOC_LICENSE = GPL-3.0+
+> > +LIBTALLOC_LICENSE_FILES = talloc.h pytalloc.h
+> > +LIBTALLOC_INSTALL_STAGING = YES
+> > +
+> > +LIBTALLOC_CONF_OPTS += --cross-compile \
+> > +             --cross-answers=$(@D)/cache.txt \
+> > +             --hostcc=gcc \
+> > +             --with-libiconv=$(HOST_DIR)/usr # waf will search by
+> default in /usr/local with causes an error at configure step when
+> BR2_COMPILER_PARANOID_UNSAFE_PATH is set
+>
+> This is almost certainly not correct: HOST_DIR/usr contains libraries
+> compiled for the host... but you're building libtalloc for the target.
+>
+> So unless libiconv is only used by libtalloc to build host binaries,
+> this looks wrong. If it's using the target libiconv, you should use
+> --with-libiconv=$(STAGING_DIR)/usr. However, keep in mind that libiconv
+> is not provided by all C libraries: with the uClibc C library built
+> without locale support, you would have to enable the
+> BR2_PACKAGE_LIBICONV option, and depend on libiconv. See for example
+> the package/acsccid package.
+>
+> Other than this issue, the rest looks good.
+>
+> However, please send libtalloc and freeradius-server as a series: the
+> latter depends on the former.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201016/1897d4a0/attachment.html>
