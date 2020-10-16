@@ -1,241 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Oct 2020 20:10:52 +0200
-Subject: [Buildroot] [git commit] package/uclibc-ng-test: update to latest
- git version
-Message-ID: <20201016175939.695E083A81@busybox.osuosl.org>
+Date: Fri, 16 Oct 2020 20:11:45 +0200
+Subject: [Buildroot] [git commit] package/libcroco: drop package
+Message-ID: <20201016180019.030A283ACF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29fdbd2b6c0921d4443c48e7901a03a310d5959c
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe9994c893e59b5572fe9d33744ce2322d99333
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All patches are upstream.
+Drop libcrococo as it is affected by several security issues such as
+CVE-2020-12825 which will never be fixed as this project has been
+archived:
+https://gitlab.gnome.org/Archive/libcroco/-/issues/8
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...scall6-fix-build-with-musl-and-older-kenr.patch | 45 --------------------
- ...Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch | 43 -------------------
- ...c-test-nftw.c-fix-build-with-latest-glibc.patch | 42 -------------------
- ...tst-mqueue4.c-fix-build-with-latest-glibc.patch | 48 ----------------------
- package/uclibc-ng-test/uclibc-ng-test.mk           |  2 +-
- 5 files changed, 1 insertion(+), 179 deletions(-)
+ Config.in.legacy               |  8 ++++++++
+ package/Config.in              |  1 -
+ package/libcroco/Config.in     | 20 --------------------
+ package/libcroco/libcroco.hash |  5 -----
+ package/libcroco/libcroco.mk   | 21 ---------------------
+ 5 files changed, 8 insertions(+), 47 deletions(-)
 
-diff --git a/package/uclibc-ng-test/0001-misc-tst-syscall6-fix-build-with-musl-and-older-kenr.patch b/package/uclibc-ng-test/0001-misc-tst-syscall6-fix-build-with-musl-and-older-kenr.patch
-deleted file mode 100644
-index ca433261ba..0000000000
---- a/package/uclibc-ng-test/0001-misc-tst-syscall6-fix-build-with-musl-and-older-kenr.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 9a09c89fdd0e0cebec48d1bb7bc187bf92ae361c Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 13 Mar 2018 12:58:59 +0200
--Subject: [PATCH] misc/tst-syscall6: fix build with musl and older kenrel
-- headers
--
--The RWF_DSYNC and RWF_HIPRI macros were introduced in kernel version 4.6
--with the preadv2/pwritev2 system calls. musl libc provides its own
--syscall definitions, even when the kernel headers are older. This leads
--to the following build failure:
--
--tst-syscall6.c: In function 'main':
--tst-syscall6.c:32:48: error: 'RWF_DSYNC' undeclared (first use in this function)
--  nio = syscall(SYS_pwritev2, fd, iov, 2, 0, 0, RWF_DSYNC);
--                                                ^~~~~~~~~
--tst-syscall6.c:32:48: note: each undeclared identifier is reported only once for each function it appears in
--tst-syscall6.c:42:58: error: 'RWF_HIPRI' undeclared (first use in this function)
--  nio = syscall(SYS_preadv2, fd, iov, 1, strlen(str0), 0, RWF_HIPRI);
--                                                          ^~~~~~~~~
--
--Make the code depend also on RWF_HIPRI to fix this failure.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: patch sent to Waldemar Brodkorb <wbx@openadk.org>
--
-- test/misc/tst-syscall6.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/test/misc/tst-syscall6.c b/test/misc/tst-syscall6.c
--index fa51c275e4a5..9ad2ddac2b8f 100644
----- a/test/misc/tst-syscall6.c
--+++ b/test/misc/tst-syscall6.c
--@@ -9,7 +9,7 @@
-- 
-- int main()
-- {
---#if defined SYS_preadv2 && defined SYS_pwritev2
--+#if defined SYS_preadv2 && defined SYS_pwritev2 && defined RWF_HIPRI
-- 	char tmp[] = "/tmp/tst-preadv2-XXXXXX";
-- 	int fd;
-- 	struct iovec iov[2];
---- 
--2.16.1
--
-diff --git a/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch b/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch
-deleted file mode 100644
-index 34760f3dfb..0000000000
---- a/package/uclibc-ng-test/0002-Add-NO_CRYPT-to-fix-build-with-glibc-2.28.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 164b1b5592ef6ad9fceba06bdfa31787e9c0329d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 14 Nov 2018 21:26:54 +0100
--Subject: [PATCH] Add NO_CRYPT to fix build with glibc 2.28
--
--Since glibc 2.28
--(https://savannah.gnu.org/forum/forum.php?forum_id=9205), the obsolete
--functions encrypt, encrypt_r, setkey, setkey_r, cbc_crypt, ecb_crypt,
--and des_setparity are no longer available to newly linked binaries, and
--the headers <rpc/des_crypt.h> and <rpc/rpc_des.h> are no longer
--installed. These functions encrypted and decrypted data with the DES
--block cipher, which is no longer considered secure. Software that still
--uses these functions should switch to a modern cryptography library,
--such as libgcrypt.
--
--So add a NO_CRYPT variable to disable test/crypt
--
--Fixes:
-- - http://autobuild.buildroot.org/results/158438debb0ce313b012b871e199bed42ba38294
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- test/Makefile | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/test/Makefile b/test/Makefile
--index 5a136ea..6690d25 100644
----- a/test/Makefile
--+++ b/test/Makefile
--@@ -39,6 +39,10 @@ ifeq ($(NO_MATH),1)
-- DIRS := $(filter-out math,$(DIRS))
-- endif
-- 
--+ifeq ($(NO_CRYPT),1)
--+DIRS := $(filter-out crypt,$(DIRS))
--+endif
--+
-- test check all: run
-- 
-- run: subdirs_run
---- 
--2.14.1
--
-diff --git a/package/uclibc-ng-test/0003-test-misc-test-nftw.c-fix-build-with-latest-glibc.patch b/package/uclibc-ng-test/0003-test-misc-test-nftw.c-fix-build-with-latest-glibc.patch
-deleted file mode 100644
-index 2c45aeee6d..0000000000
---- a/package/uclibc-ng-test/0003-test-misc-test-nftw.c-fix-build-with-latest-glibc.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From de742f52d46d82db1fe1b0f3255043d48843901d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 29 Oct 2019 11:14:35 +0100
--Subject: [PATCH] test/misc/test-nftw.c: fix build with latest glibc
--
--Fix the following error with latest glibc:
--
--In function 'open',
--    inlined from 'do_test' at tst-nftw.c:38:10,
--    inlined from 'main' at ../test-skeleton.c:318:12:
--/home/mark/buildroot-test/instance-0/output/host/riscv32-buildroot-linux-gnu/sysroot/usr/include/bits/fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
--    __open_missing_mode ();
--    ^~~~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.net/results/f370abcc8dc12975d96a46c34db978554f8c21db
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/wbx-github/uclibc-ng-test/pull/1]
-----
-- test/misc/tst-nftw.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/test/misc/tst-nftw.c b/test/misc/tst-nftw.c
--index 970dfc2..7a08c78 100644
----- a/test/misc/tst-nftw.c
--+++ b/test/misc/tst-nftw.c
--@@ -35,9 +35,9 @@ do_test(void)
-- 	perror("Creating path");
--     if ((mkdir(subpath, 0700)) < 0)
-- 	perror("Creating subpath");
---    if ((open(filepath, O_CREAT)) < 0)
--+    if ((open(filepath, O_CREAT, 0600)) < 0)
-- 	perror("Opening filepath");
---    if ((open(filesubpath, O_CREAT)) < 0)
--+    if ((open(filesubpath, O_CREAT, 0600)) < 0)
-- 	perror("Opening filesubpath");
-- 
--     if (nftw(path, process_one_entry, 100, (FTW_CHDIR|FTW_DEPTH|FTW_PHYS)) < 0)
---- 
--2.23.0
--
-diff --git a/package/uclibc-ng-test/0004-test-nptl-tst-mqueue4.c-fix-build-with-latest-glibc.patch b/package/uclibc-ng-test/0004-test-nptl-tst-mqueue4.c-fix-build-with-latest-glibc.patch
-deleted file mode 100644
-index 374427d96c..0000000000
---- a/package/uclibc-ng-test/0004-test-nptl-tst-mqueue4.c-fix-build-with-latest-glibc.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 04052336f84a84811dd03bfed4cfcb4fe7b424cc Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 29 Oct 2019 11:21:47 +0100
--Subject: [PATCH] test/nptl/tst-mqueue4.c: fix build with latest glibc
--
--Fix the following error with latest glibc:
--
--In file included from /home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot/usr/include/mqueue.h:93:0,
--                 from tst-mqueue4.c:22:
--In function 'mq_open',
--    inlined from 'do_test' at tst-mqueue4.c:174:6:
--/home/fabrice/buildroot/output/host/riscv32-buildroot-linux-gnu/sysroot/usr/include/bits/mqueue2.h:41:5: error: call to '__mq_open_wrong_number_of_args' declared with attribute error: mq_open can be called either with 2 or 4 arguments
--     __mq_open_wrong_number_of_args ();
--     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.net/results/f370abcc8dc12975d96a46c34db978554f8c21db
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/wbx-github/uclibc-ng-test/pull/1]
-----
-- test/nptl/tst-mqueue4.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/test/nptl/tst-mqueue4.c b/test/nptl/tst-mqueue4.c
--index 87ef0c3..1fbecc5 100644
----- a/test/nptl/tst-mqueue4.c
--+++ b/test/nptl/tst-mqueue4.c
--@@ -171,14 +171,14 @@ do_test (void)
--       result = 1;
--     }
-- 
---  q2 = mq_open (name, O_RDONLY, 0600);
--+  q2 = mq_open (name, O_RDONLY, 0600, &attr);
--   if (q2 == (mqd_t) -1)
--     {
--       printf ("mq_open without O_CREAT failed with %m\n");
--       result = 1;
--     }
-- 
---  mqd_t q3 = mq_open (name, O_RDONLY, 0600);
--+  mqd_t q3 = mq_open (name, O_RDONLY, 0600, &attr);
--   if (q3 == (mqd_t) -1)
--     {
--       printf ("mq_open without O_CREAT failed with %m\n");
---- 
--2.23.0
--
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index aeea799d88..1d1722adee 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 53be724634..9d60cfea75 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
--UCLIBC_NG_TEST_VERSION = c6d62cbc60504c7f6867b486248b0ef7cc2da554
-+UCLIBC_NG_TEST_VERSION = c64d6ac77f0e745c70e76024212c72e4bbe2091a
- UCLIBC_NG_TEST_SITE = git://uclibc-ng.org/git/uclibc-ng-test
- UCLIBC_NG_TEST_LICENSE = LGPL-2.1+
- UCLIBC_NG_TEST_LICENSE_FILES = COPYING.LIB
+ comment "Legacy options removed in 2020.11"
+ 
++config BR2_PACKAGE_LIBCROCO
++	bool "libcroco package was removed"
++	select BR2_LEGACY
++	help
++	  This package has been removed as it is affected by several
++	  security issues such as CVE-2020-12825 which will never be
++	  fixed as libcroco has been archived.
++
+ config BR2_PACKAGE_BELLAGIO
+ 	bool "bellagio package was removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 22d4bcf27c..504cfec98e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1864,7 +1864,6 @@ menu "Other"
+ 	source "package/libclc/Config.in"
+ 	source "package/libcofi/Config.in"
+ 	source "package/libcorrect/Config.in"
+-	source "package/libcroco/Config.in"
+ 	source "package/libcrossguid/Config.in"
+ 	source "package/libcsv/Config.in"
+ 	source "package/libdaemon/Config.in"
+diff --git a/package/libcroco/Config.in b/package/libcroco/Config.in
+deleted file mode 100644
+index ad78a147e4..0000000000
+--- a/package/libcroco/Config.in
++++ /dev/null
+@@ -1,20 +0,0 @@
+-config BR2_PACKAGE_LIBCROCO
+-	bool "libcroco"
+-	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+-	depends on BR2_USE_MMU # glib2
+-	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  Libcroco is a standalone css2 parsing and manipulation
+-	  library. The parser provides a low level event driven SAC
+-	  like api and a css object model like api.
+-
+-	  Libcroco provides a CSS2 selection engine and an
+-	  experimental xml/css rendering engine.
+-
+-	  https://github.com/GNOME/libcroco
+-
+-comment "libcroco needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libcroco/libcroco.hash b/package/libcroco/libcroco.hash
+deleted file mode 100644
+index b998206422..0000000000
+--- a/package/libcroco/libcroco.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/libcroco/0.6/libcroco-0.6.13.sha256sum
+-sha256	767ec234ae7aa684695b3a735548224888132e063f92db585759b422570621d4	libcroco-0.6.13.tar.xz
+-
+-# Hash for license file:
+-sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING.LIB
+diff --git a/package/libcroco/libcroco.mk b/package/libcroco/libcroco.mk
+deleted file mode 100644
+index c717c9a212..0000000000
+--- a/package/libcroco/libcroco.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# libcroco
+-#
+-################################################################################
+-
+-LIBCROCO_VERSION_MAJOR = 0.6
+-LIBCROCO_VERSION = $(LIBCROCO_VERSION_MAJOR).13
+-LIBCROCO_SITE = http://ftp.gnome.org/pub/gnome/sources/libcroco/$(LIBCROCO_VERSION_MAJOR)
+-LIBCROCO_SOURCE = libcroco-$(LIBCROCO_VERSION).tar.xz
+-LIBCROCO_INSTALL_STAGING = YES
+-LIBCROCO_DEPENDENCIES = host-pkgconf libglib2 libxml2
+-HOST_LIBCROCO_DEPENDENCIES = host-pkgconf host-libglib2 host-libxml2
+-LIBCROCO_CONFIG_SCRIPTS = croco-$(LIBCROCO_VERSION_MAJOR)-config
+-# NEWS states that it's only LGPL
+-# Source code says v2.1+ even though COPYING.LIB is v2
+-LIBCROCO_LICENSE = LGPL-2.1+
+-LIBCROCO_LICENSE_FILES = COPYING.LIB
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
