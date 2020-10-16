@@ -1,68 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 16 Oct 2020 09:55:19 +0200
-Subject: [Buildroot] [git commit] package/mpdecimal: bump to version 2.5.0
-Message-ID: <20201016074428.11C4D834D4@busybox.osuosl.org>
+Date: Fri, 16 Oct 2020 12:03:05 +0200
+Subject: [Buildroot] [PATCH v4] package/libtalloc: new package
+In-Reply-To: <CAH3uZAwsvcv5kNFCi_fHgoszzbvKGbh52OeX1eqPbWEpfzYoVg@mail.gmail.com>
+References: <20201014170254.6184-1-dgouarin@gmail.com>
+ <20201015200609.20205-1-dgouarin@gmail.com>
+ <20201015221657.7a224c6a@windsurf>
+ <CAH3uZAwsvcv5kNFCi_fHgoszzbvKGbh52OeX1eqPbWEpfzYoVg@mail.gmail.com>
+Message-ID: <20201016120305.23b2c455@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=264cf7a57ac6bbe9fbabdd828bdd85bb254614e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello David,
 
-Update license hash due to date update.
+On Fri, 16 Oct 2020 08:25:26 +0200
+david gouarin <dgouarin@gmail.com> wrote:
 
-Tweak patch so that it applies still.
+> I agree, HOST_DIR is completely wrong here, I totally missed that, and I
+> admit I still have difficulties formatting my patches, mainly because I
+> have to work in an isolated network :)
 
-This update is needed following the bump of python3 to 3.9.0 in commit
-f26ce577605e843ebf0f5583242ee9ff3cd08ac3.
+Ah, indeed, that may be not the most efficient way of working :/
 
-Fixes:
-http://autobuild.buildroot.net/results/b73/b7384312567825e6f4ddbd7c08c1b8e44c7f1f9b
+> I have however sent a new revision for both freeradius and libtalloc as a
+> series using git send-email as described in the documentation,  I don't
+> understand what is wrong ?
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Add-minimal-support-for-enable-disable-shared-static.patch   | 2 +-
- package/mpdecimal/mpdecimal.hash                                      | 4 ++--
- package/mpdecimal/mpdecimal.mk                                        | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+They are not numbered: you probably used "git format-patch -N", but you
+shouldn't use the -N option in this case.
 
-diff --git a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-index 630bbd6642..4b60013840 100644
---- a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-+++ b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-@@ -37,7 +37,7 @@ index 2c91891..0c44f36 100644
- +endif
- +ifeq ($(BUILD_SHARED),yes)
-  	$(INSTALL) -m 755 libmpdec/$(LIBSHARED) $(DESTDIR)$(libdir)
-- 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED) $(LIBSONAME) && ln -sf $(LIBSHARED) libmpdec.so
-+ 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED) $(LIBSONAME) && ln -sf $(LIBSHARED) $(LIBNAME)
- +endif
-  	$(INSTALL) -d -m 755 $(DESTDIR)$(docdir)
-  	cp -R doc/* $(DESTDIR)$(docdir)
-diff --git a/package/mpdecimal/mpdecimal.hash b/package/mpdecimal/mpdecimal.hash
-index e152243230..c931ee4a6d 100644
---- a/package/mpdecimal/mpdecimal.hash
-+++ b/package/mpdecimal/mpdecimal.hash
-@@ -1,4 +1,4 @@
- # From http://www.bytereef.org/mpdecimal/download.html
--sha256 83c628b90f009470981cf084c5418329c88b19835d8af3691b930afccb7d79c7 mpdecimal-2.4.2.tar.gz
-+sha256  15417edc8e12a57d1d9d75fa7e3f22b158a3b98f44db9d694cfd2acde8dfa0ca  mpdecimal-2.5.0.tar.gz
- # Locally computed
--sha256 e384413a13f061a50f6fadceefc0f326c22d83c13ae94978e1f86d0468332c19 LICENSE.txt
-+sha256  b07528d8b1dbf1e2d2741052996f0876e23342ce2d30d0effa39c5457716c25a  LICENSE.txt
-diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
-index 2d06d0f6b4..00aa98e693 100644
---- a/package/mpdecimal/mpdecimal.mk
-+++ b/package/mpdecimal/mpdecimal.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases
--MPDECIMAL_VERSION = 2.4.2
-+MPDECIMAL_VERSION = 2.5.0
- MPDECIMAL_INSTALL_STAGING = YES
- MPDECIMAL_LICENSE = BSD-2-Clause
- MPDECIMAL_LICENSE_FILES = LICENSE.txt
+For patches sent to Buildroot, we want them numbered, so they clearly
+appear as a series and we understand that they depend on each other.
+
+For patches to Buildroot packages (i.e patches in package/foo/*.patch),
+we want them *NOT* numbered, as otherwise the 2/3 or 5/6 numbering very
+quickly gets out of date when adding/removing patches, and this
+numbering is already sufficiently explicit by the name of the patches
+(0001-something.patch, 0002-something-else.patch).
+
+Perhaps this is what caused the confusion ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
