@@ -1,95 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 16 Oct 2020 22:19:16 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mpdecimal: fix static build
-In-Reply-To: <20201016201916.2082927-1-fontaine.fabrice@gmail.com>
-References: <20201016201916.2082927-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201016201916.2082927-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 16 Oct 2020 22:59:45 +0200
+Subject: [Buildroot] [PATCH v2] package/dvb-apps: fix build failure with
+ glibc 2.31
+In-Reply-To: <20201015231202.71346d5e@windsurf>
+References: <20200926170920.716-1-daggs@gmx.com>
+ <20201015231202.71346d5e@windsurf>
+Message-ID: <20201016205945.GE3466@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update patch to take into account the new libmpdec++ library
+Thomas, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/40e50ffd00dacbaa697cde67846e0fc570069f56
+On 2020-10-15 23:12 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 26 Sep 2020 20:09:20 +0300
+> > dvb-apps fails to build with glibc 2.31 with the following error:
+> > Fixes:
+> > http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/
+> Applied to master, thanks. I'm wondering: is dvb-apps still useful? It
+> doesn't seem to really be maintained anywhere...
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ort-for-enable-disable-shared-static.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
+Last commit was on 2014-03-21, more than 6 years ago now. The project is
+in the "Old projects not maintained anymore at LinuxTV.org" section of
+linuxtv.org.
 
-diff --git a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-index 4b60013840..60d6b4bb02 100644
---- a/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-+++ b/package/mpdecimal/0001-Add-minimal-support-for-enable-disable-shared-static.patch
-@@ -9,6 +9,8 @@ that building the shared library can be disabled in pure static
- library contexts.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Fabrice: update for 2.5.0 (add libmpdec++)]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  Makefile.in          |  6 ++++++
-  configure.ac         | 13 +++++++++++++
-@@ -42,6 +44,20 @@ index 2c91891..0c44f36 100644
-  	$(INSTALL) -d -m 755 $(DESTDIR)$(docdir)
-  	cp -R doc/* $(DESTDIR)$(docdir)
-  
-+@@ -74,9 +80,13 @@ install_libcxx: install_lib
-+ 	$(INSTALL) -d -m 755 $(DESTDIR)$(includedir)
-+ 	$(INSTALL) -m 644 libmpdec++/decimal.hh $(DESTDIR)$(includedir)
-+ 	$(INSTALL) -d -m 755 $(DESTDIR)$(libdir)
-++ifeq ($(BUILD_STATIC),yes)
-+ 	$(INSTALL) -m 644 libmpdec++/$(LIBSTATIC_CXX) $(DESTDIR)$(libdir)
-++endif
-++ifeq ($(BUILD_SHARED),yes)
-+ 	$(INSTALL) -m 755 libmpdec++/$(LIBSHARED_CXX) $(DESTDIR)$(libdir)
-+ 	cd $(DESTDIR)$(libdir) && ln -sf $(LIBSHARED_CXX) $(LIBSONAME_CXX) && ln -sf $(LIBSHARED_CXX) $(LIBNAME_CXX)
-++endif
-+ 	cp -R doc/libmpdec++ $(DESTDIR)$(docdir)
-+ 
-+ 
- diff --git a/configure.ac b/configure.ac
- index 7ee8f86..2b3e505 100644
- --- a/configure.ac
-@@ -96,6 +112,36 @@ index d9619a3..985c73c 100644
-  
-  
-  OBJS := basearith.o context.o constants.o convolute.o crt.o mpdecimal.o \
-+diff --git a/libmpdec/Makefile.in b/libmpdec/Makefile.in
-+index d9619a3..985c73c 100644
-+--- a/libmpdec++/Makefile.in
-++++ b/libmpdec++/Makefile.in
-+@@ -13,6 +13,8 @@ LIBSTATIC_CXX = @LIBSTATIC_CXX@
-+ LIBNAME_CXX = @LIBNAME_CXX@
-+ LIBSONAME_CXX = @LIBSONAME_CXX@
-+ LIBSHARED_CXX = @LIBSHARED_CXX@
-++BUILD_SHARED = @BUILD_SHARED@
-++BUILD_STATIC = @BUILD_STATIC@
-+ 
-+ CXX = @CXX@
-+ LDXX = @LDXX@
-+@@ -39,8 +41,15 @@ ifeq ($(MAKECMDGOALS), profile_use)
-+   MPD_LDXXFLAGS += $(MPD_PUSE)
-+ endif
-+ 
-++ifeq ($(BUILD_SHARED),yes)
-++TARGETS += $(LIBSHARED_CXX)
-++endif
-++
-++ifeq ($(BUILD_STATIC),yes)
-++TARGETS += $(LIBSTATIC_CXX)
-++endif
-+ 
-+-default: $(LIBSTATIC_CXX) $(LIBSHARED_CXX)
-++default: $(TARGETS)
-+ 
-+ 
-+ OBJS := decimal.o
- -- 
- 2.1.0
- 
+The homepage https://www.linuxtv.org/wiki/index.php/LinuxTV_dvb-apps has
+not been updated since 2013-02-16.
+
+It seems they have been replaced by a set of utilties in the v4l-utils
+tree: https://git.linuxtv.org/v4l-utils.git/tree/utils at least
+regarding the scanning utilities, and by a repository dedicated to
+hosting the scnan tables: https://git.linuxtv.org/dtv-scan-tables.git/
+
+dvb-apps still has a few utilities that are not avilable elsewhere, like
+dvbdate, to set the clock from the DTV signal, for example.
+
+TBH, I lost most interest in these DTV-related packages since the time I
+added them, 6 to 8 years ago now, and I no longer use them anymore, so I
+am not really sure how they relate to each other now...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
