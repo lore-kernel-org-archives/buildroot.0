@@ -1,100 +1,42 @@
-From: david gouarin <dgouarin@gmail.com>
-Date: Fri, 16 Oct 2020 08:25:26 +0200
-Subject: [Buildroot] [PATCH v4] package/libtalloc: new package
-In-Reply-To: <20201015221657.7a224c6a@windsurf>
-References: <20201014170254.6184-1-dgouarin@gmail.com>
- <20201015200609.20205-1-dgouarin@gmail.com>
- <20201015221657.7a224c6a@windsurf>
-Message-ID: <CAH3uZAwsvcv5kNFCi_fHgoszzbvKGbh52OeX1eqPbWEpfzYoVg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 16 Oct 2020 08:41:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kismet: bump to version 2020-09-R4
+Message-ID: <20201016064102.1980387-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Thomas,
-I agree, HOST_DIR is completely wrong here, I totally missed that, and I
-admit I still have difficulties formatting my patches, mainly because I
-have to work in an isolated network :)
-I have however sent a new revision for both freeradius and libtalloc as a
-series using git send-email as described in the documentation,  I don't
-understand what is wrong ?
+https://www.kismetwireless.net/release/kismet-2020-09-R4
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kismet/kismet.hash | 2 +-
+ package/kismet/kismet.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le jeu. 15 oct. 2020 ? 22:16, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
-
-> Hello David,
->
-> Thanks for this new iteration!
->
-> On Thu, 15 Oct 2020 22:06:08 +0200
-> David GOUARIN <dgouarin@gmail.com> wrote:
->
-> > talloc is a hierarchical, reference counted memory pool system with
-> destructors.
-> > It is the core memory allocator used in Samba.
-> >
-> > Signed-off-by: David GOUARIN <dgouarin@thalesgroup.com>
-> >
-> > Change v1 -> v2:
-> >   - merge with work from jared.bents at rockwellcollins.com, as sujested
-> by Matthew Weber
-> >
-> http://patchwork.ozlabs.org/project/buildroot/patch/20200327150225.15277-1-jared.bents at rockwellcollins.com
-> >
-> > Change v2 -> v4: (no v3, resubmitting the whole patch series)
-> >   - fix build with BR2_PARANOID_UNSAFE_PATH (Thomas review)
-> >   - add hashes of license files (Thomas)
-> >   - license is GPL-3.0+ for both talloc and pytalloc (Thomas)
-> >   - remove useless --prefix and --libdir (Thomas)
->
-> Your changelog should be below the --- sign...
->
-> >
-> > ---
->
-> ... here.
->
->
-> > +LIBTALLOC_VERSION = 2.3.1
-> > +LIBTALLOC_SOURCE = talloc-$(LIBTALLOC_VERSION).tar.gz
-> > +LIBTALLOC_SITE = https://www.samba.org/ftp/talloc
-> > +LIBTALLOC_LICENSE = GPL-3.0+
-> > +LIBTALLOC_LICENSE_FILES = talloc.h pytalloc.h
-> > +LIBTALLOC_INSTALL_STAGING = YES
-> > +
-> > +LIBTALLOC_CONF_OPTS += --cross-compile \
-> > +             --cross-answers=$(@D)/cache.txt \
-> > +             --hostcc=gcc \
-> > +             --with-libiconv=$(HOST_DIR)/usr # waf will search by
-> default in /usr/local with causes an error at configure step when
-> BR2_COMPILER_PARANOID_UNSAFE_PATH is set
->
-> This is almost certainly not correct: HOST_DIR/usr contains libraries
-> compiled for the host... but you're building libtalloc for the target.
->
-> So unless libiconv is only used by libtalloc to build host binaries,
-> this looks wrong. If it's using the target libiconv, you should use
-> --with-libiconv=$(STAGING_DIR)/usr. However, keep in mind that libiconv
-> is not provided by all C libraries: with the uClibc C library built
-> without locale support, you would have to enable the
-> BR2_PACKAGE_LIBICONV option, and depend on libiconv. See for example
-> the package/acsccid package.
->
-> Other than this issue, the rest looks good.
->
-> However, please send libtalloc and freeradius-server as a series: the
-> latter depends on the former.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201016/1897d4a0/attachment.html>
+diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+index 81c8cfb98b..c55e31ef96 100644
+--- a/package/kismet/kismet.hash
++++ b/package/kismet/kismet.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6c935a5ee28fe6c5376d6270a2fc484b26a65e63184506724427b2aeff674ab7  kismet-2020-09-R3.tar.xz
++sha256  79c9c343cc055523ec1c8607bf63f26bb826d8ffaccc1e6e033c945c8ada664d  kismet-2020-09-R4.tar.xz
+ sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 723ce9c02b..853dabf106 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KISMET_VERSION = 2020-09-R3
++KISMET_VERSION = 2020-09-R4
+ KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
+ KISMET_SITE = http://www.kismetwireless.net/code
+ KISMET_DEPENDENCIES = \
+-- 
+2.28.0
