@@ -1,40 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2020 18:22:46 +0200
-Subject: [Buildroot] [git commit] package/kismet: link with libatomic if
+Date: Sat, 17 Oct 2020 18:24:50 +0200
+Subject: [Buildroot] [git commit] package/opencv3: link with libatomic if
  needed
-Message-ID: <20201017161332.7D264835FB@busybox.osuosl.org>
+Message-ID: <20201017161332.916DF835F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2f88b45de0dc76c801bf6a9fc315a85ed3b2abe
+commit: https://git.buildroot.net/buildroot/commit/?id=dd69967123870383496b5c8eb7b574e8b156b36d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build of kismet-2020-09-R3 with riscv64
+Restore the atomic workaround that was wrongly removed when bumping to
+version 3.4.9 in commit f6fb2cae0691d25b034b12a16261ee26096db7d1 as it
+seems that opencv3 still needs help to detect atomic library
 
 Fixes:
- - http://autobuild.buildroot.org/results/9c3d56ef837c7c5bfbb34a0ec51b349108e201b1
+ - http://autobuild.buildroot.org/results/9162b29725f8d9b891eb74fcb8078f211140a841
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kismet/kismet.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/opencv3/opencv3.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 723ce9c02b..4fc96e76c3 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -27,6 +27,10 @@ endif
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index de89aebca4..648cc66af3 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -13,6 +13,11 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
  
- KISMET_CONF_ENV += CXXFLAGS="$(KISMET_CXXFLAGS)"
+ OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
  
++# Uses __atomic_fetch_add_4
 +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+KISMET_CONF_ENV += LIBS=-latomic
++OPENCV3_CXXFLAGS += -latomic
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- KISMET_DEPENDENCIES += libcap
- KISMET_CONF_OPTS += --enable-libcap
+ # Fix c++11 build with missing std::exception_ptr
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
