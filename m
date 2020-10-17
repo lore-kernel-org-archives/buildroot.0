@@ -1,62 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2020 18:20:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add rpi
- settings files
-In-Reply-To: <20201017151848.1283394-1-fhunleth@troodon-software.com>
-References: <20201017151848.1283394-1-fhunleth@troodon-software.com>
-Message-ID: <20201017162058.GP3466@scaer>
+Date: Sat, 17 Oct 2020 18:22:46 +0200
+Subject: [Buildroot] [git commit] package/kismet: link with libatomic if
+ needed
+Message-ID: <20201017161332.7D264835FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a2f88b45de0dc76c801bf6a9fc315a85ed3b2abe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-10-17 11:18 -0400, Frank Hunleth spake thusly:
-> The brcmfmac drivers now load settings files for BCM434xx devices and
-> fail if they're missing on the Raspberry Pi:
-> 
-> brcmfmac mmc1:0001:1: Direct firmware load for brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt failed with error -2
-> 
-> This commit copies the missing settings files over to the firmware
-> directory with the other files.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Fix build of kismet-2020-09-R3 with riscv64
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/9c3d56ef837c7c5bfbb34a0ec51b349108e201b1
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kismet/kismet.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  package/linux-firmware/linux-firmware.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-> index 8a44129102..e2a6ebcbf1 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -547,7 +547,10 @@ LINUX_FIRMWARE_FILES += \
->  	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43430-sdio.bin \
->  	brcm/brcmfmac43430a0-sdio.bin brcm/brcmfmac43455-sdio.bin \
->  	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
-> -	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
-> +	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin \
-> +	brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt \
-> +	brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt \
-> +	brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
->  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
->  endif
->  
-> -- 
-> 2.25.1
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 723ce9c02b..4fc96e76c3 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -27,6 +27,10 @@ endif
+ 
+ KISMET_CONF_ENV += CXXFLAGS="$(KISMET_CXXFLAGS)"
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++KISMET_CONF_ENV += LIBS=-latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ KISMET_DEPENDENCIES += libcap
+ KISMET_CONF_OPTS += --enable-libcap
