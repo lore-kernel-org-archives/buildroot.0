@@ -1,104 +1,105 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Oct 2020 15:10:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: add opencv3 optional
- dependency
-Message-ID: <20201017131043.3070011-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Oct 2020 15:11:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix build with atomic
+In-Reply-To: <20200211175511.12719-1-fontaine.fabrice@gmail.com>
+References: <20200211175511.12719-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201017131128.GN3466@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-opencv3 is an optional dependency since version 1.8.1 and
-https://github.com/signalwire/freeswitch/commit/6483ab8b65886465863584e8dcfee57084030b9c
+Fabrice, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ions-mod_cv-mod_cv.cpp-fix-build-wit.patch | 44 +++++++++++++++++++
- package/freeswitch/Config.in                  |  3 ++
- package/freeswitch/freeswitch.mk              |  5 +++
- 3 files changed, 52 insertions(+)
- create mode 100644 package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch
+On 2020-02-11 18:55 +0100, Fabrice Fontaine spake thusly:
+> Use HAVE_CXX_ATOMICS_WITHOUT_LIB variable to tell opencv3 to check for
+> atomic library and add it in $(REQUIRED_LIBRARIES) if needed (atomic
+> workaround was removed when bumping to version 3.4.9 in commit
+> id=f6fb2cae0691d25b034b12a16261ee26096db7d1 but it seems tha opencv3
+> still needs help to detect atomic library)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9162b29725f8d9b891eb74fcb8078f211140a841
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch b/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch
-new file mode 100644
-index 0000000000..cd0a3ab4c2
---- /dev/null
-+++ b/package/freeswitch/0001-src-mod-applications-mod_cv-mod_cv.cpp-fix-build-wit.patch
-@@ -0,0 +1,44 @@
-+From 575409a14e62f73e83309daf8ff6642a235f250c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 16 Oct 2020 23:06:36 +0200
-+Subject: [PATCH] src/mod/applications/mod_cv/mod_cv.cpp: fix build with opencv
-+ 3.4.9
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Use cvScalar instead of CV_RGB to avoid the following build failure with
-+opencv 3.4.9:
-+
-+mod_cv.cpp:693:24: error: conversion from ?cv::Scalar {aka cv::Scalar_<double>}? to non-scalar type ?CvScalar? requested
-+         CvScalar col = CV_RGB((float)255 * object_neighbors / max_neighbors, 0, 0);
-+                        ^
-+
-+Indeed, CV_RGB is defined as cv::Scalar instead of cvScalar since
-+version 3.4.2 and
-+https://github.com/opencv/opencv/commit/7f9253ea0a9fe2635926379420002dbf0c3fce0f
-+
-+It should be noted that CV_RGB(r,g,b) = cvScalar(b,g,r,0)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/signalwire/freeswitch/pull/914]
-+---
-+ src/mod/applications/mod_cv/mod_cv.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/mod/applications/mod_cv/mod_cv.cpp b/src/mod/applications/mod_cv/mod_cv.cpp
-+index 582f925abf..bbec755e91 100644
-+--- a/src/mod/applications/mod_cv/mod_cv.cpp
-++++ b/src/mod/applications/mod_cv/mod_cv.cpp
-+@@ -690,7 +690,7 @@ void detectAndDraw(cv_context_t *context)
-+ 		//printf("WTF %d\n", object_neighbors);
-+         //cout << "Detected " << object_neighbors << " object neighbors" << endl;
-+         const int rect_height = cvRound((float)img.rows * object_neighbors / max_neighbors);
-+-        CvScalar col = CV_RGB((float)255 * object_neighbors / max_neighbors, 0, 0);
-++        CvScalar col = cvScalar(0, 0, (float)255 * object_neighbors / max_neighbors, 0);
-+         rectangle(img, cvPoint(0, img.rows), cvPoint(img.cols/10, img.rows - rect_height), col, -1);
-+ 
-+         parse_stats(&context->nestDetected, nestedObjects.size(), context->skip);
-+-- 
-+2.28.0
-+
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index fc8b4bf7e7..a2bb6f4fb0 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -14,6 +14,9 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
-+	select BR2_PACKAGE_OPENCV3_LIB_HIGHGUI if BR2_PACKAGE_OPENCV3
-+	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC if BR2_PACKAGE_OPENCV3
-+	select BR2_PACKAGE_OPENCV3_LIB_OBJDETECT if BR2_PACKAGE_OPENCV3
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SOFIA_SIP
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index fe10bc1fa1..e4438e5f04 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -279,6 +279,11 @@ FREESWITCH_DEPENDENCIES += opencv
- FREESWITCH_ENABLED_MODULES += applications/mod_cv
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV3),y)
-+FREESWITCH_DEPENDENCIES += opencv3
-+FREESWITCH_ENABLED_MODULES += applications/mod_cv
-+endif
-+
- ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
- FREESWITCH_CONF_ENV += \
- 	ac_cv_path_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+So, while applying your recent bump to 3.4.12, I noticed this old patch
+of yours.
+
+So, I tried and was able to reproduce the original issue with the bump.
+Applying this patch in addition, did not fix the issue, though:
+
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/ocl/test_opencl.cpp.o: in function `cv::Mat::~Mat()':
+     test_opencl.cpp:(.text._ZN2cv3MatD2Ev[_ZN2cv3MatD5Ev]+0x1c): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/test_arithm.cpp.o: in function `cv::Ptr<opencv_test::(anonymous namespace)::BaseElemWiseOp>::Ptr(cv::Ptr<opencv_test::(anonymous namespace)::BaseElemWiseOp> const&)':
+     test_arithm.cpp:(.text._ZN2cv3PtrIN11opencv_test12_GLOBAL__N_114BaseElemWiseOpEEC2ERKS4_+0x28): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/test_arithm.cpp.o: in function `cv::detail::PtrOwner::decRef()':
+     test_arithm.cpp:(.text._ZN2cv6detail8PtrOwner6decRefEv[_ZN2cv6detail8PtrOwner6decRefEv]+0xc): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/test_arithm.cpp.o: in function `cv::Mat::Mat(cv::Mat const&)':
+     test_arithm.cpp:(.text._ZN2cv3MatC2ERKS0_[_ZN2cv3MatC5ERKS0_]+0x7c): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/test_arithm.cpp.o: in function `cv::Mat::release()':
+     test_arithm.cpp:(.text._ZN2cv3Mat7releaseEv[_ZN2cv3Mat7releaseEv]+0x18): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_core.dir/test/test_arithm.cpp.o:test_arithm.cpp:(.text._ZN2cv3MataSERKS0_[_ZN2cv3MataSERKS0_]+0x24): more undefined references to `__atomic_fetch_add_4' follow
+     collect2: error: ld returned 1 exit status
+     make[4]: *** [modules/core/CMakeFiles/opencv_test_core.dir/build.make:555: bin/opencv_test_core] Error 1
+     make[3]: *** [CMakeFiles/Makefile2:1565: modules/core/CMakeFiles/opencv_test_core.dir/all] Error 2
+     [ 92%] Linking CXX executable ../../bin/opencv_test_imgproc
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_bilateral_filter.cpp.o: in function `cv::Mat::~Mat()':
+     test_bilateral_filter.cpp:(.text._ZN2cv3MatD2Ev[_ZN2cv3MatD5Ev]+0x1c): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_canny.cpp.o: in function `cv::Mat::Mat(cv::Mat const&)':
+     test_canny.cpp:(.text._ZN2cv3MatC2ERKS0_[_ZN2cv3MatC5ERKS0_]+0x7c): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_canny.cpp.o: in function `cv::Mat::release()':
+     test_canny.cpp:(.text._ZN2cv3Mat7releaseEv[_ZN2cv3Mat7releaseEv]+0x18): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_color.cpp.o: in function `cv::detail::PtrOwner::decRef()':
+     test_color.cpp:(.text._ZN2cv6detail8PtrOwner6decRefEv[_ZN2cv6detail8PtrOwner6decRefEv]+0xc): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_connectedcomponents.cpp.o: in function `opencv_test::(anonymous namespace)::CV_ConnectedComponentsTest::run(int)':
+     test_connectedcomponents.cpp:(.text._ZN11opencv_test12_GLOBAL__N_126CV_ConnectedComponentsTest3runEi+0x434): undefined reference to `__atomic_fetch_add_4'
+     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/8.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: CMakeFiles/opencv_test_imgproc.dir/test/test_convhull.cpp.o:test_convhull.cpp:(.text._ZN2cv3PtrI12CvMemStorageE7releaseEv[_ZN2cv3PtrI12CvMemStorageE7releaseEv]+0x18): more undefined references to `__atomic_fetch_add_4' follow
+     collect2: error: ld returned 1 exit status
+     make[4]: *** [modules/imgproc/CMakeFiles/opencv_test_imgproc.dir/build.make:870: bin/opencv_test_imgproc] Error 1
+     make[3]: *** [CMakeFiles/Makefile2:1684: modules/imgproc/CMakeFiles/opencv_test_imgproc.dir/all] Error 2
+     make[2]: *** [Makefile:163: all] Error 2
+     make[1]: *** [package/pkg-generic.mk:250: /home/ymorin/dev/buildroot/O/build/opencv3-3.4.12/.stamp_built] Error 2
+     make: *** [Makefile:23: _all] Error 2
+
+So maybe the simplest solution owuld be to partially revert f6fb2cae069,
+to restore the explicit link to libatomic?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/opencv3/opencv3.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+> index fab6716340..ffe5ca44ae 100644
+> --- a/package/opencv3/opencv3.mk
+> +++ b/package/opencv3/opencv3.mk
+> @@ -347,6 +347,10 @@ OPENCV3_CONF_OPTS += \
+>  	-DBUILD_opencv_python3=OFF
+>  endif
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +OPENCV3_CONF_OPTS += -DHAVE_CXX_ATOMICS_WITHOUT_LIB=OFF
+> +endif
+> +
+>  # Installation hooks:
+>  define OPENCV3_CLEAN_INSTALL_DOC
+>  	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+> -- 
+> 2.24.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
