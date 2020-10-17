@@ -1,48 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Oct 2020 15:21:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libminiupnpc: bump to version
- 2.1.20201016
-Message-ID: <20201017132123.3182408-1-fontaine.fabrice@gmail.com>
+Date: Sat, 17 Oct 2020 15:46:23 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/opencv3: fix build with atomic
+Message-ID: <20201017134623.3457333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update indentation in hash file (two spaces)
-- Update LICENSE hash (update in year:
-  https://github.com/miniupnp/miniupnp/commit/922372bff32612adfc11cd0f20638820a9b124f1)
+Restore the atomic workaround that was wrongly removed when bumping to
+version 3.4.9 in commit f6fb2cae0691d25b034b12a16261ee26096db7d1 as it
+seems that opencv3 still needs help to detect atomic library
 
-http://miniupnp.free.fr/files/changelog.php?file=miniupnpc-2.1.20201016.tar.gz
+Fixes:
+ - http://autobuild.buildroot.org/results/9162b29725f8d9b891eb74fcb8078f211140a841
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libminiupnpc/libminiupnpc.hash | 4 ++--
- package/libminiupnpc/libminiupnpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Restore workaround instead of setting -DHAVE_CXX_ATOMICS_WITHOUT_LIB
 
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-index 556d8cc45a..758ea29f59 100644
---- a/package/libminiupnpc/libminiupnpc.hash
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 e19fb5e01ea5a707e2a8cb96f537fbd9f3a913d53d804a3265e3aeab3d2064c6  miniupnpc-2.1.tar.gz
--sha256 e2df21b3d4b1a84a0ac31d808a3ff330fdf3602e0839a526d3df2fcfba287ac4  LICENSE
-+sha256  69f72fe355f911b807915f78dcfc0af772c0f22bc7ab1157e70f334e37db7d39  miniupnpc-2.1.20201016.tar.gz
-+sha256  0b476c395af6dd21eeb54c40a21d22e1c11a751fbd2dd17a41ce26e370be88d5  LICENSE
-diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-index 5a4c8fc693..50b3c6604c 100644
---- a/package/libminiupnpc/libminiupnpc.mk
-+++ b/package/libminiupnpc/libminiupnpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/opencv3/opencv3.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index de89aebca4..648cc66af3 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -13,6 +13,11 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
  
--LIBMINIUPNPC_VERSION = 2.1
-+LIBMINIUPNPC_VERSION = 2.1.20201016
- LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
- LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
- LIBMINIUPNPC_INSTALL_STAGING = YES
+ OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++OPENCV3_CXXFLAGS += -latomic
++endif
++
+ # Fix c++11 build with missing std::exception_ptr
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
 -- 
 2.28.0
