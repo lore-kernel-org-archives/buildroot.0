@@ -1,13 +1,16 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 17 Oct 2020 11:18:48 -0400
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add rpi settings
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Oct 2020 18:13:25 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: add rpi settings
  files
-Message-ID: <20201017151848.1283394-1-fhunleth@troodon-software.com>
+Message-ID: <20201017160908.DEF3F81544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f76cbc2d48751a89116cc9f44c7643995bb0dc29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The brcmfmac drivers now load settings files for BCM434xx devices and
 fail if they're missing on the Raspberry Pi:
@@ -18,6 +21,7 @@ This commit copies the missing settings files over to the firmware
 directory with the other files.
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/linux-firmware/linux-firmware.mk | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
@@ -38,5 +42,3 @@ index 8a44129102..e2a6ebcbf1 100644
  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
  endif
  
--- 
-2.25.1
