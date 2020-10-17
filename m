@@ -1,13 +1,15 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Oct 2020 15:12:40 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/gstreamer1/gst1-libav: fix license
-Message-ID: <20201017131240.3070362-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Oct 2020 15:19:59 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-libav: fix license
+Message-ID: <20201017130926.0A2E183654@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=be38e70073669760c46adff2b679dfb3ffadcbde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Commit 15dc48ca9becafec6ba11b08af18453bc0e40c9e forgot to change
 the license which is LGPL-2.0+ since version 1.17.1 and
@@ -21,10 +23,8 @@ Fixes:
  - http://autobuild.buildroot.org/results/848d7c49a01f719397cb2e8a8f8e3bd73bd03df4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2 (after review od Yann E. Morin):
- - Set license to LGPL-2.0+ instead of LGPL-2.1+
-
  package/gstreamer1/gst1-libav/gst1-libav.hash | 2 +-
  package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
@@ -51,5 +51,3 @@ index 3fd23b8185..533e13baac 100644
  GST1_LIBAV_LICENSE_FILES = COPYING
  GST1_LIBAV_DEPENDENCIES =  host-pkgconf ffmpeg gstreamer1 gst1-plugins-base
  GST1_LIBAV_CONF_OPTS = -Ddoc=disabled
--- 
-2.28.0
