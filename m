@@ -1,45 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Oct 2020 14:44:05 +0200
-Subject: [Buildroot] [git commit] support/scripts/apply-patches.sh: manage
- uncompression
-Message-ID: <20201017123235.869E482B7C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 Oct 2020 12:45:00 +0000
+Subject: [Buildroot] [Bug 11931] Bugs in support/scripts/apply-patches.sh
+In-Reply-To: <bug-11931-163@https.bugs.busybox.net/>
+References: <bug-11931-163@https.bugs.busybox.net/>
+Message-ID: <bug-11931-163-8XGIYCEt27@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35c3a1e6937dc08157075027bf6219157510b2f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11931
 
-Extract from bug report:
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-"Code line 120 to line 128 is to check whether the patch containing
-"rename from" and "rename to". But it directly use grep to find,
-ignoring the patch may be a tar file or else. It can only work on patch
-of textfile form."
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=11931
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=35c3a1e6937dc08157075027bf6219157510b2f9.
+Thanks!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/apply-patches.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 2d39d63da1..9fb488c570 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -113,8 +113,8 @@ function apply_patch {
-         echo "  to be applied  : ${path}/${patch}"
-         exit 1
-     fi
--    if grep -q "^rename from" ${path}/${patch} && \
--       grep -q "^rename to" ${path}/${patch} ; then
-+    if ${uncomp} "${path}/$patch" | grep -q "^rename from" && \
-+       ${uncomp} "${path}/$patch" | grep -q "^rename to" ; then
-         echo "Error: patch contains some renames, not supported by old patch versions"
-         exit 1
-     fi
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
