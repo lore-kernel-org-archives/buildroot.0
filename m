@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2020 23:46:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mksh: fix legal-info
-In-Reply-To: <20201017181628.3462312-1-fontaine.fabrice@gmail.com>
-References: <20201017181628.3462312-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201017214617.GT3466@scaer>
+Date: Sat, 17 Oct 2020 23:52:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/transmission: fix build with UTP
+In-Reply-To: <20201017192651.3739425-1-fontaine.fabrice@gmail.com>
+References: <20201017192651.3739425-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201017215231.GU3466@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,55 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-10-17 20:16 +0200, Fabrice Fontaine spake thusly:
-> Commit b6b5981f704ff1196f44835c18c245d5e964b2ab forgot to update hash
-> of mksh.1 which is used as the license file
+On 2020-10-17 21:26 +0200, Fabrice Fontaine spake thusly:
+> Update first patch to fix build of transmission 3.00 with UTP
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bbfb61cf911fb29dcc02626f6eb47fff9e5e64f5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/transmission/0001-fix-utypes.patch | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/transmission/0001-fix-utypes.patch b/package/transmission/0001-fix-utypes.patch
+> index 96403a6c36..e0bc633bd4 100644
+> --- a/package/transmission/0001-fix-utypes.patch
+> +++ b/package/transmission/0001-fix-utypes.patch
+> @@ -6,10 +6,13 @@ The corresponding upstream bug report (unfixed) can be found here:
+>  https://trac.transmissionbt.com/ticket/5232
+>  
+>  Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+> +[Fabrice: remove HAVE_STDBOOL_H as it is never defined since
+> +https://github.com/transmission/transmission/commit/f27596238d37f14477cc474c62c52eb53c4dcea6]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  
+>  --- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
+>  +++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
+> -@@ -35,8 +35,15 @@
+> +@@ -35,8 +35,11 @@
+>   typedef const char * cstr;
+>   typedef char * str;
+>   
+> @@ -20,11 +23,7 @@ Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+>  +//typedef uint8 bool;
+>  +//#endif
+>  +#ifndef __cplusplus
+> -+#ifdef HAVE_STDBOOL_H
+>  +#include <stdbool.h>
+> -+#else
+> -+typedef uint8 bool;
+> -+#endif
 
-Has the license changed, of is it just the manual side of the man-page
-that has changed?
+If HAVE_STDBOOL_H is never defined, then presumably we always take the
+else clause path, no?
 
 Regards,
 Yann E. MORIN.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1291917e4b17e087455a6698c4b82e4ff783600d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mksh/mksh.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
-> index 61a3acdc12..7fc34fa3e3 100644
-> --- a/package/mksh/mksh.hash
-> +++ b/package/mksh/mksh.hash
-> @@ -1,4 +1,4 @@
->  # From http://www.mirbsd.org/mksh.htm#build
->  sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
->  # Locally computed
-> -sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
-> +sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
+>  +#endif
+>   
+>   #endif //__UTYPES_H__
 > -- 
 > 2.28.0
 > 
