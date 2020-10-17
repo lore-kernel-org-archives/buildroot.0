@@ -1,94 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2020 23:59:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: drop second patch
-In-Reply-To: <20201017194639.3919479-1-fontaine.fabrice@gmail.com>
-References: <20201017194639.3919479-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201017215901.GW3466@scaer>
+From: Norbert Lange <nolange79@gmail.com>
+Date: Sun, 18 Oct 2020 00:17:40 +0200
+Subject: [Buildroot] [PATCH v2 1/4] package/Makefile.in: use gcc wrappers
+ for binutils tools
+Message-ID: <20201017221743.160029-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This will use gcc-ar, gcc-nm and gcc-ranlib instead of the
+normal binutils tools. The difference is that with the
+wrappers, gcc plugins will be automatically picked up.
 
-On 2020-10-17 21:46 +0200, Fabrice Fontaine spake thusly:
-> transmission in version 3.00 is building fine on musl and upstream
-> thinks that this patch is not needed anymore:
-> https://github.com/transmission/transmission/pull/1156
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+gcc 4.7 introduced these wrappers, to detect the prefix and
+keep gcc specifics out of Makefile.in, a new variable
+BR2_TOOLCHAIN_BUTILS_PREFIX will be used to carry the
+prefix on supported versions.
 
-Applied to master, thanks.
+Note that binutils added some automatic loading with the
+'bfd-plugins' directory (somewhere around 2.28), but
+the first implementation had issues, and generally depends on
+correctly setup symlinks (often broken, may point to some
+other gcc's library). The wrappers always work painless.
 
-Regards,
-Yann E. MORIN.
+The original motivation (now ~2 years in use) was to add
+"-flto -ffat-lto-objects" to both BR2_TARGET_OPTIMIZATION and
+BR2_TARGET_LDFLAGS, and have target binaries lto optimized.
 
-> ---
->  ...clude.patch => 0002-fix-utp-include.patch} |  0
->  .../0002-musl-missing-header.patch            | 36 -------------------
->  2 files changed, 36 deletions(-)
->  rename package/transmission/{0003-fix-utp-include.patch => 0002-fix-utp-include.patch} (100%)
->  delete mode 100644 package/transmission/0002-musl-missing-header.patch
-> 
-> diff --git a/package/transmission/0003-fix-utp-include.patch b/package/transmission/0002-fix-utp-include.patch
-> similarity index 100%
-> rename from package/transmission/0003-fix-utp-include.patch
-> rename to package/transmission/0002-fix-utp-include.patch
-> diff --git a/package/transmission/0002-musl-missing-header.patch b/package/transmission/0002-musl-missing-header.patch
-> deleted file mode 100644
-> index ebb74cbffb..0000000000
-> --- a/package/transmission/0002-musl-missing-header.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -Fix musl build
-> -
-> -Downloaded from
-> -https://cgit.gentoo.org/proj/musl.git/tree/net-p2p/transmission/files/transmission-2.84-musl-missing-header.patch
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -
-> -
-> -libtransmission/transmission.h: add missing <sys/types.h>
-> -
-> -transmission.h and several files including it, like bitfield.c and fdlimits.h
-> -make reference to ssize_t, off_t and other types defined in <sys/types.h> but
-> -never include the header.  By including <sys/types.h> in transmission.h, the
-> -required type definitions are propagated to all files that need them.
-> -
-> -Not including <sys/types.h> on glibc and uClibc systems does not pose a problem
-> -because of the way the headers stack in those C Standard Libraries, but on musl
-> -excluding <sys/types.h> leads to compile time failure.
-> -
-> -For the POSIX specs, see
-> -
-> -http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
-> -
-> -Signed-of-by: Anthony G. Basile <blueness@gentoo.org>
-> -
-> -diff -Naur transmission-2.84.orig/libtransmission/transmission.h transmission-2.84/libtransmission/transmission.h
-> ---- transmission-2.84.orig/libtransmission/transmission.h	2014-07-01 13:09:01.682910744 -0400
-> -+++ transmission-2.84/libtransmission/transmission.h	2015-07-19 03:11:07.379219181 -0400
-> -@@ -28,6 +28,7 @@
-> - 
-> - #include <inttypes.h> /* uintN_t */
-> - #include <time.h> /* time_t */
-> -+#include <sys/types.h>
-> - 
-> - #ifdef WIN32
-> -  #define __USE_MINGW_ANSI_STDIO 1
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Not all packages will compile with this option, further work
+could white/blacklist packages (adding -fno-lto to the
+options).
 
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+v1->v2:
+*   support older gcc versions missing those wrappers
+---
+ package/Makefile.in | 6 +++---
+ toolchain/Config.in | 7 +++++++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 51f5cbce4f..665edec539 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -198,15 +198,15 @@ TARGET_CROSS = $(HOST_DIR)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
+ endif
+ 
+ # Define TARGET_xx variables for all common binutils/gcc
+-TARGET_AR       = $(TARGET_CROSS)ar
++TARGET_AR       = $(TARGET_CROSS)$(call qstrip,$(BR2_TOOLCHAIN_BUTILS_PREFIX))ar
+ TARGET_AS       = $(TARGET_CROSS)as
+ TARGET_CC       = $(TARGET_CROSS)gcc
+ TARGET_CPP      = $(TARGET_CROSS)cpp
+ TARGET_CXX      = $(TARGET_CROSS)g++
+ TARGET_FC       = $(TARGET_CROSS)gfortran
+ TARGET_LD       = $(TARGET_CROSS)ld
+-TARGET_NM       = $(TARGET_CROSS)nm
+-TARGET_RANLIB   = $(TARGET_CROSS)ranlib
++TARGET_NM       = $(TARGET_CROSS)$(call qstrip,$(BR2_TOOLCHAIN_BUTILS_PREFIX))nm
++TARGET_RANLIB   = $(TARGET_CROSS)$(call qstrip,$(BR2_TOOLCHAIN_BUTILS_PREFIX))ranlib
+ TARGET_READELF  = $(TARGET_CROSS)readelf
+ TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index db2ab0f059..7a2becc09a 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -732,4 +732,11 @@ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+ 	bool
+ 	default y if BR2_i386 || BR2_x86_64
+ 
++# gcc ships with wrappers that will automatically pass arguments
++# to the binutils tools.
++# So far, those are paths to necessary linker plugins
++config BR2_TOOLCHAIN_BUTILS_PREFIX
++	string
++	default "gcc-" if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++
+ endmenu
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
