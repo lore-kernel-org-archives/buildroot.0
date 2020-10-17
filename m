@@ -1,89 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 Oct 2020 19:00:06 +0200
-Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: use gcc wrappers
- for binutils tools
-In-Reply-To: <20201014194002.9753-1-nolange79@gmail.com>
-References: <20201014194002.9753-1-nolange79@gmail.com>
-Message-ID: <20201017170006.GS3466@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 17 Oct 2020 20:16:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mksh: fix legal-info
+Message-ID: <20201017181628.3462312-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Norbert, All,
+Commit b6b5981f704ff1196f44835c18c245d5e964b2ab forgot to update hash
+of mksh.1 which is used as the license file
 
-On 2020-10-14 21:39 +0200, Norbert Lange spake thusly:
-> This will use gcc-ar, gcc-nm and gcc-ranlib instead of the
-> normal binutils tools. The difference is that with the
-> wrappers, gcc plugins will be automatically picked up.
-> 
-> I dont think there are any toolchains still supported that
-> lack those wrappers, so it should be safe to use
-> unconditionally. Otherwise an option needs to be added.
+Fixes:
+ - http://autobuild.buildroot.org/results/1291917e4b17e087455a6698c4b82e4ff783600d
 
-When were they added? We are supposed to still support building with at
-least back to gcc-4.3:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mksh/mksh.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    https://git.buildroot.org/buildroot/tree/toolchain/Config.in#n557
-
-Regards,
-Yann E. MORIN.
-
-> Note that binutils added some automatic loading with the
-> 'bfd-plugins' directory (somewhere around 2.28), but
-> the first implementation had issues, and generally depends on
-> correctly setup symlinks (often broken, may point to some
-> other gcc's library). The wrappers always work painless.
-> 
-> The original motivation (now ~2 years in use) was to add
-> "-flto -ffat-lto-objects" to both BR2_TARGET_OPTIMIZATION and
-> BR2_TARGET_LDFLAGS, and have target binaries lto optimized.
-> 
-> Not all packages will compile with this option, further work
-> could white/blacklist packages (adding -fno-lto to the
-> options).
-> 
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/Makefile.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 51f5cbce4f..a03f0304d5 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -198,15 +198,15 @@ TARGET_CROSS = $(HOST_DIR)/bin/$(TOOLCHAIN_EXTERNAL_PREFIX)-
->  endif
->  
->  # Define TARGET_xx variables for all common binutils/gcc
-> -TARGET_AR       = $(TARGET_CROSS)ar
-> +TARGET_AR       = $(TARGET_CROSS)gcc-ar
->  TARGET_AS       = $(TARGET_CROSS)as
->  TARGET_CC       = $(TARGET_CROSS)gcc
->  TARGET_CPP      = $(TARGET_CROSS)cpp
->  TARGET_CXX      = $(TARGET_CROSS)g++
->  TARGET_FC       = $(TARGET_CROSS)gfortran
->  TARGET_LD       = $(TARGET_CROSS)ld
-> -TARGET_NM       = $(TARGET_CROSS)nm
-> -TARGET_RANLIB   = $(TARGET_CROSS)ranlib
-> +TARGET_NM       = $(TARGET_CROSS)gcc-nm
-> +TARGET_RANLIB   = $(TARGET_CROSS)gcc-ranlib
->  TARGET_READELF  = $(TARGET_CROSS)readelf
->  TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
->  TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 61a3acdc12..7fc34fa3e3 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+ sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
+ # Locally computed
+-sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
++sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
