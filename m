@@ -1,29 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Oct 2020 12:45:00 +0000
-Subject: [Buildroot] [Bug 11931] Bugs in support/scripts/apply-patches.sh
-In-Reply-To: <bug-11931-163@https.bugs.busybox.net/>
-References: <bug-11931-163@https.bugs.busybox.net/>
-Message-ID: <bug-11931-163-8XGIYCEt27@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 17 Oct 2020 14:45:17 +0200
+Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh:
+ manage uncompression
+In-Reply-To: <20200520193045.92597-1-fontaine.fabrice@gmail.com>
+References: <20200520193045.92597-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201017144517.7a0560c0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11931
+On Wed, 20 May 2020 21:30:45 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
+> Extract from bug report:
+> 
+> "Code line 120 to line 128 is to check whether the patch containing
+> "rename from" and "rename to". But it directly use grep to find,
+> ignoring the patch may be a tar file or else. It can only work on patch
+> of textfile form."
+> 
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=11931
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  support/scripts/apply-patches.sh | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |FIXED
+Applied to master, thanks.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=35c3a1e6937dc08157075027bf6219157510b2f9.
-Thanks!
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
