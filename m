@@ -1,13 +1,16 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 17 Oct 2020 12:17:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-devtools: install
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 Oct 2020 14:06:30 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-devtools: install
  to staging
-Message-ID: <20201017101703.3044360-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201017115816.41C41834E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8b19d4d8168319c730a36f102f0ee8615af28fce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This will fix the following build failure with
 gstreamer1-editing-services which optionally depends on gst1-devtools
@@ -22,6 +25,7 @@ Fixes:
  - http://autobuild.buildroot.org/results/e9d96a63861737d82734559db5e5ffbf5996ffde
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/gstreamer1/gst1-devtools/gst1-devtools.mk | 1 +
  1 file changed, 1 insertion(+)
@@ -38,5 +42,3 @@ index 23b4d5ab8f..c88d4c0378 100644
  
  GST1_DEVTOOLS_DEPENDENCIES = \
  	gstreamer1 \
--- 
-2.28.0
