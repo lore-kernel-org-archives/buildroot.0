@@ -1,38 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 17 Oct 2020 14:45:17 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts/apply-patches.sh:
- manage uncompression
-In-Reply-To: <20200520193045.92597-1-fontaine.fabrice@gmail.com>
-References: <20200520193045.92597-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201017144517.7a0560c0@windsurf>
+Date: Sat, 17 Oct 2020 14:50:54 +0200
+Subject: [Buildroot] [git commit] package/samba4: fix uclibc build with
+ openldap
+Message-ID: <20201017123944.2B328826D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 May 2020 21:30:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=990c7bfd463d4bbc602c0172692e71928a73c7ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Extract from bug report:
-> 
-> "Code line 120 to line 128 is to check whether the patch containing
-> "rename from" and "rename to". But it directly use grep to find,
-> ignoring the patch may be a tar file or else. It can only work on patch
-> of textfile form."
-> 
-> Fixes:
->  - https://bugs.buildroot.org/show_bug.cgi?id=11931
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  support/scripts/apply-patches.sh | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ge_test.c-include-stdint.h-before-cmoka.h.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+new file mode 100644
+index 0000000000..e63f43c290
+--- /dev/null
++++ b/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+@@ -0,0 +1,40 @@
++From b2ea5dc3639d68b878c6534f4992da446dbbf2d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 May 2020 18:15:38 +0200
++Subject: [PATCH] ldap_message_test.c: include stdint.h before cmoka.h
++
++This fix the following build failure on uclibc:
++
++In file included from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/include/stdint.h:9:0,
++                 from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/inttypes.h:27,
++                 from ../../lib/replace/../replace/replace.h:64,
++                 from ../../source4/include/includes.h:23,
++                 from ../../libcli/ldap/tests/ldap_message_test.c:41:
++/home/giuliobenetti/autobuild/run/instance-1/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/stdint.h:122:27: error: conflicting types for 'uintptr_t'
++ typedef unsigned long int uintptr_t;
++                           ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ libcli/ldap/tests/ldap_message_test.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libcli/ldap/tests/ldap_message_test.c b/libcli/ldap/tests/ldap_message_test.c
++index c5aacd4bc6b..51331e5c600 100644
++--- a/libcli/ldap/tests/ldap_message_test.c
+++++ b/libcli/ldap/tests/ldap_message_test.c
++@@ -34,6 +34,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
++-- 
++2.26.2
++
