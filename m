@@ -1,124 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Oct 2020 21:50:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: drop second patch
-In-Reply-To: <20201018164057.GA3466@scaer>
-References: <20201017194639.3919479-1-fontaine.fabrice@gmail.com>
- <20201018164057.GA3466@scaer>
-Message-ID: <20201018195033.GF3466@scaer>
+Date: Sun, 18 Oct 2020 22:17:30 +0200
+Subject: [Buildroot] [git commit]
+ package/gstreamer1/gstreamer1-editing-services: fix static build
+Message-ID: <20201018201106.22BCC83F99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b22d55dcc94468895f1509f958326853ef233099
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-10-18 18:40 +0200, Yann E. MORIN spake thusly:
-> Fabrice, All,
-> 
-> On 2020-10-17 21:46 +0200, Fabrice Fontaine spake thusly:
-> > transmission in version 3.00 is building fine on musl and upstream
-> > thinks that this patch is not needed anymore:
-> > https://github.com/transmission/transmission/pull/1156
-> > 
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> Applied to master, after expanding about the reason this is now correct.
-> 
-> I also updated the patch to jsut drop the code instead of commenting it
-> out, and by restoring CR/LF line endings as used by upstream.
+Fix static build with gstreamer1-editing-services in version 1.17.1 and
+above
 
-I mistakenly replied to this thread, when I wanting to reply to the
-patch titled "package/transmission: fix build with UTP", which is thus
-applied to master, thanks!
+Fixes:
+ - http://autobuild.buildroot.org/results/2a528a1185644f5b23d26eb3f2b342e99aa1e493
 
-Sorry for the confusion.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0001-utils.c-fix-static-build.patch            | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> Thanks!
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > ---
-> >  ...clude.patch => 0002-fix-utp-include.patch} |  0
-> >  .../0002-musl-missing-header.patch            | 36 -------------------
-> >  2 files changed, 36 deletions(-)
-> >  rename package/transmission/{0003-fix-utp-include.patch => 0002-fix-utp-include.patch} (100%)
-> >  delete mode 100644 package/transmission/0002-musl-missing-header.patch
-> > 
-> > diff --git a/package/transmission/0003-fix-utp-include.patch b/package/transmission/0002-fix-utp-include.patch
-> > similarity index 100%
-> > rename from package/transmission/0003-fix-utp-include.patch
-> > rename to package/transmission/0002-fix-utp-include.patch
-> > diff --git a/package/transmission/0002-musl-missing-header.patch b/package/transmission/0002-musl-missing-header.patch
-> > deleted file mode 100644
-> > index ebb74cbffb..0000000000
-> > --- a/package/transmission/0002-musl-missing-header.patch
-> > +++ /dev/null
-> > @@ -1,36 +0,0 @@
-> > -Fix musl build
-> > -
-> > -Downloaded from
-> > -https://cgit.gentoo.org/proj/musl.git/tree/net-p2p/transmission/files/transmission-2.84-musl-missing-header.patch
-> > -
-> > -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > -
-> > -
-> > -libtransmission/transmission.h: add missing <sys/types.h>
-> > -
-> > -transmission.h and several files including it, like bitfield.c and fdlimits.h
-> > -make reference to ssize_t, off_t and other types defined in <sys/types.h> but
-> > -never include the header.  By including <sys/types.h> in transmission.h, the
-> > -required type definitions are propagated to all files that need them.
-> > -
-> > -Not including <sys/types.h> on glibc and uClibc systems does not pose a problem
-> > -because of the way the headers stack in those C Standard Libraries, but on musl
-> > -excluding <sys/types.h> leads to compile time failure.
-> > -
-> > -For the POSIX specs, see
-> > -
-> > -http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
-> > -
-> > -Signed-of-by: Anthony G. Basile <blueness@gentoo.org>
-> > -
-> > -diff -Naur transmission-2.84.orig/libtransmission/transmission.h transmission-2.84/libtransmission/transmission.h
-> > ---- transmission-2.84.orig/libtransmission/transmission.h	2014-07-01 13:09:01.682910744 -0400
-> > -+++ transmission-2.84/libtransmission/transmission.h	2015-07-19 03:11:07.379219181 -0400
-> > -@@ -28,6 +28,7 @@
-> > - 
-> > - #include <inttypes.h> /* uintN_t */
-> > - #include <time.h> /* time_t */
-> > -+#include <sys/types.h>
-> > - 
-> > - #ifdef WIN32
-> > -  #define __USE_MINGW_ANSI_STDIO 1
-> > -- 
-> > 2.28.0
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-utils.c-fix-static-build.patch b/package/gstreamer1/gstreamer1-editing-services/0001-utils.c-fix-static-build.patch
+new file mode 100644
+index 0000000000..8b60299ce3
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1-editing-services/0001-utils.c-fix-static-build.patch
+@@ -0,0 +1,74 @@
++From 248290c5c49b25b72b40017857c6118c51ef614e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 18 Oct 2020 16:08:36 +0200
++Subject: [PATCH] utils.c: fix static build
++
++Static build fails since version 1.17.1 and
++https://gitlab.freedesktop.org/gstreamer/gst-editing-services/-/commit/1e488d4311420b5ca193155ad8ab05509c9a4a37
++on:
++
++FAILED: tools/ges-launch-1.0
++/srv/storage/autobuild/run/instance-2/output-1/host/bin/arm-linux-gcc  -o tools/ges-launch-1.0 tools/ges-launch-1.0.p/ges-validate.c.o tools/ges-launch-1.0.p/ges-launch.c.o tools/ges-launch-1.0.p/ges-launcher.c.o tools/ges-launch-1.0.p/utils.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1 -Wl,-Bsymbolic-functions -static -Wl,--start-group ges/libges-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgobject-2.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libglib-2.0.a -pthread /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libpcre.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libffi.a /srv/storage/autobuild/run/instance-2/output
+ -1/host/
+ arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgmodule-2.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstbase-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstvideo-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstpbutils-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstaudio-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libz.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgsttag-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstcontroller-1.0.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sys
+ root/usr
+ /lib/libgio-2.0.a /srv/storage/autobuild/run/instance
+-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmount.a /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libblkid.a -lm -Wl,--end-group
++/srv/storage/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /srv/storage/autobuild/run/instance-2/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(err.os): in function `warn':
++err.c:(.text+0x1d8): multiple definition of `warn'; tools/ges-launch-1.0.p/utils.c.o:utils.c:(.text+0x9bc): first defined here
++
++So rename warn function to gst_warn
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2a528a1185644f5b23d26eb3f2b342e99aa1e493
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/gstreamer/gst-editing-services/-/merge_requests/216]
++---
++ tools/ges-launcher.c | 2 +-
++ tools/utils.c        | 2 +-
++ tools/utils.h        | 4 ++--
++ 3 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/tools/ges-launcher.c b/tools/ges-launcher.c
++index ad2921cc..9eb1f615 100644
++--- a/tools/ges-launcher.c
+++++ b/tools/ges-launcher.c
++@@ -261,7 +261,7 @@ _set_rendering_details (GESLauncher * self)
++       }
++ 
++       if (!prof) {
++-        warn ("No format specified and couldn't find one from output file extension, " "falling back to theora+vorbis in ogg.");
+++        gst_warn ("No format specified and couldn't find one from output file extension, " "falling back to theora+vorbis in ogg.");
++         g_free (opts->format);
++ 
++         opts->format =
++diff --git a/tools/utils.c b/tools/utils.c
++index 7ad64522..fe79f0a1 100644
++--- a/tools/utils.c
+++++ b/tools/utils.c
++@@ -222,7 +222,7 @@ ok (const gchar * format, ...)
++ }
++ 
++ void
++-warn (const gchar * format, ...)
+++gst_warn (const gchar * format, ...)
++ {
++   va_list var_args;
++ 
++diff --git a/tools/utils.h b/tools/utils.h
++index ac18ab5a..e2f0ac67 100644
++--- a/tools/utils.h
+++++ b/tools/utils.h
++@@ -29,9 +29,9 @@ void print_enum (GType enum_type);
++ 
++ void print (GstDebugColorFlags c, gboolean err, gboolean nline, const gchar * format, va_list var_args);
++ void ok (const gchar * format, ...);
++-void warn (const gchar * format, ...);
+++void gst_warn (const gchar * format, ...);
++ void printerr (const gchar * format, ...);
++ 
++ gchar * get_file_extension (gchar * uri);
++ void describe_encoding_profile (GstEncodingProfile *profile);
++-void print_timeline(GESTimeline *timeline);
++\ No newline at end of file
+++void print_timeline(GESTimeline *timeline);
++-- 
++2.28.0
++
