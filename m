@@ -1,64 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Oct 2020 10:36:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mksh: fix legal-info
-In-Reply-To: <20201017214617.GT3466@scaer>
-References: <20201017181628.3462312-1-fontaine.fabrice@gmail.com>
- <20201017214617.GT3466@scaer>
-Message-ID: <CAPi7W822dqaptimVwLvtDcMmmMUcqdk0q26LGE1SEfZgwp36PA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 18 Oct 2020 12:25:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
+ 18.1.21
+Message-ID: <20201018102501.685536-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le sam. 17 oct. 2020 ? 23:46, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->
-> Fabrice, All,
->
-> On 2020-10-17 20:16 +0200, Fabrice Fontaine spake thusly:
-> > Commit b6b5981f704ff1196f44835c18c245d5e964b2ab forgot to update hash
-> > of mksh.1 which is used as the license file
->
-> Has the license changed, of is it just the manual side of the man-page
-> that has changed?
-There is no change in the license part of mksh.1.
->
-> Regards,
-> Yann E. MORIN.
->
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/1291917e4b17e087455a6698c4b82e4ff783600d
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/mksh/mksh.hash | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
-> > index 61a3acdc12..7fc34fa3e3 100644
-> > --- a/package/mksh/mksh.hash
-> > +++ b/package/mksh/mksh.hash
-> > @@ -1,4 +1,4 @@
-> >  # From http://www.mirbsd.org/mksh.htm#build
-> >  sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
-> >  # Locally computed
-> > -sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
-> > +sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
-> > --
-> > 2.28.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-Best Regards,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fabrice
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 5e1454eff6..13201a4292 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  36dedc8bc6b95aa6036d0e5aa94d90f7d965f57325cc858ad6bcc401f371d3ed  kodi-pvr-zattoo-18.1.19-Leia.tar.gz
++sha256  19de7bc58bcf37bbcff5ad2cb2f095cb15a4217f9abec5c9ff30d0489dab89d2  kodi-pvr-zattoo-18.1.21-Leia.tar.gz
+ sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 3644751034..66aff690ff 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 18.1.19-Leia
++KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+-- 
+2.27.0
