@@ -1,62 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Oct 2020 15:46:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libapparmor: fix build with musl
-Message-ID: <20201018134647.960413-1-fontaine.fabrice@gmail.com>
+Date: Sun, 18 Oct 2020 15:47:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix typo in
+ OPENCV_WARNINGS_ARE_ERRORS
+Message-ID: <20201018134732.960533-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of apparmor 3.0.0 with musl
-
-Fixes:
- - http://autobuild.buildroot.org/results/ccbee89030308cf1e4bfce89635d40676c7c63a0
+OPENCV3_WARNINGS_ARE_ERRORS option does not exist so rename it to
+OPENCV_WARNINGS_ARE_ERRORS (even if it is already disabled by default)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-aa_status-Fix-build-issue-with-musl.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
+ package/opencv3/opencv3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
-new file mode 100644
-index 0000000000..83981bfecc
---- /dev/null
-+++ b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
-@@ -0,0 +1,33 @@
-+From a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8 Mon Sep 17 00:00:00 2001
-+From: Armin Kuster <akuster808@gmail.com>
-+Date: Wed, 7 Oct 2020 08:27:11 -0700
-+Subject: [PATCH] aa_status: Fix build issue with musl
-+
-+add limits.h
-+
-+aa_status.c:269:22: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
-+|   269 |    real_exe = calloc(PATH_MAX + 1, sizeof(char));
-+
-+Signed-off-by: Armin Kuster <akuster808@gmail.com>
-+[Retrieved from:
-+https://gitlab.com/apparmor/apparmor/-/commit/a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ binutils/aa_status.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/binutils/aa_status.c b/binutils/aa_status.c
-+index 78b034090..41f1954e9 100644
-+--- a/binutils/aa_status.c
-++++ b/binutils/aa_status.c
-+@@ -10,6 +10,7 @@
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-++#include <limits.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/wait.h>
-+-- 
-+GitLab
-+
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 648cc66af3..c67387e114 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -53,7 +53,7 @@ OPENCV3_CONF_OPTS += \
+ 	-DENABLE_OMIT_FRAME_POINTER=ON \
+ 	-DENABLE_PRECOMPILED_HEADERS=OFF \
+ 	-DENABLE_PROFILING=OFF \
+-	-DOPENCV3_WARNINGS_ARE_ERRORS=OFF
++	-DOPENCV_WARNINGS_ARE_ERRORS=OFF
+ 
+ # OpenCV link options
+ OPENCV3_CONF_OPTS += \
 -- 
 2.28.0
