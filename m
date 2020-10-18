@@ -1,117 +1,89 @@
 From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Sun, 18 Oct 2020 05:52:03 +0000
-Subject: [Buildroot] [PATCH v4 1/1] package/opensc: new package
-Message-ID: <GkJQCRWtnp7kZ0u2IG0LIeJIfuoGEqihwDaTMTIr39Y3ARLgO23D7JuXmhdVqopcHm8rwqEvrgM_SH8UEgOJHvoglRJHI_D6AQQ-WOjs5So=@protonmail.com>
+Date: Sun, 18 Oct 2020 06:07:43 +0000
+Subject: [Buildroot] [PATCH v3 1/1] package/opensc: new package
+In-Reply-To: <20201015230648.4e448ed8@windsurf>
+References: <vtnyOPUcLKKBUVjtW_D5JrRC5N5DfTiqL8Iyiu1KSPxzgvAFbo61ULCtztMd-suIPR7Ab8eYMjQH6-XBjDs3Uxakebo-SY4fQhRhwBQ7u-g=@protonmail.com>
+ <20201015230648.4e448ed8@windsurf>
+Message-ID: <cZtbqtroxqzEMrmXsCXKxAlA2dcXVyMMF6rIxM-YkbHCfOVsq1WM332QLnzzqpnaxLkMIGe-5QScBkvUvc-lsgd9GMIRZ5q8yjqXmP-GY4s=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Open source smart card tools and middleware.
-OpenSC provides a set of libraries and utilities to work with smart cards. Its
-main focus is on cards that support cryptographic operations, and facilitate
-their use in security applications such as authentication, mail encryption and
-digital signatures. OpenSC implements the standard APIs to smart cards, e.g.
-PKCS#11 API, Windows? Smart Card Minidriver and macOS CryptoTokenKit.
+Fixed in v4 for this patch.
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/opensc/Config.in   | 23 +++++++++++++++++++++++
- package/opensc/opensc.hash |  3 +++
- package/opensc/opensc.mk   | 18 ++++++++++++++++++
- 5 files changed, 46 insertions(+)
- create mode 100644 package/opensc/Config.in
- create mode 100644 package/opensc/opensc.hash
- create mode 100644 package/opensc/opensc.mk
+In general, can you publish/refer to a minimal defconfigs for testing?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b245c1cd7e..3e131eec04 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2711,6 +2711,7 @@ F:	package/fwup/
+Thanks,
+Yair
 
- N:	Yair Ben Avraham <yairba@protonmail.com>
- F:	package/gloox/
-+F:	package/opensc/
+??????? Original Message ???????
+On Thursday, October 15, 2020 11:06 PM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
- F:	board/friendlyarm/nanopi-neo/
-diff --git a/package/Config.in b/package/Config.in
-index 504cfec98e..d65fd54c37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1352,6 +1352,7 @@ menu "Crypto"
- 	source "package/libuecc/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
-+	source "package/opensc/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/pkcs11-helper/Config.in"
- 	source "package/rhash/Config.in"
-diff --git a/package/opensc/Config.in b/package/opensc/Config.in
-new file mode 100644
-index 0000000000..973c50caec
---- /dev/null
-+++ b/package/opensc/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_OPENSC
-+	bool "opensc"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pcsc-lite, libusb
-+	depends on BR2_USE_MMU # pcsc-lite
-+	depends on BR2_USE_WCHAR # wprintf
-+	depends on !BR2_STATIC_LIBS # pcsc-lite
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_PCSC_LITE
-+	help
-+	  Open source smart card tools and middleware.
-+	  OpenSC provides a set of libraries and utilities to work with smart
-+	  cards. Its main focus is on cards that support cryptographic
-+	  operations, and facilitate their use in security applications such as
-+	  authentication, mail encryption and digital signatures. OpenSC
-+	  implements the standard APIs to smart cards, e.g. PKCS#11 API,
-+	  Windows? Smart Card Minidriver and macOS CryptoTokenKit.
-+
-+	  https://github.com/OpenSC/OpenSC
-+
-+comment "opensc needs a toolchain w/ wchar threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR \
-+		|| BR2_STATIC_LIBS
-diff --git a/package/opensc/opensc.hash b/package/opensc/opensc.hash
-new file mode 100644
-index 0000000000..aceb51e2de
---- /dev/null
-+++ b/package/opensc/opensc.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  bbf4b4f4a44463645c90a525e820a8059b2f742a53b7b944f941de3c97ba4863  opensc-0.20.0.tar.gz
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/opensc/opensc.mk b/package/opensc/opensc.mk
-new file mode 100644
-index 0000000000..a4146a07c8
---- /dev/null
-+++ b/package/opensc/opensc.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# opensc
-+#
-+################################################################################
-+
-+OPENSC_VERSION = 0.20.0
-+OPENSC_SITE = https://github.com/OpenSC/OpenSC/releases/download/$(OPENSC_VERSION)
-+OPENSC_LICENSE = LGPL-2.1+
-+OPENSC_LICENSE_FILES = COPYING
-+OPENSC_INSTALL_STAGING = YES
-+OPENSC_DEPENDENCIES = libusb pcsc-lite
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-+OPENSC_CONF_OPTS += CFLAGS="-Wno-error=maybe-uninitialized"
-+endif
-+
-+$(eval $(autotools-package))
---
-2.20.1
+> Hello,
+>
+> On Thu, 15 Oct 2020 15:01:36 +0000
+> Yair Ben-Avraham via buildroot buildroot at busybox.net wrote:
+>
+> > Open source smart card tools and middleware.
+> > OpenSC provides a set of libraries and utilities to work with smart cards. Its
+> > main focus is on cards that support cryptographic operations, and facilitate
+> > their use in security applications such as authentication, mail encryption and
+> > digital signatures. OpenSC implements the standard APIs to smart cards, e.g.
+> > PKCS#11 API, Windows? Smart Card Minidriver and macOS CryptoTokenKit.
+> > Signed-off-by: Yair Ben-Avraham yairba at protonmail.com
+>
+> I was about to apply, but unfortunately the build fails with the following defconfig:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2020.02.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+>
+> BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+>
+> ====================================================
+>
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+>
+> BR2_PACKAGE_BUSYBOX is not set
+>
+> ===============================
+>
+> BR2_PACKAGE_OPENSC=y
+>
+> BR2_TARGET_ROOTFS_TAR is not set
+>
+> =================================
+>
+> The failure is:
+>
+> pkcs15-asepcos.c: In function ?asepcos_do_store_pin.isra.3?:
+> pkcs15-asepcos.c:307:33: error: ?akn? may be used uninitialized in this function [-Werror=maybe-uninitialized]
+> auth_info->attrs.pin.reference = akn;
+>
+>                                  ^
+>
+>
+> cc1: all warnings being treated as errors
+>
+> Since you're going to send a new iteration for this, could you also
+> make sure to update the DEVELOPERS file in the same patch to add
+> yourself as a maintainer for this package ?
+>
+> Thanks a lot!
+>
+> Thomas
+>
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+>
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
