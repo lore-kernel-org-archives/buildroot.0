@@ -1,101 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 18 Oct 2020 13:11:25 +0200
-Subject: [Buildroot] [PATCH] package/quickjs: new package
-Message-ID: <20201018111125.899134-1-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Oct 2020 13:28:37 +0200
+Subject: [Buildroot] [git commit] package/mksh: fix legal-info
+Message-ID: <20201018112858.8D18383976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in            |  1 +
- package/quickjs/Config.in    |  9 +++++++++
- package/quickjs/quickjs.hash |  2 ++
- package/quickjs/quickjs.mk   | 37 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 package/quickjs/Config.in
- create mode 100644 package/quickjs/quickjs.hash
- create mode 100644 package/quickjs/quickjs.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=7088cca88299fb3eb9f58112b53908eb0ad2fb4e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index d7e79f479..f64b68d38 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1225,6 +1225,7 @@ menu "External python modules"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-+	source "package/quickjs/Config.in"
- 	source "package/ruby/Config.in"
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
-diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-new file mode 100644
-index 000000000..e5675ad14
---- /dev/null
-+++ b/package/quickjs/Config.in
-@@ -0,0 +1,9 @@
-+
-+config BR2_PACKAGE_QUICKJS
-+	bool "quickjs"
-+	help
-+	  QuickJS is a small and embeddable Javascript engine.
-+	  It supports the ES2020 specification including modules,
-+	  asynchronous generators, proxies and BigInt.
-+
-+	  https://bellard.org/quickjs/
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-new file mode 100644
-index 000000000..076e4bddb
---- /dev/null
-+++ b/package/quickjs/quickjs.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0021a3e8cdc6b61e225411d05e2841d2437e1ccf4b4cabb9a5f7685ebfb57717  quickjs-2020-09-06.tar.xz
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-new file mode 100644
-index 000000000..af35dba62
---- /dev/null
-+++ b/package/quickjs/quickjs.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# quickjs
-+#
-+################################################################################
-+
-+QUICKJS_VERSION = 2020-09-06
-+QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
-+QUICKJS_SITE = https://bellard.org/quickjs
-+QUICKJS_LICENSE = MIT
-+QUICKJS_INSTALL_STAGING = YES
-+
-+define QUICKJS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		all
-+endef
-+
-+define QUICKJS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(STAGING_DIR) \
-+		STRIP=true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+define QUICKJS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(TARGET_DIR) \
-+		STRIP=true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.25.1
+Commit b6b5981f704f (package/mksh: update to R59b) forgot to update the
+hash of mksh.1 which is used as the license file. Although the manpage
+has changed to accomodate changes in mksh, the licensing blurb has not
+changed.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1291917e4b17e087455a6698c4b82e4ff783600d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - expand commit log to state the license has not changed
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mksh/mksh.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 61a3acdc12..7fc34fa3e3 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+ sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
+ # Locally computed
+-sha256  4655d87a53a703ead36a52f166f065c23cf58dd02d7b14abd2474f9f49383a16  mksh.1
++sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
