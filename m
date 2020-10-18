@@ -1,66 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 18 Oct 2020 17:02:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: add webp support
-Message-ID: <20201018150211.1299636-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 Oct 2020 18:33:52 +0200
+Subject: [Buildroot] [git commit] package/transmission: fix build with UTP
+Message-ID: <20201018162920.8BB7881F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-webp support is available since version 3.0.0 and
-https://github.com/opencv/opencv/commit/500b7318beee639d8c341e9ea63ac7610ca225f4
+commit: https://git.buildroot.net/buildroot/commit/?id=60d3b4e5c409b9428101a60969066ce08da76b2d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update first patch to fix build of transmission 3.00 with UTP. Since
+upstream commit f27596238d37 (Include stdbool.h unconditionally),
+upstream no longer ever defines HAVE_STDBOOL_H, so we always fallback to
+manually defining 'bool' which conflicts with the type used elsewhere in
+the code.
+
+Drop our workaround, to always include stdbool.h unconditionally.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/bbfb61cf911fb29dcc02626f6eb47fff9e5e64f5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - expand commit log
+  - drop commented-out code
+  - restore CR-LF line endings in replacement code, as used by upstream
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/opencv3/Config.in  | 8 ++++++++
- package/opencv3/opencv3.mk | 8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+ package/transmission/0001-fix-utypes.patch | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index ac7da67c5f..b9ea033f13 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -312,6 +312,14 @@ config BR2_PACKAGE_OPENCV3_WITH_V4L
- 	  If the package libv4l is enabled, its support is
- 	  automatically enabled.
+diff --git a/package/transmission/0001-fix-utypes.patch b/package/transmission/0001-fix-utypes.patch
+index 96403a6c36..81efa884a7 100644
+--- a/package/transmission/0001-fix-utypes.patch
++++ b/package/transmission/0001-fix-utypes.patch
+@@ -6,25 +6,25 @@ The corresponding upstream bug report (unfixed) can be found here:
+ https://trac.transmissionbt.com/ticket/5232
  
-+config BR2_PACKAGE_OPENCV3_WITH_WEBP
-+	bool "webp support"
-+	select BR2_PACKAGE_WEBP
-+	help
-+	  Enable WebP support.
-+
-+	  Use shared libwebp from the target system.
-+
- comment "Install options"
+ Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
++[Fabrice: adapt to 3.00, which always uses stdbool.h]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[yann.morin.1998 at free.fr:
++  - don't comment-out dropped code, just drop it
++  - use CR-LF in replacement code, as used by upstream
++]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
  
- config BR2_PACKAGE_OPENCV3_INSTALL_DATA
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index c67387e114..8cd28cbf0c 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -223,7 +223,6 @@ OPENCV3_CONF_OPTS += \
- 	-DWITH_VA=OFF \
- 	-DWITH_VA_INTEL=OFF \
- 	-DWITH_VTK=OFF \
--	-DWITH_WEBP=OFF \
- 	-DWITH_XINE=OFF
- 
- OPENCV3_DEPENDENCIES += host-pkgconf zlib
-@@ -318,6 +317,13 @@ else
- OPENCV3_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV3_WITH_WEBP),y)
-+OPENCV3_CONF_OPTS += -DWITH_WEBP=ON
-+OPENCV3_DEPENDENCIES += webp
-+else
-+OPENCV3_CONF_OPTS += -DWITH_WEBP=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV3_LIB_PYTHON),y)
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_opencv_python2=OFF \
--- 
-2.28.0
+ --- transmission-2.82.org/third-party/libutp/utypes.h	2013-08-09 04:47:43.000000000 +0200
+ +++ transmission-2.82/third-party/libutp/utypes.h	2014-01-02 20:17:18.000000000 +0100
+-@@ -35,8 +35,15 @@
++@@ -35,8 +35,8 @@
+  typedef const char * cstr;
+  typedef char * str;
+  
+ -#ifndef __cplusplus
+ -typedef uint8 bool;
+ -#endif
+-+//#ifndef __cplusplus
+-+//typedef uint8 bool;
+-+//#endif
+-+#ifndef __cplusplus
+-+#ifdef HAVE_STDBOOL_H
+-+#include <stdbool.h>
+-+#else
+-+typedef uint8 bool;
+-+#endif
+-+#endif
+++#ifndef __cplusplus
+++#include <stdbool.h>
+++#endif
+  
+  #endif //__UTYPES_H__
