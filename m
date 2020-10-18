@@ -1,99 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Oct 2020 18:40:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: drop second patch
-In-Reply-To: <20201017194639.3919479-1-fontaine.fabrice@gmail.com>
-References: <20201017194639.3919479-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201018164057.GA3466@scaer>
+Date: Sun, 18 Oct 2020 18:43:54 +0200
+Subject: [Buildroot] [git commit] package/libapparmor: fix build with musl
+Message-ID: <20201018163242.A4660840E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=30d866c11de038e51acd73c3ed434ccff7dea388
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-10-17 21:46 +0200, Fabrice Fontaine spake thusly:
-> transmission in version 3.00 is building fine on musl and upstream
-> thinks that this patch is not needed anymore:
-> https://github.com/transmission/transmission/pull/1156
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix build of apparmor 3.0.0 with musl
 
-Applied to master, after expanding about the reason this is now correct.
+Fixes:
+ - http://autobuild.buildroot.org/results/ccbee89030308cf1e4bfce89635d40676c7c63a0
 
-I also updated the patch to jsut drop the code instead of commenting it
-out, and by restoring CR/LF line endings as used by upstream.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../0003-aa_status-Fix-build-issue-with-musl.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...clude.patch => 0002-fix-utp-include.patch} |  0
->  .../0002-musl-missing-header.patch            | 36 -------------------
->  2 files changed, 36 deletions(-)
->  rename package/transmission/{0003-fix-utp-include.patch => 0002-fix-utp-include.patch} (100%)
->  delete mode 100644 package/transmission/0002-musl-missing-header.patch
-> 
-> diff --git a/package/transmission/0003-fix-utp-include.patch b/package/transmission/0002-fix-utp-include.patch
-> similarity index 100%
-> rename from package/transmission/0003-fix-utp-include.patch
-> rename to package/transmission/0002-fix-utp-include.patch
-> diff --git a/package/transmission/0002-musl-missing-header.patch b/package/transmission/0002-musl-missing-header.patch
-> deleted file mode 100644
-> index ebb74cbffb..0000000000
-> --- a/package/transmission/0002-musl-missing-header.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -Fix musl build
-> -
-> -Downloaded from
-> -https://cgit.gentoo.org/proj/musl.git/tree/net-p2p/transmission/files/transmission-2.84-musl-missing-header.patch
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> -
-> -
-> -libtransmission/transmission.h: add missing <sys/types.h>
-> -
-> -transmission.h and several files including it, like bitfield.c and fdlimits.h
-> -make reference to ssize_t, off_t and other types defined in <sys/types.h> but
-> -never include the header.  By including <sys/types.h> in transmission.h, the
-> -required type definitions are propagated to all files that need them.
-> -
-> -Not including <sys/types.h> on glibc and uClibc systems does not pose a problem
-> -because of the way the headers stack in those C Standard Libraries, but on musl
-> -excluding <sys/types.h> leads to compile time failure.
-> -
-> -For the POSIX specs, see
-> -
-> -http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
-> -
-> -Signed-of-by: Anthony G. Basile <blueness@gentoo.org>
-> -
-> -diff -Naur transmission-2.84.orig/libtransmission/transmission.h transmission-2.84/libtransmission/transmission.h
-> ---- transmission-2.84.orig/libtransmission/transmission.h	2014-07-01 13:09:01.682910744 -0400
-> -+++ transmission-2.84/libtransmission/transmission.h	2015-07-19 03:11:07.379219181 -0400
-> -@@ -28,6 +28,7 @@
-> - 
-> - #include <inttypes.h> /* uintN_t */
-> - #include <time.h> /* time_t */
-> -+#include <sys/types.h>
-> - 
-> - #ifdef WIN32
-> -  #define __USE_MINGW_ANSI_STDIO 1
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
+new file mode 100644
+index 0000000000..83981bfecc
+--- /dev/null
++++ b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
+@@ -0,0 +1,33 @@
++From a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8 Mon Sep 17 00:00:00 2001
++From: Armin Kuster <akuster808@gmail.com>
++Date: Wed, 7 Oct 2020 08:27:11 -0700
++Subject: [PATCH] aa_status: Fix build issue with musl
++
++add limits.h
++
++aa_status.c:269:22: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++|   269 |    real_exe = calloc(PATH_MAX + 1, sizeof(char));
++
++Signed-off-by: Armin Kuster <akuster808@gmail.com>
++[Retrieved from:
++https://gitlab.com/apparmor/apparmor/-/commit/a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ binutils/aa_status.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/binutils/aa_status.c b/binutils/aa_status.c
++index 78b034090..41f1954e9 100644
++--- a/binutils/aa_status.c
+++++ b/binutils/aa_status.c
++@@ -10,6 +10,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <limits.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <sys/wait.h>
++-- 
++GitLab
++
