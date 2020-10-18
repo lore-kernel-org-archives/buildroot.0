@@ -1,86 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 Oct 2020 18:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libapparmor: fix build with musl
-In-Reply-To: <20201018134647.960413-1-fontaine.fabrice@gmail.com>
-References: <20201018134647.960413-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201018164442.GB3466@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 Oct 2020 21:28:18 +0200
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/docker-containerd: security bump to version 1.2.14
+Message-ID: <20201018191645.6CB5B814ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=38c34d5d866b45a732f9fb724c8570be0d3c0911
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-On 2020-10-18 15:46 +0200, Fabrice Fontaine spake thusly:
-> Fix build of apparmor 3.0.0 with musl
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/ccbee89030308cf1e4bfce89635d40676c7c63a0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security issue:
 
-Applied to master, thanks.
+- CVE-2020-15157: containerd v1.2.x can be coerced into leaking credentials
+  during image pull
 
-Regards,
-Yann E. MORIN.
+For details, see the advisory:
+https://github.com/containerd/containerd/security/advisories/GHSA-742w-89gc-8m9c
 
-> ---
->  ...-aa_status-Fix-build-issue-with-musl.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
-> 
-> diff --git a/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
-> new file mode 100644
-> index 0000000000..83981bfecc
-> --- /dev/null
-> +++ b/package/libapparmor/3.0.0/0003-aa_status-Fix-build-issue-with-musl.patch
-> @@ -0,0 +1,33 @@
-> +From a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8 Mon Sep 17 00:00:00 2001
-> +From: Armin Kuster <akuster808@gmail.com>
-> +Date: Wed, 7 Oct 2020 08:27:11 -0700
-> +Subject: [PATCH] aa_status: Fix build issue with musl
-> +
-> +add limits.h
-> +
-> +aa_status.c:269:22: error: 'PATH_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
-> +|   269 |    real_exe = calloc(PATH_MAX + 1, sizeof(char));
-> +
-> +Signed-off-by: Armin Kuster <akuster808@gmail.com>
-> +[Retrieved from:
-> +https://gitlab.com/apparmor/apparmor/-/commit/a2a0d14b9c5046b76124c828a53b0e9cbc1bc5c8]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + binutils/aa_status.c | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/binutils/aa_status.c b/binutils/aa_status.c
-> +index 78b034090..41f1954e9 100644
-> +--- a/binutils/aa_status.c
-> ++++ b/binutils/aa_status.c
-> +@@ -10,6 +10,7 @@
-> + #include <stdio.h>
-> + #include <stdlib.h>
-> + #include <string.h>
-> ++#include <limits.h>
-> + #include <sys/types.h>
-> + #include <sys/stat.h>
-> + #include <sys/wait.h>
-> +-- 
-> +GitLab
-> +
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/docker-containerd/docker-containerd.hash | 4 ++--
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 95288be58b..6fbb228ed2 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256	0811057ab67b78ce911416e793edaeb14b3f1e105d67b8e67b6302e0eab572e4  docker-containerd-1.2.13.tar.gz
+-sha256 4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
++sha256	80ea55655612d7d9f9e8e10df5993a3636b088390e1a372962687d70ef265d97  docker-containerd-1.2.14.tar.gz
++sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 5a44489065..64cb086fef 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = 1.2.13
++DOCKER_CONTAINERD_VERSION = 1.2.14
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
