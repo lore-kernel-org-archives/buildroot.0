@@ -1,56 +1,43 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 19 Oct 2020 14:44:48 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
- build issue with Wayland backend
-In-Reply-To: <20200402162543.595ed9e7@windsurf.home>
-References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
- <20200402130842.918696-3-gary.bisson@boundarydevices.com>
- <20200402162543.595ed9e7@windsurf.home>
-Message-ID: <CAEyMn7Yc=u3CPxeSABY3dPPK1eAMM6Jn_wxz3K=pr7ZQgNmf+g@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Oct 2020 20:01:49 +0300
+Subject: [Buildroot] [PATCH] package/iperf3: bump to version 3.9
+Message-ID: <62e2a92cb3eee3df4162da83b2a67a989e08052f.1603126909.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Am Do., 2. Apr. 2020 um 16:25 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello Gary,
->
-> As usual, thanks for your work maintaining good support for i.MX
-> platforms in Buildroot. One question below.
->
-> On Thu,  2 Apr 2020 15:08:42 +0200
-> Gary Bisson <gary.bisson@boundarydevices.com> wrote:
->
-> >  ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
-> > -define IMX_GPU_VIV_FIXUP_FB_HEADERS
-> > +define IMX_GPU_VIV_FIXUP_HEADERS
-> >       $(SED) '39i\
-> > -             #if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
-> > +             #if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
-> >               #define EGL_API_FB \n\
-> >               #endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
-> >  endef
-> > @@ -77,6 +77,12 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
-> >  define IMX_GPU_VIV_FIXUP_PKGCONFIG
-> >       ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
-> >  endef
-> > +define IMX_GPU_VIV_FIXUP_HEADERS
-> > +     $(SED) '39i\
-> > +             #if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) && !defined(WL_EGL_PLATFORM) \n\
-> > +             #define WL_EGL_PLATFORM\n\
-> > +             #endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
-> > +endef
-> >  endif
->
-> Can we use a proper patch instead of these horrible SED calls ?
-
-What do you mean with a proper patch? These fixups will modify a
-header file of weston. How could we do a patch of weston here?
-
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 5f1c200f55db..fa9d54f40444 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.8.1.tar.gz.sha256
+-sha256	e5b080f3273a8a715a4100f13826ac2ca31cc7b1315925631b2ecf64957ded96  iperf-3.8.1.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
++sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
+ # Locally computed
+ sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 7d5a10cdef46..f67fa17022fd 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPERF3_VERSION = 3.8.1
++IPERF3_VERSION = 3.9
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 -- 
-Heiko
+2.28.0
