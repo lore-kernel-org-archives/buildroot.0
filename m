@@ -1,54 +1,54 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 19 Oct 2020 20:27:56 +0200
-Subject: [Buildroot] [PATCH] package/stunnel: bump to version 5.57
-Message-ID: <1603132076-2071-1-git-send-email-pjtexier@koncepto.io>
+Date: Mon, 19 Oct 2020 20:28:49 +0200
+Subject: [Buildroot] [PATCH] package/mxml: bump to version 3.2
+Message-ID: <1603132129-2372-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update COPYING hash; copyright year update:
+The hash of the NOTICE file has changed due to the following minor update:
 
--_Copyright (C) 1998-2019 Michal Trojnara_
-+_Copyright (C) 1998-2020 Michal Trojnara_
+-Exceptions to the Apache 2.0 License:
+-=====================================
++(Optional) Exceptions to the Apache 2.0 License:
++================================================
 
 Also update hash file formatting (2 spaces)
 
-See changelog https://www.stunnel.org/NEWS.html
+See changelog https://github.com/michaelrsweet/mxml/releases/tag/v3.2
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/stunnel/stunnel.hash | 8 ++++----
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/mxml/mxml.hash | 6 +++---
+ package/mxml/mxml.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index b741b0e..67d06a4 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,5 +1,5 @@
--# From https://www.stunnel.org/downloads/stunnel-5.56.tar.gz.sha256
--sha256	7384bfb356b9a89ddfee70b5ca494d187605bb516b4fff597e167f97e2236b22	stunnel-5.56.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.57.tar.gz.sha256
-+sha256  af5ab973dde11807c38735b87bdd87563a47d2fa1c72a07929fcfce80a600fe1  stunnel-5.57.tar.gz
- # Locally calculated
--sha256	f46e2613769e23e23348b6eb667dc85309da2252c8cc2016db92ad93d743aea4	COPYING.md
--sha256	62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d	COPYRIGHT.md
-+sha256  d3055d327fd4daa5895fcf8fc4ebe993d06f40f2841ac995c6a69988d19bac4b  COPYING.md
-+sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index f8265c4..e0cc563 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 811064c..70f82ca 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 1ac8d252f62f9dc2b2004518c70d2da313bdfcd92b8350e215f46064a34b52fc mxml-3.1.tar.gz
+-sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 LICENSE
+-sha256 63cc06ba05adecb1fdf2c94460a98291fd71614865456e52a19a1e7cc674250f NOTICE
++sha256  b894f6c64964f2e77902564c17ba00f5d077a7a24054e7c1937903b0bd42c974  mxml-3.2.tar.gz
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
++sha256  ed63aec4c75b9c21a5156b40052138032269bd27fd6f4bc0c51389807cdc7db9  NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 8ca83e1..85930ab 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).56
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).57
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-MXML_VERSION = 3.1
++MXML_VERSION = 3.2
+ MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
+ MXML_LICENSE = Apache-2.0 with exceptions
+ MXML_LICENSE_FILES = LICENSE NOTICE
 -- 
 2.7.4
