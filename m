@@ -1,103 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Oct 2020 22:14:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/binutils: build host binutils
- w/o debuginfod
-In-Reply-To: <20201019170533.3297066-1-egorenar@linux.ibm.com>
-References: <20201019170533.3297066-1-egorenar@linux.ibm.com>
-Message-ID: <20201019201452.GI3466@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 19 Oct 2020 23:34:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to version
+ 0.20.2
+Message-ID: <20201019213427.790231-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+Fix CVE-2020-24890: libraw 20.0 has a null pointer dereference
+vulnerability in parse_tiff_ifd in src/metadata/tiff.cpp, which may
+result in context-dependent arbitrary code execution.
 
-On 2020-10-19 19:05 +0200, Alexander Egorenkov spake thusly:
-> Since version 2.34 binutils enables debuginfod support
-> by default if the debuginfod library is present on the host.
-> This leads to a problem with host-openssl's libcrypto and hosts's
-> libk5crypto which are both linked by the host's libdebuginfod and
-> are incompatible.
-> 
-> This behavior has been observed on Fedora 32 which ships libdebuginfod.
-> 
-> $ nm -D /lib64/libk5crypto.so.3 | grep 'U EVP_KDF_ctrl'
->                  U EVP_KDF_ctrl
-> 
-> $ ldd $BUILD_DIR/host/bin/s390x-buildroot-linux-gnu-objdump
->         linux-vdso.so.1 (0x00007ffd7ed9b000)
->         libz.so.1 => $BUILD_DIR/host/lib/libz.so.1 (0x00007f7ad0dcd000)
->         libdebuginfod.so.1 => /lib64/libdebuginfod.so.1 (0x00007f7ad0da1000)
->         libdl.so.2 => /lib64/libdl.so.2 (0x00007f7ad0d9a000)
->         libc.so.6 => /lib64/libc.so.6 (0x00007f7ad0bd0000)
->         libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f7ad0b3c000)
->         /lib64/ld-linux-x86-64.so.2 (0x00007f7ad0de9000)
->         libnghttp2.so.14 => /lib64/libnghttp2.so.14 (0x00007f7ad0b10000)
->         libidn2.so.0 => /lib64/libidn2.so.0 (0x00007f7ad0aec000)
->         libssh.so.4 => /lib64/libssh.so.4 (0x00007f7ad0a7a000)
->         libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f7ad0a67000)
->         libssl.so.1.1 => $BUILD_DIR/host/lib/libssl.so.1.1 (0x00007f7ad09d8000)
->         libcrypto.so.1.1 => $BUILD_DIR/host/lib/libcrypto.so.1.1 (0x00007f7ad0718000)
->         libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 (0x00007f7ad06c1000)
->         libkrb5.so.3 => /lib64/libkrb5.so.3 (0x00007f7ad05d4000)
->         libk5crypto.so.3 => /lib64/libk5crypto.so.3 (0x00007f7ad05bb000)
->         libcom_err.so.2 => $BUILD_DIR/host/lib/libcom_err.so.2 (0x00007f7ad05b5000)
->         libldap-2.4.so.2 => /lib64/libldap-2.4.so.2 (0x00007f7ad0563000)
->         liblber-2.4.so.2 => /lib64/liblber-2.4.so.2 (0x00007f7ad0551000)
->         libbrotlidec.so.1 => /lib64/libbrotlidec.so.1 (0x00007f7ad0543000)
->         libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f7ad051f000)
->         libunistring.so.2 => /lib64/libunistring.so.2 (0x00007f7ad039a000)
->         libkrb5support.so.0 => /lib64/libkrb5support.so.0 (0x00007f7ad0388000)
->         libkeyutils.so.1 => /lib64/libkeyutils.so.1 (0x00007f7ad0381000)
->         libresolv.so.2 => /lib64/libresolv.so.2 (0x00007f7ad0367000)
->         libsasl2.so.3 => /lib64/libsasl2.so.3 (0x00007f7ad0345000)
->         libbrotlicommon.so.1 => /lib64/libbrotlicommon.so.1 (0x00007f7ad0322000)
->         libselinux.so.1 => /lib64/libselinux.so.1 (0x00007f7ad02f5000)
->         libcrypt.so.2 => /lib64/libcrypt.so.2 (0x00007f7ad02ba000)
->         libpcre2-8.so.0 => /lib64/libpcre2-8.so.0 (0x00007f7ad0221000)
-> 
-> $ $BUILD_DIR/host/bin/s390x-buildroot-linux-gnu-objdump
-> qemu-s390x/host/bin/s390x-buildroot-linux-gnu-objdump: symbol lookup error: /lib64/libk5crypto.so.3: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+https://www.libraw.org/news/libraw-0-20-2-Release
 
-I've reworked the commit log to include more details about the
-dependency chain and how the issue arises, and with an easy reproducer.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libraw/libraw.hash | 2 +-
+ package/libraw/libraw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the investigations, and for your help on IRC! :-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/binutils/binutils.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> index 461bc2b838..6ae4605d86 100644
-> --- a/package/binutils/binutils.mk
-> +++ b/package/binutils/binutils.mk
-> @@ -93,6 +93,7 @@ HOST_BINUTILS_CONF_OPTS = \
->  	--enable-static \
->  	--with-sysroot=$(STAGING_DIR) \
->  	--enable-poison-system-directories \
-> +	--without-debuginfod \
->  	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
->  	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
->  
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+index e8117cd1f1..f2a01c277b 100644
+--- a/package/libraw/libraw.hash
++++ b/package/libraw/libraw.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  1f0a383da2ce9f409087facd28261decbf6be72cc90c78cd003b0766e4d694a3  LibRaw-0.20.0.tar.gz
++sha256  dc1b486c2003435733043e4e05273477326e51c3ea554c6864a4eafaff1004a6  LibRaw-0.20.2.tar.gz
+ sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
+ sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
+ sha256  313415f7f48f6cd3cc78856626aab4bbe97dbb1e9a11db9c25396ca8d0e76cd9  README.md
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index e33674e6f5..acfa4dbe37 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRAW_VERSION = 0.20.0
++LIBRAW_VERSION = 0.20.2
+ LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ LIBRAW_SITE = http://www.libraw.org/data
+ LIBRAW_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.28.0
