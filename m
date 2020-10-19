@@ -1,76 +1,36 @@
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Mon, 19 Oct 2020 19:05:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/binutils: build host binutils w/o
- debuginfod
-Message-ID: <20201019170533.3297066-1-egorenar@linux.ibm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 Oct 2020 19:07:38 +0200
+Subject: [Buildroot] [git commit] configs/qemu_s390x_defconfig: use linux
+ headers same as kernel series 5.8
+Message-ID: <20201019165621.8F8F084188@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 2.34 binutils enables debuginfod support
-by default if the debuginfod library is present on the host.
-This leads to a problem with host-openssl's libcrypto and hosts's
-libk5crypto which are both linked by the host's libdebuginfod and
-are incompatible.
+commit: https://git.buildroot.net/buildroot/commit/?id=1981b012f49a80ec0a1734fd1816fe559403d3e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This behavior has been observed on Fedora 32 which ships libdebuginfod.
-
-$ nm -D /lib64/libk5crypto.so.3 | grep 'U EVP_KDF_ctrl'
-                 U EVP_KDF_ctrl
-
-$ ldd $BUILD_DIR/host/bin/s390x-buildroot-linux-gnu-objdump
-        linux-vdso.so.1 (0x00007ffd7ed9b000)
-        libz.so.1 => $BUILD_DIR/host/lib/libz.so.1 (0x00007f7ad0dcd000)
-        libdebuginfod.so.1 => /lib64/libdebuginfod.so.1 (0x00007f7ad0da1000)
-        libdl.so.2 => /lib64/libdl.so.2 (0x00007f7ad0d9a000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007f7ad0bd0000)
-        libcurl.so.4 => /lib64/libcurl.so.4 (0x00007f7ad0b3c000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f7ad0de9000)
-        libnghttp2.so.14 => /lib64/libnghttp2.so.14 (0x00007f7ad0b10000)
-        libidn2.so.0 => /lib64/libidn2.so.0 (0x00007f7ad0aec000)
-        libssh.so.4 => /lib64/libssh.so.4 (0x00007f7ad0a7a000)
-        libpsl.so.5 => /lib64/libpsl.so.5 (0x00007f7ad0a67000)
-        libssl.so.1.1 => $BUILD_DIR/host/lib/libssl.so.1.1 (0x00007f7ad09d8000)
-        libcrypto.so.1.1 => $BUILD_DIR/host/lib/libcrypto.so.1.1 (0x00007f7ad0718000)
-        libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 (0x00007f7ad06c1000)
-        libkrb5.so.3 => /lib64/libkrb5.so.3 (0x00007f7ad05d4000)
-        libk5crypto.so.3 => /lib64/libk5crypto.so.3 (0x00007f7ad05bb000)
-        libcom_err.so.2 => $BUILD_DIR/host/lib/libcom_err.so.2 (0x00007f7ad05b5000)
-        libldap-2.4.so.2 => /lib64/libldap-2.4.so.2 (0x00007f7ad0563000)
-        liblber-2.4.so.2 => /lib64/liblber-2.4.so.2 (0x00007f7ad0551000)
-        libbrotlidec.so.1 => /lib64/libbrotlidec.so.1 (0x00007f7ad0543000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f7ad051f000)
-        libunistring.so.2 => /lib64/libunistring.so.2 (0x00007f7ad039a000)
-        libkrb5support.so.0 => /lib64/libkrb5support.so.0 (0x00007f7ad0388000)
-        libkeyutils.so.1 => /lib64/libkeyutils.so.1 (0x00007f7ad0381000)
-        libresolv.so.2 => /lib64/libresolv.so.2 (0x00007f7ad0367000)
-        libsasl2.so.3 => /lib64/libsasl2.so.3 (0x00007f7ad0345000)
-        libbrotlicommon.so.1 => /lib64/libbrotlicommon.so.1 (0x00007f7ad0322000)
-        libselinux.so.1 => /lib64/libselinux.so.1 (0x00007f7ad02f5000)
-        libcrypt.so.2 => /lib64/libcrypt.so.2 (0x00007f7ad02ba000)
-        libpcre2-8.so.0 => /lib64/libpcre2-8.so.0 (0x00007f7ad0221000)
-
-$ $BUILD_DIR/host/bin/s390x-buildroot-linux-gnu-objdump
-qemu-s390x/host/bin/s390x-buildroot-linux-gnu-objdump: symbol lookup error: /lib64/libk5crypto.so.3: undefined symbol: EVP_KDF_ctrl, version OPENSSL_1_1_1b
+Broke since introduction of linux kernel series 5.9.
 
 Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/binutils/binutils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ configs/qemu_s390x_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 461bc2b838..6ae4605d86 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -93,6 +93,7 @@ HOST_BINUTILS_CONF_OPTS = \
- 	--enable-static \
- 	--with-sysroot=$(STAGING_DIR) \
- 	--enable-poison-system-directories \
-+	--without-debuginfod \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index 3bd407b250..b3c2641d15 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -11,6 +11,9 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
--- 
-2.26.2
++# Linux headers same as kernel, a 5.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
