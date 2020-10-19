@@ -1,7 +1,9 @@
 From: Christian Stewart <christian@paral.in>
-Date: Mon, 19 Oct 2020 01:43:06 -0700
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.15.3
-Message-ID: <20201019084307.3283077-1-christian@paral.in>
+Date: Mon, 19 Oct 2020 01:43:07 -0700
+Subject: [Buildroot] [RFC PATCH v1 1/1] package/go: bump to version 1.15.3
+In-Reply-To: <20201019084307.3283077-1-christian@paral.in>
+References: <20201019084307.3283077-1-christian@paral.in>
+Message-ID: <20201019084307.3283077-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
