@@ -1,42 +1,34 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 19 Oct 2020 02:34:22 -0700
-Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: bump version to
- 1.2.0
-Message-ID: <20201019093422.4128291-1-christian@paral.in>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Mon, 19 Oct 2020 14:31:45 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/qemu_s390x_defconfig: use linux
+ headers same as kernel series 5.8
+Message-ID: <20201019123145.1159123-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
- package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Broke since introduction of linux kernel series 5.9.
 
-diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
-index 4f10be85a9..0c52e05cc9 100644
---- a/package/fuse-overlayfs/fuse-overlayfs.hash
-+++ b/package/fuse-overlayfs/fuse-overlayfs.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  1c0fa67f806c44d5c51f4bce02fdcb546137a2688a8de76d93d07b79defc9cac  fuse-overlayfs-1.1.2.tar.gz
-+sha256  5df218732244059057686194b0e1fef66fb822d4087db48af88e1bc29bb1afde  fuse-overlayfs-1.2.0.tar.gz
- # Locally computed
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
-index 1d19099eda..67bd9d1c7f 100644
---- a/package/fuse-overlayfs/fuse-overlayfs.mk
-+++ b/package/fuse-overlayfs/fuse-overlayfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ configs/qemu_s390x_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index 3bd407b250..b3c2641d15 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -11,6 +11,9 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
--FUSE_OVERLAYFS_VERSION = 1.1.2
-+FUSE_OVERLAYFS_VERSION = 1.2.0
- FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
- FUSE_OVERLAYFS_LICENSE = GPL-3.0
- FUSE_OVERLAYFS_LICENSE_FILES = COPYING
++# Linux headers same as kernel, a 5.8 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
-2.28.0
+2.26.2
