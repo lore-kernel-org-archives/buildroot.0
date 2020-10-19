@@ -1,31 +1,42 @@
-From: dfanton <d.fanton@gds.com>
-Date: Mon, 19 Oct 2020 04:18:14 -0500 (CDT)
-Subject: [Buildroot] MongoDb storage engine problem
-Message-ID: <1603099094833-0.post@n4.nabble.com>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 19 Oct 2020 02:34:22 -0700
+Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: bump version to
+ 1.2.0
+Message-ID: <20201019093422.4128291-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hello 
-I'm using buildroot 2020.08.1 in one board with IMX6, mongodb and python3 
-The buildroot do the process perfect without problem but when I try to use
-the mongod i received this error
-Cannot start server with an unknown storage engine I make some test but I
-can't find a way to run it. 
-I understand from the last version remove the engine mmapv1 and can use only
-wiredTiger I have try do downgrade mongo db packange but if I do this I find
-an other problem
-print( "python version: " + " ".join( [ `i` for i in sys.version_info ] ) ) 
-SyntaxError: invalid syntax 
-I have try to downgrad to gcc 7 but the problem still present. I can't go to
-version before because the 5.7 of the kernel can't give the possibility to
-go with version lower (I know is fixed with version 5) 
-Please any advise is really appreciated 
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
+ package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+index 4f10be85a9..0c52e05cc9 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.hash
++++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  1c0fa67f806c44d5c51f4bce02fdcb546137a2688a8de76d93d07b79defc9cac  fuse-overlayfs-1.1.2.tar.gz
++sha256  5df218732244059057686194b0e1fef66fb822d4087db48af88e1bc29bb1afde  fuse-overlayfs-1.2.0.tar.gz
+ # Locally computed
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+index 1d19099eda..67bd9d1c7f 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.mk
++++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FUSE_OVERLAYFS_VERSION = 1.1.2
++FUSE_OVERLAYFS_VERSION = 1.2.0
+ FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+ FUSE_OVERLAYFS_LICENSE = GPL-3.0
+ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
+-- 
+2.28.0
