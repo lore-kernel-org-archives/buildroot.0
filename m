@@ -1,33 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 19 Oct 2020 01:56:00 -0700
-Subject: [Buildroot] [PATCH 2/2] package/docker-engine: bump to version
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 Oct 2020 11:56:32 +0300
+Subject: [Buildroot] [PATCH 1/2] package/docker-cli: bump to version
  19.03.13
-In-Reply-To: <20201019085039.3429230-2-christian@paral.in>
+In-Reply-To: <20201019085039.3429230-1-christian@paral.in>
 References: <20201019085039.3429230-1-christian@paral.in>
- <20201019085039.3429230-2-christian@paral.in>
-Message-ID: <CA+h8R2qnjEovd-fm4OZwZEoxa6CJKE=7hSM6GCQsq2c91ucBQA@mail.gmail.com>
+Message-ID: <878sc2vbjz.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Christian,
 
-On Mon, Oct 19, 2020 at 1:50 AM Christian Stewart <christian@paral.in> wrote:
->
+On Mon, Oct 19 2020, Christian Stewart wrote:
 > Signed-off-by: Christian Stewart <christian@paral.in>
 > ---
->  package/docker-engine/docker-engine.mk | 2 +-
+>  package/docker-cli/docker-cli.mk | 2 +-
+
+What about docker-cli.hash?
+
 >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+> index c6448ca660..86fffafdb8 100644
+> --- a/package/docker-cli/docker-cli.mk
+> +++ b/package/docker-cli/docker-cli.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -DOCKER_CLI_VERSION = 19.03.12
+> +DOCKER_CLI_VERSION = 19.03.13
+>  DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+>  
+>  DOCKER_CLI_LICENSE = Apache-2.0
 
-This series has issues:
-
- - docker/engine has not tagged v19.03.13 yet
- - it may be necessary to switch to github.com/moby/moby as upstream
- - hash file needs update
-
-Marked as superseded. Will send a v2 once tested.
-
-Best regards,
-Christian Stewart
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
