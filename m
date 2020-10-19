@@ -1,58 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Oct 2020 19:08:27 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/qemu_s390x_defconfig: use linux
- headers same as kernel series 5.8
-In-Reply-To: <20201019123145.1159123-1-egorenar@linux.ibm.com>
-References: <20201019123145.1159123-1-egorenar@linux.ibm.com>
-Message-ID: <20201019170827.GH3466@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 19 Oct 2020 20:27:56 +0200
+Subject: [Buildroot] [PATCH] package/stunnel: bump to version 5.57
+Message-ID: <1603132076-2071-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A;exander, All,
+Update COPYING hash; copyright year update:
 
-On 2020-10-19 14:31 +0200, Alexander Egorenkov spake thusly:
-> Broke since introduction of linux kernel series 5.9.
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+-_Copyright (C) 1998-2019 Michal Trojnara_
++_Copyright (C) 1998-2020 Michal Trojnara_
 
-Applied to master, thanks.
+Also update hash file formatting (2 spaces)
 
-Regards,
-Yann E. MORIN.
+See changelog https://www.stunnel.org/NEWS.html
 
-> ---
->  configs/qemu_s390x_defconfig | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
-> index 3bd407b250..b3c2641d15 100644
-> --- a/configs/qemu_s390x_defconfig
-> +++ b/configs/qemu_s390x_defconfig
-> @@ -11,6 +11,9 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
->  BR2_TARGET_ROOTFS_EXT2=y
->  # BR2_TARGET_ROOTFS_TAR is not set
->  
-> +# Linux headers same as kernel, a 5.8 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-> +
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/stunnel/stunnel.hash | 8 ++++----
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index b741b0e..67d06a4 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,5 +1,5 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.56.tar.gz.sha256
+-sha256	7384bfb356b9a89ddfee70b5ca494d187605bb516b4fff597e167f97e2236b22	stunnel-5.56.tar.gz
++# From https://www.stunnel.org/downloads/stunnel-5.57.tar.gz.sha256
++sha256  af5ab973dde11807c38735b87bdd87563a47d2fa1c72a07929fcfce80a600fe1  stunnel-5.57.tar.gz
+ # Locally calculated
+-sha256	f46e2613769e23e23348b6eb667dc85309da2252c8cc2016db92ad93d743aea4	COPYING.md
+-sha256	62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d	COPYRIGHT.md
++sha256  d3055d327fd4daa5895fcf8fc4ebe993d06f40f2841ac995c6a69988d19bac4b  COPYING.md
++sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index f8265c4..e0cc563 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).56
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).57
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
