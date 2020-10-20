@@ -1,49 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 19 Oct 2020 23:34:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to version
- 0.20.2
-Message-ID: <20201019213427.790231-1-fontaine.fabrice@gmail.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 20 Oct 2020 19:46:38 +1300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-10-18
+In-Reply-To: <5f8d3b76.1c69fb81.a6c23.a6eeSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5f8d3b76.1c69fb81.a6c23.a6eeSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CAFOYHZDchgmMGap_YESw5C+vB2T7hOJHCjR6_Fpckc0+Ln-wNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-24890: libraw 20.0 has a null pointer dereference
-vulnerability in parse_tiff_ifd in src/metadata/tiff.cpp, which may
-result in context-dependent arbitrary code execution.
+On Mon, 19 Oct 2020, 8:08 PM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
 
-https://www.libraw.org/news/libraw-0-20-2-Release
+> Hello,
+>
+> Packages with CVEs
+> ==================
+>
+> This is the list of packages for which a known CVE is affecting
+> them, which means a security vulnerability exists for
+> those packages.
+>
+>              name              |       CVE        |
+>      link
+>
+> -------------------------------+------------------+--------------------------------------------------------------
+>                      syslog-ng | CVE-2008-5110    |
+> https://security-tracker.debian.org/tracker/CVE-2008-5110
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libraw/libraw.hash | 2 +-
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I think this is a false positive that's a pretty old CVE.
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index e8117cd1f1..f2a01c277b 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1f0a383da2ce9f409087facd28261decbf6be72cc90c78cd003b0766e4d694a3  LibRaw-0.20.0.tar.gz
-+sha256  dc1b486c2003435733043e4e05273477326e51c3ea554c6864a4eafaff1004a6  LibRaw-0.20.2.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  313415f7f48f6cd3cc78856626aab4bbe97dbb1e9a11db9c25396ca8d0e76cd9  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index e33674e6f5..acfa4dbe37 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRAW_VERSION = 0.20.0
-+LIBRAW_VERSION = 0.20.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
--- 
-2.28.0
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201020/6855eb8e/attachment.html>
