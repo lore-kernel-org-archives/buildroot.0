@@ -1,35 +1,53 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 20 Oct 2020 11:05:19 +0200
-Subject: [Buildroot] [PATCH] uclibc-ng-test: disable TLS for nds32 and s390x
-Message-ID: <20201020090518.GA3322@waldemar-brodkorb.de>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Tue, 20 Oct 2020 12:39:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: add zlib dependency
+Message-ID: <20201020103904.1529898-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/dac2a477a4de28d671c165e940db25364e291636
-http://autobuild.buildroot.net/results/84ca7104669bdc4fe538e526f3522e36b9bf666b
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc-ng-test/uclibc-ng-test.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+zlib is required to build s390-tools and cannot be disabled for now
+due to libvmdump.
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 1d1722adee..9f866f5d71 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -38,6 +38,10 @@ endif
- ifeq ($(BR2_STATIC_LIBS),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
- endif
-+# no TLS macros available
-+ifeq ($(BR2_nds32)$(BR2_s390x),y)
-+UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1
-+endif
+Fixes:
+
+$BUILD_DIR/host/bin/s390x-buildroot-linux-gnu-g++ ... -c vmdump_convert.cpp -o vmdump_convert.o
+lkcd_dump.cpp:15:10: fatal error: zlib.h: No such file or directory
+   15 | #include <zlib.h>
+      |          ^~~~~~~~
+compilation terminated.
+
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ package/s390-tools/Config.in     | 1 +
+ package/s390-tools/s390-tools.mk | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/s390-tools/Config.in b/package/s390-tools/Config.in
+index a553b5eeab..4aede4e265 100644
+--- a/package/s390-tools/Config.in
++++ b/package/s390-tools/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_S390_TOOLS
+ 	depends on BR2_s390x
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Tools for use with the s390 Linux kernel and device drivers.
  
- # to execute tests in a deterministic order, call test_gen separately
- define UCLIBC_NG_TEST_BUILD_CMDS
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index 4d4c8188fe..d186f85cd3 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -8,6 +8,7 @@ S390_TOOLS_VERSION = 2.14.0
+ S390_TOOLS_SITE = $(call github,ibm-s390-tools,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
++S390_TOOLS_DEPENDENCIES = zlib
+ 
+ S390_TOOLS_MAKE_OPTS = \
+ 	ARCH=$(BR2_ARCH) \
 -- 
-2.20.1
+2.26.2
