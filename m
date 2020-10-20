@@ -1,87 +1,99 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 20 Oct 2020 18:21:20 +0200
-Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 0.3.1
-Message-ID: <20201020162120.1022548-1-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Oct 2020 23:20:45 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freescale-imx/imx-gpu-viv: fix
+ build issue with Wayland backend
+In-Reply-To: <CAEyMn7ZM4Stiud_M2tnK=t-Z7Azot5LxBX9_kzxFUXgFqxikpg@mail.gmail.com>
+References: <20200402130842.918696-1-gary.bisson@boundarydevices.com>
+ <20200402130842.918696-3-gary.bisson@boundarydevices.com>
+ <20200402162543.595ed9e7@windsurf.home>
+ <20200402151026.GA934730@p1g2> <20200708122048.GB331830@p1g2>
+ <CAEyMn7ZM4Stiud_M2tnK=t-Z7Azot5LxBX9_kzxFUXgFqxikpg@mail.gmail.com>
+Message-ID: <20201020212045.GJ3466@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...xt-do-not-force-the-build-of-a-share.patch | 24 ++++++++++++-------
- package/libubootenv/libubootenv.hash          |  2 +-
- package/libubootenv/libubootenv.mk            |  2 +-
- 3 files changed, 18 insertions(+), 10 deletions(-)
+Gary, Heiko, Thomas,  All,
 
-diff --git a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-index c1196d615..2a234af78 100644
---- a/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-+++ b/package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
-@@ -22,25 +22,33 @@ EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON"
- Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
- [Upstream status: http://patchwork.ozlabs.org/patch/1103437/]
- ---
-- src/CMakeLists.txt | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
-+ src/CMakeLists.txt | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
- 
- diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 051732b..c5f6dcb 100644
-+index a04dd11..3a2115d 100644
- --- a/src/CMakeLists.txt
- +++ b/src/CMakeLists.txt
--@@ -10,10 +10,9 @@ SET(include_HEADERS
--   libuboot.h
-- )
-+@@ -12,17 +12,15 @@ SET(include_HEADERS
-+ 
-+ include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
-  
- -add_library(ubootenv SHARED ${libubootenv_SOURCES} ${include_HEADERS})
- +add_library(ubootenv ${libubootenv_SOURCES} ${include_HEADERS})
-- SET_TARGET_PROPERTIES(ubootenv PROPERTIES SOVERSION ${SOVERSION})
-+ SET_TARGET_PROPERTIES(ubootenv PROPERTIES VERSION ${VERSION} SOVERSION ${SOVERSION})
-  
- -ADD_LIBRARY(ubootenv_static STATIC ${libubootenv_SOURCES} ${include_HEADERS})
-+-SET_TARGET_PROPERTIES(ubootenv_static PROPERTIES OUTPUT_NAME ubootenv)
-  add_executable(fw_printenv fw_printenv.c)
-  add_executable(fw_setenv fw_setenv.c)
-  target_link_libraries(fw_printenv ubootenv z)
-+ target_link_libraries(fw_setenv ubootenv z)
-+ 
-+-install (TARGETS ubootenv ubootenv_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
-++install (TARGETS ubootenv DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+ install (FILES libuboot.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-+ install (TARGETS fw_printenv DESTINATION ${CMAKE_INSTALL_BINDIR})
-+ install (TARGETS fw_setenv DESTINATION ${CMAKE_INSTALL_BINDIR})
- -- 
--2.7.4
-+2.25.1
- 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 6ef2aa788..762d193f2 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  15fe743c661e19e0fba6a91cad6e8e295e6358cb917f3752a0bf6e742027252c  libubootenv-86bd30a14e153a18f670b25708795253d8736f0f.tar.gz
-+sha256  4c52dd908b69f18cdd5721b3f24573fb276e61115f66edb74906d766ca60399f  libubootenv-v0.3.1.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 65260b70e..4c7607ac8 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUBOOTENV_VERSION = 86bd30a14e153a18f670b25708795253d8736f0f
-+LIBUBOOTENV_VERSION = v0.3.1
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+On 2020-10-13 20:30 +0200, Heiko Thiery spake thusly:
+> Am Mi., 8. Juli 2020 um 14:20 Uhr schrieb Gary Bisson
+> <gary.bisson@boundarydevices.com>:
+> > Gentle ping on this, let me know if you see another approach that would
+> > be better, I'm open to suggestions.
+> >
+> > I'd love to have Weston support for i.MX8M* fixed for next release and
+> > my other series [1] depends on this patch.
+> >
+> > Then I am preparing patches to have VPU support using GStreamer-imx V2
+> > for i.MX8M* as well.
+> 
+> Any news on that? I also would like to see weston support for imx8m in
+> buildroot.
+
+So, we've discussed and investigated this with Heiko on IRC tonight, and
+we came to the conclusion that the weston build failure is a weston bug.
+
+Indeed, weston *is* using pkg-config to find EGL:
+    Run-time dependency egl found: YES 8.0
+
+Weston is indeed using the proper CFLAGS from egl.pc to build parts of
+its files; for example, bulding libweston/backend-wayland/wayland.c is
+using the proper -DWL_EGL_PLATFORM.
+
+However, the CFLAGS from egl.pc are not used when building gdbm-drm.c,
+when it should. Indeed, drm-gbm.c includes gl-renderer.h which includes
+egl.h which include eglpltform.h, so it seems totally expected that
+drm-gbm.c does use the CFLAGS frpm egl.pc.
+
+In my opinion, this build failre you report in your original patch is in
+fact a weston bug.
+
+Probably, patch like this could help:
+
+    From Yann E. MORIN <yann.morin.1998@free.fr>
+
+    libweston/backend/drm: might need EGL
+
+    gbm-drm.c includes gl-renderer.h. When EGL is enabled, that in turns
+    includes egl.h. As such, dependencies for drm should include EGL if
+    it is available.
+
+    This condition is modelled after a similar one in libweston/meson.build
+
+    Reported-by: Gary Bisson <gary.bisson@boundarydevices.com>
+    Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+    Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+    Cc: Refik Tuzakli <tuzakli.refik@gmail.com>
+    Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+    diff --git a/libweston/backend-drm/meson.build b/libweston/backend-drm/meson.build
+    index 484c2702..67648a09 100644
+    --- a/libweston/backend-drm/meson.build
+    +++ b/libweston/backend-drm/meson.build
+    @@ -53,6 +53,10 @@ if get_option('renderer-gl')
+     		config_h.set('HAVE_GBM_FD_IMPORT', '1')
+     	endif
+     	deps_drm += dep_gbm
+    +	deps_egl = dependency('egl', required: false)
+    +	if dep_egl.found()
+    +		deps_drm += dep_egl
+    +	endif
+     	srcs_drm += 'drm-gbm.c'
+     	config_h.set('BUILD_DRM_GBM', '1')
+     	endif
+
+The build succeeded for me with that patch, at least; I'll let you check
+it is valid, and maybe send it upstream
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
