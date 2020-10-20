@@ -1,24 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 Oct 2020 14:07:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xvisor: fix build with gcc 10
-In-Reply-To: <20201006202132.864896-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 6 Oct 2020 22:21:32 +0200")
-References: <20201006202132.864896-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn5dje2o.fsf@dell.be.48ers.dk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 20 Oct 2020 18:43:19 +0300
+Subject: [Buildroot] [PATCH 0/2] package/wpewebkit: build fixes for CPUs
+ which need CLoop
+Message-ID: <20201020154321.3491904-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello,
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/b6070c0721b33824e71833ce53423979980aa598
+Recently it has come to my attention that the JavaScriptCore JIT support for
+ARMv5 and ARMv6 has biytrotted and has not received fixes lately, due to a
+bug reported [1] against Cog.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This patch set fixes the build with ENABLE_C_LOOP set, and adds both ARMv5
+and ARMv6 to the list of target CPUs that need to use it.
 
-Committed to 2020.08.x, thanks.
+Cheers,
+?Adri?n
+
+---
+[1] https://github.com/Igalia/cog/issues/210
+
+
+Adrian Perez de Castro (2):
+  package/wpewebkit: fix build with ENABLE_C_LOOP=ON
+  package/wpewebkit: disable JIT for ARMv5 and ARMv6
+
+ package/wpewebkit/wpewebkit.mk | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.28.0
