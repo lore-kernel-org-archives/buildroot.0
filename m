@@ -1,49 +1,45 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 20 Oct 2020 06:44:19 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-10-18
-In-Reply-To: <CAFOYHZDchgmMGap_YESw5C+vB2T7hOJHCjR6_Fpckc0+Ln-wNw@mail.gmail.com>
-References: <5f8d3b76.1c69fb81.a6c23.a6eeSMTPIN_ADDED_MISSING@mx.google.com>
- <CAFOYHZDchgmMGap_YESw5C+vB2T7hOJHCjR6_Fpckc0+Ln-wNw@mail.gmail.com>
-Message-ID: <CANQCQpYM342mSx26opoVEHCJvbQrBO0=tC0=odrpH2uDDsT4uQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 Oct 2020 13:53:23 +0200
+Subject: [Buildroot] OpenSSL & Mosquitto on ARM Cortex M7
+In-Reply-To: <01b901d6a5ad$95b9df00$c12d9d00$@gmail.com> (rob's message of
+ "Mon, 19 Oct 2020 02:20:00 +0200")
+References: <01b901d6a5ad$95b9df00$c12d9d00$@gmail.com>
+Message-ID: <87tuupjeq4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris,
+>>>>>   <rob.r374@gmail.com> writes:
 
-On Tue, Oct 20, 2020 at 1:50 AM Chris Packham <judge.packham@gmail.com> wrote:
->
->
->
-> On Mon, 19 Oct 2020, 8:08 PM Thomas Petazzoni, <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> Packages with CVEs
->> ==================
->>
->> This is the list of packages for which a known CVE is affecting
->> them, which means a security vulnerability exists for
->> those packages.
->>
->>              name              |       CVE        |                             link
->> -------------------------------+------------------+--------------------------------------------------------------
->>                      syslog-ng | CVE-2008-5110    | https://security-tracker.debian.org/tracker/CVE-2008-5110
->
->
-> I think this is a false positive that's a pretty old CVE.
+ > Hello,
+ > I'm trying to include Mosquitto with OpenSSL support on Buildroot. 
 
-Would you mind checking NVD
-(https://nvd.nist.gov/vuln/detail/CVE-2008-5110) and making sure it
-has been correctly allocated to the correct range of versions?  If it
-doesn't look correct, I've captured some notes on how to update the
-entry.
-https://elinux.org/Buildroot:Security_Vulnerability_Management
+ 
 
+ > On working Buildroot basic build, I've added packages and setup static libs
+ > :
 
+ > BR2_PACKAGE_LIBOPENSSL=y
 
-Best Regards,
-Matt
+ > BR2_PACKAGE_MOSQUITTO=y 
+
+ > BR2_PACKAGE_MBEDTLS=y
+
+Why both mbedtls and openssl?
+
+ > BR2_STATIC_LIBS=y
+
+ > If I try to run Mosquitto tools (and MbedTLS test), I get :
+
+ > ~ # mosquitto_pub
+
+ > binfmt_flat: reference 0xffb4d0 to shared library 127, killing
+ > mosquitto_pub!
+
+binfmt_flat? What architecture are you building for / what is your
+entire defconfig?
+
+-- 
+Bye, Peter Korsgaard
