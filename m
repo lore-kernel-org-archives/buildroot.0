@@ -1,43 +1,41 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 20 Oct 2020 18:43:20 +0300
-Subject: [Buildroot] [PATCH 1/2] package/wpewebkit: fix build with
- ENABLE_C_LOOP=ON
-In-Reply-To: <20201020154321.3491904-1-aperez@igalia.com>
-References: <20201020154321.3491904-1-aperez@igalia.com>
-Message-ID: <20201020154321.3491904-2-aperez@igalia.com>
+From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
+Date: Tue, 20 Oct 2020 17:47:19 +0200
+Subject: [Buildroot] [PATCH] package/angularjs: bump version to 1.8.1
+Message-ID: <20201020154719.j22q4pgh5x6loizq@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ENABLE_C_LOOP option conflicts with ENABLE_SAMPLING_PROFILER, so
-the WebKit CMake build system will emit an error when both are enabled
-at the same time. To avoid hitting that situation, explicitly disable
-ENABLE_SAMPLING_PROFILER as needed.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
 ---
- package/wpewebkit/wpewebkit.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/angularjs/angularjs.hash | 4 ++--
+ package/angularjs/angularjs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index d6a3dca551..7bb13aa610 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -67,9 +67,12 @@ endif
- # have a check for these processors. Disable JIT forcibly here and use
- # the CLoop interpreter instead.
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
+index 7df9ae8596..efb364913b 100644
+--- a/package/angularjs/angularjs.hash
++++ b/package/angularjs/angularjs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c4098f594dc24cc4c8ad469c6d5785a65c0df812afe9f56ea0e4d3490c2fd46d  angular-1.8.0.zip
+-sha256  c7df41bc00628bec220b0378dc1f2f5041980758403b6f24b9774ac43a9186d8  angular.js
++sha256  a2c1452004943ba1f7caa0d4168a990839cfeccbc27ac66b66adbbd2b50f9a45  angular-1.8.1.zip
++sha256  6ba77ee7e5e8b1ddbfa601bcae30ec7d0daecba6d0993796ad52994bc8631f0d  angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+index 53b837e59f..e69c2abe41 100644
+--- a/package/angularjs/angularjs.mk
++++ b/package/angularjs/angularjs.mk
+@@ -4,7 +4,7 @@
  #
-+# Also, we have to disable the sampling profiler, which does NOT work
-+# with ENABLE_C_LOOP.
-+#
- # Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
- ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
--WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
-+WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+ ################################################################################
  
- $(eval $(cmake-package))
+-ANGULARJS_VERSION = 1.8.0
++ANGULARJS_VERSION = 1.8.1
+ ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+ ANGULARJS_LICENSE = MIT
 -- 
-2.28.0
+2.25.1
