@@ -1,51 +1,39 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 21 Oct 2020 15:02:27 -0700
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove Adam Duskett
-Message-ID: <20201021220227.3333932-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 Oct 2020 21:56:57 +0200
+Subject: [Buildroot] [git commit] Makefile: exclude BR2_DL_DIR from
+ savedefconfig
+Message-ID: <20201021194536.54ABC8392A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Running "make savedefconfig" with BR2_DL_DIR set also saves that
+variable, which is only useful in local context.
+
+Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
+[yann.morin.1998 at free.fr: wrap line]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS | 21 ---------------------
- 1 file changed, 21 deletions(-)
+ Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b245c1cd7e..81272157f6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -26,27 +26,6 @@
- #   infrastructure, and will be CC'ed on all patches that add or
- #   modify packages that use this infrastructure.
+diff --git a/Makefile b/Makefile
+index 384bfe3fe9..d1d19d8f40 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1027,7 +1027,9 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
+-	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
++	@$(SED) '/BR2_DEFCONFIG=/d' \
++		-e '/BR2_DL_DIR=/d' \
++		$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
  
--N:	Adam Duskett <aduskett@gmail.com>
--F:	package/gobject-introspection/
--F:	package/janus-gateway/
--F:	package/json-for-modern-cpp/
--F:	package/libressl/
--F:	package/libselinux/
--F:	package/libsemanage/
--F:	package/libsepol/
--F:	package/openjdk/
--F:	package/openjdk-bin/
--F:	package/policycoreutils/
--F:	package/prelink-cross/
--F:	package/python-gobject/
--F:	package/restorecond/
--F:	package/refpolicy/
--F:	package/selinux-python/
--F:	package/semodule-utils/
--F:	package/setools/
--F:	package/systemd/
--F:	support/testing/tests/package/test_python_gobject.py
--
- N:	Adam Heinrich <adam@adamh.cz>
- F:	package/jack1/
+ .PHONY: defconfig savedefconfig update-defconfig
  
--- 
-2.26.2
