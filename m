@@ -1,46 +1,33 @@
 From: Sven Oliver Moll <buildroot@svol.li>
-Date: Wed, 21 Oct 2020 12:33:43 +0200 (CEST)
-Subject: [Buildroot] [PATCH 1/1] busybox: install example zcip.script when
- zcip is activated in config
-Message-ID: <alpine.DEB.2.20.2010211135470.29285@defender.svolli.xa>
+Date: Wed, 21 Oct 2020 12:34:00 +0200 (CEST)
+Subject: [Buildroot] [PATCH 1/1] Makefile: exclude DL_DIR from savedefconfig
+Message-ID: <alpine.DEB.2.20.2010211133360.29285@defender.svolli.xa>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this way zcip will work out of the box when configured
+Running "make savedefconfig" with DL_DIR set also saves that variable,
+which is only useful in local context.
 
 Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
 ---
-  package/busybox/busybox.mk | 8 ++++++++
-  1 file changed, 8 insertions(+)
+  Makefile | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 45f74271f2..7136d9378a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -207,6 +207,13 @@ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
-  	fi
-  endef
+diff --git a/Makefile b/Makefile
+index 384bfe3fe9..e7b3b7535b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1027,7 +1027,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+  	@$(COMMON_CONFIG_ENV) $< \
+  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+  		$(CONFIG_CONFIG_IN)
+-	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
++	@$(SED) '/BR2_DEFCONFIG=/d' -e '/BR2_DL_DIR=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
 
-+define BUSYBOX_INSTALL_ZCIP_SCRIPT
-+	if grep -q CONFIG_ZCIP=y $(@D)/.config; then \
-+		$(INSTALL) -m 0755 -D $(@D)/examples/zcip.script \
-+			$(TARGET_DIR)/usr/share/zcip/default.script; \
-+	fi
-+endef
-+
-  ifeq ($(BR2_INIT_BUSYBOX),y)
-
-  define BUSYBOX_SET_INIT
-@@ -352,6 +359,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
-  	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install-noclobber
-  	$(BUSYBOX_INSTALL_INITTAB)
-  	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
-+	$(BUSYBOX_INSTALL_ZCIP_SCRIPT)
-  	$(BUSYBOX_INSTALL_MDEV_CONF)
-  endef
+  .PHONY: defconfig savedefconfig update-defconfig
 
 -- 
 2.20.1
