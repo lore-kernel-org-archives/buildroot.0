@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 21 Oct 2020 20:20:23 +0200
-Subject: [Buildroot] [PATCH] package/libubootenv: bump to version 0.3.1
-In-Reply-To: <20201020162120.1022548-1-francois.perrad@gadz.org>
-References: <20201020162120.1022548-1-francois.perrad@gadz.org>
-Message-ID: <20201021202023.1056e356@windsurf.home>
+Date: Wed, 21 Oct 2020 20:20:58 +0200
+Subject: [Buildroot] [git commit] package/libqrencode: bump to version 4.1.1
+Message-ID: <20201021180909.9E84283641@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=9a2c91cddd38d50551949d7721f5952139cd87bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Oct 2020 18:21:20 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Update indentation in hash file (two spaces)
 
-> diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-> index 65260b70e..4c7607ac8 100644
-> --- a/package/libubootenv/libubootenv.mk
-> +++ b/package/libubootenv/libubootenv.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBUBOOTENV_VERSION = 86bd30a14e153a18f670b25708795253d8736f0f
-> +LIBUBOOTENV_VERSION = v0.3.1
+https://fukuchi.org/works/qrencode/#news
 
-Thanks for the patch. However, we try to avoid having the "v" prefix in
-the version variable. Could you adjust your patch accordingly ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libqrencode/libqrencode.hash | 6 +++---
+ package/libqrencode/libqrencode.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
+index d8584c8ac7..ffcc537379 100644
+--- a/package/libqrencode/libqrencode.hash
++++ b/package/libqrencode/libqrencode.hash
+@@ -1,5 +1,5 @@
+-# From http://fukuchi.org/works/qrencode/qrencode-4.0.2.tar.gz.sha
+-sha512	c3e3834574ec059a4b571427b29d6f5f26bd806fd7498b9bba778f4eceab6ebe5733eef0f3c4f6af91eb3f2e9310f93f6d7b337c28e85c72db7e59bd79be77a9	qrencode-4.0.2.tar.gz
++# From http://fukuchi.org/works/qrencode/qrencode-4.1.1.tar.gz.sha
++sha512  209bb656ae3f391b03c7b3ceb03e34f7320b0105babf48b619e7a299528b8828449e0e7696f0b5db0d99170a81709d0518e34835229a748701e7df784e58a9ce  qrencode-4.1.1.tar.gz
+ 
+ # Hash for license file:
+-sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index 669c4193bd..0062a96a39 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQRENCODE_VERSION = 4.0.2
++LIBQRENCODE_VERSION = 4.1.1
+ LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+ LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
+ LIBQRENCODE_DEPENDENCIES = host-pkgconf
