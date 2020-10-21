@@ -1,9 +1,9 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 21 Oct 2020 18:50:02 +0200
-Subject: [Buildroot] [PATCH v2 2/4] package/re2: bump version to 2020-10-01
+Date: Wed, 21 Oct 2020 18:50:03 +0200
+Subject: [Buildroot] [PATCH v2 3/4] package/grpc: bump version to 1.33.1
 In-Reply-To: <20201021165005.641-1-buildroot@heine.tech>
 References: <20201021165005.641-1-buildroot@heine.tech>
-Message-ID: <20201021165005.641-2-buildroot@heine.tech>
+Message-ID: <20201021165005.641-3-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +11,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
 ---
-
-Resend as first mail got lost somehow.
-
----
- package/re2/re2.hash | 2 +-
- package/re2/re2.mk   | 2 +-
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index b8a80513b7..b502f12835 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 3a2dbe2d8a..57852ec63f 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
 @@ -1,3 +1,3 @@
- # locally calculated
--sha256  6f4c8514249cd65b9e85d3e6f4c35595809a63ad71c5d93083e4d1dcdf9e0cd6  re2-2020-08-01.tar.gz
-+sha256  0915741f524ad87debb9eb0429fe6016772a1569e21dc6d492039562308fcb0f  re2-2020-10-01.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 0c3bf4e844..7d1857dbf9 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
+ # Locally computed
+-sha256  f880ebeb2ccf0e47721526c10dd97469200e40b5f101a0d9774eb69efa0bd07a  grpc-1.32.0.tar.gz
++sha256  58eaee5c0f1bd0b92ebe1fa0606ec8f14798500620e7444726afcaf65041cb63  grpc-1.33.1.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index a6c1490fac..cca334dec5 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RE2_VERSION = 2020-08-01
-+RE2_VERSION = 2020-10-01
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
+-GRPC_VERSION = 1.32.0
++GRPC_VERSION = 1.33.1
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
 -- 
 2.25.1
