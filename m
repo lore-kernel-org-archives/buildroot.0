@@ -1,57 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Oct 2020 22:01:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Makefile: exclude DL_DIR from
- savedefconfig
-In-Reply-To: <alpine.DEB.2.20.2010211133360.29285@defender.svolli.xa>
-References: <alpine.DEB.2.20.2010211133360.29285@defender.svolli.xa>
-Message-ID: <20201021200130.GL3466@scaer>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Wed, 21 Oct 2020 17:18:36 +0200
+Subject: [Buildroot] [PATCH 2/4] package/re2: bump version to 2020-10-01
+In-Reply-To: <20201021151839.31731-1-buildroot@heine.tech>
+References: <20201021151839.31731-1-buildroot@heine.tech>
+Message-ID: <20201021151839.31731-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sven, All,
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/re2/re2.hash | 2 +-
+ package/re2/re2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2020-10-21 12:34 +0200, Sven Oliver Moll spake thusly:
-> Running "make savedefconfig" with DL_DIR set also saves that variable,
-> which is only useful in local context.
-> 
-> Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 384bfe3fe9..e7b3b7535b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1027,7 +1027,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@$(COMMON_CONFIG_ENV) $< \
->  		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
->  		$(CONFIG_CONFIG_IN)
-> -	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-> +	@$(SED) '/BR2_DEFCONFIG=/d' -e '/BR2_DL_DIR=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-> 
->  .PHONY: defconfig savedefconfig update-defconfig
-> 
-> -- 
-> 2.20.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index b8a80513b7..b502f12835 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  6f4c8514249cd65b9e85d3e6f4c35595809a63ad71c5d93083e4d1dcdf9e0cd6  re2-2020-08-01.tar.gz
++sha256  0915741f524ad87debb9eb0429fe6016772a1569e21dc6d492039562308fcb0f  re2-2020-10-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 0c3bf4e844..7d1857dbf9 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RE2_VERSION = 2020-08-01
++RE2_VERSION = 2020-10-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
