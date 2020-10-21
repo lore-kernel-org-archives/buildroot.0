@@ -1,39 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Oct 2020 21:56:57 +0200
-Subject: [Buildroot] [git commit] Makefile: exclude BR2_DL_DIR from
- savedefconfig
-Message-ID: <20201021194536.54ABC8392A@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 21 Oct 2020 23:39:56 +0200
+Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.5.2
+Message-ID: <20201021213956.276148-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump to version 2.5.2 and add missing whitespace in .hash file for
+COPYING.
 
-Running "make savedefconfig" with BR2_DL_DIR set also saves that
-variable, which is only useful in local context.
-
-Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
-[yann.morin.1998 at free.fr: wrap line]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/nfs-utils/nfs-utils.hash | 6 +++---
+ package/nfs-utils/nfs-utils.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 384bfe3fe9..d1d19d8f40 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1027,7 +1027,9 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
--	@$(SED) '/BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-+	@$(SED) '/BR2_DEFCONFIG=/d' \
-+		-e '/BR2_DL_DIR=/d' \
-+		$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
+index 266752071a..6268552ca1 100644
+--- a/package/nfs-utils/nfs-utils.hash
++++ b/package/nfs-utils/nfs-utils.hash
+@@ -1,4 +1,4 @@
+-# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.1/sha256sums.asc
+-sha256 0f1c8170e16a07d9836bbf0836d48d0c842b6f0e0e8b18748f099751851d30c4  nfs-utils-2.5.1.tar.xz
++# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.2/sha256sums.asc
++sha256  d493b81c9d3ffce5d10af701a63ed2b8a21768c23da4a2eceb4d708aea65d9de  nfs-utils-2.5.2.tar.xz
+ # Locally computed
+-sha256 576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
++sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index da85cb178f..d60b5055a0 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- .PHONY: defconfig savedefconfig update-defconfig
- 
+-NFS_UTILS_VERSION = 2.5.1
++NFS_UTILS_VERSION = 2.5.2
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
+ NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_LICENSE = GPL-2.0+
+-- 
+2.25.1
