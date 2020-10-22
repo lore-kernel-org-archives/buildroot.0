@@ -1,53 +1,52 @@
 From: Florian La Roche <florian.laroche@googlemail.com>
-Date: Thu, 22 Oct 2020 12:15:12 +0200
-Subject: [Buildroot] [PATCH 1/1] grub-efi: align the rootfs to start at 16MB
- offset from start of the image
-Message-ID: <20201022101512.56470-1-Florian.LaRoche@gmail.com>
+Date: Thu, 22 Oct 2020 12:31:51 +0200
+Subject: [Buildroot] [PATCH 1/1] BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E
+ as new firmware option
+Message-ID: <20201022103151.57497-1-Florian.LaRoche@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For grub-efi we can align the rootfs to start at exactly 16MB from the
-beginning of the disk. This can be done by reducing the vfat partition
-to be 32 KB smaller than its 16MB size, just like the offset of the vfat
-partition.
-
 Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
 ---
- board/pc/genimage-efi.cfg | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
-index ea15ae5cfb..304e964f14 100644
---- a/board/pc/genimage-efi.cfg
-+++ b/board/pc/genimage-efi.cfg
-@@ -10,7 +10,7 @@ image efi-part.vfat {
-       image = "bzImage"
-     }
-   }
--  size = 16777216
-+  size = 16744448
- }
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 1f0111f957..9b999034da 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -289,6 +289,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
+ 	help
+ 	  MediaTek MT7601U
  
- image disk.img {
-@@ -22,7 +22,7 @@ image disk.img {
-     image = "efi-part.vfat"
-     partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
-     offset = 32768
--    size = 16777216
-+    size = 16744448
-     bootable = true
-   }
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E
++	bool "MediaTek MT7610E"
++	help
++	  MediaTek MT7610E
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT76X2E
+ 	bool "MediaTek MT76x2e"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index e2a6ebcbf1..d9ad942903 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -286,6 +286,12 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
+ endif
  
-@@ -30,6 +30,6 @@ image disk.img {
-     partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
-     partition-uuid = UUID_TMP
-     image = "rootfs.ext2"
--    offset = 16809984
-+    offset = 16777216
-   }
- }
++# MT7610
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E),y)
++LINUX_FIRMWARE_FILES += mediatek/mt7610e.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
++endif
++
+ # MT7650
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650),y)
+ LINUX_FIRMWARE_FILES += mt7650.bin
 -- 
 2.28.0
