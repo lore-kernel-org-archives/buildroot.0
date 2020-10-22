@@ -1,21 +1,34 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 22 Oct 2020 21:29:34 +0200
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.5.2
-In-Reply-To: <20201021213956.276148-1-giulio.benetti@benettiengineering.com>
-References: <20201021213956.276148-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20201022192934.GA7479@x230>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 22 Oct 2020 19:43:57 +0000
+Subject: [Buildroot] [Bug 13281] Raspberry Pi 2: overlays folder missing in
+ genimage-raspberrypi2.cfg
+In-Reply-To: <bug-13281-163@https.bugs.busybox.net/>
+References: <bug-13281-163@https.bugs.busybox.net/>
+Message-ID: <bug-13281-163-Hc3lcKhWgg@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=13281
 
-> Bump to version 2.5.2 and add missing whitespace in .hash file for
-> COPYING.
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Sorry, it is by design (note the line '#
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set' in
+configs/raspberrypi2_defconfig)...
 
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Long answer: 
 
-Kind regards,
-Petr
+The buildroot defconfigs are about a minimal starting point for own
+development, minimal means board startup and at least a serial login, in the
+case of RPi2 no device tree overlays needed to achieve this, so config option
+RPI_FIRMWARE_INSTALL_DTB_OVERLAYS disabled and no entry in the genimage config
+file...
+
+For your own/enhanced project feel free to adjust as needed (and the genimage
+config is for sure a minor part of it)...
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
