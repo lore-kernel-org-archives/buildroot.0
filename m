@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 23 Oct 2020 22:07:16 +0200
-Subject: [Buildroot] [PATCH 02/11] package/perl-file-sharedir: bump to
- version 0.118
+Date: Fri, 23 Oct 2020 22:07:17 +0200
+Subject: [Buildroot] [PATCH 03/11] package/perl-gd: bump to version 2.73
 In-Reply-To: <20201023200725.1407498-1-francois.perrad@gadz.org>
 References: <20201023200725.1407498-1-francois.perrad@gadz.org>
-Message-ID: <20201023200725.1407498-2-francois.perrad@gadz.org>
+Message-ID: <20201023200725.1407498-3-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-file-sharedir/perl-file-sharedir.hash | 6 +++---
- package/perl-file-sharedir/perl-file-sharedir.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-gd/perl-gd.hash | 4 ++--
+ package/perl-gd/perl-gd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-file-sharedir/perl-file-sharedir.hash b/package/perl-file-sharedir/perl-file-sharedir.hash
-index e0a496655..413678d6a 100644
---- a/package/perl-file-sharedir/perl-file-sharedir.hash
-+++ b/package/perl-file-sharedir/perl-file-sharedir.hash
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index bfa52b997..780b1d1e2 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    f2a0eee9f04c93753dd56437175e5bda File-ShareDir-1.116.tar.gz
--sha256 59d90bfdf98c4656ff4173e62954ea8cf0de66565e35d108ecd7050596cb8328 File-ShareDir-1.116.tar.gz
-+md5  0084f730f4e3d4d89703d92b3ea82f54  File-ShareDir-1.118.tar.gz
-+sha256  3bb2a20ba35df958dc0a4f2306fc05d903d8b8c4de3c8beefce17739d281c958  File-ShareDir-1.118.tar.gz
+-md5  ae960b9eed826d8d20e4c563151629f2  GD-2.72.tar.gz
+-sha256  61d00713fcc3ba3c8fa8859025d86f97506e6af17e66d59e9396996773989104  GD-2.72.tar.gz
++md5  c2bf1ca56d15e33d2432e4d8ba5aeadf  GD-2.73.tar.gz
++sha256  491c9e73238522e2987e66725a20935f4268a3864202ecbaf4659a1691ba322b  GD-2.73.tar.gz
  
  # computed by scancpan
--sha256 db57983ce0a3bce54900b5a3a3a69e9a593e7b07d0f58dd9f87ac9b016ff4a6b LICENSE
-+sha256  db57983ce0a3bce54900b5a3a3a69e9a593e7b07d0f58dd9f87ac9b016ff4a6b  LICENSE
-diff --git a/package/perl-file-sharedir/perl-file-sharedir.mk b/package/perl-file-sharedir/perl-file-sharedir.mk
-index d907f3b06..0121b5634 100644
---- a/package/perl-file-sharedir/perl-file-sharedir.mk
-+++ b/package/perl-file-sharedir/perl-file-sharedir.mk
+ sha256  1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f  LICENSE
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index e73cf62a4..d34328f0d 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_FILE_SHAREDIR_VERSION = 1.116
-+PERL_FILE_SHAREDIR_VERSION = 1.118
- PERL_FILE_SHAREDIR_SOURCE = File-ShareDir-$(PERL_FILE_SHAREDIR_VERSION).tar.gz
- PERL_FILE_SHAREDIR_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
- PERL_FILE_SHAREDIR_DEPENDENCIES = host-perl-file-sharedir-install
+-PERL_GD_VERSION = 2.72
++PERL_GD_VERSION = 2.73
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
 -- 
 2.25.1
