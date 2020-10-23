@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 23 Oct 2020 22:07:24 +0200
-Subject: [Buildroot] [PATCH 10/11] package/perl-type-tiny: bump to version
- 1.010006
+Date: Fri, 23 Oct 2020 22:07:25 +0200
+Subject: [Buildroot] [PATCH 11/11] package/perl-uri: bump to version 5.05
 In-Reply-To: <20201023200725.1407498-1-francois.perrad@gadz.org>
 References: <20201023200725.1407498-1-francois.perrad@gadz.org>
-Message-ID: <20201023200725.1407498-10-francois.perrad@gadz.org>
+Message-ID: <20201023200725.1407498-11-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +12,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-type-tiny/perl-type-tiny.hash | 4 ++--
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-uri/perl-uri.hash | 6 +++---
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index c4c64a62b..85e312c6f 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 02287a064..39f2f4765 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  d20a07df0704e92c9c9beb72c5fdf153  Type-Tiny-1.010005.tar.gz
--sha256  e01becf614849ff8a869614c46ac2706b18da8e35ed80277d8475d8c88ca9173  Type-Tiny-1.010005.tar.gz
-+md5  b56b6d578843f509100f49b6ffddc21e  Type-Tiny-1.010006.tar.gz
-+sha256  f1568e3f0bf103e65faadc1804c6184fe29bf52559e7ff3c12f4dad437befd82  Type-Tiny-1.010006.tar.gz
+-md5    c236e0142adecc1b1104da664bc43a79 URI-1.76.tar.gz
+-sha256 b2c98e1d50d6f572483ee538a6f4ccc8d9185f91f0073fd8af7390898254413e URI-1.76.tar.gz
++md5  978454ba823a6908bad1c3c1804945d3  URI-5.05.tar.gz
++sha256  a5c113d2d02706d9fbdca6a86f290c5b05b2f86836d4e7fe1447f063261b79ec  URI-5.05.tar.gz
  
  # computed by scancpan
- sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 5d9758269..3fa119a8c 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
+-sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e LICENSE
++sha256  65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index 730b39052..1a4886590 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.010005
-+PERL_TYPE_TINY_VERSION = 1.010006
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_URI_VERSION = 1.76
++PERL_URI_VERSION = 5.05
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
 -- 
 2.25.1
