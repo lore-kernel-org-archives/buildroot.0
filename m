@@ -1,39 +1,54 @@
-From: Sven Oliver Moll <buildroot@svol.li>
-Date: Fri, 23 Oct 2020 19:35:35 +0200 (CEST)
-Subject: [Buildroot] [PATCH] Makefile: be careful what we remove from
- saved defconfig
-In-Reply-To: <ad27d198-54b8-596c-a079-46c756a6617a@celad.com>
-References: <20201021200828.3376405-1-yann.morin.1998@free.fr>
- <ad27d198-54b8-596c-a079-46c756a6617a@celad.com>
-Message-ID: <alpine.DEB.2.20.2010231929270.29285@defender.svolli.xa>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 23 Oct 2020 22:07:15 +0200
+Subject: [Buildroot] [PATCH 01/11] package/perl-file-listing: bump to
+ version 6.11
+Message-ID: <20201023200725.1407498-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 23 Oct 2020, Herv? CODINA wrote:
+now, LICENSE has its own file
 
-> Maybe I acked too quickly ...
->
-> What do you think about this pattern
-> @$(SED) '/^BR2_DEFCONFIG=/d' -e '/^# BR2_DEFCONFIG /
-> in order to match "BR2_DEFCONFIG=xxxxxxxx" and "# BR2_DEFCONFIG is not set" ?
-[...]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-file-listing/perl-file-listing.hash | 6 +++---
+ package/perl-file-listing/perl-file-listing.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-I don't think that this is necessary, because savedefconfig only saves the 
-ones that are different from preset. So:
-- BR2_DEFCONFIG is the name to save to, so an unset instance does not exist
-   (a bit like chicken and egg)
-- BR2_DL_DIR, when unset, will not appear as "# BR2_DL_DIR is unset" in the
-   saved *_defconfig
-...or am I missing something?
-
-
-Greetings,
-SvOlli
+diff --git a/package/perl-file-listing/perl-file-listing.hash b/package/perl-file-listing/perl-file-listing.hash
+index 6189948a1..5496646d2 100644
+--- a/package/perl-file-listing/perl-file-listing.hash
++++ b/package/perl-file-listing/perl-file-listing.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    83f636b477741f3a014585bb9cc079a6 File-Listing-6.04.tar.gz
+-sha256 1e0050fcd6789a2179ec0db282bf1e90fb92be35d1171588bd9c47d52d959cf5 File-Listing-6.04.tar.gz
++md5  6f298b96fdc072fbd0e0c2890a70ab2e  File-Listing-6.11.tar.gz
++sha256  c24c14ece10b949e1cb52d64bc28b42cbaebf87e00293a3f7500950d6be0bf6e  File-Listing-6.11.tar.gz
+ 
+ # computed by scancpan
+-sha256 9ee526d1593c48e65141aea5567f0cdf156eb57e68448cd91584c7aae92bd787 README
++sha256  7f0ccec295e6d7d2be1439cedd7caf6cc6247191f4c10ac56d91ee9bc265ba02  LICENSE
+diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
+index 9f3ca9516..f8d449ba3 100644
+--- a/package/perl-file-listing/perl-file-listing.mk
++++ b/package/perl-file-listing/perl-file-listing.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PERL_FILE_LISTING_VERSION = 6.04
++PERL_FILE_LISTING_VERSION = 6.11
+ PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
+-PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PL/PLICEASE
+ PERL_FILE_LISTING_LICENSE = Artistic or GPL-1.0+
+-PERL_FILE_LISTING_LICENSE_FILES = README
++PERL_FILE_LISTING_LICENSE_FILES = LICENSE
+ PERL_FILE_LISTING_DISTNAME = File-Listing
+ 
+ $(eval $(perl-package))
 -- 
-|  _______       |
-| (  /\          |
-|__)v\/lli a.k.a.| Be good, but not TOO good.
-|Sven Oliver Moll|   -- Frumpy The Clown by Judd Winick (Final: June, 7th 1998)
+2.25.1
