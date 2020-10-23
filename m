@@ -1,10 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 23 Oct 2020 22:07:20 +0200
-Subject: [Buildroot] [PATCH 06/11] package/perl-libwww-perl: bump to version
- 6.49
+Date: Fri, 23 Oct 2020 22:07:22 +0200
+Subject: [Buildroot] [PATCH 08/11] package/perl-net-dns: bump to version 1.27
 In-Reply-To: <20201023200725.1407498-1-francois.perrad@gadz.org>
 References: <20201023200725.1407498-1-francois.perrad@gadz.org>
-Message-ID: <20201023200725.1407498-6-francois.perrad@gadz.org>
+Message-ID: <20201023200725.1407498-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
- package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ package/perl-net-dns/perl-net-dns.hash | 4 ++--
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index e519f7966..58cb2e847 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.hash
-+++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index 2a2212a99..dfedb0a95 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  fe42c3f99fd8d1438d383f820c89d9bd  libwww-perl-6.47.tar.gz
--sha256  3029d6efc2099c4175bf976d0db7fbab9771ada631010c809cb4664230898f53  libwww-perl-6.47.tar.gz
-+md5  86601652f46b924a26acecad0fe5c110  libwww-perl-6.49.tar.gz
-+sha256  c3e4d0deae254c8b8fdc13e14b7b4b893594c947c43f4b5401e06322c96360a6  libwww-perl-6.49.tar.gz
+-md5  6db2562b6c42619e9c7d7e62422af8c4  Net-DNS-1.26.tar.gz
+-sha256  eabaecd0fdb3e6adef8c9e016e8509319f19caa8c76836253f7db72bafe56498  Net-DNS-1.26.tar.gz
++md5  204e08e5c8042ce0e7d7f0851af46d50  Net-DNS-1.27.tar.gz
++sha256  f336277710f3672095b23efe0735d8093fc493070944c57c4ec39191a52abd41  Net-DNS-1.27.tar.gz
  
  # computed by scancpan
- sha256  e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc  LICENSE
-diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 01428f91e..d749b1b60 100644
---- a/package/perl-libwww-perl/perl-libwww-perl.mk
-+++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+ sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 1408725f7..3d9ee3a2f 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_LIBWWW_PERL_VERSION = 6.47
-+PERL_LIBWWW_PERL_VERSION = 6.49
- PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
- PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_DNS_VERSION = 1.26
++PERL_NET_DNS_VERSION = 1.27
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
 -- 
 2.25.1
