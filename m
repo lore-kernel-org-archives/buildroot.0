@@ -1,99 +1,30 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Fri, 23 Oct 2020 02:36:41 -0700
-Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h via
- cross compiler
-Message-ID: <20201023093641.619746-1-raj.khem@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 23 Oct 2020 10:35:02 +0000
+Subject: [Buildroot] [Bug 12301] systemd-journal-gatewayd: config options
+ broken
+In-Reply-To: <bug-12301-163@https.bugs.busybox.net/>
+References: <bug-12301-163@https.bugs.busybox.net/>
+Message-ID: <bug-12301-163-b2bJMwfAz5@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using linux/version.h is assumed to be hardcoded inside sysroot but this
-does not consider the case where toolchains might be built with
---with-native-system-header-dir which means the header directories will
-not be under <sysroot>/usr/include but customized, archlinux, debian
-built cross toolchains use these install settings ( due to multiarch )
-they have the headers installed like /usr/aarch64-linux-gnu/include and
-not /usr/aarch64-linux-gnu/usr/include
+https://bugs.busybox.net/show_bug.cgi?id=12301
 
-This patch adds logic to use cross compiler to compute the path to
-linux/version.h on the fly, it means we do not really need to assume the
-install structure
+Michael Nosthoff <buildroot@heine.tech> changed:
 
-Fixes built when using external toolchains provided by archlinux e.g.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+   Target Milestone|---                         |2020.11
+             Status|NEW                         |RESOLVED
 
-Signed-off-by: Khem Raj <raj.khem@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/check-kernel-headers.sh           | 15 ++++++++++++++-
- toolchain/helpers.mk                              |  2 +-
- .../toolchain-external/pkg-toolchain-external.mk  |  3 ++-
- 3 files changed, 17 insertions(+), 3 deletions(-)
+--- Comment #2 from Michael Nosthoff <buildroot@heine.tech> ---
+fixed by
+https://git.busybox.net/buildroot/commit/?id=e46fe9a6f2b7cef9789f5172332067cac5ff03bd
 
-diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-index 4e6dce5487..5cedb9a082 100755
---- a/support/scripts/check-kernel-headers.sh
-+++ b/support/scripts/check-kernel-headers.sh
-@@ -21,6 +21,9 @@ SYSROOT="${2}"
- HDR_VER="${3}.0.0"
- CHECK="${4}"  # 'strict' or 'loose'
- 
-+# cross compiler passed in case of external toolchains
-+CROSS_CC="${5}"
-+
- HDR_M="${HDR_VER%%.*}"
- HDR_V="${HDR_VER#*.}"
- HDR_m="${HDR_V%%.*}"
-@@ -36,11 +39,21 @@ trap 'rm -f "${EXEC}"' EXIT
- 
- EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
- 
-+if [ -n "${CROSS_CC}" ]; then
-+  MAKE_VER_H=$(${CROSS_CC} -M -xc - <<_EOF_
-+#include <linux/version.h>
-+_EOF_
-+  )
-+  VER_H=`echo $MAKE_VER_H | awk 'END {print $NF}'`
-+else
-+  VER_H="${SYSROOT}/usr/include/linux/version.h"
-+fi
-+
- # We do not want to account for the patch-level, since headers are
- # not supposed to change for different patchlevels, so we mask it out.
- # This only applies to kernels >= 3.0, but those are the only one
- # we actually care about; we treat all 2.6.x kernels equally.
--${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
-+${HOSTCC} -imacros "${VER_H}" \
-           -x c -o "${EXEC}" - <<_EOF_
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 17bc159f3e..51d840b176 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -166,7 +166,7 @@ copy_toolchain_sysroot = \
- #
- check_kernel_headers_version = \
- 	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
--		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
-+		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict) $(5); \
- 	then \
- 		exit 1; \
- 	fi
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 6d91cb5d1e..93f725dada 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -549,7 +549,8 @@ define $(2)_CONFIGURE_CMDS
- 		$$(BUILD_DIR),\
- 		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
--		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
-+		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict),\
-+		$$(TOOLCHAIN_EXTERNAL_CC)); \
- 	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
- 		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
- 	if test "$$(BR2_arm)" = "y" ; then \
 -- 
-2.29.0
+You are receiving this mail because:
+You are on the CC list for the bug.
