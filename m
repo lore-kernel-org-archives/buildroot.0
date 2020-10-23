@@ -1,46 +1,58 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 23 Oct 2020 22:07:22 +0200
-Subject: [Buildroot] [PATCH 08/11] package/perl-net-dns: bump to version 1.27
+Date: Fri, 23 Oct 2020 22:07:23 +0200
+Subject: [Buildroot] [PATCH 09/11] package/perl-params-util: bump to version
+ 1.101
 In-Reply-To: <20201023200725.1407498-1-francois.perrad@gadz.org>
 References: <20201023200725.1407498-1-francois.perrad@gadz.org>
-Message-ID: <20201023200725.1407498-8-francois.perrad@gadz.org>
+Message-ID: <20201023200725.1407498-9-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+split LICENSE file
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-params-util/perl-params-util.hash | 8 +++++---
+ package/perl-params-util/perl-params-util.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 2a2212a99..dfedb0a95 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/perl-params-util/perl-params-util.hash b/package/perl-params-util/perl-params-util.hash
+index 0c247ebfe..d43b8baff 100644
+--- a/package/perl-params-util/perl-params-util.hash
++++ b/package/perl-params-util/perl-params-util.hash
+@@ -1,6 +1,8 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  6db2562b6c42619e9c7d7e62422af8c4  Net-DNS-1.26.tar.gz
--sha256  eabaecd0fdb3e6adef8c9e016e8509319f19caa8c76836253f7db72bafe56498  Net-DNS-1.26.tar.gz
-+md5  204e08e5c8042ce0e7d7f0851af46d50  Net-DNS-1.27.tar.gz
-+sha256  f336277710f3672095b23efe0735d8093fc493070944c57c4ec39191a52abd41  Net-DNS-1.27.tar.gz
+-md5    02db120c0eef87aae1830cc62bdec37b Params-Util-1.07.tar.gz
+-sha256 30f1ec3f2cf9ff66ae96f973333f23c5f558915bb6266881eac7423f52d7c76c Params-Util-1.07.tar.gz
++md5  eaf000a27bbd21abfd55f83473ab79fd  Params-Util-1.101.tar.gz
++sha256  97f391bc092b9c911e4536d103afd48058eb1f8a53d729af7adb65430eb338b7  Params-Util-1.101.tar.gz
  
  # computed by scancpan
- sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index 1408725f7..3d9ee3a2f 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
-@@ -4,7 +4,7 @@
+-sha256 71b5fb95de1ba013a517c926feaa2a7d0fb0e8f132818e8529e0da5ec01187cd LICENSE
++sha256  08c2ed7589aff3b2076b48b792078d3479c2295559ee7bc4615e93abe0473939  ARTISTIC-1.0
++sha256  3d2fb9b42d1134f39c2e990d66b5e9b77005663fe956db526cc380eb3d9a77d8  GPL-1
++sha256  834c4ebff45be11f35f059b077fdd747dee4b8a747b95049d849fef1c0ccdc62  LICENSE
+diff --git a/package/perl-params-util/perl-params-util.mk b/package/perl-params-util/perl-params-util.mk
+index c33ea816e..1a48a46fe 100644
+--- a/package/perl-params-util/perl-params-util.mk
++++ b/package/perl-params-util/perl-params-util.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.26
-+PERL_NET_DNS_VERSION = 1.27
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-PERL_PARAMS_UTIL_VERSION = 1.07
++PERL_PARAMS_UTIL_VERSION = 1.101
+ PERL_PARAMS_UTIL_SOURCE = Params-Util-$(PERL_PARAMS_UTIL_VERSION).tar.gz
+-PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK
++PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
+ PERL_PARAMS_UTIL_LICENSE = Artistic or GPL-1.0+
+-PERL_PARAMS_UTIL_LICENSE_FILES = LICENSE
++PERL_PARAMS_UTIL_LICENSE_FILES = ARTISTIC-1.0 GPL-1 LICENSE
+ PERL_PARAMS_UTIL_DISTNAME = Params-Util
+ 
+ $(eval $(perl-package))
 -- 
 2.25.1
