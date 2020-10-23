@@ -1,31 +1,16 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Fri, 23 Oct 2020 13:48:34 +0300
-Subject: [Buildroot] [PATCH 2/2] package/gpsd: add GPSD_PYTHON config
- option
-In-Reply-To: <20200824093544.GA31482@orolia.com>
-References: <20200824080449.10036-1-olivier.dautricourt@orolia.com>
- <20200824080449.10036-2-olivier.dautricourt@orolia.com>
- <875z98a2ax.fsf@tarshish> <20200824093544.GA31482@orolia.com>
-Message-ID: <20201023104834.GA2317@curiosity>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Fri, 23 Oct 2020 12:49:49 +0000
+Subject: [Buildroot] [PATCH v4 1/1] package/opensc: new package
+In-Reply-To: <GkJQCRWtnp7kZ0u2IG0LIeJIfuoGEqihwDaTMTIr39Y3ARLgO23D7JuXmhdVqopcHm8rwqEvrgM_SH8UEgOJHvoglRJHI_D6AQQ-WOjs5So=@protonmail.com>
+References: <GkJQCRWtnp7kZ0u2IG0LIeJIfuoGEqihwDaTMTIr39Y3ARLgO23D7JuXmhdVqopcHm8rwqEvrgM_SH8UEgOJHvoglRJHI_D6AQQ-WOjs5So=@protonmail.com>
+Message-ID: <cc1u0VWuW37vsyr9Pht63XPmynMYstjKxUjZgYckFzpLRz5pY8_tX0L0P0Cug2s1Wg33_n32Oiy-BCSk_hAWROdVQ72XdkJnA_h9S_H5-sk=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Oliver,
+Are additional fixes required for this (opensc) package?
 
-> I'll send a V2 for this patch (2/2).
-> 
-> Regards,
-> -- 
-> Olivier Dautricourt
-
-Do you plan to work on the next revision of gpsd update patches ?
-Let me know if you don't have capacity for that at the moment.
-I have been recently working on the same update together with
-enablement of gpsfake python test tools. So I can pick up
-your changes and proceed.
-
-Regards,
-Sergey
+Thanks,
+Yair
