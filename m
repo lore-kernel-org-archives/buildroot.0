@@ -1,82 +1,46 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 24 Oct 2020 17:57:50 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-memory-profiler: new package
-Message-ID: <20201024145750.267540-1-asafka7@gmail.com>
+From: =?iso-8859-15?Q?Herv=E9_CODINA?= <Herve.CODINA@celad.com>
+Date: Sat, 24 Oct 2020 16:32:47 +0000
+Subject: [Buildroot] [PATCH] Makefile: be careful what we remove from
+ saved defconfig
+In-Reply-To: <alpine.DEB.2.20.2010231929270.29285@defender.svolli.xa>
+References: <20201021200828.3376405-1-yann.morin.1998@free.fr>
+ <ad27d198-54b8-596c-a079-46c756a6617a@celad.com>
+ <alpine.DEB.2.20.2010231929270.29285@defender.svolli.xa>
+Message-ID: <dc3d24c2-bc60-f8b3-e73d-e660a07d2ec1@celad.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A module for monitoring memory usage of a python program.
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/Config.in                                  |  1 +
- package/python-memory-profiler/Config.in           |  8 ++++++++
- .../python-memory-profiler.hash                    |  5 +++++
- .../python-memory-profiler.mk                      | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-memory-profiler/Config.in
- create mode 100644 package/python-memory-profiler/python-memory-profiler.hash
- create mode 100644 package/python-memory-profiler/python-memory-profiler.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 504cfec98e..4da49ad179 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1037,6 +1037,7 @@ menu "External python modules"
- 	source "package/python-matplotlib/Config.in"
- 	source "package/python-mbstrdecoder/Config.in"
- 	source "package/python-meld3/Config.in"
-+	source "package/python-memory-profiler/Config.in"
- 	source "package/python-mimeparse/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-modbus-tk/Config.in"
-diff --git a/package/python-memory-profiler/Config.in b/package/python-memory-profiler/Config.in
-new file mode 100644
-index 0000000000..60833304ae
---- /dev/null
-+++ b/package/python-memory-profiler/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_MEMORY_PROFILER
-+	bool "python-memory-profiler"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
-+	help
-+	  A module for monitoring memory usage of a python program.
-+
-+	  https://github.com/pythonprofilers/memory_profiler
-diff --git a/package/python-memory-profiler/python-memory-profiler.hash b/package/python-memory-profiler/python-memory-profiler.hash
-new file mode 100644
-index 0000000000..9ee515b529
---- /dev/null
-+++ b/package/python-memory-profiler/python-memory-profiler.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/memory-profiler/json
-+md5  b1d1783064a1198fb21bc877e535ec1b  memory_profiler-0.58.0.tar.gz
-+sha256  01385ac0fec944fcf7969814ec4406c6d8a9c66c079d09276723c5a7680f44e5  memory_profiler-0.58.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  51926ce91b8283532efa9dfb02518582c15f49c105a3ac18cce1f7a4947e96ae  COPYING
-diff --git a/package/python-memory-profiler/python-memory-profiler.mk b/package/python-memory-profiler/python-memory-profiler.mk
-new file mode 100644
-index 0000000000..053b0e2d62
---- /dev/null
-+++ b/package/python-memory-profiler/python-memory-profiler.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-memory-profiler
-+#
-+################################################################################
-+
-+PYTHON_MEMORY_PROFILER_VERSION = 0.58.0
-+PYTHON_MEMORY_PROFILER_SOURCE = memory_profiler-$(PYTHON_MEMORY_PROFILER_VERSION).tar.gz
-+PYTHON_MEMORY_PROFILER_SITE = https://files.pythonhosted.org/packages/8f/fd/d92b3295657f8837e0177e7b48b32d6651436f0293af42b76d134c3bb489
-+PYTHON_MEMORY_PROFILER_SETUP_TYPE = setuptools
-+PYTHON_MEMORY_PROFILER_LICENSE = BSD-3-Clause
-+PYTHON_MEMORY_PROFILER_LICENSE_FILES = COPYING
-+
-+$(eval $(python-package))
--- 
-2.29.0
+On 23/10/2020 19:35, Sven Oliver Moll wrote:
+> On Fri, 23 Oct 2020, Herv? CODINA wrote:
+> 
+>> Maybe I acked too quickly ...
+>>
+>> What do you think about this pattern
+>> @$(SED) '/^BR2_DEFCONFIG=/d' -e '/^# BR2_DEFCONFIG /
+>> in order to match "BR2_DEFCONFIG=xxxxxxxx" and "# BR2_DEFCONFIG is not set" ?
+> [...]
+> 
+> I don't think that this is necessary, because savedefconfig only saves the ones that are different from preset. So:
+> - BR2_DEFCONFIG is the name to save to, so an unset instance does not exist
+>  ? (a bit like chicken and egg)
+> - BR2_DL_DIR, when unset, will not appear as "# BR2_DL_DIR is unset" in the
+>  ? saved *_defconfig
+> ...or am I missing something?
+> 
+> 
+> Greetings,
+> SvOlli
+
+I didn't fully check if BR2_DEFCONFIG and BR2_DL_DIR can appear commented.
+As some commented 'symbols' are present in defconfig files in /configs directory,
+my remark was just a kind of belt and suspenders approach :-)
+
+If BR2_DEFCONFIG and BR2_DL_DIR cannot appear commented, using just '/^BR2_DEFCONFIG=/d' and
+'/^BR2_DL_DIR=/d' is ok for me.
+
+Herve
