@@ -1,46 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:26:53 +0200
-Subject: [Buildroot] [git commit] package/perl-net-dns: bump to version 1.27
-Message-ID: <20201024201639.C91CA839B3@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:26:39 +0200
+Subject: [Buildroot] [git commit] package/perl-io-html: bump to version 1.004
+Message-ID: <20201024201639.A762482DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bbe6a98249ab64ade6a0075b992e4cfc1af3757
+commit: https://git.buildroot.net/buildroot/commit/?id=338d050fab1d20a8396d04274b5400f8c39b91f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+LICENSE diff:
+-This software is copyright (c) 2014 by Christopher J. Madsen.
++This software is copyright (c) 2020 by Christopher J. Madsen.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-io-html/perl-io-html.hash | 6 +++---
+ package/perl-io-html/perl-io-html.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index 2a2212a992..dfedb0a950 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
+diff --git a/package/perl-io-html/perl-io-html.hash b/package/perl-io-html/perl-io-html.hash
+index d8d865e8da..4067d2faa1 100644
+--- a/package/perl-io-html/perl-io-html.hash
++++ b/package/perl-io-html/perl-io-html.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  6db2562b6c42619e9c7d7e62422af8c4  Net-DNS-1.26.tar.gz
--sha256  eabaecd0fdb3e6adef8c9e016e8509319f19caa8c76836253f7db72bafe56498  Net-DNS-1.26.tar.gz
-+md5  204e08e5c8042ce0e7d7f0851af46d50  Net-DNS-1.27.tar.gz
-+sha256  f336277710f3672095b23efe0735d8093fc493070944c57c4ec39191a52abd41  Net-DNS-1.27.tar.gz
+-md5    3f8958718844dc96b9f6946f21d70d22 IO-HTML-1.001.tar.gz
+-sha256 ea78d2d743794adc028bc9589538eb867174b4e165d7d8b5f63486e6b828e7e0 IO-HTML-1.001.tar.gz
++md5  04bbe363686fd19bfb4cc0ed775e3d03  IO-HTML-1.004.tar.gz
++sha256  c87b2df59463bbf2c39596773dfb5c03bde0f7e1051af339f963f58c1cbd8bf5  IO-HTML-1.004.tar.gz
  
  # computed by scancpan
- sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index 1408725f77..3d9ee3a2ff 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
+-sha256 b386f0545c17589141d98810dd46aa1c4a14d7028cae6bdd807969639ea7405e LICENSE
++sha256  669fdd41b60ef6169a975b87a5fe35c50e81b9efc8f96b2459f4fbb238079d84  LICENSE
+diff --git a/package/perl-io-html/perl-io-html.mk b/package/perl-io-html/perl-io-html.mk
+index ae8c6405a3..934ac60cb6 100644
+--- a/package/perl-io-html/perl-io-html.mk
++++ b/package/perl-io-html/perl-io-html.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.26
-+PERL_NET_DNS_VERSION = 1.27
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-PERL_IO_HTML_VERSION = 1.001
++PERL_IO_HTML_VERSION = 1.004
+ PERL_IO_HTML_SOURCE = IO-HTML-$(PERL_IO_HTML_VERSION).tar.gz
+ PERL_IO_HTML_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CJ/CJM
+ PERL_IO_HTML_LICENSE = Artistic or GPL-1.0+
