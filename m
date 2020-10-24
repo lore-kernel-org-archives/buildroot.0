@@ -1,47 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:27:07 +0200
-Subject: [Buildroot] [git commit] package/perl-type-tiny: bump to version
- 1.010006
-Message-ID: <20201024201639.E3B4C82DA2@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:27:03 +0200
+Subject: [Buildroot] [git commit] package/perl-params-util: bump to version
+ 1.101
+Message-ID: <20201024201639.D68A182872@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7775320aa40becece0d9ee557b8d633337884b1
+commit: https://git.buildroot.net/buildroot/commit/?id=af87bcede85f499c9cdb33f460d2d46e72cc3242
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+split LICENSE file
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-type-tiny/perl-type-tiny.hash | 4 ++--
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-params-util/perl-params-util.hash | 8 +++++---
+ package/perl-params-util/perl-params-util.mk   | 6 +++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index c4c64a62b5..85e312c6f1 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/perl-params-util/perl-params-util.hash b/package/perl-params-util/perl-params-util.hash
+index 0c247ebfe5..d43b8baffc 100644
+--- a/package/perl-params-util/perl-params-util.hash
++++ b/package/perl-params-util/perl-params-util.hash
+@@ -1,6 +1,8 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  d20a07df0704e92c9c9beb72c5fdf153  Type-Tiny-1.010005.tar.gz
--sha256  e01becf614849ff8a869614c46ac2706b18da8e35ed80277d8475d8c88ca9173  Type-Tiny-1.010005.tar.gz
-+md5  b56b6d578843f509100f49b6ffddc21e  Type-Tiny-1.010006.tar.gz
-+sha256  f1568e3f0bf103e65faadc1804c6184fe29bf52559e7ff3c12f4dad437befd82  Type-Tiny-1.010006.tar.gz
+-md5    02db120c0eef87aae1830cc62bdec37b Params-Util-1.07.tar.gz
+-sha256 30f1ec3f2cf9ff66ae96f973333f23c5f558915bb6266881eac7423f52d7c76c Params-Util-1.07.tar.gz
++md5  eaf000a27bbd21abfd55f83473ab79fd  Params-Util-1.101.tar.gz
++sha256  97f391bc092b9c911e4536d103afd48058eb1f8a53d729af7adb65430eb338b7  Params-Util-1.101.tar.gz
  
  # computed by scancpan
- sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 5d9758269c..3fa119a8ce 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
-@@ -4,7 +4,7 @@
+-sha256 71b5fb95de1ba013a517c926feaa2a7d0fb0e8f132818e8529e0da5ec01187cd LICENSE
++sha256  08c2ed7589aff3b2076b48b792078d3479c2295559ee7bc4615e93abe0473939  ARTISTIC-1.0
++sha256  3d2fb9b42d1134f39c2e990d66b5e9b77005663fe956db526cc380eb3d9a77d8  GPL-1
++sha256  834c4ebff45be11f35f059b077fdd747dee4b8a747b95049d849fef1c0ccdc62  LICENSE
+diff --git a/package/perl-params-util/perl-params-util.mk b/package/perl-params-util/perl-params-util.mk
+index c33ea816eb..1a48a46fe2 100644
+--- a/package/perl-params-util/perl-params-util.mk
++++ b/package/perl-params-util/perl-params-util.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.010005
-+PERL_TYPE_TINY_VERSION = 1.010006
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_PARAMS_UTIL_VERSION = 1.07
++PERL_PARAMS_UTIL_VERSION = 1.101
+ PERL_PARAMS_UTIL_SOURCE = Params-Util-$(PERL_PARAMS_UTIL_VERSION).tar.gz
+-PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK
++PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
+ PERL_PARAMS_UTIL_LICENSE = Artistic or GPL-1.0+
+-PERL_PARAMS_UTIL_LICENSE_FILES = LICENSE
++PERL_PARAMS_UTIL_LICENSE_FILES = ARTISTIC-1.0 GPL-1 LICENSE
+ PERL_PARAMS_UTIL_DISTNAME = Params-Util
+ 
+ $(eval $(perl-package))
