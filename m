@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:58:36 +0200
-Subject: [Buildroot] [PATCH] package/stunnel: bump to version 5.57
-In-Reply-To: <1603132076-2071-1-git-send-email-pjtexier@koncepto.io>
-References: <1603132076-2071-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20201024225836.12486932@windsurf.home>
+Date: Sat, 24 Oct 2020 22:58:41 +0200
+Subject: [Buildroot] [PATCH] package/mxml: bump to version 3.2
+In-Reply-To: <1603132129-2372-1-git-send-email-pjtexier@koncepto.io>
+References: <1603132129-2372-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20201024225841.64b30cc3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 19 Oct 2020 20:27:56 +0200
+On Mon, 19 Oct 2020 20:28:49 +0200
 Pierre-Jean Texier via buildroot <buildroot@busybox.net> wrote:
 
-> Update COPYING hash; copyright year update:
+> The hash of the NOTICE file has changed due to the following minor update:
 > 
-> -_Copyright (C) 1998-2019 Michal Trojnara_
-> +_Copyright (C) 1998-2020 Michal Trojnara_
+> -Exceptions to the Apache 2.0 License:
+> -=====================================
+> +(Optional) Exceptions to the Apache 2.0 License:
+> +================================================
 > 
 > Also update hash file formatting (2 spaces)
 > 
-> See changelog https://www.stunnel.org/NEWS.html
+> See changelog https://github.com/michaelrsweet/mxml/releases/tag/v3.2
 > 
 > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/stunnel/stunnel.hash | 8 ++++----
->  package/stunnel/stunnel.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/mxml/mxml.hash | 6 +++---
+>  package/mxml/mxml.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
