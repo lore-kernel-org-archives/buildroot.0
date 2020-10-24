@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:57:16 +0200
-Subject: [Buildroot] [git commit] package/libraw: security bump to version
- 0.20.2
-Message-ID: <20201024204612.06C838360E@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:57:33 +0200
+Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.9
+Message-ID: <20201024204612.13E108145E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a05b7cc7c10b070669722a80af182d7b7974a0d
+commit: https://git.buildroot.net/buildroot/commit/?id=70fe20867b50736e1e7d04fab76e36a24a29ed25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2020-24890: libraw 20.0 has a null pointer dereference
-vulnerability in parse_tiff_ifd in src/metadata/tiff.cpp, which may
-result in context-dependent arbitrary code execution.
-
-https://www.libraw.org/news/libraw-0-20-2-Release
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libraw/libraw.hash | 2 +-
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index e8117cd1f1..f2a01c277b 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1f0a383da2ce9f409087facd28261decbf6be72cc90c78cd003b0766e4d694a3  LibRaw-0.20.0.tar.gz
-+sha256  dc1b486c2003435733043e4e05273477326e51c3ea554c6864a4eafaff1004a6  LibRaw-0.20.2.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  313415f7f48f6cd3cc78856626aab4bbe97dbb1e9a11db9c25396ca8d0e76cd9  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index e33674e6f5..acfa4dbe37 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 5f1c200f55..fa9d54f404 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.8.1.tar.gz.sha256
+-sha256	e5b080f3273a8a715a4100f13826ac2ca31cc7b1315925631b2ecf64957ded96  iperf-3.8.1.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
++sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
+ # Locally computed
+ sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 7d5a10cdef..f67fa17022 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRAW_VERSION = 0.20.0
-+LIBRAW_VERSION = 0.20.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
+-IPERF3_VERSION = 3.8.1
++IPERF3_VERSION = 3.9
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
