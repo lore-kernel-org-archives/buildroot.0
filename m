@@ -1,46 +1,43 @@
-From: =?iso-8859-15?Q?Herv=E9_CODINA?= <Herve.CODINA@celad.com>
-Date: Sat, 24 Oct 2020 16:32:47 +0000
-Subject: [Buildroot] [PATCH] Makefile: be careful what we remove from
- saved defconfig
-In-Reply-To: <alpine.DEB.2.20.2010231929270.29285@defender.svolli.xa>
-References: <20201021200828.3376405-1-yann.morin.1998@free.fr>
- <ad27d198-54b8-596c-a079-46c756a6617a@celad.com>
- <alpine.DEB.2.20.2010231929270.29285@defender.svolli.xa>
-Message-ID: <dc3d24c2-bc60-f8b3-e73d-e660a07d2ec1@celad.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 24 Oct 2020 18:33:56 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/rpi-firmware: bump version to
+ 358f4c2
+In-Reply-To: <20201024163356.17502-1-ps.report@gmx.net>
+References: <20201024163356.17502-1-ps.report@gmx.net>
+Message-ID: <20201024163356.17502-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 23/10/2020 19:35, Sven Oliver Moll wrote:
-> On Fri, 23 Oct 2020, Herv? CODINA wrote:
-> 
->> Maybe I acked too quickly ...
->>
->> What do you think about this pattern
->> @$(SED) '/^BR2_DEFCONFIG=/d' -e '/^# BR2_DEFCONFIG /
->> in order to match "BR2_DEFCONFIG=xxxxxxxx" and "# BR2_DEFCONFIG is not set" ?
-> [...]
-> 
-> I don't think that this is necessary, because savedefconfig only saves the ones that are different from preset. So:
-> - BR2_DEFCONFIG is the name to save to, so an unset instance does not exist
->  ? (a bit like chicken and egg)
-> - BR2_DL_DIR, when unset, will not appear as "# BR2_DL_DIR is unset" in the
->  ? saved *_defconfig
-> ...or am I missing something?
-> 
-> 
-> Greetings,
-> SvOlli
-
-I didn't fully check if BR2_DEFCONFIG and BR2_DL_DIR can appear commented.
-As some commented 'symbols' are present in defconfig files in /configs directory,
-my remark was just a kind of belt and suspenders approach :-)
-
-If BR2_DEFCONFIG and BR2_DL_DIR cannot appear commented, using just '/^BR2_DEFCONFIG=/d' and
-'/^BR2_DL_DIR=/d' is ok for me.
-
-Herve
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 1f1485f246..8730ec959b 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dcea78fcd14e0a0cb9f3b7eba42baf17566e141c3188f348017271d64edacaa3  rpi-firmware-baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55.tar.gz
++sha256  c7a8c2b8cfe1977095d62086d340d6c15a383562aba2742e21df7f5f792aeb4b  rpi-firmware-358f4c271f2bc10931aae8fe0879ffaded8b9c44.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 91368fa809..8b2b2c7154 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = baec4d28b54c7f9c30aabdbc61fa0c4dedcb3e55
++RPI_FIRMWARE_VERSION = 358f4c271f2bc10931aae8fe0879ffaded8b9c44
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-- 
+2.28.0
