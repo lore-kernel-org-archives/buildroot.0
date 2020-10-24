@@ -1,58 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 23:00:09 +0200
-Subject: [Buildroot] [git commit] package/docker-engine: bump to version
+Date: Sat, 24 Oct 2020 23:01:34 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/docker-cli: bump to version
  19.03.13
-Message-ID: <20201024204906.177F881367@busybox.osuosl.org>
+In-Reply-To: <20201019090825.3677582-1-christian@paral.in>
+References: <20201019090825.3677582-1-christian@paral.in>
+Message-ID: <20201024230134.4df26077@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ebd4d9a61435e61561344ce5eca8d6960f2a8bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Oct 2020 02:08:24 -0700
+Christian Stewart <christian@paral.in> wrote:
 
-The Docker developers appear to no longer be tagging releases on the
-docker/engine repository on GitHub, but are tagging releases on the main
-moby/moby repository, which still is the true home of "dockerd."
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> 
+> ---
 
-This commit changes the upstream repo to moby/moby with no changes required.
+Both applied. Thanks!
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-
-v1 -> v2:
-
- - updated hash
- - changed upstream to moby/moby
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 3283e4eb48..e7d5932687 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	858e4e74ee0097bcbdb71d737e268dfcfd1970efa4a1600354253b02fd403e39  docker-engine-19.03.12.tar.gz
-+sha256	f43331fef1d24e31f43392fc1fed72b48fc17fd432d341d6eb1f68ca11383406  docker-engine-19.03.13.tar.gz
- sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 2d92570b94..8cedf307ba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DOCKER_ENGINE_VERSION = 19.03.12
--DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
-+DOCKER_ENGINE_VERSION = 19.03.13
-+DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
- DOCKER_ENGINE_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
