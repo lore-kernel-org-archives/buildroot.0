@@ -1,45 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:57:33 +0200
-Subject: [Buildroot] [git commit] package/iperf3: bump to version 3.9
-Message-ID: <20201024204612.13E108145E@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:58:18 +0200
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.58
+Message-ID: <20201024204612.32F058360E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70fe20867b50736e1e7d04fab76e36a24a29ed25
+commit: https://git.buildroot.net/buildroot/commit/?id=178f491f8d4a698dd9ceac478ed301b91a05074a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Bump version to 3.58. Unfortunately local patch is still pending
+upstream and not applied due to Covid-19 latency:
+https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.58_release_notes
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf3/iperf3.hash | 4 ++--
- package/iperf3/iperf3.mk   | 2 +-
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 5f1c200f55..fa9d54f404 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index e3b584351e..02593c7dde 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
--# From https://downloads.es.net/pub/iperf/iperf-3.8.1.tar.gz.sha256
--sha256	e5b080f3273a8a715a4100f13826ac2ca31cc7b1315925631b2ecf64957ded96  iperf-3.8.1.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.9.tar.gz.sha256
-+sha256	24b63a26382325f759f11d421779a937b63ca1bc17c44587d2fcfedab60ac038  iperf-3.9.tar.gz
- # Locally computed
- sha256	9ef73096bdd5209dd979bfa1fec70aeb42a7255d2df3aec423642aa92d5e9f40  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 7d5a10cdef..f67fa17022 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_57_RTM/src/SHA256SUMS
+-sha256  55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382  nss-3.57.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_58_RTM/src/SHA256SUMS
++sha256  9f73cf789b5f109b978e5239551b609b0cafa88d18f0bc8ce3f976cb629353c0  nss-3.58.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 21cd65cb8f..8e6a77d2cb 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF3_VERSION = 3.8.1
-+IPERF3_VERSION = 3.9
- IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+-LIBNSS_VERSION = 3.57
++LIBNSS_VERSION = 3.58
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
