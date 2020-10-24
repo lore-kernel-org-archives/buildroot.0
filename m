@@ -1,49 +1,46 @@
-From: Derrick Pallas <derrick@meter.com>
-Date: Sat, 24 Oct 2020 12:02:27 -0700
-Subject: [Buildroot] [PATCH 1/1] package/meson: fix blank entry in
- cross-compilation.conf
-In-Reply-To: <20201024203231.36f8b4a5@gmx.net>
-References: <20201023061251.29900-1-derrick@meter.com>
- <20201024203231.36f8b4a5@gmx.net>
-Message-ID: <f7739bed-eba2-8c5e-837e-d66e9b7940e8@meter.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 24 Oct 2020 22:26:25 +0200
+Subject: [Buildroot] [git commit] package/perl-gd: bump to version 2.73
+Message-ID: <20201024201639.8E6E882DA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for looking Peter.
+commit: https://git.buildroot.net/buildroot/commit/?id=6b69fde576df44d1a56848a659ccdedc41b14ee4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 10/24/20 11:32 AM, Peter Seiderer wrote:
-> On my system (for a RPi4 configuration) already without your patch:
-> 
-> 	$ grep cpu host/etc/meson/cross-compilation.conf
-> cpu_family ='aarch64'
-> cpu = 'cortex-a72'
-> 
-> GCC_TARGET_CPU comes from arch/arch.mk:
-> 
-> GCC_TARGET_CPU := $(call qstrip,$(BR2_GCC_TARGET_CPU))
-> 
-> Anything special with your configuration/build environment (which
-> buildroot version)? What is the BR2_GCC_TARGET_CPU entry in
-> your .config file?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-gd/perl-gd.hash | 4 ++--
+ package/perl-gd/perl-gd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've tried this on both the development branch and on 2020.08.1 and I 
-get the same results. The target is an x86_64/silvermont. After taking a 
-second look, the problem seems to be that arch/Config.in.x86 does not 
-actually set BR2_GCC_TARGET_CPU; instead, it sets BR2_GCC_TARGET_ARCH 
-with a value that might better described as BR2_GCC_TARGET_CPU. Thus, my 
-config has
-
-	BR2_ARCH = x86_64 # because BR2_x86_64
-	BR2_GCC_TARGET_ARCH = silvermont # because BR2_x86_silvermont
-
-Is the config variable misnamed for x86? Adding Thomas Petazzoni, since 
-it looks like he did the original breakout of BR2_GCC_TARGET_ARCH and 
-then later removed it from several archs (e.g. arm) in favor of cpu.
-
-Or should there be a fallback from BR2_GCC_TARGET_CPU to 
-BR2_GCC_TARGET_ARCH if the former does not exist?
-
-Thanks, ~Derrick
+diff --git a/package/perl-gd/perl-gd.hash b/package/perl-gd/perl-gd.hash
+index bfa52b9970..780b1d1e27 100644
+--- a/package/perl-gd/perl-gd.hash
++++ b/package/perl-gd/perl-gd.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  ae960b9eed826d8d20e4c563151629f2  GD-2.72.tar.gz
+-sha256  61d00713fcc3ba3c8fa8859025d86f97506e6af17e66d59e9396996773989104  GD-2.72.tar.gz
++md5  c2bf1ca56d15e33d2432e4d8ba5aeadf  GD-2.73.tar.gz
++sha256  491c9e73238522e2987e66725a20935f4268a3864202ecbaf4659a1691ba322b  GD-2.73.tar.gz
+ 
+ # computed by scancpan
+ sha256  1e2250289d6df4ba1c24f7550982d7ffaff2c97cd02e847659406e1afd28e83f  LICENSE
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index e73cf62a46..d34328f0de 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_GD_VERSION = 2.72
++PERL_GD_VERSION = 2.73
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_GD_DEPENDENCIES = zlib libpng freetype gd
