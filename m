@@ -1,50 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:26:31 +0200
-Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
- 6.26
-Message-ID: <20201024201639.97E158443E@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:26:20 +0200
+Subject: [Buildroot] [git commit] package/perl-file-sharedir: bump to
+ version 0.118
+Message-ID: <20201024201639.8799882872@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1bc4da4e5d2057a47eeebba6ca992ea3c570666
+commit: https://git.buildroot.net/buildroot/commit/?id=324f90f10f2e8cec1e5c5e88919fb7aed7113a6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 4 ++--
+ package/perl-file-sharedir/perl-file-sharedir.hash | 6 +++---
+ package/perl-file-sharedir/perl-file-sharedir.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index c220d5f824..989d7efd0e 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-file-sharedir/perl-file-sharedir.hash b/package/perl-file-sharedir/perl-file-sharedir.hash
+index e0a4966553..413678d6ae 100644
+--- a/package/perl-file-sharedir/perl-file-sharedir.hash
++++ b/package/perl-file-sharedir/perl-file-sharedir.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  8847fe62ec103a242d39194c9e3c647e  HTTP-Message-6.25.tar.gz
--sha256  21f46502e87d57f43b7a38f81916464b079f5d50fe529458391c0ad529e0075a  HTTP-Message-6.25.tar.gz
-+md5  3b4b64fff4885429b997390564521db0  HTTP-Message-6.26.tar.gz
-+sha256  6ce6c359de75c3bb86696a390189b485ec93e3ffc55326b6d044fa900f1725e1  HTTP-Message-6.26.tar.gz
+-md5    f2a0eee9f04c93753dd56437175e5bda File-ShareDir-1.116.tar.gz
+-sha256 59d90bfdf98c4656ff4173e62954ea8cf0de66565e35d108ecd7050596cb8328 File-ShareDir-1.116.tar.gz
++md5  0084f730f4e3d4d89703d92b3ea82f54  File-ShareDir-1.118.tar.gz
++sha256  3bb2a20ba35df958dc0a4f2306fc05d903d8b8c4de3c8beefce17739d281c958  File-ShareDir-1.118.tar.gz
  
  # computed by scancpan
- sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index cb8a1d94b5..114fc80008 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
-@@ -4,9 +4,9 @@
+-sha256 db57983ce0a3bce54900b5a3a3a69e9a593e7b07d0f58dd9f87ac9b016ff4a6b LICENSE
++sha256  db57983ce0a3bce54900b5a3a3a69e9a593e7b07d0f58dd9f87ac9b016ff4a6b  LICENSE
+diff --git a/package/perl-file-sharedir/perl-file-sharedir.mk b/package/perl-file-sharedir/perl-file-sharedir.mk
+index d907f3b066..0121b5634f 100644
+--- a/package/perl-file-sharedir/perl-file-sharedir.mk
++++ b/package/perl-file-sharedir/perl-file-sharedir.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.25
-+PERL_HTTP_MESSAGE_VERSION = 6.26
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
--PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
- PERL_HTTP_MESSAGE_LICENSE_FILES = LICENSE
- PERL_HTTP_MESSAGE_DISTNAME = HTTP-Message
+-PERL_FILE_SHAREDIR_VERSION = 1.116
++PERL_FILE_SHAREDIR_VERSION = 1.118
+ PERL_FILE_SHAREDIR_SOURCE = File-ShareDir-$(PERL_FILE_SHAREDIR_VERSION).tar.gz
+ PERL_FILE_SHAREDIR_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
+ PERL_FILE_SHAREDIR_DEPENDENCIES = host-perl-file-sharedir-install
