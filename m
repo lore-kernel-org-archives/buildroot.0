@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:55:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix SSP build
-In-Reply-To: <20201020111647.1605963-1-egorenar@linux.ibm.com>
-References: <20201020111647.1605963-1-egorenar@linux.ibm.com>
-Message-ID: <20201024225556.2140e616@windsurf.home>
+Date: Sat, 24 Oct 2020 22:56:10 +0200
+Subject: [Buildroot] [git commit] package/angularjs: bump version to 1.8.1
+Message-ID: <20201024204404.55878840B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 20 Oct 2020 13:16:47 +0200
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=977bcf50b31938297f1f21bff9bff7082784c648
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.net/results/f906ca8650a7a9ccca4a2ee359a807d08a7763b9
-> 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-> ---
->  .../0001-zipl-boot-disable-SSP.patch          | 28 +++++++++++++++++++
->  .../0002-genprotimg-boot-disable-SSP.patch    | 28 +++++++++++++++++++
->  2 files changed, 56 insertions(+)
->  create mode 100644 package/s390-tools/0001-zipl-boot-disable-SSP.patch
->  create mode 100644 package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
+Signed-off-by: Ignacy Gaw??dzki <ignacy.gawedzki@green-communications.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/angularjs/angularjs.hash | 4 ++--
+ package/angularjs/angularjs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks. Could you make sure to get the two patches
-applied to the upstream project ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
+index 7df9ae8596..efb364913b 100644
+--- a/package/angularjs/angularjs.hash
++++ b/package/angularjs/angularjs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c4098f594dc24cc4c8ad469c6d5785a65c0df812afe9f56ea0e4d3490c2fd46d  angular-1.8.0.zip
+-sha256  c7df41bc00628bec220b0378dc1f2f5041980758403b6f24b9774ac43a9186d8  angular.js
++sha256  a2c1452004943ba1f7caa0d4168a990839cfeccbc27ac66b66adbbd2b50f9a45  angular-1.8.1.zip
++sha256  6ba77ee7e5e8b1ddbfa601bcae30ec7d0daecba6d0993796ad52994bc8631f0d  angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
+index 53b837e59f..e69c2abe41 100644
+--- a/package/angularjs/angularjs.mk
++++ b/package/angularjs/angularjs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ANGULARJS_VERSION = 1.8.0
++ANGULARJS_VERSION = 1.8.1
+ ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+ ANGULARJS_LICENSE = MIT
