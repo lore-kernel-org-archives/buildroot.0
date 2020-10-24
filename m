@@ -1,31 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:42:05 +0200
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.5.2
-In-Reply-To: <20201021213956.276148-1-giulio.benetti@benettiengineering.com>
-References: <20201021213956.276148-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20201024224205.646b2656@windsurf.home>
+Date: Sat, 24 Oct 2020 22:42:18 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Adam Duskett
+Message-ID: <20201024203012.D57D38467C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 21 Oct 2020 23:39:56 +0200
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=065adaeaebc02263d43406d15865c40d9999fd43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump to version 2.5.2 and add missing whitespace in .hash file for
-> COPYING.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/nfs-utils/nfs-utils.hash | 6 +++---
->  package/nfs-utils/nfs-utils.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 21 ---------------------
+ 1 file changed, 21 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b245c1cd7e..81272157f6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -26,27 +26,6 @@
+ #   infrastructure, and will be CC'ed on all patches that add or
+ #   modify packages that use this infrastructure.
+ 
+-N:	Adam Duskett <aduskett@gmail.com>
+-F:	package/gobject-introspection/
+-F:	package/janus-gateway/
+-F:	package/json-for-modern-cpp/
+-F:	package/libressl/
+-F:	package/libselinux/
+-F:	package/libsemanage/
+-F:	package/libsepol/
+-F:	package/openjdk/
+-F:	package/openjdk-bin/
+-F:	package/policycoreutils/
+-F:	package/prelink-cross/
+-F:	package/python-gobject/
+-F:	package/restorecond/
+-F:	package/refpolicy/
+-F:	package/selinux-python/
+-F:	package/semodule-utils/
+-F:	package/setools/
+-F:	package/systemd/
+-F:	support/testing/tests/package/test_python_gobject.py
+-
+ N:	Adam Heinrich <adam@adamh.cz>
+ F:	package/jack1/
+ 
