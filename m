@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 24 Oct 2020 22:56:10 +0200
-Subject: [Buildroot] [git commit] package/angularjs: bump version to 1.8.1
-Message-ID: <20201024204404.55878840B3@busybox.osuosl.org>
+Date: Sat, 24 Oct 2020 22:56:49 +0200
+Subject: [Buildroot] [git commit] package/uclibc-ng-test: disable TLS for
+ nds32 and s390x
+Message-ID: <20201024204449.BC52B84340@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=977bcf50b31938297f1f21bff9bff7082784c648
+commit: https://git.buildroot.net/buildroot/commit/?id=335eafc12324606257ee43498355aa61915be2df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ignacy Gaw??dzki <ignacy.gawedzki@green-communications.fr>
+Fixes:
+http://autobuild.buildroot.net/results/dac2a477a4de28d671c165e940db25364e291636
+http://autobuild.buildroot.net/results/84ca7104669bdc4fe538e526f3522e36b9bf666b
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/angularjs/angularjs.hash | 4 ++--
- package/angularjs/angularjs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/uclibc-ng-test/uclibc-ng-test.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
-index 7df9ae8596..efb364913b 100644
---- a/package/angularjs/angularjs.hash
-+++ b/package/angularjs/angularjs.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  c4098f594dc24cc4c8ad469c6d5785a65c0df812afe9f56ea0e4d3490c2fd46d  angular-1.8.0.zip
--sha256  c7df41bc00628bec220b0378dc1f2f5041980758403b6f24b9774ac43a9186d8  angular.js
-+sha256  a2c1452004943ba1f7caa0d4168a990839cfeccbc27ac66b66adbbd2b50f9a45  angular-1.8.1.zip
-+sha256  6ba77ee7e5e8b1ddbfa601bcae30ec7d0daecba6d0993796ad52994bc8631f0d  angular.js
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-index 53b837e59f..e69c2abe41 100644
---- a/package/angularjs/angularjs.mk
-+++ b/package/angularjs/angularjs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
+index 1d1722adee..9f866f5d71 100644
+--- a/package/uclibc-ng-test/uclibc-ng-test.mk
++++ b/package/uclibc-ng-test/uclibc-ng-test.mk
+@@ -38,6 +38,10 @@ endif
+ ifeq ($(BR2_STATIC_LIBS),y)
+ UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
+ endif
++# no TLS macros available
++ifeq ($(BR2_nds32)$(BR2_s390x),y)
++UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1
++endif
  
--ANGULARJS_VERSION = 1.8.0
-+ANGULARJS_VERSION = 1.8.1
- ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
- ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
- ANGULARJS_LICENSE = MIT
+ # to execute tests in a deterministic order, call test_gen separately
+ define UCLIBC_NG_TEST_BUILD_CMDS
