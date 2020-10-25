@@ -1,29 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 11:02:41 +0100
-Subject: [Buildroot] [PATCH 1/1]
- BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E as new firmware option
-In-Reply-To: <20201022103151.57497-1-Florian.LaRoche@gmail.com>
-References: <20201022103151.57497-1-Florian.LaRoche@gmail.com>
-Message-ID: <20201025110241.75cf71d5@windsurf.home>
+Date: Sun, 25 Oct 2020 11:03:05 +0100
+Subject: [Buildroot] [git commit] package/stella: bump version to 6.3
+Message-ID: <20201025095138.3D79583659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 22 Oct 2020 12:31:51 +0200
-Florian La Roche via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2e116fe233ccb77e41ad4104696b1e59f0540149
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
-> ---
->  package/linux-firmware/Config.in         | 5 +++++
->  package/linux-firmware/linux-firmware.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/stella/stella.hash | 2 +-
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index 31a3bef1e5..18e325b1e4 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  47b991af880b1699614c081d602c197942cfbdcbf52e3d738617923d5df23dc7  stella-6.2.1-src.tar.xz
++sha256  59ee35a3e49f52e64fa15e0217ecda90ccb768dcb075d997e72d5e5a3198f82e  stella-6.3-src.tar.xz
+ sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
+ sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 1a071cb0a9..1e2cbaf9fa 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STELLA_VERSION = 6.2.1
++STELLA_VERSION = 6.3
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
