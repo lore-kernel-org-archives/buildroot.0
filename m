@@ -1,70 +1,76 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 Oct 2020 12:49:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 18.9-Leia
-Message-ID: <20201025114959.561657-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Oct 2020 13:38:16 +0100
+Subject: [Buildroot] [git commit] package/lua-gd: bump to version
+ 2ce8e478a8591afd71e607506bc8c64b161bbd30
+Message-ID: <20201025122608.317DC840DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
- package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
- package/kodi/kodi.hash                                   | 2 +-
- package/kodi/kodi.mk                                     | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=f51d1723b1721ec0b12f01e34fff1e990c760cbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-index 7d0772fb78..2c7f77d050 100644
---- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-+++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
-@@ -6,7 +6,7 @@
+drop gdlib-config
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lua-gd/lua-gd.hash |  2 +-
+ package/lua-gd/lua-gd.mk   | 24 ++++++++++++++++++++++--
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/package/lua-gd/lua-gd.hash b/package/lua-gd/lua-gd.hash
+index d1bab37bc1..512573b474 100644
+--- a/package/lua-gd/lua-gd.hash
++++ b/package/lua-gd/lua-gd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  114f273a64da6ccbf6e0555757b952f84ab8c134416dd7aae1aeb666ca0e964d  lua-gd-e60b13b7977bb3424d7044976ccba5d42c256934.tar.gz
++sha256  928fa036b37595d773db1999c9ff43195c4290f0722298fa5b0c3e619c678525  lua-gd-2ce8e478a8591afd71e607506bc8c64b161bbd30.tar.gz
+ sha256  b0ca41d88ddb0ca785436d37b08b8f413055755eb6bfd3ea0a6ff3214303aa43  COPYING
+diff --git a/package/lua-gd/lua-gd.mk b/package/lua-gd/lua-gd.mk
+index e9a51a1677..099df31f7f 100644
+--- a/package/lua-gd/lua-gd.mk
++++ b/package/lua-gd/lua-gd.mk
+@@ -4,17 +4,37 @@
+ #
+ ################################################################################
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_JSONSCHEMABUILDER_VERSION = 18.8-Leia
-+KODI_JSONSCHEMABUILDER_VERSION = 18.9-Leia
- KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
- KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
- KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
-diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
-index c83cc3165e..7b13904ef4 100644
---- a/package/kodi-texturepacker/kodi-texturepacker.mk
-+++ b/package/kodi-texturepacker/kodi-texturepacker.mk
-@@ -6,7 +6,7 @@
+-LUA_GD_VERSION = e60b13b7977bb3424d7044976ccba5d42c256934
++LUA_GD_VERSION = 2ce8e478a8591afd71e607506bc8c64b161bbd30
+ LUA_GD_SITE = $(call github,ittner,lua-gd,$(LUA_GD_VERSION))
+ LUA_GD_LICENSE = MIT
+ LUA_GD_LICENSE_FILES = COPYING
+ LUA_GD_DEPENDENCIES = luainterpreter gd
  
- # Not possible to directly refer to kodi variables, because of
- # first/second expansion trickery...
--KODI_TEXTUREPACKER_VERSION = 18.8-Leia
-+KODI_TEXTUREPACKER_VERSION = 18.9-Leia
- KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
- KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
- KODI_TEXTUREPACKER_DL_SUBDIR = kodi
-diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
-index 06a33efa85..545f87909f 100644
---- a/package/kodi/kodi.hash
-+++ b/package/kodi/kodi.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  6deb28f725880b1ab6c5920b55ef1190a79b0684ffb30b6e13b199d23a0af296  kodi-18.8-Leia.tar.gz
-+sha256  bdf8afa9356b1f815de9984801d3e0d2b46a719e747895b75528f20995c59d2b  kodi-18.9-Leia.tar.gz
- sha256  e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
- sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
- sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index d8144c0c38..80a8d4e6bf 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please also update kodi-jsonschemabuilder
- # and kodi-texturepacker
--KODI_VERSION = 18.8-Leia
-+KODI_VERSION = 18.9-Leia
- KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
- KODI_LICENSE = GPL-2.0
- KODI_LICENSE_FILES = LICENSE.md
--- 
-2.27.0
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++LUA_GD_FEATURES += -DGD_FONTCONFIG
++endif
++
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++LUA_GD_FEATURES += -DGD_FREETYPE
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LUA_GD_FEATURES += -DGD_JPEG
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LUA_GD_FEATURES += -DGD_PNG
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
++LUA_GD_FEATURES += -DGD_XPM
++endif
++
+ # VERSION follows the scheme described on https://ittner.github.io/lua-gd/manual.html#intro,
+ # the current version of the binding is 3.
+ define LUA_GD_BUILD_CMDS
+ 	$(MAKE) -C $(@D) gd.so \
+-		GDLIBCONFIG="$(STAGING_DIR)/usr/bin/gdlib-config" \
++		GDFEATURES="$(LUA_GD_FEATURES)" \
+ 		CC=$(TARGET_CC) \
+ 		CFLAGS="$(TARGET_CFLAGS) -fPIC -DVERSION=\\\"$(GD_VERSION)r3\\\"" \
+ 		LFLAGS="-shared -lgd"
