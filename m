@@ -1,65 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 10:30:08 +0100
-Subject: [Buildroot] [git commit] package/nginx: use /run instead of /var/run
-Message-ID: <20201025091809.4C30D856C7@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 10:30:27 +0100
+Subject: [Buildroot] [PATCH] package/nginx: use /run instead of /var/run
+In-Reply-To: <20201015101137.32333-1-buildroot@heine.tech>
+References: <20201015101137.32333-1-buildroot@heine.tech>
+Message-ID: <20201025103027.5704d2aa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d200ceffb2eab5c097684c5b9a2e6c6097b1f698
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 15 Oct 2020 12:11:36 +0200
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
-PIDFile"), in which we missed that nginx is still built with /var/run
-paths.
+> This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
+> PIDFile").
+> 
+> I missed that nginx is still built with /var/run paths.
+> 
+> This commit changes the compile options to use /run instead of /var/run
+> for pid and lock file to make it consistent.
+> 
+> Further dropping the passing of the pid option in the service file as
+> this isn't neccessary. Neither debian nor nginx default .service does
+> it.
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> ---
+>  package/nginx/nginx.mk      | 4 ++--
+>  package/nginx/nginx.service | 8 ++++----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
-This commit changes the compile options to use /run instead of
-/var/run for pid and lock file to make it consistent.
+Applied to master, thanks.
 
-Further dropping the passing of the pid option in the service file as
-this isn't neccessary. Neither debian nor nginx default .service does
-it.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nginx/nginx.mk      | 4 ++--
- package/nginx/nginx.service | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 1f896bc377..00fb147682 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -49,8 +49,8 @@ NGINX_CONF_OPTS += \
- 	--prefix=/usr \
- 	--conf-path=/etc/nginx/nginx.conf \
- 	--sbin-path=/usr/sbin/nginx \
--	--pid-path=/var/run/nginx.pid \
--	--lock-path=/var/run/lock/nginx.lock \
-+	--pid-path=/run/nginx.pid \
-+	--lock-path=/run/lock/nginx.lock \
- 	--user=www-data \
- 	--group=www-data \
- 	--error-log-path=/var/log/nginx/error.log \
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 9fd215fd3e..f203cecdc0 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -6,10 +6,10 @@ After=syslog.target network.target
- Type=forking
- PIDFile=/run/nginx.pid
- ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
--ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
--ExecStop=/usr/sbin/nginx -g 'pid /var/run/nginx.pid;' -s quit
-+ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
-+ExecStart=/usr/sbin/nginx -g 'daemon on; master_process on;'
-+ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
-+ExecStop=/usr/sbin/nginx -s quit
- PrivateDevices=yes
- 
- [Install]
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
