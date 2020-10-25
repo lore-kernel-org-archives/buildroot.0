@@ -1,55 +1,164 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 11:31:30 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/liblo: bump to version 0.31
-Message-ID: <20201025103130.419099-1-fontaine.fabrice@gmail.com>
+From: RR <rob.r374@gmail.com>
+Date: Sun, 25 Oct 2020 11:33:05 +0100
+Subject: [Buildroot] OpenSSL & Mosquitto on ARM Cortex M7
+In-Reply-To: <20201019211123.320af01b@gmx.net>
+References: <01b901d6a5ad$95b9df00$c12d9d00$@gmail.com>
+ <20201019211123.320af01b@gmx.net>
+Message-ID: <004001d6aaba$39e116a0$ada343e0$@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Hello,
 
-http://liblo.sourceforge.net/NEWS.html
+I'm enclosing my defconfig... I'm basically compiling for ARM Cortex-M7
+(stm32f769 discovery board).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix package name
+What I have additionally spotted is that mosquiotto_sub doesn't crash with
+same error, but it doesn't have ssl options working.
+So probably my first problem is that libopenssl doesn't compile properly...
 
- package/liblo/liblo.hash | 10 +++++-----
- package/liblo/liblo.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+When I try to compile it separately, by using 
+	make libopenssl-reconfigure
 
-diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
-index 049ab80747..a3d34d796c 100644
---- a/package/liblo/liblo.hash
-+++ b/package/liblo/liblo.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/liblo/files/liblo/0.30/
--sha1	152a3260d186f111a71508dc0ed709984960f130	liblo-0.30.tar.gz
--md5	fa1a9d45f86fc18fb54019f670ff2262		liblo-0.30.tar.gz
-+# From http://sourceforge.net/projects/liblo/files/liblo/0.31/
-+sha1  d188a62df51e29fa98861daec1db0fdae400410d  liblo-0.31.tar.gz
-+md5  14378c1e74c58e777fbb4fcf33ac5315  liblo-0.31.tar.gz
- 
- # Locally computed
--sha256	  30a7c9de49a25ed7f2425a7a7415f5b14739def62431423d3419ea26fb978d1b	liblo-0.30.tar.gz
--sha256	  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
-+sha256  2b4f446e1220dcd624ecd8405248b08b7601e9a0d87a0b94730c2907dbccc750  liblo-0.31.tar.gz
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
-index 69918186db..27dba1f99f 100644
---- a/package/liblo/liblo.mk
-+++ b/package/liblo/liblo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBLO_VERSION = 0.30
-+LIBLO_VERSION = 0.31
- LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
- 
- LIBLO_LICENSE = LGPL-2.1+
--- 
-2.28.0
+it seems that it doesn't have target architecture defined. If I add
+BR2_PACKAGE_TARGET_ARCH="arm-v4" to make call,
+I end up in error of missing file (it's also weird why win32 files are
+included in compilation at all) :
+
+/home/robi/Razvoj/Linux/Buildroot/JE_UcLinux/buildroot/../host/bin/arm-build
+root-uclinux-uclibcgnueabi-gcc  -I. -Iinclude -fPIC -pthread
+-Wa,--noexecstack -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os    -Wl,-elf2flt -static -DHAVE_FORK=0
+-DOPENSSL_NO_MADVISE -DOPENSSL_NO_ASYNC    -Wl,-elf2flt -static
+-DOPENSSL_USE_NODELETE -DOPENSSL_PIC -DOPENSSL_CPUID_OBJ
+-DOPENSSL_BN_ASM_MONT -DOPENSSL_BN_ASM_GF2m -DSHA1_ASM -DSHA256_ASM
+-DSHA512_ASM -DKECCAK1600_ASM -DAES_ASM -DBSAES_ASM -DGHASH_ASM
+-DECP_NISTZ256_ASM -DPOLY1305_ASM -DOPENSSLDIR="\"/etc/ssl\""
+-DENGINESDIR="\"/usr/lib/engines-1.1\"" -DZLIB -DNDEBUG -D_LARGEFILE_SOURCE
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -MMD -MF
+crypto/dso/dso_win32.d.tmp -MT crypto/dso/dso_win32.o -c -o
+crypto/dso/dso_win32.o crypto/dso/dso_win32.c
+crypto/dso/dso_dlfcn.c:28:12: fatal error: dlfcn.h: No such file or
+directory
+ #  include <dlfcn.h>
+            ^~~~~~~~~
+compilation terminated.
+
+Any advice where I can learn or get libopenssl compiled properly?
+ Then I can proceed to mosquitto, because it uses libopenssl.
+I'm probably doing something obviously wrong...
+I'm using buildroot release tag 2020.05...
+
+Thanks in advance,
+Regards,
+
+-----Original Message-----
+From: Peter Seiderer <ps.report@gmx.net> 
+Sent: Monday, October 19, 2020 9:11 PM
+To: rob.r374 at gmail.com
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] OpenSSL & Mosquitto on ARM Cortex M7
+
+Hello Rob,
+
+On Mon, 19 Oct 2020 02:20:00 +0200, <rob.r374@gmail.com> wrote:
+
+> Hello,
+>
+>
+>
+> I'm trying to include Mosquitto with OpenSSL support on Buildroot.
+>
+>
+>
+> On working Buildroot basic build, I've added packages and setup static 
+> libs
+> :
+>
+> BR2_PACKAGE_LIBOPENSSL=y
+>
+> BR2_PACKAGE_MOSQUITTO=y
+>
+> BR2_PACKAGE_MBEDTLS=y
+>
+> BR2_STATIC_LIBS=y
+>
+> If I try to run Mosquitto tools (and MbedTLS test), I get :
+>
+> ~ # mosquitto_pub
+>
+> binfmt_flat: reference 0xffb4d0 to shared library 127, killing 
+> mosquitto_pub!
+>
+> SEGV
+>
+> ~ # mosquitto_sub
+>
+> Error: You must specify a topic to subscribe to.
+>
+> Use 'mosquitto_sub --help' to see usage.
+>
+>
+>
+> ~ # ssl_client2
+>
+> sh: can't execute 'ssl_client2': No such file or directory
+>
+>
+>
+> It's weird, because mosquitto_pub complains about shared lib, but I 
+> have defined static libraries only (at least I think so).
+>
+> In addition, mosquitto_sub works, but it seems it doesn't receive SSL 
+> related arguments - seems like it was not compiled with OpenSSL lib.
+>
+> Also, ssl_client2 or other tools from MbedTLS cannot be found.
+>
+>
+>
+> How to solve those problems ?
+>
+>
+>
+> Also I'm not sure how to check for each package - compilation, 
+> installation, errors, warnings etc.
+
+Did you do/try a full rebuild after changing your config ([1])?
+
+If the problem still exists after a full rebuild please provide your .config
+or defconfig file and the buildroot version your are using...
+
+Regards,
+Peter
+
+[1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
+
+>
+>
+>
+> Regards,
+>
+> Rob.
+>
+>
+>
+>
+>
+>
+>
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: OpenSSL_log.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201025/042f4ba2/attachment.txt>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: custom_stm32f769_defconfig
+Type: application/octet-stream
+Size: 2054 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201025/042f4ba2/attachment.obj>
