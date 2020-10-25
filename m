@@ -1,46 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 11:22:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/scrypt: bump to version 1.3.1
-Message-ID: <20201025102233.412261-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 11:29:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libo: bump to version 0.31
+Message-ID: <20201025102954.418944-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash of COPYRIGHT (update in year:
-https://github.com/Tarsnap/scrypt/commit/8584d33ad75eb6c920df13e17a6af91c1c4576d0)
+Update indentation in hash file (two spaces)
+
+http://liblo.sourceforge.net/NEWS.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/scrypt/scrypt.hash | 6 +++---
- package/scrypt/scrypt.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/liblo/liblo.hash | 10 +++++-----
+ package/liblo/liblo.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
-index c73ff515bc..4004b89737 100644
---- a/package/scrypt/scrypt.hash
-+++ b/package/scrypt/scrypt.hash
-@@ -1,4 +1,4 @@
--# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.0.asc
--sha256  263034edd4d1e117d4051d9a9260c74dedb0efaf4491c5152b738978b3f32748  scrypt-1.3.0.tgz
-+# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.1.asc
-+sha256  df2f23197c9589963267f85f9c5307ecf2b35a98b83a551bf1b1fb7a4d06d4c2  scrypt-1.3.1.tgz
+diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
+index 049ab80747..a3d34d796c 100644
+--- a/package/liblo/liblo.hash
++++ b/package/liblo/liblo.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/liblo/files/liblo/0.30/
+-sha1	152a3260d186f111a71508dc0ed709984960f130	liblo-0.30.tar.gz
+-md5	fa1a9d45f86fc18fb54019f670ff2262		liblo-0.30.tar.gz
++# From http://sourceforge.net/projects/liblo/files/liblo/0.31/
++sha1  d188a62df51e29fa98861daec1db0fdae400410d  liblo-0.31.tar.gz
++md5  14378c1e74c58e777fbb4fcf33ac5315  liblo-0.31.tar.gz
+ 
  # Locally computed
--sha256  adc1942c42da6e3370223a27ff4a6835924d2b41e509f9bee58a5e6ca1bbddae  COPYRIGHT
-+sha256  1fb4da0e9000287414066a238f378528d5652f89b72b4a1d6b89fdd20031b22d  COPYRIGHT
-diff --git a/package/scrypt/scrypt.mk b/package/scrypt/scrypt.mk
-index 820664f6c1..fb305faf41 100644
---- a/package/scrypt/scrypt.mk
-+++ b/package/scrypt/scrypt.mk
+-sha256	  30a7c9de49a25ed7f2425a7a7415f5b14739def62431423d3419ea26fb978d1b	liblo-0.30.tar.gz
+-sha256	  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
++sha256  2b4f446e1220dcd624ecd8405248b08b7601e9a0d87a0b94730c2907dbccc750  liblo-0.31.tar.gz
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 69918186db..27dba1f99f 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SCRYPT_VERSION = 1.3.0
-+SCRYPT_VERSION = 1.3.1
- SCRYPT_SOURCE = scrypt-$(SCRYPT_VERSION).tgz
- SCRYPT_SITE = http://www.tarsnap.com/scrypt
- SCRYPT_LICENSE = BSD-2-Clause
+-LIBLO_VERSION = 0.30
++LIBLO_VERSION = 0.31
+ LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
+ 
+ LIBLO_LICENSE = LGPL-2.1+
 -- 
 2.28.0
