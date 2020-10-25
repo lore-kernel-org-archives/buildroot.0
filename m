@@ -1,57 +1,90 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 15:39:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: security bump to
- version 2.3.4
-Message-ID: <20201025143912.1273561-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 15:49:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dmidecode: bump to version 3.3
+Message-ID: <20201025144934.1290100-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-14382: A vulnerability was found in upstream release
-cryptsetup-2.2.0 where, there's a bug in LUKS2 format validation code,
-that is effectively invoked on every device/image presenting itself as
-LUKS2 container. The bug is in segments validation code in file
-'lib/luks2/luks2_json_metadata.c' in function
-hdr_validate_segments(struct crypt_device *cd, json_object *hdr_jobj)
-where the code does not check for possible overflow on memory allocation
-used for intervals array (see statement "intervals = malloc(first_backup
-* sizeof(*intervals));"). Due to the bug, library can be *tricked* to
-expect such allocation was successful but for far less memory then
-originally expected. Later it may read data FROM image crafted by an
-attacker and actually write such data BEYOND allocated memory.
+- Drop patch (not needed since
+  http://git.savannah.nongnu.org/cgit/dmidecode.git/commit?id=5b3c8e9950262fc941bb5b3b3a1275720d47d62d)
+- Update indentation in hash file (two spaces)
 
-https://mirrors.edge.kernel.org/pub/linux/utils/cryptsetup/v2.3/v2.3.4-ReleaseNotes
+http://git.savannah.gnu.org/cgit/dmidecode.git/plain/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../dmidecode/0001-build-system-fixes.patch   | 35 -------------------
+ package/dmidecode/dmidecode.hash              |  4 +--
+ package/dmidecode/dmidecode.mk                |  2 +-
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 package/dmidecode/0001-build-system-fixes.patch
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index c47d701baa..3b58345611 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
--sha256  3bca4ffe39e2f94cef50f6ea65acb873a6dbce5db34fc6bcefe38b6d095e82df  cryptsetup-2.3.3.tar.xz
-+sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 68cc1543dc..a2abf776cc 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/dmidecode/0001-build-system-fixes.patch b/package/dmidecode/0001-build-system-fixes.patch
+deleted file mode 100644
+index 00897f82ad..0000000000
+--- a/package/dmidecode/0001-build-system-fixes.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Minor build system fixes
+-
+-Usual build system fixes to allow CC/CFLAGS/LDFLAGS to be overriden
+-from the command line, and completed by additional flags from the
+-Makefile.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -12,9 +12,10 @@
+- #   (at your option) any later version.
+- #
+- 
+--CC      = gcc
+--CFLAGS  = -W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
+--          -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
+-+CC      ?= gcc
+-+override CFLAGS  += \
+-+	-W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
+-+        -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
+- 
+- # Let lseek and mmap support 64-bit wide offsets
+- CFLAGS += -D_FILE_OFFSET_BITS=64
+-@@ -27,7 +28,7 @@ CFLAGS += -O2
+- #CFLAGS += -g
+- 
+- # Pass linker flags here
+--LDFLAGS =
+-+override LDFLAGS +=
+- 
+- DESTDIR =
+- prefix  = /usr/local
+diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
+index c6edf4bcac..ba72295cae 100644
+--- a/package/dmidecode/dmidecode.hash
++++ b/package/dmidecode/dmidecode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 077006fa2da0d06d6383728112f2edef9684e9c8da56752e97cd45a11f838edd  dmidecode-3.2.tar.xz
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  82c737a780614c38a783e8055340d295e332fb12c7f418b5d21a0797d3fb1455  dmidecode-3.3.tar.xz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
+index 811565d8e4..89d9155f95 100644
+--- a/package/dmidecode/dmidecode.mk
++++ b/package/dmidecode/dmidecode.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 2.3
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c libargon2 \
+-DMIDECODE_VERSION = 3.2
++DMIDECODE_VERSION = 3.3
+ DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
+ DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
+ DMIDECODE_LICENSE = GPL-2.0+
 -- 
 2.28.0
