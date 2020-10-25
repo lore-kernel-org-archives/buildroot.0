@@ -1,31 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 16:05:58 +0100
-Subject: [Buildroot] [PATCH v1] package/meson: fix
- cross-compilation.conf.in formatting
-In-Reply-To: <20201024183810.28154-1-ps.report@gmx.net>
-References: <20201024183810.28154-1-ps.report@gmx.net>
-Message-ID: <20201025160558.1b6b7985@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 25 Oct 2020 17:43:31 +0200
+Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2020.10
+In-Reply-To: <20201025155543.4a6dcb17@windsurf.home>
+References: <20201025105107.1439143-1-francois.perrad@gadz.org>
+ <20201025155543.4a6dcb17@windsurf.home>
+Message-ID: <87ft62ux98.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 24 Oct 2020 20:38:10 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hi Thomas,
 
-> Add missing space for the cross-compilation.conf.in cpu_family
-> entry.
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/meson/cross-compilation.conf.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Oct 25 2020, Thomas Petazzoni wrote:
+> On Sun, 25 Oct 2020 11:51:07 +0100
+> Francois Perrad <fperrad@gmail.com> wrote:
+>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/moarvm/moarvm.hash | 2 +-
+>>  package/moarvm/moarvm.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> Applied to master, thanks.
 
-Applied to master, thanks.
+Not in master as of commit 60ef34b414d27.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
