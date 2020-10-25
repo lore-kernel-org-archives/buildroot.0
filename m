@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 11:29:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libo: bump to version 0.31
-Message-ID: <20201025102954.418944-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 11:31:30 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/liblo: bump to version 0.31
+Message-ID: <20201025103130.419099-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,9 @@ http://liblo.sourceforge.net/NEWS.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix package name
+
  package/liblo/liblo.hash | 10 +++++-----
  package/liblo/liblo.mk   |  2 +-
  2 files changed, 6 insertions(+), 6 deletions(-)
