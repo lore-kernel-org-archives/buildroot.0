@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 11:06:03 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: add support for TLS
- with libressl
-Message-ID: <20201025095356.660D685F5E@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 11:05:57 +0100
+Subject: [Buildroot] [git commit] package/gst1-devtools: add optional
+ gst1-rtsp-server dependency
+Message-ID: <20201025095356.52DD183935@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a49be66e19f74f7d615f23bc3fdd556815b67f8
+commit: https://git.buildroot.net/buildroot/commit/?id=f96dc1e64acc2635c01d60c57af9c8cee5a1586f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mosquitto nowadays works correctly with libressl, so allow that as the
-openssl backend as well.
+Add optional gst1-rtsp-server dependency as checked for in
+gst1-devtools-1.18.0/validate/tools/meson.build.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosquitto/mosquitto.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-devtools/gst1-devtools.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 5734dd45c5..fcd9cb7de9 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -48,8 +48,8 @@ else
- MOSQUITTO_MAKE_OPTS += WITH_THREADING=no
+diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+index c88d4c0378..65c9bd4914 100644
+--- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
++++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+@@ -23,6 +23,10 @@ else
+ GST1_DEVTOOLS_DEPENDENCIES += host-python python
  endif
  
--ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
--MOSQUITTO_DEPENDENCIES += host-pkgconf libopenssl
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MOSQUITTO_DEPENDENCIES += host-pkgconf openssl
- MOSQUITTO_MAKE_OPTS += \
- 	WITH_TLS=yes \
- 	CLIENT_STATIC_LDADD="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
++ifeq ($(BR2_PACKAGE_GST1_RTSP_SERVER),y)
++GST1_DEVTOOLS_DEPENDENCIES += gst1-rtsp-server
++endif
++
+ GST1_DEVTOOLS_CONF_OPTS = \
+ 	-Dvalidate=enabled \
+ 	-Ddebug_viewer=disabled \
