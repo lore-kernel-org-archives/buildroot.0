@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 10:21:55 +0100
-Subject: [Buildroot] [PATCH v1] package/rtl8821au: fix patch/compile for
- kernel < 5.6.x
-In-Reply-To: <20201025085725.18356-1-ps.report@gmx.net>
-References: <20201025085725.18356-1-ps.report@gmx.net>
-Message-ID: <20201025102155.5680d0fd@windsurf.home>
+Date: Sun, 25 Oct 2020 10:21:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version
+ 2.30.2
+In-Reply-To: <20201025085754.1060932-1-aperez@igalia.com>
+References: <20201025085754.1060932-1-aperez@igalia.com>
+Message-ID: <20201025102158.22426c5a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 25 Oct 2020 09:57:25 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Sun, 25 Oct 2020 10:57:54 +0200
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> Add missing semicolon for linux kernel verson < 5.6.x compile introduced
-> by patch 0006-rtw_proc-convert-file_operations-to-proc_ops-for-5.6.patch.
+> This is a minor release which fixes a few build and networking issues.
+> Release notes:
 > 
-> Fixes:
+>   https://wpewebkit.org/release/wpewebkit-2.30.2.html
 > 
->   os_dep/linux/rtw_proc.c:195:1: error: expected ?,? or ?;? before ?int?
->   195 | int rtw_drv_proc_init(void)
->       | ^~~
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  ...vert-file_operations-to-proc_ops-for-5.6.patch | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+>  package/wpewebkit/wpewebkit.hash | 8 ++++----
+>  package/wpewebkit/wpewebkit.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
