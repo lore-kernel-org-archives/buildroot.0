@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 09:56:55 +0100
-Subject: [Buildroot] [git commit] package/webkitgtk: fix build with
- ENABLE_C_LOOP=ON
-Message-ID: <20201025084452.BF5A481675@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 09:50:28 +0100
+Subject: [Buildroot] [git commit] package/busybox: install example
+ zcip.script when zcip is enabled
+Message-ID: <20201025084452.98E2881675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6e78c1752abde36b88309c5268b47072534829a
+commit: https://git.buildroot.net/buildroot/commit/?id=aebefc1e5a70a834813a218b37633629e7a41562
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ENABLE_C_LOOP option conflicts with ENABLE_SAMPLING_PROFILER, so
-the WebKit CMake build system will emit an error when both are enabled
-at the same time. To avoid hitting that situation, explicitly disable
-ENABLE_SAMPLING_PROFILER as needed.
+this way zcip will work out of the box when configured
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/webkitgtk.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/busybox/busybox.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 5293d2d0ff..7fab924cc8 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -108,9 +108,12 @@ endif
- # have a check for these processors. Disable JIT forcibly here and use
- # the CLoop interpreter instead.
- #
-+# Also, we have to disable the sampling profiler, which does NOT work
-+# with ENABLE_C_LOOP.
-+#
- # Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
- ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
--WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON
-+WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 01f7331221..76ab30780c 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -208,6 +208,13 @@ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	fi
+ endef
  
- $(eval $(cmake-package))
++define BUSYBOX_INSTALL_ZCIP_SCRIPT
++	if grep -q CONFIG_ZCIP=y $(@D)/.config; then \
++		$(INSTALL) -m 0755 -D $(@D)/examples/zcip.script \
++			$(TARGET_DIR)/usr/share/zcip/default.script; \
++	fi
++endef
++
+ ifeq ($(BR2_INIT_BUSYBOX),y)
+ 
+ define BUSYBOX_SET_INIT
+@@ -366,6 +373,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+ 	$(BUSYBOX_INSTALL_INITTAB)
+ 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
++	$(BUSYBOX_INSTALL_ZCIP_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ endef
+ 
