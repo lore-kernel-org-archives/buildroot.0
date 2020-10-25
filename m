@@ -1,91 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 15:54:48 +0100
-Subject: [Buildroot] [git commit] package/dmidecode: bump to version 3.3
-Message-ID: <20201025144240.7938C8600F@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 15:52:23 +0100
+Subject: [Buildroot] [git commit] package/azure-iot-sdk-c: bump version to
+ LTS_07_2020_Ref01
+Message-ID: <20201025144240.3813D8395F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ada7e6a24e0ae2088573d7d58019cf0242d8df67
+commit: https://git.buildroot.net/buildroot/commit/?id=d61577374dcc55318e3a85ce850134a20852e043
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Drop patch (not needed since
-  http://git.savannah.nongnu.org/cgit/dmidecode.git/commit?id=5b3c8e9950262fc941bb5b3b3a1275720d47d62d)
-- Update indentation in hash file (two spaces)
-
-http://git.savannah.gnu.org/cgit/dmidecode.git/plain/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dmidecode/0001-build-system-fixes.patch | 35 -------------------------
- package/dmidecode/dmidecode.hash                |  4 +--
- package/dmidecode/dmidecode.mk                  |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
+ package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
+ package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmidecode/0001-build-system-fixes.patch b/package/dmidecode/0001-build-system-fixes.patch
-deleted file mode 100644
-index 00897f82ad..0000000000
---- a/package/dmidecode/0001-build-system-fixes.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Minor build system fixes
--
--Usual build system fixes to allow CC/CFLAGS/LDFLAGS to be overriden
--from the command line, and completed by additional flags from the
--Makefile.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -12,9 +12,10 @@
-- #   (at your option) any later version.
-- #
-- 
---CC      = gcc
---CFLAGS  = -W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
---          -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
--+CC      ?= gcc
--+override CFLAGS  += \
--+	-W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
--+        -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
-- 
-- # Let lseek and mmap support 64-bit wide offsets
-- CFLAGS += -D_FILE_OFFSET_BITS=64
--@@ -27,7 +28,7 @@ CFLAGS += -O2
-- #CFLAGS += -g
-- 
-- # Pass linker flags here
---LDFLAGS =
--+override LDFLAGS +=
-- 
-- DESTDIR =
-- prefix  = /usr/local
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index c6edf4bcac..ba72295cae 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 077006fa2da0d06d6383728112f2edef9684e9c8da56752e97cd45a11f838edd  dmidecode-3.2.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  82c737a780614c38a783e8055340d295e332fb12c7f418b5d21a0797d3fb1455  dmidecode-3.3.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 811565d8e4..89d9155f95 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+index e9c3cf4279..8e547963e2 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  36f41f4f59eb0b4a61e7d64ba8fabb4bcc66ab21473688273cd45c2a7b65bb49  azure-iot-sdk-c-LTS_02_2020_Ref01.tar.gz
++sha256  6f5ce8a81ed941e525a0265844082e4c641e9ac5cdac8b00bc92492700512a43  azure-iot-sdk-c-LTS_07_2020_Ref01.tar.gz
+ 
+ # Hash for license files:
+ sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
+diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+index caca857591..19f0812f84 100644
+--- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
++++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DMIDECODE_VERSION = 3.2
-+DMIDECODE_VERSION = 3.3
- DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
+-AZURE_IOT_SDK_C_VERSION = LTS_02_2020_Ref01
++AZURE_IOT_SDK_C_VERSION = LTS_07_2020_Ref01
+ AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
+ AZURE_IOT_SDK_C_SITE_METHOD = git
+ AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
