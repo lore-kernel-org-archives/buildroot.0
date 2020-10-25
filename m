@@ -1,42 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 11:13:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sispmctl: bump to version 4.8
-Message-ID: <20201025101321.407076-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 11:22:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/scrypt: bump to version 1.3.1
+Message-ID: <20201025102233.412261-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://sourceforge.net/p/sispmctl/git/ci/release-4.8/tree/ChangeLog
+Update hash of COPYRIGHT (update in year:
+https://github.com/Tarsnap/scrypt/commit/8584d33ad75eb6c920df13e17a6af91c1c4576d0)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sispmctl/sispmctl.hash | 2 +-
- package/sispmctl/sispmctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/scrypt/scrypt.hash | 6 +++---
+ package/scrypt/scrypt.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
-index 941eb3dfda..95129cec03 100644
---- a/package/sispmctl/sispmctl.hash
-+++ b/package/sispmctl/sispmctl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  300adc32ab35a4f9260705f8f57ccd83c3c6601fc493dbe7d259335938819aaf  sispmctl-4.2.tar.gz
-+sha256  0f8391f7e95cbf1fb96a68686a1dcf1e16747b050ae1b8ff90653c99976068db  sispmctl-4.8.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index ed0c8c2958..3e4252a8d8 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
+diff --git a/package/scrypt/scrypt.hash b/package/scrypt/scrypt.hash
+index c73ff515bc..4004b89737 100644
+--- a/package/scrypt/scrypt.hash
++++ b/package/scrypt/scrypt.hash
+@@ -1,4 +1,4 @@
+-# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.0.asc
+-sha256  263034edd4d1e117d4051d9a9260c74dedb0efaf4491c5152b738978b3f32748  scrypt-1.3.0.tgz
++# From http://www.tarsnap.com/scrypt/scrypt-sigs-1.3.1.asc
++sha256  df2f23197c9589963267f85f9c5307ecf2b35a98b83a551bf1b1fb7a4d06d4c2  scrypt-1.3.1.tgz
+ # Locally computed
+-sha256  adc1942c42da6e3370223a27ff4a6835924d2b41e509f9bee58a5e6ca1bbddae  COPYRIGHT
++sha256  1fb4da0e9000287414066a238f378528d5652f89b72b4a1d6b89fdd20031b22d  COPYRIGHT
+diff --git a/package/scrypt/scrypt.mk b/package/scrypt/scrypt.mk
+index 820664f6c1..fb305faf41 100644
+--- a/package/scrypt/scrypt.mk
++++ b/package/scrypt/scrypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SISPMCTL_VERSION = 4.2
-+SISPMCTL_VERSION = 4.8
- SISPMCTL_SITE = http://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
- SISPMCTL_LICENSE = GPL-2.0+
- SISPMCTL_LICENSE_FILES = COPYING
+-SCRYPT_VERSION = 1.3.0
++SCRYPT_VERSION = 1.3.1
+ SCRYPT_SOURCE = scrypt-$(SCRYPT_VERSION).tgz
+ SCRYPT_SITE = http://www.tarsnap.com/scrypt
+ SCRYPT_LICENSE = BSD-2-Clause
 -- 
 2.28.0
