@@ -1,90 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 15:49:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dmidecode: bump to version 3.3
-Message-ID: <20201025144934.1290100-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 25 Oct 2020 15:51:02 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/zeek: new package
+In-Reply-To: <20200906131635.2872307-1-fontaine.fabrice@gmail.com>
+References: <20200906131635.2872307-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201025155102.1973e902@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patch (not needed since
-  http://git.savannah.nongnu.org/cgit/dmidecode.git/commit?id=5b3c8e9950262fc941bb5b3b3a1275720d47d62d)
-- Update indentation in hash file (two spaces)
+Hello Fabrice,
 
-http://git.savannah.gnu.org/cgit/dmidecode.git/plain/NEWS
+On Sun,  6 Sep 2020 15:16:35 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../dmidecode/0001-build-system-fixes.patch   | 35 -------------------
- package/dmidecode/dmidecode.hash              |  4 +--
- package/dmidecode/dmidecode.mk                |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
- delete mode 100644 package/dmidecode/0001-build-system-fixes.patch
+> The Zeek Network Security Monitor
+> 
+> Zeek is a powerful network analysis framework that is much different
+> from the typical IDS you may know. (Zeek is the new name for the
+> long-established Bro system.)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/dmidecode/0001-build-system-fixes.patch b/package/dmidecode/0001-build-system-fixes.patch
-deleted file mode 100644
-index 00897f82ad..0000000000
---- a/package/dmidecode/0001-build-system-fixes.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Minor build system fixes
--
--Usual build system fixes to allow CC/CFLAGS/LDFLAGS to be overriden
--from the command line, and completed by additional flags from the
--Makefile.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/Makefile
--===================================================================
----- a/Makefile
--+++ b/Makefile
--@@ -12,9 +12,10 @@
-- #   (at your option) any later version.
-- #
-- 
---CC      = gcc
---CFLAGS  = -W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
---          -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
--+CC      ?= gcc
--+override CFLAGS  += \
--+	-W -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual \
--+        -Wcast-align -Wwrite-strings -Wmissing-prototypes -Winline -Wundef
-- 
-- # Let lseek and mmap support 64-bit wide offsets
-- CFLAGS += -D_FILE_OFFSET_BITS=64
--@@ -27,7 +28,7 @@ CFLAGS += -O2
-- #CFLAGS += -g
-- 
-- # Pass linker flags here
---LDFLAGS =
--+override LDFLAGS +=
-- 
-- DESTDIR =
-- prefix  = /usr/local
-diff --git a/package/dmidecode/dmidecode.hash b/package/dmidecode/dmidecode.hash
-index c6edf4bcac..ba72295cae 100644
---- a/package/dmidecode/dmidecode.hash
-+++ b/package/dmidecode/dmidecode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 077006fa2da0d06d6383728112f2edef9684e9c8da56752e97cd45a11f838edd  dmidecode-3.2.tar.xz
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  82c737a780614c38a783e8055340d295e332fb12c7f418b5d21a0797d3fb1455  dmidecode-3.3.tar.xz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 811565d8e4..89d9155f95 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DMIDECODE_VERSION = 3.2
-+DMIDECODE_VERSION = 3.3
- DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
+This doesn't build: building host-zeex requires host-libpcap:
+
+-- Found ZLIB: /home/thomas/projets/buildroot/output/host/usr/lib/libz.so (found version "1.2.11") 
+CMake Error at auxil/binpac/CMakeLists.txt:35 (message):
+   Could not find prerequisite package 'PCAP'
+
+In fact, you don't express any dependency for host-zeex, which seems
+suspicious. Make sure to try building zeex in a minimal Docker
+container that contains just the minimal set of Buildroot dependencies.
+This is the only way to ensure that you have really expressed all
+host-zeex dependencies.
+
+Also, another comment below.
+
+> +ZEEK_CONF_OPTS = \
+> +	-DBIFCL_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/bifcl/bifcl \
+> +	-DBINPAC_EXE_PATH=$(HOST_ZEEK_BUILDDIR)/auxil/binpac/src/binpac \
+> +	-DBROKER_DISABLE_DOCS=ON \
+> +	-DBROKER_DISABLE_TESTS=ON \
+> +	-DINSTALL_AUX_TOOLS=ON \
+> +	-DZEEK_ETC_INSTALL_DIR=/etc
+> +
+> +HOST_ZEEK_MAKE_OPTS = binpac bifcl
+> +# Don't install host-zeek. We just need to build binpac and bifcl.
+> +# Therefore only run 'true' and do nothing, not even the default action.
+> +HOST_ZEEK_INSTALL_CMDS = true
+
+Could you instead install just binpac and bifcl to $(HOST_DIR)/bin, and
+make the target zeex package use them ?
+
+When possible, we try to avoid having one package reference the build
+directory of another package.
+
+Thanks!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
