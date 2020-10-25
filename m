@@ -1,204 +1,67 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 25 Oct 2020 22:21:46 +0100
-Subject: [Buildroot] OpenSSL & Mosquitto on ARM Cortex M7
-In-Reply-To: <004001d6aaba$39e116a0$ada343e0$@gmail.com>
-References: <01b901d6a5ad$95b9df00$c12d9d00$@gmail.com>
- <20201019211123.320af01b@gmx.net>
- <004001d6aaba$39e116a0$ada343e0$@gmail.com>
-Message-ID: <20201025222146.6379eb5e@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 23:39:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-intelhex: bump to version
+ 2.3.0
+Message-ID: <20201025223957.2143147-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Rob,
+Fix Python 3.9 compatibility issue with 'array' module
 
-On Sun, 25 Oct 2020 11:33:05 +0100, "RR" <rob.r374@gmail.com> wrote:
+https://github.com/python-intelhex/intelhex/releases/tag/2.3.0
 
-> Hello,
->
-> I'm enclosing my defconfig... I'm basically compiling for ARM Cortex-M7
-> (stm32f769 discovery board).
->
-> What I have additionally spotted is that mosquiotto_sub doesn't crash with
-> same error, but it doesn't have ssl options working.
-> So probably my first problem is that libopenssl doesn't compile properly...
->
-> When I try to compile it separately, by using
-> 	make libopenssl-reconfigure
->
-> it seems that it doesn't have target architecture defined. If I add
-> BR2_PACKAGE_TARGET_ARCH="arm-v4" to make call,
-> I end up in error of missing file (it's also weird why win32 files are
-> included in compilation at all) :
->
-> /home/robi/Razvoj/Linux/Buildroot/JE_UcLinux/buildroot/../host/bin/arm-build
-> root-uclinux-uclibcgnueabi-gcc  -I. -Iinclude -fPIC -pthread
-> -Wa,--noexecstack -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64  -Os    -Wl,-elf2flt -static -DHAVE_FORK=0
-> -DOPENSSL_NO_MADVISE -DOPENSSL_NO_ASYNC    -Wl,-elf2flt -static
-> -DOPENSSL_USE_NODELETE -DOPENSSL_PIC -DOPENSSL_CPUID_OBJ
-> -DOPENSSL_BN_ASM_MONT -DOPENSSL_BN_ASM_GF2m -DSHA1_ASM -DSHA256_ASM
-> -DSHA512_ASM -DKECCAK1600_ASM -DAES_ASM -DBSAES_ASM -DGHASH_ASM
-> -DECP_NISTZ256_ASM -DPOLY1305_ASM -DOPENSSLDIR="\"/etc/ssl\""
-> -DENGINESDIR="\"/usr/lib/engines-1.1\"" -DZLIB -DNDEBUG -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -MMD -MF
-> crypto/dso/dso_win32.d.tmp -MT crypto/dso/dso_win32.o -c -o
-> crypto/dso/dso_win32.o crypto/dso/dso_win32.c
-> crypto/dso/dso_dlfcn.c:28:12: fatal error: dlfcn.h: No such file or
-> directory
->  #  include <dlfcn.h>
->             ^~~~~~~~~
-> compilation terminated.
->
-> Any advice where I can learn or get libopenssl compiled properly?
+Fixes:
+ - http://autobuild.buildroot.org/results/1c217f0c67c63ee43494ef84af832df8e856e2df
 
-Use buildroot and take a look at the log and/or compile output...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-intelhex/Config.in            | 2 +-
+ package/python-intelhex/python-intelhex.hash | 4 ++--
+ package/python-intelhex/python-intelhex.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-
->  Then I can proceed to mosquitto, because it uses libopenssl.
-
-The following defconfig compiles fine (no runtime test because
-of lack of hardware):
-
-BR2_arm=y
-BR2_cortex_m7=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_ELF2FLT=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_SDL=y
-BR2_PACKAGE_SDL_TTF=y
-BR2_PACKAGE_MBEDTLS=y
-BR2_PACKAGE_OPENSSL=y
-BR2_PACKAGE_LIBOPENSSL_BIN=y
-BR2_PACKAGE_LIBPTHREAD_STUBS=y
-BR2_PACKAGE_DROPBEAR=y
-BR2_PACKAGE_MOSQUITTO=y
-BR2_PACKAGE_NET_TOOLS=y
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_OPENOCD=y
-
-
-The mosquitto package compile gets the right make options, e.g.:
-
-/usr/bin/make -j17 -C .../build/mosquitto-1.6.12 [...] WITH_WRAP=no WITH_DOCS=no WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no WITH_ADNS=no WITH_THREADING=no WITH_TLS=yes CLIENT_STATIC_LDADD="`/home/seiderer/Work/Buildroot/build_openssl_mosquitto_001/host/bin/pkg-config --libs openssl`" WITH_SRV=no WITH_WEBSOCKETS=no
-
-
-> I'm probably doing something obviously wrong...
-> I'm using buildroot release tag 2020.05...
->
-> Thanks in advance,
-> Regards,
->
-> -----Original Message-----
-> From: Peter Seiderer <ps.report@gmx.net>
-> Sent: Monday, October 19, 2020 9:11 PM
-> To: rob.r374 at gmail.com
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] OpenSSL & Mosquitto on ARM Cortex M7
->
-> Hello Rob,
->
-> On Mon, 19 Oct 2020 02:20:00 +0200, <rob.r374@gmail.com> wrote:
->
-> > Hello,
-> >
-> >
-> >
-> > I'm trying to include Mosquitto with OpenSSL support on Buildroot.
-> >
-> >
-> >
-> > On working Buildroot basic build, I've added packages and setup static
-> > libs
-> > :
-> >
-> > BR2_PACKAGE_LIBOPENSSL=y
-> >
-> > BR2_PACKAGE_MOSQUITTO=y
-> >
-> > BR2_PACKAGE_MBEDTLS=y
-> >
-> > BR2_STATIC_LIBS=y
-> >
-> > If I try to run Mosquitto tools (and MbedTLS test), I get :
-> >
-> > ~ # mosquitto_pub
-> >
-> > binfmt_flat: reference 0xffb4d0 to shared library 127, killing
-> > mosquitto_pub!
-> >
-> > SEGV
-> >
-> > ~ # mosquitto_sub
-> >
-> > Error: You must specify a topic to subscribe to.
-> >
-> > Use 'mosquitto_sub --help' to see usage.
-> >
-> >
-> >
-> > ~ # ssl_client2
-> >
-> > sh: can't execute 'ssl_client2': No such file or directory
-
-ssh_client2 is from mbedtls, but BR2_PACKAGE_MBEDTLS_PROGRAMS depends on BR2_USE_MMU
-which is not set for your configuration...
-
-> >
-> >
-> >
-> > It's weird, because mosquitto_pub complains about shared lib, but I
-> > have defined static libraries only (at least I think so).
-> >
-> > In addition, mosquitto_sub works, but it seems it doesn't receive SSL
-> > related arguments - seems like it was not compiled with OpenSSL lib.
-
-What do your mean with 'doesn't receive SSL related arguments'?
-
-Did your try a full re-build?
-
-Regards,
-Peter
-
-
-> >
-> > Also, ssl_client2 or other tools from MbedTLS cannot be found.
-> >
-> >
-> >
-> > How to solve those problems ?
-> >
-> >
-> >
-> > Also I'm not sure how to check for each package - compilation,
-> > installation, errors, warnings etc.
->
-> Did you do/try a full rebuild after changing your config ([1])?
->
-> If the problem still exists after a full rebuild please provide your .config
-> or defconfig file and the buildroot version your are using...
->
-> Regards,
-> Peter
->
-> [1] https://buildroot.org/downloads/manual/manual.html#full-rebuild
->
-> >
-> >
-> >
-> > Regards,
-> >
-> > Rob.
-> >
-> >
-> >
-> >
-> >
-> >
-> >
->
+diff --git a/package/python-intelhex/Config.in b/package/python-intelhex/Config.in
+index 20dbb8c9ca..d67de822f2 100644
+--- a/package/python-intelhex/Config.in
++++ b/package/python-intelhex/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_INTELHEX
+ 	help
+ 	  Python library for Intel HEX files manipulations.
+ 
+-	  https://pypi.python.org/pypi/IntelHex
++	  https://github.com/python-intelhex/intelhex
+diff --git a/package/python-intelhex/python-intelhex.hash b/package/python-intelhex/python-intelhex.hash
+index 80674f14ae..917bd72cd7 100644
+--- a/package/python-intelhex/python-intelhex.hash
++++ b/package/python-intelhex/python-intelhex.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/intelhex/json
+-md5  9ce7402e0fd33249aef52cbf437b4ab7  intelhex-2.2.1.tar.gz
+-sha256  009d8511e0d50639230c39af9607deee771cf026f67ef7507a8c3fd4fa927832  intelhex-2.2.1.tar.gz
++md5  9de0e92c1b66f75322581c8b22c020c2  intelhex-2.3.0.tar.gz
++sha256  892b7361a719f4945237da8ccf754e9513db32f5628852785aea108dcd250093  intelhex-2.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  1b2eb032ab8a1b0266f7995c76e44509f89ca9c0e90ec507763b5e735aca7de4  LICENSE.txt
+diff --git a/package/python-intelhex/python-intelhex.mk b/package/python-intelhex/python-intelhex.mk
+index 64b21270e1..cc8b973f0f 100644
+--- a/package/python-intelhex/python-intelhex.mk
++++ b/package/python-intelhex/python-intelhex.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_INTELHEX_VERSION = 2.2.1
++PYTHON_INTELHEX_VERSION = 2.3.0
+ PYTHON_INTELHEX_SOURCE = intelhex-$(PYTHON_INTELHEX_VERSION).tar.gz
+-PYTHON_INTELHEX_SITE = https://files.pythonhosted.org/packages/01/66/8fab869edcc0eaf8fc030472ff379b8eeee2ef3b42f8aec6bd84e9f735e3
+-PYTHON_INTELHEX_SETUP_TYPE = distutils
++PYTHON_INTELHEX_SITE = https://files.pythonhosted.org/packages/66/37/1e7522494557d342a24cb236e2aec5d078fac8ed03ad4b61372586406b01
++PYTHON_INTELHEX_SETUP_TYPE = setuptools
+ PYTHON_INTELHEX_LICENSE = BSD-3-Clause
+ PYTHON_INTELHEX_LICENSE_FILES = LICENSE.txt
+ 
+-- 
+2.28.0
