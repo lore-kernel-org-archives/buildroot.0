@@ -1,54 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 11:02:01 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: add new option for
- Mediatek MT7610E firmware
-Message-ID: <20201025095022.5C55885258@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 11:02:41 +0100
+Subject: [Buildroot] [PATCH 1/1]
+ BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E as new firmware option
+In-Reply-To: <20201022103151.57497-1-Florian.LaRoche@gmail.com>
+References: <20201022103151.57497-1-Florian.LaRoche@gmail.com>
+Message-ID: <20201025110241.75cf71d5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdf9b9fa79f0dae80cb3dfbbd22a70e463c75ea9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 22 Oct 2020 12:31:51 +0200
+Florian La Roche via buildroot <buildroot@busybox.net> wrote:
 
-Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+> Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
+> ---
+>  package/linux-firmware/Config.in         | 5 +++++
+>  package/linux-firmware/linux-firmware.mk | 6 ++++++
+>  2 files changed, 11 insertions(+)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 1f0111f957..9b999034da 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -289,6 +289,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
- 	help
- 	  MediaTek MT7601U
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E
-+	bool "MediaTek MT7610E"
-+	help
-+	  MediaTek MT7610E
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT76X2E
- 	bool "MediaTek MT76x2e"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index e2a6ebcbf1..d9ad942903 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -286,6 +286,12 @@ LINUX_FIRMWARE_FILES += mt7601u.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
- endif
- 
-+# MT7610
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7610E),y)
-+LINUX_FIRMWARE_FILES += mediatek/mt7610e.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
-+endif
-+
- # MT7650
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7650),y)
- LINUX_FIRMWARE_FILES += mt7650.bin
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
