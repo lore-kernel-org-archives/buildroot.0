@@ -1,64 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 25 Oct 2020 17:41:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sshfs: fix uclibc build
-Message-ID: <20201025164108.1837152-1-fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 17:43:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix build without dlopen
+Message-ID: <20201025164359.1837392-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of sshfs 3.7.0 with uclibc
+Fix build of libuhttpd in version 3.4.0 without dlopen
 
 Fixes:
- - http://autobuild.buildroot.org/results/f93972515ad09ab2ccbdc4cd976ed60702c5974a
+ - http://autobuild.buildroot.org/results/b2bbd0681705b94e6b531996b39f62e47f089c92
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-target-libfuse-version-30.patch      | 35 +++++++++++++++++++
+ ...rc-uhttpd.c-fix-build-without-dlopen.patch | 35 +++++++++++++++++++
  1 file changed, 35 insertions(+)
- create mode 100644 package/sshfs/0001-target-libfuse-version-30.patch
+ create mode 100644 package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
 
-diff --git a/package/sshfs/0001-target-libfuse-version-30.patch b/package/sshfs/0001-target-libfuse-version-30.patch
+diff --git a/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch b/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
 new file mode 100644
-index 0000000000..d83ebcf13b
+index 0000000000..966041028b
 --- /dev/null
-+++ b/package/sshfs/0001-target-libfuse-version-30.patch
++++ b/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
 @@ -0,0 +1,35 @@
-+From 7315b0c2f7e04353fefb9734da60884e9b382e51 Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Tue, 28 Jul 2020 15:40:39 -0700
-+Subject: [PATCH] target libfuse version 30
++From 0b2058e7c96a3d8d994d572116ad7b950766347b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 16 Oct 2020 21:39:47 +0200
++Subject: [PATCH] src/uhttpd.c: fix build without dlopen
 +
-+libfuse only defines fuse_new_30 when FUSE_USE_VERSION == 30. It does not
-+define fuse_new_31 in the headers.
++Build without dlopen fails on:
 +
-+fuse_new_31 and _32 seem to be internal only.
++/data/buildroot-test/instance-0/output-1/build/libuhttpd-3.4.0/src/uhttpd.c:45:23: error: unused variable 'p' [-Werror=unused-variable]
++     struct uh_plugin *p = srv->plugins;
++                       ^
 +
-+Fixes a linking issue:
-+ld: sshfs.p/sshfs.c.o: in function `main':
-+sshfs.c:(.text.startup+0x506): undefined reference to `fuse_new'
-+ld: sshfs.c:(.text.startup+0x506): undefined reference to `fuse_new'
++Fixes:
++ - http://autobuild.buildroot.org/results/b2bbd0681705b94e6b531996b39f62e47f089c92
 +
-+[Retrieved from:
-+https://github.com/libfuse/sshfs/pull/221/commits/7315b0c2f7e04353fefb9734da60884e9b382e51]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/zhaojh329/libuhttpd/commit/0b2058e7c96a3d8d994d572116ad7b950766347b]
 +---
-+ meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/uhttpd.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/meson.build b/meson.build
-+index f6bbe51..dc40313 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -51,7 +51,7 @@ sshfs_deps = [ dependency('fuse3', version: '>= 3.1.0'),
-+ executable('sshfs', sshfs_sources,
-+            include_directories: include_dirs,
-+            dependencies: sshfs_deps,
-+-           c_args: ['-DFUSE_USE_VERSION=31'],
-++           c_args: ['-DFUSE_USE_VERSION=30'],
-+            install: true,
-+            install_dir: get_option('bindir'))
++diff --git a/src/uhttpd.c b/src/uhttpd.c
++index dad3646..a37c136 100644
++--- a/src/uhttpd.c
+++++ b/src/uhttpd.c
++@@ -42,7 +42,9 @@ void conn_free(struct uh_connection *conn);
++ static void uh_server_free(struct uh_server *srv)
++ {
++     struct uh_connection *conn = srv->conns;
+++#ifdef HAVE_DLOPEN
++     struct uh_plugin *p = srv->plugins;
+++#endif
++ 
++     ev_io_stop(srv->loop, &srv->ior);
 + 
 -- 
 2.28.0
