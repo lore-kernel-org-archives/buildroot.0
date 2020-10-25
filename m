@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 10:02:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.30.2
-In-Reply-To: <20201025084451.1014460-1-aperez@igalia.com>
-References: <20201025084451.1014460-1-aperez@igalia.com>
-Message-ID: <20201025100208.6cb0447f@windsurf.home>
+Date: Sun, 25 Oct 2020 10:21:55 +0100
+Subject: [Buildroot] [PATCH v1] package/rtl8821au: fix patch/compile for
+ kernel < 5.6.x
+In-Reply-To: <20201025085725.18356-1-ps.report@gmx.net>
+References: <20201025085725.18356-1-ps.report@gmx.net>
+Message-ID: <20201025102155.5680d0fd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 25 Oct 2020 10:44:51 +0200
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Sun, 25 Oct 2020 09:57:25 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> This is a minor release which fixes a few build and networking issues.
-> Release notes:
+> Add missing semicolon for linux kernel verson < 5.6.x compile introduced
+> by patch 0006-rtw_proc-convert-file_operations-to-proc_ops-for-5.6.patch.
 > 
->   https://webkitgtk.org/2020/10/23/webkitgtk2.30.2-released.html
+> Fixes:
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+>   os_dep/linux/rtw_proc.c:195:1: error: expected ?,? or ?;? before ?int?
+>   195 | int rtw_drv_proc_init(void)
+>       | ^~~
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/webkitgtk/webkitgtk.hash | 8 ++++----
->  package/webkitgtk/webkitgtk.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  ...vert-file_operations-to-proc_ops-for-5.6.patch | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
