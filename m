@@ -1,46 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 10:48:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/suricata: bump to version 6.0.0
-In-Reply-To: <20201010194850.1434998-1-fontaine.fabrice@gmail.com>
-References: <20201010194850.1434998-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201025104830.314afbc2@windsurf.home>
+Date: Sun, 25 Oct 2020 10:48:58 +0100
+Subject: [Buildroot] [git commit] toolchain/toolchain-wrapper: disable
+ -ftree-loop-distribute-patterns when building for microblaze with gcc >= 10
+Message-ID: <20201025093725.B0165842E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 10 Oct 2020 21:48:50 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7cbc19471bedae4f83de75e6e6a6c77660e83c59
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Refresh first patch
-> - Drop second patch, not needed since
->   https://github.com/OISF/suricata/commit/5c725d50502b2a7a747fc04938937b8c6b733aac
-> - Drop BR2_PACKAGE_GEOIP dependency as suricata switched to GeoIP2, see
->   https://github.com/OISF/suricata/commit/a291209e473a261546363f0d9051f1e3b82e699a
-> - jansson is now a mandatory dependency, see
->   https://github.com/OISF/suricata/commit/e49c40428e1b9f7e5dcdb5857c3978d5cb859fd9
-> - rustc is now a mandatory dependency, see
->   https://github.com/OISF/suricata/commit/75429bbe3ea3ff12a9e8e7e863a10ded91cb6de9
-> 
-> EOL date of 4.1 branch is December 31st, 2020.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ure-proper-shabang-on-python-scripts.patch | 12 ++++---
->  ...low-the-user-to-override-RUST_TARGET.patch | 35 +++++++++++++++++++
->  ...re.ac-fix-cross-compilation-with-lua.patch | 33 -----------------
->  package/suricata/Config.in                    |  4 +++
->  package/suricata/suricata.hash                |  2 +-
->  package/suricata/suricata.mk                  | 23 +++++-------
->  6 files changed, 55 insertions(+), 54 deletions(-)
->  create mode 100644 package/suricata/0002-configure.ac-allow-the-user-to-override-RUST_TARGET.patch
->  delete mode 100644 package/suricata/0002-configure.ac-fix-cross-compilation-with-lua.patch
+GCC 10 now enable by default -ftree-loop-distribute-patterns at -O2 or -Os
+optimization level instead of -O3, see commit [1].
 
-Applied to master, thanks.
+Due to this change, the microblaze kernel doesn't boot (as reported by
+toolchain-builder project).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The gcc docs between version 9 and 10 has been updated accordingly [2] [3]
+but there no word about this change in the gcc 10 changelog [4].
+
+Fixes microblazebe:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359536 (glibc)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359538 (musl)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359540 (uClubc-ng)
+
+Fixes microblazeel:
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359542 (glibc)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359544 (musl)
+https://gitlab.com/bootlin/toolchains-builder/-/jobs/729359546 (uClibc-ng)
+
+This has been reported upsteam [5].
+
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
+[2] https://gcc.gnu.org/onlinedocs/gcc-9.3.0/gcc/Optimize-Options.html#Optimize-Options
+[3] https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gcc/Optimize-Options.html#Optimize-Options
+[4] https://gcc.gnu.org/gcc-10/changes.html
+[5] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/toolchain-wrapper.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index f1312c5c7f..8b551e3a18 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -33,6 +33,14 @@ TOOLCHAIN_WRAPPER_OPTS += -DBR_NEED_SOURCE_DATE_EPOCH
+ endif
+ endif
+ 
++# Disable -ftree-loop-distribute-patterns on microblaze to
++# workaround a compiler bug with gcc 10 and -O2, -Os or -O3.
++# https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=5879ab5fafedc8f6f9bfe95a4cf8501b0df90edd
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97208
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_10)$(BR2_microblaze),yy)
++TOOLCHAIN_WRAPPER_OPTS += -fno-tree-loop-distribute-patterns
++endif
++
+ # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
+ # separate argument when used in execv() by the toolchain wrapper.
+ TOOLCHAIN_WRAPPER_ARGS += \
