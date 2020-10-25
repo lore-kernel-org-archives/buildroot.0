@@ -1,377 +1,76 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 25 Oct 2020 10:34:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcap: bump to version 2.44
-Message-ID: <20201025093407.4843-1-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 10:37:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sshfs: bump to version 3.7.0
+Message-ID: <20201025093742.394168-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove patches that are already upstrem
-- modified and renumbered existing patch
-- add CROSS_COMPILE make arg
-- update hashfile for new version
+- libfuse3 is needed since version 3.0.0 and
+  https://github.com/libfuse/sshfs/commit/34146444ce20c477cba7e9fe113e4387da32ae94
+- Switch to meson-package
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+https://github.com/libfuse/sshfs/blob/sshfs-3.7.0/ChangeLog.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...namic-test-compilation-and-execution.patch | 224 ------------------
- ...isable-building-installing-shared-l.patch} |   4 +-
- ...-of-tcapsh-static-to-sudotest-target.patch |  55 -----
- package/libcap/libcap.hash                    |   2 +-
- package/libcap/libcap.mk                      |   3 +-
- 5 files changed, 6 insertions(+), 282 deletions(-)
- delete mode 100644 package/libcap/0001-Support-dynamic-test-compilation-and-execution.patch
- rename package/libcap/{0003-libcap-Makefile-disable-building-installing-shared-l.patch => 0001-libcap-Makefile-disable-building-installing-shared-l.patch} (86%)
- delete mode 100644 package/libcap/0002-Migrate-all-uses-of-tcapsh-static-to-sudotest-target.patch
+ package/sshfs/Config.in  | 8 ++++----
+ package/sshfs/sshfs.hash | 2 +-
+ package/sshfs/sshfs.mk   | 9 +++++----
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/package/libcap/0001-Support-dynamic-test-compilation-and-execution.patch b/package/libcap/0001-Support-dynamic-test-compilation-and-execution.patch
-deleted file mode 100644
-index a456ea55d9..0000000000
---- a/package/libcap/0001-Support-dynamic-test-compilation-and-execution.patch
-+++ /dev/null
-@@ -1,224 +0,0 @@
--From 307e7f5744b7c84af4c07091c5310cf4f9514694 Mon Sep 17 00:00:00 2001
--From: "Andrew G. Morgan" <morgan@kernel.org>
--Date: Mon, 7 Sep 2020 12:24:43 -0700
--Subject: Support dynamic test compilation and execution.
--
--  make DYNAMIC=yes test sudotest
--
--works now. Thomas Petazzoni provided a patch that built
--the tests this way, but I've restructured things to
--make the above command line work against the uninstalled
--library builds.
--
--Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
--[Retrieved from:
--https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=307e7f5744b7c84af4c07091c5310cf4f9514694]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Make.Rules          |  2 +-
-- go/Makefile         |  6 +++---
-- go/try-launching.go |  2 +-
-- progs/.gitignore    |  1 +
-- progs/Makefile      | 15 ++++++++++-----
-- progs/quicktest.sh  |  8 ++++----
-- tests/Makefile      | 23 +++++++++++++++--------
-- 7 files changed, 35 insertions(+), 22 deletions(-)
--
--diff --git a/Make.Rules b/Make.Rules
--index c62f541..8c3f9b3 100644
----- a/Make.Rules
--+++ b/Make.Rules
--@@ -69,7 +69,7 @@ WARNINGS=-Wall -Wwrite-strings \
-- LD=$(CC) -Wl,-x -shared
-- LDFLAGS ?= #-g
-- LIBCAPLIB := -L$(topdir)/libcap -lcap
---LIBPSXLIB := -L$(topdir)/libcap -lpsx -lpthread
--+LIBPSXLIB := -L$(topdir)/libcap -lpsx -lpthread -Wl,-wrap,pthread_create
-- 
-- BUILD_GPERF := $(shell which gperf >/dev/null 2>/dev/null && echo yes)
-- 
--diff --git a/go/Makefile b/go/Makefile
--index c5ad7aa..19b3e29 100644
----- a/go/Makefile
--+++ b/go/Makefile
--@@ -23,8 +23,8 @@ all: $(PSXGOPACKAGE) $(CAPGOPACKAGE) web compare-cap try-launching
-- $(DEPS):
-- 	make -C ../libcap all
-- 
---../progs/capsh:
---	make -C ../progs capsh
--+../progs/tcapsh-static:
--+	make -C ../progs tcapsh-static
-- 
-- src/$(IMPORTDIR)/psx:
-- 	mkdir -p "src/$(IMPORTDIR)"
--@@ -70,7 +70,7 @@ ifeq ($(CGO_REQUIRED),0)
-- 	CGO_ENABLED="1" CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH=$(GOPATH) $(GO) build -o $@-cgo $<
-- endif
-- 
---test: all ../progs/capsh
--+test: all ../progs/tcapsh-static
-- 	CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH="$(GOPATH)" $(GO) test $(IMPORTDIR)/psx
-- 	CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH="$(GOPATH)" $(GO) test $(IMPORTDIR)/cap
-- 	LD_LIBRARY_PATH=../libcap ./compare-cap
--diff --git a/go/try-launching.go b/go/try-launching.go
--index 1c3d477..272fd0a 100644
----- a/go/try-launching.go
--+++ b/go/try-launching.go
--@@ -32,7 +32,7 @@ func tryLaunching() {
-- 	}{
-- 		{args: []string{root + "/go/ok"}},
-- 		{
---			args:   []string{root + "/progs/capsh", "--dropped=cap_chown", "--is-uid=123", "--is-gid=456", "--has-a=cap_setuid"},
--+			args:   []string{root + "/progs/tcapsh-static", "--dropped=cap_chown", "--is-uid=123", "--is-gid=456", "--has-a=cap_setuid"},
-- 			iab:    "!cap_chown,^cap_setuid,cap_sys_admin",
-- 			uid:    123,
-- 			gid:    456,
--diff --git a/progs/.gitignore b/progs/.gitignore
--index 1c7ff23..978229e 100644
----- a/progs/.gitignore
--+++ b/progs/.gitignore
--@@ -1,4 +1,5 @@
-- capsh
--+tcapsh-static
-- getcap
-- getpcaps
-- setcap
--diff --git a/progs/Makefile b/progs/Makefile
--index 076e44f..1b27c41 100644
----- a/progs/Makefile
--+++ b/progs/Makefile
--@@ -8,13 +8,15 @@ PROGS=getpcaps capsh getcap setcap
-- 
-- BUILD=$(PROGS)
-- 
---ifneq ($(DYNAMIC),yes)
--+ifeq ($(DYNAMIC),yes)
--+LDPATH = LD_LIBRARY_PATH=../libcap
--+else
-- LDFLAGS += --static
-- endif
-- 
-- DEPS=../libcap/libcap.a ../libcap/libpsx.a
-- 
---all: $(BUILD)
--+all: $(BUILD) tcapsh-static
-- 
-- $(DEPS):
-- 	make -C ../libcap all
--@@ -36,9 +38,12 @@ endif
-- 
-- test: $(PROGS)
-- 
---sudotest: test
---	sudo ./quicktest.sh
--+tcapsh-static: capsh.c $(DEPS)
--+	$(CC) $(IPATH) $(CAPSH_SHELL) $(CFLAGS) -o $@ $< $(LIBCAPLIB) $(LDFLAGS) --static
--+
--+sudotest: test tcapsh-static
--+	sudo $(LDPATH) ./quicktest.sh
-- 
-- clean:
-- 	$(LOCALCLEAN)
---	rm -f *.o $(BUILD) tcapsh ping hack.sh compare-cap
--+	rm -f *.o $(BUILD) tcapsh* privileged ping hack.sh compare-cap
--diff --git a/progs/quicktest.sh b/progs/quicktest.sh
--index fbe98a6..5873317 100755
----- a/progs/quicktest.sh
--+++ b/progs/quicktest.sh
--@@ -45,7 +45,7 @@ pass_capsh () {
-- pass_capsh --print
-- 
-- # Make a local non-setuid-0 version of capsh and call it privileged
---cp ./capsh ./privileged && /bin/chmod -s ./privileged
--+cp ./tcapsh-static ./privileged && /bin/chmod -s ./privileged
-- if [ $? -ne 0 ]; then
--     echo "Failed to copy capsh for capability manipulation"
--     exit 1
--@@ -77,7 +77,7 @@ pass_capsh --mode=PURE1E --iab='!%cap_chown,cap_sys_admin'
-- pass_capsh --keep=0 --keep=1 --keep=0 --keep=1 --print
-- 
-- /bin/rm -f tcapsh
---/bin/cp capsh tcapsh
--+/bin/cp tcapsh-static tcapsh
-- /bin/chown root.root tcapsh
-- /bin/chmod u+s tcapsh
-- /bin/ls -l tcapsh
--@@ -166,7 +166,7 @@ pass_capsh --keep=1 --uid=$nouid --caps=cap_setpcap=ep \
-- 
-- # Verify we can chroot
-- pass_capsh --chroot=$(/bin/pwd)
---pass_capsh --chroot=$(/bin/pwd) ==
--+pass_capsh -- -c "./tcapsh-static --chroot=$(/bin/pwd) =="
-- fail_capsh --chroot=$(/bin/pwd) -- -c "echo oops"
-- 
-- ./capsh --has-ambient
--@@ -216,7 +216,7 @@ echo "testing namespaced file caps"
-- # nsprivileged capsh will have an ns rootid value (this is
-- # the same setup as an earlier test but with a ns file cap).
-- rm -f nsprivileged
---cp ./capsh ./nsprivileged && /bin/chmod -s ./nsprivileged
--+cp ./tcapsh-static ./nsprivileged && /bin/chmod -s ./nsprivileged
-- ./setcap -n 1 all=ep ./nsprivileged
-- if [ $? -eq 0 ]; then
--     ./getcap -n ./nsprivileged | fgrep "[rootid=1]"
--diff --git a/tests/Makefile b/tests/Makefile
--index 0c86ee8..a555887 100644
----- a/tests/Makefile
--+++ b/tests/Makefile
--@@ -7,6 +7,12 @@ include ../Make.Rules
-- 
-- DEPS=../libcap/libcap.a ../libcap/libpsx.a
-- 
--+ifeq ($(DYNAMIC),yes)
--+LDPATH = LD_LIBRARY_PATH=../libcap
--+else
--+LDFLAGS += --static
--+endif
--+
-- all: psx_test libcap_psx_test libcap_launch_test
-- 
-- $(DEPS):
--@@ -19,30 +25,31 @@ sudotest: test run_libcap_launch_test run_libcap_launch_test
-- install: all
-- 
-- run_psx_test: psx_test
---	./psx_test
--+	$(LDPATH) ./psx_test
-- 
-- psx_test: psx_test.c $(DEPS)
---	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBPSXLIB) -Wl,-wrap,pthread_create
--+	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBPSXLIB)
-- 
-- run_libcap_psx_test: libcap_psx_test
---	./libcap_psx_test
--+	$(LDPATH) ./libcap_psx_test
-- 
-- libcap_psx_test: libcap_psx_test.c $(DEPS)
---	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create --static
--+	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) $(LDFLAGS)
-- 
-- run_libcap_launch_test: libcap_launch_test libcap_psx_launch_test noop
---	sudo ./libcap_launch_test
---	sudo ./libcap_psx_launch_test
--+	sudo $(LDPATH) ./libcap_launch_test
--+	sudo $(LDPATH) ./libcap_psx_launch_test
-- 
-- libcap_launch_test: libcap_launch_test.c $(DEPS)
---	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) --static
--+	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LIBCAPLIB) $(LDFLAGS)
-- 
-- # this varies only slightly from the above insofar as it currently
-- # only links in the pthreads fork support. TODO() we need to change
-- # the source to do something interesting with pthreads.
-- libcap_psx_launch_test: libcap_launch_test.c $(DEPS)
---	$(CC) $(CFLAGS) $(IPATH) -DWITH_PTHREADS $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) -Wl,-wrap,pthread_create --static
--+	$(CC) $(CFLAGS) $(IPATH) -DWITH_PTHREADS $< -o $@ $(LIBCAPLIB) $(LIBPSXLIB) $(LDFLAGS)
-- 
--+# This one runs in a chroot with no shared library files.
-- noop: noop.c
-- 	$(CC) $(CFLAGS) $< -o $@ --static
-- 
---- 
--cgit 1.2.3-1.el7
--
-diff --git a/package/libcap/0003-libcap-Makefile-disable-building-installing-shared-l.patch b/package/libcap/0001-libcap-Makefile-disable-building-installing-shared-l.patch
-similarity index 86%
-rename from package/libcap/0003-libcap-Makefile-disable-building-installing-shared-l.patch
-rename to package/libcap/0001-libcap-Makefile-disable-building-installing-shared-l.patch
-index d3a8bbec1d..6d49f235a9 100644
---- a/package/libcap/0003-libcap-Makefile-disable-building-installing-shared-l.patch
-+++ b/package/libcap/0001-libcap-Makefile-disable-building-installing-shared-l.patch
-@@ -5,6 +5,8 @@ Subject: [PATCH] libcap/Makefile: disable building/installing shared
-  library when DYNAMIC is empty
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+[slightly manual modifications that patch still applies for libcap 2.44]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- ---
-  libcap/Makefile | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-@@ -26,7 +28,7 @@ index 81b089e..dfd4dea 100644
-  test: cap_test
-  	./cap_test
-  
---install: install-shared install-static
-+-install: install-static install-shared
- +install: $(if $(DYNAMIC),install-shared) install-static
-  
-  install-common: pcs
-diff --git a/package/libcap/0002-Migrate-all-uses-of-tcapsh-static-to-sudotest-target.patch b/package/libcap/0002-Migrate-all-uses-of-tcapsh-static-to-sudotest-target.patch
-deleted file mode 100644
-index db1b00462f..0000000000
---- a/package/libcap/0002-Migrate-all-uses-of-tcapsh-static-to-sudotest-target.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 159d53d71c7539719b3883bbdc7b113c876a5e55 Mon Sep 17 00:00:00 2001
--From: "Andrew G. Morgan" <morgan@kernel.org>
--Date: Mon, 7 Sep 2020 14:02:03 -0700
--Subject: [PATCH] Migrate all uses of tcapsh-static to sudotest target.
--
--Since sudotest is mostly the reason for using a static binary, force
--all uses to be under this test target.
--
--Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- go/Makefile    | 6 +++---
-- progs/Makefile | 2 +-
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/go/Makefile b/go/Makefile
--index 19b3e29..508b380 100644
----- a/go/Makefile
--+++ b/go/Makefile
--@@ -70,16 +70,16 @@ ifeq ($(CGO_REQUIRED),0)
-- 	CGO_ENABLED="1" CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH=$(GOPATH) $(GO) build -o $@-cgo $<
-- endif
-- 
---test: all ../progs/tcapsh-static
--+test: all
-- 	CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH="$(GOPATH)" $(GO) test $(IMPORTDIR)/psx
-- 	CGO_LDFLAGS_ALLOW="$(CGO_LDFLAGS_ALLOW)" GOPATH="$(GOPATH)" $(GO) test $(IMPORTDIR)/cap
-- 	LD_LIBRARY_PATH=../libcap ./compare-cap
--+
--+sudotest: test ../progs/tcapsh-static
-- 	./try-launching
-- ifeq ($(CGO_REQUIRED),0)
-- 	./try-launching-cgo
-- endif
---
---sudotest: test
-- 	sudo ./try-launching
-- ifeq ($(CGO_REQUIRED),0)
-- 	sudo ./try-launching-cgo
--diff --git a/progs/Makefile b/progs/Makefile
--index 1b27c41..f416e59 100644
----- a/progs/Makefile
--+++ b/progs/Makefile
--@@ -16,7 +16,7 @@ endif
-- 
-- DEPS=../libcap/libcap.a ../libcap/libpsx.a
-- 
---all: $(BUILD) tcapsh-static
--+all: $(BUILD)
-- 
-- $(DEPS):
-- 	make -C ../libcap all
---- 
--2.26.2
--
-diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
-index 6af96f7764..8850da0b32 100644
---- a/package/libcap/libcap.hash
-+++ b/package/libcap/libcap.hash
-@@ -1,5 +1,5 @@
- # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
--sha256  512a0e5fc4c1e06d472a20da26aa96a9b9bf2a26b23f094f77f1b8da56cc427f  libcap-2.43.tar.xz
-+sha256  92188359cd5be86e8e5bd3f6483ac6ce582264f912398937ef763def2205c8e1  libcap-2.44.tar.xz
- 
- # Hash for license file:
- sha256  088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 3992efeeae..e09bc1a624 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+index 7383b6094d..bc54b698d8 100644
+--- a/package/sshfs/Config.in
++++ b/package/sshfs/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_SSHFS
+ 	bool "sshfs (FUSE)"
+ 	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse, glib2
+-	depends on BR2_USE_MMU # libfuse, glib2
+-	depends on !BR2_STATIC_LIBS # libfuse
+-	select BR2_PACKAGE_LIBFUSE
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse3, glib2
++	depends on BR2_USE_MMU # libfuse3, glib2
++	depends on !BR2_STATIC_LIBS # libfuse3
++	select BR2_PACKAGE_LIBFUSE3
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSH
+diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
+index a8878e6931..b8488013a7 100644
+--- a/package/sshfs/sshfs.hash
++++ b/package/sshfs/sshfs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  7f689174d02e6b7e2631306fda4fb8e6b4483102d1bce82b3cdafba33369ad22  sshfs-2.8.tar.gz
++sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index ee96ad67e8..70e7feab1d 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
+@@ -4,13 +4,14 @@
  #
  ################################################################################
  
--LIBCAP_VERSION = 2.43
-+LIBCAP_VERSION = 2.44
- LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
- LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
- LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
-@@ -16,6 +16,7 @@ LIBCAP_INSTALL_STAGING = YES
- HOST_LIBCAP_DEPENDENCIES = host-gperf
+-SSHFS_VERSION = 2.8
+-SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs_$(SSHFS_VERSION)
++SSHFS_VERSION = 3.7.0
++SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
++SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
+ SSHFS_LICENSE = GPL-2.0
+ SSHFS_LICENSE_FILES = COPYING
+ SSHFS_DEPENDENCIES = \
+-	libglib2 libfuse openssh \
++	libglib2 libfuse3 openssh \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv)
  
- LIBCAP_MAKE_FLAGS = \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	BUILD_CC="$(HOSTCC)" \
- 	BUILD_CFLAGS="$(HOST_CFLAGS)" \
- 	DYNAMIC=$(if $(BR2_STATIC_LIBS),,yes)
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
-2.20.1
+2.28.0
