@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 09:42:51 +0100
-Subject: [Buildroot] [PATCH 01/11] package/perl-file-listing: bump to
- version 6.11
-In-Reply-To: <87r1pnudy9.fsf@tarshish>
-References: <20201023200725.1407498-1-francois.perrad@gadz.org>
- <20201024222917.4cde71e4@windsurf.home> <87r1pnudy9.fsf@tarshish>
-Message-ID: <20201025094251.15a2a15b@windsurf.home>
+Date: Sun, 25 Oct 2020 09:43:02 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 18.1.21
+Message-ID: <20201025083054.953198448F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 25 Oct 2020 06:28:14 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea3af05044ccd061041c2df8a7904530c2cbc228
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Thanks, series applied!  
-> 
-> Patch #11 in this series ("package/perl-uri: bump to version 5.05") is
-> not in master as of commit b3a8368da2fac.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Dammit, indeed, I missed it. Thanks a lot for spotting this, I have now
-properly applied and pushed this one.
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 5e1454eff6..13201a4292 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  36dedc8bc6b95aa6036d0e5aa94d90f7d965f57325cc858ad6bcc401f371d3ed  kodi-pvr-zattoo-18.1.19-Leia.tar.gz
++sha256  19de7bc58bcf37bbcff5ad2cb2f095cb15a4217f9abec5c9ff30d0489dab89d2  kodi-pvr-zattoo-18.1.21-Leia.tar.gz
+ sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 14ac22db50..7afe92e87c 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 18.1.19-Leia
++KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
