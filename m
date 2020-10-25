@@ -1,44 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 15:52:27 +0100
-Subject: [Buildroot] [git commit] package/sispmctl: bump to version 4.8
-Message-ID: <20201025144240.4274982D9B@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 15:52:40 +0100
+Subject: [Buildroot] [git commit] package/liblo: bump to version 0.31
+Message-ID: <20201025144240.57F4F8395F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de126703d1401458db78241a910b5d4c40309b05
+commit: https://git.buildroot.net/buildroot/commit/?id=a70c287e98aa6a7fdc6c034b925e97de134c1e4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://sourceforge.net/p/sispmctl/git/ci/release-4.8/tree/ChangeLog
+Update indentation in hash file (two spaces)
+
+http://liblo.sourceforge.net/NEWS.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sispmctl/sispmctl.hash | 2 +-
- package/sispmctl/sispmctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/liblo/liblo.hash | 10 +++++-----
+ package/liblo/liblo.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
-index 941eb3dfda..95129cec03 100644
---- a/package/sispmctl/sispmctl.hash
-+++ b/package/sispmctl/sispmctl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  300adc32ab35a4f9260705f8f57ccd83c3c6601fc493dbe7d259335938819aaf  sispmctl-4.2.tar.gz
-+sha256  0f8391f7e95cbf1fb96a68686a1dcf1e16747b050ae1b8ff90653c99976068db  sispmctl-4.8.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index ed0c8c2958..3e4252a8d8 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
+diff --git a/package/liblo/liblo.hash b/package/liblo/liblo.hash
+index 049ab80747..a3d34d796c 100644
+--- a/package/liblo/liblo.hash
++++ b/package/liblo/liblo.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/liblo/files/liblo/0.30/
+-sha1	152a3260d186f111a71508dc0ed709984960f130	liblo-0.30.tar.gz
+-md5	fa1a9d45f86fc18fb54019f670ff2262		liblo-0.30.tar.gz
++# From http://sourceforge.net/projects/liblo/files/liblo/0.31/
++sha1  d188a62df51e29fa98861daec1db0fdae400410d  liblo-0.31.tar.gz
++md5  14378c1e74c58e777fbb4fcf33ac5315  liblo-0.31.tar.gz
+ 
+ # Locally computed
+-sha256	  30a7c9de49a25ed7f2425a7a7415f5b14739def62431423d3419ea26fb978d1b	liblo-0.30.tar.gz
+-sha256	  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a	COPYING
++sha256  2b4f446e1220dcd624ecd8405248b08b7601e9a0d87a0b94730c2907dbccc750  liblo-0.31.tar.gz
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+index 69918186db..27dba1f99f 100644
+--- a/package/liblo/liblo.mk
++++ b/package/liblo/liblo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SISPMCTL_VERSION = 4.2
-+SISPMCTL_VERSION = 4.8
- SISPMCTL_SITE = http://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
- SISPMCTL_LICENSE = GPL-2.0+
- SISPMCTL_LICENSE_FILES = COPYING
+-LIBLO_VERSION = 0.30
++LIBLO_VERSION = 0.31
+ LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
+ 
+ LIBLO_LICENSE = LGPL-2.1+
