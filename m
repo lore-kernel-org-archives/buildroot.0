@@ -1,54 +1,64 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sun, 25 Oct 2020 13:34:57 -0300
-Subject: [Buildroot] [PATCH] package/tio: disable for sparc and sparc64
- architectures
-Message-ID: <20201025163457.30460-1-sergio.prado@e-labworks.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 25 Oct 2020 17:41:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sshfs: fix uclibc build
+Message-ID: <20201025164108.1837152-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tio fails to build on sparc and sparc64 architectures with a
-redefinition of 'struct termio' error, with no proper fix or workaround
-for now. See discussions in [1] and [2] and picocom source code in [3].
-
-[1] http://patchwork.ozlabs.org/project/buildroot/patch/20191227204520.1500501-1-fontaine.fabrice at gmail.com/
-[2] http://patchwork.ozlabs.org/project/buildroot/patch/20200511142602.46170-1-vadim4j at gmail.com/
-[3] https://github.com/npat-efault/picocom/blob/master/termbits2.h#L37
-
-So let's disable it for now on sparc and sparc64 architectures.
+Fix build of sshfs 3.7.0 with uclibc
 
 Fixes:
-http://autobuild.buildroot.org/results/e041dde522e2a774f528d4377f67ca0a8a99461c
-http://autobuild.buildroot.org/results/6e1f9fe47e8b2cfdf5effcb7bbc697189f54ff2c
-http://autobuild.buildroot.org/results/49708fe6f404fea6761f102af854e98d6a1d43c1
-Many more...
+ - http://autobuild.buildroot.org/results/f93972515ad09ab2ccbdc4cd976ed60702c5974a
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tio/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../0001-target-libfuse-version-30.patch      | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/sshfs/0001-target-libfuse-version-30.patch
 
-diff --git a/package/tio/Config.in b/package/tio/Config.in
-index 6c748c5d12a1..d5d619100eb3 100644
---- a/package/tio/Config.in
-+++ b/package/tio/Config.in
-@@ -1,8 +1,15 @@
- config BR2_PACKAGE_TIO
- 	bool "tio"
-+	depends on !BR2_sparc64 && !BR2_sparc
- 	help
- 	  "tio" is a simple TTY terminal application which features a
- 	  straightforward commandline interface to easily connect to
- 	  TTY devices for basic input/output.
- 
- 	  https://tio.github.io/
+diff --git a/package/sshfs/0001-target-libfuse-version-30.patch b/package/sshfs/0001-target-libfuse-version-30.patch
+new file mode 100644
+index 0000000000..d83ebcf13b
+--- /dev/null
++++ b/package/sshfs/0001-target-libfuse-version-30.patch
+@@ -0,0 +1,35 @@
++From 7315b0c2f7e04353fefb9734da60884e9b382e51 Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Tue, 28 Jul 2020 15:40:39 -0700
++Subject: [PATCH] target libfuse version 30
 +
-+# tio is disabled for sparc and sparc64 architectures because it fails
-+# to build with a redefinition of 'struct termio' error, with no proper
-+# fix or workaround for now
-+comment "tio is disabled for sparc and sparc64 architectures"
-+	depends on BR2_sparc64 || BR2_sparc
++libfuse only defines fuse_new_30 when FUSE_USE_VERSION == 30. It does not
++define fuse_new_31 in the headers.
++
++fuse_new_31 and _32 seem to be internal only.
++
++Fixes a linking issue:
++ld: sshfs.p/sshfs.c.o: in function `main':
++sshfs.c:(.text.startup+0x506): undefined reference to `fuse_new'
++ld: sshfs.c:(.text.startup+0x506): undefined reference to `fuse_new'
++
++[Retrieved from:
++https://github.com/libfuse/sshfs/pull/221/commits/7315b0c2f7e04353fefb9734da60884e9b382e51]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index f6bbe51..dc40313 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -51,7 +51,7 @@ sshfs_deps = [ dependency('fuse3', version: '>= 3.1.0'),
++ executable('sshfs', sshfs_sources,
++            include_directories: include_dirs,
++            dependencies: sshfs_deps,
++-           c_args: ['-DFUSE_USE_VERSION=31'],
+++           c_args: ['-DFUSE_USE_VERSION=30'],
++            install: true,
++            install_dir: get_option('bindir'))
++ 
 -- 
-2.17.1
+2.28.0
