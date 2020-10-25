@@ -1,23 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 15:55:28 +0100
-Subject: [Buildroot] [PATCH] package/azure-iot-sdk-c: bump version to
- LTS_07_2020_Ref01
-In-Reply-To: <20201025100609.29669-1-sergio.prado@e-labworks.com>
-References: <20201025100609.29669-1-sergio.prado@e-labworks.com>
-Message-ID: <20201025155528.3c5a9a08@windsurf.home>
+Date: Sun, 25 Oct 2020 15:55:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sispmctl: bump to version 4.8
+In-Reply-To: <20201025101321.407076-1-fontaine.fabrice@gmail.com>
+References: <20201025101321.407076-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201025155531.187a69d0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 25 Oct 2020 07:06:09 -0300
-Sergio Prado <sergio.prado@e-labworks.com> wrote:
+On Sun, 25 Oct 2020 11:13:21 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> https://sourceforge.net/p/sispmctl/git/ci/release-4.8/tree/ChangeLog
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
->  package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
+>  package/sispmctl/sispmctl.hash | 2 +-
+>  package/sispmctl/sispmctl.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
