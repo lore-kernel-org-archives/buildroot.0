@@ -1,45 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 10:22:44 +0100
-Subject: [Buildroot] [git commit] package/go: bump to version 1.15.3
-Message-ID: <20201025091141.58FAC826E7@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 10:23:49 +0100
+Subject: [Buildroot] [git commit] package/libminiupnpc: bump to version
+ 2.1.20201016
+Message-ID: <20201025091141.65AE5826E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce0d25ffc7624a7456d8b53d72527ace30c606ad
+commit: https://git.buildroot.net/buildroot/commit/?id=4b4891235b5394879c8297aec8e79b102bc4cae3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-go1.15.3 (released 2020/10/14) includes fixes to cgo, the compiler, runtime, the
-go command, and the bytes, plugin, and testing packages.
+- Update indentation in hash file (two spaces)
+- Update LICENSE hash (update in year:
+  https://github.com/miniupnp/miniupnp/commit/922372bff32612adfc11cd0f20638820a9b124f1)
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+http://miniupnp.free.fr/files/changelog.php?file=miniupnpc-2.1.20201016.tar.gz
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/go/go.hash | 1 +
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libminiupnpc/libminiupnpc.hash | 4 ++--
+ package/libminiupnpc/libminiupnpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 2f5fe8aacb..9d651a1bfb 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,4 @@
- # From https://golang.org/dl/
- sha256	28bf9d0bcde251011caae230a4a05d917b172ea203f2a62f2c2f9533589d4b4d  go1.15.2.src.tar.gz
-+sha256	896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888  go1.15.3.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index edc44d2378..dc3b35ff50 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
+index 556d8cc45a..758ea29f59 100644
+--- a/package/libminiupnpc/libminiupnpc.hash
++++ b/package/libminiupnpc/libminiupnpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 e19fb5e01ea5a707e2a8cb96f537fbd9f3a913d53d804a3265e3aeab3d2064c6  miniupnpc-2.1.tar.gz
+-sha256 e2df21b3d4b1a84a0ac31d808a3ff330fdf3602e0839a526d3df2fcfba287ac4  LICENSE
++sha256  69f72fe355f911b807915f78dcfc0af772c0f22bc7ab1157e70f334e37db7d39  miniupnpc-2.1.20201016.tar.gz
++sha256  0b476c395af6dd21eeb54c40a21d22e1c11a751fbd2dd17a41ce26e370be88d5  LICENSE
+diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
+index 5a4c8fc693..50b3c6604c 100644
+--- a/package/libminiupnpc/libminiupnpc.mk
++++ b/package/libminiupnpc/libminiupnpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.15.2
-+GO_VERSION = 1.15.3
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-LIBMINIUPNPC_VERSION = 2.1
++LIBMINIUPNPC_VERSION = 2.1.20201016
+ LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
+ LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
+ LIBMINIUPNPC_INSTALL_STAGING = YES
