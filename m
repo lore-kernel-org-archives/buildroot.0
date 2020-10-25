@@ -1,48 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 25 Oct 2020 09:50:28 +0100
-Subject: [Buildroot] [git commit] package/busybox: install example
- zcip.script when zcip is enabled
-Message-ID: <20201025084452.98E2881675@busybox.osuosl.org>
+Date: Sun, 25 Oct 2020 09:56:49 +0100
+Subject: [Buildroot] [git commit] package/wpewebkit: disable JIT for ARMv5
+ and ARMv6
+Message-ID: <20201025084452.B248181675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aebefc1e5a70a834813a218b37633629e7a41562
+commit: https://git.buildroot.net/buildroot/commit/?id=f8eaccdddc3a6eecfa9a886602de0577ef01c993
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-this way zcip will work out of the box when configured
+WebKit's JavaScriptCore does not support using JIT nor the LLint
+interpreter on ARMv5 and ARMv6, so add those two cases when checking
+for target CPUs which need to use the CLoop interpreter.
 
-Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/busybox/busybox.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/wpewebkit/wpewebkit.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 01f7331221..76ab30780c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -208,6 +208,13 @@ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
- 	fi
- endef
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 7bb13aa610..e1e9ceea76 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -64,14 +64,16 @@ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
+ endif
  
-+define BUSYBOX_INSTALL_ZCIP_SCRIPT
-+	if grep -q CONFIG_ZCIP=y $(@D)/.config; then \
-+		$(INSTALL) -m 0755 -D $(@D)/examples/zcip.script \
-+			$(TARGET_DIR)/usr/share/zcip/default.script; \
-+	fi
-+endef
-+
- ifeq ($(BR2_INIT_BUSYBOX),y)
- 
- define BUSYBOX_SET_INIT
-@@ -366,6 +373,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
- 	$(BUSYBOX_INSTALL_INITTAB)
- 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
-+	$(BUSYBOX_INSTALL_ZCIP_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- endef
+ # JIT is not supported for MIPS r6, but the WebKit build system does not
+-# have a check for these processors. Disable JIT forcibly here and use
+-# the CLoop interpreter instead.
++# have a check for these processors. The same goes for ARMv5 and ARMv6.
++# Disable JIT forcibly here and use the CLoop interpreter instead.
+ #
+ # Also, we have to disable the sampling profiler, which does NOT work
+ # with ENABLE_C_LOOP.
+ #
+-# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
+-ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
++# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
++#                https://bugs.webkit.org/show_bug.cgi?id=172765
++#
++ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
+ WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
+ endif
  
