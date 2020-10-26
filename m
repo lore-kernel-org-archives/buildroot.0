@@ -1,62 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Oct 2020 22:23:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: bump version to 18.9-Leia
-In-Reply-To: <20201026220517.7a82f9f8@windsurf.home>
-References: <20201025114959.561657-1-bernd.kuhls@t-online.de>
- <20201026220517.7a82f9f8@windsurf.home>
-Message-ID: <20201026212352.GF2805@scaer>
+From: Augustin Thiercelin <augustin.thiercelin@outlook.com>
+Date: Mon, 26 Oct 2020 22:31:39 +0100
+Subject: [Buildroot] (no subject)
+Message-ID: <AM0PR04MB40834541F92A0945F62F8F55FB190@AM0PR04MB4083.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+ From 0f755639dc7a297ff6c656d29d541b5ad2b8f7dc Mon Sep 17 00:00:00 2001
+From: Augustin Thiercelin <augustin.thiercelin@outlook.com>
+Date: Mon, 26 Oct 2020 20:59:10 +0100
+Subject: [PATCH 1/1] package/gst-omx: fix gstomx.conf installation for
+  raspberry
 
-On 2020-10-26 22:05 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 25 Oct 2020 12:49:59 +0100
-> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > ---
-> >  package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
-> >  package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
-> >  package/kodi/kodi.hash                                   | 2 +-
-> >  package/kodi/kodi.mk                                     | 2 +-
-> >  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> Applied to master, thanks. Do you know why we have separate
-> kodi-texturepacker/kodi-jsconschemabuilder packages instead of having a
-> host-kodi package that would just build those two tools out of the Kodi
-> code base ?
+The commit 7e6f4e5 introduces a new bug when building the gst-omx package
+for the raspberry.
 
-I guess there is a bit of "historical reasons" behind it.
+GST_OMX_VARIANT variable in gst-omx.mk was shadowed to 'generic' after being
+set well for raspberry. It results having the gstomx.conf not being 
+installed,
+and thus having gst-omx installed but none of its features available.
 
-However, there is a good technical reason: our package infrastructure
-can only build in one FOO_SUBDIR per pacakge, but here we have two:
+Signed-off-by: Augustin Thiercelin <augustin.thiercelin@outlook.com>
+---
+  package/gstreamer1/gst-omx/gst-omx.mk | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-  - tools/depends/native/JsonSchemaBuilder/
-  - tools/depends/native/TexturePacker/
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk 
+b/package/gstreamer1/gst-omx/gst-omx.mk
+index cdd0e86b04..01c3ef941b 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
+@@ -17,10 +17,11 @@ GST_OMX_CONF_OPTS = \
+  	-Dtools=disabled \
+  	-Ddoc=disabled
 
-Regards,
-Yann E. MORIN.
++GST_OMX_VARIANT = generic
++
+  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+  GST_OMX_VARIANT = rpi
+  GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
+-GST_OMX_VARIANT = generic
+  endif
 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+  GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.0
