@@ -1,80 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Oct 2020 20:04:57 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: change Julien Olivain's e-mail
- address
-In-Reply-To: <VI1PR0401MB2255684900A6D95D9364A5A796190@VI1PR0401MB2255.eurprd04.prod.outlook.com>
-References: <20201026082718.497076-1-thomas.petazzoni@bootlin.com>
- <VI1PR0401MB2255684900A6D95D9364A5A796190@VI1PR0401MB2255.eurprd04.prod.outlook.com>
-Message-ID: <20201026190457.GE2805@scaer>
+From: Michael Durrant <mdurrant@ArcturusNetworks.com>
+Date: Mon, 26 Oct 2020 15:17:35 -0400
+Subject: [Buildroot] [PATCH 1/1] package/gcc: Enable gcc-8.x support for
+ BR2_powerpc_spe
+In-Reply-To: <9aeb0cb1-00e7-702a-0d41-f6471e6f0302@ArcturusNetworks.com>
+References: <9aeb0cb1-00e7-702a-0d41-f6471e6f0302@ArcturusNetworks.com>
+Message-ID: <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
+within GCC.? After GCC-7.x support was removed as a default in buildroot,
+some boards, including the arcturus_ucp1020_defconfig and
+freescale_p1025twr_defconfig will fail to compile.
 
-On 2020-10-26 13:25 +0000, Julien Olivain (OSS) spake thusly:
-> > -----Original Message-----
-> > From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Sent: Monday, October 26, 2020 9:27 AM
-> > To: buildroot at buildroot.org
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Julien Olivain (OSS)
-> > <julien.olivain@oss.nxp.com>
-> > Subject: [PATCH] DEVELOPERS: change Julien Olivain's e-mail address
-> > 
-> > Julien's e-mail @cotds.org is no longer working:
-> > 
-> > <juju@cotds.org>: host mail.cotds.org[194.117.244.136] said: 451 4.3.5 Server
-> >     configuration problem (in reply to RCPT TO command)
-> > 
-> > Use his @oss.nxp.com e-mail address instead.
-> > 
-> > Cc: Julien Olivain <julien.olivain@oss.nxp.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  DEVELOPERS | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 123ffbf033..94d6eae4d4 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1425,7 +1425,7 @@ F:	board/technologic/ts7680/
-> >  F:	configs/ts7680_defconfig
-> >  F:	package/paho-mqtt-c
-> > 
-> > -N:	Julien Olivain <juju@cotds.org>
-> > +N:	Julien Olivain <julien.olivain@oss.nxp.com>
-> 
-> Could you please set the following email address instead?
-> Julien Olivain <ju.o@free.fr>
+The GCC-8.x compiler series continues to support powerpc_spe CPU
+cores, but only as an --enable-obsoleted instruction set.
+This patch enables the use of GCC-8.x and asserts the required
+option to enable the powerpc_spe instruction set.
 
-Done, thanks for following up! :-)
+This Patch passes compilation and run tests with the
+arcturus/ppc-ucp1020? board.
 
-Applied to master.
+Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
 
-Regards,
-Yann E. MORIN.
+This patch should address a noted job failure on GitLab CI
+https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
 
-> >  F:	board/qmtech/zynq/
-> >  F:	board/technexion/imx8mmpico/
-> >  F:	board/technexion/imx8mpico/
-> > --
-> > 2.26.2
-> 
-> Best regards,
-> 
-> Julien.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
+---
+?package/gcc/Config.in.host | 2 +-
+?package/gcc/gcc.mk???????? | 1 +
+?2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 74999c800b..8ae778437b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -27,7 +27,7 @@ config BR2_GCC_VERSION_8_X
+??????? depends on !BR2_or1k
+??????? # powerpc spe support has been deprecated since gcc 8.x.
+??????? # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-?????? depends on !BR2_powerpc_SPE
++?????? # it can still be built with --enable-obsolete
+??????? select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+
+?config BR2_GCC_VERSION_9_X
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index f372857916..beac27ede4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -217,6 +217,7 @@ endif
+?# Enable proper double/long double for SPE ABI
+?ifeq ($(BR2_powerpc_SPE),y)
+?HOST_GCC_COMMON_CONF_OPTS += \
++?????? --enable-obsolete \
+??????? --enable-e500_double \
+??????? --with-long-double-128
+?endif
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.26.2
