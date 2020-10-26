@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Oct 2020 09:29:23 +0100
-Subject: [Buildroot] Help adding support for Dragonboard 410c
-In-Reply-To: <CABqcFRnBj3jtaOmrzSE0h+hYUrs=CytQDayFrQ=pHyGrYCPN+Q@mail.gmail.com>
-References: <CABqcFRnBj3jtaOmrzSE0h+hYUrs=CytQDayFrQ=pHyGrYCPN+Q@mail.gmail.com>
-Message-ID: <20201026092923.34e78e5b@windsurf.home>
+Date: Mon, 26 Oct 2020 09:31:02 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: replace Trent Piepho's e-mail
+ address
+Message-ID: <20201026083103.497368-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mike,
+Trent's e-mail address is no longer working:
 
-On Mon, 26 Oct 2020 15:46:44 +1300
-Mike Frampton <mikeframpo@gmail.com> wrote:
+<tpiepho@impinj.com>: host us-smtp-inbound-2.mimecast.com[205.139.110.221]
+    said: 550 Invalid Recipient -
+    https://community.mimecast.com/docs/DOC-1369#550
+    [7R954rMIM8GCM0FMERvPAg.us536] (in reply to RCPT TO command)
 
-> I have been working on adding support for the Qualcomm Dragonboard
-> 410c SBC. I have a working, minimal config.
-> 
-> My config builds an abootimg kernel image, which can be booted via SD
-> card or USB. The patch adds a package for Qualcomm's BSP for the
-> device.
-> 
-> This is my first time using Buildroot (coming from OE previously and
-> this is much more my cup of tea :-).
+Use another e-mail that Trent has recently used on the mailing list.
 
-Glad to hear that you found Buildroot useful for your project!
+Cc: Trent Piepho <trent.piepho@synapse.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> My patch touches a couple of packages. Should I break each
-> package-change into a separate patch before posting here?
-
-Yes, we generally like contributions to be split up in several patches
-if they touch several areas/packages.
-
-Thanks a lot!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 123ffbf033..f39e745217 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2616,7 +2616,7 @@ F:	package/waf/
+ F:	support/testing/tests/package/test_crudini.py
+ F:	support/testing/tests/package/test_redis.py
+ 
+-N:	Trent Piepho <tpiepho@impinj.com>
++N:	Trent Piepho <trent.piepho@synapse.com>
+ F:	package/libp11/
+ 
+ N:	Tudor Holton <buildroot@tudorholton.com>
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
