@@ -1,69 +1,59 @@
-From: Michael Durrant <mdurrant@ArcturusNetworks.com>
-Date: Mon, 26 Oct 2020 14:56:58 -0400
-Subject: [Buildroot] [PATCH 1/1] package/gcc: Enabling gcc-8.x support for,
- BR2_powerpc_8548 cores
-In-Reply-To: <b5cbb9bf-5507-d5b1-9679-4ea0b5767f99@ArcturusNetworks.com>
-References: <977a0251-8239-1ec8-268c-4bf9b1c0498a@ArcturusNetworks.com>
- <b5cbb9bf-5507-d5b1-9679-4ea0b5767f99@ArcturusNetworks.com>
-Message-ID: <2ecc546a-3431-af77-8bc2-ecf3f983e403@ArcturusNetworks.com>
+From: Julien Olivain (OSS) <julien.olivain@oss.nxp.com>
+Date: Mon, 26 Oct 2020 13:25:35 +0000
+Subject: [Buildroot] [PATCH] DEVELOPERS: change Julien Olivain's e-mail
+ address
+In-Reply-To: <20201026082718.497076-1-thomas.petazzoni@bootlin.com>
+References: <20201026082718.497076-1-thomas.petazzoni@bootlin.com>
+Message-ID: <VI1PR0401MB2255684900A6D95D9364A5A796190@VI1PR0401MB2255.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-package/gcc: Enabling gcc-8.x support for? BR2_powerpc_8548 cores
+Hi Thomas,
 
-The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
-within GCC.? After GCC-7.x support was removed as a default in buildroot,
-some boards, including the arcturus_ucp1020_defconfig and
-freescale_p1025twr_defconfig will fail to compile.
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Monday, October 26, 2020 9:27 AM
+> To: buildroot at buildroot.org
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Julien Olivain (OSS)
+> <julien.olivain@oss.nxp.com>
+> Subject: [PATCH] DEVELOPERS: change Julien Olivain's e-mail address
+> 
+> Julien's e-mail @cotds.org is no longer working:
+> 
+> <juju@cotds.org>: host mail.cotds.org[194.117.244.136] said: 451 4.3.5 Server
+>     configuration problem (in reply to RCPT TO command)
+> 
+> Use his @oss.nxp.com e-mail address instead.
+> 
+> Cc: Julien Olivain <julien.olivain@oss.nxp.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  DEVELOPERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 123ffbf033..94d6eae4d4 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1425,7 +1425,7 @@ F:	board/technologic/ts7680/
+>  F:	configs/ts7680_defconfig
+>  F:	package/paho-mqtt-c
+> 
+> -N:	Julien Olivain <juju@cotds.org>
+> +N:	Julien Olivain <julien.olivain@oss.nxp.com>
 
-The GCC-8.x compiler series continues to support powerpc_spe CPU
-cores, but only as an --enable-obsoleted instruction set.
-This patch enables the use of GCC-8.x and asserts the required
-option to enable the powerpc_spe instruction set.
+Could you please set the following email address instead?
+Julien Olivain <ju.o@free.fr>
 
-This Patch passes compilation and run tests with the
-arcturus/ppc-ucp1020? board.
+>  F:	board/qmtech/zynq/
+>  F:	board/technexion/imx8mmpico/
+>  F:	board/technexion/imx8mpico/
+> --
+> 2.26.2
 
-Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+Best regards,
 
-This patch should address a noted job failure on GitLab CI
-https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
-Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
-Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
----
-?package/gcc/Config.in.host | 2 +-
-?package/gcc/gcc.mk???????? | 1 +
-?2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 74999c800b..8ae778437b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -27,7 +27,7 @@ config BR2_GCC_VERSION_8_X
-??????? depends on !BR2_or1k
-??????? # powerpc spe support has been deprecated since gcc 8.x.
-??????? # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
--?????? depends on !BR2_powerpc_SPE
-+?????? # it can still be built with --enable-obsolete
-??????? select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-
-?config BR2_GCC_VERSION_9_X
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index f372857916..beac27ede4 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -217,6 +217,7 @@ endif
-?# Enable proper double/long double for SPE ABI
-?ifeq ($(BR2_powerpc_SPE),y)
-?HOST_GCC_COMMON_CONF_OPTS += \
-+?????? --enable-obsolete \
-??????? --enable-e500_double \
-??????? --with-long-double-128
-?endif
--- 
-2.26.2
+Julien.
