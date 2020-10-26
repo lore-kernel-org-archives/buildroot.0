@@ -1,53 +1,72 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 26 Oct 2020 20:22:39 +0100
-Subject: [Buildroot] [PATCH v1] package/libevdev: bump version to 1.10.0
-Message-ID: <20201026192239.27691-1-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Oct 2020 21:44:10 +0100
+Subject: [Buildroot] [git commit] package/kodi: bump version to 18.9-Leia
+Message-ID: <20201026205102.836D77FFF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+commit: https://git.buildroot.net/buildroot/commit/?id=8b31817962c3391e40703204f6ed69ea76f0b9e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] https://lists.freedesktop.org/archives/input-tools/2020-October/001545.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libevdev/libevdev.hash | 10 +++++-----
- package/libevdev/libevdev.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index c4ce252ef1..3003dc33fa 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/input-tools/2020-July/001541.html
--md5  58286a834ae14536caf9cab8633419cf  libevdev-1.9.1.tar.xz
--sha1  b61c6a09446d717edc4971f7bc3ce9ffa2f05306  libevdev-1.9.1.tar.xz
--sha256  f5603c48c5afd76b14df7a5124e0a94a102f8da0d45826192325069d1bbc7acb  libevdev-1.9.1.tar.xz
--sha512  7d845ce2279d2e2ef12437f6218550265ea0c85e5b6c0d116aff09787b73626b338fe3084baff060085d393688b5ae3d33772689e0581684eff257af01c4c645  libevdev-1.9.1.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2020-October/001545.html
-+md5  c6239ef0d61c4f4911f25bb8426a0b82  libevdev-1.10.0.tar.xz
-+sha1  3eedd43652a238f687595ffd722fd3bb94359216  libevdev-1.10.0.tar.xz
-+sha256  3522c26e2c148be0ad68ce26fbced408a4185dea90bfe8079dc82b8ace962d4a  libevdev-1.10.0.tar.xz
-+sha512  94ab4ee7e0854c41a491d8e4713baa95ae66dd337b41823011c0913aa1c72e8bbf8b808d5936c2ef456af794b6d3a5cd7cd0515fbd1d06dd1b7ba19275bd928f  libevdev-1.10.0.tar.xz
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index 7d0772fb78..2c7f77d050 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
- # Hash for license files:
- sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 8505346b33..0453028f2f 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 18.8-Leia
++KODI_JSONSCHEMABUILDER_VERSION = 18.9-Leia
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index c83cc3165e..7b13904ef4 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
  
--LIBEVDEV_VERSION = 1.9.1
-+LIBEVDEV_VERSION = 1.10.0
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
--- 
-2.29.0
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 18.8-Leia
++KODI_TEXTUREPACKER_VERSION = 18.9-Leia
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 06a33efa85..545f87909f 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  6deb28f725880b1ab6c5920b55ef1190a79b0684ffb30b6e13b199d23a0af296  kodi-18.8-Leia.tar.gz
++sha256  bdf8afa9356b1f815de9984801d3e0d2b46a719e747895b75528f20995c59d2b  kodi-18.9-Leia.tar.gz
+ sha256  e11e7594af35f36ab2711252c3d6bb106908f26605498aef4a9be2d7bc001db2  kodi-ffmpeg-4.0.4-Leia-18.4.tar.gz
+ sha256  38816f8373e243bc5950449b4f3b18938c4e1c59348e3411e23f31db4072e40d  kodi-libdvdcss-1.4.2-Leia-Beta-5.tar.gz
+ sha256  071e414e61b795f2ff9015b21a85fc009dde967f27780d23092643916538a57a  kodi-libdvdnav-6.0.0-Leia-Alpha-3.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index d8144c0c38..80a8d4e6bf 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION = 18.8-Leia
++KODI_VERSION = 18.9-Leia
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPL-2.0
+ KODI_LICENSE_FILES = LICENSE.md
