@@ -1,70 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Oct 2020 22:34:13 +0100
-Subject: [Buildroot] [git commit] package/ltrace: bump ltrace using a more
- recent git repo
-Message-ID: <20201026212209.51071817E3@busybox.osuosl.org>
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+Date: Mon, 26 Oct 2020 22:34:33 +0100
+Subject: [Buildroot] [PATCH] package/lzma-alone: new package
+Message-ID: <20201026213433.4309-1-zajec5@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b5a5692e6e3672bf2dba10d036c1cf26b3dab59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Rafa? Mi?ecki <rafal@milecki.pl>
 
-The official repo pointed by https://ltrace.org/ hasn't seen any
-updates in 5 years, so this commit switches to
-https://github.com/dkogan/ltrace from Dima Kogan that includes some
-bug fixes, in particular the following commit to avoid a crash:
+This new package provides "lzma_alone" host binary based on the original
+LZMA SDK. It provides few extra options when compared to the LZMA Utils
+project "lzma" binary (already packaged as the "lzma").
 
-  192e0a6 void struct members are now ignored
+This tool is required for preparing firmware images for some home
+routers with picky bootloaders. It's main advantage is support for
+specifying dictionary size and lc/lp/pb LZMA values.
 
-The previous ltrace version gave a crash on a ARMv7 device, showing
-this error:
+Broadcom CFE bootloader for MIPS BCM47xx devices is known to fail to
+boot images using LZMA compression with dictionary.
+Broadcom cferam bootloader for ARM64 BCM4908 devices is known to fail to
+boot images without uncompressed size specified.
+Broadcom CFE for BCM63xx DSL devices has even different requirements.
 
-  "Assertion `field_info->type != ARGTYPE_VOID' failed."
+Packaging LZMA SDK "lzma" as "lzma_alone" is how it's handled in the
+Arch, Debian and Ubuntu.
 
-Using this commit ltrace shows a '<void>' return value in such cases,
-but at least avoids the crash.
-
-Signed-off-by: Mauro Meneghin <mauro.meneghin@youview.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Rafa? Mi?ecki <rafal@milecki.pl>
 ---
- package/ltrace/ltrace.hash |  2 +-
- package/ltrace/ltrace.mk   | 14 +++++---------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ package/lzma-alone/lzma-alone.hash |  1 +
+ package/lzma-alone/lzma-alone.mk   | 23 +++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/lzma-alone/lzma-alone.hash
+ create mode 100644 package/lzma-alone/lzma-alone.mk
 
-diff --git a/package/ltrace/ltrace.hash b/package/ltrace/ltrace.hash
-index f795f53bfb..a677ed3511 100644
---- a/package/ltrace/ltrace.hash
-+++ b/package/ltrace/ltrace.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  894333bb7d347066c4e398d9f4a202af5f2faf80754905dd0e6a2259695baba0  ltrace-c22d359433b333937ee3d803450dc41998115685.tar.gz
-+sha256  4aecf69e4a33331aed1e50ce4907e73a98cbccc4835febc3473863474304d547  ltrace-82c66409c7a93ca6ad2e4563ef030dfb7e6df4d4.tar.gz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index 2eb60fe450..b3bd90daaa 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -4,15 +4,11 @@
- #
- ################################################################################
- 
--LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
--#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
--
--# Upstream is dead: the git reporistory for ltrace did not follow during the
--# migration from alioth to gitlab, and there is no longer any official
--# upstream repository with the expected sha1, except for the tarball cached on
--# s.b.o., so we go fetch it there.
--LTRACE_SITE = http://sources.buildroot.org/ltrace
--
-+# This github version has some extra fixes on top of https://ltrace.org/
-+# in particular the following commit to avoid a crash:
-+#   192e0a6 void struct members are now ignored
-+LTRACE_VERSION = 82c66409c7a93ca6ad2e4563ef030dfb7e6df4d4
-+LTRACE_SITE = $(call github,dkogan,ltrace,$(LTRACE_VERSION))
- LTRACE_DEPENDENCIES = elfutils
- LTRACE_CONF_OPTS = --disable-werror
- LTRACE_LICENSE = GPL-2.0
+diff --git a/package/lzma-alone/lzma-alone.hash b/package/lzma-alone/lzma-alone.hash
+new file mode 100644
+index 0000000000..39759c4e3b
+--- /dev/null
++++ b/package/lzma-alone/lzma-alone.hash
+@@ -0,0 +1 @@
++sha256	9aade84f229fb25f7aef39d8866b375fe6d35a9e18098d7cd86a99e294902944	lzma922.tar.bz2
+diff --git a/package/lzma-alone/lzma-alone.mk b/package/lzma-alone/lzma-alone.mk
+new file mode 100644
+index 0000000000..6a1d8dd3c0
+--- /dev/null
++++ b/package/lzma-alone/lzma-alone.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# lzma-alone
++#
++################################################################################
++
++LZMA_ALONE_VERSION = 9.22
++LZMA_ALONE_SITE = https://sourceforge.net/projects/sevenzip/files/LZMA%20SDK/
++LZMA_ALONE_SOURCE = lzma922.tar.bz2
++LZMA_ALONE_STRIP_COMPONENTS = 0
++LZMA_ALONE_LICENSE = LGPL-2.1-or-later, BSD-3-Clause
++
++define HOST_LZMA_ALONE_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/C/Util/Lzma -f makefile.gcc
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/CPP/7zip/Bundles/LzmaCon -f makefile.gcc
++endef
++
++define HOST_LZMA_ALONE_INSTALL_CMDS
++	$(INSTALL) -d -m 0755 $(HOST_DIR)/bin
++	$(INSTALL) -D -m 0755 $(@D)/CPP/7zip/Bundles/LzmaCon/lzma $(HOST_DIR)/bin/lzma_alone
++endef
++
++$(eval $(host-generic-package))
+-- 
+2.27.0
