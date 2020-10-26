@@ -1,13 +1,16 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 26 Oct 2020 13:40:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/weston: add patch to fix issue in
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Oct 2020 14:05:44 +0100
+Subject: [Buildroot] [git commit] package/weston: add patch to fix issue in
  conjunction with imx-gpu-viv
-Message-ID: <20201026124030.18360-1-heiko.thiery@gmail.com>
+Message-ID: <20201026130726.2DB8380035@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4da7fe5d42943cfc6976bf4de510d623f11bfdb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 In file included from host/aarch64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:39,
                  from ../libweston/renderer-gl/gl-renderer.h:36,
@@ -23,10 +26,10 @@ Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Refik Tuzakli <tuzakli.refik@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...libweston-backend-drm-might-need-EGL.patch | 47 +++++++++++++++++++
+ ...0002-libweston-backend-drm-might-need-EGL.patch | 47 ++++++++++++++++++++++
  1 file changed, 47 insertions(+)
- create mode 100644 package/weston/0002-libweston-backend-drm-might-need-EGL.patch
 
 diff --git a/package/weston/0002-libweston-backend-drm-might-need-EGL.patch b/package/weston/0002-libweston-backend-drm-might-need-EGL.patch
 new file mode 100644
@@ -81,5 +84,3 @@ index 0000000000..f504e1145b
 +--
 +2.20.1
 +
--- 
-2.20.1
