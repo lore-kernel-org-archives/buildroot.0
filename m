@@ -1,48 +1,69 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 26 Oct 2020 18:51:03 +0100
-Subject: [Buildroot] Request for documenting HOST_LIBFOO_BUILD_CMDS
-In-Reply-To: <CACna6ry9F7VrNPMo1mFyr-3CjQA+xNw=tJWK8ih_y0pN60NKrw@mail.gmail.com>
-References: <CACna6ry9F7VrNPMo1mFyr-3CjQA+xNw=tJWK8ih_y0pN60NKrw@mail.gmail.com>
-Message-ID: <20201026185103.070cc235@gmx.net>
+From: Michael Durrant <mdurrant@ArcturusNetworks.com>
+Date: Mon, 26 Oct 2020 14:56:58 -0400
+Subject: [Buildroot] [PATCH 1/1] package/gcc: Enabling gcc-8.x support for,
+ BR2_powerpc_8548 cores
+In-Reply-To: <b5cbb9bf-5507-d5b1-9679-4ea0b5767f99@ArcturusNetworks.com>
+References: <977a0251-8239-1ec8-268c-4bf9b1c0498a@ArcturusNetworks.com>
+ <b5cbb9bf-5507-d5b1-9679-4ea0b5767f99@ArcturusNetworks.com>
+Message-ID: <2ecc546a-3431-af77-8bc2-ecf3f983e403@ArcturusNetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Rafa?,
+package/gcc: Enabling gcc-8.x support for? BR2_powerpc_8548 cores
 
-On Mon, 26 Oct 2020 18:37:45 +0100, Rafa? Mi?ecki <zajec5@gmail.com> wrote:
+The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
+within GCC.? After GCC-7.x support was removed as a default in buildroot,
+some boards, including the arcturus_ucp1020_defconfig and
+freescale_p1025twr_defconfig will fail to compile.
 
-> Hey,
-> 
-> I'm new to the buildroot and I just spent few hours developing my
-> first (host) package. My main problem was buildroot not executing
-> build commands.
-> 
-> In the documentation section "17.5.2. generic-package reference" there
-> is description of LIBFOO_BUILD_CMDS without mentioning
-> HOST_LIBFOO_BUILD_CMDS. While it must be obvious for existing
-> developers, I find it misleading for newbies.
+The GCC-8.x compiler series continues to support powerpc_spe CPU
+cores, but only as an --enable-obsoleted instruction set.
+This patch enables the use of GCC-8.x and asserts the required
+option to enable the powerpc_spe instruction set.
 
-There is already some documentation about it, see [1]:
+This Patch passes compilation and run tests with the
+arcturus/ppc-ucp1020? board.
 
-  For the target package, the generic-package uses the variables defined by the .mk
-  file and prefixed by the uppercased package name: LIBFOO_*. host-generic-package
-  uses the HOST_LIBFOO_* variables. For some variables, if the HOST_LIBFOO_ prefixed
-  variable doesn?t exist, the package infrastructure uses the corresponding variable
-  prefixed by LIBFOO_. This is done for variables that are likely to have the same
-  value for both the target and host packages. See below for details.
+Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
 
-> 
-> Could someone familiar with buildroot document that, please?
-> Otherwise buildroot's documentation is really great, thanks a lot
-> everyone involved in it :)
-> 
+This patch should address a noted job failure on GitLab CI
+https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
 
-Maybe it is a little bit hidden and could be more emphasized...
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
+---
+?package/gcc/Config.in.host | 2 +-
+?package/gcc/gcc.mk???????? | 1 +
+?2 files changed, 2 insertions(+), 1 deletion(-)
 
-Regards,
-Peter
- 
-[1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 74999c800b..8ae778437b 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -27,7 +27,7 @@ config BR2_GCC_VERSION_8_X
+??????? depends on !BR2_or1k
+??????? # powerpc spe support has been deprecated since gcc 8.x.
+??????? # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-?????? depends on !BR2_powerpc_SPE
++?????? # it can still be built with --enable-obsolete
+??????? select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+
+?config BR2_GCC_VERSION_9_X
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index f372857916..beac27ede4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -217,6 +217,7 @@ endif
+?# Enable proper double/long double for SPE ABI
+?ifeq ($(BR2_powerpc_SPE),y)
+?HOST_GCC_COMMON_CONF_OPTS += \
++?????? --enable-obsolete \
+??????? --enable-e500_double \
+??????? --with-long-double-128
+?endif
+-- 
+2.26.2
