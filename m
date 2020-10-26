@@ -1,75 +1,50 @@
-From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-Date: Mon, 26 Oct 2020 22:34:33 +0100
-Subject: [Buildroot] [PATCH] package/lzma-alone: new package
-Message-ID: <20201026213433.4309-1-zajec5@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Oct 2020 22:35:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ltrace: bump ltrace to more
+ recent git repo with latest commit
+In-Reply-To: <20201023134329.1810-1-mauro.meneghin@youview.com>
+References: <20201023134329.1810-1-mauro.meneghin@youview.com>
+Message-ID: <20201026223513.096b2b69@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Rafa? Mi?ecki <rafal@milecki.pl>
+On Fri, 23 Oct 2020 14:43:29 +0100
+Mauro Meneghin <mauro.meneghin@youview.com> wrote:
 
-This new package provides "lzma_alone" host binary based on the original
-LZMA SDK. It provides few extra options when compared to the LZMA Utils
-project "lzma" binary (already packaged as the "lzma").
+> I've updated LTRACE_SITE to point to https://github.com/dkogan/ltrace
+> of Dima Kogan that includes some bug fixes, in particular the following
+> commit to avoid a crash:
+>   192e0a6 void struct members are now ignored
+> 
+> The previous ltrace version gave me a crash on a ARMv7 device, showing
+> this error:
+>   "Assertion `field_info->type != ARGTYPE_VOID' failed."
+> 
+> Using this commit ltrace shows a '<void>' return value in such cases,
+> but at least avoids the crash.
+> 
+> Signed-off-by: Mauro Meneghin <mauro.meneghin@youview.com>
 
-This tool is required for preparing firmware images for some home
-routers with picky bootloaders. It's main advantage is support for
-specifying dictionary size and lc/lp/pb LZMA values.
+Thanks for your patch. I have rewritten a bit the commit log to not use
+first person sentences.
 
-Broadcom CFE bootloader for MIPS BCM47xx devices is known to fail to
-boot images using LZMA compression with dictionary.
-Broadcom cferam bootloader for ARM64 BCM4908 devices is known to fail to
-boot images without uncompressed size specified.
-Broadcom CFE for BCM63xx DSL devices has even different requirements.
+> -LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
+> -#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
+> +# This github version has some extra fixes on top of https://ltrace.org/
+> +# in particular the following commit to avoid a crash:
+> +#   192e0a6 void struct members are now ignored
+> +LTRACE_VERSION = 82c66409c7a93ca6ad2e4563ef030dfb7e6df4d4
+> +LTRACE_SITE = git://github.com/dkogan/ltrace.git
 
-Packaging LZMA SDK "lzma" as "lzma_alone" is how it's handled in the
-Arch, Debian and Ubuntu.
+And changed that to use the "github" macro we have in Buildroot.
 
-Signed-off-by: Rafa? Mi?ecki <rafal@milecki.pl>
----
- package/lzma-alone/lzma-alone.hash |  1 +
- package/lzma-alone/lzma-alone.mk   | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
- create mode 100644 package/lzma-alone/lzma-alone.hash
- create mode 100644 package/lzma-alone/lzma-alone.mk
+Applied with those changes. Thanks!
 
-diff --git a/package/lzma-alone/lzma-alone.hash b/package/lzma-alone/lzma-alone.hash
-new file mode 100644
-index 0000000000..39759c4e3b
---- /dev/null
-+++ b/package/lzma-alone/lzma-alone.hash
-@@ -0,0 +1 @@
-+sha256	9aade84f229fb25f7aef39d8866b375fe6d35a9e18098d7cd86a99e294902944	lzma922.tar.bz2
-diff --git a/package/lzma-alone/lzma-alone.mk b/package/lzma-alone/lzma-alone.mk
-new file mode 100644
-index 0000000000..6a1d8dd3c0
---- /dev/null
-+++ b/package/lzma-alone/lzma-alone.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# lzma-alone
-+#
-+################################################################################
-+
-+LZMA_ALONE_VERSION = 9.22
-+LZMA_ALONE_SITE = https://sourceforge.net/projects/sevenzip/files/LZMA%20SDK/
-+LZMA_ALONE_SOURCE = lzma922.tar.bz2
-+LZMA_ALONE_STRIP_COMPONENTS = 0
-+LZMA_ALONE_LICENSE = LGPL-2.1-or-later, BSD-3-Clause
-+
-+define HOST_LZMA_ALONE_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/C/Util/Lzma -f makefile.gcc
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)/CPP/7zip/Bundles/LzmaCon -f makefile.gcc
-+endef
-+
-+define HOST_LZMA_ALONE_INSTALL_CMDS
-+	$(INSTALL) -d -m 0755 $(HOST_DIR)/bin
-+	$(INSTALL) -D -m 0755 $(@D)/CPP/7zip/Bundles/LzmaCon/lzma $(HOST_DIR)/bin/lzma_alone
-+endef
-+
-+$(eval $(host-generic-package))
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
