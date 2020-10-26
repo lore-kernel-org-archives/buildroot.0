@@ -1,76 +1,34 @@
-From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Mon, 26 Oct 2020 10:27:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-intelhex: bump to
- version 2.3.0
-In-Reply-To: <20201025223957.2143147-1-fontaine.fabrice@gmail.com>
-References: <20201025223957.2143147-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ft618hh4.fsf@grinn-global.com>
+From: Magnus Armholt <magnus.armholt@wapice.com>
+Date: Mon, 26 Oct 2020 09:32:02 +0000
+Subject: [Buildroot] Building containers on host?
+Message-ID: <HE1PR03MB298816B86352B2A4CE807634F0190@HE1PR03MB2988.eurprd03.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
+We are interested in using containers on our target.
+The reason is mainly for security and dependency isolation.
+Our target runs in a separated environment so we can't use a repository but instead want to ship the containers in the target image.
+We have done a small proof of concept package where we build a container on host, save it, deploy the compressed image to target, load it and finally launch it during target bootup.
+This seems to work as we expect.
+Currently the container is loaded and launched with docker, but in the future it would be nice to make `podman` work on the target (lets see I ever get that far).
+Since the package builds the container on the host, there is a host side dependency to the container building binary (currently unhandled).
+We would prefer to use `buildah` on host side but also `docker` would be an option(although secondary).
 
-Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Reading the manual my understanding is that I need to add a host side package `host-buildah`.
 
-> Fix Python 3.9 compatibility issue with 'array' module
->
-> https://github.com/python-intelhex/intelhex/releases/tag/2.3.0
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/1c217f0c67c63ee43494ef84af832df8e856e2df
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-intelhex/Config.in            | 2 +-
->  package/python-intelhex/python-intelhex.hash | 4 ++--
->  package/python-intelhex/python-intelhex.mk   | 6 +++---
->  3 files changed, 6 insertions(+), 6 deletions(-)
+Buildah is available in basically all package managers, but if building from sources there are dependencies to `runc` and `CNI` (github.com/containernetworking/plugins).
 
-Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Is the correct understanding that I should add 3 host side packages, `host-buildah`, `host-runc` and `host-cni`?
+Would adding `host-docker` be an intermediate easier step (since you have docker buildroot package)?
 
->
-> diff --git a/package/python-intelhex/Config.in b/package/python-intelhex/Config.in
-> index 20dbb8c9ca..d67de822f2 100644
-> --- a/package/python-intelhex/Config.in
-> +++ b/package/python-intelhex/Config.in
-> @@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_INTELHEX
->  	help
->  	  Python library for Intel HEX files manipulations.
->  
-> -	  https://pypi.python.org/pypi/IntelHex
-> +	  https://github.com/python-intelhex/intelhex
-> diff --git a/package/python-intelhex/python-intelhex.hash b/package/python-intelhex/python-intelhex.hash
-> index 80674f14ae..917bd72cd7 100644
-> --- a/package/python-intelhex/python-intelhex.hash
-> +++ b/package/python-intelhex/python-intelhex.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/intelhex/json
-> -md5  9ce7402e0fd33249aef52cbf437b4ab7  intelhex-2.2.1.tar.gz
-> -sha256  009d8511e0d50639230c39af9607deee771cf026f67ef7507a8c3fd4fa927832  intelhex-2.2.1.tar.gz
-> +md5  9de0e92c1b66f75322581c8b22c020c2  intelhex-2.3.0.tar.gz
-> +sha256  892b7361a719f4945237da8ccf754e9513db32f5628852785aea108dcd250093  intelhex-2.3.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  1b2eb032ab8a1b0266f7995c76e44509f89ca9c0e90ec507763b5e735aca7de4  LICENSE.txt
-> diff --git a/package/python-intelhex/python-intelhex.mk b/package/python-intelhex/python-intelhex.mk
-> index 64b21270e1..cc8b973f0f 100644
-> --- a/package/python-intelhex/python-intelhex.mk
-> +++ b/package/python-intelhex/python-intelhex.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_INTELHEX_VERSION = 2.2.1
-> +PYTHON_INTELHEX_VERSION = 2.3.0
->  PYTHON_INTELHEX_SOURCE = intelhex-$(PYTHON_INTELHEX_VERSION).tar.gz
-> -PYTHON_INTELHEX_SITE = https://files.pythonhosted.org/packages/01/66/8fab869edcc0eaf8fc030472ff379b8eeee2ef3b42f8aec6bd84e9f735e3
-> -PYTHON_INTELHEX_SETUP_TYPE = distutils
-> +PYTHON_INTELHEX_SITE = https://files.pythonhosted.org/packages/66/37/1e7522494557d342a24cb236e2aec5d078fac8ed03ad4b61372586406b01
-> +PYTHON_INTELHEX_SETUP_TYPE = setuptools
->  PYTHON_INTELHEX_LICENSE = BSD-3-Clause
->  PYTHON_INTELHEX_LICENSE_FILES = LICENSE.txt
+BR,
+Magnus
 
 
--- 
-Marcin Niestr?j
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201026/f2abff36/attachment.html>
