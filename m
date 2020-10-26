@@ -1,52 +1,43 @@
-From: Mike Frampton <mikeframpo@gmail.com>
-Date: Tue, 27 Oct 2020 10:07:19 +1300
-Subject: [Buildroot] Help adding support for Dragonboard 410c
-In-Reply-To: <20201026092923.34e78e5b@windsurf.home>
-References: <CABqcFRnBj3jtaOmrzSE0h+hYUrs=CytQDayFrQ=pHyGrYCPN+Q@mail.gmail.com>
- <20201026092923.34e78e5b@windsurf.home>
-Message-ID: <CABqcFR=FdL7zb2_k=R4vrdK0zowdAE+DGdcEhB-w-ThbUkCVfQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Oct 2020 22:08:41 +0100
+Subject: [Buildroot] [PATCH v3,2/2] package/zeek: new package
+In-Reply-To: <20201025161246.1622486-2-fontaine.fabrice@gmail.com>
+References: <20201025161246.1622486-1-fontaine.fabrice@gmail.com>
+ <20201025161246.1622486-2-fontaine.fabrice@gmail.com>
+Message-ID: <20201026220841.085177d8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Fabrice,
 
-Thanks for that, I'll prepare my patch and post it here soon.
+On Sun, 25 Oct 2020 17:12:46 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
---Mike
+> +ZEEK_CONF_OPTS = \
+> +	-DBIFCL_EXE_PATH=$(HOST_DIR)/bin/bifcl \
+> +	-DBINPAC_EXE_PATH=$(HOST_DIR)/bin/binpac \
+> +	-DBROKER_DISABLE_DOCS=ON \
+> +	-DBROKER_DISABLE_TESTS=ON \
+> +	-DINSTALL_AUX_TOOLS=ON \
+> +	-DZEEK_ETC_INSTALL_DIR=/etc
+> +
+> +define ZEEK_FIX_PYTHON_PATH
+> +	$(SED) 's, at PYTHON_EXECUTABLE@,/usr/bin/python,' \
+> +		$(@D)/auxil/zeekctl/ZeekControl/ssh_runner.py
+> +endef
+> +
+> +ZEEK_POST_CONFIGURE_HOOKS += ZEEK_FIX_PYTHON_PATH
 
-On Mon, Oct 26, 2020 at 9:29 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Mike,
->
-> On Mon, 26 Oct 2020 15:46:44 +1300
-> Mike Frampton <mikeframpo@gmail.com> wrote:
->
-> > I have been working on adding support for the Qualcomm Dragonboard
-> > 410c SBC. I have a working, minimal config.
-> >
-> > My config builds an abootimg kernel image, which can be booted via SD
-> > card or USB. The patch adds a package for Qualcomm's BSP for the
-> > device.
-> >
-> > This is my first time using Buildroot (coming from OE previously and
-> > this is much more my cup of tea :-).
->
-> Glad to hear that you found Buildroot useful for your project!
->
-> > My patch touches a couple of packages. Should I break each
-> > package-change into a separate patch before posting here?
->
-> Yes, we generally like contributions to be split up in several patches
-> if they touch several areas/packages.
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Does this needs to be a post-configure hook ? Isn't that needed simply
+after the installation ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
