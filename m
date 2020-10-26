@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Oct 2020 09:31:02 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: replace Trent Piepho's e-mail
- address
-Message-ID: <20201026083103.497368-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 26 Oct 2020 09:33:32 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: drop Mamatha Inamdar
+Message-ID: <20201026082145.0C3F18435A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Trent's e-mail address is no longer working:
+commit: https://git.buildroot.net/buildroot/commit/?id=656c34dc87e7a95b4fdd4e5d1b78099dcc5ba27f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-<tpiepho@impinj.com>: host us-smtp-inbound-2.mimecast.com[205.139.110.221]
-    said: 550 Invalid Recipient -
-    https://community.mimecast.com/docs/DOC-1369#550
-    [7R954rMIM8GCM0FMERvPAg.us536] (in reply to RCPT TO command)
+His/her e-mail address is bouncing:
 
-Use another e-mail that Trent has recently used on the mailing list.
+VMSDVM9.POK.IBM.COM unable to deliver following mail to recipient(s):
+    <mamatha4@linux.ibm.com>
+VMSDVM9.POK.IBM.COM received negative reply:
+550 5.1.1 <mamatha4@linux.ibm.com>: Recipient address rejected: User unknown in local recipient table
 
-Cc: Trent Piepho <trent.piepho@synapse.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 123ffbf033..f39e745217 100644
+index e9dfe96206..5e26202fe2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2616,7 +2616,7 @@ F:	package/waf/
- F:	support/testing/tests/package/test_crudini.py
- F:	support/testing/tests/package/test_redis.py
+@@ -1569,9 +1569,6 @@ F:	package/mpv/
+ F:	package/rpi-firmware/
+ F:	package/rpi-userland/
  
--N:	Trent Piepho <tpiepho@impinj.com>
-+N:	Trent Piepho <trent.piepho@synapse.com>
- F:	package/libp11/
- 
- N:	Tudor Holton <buildroot@tudorholton.com>
--- 
-2.26.2
+-N:	Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+-F:	package/nvme/
+-
+ N:	Manuel V??gele <develop@manuel-voegele.de>
+ F:	package/python-pyqt5/
+ F:	package/python-requests-toolbelt/
