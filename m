@@ -1,13 +1,16 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 26 Oct 2020 07:11:14 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: fix build with libssh2 and
- disabled proxy
-Message-ID: <ff7bc375af351ebbfcc8f09c6b351fae305b24b1.1603689074.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 Oct 2020 08:12:26 +0100
+Subject: [Buildroot] [git commit] package/libcurl: fix build with libssh2
+ and disabled proxy
+Message-ID: <20201026070046.E2E1C8424A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0fa9af8be0763cf32d7a2d55a7d3e04a7f9e2cb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add patch fixing build of libssh2 support when
 BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
@@ -19,14 +22,14 @@ http://autobuild.buildroot.net/results/ab1f7b9837ac74fad359e6c239f45ed25ad31df3/
 
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ix-build-with-disabled-proxy-support.patch | 46 +++++++++++++++++++
+ ...sh2-fix-build-with-disabled-proxy-support.patch | 46 ++++++++++++++++++++++
  1 file changed, 46 insertions(+)
- create mode 100644 package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch
 
 diff --git a/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch b/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch
 new file mode 100644
-index 000000000000..180f243581a1
+index 0000000000..180f243581
 --- /dev/null
 +++ b/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch
 @@ -0,0 +1,46 @@
@@ -76,5 +79,3 @@ index 000000000000..180f243581a1
 +-- 
 +2.28.0
 +
--- 
-2.28.0
