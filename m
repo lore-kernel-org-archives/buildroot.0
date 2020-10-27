@@ -1,85 +1,44 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Tue, 27 Oct 2020 22:12:14 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.4.1
-In-Reply-To: <20201027141214.2004-1-zhaojh329@gmail.com>
-References: <20201027141214.2004-1-zhaojh329@gmail.com>
-Message-ID: <20201027141214.2004-2-zhaojh329@gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Tue, 27 Oct 2020 15:13:08 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5Bautobuild=2Ebuildroot=2Enet=5D_Your_dai?=
+ =?utf-8?q?ly_results_for_2020-10-26=2C_libabseil-cpp?=
+Message-ID: <54-5f982b00-5-30c39040@76485822>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- ...rc-uhttpd.c-fix-build-without-dlopen.patch | 35 -------------------
- package/libuhttpd/libuhttpd.hash              |  2 +-
- package/libuhttpd/libuhttpd.mk                |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
- delete mode 100644 package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
+Hi,
 
-diff --git a/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch b/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
-deleted file mode 100644
-index 966041028b..0000000000
---- a/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 0b2058e7c96a3d8d994d572116ad7b950766347b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 16 Oct 2020 21:39:47 +0200
--Subject: [PATCH] src/uhttpd.c: fix build without dlopen
--
--Build without dlopen fails on:
--
--/data/buildroot-test/instance-0/output-1/build/libuhttpd-3.4.0/src/uhttpd.c:45:23: error: unused variable 'p' [-Werror=unused-variable]
--     struct uh_plugin *p = srv->plugins;
--                       ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/b2bbd0681705b94e6b531996b39f62e47f089c92
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/zhaojh329/libuhttpd/commit/0b2058e7c96a3d8d994d572116ad7b950766347b]
-----
-- src/uhttpd.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/uhttpd.c b/src/uhttpd.c
--index dad3646..a37c136 100644
----- a/src/uhttpd.c
--+++ b/src/uhttpd.c
--@@ -42,7 +42,9 @@ void conn_free(struct uh_connection *conn);
-- static void uh_server_free(struct uh_server *srv)
-- {
--     struct uh_connection *conn = srv->conns;
--+#ifdef HAVE_DLOPEN
--     struct uh_plugin *p = srv->plugins;
--+#endif
-- 
--     ev_io_stop(srv->loop, &srv->ior);
-- 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index bcded4a983..0c19569a6e 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c77a404e2a666dda6c731cee977cfa8c2aa433e167222cbd28dd0c91a5c80570  libuhttpd-3.4.0.tar.gz
-+sha256  9e89a5a797e6a89acbb5ae8566b21eef2593b4290f31b2a724c1fc86ef4990e6  libuhttpd-3.4.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 71e7754bab..b3d735689b 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.4.0
-+LIBUHTTPD_VERSION = 3.4.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
--- 
-2.25.1
+On Tuesday, October 27, 2020 09:12 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote: 
+> 
+> Build failures related to your packages:
+> 
+>     arch     |             reason             |                                       url                                      
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>   aarch64    | host-libabseil-cpp-20200923.2  | http://autobuild.buildroot.net/results/5780d5e21e5e9c0ba86cc422ef995f45dc83cc4c
+>  aarch64_be  | host-libabseil-cpp-20200923.2  | http://autobuild.buildroot.net/results/8138c63fc13940e1b97f07f24752b199f88ccfa8
+>     arm      |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/f8eda966c6400c242680db378c8944444d89d5c5
+>   mips64el   |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/38e9427d995e16bc4876f9fdc890c42e4fd04c06
+>     mips     |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/4e99415728a6f3c6b396a9872924262652f77996
+>     arm      |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/1830577843772bdfd6e310b4d361aa1edf5969d6
+> 
+
+The build fails because abseil stopped setting the C++11 build Flag itself. But that leads to another problem:
+
+I just realized that, abseil also dropped support for gcc 4.8.x with the latest release. See [0]
+We could add a dependency on gcc 4.9 (host and target). But this would also influence the grpc package which just depends on c++11.
+The other option would be to revert the last version bump and keep this as long ad grpc keeps working with it
+(grpc itself has still the old version as submodule).
+
+What would be the preferred way to go?
+
+Regards,
+Michael
+
+[0] https://abseil.io/docs/cpp/platforms/platforms#linux
+> 
+> -- 
+> http://autobuild.buildroot.net
