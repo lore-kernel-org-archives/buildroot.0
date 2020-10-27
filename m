@@ -1,61 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Oct 2020 13:10:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst-omx: fix gstomx.conf
- installation for raspberry
-In-Reply-To: <AM0PR04MB4083CF2D34FB9C1B4C787DF5FB160@AM0PR04MB4083.eurprd04.prod.outlook.com>
-References: <AM0PR04MB4083CF2D34FB9C1B4C787DF5FB160@AM0PR04MB4083.eurprd04.prod.outlook.com>
-Message-ID: <20201027121011.GG2805@scaer>
+From: Gustavo Heinz <gustavo@gsthnz.com>
+Date: Tue, 27 Oct 2020 09:16:17 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-10-26
+Message-ID: <13300abd-7ceb-424e-e7a1-666f705e6b24@gsthnz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Augustin, All,
+On 10/27/20 5:12 AM, Thomas Petazzoni wrote:
 
-On 2020-10-27 12:30 +0100, Augustin Thiercelin spake thusly:
-> The commit 7e6f4e5 introduces a new bug when building the gst-omx package
-> for the raspberry.
+> Build failures related to your packages:
 > 
-> GST_OMX_VARIANT variable in gst-omx.mk was shadowed to 'generic' after being
-> set well for raspberry. It results having the gstomx.conf not being installed,
-> and thus having gst-omx installed but none of its features available.
+>      arch     |             reason             |                                       url
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>   powerpc64   |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/87a02d73b31bd5972548c91a828af10bcb9638b8
+>      arm      |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/85f11b65d0ff889f0219b1a1d3bba13c1d6fef1c
+>   powerpc64   |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/37f8a32e4db188cb684542fcb7afef0ede8a9f32
+>    riscv64    |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/70a1687f8cfe5b145d53ae98a4fa220d085ae2a3
+>      arm      |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/6eee206382969c7b288c8756f3a41557470204ba
 > 
-> Signed-off-by: Augustin Thiercelin <augustin.thiercelin@outlook.com>
 
-Applied to master, thanks.
+I'm trying to fix this error, it seems to be happening a lot on the 
+autobuild.
 
-Regards,
-Yann E. MORIN.
+However I'm not sure what seems to be the problem here, if I run from 
+the provided config I can reproduce the problem, but if I remove the 
+external toolchain and use the toolchain from buildroot with the same 
+arch, the problem does not happen.
 
-> ---
->  package/gstreamer1/gst-omx/gst-omx.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-> index cdd0e86b04..9e35ff3d04 100644
-> --- a/package/gstreamer1/gst-omx/gst-omx.mk
-> +++ b/package/gstreamer1/gst-omx/gst-omx.mk
-> @@ -20,6 +20,7 @@ GST_OMX_CONF_OPTS = \
->  ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
->  GST_OMX_VARIANT = rpi
->  GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
-> +else
->  GST_OMX_VARIANT = generic
->  endif
->  
-> -- 
-> 2.29.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Am I missing something here?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Gustavo Heinz
