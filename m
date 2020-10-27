@@ -1,43 +1,147 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 27 Oct 2020 08:32:39 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-10-25
-In-Reply-To: <b56105e96c0bfb86b803acc2ef6e0aad@tudorholton.com>
-References: <b56105e96c0bfb86b803acc2ef6e0aad@tudorholton.com>
-Message-ID: <CANQCQpaurhRXOqqe34dO6Kzw77_JpjQLFb=F2SMcYGC625ZO8g@mail.gmail.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Oct 2020 09:01:40 -0500
+Subject: [Buildroot] [PATCH] package/environment-setup: new package
+Message-ID: <20201027140140.47982-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tudor,
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-On Mon, Oct 26, 2020 at 4:08 AM Tudor Holton <tudor@tudorholton.com> wrote:
->
-> Hi all,
->
-> The CVE listed below appears only to relate to openjdk6 and openjdk7.
-> The current package builds openjdk11.0.8 or openjdk14.0.2.
->
+Install an helper script to setup a build environment based on buildroot.
+It's useful when a developer wants to use a buildroot generated sdk to
+build an external project.
 
-The vulnerability database must not be mapping the impacted versions
-correctly (ie.  CVE is applicable to which CPE or range of CPE
-versions).   When I look at
-https://nvd.nist.gov/vuln/detail/CVE-2013-0169 , I see specific
-entries for 1.6 / 1.7 / 1.8 and an entry of
-cpe:2.3:a:oracle:openjdk:-:*:*:*:*:*:*:* .  I wonder if we are
-incorrectly string matching that "-" as a version?  +Gregory  any
-ideas?
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+Tested-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Maury Anderson <maury.anderson@collins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
 
-Tudor, you can definitely send a patch to ignore this CVE but I
-believe we may have a matching issue with our scripts. As the
-following are the listed CPE matches which according to the CVE text
-look correct.
-cpe:2.3:a:oracle:openjdk:-:*:*:*:*:*:*:*
-cpe:2.3:a:oracle:openjdk:1.6.0:*:*:*:*:*:*:*
-cpe:2.3:a:oracle:openjdk:1.7.0:*:*:*:*:*:*:*
-cpe:2.3:a:oracle:openjdk:1.8.0:*:*:*:*:*:*:*
+Reviving a patch from this series.
+http://patchwork.ozlabs.org/project/buildroot/patch/1588085161-28104-1-git-send-email-angelo at amarulasolutions.com/
 
-Best Regards,
-Matt
+Changes v6 -> new v1
+(Maury)
+ - Adjusted host tool naming in menuconfig to be prefixed with "host "
+---
+ docs/manual/using-buildroot-toolchain.txt     |  8 +++++
+ package/Config.in.host                        |  1 +
+ package/environment-setup/Config.in.host      |  6 ++++
+ package/environment-setup/environment-setup   | 16 +++++++++
+ .../environment-setup/environment-setup.mk    | 34 +++++++++++++++++++
+ 5 files changed, 65 insertions(+)
+ create mode 100644 package/environment-setup/Config.in.host
+ create mode 100644 package/environment-setup/environment-setup
+ create mode 100644 package/environment-setup/environment-setup.mk
+
+diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+index 0c0c35fced..98dae6cdcc 100644
+--- a/docs/manual/using-buildroot-toolchain.txt
++++ b/docs/manual/using-buildroot-toolchain.txt
+@@ -27,6 +27,14 @@ Upon extracting the SDK tarball, the user must run the script
+ +relocate-sdk.sh+ (located at the top directory of the SDK), to make
+ sure all paths are updated with the new location.
+ 
++For your convenience, by selecting the host package
++BR2_PACKAGE_HOST_ENVIRONMENT_SETUP, you can have a +setup-environment+ script
++installed in +output/host/+.
++This script can be sourced with +. your/sdk/path/environment-setup+ to launch
++the buildroot shell. Inside this shell, you will find an environment already
++set up with the correct PATH and the complete list of +target configure
++options+.
++
+ Alternatively, if you just want to prepare the SDK without generating
+ the tarball (e.g. because you will just be moving the +host+ directory,
+ or will be generating the tarball on your own), Buildroot also allows
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 546f1c226d..c69c756f3a 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -19,6 +19,7 @@ menu "Host utilities"
+ 	source "package/dtc/Config.in.host"
+ 	source "package/e2fsprogs/Config.in.host"
+ 	source "package/e2tools/Config.in.host"
++	source "package/environment-setup/Config.in.host"
+ 	source "package/erofs-utils/Config.in.host"
+ 	source "package/eudev/Config.in.host"
+ 	source "package/exfatprogs/Config.in.host"
+diff --git a/package/environment-setup/Config.in.host b/package/environment-setup/Config.in.host
+new file mode 100644
+index 0000000000..d3604525a5
+--- /dev/null
++++ b/package/environment-setup/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_ENVIRONMENT_SETUP
++	bool "host environment setup"
++	help
++	  Install an helper script to setup a build environment
++	  based on buildroot. It's useful when you export an sdk
++	  and want to use buildroot to build an external project
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+new file mode 100644
+index 0000000000..b48f1979d6
+--- /dev/null
++++ b/package/environment-setup/environment-setup
+@@ -0,0 +1,16 @@
++cat <<'EOF'
++ _           _ _     _                 _
++| |__  _   _(_) | __| |_ __ ___   ___ | |_
++| '_ \| | | | | |/ _` | '__/ _ \ / _ \| __|
++| |_) | |_| | | | (_| | | | (_) | (_) | |_
++|_.__/ \__,_|_|_|\__,_|_|  \___/ \___/ \__| shell
++
++       Making embedded Linux easy!
++
++Some tips:
++* PATH is now pointing to the HOST_DIR path
++* Target configure options are already exported
++* To configure do "./configure $CONFIGURE_FLAGS"
++
++EOF
++SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
+new file mode 100644
+index 0000000000..6d2396f8f1
+--- /dev/null
++++ b/package/environment-setup/environment-setup.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# environment-setup
++#
++################################################################################
++
++ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
++ENVIRONMENT_SETUP_HOST_DIR_SED_EXP = 's+$(HOST_DIR)+\$$SDK_PATH+g'
++ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP = 's+$(HOST_DIR)/bin/++g'
++
++define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
++	cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
++	for var in $(TARGET_CONFIGURE_OPTS); do \
++		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
++	done
++	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
++	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--exec-prefix=/usr \
++		--sysconfdir=/etc \
++		--localstatedir=/var \
++		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
++	$(SED) $(ENVIRONMENT_SETUP_HOST_BIN_DIR_SED_EXP) \
++		-e $(ENVIRONMENT_SETUP_HOST_DIR_SED_EXP) \
++		-e '/^export "PATH=/c\' \
++		$(ENVIRONMENT_SETUP_FILE)
++	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
++		>> $(ENVIRONMENT_SETUP_FILE)
++
++endef
++
++$(eval $(host-generic-package))
+-- 
+2.17.1
