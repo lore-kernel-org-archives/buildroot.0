@@ -1,40 +1,90 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 27 Oct 2020 19:34:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pax-utils: bump to version 1.2.6
-Message-ID: <20201027183401.458347-1-fontaine.fabrice@gmail.com>
+From: Mike Frampton <mikeframpo@gmail.com>
+Date: Wed, 28 Oct 2020 08:47:05 +1300
+Subject: [Buildroot] [PATCH 1/3] configs/qcom_db410c: Add support for
+ Dragonboard410c SBC Adds basic support for the DB410c SBC. Builds the
+ qualcomm kernel version 5.4 arm64. Adds the device's graphics firmware.
+In-Reply-To: <20201027105107.2ea0e6c7@windsurf.home>
+References: <20201027075056.10753-1-mikeframpo@gmail.com>
+ <20201027105107.2ea0e6c7@windsurf.home>
+Message-ID: <CABqcFR=4MXK2C+RqBhDpPk+xiszrybTO7=e5T+nxVCNQD86hhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pax-utils/pax-utils.hash | 2 +-
- package/pax-utils/pax-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
-index 1b4cee4fb8..0ef8fad643 100644
---- a/package/pax-utils/pax-utils.hash
-+++ b/package/pax-utils/pax-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7f4a7f8db6b4743adde7582fa48992ad01776796fcde030683732f56221337d9  pax-utils-1.2.2.tar.xz
-+sha256  9742d2a31d53a4e0f6df0d3721ab6f7cf8b0404c95fee3b00e678c1ff6db7f21  pax-utils-1.2.6.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
-index b31468eca2..502fc87446 100644
---- a/package/pax-utils/pax-utils.mk
-+++ b/package/pax-utils/pax-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAX_UTILS_VERSION = 1.2.2
-+PAX_UTILS_VERSION = 1.2.6
- PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
- PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
- PAX_UTILS_LICENSE = GPL-2.0
--- 
-2.28.0
+Thanks very much for the feedback! I'll post an updated patch soon
+which addresses your comments.
+
+Cheers,
+--Mike
+
+On Tue, Oct 27, 2020 at 10:51 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Mike,
+>
+> On Tue, 27 Oct 2020 20:50:54 +1300
+> Mike Frampton <mikeframpo@gmail.com> wrote:
+>
+> > Signed-off-by: Mike Frampton <mikeframpo@gmail.com>
+> > ---
+> >  configs/qcom_db410c_defconfig | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> >  create mode 100644 configs/qcom_db410c_defconfig
+>
+> This looks good overall, but as explained in the review of the other
+> patches, this patch should come last in the series, once all the
+> preparation is done (adding a package for the firmware, host-abootimg
+> support). Also:
+>
+>  - The commit title shoudld be just "configs/qcom_db410c: new defconfig"
+>
+>  - An entry in the DEVELOPERS file should be added for the defconfig
+>    file and the board/qcom/db410c/ directory
+>
+>  - A readme.txt should be added in board/qcom/db410c/readme.txt.
+>
+> > diff --git a/configs/qcom_db410c_defconfig b/configs/qcom_db410c_defconfig
+> > new file mode 100644
+> > index 0000000000..835e34453d
+> > --- /dev/null
+> > +++ b/configs/qcom_db410c_defconfig
+> > @@ -0,0 +1,24 @@
+> > +# Architecture
+> > +BR2_aarch64=y
+>
+> Perhaps set the specific sub-architecture being used ?
+>
+> > +
+> > +# Toolchain options
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+> > +
+> > +# Firmware
+> > +BR2_PACKAGE_LINUX_FIRMWARE=y
+> > +BR2_PACKAGE_LINUX_FIRMWARE_QCOM_VENUS=y
+> > +BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO=y
+> > +
+> > +# Kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/landing-teams/working/qualcomm/kernel.git"
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="release/qcomlt-5.4"
+> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="apq8016-sbc"
+> > +
+> > +# Filesystem
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
