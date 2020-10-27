@@ -1,40 +1,102 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 27 Oct 2020 15:28:33 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5base: fix imx6 eglfs support
- with imx-gpu-viv
-Message-ID: <20201027142833.1138548-1-gary.bisson@boundarydevices.com>
+From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Date: Tue, 27 Oct 2020 15:33:12 +0100
+Subject: [Buildroot] [PATCH] package/lzma-alone: new package
+In-Reply-To: <20201027101855.6e23b1ca@windsurf.home>
+References: <20201026213433.4309-1-zajec5@gmail.com>
+ <20201027101855.6e23b1ca@windsurf.home>
+Message-ID: <df98e4e7-163c-bdd3-04a9-ef88bd166e70@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Last commit fixed eglfs_kms support for i.MX8 platforms that required to
-declare imx-gpu-viv as the gbm provider.
-However, this broke the eglfs "fbdev" imx6 support as gbm isn't provided
-in this case. So limit the gbm option to imx-gpu-viv when wayland
-backend is used only.
+On 27.10.2020 10:18, Thomas Petazzoni wrote:
+> On Mon, 26 Oct 2020 22:34:33 +0100
+> Rafa? Mi?ecki <zajec5@gmail.com> wrote:
+> 
+>> From: Rafa? Mi?ecki <rafal@milecki.pl>
+>>
+>> This new package provides "lzma_alone" host binary based on the original
+>> LZMA SDK. It provides few extra options when compared to the LZMA Utils
+>> project "lzma" binary (already packaged as the "lzma").
+>>
+>> This tool is required for preparing firmware images for some home
+>> routers with picky bootloaders. It's main advantage is support for
+>> specifying dictionary size and lc/lp/pb LZMA values.
+>>
+>> Broadcom CFE bootloader for MIPS BCM47xx devices is known to fail to
+>> boot images using LZMA compression with dictionary.
+>> Broadcom cferam bootloader for ARM64 BCM4908 devices is known to fail to
+>> boot images without uncompressed size specified.
+>> Broadcom CFE for BCM63xx DSL devices has even different requirements.
+>>
+>> Packaging LZMA SDK "lzma" as "lzma_alone" is how it's handled in the
+>> Arch, Debian and Ubuntu.
+>>
+>> Signed-off-by: Rafa? Mi?ecki <rafal@milecki.pl>
+> 
+> I am a bit confused by all the different lzma projects out there.
+> 
+> The Debian source package lzma (https://tracker.debian.org/pkg/lzma)
+> produces the lzma, lzma-alone and lzma-dev packages, and its source
+> package is apparently referring to what you suggest to use here.
+> 
+> The Buildroot package lzma points to https://tukaani.org/lzma/, which
+> says "Users of LZMA Utils should move to XZ Utils." and where the
+> latest release is from 2008.
+> 
+> And then, there is the LZMA SDK at https://www.7-zip.org/sdk.html,
+> where the latest release is 19.00, from 2019, at
+> https://www.7-zip.org/a/lzma1900.7z. This seems to be the same files
+> provided at
+> https://sourceforge.net/projects/sevenzip/files/LZMA%20SDK/, but you're
+> using the lzma922 version.
+> 
+> Do you have some clarifications about this (apparent) mess ?
 
-Fixes: 82fb51d3b5 ("package/qt5/qt5base: allow to use imx-gpu-viv as GBM
-provider")
+I wasn't fully aware of Debian solution. So it seems that Debian
+developers:
+1. Switched from LZMA Utils to the LZMA SDK
+2. Kept "lzma" CLI from the LZMA Utils project
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+They did that by patching LZMA SDK sources (see
+lzma_9.22-2.1.debian.tar-1.xz and its "patches"). They ported lzmp.cpp
+from the LZMA Utils.
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e0189599a7..ed308c1fa2 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -79,7 +79,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
- else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += ti-sgx-libgbm
--else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
-+else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += imx-gpu-viv
- else
--- 
-2.28.0
+Advantages:
+1. Single code base
+2. Using the latest LZMA core code
+
+Disadvantages:
+1. Some missing tools like lzmainfo
+
+To make things worse, there is also a XZ Utils project that also
+provides binaries lzma (with CLI like in LZMA Utils), unlzma & lzmainfo.
+
+
+What strategy should buildroot follow in this case?
+
+
+As for version choise I used 9.22 as that is what Debian uses and it's
+the latest release with sources available as tar.bz2 (newer use 7z).
+
+
+>>   package/lzma-alone/lzma-alone.hash |  1 +
+>>   package/lzma-alone/lzma-alone.mk   | 23 +++++++++++++++++++++++
+>>   2 files changed, 24 insertions(+)
+>>   create mode 100644 package/lzma-alone/lzma-alone.hash
+>>   create mode 100644 package/lzma-alone/lzma-alone.mk
+> 
+> We probably want a Config.in.host entry to this package.
+
+What extra options should I put in Config.in.host?
+
+
+>> +define HOST_LZMA_ALONE_INSTALL_CMDS
+>> +	$(INSTALL) -d -m 0755 $(HOST_DIR)/bin
+> 
+> Not needed, the following $(INSTALL) -D will create the destination
+> folder for you.
+
+Thanks!
