@@ -1,36 +1,43 @@
-From: Gustavo Heinz <gustavo@gsthnz.com>
-Date: Tue, 27 Oct 2020 09:16:17 -0300
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Oct 2020 08:32:39 -0500
 Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-10-26
-Message-ID: <13300abd-7ceb-424e-e7a1-666f705e6b24@gsthnz.com>
+ 2020-10-25
+In-Reply-To: <b56105e96c0bfb86b803acc2ef6e0aad@tudorholton.com>
+References: <b56105e96c0bfb86b803acc2ef6e0aad@tudorholton.com>
+Message-ID: <CANQCQpaurhRXOqqe34dO6Kzw77_JpjQLFb=F2SMcYGC625ZO8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/27/20 5:12 AM, Thomas Petazzoni wrote:
+Tudor,
 
-> Build failures related to your packages:
-> 
->      arch     |             reason             |                                       url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->   powerpc64   |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/87a02d73b31bd5972548c91a828af10bcb9638b8
->      arm      |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/85f11b65d0ff889f0219b1a1d3bba13c1d6fef1c
->   powerpc64   |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/37f8a32e4db188cb684542fcb7afef0ede8a9f32
->    riscv64    |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/70a1687f8cfe5b145d53ae98a4fa220d085ae2a3
->      arm      |     python-m2crypto-0.36.0     | http://autobuild.buildroot.net/results/6eee206382969c7b288c8756f3a41557470204ba
-> 
+On Mon, Oct 26, 2020 at 4:08 AM Tudor Holton <tudor@tudorholton.com> wrote:
+>
+> Hi all,
+>
+> The CVE listed below appears only to relate to openjdk6 and openjdk7.
+> The current package builds openjdk11.0.8 or openjdk14.0.2.
+>
 
-I'm trying to fix this error, it seems to be happening a lot on the 
-autobuild.
+The vulnerability database must not be mapping the impacted versions
+correctly (ie.  CVE is applicable to which CPE or range of CPE
+versions).   When I look at
+https://nvd.nist.gov/vuln/detail/CVE-2013-0169 , I see specific
+entries for 1.6 / 1.7 / 1.8 and an entry of
+cpe:2.3:a:oracle:openjdk:-:*:*:*:*:*:*:* .  I wonder if we are
+incorrectly string matching that "-" as a version?  +Gregory  any
+ideas?
 
-However I'm not sure what seems to be the problem here, if I run from 
-the provided config I can reproduce the problem, but if I remove the 
-external toolchain and use the toolchain from buildroot with the same 
-arch, the problem does not happen.
+Tudor, you can definitely send a patch to ignore this CVE but I
+believe we may have a matching issue with our scripts. As the
+following are the listed CPE matches which according to the CVE text
+look correct.
+cpe:2.3:a:oracle:openjdk:-:*:*:*:*:*:*:*
+cpe:2.3:a:oracle:openjdk:1.6.0:*:*:*:*:*:*:*
+cpe:2.3:a:oracle:openjdk:1.7.0:*:*:*:*:*:*:*
+cpe:2.3:a:oracle:openjdk:1.8.0:*:*:*:*:*:*:*
 
-Am I missing something here?
-
--- 
-Gustavo Heinz
+Best Regards,
+Matt
