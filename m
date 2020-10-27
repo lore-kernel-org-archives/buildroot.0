@@ -1,35 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Oct 2020 15:54:43 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-10-26, libabseil-cpp
-In-Reply-To: <54-5f982b00-5-30c39040@76485822>
-References: <54-5f982b00-5-30c39040@76485822>
-Message-ID: <20201027155443.4cf65e7a@windsurf.home>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 27 Oct 2020 10:03:05 -0500
+Subject: [Buildroot] [PATCH 1/1] package/gcc: Enable gcc-8.x support for
+ BR2_powerpc_spe
+In-Reply-To: <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
+References: <9aeb0cb1-00e7-702a-0d41-f6471e6f0302@ArcturusNetworks.com>
+ <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
+Message-ID: <CANQCQpajZfJ5XgvBy7kY5S00VO+0_1Yw2Pn-9d+YLAwqciG09g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 27 Oct 2020 15:13:08 +0100
-"Michael Nosthoff" <buildroot@heine.tech> wrote:
+MIchael,
 
-> The build fails because abseil stopped setting the C++11 build Flag itself. But that leads to another problem:
-> 
-> I just realized that, abseil also dropped support for gcc 4.8.x with the latest release. See [0]
-> We could add a dependency on gcc 4.9 (host and target). But this would also influence the grpc package which just depends on c++11.
-> The other option would be to revert the last version bump and keep this as long ad grpc keeps working with it
-> (grpc itself has still the old version as submodule).
-> 
-> What would be the preferred way to go?
 
-Having a dependency of libabseil on gcc >= 4.9 is fine, even if that
-implies that grpc also needs such a dependency.
+On Mon, Oct 26, 2020 at 2:20 PM Michael Durrant
+<mdurrant@arcturusnetworks.com> wrote:
+>
+> The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
+> within GCC.  After GCC-7.x support was removed as a default in buildroot,
+> some boards, including the arcturus_ucp1020_defconfig and
+> freescale_p1025twr_defconfig will fail to compile.
+>
+> The GCC-8.x compiler series continues to support powerpc_spe CPU
+> cores, but only as an --enable-obsoleted instruction set.
+> This patch enables the use of GCC-8.x and asserts the required
+> option to enable the powerpc_spe instruction set.
+>
 
-Thanks,
+Hopefully things get revived and support moves back out of obsoleted....
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://lists.freebsd.org/pipermail/freebsd-ppc/2018-May/009465.html
+
+> This Patch passes compilation and run tests with the
+> arcturus/ppc-ucp1020  board.
+>
+> Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+>
+> This patch should address a noted job failure on GitLab CI
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+>
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+> Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
+> Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
+
+
+Review-by: Matt Weber <matthew.weber@rockwellcollins.com>
