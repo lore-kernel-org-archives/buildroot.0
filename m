@@ -1,110 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Oct 2020 10:49:25 +0100
-Subject: [Buildroot] [PATCH 3/3] package/abootimg: add host build for
- abootimg Build abootimg on the host,
- and use it to build a kernel image for the DB410c.
-In-Reply-To: <20201027075056.10753-3-mikeframpo@gmail.com>
+Date: Tue, 27 Oct 2020 10:51:07 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/qcom_db410c: Add support for
+ Dragonboard410c SBC Adds basic support for the DB410c SBC. Builds the
+ qualcomm kernel version 5.4 arm64. Adds the device's graphics firmware.
+In-Reply-To: <20201027075056.10753-1-mikeframpo@gmail.com>
 References: <20201027075056.10753-1-mikeframpo@gmail.com>
- <20201027075056.10753-3-mikeframpo@gmail.com>
-Message-ID: <20201027104925.1992d6a5@windsurf.home>
+Message-ID: <20201027105107.2ea0e6c7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Mike,
 
-On Tue, 27 Oct 2020 20:50:56 +1300
+On Tue, 27 Oct 2020 20:50:54 +1300
 Mike Frampton <mikeframpo@gmail.com> wrote:
 
 > Signed-off-by: Mike Frampton <mikeframpo@gmail.com>
 > ---
->  board/qcom/db410c/post-image.sh | 21 +++++++++++++++++++++
->  configs/qcom_db410c_defconfig   |  4 ++++
->  package/Config.in.host          |  1 +
->  package/abootimg/Config.in.host |  8 ++++++++
->  package/abootimg/abootimg.mk    | 12 ++++++++++++
->  5 files changed, 46 insertions(+)
->  create mode 100755 board/qcom/db410c/post-image.sh
->  create mode 100644 package/abootimg/Config.in.host
+>  configs/qcom_db410c_defconfig | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 configs/qcom_db410c_defconfig
 
-There should be one commit adding support for abootimg as a host
-package, and then the commit adding the defconfig file together with
-its post-image script.
+This looks good overall, but as explained in the review of the other
+patches, this patch should come last in the series, once all the
+preparation is done (adding a package for the firmware, host-abootimg
+support). Also:
 
-> diff --git a/board/qcom/db410c/post-image.sh b/board/qcom/db410c/post-image.sh
-> new file mode 100755
-> index 0000000000..5182b655d2
+ - The commit title shoudld be just "configs/qcom_db410c: new defconfig"
+
+ - An entry in the DEVELOPERS file should be added for the defconfig
+   file and the board/qcom/db410c/ directory
+
+ - A readme.txt should be added in board/qcom/db410c/readme.txt.
+
+> diff --git a/configs/qcom_db410c_defconfig b/configs/qcom_db410c_defconfig
+> new file mode 100644
+> index 0000000000..835e34453d
 > --- /dev/null
-> +++ b/board/qcom/db410c/post-image.sh
-> @@ -0,0 +1,21 @@
-> +#!/bin/bash
+> +++ b/configs/qcom_db410c_defconfig
+> @@ -0,0 +1,24 @@
+> +# Architecture
+> +BR2_aarch64=y
+
+Perhaps set the specific sub-architecture being used ?
+
 > +
-> +set -e
+> +# Toolchain options
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
 > +
-> +OUTIMG=$BINARIES_DIR/boot-db410c.img
-> +KERNEL_BUILD=$BUILD_DIR/linux-release_qcomlt-5.4
+> +# Firmware
+> +BR2_PACKAGE_LINUX_FIRMWARE=y
+> +BR2_PACKAGE_LINUX_FIRMWARE_QCOM_VENUS=y
+> +BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO=y
 > +
-> +cp $KERNEL_BUILD/arch/arm64/boot/dts/qcom/apq8016-sbc.dtb $BINARIES_DIR
-> +cp $KERNEL_BUILD/arch/arm64/boot/Image.gz $BINARIES_DIR
-
-This shouldn't be necessary: the linux package already installs the
-kernel image and DTB in BINARIES_DIR. And this would avoid the need to
-hardcode the KERNEL_BUILD directory.
-
-> +# now assemble the bootimg
-> +#cd $BINARIES_DIR
-
-Line commented, not needed.
-
-> +cat $BINARIES_DIR/Image.gz $BINARIES_DIR/apq8016-sbc.dtb > $BINARIES_DIR/Image.gz+dtb
-> +echo "not a ramdisk" > $BINARIES_DIR/ramdisk.img
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.linaro.org/landing-teams/working/qualcomm/kernel.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="release/qcomlt-5.4"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="apq8016-sbc"
 > +
-> +abootimg --create $OUTIMG -k $BINARIES_DIR/Image.gz+dtb -r $BINARIES_DIR/ramdisk.img \
-> +	-c pagesize=2048 -c kerneladdr=0x80008000 -c ramdiskaddr=0x81000000 \
-> +	-c cmdline="root=/dev/mmcblk1p13 rw rootwait console=tty0 console=ttyMSM0,115200n8"
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
 > +
-> +echo "boot img written to $OUTIMG"
 
-This last line is not needed.
-
-Instead, what we like is to have a board/qcom/db410c/readme.txt file
-that explains how to use/build/flash this defconfig. See other
-readme.txt files in board/ for a number of examples.
-
-> diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
-> index e906546948..6a4cd01586 100644
-> --- a/package/abootimg/abootimg.mk
-> +++ b/package/abootimg/abootimg.mk
-> @@ -11,6 +11,7 @@ ABOOTIMG_LICENSE_FILES = LICENSE
->  
->  # depends on libblkid from util-linux
->  ABOOTIMG_DEPENDENCIES = util-linux
-> +ABOOTIMG_HOST_DEPENDENCIES = host-util-linux
->  
->  define ABOOTIMG_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> @@ -20,4 +21,15 @@ define ABOOTIMG_INSTALL_TARGET_CMDS
->  	$(INSTALL) -m 0755 $(@D)/abootimg $(TARGET_DIR)/usr/bin/abootimg
->  endef
->  
-> +# host build
-
-This comment is not needed, it's pretty obvious.
-
-> +define HOST_ABOOTIMG_BUILD_CMDS
-> +	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-> +endef
-> +
-> +define HOST_ABOOTIMG_INSTALL_CMDS
-> +	$(INSTALL) -m 0755 $(@D)/abootimg $(HOST_DIR)/usr/bin/abootimg
-> +endef
-> +
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
-
-Otherwise, looks good!
+Thanks!
 
 Thomas
 -- 
