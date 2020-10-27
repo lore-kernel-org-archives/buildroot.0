@@ -1,49 +1,53 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 27 Oct 2020 10:03:05 -0500
-Subject: [Buildroot] [PATCH 1/1] package/gcc: Enable gcc-8.x support for
- BR2_powerpc_spe
-In-Reply-To: <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
-References: <9aeb0cb1-00e7-702a-0d41-f6471e6f0302@ArcturusNetworks.com>
- <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
-Message-ID: <CANQCQpajZfJ5XgvBy7kY5S00VO+0_1Yw2Pn-9d+YLAwqciG09g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 27 Oct 2020 16:12:29 +0100
+Subject: [Buildroot] [PATCH] package/busybox: update licensing info
+Message-ID: <20201027151229.2173500-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MIchael,
+Busybox is mainly licensed under the GPL-2.0, but the bzip2 part is a
+modified copy of the bzip2/libbzip2 project, which comes with its own
+license.
 
+Update the licensing information accordingly.
 
-On Mon, Oct 26, 2020 at 2:20 PM Michael Durrant
-<mdurrant@arcturusnetworks.com> wrote:
->
-> The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
-> within GCC.  After GCC-7.x support was removed as a default in buildroot,
-> some boards, including the arcturus_ucp1020_defconfig and
-> freescale_p1025twr_defconfig will fail to compile.
->
-> The GCC-8.x compiler series continues to support powerpc_spe CPU
-> cores, but only as an --enable-obsoleted instruction set.
-> This patch enables the use of GCC-8.x and asserts the required
-> option to enable the powerpc_spe instruction set.
->
+Add the hash for the new license file, and fixup indentation (2 spaces).
 
-Hopefully things get revived and support moves back out of obsoleted....
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/busybox/busybox.hash | 5 +++--
+ package/busybox/busybox.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-https://lists.freebsd.org/pipermail/freebsd-ppc/2018-May/009465.html
-
-> This Patch passes compilation and run tests with the
-> arcturus/ppc-ucp1020  board.
->
-> Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
->
-> This patch should address a noted job failure on GitLab CI
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
->
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
-> Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
-> Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
-
-
-Review-by: Matt Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index cf744ffcda..2229379600 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,4 +1,5 @@
+ # From https://busybox.net/downloads/busybox-1.32.0.tar.bz2.sha256
+-sha256 c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689  busybox-1.32.0.tar.bz2
++sha256  c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689  busybox-1.32.0.tar.bz2
+ # Locally computed
+-sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
++sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
++sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 76ab30780c..8c8303a358 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -7,8 +7,8 @@
+ BUSYBOX_VERSION = 1.32.0
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+-BUSYBOX_LICENSE = GPL-2.0
+-BUSYBOX_LICENSE_FILES = LICENSE
++BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
++BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
+ 
+ define BUSYBOX_HELP_CMDS
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+-- 
+2.25.1
