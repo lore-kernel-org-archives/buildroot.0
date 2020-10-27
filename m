@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Oct 2020 10:08:18 +0100
-Subject: [Buildroot] [git commit] package/xl2tp: bump to version 1.3.16
-Message-ID: <20201027085603.E29A386330@busybox.osuosl.org>
+Date: Tue, 27 Oct 2020 10:08:23 +0100
+Subject: [Buildroot] [git commit] package/motion: bump to version 4.3.2
+Message-ID: <20201027085603.EE4C481275@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87535bd5f3b99c9ec7dd0a449b0f3c2fa0e4ad5b
+commit: https://git.buildroot.net/buildroot/commit/?id=8e26559fadb06e83623422e04f13f9765bc6c80e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/xelerance/xl2tpd/releases/tag/v1.3.16
+https://github.com/Motion-Project/motion/releases/tag/release-4.3.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xl2tp/xl2tp.hash | 2 +-
- package/xl2tp/xl2tp.mk   | 2 +-
+ package/motion/motion.hash | 2 +-
+ package/motion/motion.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xl2tp/xl2tp.hash b/package/xl2tp/xl2tp.hash
-index 8cf6522833..471657f0f2 100644
---- a/package/xl2tp/xl2tp.hash
-+++ b/package/xl2tp/xl2tp.hash
+diff --git a/package/motion/motion.hash b/package/motion/motion.hash
+index 6e8dd699e1..96ab1c4338 100644
+--- a/package/motion/motion.hash
++++ b/package/motion/motion.hash
 @@ -1,3 +1,3 @@
- # locally computed
--sha256  0d149bf9d2f7d838806e6a36fd7a676d03bf246d2b7869e16c945330e13b922e  xl2tp-1.3.15.tar.gz
-+sha256  c28608b315adb25c8bf9579c1d6ab52ab47c4c43b68a5ab63c5d039196fd180f  xl2tp-1.3.16.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
-index b40eb2fd18..89ca65a7e4 100644
---- a/package/xl2tp/xl2tp.mk
-+++ b/package/xl2tp/xl2tp.mk
+ # Locally computed:
+-sha256  545712b10fc4a0134e994b7d8a3773c1c22f0bf4bd7afea7d7ffff357aca9ea5  motion-4.3.1.tar.gz
++sha256  dafa4264b2d8e4778f8be5871f09b6c0ec710d5a836182c583469c18db944d70  motion-4.3.2.tar.gz
+ sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  doc/COPYING
+diff --git a/package/motion/motion.mk b/package/motion/motion.mk
+index 17a48d42ac..29b70fd85f 100644
+--- a/package/motion/motion.mk
++++ b/package/motion/motion.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XL2TP_VERSION = 1.3.15
-+XL2TP_VERSION = 1.3.16
- XL2TP_SITE = $(call github,xelerance,xl2tpd,v$(XL2TP_VERSION))
- XL2TP_DEPENDENCIES = libpcap
- XL2TP_LICENSE = GPL-2.0
+-MOTION_VERSION = 4.3.1
++MOTION_VERSION = 4.3.2
+ MOTION_SITE = $(call github,Motion-Project,motion,release-$(MOTION_VERSION))
+ MOTION_LICENSE = GPL-2.0
+ MOTION_LICENSE_FILES = doc/COPYING
