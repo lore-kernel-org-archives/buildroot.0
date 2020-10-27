@@ -1,85 +1,40 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Tue, 27 Oct 2020 22:14:57 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.4.1
-In-Reply-To: <20201027141457.2226-1-zhaojh329@gmail.com>
-References: <20201027141457.2226-1-zhaojh329@gmail.com>
-Message-ID: <20201027141457.2226-2-zhaojh329@gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 27 Oct 2020 15:28:33 +0100
+Subject: [Buildroot] [PATCH] package/qt5/qt5base: fix imx6 eglfs support
+ with imx-gpu-viv
+Message-ID: <20201027142833.1138548-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- ...rc-uhttpd.c-fix-build-without-dlopen.patch | 35 -------------------
- package/libuhttpd/libuhttpd.hash              |  2 +-
- package/libuhttpd/libuhttpd.mk                |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
- delete mode 100644 package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
+Last commit fixed eglfs_kms support for i.MX8 platforms that required to
+declare imx-gpu-viv as the gbm provider.
+However, this broke the eglfs "fbdev" imx6 support as gbm isn't provided
+in this case. So limit the gbm option to imx-gpu-viv when wayland
+backend is used only.
 
-diff --git a/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch b/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
-deleted file mode 100644
-index 966041028b..0000000000
---- a/package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 0b2058e7c96a3d8d994d572116ad7b950766347b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 16 Oct 2020 21:39:47 +0200
--Subject: [PATCH] src/uhttpd.c: fix build without dlopen
--
--Build without dlopen fails on:
--
--/data/buildroot-test/instance-0/output-1/build/libuhttpd-3.4.0/src/uhttpd.c:45:23: error: unused variable 'p' [-Werror=unused-variable]
--     struct uh_plugin *p = srv->plugins;
--                       ^
--
--Fixes:
-- - http://autobuild.buildroot.org/results/b2bbd0681705b94e6b531996b39f62e47f089c92
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/zhaojh329/libuhttpd/commit/0b2058e7c96a3d8d994d572116ad7b950766347b]
-----
-- src/uhttpd.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/src/uhttpd.c b/src/uhttpd.c
--index dad3646..a37c136 100644
----- a/src/uhttpd.c
--+++ b/src/uhttpd.c
--@@ -42,7 +42,9 @@ void conn_free(struct uh_connection *conn);
-- static void uh_server_free(struct uh_server *srv)
-- {
--     struct uh_connection *conn = srv->conns;
--+#ifdef HAVE_DLOPEN
--     struct uh_plugin *p = srv->plugins;
--+#endif
-- 
--     ev_io_stop(srv->loop, &srv->ior);
-- 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index bcded4a983..0c19569a6e 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c77a404e2a666dda6c731cee977cfa8c2aa433e167222cbd28dd0c91a5c80570  libuhttpd-3.4.0.tar.gz
-+sha256  9e89a5a797e6a89acbb5ae8566b21eef2593b4290f31b2a724c1fc86ef4990e6  libuhttpd-3.4.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 71e7754bab..b3d735689b 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.4.0
-+LIBUHTTPD_VERSION = 3.4.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+Fixes: 82fb51d3b5 ("package/qt5/qt5base: allow to use imx-gpu-viv as GBM
+provider")
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/qt5/qt5base/qt5base.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e0189599a7..ed308c1fa2 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -79,7 +79,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
+ else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += ti-sgx-libgbm
+-else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
++else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += imx-gpu-viv
+ else
 -- 
-2.25.1
+2.28.0
