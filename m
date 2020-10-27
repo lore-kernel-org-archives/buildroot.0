@@ -1,61 +1,132 @@
 From: Giacomo Longo <gabibbo97@gmail.com>
-Date: Tue, 27 Oct 2020 16:14:07 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/uftrace: new package
+Date: Tue, 27 Oct 2020 16:14:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: new package
 In-Reply-To: <20201027103643.01576b52@windsurf.home>
 References: <20201027103643.01576b52@windsurf.home>
-Message-ID: <20201027151407.2870851-1-gabibbo97@gmail.com>
+Message-ID: <20201027151407.2870851-2-gabibbo97@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First of all, thanks Thomas for your kind words and helping me finding
-my way around (this mail is my first git-send-patch).
+Signed-off-by: Giacomo Longo <gabibbo97@gmail.com>
+---
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/uftrace/Config.in    | 24 ++++++++++++++++++++++++
+ package/uftrace/uftrace.hash |  3 +++
+ package/uftrace/uftrace.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 66 insertions(+)
+ create mode 100644 package/uftrace/Config.in
+ create mode 100644 package/uftrace/uftrace.hash
+ create mode 100644 package/uftrace/uftrace.mk
 
-I have tried to incorporate the feedback inside this second version of
-the patch.
-
-Here's a list of the changes I've made:
-
-I added myself to the DEVELOPERS file.
-
-I decided to remove the configuration options concerning TUI and
-luajit, replacing them with an if inside the makefile. These are not
-core functionalities and probably are not worth of an extra
-configuration flag.
-
-I removed the dependency on UTIL_LINUX that was not needed.
-
-I have converted BR2_INSTALL_LIBSTDCPP from "selects" to "depends on".
-
-The flags BR2_USE_WCHAR, BR2_TOOLCHAIN_HAS_THREADS coming from the
-selection of BR2_PACKAGE_ELFUTILS have been included as
-depends on.
-
-Comment has been moved to the end of the file, and a dependency on the
-correct architecture has been added.
-
-The makefile has been shuffled around:
-
-- Standard configuration options are now at the top
-- Architecture configuration follows
-- Optional feature flags are at the bottom
-
-Concerning the uClibc and musl incompatibility, build fails on non-glibc with this error:
-
-uftrace-v0.9.4/cmds/record.c:2078:19: error: ?ADDR_NO_RANDOMIZE? undeclared (first use in this function)
-   if (personality(ADDR_NO_RANDOMIZE) < 0)
-
-I have been able to find the symbol in musl at
-https://git.musl-libc.org/cgit/musl/tree/include/sys/personality.h but
-apparently it does not work.
-
-The patch as it is passes ./utils/test-pkg with 45 builds, 36 skipped, 0
-build failed, 0 legal-info failed and ./utils/check-package
-package/uftrace/* with 62 lines processed and 0 warnings generated.
-
-I have been able to test the package by assembling and running buildroot
-on QEMU system arm emulation (target arch Cortex A7).
-
-Thanks again for your understanding, have a nice day.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ceb9cc9160..1c63e693b3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -980,6 +980,9 @@ N:	Gerome Burlats <gerome.burlats@smile.fr>
+ F:	board/qemu/
+ F:	configs/qemu_*
+ 
++N:	Giacomo Longo <gabibbo97@gmail.com>
++F:	package/uftrace/
++
+ N:	Gilles Talis <gilles.talis@gmail.com>
+ F:	board/freescale/imx8mmevk/
+ F:	configs/freescale_imx8mmevk_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index ee05467479..b9c51dc3f1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -140,6 +140,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/trace-cmd/Config.in"
+ 	source "package/trinity/Config.in"
+ 	source "package/uclibc-ng-test/Config.in"
++	source "package/uftrace/Config.in"
+ 	source "package/valgrind/Config.in"
+ 	source "package/vmtouch/Config.in"
+ 	source "package/whetstone/Config.in"
+diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+new file mode 100644
+index 0000000000..4349a5778e
+--- /dev/null
++++ b/package/uftrace/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_i386
++	default y if BR2_x86_64
++
++config BR2_PACKAGE_UFTRACE
++	bool "uftrace"
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
++	select BR2_PACKAGE_ELFUTILS
++	help
++	  Tool to trace and analyze execution of a program.
++
++	  https://uftrace.github.io/slide
++
++comment "uftrace needs a glibc toolchain w/ C++, dynamic library, threads, wchar"
++	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
+new file mode 100644
+index 0000000000..8f38e7431d
+--- /dev/null
++++ b/package/uftrace/uftrace.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha512 f73ad4461051b9c61668161e077897d118ac556d234ff204e32bf14ecdc2c0df148da30ea5d5054641e79ea20b29261d6f637908f5047f5669207ef244865358 uftrace-v0.9.4.tar.gz
++sha512 aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957 COPYING
+diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
+new file mode 100644
+index 0000000000..bce98888de
+--- /dev/null
++++ b/package/uftrace/uftrace.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# uftrace
++#
++################################################################################
++
++UFTRACE_VERSION = v0.9.4
++UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
++UFTRACE_LICENSE = GPL-2.0+
++UFTRACE_LICENSE_FILES = COPYING
++UFTRACE_DEPENDENCIES = elfutils
++
++UFTRACE_CONF_OPTS = \
++	--without-capstone \
++	--without-libpython
++
++ifeq ($(BR2_aarch64),y)
++UFTRACE_CONF_OPTS += --arch=aarch64
++else ifeq ($(BR2_arm),y)
++UFTRACE_CONF_OPTS += --arch=arm
++else ifeq ($(BR2_i386),y)
++UFTRACE_CONF_OPTS += --arch=i386
++else ifeq ($(BR2_x86_64),y)
++UFTRACE_CONF_OPTS += --arch=x86_64
++endif
++
++ifeq ($(BR2_PACKAGE_LUAJIT),n)
++UFTRACE_CONF_OPTS += --without-libluajit
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),n)
++UFTRACE_CONF_OPTS += --without-libncurses
++endif
++
++$(eval $(autotools-package))
+-- 
+2.28.0
