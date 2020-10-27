@@ -1,8 +1,9 @@
 From: buildroot at heine.tech <buildroot@heine.tech>
-Date: Tue, 27 Oct 2020 18:40:43 +0100
-Subject: [Buildroot] [PATCH 0/3] fix libabseil-cpp build on older gcc
- versions
-Message-ID: <20201027174046.17157-1-buildroot@heine.tech>
+Date: Tue, 27 Oct 2020 18:40:44 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libabseil-cpp: enforce C++11
+In-Reply-To: <20201027174046.17157-1-buildroot@heine.tech>
+References: <20201027174046.17157-1-buildroot@heine.tech>
+Message-ID: <20201027174046.17157-2-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,31 +12,33 @@ To: buildroot@busybox.net
 
 From: Michael Nosthoff <buildroot@heine.tech>
 
-This series fixes a bunch of issues with the latest libabseil version on
-older gcc versions.
+For gcc < 6 the c++ default is 98. Abseil needs at least 11
+but doesn't enforce this anymore. So we need to do this.
 
-* libabseil doesn't enforce a C++ Standard anymore but needs at least
-  C++11. So for GCC < 6 set 11 manually.
-* libabseil depends on gcc >= 4.9
-* grpc depends on (host-)libabseil-cpp so depend on (host-)gcc >= 4.9
-
-fixes 
-  aarch64    | host-libabseil-cpp-20200923.2  | http://autobuild.buildroot.net/results/5780d5e21e5e9c0ba86cc422ef995f45dc83cc4c
- aarch64_be  | host-libabseil-cpp-20200923.2  | http://autobuild.buildroot.net/results/8138c63fc13940e1b97f07f24752b199f88ccfa8
-    arm      |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/f8eda966c6400c242680db378c8944444d89d5c5
-  mips64el   |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/38e9427d995e16bc4876f9fdc890c42e4fd04c06
-    mips     |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/4e99415728a6f3c6b396a9872924262652f77996
-    arm      |    libabseil-cpp-20200923.2    | http://autobuild.buildroot.net/results/1830577843772bdfd6e310b4d361aa1edf5969d6
-
-Michael Nosthoff (3):
-  package/libabseil-cpp: enforce C++11
-  package/libabseil-cpp: depend on gcc >= 4.9
-  package/grpc: raise (host) gcc dependency to 4.9
-
- package/grpc/Config.in                 |  8 +++++---
- package/libabseil-cpp/Config.in        |  5 +++--
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
  package/libabseil-cpp/libabseil-cpp.mk | 10 ++++++++++
- 3 files changed, 18 insertions(+), 5 deletions(-)
+ 1 file changed, 10 insertions(+)
 
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index dfcf892f65..8490b6d948 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -20,5 +20,15 @@ HOST_LIBABSEIL_CPP_CONF_OPTS = \
+ 	-DABSL_USE_GOOGLETEST_HEAD=OFF \
+ 	-DABSL_RUN_TESTS=OFF
+ 
++# abseil needs c++ >= 11 but doesn't set this anymore,
++# before gcc6 the default is 98.
++ifeq ($(BR2_GCC_AT_LEAST_6_0),)
++LIBABSEIL_CPP_CONF_OPTS += -DCMAKE_CXX_STANDARD=11
++endif
++
++ifeq ($(BR2_HOST_GCC_AT_LEAST_6_0),)
++HOST_LIBABSEIL_CPP_CONF_OPTS += -DCMAKE_CXX_STANDARD=11
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.25.1
