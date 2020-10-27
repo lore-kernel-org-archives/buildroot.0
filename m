@@ -1,149 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 27 Oct 2020 10:46:34 +0100
-Subject: [Buildroot] [PATCH 2/3] package/qcom-db410c-firmware: add
- support for DB410c Wifi Added new package. Installs required Wifi firmware
- blobs on the target.
-In-Reply-To: <20201027075056.10753-2-mikeframpo@gmail.com>
+Date: Tue, 27 Oct 2020 10:49:25 +0100
+Subject: [Buildroot] [PATCH 3/3] package/abootimg: add host build for
+ abootimg Build abootimg on the host,
+ and use it to build a kernel image for the DB410c.
+In-Reply-To: <20201027075056.10753-3-mikeframpo@gmail.com>
 References: <20201027075056.10753-1-mikeframpo@gmail.com>
- <20201027075056.10753-2-mikeframpo@gmail.com>
-Message-ID: <20201027104634.1927f8c7@windsurf.home>
+ <20201027075056.10753-3-mikeframpo@gmail.com>
+Message-ID: <20201027104925.1992d6a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mike,
+Hello,
 
-On Tue, 27 Oct 2020 20:50:55 +1300
+On Tue, 27 Oct 2020 20:50:56 +1300
 Mike Frampton <mikeframpo@gmail.com> wrote:
 
 > Signed-off-by: Mike Frampton <mikeframpo@gmail.com>
 > ---
->  configs/qcom_db410c_defconfig                 |  1 +
->  package/Config.in                             |  1 +
->  package/qcom-db410c-firmware/Config.in        |  5 ++++
->  .../qcom-db410c-firmware.mk                   | 28 +++++++++++++++++++
->  4 files changed, 35 insertions(+)
+>  board/qcom/db410c/post-image.sh | 21 +++++++++++++++++++++
+>  configs/qcom_db410c_defconfig   |  4 ++++
+>  package/Config.in.host          |  1 +
+>  package/abootimg/Config.in.host |  8 ++++++++
+>  package/abootimg/abootimg.mk    | 12 ++++++++++++
+>  5 files changed, 46 insertions(+)
+>  create mode 100755 board/qcom/db410c/post-image.sh
+>  create mode 100644 package/abootimg/Config.in.host
 
-You are adding a new package: we need an entry in the DEVELOPERS file
-for it.
+There should be one commit adding support for abootimg as a host
+package, and then the commit adding the defconfig file together with
+its post-image script.
 
-Also, please add a hash file for this package.
-
-The commit title should be:
-
-	package/qcom-db410c-firmware: new package
-
-it would perhaps be nice to have a bit of explanation in the commit log
-about the oddities of this package. Or even better: a few comments
-above the install target commands.
-
->  create mode 100644 package/qcom-db410c-firmware/Config.in
->  create mode 100644 package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-> 
-> diff --git a/configs/qcom_db410c_defconfig b/configs/qcom_db410c_defconfig
-> index 835e34453d..470d55efde 100644
-> --- a/configs/qcom_db410c_defconfig
-> +++ b/configs/qcom_db410c_defconfig
-> @@ -8,6 +8,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
->  BR2_PACKAGE_LINUX_FIRMWARE=y
->  BR2_PACKAGE_LINUX_FIRMWARE_QCOM_VENUS=y
->  BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO=y
-> +BR2_PACKAGE_QCOM_DB410C_FIRMWARE=y
-
-This should be in the patch adding the defconfig. In fact, your patch
-1/3 adding the defconfig should be the last one in the series.
-
-> diff --git a/package/Config.in b/package/Config.in
-> index d7e79f4795..6ceff1107c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -400,6 +400,7 @@ menu "Firmware"
->  	source "package/b43-firmware/Config.in"
->  	source "package/linux-firmware/Config.in"
->  	source "package/murata-cyw-fw/Config.in"
-> +	source "package/qcom-db410c-firmware/Config.in"
->  	source "package/rpi-bt-firmware/Config.in"
->  	source "package/rpi-firmware/Config.in"
->  	source "package/rpi-wifi-firmware/Config.in"
-> diff --git a/package/qcom-db410c-firmware/Config.in b/package/qcom-db410c-firmware/Config.in
-> new file mode 100644
-> index 0000000000..8ad768230b
+> diff --git a/board/qcom/db410c/post-image.sh b/board/qcom/db410c/post-image.sh
+> new file mode 100755
+> index 0000000000..5182b655d2
 > --- /dev/null
-> +++ b/package/qcom-db410c-firmware/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_QCOM_DB410C_FIRMWARE
-> +	bool "qcom-db410c-firmware"
-> +	help
-> +	  Wifi/BT firmware for Qualcomm Dragonboard 410c SBC.
+> +++ b/board/qcom/db410c/post-image.sh
+> @@ -0,0 +1,21 @@
+> +#!/bin/bash
 > +
-> diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-> new file mode 100644
-> index 0000000000..5a1e6bbca4
-> --- /dev/null
-> +++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
-> @@ -0,0 +1,28 @@
+> +set -e
 > +
-
-We like to have our traditional header here, like this:
-
-################################################################################
-#
-# qcom-db410c-firmware
-#
-################################################################################
-
-yes, this is silly, but consistency wins over silliness :-)
-
-> +QCOM_DB410C_FIRMWARE_VERSION = r1034.2.1
-
-Please set the version to just 1034.2.1, and encode the "r" in the
-_SOURCE and _BASE variables.
-
-> +QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-$(QCOM_DB410C_FIRMWARE_VERSION)
-> +QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
-> +QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
+> +OUTIMG=$BINARIES_DIR/boot-db410c.img
+> +KERNEL_BUILD=$BUILD_DIR/linux-release_qcomlt-5.4
 > +
-> +QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
-> +QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
+> +cp $KERNEL_BUILD/arch/arm64/boot/dts/qcom/apq8016-sbc.dtb $BINARIES_DIR
+> +cp $KERNEL_BUILD/arch/arm64/boot/Image.gz $BINARIES_DIR
+
+This shouldn't be necessary: the linux package already installs the
+kernel image and DTB in BINARIES_DIR. And this would avoid the need to
+hardcode the KERNEL_BUILD directory.
+
+> +# now assemble the bootimg
+> +#cd $BINARIES_DIR
+
+Line commented, not needed.
+
+> +cat $BINARIES_DIR/Image.gz $BINARIES_DIR/apq8016-sbc.dtb > $BINARIES_DIR/Image.gz+dtb
+> +echo "not a ramdisk" > $BINARIES_DIR/ramdisk.img
 > +
-> +QCOM_DB410C_FIRMWARE_INSTALL_TARGET = YES
+> +abootimg --create $OUTIMG -k $BINARIES_DIR/Image.gz+dtb -r $BINARIES_DIR/ramdisk.img \
+> +	-c pagesize=2048 -c kerneladdr=0x80008000 -c ramdiskaddr=0x81000000 \
+> +	-c cmdline="root=/dev/mmcblk1p13 rw rootwait console=tty0 console=ttyMSM0,115200n8"
+> +
+> +echo "boot img written to $OUTIMG"
 
-Not needed, this is the default.
+This last line is not needed.
 
-> +define QCOM_DB410C_FIRMWARE_EXTRACT_CMDS
-> +        $(UNZIP) -d $(@D) $(QCOM_DB410C_FIRMWARE_DL_DIR)/$(QCOM_DB410C_FIRMWARE_SOURCE)
+Instead, what we like is to have a board/qcom/db410c/readme.txt file
+that explains how to use/build/flash this defconfig. See other
+readme.txt files in board/ for a number of examples.
+
+> diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
+> index e906546948..6a4cd01586 100644
+> --- a/package/abootimg/abootimg.mk
+> +++ b/package/abootimg/abootimg.mk
+> @@ -11,6 +11,7 @@ ABOOTIMG_LICENSE_FILES = LICENSE
+>  
+>  # depends on libblkid from util-linux
+>  ABOOTIMG_DEPENDENCIES = util-linux
+> +ABOOTIMG_HOST_DEPENDENCIES = host-util-linux
+>  
+>  define ABOOTIMG_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> @@ -20,4 +21,15 @@ define ABOOTIMG_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -m 0755 $(@D)/abootimg $(TARGET_DIR)/usr/bin/abootimg
+>  endef
+>  
+> +# host build
+
+This comment is not needed, it's pretty obvious.
+
+> +define HOST_ABOOTIMG_BUILD_CMDS
+> +	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
 > +endef
 > +
-> +define QCOM_DB410C_FIRMWARE_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d $(TARGET_DIR)/boot
-
-Not needed if you change a bit the next line.
-
-> +	cp $(@D)/$(QCOM_DB410C_FIRMWARE_BASE)/efs-seed/fs_image_linux.tar.gz.mbn.img $(TARGET_DIR)/boot/modem_fsg
-
-Change to:
-
-	$(INSTALL) -D -m 0644 \
-		$(@D)/$(QCOM_DB410C_FIRMWARE_BASE)/efs-seed/fs_image_linux.tar.gz.mbn.img \
-		$(TARGET_DIR)/boot/modem_fsg
-
-> +	$(INSTALL) -d $(TARGET_DIR)/lib/firmware
-> +	cp -r $(@D)/$(QCOM_DB410C_FIRMWARE_BASE)/proprietary-linux/wlan $(TARGET_DIR)/lib/firmware/
+> +define HOST_ABOOTIMG_INSTALL_CMDS
+> +	$(INSTALL) -m 0755 $(@D)/abootimg $(HOST_DIR)/usr/bin/abootimg
+> +endef
 > +
-> +	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/qcom/msm8916
-> +	MTOOLS_SKIP_CHECK=1 mcopy -i $(@D)/$(QCOM_DB410C_FIRMWARE_BASE)/bootloaders-linux/NON-HLOS.bin \
-> +		::image/modem.* ::image/mba.mbn ::image/wcnss.* $(TARGET_DIR)/lib/firmware/qcom/msm8916
+>  $(eval $(generic-package))
+> +$(eval $(host-generic-package))
 
-Doh, why are you using mcopy here? The files you need are burried
-inside NON-HLOS.bin which is a FAT filesystem image ?
-
-If you need mcopy, then you'll need a dependency on host-mtools, and
-use $(HOST_DIR)/bin/mcopy instead, as you can't rely on mcopy being
-available system-wide.
-
-Thanks!
+Otherwise, looks good!
 
 Thomas
 -- 
