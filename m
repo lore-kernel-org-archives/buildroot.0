@@ -1,51 +1,49 @@
-From: buildroot at heine.tech <buildroot@heine.tech>
-Date: Tue, 27 Oct 2020 18:40:46 +0100
-Subject: [Buildroot] [PATCH 3/3] package/grpc: raise (host) gcc dependency
- to 4.9
-In-Reply-To: <20201027174046.17157-1-buildroot@heine.tech>
-References: <20201027174046.17157-1-buildroot@heine.tech>
-Message-ID: <20201027174046.17157-4-buildroot@heine.tech>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 27 Oct 2020 19:27:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: bump to version 10.35
+Message-ID: <20201027182756.449229-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Michael Nosthoff <buildroot@heine.tech>
+Update LICENCE hash (update in year:
+https://vcs.pcre.org/pcre2/code/trunk/LICENCE?r1=1078&r2=1244)
 
-(host-)libabseil-cpp depends on gcc >= 4.9
+https://www.pcre.org/news.txt
+https://www.pcre.org/changelog.txt
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/grpc/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/pcre2/pcre2.hash | 6 +++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 0270b38c35..6151f4b3d1 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf, re2
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libabseil-cpp
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -19,9 +20,10 @@ config BR2_PACKAGE_GRPC
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index 9b83ccf135..81313039f0 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.34.tar.bz2.sig
+-sha256  74c473ffaba9e13db6951fd146e0143fe9887852ce73406a03277af1d9b798ca  pcre2-10.34.tar.bz2
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.bz2.sig
++sha256  9ccba8e02b0ce78046cdfb52e5c177f0f445e421059e43becca4359c669d4613  pcre2-10.35.tar.bz2
+ # Locally computed
+-sha256  982293becea3f18eb4e3ce2145f66638e46d105a27b88418766caf321a684d03  LICENCE
++sha256  9cb35e4fe442e49d1fbe9c7e07d9601ac959774b24e1884665a3e2f88b7f0831  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index cedf4652a8..ddb53280f2 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://github.com/grpc/grpc
- 
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-PCRE2_VERSION = 10.34
++PCRE2_VERSION = 10.35
+ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
 -- 
-2.25.1
+2.28.0
