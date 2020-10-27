@@ -1,53 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 27 Oct 2020 16:12:29 +0100
-Subject: [Buildroot] [PATCH] package/busybox: update licensing info
-Message-ID: <20201027151229.2173500-1-yann.morin.1998@free.fr>
+From: Giacomo Longo <gabibbo97@gmail.com>
+Date: Tue, 27 Oct 2020 16:14:07 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/uftrace: new package
+In-Reply-To: <20201027103643.01576b52@windsurf.home>
+References: <20201027103643.01576b52@windsurf.home>
+Message-ID: <20201027151407.2870851-1-gabibbo97@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox is mainly licensed under the GPL-2.0, but the bzip2 part is a
-modified copy of the bzip2/libbzip2 project, which comes with its own
-license.
+First of all, thanks Thomas for your kind words and helping me finding
+my way around (this mail is my first git-send-patch).
 
-Update the licensing information accordingly.
+I have tried to incorporate the feedback inside this second version of
+the patch.
 
-Add the hash for the new license file, and fixup indentation (2 spaces).
+Here's a list of the changes I've made:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/busybox/busybox.hash | 5 +++--
- package/busybox/busybox.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+I added myself to the DEVELOPERS file.
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index cf744ffcda..2229379600 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,4 +1,5 @@
- # From https://busybox.net/downloads/busybox-1.32.0.tar.bz2.sha256
--sha256 c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689  busybox-1.32.0.tar.bz2
-+sha256  c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689  busybox-1.32.0.tar.bz2
- # Locally computed
--sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
-+sha256  bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
-+sha256  b5a136ed67798e51fe2e0ca0b2a21cb01b904ff0c9f7d563a6292e276607e58f  archival/libarchive/bz/LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 76ab30780c..8c8303a358 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -7,8 +7,8 @@
- BUSYBOX_VERSION = 1.32.0
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
--BUSYBOX_LICENSE = GPL-2.0
--BUSYBOX_LICENSE_FILES = LICENSE
-+BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
-+BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
- 
- define BUSYBOX_HELP_CMDS
- 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
--- 
-2.25.1
+I decided to remove the configuration options concerning TUI and
+luajit, replacing them with an if inside the makefile. These are not
+core functionalities and probably are not worth of an extra
+configuration flag.
+
+I removed the dependency on UTIL_LINUX that was not needed.
+
+I have converted BR2_INSTALL_LIBSTDCPP from "selects" to "depends on".
+
+The flags BR2_USE_WCHAR, BR2_TOOLCHAIN_HAS_THREADS coming from the
+selection of BR2_PACKAGE_ELFUTILS have been included as
+depends on.
+
+Comment has been moved to the end of the file, and a dependency on the
+correct architecture has been added.
+
+The makefile has been shuffled around:
+
+- Standard configuration options are now at the top
+- Architecture configuration follows
+- Optional feature flags are at the bottom
+
+Concerning the uClibc and musl incompatibility, build fails on non-glibc with this error:
+
+uftrace-v0.9.4/cmds/record.c:2078:19: error: ?ADDR_NO_RANDOMIZE? undeclared (first use in this function)
+   if (personality(ADDR_NO_RANDOMIZE) < 0)
+
+I have been able to find the symbol in musl at
+https://git.musl-libc.org/cgit/musl/tree/include/sys/personality.h but
+apparently it does not work.
+
+The patch as it is passes ./utils/test-pkg with 45 builds, 36 skipped, 0
+build failed, 0 legal-info failed and ./utils/check-package
+package/uftrace/* with 62 lines processed and 0 warnings generated.
+
+I have been able to test the package by assembling and running buildroot
+on QEMU system arm emulation (target arch Cortex A7).
+
+Thanks again for your understanding, have a nice day.
