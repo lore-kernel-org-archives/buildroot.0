@@ -1,33 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 22:57:50 +0100
-Subject: [Buildroot] [git commit] package/kernel-module-imx-gpu-viv: fix
- disabling kernel option
-In-Reply-To: <20201017072212.F0F7F821F0@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 17 Oct 2020 09:33:21 +0200")
-References: <20201017072212.F0F7F821F0@busybox.osuosl.org>
-Message-ID: <87o8kmhv35.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Oct 2020 22:51:34 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: add mksh/ruby
+ to Waldemar Brodkorb
+Message-ID: <20201028214525.749CA8393E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0058e1cc9e6e7c6b12f9a88a362cab1a8207e7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=74a8865b2fa58a26c567e5fef1faa6df639deda7
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4d564368aaa79faa53e7808d70de588fd415475e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Commit 391c448acbb9 (package/kernel-module-imx-gpu-viv: bear the kernel
- > options munging) improperly named the macro, including a superfluous
- > 'MODULE' in the middle of the macro name, which meant it was totally
- > unused.
-
- > Fix that.
-
- > Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fdea766e09..5836bab47d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2629,6 +2629,8 @@ N:	Wade Berrier <wberrier@gmail.com>
+ F:	package/ngrep/
+ 
+ N:	Waldemar Brodkorb <wbx@openadk.org>
++F:	package/mksh/
++F:	package/ruby/
+ F:	package/uclibc/
+ F:	package/uclibc-ng-test/
+ 
