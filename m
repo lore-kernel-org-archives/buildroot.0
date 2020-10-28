@@ -1,70 +1,112 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 15:54:26 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/oniguruma: fix
- CVE-2020-26159
-Message-ID: <20201028150625.634D683F07@busybox.osuosl.org>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Wed, 28 Oct 2020 16:42:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version 2.15.1
+Message-ID: <20201028154220.648052-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=196f605d55ecc8aca0557cba01d3c2c4339b22e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
-
-Fix CVE-2020-26159: In Oniguruma 6.9.5_rev1, an attacker able to supply
-a regular expression for compilation may be able to overflow a buffer by
-one byte in concat_opt_exact_str in src/regcomp.c.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5dbebf3d35095e26463bbb0fddebf906454a685c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- .../oniguruma/0001-207-Out-of-bounds-write.patch   | 25 ++++++++++++++++++++++
- package/oniguruma/oniguruma.mk                     |  3 +++
- 2 files changed, 28 insertions(+)
+ .../0001-zipl-boot-disable-SSP.patch          | 28 -------------------
+ .../0002-genprotimg-boot-disable-SSP.patch    | 28 -------------------
+ package/s390-tools/s390-tools.hash            |  2 +-
+ package/s390-tools/s390-tools.mk              |  2 +-
+ 4 files changed, 2 insertions(+), 58 deletions(-)
+ delete mode 100644 package/s390-tools/0001-zipl-boot-disable-SSP.patch
+ delete mode 100644 package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
 
-diff --git a/package/oniguruma/0001-207-Out-of-bounds-write.patch b/package/oniguruma/0001-207-Out-of-bounds-write.patch
-new file mode 100644
-index 0000000000..3317449702
---- /dev/null
-+++ b/package/oniguruma/0001-207-Out-of-bounds-write.patch
-@@ -0,0 +1,25 @@
-+From cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0 Mon Sep 17 00:00:00 2001
-+From: "K.Kosako" <kkosako0@gmail.com>
-+Date: Mon, 21 Sep 2020 12:58:29 +0900
-+Subject: [PATCH] #207: Out-of-bounds write
-+
-+[Retrieved from:
-+https://github.com/kkos/oniguruma/commit/cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/regcomp.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/regcomp.c b/src/regcomp.c
-+index f6494b6d..a0a68561 100644
-+--- a/src/regcomp.c
-++++ b/src/regcomp.c
-+@@ -6257,7 +6257,7 @@ concat_opt_exact_str(OptStr* to, UChar* s, UChar* end, OnigEncoding enc)
-+ 
-+   for (i = to->len, p = s; p < end && i < OPT_EXACT_MAXLEN; ) {
-+     len = enclen(enc, p);
-+-    if (i + len > OPT_EXACT_MAXLEN) break;
-++    if (i + len >= OPT_EXACT_MAXLEN) break;
-+     for (j = 0; j < len && p < end; j++)
-+       to->s[i++] = *p++;
-+   }
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index d1ff1f115f..c2330c7380 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
-@@ -12,4 +12,7 @@ ONIGURUMA_LICENSE = BSD-2-Clause
- ONIGURUMA_LICENSE_FILES = COPYING
- ONIGURUMA_INSTALL_STAGING = YES
+diff --git a/package/s390-tools/0001-zipl-boot-disable-SSP.patch b/package/s390-tools/0001-zipl-boot-disable-SSP.patch
+deleted file mode 100644
+index bedc94d62d..0000000000
+--- a/package/s390-tools/0001-zipl-boot-disable-SSP.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 5ba78a11cbf2cab793e4214170a9ab540687e3c8 Mon Sep 17 00:00:00 2001
+-From: Alexander Egorenkov <egorenar@linux.ibm.com>
+-Date: Tue, 20 Oct 2020 12:50:58 +0200
+-Subject: [PATCH] zipl/boot: disable SSP
+-
+-SSP cannot work with boot loaders because it requires libc.
+-
+-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+----
+- zipl/boot/Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/zipl/boot/Makefile b/zipl/boot/Makefile
+-index 359189e5..a2e5f190 100644
+---- a/zipl/boot/Makefile
+-+++ b/zipl/boot/Makefile
+-@@ -7,7 +7,7 @@ INCLUDE_PARMS := $(addprefix -I,$(INCLUDE_PATHS))
+- ALL_CFLAGS = $(NO_PIE_CFLAGS) -Os -g $(INCLUDE_PARMS) \
+- 	  -DS390_TOOLS_RELEASE=$(S390_TOOLS_RELEASE) \
+- 	  -fno-builtin -ffreestanding -fno-asynchronous-unwind-tables \
+--	  -fno-delete-null-pointer-checks \
+-+	  -fno-delete-null-pointer-checks -fno-stack-protector \
+- 	  -fexec-charset=IBM1047 -m64 -mpacked-stack \
+- 	  -mstack-size=4096 -mstack-guard=128 -msoft-float \
+- 	  -W -Wall -Wformat-security
+--- 
+-2.26.2
+-
+diff --git a/package/s390-tools/0002-genprotimg-boot-disable-SSP.patch b/package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
+deleted file mode 100644
+index 63ca7d0aa4..0000000000
+--- a/package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From 6a7800c00752dc0e68939d640274b9813cf0604e Mon Sep 17 00:00:00 2001
+-From: Alexander Egorenkov <egorenar@linux.ibm.com>
+-Date: Tue, 20 Oct 2020 12:55:44 +0200
+-Subject: [PATCH] genprotimg/boot: disable SSP
+-
+-SSP cannot work with boot loaders because it requires libc.
+-
+-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+----
+- genprotimg/boot/Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/genprotimg/boot/Makefile b/genprotimg/boot/Makefile
+-index d39bbd66..f2bc25c3 100644
+---- a/genprotimg/boot/Makefile
+-+++ b/genprotimg/boot/Makefile
+-@@ -12,7 +12,7 @@ ALL_CFLAGS := $(NO_PIE_CFLAGS) -Os -g \
+- 	-DENABLE_SCLP_ASCII=1 \
+- 	-DS390_TOOLS_RELEASE=$(S390_TOOLS_RELEASE) \
+- 	-fno-builtin -ffreestanding -fno-asynchronous-unwind-tables \
+--	-fno-delete-null-pointer-checks \
+-+	-fno-delete-null-pointer-checks -fno-stack-protector \
+- 	-fexec-charset=IBM1047 -m64 -mpacked-stack \
+- 	-mstack-size=4096 -mstack-guard=128 -msoft-float \
+- 	-Wall -Wformat-security -Wextra -Werror
+--- 
+-2.26.2
+-
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index 38c2431c25..4f60b22b05 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  02171161c3f858e413f777dac542d37328b7b882a7919cfb966ea554bb6ac0b2  s390-tools-2.14.0.tar.gz
++sha256  8dc1180031018756ccd5acf6c26c4175bcac79e512e8a2ea8569fdf5d3f9bd6c  s390-tools-2.15.1.tar.gz
+ sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  COPYING
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index d186f85cd3..5a3bcffba9 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-207-Out-of-bounds-write.patch
-+ONIGURUMA_IGNORE_CVES += CVE-2020-26159
-+
- $(eval $(autotools-package))
+-S390_TOOLS_VERSION = 2.14.0
++S390_TOOLS_VERSION = 2.15.1
+ S390_TOOLS_SITE = $(call github,ibm-s390-tools,s390-tools,v$(S390_TOOLS_VERSION))
+ S390_TOOLS_LICENSE = MIT
+ S390_TOOLS_LICENSE_FILES = LICENSE
+-- 
+2.26.2
