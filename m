@@ -1,35 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 22:51:34 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: add mksh/ruby
- to Waldemar Brodkorb
-Message-ID: <20201028214525.749CA8393E@busybox.osuosl.org>
+Date: Wed, 28 Oct 2020 22:56:02 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/kernel-module-imx-gpu-viv: fix disabling kernel option
+Message-ID: <20201028214525.82B0C8393E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0058e1cc9e6e7c6b12f9a88a362cab1a8207e7b
+commit: https://git.buildroot.net/buildroot/commit/?id=c398366d0a6af5938d20355a450ce3c0e1dc8588
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4d564368aaa79faa53e7808d70de588fd415475e)
+Commit 391c448acbb9 (package/kernel-module-imx-gpu-viv: bear the kernel
+options munging) improperly named the macro, including a superfluous
+'MODULE' in the middle of the macro name, which meant it was totally
+unused.
+
+Fix that.
+
+Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 74a8865b2fa58a26c567e5fef1faa6df639deda7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fdea766e09..5836bab47d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2629,6 +2629,8 @@ N:	Wade Berrier <wberrier@gmail.com>
- F:	package/ngrep/
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 89b47f9147..2cea117087 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -16,7 +16,7 @@ KERNEL_MODULE_IMX_GPU_VIV_MODULE_MAKE_OPTS = \
  
- N:	Waldemar Brodkorb <wbx@openadk.org>
-+F:	package/mksh/
-+F:	package/ruby/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
+ KERNEL_MODULE_IMX_GPU_VIV_MODULE_SUBDIRS = kernel-module-imx-gpu-viv-src
+ 
+-define KERNEL_MODULE_IMX_GPU_VIV_MODULE_LINUX_CONFIG_FIXUPS
++define KERNEL_MODULE_IMX_GPU_VIV_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV)
+ endef
  
