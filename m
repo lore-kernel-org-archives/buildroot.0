@@ -1,64 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 18:07:39 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/dvb-apps: fix
- build failure with glibc 2.31
-Message-ID: <20201028165630.EA6E082AF2@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 28 Oct 2020 18:50:04 +0100
+Subject: [Buildroot] [PATCHv2] infra: add the transient download
+ mechanism
+In-Reply-To: <20200930223142.681174c0@windsurf.home>
+References: <20200930173030.2461586-1-yann.morin.1998@free.fr>
+ <20200930214530.6b964a45@windsurf.home>
+ <20200930201303.GU11621@scaer>
+ <20200930223142.681174c0@windsurf.home>
+Message-ID: <20201028175004.GJ2805@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31388dc836e68f9f81762e2943fbbcd24507691a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Thomas, All,
 
-dvb-apps fails to build with glibc 2.31 with the following error:
-| dvbdate.c: In function set_time:
-| dvbdate.c:312:6: warning: implicit declaration of function stime; did you mean ctime? [-Wimplicit-function-declaration]
-| 312 | if (stime(new_time)) {
-| | ^~~~~
-| | ctime
+On 2020-09-30 22:31 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 30 Sep 2020 22:13:03 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > I think it is important to stress that, though, because people can be
+> > very confused but the outcome, one way or the other.
+[--SNIP--]
+> I understand what you're describing here, and I understand that it
+> indeed should be explained. Then, it shouldn't be presented as a
+> "pitfall", but really as an explanation of the consequences.
 
-Fixes:
+So I thought again about this, and I stand by my position.
 
-http://autobuild.buildroot.net/results/95f30c5e6af2274418bb44a20da7caac69f1dd68/
+I do not want to play down the issues attached to that (mis)feature, and
+I still think this is a pitfall. So, I am not going to change the wording.
 
-references:
-1. https://gitweb.gentoo.org/repo/gentoo.git/commit/media-tv/linuxtv-dvb-apps/files/linuxtv-dvb-apps-glibc-2.31.patch?id=eb705f892eae45b93306c1de1407c1c22ac23956
-2. https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=964223
+Feel free to grab the patch and adapt if you feel strongly about it.
 
-Signed-off-by: Dagg Stompler <daggs@gmx.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bbe170dbcf4ddb63e76299214e2c18b16e5cf016)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dvb-apps/0006-fix-glibc-2.31.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Thanks! :-)
 
-diff --git a/package/dvb-apps/0006-fix-glibc-2.31.patch b/package/dvb-apps/0006-fix-glibc-2.31.patch
-new file mode 100644
-index 0000000000..079a24f149
---- /dev/null
-+++ b/package/dvb-apps/0006-fix-glibc-2.31.patch
-@@ -0,0 +1,21 @@
-+dvbdate: fix compilation error with glibc 2.31
-+
-+as stime func doesn't exists anymore in newer versions of glibc >= 2.31 due
-+to obseletion, a replacment with clock_settime is inorder to fix the issue.
-+
-+Signed-off-by: Dagg Stompler <daggs@gmx.com>
-+
-+--- a/util/dvbdate/dvbdate.c
-++++ b/util/dvbdate/dvbdate.c
-+@@ -309,7 +309,10 @@
-+  */
-+ int set_time(time_t * new_time)
-+ {
-+-	if (stime(new_time)) {
-++	struct timespec s = {0};
-++	s.tv_sec = new_time;
-++
-++	if (clock_settime(CLOCK_REALTIME, &s)) {
-+ 		perror("Unable to set time");
-+ 		return -1;
-+ 	}
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
