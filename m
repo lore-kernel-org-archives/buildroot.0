@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 23:28:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Wed, 28 Oct 2020 23:28:27 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  support/scripts/apply-patches.sh: manage uncompression
-Message-ID: <20201028221706.A9744863E5@busybox.osuosl.org>
+Message-ID: <20201028221713.5B840835C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=150a9c402457afba4a387d0e5156a5532a5c5b8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42830fc435e0e6187d130b44a07f466fdd648904
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Extract from bug report:
 
