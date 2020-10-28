@@ -1,187 +1,176 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 28 Oct 2020 09:26:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix CVE-2020-27743
-Message-ID: <20201028082658.47272-1-fontaine.fabrice@gmail.com>
+Date: Wed, 28 Oct 2020 09:45:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wavemon: bump to version 0.9.2
+Message-ID: <20201028084530.53208-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libtac in pam_tacplus through 1.5.1 lacks a check for a failure of
-RAND_bytes()/RAND_pseudo_bytes(). This could lead to use of a
-non-random/predictable session_id.
+Add two upstream patches and don't autoreconf as the second patch is
+also updating configure
+
+https://github.com/uoaerg/wavemon/releases/tag/v0.9.2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...failure-of-OpenSSL-RAND_pseudo_bytes.patch | 146 ++++++++++++++++++
- package/libpam-tacplus/libpam-tacplus.mk      |   3 +
- 2 files changed, 149 insertions(+)
- create mode 100644 package/libpam-tacplus/0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch
+ ....h-add-a-check-for-ncursesw-curses.h.patch | 42 +++++++++++
+ ...ude-condition-for-ncursesw-ncurses-h.patch | 73 +++++++++++++++++++
+ package/wavemon/wavemon.hash                  |  2 +-
+ package/wavemon/wavemon.mk                    |  2 +-
+ 4 files changed, 117 insertions(+), 2 deletions(-)
+ create mode 100644 package/wavemon/0001-wavemon.h-add-a-check-for-ncursesw-curses.h.patch
+ create mode 100644 package/wavemon/0002-Build-clarify-include-condition-for-ncursesw-ncurses-h.patch
 
-diff --git a/package/libpam-tacplus/0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch b/package/libpam-tacplus/0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch
+diff --git a/package/wavemon/0001-wavemon.h-add-a-check-for-ncursesw-curses.h.patch b/package/wavemon/0001-wavemon.h-add-a-check-for-ncursesw-curses.h.patch
 new file mode 100644
-index 0000000000..8b0a25bbbd
+index 0000000000..4a7ec8e38e
 --- /dev/null
-+++ b/package/libpam-tacplus/0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch
-@@ -0,0 +1,146 @@
-+From c9bed7496e81e550ee22746f23bbb11be2e046ed Mon Sep 17 00:00:00 2001
-+From: Duncan Eastoe <duncan.eastoe@att.com>
-+Date: Thu, 22 Oct 2020 19:18:27 +0100
-+Subject: [PATCH 1/2] magic.c: check for failure of RAND_[pseudo_]bytes
++++ b/package/wavemon/0001-wavemon.h-add-a-check-for-ncursesw-curses.h.patch
+@@ -0,0 +1,42 @@
++From ce7f9c4da90767bb50e4b80cdb3cee61264d8d12 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 27 Oct 2020 00:18:52 +0100
++Subject: [PATCH] wavemon.h: add a check for <ncursesw/curses.h>
 +
-+When magic() is implemented via libcrypto's RAND_bytes or
-+RAND_pseudo_bytes we should check for a failure and abort to
-+ensure we don't use a predictable session_id.
++Add a check for <ncursesw/curses.h> before using it to fix a build
++failaure on buildroot where curses.h is not installed under ncursesw
++even when libncursesw is enabled/installed.
 +
-+This prevents (further) weakening* of the TACACS+ protocol
-+"encryption" since session_id is an input to the algorithm.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/uoaerg/wavemon/commit/ce7f9c4da90767bb50e4b80cdb3cee61264d8d12]
++---
++ configure.ac | 1 +
++ wavemon.h    | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
 +
-+*by modern standards TACACS+ is deemed "obfuscated" - RFC 8907.
++diff --git a/configure.ac b/configure.ac
++index 5ad562f..c2a6c76 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -52,6 +52,7 @@ AC_HEADER_STDBOOL
++ 
++ # Tests involving libraries
++ AC_CHECK_LIB([m], [pow], [],              [AC_MSG_ERROR(math library not found)])
+++AC_CHECK_HEADERS([ncursesw/curses.h])
++ AC_CHECK_LIB([ncursesw], [waddstr],
++ 	     [],
++ 	     [AC_CHECK_LIB([ncurses], [waddstr], [], [AC_MSG_ERROR(ncurses library not found)])])
++diff --git a/wavemon.h b/wavemon.h
++index baf9dba..e263fef 100644
++--- a/wavemon.h
+++++ b/wavemon.h
++@@ -34,7 +34,7 @@
++ #include <ctype.h>
++ #include <math.h>
++ #include <stdbool.h>
++-#ifdef HAVE_LIBNCURSESW
+++#ifdef HAVE_NCURSESW_CURSES_H
++ #define _XOPEN_SOURCE_EXTENDED
++ #include <ncursesw/curses.h>
++ #else
+diff --git a/package/wavemon/0002-Build-clarify-include-condition-for-ncursesw-ncurses-h.patch b/package/wavemon/0002-Build-clarify-include-condition-for-ncursesw-ncurses-h.patch
+new file mode 100644
+index 0000000000..20da98645b
+--- /dev/null
++++ b/package/wavemon/0002-Build-clarify-include-condition-for-ncursesw-ncurses-h.patch
+@@ -0,0 +1,73 @@
++From 31e3def1c7332ad830bd966e7d21b343b4f2da54 Mon Sep 17 00:00:00 2001
++From: Gerrit Renker <gerrit@erg.abdn.ac.uk>
++Date: Tue, 27 Oct 2020 18:18:23 -0400
++Subject: [PATCH] Build: clarify include condition for ncursesw/ncurses.h (#79)
 +
 +[Retrieved from:
-+https://github.com/kravietz/pam_tacplus/commit/468cc9d484364ecdc8bb245805f5c1fcb415fec9]
++https://github.com/uoaerg/wavemon/commit/31e3def1c7332ad830bd966e7d21b343b4f2da54]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ libtac/lib/magic.c | 26 +++++++++++++++++++++-----
-+ pam_tacplus.c      |  6 ++++++
-+ 2 files changed, 27 insertions(+), 5 deletions(-)
++ configure    | 12 ++++++++++++
++ configure.ac |  2 +-
++ wavemon.h    |  4 +++-
++ 3 files changed, 16 insertions(+), 2 deletions(-)
 +
-+diff --git a/libtac/lib/magic.c b/libtac/lib/magic.c
-+index e13a483..ae6b44f 100644
-+--- a/libtac/lib/magic.c
-++++ b/libtac/lib/magic.c
-+@@ -81,26 +81,42 @@ magic()
++diff --git a/configure b/configure
++index d16f86a..3ab5115 100755
++--- a/configure
+++++ b/configure
++@@ -3644,6 +3644,18 @@ fi
 + 
-+ #elif defined(HAVE_OPENSSL_RAND_H) && defined(HAVE_LIBCRYPTO)
++ done
 + 
-++#include <openssl/err.h>
-+ #include <openssl/rand.h>
-+ 
-+ /* RAND_bytes is OpenSSL's classic function to obtain cryptographic strength pseudo-random bytes
-+-   however, since the magic() function is used to generate TACACS+ session id rather than crypto keys
-+-   we can use RAND_pseudo_bytes() which doesn't deplete the system's entropy pool
-++   however, we can use RAND_pseudo_bytes() which doesn't deplete the system's entropy pool, so long
-++   as it returns a "cryptographically strong" result - since session_id is an input to the TACACS+
-++   "encryption" ("obfuscation" by modern standards - RFC 8907) algorithm.
-+    */
-+ 
-+ u_int32_t
-+ magic()
-+ {
-+     u_int32_t num;
-++    int ret;
-+ 
-+ #ifdef HAVE_RAND_BYTES
-+-    RAND_bytes((unsigned char *)&num, sizeof(num));
-++    ret = RAND_bytes((unsigned char *)&num, sizeof(num));
-+ #elif HAVE_RAND_PSEUDO_BYTES
-+-    RAND_pseudo_bytes((unsigned char *)&num, sizeof(num));
-++    ret = RAND_pseudo_bytes((unsigned char *)&num, sizeof(num));
-+ #else
-+ 	#error Neither  RAND_bytes nor RAND_pseudo_bytes seems to be available
-+ #endif
-+-    return num;
+++for ac_header in ncursesw/curses.h
+++do :
+++  ac_fn_c_check_header_mongrel "$LINENO" "ncursesw/curses.h" "ac_cv_header_ncursesw_curses_h" "$ac_includes_default"
+++if test "x$ac_cv_header_ncursesw_curses_h" = xyes; then :
+++  cat >>confdefs.h <<_ACEOF
+++#define HAVE_NCURSESW_CURSES_H 1
+++_ACEOF
 ++
-++    /* RAND_bytes success / RAND_pseudo_bytes "cryptographically strong" result */
-++    if (ret == 1)
-++        return num;
+++fi
 ++
-++    TACSYSLOG(LOG_CRIT,"%s: "
-++#ifdef HAVE_RAND_BYTES
-++                       "RAND_bytes "
-++#else
-++                       "RAND_pseudo_bytes "
+++done
+++
++ 
++ # linux/if.h needs 'struct sockaddr'
++ # linux/wireless.h in turn depends on linux/if.h
++diff --git a/configure.ac b/configure.ac
++index c2a6c76..809596e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -28,6 +28,7 @@ AC_HEADER_TIME
++ AC_CHECK_HEADERS([ncurses.h fcntl.h netdb.h sys/ioctl.h sys/time.h unistd.h\
++ 		  net/if_arp.h netinet/ether.h net/ethernet.h pthread.h],
++ 		 [], [AC_MSG_ERROR($ac_header not found)])
+++AC_CHECK_HEADERS([ncursesw/curses.h])
++ 
++ # linux/if.h needs 'struct sockaddr'
++ # linux/wireless.h in turn depends on linux/if.h
++@@ -52,7 +53,6 @@ AC_HEADER_STDBOOL
++ 
++ # Tests involving libraries
++ AC_CHECK_LIB([m], [pow], [],              [AC_MSG_ERROR(math library not found)])
++-AC_CHECK_HEADERS([ncursesw/curses.h])
++ AC_CHECK_LIB([ncursesw], [waddstr],
++ 	     [],
++ 	     [AC_CHECK_LIB([ncurses], [waddstr], [], [AC_MSG_ERROR(ncurses library not found)])])
++diff --git a/wavemon.h b/wavemon.h
++index e263fef..ea2f2f7 100644
++--- a/wavemon.h
+++++ b/wavemon.h
++@@ -34,8 +34,10 @@
++ #include <ctype.h>
++ #include <math.h>
++ #include <stdbool.h>
++-#ifdef HAVE_NCURSESW_CURSES_H
+++#ifdef HAVE_LIBNCURSESW
++ #define _XOPEN_SOURCE_EXTENDED
 ++#endif
-++                       "failed; ret: %d err: %ld", __FUNCTION__, ret, ERR_get_error());
-++
-++    exit(1);
-+ }
-+ 
+++#if defined(HAVE_LIBNCURSESW) && defined(HAVE_NCURSESW_CURSES_H)
++ #include <ncursesw/curses.h>
 + #else
-+diff --git a/pam_tacplus.c b/pam_tacplus.c
-+index a0cb83d..4999ca9 100644
-+--- a/pam_tacplus.c
-++++ b/pam_tacplus.c
-+@@ -718,6 +718,12 @@ int pam_sm_acct_mgmt(pam_handle_t *pamh, int UNUSED(flags), int argc,
-+ PAM_EXTERN
-+ int pam_sm_open_session(pam_handle_t *pamh, int UNUSED(flags), int argc,
-+                         const char **argv) {
-++
-++/* Task ID has no need to be cryptographically strong so we don't
-++ * check for failures of the RAND functions. If they fail then we are
-++ * as well sending the accounting request regardless of whether any value
-++ * was written to task_id.
-++ */
-+ #if defined(HAVE_OPENSSL_RAND_H) && defined(HAVE_LIBCRYPTO)
-+ # if defined(HAVE_RAND_BYTES)
-+ 	RAND_bytes((unsigned char *) &task_id, sizeof(task_id));
-+
-+From bceaab0cd51a09b88f40f19da799ac7390264bf8 Mon Sep 17 00:00:00 2001
-+From: Duncan Eastoe <duncan.eastoe@att.com>
-+Date: Fri, 23 Oct 2020 11:23:07 +0100
-+Subject: [PATCH 2/2] pam_tacplus.c: Fallback to using PID as task ID
-+
-+If there is a failure obtaining a random task ID for the session
-+accounting request then fallback to using the PID, as this is unique
-+for the lifetime of the PAM application and therefore session.
-+---
-+ pam_tacplus.c | 16 ++++++++++++----
-+ 1 file changed, 12 insertions(+), 4 deletions(-)
-+
-+diff --git a/pam_tacplus.c b/pam_tacplus.c
-+index 4999ca9..b69e3d0 100644
-+--- a/pam_tacplus.c
-++++ b/pam_tacplus.c
-+@@ -100,8 +100,13 @@ int _pam_send_account(int tac_fd, int type, const char *user, char *tty,
-+ 	} else if (type == TAC_PLUS_ACCT_FLAG_STOP) {
-+ 		tac_add_attrib(&attr, "stop_time", buf);
-+ 	}
-+-	sprintf(buf, "%hu", task_id);
-++
-++	if (task_id == 0)
-++		snprintf(buf, sizeof(buf), "%d", getpid());
-++	else
-++		snprintf(buf, sizeof(buf), "%hu", task_id);
-+ 	tac_add_attrib(&attr, "task_id", buf);
-++
-+ 	tac_add_attrib(&attr, "service", tac_service);
-+ 	if (tac_protocol[0] != '\0')
-+ 		tac_add_attrib(&attr, "protocol", tac_protocol);
-+@@ -720,9 +725,8 @@ int pam_sm_open_session(pam_handle_t *pamh, int UNUSED(flags), int argc,
-+                         const char **argv) {
-+ 
-+ /* Task ID has no need to be cryptographically strong so we don't
-+- * check for failures of the RAND functions. If they fail then we are
-+- * as well sending the accounting request regardless of whether any value
-+- * was written to task_id.
-++ * check for failures of the RAND functions. If we fail to get an ID we
-++ * fallback to using our PID (in _pam_send_account).
-+  */
-+ #if defined(HAVE_OPENSSL_RAND_H) && defined(HAVE_LIBCRYPTO)
-+ # if defined(HAVE_RAND_BYTES)
-+@@ -734,6 +738,10 @@ int pam_sm_open_session(pam_handle_t *pamh, int UNUSED(flags), int argc,
-+ 	task_id=(short int) magic();
-+ #endif
-+ 
-++	if (task_id == 0)
-++		syslog(LOG_INFO, "%s: failed to generate random task ID, "
-++				"falling back to PID", __FUNCTION__);
-++
-+ 	return _pam_account(pamh, argc, argv, TAC_PLUS_ACCT_FLAG_START, NULL);
-+ } /* pam_sm_open_session */
-+ 
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-index fd2b4f9a30..86a5b1c461 100644
---- a/package/libpam-tacplus/libpam-tacplus.mk
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
-@@ -17,4 +17,7 @@ LIBPAM_TACPLUS_INSTALL_STAGING = YES
- LIBPAM_TACPLUS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++ #include <ncurses.h>
+diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
+index 455e64cba8..2533fe2955 100644
+--- a/package/wavemon/wavemon.hash
++++ b/package/wavemon/wavemon.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5ebd5b79d3b7c546bc16b95161872c699a75e9acdfc6e3f02ec48dad10802067  wavemon-0.9.1.tar.gz
++sha256  13334ff17720ba4d17f4658dd2b93a50a6b5bc0583dedd72b88fd0cb90db686a  wavemon-0.9.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
+index 3ae1141ec4..a27e83c0b5 100644
+--- a/package/wavemon/wavemon.mk
++++ b/package/wavemon/wavemon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch
-+LIBPAM_TACPLUS_IGNORE_CVES += CVE-2020-27743
-+
- $(eval $(autotools-package))
+-WAVEMON_VERSION = 0.9.1
++WAVEMON_VERSION = 0.9.2
+ WAVEMON_SITE = $(call github,uoaerg,wavemon,v$(WAVEMON_VERSION))
+ WAVEMON_LICENSE = GPL-3.0+
+ WAVEMON_LICENSE_FILES = COPYING
 -- 
 2.28.0
