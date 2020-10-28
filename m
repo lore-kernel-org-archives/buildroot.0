@@ -1,71 +1,65 @@
-From: Mauro Meneghin <mauro.meneghin@youview.com>
-Date: Wed, 28 Oct 2020 17:15:55 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ltrace: bump ltrace to more
- recent git repo with latest commit
-In-Reply-To: <20201026223513.096b2b69@windsurf.home>
-References: <20201023134329.1810-1-mauro.meneghin@youview.com>,
- <20201026223513.096b2b69@windsurf.home>
-Message-ID: <DBAPR05MB7144792C3D4B221929C60C789A170@DBAPR05MB7144.eurprd05.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 28 Oct 2020 18:56:01 +0100
+Subject: [Buildroot] [PATCHv2] infra: add the transient download
+ mechanism
+In-Reply-To: <d0ecce82-e718-9309-ffb6-9cc93a317b79@mind.be>
+References: <20200930173030.2461586-1-yann.morin.1998@free.fr>
+ <20200930214530.6b964a45@windsurf.home>
+ <20200930201303.GU11621@scaer>
+ <d0ecce82-e718-9309-ffb6-9cc93a317b79@mind.be>
+Message-ID: <20201028175601.GK2805@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Thomas Petazzoni
+Arnout, All,
 
-________________________________
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Sent: 26 October 2020 21:35
-To: Mauro Meneghin <mauro.meneghin@youview.com>
-Cc: buildroot at buildroot.org <buildroot@buildroot.org>
-Subject: Re: [Buildroot] [PATCH 1/1] package/ltrace: bump ltrace to more recent git repo with latest commit
+On 2020-10-06 20:43 +0200, Arnout Vandecappelle spake thusly:
+> On 30/09/2020 22:13, Yann E. MORIN wrote:
+> > On 2020-09-30 21:45 +0200, Thomas Petazzoni spake thusly:
+> >> On Wed, 30 Sep 2020 19:30:30 +0200
+> >> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > [--SNIP--]
+> >>> +  obvious being the *lack of reproducibility*. Besides, it has its own
+> >>> +  pitfalls that one must be aware of as well:
+> >>> +  ** when two builds are running in parallel on the same machine, there
+> >>> +     is a TOCTOU race for each build to download and extract the archive,
+> >>> +     so each build may not get what it downloaded, but what the other
+> >>> +     build did download;
+[--SNIP--]
+> > But now consider the following scenario:
+> >   - I push my branch, a pipeline is triggered;
+>  Here your reasoning is wrong: this feature should *NOT* be used for triggering
+> a build on push to some repo. For that use case, OVERRIDE_SRCDIR is much more
+> suitable, because that *will* use the exact sources that correspond to the trigger.
 
-[External email]
+But OVERRIDE_SRCDIR can *also* be used for the CI part, so why are we
+even looking at this transient thing, then?
 
+When transient is available, people are going to use it, even for cases
+it was been designed for. And the use-case I describe is really one such
+(un)expected scenario transient is made for.
 
-On Fri, 23 Oct 2020 14:43:29 +0100
-Mauro Meneghin <mauro.meneghin@youview.com> wrote:
+>  What this feature is meant for is to do actual continuous integration, i.e.
+> people are developing code in different repos, and a regularly triggered (or
+> continuous) build brings all these repos together. It sounds insane to do
+> something like that, but it is the way that some projects work [1].
 
-> I've updated LTRACE_SITE to point to https://github.com/dkogan/ltrace
-> of Dima Kogan that includes some bug fixes, in particular the following
-> commit to avoid a crash:
->   192e0a6 void struct members are now ignored
->
-> The previous ltrace version gave me a crash on a ARMv7 device, showing
-> this error:
->   "Assertion `field_info->type != ARGTYPE_VOID' failed."
->
-> Using this commit ltrace shows a '<void>' return value in such cases,
-> but at least avoids the crash.
->
-> Signed-off-by: Mauro Meneghin <mauro.meneghin@youview.com>
+Insane what people can come up with once they have some feature at hand!
+;-)
 
-Thanks for your patch. I have rewritten a bit the commit log to not use
-first person sentences.
+But I am no longer interested in pushing this (mis)feature anyway.
+Remember I am initially opposed to it to begin with...
 
-> -LTRACE_VERSION = c22d359433b333937ee3d803450dc41998115685
-> -#LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
-> +# This github version has some extra fixes on top of https://ltrace.org/
-> +# in particular the following commit to avoid a crash:
-> +#   192e0a6 void struct members are now ignored
-> +LTRACE_VERSION = 82c66409c7a93ca6ad2e4563ef030dfb7e6df4d4
-> +LTRACE_SITE = git://github.com/dkogan/ltrace.git
+Regards,
+Yann E. MORIN.
 
-And changed that to use the "github" macro we have in Buildroot.
-
-Applied with those changes. Thanks!
-
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
-
-[External email. Treat hyperlinks and attachments with caution]
-
-This transmission contains information that may be confidential and contain personal views which are not necessarily those of YouView TV Ltd. YouView TV Ltd (Co No:7308805) is a limited liability company registered in England and Wales with its registered address at YouView TV Ltd, 3rd Floor, 10 Lower Thames Street, London, EC3R 6YT. For details see our web site at http://www.youview.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201028/04736876/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
