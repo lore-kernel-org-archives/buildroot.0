@@ -1,22 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 22:51:53 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: add mksh/ruby to Waldemar
- Brodkorb
-In-Reply-To: <20201015214041.5de4o4p4c43iuztg@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Thu, 15 Oct 2020 23:40:41 +0200")
-References: <20201015214041.5de4o4p4c43iuztg@waldemar-brodkorb.de>
-Message-ID: <87sg9yhvd2.fsf@dell.be.48ers.dk>
+Date: Wed, 28 Oct 2020 22:57:50 +0100
+Subject: [Buildroot] [git commit] package/kernel-module-imx-gpu-viv: fix
+ disabling kernel option
+In-Reply-To: <20201017072212.F0F7F821F0@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sat, 17 Oct 2020 09:33:21 +0200")
+References: <20201017072212.F0F7F821F0@busybox.osuosl.org>
+Message-ID: <87o8kmhv35.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > commit: https://git.buildroot.net/buildroot/commit/?id=74a8865b2fa58a26c567e5fef1faa6df639deda7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+ > Commit 391c448acbb9 (package/kernel-module-imx-gpu-viv: bear the kernel
+ > options munging) improperly named the macro, including a superfluous
+ > 'MODULE' in the middle of the macro name, which meant it was totally
+ > unused.
+
+ > Fix that.
+
+ > Reported-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
