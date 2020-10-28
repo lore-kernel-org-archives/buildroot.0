@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 14:21:22 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/patchelf: pull in
+Date: Wed, 28 Oct 2020 14:20:50 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/patchelf: pull in
  upstream bugfixes
-Message-ID: <20201028131413.3087F81F76@busybox.osuosl.org>
+Message-ID: <20201028131417.84DA1842A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38ddceb79dfb74a46ee5ebde9d82d7fc6109c993
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9709552fc9ef051714612a8126fe3e67b2a1ce6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 When building iputils for powerpc with BR2_PIC_PIE enabled, the
 arping/rdisc/tftpd binaries will segfault at runtime. This can be
