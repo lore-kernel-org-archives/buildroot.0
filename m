@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 Oct 2020 16:01:13 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/oniguruma: fix
+Date: Wed, 28 Oct 2020 15:54:26 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/oniguruma: fix
  CVE-2020-26159
-Message-ID: <20201028150620.F11D6863C6@busybox.osuosl.org>
+Message-ID: <20201028150625.634D683F07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f130e060fdaead88970594904f175996632f512
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=196f605d55ecc8aca0557cba01d3c2c4339b22e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fix CVE-2020-26159: In Oniguruma 6.9.5_rev1, an attacker able to supply
 a regular expression for compilation may be able to overflow a buffer by
@@ -57,7 +57,7 @@ index 0000000000..3317449702
 +       to->s[i++] = *p++;
 +   }
 diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index 2126ff9120..a1a468d931 100644
+index d1ff1f115f..c2330c7380 100644
 --- a/package/oniguruma/oniguruma.mk
 +++ b/package/oniguruma/oniguruma.mk
 @@ -12,4 +12,7 @@ ONIGURUMA_LICENSE = BSD-2-Clause
