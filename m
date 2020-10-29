@@ -1,53 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 17:38:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libraw: security
- bump to version 0.20.2
-Message-ID: <20201029162654.455DE842A4@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 29 Oct 2020 18:35:56 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/openvpn: add mbedtls support
+Message-ID: <20201029173556.506699-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b119b717f263634a9474d0a918a62b42186e7361
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+mbedtls (former polarssl) support was dropped with commit
+3380da69c5ab490e5c51dca0c4389b0da91743d0
 
-Fix CVE-2020-24890: libraw 20.0 has a null pointer dereference
-vulnerability in parse_tiff_ifd in src/metadata/tiff.cpp, which may
-result in context-dependent arbitrary code execution.
-
-https://www.libraw.org/news/libraw-0-20-2-Release
+Put it back as openvpn supports mbedtls 2.x since version 2.4.0 and
+https://github.com/OpenVPN/openvpn/commit/86d8cd6860dfc74cb1a040ff8fe03140ebe7f930
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a05b7cc7c10b070669722a80af182d7b7974a0d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libraw/libraw.hash | 2 +-
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+ - Remove openssl from openvpn mandatory dependencies
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index e8117cd1f1..f2a01c277b 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1f0a383da2ce9f409087facd28261decbf6be72cc90c78cd003b0766e4d694a3  LibRaw-0.20.0.tar.gz
-+sha256  dc1b486c2003435733043e4e05273477326e51c3ea554c6864a4eafaff1004a6  LibRaw-0.20.2.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  313415f7f48f6cd3cc78856626aab4bbe97dbb1e9a11db9c25396ca8d0e76cd9  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index e33674e6f5..acfa4dbe37 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/openvpn/Config.in  |  2 +-
+ package/openvpn/openvpn.mk | 11 +++++++++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/package/openvpn/Config.in b/package/openvpn/Config.in
+index 0a1675573a..3f4a617fb7 100644
+--- a/package/openvpn/Config.in
++++ b/package/openvpn/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_OPENVPN
+ 	bool "openvpn"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_MBEDTLS
+ 	help
+ 	  OpenVPN is a full-featured SSL VPN solution which can
+ 	  accomodate a wide range of configurations, including road
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 4234675d9f..1008c47b5a 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -7,12 +7,11 @@
+ OPENVPN_VERSION = 2.4.9
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+-OPENVPN_DEPENDENCIES = host-pkgconf openssl
++OPENVPN_DEPENDENCIES = host-pkgconf
+ OPENVPN_LICENSE = GPL-2.0
+ OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+ OPENVPN_CONF_OPTS = \
+ 	--enable-iproute2 \
+-	--with-crypto-library=openssl \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+ OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+ 	NETSTAT=/bin/netstat \
+@@ -51,6 +50,14 @@ else
+ OPENVPN_CONF_OPTS += --disable-plugin-auth-pam
+ endif
  
--LIBRAW_VERSION = 0.20.0
-+LIBRAW_VERSION = 0.20.2
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++OPENVPN_DEPENDENCIES += openssl
++OPENVPN_CONF_OPTS += --with-crypto-library=openssl
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++OPENVPN_DEPENDENCIES += mbedtls
++OPENVPN_CONF_OPTS += --with-crypto-library=mbedtls
++endif
++
+ ifeq ($(BR2_PACKAGE_PKCS11_HELPER),y)
+ OPENVPN_DEPENDENCIES += pkcs11-helper
+ OPENVPN_CONF_OPTS += --enable-pkcs11
+-- 
+2.28.0
