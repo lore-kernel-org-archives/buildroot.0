@@ -1,36 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 16:44:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pistache: fix static build
-In-Reply-To: <20201017135449.3459214-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 17 Oct 2020 15:54:49 +0200")
-References: <20201017135449.3459214-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mu05ghp0.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Oct 2020 16:04:42 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/opencv3: link
+ with libatomic if needed
+Message-ID: <20201029153517.0FF2A86437@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8023f8d8ca23eca67a01b15fc6d380706317d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > Don't build shared library with BR2_SHARED_LIBS=OFF to avoid the
- > following build failure:
+Restore the atomic workaround that was wrongly removed when bumping to
+version 3.4.9 in commit f6fb2cae0691d25b034b12a16261ee26096db7d1 as it
+seems that opencv3 still needs help to detect atomic library
 
- > [100%] Linking CXX shared library libpistache.so
- > make[3]: Leaving directory
- > `/home/buildroot/autobuild/run/instance-1/output-1/build/pistache-f2f5a50fbfb5b8ef6cf1d3d2a9d442a8270e375d'
- > [100%] Built target pistache_static
- > /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld:
- > /home/buildroot/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/8.3.0/crtbeginT.o:
- > relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be
- > used when making a shared object
+Fixes:
+ - http://autobuild.buildroot.org/results/9162b29725f8d9b891eb74fcb8078f211140a841
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/6cc/6cc76b3e76defa9b8154568a6ebcd6bf4cadd334/build-end.log
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit dd69967123870383496b5c8eb7b574e8b156b36d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/opencv3/opencv3.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.08.x (pistache not in 2020.02), thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 1ab5cf1efd..70b0a4039f 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -13,6 +13,11 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++OPENCV3_CXXFLAGS += -latomic
++endif
++
+ # Fix c++11 build with missing std::exception_ptr
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
+ OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
