@@ -1,39 +1,44 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 29 Oct 2020 09:04:52 -0500
-Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc 2.31
-Message-ID: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Oct 2020 15:14:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pyqt5: QtSvg needs
+ QtWidgets
+In-Reply-To: <20200517122738.2207020-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 17 May 2020 14:27:38 +0200")
+References: <20200517122738.2207020-1-fontaine.fabrice@gmail.com>
+Message-ID: <877dr9i0gb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Would you mind picking over the following commit to add busybox glibc
-2.31 support to the 2020.02LTS?
+ > Building QtSvg without QtWidgets results in the following build failure:
+ > /tmp/instance-0/output-1/host/bin/powerpc64le-linux-g++ -c -pipe
+ > -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os
+ > --sysroot=/tmp/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot
+ > -fno-exceptions -Wall -Wextra -D_REENTRANT -fPIC
+ > -DSIP_PROTECTED_IS_PUBLIC -Dprotected=public -DQT_NO_DEBUG -DQT_PLUGIN
+ > -DQT_SVG_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+ > -I. -I. -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/python3.8
+ > -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5
+ > -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtSvg
+ > -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui
+ > -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore
+ > -I. -I../../../host/mkspecs/devices/linux-buildroot-g++ -o
+ > sipQtSvgcmodule.o sipQtSvgcmodule.cpp
+ > sip/QtWidgets/qwidget.sip:28:10: fatal error: qwidget.h: No such file or directory
+ > compilation terminated.
+ > sip/QtWidgets/qgraphicsitem.sip:26:10: fatal error: qgraphicsitem.h: No such file or directory
+ > compilation terminated.
 
-commit 13f2d688a24f47446af236829bd6ca194d5aea5b
-Author: Carlos Santos <unixmania@gmail.com>
-Date:   Sun Mar 22 14:13:01 2020 -0300
-package/busybox: fix build with glibc 2.31
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/26f55a1fa9f6520ce449b98b40d98f984cec07b3
 
-The known [1,2] issue was found when using a newer external toolchain
-with the following configuration and the 2020.02.7 tag.
-BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2020.08-1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Note: I'll have additional individual patches coming for openssh and
-strace as those were fixed for a similar issue but through version
-bumps on master.  Is there some backstory (beyond the patchwork
-submissions for master) on other attempts to bring glibc 2.31 support
-to LTS?
+Committed to 2020.02.x and 2020.08.x, thanks.
 
-Best Regards,
-Matt
-
-
-Ref:
-[1] http://lists.busybox.net/pipermail/buildroot/2020-February/272657.html
-[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=165949&archive=both&state=*
+-- 
+Bye, Peter Korsgaard
