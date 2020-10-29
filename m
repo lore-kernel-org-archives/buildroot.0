@@ -1,45 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 16:04:30 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv3: link
- with libatomic if needed
-Message-ID: <20201029153521.3ABEF86437@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 16:59:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix typo in
+ OPENCV_WARNINGS_ARE_ERRORS
+In-Reply-To: <20201018134732.960533-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 18 Oct 2020 15:47:32 +0200")
+References: <20201018134732.960533-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imatgh16.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80c28bcde9e05147838fd0dd5c153d02f14164a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Restore the atomic workaround that was wrongly removed when bumping to
-version 3.4.9 in commit f6fb2cae0691d25b034b12a16261ee26096db7d1 as it
-seems that opencv3 still needs help to detect atomic library
+ > OPENCV3_WARNINGS_ARE_ERRORS option does not exist so rename it to
+ > OPENCV_WARNINGS_ARE_ERRORS (even if it is already disabled by default)
 
-Fixes:
- - http://autobuild.buildroot.org/results/9162b29725f8d9b891eb74fcb8078f211140a841
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit dd69967123870383496b5c8eb7b574e8b156b36d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opencv3/opencv3.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+Committed to 2020.02.x and 2020.08.x, thanks.
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index fab6716340..41e3f94e85 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -13,6 +13,11 @@ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+OPENCV3_CXXFLAGS += -latomic
-+endif
-+
- # Fix c++11 build with missing std::exception_ptr
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
- OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
+-- 
+Bye, Peter Korsgaard
