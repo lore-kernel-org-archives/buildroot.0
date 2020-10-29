@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 17:38:51 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libraw: security
+Date: Thu, 29 Oct 2020 17:38:38 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libraw: security
  bump to version 0.20.2
-Message-ID: <20201029162649.1C9A38642C@busybox.osuosl.org>
+Message-ID: <20201029162654.455DE842A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a83dc6faef7639ff00ed4f53bc5848360b114dbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b119b717f263634a9474d0a918a62b42186e7361
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fix CVE-2020-24890: libraw 20.0 has a null pointer dereference
 vulnerability in parse_tiff_ifd in src/metadata/tiff.cpp, which may
