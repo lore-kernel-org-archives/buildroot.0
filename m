@@ -1,83 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 29 Oct 2020 14:00:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sispmctl: fix build with gcc 4.8
-Message-ID: <20201029130031.58927-1-fontaine.fabrice@gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Thu, 29 Oct 2020 14:06:45 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5BPATCH=5D_package/libgpiod=3A_bump_versi?=
+ =?utf-8?q?on_to_1=2E6?=
+In-Reply-To: <20201029135017.652486f7@windsurf.home>
+Message-ID: <7e-5f9abe80-1-60a72780@84134619>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/079f1454121d38a83c49529c0f6cc8ed61fd5abb
+Hi,
+ 
+On Thursday, October 29, 2020 13:50 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote: 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...rc-schedule.c-fix-build-with-gcc-4.8.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
+> 
+> Hum, this is a bit annoying. And upstream is not willing to have proper
+> conditional logic to keep supporting kernels older than 5.5 ? 5.5 is
+> not that old, it seems odd to so quickly drop support. Even 5.4 is the
+> current LTS kernel !
 
-diff --git a/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch b/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..69dc31e353
---- /dev/null
-+++ b/package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,56 @@
-+From 3ccbb67c71aa13b9a37a58363d37a18b8fdbf300 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 29 Oct 2020 13:36:00 +0100
-+Subject: [PATCH] src/schedule.c: fix build with gcc 4.8
-+
-+Fix the following build failure with gcc 4.8:
-+
-+schedule.c:19:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (int i = 0; i < 4; ++i) {
-+  ^
-+schedule.c:19:2: note: use option -std=c99 or -std=gnu99 to compile your code
-+schedule.c: In function 'pms2_read_block':
-+schedule.c:39:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (int i = 0; i < 4; ++i) {
-+  ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/079f1454121d38a83c49529c0f6cc8ed61fd5abb
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://sourceforge.net/p/sispmctl/git/merge-requests/1]
-+---
-+ src/schedule.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/schedule.c b/src/schedule.c
-+index 4dd908d..1725421 100644
-+--- a/src/schedule.c
-++++ b/src/schedule.c
-+@@ -15,8 +15,9 @@
-+ static unsigned char
-+ *pms2_write_block(uint8_t action, uint32_t time, unsigned char *ptr)
-+ {
-++	int i;
-+ 	*ptr++ = action;	
-+-	for (int i = 0; i < 4; ++i) {
-++	for (i = 0; i < 4; ++i) {
-+ 		*ptr++ = (uint8_t)time;
-+ 		time >>= 8;
-+ 	}
-+@@ -34,9 +35,10 @@ static unsigned char
-+ static const unsigned char
-+ *pms2_read_block(uint8_t *action, uint32_t *time, const unsigned char *ptr)
-+ {
-++	int i;
-+ 	*action = *ptr++;
-+ 	*time = 0;
-+-	for (int i = 0; i < 4; ++i) {
-++	for (i = 0; i < 4; ++i) {
-+ 		*time >>= 8;
-+ 		*time += (uint32_t)*ptr++ << 24;
-+ 	}
-+-- 
-+2.28.0
-+
--- 
-2.28.0
+At least that's how I interpret this comment in the NEWS for 1.5 [0]:
+
+- added support for bias flags which are a new functionality first available in
+  linux v5.5; subsequently the library now requires v5.5 kernel headers to
+  build;
+
+But maybe Bartosz can clarify on this, as he basically is the "upstream" :)
+
+
+Regards,
+Michael
+
+[0] https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS
