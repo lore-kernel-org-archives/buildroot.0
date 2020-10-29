@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 14:58:59 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: fix
+Date: Thu, 29 Oct 2020 14:58:48 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/samba4: fix
  uclibc build with openldap
-Message-ID: <20201029134637.5D86284545@busybox.osuosl.org>
+Message-ID: <20201029134641.BC2F084545@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c983f930913bc0073d155d339d029213c38f9fb1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=39dbbc0ea49792872433455766573168e1a7c03e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
