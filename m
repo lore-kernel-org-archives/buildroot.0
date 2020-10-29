@@ -1,51 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 19:58:55 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/wpewebkit:
- disable JIT for ARMv5 and ARMv6
-Message-ID: <20201029185148.09D6284239@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 18:36:07 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/docker-cli: bump
+ to version 19.03.13
+Message-ID: <20201029185147.DC5CF84239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c417b09bfb59162ebd414f7412de71add823ae30
+commit: https://git.buildroot.net/buildroot/commit/?id=827d2449193a9a5aed63c0a0cdd84ce7cd4827af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-WebKit's JavaScriptCore does not support using JIT nor the LLint
-interpreter on ARMv5 and ARMv6, so add those two cases when checking
-for target CPUs which need to use the CLoop interpreter.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f8eaccdddc3a6eecfa9a886602de0577ef01c993)
+(cherry picked from commit 753435456389c77d834d7fdd57adf98b74d448ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 0a67391ced..9bc437d283 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -64,14 +64,16 @@ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
- endif
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 8f9e69e593..66abfe5224 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	00801d6b7e9777cf2cf54255ca5afb7b58b3d35c14bb0f60bb9f07d031883223  docker-cli-19.03.12.tar.gz
++sha256	21b88a00e8f7a3194c0ae1de5a31e3e1728ef6aa2804158dcb502a8b5fd6ae2b  docker-cli-19.03.13.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 49abefcaf2..b2ac4a596d 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # JIT is not supported for MIPS r6, but the WebKit build system does not
--# have a check for these processors. Disable JIT forcibly here and use
--# the CLoop interpreter instead.
-+# have a check for these processors. The same goes for ARMv5 and ARMv6.
-+# Disable JIT forcibly here and use the CLoop interpreter instead.
- #
- # Also, we have to disable the sampling profiler, which does NOT work
- # with ENABLE_C_LOOP.
- #
--# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
--ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
-+#                https://bugs.webkit.org/show_bug.cgi?id=172765
-+#
-+ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
- WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+-DOCKER_CLI_VERSION = 19.03.12
++DOCKER_CLI_VERSION = 19.03.13
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
