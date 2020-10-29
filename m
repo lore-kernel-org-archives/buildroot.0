@@ -1,61 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 29 Oct 2020 14:11:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: fix build with sshfs 3.7.0
-Message-ID: <20201029131159.237077-1-fontaine.fabrice@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 29 Oct 2020 14:12:24 +0100
+Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 1.6
+In-Reply-To: <7e-5f9abe80-1-60a72780@84134619>
+References: <20201029135017.652486f7@windsurf.home>
+ <7e-5f9abe80-1-60a72780@84134619>
+Message-ID: <CAMRc=MdSUOZmkDqkBfVPp2H6n+J9RS8Y2aLtLjYiQn3_2sDN-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/f93972515ad09ab2ccbdc4cd976ed60702c5974a
+On Thu, Oct 29, 2020 at 2:06 PM Michael Nosthoff <buildroot@heine.tech> wrote:
+>
+> Hi,
+>
+> On Thursday, October 29, 2020 13:50 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> >
+> > Hum, this is a bit annoying. And upstream is not willing to have proper
+> > conditional logic to keep supporting kernels older than 5.5 ? 5.5 is
+> > not that old, it seems odd to so quickly drop support. Even 5.4 is the
+> > current LTS kernel !
+>
+> At least that's how I interpret this comment in the NEWS for 1.5 [0]:
+>
+> - added support for bias flags which are a new functionality first available in
+>   linux v5.5; subsequently the library now requires v5.5 kernel headers to
+>   build;
+>
+> But maybe Bartosz can clarify on this, as he basically is the "upstream" :)
+>
+>
+> Regards,
+> Michael
+>
+> [0] https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/NEWS
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-remove-old-uclibc-hack.patch         | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/libfuse3/0001-remove-old-uclibc-hack.patch
+Hi Thomas!
 
-diff --git a/package/libfuse3/0001-remove-old-uclibc-hack.patch b/package/libfuse3/0001-remove-old-uclibc-hack.patch
-new file mode 100644
-index 0000000000..79b2f8c65e
---- /dev/null
-+++ b/package/libfuse3/0001-remove-old-uclibc-hack.patch
-@@ -0,0 +1,34 @@
-+From 4ebb018e78b53a8afe0368e7cd7a17a67c52e3df Mon Sep 17 00:00:00 2001
-+From: Rosen Penev <rosenp@gmail.com>
-+Date: Wed, 28 Oct 2020 19:20:35 -0700
-+Subject: [PATCH] remove old uclibc hack
-+
-+This actually prevents sshfs linking to it as fuse_new becomes
-+unavailable.
-+
-+According to the git history, this seems to predate 2006.
-+
-+Signed-off-by: Rosen Penev <rosenp@gmail.com>
-+[Retrieved from:
-+https://github.com/libfuse/libfuse/commit/4ebb018e78b53a8afe0368e7cd7a17a67c52e3df]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/fuse_misc.h | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/lib/fuse_misc.h b/lib/fuse_misc.h
-+index a8b59617..f384aeab 100644
-+--- a/lib/fuse_misc.h
-++++ b/lib/fuse_misc.h
-+@@ -10,10 +10,9 @@
-+ 
-+ /*
-+   Versioned symbols cannot be used in some cases because it
-+-    - confuse the dynamic linker in uClibc
-+     - not supported on MacOSX (in MachO binary format)
-+ */
-+-#if (!defined(__UCLIBC__) && !defined(__APPLE__))
-++#ifndef __APPLE__
-+ # if HAVE_SYMVER_ATTRIBUTE
-+ #  define FUSE_SYMVER(sym1, sym2) __attribute__ ((symver (sym2)))
-+ # else
--- 
-2.28.0
+I don't want to have an ifdef hell in libgpiod depending on symbol
+presence/kernel version. I much better prefer to support multiple
+stable branches. v1.4.x will be supported for as long as linux v5.4 is
+supported.
+
+That being said: libgpiod only requires the v5.5 headers to build. It
+will still work on older kernels unless someone uses features that
+aren't supported.
+
+Bartosz
