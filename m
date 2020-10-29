@@ -1,46 +1,42 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 29 Oct 2020 23:10:25 +0100
-Subject: [Buildroot] [PATCH] package/python-urllib3: bump to version 1.25.11
-Message-ID: <20201029221025.5358-1-m.niestroj@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 29 Oct 2020 21:28:35 +0100
+Subject: [Buildroot] [git commit] package/moarvm: bump to version 2020.10
+Message-ID: <20201029215933.E6D6883916@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/python-urllib3/python-urllib3.hash | 5 +++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=e0a213cd66d10bc13af912b21799d23713f286cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 6be3671a3c..e29966672a 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/urllib3/json
--sha256	91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a  urllib3-1.25.10.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/urllib3/json
-+md5  d47dd21a6e66a03c3633cac468ffd010  urllib3-1.25.11.tar.gz
-+sha256  8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2  urllib3-1.25.11.tar.gz
- # Locally computed sha256 checksums
- sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index e64ff136ab..88e8d2097b 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 23040d9e2d..36f0a81f31 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  da48887a1be0e397586b3470c2627d04c64d1e0caf9305ee7dc8db8db739f7cf  MoarVM-2020.07.tar.gz
++sha256  637883083f16c4398ffd3685ea6411daa605dd0862e1f59cce632bb2b994f2c4  MoarVM-2020.10.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index f49191f173..9fe5f4c077 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 1.25.10
-+PYTHON_URLLIB3_VERSION = 1.25.11
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/76/d9/bbbafc76b18da706451fa91bc2ebe21c0daf8868ef3c30b869ac7cb7f01d
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_SETUP_TYPE = setuptools
--- 
-2.29.1
+-MOARVM_VERSION = 2020.07
++MOARVM_VERSION = 2020.10
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
