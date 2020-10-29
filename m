@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Oct 2020 23:24:34 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: update email address
-Message-ID: <20201029221615.E9A5D838FE@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 23:26:21 +0100
+Subject: [Buildroot] [git commit] package/unscd: bump version to 0.54
+Message-ID: <20201029221616.00F91838FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6c14416366d6bbd4e0664d754e8378a2cc1766b
+commit: https://git.buildroot.net/buildroot/commit/?id=6d1973c0d3de833fa07f2778f7dd85abed0259ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Doug Kehn <rdkehn@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/unscd/unscd.hash | 2 +-
+ package/unscd/unscd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ceb9cc9160..1e05fde8ff 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -670,7 +670,7 @@ N:	Dominik Faessler <faessler@was.ch>
- F:	package/logsurfer/
- F:	package/python-id3/
+diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
+index 671149fda2..9ed698fd2a 100644
+--- a/package/unscd/unscd.hash
++++ b/package/unscd/unscd.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  9078255b2b9c344d9a0c3333ce23dda9d745f158dde0ea2244a8c56ba93f7a40  nscd-0.53.c
++sha256  90e12c71732474cac4d055bf9d104e599178b4e1ecb6d3b8c556eaa11f8f6447  nscd-0.54.c
+diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
+index c79ec44000..94b46460f6 100644
+--- a/package/unscd/unscd.mk
++++ b/package/unscd/unscd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Doug Kehn <rdkehn@yahoo.com>
-+N:	Doug Kehn <rdkehn@gmail.com>
- F:	package/nss-pam-ldapd/
- F:	package/sp-oops-extract/
- F:	package/unscd/
+-UNSCD_VERSION = 0.53
++UNSCD_VERSION = 0.54
+ UNSCD_SOURCE = nscd-$(UNSCD_VERSION).c
+ UNSCD_SITE = http://busybox.net/~vda/unscd
+ UNSCD_LICENSE = GPL-2.0
