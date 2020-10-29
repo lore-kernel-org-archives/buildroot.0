@@ -1,25 +1,33 @@
-From: Ed Spiridonov <edo.rus@gmail.com>
-Date: Fri, 30 Oct 2020 01:20:44 +0300
-Subject: [Buildroot] [PATCH v2, 1/1] package/openvpn: add mbedtls support
-In-Reply-To: <mailman.19973.1603998272.40933.buildroot@busybox.net>
-References: <mailman.19973.1603998272.40933.buildroot@busybox.net>
-Message-ID: <CACm0Nn1yXwa3X1iTgTN61GACgBQUZsKhs6ser2NP=Cx3d=jb0g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Oct 2020 23:22:14 +0100
+Subject: [Buildroot] [PATCH] package/nginx: use /run instead of /var/run
+In-Reply-To: <20201015101137.32333-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Thu, 15 Oct 2020 12:11:36 +0200")
+References: <20201015101137.32333-1-buildroot@heine.tech>
+Message-ID: <87ft5wfzah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> mbedtls (former polarssl) support was dropped with commit
-> 3380da69c5ab490e5c51dca0c4389b0da91743d0
->
-> Put it back as openvpn supports mbedtls 2.x since version 2.4.0 and
-> https://github.com/OpenVPN/openvpn/commit/86d8cd6860dfc74cb1a040ff8fe03140ebe7f930
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
 
-I proposed such a patch in May, but it was not accepted.
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-package-openvpn-add-option-to-use-mbed-TLS-instead-of-OpenSSL-td255807.html
+ > This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
+ > PIDFile").
 
-IMO mbedtls could be selected by default.
-I tried
-        select BR2_PACKAGE_MBEDTLS if !BR2_PACKAGE_OPENSSL
-but it doesn't work (kconfig fails to resolve dependencies).
+ > I missed that nginx is still built with /var/run paths.
+
+ > This commit changes the compile options to use /run instead of /var/run
+ > for pid and lock file to make it consistent.
+
+ > Further dropping the passing of the pid option in the service file as
+ > this isn't neccessary. Neither debian nor nginx default .service does
+ > it.
+
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
