@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Oct 2020 23:38:17 +0100
-Subject: [Buildroot] [git commit] package/pax-utils: bump to version 1.2.6
-Message-ID: <20201029222624.D24B682A4E@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 23:38:08 +0100
+Subject: [Buildroot] [git commit] package/pcre2: bump to version 10.35
+Message-ID: <20201029222624.B68D182A4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef4f72aef7bf87ed0c31fbabedca3904053c39d8
+commit: https://git.buildroot.net/buildroot/commit/?id=076e1ba1baf1b6f21b488341cf3e59cc75168970
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update LICENCE hash (update in year:
+https://vcs.pcre.org/pcre2/code/trunk/LICENCE?r1=1078&r2=1244)
+
+https://www.pcre.org/news.txt
+https://www.pcre.org/changelog.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pax-utils/pax-utils.hash | 2 +-
- package/pax-utils/pax-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pcre2/pcre2.hash | 6 +++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
-index 1b4cee4fb8..0ef8fad643 100644
---- a/package/pax-utils/pax-utils.hash
-+++ b/package/pax-utils/pax-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7f4a7f8db6b4743adde7582fa48992ad01776796fcde030683732f56221337d9  pax-utils-1.2.2.tar.xz
-+sha256  9742d2a31d53a4e0f6df0d3721ab6f7cf8b0404c95fee3b00e678c1ff6db7f21  pax-utils-1.2.6.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
-index b31468eca2..502fc87446 100644
---- a/package/pax-utils/pax-utils.mk
-+++ b/package/pax-utils/pax-utils.mk
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index 9b83ccf135..81313039f0 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.34.tar.bz2.sig
+-sha256  74c473ffaba9e13db6951fd146e0143fe9887852ce73406a03277af1d9b798ca  pcre2-10.34.tar.bz2
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.bz2.sig
++sha256  9ccba8e02b0ce78046cdfb52e5c177f0f445e421059e43becca4359c669d4613  pcre2-10.35.tar.bz2
+ # Locally computed
+-sha256  982293becea3f18eb4e3ce2145f66638e46d105a27b88418766caf321a684d03  LICENCE
++sha256  9cb35e4fe442e49d1fbe9c7e07d9601ac959774b24e1884665a3e2f88b7f0831  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index cedf4652a8..ddb53280f2 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAX_UTILS_VERSION = 1.2.2
-+PAX_UTILS_VERSION = 1.2.6
- PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
- PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
- PAX_UTILS_LICENSE = GPL-2.0
+-PCRE2_VERSION = 10.34
++PCRE2_VERSION = 10.35
+ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
