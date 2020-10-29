@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 20:01:01 +0100
-Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: disable JIT for
- ARMv5 and ARMv6
-In-Reply-To: <20201020154321.3491904-3-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 20 Oct 2020 18:43:21 +0300")
-References: <20201020154321.3491904-1-aperez@igalia.com>
- <20201020154321.3491904-3-aperez@igalia.com>
-Message-ID: <87sg9wg8lu.fsf@dell.be.48ers.dk>
+Date: Thu, 29 Oct 2020 20:01:16 +0100
+Subject: [Buildroot] [PATCH 1/2] package/webkitgtk: fix build with
+ ENABLE_C_LOOP=ON
+In-Reply-To: <20201020155311.3493430-2-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Tue, 20 Oct 2020 18:53:10 +0300")
+References: <20201020155311.3493430-1-aperez@igalia.com>
+ <20201020155311.3493430-2-aperez@igalia.com>
+Message-ID: <87o8kkg8lf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > WebKit's JavaScriptCore does not support using JIT nor the LLint
- > interpreter on ARMv5 and ARMv6, so add those two cases when checking
- > for target CPUs which need to use the CLoop interpreter.
+ > The ENABLE_C_LOOP option conflicts with ENABLE_SAMPLING_PROFILER, so
+ > the WebKit CMake build system will emit an error when both are enabled
+ > at the same time. To avoid hitting that situation, explicitly disable
+ > ENABLE_SAMPLING_PROFILER as needed.
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
