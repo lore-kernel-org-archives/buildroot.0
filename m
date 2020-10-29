@@ -1,62 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 15:12:33 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python-pyqt5:
- QtSvg needs QtWidgets
-Message-ID: <20201029142306.4BB278632D@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 15:26:27 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/linux-firmware:
+ add rpi settings files
+Message-ID: <20201029142306.5AB4C7FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93de367467221904ee7112ce6df5d22593f94db9
+commit: https://git.buildroot.net/buildroot/commit/?id=af6c670a78dc97eb3fcd091ea4a582a7284b4771
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Building QtSvg without QtWidgets results in the following build failure:
+The brcmfmac drivers now load settings files for BCM434xx devices and
+fail if they're missing on the Raspberry Pi:
 
-/tmp/instance-0/output-1/host/bin/powerpc64le-linux-g++ -c -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os --sysroot=/tmp/instance-0/output-1/host/powerpc64le-buildroot-linux-gnu/sysroot -fno-exceptions -Wall -Wextra -D_REENTRANT -fPIC -DSIP_PROTECTED_IS_PUBLIC -Dprotected=public -DQT_NO_DEBUG -DQT_PLUGIN -DQT_SVG_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I. -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/python3.8 -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5 -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtSvg -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtGui -I../../../host/powerpc64le-buildroot-linux-gnu/sysroot/usr/include/qt5/QtCore -I. -I../../../host/mkspecs/devices/linux-buildroot-g++ -o sipQtSvgcmodule.o sipQtSvgcmodule.cpp
-sip/QtWidgets/qwidget.sip:28:10: fatal error: qwidget.h: No such file or directory
-compilation terminated.
-sip/QtWidgets/qgraphicsitem.sip:26:10: fatal error: qgraphicsitem.h: No such file or directory
-compilation terminated.
+brcmfmac mmc1:0001:1: Direct firmware load for brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt failed with error -2
 
-Fixes:
- - http://autobuild.buildroot.org/results/26f55a1fa9f6520ce449b98b40d98f984cec07b3
+This commit copies the missing settings files over to the firmware
+directory with the other files.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 19ee46b1dcb117398f1e6d773c5b8b434d73595a)
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f76cbc2d48751a89116cc9f44c7643995bb0dc29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyqt5/python-pyqt5.mk | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-index 9b5e9089fc..9285b6497c 100644
---- a/package/python-pyqt5/python-pyqt5.mk
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -39,6 +39,12 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_TEST),y)
- PYTHON_PYQT5_MODULES += QtTest
- endif
-+
-+# QtSvg needs QtWidgets
-+ifeq ($(BR2_PACKAGE_QT5SVG),y)
-+PYTHON_PYQT5_DEPENDENCIES += qt5svg
-+PYTHON_PYQT5_MODULES += QtSvg
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_QT5CONNECTIVITY),y)
-@@ -88,11 +94,6 @@ PYTHON_PYQT5_DEPENDENCIES += qt5serialport
- PYTHON_PYQT5_MODULES += QtSerialPort
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index cbad8d592a..a68bfcb14d 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -542,7 +542,10 @@ LINUX_FIRMWARE_FILES += \
+ 	brcm/brcmfmac43362-sdio.bin brcm/brcmfmac43430-sdio.bin \
+ 	brcm/brcmfmac43430a0-sdio.bin brcm/brcmfmac43455-sdio.bin \
+ 	brcm/brcmfmac43569.bin brcm/brcmfmac43570-pcie.bin \
+-	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin
++	brcm/brcmfmac43602-pcie.ap.bin brcm/brcmfmac43602-pcie.bin \
++	brcm/brcmfmac43430-sdio.raspberrypi,3-model-b.txt \
++	brcm/brcmfmac43455-sdio.raspberrypi,3-model-b-plus.txt \
++	brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
  endif
  
--ifeq ($(BR2_PACKAGE_QT5SVG),y)
--PYTHON_PYQT5_DEPENDENCIES += qt5svg
--PYTHON_PYQT5_MODULES += QtSvg
--endif
--
- ifeq ($(BR2_PACKAGE_QT5WEBCHANNEL),y)
- PYTHON_PYQT5_DEPENDENCIES += qt5webchannel
- PYTHON_PYQT5_MODULES += QtWebChannel
