@@ -1,68 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 23:19:12 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/nginx: use /run
- instead of /var/run
-Message-ID: <20201030082143.DBAD486391@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 23:35:50 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/cryptsetup:
+ security bump to version 2.3.4
+Message-ID: <20201030082144.0013A86609@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b18bd17aab0e916d5961bb21870a238e47ff4b7
+commit: https://git.buildroot.net/buildroot/commit/?id=635b00240191931ebd85ee905b84fde73d65750b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
-PIDFile"), in which we missed that nginx is still built with /var/run
-paths.
+Fix CVE-2020-14382: A vulnerability was found in upstream release
+cryptsetup-2.2.0 where, there's a bug in LUKS2 format validation code,
+that is effectively invoked on every device/image presenting itself as
+LUKS2 container. The bug is in segments validation code in file
+'lib/luks2/luks2_json_metadata.c' in function
+hdr_validate_segments(struct crypt_device *cd, json_object *hdr_jobj)
+where the code does not check for possible overflow on memory allocation
+used for intervals array (see statement "intervals = malloc(first_backup
+* sizeof(*intervals));"). Due to the bug, library can be *tricked* to
+expect such allocation was successful but for far less memory then
+originally expected. Later it may read data FROM image crafted by an
+attacker and actually write such data BEYOND allocated memory.
 
-This commit changes the compile options to use /run instead of
-/var/run for pid and lock file to make it consistent.
+https://mirrors.edge.kernel.org/pub/linux/utils/cryptsetup/v2.3/v2.3.4-ReleaseNotes
 
-Further dropping the passing of the pid option in the service file as
-this isn't neccessary. Neither debian nor nginx default .service does
-it.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d200ceffb2eab5c097684c5b9a2e6c6097b1f698)
+(cherry picked from commit baa28856f15723a1c492d8afbe9e3be797d53659)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.mk      | 4 ++--
- package/nginx/nginx.service | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 6b0b318247..64dc71fb90 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -49,8 +49,8 @@ NGINX_CONF_OPTS += \
- 	--prefix=/usr \
- 	--conf-path=/etc/nginx/nginx.conf \
- 	--sbin-path=/usr/sbin/nginx \
--	--pid-path=/var/run/nginx.pid \
--	--lock-path=/var/run/lock/nginx.lock \
-+	--pid-path=/run/nginx.pid \
-+	--lock-path=/run/lock/nginx.lock \
- 	--user=www-data \
- 	--group=www-data \
- 	--error-log-path=/var/log/nginx/error.log \
-diff --git a/package/nginx/nginx.service b/package/nginx/nginx.service
-index 9fd215fd3e..f203cecdc0 100644
---- a/package/nginx/nginx.service
-+++ b/package/nginx/nginx.service
-@@ -6,10 +6,10 @@ After=syslog.target network.target
- Type=forking
- PIDFile=/run/nginx.pid
- ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
--ExecStartPre=/usr/sbin/nginx -t -q -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecStart=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;'
--ExecReload=/usr/sbin/nginx -g 'pid /var/run/nginx.pid; daemon on; master_process on;' -s reload
--ExecStop=/usr/sbin/nginx -g 'pid /var/run/nginx.pid;' -s quit
-+ExecStartPre=/usr/sbin/nginx -t -q -g 'daemon on; master_process on;'
-+ExecStart=/usr/sbin/nginx -g 'daemon on; master_process on;'
-+ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
-+ExecStop=/usr/sbin/nginx -s quit
- PrivateDevices=yes
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index c47d701baa..3b58345611 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.3/sha256sums.asc
+-sha256  3bca4ffe39e2f94cef50f6ea65acb873a6dbce5db34fc6bcefe38b6d095e82df  cryptsetup-2.3.3.tar.xz
++sha256  9d16eebb96b53b514778e813019b8dd15fea9fec5aafde9fae5febf59df83773  cryptsetup-2.3.4.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 68cc1543dc..a2abf776cc 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- [Install]
+ CRYPTSETUP_VERSION_MAJOR = 2.3
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c libargon2 \
