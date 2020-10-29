@@ -1,58 +1,71 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 29 Oct 2020 14:41:32 +0100
-Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 1.6
-In-Reply-To: <20201029141343.18ad9770@windsurf.home>
-References: <20201029135017.652486f7@windsurf.home>
- <7e-5f9abe80-1-60a72780@84134619>
- <20201029141343.18ad9770@windsurf.home>
-Message-ID: <CAMRc=MfTQ4o8TTV6UDR27dGBPqbUJA9EAFykdO0Rb3LDjp4Gkw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 29 Oct 2020 14:58:59 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: fix
+ uclibc build with openldap
+Message-ID: <20201029134637.5D86284545@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 29, 2020 at 2:13 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Thu, 29 Oct 2020 14:06:45 +0100
-> "Michael Nosthoff" <buildroot@heine.tech> wrote:
->
-> > At least that's how I interpret this comment in the NEWS for 1.5 [0]:
-> >
-> > - added support for bias flags which are a new functionality first available in
-> >   linux v5.5; subsequently the library now requires v5.5 kernel headers to
-> >   build;
-> >
-> > But maybe Bartosz can clarify on this, as he basically is the "upstream" :)
->
-> Wow, actually things are even worse. The latest upstream commit goes
-> like this:
->
->     treewide: make linux v5.10 a hard requirement for libgpiod
->
->     The library now uses v2 of the GPIO uAPI. The new user interface is
->     scheduled for release as part of linux v5.10. Linux v5.10-rc1 is now
->     tagged so make v5.10 headers a requirement for the build and update
->     all tests to check for the correct version.
->
->     Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->
-> So a userspace package requires a not-even released Linux kernel
-> version, without backward compatibility for older kernel versions. This
-> seems like a really really odd decision from upstream :-/
->
+commit: https://git.buildroot.net/buildroot/commit/?id=c983f930913bc0073d155d339d029213c38f9fb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Thomas,
+Fixes:
+ - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
 
-This is the master branch - it's not meant for being deployed in
-distros - this is what stable branches are for. We now have a new ABI
-in linux and libgpiod has just started a new release cycle that will
-break the API and ABI of the library - hence the version bump to v2.0
-from v1.6 - in order to use new kernel features.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 990c7bfd463d4bbc602c0172692e71928a73c7ae)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ge_test.c-include-stdint.h-before-cmoka.h.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-v2.0 of libgpiod will no longer support older kernels but I'll support
-v1.6 indefinitely for older kernels and v1.4 as long as v5.4 is
-supported.
-
-Bartosz
+diff --git a/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+new file mode 100644
+index 0000000000..e63f43c290
+--- /dev/null
++++ b/package/samba4/0004-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch
+@@ -0,0 +1,40 @@
++From b2ea5dc3639d68b878c6534f4992da446dbbf2d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 16 May 2020 18:15:38 +0200
++Subject: [PATCH] ldap_message_test.c: include stdint.h before cmoka.h
++
++This fix the following build failure on uclibc:
++
++In file included from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/include/stdint.h:9:0,
++                 from /home/giuliobenetti/autobuild/run/instance-1/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/inttypes.h:27,
++                 from ../../lib/replace/../replace/replace.h:64,
++                 from ../../source4/include/includes.h:23,
++                 from ../../libcli/ldap/tests/ldap_message_test.c:41:
++/home/giuliobenetti/autobuild/run/instance-1/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/stdint.h:122:27: error: conflicting types for 'uintptr_t'
++ typedef unsigned long int uintptr_t;
++                           ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ libcli/ldap/tests/ldap_message_test.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libcli/ldap/tests/ldap_message_test.c b/libcli/ldap/tests/ldap_message_test.c
++index c5aacd4bc6b..51331e5c600 100644
++--- a/libcli/ldap/tests/ldap_message_test.c
+++++ b/libcli/ldap/tests/ldap_message_test.c
++@@ -34,6 +34,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
++-- 
++2.26.2
++
