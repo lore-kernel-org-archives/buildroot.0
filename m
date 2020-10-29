@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 23:01:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nginx: use /run
+Date: Thu, 29 Oct 2020 23:19:12 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/nginx: use /run
  instead of /var/run
-Message-ID: <20201030082129.9B981842C5@busybox.osuosl.org>
+Message-ID: <20201030082143.DBAD486391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdaa66edcb1dc3e7a58b2032bc4b7cfff560e94e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8b18bd17aab0e916d5961bb21870a238e47ff4b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 This is a follow-up to 4027ba29f448 ("package/nginx: use /run for
 PIDFile"), in which we missed that nginx is still built with /var/run
@@ -33,10 +33,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 9bbb3fc201..60d7e729e3 100644
+index 6b0b318247..64dc71fb90 100644
 --- a/package/nginx/nginx.mk
 +++ b/package/nginx/nginx.mk
-@@ -50,8 +50,8 @@ NGINX_CONF_OPTS += \
+@@ -49,8 +49,8 @@ NGINX_CONF_OPTS += \
  	--prefix=/usr \
  	--conf-path=/etc/nginx/nginx.conf \
  	--sbin-path=/usr/sbin/nginx \
