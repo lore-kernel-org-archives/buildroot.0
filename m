@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 19:59:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/webkitgtk:
- disable JIT for ARMv5 and ARMv6
-Message-ID: <20201029185148.1EEC284239@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 18:36:13 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/docker-engine:
+ bump to version 19.03.13
+Message-ID: <20201029185147.E6BC68026B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58f1bc3d958c33c8362ea733c6eb6e35a695eb03
+commit: https://git.buildroot.net/buildroot/commit/?id=23fe375282689f395ec61f5120d49e1813c65dd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-WebKit's JavaScriptCore does not support using JIT nor the LLint
-interpreter on ARMv5 and ARMv6, so add those two cases when checking
-for target CPUs which need to use the CLoop interpreter.
+The Docker developers appear to no longer be tagging releases on the
+docker/engine repository on GitHub, but are tagging releases on the main
+moby/moby repository, which still is the true home of "dockerd."
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+This commit changes the upstream repo to moby/moby with no changes required.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+
+v1 -> v2:
+
+ - updated hash
+ - changed upstream to moby/moby
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 594eb3df506957a9f52eb8bfef6482149d0c28e5)
+(cherry picked from commit 5ebd4d9a61435e61561344ce5eca8d6960f2a8bd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index b760a1f2bf..18b4269322 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -105,14 +105,16 @@ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
- endif
- 
- # JIT is not supported for MIPS r6, but the WebKit build system does not
--# have a check for these processors. Disable JIT forcibly here and use
--# the CLoop interpreter instead.
-+# have a check for these processors. The same goes for ARMv5 and ARMv6.
-+# Disable JIT forcibly here and use the CLoop interpreter instead.
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 3283e4eb48..e7d5932687 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	858e4e74ee0097bcbdb71d737e268dfcfd1970efa4a1600354253b02fd403e39  docker-engine-19.03.12.tar.gz
++sha256	f43331fef1d24e31f43392fc1fed72b48fc17fd432d341d6eb1f68ca11383406  docker-engine-19.03.13.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index bd5c23fc59..990897e701 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,8 +4,8 @@
  #
- # Also, we have to disable the sampling profiler, which does NOT work
- # with ENABLE_C_LOOP.
- #
--# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=191258
--ifeq ($(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
-+#                https://bugs.webkit.org/show_bug.cgi?id=172765
-+#
-+ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
- WEBKITGTK_CONF_OPTS += -DENABLE_JIT=OFF -DENABLE_C_LOOP=ON -DENABLE_SAMPLING_PROFILER=OFF
- endif
+ ################################################################################
  
+-DOCKER_ENGINE_VERSION = 19.03.12
+-DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
++DOCKER_ENGINE_VERSION = 19.03.13
++DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
