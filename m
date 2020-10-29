@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 29 Oct 2020 23:26:21 +0100
-Subject: [Buildroot] [git commit] package/unscd: bump version to 0.54
-Message-ID: <20201029221616.00F91838FE@busybox.osuosl.org>
+Date: Thu, 29 Oct 2020 23:34:06 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: remove
+ fb headers fixup
+Message-ID: <20201029222136.BD857863E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d1973c0d3de833fa07f2778f7dd85abed0259ef
+commit: https://git.buildroot.net/buildroot/commit/?id=6d21635c36dbbc4c44ec9f83663858b9b46457a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Doug Kehn <rdkehn@gmail.com>
+As it doesn't seem to be needed any longer. Also it was agreed to fix
+packages not using pkgconfig properly instead of doing this sed.
+
+Tested on i.MX6 platform with Qt5, no more issues.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/unscd/unscd.hash | 2 +-
- package/unscd/unscd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/package/unscd/unscd.hash b/package/unscd/unscd.hash
-index 671149fda2..9ed698fd2a 100644
---- a/package/unscd/unscd.hash
-+++ b/package/unscd/unscd.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  9078255b2b9c344d9a0c3333ce23dda9d745f158dde0ea2244a8c56ba93f7a40  nscd-0.53.c
-+sha256  90e12c71732474cac4d055bf9d104e599178b4e1ecb6d3b8c556eaa11f8f6447  nscd-0.54.c
-diff --git a/package/unscd/unscd.mk b/package/unscd/unscd.mk
-index c79ec44000..94b46460f6 100644
---- a/package/unscd/unscd.mk
-+++ b/package/unscd/unscd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index b6b070e4f6..fca8a4d447 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -58,15 +58,6 @@ define IMX_GPU_VIV_BUILD_CMDS
+ 	ln -sf libVDK-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVDK.so
+ endef
  
--UNSCD_VERSION = 0.53
-+UNSCD_VERSION = 0.54
- UNSCD_SOURCE = nscd-$(UNSCD_VERSION).c
- UNSCD_SITE = http://busybox.net/~vda/unscd
- UNSCD_LICENSE = GPL-2.0
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+-define IMX_GPU_VIV_FIXUP_FB_HEADERS
+-	$(SED) '39i\
+-		#if !defined(EGL_API_X11) && !defined(EGL_API_DFB) && !defined(EGL_API_FB) \n\
+-		#define EGL_API_FB \n\
+-		#endif' $(STAGING_DIR)/usr/include/EGL/eglplatform.h
+-endef
+-endif
+-
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ 	ln -sf egl_linuxfb.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+@@ -89,7 +80,6 @@ endif
+ 
+ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
+-	$(IMX_GPU_VIV_FIXUP_FB_HEADERS)
+ 	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
+ 	for lib in egl gbm glesv1_cm glesv2 vg; do \
+ 		$(INSTALL) -m 0644 -D \
