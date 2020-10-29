@@ -1,7 +1,7 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 29 Oct 2020 23:09:55 +0100
-Subject: [Buildroot] [PATCH] package/python-idna: bump to version 2.10
-Message-ID: <20201029220955.5158-1-m.niestroj@grinn-global.com>
+Date: Thu, 29 Oct 2020 23:10:25 +0100
+Subject: [Buildroot] [PATCH] package/python-urllib3: bump to version 1.25.11
+Message-ID: <20201029221025.5358-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/python-idna/python-idna.hash | 4 ++--
- package/python-idna/python-idna.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 5 +++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 50897f045b..c5f7378fda 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/idna/json
--md5  870b8b80267f00f0faf1b7ba4bdbf14e  idna-2.9.tar.gz
--sha256  7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb  idna-2.9.tar.gz
-+md5  7a910c706db30d758f377db2762c0f9a  idna-2.10.tar.gz
-+sha256  b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6  idna-2.10.tar.gz
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 6be3671a3c..e29966672a 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/urllib3/json
+-sha256	91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a  urllib3-1.25.10.tar.gz
++# md5, sha256 from https://pypi.org/pypi/urllib3/json
++md5  d47dd21a6e66a03c3633cac468ffd010  urllib3-1.25.11.tar.gz
++sha256  8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2  urllib3-1.25.11.tar.gz
  # Locally computed sha256 checksums
- sha256  412014420d2473dba06117c3d4d9e0eecaa6dde0ca30cd951f4ec2be39426f32  LICENSE.rst
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index eb4c1036cf..b4d9839e29 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
+ sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index e64ff136ab..88e8d2097b 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IDNA_VERSION = 2.9
-+PYTHON_IDNA_VERSION = 2.10
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/cb/19/57503b5de719ee45e83472f339f617b0c01ad75cba44aba1e4c97c2b0abd
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70
- PYTHON_IDNA_LICENSE = BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
- PYTHON_IDNA_SETUP_TYPE = setuptools
+-PYTHON_URLLIB3_VERSION = 1.25.10
++PYTHON_URLLIB3_VERSION = 1.25.11
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/76/d9/bbbafc76b18da706451fa91bc2ebe21c0daf8868ef3c30b869ac7cb7f01d
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
 -- 
 2.29.1
