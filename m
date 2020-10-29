@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 16:57:32 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv3: fix typo
+Date: Thu, 29 Oct 2020 16:53:17 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/opencv3: fix typo
  in OPENCV_WARNINGS_ARE_ERRORS
-Message-ID: <20201029154638.0DC3984202@busybox.osuosl.org>
+Message-ID: <20201029154648.A6CFF86439@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33f02d588f4404f8221b14ca957e1e5c8833f2ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2f22dd1f9f7f6f1be77fa528565eb88ca80df4f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 OPENCV3_WARNINGS_ARE_ERRORS option does not exist so rename it to
 OPENCV_WARNINGS_ARE_ERRORS (even if it is already disabled by default)
@@ -24,7 +24,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 41e3f94e85..d1d504a608 100644
+index 70b0a4039f..f36966ebac 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
 @@ -53,7 +53,7 @@ OPENCV3_CONF_OPTS += \
