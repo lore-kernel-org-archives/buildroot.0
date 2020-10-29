@@ -1,25 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 Oct 2020 14:59:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: fix uclibc build with
- openldap
-In-Reply-To: <20200516162731.1708912-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 16 May 2020 18:27:31 +0200")
-References: <20200516162731.1708912-1-fontaine.fabrice@gmail.com>
-Message-ID: <87blgli14i.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 29 Oct 2020 09:04:52 -0500
+Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc 2.31
+Message-ID: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Peter,
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/09e84d15efe755bdefa9f8c6b8355c49ddbc2f65
+Would you mind picking over the following commit to add busybox glibc
+2.31 support to the 2020.02LTS?
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit 13f2d688a24f47446af236829bd6ca194d5aea5b
+Author: Carlos Santos <unixmania@gmail.com>
+Date:   Sun Mar 22 14:13:01 2020 -0300
+package/busybox: fix build with glibc 2.31
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+The known [1,2] issue was found when using a newer external toolchain
+with the following configuration and the 2020.02.7 tag.
+BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2020.08-1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
 
--- 
-Bye, Peter Korsgaard
+Note: I'll have additional individual patches coming for openssh and
+strace as those were fixed for a similar issue but through version
+bumps on master.  Is there some backstory (beyond the patchwork
+submissions for master) on other attempts to bring glibc 2.31 support
+to LTS?
+
+Best Regards,
+Matt
+
+
+Ref:
+[1] http://lists.busybox.net/pipermail/buildroot/2020-February/272657.html
+[2] https://patchwork.ozlabs.org/project/buildroot/list/?series=165949&archive=both&state=*
