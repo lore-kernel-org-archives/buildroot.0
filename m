@@ -1,8 +1,7 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Thu, 29 Oct 2020 23:09:25 +0100
-Subject: [Buildroot] [PATCH] package/python-certifi: bump to version
- 2020.6.20
-Message-ID: <20201029220925.4952-1-m.niestroj@grinn-global.com>
+Date: Thu, 29 Oct 2020 23:09:55 +0100
+Subject: [Buildroot] [PATCH] package/python-idna: bump to version 2.10
+Message-ID: <20201029220955.5158-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,37 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
+ package/python-idna/python-idna.hash | 4 ++--
+ package/python-idna/python-idna.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 698653d3c2..8543393d83 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 50897f045b..c5f7378fda 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  8e90cfd6fc5ddd7e3011958d8a7fcab4  certifi-2020.4.5.1.tar.gz
--sha256  51fcb31174be6e6664c5f69e3e1691a2d72a1a12e90f872cbdb1567eb47b6519  certifi-2020.4.5.1.tar.gz
-+md5  89525ece725d674d91b0c43007d2a47e  certifi-2020.6.20.tar.gz
-+sha256  5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3  certifi-2020.6.20.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  870b8b80267f00f0faf1b7ba4bdbf14e  idna-2.9.tar.gz
+-sha256  7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb  idna-2.9.tar.gz
++md5  7a910c706db30d758f377db2762c0f9a  idna-2.10.tar.gz
++sha256  b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6  idna-2.10.tar.gz
  # Locally computed sha256 checksums
- sha256  6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 324657dea6..faa0a0a89f 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ sha256  412014420d2473dba06117c3d4d9e0eecaa6dde0ca30cd951f4ec2be39426f32  LICENSE.rst
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index eb4c1036cf..b4d9839e29 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2020.4.5.1
-+PYTHON_CERTIFI_VERSION = 2020.6.20
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/b8/e2/a3a86a67c3fc8249ed305fc7b7d290ebe5e4d46ad45573884761ef4dea7b
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/40/a7/ded59fa294b85ca206082306bba75469a38ea1c7d44ea7e1d64f5443d67a
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_IDNA_VERSION = 2.9
++PYTHON_IDNA_VERSION = 2.10
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/cb/19/57503b5de719ee45e83472f339f617b0c01ad75cba44aba1e4c97c2b0abd
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
+ PYTHON_IDNA_SETUP_TYPE = setuptools
 -- 
 2.29.1
