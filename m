@@ -1,7 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Fri, 30 Oct 2020 15:29:45 +0100
-Subject: [Buildroot] [PATCH] package/uhd: fix build with ARM
-Message-ID: <20201030142945.1190031-1-gwenj@trabucayre.com>
+Date: Fri, 30 Oct 2020 16:31:45 +0100
+Subject: [Buildroot] [PATCH] package/uhd: fix build with riscV
+Message-ID: <20201030153145.1198183-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +10,54 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-UHD has two issues with ARM:
-1/ NEON_SIMD_ENABLE is always enabled when architecture is ARM. But NEON isn't
-   necessarily support in the CPU
-2/ when NEON is supported -mfpu=neon must be passed to the compiler (not
-   automatically done by UHD)
+UHD with riscV CPU fails to build with error like:
+/xxx/output-1/build/uhd-3.15.0.0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
+  190 | #error msgpack-c supports only big endian and little endian
+      |  ^~~~~
+
+msgpack, required by MPMD, support many architecture but not riscV, and,
+consequently is unable to determine the endianess.
+
+This patch add a depends on !(BR2_RISCV_64 || BR2_RISCV_32) to disable MPMD
+for riscV target.
+Since E300 and E320 needs MPMD, the select is replaced by depends on
 
 Fixes:
-- http://autobuild.buildroot.net/results/2519bd075b8c021b440677297b32f16b1c3cc3dd/
-- http://autobuild.buildroot.net/results/99d9979be4f37c42390c87b1afd4cd33bac07f5e/
-- http://autobuild.buildroot.net/results/cabc7a87ee869d6bac7d092c1a4fcfcdac22a96e/
+- http://autobuild.buildroot.net/results/b501a8bf90f2eb10c3f98f26a52539392d320088/
+- http://autobuild.buildroot.net/results/f7ae898c6ecdfa568eb97f7cae6447e97ce306a0/
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/uhd/uhd.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/uhd/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
-index ec0ec03e9f..17d0dd569b 100644
---- a/package/uhd/uhd.mk
-+++ b/package/uhd/uhd.mk
-@@ -38,6 +38,18 @@ UHD_CONF_OPTS = \
- 	-DENABLE_UTILS=OFF \
- 	-DENABLE_X300=OFF
+diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+index 32cb4cf89d..cf4f470629 100644
+--- a/package/uhd/Config.in
++++ b/package/uhd/Config.in
+@@ -45,13 +45,13 @@ config BR2_PACKAGE_UHD_B200
  
-+# As soon as architecture is ARM, uhd will try
-+# to use it. But this doesn't necessarily
-+# mean we have NEON support in our CPU.
-+# When CPU support NEON -mfpu=neon must be added to CXX_FLAGS
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+UHD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -mfpu=neon"
-+UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=ON
-+else
-+UHD_CONF_OPTS += -Dhave_mfpu_neon=0
-+UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_ORC),y)
- UHD_DEPENDENCIES += orc
- endif
+ config BR2_PACKAGE_UHD_E300
+ 	bool "E300 support"
+-	select BR2_PACKAGE_UHD_MPMD
++	depends on BR2_PACKAGE_UHD_MPMD
+ 	help
+ 	  enable E300 support
+ 
+ config BR2_PACKAGE_UHD_E320
+ 	bool "E320 support"
+-	select BR2_PACKAGE_UHD_MPMD
++	depends on BR2_PACKAGE_UHD_MPMD
+ 	help
+ 	  enable E320 support
+ 
+@@ -62,6 +62,7 @@ config BR2_PACKAGE_UHD_EXAMPLES
+ 
+ config BR2_PACKAGE_UHD_MPMD
+ 	bool "MPMD support"
++	depends on !(BR2_RISCV_64 || BR2_RISCV_32)
+ 	help
+ 	  enable MPMD support
+ 
 -- 
 2.20.1
