@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Oct 2020 09:36:06 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: disable
+Date: Fri, 30 Oct 2020 09:36:02 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/gcc: disable
  fortran use of libquadmath
-Message-ID: <20201030082350.007D8841E0@busybox.osuosl.org>
+Message-ID: <20201030082355.D681486373@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b01baed229fa998367a75352c068d412de52840f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=83c6564a37f4c043a1d9ad5e14b7bee26376ce6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 The GCC package has a default conf option of disabling libquadmath and
 the toolchain dependencies selectively enabled it if i386 / x64.
@@ -44,10 +44,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index b58f17575a..54b69b9d20 100644
+index 1eab41a87c..f061d36d5b 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -123,7 +123,7 @@ endif
+@@ -116,7 +116,7 @@ endif
  ifeq ($(BR2_USE_WCHAR)$(BR2_TOOLCHAIN_HAS_LIBQUADMATH),yy)
  HOST_GCC_COMMON_CONF_OPTS += --enable-libquadmath
  else
@@ -55,4 +55,4 @@ index b58f17575a..54b69b9d20 100644
 +HOST_GCC_COMMON_CONF_OPTS += --disable-libquadmath --disable-libquadmath-support
  endif
  
- # libsanitizer requires wordexp, not in default uClibc config. Also
+ # Disable libsanitizer due to a build issue with gcc 7.5 and glibc 2.31.
