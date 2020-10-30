@@ -1,110 +1,167 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 30 Oct 2020 08:50:40 +0100
-Subject: [Buildroot] [PATCH 3/8] package/optee-client: bump to version 3.11.0
+Date: Fri, 30 Oct 2020 08:50:43 +0100
+Subject: [Buildroot] [PATCH 6/8] package/optee-test: bump to version 3.11.0
 In-Reply-To: <20201030075045.6960-1-etienne.carriere@linaro.org>
 References: <20201030075045.6960-1-etienne.carriere@linaro.org>
-Message-ID: <20201030075045.6960-3-etienne.carriere@linaro.org>
+Message-ID: <20201030075045.6960-6-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE Client package version to OP-TEE release 3.11.0.
-Remove local patch file since issue addressed since.
+Bump OP-TEE Test package version to OP-TEE release 3.11.0.
+Add dependency on BR2_INSTALL_LIBSTDCPP since C++ support is needed
+to build some OP-TEE test trusted applications.
+Remove local patch files since issues addressed since.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- ...teec-CMakeLists.txt-fix-static-build.patch | 55 -------------------
- package/optee-client/optee-client.hash        |  4 +-
- package/optee-client/optee-client.mk          |  2 +-
- 3 files changed, 3 insertions(+), 58 deletions(-)
- delete mode 100644 package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+ ...-xtest-fix-generic-argument-handling.patch | 32 -------------
+ ...-1027-1028-skip-tests-when-test-leve.patch | 47 -------------------
+ package/optee-test/Config.in                  |  6 ++-
+ package/optee-test/optee-test.hash            |  4 +-
+ package/optee-test/optee-test.mk              |  2 +-
+ 5 files changed, 7 insertions(+), 84 deletions(-)
+ delete mode 100644 package/optee-test/0001-xtest-fix-generic-argument-handling.patch
+ delete mode 100644 package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch
 
-diff --git a/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch b/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+diff --git a/package/optee-test/0001-xtest-fix-generic-argument-handling.patch b/package/optee-test/0001-xtest-fix-generic-argument-handling.patch
 deleted file mode 100644
-index 5307c7032c..0000000000
---- a/package/optee-client/0001-libckteec-CMakeLists.txt-fix-static-build.patch
+index c61dc49c5c..0000000000
+--- a/package/optee-test/0001-xtest-fix-generic-argument-handling.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--From dedd04034fd246c5726ad875e8207c821e9471b7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 15 Jul 2020 00:09:21 +0200
--Subject: [PATCH] libckteec/CMakeLists.txt: fix static build
+@@ -1,32 +0,0 @@
+-From e1af176af2bb274745e9b0d43456763f8946f107 Mon Sep 17 00:00:00 2001
+-From: Etienne Carriere <etienne.carriere@linaro.org>
+-Date: Mon, 25 May 2020 13:09:59 +0200
+-Subject: [PATCH] xtest: fix generic argument handling
 -
--Remove SHARED from add_library call to avoid the following build failure
--when the toolchain does not support shared library:
+-Fix position of last generic argument badly handled that makes -d, -l or
+--t argument being treated also as if it was the first test ID to consider
+-in the filtered test IDs list.
 -
--[ 78%] Linking C shared library libckteec.so
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(close.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open64.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(libc-cancellation.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux[ 84%] Building C object tee-supplicant/CMakeFiles/tee-supplicant.dir/src/teec_ta_load.c.o
---uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(open.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in /home/buildroot/autobuild/instance-3/output-1/host/microblazeel-buildroot-linux-uclibc/sysroot/usr/lib/libc.a(__syscall_fcntl.os)(.eh_frame) prevents .eh_frame_hdr table being created
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: further warnings about FDE encoding preventing .eh_frame_hdr generation dropped
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-microblaze.c:1542
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/crtbeginT.o: probably compiled without -fPIC?
--/home/buildroot/autobuild/instance-3/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: final link failed: bad value
--collect2: error: ld returned 1 exit status
--libckteec/CMakeFiles/ckteec.dir/build.make:144: recipe for target 'libckteec/libckteec.so.0.1.0' failed
--
--This build failure is raised on version 3.9.0 since
--https://github.com/ffontaine/optee_client/commit/fa679fc6f1f0c6240513ec69c63f0f89c2c4dd99
--
--Fixes:
-- - http://autobuild.buildroot.org/results/fe2d0f5a956bf23635e51258f92d9ab2e5af7941
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/OP-TEE/optee_client/pull/215]
+-Fixes: 66542a1bb4e0 ("xtest: exclude tests with -x")
+-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+-Acked-by: Jerome Forissier <jerome@forissier.org>
 ----
-- libckteec/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- host/xtest/xtest_main.c | 2 --
+- 1 file changed, 2 deletions(-)
 -
--diff --git a/libckteec/CMakeLists.txt b/libckteec/CMakeLists.txt
--index f0e14d1..615c9fe 100644
----- a/libckteec/CMakeLists.txt
--+++ b/libckteec/CMakeLists.txt
--@@ -33,7 +33,7 @@ set (SRC
-- ################################################################################
-- # Built library
-- ################################################################################
---add_library (ckteec SHARED ${SRC})
--+add_library (ckteec ${SRC})
+-diff --git a/host/xtest/xtest_main.c b/host/xtest/xtest_main.c
+-index 3dff2fe..1e566fa 100644
+---- a/host/xtest/xtest_main.c
+-+++ b/host/xtest/xtest_main.c
+-@@ -188,8 +188,6 @@ int main(int argc, char *argv[])
+- 		}
+- 	}
+- next:
+--	if (last_gen_option > 1)
+--		last_gen_option--;
 - 
-- set_target_properties (ckteec PROPERTIES
-- 	VERSION ${PROJECT_VERSION}
+- 	for (index = last_gen_option; index < argc; index++) {
+- 		if (!strcmp(argv[index], "-x")) {
 --- 
--2.27.0
+-2.17.1
 -
-diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
-index b08ebc38c0..d8e507dba7 100644
---- a/package/optee-client/optee-client.hash
-+++ b/package/optee-client/optee-client.hash
+diff --git a/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch b/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch
+deleted file mode 100644
+index d45644426e..0000000000
+--- a/package/optee-test/0002-xtest-regression-1027-1028-skip-tests-when-test-leve.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 899099be7f522d59baa51d26077c0f5804161cfe Mon Sep 17 00:00:00 2001
+-From: Etienne Carriere <etienne.carriere@linaro.org>
+-Date: Fri, 29 May 2020 15:27:06 +0200
+-Subject: [PATCH] xtest: regression 1027/1028: skip tests when test level is 0
+-
+-Skip regression tests 1027 and 1028 when xtest runs with test level 0
+-since these tests expect changes in Linux kernel that are not available
+-in mainline kernel source trees, at least up to v5.7.
+-
+-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+----
+- host/xtest/regression_1000.c | 12 ++++++++++++
+- 1 file changed, 12 insertions(+)
+-
+-diff --git a/host/xtest/regression_1000.c b/host/xtest/regression_1000.c
+-index a70a722..2b0140c 100644
+---- a/host/xtest/regression_1000.c
+-+++ b/host/xtest/regression_1000.c
+-@@ -2096,6 +2096,12 @@ static void xtest_tee_test_1027(ADBG_Case_t *c)
+- 	TEEC_UUID uuid_ns = { };
+- 	char uuid_name[TEE_UUID_NS_NAME_SIZE] = { };
+- 
+-+	/* Skip test at level 0 since its dependency on patched Linux kernel */
+-+	if (level == 0) {
+-+		Do_ADBG_Log("Test level 0: skip regression 1027");
+-+		return;
+-+	}
+-+
+- 	result = xtest_uuid_from_str(&uuid_ns, client_uuid_linux_ns);
+- 
+- 	if (!ADBG_EXPECT_TEEC_SUCCESS(c, result))
+-@@ -2159,6 +2165,12 @@ static void xtest_tee_test_1028(ADBG_Case_t *c)
+- 	char uuid_name[TEE_UUID_NS_NAME_SIZE] = { };
+- 	uint32_t group = 0;
+- 
+-+	/* Skip test at level 0 since its dependency on patched Linux kernel */
+-+	if (level == 0) {
+-+		Do_ADBG_Log("Test level 0: skip regression 1027");
+-+		return;
+-+	}
+-+
+- 	group = getegid();
+- 
+- 	result = xtest_uuid_from_str(&uuid_ns, client_uuid_linux_ns);
+--- 
+-2.17.1
+-
+diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
+index a40f1e9069..d1085b43d9 100644
+--- a/package/optee-test/Config.in
++++ b/package/optee-test/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPTEE_TEST
+ 	bool "optee-test"
+ 	depends on BR2_TARGET_OPTEE_OS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # optee-client
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_OPTEE_CLIENT
+ 	select BR2_TARGET_OPTEE_OS_SDK
+ 	help
+@@ -22,6 +23,7 @@ config BR2_PACKAGE_OPTEE_TEST
+ 
+ 	  http://github.com/OP-TEE/optee_test
+ 
+-comment "optee-test needs a toolchain w/ threads"
++comment "optee-test needs a toolchain w/ threads and C++"
+ 	depends on BR2_TARGET_OPTEE_OS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREAD
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 3a769ac4c2..52e2373bf7 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_client/archive/3.9.0.tar.gz
--sha256 1b072e6be8a697656e9fe34499789bbd4132b3720f8d1b95c659e8e6c5873654  optee-client-3.9.0.tar.gz
-+# From https://github.com/OP-TEE/optee_client/archive/3.11.0.tar.gz
-+sha256 91f8ec191cd999ee666b6203ec376415d5dc90a8a9955f3d5fce1f48df77169b  optee-client-3.11.0.tar.gz
+-# From https://github.com/OP-TEE/optee_test/archive/3.9.0.tar.gz
+-sha256 59be1c97cdef7a886bdf4c50f7bf86354be68a68f6ffd43cd5ce4bb96156f402  optee-test-3.9.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.11.0.tar.gz
++sha256 54d4b7e2ad22cd409ee8e25e990c1878690b1b5eb8843f649d12022888186a53  optee-test-3.11.0.tar.gz
  # Locally computed
- sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-index 842ba8a81a..8108fc2130 100644
---- a/package/optee-client/optee-client.mk
-+++ b/package/optee-client/optee-client.mk
+ sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index fb6c9fcc50..1f4f586672 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPTEE_CLIENT_VERSION = 3.9.0
-+OPTEE_CLIENT_VERSION = 3.11.0
- OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
- OPTEE_CLIENT_LICENSE = BSD-2-Clause
- OPTEE_CLIENT_LICENSE_FILES = LICENSE
+-OPTEE_TEST_VERSION = 3.9.0
++OPTEE_TEST_VERSION = 3.11.0
+ OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+ OPTEE_TEST_LICENSE_FILES = LICENSE.md
 -- 
 2.17.1
