@@ -1,29 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Oct 2020 09:46:37 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: change Julien Olivain's e-mail
- address
-In-Reply-To: <20201026082718.497076-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 26 Oct 2020 09:27:17 +0100")
-References: <20201026082718.497076-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87pn50drte.fsf@dell.be.48ers.dk>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 30 Oct 2020 09:47:42 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5BPATCH_1/3=5D_package/libabseil-cpp=3A_e?=
+ =?utf-8?q?nforce_C++11?=
+In-Reply-To: <20201030091522.53c77303@windsurf.home>
+Message-ID: <52-5f9bd300-7-71e23380@170443389>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi,
+ 
+On Friday, October 30, 2020 09:15 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote: 
+ 
+> 
+> In fact, let's turn this around: if abseil uses C++11 features, then it
+> should by itself pass -std=c++11 to the compiler, by setting the
+> appropriate CXX_STANDARD in its CMakeLists.txt. There is no reason
+> Buildroot should have to help here. So isn't an abseil CMakeLists.txt
+> fix (submitted upstream) more appropriate here ?
+> 
 
- > Julien's e-mail @cotds.org is no longer working:
- > <juju@cotds.org>: host mail.cotds.org[194.117.244.136] said: 451 4.3.5 Server
- >     configuration problem (in reply to RCPT TO command)
+Actually this was in abseil and they removed it intentionally in [0].
+So I don't think they might have interest in picking up a patch that would reintroduce that...
 
- > Use his @oss.nxp.com e-mail address instead.
+Regards,
+Michael
 
- > Cc: Julien Olivain <julien.olivain@oss.nxp.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+[0] https://github.com/abseil/abseil-cpp/commit/c6954897f7ece5011f0126db9117361dc1a6ff36#
