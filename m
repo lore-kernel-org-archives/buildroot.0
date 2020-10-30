@@ -1,41 +1,48 @@
-From: Florian La Roche <florian.laroche@googlemail.com>
-Date: Fri, 30 Oct 2020 11:24:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rt-tests: bump to version 1.9
-Message-ID: <20201030102426.47787-1-Florian.LaRoche@gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Fri, 30 Oct 2020 12:25:04 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/libabseil-cpp: enforce C++11
+Message-ID: <20201030112506.489-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
----
- package/rt-tests/rt-tests.hash | 2 +-
- package/rt-tests/rt-tests.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Abseil needs at least c++11 but removed the fallback when not set in [0].
+So we need to do this.
 
-diff --git a/package/rt-tests/rt-tests.hash b/package/rt-tests/rt-tests.hash
-index 8080415802..66834006d8 100644
---- a/package/rt-tests/rt-tests.hash
-+++ b/package/rt-tests/rt-tests.hash
-@@ -1,4 +1,4 @@
- # From https://mirrors.edge.kernel.org/pub/linux/utils/rt-tests/sha256sums.asc
--sha256 bda8f08e13d1022e7de6faf8762b4e831afc4e85f79bdf9c9101f84225b23f53  rt-tests-1.8.tar.xz
-+sha256 611c5a2b02964ab778e037ae16402e8d1cb8456628c7ca38d85a7548f33e52e3  rt-tests-1.9.tar.xz
- # locally computed hash
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index c17b7fe982..26c257213b 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -6,7 +6,7 @@
+[0] https://github.com/abseil/abseil-cpp/commit/c6954897f7ece5011f0126db9117361dc1a6ff36
+
+Fixes:
+  http://autobuild.buildroot.net/results/5780d5e21e5e9c0ba86cc422ef995f45dc83cc4c
+  http://autobuild.buildroot.net/results/8138c63fc13940e1b97f07f24752b199f88ccfa8
+  http://autobuild.buildroot.net/results/f8eda966c6400c242680db378c8944444d89d5c5
+  http://autobuild.buildroot.net/results/38e9427d995e16bc4876f9fdc890c42e4fd04c06
+  http://autobuild.buildroot.net/results/4e99415728a6f3c6b396a9872924262652f77996
+  http://autobuild.buildroot.net/results/1830577843772bdfd6e310b4d361aa1edf5969d6
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/libabseil-cpp/libabseil-cpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index dfcf892f65..9cff8f0ff4 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -11,11 +11,13 @@ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+ LIBABSEIL_CPP_INSTALL_STAGING = YES
  
- RT_TESTS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/rt-tests
- RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
--RT_TESTS_VERSION = 1.8
-+RT_TESTS_VERSION = 1.9
- RT_TESTS_LICENSE = GPL-2.0+
- RT_TESTS_LICENSE_FILES = COPYING
- RT_TESTS_DEPENDENCIES = numactl
+ LIBABSEIL_CPP_CONF_OPTS = \
++	-DCMAKE_CXX_STANDARD=11 \
+ 	-DABSL_ENABLE_INSTALL=ON \
+ 	-DABSL_USE_GOOGLETEST_HEAD=OFF \
+ 	-DABSL_RUN_TESTS=OFF
+ 
+ HOST_LIBABSEIL_CPP_CONF_OPTS = \
++	-DCMAKE_CXX_STANDARD=11 \
+ 	-DABSL_ENABLE_INSTALL=ON \
+ 	-DABSL_USE_GOOGLETEST_HEAD=OFF \
+ 	-DABSL_RUN_TESTS=OFF
 -- 
-2.28.0
+2.25.1
