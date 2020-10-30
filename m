@@ -1,31 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Oct 2020 09:49:05 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: replace Trent Piepho's e-mail
- address
-In-Reply-To: <20201026083103.497368-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 26 Oct 2020 09:31:02 +0100")
-References: <20201026083103.497368-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87lffodrpa.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Oct 2020 09:42:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: remove Ryan
+ Coe
+Message-ID: <20201030084159.4051D8419F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e72ea47e4c8a26df4c2ef813728a13679208a085
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Trent's e-mail address is no longer working:
- > <tpiepho@impinj.com>: host us-smtp-inbound-2.mimecast.com[205.139.110.221]
- >     said: 550 Invalid Recipient -
- >     https://community.mimecast.com/docs/DOC-1369#550
- >     [7R954rMIM8GCM0FMERvPAg.us536] (in reply to RCPT TO command)
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit bbbbe9661f3fd6266e53c3c5190cba7ed9f7c0b1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
- > Use another e-mail that Trent has recently used on the mailing list.
-
- > Cc: Trent Piepho <trent.piepho@synapse.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ce99cec3b..001ad08062 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2151,11 +2151,6 @@ F:	package/python-pysnmp-mibs/
+ F:	package/python-tornado/
+ F:	package/websocketpp/
+ 
+-N:	Ryan Coe <bluemrp9@gmail.com>
+-F:	package/inadyn/
+-F:	package/libite/
+-F:	package/mariadb/
+-
+ N:	Ryan Wilkins <ryan@deadfrog.net>
+ F:	package/biosdevname/
+ 
