@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Oct 2020 09:48:36 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: replace Trent
- Piepho's e-mail address
-Message-ID: <20201030085402.5FDC57FCD0@busybox.osuosl.org>
+Date: Fri, 30 Oct 2020 09:45:57 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: change Julien
+ Olivain's e-mail address
+Message-ID: <20201030085402.534987FCD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e44e80e09bdbbb8861b770b09fe27d33a823086
+commit: https://git.buildroot.net/buildroot/commit/?id=da151b140fea0ac7d61487f1f67962edf16c2136
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Trent's e-mail address is no longer working:
+Julien's e-mail @cotds.org is no longer working:
 
-<tpiepho@impinj.com>: host us-smtp-inbound-2.mimecast.com[205.139.110.221]
-    said: 550 Invalid Recipient -
-    https://community.mimecast.com/docs/DOC-1369#550
-    [7R954rMIM8GCM0FMERvPAg.us536] (in reply to RCPT TO command)
+<juju@cotds.org>: host mail.cotds.org[194.117.244.136] said: 451 4.3.5 Server
+    configuration problem (in reply to RCPT TO command)
 
-Use another e-mail that Trent has recently used on the mailing list.
+Use his @free.fr e-mail address instead.
 
-Cc: Trent Piepho <trent.piepho@synapse.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1c20802d4b5de5836b2ab6000a4c5e273711a8aa)
+[yann.morin.1998 at free.fr: adjust email address after Julien's review]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 1194b5c81a8e4f1e9d85de6d5833e3ce21f919d8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  DEVELOPERS | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index acc754fc84..571413279e 100644
+index 7c99812025..acc754fc84 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2568,7 +2568,7 @@ F:	package/waf/
- F:	support/testing/tests/package/test_crudini.py
- F:	support/testing/tests/package/test_redis.py
+@@ -1433,7 +1433,7 @@ F:	board/technologic/ts7680/
+ F:	configs/ts7680_defconfig
+ F:	package/paho-mqtt-c
  
--N:	Trent Piepho <tpiepho@impinj.com>
-+N:	Trent Piepho <trent.piepho@synapse.com>
- F:	package/libp11/
- 
- N:	Tudor Holton <buildroot@tudorholton.com>
+-N:	Julien Olivain <juju@cotds.org>
++N:	Julien Olivain <ju.o@free.fr>
+ F:	board/qmtech/zynq/
+ F:	board/technexion/imx8mmpico/
+ F:	board/technexion/imx8mpico/
