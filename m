@@ -1,44 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 Oct 2020 09:48:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: replace Trent
- Piepho's e-mail address
-Message-ID: <20201030084159.6D8B782872@busybox.osuosl.org>
+Date: Fri, 30 Oct 2020 10:01:08 +0100
+Subject: [Buildroot] Building containers on host?
+In-Reply-To: <HE1PR03MB298816B86352B2A4CE807634F0190@HE1PR03MB2988.eurprd03.prod.outlook.com>
+ (Magnus Armholt's message of "Mon, 26 Oct 2020 09:32:02 +0000")
+References: <HE1PR03MB298816B86352B2A4CE807634F0190@HE1PR03MB2988.eurprd03.prod.outlook.com>
+Message-ID: <87h7qcdr57.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cecde822f4377cdb82afee7e4b769883fb83de2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Magnus" == Magnus Armholt <magnus.armholt@wapice.com> writes:
 
-Trent's e-mail address is no longer working:
+ > Hi,
+ > We are interested in using containers on our target.
+ > The reason is mainly for security and dependency isolation.
+ > Our target runs in a separated environment so we can't use a
+ > repository but instead want to ship the containers in the target
+ > image.
+ > We have done a small proof of concept package where we build a
+ > container on host, save it, deploy the compressed image to target,
+ > load it and finally launch it during target bootup.
+ > This seems to work as we expect.
+ > Currently the container is loaded and launched with docker, but in the
+ > future it would be nice to make `podman` work on the target (lets see
+ > I ever get that far).
+ > Since the package builds the container on the host, there is a host
+ > side dependency to the container building binary (currently
+ > unhandled).
+ > We would prefer to use `buildah` on host side but also `docker` would be an option(although secondary).
 
-<tpiepho@impinj.com>: host us-smtp-inbound-2.mimecast.com[205.139.110.221]
-    said: 550 Invalid Recipient -
-    https://community.mimecast.com/docs/DOC-1369#550
-    [7R954rMIM8GCM0FMERvPAg.us536] (in reply to RCPT TO command)
+ > Reading the manual my understanding is that I need to add a host side package `host-buildah`.
 
-Use another e-mail that Trent has recently used on the mailing list.
+ > Buildah is available in basically all package managers, but if
+ > building from sources there are dependencies to `runc` and `CNI`
+ > (github.com/containernetworking/plugins).
 
-Cc: Trent Piepho <trent.piepho@synapse.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1c20802d4b5de5836b2ab6000a4c5e273711a8aa)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Is the correct understanding that I should add 3 host side packages, `host-buildah`, `host-runc` and `host-cni`?
+ > Would adding `host-docker` be an intermediate easier step (since you have docker buildroot package)?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 004ad16386..2b8e59003e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2426,7 +2426,7 @@ F:	package/redis/
- F:	package/waf/
- F:	support/testing/tests/package/test_crudini.py
- 
--N:	Trent Piepho <tpiepho@impinj.com>
-+N:	Trent Piepho <trent.piepho@synapse.com>
- F:	package/libp11/
- 
- N:	Tudor Holton <buildroot@tudorholton.com>
+I do something similar, but handle the containers outside Buildroot (as
+I build a generic base OS and combine it with different containers
+depending on use cases).
+
+The issue with a host-docker package is that you also need to run the
+privileged dockerd daemon, so buildah is probably a better
+option. Alternatively, simply rely on the host having docker, which is
+probably not an unreasonable assumption if you are doing such container
+work.
+
+-- 
+Bye, Peter Korsgaard
