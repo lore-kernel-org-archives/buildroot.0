@@ -1,52 +1,53 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 30 Oct 2020 15:25:29 +0100
-Subject: [Buildroot] [PATCH] package/wine: update dependencies for 5.12
-Message-ID: <20201030142529.500522-1-nerv@dawncrow.de>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Fri, 30 Oct 2020 15:29:45 +0100
+Subject: [Buildroot] [PATCH] package/uhd: fix build with ARM
+Message-ID: <20201030142945.1190031-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- package/wine/wine.mk | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 7d7b22a137..7eafe9b06d 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -145,11 +145,18 @@ else
- WINE_CONF_OPTS += --without-png
- endif
+UHD has two issues with ARM:
+1/ NEON_SIMD_ENABLE is always enabled when architecture is ARM. But NEON isn't
+   necessarily support in the CPU
+2/ when NEON is supported -mfpu=neon must be passed to the compiler (not
+   automatically done by UHD)
+
+Fixes:
+- http://autobuild.buildroot.net/results/2519bd075b8c021b440677297b32f16b1c3cc3dd/
+- http://autobuild.buildroot.net/results/99d9979be4f37c42390c87b1afd4cd33bac07f5e/
+- http://autobuild.buildroot.net/results/cabc7a87ee869d6bac7d092c1a4fcfcdac22a96e/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/uhd/uhd.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
+index ec0ec03e9f..17d0dd569b 100644
+--- a/package/uhd/uhd.mk
++++ b/package/uhd/uhd.mk
+@@ -38,6 +38,18 @@ UHD_CONF_OPTS = \
+ 	-DENABLE_UTILS=OFF \
+ 	-DENABLE_X300=OFF
  
-+ifeq ($(BR2_PACKAGE_LIBUSB),y)
-+WINE_CONF_OPTS += --with-usb
-+WINE_DEPENDENCIES += libusb
++# As soon as architecture is ARM, uhd will try
++# to use it. But this doesn't necessarily
++# mean we have NEON support in our CPU.
++# When CPU support NEON -mfpu=neon must be added to CXX_FLAGS
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++UHD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -mfpu=neon"
++UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=ON
 +else
-+WINE_CONF_OPTS += --without-usb
++UHD_CONF_OPTS += -Dhave_mfpu_neon=0
++UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
--WINE_CONF_OPTS += --with-v4l
-+WINE_CONF_OPTS += --with-v4l2
- WINE_DEPENDENCIES += libv4l
- else
--WINE_CONF_OPTS += --without-v4l
-+WINE_CONF_OPTS += --without-v4l2
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ UHD_DEPENDENCIES += orc
  endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
-@@ -386,7 +393,8 @@ HOST_WINE_CONF_OPTS += \
- 	--without-sane \
- 	--without-sdl \
- 	--without-tiff \
--	--without-v4l \
-+	--without-usb \
-+	--without-v4l2 \
- 	--without-vkd3d \
- 	--without-vulkan \
- 	--without-x \
 -- 
-2.25.1
+2.20.1
