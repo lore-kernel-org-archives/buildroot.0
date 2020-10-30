@@ -1,32 +1,34 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 30 Oct 2020 08:53:18 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/libgpiod=3A_bump_versi?=
- =?utf-8?q?on_to_1=2E6?=
-In-Reply-To: <CAMRc=MfTQ4o8TTV6UDR27dGBPqbUJA9EAFykdO0Rb3LDjp4Gkw@mail.gmail.com>
-Message-ID: <57-5f9bc680-3-4a87f08@125885651>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 30 Oct 2020 09:02:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: bump to version 10.35
+In-Reply-To: <20201027182756.449229-1-fontaine.fabrice@gmail.com>
+References: <20201027182756.449229-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201030090246.6501bdac@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
- 
-On Thursday, October 29, 2020 14:41 CET, Bartosz Golaszewski <brgl@bgdev.pl> wrote: 
+On Tue, 27 Oct 2020 19:27:56 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
+> Update LICENCE hash (update in year:
+> https://vcs.pcre.org/pcre2/code/trunk/LICENCE?r1=1078&r2=1244)
 > 
-> v2.0 of libgpiod will no longer support older kernels but I'll support
-> v1.6 indefinitely for older kernels and v1.4 as long as v5.4 is
-> supported.
+> https://www.pcre.org/news.txt
+> https://www.pcre.org/changelog.txt
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/pcre2/pcre2.hash | 6 +++---
+>  package/pcre2/pcre2.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Will 1.4.x still work with 5.10 kernels? I guess the old API will just be deprecated for a while?
+Applied to master, thanks.
 
-So I guess we have two possibilities going forward: 
-
-- Use the version switch I proposed and even extend it when 2.0 and headers 5.10 are released
-or
-- Stay on the 1.4.x branch until linux 5.5 is the oldest supported version (if this is possible).
-
-Regards,
-Michael
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
