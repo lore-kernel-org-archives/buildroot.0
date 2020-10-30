@@ -1,82 +1,35 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Fri, 30 Oct 2020 12:25:05 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/libabseil-cpp: depend on (host)
- gcc >= 4.9
-In-Reply-To: <20201030112506.489-1-buildroot@heine.tech>
-References: <20201030112506.489-1-buildroot@heine.tech>
-Message-ID: <20201030112506.489-2-buildroot@heine.tech>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 30 Oct 2020 14:11:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wine: bump version to 5.12
+In-Reply-To: <20200727151548.3e44589c@windsurf.home>
+References: <20200713202758.14081-1-heiko.thiery@gmail.com>
+ <20200727151548.3e44589c@windsurf.home>
+Message-ID: <742411c6-3dfe-7285-91ba-0e1fd49cd234@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-abseil depends on gcc >= 4.9 according to [0] and actually doesn't
-compile anymore with the latest version bump.
-This didn't show in the autobuilders as the C++11 issue fixed in the
-previous commit shadowed it.
+Am 27.07.20 um 15:15 schrieb Thomas Petazzoni:
+> On Mon, 13 Jul 2020 22:27:58 +0200
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+> 
+>> Also update hash file formatting (2 spaces).
+>>
+>> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+>> ---
+>>  package/wine/wine.hash | 6 +++---
+>>  package/wine/wine.mk   | 4 ++--
+>>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> There was no feedback from Andr?, so I applied. Thanks!
+> 
+> Thomas
+> 
 
-also update dependency in package/grpc.
+Hi,
 
-fixes:
- https://github.com/abseil/abseil-cpp/issues/795
-
-[0] https://abseil.io/docs/cpp/platforms/platforms#linux
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/grpc/Config.in          | 8 +++++---
- package/libabseil-cpp/Config.in | 5 +++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 0270b38c35..6151f4b3d1 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf, re2
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libabseil-cpp
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -19,9 +20,10 @@ config BR2_PACKAGE_GRPC
- 
- 	  http://github.com/grpc/grpc
- 
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 8018e7b264..222e3a092a 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -26,7 +27,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
- 
- 	  https://github.com/abseil/abseil-cpp
- 
--comment "libabseil-cpp needs a toolchain w/ C++, threads, dynamic library"
-+comment "libabseil-cpp needs a toolchain w/ gcc >= 4.9, C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
--- 
-2.25.1
+Sorry, seems I need to adjust my mail filters...
+I'd say the 5.0.1 fixpoint release would have been a more stable option, but I think it's not too bad.
+In case there are issues (I will build it now and have a look) I will submit patches, otherwise we'll keep that until 6.0 :)
