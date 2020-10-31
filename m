@@ -1,39 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 22:20:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: bump to version
- 1.6.1
-In-Reply-To: <20201031162010.232026-1-fontaine.fabrice@gmail.com>
-References: <20201031162010.232026-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201031222036.7f147a98@windsurf>
+Date: Sat, 31 Oct 2020 22:21:44 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/libabseil-cpp: enforce C++11
+In-Reply-To: <20201030112506.489-1-buildroot@heine.tech>
+References: <20201030112506.489-1-buildroot@heine.tech>
+Message-ID: <20201031222144.6409094c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Oct 2020 17:20:10 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Fri, 30 Oct 2020 12:25:04 +0100
+Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
 
-> - Drop all patches (already in version)
-> - Update indentation in hash file (two spaces)
+> Abseil needs at least c++11 but removed the fallback when not set in [0].
+> So we need to do this.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [0] https://github.com/abseil/abseil-cpp/commit/c6954897f7ece5011f0126db9117361dc1a6ff36
+> 
+> Fixes:
+>   http://autobuild.buildroot.net/results/5780d5e21e5e9c0ba86cc422ef995f45dc83cc4c
+>   http://autobuild.buildroot.net/results/8138c63fc13940e1b97f07f24752b199f88ccfa8
+>   http://autobuild.buildroot.net/results/f8eda966c6400c242680db378c8944444d89d5c5
+>   http://autobuild.buildroot.net/results/38e9427d995e16bc4876f9fdc890c42e4fd04c06
+>   http://autobuild.buildroot.net/results/4e99415728a6f3c6b396a9872924262652f77996
+>   http://autobuild.buildroot.net/results/1830577843772bdfd6e310b4d361aa1edf5969d6
+> 
+> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 > ---
->  ...btac-lib-magic.c-fix-build-on-uclibc.patch |  52 --
->  .../0002-Drop-u_char-and-u_short.patch        | 653 ------------------
->  ...0003-Fix-unused-parameters-with-musl.patch |  52 --
->  ...build-failure-when-time_t-is-64-bits.patch |  80 ---
->  ...failure-of-OpenSSL-RAND_pseudo_bytes.patch | 146 ----
->  package/libpam-tacplus/libpam-tacplus.hash    |   4 +-
->  package/libpam-tacplus/libpam-tacplus.mk      |   5 +-
->  7 files changed, 3 insertions(+), 989 deletions(-)
->  delete mode 100644 package/libpam-tacplus/0001-libtac-lib-magic.c-fix-build-on-uclibc.patch
->  delete mode 100644 package/libpam-tacplus/0002-Drop-u_char-and-u_short.patch
->  delete mode 100644 package/libpam-tacplus/0003-Fix-unused-parameters-with-musl.patch
->  delete mode 100644 package/libpam-tacplus/0004-fix-build-failure-when-time_t-is-64-bits.patch
->  delete mode 100644 package/libpam-tacplus/0005-Check-for-failure-of-OpenSSL-RAND_pseudo_bytes.patch
+>  package/libabseil-cpp/libabseil-cpp.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
+Both applied to master. Thanks!
 
 Thomas
 -- 
