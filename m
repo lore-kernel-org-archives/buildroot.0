@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 22:04:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sshfs: fix build with gcc 4.8
-In-Reply-To: <20201031202154.904162-1-fontaine.fabrice@gmail.com>
-References: <20201031202154.904162-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201031220416.726ed4e6@windsurf>
+Date: Sat, 31 Oct 2020 22:04:32 +0100
+Subject: [Buildroot] [git commit] package/collectd: fix build with amqp
+Message-ID: <20201031205218.970D3860C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Oct 2020 21:21:54 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=edb94d770ba8c8688e384021473beb41b986d37c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix build of sshfs 3.7.0 and gcc 4.8
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-sshfs.c-fix-build-with-gcc-4.8.patch | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+collectd unconditionally uses amqp_ssl_socket.h since version 5.11.0 and
+https://github.com/collectd/collectd/commit/e4808ad138de362fab5efa09648fbc101f97bd76
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/525abe0a5cca81ff517c9c07c092d85160c7eb62
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/collectd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 9723b1ae1c..39ecbcfe54 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -582,6 +582,7 @@ comment "Select at least one for collectd to be useful"
+ 
+ config BR2_PACKAGE_COLLECTD_AMQP
+ 	bool "amqp"
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Send/receive values via the Advanced Message Queuing Protocol
