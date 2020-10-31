@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:44:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
- 2.15.1
-In-Reply-To: <20201028154220.648052-1-egorenar@linux.ibm.com>
-References: <20201028154220.648052-1-egorenar@linux.ibm.com>
-Message-ID: <20201031234430.5d7ec716@windsurf>
+Date: Sat, 31 Oct 2020 23:44:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libraw: needs autoreconf
+In-Reply-To: <20201028113540.127357-1-fontaine.fabrice@gmail.com>
+References: <20201028113540.127357-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201031234438.3314abc9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 28 Oct 2020 16:42:20 +0100
-Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
+On Wed, 28 Oct 2020 12:35:40 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> configure is older than configure.ac in official libraw 0.20.2 tarball:
+> https://github.com/LibRaw/LibRaw/issues/353
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/abef2ac14a959093a6391cad28e738558e15ceec
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0001-zipl-boot-disable-SSP.patch          | 28 -------------------
->  .../0002-genprotimg-boot-disable-SSP.patch    | 28 -------------------
->  package/s390-tools/s390-tools.hash            |  2 +-
->  package/s390-tools/s390-tools.mk              |  2 +-
->  4 files changed, 2 insertions(+), 58 deletions(-)
->  delete mode 100644 package/s390-tools/0001-zipl-boot-disable-SSP.patch
->  delete mode 100644 package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
+>  package/libraw/libraw.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
