@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:42:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: add file optional
- dependency
-In-Reply-To: <20201031220922.1557564-1-fontaine.fabrice@gmail.com>
-References: <20201031220922.1557564-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201031234247.1e0f1307@windsurf>
+Date: Sat, 31 Oct 2020 23:42:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libressl: bump to version 3.2.2
+In-Reply-To: <20201031221223.1564681-1-fontaine.fabrice@gmail.com>
+References: <20201031221223.1564681-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201031234250.79672592@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Oct 2020 23:09:22 +0100
+On Sat, 31 Oct 2020 23:12:23 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> file is an optional dependency of more binary and is enabled by default
-> since version 2.36 and
-> https://github.com/karelzak/util-linux/commit/09070e1a658e70ec203150e4fa5f486b32771858
+> https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.2-relnotes.txt
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/util-linux/util-linux-libs/util-linux-libs.mk | 3 +++
->  package/util-linux/util-linux.mk                      | 8 ++++++++
->  2 files changed, 11 insertions(+)
+>  package/libressl/libressl.hash | 2 +-
+>  package/libressl/libressl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
