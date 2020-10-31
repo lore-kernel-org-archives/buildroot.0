@@ -1,43 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 23:12:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libressl: bump to version 3.2.2
-Message-ID: <20201031221223.1564681-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Oct 2020 23:01:00 +0100
+Subject: [Buildroot] [git commit] package/lxc: bump to version 4.0.5
+Message-ID: <20201031222812.ECAA786810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.2-relnotes.txt
+commit: https://git.buildroot.net/buildroot/commit/?id=3a42f6df157fdfbdf9580ed05609c63827d18d7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://discuss.linuxcontainers.org/t/lxc-4-0-5-lts-has-been-released/9269
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
+ package/lxc/lxc.hash | 2 +-
+ package/lxc/lxc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index eb784868a8..9dfb74ff07 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index ed4957c938..4cecf6b0f7 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
 @@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  414c149c9963983f805a081db5bd3aec146b5f82d529bb63875ac941b25dcbb6  libressl-3.1.4.tar.gz
-+sha256  a9d1e1d030b8bcc67bf6428b8c0fff14a5602e2236257b9e3d77acaf12e2a7a1  libressl-3.2.2.tar.gz
- # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 06b7174c5e..41484f5a96 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
+ # Locally calculated
+-sha256  3c65a8ba20ed2b66c2075dc914aa632f76d0137af707b851b62b5555fed7d995  lxc-4.0.4.tar.gz
++sha256  af2cd616d5ab689e5d2305361c6571b5e632afd7eaab1754cca1670446a2e6a4  lxc-4.0.5.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 82b8793546..b067f145e3 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 3.1.4
-+LIBRESSL_VERSION = 3.2.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
--- 
-2.28.0
+-LXC_VERSION = 4.0.4
++LXC_VERSION = 4.0.5
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
+ LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
