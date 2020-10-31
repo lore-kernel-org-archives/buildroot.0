@@ -1,76 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 21:21:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sshfs: fix build with gcc 4.8
-Message-ID: <20201031202154.904162-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Oct 2020 21:42:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pax-utils: needs wchar
+In-Reply-To: <20201031150836.100678-1-fontaine.fabrice@gmail.com>
+References: <20201031150836.100678-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201031214211.69a71de5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of sshfs 3.7.0 and gcc 4.8
+On Sat, 31 Oct 2020 16:08:36 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
+> pax-utils uses asprintf and so needs wchar since version 1.2.4 and
+> https://gitweb.gentoo.org/proj/pax-utils.git/commit/?id=9c0ec154d782795daa3b7d2ae273bbda2b36ae83
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-sshfs.c-fix-build-with-gcc-4.8.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+In fact, it seems like the build problem comes from gnulib, which is
+bundled in pax-utils. Usage of wctomb() was recently added in gnulib as
+of commit 5cdec0ff5ecf34474d90d8b57f50a148449cda0c. And it seems like
+there is code to not use wctomb() when wchar support is not available,
+but that logic doesn't seem to work.
 
-diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..312985d8dc
---- /dev/null
-+++ b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,47 @@
-+From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 31 Oct 2020 21:08:53 +0100
-+Subject: [PATCH] sshfs.c: fix build with gcc 4.8
-+
-+Fix the following build failure with gcc 4.8:
-+
-+../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
-+  for (int i = 0; i < sshfs.max_conns; i++) {
-+  ^
-+
-+This build failure has been added with
-+https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/libfuse/sshfs/pull/233]
-+---
-+ sshfs.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/sshfs.c b/sshfs.c
-+index d5f2ff7..2c2db42 100644
-+--- a/sshfs.c
-++++ b/sshfs.c
-+@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-+ 			     const char *path)
-+ {
-+ 	struct conntab_entry *ce;
-++	int i;
-+ 
-+ 	if (sshfs.max_conns == 1)
-+ 		return &sshfs.conns[0];
-+@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-+ 
-+ 	int best_index = 0;
-+ 	uint64_t best_score = ~0ULL; /* smaller is better */
-+-	for (int i = 0; i < sshfs.max_conns; i++) {
-++	for (i = 0; i < sshfs.max_conns; i++) {
-+ 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
-+ 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
-+ 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
-+-- 
-+2.28.0
-+
+I don't really care about pax-utils being not available with wchar
+disabled, but since gnulib is also used in lots of other projects, I'm
+fearing that we might see this issue elsewhere.
+
+Could you check if the pax-utils copy of gnulib lib/vasnprintf.c
+includes commit 5cdec0ff5ecf34474d90d8b57f50a148449cda0c and report a
+bug to upstream gnulib ?
+
+In the mean time, I have applied your patch, with an extended commit
+log.
+
+Thanks!
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
