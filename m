@@ -1,89 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 22:03:23 +0100
-Subject: [Buildroot] [git commit] package/fastd: fix CVE-2020-27638
-Message-ID: <20201031205051.A98E28632D@busybox.osuosl.org>
+Date: Sat, 31 Oct 2020 22:03:31 +0100
+Subject: [Buildroot] [git commit] package/sshfs: fix build with gcc 4.8
+Message-ID: <20201031205051.B749B8632D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e4af3ce3f9142f09f20c7904925c5454332ec24
+commit: https://git.buildroot.net/buildroot/commit/?id=3f38e3b86a54ab2e2cbd20d9cba5fcb80b49dfb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-receive.c in fastd before v21 allows denial of service (assertion
-failure) when receiving packets with an invalid type code.
+Fix build of sshfs 3.7.0 and gcc 4.8
+
+Fixes:
+ - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...uffer-leak-when-receiving-invalid-packets.patch | 45 ++++++++++++++++++++++
- package/fastd/fastd.mk                             |  3 ++
- 2 files changed, 48 insertions(+)
+ .../0001-sshfs.c-fix-build-with-gcc-4.8.patch      | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
 new file mode 100644
-index 0000000000..f4a44fea6d
+index 0000000000..312985d8dc
 --- /dev/null
-+++ b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-@@ -0,0 +1,45 @@
-+From 737925113363b6130879729cdff9ccc46c33eaea Mon Sep 17 00:00:00 2001
-+From: Matthias Schiffer <mschiffer@universe-factory.net>
-+Date: Mon, 19 Oct 2020 21:08:16 +0200
-+Subject: [PATCH] receive: fix buffer leak when receiving invalid packets
++++ b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,47 @@
++From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 31 Oct 2020 21:08:53 +0100
++Subject: [PATCH] sshfs.c: fix build with gcc 4.8
 +
-+For fastd versions before v20, this was just a memory leak (which could
-+still be used for DoS, as it's remotely triggerable). With the new
-+buffer management of fastd v20, this will trigger an assertion failure
-+instead as soon as the buffer pool is empty.
++Fix the following build failure with gcc 4.8:
 +
-+[Retrieved from:
-+https://github.com/NeoRaider/fastd/commit/737925113363b6130879729cdff9ccc46c33eaea]
++../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
++  for (int i = 0; i < sshfs.max_conns; i++) {
++  ^
++
++This build failure has been added with
++https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
++
++Fixes:
++ - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/libfuse/sshfs/pull/233]
 +---
-+ src/receive.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
++ sshfs.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/src/receive.c b/src/receive.c
-+index 043c9f2..6bca9f4 100644
-+--- a/src/receive.c
-++++ b/src/receive.c
-+@@ -169,6 +169,11 @@ static inline void handle_socket_receive_known(
++diff --git a/sshfs.c b/sshfs.c
++index d5f2ff7..2c2db42 100644
++--- a/sshfs.c
+++++ b/sshfs.c
++@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
++ 			     const char *path)
++ {
++ 	struct conntab_entry *ce;
+++	int i;
 + 
-+ 	case PACKET_HANDSHAKE:
-+ 		fastd_handshake_handle(sock, local_addr, remote_addr, peer, buffer);
-++		break;
-++
-++	default:
-++		fastd_buffer_free(buffer);
-++		pr_debug("received packet with invalid type from %P[%I]", peer, remote_addr);
-+ 	}
-+ }
++ 	if (sshfs.max_conns == 1)
++ 		return &sshfs.conns[0];
++@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
 + 
-+@@ -195,6 +200,11 @@ static inline void handle_socket_receive_unknown(
-+ 
-+ 	case PACKET_HANDSHAKE:
-+ 		fastd_handshake_handle(sock, local_addr, remote_addr, NULL, buffer);
-++		break;
-++
-++	default:
-++		fastd_buffer_free(buffer);
-++		pr_debug("received packet with invalid type from unknown address %I", remote_addr);
-+ 	}
-+ }
-+ 
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index b1261f0fa5..d556e2fbb1 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -12,6 +12,9 @@ FASTD_LICENSE_FILES = COPYRIGHT
- FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
- FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
- 
-+# 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-+FASTD_IGNORE_CVES += CVE-2020-27638
++ 	int best_index = 0;
++ 	uint64_t best_score = ~0ULL; /* smaller is better */
++-	for (int i = 0; i < sshfs.max_conns; i++) {
+++	for (i = 0; i < sshfs.max_conns; i++) {
++ 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
++ 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
++ 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
++-- 
++2.28.0
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
- FASTD_DEPENDENCIES += openssl
