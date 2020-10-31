@@ -1,56 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 21:52:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pax-utils: needs wchar
-In-Reply-To: <20201031214211.69a71de5@windsurf>
-References: <20201031150836.100678-1-fontaine.fabrice@gmail.com>
- <20201031214211.69a71de5@windsurf>
-Message-ID: <CAPi7W83XDhp2f-U=g89w76XEEqeyzE_jTCLzRHYogrcFr6=d_A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Oct 2020 21:44:00 +0100
+Subject: [Buildroot] [git commit] package/python-urllib3: bump to version
+ 1.25.11
+Message-ID: <20201031204918.25FDA86387@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=822c283edcb7ee1df83cb4f4e367fba73e4391fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le sam. 31 oct. 2020 ? 21:42, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Sat, 31 Oct 2020 16:08:36 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > pax-utils uses asprintf and so needs wchar since version 1.2.4 and
-> > https://gitweb.gentoo.org/proj/pax-utils.git/commit/?id=9c0ec154d782795daa3b7d2ae273bbda2b36ae83
->
-> In fact, it seems like the build problem comes from gnulib, which is
-> bundled in pax-utils. Usage of wctomb() was recently added in gnulib as
-> of commit 5cdec0ff5ecf34474d90d8b57f50a148449cda0c. And it seems like
-> there is code to not use wctomb() when wchar support is not available,
-> but that logic doesn't seem to work.
->
-> I don't really care about pax-utils being not available with wchar
-> disabled, but since gnulib is also used in lots of other projects, I'm
-> fearing that we might see this issue elsewhere.
->
-> Could you check if the pax-utils copy of gnulib lib/vasnprintf.c
-> includes commit 5cdec0ff5ecf34474d90d8b57f50a148449cda0c and report a
-> bug to upstream gnulib ?
-pax-utils copy of gnulib does not include commit
-5cdec0ff5ecf34474d90d8b57f50a148449cda0c (there is no
-ENABLE_WCHAR_FALLBACK or wctomb_fallback).
-So we should be able to drop wchar dependency as soon as pax-utils
-refresh gnulib.
->
-> In the mean time, I have applied your patch, with an extended commit
-> log.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-urllib3/python-urllib3.hash | 5 +++--
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-Fabrice
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 6be3671a3c..e29966672a 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/urllib3/json
+-sha256	91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a  urllib3-1.25.10.tar.gz
++# md5, sha256 from https://pypi.org/pypi/urllib3/json
++md5  d47dd21a6e66a03c3633cac468ffd010  urllib3-1.25.11.tar.gz
++sha256  8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2  urllib3-1.25.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index e64ff136ab..88e8d2097b 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_URLLIB3_VERSION = 1.25.10
++PYTHON_URLLIB3_VERSION = 1.25.11
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/81/f4/87467aeb3afc4a6056e1fe86626d259ab97e1213b1dfec14c7cb5f538bf0
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/76/d9/bbbafc76b18da706451fa91bc2ebe21c0daf8868ef3c30b869ac7cb7f01d
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
