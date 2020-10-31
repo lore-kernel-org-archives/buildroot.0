@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:42:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ima-evm-utils: Bump to version
- 1.3.2
-In-Reply-To: <20201029163214.5600-1-petr.vorel@gmail.com>
-References: <20201029163214.5600-1-petr.vorel@gmail.com>
-Message-ID: <20201031234219.1767d462@windsurf>
+Date: Sat, 31 Oct 2020 23:42:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: add file optional
+ dependency
+In-Reply-To: <20201031220922.1557564-1-fontaine.fabrice@gmail.com>
+References: <20201031220922.1557564-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201031234247.1e0f1307@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Oct 2020 17:32:14 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+On Sat, 31 Oct 2020 23:09:22 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop patch from upstream.
-
-There was no patch at all in this package, so I dropped this line from
-the commit log.
-
+> file is an optional dependency of more binary and is enabled by default
+> since version 2.36 and
+> https://github.com/karelzak/util-linux/commit/09070e1a658e70ec203150e4fa5f486b32771858
 > 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
-> Reason to update:
-> * Bugfixes: importing keys
+>  package/util-linux/util-linux-libs/util-linux-libs.mk | 3 +++
+>  package/util-linux/util-linux.mk                      | 8 ++++++++
+>  2 files changed, 11 insertions(+)
 
 Applied to master, thanks.
 
