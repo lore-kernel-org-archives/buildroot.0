@@ -1,25 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 16:09:18 +0100
-Subject: [Buildroot] [PATCH v1 01/11] package/gstreamer1: bump version
- to 1.18.1
-In-Reply-To: <20201031001006.21829-1-ps.report@gmx.net>
-References: <20201031001006.21829-1-ps.report@gmx.net>
-Message-ID: <20201031160918.7ea8efd9@windsurf>
+Date: Sat, 31 Oct 2020 16:10:21 +0100
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 7.4.12
+Message-ID: <20201031145742.AAC3E82BDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Oct 2020 01:09:56 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=69beb4dd980adbfdb1a7605acbc1687577617ce3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.12
 
-Thanks, entire series applied!
+According to the release notes this is a "security bug fix release":
+https://news-web.php.net/php.announce/300
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 77a0feb555..8e8131d301 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
++sha256  e82d2bcead05255f6b7d2ff4e2561bc334204955820cabc2457b5239fde96b76  php-7.4.12.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 6b528cdc33..ce0e3e4a49 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.11
++PHP_VERSION = 7.4.12
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
