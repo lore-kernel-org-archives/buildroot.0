@@ -1,25 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 16:11:06 +0100
-Subject: [Buildroot] [PATCH] package/python-pyudev: bump to version
- 0.22.0
-In-Reply-To: <20201029213822.4423-1-m.niestroj@grinn-global.com>
-References: <20201029213822.4423-1-m.niestroj@grinn-global.com>
-Message-ID: <20201031161106.44700318@windsurf>
+Date: Sat, 31 Oct 2020 16:11:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.11.15
+In-Reply-To: <20201029214313.1570859-1-bernd.kuhls@t-online.de>
+References: <20201029214313.1570859-1-bernd.kuhls@t-online.de>
+Message-ID: <20201031161111.1e2ba9d2@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Oct 2020 22:38:22 +0100
-Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+On Thu, 29 Oct 2020 22:43:13 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> Fixes
+> o CVE-2020-14318: Missing handle permissions check in SMB1/2/3 ChangeNotify.
+> o CVE-2020-14323: Unprivileged user can crash winbind.
+> o CVE-2020-14383: An authenticated user can crash the DCE/RPC DNS with easily
+>                   crafted records.
+> 
+> Release notes:
+> https://www.samba.org/samba/history/samba-4.11.14.html (bugfix-only)
+> https://www.samba.org/samba/history/samba-4.11.15.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...ng-libudev-on-systems-without-ldconf.patch | 46 ++++++++++---------
->  package/python-pyudev/python-pyudev.hash      |  8 ++--
->  package/python-pyudev/python-pyudev.mk        |  4 +-
->  3 files changed, 30 insertions(+), 28 deletions(-)
+>  package/samba4/samba4.hash | 4 ++--
+>  package/samba4/samba4.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
