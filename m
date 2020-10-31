@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 16:11:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.4.12
-In-Reply-To: <20201029213711.1521279-1-bernd.kuhls@t-online.de>
-References: <20201029213711.1521279-1-bernd.kuhls@t-online.de>
-Message-ID: <20201031161102.18f3fbd7@windsurf>
+Date: Sat, 31 Oct 2020 16:11:06 +0100
+Subject: [Buildroot] [PATCH] package/python-pyudev: bump to version
+ 0.22.0
+In-Reply-To: <20201029213822.4423-1-m.niestroj@grinn-global.com>
+References: <20201029213822.4423-1-m.niestroj@grinn-global.com>
+Message-ID: <20201031161106.44700318@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Oct 2020 22:37:11 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Thu, 29 Oct 2020 22:38:22 +0100
+Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-> Changelog: https://www.php.net/ChangeLog-7.php#7.4.12
-> 
-> According to the release notes this is a "security bug fix release":
-> https://news-web.php.net/php.announce/300
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...ng-libudev-on-systems-without-ldconf.patch | 46 ++++++++++---------
+>  package/python-pyudev/python-pyudev.hash      |  8 ++--
+>  package/python-pyudev/python-pyudev.mk        |  4 +-
+>  3 files changed, 30 insertions(+), 28 deletions(-)
 
 Applied to master, thanks.
 
