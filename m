@@ -1,159 +1,159 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Nov 2020 16:33:37 +0100
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: add CPE ID related
- package variables
-Message-ID: <20201203092227.496BF821E0@busybox.osuosl.org>
+Date: Sun, 1 Nov 2020 00:01:56 +0100
+Subject: [Buildroot] [PATCH] configs/mvebu: new defconfig for Turris MOX
+In-Reply-To: <20201029215629.2120636-1-olteanv@gmail.com>
+References: <20201029215629.2120636-1-olteanv@gmail.com>
+Message-ID: <20201101000156.2f26a917@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97a54c33c917d530933fc8f30e17baf4a72b3d50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Vladimir,
 
-Currently, the match between Buildroot packages and CVEs is solely
-based on the package names. Unfortunately, as one can imagine, there
-isn't necessarily a strict mapping between Buildroot package names,
-and how software projects are referenced in the National Vulnerability
-Database (NVD) which we use.
+Thanks for this contribution!
 
-The NVD has defined the concept of CPE (Common Platform Enumeration)
-identifiers, which uniquely identifies software components based on
-string looking like this:
+On Thu, 29 Oct 2020 23:56:29 +0200
+Vladimir Oltean <olteanv@gmail.com> wrote:
 
-  cpe:2.3:a:netsurf-browser:libnsbmp:0.1.2:*:*:*:*:*:*:*
+>  DEVELOPERS                                 |    4 +
+>  board/mvebu/cznic-turris-mox/boot.cmd      |   28 +
+>  board/mvebu/cznic-turris-mox/genimage.cfg  |   10 +
+>  board/mvebu/cznic-turris-mox/mox.config    | 1554 ++++++++++++++++++++
+>  board/mvebu/cznic-turris-mox/post-build.sh |    3 +
+>  configs/cznic_turris_mox_defconfig         |   46 +
 
-In particular, this CPE identifier contains a vendor name (here
-"netsurf-browser"), a product name (here "libnsbmp") and a version
-(here "0.1.2").
+We normally like to have a readme.txt file in
+board/mvebu/cznic-turris-mox/ to explain how to use the defconfig.
+Especially how to use the build results on the board. See other
+readme.txt files in board/.
 
-This patch series introduces the concept of CPE ID in Buildroot, where
-each package can be associated to a CPE ID. A package can define one
-or several of:
+> diff --git a/board/mvebu/cznic-turris-mox/mox.config b/board/mvebu/cznic-turris-mox/mox.config
+> new file mode 100644
+> index 000000000000..07f8b801f3e0
+> --- /dev/null
+> +++ b/board/mvebu/cznic-turris-mox/mox.config
 
- - <pkg>_CPE_ID_VENDOR
- - <pkg>_CPE_ID_PRODUCT
- - <pkg>_CPE_ID_VERSION
- - <pkg>_CPE_ID_VERSION_MINOR
- - <pkg>_CPE_ID_PREFIX
+Instead of mox.config, could you call is linux.config or kernel.config ?
 
-If one or several of those variables are defined, then the
-<pkg>_CPE_ID will be defined by the generic package infrastructure as
-follows:
+Also, this configuration files looks really huge, with lots of useless
+things. There's really two options there:
 
-  $(2)_CPE_ID = $$($(2)_CPE_ID_PREFIX):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR):*:*:*:*:*:*
+ - Use the full-blown arm64 defconfig from the upstream kernel,
+   optionally with a small fragment file to add a few more options that
+   are needed for your platform.
 
-<pkg>_CPE_ID_* variables that are not explicitly specified by the
-package will carry a default value defined by the generic package
-infrastructure.
+ - Use a dedicated configuration like you're doing, but in this case,
+   it should be reasonably tweaked to the platform, which clearly isn't
+   the case here.
 
-If a package is happy with the default <pkg>_CPE_ID, and therefore
-does not need to define any of <pkg>_CPE_ID_{VENDOR,PRODUCT,...}, it
-can set <pkg>_CPE_ID_VALID = YES.
 
-If any of the <pkg>_CPE_ID_{VENDOR,PRODUCT,...} variables are defined
-by the package, then <pkg>_CPE_ID_VALID = YES will be set by the
-generic package infrastructure.
 
-Then, it's only if <pkg>_CPE_ID_VALID = YES that a <pkg>_CPE_ID will
-be defined. Indeed, we want to be able to distinguish packages for
-which the CPE ID information has been checked and is considered valid,
-from packages for which the CPE ID information has never been
-verified. For this reason, we cannot simply define a default value
-for <pkg>_CPE_ID.
+> @@ -0,0 +1,1554 @@
+> +CONFIG_ACPI_CPPC_CPUFREQ=y
+> +CONFIG_ALTERA_FREEZE_BRIDGE=y
+> +CONFIG_ARMADA_37XX_RWTM_MBOX=y
+> +CONFIG_ARMADA_37XX_WATCHDOG=y
+> +CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM=y
 
-The <pkg>_CPE_ID_* values for the host package are inherited from the
-same variables of the corresponding target package, as we normally do
-for most package variables.
+Allwinner stuff.
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-generic.mk | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+> +CONFIG_ARM_IMX_CPUFREQ_DT=y
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 54de03da03..621fb91424 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -608,6 +608,76 @@ $(2)_REDISTRIBUTE		?= YES
- 
- $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_BASENAME_RAW)
- 
-+# If any of the <pkg>_CPE_ID_* variables are set, we assume the CPE ID
-+# information is valid for this package.
-+ifneq ($$($(2)_CPE_ID_VENDOR)$$($(2)_CPE_ID_NAME)$$($(2)_CPE_ID_VERSION)$$($(2)_CPE_ID_VERSION_MINOR)$$($(2)_CPE_ID_PREFIX),)
-+$(2)_CPE_ID_VALID = YES
-+endif
-+
-+# When we're a host package, make sure to use the variables of the
-+# corresponding target package, if any.
-+ifneq ($$($(3)_CPE_ID_VENDOR)$$($(3)_CPE_ID_NAME)$$($(3)_CPE_ID_VERSION)$$($(3)_CPE_ID_VERSION_MINOR)$$($(3)_CPE_ID_PREFIX),)
-+$(2)_CPE_ID_VALID = YES
-+endif
-+
-+# If the CPE ID is valid for the target package so it is for the host
-+# package
-+ifndef $(2)_CPE_ID_VALID
-+ ifdef $(3)_CPE_ID_VALID
-+   $(2)_CPE_ID_VALID = $$($(3)_CPE_ID_VALID)
-+ endif
-+endif
-+
-+ifeq ($$($(2)_CPE_ID_VALID),YES)
-+ # CPE_ID_VENDOR
-+ ifndef $(2)_CPE_ID_VENDOR
-+  ifdef $(3)_CPE_ID_VENDOR
-+   $(2)_CPE_ID_VENDOR = $$($(3)_CPE_ID_VENDOR)
-+  else
-+   $(2)_CPE_ID_VENDOR = $$($(2)_RAWNAME)_project
-+ endif
-+ endif
-+
-+ # CPE_ID_NAME
-+ ifndef $(2)_CPE_ID_NAME
-+  ifdef $(3)_CPE_ID_NAME
-+   $(2)_CPE_ID_NAME = $$($(3)_CPE_ID_NAME)
-+  else
-+   $(2)_CPE_ID_NAME = $$($(2)_RAWNAME)
-+  endif
-+ endif
-+
-+ # CPE_ID_VERSION
-+ ifndef $(2)_CPE_ID_VERSION
-+  ifdef $(3)_CPE_ID_VERSION
-+   $(2)_CPE_ID_VERSION = $$($(3)_CPE_ID_VERSION)
-+  else
-+   $(2)_CPE_ID_VERSION = $$($(2)_VERSION)
-+  endif
-+ endif
-+
-+ # CPE_ID_VERSION_MINOR
-+ ifndef $(2)_CPE_ID_VERSION_MINOR
-+  ifdef $(3)_CPE_ID_VERSION_MINOR
-+   $(2)_CPE_ID_VERSION_MINOR = $$($(3)_CPE_ID_VERSION_MINOR)
-+  else
-+   $(2)_CPE_ID_VERSION_MINOR = *
-+  endif
-+ endif
-+
-+ # CPE_ID_PREFIX
-+ ifndef $(2)_CPE_ID_PREFIX
-+  ifdef $(3)_CPE_ID_PREFIX
-+   $(2)_CPE_ID_PREFIX = $$($(3)_CPE_ID_PREFIX)
-+  else
-+   $(2)_CPE_ID_PREFIX = cpe:2.3:a
-+  endif
-+ endif
-+
-+ # Calculate complete CPE ID
-+ $(2)_CPE_ID = $$($(2)_CPE_ID_PREFIX):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR):*:*:*:*:*:*
-+endif # ifeq ($$($(2)_CPE_ID_VALID),YES)
-+
- # When a target package is a toolchain dependency set this variable to
- # 'NO' so the 'toolchain' dependency is not added to prevent a circular
- # dependency.
+i.MX stuff.
+
+> +CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
+
+RPi stuff.
+
+> +CONFIG_DRM=y
+
+DRM for a platform that has no display.
+
+etc.
+
+> diff --git a/board/mvebu/cznic-turris-mox/post-build.sh b/board/mvebu/cznic-turris-mox/post-build.sh
+> new file mode 100755
+> index 000000000000..808c94e94b57
+> --- /dev/null
+> +++ b/board/mvebu/cznic-turris-mox/post-build.sh
+> @@ -0,0 +1,3 @@
+> +#!/bin/sh
+> +cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+> +ln -sf boot/boot.scr $TARGET_DIR/boot.scr
+> diff --git a/configs/cznic_turris_mox_defconfig b/configs/cznic_turris_mox_defconfig
+> new file mode 100644
+> index 000000000000..bd382db1769a
+> --- /dev/null
+> +++ b/configs/cznic_turris_mox_defconfig
+> @@ -0,0 +1,46 @@
+> +# Architecture
+> +BR2_aarch64=y
+> +# Armada 3720
+> +BR2_cortex_a53=y
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="1G"
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +
+> +# toolchain
+> +BR2_TOOLCHAIN=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+> +BR2_TOOLCHAIN_USES_GLIBC=y
+> +BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
+
+Please keep the default toolchain.
+
+> +
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_LATEST_VERSION=y
+
+Use a fixed kernel version, and not "the latest".
+
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/mvebu/cznic-turris-mox/mox.config"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-turris-mox"
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/mvebu/cznic-turris-mox/boot.cmd"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/mvebu/cznic-turris-mox/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mvebu/cznic-turris-mox/genimage.cfg"
+> +
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+
+This should be with the rest of the U-Boot boot script options.
+
+> +# Serial port config
+> +BR2_TARGET_GENERIC_GETTY=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyMV0"
+> +
+> +# required tools to create the microSD image
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +
+> +BR2_TARGET_GENERIC_HOSTNAME="mox"
+> +
+> +BR2_USE_MMU=y
+
+Not needed.
+
+> +BR2_USE_WCHAR=y
+
+Ditto.
+
+Could you rework your patch and send an updated version ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
