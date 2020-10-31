@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:44:06 +0100
-Subject: [Buildroot] [git commit] package/libraw: needs autoreconf
-Message-ID: <20201031223126.2BC288212A@busybox.osuosl.org>
+Date: Sat, 31 Oct 2020 23:44:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sispmctl: fix build with gcc 4.8
+In-Reply-To: <20201029130031.58927-1-fontaine.fabrice@gmail.com>
+References: <20201029130031.58927-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201031234413.6da0582e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=082d0fea3deab17634a6b29e80579417440a6181
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 29 Oct 2020 14:00:31 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-configure is older than configure.ac in official libraw 0.20.2 tarball:
-https://github.com/LibRaw/LibRaw/issues/353
+> Fixes:
+>  - http://autobuild.buildroot.org/results/079f1454121d38a83c49529c0f6cc8ed61fd5abb
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...rc-schedule.c-fix-build-with-gcc-4.8.patch | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/sispmctl/0001-src-schedule.c-fix-build-with-gcc-4.8.patch
 
-Fixes:
- - http://autobuild.buildroot.org/results/abef2ac14a959093a6391cad28e738558e15ceec
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libraw/libraw.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index acfa4dbe37..7f79000fd3 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -14,6 +14,8 @@ LIBRAW_CONF_OPTS += \
- LIBRAW_LICENSE = LGPL-2.1 or CDDL-1.0
- LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README.md
- LIBRAW_DEPENDENCIES = host-pkgconf
-+# https://github.com/LibRaw/LibRaw/issues/353
-+LIBRAW_AUTORECONF = YES
- LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
