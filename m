@@ -1,39 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 16:08:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pax-utils: needs wchar
-Message-ID: <20201031150836.100678-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Oct 2020 16:08:18 +0100
+Subject: [Buildroot] [git commit] package/gstreamer1/gstreamer1: bump
+ version to 1.18.1
+Message-ID: <20201031145617.75F598638C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pax-utils uses asprintf and so needs wchar since version 1.2.4 and
-https://gitweb.gentoo.org/proj/pax-utils.git/commit/?id=9c0ec154d782795daa3b7d2ae273bbda2b36ae83
+commit: https://git.buildroot.net/buildroot/commit/?id=0b42389ef606046c2154fddec1712ab79d718109
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/613840edba8ea161bb900f3b56d8d3605961c78f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pax-utils/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
-index 58100e482a..ebcca98500 100644
---- a/package/pax-utils/Config.in
-+++ b/package/pax-utils/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PAX_UTILS
- 	bool "pax-utils"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  ELF related utils for ELF 32/64 binaries that can check files
- 	  for security relevant properties.
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 47cf680ba6..d970e9c646 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.0.tar.xz.sha256sum
+-sha256  0ff09245b06c0aeb5d9a156edcab088a7e8213a0bf9c84a1ff0318f9c00c7805  gstreamer-1.18.0.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.1.tar.xz.sha256sum
++sha256  79df8de21f284a105a5c1568527f8c559c583c85c0f2bd7bdb5b0372b8beecba  gstreamer-1.18.1.tar.xz
+ sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 1f190c0bc3..963a7006d3 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
-+
-+comment "pax-utils needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
--- 
-2.28.0
+-GSTREAMER1_VERSION = 1.18.0
++GSTREAMER1_VERSION = 1.18.1
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
