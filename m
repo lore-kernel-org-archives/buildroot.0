@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:44:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.4.2
-In-Reply-To: <20201028132338.1545-1-zhaojh329@gmail.com>
-References: <20201028132338.1545-1-zhaojh329@gmail.com>
-Message-ID: <20201031234420.34efac3c@windsurf>
+Date: Sat, 31 Oct 2020 23:44:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: bump to version
+ 2.15.1
+In-Reply-To: <20201028154220.648052-1-egorenar@linux.ibm.com>
+References: <20201028154220.648052-1-egorenar@linux.ibm.com>
+Message-ID: <20201031234430.5d7ec716@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 28 Oct 2020 21:23:38 +0800
-Jianhui Zhao <zhaojh329@gmail.com> wrote:
+On Wed, 28 Oct 2020 16:42:20 +0100
+Alexander Egorenkov <egorenar@linux.ibm.com> wrote:
 
-> fix compile fail on riscv64
-> 
-> Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+> Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 > ---
->  ...rc-uhttpd.c-fix-build-without-dlopen.patch | 35 -------------------
->  package/libuhttpd/libuhttpd.hash              |  2 +-
->  package/libuhttpd/libuhttpd.mk                |  2 +-
->  3 files changed, 2 insertions(+), 37 deletions(-)
->  delete mode 100644 package/libuhttpd/0001-src-uhttpd.c-fix-build-without-dlopen.patch
+>  .../0001-zipl-boot-disable-SSP.patch          | 28 -------------------
+>  .../0002-genprotimg-boot-disable-SSP.patch    | 28 -------------------
+>  package/s390-tools/s390-tools.hash            |  2 +-
+>  package/s390-tools/s390-tools.mk              |  2 +-
+>  4 files changed, 2 insertions(+), 58 deletions(-)
+>  delete mode 100644 package/s390-tools/0001-zipl-boot-disable-SSP.patch
+>  delete mode 100644 package/s390-tools/0002-genprotimg-boot-disable-SSP.patch
 
 Applied to master, thanks.
 
