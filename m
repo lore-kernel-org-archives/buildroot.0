@@ -1,82 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 22:21:13 +0100
-Subject: [Buildroot] [git commit] package/libabseil-cpp: depend on (host)
- gcc >= 4.9
-Message-ID: <20201031210947.7D97F82B99@busybox.osuosl.org>
+Date: Sat, 31 Oct 2020 22:22:11 +0100
+Subject: [Buildroot] [git commit] package/fastd: libcap is optional not
+ mandatory
+Message-ID: <20201031210947.8C31281541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e98610f039b88a5d164b19343d5ecef2d1c01f6d
+commit: https://git.buildroot.net/buildroot/commit/?id=25ab2d8b11d9599696133b1bc30494b50625e768
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-abseil depends on gcc >= 4.9 according to [0] and actually doesn't
-compile anymore with the latest version bump.
-This didn't show in the autobuilders as the C++11 issue fixed in the
-previous commit shadowed it.
+libcap is an optional dependency which is available since version 7:
+https://github.com/NeoRaider/fastd/commit/eaac49427339a365aac2d3505f567572cfbdbb96
 
-also update dependency in package/grpc.
-
-fixes:
- https://github.com/abseil/abseil-cpp/issues/795
-
-[0] https://abseil.io/docs/cpp/platforms/platforms#linux
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/grpc/Config.in          | 8 +++++---
- package/libabseil-cpp/Config.in | 5 +++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/fastd/Config.in | 1 -
+ package/fastd/fastd.mk  | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 0270b38c35..6151f4b3d1 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -3,7 +3,8 @@ config BR2_PACKAGE_GRPC
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, re2
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf, re2
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # protobuf, re2, libabseil-cpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-libabseil-cpp
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -19,9 +20,10 @@ config BR2_PACKAGE_GRPC
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index c4f296dd63..5319d68503 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_FASTD
+ 	select BR2_PACKAGE_LIBUECC
+ 	select BR2_PACKAGE_LIBSODIUM
+ 	select BR2_PACKAGE_LIBSODIUM_FULL
+-	select BR2_PACKAGE_LIBCAP
+ 	help
+ 	  Fast and Secure Tunneling Daemon
  
- 	  http://github.com/grpc/grpc
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index d556e2fbb1..43d3c242f3 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -10,11 +10,18 @@ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+ FASTD_LICENSE = BSD-2-Clause
+ FASTD_LICENSE_FILES = COPYRIGHT
+ FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
+-FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
++FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
  
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 8018e7b264..222e3a092a 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBABSEIL_CPP
- 	bool "libabseil-cpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-@@ -26,7 +27,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
+ # 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+ FASTD_IGNORE_CVES += CVE-2020-27638
  
- 	  https://github.com/abseil/abseil-cpp
- 
--comment "libabseil-cpp needs a toolchain w/ C++, threads, dynamic library"
-+comment "libabseil-cpp needs a toolchain w/ gcc >= 4.9, C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++FASTD_CONF_OPTS += -DWITH_CAPABILITIES=ON
++FASTD_DEPENDENCIES += libcap
++else
++FASTD_CONF_OPTS += -DWITH_CAPABILITIES=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
+ FASTD_DEPENDENCIES += openssl
