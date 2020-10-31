@@ -1,43 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 22:43:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.5
-Message-ID: <20201031214304.1222569-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 31 Oct 2020 22:46:38 +0100
+Subject: [Buildroot] [PATCH 7/8] package/optee-test: add deps on openssl
+ when enabled
+In-Reply-To: <20201030075045.6960-7-etienne.carriere@linaro.org>
+References: <20201030075045.6960-1-etienne.carriere@linaro.org>
+ <20201030075045.6960-7-etienne.carriere@linaro.org>
+Message-ID: <20201031224638.1a75b0b4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://discuss.linuxcontainers.org/t/lxc-4-0-5-lts-has-been-released/9269
+Hello ?tienne,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/lxc/lxc.hash | 2 +-
- package/lxc/lxc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 30 Oct 2020 08:50:44 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
-index ed4957c938..4cecf6b0f7 100644
---- a/package/lxc/lxc.hash
-+++ b/package/lxc/lxc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  3c65a8ba20ed2b66c2075dc914aa632f76d0137af707b851b62b5555fed7d995  lxc-4.0.4.tar.gz
-+sha256  af2cd616d5ab689e5d2305361c6571b5e632afd7eaab1754cca1670446a2e6a4  lxc-4.0.5.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index 82b8793546..b067f145e3 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LXC_VERSION = 4.0.4
-+LXC_VERSION = 4.0.5
- LXC_SITE = https://linuxcontainers.org/downloads/lxc
- LXC_LICENSE = GPL-2.0 (some tools), LGPL-2.1+
- LXC_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1
+>  OPTEE_TEST_DEPENDENCIES = optee-client optee-os
+> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+
+Is it intentional that the dependency is on BR2_PACKAGE_LIBOPENSSL and
+not BR2_PACKAGE_OPENSSL ?
+
+If you use BR2_PACKAGE_OPENSSL, it means that either openssl or
+libressl can be used. If you use BR2_PACKAGE_LIBOPENSSL, then it means
+that you really only support working with openssl.
+
+Normally, libressl is a drop-in replacement for openssl, so it does
+work just like openssl in most cases. There are however a few OpenSSL
+APIs that are no longer supported in LibreSSL.
+
+Could you clarify this point ?
+
+Thanks,
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
