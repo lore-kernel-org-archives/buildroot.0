@@ -1,159 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Nov 2020 00:01:56 +0100
-Subject: [Buildroot] [PATCH] configs/mvebu: new defconfig for Turris MOX
-In-Reply-To: <20201029215629.2120636-1-olteanv@gmail.com>
-References: <20201029215629.2120636-1-olteanv@gmail.com>
-Message-ID: <20201101000156.2f26a917@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Nov 2020 00:24:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/frr: fix detection of host-python3
+Message-ID: <20201031232427.1681349-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vladimir,
+Add an upstream patch to fix detection of host-python3 and avoid the
+following failure because of missing --embed flag:
 
-Thanks for this contribution!
+configure:22276: checking python interpreter python3
+configure:22278: "$PYTHON" -c 'import sys; open("conftest.pyver", "w").write(sys.executable or ""); sys.exit(not (sys.version_info.major == 2 and sys.version_info.minor >= 7))'
+configure:22281: $? = 1
+configure:22287: "$PYTHON" -c 'import sys; open("conftest.pyver", "w").write(sys.executable or ""); sys.exit(not ((sys.version_info.major == 3 and sys.version_info.minor >= 2) or sys.version_info.major > 3))'
+configure:22290: $? = 0
+configure:22310: result: /home/buildroot/autobuild/run/instance-1/output-1/host/bin/python3 (python3)
+py_abi= py_ldver=3.9 py_ver=3.9 py_bindir=/home/buildroot/autobuild/run/instance-1/output-1/host/bin/
+configure:22326: checking whether /home/buildroot/autobuild/run/instance-1/output-1/host/bin/python3.9-config is available
+configure:22329: result: yes
+configure:22339: checking whether /home/buildroot/autobuild/run/instance-1/output-1/host/bin/python3.9-config provides a working build environment
+configure:22376: /usr/bin/gcc -std=gnu11 -o conftest -O2 -I/home/buildroot/autobuild/run/instance-1/output-1/host/include -fno-omit-frame-pointer -funwind-tables -Wall -Wextra -Wmissing-prototypes -Wmissing-declarations -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wundef -Wno-unused-result -Wno-unused-parameter -Wno-missing-field-initializers -pthread -I/home/buildroot/autobuild/run/instance-1/output-1/host/include/python3.9 -I/home/buildroot/autobuild/run/instance-1/output-1/host/include/python3.9 -I/home/buildroot/autobuild/run/instance-1/output-1/host/include -L/home/buildroot/autobuild/run/instance-1/output-1/host/lib -Wl,-rpath,/home/buildroot/autobuild/run/instance-1/output-1/host/lib conftest.c    -L/home/buildroot/autobuild/run/instance-1/output-1/host/lib  -lcrypt -lpthread -ldl  -lutil -lm -lm  >&5
+/tmp/ccrVSMCb.o: In function `main':
+conftest.c:(.text.startup+0x5): undefined reference to `Py_Initialize'
 
-On Thu, 29 Oct 2020 23:56:29 +0200
-Vladimir Oltean <olteanv@gmail.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/d33293bfb2f8d558efa2d83e5cb71226d3e65c7f
 
->  DEVELOPERS                                 |    4 +
->  board/mvebu/cznic-turris-mox/boot.cmd      |   28 +
->  board/mvebu/cznic-turris-mox/genimage.cfg  |   10 +
->  board/mvebu/cznic-turris-mox/mox.config    | 1554 ++++++++++++++++++++
->  board/mvebu/cznic-turris-mox/post-build.sh |    3 +
->  configs/cznic_turris_mox_defconfig         |   46 +
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...all-future-minor-versions-of-python3.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
 
-We normally like to have a readme.txt file in
-board/mvebu/cznic-turris-mox/ to explain how to use the defconfig.
-Especially how to use the build results on the board. See other
-readme.txt files in board/.
-
-> diff --git a/board/mvebu/cznic-turris-mox/mox.config b/board/mvebu/cznic-turris-mox/mox.config
-> new file mode 100644
-> index 000000000000..07f8b801f3e0
-> --- /dev/null
-> +++ b/board/mvebu/cznic-turris-mox/mox.config
-
-Instead of mox.config, could you call is linux.config or kernel.config ?
-
-Also, this configuration files looks really huge, with lots of useless
-things. There's really two options there:
-
- - Use the full-blown arm64 defconfig from the upstream kernel,
-   optionally with a small fragment file to add a few more options that
-   are needed for your platform.
-
- - Use a dedicated configuration like you're doing, but in this case,
-   it should be reasonably tweaked to the platform, which clearly isn't
-   the case here.
-
-
-
-> @@ -0,0 +1,1554 @@
-> +CONFIG_ACPI_CPPC_CPUFREQ=y
-> +CONFIG_ALTERA_FREEZE_BRIDGE=y
-> +CONFIG_ARMADA_37XX_RWTM_MBOX=y
-> +CONFIG_ARMADA_37XX_WATCHDOG=y
-> +CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM=y
-
-Allwinner stuff.
-
-> +CONFIG_ARM_IMX_CPUFREQ_DT=y
-
-i.MX stuff.
-
-> +CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
-
-RPi stuff.
-
-> +CONFIG_DRM=y
-
-DRM for a platform that has no display.
-
-etc.
-
-> diff --git a/board/mvebu/cznic-turris-mox/post-build.sh b/board/mvebu/cznic-turris-mox/post-build.sh
-> new file mode 100755
-> index 000000000000..808c94e94b57
-> --- /dev/null
-> +++ b/board/mvebu/cznic-turris-mox/post-build.sh
-> @@ -0,0 +1,3 @@
-> +#!/bin/sh
-> +cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-> +ln -sf boot/boot.scr $TARGET_DIR/boot.scr
-> diff --git a/configs/cznic_turris_mox_defconfig b/configs/cznic_turris_mox_defconfig
-> new file mode 100644
-> index 000000000000..bd382db1769a
-> --- /dev/null
-> +++ b/configs/cznic_turris_mox_defconfig
-> @@ -0,0 +1,46 @@
-> +# Architecture
-> +BR2_aarch64=y
-> +# Armada 3720
-> +BR2_cortex_a53=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="1G"
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +
-> +# toolchain
-> +BR2_TOOLCHAIN=y
-> +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-> +BR2_TOOLCHAIN_USES_GLIBC=y
-> +BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
-
-Please keep the default toolchain.
-
-> +
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_LATEST_VERSION=y
-
-Use a fixed kernel version, and not "the latest".
-
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/mvebu/cznic-turris-mox/mox.config"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-3720-turris-mox"
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/mvebu/cznic-turris-mox/boot.cmd"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/mvebu/cznic-turris-mox/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/mvebu/cznic-turris-mox/genimage.cfg"
-> +
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-
-This should be with the rest of the U-Boot boot script options.
-
-> +# Serial port config
-> +BR2_TARGET_GENERIC_GETTY=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyMV0"
-> +
-> +# required tools to create the microSD image
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +
-> +BR2_TARGET_GENERIC_HOSTNAME="mox"
-> +
-> +BR2_USE_MMU=y
-
-Not needed.
-
-> +BR2_USE_WCHAR=y
-
-Ditto.
-
-Could you rework your patch and send an updated version ?
-
-Thanks!
-
-Thomas
+diff --git a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch b/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
+new file mode 100644
+index 0000000000..1eb693703b
+--- /dev/null
++++ b/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
+@@ -0,0 +1,30 @@
++From 838cb35e08eb98acbc27637808162105ae2c4549 Mon Sep 17 00:00:00 2001
++From: Michal Ruprich <michalruprich@gmail.com>
++Date: Wed, 17 Jun 2020 13:47:30 +0200
++Subject: [PATCH] build: find all future minor versions of python3
++
++This way we can find every python from 3.8 further
++
++Signed-off-by: Michal Ruprich <michalruprich@gmail.com>
++
++[Retrieved from:
++https://github.com/FRRouting/frr/commit/838cb35e08eb98acbc27637808162105ae2c4549]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ m4/ax_python.m4 | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/m4/ax_python.m4 b/m4/ax_python.m4
++index 9f43ea0ab12..91d12b99b43 100644
++--- a/m4/ax_python.m4
+++++ b/m4/ax_python.m4
++@@ -186,7 +186,8 @@ AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
++       AC_MSG_RESULT([yes])
++ 
++       PYTHON_CFLAGS="`\"$pycfg\" --includes`"
++-      if test x"${py_ver}" = x"3.8" || test x"{py_ver}" = x"3.9"; then
+++      minor_ver=${py_ver#*\.}
+++      if test $((minor_ver)) -gt 7; then
++         PYTHON_LIBS="`\"$pycfg\" --ldflags --embed`"
++       else
++         PYTHON_LIBS="`\"$pycfg\" --ldflags`"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
