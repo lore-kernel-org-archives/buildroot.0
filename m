@@ -1,122 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 31 Oct 2020 18:26:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fastd: fix CVE-2020-27638
-In-Reply-To: <20201031172023.kofrpesgfwchdjei@falbala.internal.home.lespocky.de>
-References: <20201031163420.289481-1-fontaine.fabrice@gmail.com>
- <20201031172023.kofrpesgfwchdjei@falbala.internal.home.lespocky.de>
-Message-ID: <CAPi7W80N6yx+Mj1WB_9EvMUYhhd_Yr7jySSQeDbq2TNGCScfOw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 31 Oct 2020 18:28:17 +0100
+Subject: [Buildroot] [git commit] package/libfuse3: fix build with sshfs
+ 3.7.0
+Message-ID: <20201031171703.62A0A84EF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander,
+commit: https://git.buildroot.net/buildroot/commit/?id=ec6598150f4e2ef15b84e3518ee73536dbf3708d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le sam. 31 oct. 2020 ? 18:20, Alexander Dahl <post@lespocky.de> a ?crit :
->
-> Hei hei,
->
-> On Sat, Oct 31, 2020 at 05:34:20PM +0100, Fabrice Fontaine wrote:
-> > receive.c in fastd before v21 allows denial of service (assertion
-> > failure) when receiving packets with an invalid type code.
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Acked-by: Alexander Dahl <post@lespocky.de>
->
-> Note: with v21 fastd switched from CMake to Meson. I have no
-> experience with Meson so far, so I might need some time for an
-> upgrade. If someone else wants to step in, do not hesitate.
-I prepared a patch to bump fastd to v21, I'll send it after this one is merged.
->
-> Greets
-> Alex
->
-> > ---
-> >  ...-leak-when-receiving-invalid-packets.patch | 45 +++++++++++++++++++
-> >  package/fastd/fastd.mk                        |  3 ++
-> >  2 files changed, 48 insertions(+)
-> >  create mode 100644 package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-> >
-> > diff --git a/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-> > new file mode 100644
-> > index 0000000000..f4a44fea6d
-> > --- /dev/null
-> > +++ b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-> > @@ -0,0 +1,45 @@
-> > +From 737925113363b6130879729cdff9ccc46c33eaea Mon Sep 17 00:00:00 2001
-> > +From: Matthias Schiffer <mschiffer@universe-factory.net>
-> > +Date: Mon, 19 Oct 2020 21:08:16 +0200
-> > +Subject: [PATCH] receive: fix buffer leak when receiving invalid packets
-> > +
-> > +For fastd versions before v20, this was just a memory leak (which could
-> > +still be used for DoS, as it's remotely triggerable). With the new
-> > +buffer management of fastd v20, this will trigger an assertion failure
-> > +instead as soon as the buffer pool is empty.
-> > +
-> > +[Retrieved from:
-> > +https://github.com/NeoRaider/fastd/commit/737925113363b6130879729cdff9ccc46c33eaea]
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +---
-> > + src/receive.c | 10 ++++++++++
-> > + 1 file changed, 10 insertions(+)
-> > +
-> > +diff --git a/src/receive.c b/src/receive.c
-> > +index 043c9f2..6bca9f4 100644
-> > +--- a/src/receive.c
-> > ++++ b/src/receive.c
-> > +@@ -169,6 +169,11 @@ static inline void handle_socket_receive_known(
-> > +
-> > +     case PACKET_HANDSHAKE:
-> > +             fastd_handshake_handle(sock, local_addr, remote_addr, peer, buffer);
-> > ++            break;
-> > ++
-> > ++    default:
-> > ++            fastd_buffer_free(buffer);
-> > ++            pr_debug("received packet with invalid type from %P[%I]", peer, remote_addr);
-> > +     }
-> > + }
-> > +
-> > +@@ -195,6 +200,11 @@ static inline void handle_socket_receive_unknown(
-> > +
-> > +     case PACKET_HANDSHAKE:
-> > +             fastd_handshake_handle(sock, local_addr, remote_addr, NULL, buffer);
-> > ++            break;
-> > ++
-> > ++    default:
-> > ++            fastd_buffer_free(buffer);
-> > ++            pr_debug("received packet with invalid type from unknown address %I", remote_addr);
-> > +     }
-> > + }
-> > +
-> > diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-> > index b1261f0fa5..d556e2fbb1 100644
-> > --- a/package/fastd/fastd.mk
-> > +++ b/package/fastd/fastd.mk
-> > @@ -12,6 +12,9 @@ FASTD_LICENSE_FILES = COPYRIGHT
-> >  FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
-> >  FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
-> >
-> > +# 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-> > +FASTD_IGNORE_CVES += CVE-2020-27638
-> > +
-> >  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> >  FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
-> >  FASTD_DEPENDENCIES += openssl
-> > --
-> > 2.28.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
->  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
-Best Regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/f93972515ad09ab2ccbdc4cd976ed60702c5974a
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libfuse3/0001-remove-old-uclibc-hack.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/package/libfuse3/0001-remove-old-uclibc-hack.patch b/package/libfuse3/0001-remove-old-uclibc-hack.patch
+new file mode 100644
+index 0000000000..79b2f8c65e
+--- /dev/null
++++ b/package/libfuse3/0001-remove-old-uclibc-hack.patch
+@@ -0,0 +1,34 @@
++From 4ebb018e78b53a8afe0368e7cd7a17a67c52e3df Mon Sep 17 00:00:00 2001
++From: Rosen Penev <rosenp@gmail.com>
++Date: Wed, 28 Oct 2020 19:20:35 -0700
++Subject: [PATCH] remove old uclibc hack
++
++This actually prevents sshfs linking to it as fuse_new becomes
++unavailable.
++
++According to the git history, this seems to predate 2006.
++
++Signed-off-by: Rosen Penev <rosenp@gmail.com>
++[Retrieved from:
++https://github.com/libfuse/libfuse/commit/4ebb018e78b53a8afe0368e7cd7a17a67c52e3df]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/fuse_misc.h | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/lib/fuse_misc.h b/lib/fuse_misc.h
++index a8b59617..f384aeab 100644
++--- a/lib/fuse_misc.h
+++++ b/lib/fuse_misc.h
++@@ -10,10 +10,9 @@
++ 
++ /*
++   Versioned symbols cannot be used in some cases because it
++-    - confuse the dynamic linker in uClibc
++     - not supported on MacOSX (in MachO binary format)
++ */
++-#if (!defined(__UCLIBC__) && !defined(__APPLE__))
+++#ifndef __APPLE__
++ # if HAVE_SYMVER_ATTRIBUTE
++ #  define FUSE_SYMVER(sym1, sym2) __attribute__ ((symver (sym2)))
++ # else
