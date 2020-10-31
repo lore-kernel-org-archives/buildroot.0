@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 21:42:38 +0100
-Subject: [Buildroot] [git commit] package/pax-utils: needs wchar
-Message-ID: <20201031204917.E60D38366C@busybox.osuosl.org>
+Date: Sat, 31 Oct 2020 21:43:55 +0100
+Subject: [Buildroot] [git commit] package/python-idna: bump to version 2.10
+Message-ID: <20201031204918.13AD6835CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04739c78e61c5f6aef96e653d7658adabea0eb3e
+commit: https://git.buildroot.net/buildroot/commit/?id=6b34b1008d47afb76d0a8b125da3e891dd014b71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pax-utils uses asprintf() since version 1.2.4 (commit
-9c0ec154d782795daa3b7d2ae273bbda2b36ae83), and recent versions of
-gnulib make use of wctomb() in their implementation of asprintf(),
-causing a build failure.
-
-While it seems to be an issue in gnulib, let's for now mark pax-utils
-as being not available with !wchar toolchains.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/613840edba8ea161bb900f3b56d8d3605961c78f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pax-utils/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/python-idna/python-idna.hash | 4 ++--
+ package/python-idna/python-idna.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
-index 58100e482a..ebcca98500 100644
---- a/package/pax-utils/Config.in
-+++ b/package/pax-utils/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PAX_UTILS
- 	bool "pax-utils"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  ELF related utils for ELF 32/64 binaries that can check files
- 	  for security relevant properties.
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 50897f045b..c5f7378fda 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  870b8b80267f00f0faf1b7ba4bdbf14e  idna-2.9.tar.gz
+-sha256  7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb  idna-2.9.tar.gz
++md5  7a910c706db30d758f377db2762c0f9a  idna-2.10.tar.gz
++sha256  b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6  idna-2.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256  412014420d2473dba06117c3d4d9e0eecaa6dde0ca30cd951f4ec2be39426f32  LICENSE.rst
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index eb4c1036cf..b4d9839e29 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
-+
-+comment "pax-utils needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
+-PYTHON_IDNA_VERSION = 2.9
++PYTHON_IDNA_VERSION = 2.10
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/cb/19/57503b5de719ee45e83472f339f617b0c01ad75cba44aba1e4c97c2b0abd
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/ea/b7/e0e3c1c467636186c39925827be42f16fee389dc404ac29e930e9136be70
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
+ PYTHON_IDNA_SETUP_TYPE = setuptools
