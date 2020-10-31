@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 16:11:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
- to 4.11.15
-In-Reply-To: <20201029214313.1570859-1-bernd.kuhls@t-online.de>
-References: <20201029214313.1570859-1-bernd.kuhls@t-online.de>
-Message-ID: <20201031161111.1e2ba9d2@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 31 Oct 2020 17:14:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/collectd: fix build with amqp
+Message-ID: <20201031161421.231545-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Oct 2020 22:43:13 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+collectd unconditionally uses amqp_ssl_socket.h since version 5.11.0 and
+https://github.com/collectd/collectd/commit/e4808ad138de362fab5efa09648fbc101f97bd76
 
-> Fixes
-> o CVE-2020-14318: Missing handle permissions check in SMB1/2/3 ChangeNotify.
-> o CVE-2020-14323: Unprivileged user can crash winbind.
-> o CVE-2020-14383: An authenticated user can crash the DCE/RPC DNS with easily
->                   crafted records.
-> 
-> Release notes:
-> https://www.samba.org/samba/history/samba-4.11.14.html (bugfix-only)
-> https://www.samba.org/samba/history/samba-4.11.15.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/samba4/samba4.hash | 4 ++--
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/525abe0a5cca81ff517c9c07c092d85160c7eb62
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/collectd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 9723b1ae1c..39ecbcfe54 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -582,6 +582,7 @@ comment "Select at least one for collectd to be useful"
+ 
+ config BR2_PACKAGE_COLLECTD_AMQP
+ 	bool "amqp"
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Send/receive values via the Advanced Message Queuing Protocol
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
