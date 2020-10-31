@@ -1,29 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 22:02:44 +0100
-Subject: [Buildroot] [PATCH] package/python-urllib3: bump to version
- 1.25.11
-In-Reply-To: <20201029221025.5358-1-m.niestroj@grinn-global.com>
-References: <20201029221025.5358-1-m.niestroj@grinn-global.com>
-Message-ID: <20201031220244.48c3a440@windsurf>
+Date: Sat, 31 Oct 2020 22:03:23 +0100
+Subject: [Buildroot] [git commit] package/fastd: fix CVE-2020-27638
+Message-ID: <20201031205051.A98E28632D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 29 Oct 2020 23:10:25 +0100
-Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e4af3ce3f9142f09f20c7904925c5454332ec24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/python-urllib3/python-urllib3.hash | 5 +++--
->  package/python-urllib3/python-urllib3.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
+receive.c in fastd before v21 allows denial of service (assertion
+failure) when receiving packets with an invalid type code.
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...uffer-leak-when-receiving-invalid-packets.patch | 45 ++++++++++++++++++++++
+ package/fastd/fastd.mk                             |  3 ++
+ 2 files changed, 48 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+new file mode 100644
+index 0000000000..f4a44fea6d
+--- /dev/null
++++ b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+@@ -0,0 +1,45 @@
++From 737925113363b6130879729cdff9ccc46c33eaea Mon Sep 17 00:00:00 2001
++From: Matthias Schiffer <mschiffer@universe-factory.net>
++Date: Mon, 19 Oct 2020 21:08:16 +0200
++Subject: [PATCH] receive: fix buffer leak when receiving invalid packets
++
++For fastd versions before v20, this was just a memory leak (which could
++still be used for DoS, as it's remotely triggerable). With the new
++buffer management of fastd v20, this will trigger an assertion failure
++instead as soon as the buffer pool is empty.
++
++[Retrieved from:
++https://github.com/NeoRaider/fastd/commit/737925113363b6130879729cdff9ccc46c33eaea]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/receive.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/src/receive.c b/src/receive.c
++index 043c9f2..6bca9f4 100644
++--- a/src/receive.c
+++++ b/src/receive.c
++@@ -169,6 +169,11 @@ static inline void handle_socket_receive_known(
++ 
++ 	case PACKET_HANDSHAKE:
++ 		fastd_handshake_handle(sock, local_addr, remote_addr, peer, buffer);
+++		break;
+++
+++	default:
+++		fastd_buffer_free(buffer);
+++		pr_debug("received packet with invalid type from %P[%I]", peer, remote_addr);
++ 	}
++ }
++ 
++@@ -195,6 +200,11 @@ static inline void handle_socket_receive_unknown(
++ 
++ 	case PACKET_HANDSHAKE:
++ 		fastd_handshake_handle(sock, local_addr, remote_addr, NULL, buffer);
+++		break;
+++
+++	default:
+++		fastd_buffer_free(buffer);
+++		pr_debug("received packet with invalid type from unknown address %I", remote_addr);
++ 	}
++ }
++ 
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index b1261f0fa5..d556e2fbb1 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -12,6 +12,9 @@ FASTD_LICENSE_FILES = COPYRIGHT
+ FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
+ FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
+ 
++# 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
++FASTD_IGNORE_CVES += CVE-2020-27638
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
+ FASTD_DEPENDENCIES += openssl
