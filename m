@@ -1,25 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:42:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lxc: bump to version 4.0.5
-In-Reply-To: <20201031214304.1222569-1-fontaine.fabrice@gmail.com>
-References: <20201031214304.1222569-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201031234203.1e6392d7@windsurf>
+Date: Sat, 31 Oct 2020 23:42:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ima-evm-utils: Bump to version
+ 1.3.2
+In-Reply-To: <20201029163214.5600-1-petr.vorel@gmail.com>
+References: <20201029163214.5600-1-petr.vorel@gmail.com>
+Message-ID: <20201031234219.1767d462@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 31 Oct 2020 22:43:04 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 29 Oct 2020 17:32:14 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> https://discuss.linuxcontainers.org/t/lxc-4-0-5-lts-has-been-released/9269
+> Drop patch from upstream.
+
+There was no patch at all in this package, so I dropped this line from
+the commit log.
+
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  package/lxc/lxc.hash | 2 +-
->  package/lxc/lxc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Reason to update:
+> * Bugfixes: importing keys
 
 Applied to master, thanks.
 
