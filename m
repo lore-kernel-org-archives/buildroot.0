@@ -1,42 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 31 Oct 2020 23:45:24 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5base: fix imx6 eglfs
- support with imx-gpu-viv
-Message-ID: <20201031223251.BE6B681171@busybox.osuosl.org>
+Date: Sat, 31 Oct 2020 23:48:51 +0100
+Subject: [Buildroot] [git commit] package/gcc: re-enable gcc 8.x for PowerPC
+ SPE
+Message-ID: <20201031223628.DBEE28626E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25f2191ed2ff1abc963dde45503bce9c9d48d47e
+commit: https://git.buildroot.net/buildroot/commit/?id=96e80ad214ced86c802d561946fa7da88c1595eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Last commit fixed eglfs_kms support for i.MX8 platforms that required to
-declare imx-gpu-viv as the gbm provider.
-However, this broke the eglfs "fbdev" imx6 support as gbm isn't provided
-in this case. So limit the gbm option to imx-gpu-viv when wayland
-backend is used only.
+The GCC-7.x compiler series was the last to officially support PowerPC
+SPE CPUs. Now that GCC-8.x is the default compiler used by Buildroot,
+some defconfigs, notably the arcturus_ucp1020_defconfig and
+freescale_p1025twr_defconfig ones started to fail building, as they
+are PowerPC SPE platforms.
 
-Fixes: 82fb51d3b5 ("package/qt5/qt5base: allow to use imx-gpu-viv as GBM
-provider")
+In fact, the GCC-8.x compiler series continues to support PowerPC SPE
+CPU cores, but only as an --enable-obsoleted instruction set. This
+patch enables the use of GCC-8.x and asserts the required option to
+enable the PowerPC SPE instruction set.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+This patch passes compilation and run tests with the
+arcturus/ppc-ucp1020?? board.
+
+This patch should address a noted job failure on GitLab CI
+https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
+Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
+Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gcc/Config.in.host | 3 ---
+ package/gcc/gcc.mk         | 1 +
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e0189599a7..ed308c1fa2 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -79,7 +79,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
- else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += ti-sgx-libgbm
--else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
-+else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += imx-gpu-viv
- else
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 74999c800b..4aa6d3725f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -25,9 +25,6 @@ config BR2_GCC_VERSION_8_X
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_or1k
+-	# powerpc spe support has been deprecated since gcc 8.x.
+-	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+-	depends on !BR2_powerpc_SPE
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_GCC_VERSION_9_X
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index f372857916..beac27ede4 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -217,6 +217,7 @@ endif
+ # Enable proper double/long double for SPE ABI
+ ifeq ($(BR2_powerpc_SPE),y)
+ HOST_GCC_COMMON_CONF_OPTS += \
++	--enable-obsolete \
+ 	--enable-e500_double \
+ 	--with-long-double-128
+ endif
