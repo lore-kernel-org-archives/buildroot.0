@@ -1,73 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Nov 2020 11:39:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux
- dependency
-In-Reply-To: <20201101102326.453770-1-fontaine.fabrice@gmail.com>
-References: <20201101102326.453770-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201101103930.GD2887157@scaer>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 1 Nov 2020 14:08:56 +0300
+Subject: [Buildroot] [PATCH v3 4/4] configs/stm32mp157c-dk2: add support
+ for wifi
+In-Reply-To: <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+References: <20201007144945.1697081-1-shlomi.39sd@gmail.com>
+ <20201007144945.1697081-4-shlomi.39sd@gmail.com>
+Message-ID: <20201101110856.GA1177156@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2020-11-01 11:23 +0100, Fabrice Fontaine spake thusly:
-> Replace util-linux dependency by util-linux-libs to break the following
-> circular dependency:
+> Adding support for wifi for stm32mp157c-dk2 is achieved by using
+> another dts which includes the bindings for the wifi module.
+> In addition, a txt file for the wifi firmware was added.
+> This was copied from the yocto bsp layer of st.
 > 
->  util-linux -> udev -> systemd -> polkit -> libglib2 -> util-linux
-> 
-> which will result in the following build failure:
-> 
-> ../output-1/build/libglib2-2.64.4/meson.build:1931:2: ERROR: Dependency "mount" not found, tried pkgconfig
-> 
-> This will also raise the following build failure with util-linux:
-> 
-> checking for udev_new in -ludev... no
-> configure: error: udev selected but libudev not found
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d2da9bda4e38b301d11d3baa66ea171e9e087171
->  - http://autobuild.buildroot.org/results/520e9f18015fe26f93eb26387524766440e63f23
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Shlomi Vaknin <shlomi.39sd@gmail.com>
+> ---
+>  .../stm32mp157c-dk2/linux.config              |  4 +-
+>  .../overlay/boot/extlinux/extlinux.conf       |  2 +-
+>  .../brcmfmac43430-sdio.st,stm32mp157c-dk2.txt | 59 +++++++++++++++++++
+>  .../stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts  | 32 ++++++++++
+>  configs/stm32mp157c_dk2_defconfig             |  7 ++-
+>  5 files changed, 100 insertions(+), 4 deletions(-)
+>  create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/overlay/lib/firmware/brcm/brcmfmac43430-sdio.st,stm32mp157c-dk2.txt
+>  create mode 100644 board/stmicroelectronics/stm32mp157c-dk2/stm32mp157c-dk2-wifi.dts
 
-Applied to master, thanks.
+I would suggest to add a kernel patch for stm32mp157c-dk2 dts file
+instead of adding custom dts directly. This way no need to modify
+extlinux.conf. Besides, patch will be easy to drop as soon as wifi
+support is mainlined.
+
+
+As for WiFi on stm32mp157c-dk2, I have the same problems as mentioned
+earlier in this email thread. Firmware is loaded, but times out later on
+
+[8.083508] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+clkctl 0x50
+[9.130954] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
+clkctl 0x50
+
+I tried both linux-firmware and murata firmware package. None of them
+makes wifi work on my board.
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  package/libglib2/libglib2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> index fda04334f5..43fcb27fae 100644
-> --- a/package/libglib2/libglib2.mk
-> +++ b/package/libglib2/libglib2.mk
-> @@ -86,7 +86,7 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
->  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
-> -LIBGLIB2_DEPENDENCIES += util-linux
-> +LIBGLIB2_DEPENDENCIES += util-linux-libs
->  else
->  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
->  endif
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Sergey
