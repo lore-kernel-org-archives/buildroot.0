@@ -1,111 +1,48 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Sun,  1 Nov 2020 17:32:58 +0100
-Subject: [Buildroot] [PATCH] package/gnuradio: fix qtgui build when
- gr-analog is not set
-Message-ID: <20201101163258.32192-1-gwenj@trabucayre.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Nov 2020 17:57:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/azure-iot-sdk-c: needs wchar
+Message-ID: <20201101165738.2334483-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+wchar is needed since version LTS_07_2020_Ref01 which bumped internal
+umock with
+https://github.com/Azure/azure-iot-sdk-c/commit/8a27860452ec7345bce84d6690b0e8d167b7560a
 
-gr-qtgui examples needs to have gr-analog enabled, without this dependency
-compile crash with:
-
-In file included from
-/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
-/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
-fatal error: gnuradio/analog/noise_source.h: No such file or directory
-24 | #include <gnuradio/analog/noise_source.h>
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
-gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from
-/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
-/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
-fatal error: gnuradio/analog/noise_source.h: No such file or directory
-24 | #include <gnuradio/analog/noise_source.h>
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-
-GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
-user has not selected this option.
-
-[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
+Indeed umock unconditionally depends on wchar since
+https://github.com/Azure/umock-c/commit/6b8e0160defb23ec4fde159ba6389cf61e352a0b
 
 Fixes:
-- http://autobuild.buildroot.net/results/fde670499289f3d7d47379eebccf6e0f92c6d200/
+ - http://autobuild.buildroot.org/results/ad7ecd00d8f55c7cae5886c38c097ff0d071a962
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...add-examples-c-subdirectory-when-gr-.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+ package/azure-iot-sdk-c/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
-new file mode 100644
-index 0000000000..034c10c5cc
---- /dev/null
-+++ b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
-@@ -0,0 +1,55 @@
-+From 268b1a599304f58bd56c86ff09041b5912c24a0c Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Sun, 1 Nov 2020 17:24:36 +0100
-+Subject: [PATCH] gr-qtgui: dont't add examples/c++ subdirectory when gr-analog
-+ is disabled
-+
-+gr-qtgui examples needs to have gr-analog enabled, without this dependency
-+compile crash with:
-+
-+In file included from
-+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
-+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
-+fatal error: gnuradio/analog/noise_source.h: No such file or directory
-+24 | #include <gnuradio/analog/noise_source.h>
-+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+compilation terminated.
-+make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
-+gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
-+make[3]: *** Waiting for unfinished jobs....
-+In file included from
-+/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
-+/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
-+fatal error: gnuradio/analog/noise_source.h: No such file or directory
-+24 | #include <gnuradio/analog/noise_source.h>
-+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+compilation terminated.
-+
-+GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
-+user has not selected this option.
-+
-+[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ gr-qtgui/CMakeLists.txt | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/gr-qtgui/CMakeLists.txt b/gr-qtgui/CMakeLists.txt
-+index 8831f3ad9..561186fbd 100644
-+--- a/gr-qtgui/CMakeLists.txt
-++++ b/gr-qtgui/CMakeLists.txt
-+@@ -68,7 +68,9 @@ if(ENABLE_GR_QTGUI)
-+ add_subdirectory(include/gnuradio/qtgui)
-+ add_subdirectory(lib)
-+ add_subdirectory(docs)
-+-add_subdirectory(examples/c++)
-++if (ENABLE_GR_ANALOG)
-++	add_subdirectory(examples/c++)
-++endif(ENABLE_GR_ANALOG)
-+ if(ENABLE_PYTHON)
-+     add_subdirectory(swig)
-+     add_subdirectory(python/qtgui)
-+-- 
-+2.26.2
-+
+diff --git a/package/azure-iot-sdk-c/Config.in b/package/azure-iot-sdk-c/Config.in
+index c554d2fb9b..860746524c 100644
+--- a/package/azure-iot-sdk-c/Config.in
++++ b/package/azure-iot-sdk-c/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_AZURE_IOT_SDK_C
+ 	bool "azure-iot-sdk-c"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_OPENSSL
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_AZURE_IOT_SDK_C
+ 
+ 	  https://github.com/Azure/azure-iot-sdk-c
+ 
+-comment "azure-iot-sdk-c needs a toolchain w/ C++ and NPTL"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++comment "azure-iot-sdk-c needs a toolchain w/ C++, NPTL and wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
 -- 
-2.20.1
+2.28.0
