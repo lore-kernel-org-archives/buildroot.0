@@ -1,104 +1,80 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 1 Nov 2020 16:03:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
- dependency
-In-Reply-To: <20201101130358.GE2887157@scaer>
-References: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
- <20201101130358.GE2887157@scaer>
-Message-ID: <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
+Date: Sun,  1 Nov 2020 16:06:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: select
+ BR2_PACKAGE_UTIL_LINUX_LIBS
+Message-ID: <20201101150619.1709959-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+When util-linux is enabled, select BR2_PACKAGE_UTIL_LINUX_LIBS as
+suggested by Yann E. Morin in
+https://patchwork.ozlabs.org/project/buildroot/patch/20201101121536.1089498-1-fontaine.fabrice at gmail.com/
 
-Le dim. 1 nov. 2020 ? 14:04, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->
-> Fabrice, All,
->
-> On 2020-11-01 13:15 +0100, Fabrice Fontaine spake thusly:
-> > Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
-> > util-linux-libs but this raises the following build failure:
-> >
-> > Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-> >
-> > To fix this build failure, use util-linux or util-linux-libs depending
-> > on BR2_PACKAGE_UTIL_LINUX_LIBS
->
-> OK, so this is exactly what I did not like in this util-linux vs
-> util-linus-libs split, and the fact that util-linux-libs is optional...
->
-> IMHO:
->
->  1. util-linux-libs must be enabled as soon as util-linux is enabled,
->
->  2. packages should build-depend on util-linux-libs, and never on
->     util-linux, and should 'select BR2_PACKAGE_UTIL_LINUX_LIBS' if
->     all they need is a library.
-We can't select BR2_PACKAGE_UTIL_LINUX_LIBS without selecting
-BR2_PACKAGE_UTIL_LINUX as BR2_PACKAGE_UTIL_LINUX_LIBS is a hidden
-option of BR2_PACKAGE_UTIL_LINUX.
-Moreover, we'll select BR2_PACKAGE_UTIL_LINUX_LIBS as soon as
-BR2_PACKAGE_UTIL_LINUX is enabled (as per your first suggestion).
-As a result, util-linux will always be selected even if packages (such
-as abootimg) only build-depend on util-linux-libs.
-So, in the end, we'll fix/clean the build order but util-linux will
-still be built but this is unavoidable unless util-linux-libs is moved
-to its own package.
-Did I misunderstood something?
-I'll send a 2-patch serie that implements your first suggestion and
-your second suggestion on abootimg. If it pleases you, I'll update the
-other packages.
->
-> So, for now I'll apply this patch, because we do need a fix.
->
-> But ultimately, we wnat to sanitise this situation.
->
-> Regards,
-> Yann E. MORIN.
->
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/libglib2/libglib2.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> > index 43fcb27fae..6e9dbd7b26 100644
-> > --- a/package/libglib2/libglib2.mk
-> > +++ b/package/libglib2/libglib2.mk
-> > @@ -86,8 +86,12 @@ endif
-> >
-> >  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-> >  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
-> > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
-> >  LIBGLIB2_DEPENDENCIES += util-linux-libs
-> >  else
-> > +LIBGLIB2_DEPENDENCIES += util-linux
-> > +endif
-> > +else
-> >  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
-> >  endif
-> >
-> > --
-> > 2.28.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-Best Regards,
+As a result, drop BR2_PACKAGE_UTIL_LINUX_LIBS workaround from libglib2
+and drop select of BR2_PACKAGE_UTIL_LINUX_LIBS from eudev and systemd
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/eudev/Config.in      | 1 -
+ package/libglib2/libglib2.mk | 4 ----
+ package/systemd/Config.in    | 1 -
+ package/util-linux/Config.in | 1 +
+ 4 files changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 0e5bd0cee9..b0ce76171a 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_UDEV_GENTOO_SCRIPTS if BR2_INIT_OPENRC
+ 	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+ 	help
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6e9dbd7b26..43fcb27fae 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -86,12 +86,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+ LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
+ LIBGLIB2_DEPENDENCIES += util-linux-libs
+ else
+-LIBGLIB2_DEPENDENCIES += util-linux
+-endif
+-else
+ LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
+ endif
+ 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ec34478e3d..9188876d49 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -29,7 +29,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_LIBS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 1f33eb5514..cee4649f67 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -1,5 +1,6 @@
+ menuconfig BR2_PACKAGE_UTIL_LINUX
+ 	bool "util-linux"
++	select BR2_PACKAGE_UTIL_LINUX_LIBS
+ 	help
+ 	  Various useful/essential linux libraries and utilities.
+ 
+-- 
+2.28.0
