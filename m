@@ -1,30 +1,41 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun, 1 Nov 2020 14:39:13 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/iproute2: bump version to
- 5.8.0
-In-Reply-To: <20200904091309.00ef486b@windsurf.home>
-References: <20200903155728.19448-1-petr.vorel@gmail.com>
- <20200903155728.19448-2-petr.vorel@gmail.com>
- <20200904091309.00ef486b@windsurf.home>
-Message-ID: <20201101133913.GA44255@pevik>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Nov 2020 15:59:37 +0100
+Subject: [Buildroot] [git commit] package/wireshark: add zstd optional
+ dependency
+Message-ID: <20201101144759.0008E83B2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=105004f72acb56e86a778deb9c33eced3173db14
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-<snip>
-> All the build failures here are with pre-built uClibc toolchains...
-> which are therefore using an older uClibc version than 1.0.35, which
-> explains the failure.
+zstd is available since version 3.1.1 and is enabled by default:
+https://github.com/wireshark/wireshark/commit/ad94c4d459d243c0cbbb9b222d5f7cdf8189ab86
 
-I've prepared iproute2 5.9.0, but it's blocked by toolchain update.
-Could you please ping me when uClibc prebuilt toolchains are updated?
-Or where can I check it myself?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/wireshark/wireshark.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Thomas
-
-Kind regards,
-Petr
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 0bcb97606a..0d4fedb3f0 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -155,6 +155,13 @@ else
+ WIRESHARK_CONF_OPTS += -DBUILD_sdjournal=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=ON
++WIRESHARK_DEPENDENCIES += zstd
++else
++WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=OFF
++endif
++
+ # Disable plugins as some of them (like l16mono) can't be built
+ # statically. ENABLE_STATIC=ON actually means "disable shared library"
+ # and ENABLE_STATIC=OFF means "enable shared library". So for the
