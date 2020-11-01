@@ -1,89 +1,111 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Nov 2020 17:30:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump to version 3.4.0
-Message-ID: <20201101163057.1944742-1-fontaine.fabrice@gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Sun,  1 Nov 2020 17:32:58 +0100
+Subject: [Buildroot] [PATCH] package/gnuradio: fix qtgui build when
+ gr-analog is not set
+Message-ID: <20201101163258.32192-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable ilibc which is available and enabled by default since
-  https://github.com/wireshark/wireshark/commit/12a13a69264fdef4281e4b13c8c7d92a272cc99e
-- LTO can be enabled since
-  https://github.com/wireshark/wireshark/commit/e6b5bd09766a1320c5540f78eb0e4ba03ce8f108
-- opus is an optional dependency since
-  https://github.com/wireshark/wireshark/commit/6136c719da4ec9b96c01adb4b0fd7f01af171688
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.0.html
+gr-qtgui examples needs to have gr-analog enabled, without this dependency
+compile crash with:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In file included from
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
+gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
+user has not selected this option.
+
+[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
+
+Fixes:
+- http://autobuild.buildroot.net/results/fde670499289f3d7d47379eebccf6e0f92c6d200/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/wireshark/wireshark.hash |  6 +++---
- package/wireshark/wireshark.mk   | 16 +++++++++++++++-
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ ...add-examples-c-subdirectory-when-gr-.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8d1a3b3a2e..667d8a371e 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.8.txt
--sha1  5fdcbbe3a50cea38a8fa5f10b21f58cbef31793e  wireshark-3.2.8.tar.xz
--sha256  a8a595d08f38c6bd083886f6c199b9d4fb007e363031b263667c7da72323cc32  wireshark-3.2.8.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.0.txt
-+sha1  6fdf4f394c287f1e21b48c5293ec1a6e6b627996  wireshark-3.4.0.tar.xz
-+sha256  67e4ebbd9153fc589fd67dc21b93176674c73adc3d5a43934c3ac69d8594a8ae  wireshark-3.4.0.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0d4fedb3f0..58262f2d2e 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.2.8
-+WIRESHARK_VERSION = 3.4.0
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
-@@ -18,6 +18,7 @@ WIRESHARK_MAKE_ENV = \
- 
- WIRESHARK_CONF_OPTS = \
- 	-DDISABLE_WERROR=ON \
-+	-DENABLE_ILBC=OFF \
- 	-DENABLE_PCAP=ON \
- 	-DENABLE_SMI=OFF
- 
-@@ -35,6 +36,12 @@ endef
- 
- WIRESHARK_PRE_BUILD_HOOKS += WIRESHARK_BUILD_LEMON_TOOL
- 
-+ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_LTO=ON
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_LTO=OFF
-+endif
+diff --git a/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+new file mode 100644
+index 0000000000..034c10c5cc
+--- /dev/null
++++ b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+@@ -0,0 +1,55 @@
++From 268b1a599304f58bd56c86ff09041b5912c24a0c Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Sun, 1 Nov 2020 17:24:36 +0100
++Subject: [PATCH] gr-qtgui: dont't add examples/c++ subdirectory when gr-analog
++ is disabled
 +
- ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),y)
- WIRESHARK_CONF_OPTS += -DBUILD_wireshark=ON
- WIRESHARK_DEPENDENCIES += qt5base qt5multimedia qt5svg qt5tools
-@@ -127,6 +134,13 @@ else
- WIRESHARK_CONF_OPTS += -DENABLE_NGHTTP2=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_OPUS=ON
-+WIRESHARK_DEPENDENCIES += opus
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_OPUS=OFF
-+endif
++gr-qtgui examples needs to have gr-analog enabled, without this dependency
++compile crash with:
 +
- ifeq ($(BR2_PACKAGE_SBC),y)
- WIRESHARK_CONF_OPTS += -DENABLE_SBC=ON
- WIRESHARK_DEPENDENCIES += sbc
++In file included from
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
++gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
++make[3]: *** Waiting for unfinished jobs....
++In file included from
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++
++GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
++user has not selected this option.
++
++[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-qtgui/CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/gr-qtgui/CMakeLists.txt b/gr-qtgui/CMakeLists.txt
++index 8831f3ad9..561186fbd 100644
++--- a/gr-qtgui/CMakeLists.txt
+++++ b/gr-qtgui/CMakeLists.txt
++@@ -68,7 +68,9 @@ if(ENABLE_GR_QTGUI)
++ add_subdirectory(include/gnuradio/qtgui)
++ add_subdirectory(lib)
++ add_subdirectory(docs)
++-add_subdirectory(examples/c++)
+++if (ENABLE_GR_ANALOG)
+++	add_subdirectory(examples/c++)
+++endif(ENABLE_GR_ANALOG)
++ if(ENABLE_PYTHON)
++     add_subdirectory(swig)
++     add_subdirectory(python/qtgui)
++-- 
++2.26.2
++
 -- 
-2.28.0
+2.20.1
