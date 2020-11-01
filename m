@@ -1,125 +1,89 @@
-From: Sergey Bobrenok <bobrofon@gmail.com>
-Date: Sun, 1 Nov 2020 23:12:28 +0700
-Subject: [Buildroot] [PATCH 1/1] sdbus-cpp: new package
-In-Reply-To: <20201031235531.338830a6@windsurf>
-References: <20201029142346.144261-1-bobrofon@gmail.com>
- <20201031235531.338830a6@windsurf>
-Message-ID: <20201101231228.7aebeddb@navi.uac>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Nov 2020 17:30:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump to version 3.4.0
+Message-ID: <20201101163057.1944742-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+- Disable ilibc which is available and enabled by default since
+  https://github.com/wireshark/wireshark/commit/12a13a69264fdef4281e4b13c8c7d92a272cc99e
+- LTO can be enabled since
+  https://github.com/wireshark/wireshark/commit/e6b5bd09766a1320c5540f78eb0e4ba03ce8f108
+- opus is an optional dependency since
+  https://github.com/wireshark/wireshark/commit/6136c719da4ec9b96c01adb4b0fd7f01af171688
 
-On Sat, 31 Oct 2020 23:55:31 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+https://www.wireshark.org/docs/relnotes/wireshark-3.4.0.html
 
-> Hello Sergey,
-> 
-> Thanks for this contribution. First just to make sure: this is really
-> a different library than package/sdbusplus/ that we already have in
-> Buildroot ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wireshark/wireshark.hash |  6 +++---
+ package/wireshark/wireshark.mk   | 16 +++++++++++++++-
+ 2 files changed, 18 insertions(+), 4 deletions(-)
 
-Yes. sdbusplus and sdbus-cpp are different libraries.
-
-> 
-> The commit title should be:
-> 
-> 	package/sdbus-cpp: new package
-
-Ok. I missed it when I was reading the contribution manual. Will fix it.
-
-> 
-> On Thu, 29 Oct 2020 21:23:46 +0700
-> Sergey Bobrenok <bobrofon@gmail.com> wrote:
-> 
-> > sdbus-c++ is a high-level C++ D-Bus library for Linux.
-> > 
-> > The target build produces sdbus-c++ library itself. The host build
-> > produces helper tool sdbus-c++-xml2cpp. sdbus-c++-xml2cpp can be
-> > used to generate sdbus-c++ stub .h files from xml files.
-> > 
-> > Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
-> > ---
-> >  package/Config.in                |  1 +
-> >  package/sdbus-cpp/Config.in      | 18 ++++++++++++++++++
-> >  package/sdbus-cpp/sdbus-cpp.hash |  3 +++
-> >  package/sdbus-cpp/sdbus-cpp.mk   | 18 ++++++++++++++++++
-> >  4 files changed, 40 insertions(+)  
-> 
-> Please add an entry in the DEVELOPERS file.
-
-I'll fix it.
-
-> 
-> > diff --git a/package/sdbus-cpp/Config.in
-> > b/package/sdbus-cpp/Config.in new file mode 100644
-> > index 0000000000..7a952d78a5
-> > --- /dev/null
-> > +++ b/package/sdbus-cpp/Config.in
-> > @@ -0,0 +1,18 @@
-> > +config BR2_PACKAGE_SDBUS_CPP
-> > +	bool "sdbus-c++"
-> > +	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_PACKAGE_SYSTEMD
-> > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-> > +	select BR2_PACKAGE_EXPAT # host package  
-> 
-> It's only the host package that needs host-expat. Selecting
-> BR2_PACKAGE_EXPAT means "I need the target expat", which is not the
-> case here.
-
-You're right. The host-sdbus-cpp package doesn't need to select
-BR2_PACKAGE_EXPAT. It just needs to declare a dependency on host-expat.
-I will delete BR2_PACKAGE_EXPAT from here.
-
-> 
-> > +	help
-> > +	  sdbus-c++ is a high-level C++ D-Bus library for Linux
-> > +	  designed to provide expressive, easy-to-use API in
-> > modern C++. +
-> > +	  This will build the target library and the host side
-> > native
-> > +	  stub generator tool (sdbus-c++-xml2cpp).  
-> 
-> No, your package as it is written today will not build the host side.
-
-Can you explain what do you mean? This package is providing
-'host-sdbus-cpp' target that can be used to build 'sdbus-c++-xml2cpp'
-generator tool by dependency. This is that I was trying to achieve and
-that how I use it (and it works). I am not sure what should I change.
-
-> 
-> > diff --git a/package/sdbus-cpp/sdbus-cpp.mk
-> > b/package/sdbus-cpp/sdbus-cpp.mk new file mode 100644
-> > index 0000000000..608919a050
-> > --- /dev/null
-> > +++ b/package/sdbus-cpp/sdbus-cpp.mk
-> > @@ -0,0 +1,18 @@
-> > +################################################################################
-> > +#
-> > +# sdbus-c++
-> > +#
-> > +################################################################################
-> > +
-> > +SDBUS_CPP_VERSION = 0.8.3
-> > +SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
-> > +SDBUS_CPP_SITE =
-> > https://github.com/Kistler-Group/sdbus-cpp/archive  
-> 
-> These are auto-generated archives. In this case, please use our $(call
-> github,...) macro instead.
-
-I'll fix it.
-
-> 
-> > +SDBUS_CPP_INSTALL_STAGING = YES
-> > +SDBUS_CPP_DEPENDENCIES = systemd
-> > +SDBUS_CPP_LICENSE = LGPL-2.1-or-later  
-> 
-> I know LGPL-2.1-or-later is the correct SPDX encoding, but we use
-> LGPL-2.1+ in Buildroot, for historical reasons.
-
-I'll fix it.
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 8d1a3b3a2e..667d8a371e 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.8.txt
+-sha1  5fdcbbe3a50cea38a8fa5f10b21f58cbef31793e  wireshark-3.2.8.tar.xz
+-sha256  a8a595d08f38c6bd083886f6c199b9d4fb007e363031b263667c7da72323cc32  wireshark-3.2.8.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.0.txt
++sha1  6fdf4f394c287f1e21b48c5293ec1a6e6b627996  wireshark-3.4.0.tar.xz
++sha256  67e4ebbd9153fc589fd67dc21b93176674c73adc3d5a43934c3ac69d8594a8ae  wireshark-3.4.0.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 0d4fedb3f0..58262f2d2e 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.2.8
++WIRESHARK_VERSION = 3.4.0
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+@@ -18,6 +18,7 @@ WIRESHARK_MAKE_ENV = \
+ 
+ WIRESHARK_CONF_OPTS = \
+ 	-DDISABLE_WERROR=ON \
++	-DENABLE_ILBC=OFF \
+ 	-DENABLE_PCAP=ON \
+ 	-DENABLE_SMI=OFF
+ 
+@@ -35,6 +36,12 @@ endef
+ 
+ WIRESHARK_PRE_BUILD_HOOKS += WIRESHARK_BUILD_LEMON_TOOL
+ 
++ifeq ($(BR2_GCC_ENABLE_LTO),y)
++WIRESHARK_CONF_OPTS += -DENABLE_LTO=ON
++else
++WIRESHARK_CONF_OPTS += -DENABLE_LTO=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),y)
+ WIRESHARK_CONF_OPTS += -DBUILD_wireshark=ON
+ WIRESHARK_DEPENDENCIES += qt5base qt5multimedia qt5svg qt5tools
+@@ -127,6 +134,13 @@ else
+ WIRESHARK_CONF_OPTS += -DENABLE_NGHTTP2=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPUS),y)
++WIRESHARK_CONF_OPTS += -DENABLE_OPUS=ON
++WIRESHARK_DEPENDENCIES += opus
++else
++WIRESHARK_CONF_OPTS += -DENABLE_OPUS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_SBC),y)
+ WIRESHARK_CONF_OPTS += -DENABLE_SBC=ON
+ WIRESHARK_DEPENDENCIES += sbc
+-- 
+2.28.0
