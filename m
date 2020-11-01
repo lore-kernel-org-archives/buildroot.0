@@ -1,44 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Nov 2020 10:04:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/opencv: drop package
-In-Reply-To: <20201018143200.1250673-1-fontaine.fabrice@gmail.com>
-References: <20201018143200.1250673-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201101100446.52130bb6@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Nov 2020 10:52:43 +0100
+Subject: [Buildroot] [git commit] package/uhd: fix build with ARM without
+ NEON
+Message-ID: <20201101094102.BEAFD86968@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=b07de37540ee34e4e5fa8586ecc40da1586cd940
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 18 Oct 2020 16:32:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+UHD has two issues with ARM:
+1/ NEON_SIMD_ENABLE is always enabled when architecture is ARM. But NEON isn't
+   necessarily support in the CPU
+2/ when NEON is supported -mfpu=neon must be passed to the compiler (not
+   automatically done by UHD)
 
-> opencv 2.x has seen no release since July 2018 and all buildroot
-> packages are already compatible with opencv3 so drop it to ease the
-> addition of opencv4 which is not fully backward compatible with opencv3
-> as "a lot of C API from OpenCV 1.x has been removed.":
-> https://opencv.org/opencv-4-0.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+- http://autobuild.buildroot.net/results/2519bd075b8c021b440677297b32f16b1c3cc3dd/
+- http://autobuild.buildroot.net/results/99d9979be4f37c42390c87b1afd4cd33bac07f5e/
+- http://autobuild.buildroot.net/results/cabc7a87ee869d6bac7d092c1a4fcfcdac22a96e/
 
-Thanks, I have applied this patch.
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/uhd/uhd.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-> +config BR2_PACKAGE_OPENCV
-> +	bool "opencv package was removed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_OPENCV3 if BR2_TOOLCHAIN_HAS_ATOMIC && \
-> +		!BR2_STATIC_LIBS
-
-I've just dropped this select. opencv3 is not really a drop-in
-replacement for opencv, this it felt a bit "weird" to have this being
-done automatically. Better have the user take care of this IMO.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
+index ec0ec03e9f..adb7579019 100644
+--- a/package/uhd/uhd.mk
++++ b/package/uhd/uhd.mk
+@@ -38,6 +38,17 @@ UHD_CONF_OPTS = \
+ 	-DENABLE_UTILS=OFF \
+ 	-DENABLE_X300=OFF
+ 
++# As soon as architecture is ARM, uhd will try to use NEON.
++# But not all ARM cores have NEON support.
++# When CPU support NEON -mfpu=neon must be added to CXX_FLAGS
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++UHD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -mfpu=neon"
++UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=ON
++else
++UHD_CONF_OPTS += -Dhave_mfpu_neon=0
++UHD_CONF_OPTS += -DNEON_SIMD_ENABLE=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ UHD_DEPENDENCIES += orc
+ endif
