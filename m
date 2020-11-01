@@ -1,26 +1,30 @@
-From: Kevin Tomary <kevin.tomary@hotmail.com>
-Date: Sun, 1 Nov 2020 13:08:30 +0000
-Subject: [Buildroot] Activate Wifi on my STM32
-Message-ID: <AM0PR10MB243337C1066FAD682FBBB9C282130@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 1 Nov 2020 14:39:13 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/iproute2: bump version to
+ 5.8.0
+In-Reply-To: <20200904091309.00ef486b@windsurf.home>
+References: <20200903155728.19448-1-petr.vorel@gmail.com>
+ <20200903155728.19448-2-petr.vorel@gmail.com>
+ <20200904091309.00ef486b@windsurf.home>
+Message-ID: <20201101133913.GA44255@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hi Thomas,
 
-I would like to know the steps to activate WiFi on my MPU using Buildroot image. I didn't find a guideline or someone working on that.
+<snip>
+> All the build failures here are with pre-built uClibc toolchains...
+> which are therefore using an older uClibc version than 1.0.35, which
+> explains the failure.
 
-I would like to know which packages to install and files to configure and manipulate in order to have access to it.
+I've prepared iproute2 5.9.0, but it's blocked by toolchain update.
+Could you please ping me when uClibc prebuilt toolchains are updated?
+Or where can I check it myself?
 
-I am using an STM32MP157C-DK2  flashed with a buildroot image. I succeeded in making Ethernet working perfectly. Now I want my MPU to work with Wi-Fi.
+> Thomas
 
-P.s I am new to embedded Linux so please talk to me with some normal vocab. I am learning by doing.
-
-Best Regards
-
-Kevin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201101/964ee92e/attachment.html>
+Kind regards,
+Petr
