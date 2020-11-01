@@ -1,12 +1,15 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Nov 2020 11:23:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux dependency
-Message-ID: <20201101102326.453770-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Nov 2020 11:35:25 +0100
+Subject: [Buildroot] [git commit] package/libglib2: fix util-linux dependency
+Message-ID: <20201101102612.D093E83A34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=2acaa86ce630f616b12aa92493e0269421c5bc97
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Replace util-linux dependency by util-linux-libs to break the following
 circular dependency:
@@ -27,6 +30,7 @@ Fixes:
  - http://autobuild.buildroot.org/results/520e9f18015fe26f93eb26387524766440e63f23
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/libglib2/libglib2.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
@@ -44,5 +48,3 @@ index fda04334f5..43fcb27fae 100644
  else
  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
  endif
--- 
-2.28.0
