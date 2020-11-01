@@ -1,39 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Nov 2020 13:05:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: add zstd optional
+Date: Sun,  1 Nov 2020 13:15:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
  dependency
-Message-ID: <20201101120558.1083803-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zstd is available since version 3.1.1 and is enabled by default:
-https://github.com/wireshark/wireshark/commit/ad94c4d459d243c0cbbb9b222d5f7cdf8189ab86
+Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
+util-linux-libs but this raises the following build failure:
+
+Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+
+To fix this build failure, use util-linux or util-linux-libs depending
+on BR2_PACKAGE_UTIL_LINUX_LIBS
+
+Fixes:
+ - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireshark/wireshark.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libglib2/libglib2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0bcb97606a..0d4fedb3f0 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -155,6 +155,13 @@ else
- WIRESHARK_CONF_OPTS += -DBUILD_sdjournal=OFF
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 43fcb27fae..6e9dbd7b26 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -86,8 +86,12 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+ LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
+ LIBGLIB2_DEPENDENCIES += util-linux-libs
+ else
++LIBGLIB2_DEPENDENCIES += util-linux
++endif
++else
+ LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=ON
-+WIRESHARK_DEPENDENCIES += zstd
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=OFF
-+endif
-+
- # Disable plugins as some of them (like l16mono) can't be built
- # statically. ENABLE_STATIC=ON actually means "disable shared library"
- # and ENABLE_STATIC=OFF means "enable shared library". So for the
 -- 
 2.28.0
