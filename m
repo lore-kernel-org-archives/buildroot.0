@@ -1,74 +1,49 @@
-From: Shlomi Vaknin <shlomi.39sd@gmail.com>
-Date: Mon, 2 Nov 2020 00:17:22 +0200
-Subject: [Buildroot] Activate Wifi on my STM32
-In-Reply-To: <AM0PR10MB243337C1066FAD682FBBB9C282130@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
-References: <AM0PR10MB243337C1066FAD682FBBB9C282130@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
-Message-ID: <CALxJ29RGQqeFL9b32KRQC9ncuG5Np+pjSn1HO87gdTPeYZoORQ@mail.gmail.com>
+From: Vadym Kochan <vadym.kochan@plvision.eu>
+Date: Mon,  2 Nov 2020 01:48:10 +0200
+Subject: [Buildroot] [PATCH] Revert "keepalived: needs headers >= 3.4"
+Message-ID: <20201101234810.10137-1-vadym.kochan@plvision.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kevin!
+This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
 
-Buildroot compiles the mainline kernel repository. Unfortunately, there are
-no dts bindings for the wifi chip (in normal vocab - nothing tells the os
-that the wifi chip is on the board).
-There was a discussion about that about a month ago in buildroot. Adding
-the relevant dts bindings did not work and this issue needs deeper
-investigation. If you still want this you can do one of the following:
-1. Use the yocto build system instead of yocto - st formally supports that
-and the wifi works perfectly there.
-2. Compile the linux kernel repository provided by st (in github) instead
-of the mainline repository. In that case, you need to change the
-linux.config file and add the brcmfmac driver.
+Original commit  made restriction for Linux headers < 3.4 which was
+related to keepalived version 1.3.5, but it compiles fine now at least
+with a toolchain based on 3.2 headers and keepalived 2.0.15 together
+with ipset enabled.
 
-In addition, you need to install the linux firmware package from murata
-(BR2_PACKAGE_MURATA_CYW_FW=y) and enable the specific wifi chip
-(BR2_PACKAGE_MURATA_CYW_FW_CYW43430=y).
-After that, you need to use some userspace tools to connect to router.
-wpa-supplicant is enough, but it is useful to install iw tools as well. If
-you really want that to be easy, use the network-manager package and nmtui
-(comes with network manager).
-If you picked yocto, it will install for you most of the packages listed
-above (if you enable wifi in DISTRO_FEATURES - no normal vocab for that,
-sorry ;)).
-If you really new to embedded linux and the first paragraph is not so clear
-for you, than I am suggesting you to learn embedded linux using the
-wonderful training materials that are freely available from bootilin:
-https://bootlin.com/training/
-Start with the embedded linux training as it has labs specifically for the
-stm32mp1 (yocto training too, btw). Good luck!
+Probably it was fixed by this commit:
 
-Regards,
-Shlomi
+    https://github.com/acassen/keepalived/commit/5a7f895bb795269f79e6353c6269dfbc0b782281
 
-??????? ??? ??, 1 ????? 2020 ?-15:08 ??? ?Kevin Tomary?? <?
-kevin.tomary@hotmail.com??>:?
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+---
+ package/keepalived/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-> Hello
->
-> I would like to know the steps to activate WiFi on my MPU using Buildroot
-> image. I didn't find a guideline or someone working on that.
->
-> I would like to know which packages to install and files to configure and
-> manipulate in order to have access to it.
->
-> I am using an STM32MP157C-DK2  flashed with a buildroot image. I succeeded
-> in making Ethernet working perfectly. Now I want my MPU to work with Wi-Fi.
->
-> P.s I am new to embedded Linux so please talk to me with some normal
-> vocab. I am learning by doing.
->
-> Best Regards
->
-> Kevin
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201102/c894f0b7/attachment.html>
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+index c71821545c..2a0663fed0 100644
+--- a/package/keepalived/Config.in
++++ b/package/keepalived/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 	bool "keepalived"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # uses libdl
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  The main goal of the keepalived project is to add a strong &
+@@ -15,6 +14,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 
+ 	  http://www.keepalived.org/
+ 
+-comment "keepalived needs a toolchain w/ dynamic library, headers >= 3.4"
++comment "keepalived needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++	depends on BR2_STATIC_LIBS
+-- 
+2.17.1
