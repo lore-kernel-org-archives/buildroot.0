@@ -1,9 +1,7 @@
 From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon,  2 Nov 2020 14:54:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/gnuradio: add gr-uhd option
-In-Reply-To: <20201102135451.1753136-1-gwenj@trabucayre.com>
-References: <20201102135451.1753136-1-gwenj@trabucayre.com>
-Message-ID: <20201102135451.1753136-2-gwenj@trabucayre.com>
+Date: Mon,  2 Nov 2020 15:00:00 +0100
+Subject: [Buildroot] [PATCH] package/python-remi: bump version to 2020.10.30
+Message-ID: <20201102140000.1753870-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +10,34 @@ To: buildroot@busybox.net
 
 From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-GNURadio has a block to use USRP, through UHD, to receive or transmit RF
-signals.
-
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/gnuradio/Config.in   | 9 +++++++++
- package/gnuradio/gnuradio.mk | 7 +++++++
- 2 files changed, 16 insertions(+)
+ package/python-remi/python-remi.hash | 4 ++--
+ package/python-remi/python-remi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index cd31ce8864..48012c7056 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -154,4 +154,13 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
- 	help
- 	  Trellis coded modulation blocks
+diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
+index 2355380163..aecdbc0bb0 100644
+--- a/package/python-remi/python-remi.hash
++++ b/package/python-remi/python-remi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 678c9caf1ecffc03c4a3d59931906520545d77e9a8027ff1a1ca90fc580f56e2  python-remi-2019.9.tar.gz
+-sha256 bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
++sha256  afe28d799d147d39954e18377e81101d045affe9c634eed5bf8dfdf888202650  python-remi-2020.10.30.tar.gz
++sha256  bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
+diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
+index df0e1df5a4..53836be9eb 100644
+--- a/package/python-remi/python-remi.mk
++++ b/package/python-remi/python-remi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GNURADIO_UHD
-+	bool "gr-uhd support"
-+	select BR2_PACKAGE_UHD
-+	select BR2_PACKAGE_GNURADIO_ANALOG
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	select BR2_PACKAGE_GNURADIO_FILTER
-+	help
-+	  UHD support
-+
- endif
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 0a818cfc24..1f4458db92 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -149,6 +149,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_GNURADIO_UHD),y)
-+GNURADIO_DEPENDENCIES += uhd
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=ON
-+else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
- else
+-PYTHON_REMI_VERSION = 2019.9
++PYTHON_REMI_VERSION = 2020.10.30
+ PYTHON_REMI_SITE = $(call github,dddomodossola,remi,$(PYTHON_REMI_VERSION))
+ PYTHON_REMI_LICENSE = Apache-2.0
+ PYTHON_REMI_LICENSE_FILES = LICENSE
 -- 
 2.20.1
