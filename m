@@ -1,48 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 02 Nov 2020 12:07:53 +0200
-Subject: [Buildroot] Booting QEMU
-In-Reply-To: <CAB9G97pWnpMk+nDQ6=KEya5DupyyxFdt_uB7=MexNok7mR8s0A@mail.gmail.com>
-References: <CAB9G97pWnpMk+nDQ6=KEya5DupyyxFdt_uB7=MexNok7mR8s0A@mail.gmail.com>
-Message-ID: <87v9eoqdfq.fsf@tarshish>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Mon,  2 Nov 2020 11:21:39 +0100
+Subject: [Buildroot] [PATCH v2] package/libgpiod: bump version to 1.4.5
+In-Reply-To: <20201029110632.25856-1-buildroot@heine.tech>
+References: <20201029110632.25856-1-buildroot@heine.tech>
+Message-ID: <20201102102139.4442-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sadiq,
+* add a comment about the kernel header dependencies when bumping
+versions
+* use two spaces in hash-file
 
-On Mon, Nov 02 2020, Sadiq Hussain Muchumarri wrote:
-> I've followed the below steps for a QEMU build:
->
-> 1)cloned the LTS version of buildroot from GitHub
->
-> 2)make clean
->
-> 3)make distclean
->
-> 4)make qemu_arm_vexpress_defconfig
->
-> 5)make
->
-> All the above steps are succesfull and I can see the artifacts in
-> output/images directory.
->
-> May I know how do I boot the QEMU now?
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-See the command line in board/qemu/arm-vexpress/readme.txt.
+---
 
-baruch
+v1 -> v2:
+  * stay on the 1.4.x branch in all cases
+  * further bump 1.4.4 to 1.4.5
+---
+ package/libgpiod/Config.in     | 2 +-
+ package/libgpiod/libgpiod.hash | 4 ++--
+ package/libgpiod/libgpiod.mk   | 4 +++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-> I see a start-qemu.sh script under output/images directory.
->
-> But, that doesn't work out of the box as it says:
-> "Invalid SD card size: 60MiB"
->
-> Any alternative to this?
-> Thanks:)
-
+diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
+index 63a7cb6e78..293eef6c89 100644
+--- a/package/libgpiod/Config.in
++++ b/package/libgpiod/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGPIOD
+ 	  This is a C library that abstracts the GPIO character
+ 	  device operations on linux.
+ 
+-	  https://github.com/brgl/libgpiod
++	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+ 
+ if BR2_PACKAGE_LIBGPIOD
+ 
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index f0009a7510..0ccb3bef5a 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
++sha256  af5950cefb157e34f8e1485b82ab98873d53eeff2d1166faec483b8ebc1a3cff  libgpiod-1.4.5.tar.xz
+ # Hash for license file
+-sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
++sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 2474ab90a2..83d5abb002 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.4.1
++# be careful when bumping versions, newer branches (e.g. >= 1.6)
++# depend on pretty recent kernel headers
++LIBGPIOD_VERSION = 1.4.5
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.25.1
