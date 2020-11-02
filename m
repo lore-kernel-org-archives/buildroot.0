@@ -1,51 +1,60 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 2 Nov 2020 14:41:43 -0600
-Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc
- 2.31
-In-Reply-To: <874km7bm62.fsf@dell.be.48ers.dk>
-References: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
- <874km7bm62.fsf@dell.be.48ers.dk>
-Message-ID: <CANQCQpYPbsgGhjB2WAnc2BOKThXVG6co8eVEGnQ3fDigLnoehg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Nov 2020 22:07:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump to version 0.15
+In-Reply-To: <20201029132429.392911-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Oct 2020 14:24:29 +0100")
+References: <20201029132429.392911-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zh3za2nt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Mon, Nov 2, 2020 at 1:21 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
->
->  > Peter,
->  > Would you mind picking over the following commit to add busybox glibc
->  > 2.31 support to the 2020.02LTS?
->
->  > commit 13f2d688a24f47446af236829bd6ca194d5aea5b
->  > Author: Carlos Santos <unixmania@gmail.com>
->  > Date:   Sun Mar 22 14:13:01 2020 -0300
->  > package/busybox: fix build with glibc 2.31
->
->  > The known [1,2] issue was found when using a newer external toolchain
->  > with the following configuration and the 2020.02.7 tag.
->  > BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2020.08-1.tar.bz2"
->  > BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
->  > BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
->
-> But that is a general issue with using "too new" external toolchains
-> with older Buildroot versions. Is there any specific reason for wanting
-> to use that toolchain and not E.G. something built from 2020.02.x?
->
+ > - harfbuzz is mandatory since
+ >   https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
+ > - Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
+ >   call to `outline_stroke` causes a signed integer overflow.) through
+ >   https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
+ >   which does not apply cleanly over version 0.14.
 
-Fair.  Our goal was to have a pre-built toolchain for ppc440 with GCC9
-(probably the last ppc support), CVE updates and the latest stable
-bootlin release is now built with libfortran enabled.  Fixing up LTS,
-saves us from having to create a toolchain only defconfig tweaked with
-these changes using LTS and managing that in addition to our regular
-defconfig.
+:/
 
-I think we're OK carrying these bumps or specific patches internally
-but thought I'd see if others had interest.
+ >   It should be noted that version 0.15 also fixes other integer
+ >   overflows (which have no CVE assigned)
+ > - Update indentation in hash file (two spaces)
 
--Matt
+ > https://github.com/libass/libass/releases/tag/0.15.0
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/gstreamer1/gst1-plugins-bad/Config.in |  8 ++++++++
+ >  package/kodi/Config.in                        |  2 ++
+ >  package/libass/Config.in                      |  9 +++++++++
+ >  package/libass/libass.hash                    |  4 ++--
+ >  package/libass/libass.mk                      | 10 ++--------
+ >  5 files changed, 23 insertions(+), 10 deletions(-)
+
+ > diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+ > index 6523dde8c2..72909ae643 100644
+ > --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+ > +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+ > @@ -330,8 +330,16 @@ comment "plugins with external dependencies"
+ 
+ >  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
+ >  	bool "assrender"
+ > +	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
+ > +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+ > +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
+ >  	select BR2_PACKAGE_LIBASS
+ 
+ > +comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
+
+It is '>=', not '=>'
+
+Committed after fixing that, thanks.
+
+-- 
+Bye, Peter Korsgaard
