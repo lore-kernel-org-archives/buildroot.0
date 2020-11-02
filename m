@@ -1,59 +1,71 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 2 Nov 2020 19:54:19 +1300
-Subject: [Buildroot] [PATCH] package/syslog-ng: Ignore CVE-2008-5110
-In-Reply-To: <20201022154328.26b50fad@windsurf.home>
-References: <20201021074424.13589-1-judge.packham@gmail.com>
- <20201022154328.26b50fad@windsurf.home>
-Message-ID: <CAFOYHZDWmUDZiT6b=kJfL+JPnU8LV5k-swsWjsnP1wh_8mNMXw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 2 Nov 2020 08:10:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
+In-Reply-To: <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
+References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
+ <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
+Message-ID: <CAPi7W819iJQ87yYC+weRj8WzX6G_4DLA0fJQZcrquiLfeT20QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Etienne,
 
-On Fri, Oct 23, 2020 at 2:43 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Le lun. 2 nov. 2020 ? 07:07, Etienne Carriere
+<etienne.carriere@linaro.org> a ?crit :
 >
-> Hello Chris,
+> Hello Fabrice,
 >
-> On Wed, 21 Oct 2020 20:44:24 +1300
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > This as fixed in syslog-ng 2.0.10 but the NVD database hasn't been
-> > updated.
+> On Sun, 1 Nov 2020 at 21:44, Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> wrote:
 > >
-> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> > Disable -Werror thanks to CFG_WERROR which is available since version
+> > 3.3.0 and
+> > https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
+> > to fix the following build failure with optee-client 3.11.0:
+> >
+> > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+> > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+> >   struct serializer obj = { };
+> >          ^
+> >
+>
+> This seems strange as { } is expected to be a valid universal initializer.
+> In OP-TEE packages, we use it to initialize struct instances, so I
+> guess the issue would rise at many places.
+> Toolchain seems gcc 4.8.3, is it this toolchain that does not support { }?
+> > -- The C compiler identification is GNU 4.8.3
+The correct universal initializer is { 0 }, not { }. I sent a PR:
+https://github.com/OP-TEE/optee_client/pull/230
+>
+>
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > > ---
-> >  package/syslog-ng/syslog-ng.mk | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> >  package/optee-client/optee-client.mk | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
 > >
-> > diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-> > index 7c2368efba..8587da746a 100644
-> > --- a/package/syslog-ng/syslog-ng.mk
-> > +++ b/package/syslog-ng/syslog-ng.mk
-> > @@ -17,6 +17,10 @@ SYSLOG_NG_AUTORECONF = YES
-> >  SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
-> >       --disable-java --disable-java-modules --disable-mongodb
+> > diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+> > index 8108fc2130..7f613f724d 100644
+> > --- a/package/optee-client/optee-client.mk
+> > +++ b/package/optee-client/optee-client.mk
+> > @@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+> >  OPTEE_CLIENT_INSTALL_STAGING = YES
 > >
-> > +# CVE-2008-5110 was fixed in syslog-ng 2.0.10 but the NVD database is not
-> > +# aware of the fix, ignore it
-> > +SYSLOG_NG_IGNORE_CVES += CVE-2008-5110
->
-> But as proposed over e-mail separately, the proper fix is to modify the
-> NVD database. Have you had the chance to report the issue to the NVD
-> database maintainers ?
->
+> >  OPTEE_CLIENT_CONF_OPTS = \
+> > -       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
+> > +       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
+> > +       -DCFG_WERROR=OFF
+> >
+> >  define OPTEE_CLIENT_INSTALL_INIT_SYSV
+> >         $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+> > --
+> > 2.28.0
+> >
+Best Regards,
 
-Sorry for taking so long to get back. I have reported the issue.
-Apparently I should be getting an email with a ticket number but no
-sign of it yet.
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Fabrice
