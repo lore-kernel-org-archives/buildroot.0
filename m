@@ -1,60 +1,51 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 2 Nov 2020 07:07:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
-In-Reply-To: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
-References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
+Date: Mon, 2 Nov 2020 07:12:10 +0100
+Subject: [Buildroot] [PATCH 6/8] package/optee-test: bump to version
+ 3.11.0
+In-Reply-To: <20201031230043.21190d90@windsurf>
+References: <20201030075045.6960-1-etienne.carriere@linaro.org>
+ <20201030075045.6960-6-etienne.carriere@linaro.org>
+ <20201031230043.21190d90@windsurf>
+Message-ID: <CAN5uoS_wka2VDe8qEV=_4Nq=Xr+Jh5C+6AEva-PaQ6Wv5u72vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+On Sat, 31 Oct 2020 at 23:00, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Fri, 30 Oct 2020 08:50:43 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> > -     depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > +     depends on !BR2_TOOLCHAIN_HAS_THREAD
+>
+> You introduced a typo here by dropping the S.
+>
+> > +     depends on !BR2_INSTALL_LIBSTDCPP
+>
+> And this should have been:
+>
+>         depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+>
+> indeed, the way you had written the conditions, the comment would only
+> displayed if the toolchain does not have threads *and* does not have
+> C++. But what we want is the comment to appear when the toolchain does
+> not have threads *or* does not have C++.
+>
+> I fixed that up when applying. Thanks!
 
-On Sun, 1 Nov 2020 at 21:44, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Disable -Werror thanks to CFG_WERROR which is available since version
-> 3.3.0 and
-> https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
-> to fix the following build failure with optee-client 3.11.0:
->
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
->   struct serializer obj = { };
->          ^
->
+Understood.
+Thanks for the fixes and for applying the changes.
 
-This seems strange as { } is expected to be a valid universal initializer.
-In OP-TEE packages, we use it to initialize struct instances, so I
-guess the issue would rise at many places.
-Toolchain seems gcc 4.8.3, is it this toolchain that does not support { }?
-> -- The C compiler identification is GNU 4.8.3
+Regards,
+Etienne
 
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/optee-client/optee-client.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-> index 8108fc2130..7f613f724d 100644
-> --- a/package/optee-client/optee-client.mk
-> +++ b/package/optee-client/optee-client.mk
-> @@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
->  OPTEE_CLIENT_INSTALL_STAGING = YES
->
->  OPTEE_CLIENT_CONF_OPTS = \
-> -       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
-> +       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
-> +       -DCFG_WERROR=OFF
->
->  define OPTEE_CLIENT_INSTALL_INIT_SYSV
->         $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+> Thomas
 > --
-> 2.28.0
->
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
