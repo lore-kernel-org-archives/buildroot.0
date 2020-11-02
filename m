@@ -1,71 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 2 Nov 2020 08:10:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
-In-Reply-To: <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
-References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
- <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
-Message-ID: <CAPi7W819iJQ87yYC+weRj8WzX6G_4DLA0fJQZcrquiLfeT20QQ@mail.gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Mon, 2 Nov 2020 09:08:09 +0100
+Subject: [Buildroot] [PATCH 7/8] package/optee-test: add deps on openssl
+ when enabled
+In-Reply-To: <20201031224638.1a75b0b4@windsurf>
+References: <20201030075045.6960-1-etienne.carriere@linaro.org>
+ <20201030075045.6960-7-etienne.carriere@linaro.org>
+ <20201031224638.1a75b0b4@windsurf>
+Message-ID: <CAN5uoS9SaDYkYhNoYJdKKQ8v0M6roYzYkPZh6E8hbECr7FPEdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Etienne,
+Hello Thomas,
 
-Le lun. 2 nov. 2020 ? 07:07, Etienne Carriere
-<etienne.carriere@linaro.org> a ?crit :
+On Sat, 31 Oct 2020 at 22:46, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello Fabrice,
+> Hello ?tienne,
 >
-> On Sun, 1 Nov 2020 at 21:44, Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > Disable -Werror thanks to CFG_WERROR which is available since version
-> > 3.3.0 and
-> > https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
-> > to fix the following build failure with optee-client 3.11.0:
-> >
-> > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
-> > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
-> >   struct serializer obj = { };
-> >          ^
-> >
+> On Fri, 30 Oct 2020 08:50:44 +0100
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
 >
-> This seems strange as { } is expected to be a valid universal initializer.
-> In OP-TEE packages, we use it to initialize struct instances, so I
-> guess the issue would rise at many places.
-> Toolchain seems gcc 4.8.3, is it this toolchain that does not support { }?
-> > -- The C compiler identification is GNU 4.8.3
-The correct universal initializer is { 0 }, not { }. I sent a PR:
-https://github.com/OP-TEE/optee_client/pull/230
+> >  OPTEE_TEST_DEPENDENCIES = optee-client optee-os
+> > +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
 >
+> Is it intentional that the dependency is on BR2_PACKAGE_LIBOPENSSL and
+> not BR2_PACKAGE_OPENSSL ?
 >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/optee-client/optee-client.mk | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-> > index 8108fc2130..7f613f724d 100644
-> > --- a/package/optee-client/optee-client.mk
-> > +++ b/package/optee-client/optee-client.mk
-> > @@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
-> >  OPTEE_CLIENT_INSTALL_STAGING = YES
-> >
-> >  OPTEE_CLIENT_CONF_OPTS = \
-> > -       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
-> > +       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
-> > +       -DCFG_WERROR=OFF
-> >
-> >  define OPTEE_CLIENT_INSTALL_INIT_SYSV
-> >         $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
-> > --
-> > 2.28.0
-> >
-Best Regards,
+> If you use BR2_PACKAGE_OPENSSL, it means that either openssl or
+> libressl can be used. If you use BR2_PACKAGE_LIBOPENSSL, then it means
+> that you really only support working with openssl.
+>
+> Normally, libressl is a drop-in replacement for openssl, so it does
+> work just like openssl in most cases. There are however a few OpenSSL
+> APIs that are no longer supported in LibreSSL.
+>
+> Could you clarify this point ?
 
-Fabrice
+Thanks for highlighting this. Indeed, constraining to libopenssl was
+not intentional.
+
+I've checked. From my reading, I would think optee-test uses standard
+stuff from openssl that libressl supports but
+testing here with libressl makes the optee-test test tool fail on a
+certificate test.
+I guess this should be investigated from the optee project scope.
+As for now I'd rather stick to BR2_PACKAGE_LIBOPENSSL dependency here
+as this change proposes.
+
+Regards,
+Etienne
+
+
+
+
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
