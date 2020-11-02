@@ -1,99 +1,113 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon,  2 Nov 2020 17:04:53 +0100
-Subject: [Buildroot] [PATCH] package/gqrx: bump version to 2.13.2
-Message-ID: <20201102160453.1770092-1-gwenj@trabucayre.com>
+From: Sergey Bobrenok <bobrofon@gmail.com>
+Date: Mon,  2 Nov 2020 23:23:24 +0700
+Subject: [Buildroot] [PATCH v2 1/1] package/sdbus-cpp: new package
+In-Reply-To: <20201031235531.338830a6@windsurf>
+References: <20201031235531.338830a6@windsurf>
+Message-ID: <20201102162324.438503-1-bobrofon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+sdbus-c++ is a high-level C++ D-Bus library for Linux.
 
-Drop patch now applied.
+The target build produces sdbus-c++ library itself. The host build
+produces helper tool sdbus-c++-xml2cpp. sdbus-c++-xml2cpp can be used
+to generate sdbus-c++ stub .h files from xml files.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
 ---
- ...aceholders_with_their_full_namespace.patch | 46 -------------------
- package/gqrx/gqrx.hash                        |  2 +-
- package/gqrx/gqrx.mk                          |  2 +-
- 3 files changed, 2 insertions(+), 48 deletions(-)
- delete mode 100644 package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/sdbus-cpp/Config.in      | 16 ++++++++++++++++
+ package/sdbus-cpp/sdbus-cpp.hash |  3 +++
+ package/sdbus-cpp/sdbus-cpp.mk   | 18 ++++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/sdbus-cpp/Config.in
+ create mode 100644 package/sdbus-cpp/sdbus-cpp.hash
+ create mode 100644 package/sdbus-cpp/sdbus-cpp.mk
 
-diff --git a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-deleted file mode 100644
-index 919dc2da01..0000000000
---- a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 0510f6ffee646171bb105e0e8d016ac35e606cd4 Mon Sep 17 00:00:00 2001
--From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
--Date: Mon, 22 Jun 2020 15:45:20 +0200
--Subject: [PATCH] qualify placeholders with their full namespace
--
--With boost >= 1.73, placeholders must be qualified by using the full namespace.
--
--Without the namespace, the build fails with:
--gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
--gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
--set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
--
--[Upstream status: https://github.com/csete/gqrx/pull/811]
--
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-----
-- src/dsp/rds/parser_impl.cc | 2 +-
-- src/dsp/rx_rds.cpp         | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/dsp/rds/parser_impl.cc b/src/dsp/rds/parser_impl.cc
--index b10fdb01..07dae038 100644
----- a/src/dsp/rds/parser_impl.cc
--+++ b/src/dsp/rds/parser_impl.cc
--@@ -40,7 +40,7 @@ parser_impl::parser_impl(bool log, bool debug, unsigned char pty_locale)
-- 	pty_locale(pty_locale)
-- {
-- 	message_port_register_in(pmt::mp("in"));
---	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
--+	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, boost::placeholders::_1));
-- 	message_port_register_out(pmt::mp("out"));
-- 	reset();
-- }
--diff --git a/src/dsp/rx_rds.cpp b/src/dsp/rx_rds.cpp
--index c4a541f3..c09835b0 100644
----- a/src/dsp/rx_rds.cpp
--+++ b/src/dsp/rx_rds.cpp
--@@ -97,7 +97,7 @@ rx_rds_store::rx_rds_store() : gr::block ("rx_rds_store",
--                                 gr::io_signature::make (0, 0, 0))
-- {
--         message_port_register_in(pmt::mp("store"));
---        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, _1));
--+        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, boost::placeholders::_1));
--         d_messages.set_capacity(100);
-- }
-- 
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index 8f5f2ca433..bfa4411c2c 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated:
--sha256  7c626db9f22c3edbe30299a08f7f549b4f30dd83c883595468029a27c3e8fda9  gqrx-2.12.1.tar.gz
-+sha256  ff3a9e350f730823dec8edb38cddfd72f602c909cc4ac39082c445eb66f88d96  gqrx-2.13.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index b3438ac1fd..dd15db2890 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7643722f3c..d96605983f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2329,6 +2329,9 @@ F:	package/libbson/
+ F:	package/lua-resty-http/
+ F:	package/mpir/
  
--GQRX_VERSION = 2.12.1
-+GQRX_VERSION = 2.13.2
- GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
++N:	Sergey Bobrenok <bobrofon@gmail.com>
++F:	package/sdbus-cpp/
++
+ N:	Sergey Matyukevich <geomatsi@gmail.com>
+ F:	boot/arm-trusted-firmware/
+ F:	boot/binaries-marvell/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..be054cbf0d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2441,6 +2441,7 @@ menu "System tools"
+ 	source "package/s6-rc/Config.in"
+ 	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
++	source "package/sdbus-cpp/Config.in"
+ 	source "package/sdbusplus/Config.in"
+ 	source "package/smack/Config.in"
+ 	source "package/start-stop-daemon/Config.in"
+diff --git a/package/sdbus-cpp/Config.in b/package/sdbus-cpp/Config.in
+new file mode 100644
+index 0000000000..85f149eaa1
+--- /dev/null
++++ b/package/sdbus-cpp/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_SDBUS_CPP
++	bool "sdbus-c++"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_SYSTEMD
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	help
++	  sdbus-c++ is a high-level C++ D-Bus library for Linux
++	  designed to provide expressive, easy-to-use API in modern C++.
++
++	  This will build the target library.
++
++	  https://github.com/Kistler-Group/sdbus-cpp
++
++comment "sdbus-c++ needs systemd and a toolchain w/ C++, gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_SYSTEMD || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+new file mode 100644
+index 0000000000..8b87653dfd
+--- /dev/null
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  0fd575ae0f463773dd9141242d1133731e2b780fd6526650ce992ba711d88628  v0.8.3.tar.gz
++sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+new file mode 100644
+index 0000000000..1b892ae943
+--- /dev/null
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# sdbus-c++
++#
++################################################################################
++
++SDBUS_CPP_VERSION = 0.8.3
++SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
++SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
++SDBUS_CPP_INSTALL_STAGING = YES
++SDBUS_CPP_DEPENDENCIES = systemd
++SDBUS_CPP_LICENSE = LGPL-2.1+
++SDBUS_CPP_LICENSE_FILES = COPYING
++HOST_SDBUS_CPP_SUBDIR = tools
++HOST_SDBUS_CPP_DEPENDENCIES = host-expat
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-2.20.1
+2.28.0
