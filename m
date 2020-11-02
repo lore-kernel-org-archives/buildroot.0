@@ -1,105 +1,102 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  2 Nov 2020 19:09:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.26.6
-Message-ID: <20201102180927.31003-1-petr.vorel@gmail.com>
+Date: Mon, 2 Nov 2020 19:42:16 +0100
+Subject: [Buildroot] [PATCH 1/1] imlib2: Bump to version 1.6.1
+In-Reply-To: <20201101214721.GG2887157@scaer>
+References: <20201101180154.14307-1-petr.vorel@gmail.com>
+ <20201101214721.GG2887157@scaer>
+Message-ID: <20201102184216.GB31558@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi,
+Hi Yann,
 
-libqmi update is needed for ModemManager update.
+> Petr, All,
 
-tested:
+> On 2020-11-01 19:01 +0100, Petr Vorel spake thusly:
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> > ---
+> > I'm sorry, I haven't figured out where to disable
+> > BR2_TOOLCHAIN_EXTERNAL_INET_RPC as suggested in the helper:
+> > riscv32-ilp32d--glibc--bleeding-edge-2020.08-1.tar.bz2: OK (sha256: 18a47b0c221137f40720df08e9bbdc0bcb6e68cde3a30906681e4dec83eb7547)
+> > >>> toolchain-external-bootlin 2020.08-1 Extracting
+> > bzcat dl/toolchain-external-bootlin/riscv32-ilp32d--glibc--bleeding-edge-2020.08-1.tar.bz2 | br-test-pkg/br-riscv32/host/bin/tar --strip-components=1 -C br-test-pkg/br-riscv32/build/toolchain-external-bootlin-2020.08-1 --exclude='usr/lib/locale/*'   -xf -
+> > rm -rf br-test-pkg/br-riscv32/host/opt/ext-toolchain
+> > mkdir -p br-test-pkg/br-riscv32/host/opt/ext-toolchain
+> > mv br-test-pkg/br-riscv32/build/toolchain-external-bootlin-2020.08-1/* br-test-pkg/br-riscv32/host/opt/ext-toolchain/
+> > >>> toolchain-external-bootlin 2020.08-1 Patching
+> > >>> toolchain-external-bootlin 2020.08-1 Configuring
+> > f951: Warning: Reading file ?<stdin>? as free form
+> > RPC support not available in C library, please disable BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+> > make: *** [package/pkg-generic.mk:240: br-test-pkg/br-riscv32/build/toolchain-external-bootlin-2020.08-1/.stamp_configured] Error 1
 
-                             andes-nds32 [ 1/45]: FAILED
-                             arm-aarch64 [ 2/45]: OK
-                    bootlin-x86-64-glibc [ 3/45]: OK
-                        br-aarch64-glibc [ 4/45]: OK
-                           br-arcle-hs38 [ 5/45]: OK
-                            br-arm-basic [ 6/45]: SKIPPED
-                  br-arm-cortex-a9-glibc [ 7/45]: OK
-                   br-arm-cortex-a9-musl [ 8/45]: OK
-                   br-arm-cortex-m4-full [ 9/45]: SKIPPED
-                             br-arm-full [10/45]: OK
-                    br-arm-full-nothread [11/45]: SKIPPED
-                      br-arm-full-static [12/45]: OK
-                br-i386-pentium-mmx-musl [13/45]: OK
-                   br-i386-pentium4-full [14/45]: OK
-                    br-microblazeel-full [15/45]: OK
-                      br-mipsel-o32-full [16/45]: OK
-                 br-mips32r6-el-hf-glibc [17/45]: OK
-                      br-mips64-n64-full [18/45]: OK
-                 br-mips64r6-el-hf-glibc [19/45]: OK
-                       br-m68k-5208-full [20/45]: SKIPPED
-                      br-m68k-68040-full [21/45]: OK
-                          br-nios2-glibc [22/45]: OK
-                      br-openrisc-uclibc [23/45]: OK
-                  br-powerpc-e500mc-full [24/45]: OK
-               br-powerpc-603e-basic-cpp [25/45]: SKIPPED
-             br-powerpc64le-power8-glibc [26/45]: OK
-               br-powerpc64-power7-glibc [27/45]: OK
-                              br-riscv32 [28/45]: FAILED
-                              br-riscv64 [29/45]: OK
-                         br-riscv64-musl [30/45]: OK
-                             br-sh4-full [31/45]: OK
-                         br-sparc-uclibc [32/45]: OK
-                        br-sparc64-glibc [33/45]: OK
-                          br-xtensa-full [34/45]: OK
-                    br-x86-64-core2-full [35/45]: OK
-                          br-x86-64-musl [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                           sourcery-mips [43/45]: OK
-                         sourcery-mips64 [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-45 builds, 5 skipped, 2 build failed, 0 legal-info failed
+> > In riscv32 section in
+> > toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options?
+> > But how to disable it?
 
-the failures are not related to this upgrade:
-* andes-nds32: libffi has not been ported to nds32le-buildroot-linux-gnu
-(the usual one)
-* br-riscv32: RPC support not available in C library, please disable
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC (problem with Bootlin, which uses
-glibc >= 2.32, which has removed SUN-RPC implementation. This is being
-discussed in:
-https://patchwork.ozlabs.org/project/buildroot/patch/20201101180154.14307-1-petr.vorel at gmail.com/#2566327)
+> > Adding
+> > # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
+> > into support/config-fragments/autobuild/br-riscv32.config didn't help.
+
+> Aha, you stumbled across the same issue as I did a few days ago, and
+> which Thomas explained me on IRC, so here's a reacp:
+
+> The riscv32 toolchain is built with a snapshot of glibc which is almost
+> a 2.33:
+
+>     $ grep -n VERSION package/glibc/glibc.mk
+>     8:GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
+>     9:GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+>     17:GLIBC_VERSION = 2.32-2-g386543bc4495f658dcce6cd4d11e4ba6574a46f5
+>     21:GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
+>     23:GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
+>     31:GLIBC_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
+
+
+> The 4th line (line 21) is the riscv version. Starting with glibc 2.32,
+> (or 2.33? I don't remember exactly) the RPC support in glibc is no
+> longer built/installed; i.e. the --enable-obsolete-rpc flag is no longer
+> supported.
+Thanks a lot for explanation. It's actually 2.32, where I removed --enable-obsolete-rpc :).
+It was wanted long time to get rid of Sun-RPC (and libnss_nis, libnss_nisplus
+and friends: --enable-obsolete-nsl) as they were abandoned and there are
+external implementations (libtirpc and NIS implementation from Thorsten Kukuk in
+https://github.com/thkukuk/ which also handles IPv6).
+
+I expected some problems, but obviously not in scripts like this.
+
+> However, the script that generates the entries for the Bootlin
+> toolchains, hard-codes the fact that a glibc toolchain will always have
+> native RPC:
+
+>     $ grep -n -A7 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC support/scripts/gen-bootlin-toolchains
+>     260:            elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC"):
+>     261-                # glibc needs mmu support
+>     262-                depends.append("BR2_USE_MMU")
+>     263-                # glibc doesn't support static only configuration
+>     264-                depends.append("!BR2_STATIC_LIBS")
+>     265-                selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
+>     266-                # all glibc toolchains have RPC support
+>     267-                selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
+
+> Fixing this will imply to find a better heuristic in that script...
+
+class Toolchain has version, which is $(GLIBC_VERSION).
+If it's possible to clone the repository - we have $(GLIBC_VERSION) and
+sometimes $(GLIBC_SITE), then we could check the version with inspecting version.h
+or include/features.h. It looks currently glibc would have to be cloned 3x.
+
+But can just be somewhere manually added value of __GLIBC_MINOR__ version?
+Either in package/glibc/glibc.mk or in the script itself?
+That would save time to clone the repositories.
+
+Or maybe even expect there is no Sun-RPC and migrate packages to libtirpc and
+Thorsten Kukuk NIS implementations?
 
 Kind regards,
 Petr
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index e166b66b22..1304a072e2 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  208fe3e94dabe1d8117d1023d841737b6fe92aaff21ef8f35bbed15417ee507f  libqmi-1.24.14.tar.xz
-+sha256  a71963bb1097a42665287e40a9a36f95b8f9d6d6a4b7a5de22d660328af97cb9  libqmi-1.26.6.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 0398100be7..6b5ccfcdea 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.24.14
-+LIBQMI_VERSION = 1.26.6
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
--- 
-2.29.1
+> Regards,
+> Yann E. MORIN.
