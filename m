@@ -1,49 +1,60 @@
-From: Vadym Kochan <vadym.kochan@plvision.eu>
-Date: Mon,  2 Nov 2020 01:48:10 +0200
-Subject: [Buildroot] [PATCH] Revert "keepalived: needs headers >= 3.4"
-Message-ID: <20201101234810.10137-1-vadym.kochan@plvision.eu>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Mon, 2 Nov 2020 07:07:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
+In-Reply-To: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
+References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
+Hello Fabrice,
 
-Original commit  made restriction for Linux headers < 3.4 which was
-related to keepalived version 1.3.5, but it compiles fine now at least
-with a toolchain based on 3.2 headers and keepalived 2.0.15 together
-with ipset enabled.
+On Sun, 1 Nov 2020 at 21:44, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Disable -Werror thanks to CFG_WERROR which is available since version
+> 3.3.0 and
+> https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
+> to fix the following build failure with optee-client 3.11.0:
+>
+> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+>   struct serializer obj = { };
+>          ^
+>
 
-Probably it was fixed by this commit:
+This seems strange as { } is expected to be a valid universal initializer.
+In OP-TEE packages, we use it to initialize struct instances, so I
+guess the issue would rise at many places.
+Toolchain seems gcc 4.8.3, is it this toolchain that does not support { }?
+> -- The C compiler identification is GNU 4.8.3
 
-    https://github.com/acassen/keepalived/commit/5a7f895bb795269f79e6353c6269dfbc0b782281
 
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
----
- package/keepalived/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
-index c71821545c..2a0663fed0 100644
---- a/package/keepalived/Config.in
-+++ b/package/keepalived/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_KEEPALIVED
- 	bool "keepalived"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS # uses libdl
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  The main goal of the keepalived project is to add a strong &
-@@ -15,6 +14,6 @@ config BR2_PACKAGE_KEEPALIVED
- 
- 	  http://www.keepalived.org/
- 
--comment "keepalived needs a toolchain w/ dynamic library, headers >= 3.4"
-+comment "keepalived needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	depends on BR2_STATIC_LIBS
--- 
-2.17.1
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/optee-client/optee-client.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+> index 8108fc2130..7f613f724d 100644
+> --- a/package/optee-client/optee-client.mk
+> +++ b/package/optee-client/optee-client.mk
+> @@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+>  OPTEE_CLIENT_INSTALL_STAGING = YES
+>
+>  OPTEE_CLIENT_CONF_OPTS = \
+> -       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
+> +       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
+> +       -DCFG_WERROR=OFF
+>
+>  define OPTEE_CLIENT_INSTALL_INIT_SYSV
+>         $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
+> --
+> 2.28.0
+>
