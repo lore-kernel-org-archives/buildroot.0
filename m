@@ -1,167 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  2 Nov 2020 19:57:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: add libbsd optional
- dependency
-Message-ID: <20201102185757.79877-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 02 Nov 2020 20:07:21 +0100
+Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc
+ 2.31
+In-Reply-To: <CANQCQpZ5xzOATqBxQrJRhR159LuwFA37eYuK2keTiS=fNzutKQ@mail.gmail.com>
+ (Matthew Weber's message of "Mon, 2 Nov 2020 06:06:07 -0600")
+References: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
+ <CANQCQpZ5xzOATqBxQrJRhR159LuwFA37eYuK2keTiS=fNzutKQ@mail.gmail.com>
+Message-ID: <87blgfbms6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libbsd is an optional dependency which is enabled by default since
-version 4.3.3 and
-https://github.com/zeromq/libzmq/commit/068385c951c0608edec6264d55ba9c4c923acccc
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/51220b1b82774e8f6f6ed8593c58d2e3c31a1531
+ > Peter / Thomas / Yann / Arnout,
+ > On Thu, Oct 29, 2020 at 9:04 AM Matthew Weber
+ > <matthew.weber@rockwellcollins.com> wrote:
+ >> 
+ >> Peter,
+ >> 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...pp-fix-build-with-libbsd-and-strlcpy.patch | 107 ++++++++++++++++++
- package/zeromq/zeromq.mk                      |   9 ++
- 2 files changed, 116 insertions(+)
- create mode 100644 package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch
+ > [snip]
 
-diff --git a/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch b/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch
-new file mode 100644
-index 0000000000..ea1166fd55
---- /dev/null
-+++ b/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch
-@@ -0,0 +1,107 @@
-+From 8cb5708829df9eacd58e1215ce7a1c135eb912b1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 2 Nov 2020 00:04:14 +0100
-+Subject: [PATCH] src/compat.hpp: fix build with libbsd and strlcpy
-+
-+Don't include bsd/string.h if strlcpy is also defined in string.h to
-+avoid the following build failure on uclibc:
-+
-+In file included from src/compat.hpp:41:0,
-+                 from src/ipc_address.cpp:31:
-+/tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/bsd/string.h:44:54: error: declaration of 'size_t strlcpy(char*, const char*, size_t)' has a different exception specifier
-+ size_t strlcpy(char *dst, const char *src, size_t siz);
-+                                                      ^
-+In file included from src/compat.hpp:34:0,
-+                 from src/ipc_address.cpp:31:
-+/tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/string.h:424:15: error: from previous declaration 'size_t strlcpy(char*, const char*, size_t) throw ()'
-+ extern size_t strlcpy(char *__restrict dst, const char *__restrict src,
-+               ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/51220b1b82774e8f6f6ed8593c58d2e3c31a1531
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/zeromq/libzmq/commit/b2a0842063aaa464ca2d182f9d3fefc6493906d0]
-+---
-+ CMakeLists.txt |  4 +---
-+ configure.ac   | 26 ++++++++++++--------------
-+ src/compat.hpp |  4 +++-
-+ 3 files changed, 16 insertions(+), 18 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 85747f626..74dd99ae0 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -250,9 +250,7 @@ if(NOT MSVC)
-+       set(ZMQ_HAVE_LIBBSD 1)
-+     endif()
-+   endif()
-+-  if(NOT WITH_LIBBSD OR NOT LIBBSD_FOUND)
-+-    check_cxx_symbol_exists(strlcpy string.h ZMQ_HAVE_STRLCPY)
-+-  endif()
-++  check_cxx_symbol_exists(strlcpy string.h ZMQ_HAVE_STRLCPY)
-+ endif()
-+ 
-+ # Select curve encryption library, defaults to tweetnacl To use libsodium instead, use --with-libsodium(must be
-+diff --git a/configure.ac b/configure.ac
-+index 58a78e75e..a7a1609af 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -812,20 +812,18 @@ if test "x$enable_libbsd" != "xno"; then
-+             fi
-+         ])
-+ fi
-+-if test "x$found_libbsd" != "xyes"; then
-+-    AC_MSG_CHECKING([whether strlcpy is available])
-+-    AC_COMPILE_IFELSE(
-+-        [AC_LANG_PROGRAM(
-+-            [[#include <string.h>]],
-+-            [[char buf [100]; size_t bar = strlcpy (buf, "foo", 100); (void)bar; return 0;]])
-+-        ],[
-+-            AC_MSG_RESULT([yes])
-+-            AC_DEFINE(ZMQ_HAVE_STRLCPY, [1],
-+-                [strlcpy is available])
-+-        ],[
-+-            AC_MSG_RESULT([no])
-+-    ])
-+-fi
-++AC_MSG_CHECKING([whether strlcpy is available])
-++AC_COMPILE_IFELSE(
-++    [AC_LANG_PROGRAM(
-++        [[#include <string.h>]],
-++        [[char buf [100]; size_t bar = strlcpy (buf, "foo", 100); (void)bar; return 0;]])
-++    ],[
-++        AC_MSG_RESULT([yes])
-++        AC_DEFINE(ZMQ_HAVE_STRLCPY, [1],
-++            [strlcpy is available])
-++    ],[
-++        AC_MSG_RESULT([no])
-++])
-+ 
-+ # pthread_setname is non-posix, and there are at least 4 different implementations
-+ AC_MSG_CHECKING([whether signature of pthread_setname_np() has 1 argument])
-+diff --git a/src/compat.hpp b/src/compat.hpp
-+index 7c7a89275..47744b98e 100644
-+--- a/src/compat.hpp
-++++ b/src/compat.hpp
-+@@ -37,9 +37,10 @@
-+ #define strcasecmp _stricmp
-+ #define strtok_r strtok_s
-+ #else
-++#ifndef ZMQ_HAVE_STRLCPY
-+ #ifdef ZMQ_HAVE_LIBBSD
-+ #include <bsd/string.h>
-+-#elif !defined(ZMQ_HAVE_STRLCPY)
-++#else
-+ static inline size_t
-+ strlcpy (char *dest_, const char *src_, const size_t dest_size_)
-+ {
-+@@ -50,6 +51,7 @@ strlcpy (char *dest_, const char *src_, const size_t dest_size_)
-+     return dest_size_ - remain;
-+ }
-+ #endif
-++#endif
-+ template <size_t size>
-+ static inline int strcpy_s (char (&dest_)[size], const char *const src_)
-+ {
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 1520ea4411..2851af8bea 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -11,6 +11,8 @@ ZEROMQ_DEPENDENCIES = util-linux-libs
- ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
- ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+# We're patching configure.ac
-+ZEROMQ_AUTORECONF = YES
- 
- # Assume these flags are always available. It is true, at least for
- # SOCK_CLOEXEC, since linux v2.6.27.
-@@ -53,6 +55,13 @@ else
- ZEROMQ_CONF_OPTS += --disable-drafts
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+ZEROMQ_DEPENDENCIES += libbsd
-+ZEROMQ_CONF_OPTS += --enable-libbsd
-+else
-+ZEROMQ_CONF_OPTS += --disable-libbsd
-+endif
-+
- # ZeroMQ uses libsodium if it's available.
- ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
- ZEROMQ_DEPENDENCIES += libsodium
+ >> Note: I'll have additional individual patches coming for openssh and
+ >> strace as those were fixed for a similar issue but through version
+ >> bumps on master.  Is there some backstory (beyond the patchwork
+ >> submissions for master) on other attempts to bring glibc 2.31 support
+ >> to LTS?
+ >> 
+
+ > Wondering about your thoughts on adding GLIBC 2.3.1 support to the
+ > 2020.02 LTS.  Technically, we believe that the patches that need
+ > cherry picked over from master are the following.  What do you guys
+ > think?  Should we pull out the individual commits within those
+ > projects(more patches in Buildroot) or are these (strace/openssh)
+ > bumps OK?
+
+But what is the reason for wanting to support glibc 2.31 in LTS? Is
+there anything important added in 2.31 or do you have an external glibc
+2.31 based toolchain you really have to use?
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
