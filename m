@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Nov 2020 22:56:34 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libpam-tacplus: fix build when time_t is 64 bits
-In-Reply-To: <20200518161525.2935223-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 18 May 2020 18:15:25 +0200")
-References: <20200518161525.2935223-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtzza0dp.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Nov 2020 22:56:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: fix
+ CVE-2020-27743
+In-Reply-To: <20201028082658.47272-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 28 Oct 2020 09:26:58 +0100")
+References: <20201028082658.47272-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imana0d8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/874433d8cb30d21332f23024081a8b6d7b3254ae
+ > libtac in pam_tacplus through 1.5.1 lacks a check for a failure of
+ > RAND_bytes()/RAND_pseudo_bytes(). This could lead to use of a
+ > non-random/predictable session_id.
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Update patch to avoid a build failure when time_t is 32 bits
 
-Committed to 2020.02.x, thanks.
+Committed to 2020.02.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
