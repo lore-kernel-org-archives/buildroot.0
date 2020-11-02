@@ -1,37 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 02 Nov 2020 20:20:37 +0100
-Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc
- 2.31
-In-Reply-To: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
- (Matthew Weber's message of "Thu, 29 Oct 2020 09:04:52 -0500")
-References: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
-Message-ID: <874km7bm62.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 2 Nov 2020 20:29:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: bump to version 3.4.0
+In-Reply-To: <20201101163057.1944742-1-fontaine.fabrice@gmail.com>
+References: <20201101163057.1944742-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201102192947.GA41334@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+Hi Fabrice,
 
- > Peter,
- > Would you mind picking over the following commit to add busybox glibc
- > 2.31 support to the 2020.02LTS?
+> - Disable ilibc which is available and enabled by default since
+>   https://github.com/wireshark/wireshark/commit/12a13a69264fdef4281e4b13c8c7d92a272cc99e
+> - LTO can be enabled since
+>   https://github.com/wireshark/wireshark/commit/e6b5bd09766a1320c5540f78eb0e4ba03ce8f108
+> - opus is an optional dependency since
+>   https://github.com/wireshark/wireshark/commit/6136c719da4ec9b96c01adb4b0fd7f01af171688
 
- > commit 13f2d688a24f47446af236829bd6ca194d5aea5b
- > Author: Carlos Santos <unixmania@gmail.com>
- > Date:   Sun Mar 22 14:13:01 2020 -0300
- > package/busybox: fix build with glibc 2.31
+> https://www.wireshark.org/docs/relnotes/wireshark-3.4.0.html
 
- > The known [1,2] issue was found when using a newer external toolchain
- > with the following configuration and the 2020.02.7 tag.
- > BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/aarch64/tarballs/aarch64--glibc--stable-2020.08-1.tar.bz2"
- > BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
- > BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-But that is a general issue with using "too new" external toolchains
-with older Buildroot versions. Is there any specific reason for wanting
-to use that toolchain and not E.G. something built from 2020.02.x?
+Thanks!
 
--- 
-Bye, Peter Korsgaard
+Kind regards,
+Petr
