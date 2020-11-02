@@ -1,52 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Nov 2020 23:10:02 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/php: security
- bump version to 7.4.12
-Message-ID: <20201102215746.D3FF386C59@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Nov 2020 23:37:02 +0100
+Subject: [Buildroot] Online Buildroot Developers Meeting, November 2
+Message-ID: <20201102233702.4774c08d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07fb221f43bba7c78d87ada9024a90da74c300b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Hello,
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.12
+Tomorrow November 2 is the first Tuesday of November. Not only this
+means it's US Elections Day, but it also means that it's our
+traditional online Buildroot Developers Meeting.
 
-According to the release notes this is a "security bug fix release":
-https://news-web.php.net/php.announce/300
+All of the four co-maintainers have confirmed their presence for the
+meeting, but we of course would like many others to participate.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 69beb4dd980adbfdb1a7605acbc1687577617ce3)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The principle is quite simple: we meet on IRC, define some patches to
+look at, distribute who is going to look at what, we try to make
+progress on pending patch series. You can participate by
+reviewing/testing pending series, by pointing us to patches you think
+are ready to apply, or generally to hack on Buildroot.
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 77a0feb555..8e8131d301 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  5d31675a9b9c21b5bd03389418218c30b26558246870caba8eb54f5856e2d6ce  php-7.4.11.tar.xz
-+sha256  e82d2bcead05255f6b7d2ff4e2561bc334204955820cabc2457b5239fde96b76  php-7.4.12.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 6b528cdc33..ce0e3e4a49 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.11
-+PHP_VERSION = 7.4.12
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+Let's meet tomorrow at 9 PM CET on #buildroot @ Freenode !
+
+More details:
+
+  https://elinux.org/Buildroot:RegularVirtualMeeting
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
