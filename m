@@ -1,89 +1,69 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Mon, 2 Nov 2020 09:16:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
-In-Reply-To: <CAPi7W819iJQ87yYC+weRj8WzX6G_4DLA0fJQZcrquiLfeT20QQ@mail.gmail.com>
-References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
- <CAN5uoS_RNnhzbCxKNaHOzc5UbrftQNKZWn8CKSkaj2QxgitWGQ@mail.gmail.com>
- <CAPi7W819iJQ87yYC+weRj8WzX6G_4DLA0fJQZcrquiLfeT20QQ@mail.gmail.com>
-Message-ID: <CAN5uoS_qoKeY_yi-px5iNo+8W4-s0-GxyN187Xm3vyE6BY1vrA@mail.gmail.com>
+From: Kevin Tomary <kevin.tomary@hotmail.com>
+Date: Mon, 2 Nov 2020 09:28:25 +0000
+Subject: [Buildroot] Activate Wifi on my STM32
+In-Reply-To: <CALxJ29RGQqeFL9b32KRQC9ncuG5Np+pjSn1HO87gdTPeYZoORQ@mail.gmail.com>
+References: <AM0PR10MB243337C1066FAD682FBBB9C282130@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>,
+ <CALxJ29RGQqeFL9b32KRQC9ncuG5Np+pjSn1HO87gdTPeYZoORQ@mail.gmail.com>
+Message-ID: <AM0PR10MB2433D0231B9FBA5F1BBCAD7782100@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2 Nov 2020 at 08:10, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Hello Etienne,
->
-> Le lun. 2 nov. 2020 ? 07:07, Etienne Carriere
-> <etienne.carriere@linaro.org> a ?crit :
-> >
-> > Hello Fabrice,
-> >
-> > On Sun, 1 Nov 2020 at 21:44, Fabrice Fontaine
-> > <fontaine.fabrice@gmail.com> wrote:
-> > >
-> > > Disable -Werror thanks to CFG_WERROR which is available since version
-> > > 3.3.0 and
-> > > https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
-> > > to fix the following build failure with optee-client 3.11.0:
-> > >
-> > > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
-> > > /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
-> > >   struct serializer obj = { };
-> > >          ^
-> > >
-> >
-> > This seems strange as { } is expected to be a valid universal initializer.
-> > In OP-TEE packages, we use it to initialize struct instances, so I
-> > guess the issue would rise at many places.
-> > Toolchain seems gcc 4.8.3, is it this toolchain that does not support { }?
-> > > -- The C compiler identification is GNU 4.8.3
-> The correct universal initializer is { 0 }, not { }. I sent a PR:
-> https://github.com/OP-TEE/optee_client/pull/230
+Hello Shlomi,
 
-{ 0 } does not fit well. When the 1st field in a struct is a pointer,
-as here, we experienced toolchains complaining about pointers being
-initialized to integer values.
+Well thank you for your response. I understood some specific things here but I didn't understand why you are talking about Yocto St. I am using Buildroot.
+I mean the first paragraph you provided was clear there is a lack of communication between the hardware and the Buildroot Linux System.  Does this mean that there is no possible way to have the Wi-Fi feature using buildroot?
+According to some searches that I made the Wi-Fi support is working out of the box in buildroot. But you have to enable the wpa_supplicant package and create a /etc/wpa_supplicant file with your Wi-Fi credentials. For generating the inital buildroot config use:
+make stm32mp157_<board>_defconfig command
 
-OP-TEE coding style documentation highlights that, see last bullet in
-https://optee.readthedocs.io/en/latest/general/coding_standards.html.
-Thanks for the P-R in OP-TEE project. I guess we'll get OP-TEE
-community feedback from there.
+The wifi setup is as mentioned only adding the package and wpa supplicant file.I can use the file system overlay option in buildroot
+
+Best Regards
+
+Kevin
+________________________________
+From: Shlomi Vaknin <shlomi.39sd@gmail.com>
+Sent: Sunday, November 1, 2020 11:17 PM
+To: Kevin Tomary <kevin.tomary@hotmail.com>
+Cc: buildroot at busybox.net <buildroot@busybox.net>
+Subject: Re: [Buildroot] Activate Wifi on my STM32
+
+Hello Kevin!
+
+Buildroot compiles the mainline kernel repository. Unfortunately, there are no dts bindings for the wifi chip (in normal vocab - nothing tells the os that the wifi chip is on the board).
+There was a discussion about that about a month ago in buildroot. Adding the relevant dts bindings did not work and this issue needs deeper investigation. If you still want this you can do one of the following:
+1. Use the yocto build system instead of yocto - st formally supports that and the wifi works perfectly there.
+2. Compile the linux kernel repository provided by st (in github) instead of the mainline repository. In that case, you need to change the linux.config file and add the brcmfmac driver.
+
+In addition, you need to install the linux firmware package from murata (BR2_PACKAGE_MURATA_CYW_FW=y) and enable the specific wifi chip (BR2_PACKAGE_MURATA_CYW_FW_CYW43430=y).
+After that, you need to use some userspace tools to connect to router. wpa-supplicant is enough, but it is useful to install iw tools as well. If you really want that to be easy, use the network-manager package and nmtui (comes with network manager).
+If you picked yocto, it will install for you most of the packages listed above (if you enable wifi in DISTRO_FEATURES - no normal vocab for that, sorry ;)).
+If you really new to embedded linux and the first paragraph is not so clear for you, than I am suggesting you to learn embedded linux using the wonderful training materials that are freely available from bootilin: https://bootlin.com/training/
+Start with the embedded linux training as it has labs specifically for the stm32mp1 (yocto training too, btw). Good luck!
 
 Regards,
-Etienne
+Shlomi
 
+??????? ??? ??, 1 ????? 2020 ?-15:08 ??? ?Kevin Tomary?? <?kevin.tomary at hotmail.com<mailto:kevin.tomary@hotmail.com>??>:?
+Hello
 
-> >
-> >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  package/optee-client/optee-client.mk | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
-> > > index 8108fc2130..7f613f724d 100644
-> > > --- a/package/optee-client/optee-client.mk
-> > > +++ b/package/optee-client/optee-client.mk
-> > > @@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
-> > >  OPTEE_CLIENT_INSTALL_STAGING = YES
-> > >
-> > >  OPTEE_CLIENT_CONF_OPTS = \
-> > > -       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
-> > > +       -DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
-> > > +       -DCFG_WERROR=OFF
-> > >
-> > >  define OPTEE_CLIENT_INSTALL_INIT_SYSV
-> > >         $(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
-> > > --
-> > > 2.28.0
-> > >
-> Best Regards,
->
-> Fabrice
+I would like to know the steps to activate WiFi on my MPU using Buildroot image. I didn't find a guideline or someone working on that.
+
+I would like to know which packages to install and files to configure and manipulate in order to have access to it.
+
+I am using an STM32MP157C-DK2  flashed with a buildroot image. I succeeded in making Ethernet working perfectly. Now I want my MPU to work with Wi-Fi.
+
+P.s I am new to embedded Linux so please talk to me with some normal vocab. I am learning by doing.
+
+Best Regards
+
+Kevin
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net<mailto:buildroot@busybox.net>
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201102/dc8434e8/attachment.html>
