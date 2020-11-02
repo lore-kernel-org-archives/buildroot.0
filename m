@@ -1,115 +1,45 @@
-From: Sadiq Hussain Muchumarri <sadiq1194@gmail.com>
-Date: Mon, 2 Nov 2020 16:58:17 +0530
-Subject: [Buildroot] Booting QEMU
-In-Reply-To: <CAB9G97py-PFtUX7oaB=r2wLExMeAHNMqpACBYPrjxeZq4ssxMw@mail.gmail.com>
-References: <CAB9G97pWnpMk+nDQ6=KEya5DupyyxFdt_uB7=MexNok7mR8s0A@mail.gmail.com>
- <87v9eoqdfq.fsf@tarshish>
- <CAB9G97orpxrvPbC6oKDoPVbxMCUiHF-bn8csk8+0aZ4o8iaQHQ@mail.gmail.com>
- <CAB9G97pnaTUKkNgbMje7D_hDYX-oVzeyYWkCjQSey2GuPBJ91w@mail.gmail.com>
- <87k0v4qa7f.fsf@tarshish>
- <CAB9G97py-PFtUX7oaB=r2wLExMeAHNMqpACBYPrjxeZq4ssxMw@mail.gmail.com>
-Message-ID: <CAB9G97p+eUTssaAuXRwn4VAggN-W6DP9P7Nxw3EqWmCG47oPkg@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 2 Nov 2020 06:06:07 -0600
+Subject: [Buildroot] [2020.02.x] package/busybox: fix build with glibc
+ 2.31
+In-Reply-To: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
+References: <CANQCQpZvbwcpdhXsE90HUS10fmZrOtbeGAA82rMUWmUZnd0LGg@mail.gmail.com>
+Message-ID: <CANQCQpZ5xzOATqBxQrJRhR159LuwFA37eYuK2keTiS=fNzutKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry.
-My mistake.
-I can enter the prompt now.
-Thanks for the support:)
+Peter / Thomas / Yann / Arnout,
 
-On Mon, 2 Nov 2020, 16:53 Sadiq Hussain Muchumarri, <sadiq1194@gmail.com>
-wrote:
 
-> But, it doesn't automatically login for me.
+On Thu, Oct 29, 2020 at 9:04 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
 >
-> On Mon, 2 Nov 2020, 16:47 Baruch Siach, <baruch@tkos.co.il> wrote:
+> Peter,
 >
->> Hi Sadiq,
->>
->> Please keep the list on Cc.
->>
->> On Mon, Nov 02 2020, Sadiq Hussain Muchumarri wrote:
->> > OK.
->> > It boots when the command present in readme.txt is explicitly given.
->> > Doesn't work if I run start-qemu.sh (not sure if this is a BUG).
->> >
->> > It asks for buildroot login.
->> > What needs to be given?
->>
->> The default build creates a 'root' account with empty password.
->>
->> baruch
->>
->> > On Mon, 2 Nov 2020, 15:49 Sadiq Hussain Muchumarri, <
->> sadiq1194 at gmail.com>
->> > wrote:
->> >
->> >> Yes.
->> >> Apart from "-serial studio", everything else is same.
->> >> According to start-qemu.sh, if I don't provide any cmd line options to
->> it,
->> >> then it takes "-serial studio". Otherwise, it takes "-nographic".
->> >>
->> >> I execute it without any arguments.
->> >> Still fails though :(
->> >>
->> >> On Mon, 2 Nov 2020, 15:37 Baruch Siach, <baruch@tkos.co.il> wrote:
->> >>
->> >>> Hi Sadiq,
->> >>>
->> >>> On Mon, Nov 02 2020, Sadiq Hussain Muchumarri wrote:
->> >>> > I've followed the below steps for a QEMU build:
->> >>> >
->> >>> > 1)cloned the LTS version of buildroot from GitHub
->> >>> >
->> >>> > 2)make clean
->> >>> >
->> >>> > 3)make distclean
->> >>> >
->> >>> > 4)make qemu_arm_vexpress_defconfig
->> >>> >
->> >>> > 5)make
->> >>> >
->> >>> > All the above steps are succesfull and I can see the artifacts in
->> >>> > output/images directory.
->> >>> >
->> >>> > May I know how do I boot the QEMU now?
->> >>>
->> >>> See the command line in board/qemu/arm-vexpress/readme.txt.
->> >>>
->> >>> baruch
->> >>>
->> >>> > I see a start-qemu.sh script under output/images directory.
->> >>> >
->> >>> > But, that doesn't work out of the box as it says:
->> >>> > "Invalid SD card size: 60MiB"
->> >>> >
->> >>> > Any alternative to this?
->> >>> > Thanks:)
->> >>>
->> >>> --
->> >>>                                                      ~. .~   Tk Open
->> >>> Systems
->> >>>
->> >>>
->> =}------------------------------------------------ooO--U--Ooo------------{=
->> >>>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il
->> -
->> >>>
->> >>
->>
->>
->> --
->>                                                      ~. .~   Tk Open
->> Systems
->>
->> =}------------------------------------------------ooO--U--Ooo------------{=
->>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->>
+
+[snip]
+
+> Note: I'll have additional individual patches coming for openssh and
+> strace as those were fixed for a similar issue but through version
+> bumps on master.  Is there some backstory (beyond the patchwork
+> submissions for master) on other attempts to bring glibc 2.31 support
+> to LTS?
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201102/a78c7b6b/attachment.html>
+
+Wondering about your thoughts on adding GLIBC 2.3.1 support to the
+2020.02 LTS.  Technically, we believe that the patches that need
+cherry picked over from master are the following.  What do you guys
+think?  Should we pull out the individual commits within those
+projects(more patches in Buildroot) or are these (strace/openssh)
+bumps OK?
+
+      859264312b package/openssh: bump to version 8.2p1
+      64fbba5778 package/busybox: fix build with musl 1.2.0
+      269d426710 package/busybox: fix build with glibc 2.31
+      5de06a91cf package/strace: bump to version 5.5
+
+Best Regards,
+Matt
