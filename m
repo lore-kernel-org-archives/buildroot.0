@@ -1,63 +1,105 @@
-From: Kevin Tomary <kevin.tomary@hotmail.com>
-Date: Mon, 2 Nov 2020 17:10:38 +0000
-Subject: [Buildroot] mkfs.ext4: Could not allocate block in ext2 filesystem
- while populating file system
-Message-ID: <AM0PR10MB2433AA0D0ED377CB19D8F22A82100@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon,  2 Nov 2020 19:09:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.26.6
+Message-ID: <20201102180927.31003-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Evryone
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
 
-I got the following error after the build of the image.  With less packages I didn?t get make errors like these.
-I wanted to include  WiFi and Bluetooth according to this blog but the make failed after a long period of building
+libqmi update is needed for ModemManager update.
 
-https://tewarid.github.io/2014/10/10/wireless-on-raspberry-pi-with-buildroot.html
-https://tewarid.github.io/2014/10/29/bluetooth-on-raspberry-pi-with-buildroot.html
+tested:
 
+                             andes-nds32 [ 1/45]: FAILED
+                             arm-aarch64 [ 2/45]: OK
+                    bootlin-x86-64-glibc [ 3/45]: OK
+                        br-aarch64-glibc [ 4/45]: OK
+                           br-arcle-hs38 [ 5/45]: OK
+                            br-arm-basic [ 6/45]: SKIPPED
+                  br-arm-cortex-a9-glibc [ 7/45]: OK
+                   br-arm-cortex-a9-musl [ 8/45]: OK
+                   br-arm-cortex-m4-full [ 9/45]: SKIPPED
+                             br-arm-full [10/45]: OK
+                    br-arm-full-nothread [11/45]: SKIPPED
+                      br-arm-full-static [12/45]: OK
+                br-i386-pentium-mmx-musl [13/45]: OK
+                   br-i386-pentium4-full [14/45]: OK
+                    br-microblazeel-full [15/45]: OK
+                      br-mipsel-o32-full [16/45]: OK
+                 br-mips32r6-el-hf-glibc [17/45]: OK
+                      br-mips64-n64-full [18/45]: OK
+                 br-mips64r6-el-hf-glibc [19/45]: OK
+                       br-m68k-5208-full [20/45]: SKIPPED
+                      br-m68k-68040-full [21/45]: OK
+                          br-nios2-glibc [22/45]: OK
+                      br-openrisc-uclibc [23/45]: OK
+                  br-powerpc-e500mc-full [24/45]: OK
+               br-powerpc-603e-basic-cpp [25/45]: SKIPPED
+             br-powerpc64le-power8-glibc [26/45]: OK
+               br-powerpc64-power7-glibc [27/45]: OK
+                              br-riscv32 [28/45]: FAILED
+                              br-riscv64 [29/45]: OK
+                         br-riscv64-musl [30/45]: OK
+                             br-sh4-full [31/45]: OK
+                         br-sparc-uclibc [32/45]: OK
+                        br-sparc64-glibc [33/45]: OK
+                          br-xtensa-full [34/45]: OK
+                    br-x86-64-core2-full [35/45]: OK
+                          br-x86-64-musl [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                           sourcery-mips [43/45]: OK
+                         sourcery-mips64 [44/45]: OK
+                          sourcery-nios2 [45/45]: OK
+45 builds, 5 skipped, 2 build failed, 0 legal-info failed
 
+the failures are not related to this upgrade:
+* andes-nds32: libffi has not been ported to nds32le-buildroot-linux-gnu
+(the usual one)
+* br-riscv32: RPC support not available in C library, please disable
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC (problem with Bootlin, which uses
+glibc >= 2.32, which has removed SUN-RPC implementation. This is being
+discussed in:
+https://patchwork.ozlabs.org/project/buildroot/patch/20201101180154.14307-1-petr.vorel at gmail.com/#2566327)
 
+Kind regards,
+Petr
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
->>>   Generating filesystem image rootfs.ext2
-mkdir -p /home/mehdi/buildroot/output/images
-rm -rf /home/mehdi/buildroot/output/build/buildroot-fs/ext2
-mkdir -p /home/mehdi/buildroot/output/build/buildroot-fs/ext2
-rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /home/mehdi/buildroot/output/target/ /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target
-echo '#!/bin/sh' > /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-echo "set -e" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-echo "chown -h -R 0:0 /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-PATH="/home/mehdi/buildroot/output/host/bin:/home/mehdi/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /home/mehdi/buildroot/support/scripts/mkusers /home/mehdi/buildroot/output/build/buildroot-fs/full_users_table.txt /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-echo "/home/mehdi/buildroot/output/host/bin/makedevs -d /home/mehdi/buildroot/output/build/buildroot-fs/full_devices_table.txt /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-printf '   \n' >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-printf '        rm -f /home/mehdi/buildroot/output/images/rootfs.ext2\n /home/mehdi/buildroot/output/host/sbin/mkfs.ext4 -d /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target -r 1 -N 0 -m 5 -L "" -O ^64bit /home/mehdi/buildroot/output/images/rootfs.ext2 "120M" || { ret=$?; echo "*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)" 1>&2; exit $ret; }\n' >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-chmod a+x /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-PATH="/home/mehdi/buildroot/output/host/bin:/home/mehdi/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /home/mehdi/buildroot/output/host/bin/fakeroot -- /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
-rootdir=/home/mehdi/buildroot/output/build/buildroot-fs/ext2/target
-table='/home/mehdi/buildroot/output/build/buildroot-fs/full_devices_table.txt'
-mke2fs 1.44.5 (15-Dec-2018)
-Creating regular file /home/mehdi/buildroot/output/images/rootfs.ext2
-64-bit filesystem support is not enabled.  The larger fields afforded by this feature enable full-strength checksumming.  Pass -O 64bit to rectify.
-Creating filesystem with 122880 1k blocks and 30720 inodes
-Filesystem UUID: 1990b9bd-d682-4181-b757-d2a3c2153ba5
-Superblock backups stored on blocks:
-        8193, 24577, 40961, 57345, 73729
-
-Allocating group tables: done
-Writing inode tables: done
-Creating journal (4096 blocks): done
-Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "nmap-os-db"
-mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
-*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
-fs/ext2/ext2.mk:46: recipe for target '/home/mehdi/buildroot/output/images/rootfs.ext2' failed
-make: *** [/home/mehdi/buildroot/output/images/rootfs.ext2] Error 1
-
-
-
-Kevin
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201102/88484dc3/attachment.html>
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index e166b66b22..1304a072e2 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  208fe3e94dabe1d8117d1023d841737b6fe92aaff21ef8f35bbed15417ee507f  libqmi-1.24.14.tar.xz
++sha256  a71963bb1097a42665287e40a9a36f95b8f9d6d6a4b7a5de22d660328af97cb9  libqmi-1.26.6.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 0398100be7..6b5ccfcdea 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.24.14
++LIBQMI_VERSION = 1.26.6
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-- 
+2.29.1
