@@ -1,9 +1,9 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon,  2 Nov 2020 11:21:39 +0100
-Subject: [Buildroot] [PATCH v2] package/libgpiod: bump version to 1.4.5
-In-Reply-To: <20201029110632.25856-1-buildroot@heine.tech>
-References: <20201029110632.25856-1-buildroot@heine.tech>
-Message-ID: <20201102102139.4442-1-buildroot@heine.tech>
+Date: Mon,  2 Nov 2020 11:27:53 +0100
+Subject: [Buildroot] [PATCH v3] package/libgpiod: bump version to 1.4.5
+In-Reply-To: <20201102102139.4442-1-buildroot@heine.tech>
+References: <20201102102139.4442-1-buildroot@heine.tech>
+Message-ID: <20201102102753.9080-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,15 @@ To: buildroot@busybox.net
 
 * add a comment about the kernel header dependencies when bumping
 versions
+* set url to kernel.org as github is unmaintained and outdated
 * use two spaces in hash-file
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
 ---
+v2 -> v3:
+  * use correct hash
+  * add comment about url
 
 v1 -> v2:
   * stay on the 1.4.x branch in all cases
@@ -41,13 +45,13 @@ index 63a7cb6e78..293eef6c89 100644
  if BR2_PACKAGE_LIBGPIOD
  
 diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index f0009a7510..0ccb3bef5a 100644
+index f0009a7510..0ea15869b0 100644
 --- a/package/libgpiod/libgpiod.hash
 +++ b/package/libgpiod/libgpiod.hash
 @@ -1,4 +1,4 @@
  # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
 -sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
-+sha256  af5950cefb157e34f8e1485b82ab98873d53eeff2d1166faec483b8ebc1a3cff  libgpiod-1.4.5.tar.xz
++sha256  a041b06907c956dd1c77836cccf4d392af29b9fe09c8ad18449a6da707b5ba2d  libgpiod-1.4.5.tar.xz
  # Hash for license file
 -sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
 +sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
