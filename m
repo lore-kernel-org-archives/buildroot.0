@@ -1,144 +1,99 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Mon,  2 Nov 2020 17:50:54 +0300
-Subject: [Buildroot] [PATCH] toolchain: update ARC tools to
- arc-2020.09-release
-Message-ID: <20201102145054.44935-1-Evgeniy.Didin@synopsys.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon,  2 Nov 2020 17:04:53 +0100
+Subject: [Buildroot] [PATCH] package/gqrx: bump version to 2.13.2
+Message-ID: <20201102160453.1770092-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps ARC toolchain to arc-2020.09-release.
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-ARC GNU tools of version arc-2020.09-release bring some quite significant
-changes like:
-* Binutils 2.34.50 with additional ARC patches
-* GCC 10.0.2 with additional ARC patches
-* GDB 10.0.50 with additional ARC patches
+Drop patch now applied.
 
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/binutils/Config.in.host                                       | 2 +-
- .../0001-poison-system-directories.patch                              | 0
- package/binutils/binutils.hash                                        | 2 +-
- package/binutils/binutils.mk                                          | 4 ++--
- package/gcc/Config.in.host                                            | 2 +-
- .../0100-uclibc-conf.patch                                            | 0
- package/gcc/gcc.hash                                                  | 2 +-
- package/gdb/Config.in.host                                            | 2 +-
- package/gdb/gdb.hash                                                  | 2 +-
- 9 files changed, 8 insertions(+), 8 deletions(-)
- rename package/binutils/{arc-2020.03-release => arc-2020.09-release}/0001-poison-system-directories.patch (100%)
- rename package/gcc/{arc-2020.03-release => arc-2020.09-release}/0100-uclibc-conf.patch (100%)
+ ...aceholders_with_their_full_namespace.patch | 46 -------------------
+ package/gqrx/gqrx.hash                        |  2 +-
+ package/gqrx/gqrx.mk                          |  2 +-
+ 3 files changed, 2 insertions(+), 48 deletions(-)
+ delete mode 100644 package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 728193ed01..b690b952dc 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -50,7 +50,7 @@ endchoice
+diff --git a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch b/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
+deleted file mode 100644
+index 919dc2da01..0000000000
+--- a/package/gqrx/0001-boost_qualify_placeholders_with_their_full_namespace.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 0510f6ffee646171bb105e0e8d016ac35e606cd4 Mon Sep 17 00:00:00 2001
+-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+-Date: Mon, 22 Jun 2020 15:45:20 +0200
+-Subject: [PATCH] qualify placeholders with their full namespace
+-
+-With boost >= 1.73, placeholders must be qualified by using the full namespace.
+-
+-Without the namespace, the build fails with:
+-gqrx-2.12.1/src/dsp/rds/parser_impl.cc: In constructor 'gr::rds::parser_impl::parser_impl(bool, bool)':
+-gqrx-2.12.1/src/dsp/rds/parser_impl.cc:42:72: error: '_1' was not declared in this scope
+-set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
+-
+-[Upstream status: https://github.com/csete/gqrx/pull/811]
+-
+-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+----
+- src/dsp/rds/parser_impl.cc | 2 +-
+- src/dsp/rx_rds.cpp         | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/dsp/rds/parser_impl.cc b/src/dsp/rds/parser_impl.cc
+-index b10fdb01..07dae038 100644
+---- a/src/dsp/rds/parser_impl.cc
+-+++ b/src/dsp/rds/parser_impl.cc
+-@@ -40,7 +40,7 @@ parser_impl::parser_impl(bool log, bool debug, unsigned char pty_locale)
+- 	pty_locale(pty_locale)
+- {
+- 	message_port_register_in(pmt::mp("in"));
+--	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, _1));
+-+	set_msg_handler(pmt::mp("in"), boost::bind(&parser_impl::parse, this, boost::placeholders::_1));
+- 	message_port_register_out(pmt::mp("out"));
+- 	reset();
+- }
+-diff --git a/src/dsp/rx_rds.cpp b/src/dsp/rx_rds.cpp
+-index c4a541f3..c09835b0 100644
+---- a/src/dsp/rx_rds.cpp
+-+++ b/src/dsp/rx_rds.cpp
+-@@ -97,7 +97,7 @@ rx_rds_store::rx_rds_store() : gr::block ("rx_rds_store",
+-                                 gr::io_signature::make (0, 0, 0))
+- {
+-         message_port_register_in(pmt::mp("store"));
+--        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, _1));
+-+        set_msg_handler(pmt::mp("store"), boost::bind(&rx_rds_store::store, this, boost::placeholders::_1));
+-         d_messages.set_capacity(100);
+- }
+- 
+diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
+index 8f5f2ca433..bfa4411c2c 100644
+--- a/package/gqrx/gqrx.hash
++++ b/package/gqrx/gqrx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated:
+-sha256  7c626db9f22c3edbe30299a08f7f549b4f30dd83c883595468029a27c3e8fda9  gqrx-2.12.1.tar.gz
++sha256  ff3a9e350f730823dec8edb38cddfd72f602c909cc4ac39082c445eb66f88d96  gqrx-2.13.2.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
+diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
+index b3438ac1fd..dd15db2890 100644
+--- a/package/gqrx/gqrx.mk
++++ b/package/gqrx/gqrx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_BINUTILS_VERSION
- 	string
--	default "arc-2020.03-release"	if BR2_BINUTILS_VERSION_ARC
-+	default "arc-2020.09-release"	if BR2_BINUTILS_VERSION_ARC
- 	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
- 	default "2.33.1"	if BR2_BINUTILS_VERSION_2_33_X
-diff --git a/package/binutils/arc-2020.03-release/0001-poison-system-directories.patch b/package/binutils/arc-2020.09-release/0001-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/arc-2020.03-release/0001-poison-system-directories.patch
-rename to package/binutils/arc-2020.09-release/0001-poison-system-directories.patch
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index b5b73e5c07..ce5b0cdca8 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -5,7 +5,7 @@ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c
- sha512  94ff72708403413b70b247f3af4099ebaa882b6659249869f1ed9941a0f1912e313f08357d470f9fd2359e7f5e5b0eb86285e5eaf883fa8187789d6b1bd304eb  binutils-2.35.1.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  99c87ea97b43719dd9ce8193d60a5a6f0abc0479e8ebabbd32876f54807cd02d1280c691ef19e12cb79946280d2a4c1562bbb1a175a31ff1533720a623c3059a  binutils-gdb-arc-2020.03-release.tar.gz
-+sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
- 
- # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
- sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 6ae4605d86..d978b424be 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -9,13 +9,13 @@
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
--BINUTILS_VERSION = arc-2020.03-release
-+BINUTILS_VERSION = arc-2020.09-release
- else
- BINUTILS_VERSION = 2.34
- endif
- endif # BINUTILS_VERSION
- 
--ifeq ($(BINUTILS_VERSION),arc-2020.03-release)
-+ifeq ($(BINUTILS_VERSION),arc-2020.09-release)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 74999c800b..a3c7840e18 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -78,7 +78,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_8_X
- 	default "9.3.0"     if BR2_GCC_VERSION_9_X
- 	default "10.2.0"    if BR2_GCC_VERSION_10_X
--	default "arc-2020.03-release" if BR2_GCC_VERSION_ARC
-+	default "arc-2020.09-release" if BR2_GCC_VERSION_ARC
- 	default "48152afb96c59733d5bc79e3399bb7b3d4b44266" if BR2_GCC_VERSION_CSKY
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/arc-2020.03-release/0100-uclibc-conf.patch b/package/gcc/arc-2020.09-release/0100-uclibc-conf.patch
-similarity index 100%
-rename from package/gcc/arc-2020.03-release/0100-uclibc-conf.patch
-rename to package/gcc/arc-2020.09-release/0100-uclibc-conf.patch
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 671548deed..2208095a29 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -6,7 +6,7 @@ sha512  4b9e3639eef6e623747a22c37a904b4750c93b6da77cf3958d5047e9b5ebddb7eebe091c
- sha512  42ae38928bd2e8183af445da34220964eb690b675b1892bbeb7cd5bb62be499011ec9a93397dba5e2fb681afadfc6f2767d03b9035b44ba9be807187ae6dc65e  gcc-10.2.0.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  09ad77fce757d77f2db49cd049b78861abfa5c1c6c3be76228815ec2b15810c1985525c48b0300e83e88f3fa33dee0062f34790cc8b6bc2fa6b0301595acf42b  gcc-arc-2020.03-release.tar.gz
-+sha512  b0853e2b1c5998044392023fa653e399e74118c46e616504ac59e1a2cf27620f94434767ce06b6cf4ca3dfb57f81d6eda92752befaf095ea5e564a9181b4659c  gcc-arc-2020.09-release.tar.gz
- # Locally calculated (fetched from Github)
- sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
- # Locally calculated (fetched from https://github.com/c-sky/gcc)
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 42021b8086..4b868e2255 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -85,7 +85,7 @@ endif
- # If cross-gdb is not enabled, the latest working version is chosen.
- config BR2_GDB_VERSION
- 	string
--	default "arc-2020.03-release-gdb" if BR2_arc
-+	default "arc-2020.09-release-gdb" if BR2_arc
- 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
- 	default "8.3.1"    if BR2_GDB_VERSION_8_3
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 03e2afe102..1f14eeafaf 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -4,7 +4,7 @@ sha512  9053a2dc6b9eb921907afbc4cecc75d635aa76df5e8c4f0e5824ccf57cb206b299c19b12
- sha512  73635f00f343117aa5e2436f1e1597099e2bfb31ef7bb162b273fa1ea282c3fa9b0f52762e70bfc7ad0334addb8d159e9ac7cbe5998ca4f755ea8cf90714d274  gdb-9.2.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  74346a2a2b2082d35377711946b12c824222005c66813d5648350b101697eac67d3d01617e1daea03e41c196c2b7b4a4b225d1ee58af91dc69731bffed0e5d51  gdb-arc-2020.03-release-gdb.tar.gz
-+sha512  5a2acf2fd33ab2ff589e1037ca40abda54328997dcff26b2b49b874bd3be980be5a63342962254f3c3bda98e32ce7a33af704d37353352833dee193135600458  gdb-arc-2020.09-release-gdb.tar.gz
- 
- # Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
- sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b  gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+-GQRX_VERSION = 2.12.1
++GQRX_VERSION = 2.13.2
+ GQRX_SITE = $(call github,csete,gqrx,v$(GQRX_VERSION))
+ GQRX_LICENSE = GPL-3.0+, Apache-2.0
+ GQRX_LICENSE_FILES = COPYING LICENSE-CTK
 -- 
-2.16.2
+2.20.1
