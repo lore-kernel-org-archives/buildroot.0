@@ -1,157 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Nov 2020 22:06:17 +0100
-Subject: [Buildroot] [git commit] package/libass: security bump to version
- 0.15
-Message-ID: <20201102205849.ED1C38638A@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 2 Nov 2020 22:34:07 +0100
+Subject: [Buildroot] mkfs.ext4: Could not allocate block in ext2
+ filesystem while populating file system
+In-Reply-To: <AM0PR10MB2433AA0D0ED377CB19D8F22A82100@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+References: <AM0PR10MB2433AA0D0ED377CB19D8F22A82100@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <20201102223407.531e8baa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ae8ecea8fb042931cebf8f8d4cb4bc891073a77
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Kevin,
 
-- harfbuzz is mandatory since
-  https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
-- Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
-  call to `outline_stroke` causes a signed integer overflow.) through
-  https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
-  which does not apply cleanly over version 0.14.
-  It should be noted that version 0.15 also fixes other integer
-  overflows (which have no CVE assigned)
-- Update indentation in hash file (two spaces)
+On Mon, 2 Nov 2020 17:10:38 +0000, Kevin Tomary <kevin.tomary@hotmail.com> wrote:
 
-https://github.com/libass/libass/releases/tag/0.15.0
+> Hi Evryone
+> 
+> I got the following error after the build of the image.  With less packages I didn?t get make errors like these.
+> I wanted to include  WiFi and Bluetooth according to this blog but the make failed after a long period of building
+> 
+> https://tewarid.github.io/2014/10/10/wireless-on-raspberry-pi-with-buildroot.html
+> https://tewarid.github.io/2014/10/29/bluetooth-on-raspberry-pi-with-buildroot.html
+> 
+> 
+> 
+> 
+> 
+> >>>   Generating filesystem image rootfs.ext2  
+> mkdir -p /home/mehdi/buildroot/output/images
+> rm -rf /home/mehdi/buildroot/output/build/buildroot-fs/ext2
+> mkdir -p /home/mehdi/buildroot/output/build/buildroot-fs/ext2
+> rsync -auH --exclude=/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM /home/mehdi/buildroot/output/target/ /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target
+> echo '#!/bin/sh' > /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> echo "set -e" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> echo "chown -h -R 0:0 /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> PATH="/home/mehdi/buildroot/output/host/bin:/home/mehdi/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" /home/mehdi/buildroot/support/scripts/mkusers /home/mehdi/buildroot/output/build/buildroot-fs/full_users_table.txt /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> echo "/home/mehdi/buildroot/output/host/bin/makedevs -d /home/mehdi/buildroot/output/build/buildroot-fs/full_devices_table.txt /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target" >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> printf '   \n' >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> printf '        rm -f /home/mehdi/buildroot/output/images/rootfs.ext2\n /home/mehdi/buildroot/output/host/sbin/mkfs.ext4 -d /home/mehdi/buildroot/output/build/buildroot-fs/ext2/target -r 1 -N 0 -m 5 -L "" -O ^64bit /home/mehdi/buildroot/output/images/rootfs.ext2 "120M" || { ret=$?; echo "*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)" 1>&2; exit $ret; }\n' >> /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> chmod a+x /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> PATH="/home/mehdi/buildroot/output/host/bin:/home/mehdi/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin" FAKEROOTDONTTRYCHOWN=1 /home/mehdi/buildroot/output/host/bin/fakeroot -- /home/mehdi/buildroot/output/build/buildroot-fs/ext2/fakeroot
+> rootdir=/home/mehdi/buildroot/output/build/buildroot-fs/ext2/target
+> table='/home/mehdi/buildroot/output/build/buildroot-fs/full_devices_table.txt'
+> mke2fs 1.44.5 (15-Dec-2018)
+> Creating regular file /home/mehdi/buildroot/output/images/rootfs.ext2
+> 64-bit filesystem support is not enabled.  The larger fields afforded by this feature enable full-strength checksumming.  Pass -O 64bit to rectify.
+> Creating filesystem with 122880 1k blocks and 30720 inodes
+> Filesystem UUID: 1990b9bd-d682-4181-b757-d2a3c2153ba5
+> Superblock backups stored on blocks:
+>         8193, 24577, 40961, 57345, 73729
+> 
+> Allocating group tables: done
+> Writing inode tables: done
+> Creating journal (4096 blocks): done
+> Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "nmap-os-db"
+> mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
+> *** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
+> fs/ext2/ext2.mk:46: recipe for target '/home/mehdi/buildroot/output/images/rootfs.ext2' failed
+> make: *** [/home/mehdi/buildroot/output/images/rootfs.ext2] Error 1
+> 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in |  8 ++++++++
- package/harfbuzz/Config.in                    |  2 +-
- package/kodi/Config.in                        |  2 ++
- package/libass/Config.in                      |  9 +++++++++
- package/libass/libass.hash                    |  4 ++--
- package/libass/libass.mk                      | 10 ++--------
- 6 files changed, 24 insertions(+), 11 deletions(-)
+Just increase the filesystem size ('BR2_TARGET_ROOTFS_EXT2_SIZE' in your .config file or
+with 'make menuconfig' --> 'Filesystem images' --> 'exact size'), the default from
+the defconfigs is adjusted for the minimal package selection...
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index a7ad74b8e2..305e0fda2f 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -326,8 +326,16 @@ comment "plugins with external dependencies"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
- 	bool "assrender"
-+	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
- 	select BR2_PACKAGE_LIBASS
- 
-+comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
- 	bool "bluez"
- 	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-index 27fa102e1f..8bc88f4284 100644
---- a/package/harfbuzz/Config.in
-+++ b/package/harfbuzz/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	  Harfbuzz can make optional use of cairo, freetype,
- 	  glib2 and icu packages if they are selected.
- 
--comment "harfbuzz needs a toolchain w/ C++, gcc => 4.8"
-+comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2acb271992..31ad8630d6 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 
- comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.8"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-@@ -61,6 +62,7 @@ comment "kodi needs an OpenGL EGL backend with OpenGL support"
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/libass/Config.in b/package/libass/Config.in
-index c654d8212a..803f6b4438 100644
---- a/package/libass/Config.in
-+++ b/package/libass/Config.in
-@@ -1,9 +1,18 @@
- config BR2_PACKAGE_LIBASS
- 	bool "libass"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_LIBFRIBIDI
- 	help
- 	  libass is a portable subtitle renderer for the ASS/SSA
- 	  (Advanced Substation Alpha/Substation Alpha) subtitle format
- 
- 	  https://github.com/libass/libass
-+
-+comment "libass needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 74ea5f921d..cd3c3af61c 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2  libass-0.14.0.tar.xz
--sha256 f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-+sha256  9f09230c9a0aa68ef7aa6a9e2ab709ca957020f842e52c5b2e52b801a7d9e833  libass-0.15.0.tar.xz
-+sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 50600963ed..818bff234e 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBASS_VERSION = 0.14.0
-+LIBASS_VERSION = 0.15.0
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
-@@ -15,6 +15,7 @@ LIBASS_LICENSE_FILES = COPYING
- LIBASS_DEPENDENCIES = \
- 	host-pkgconf \
- 	freetype \
-+	harfbuzz \
- 	libfribidi \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
-@@ -31,11 +32,4 @@ else
- LIBASS_CONF_OPTS += --disable-fontconfig --disable-require-system-font-provider
- endif
- 
--ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
--LIBASS_DEPENDENCIES += harfbuzz
--LIBASS_CONF_OPTS += --enable-harfbuzz
--else
--LIBASS_CONF_OPTS += --disable-harfbuzz
--endif
--
- $(eval $(autotools-package))
+Regards,
+Peter
+
+>
+> 
+> Kevin
+> 
