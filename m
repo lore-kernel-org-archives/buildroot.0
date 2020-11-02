@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Nov 2020 23:10:15 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: security
+Date: Mon, 2 Nov 2020 23:10:02 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/php: security
  bump version to 7.4.12
-Message-ID: <20201102215741.AFEBF82167@busybox.osuosl.org>
+Message-ID: <20201102215746.D3FF386C59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85edcc54c78e16730ea5b82e6a97fd05d398443f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=07fb221f43bba7c78d87ada9024a90da74c300b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Changelog: https://www.php.net/ChangeLog-7.php#7.4.12
 
@@ -38,7 +38,7 @@ index 77a0feb555..8e8131d301 100644
  # License file
  sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 011c9019c5..e79a14c2c8 100644
+index 6b528cdc33..ce0e3e4a49 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
