@@ -1,63 +1,152 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 3 Nov 2020 21:37:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gcc: Enable gcc-8.x support for
- BR2_powerpc_spe
-In-Reply-To: <20201031234922.3653a68a@windsurf>
-References: <9aeb0cb1-00e7-702a-0d41-f6471e6f0302@ArcturusNetworks.com>
- <8a492cbe-907c-1699-8f6f-eb9c40d8785c@ArcturusNetworks.com>
- <20201031234922.3653a68a@windsurf>
-Message-ID: <5fd0508f-8598-4cea-6451-34cbdd382fae@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Nov 2020 21:38:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
+ dependency
+In-Reply-To: <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
+References: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
+ <20201101130358.GE2887157@scaer>
+ <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
+Message-ID: <20201103203837.GJ2887157@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fabrice, All,
 
-Le 31/10/2020 ? 23:49, Thomas Petazzoni a ?crit?:
-> On Mon, 26 Oct 2020 15:17:35 -0400
-> Michael Durrant <mdurrant@ArcturusNetworks.com> wrote:
-> 
->> The GCC-7.x compiler series was the last to support BR2_powerpc_SPE CPUs
->> within GCC.? After GCC-7.x support was removed as a default in buildroot,
->> some boards, including the arcturus_ucp1020_defconfig and
->> freescale_p1025twr_defconfig will fail to compile.
->>
->> The GCC-8.x compiler series continues to support powerpc_spe CPU
->> cores, but only as an --enable-obsoleted instruction set.
->> This patch enables the use of GCC-8.x and asserts the required
->> option to enable the powerpc_spe instruction set.
+On 2020-11-01 16:03 +0100, Fabrice Fontaine spake thusly:
+> Le dim. 1 nov. 2020 ? 14:04, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+> > On 2020-11-01 13:15 +0100, Fabrice Fontaine spake thusly:
+> > > Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
+> > > util-linux-libs but this raises the following build failure:
+> > >
+> > > Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+> > >
+> > > To fix this build failure, use util-linux or util-linux-libs depending
+> > > on BR2_PACKAGE_UTIL_LINUX_LIBS
+> >
+> > OK, so this is exactly what I did not like in this util-linux vs
+> > util-linus-libs split, and the fact that util-linux-libs is optional...
+> >
+> > IMHO:
+> >
+> >  1. util-linux-libs must be enabled as soon as util-linux is enabled,
+> >
+> >  2. packages should build-depend on util-linux-libs, and never on
+> >     util-linux, and should 'select BR2_PACKAGE_UTIL_LINUX_LIBS' if
+> >     all they need is a library.
+> We can't select BR2_PACKAGE_UTIL_LINUX_LIBS without selecting
+> BR2_PACKAGE_UTIL_LINUX as BR2_PACKAGE_UTIL_LINUX_LIBS is a hidden
+> option of BR2_PACKAGE_UTIL_LINUX.
 
-This is sad to see a CPU that is still used removed from upstream GCC.
-But what's the plan for next year ? GCC 8 is currently at 8.4.0 and the last
-release will be available in few month.
-As soon as GCC 11.1 is added to Buildroot, GCC 8 will likely be removed to keep
-only 3 GCC version.
-I don't see a future proof solution... maybe using a prebuilt toolchain for this
-defconfig?
+No, we really need to make util-linux-libs a real package, not a hidden
+one, like
 
-Best regards,
-Romain
+    config BR2_PACAKGE_UTIL_LINUX_LIBS
+        bool "util-linux-libs"
+        help
+          Only the libraries provided bby util-linux; if you need the
+          tools too, select util-linux.
 
->>
->> This Patch passes compilation and run tests with the
->> arcturus/ppc-ucp1020? board.
->>
->> Tested-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
->>
->> This patch should address a noted job failure on GitLab CI
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
->>
->> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/805461732
->> Signed-off-by: Oleksandr G Zhadan <Oleks@ArcturusNetworks.com>
->> Signed-off-by: Michael Durrant <mdurrant@ArcturusNetworks.com>
->> ---
->> ?package/gcc/Config.in.host | 2 +-
->> ?package/gcc/gcc.mk???????? | 1 +
->> ?2 files changed, 2 insertions(+), 1 deletion(-)
+and:
+
+    config BR2_PACAKGE_UTIL_LINUX
+        bool "util-linux"
+        select BR2_PACAKGE_UTIL_LINUX_LIBS
+
+    (or:)
+
+    config BR2_PACAKGE_UTIL_LINUX_LIBMOUNT
+        bool "libmount"
+        select BR2_PACAKGE_UTIL_LINUX_LIBS
+
+> Moreover, we'll select BR2_PACKAGE_UTIL_LINUX_LIBS as soon as
+> BR2_PACKAGE_UTIL_LINUX is enabled (as per your first suggestion).
+> As a result, util-linux will always be selected even if packages (such
+> as abootimg) only build-depend on util-linux-libs.
+
+Now that util-linux-libs is a full-gfledged package, it is selctable by
+packages. See for example eudev os systemd, which already both select
+BR2_PACKAGE_UTIL_LINUX_LIBS and biuld-depend on util-linux-libs.
+
+> So, in the end, we'll fix/clean the build order but util-linux will
+> still be built but this is unavoidable unless util-linux-libs is moved
+> to its own package.
+
+It is already its own package; just it is not "user-visible".
+
+> Did I misunderstood something?
+
+The above, I guess. ;-)
+
+> I'll send a 2-patch serie that implements your first suggestion and
+> your second suggestion on abootimg. If it pleases you, I'll update the
+> other packages.
+
+Well, we can do it multi-pass, of course; fixing packages to build-depend
+on util-linux-libs is not a lost effort anyway.
+
+Thanks for your work! :-)
+
+Regards,
+Yann E. MORIN.
+
+> > So, for now I'll apply this patch, because we do need a fix.
+> >
+> > But ultimately, we wnat to sanitise this situation.
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > ---
+> > >  package/libglib2/libglib2.mk | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> > > index 43fcb27fae..6e9dbd7b26 100644
+> > > --- a/package/libglib2/libglib2.mk
+> > > +++ b/package/libglib2/libglib2.mk
+> > > @@ -86,8 +86,12 @@ endif
+> > >
+> > >  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+> > >  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
+> > > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
+> > >  LIBGLIB2_DEPENDENCIES += util-linux-libs
+> > >  else
+> > > +LIBGLIB2_DEPENDENCIES += util-linux
+> > > +endif
+> > > +else
+> > >  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
+> > >  endif
+> > >
+> > > --
+> > > 2.28.0
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+> Best Regards,
 > 
-> Applied to master, thanks.
-> 
-> Thomas
-> 
+> Fabrice
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
