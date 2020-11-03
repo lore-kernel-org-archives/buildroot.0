@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 11:04:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libraw: needs autoreconf
-In-Reply-To: <20201028113540.127357-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 28 Oct 2020 12:35:40 +0100")
-References: <20201028113540.127357-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ft5q92oa.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Nov 2020 11:04:18 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libraw: needs
+ autoreconf
+Message-ID: <20201103095144.6A24486F28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cb0cac50816d87d1742ea52a6fedcfc3ac9f5256
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > configure is older than configure.ac in official libraw 0.20.2 tarball:
- > https://github.com/LibRaw/LibRaw/issues/353
+configure is older than configure.ac in official libraw 0.20.2 tarball:
+https://github.com/LibRaw/LibRaw/issues/353
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/abef2ac14a959093a6391cad28e738558e15ceec
+Fixes:
+ - http://autobuild.buildroot.org/results/abef2ac14a959093a6391cad28e738558e15ceec
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 082d0fea3deab17634a6b29e80579417440a6181)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libraw/libraw.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index acfa4dbe37..7f79000fd3 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -14,6 +14,8 @@ LIBRAW_CONF_OPTS += \
+ LIBRAW_LICENSE = LGPL-2.1 or CDDL-1.0
+ LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README.md
+ LIBRAW_DEPENDENCIES = host-pkgconf
++# https://github.com/LibRaw/LibRaw/issues/353
++LIBRAW_AUTORECONF = YES
+ LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
+ LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
+ 
