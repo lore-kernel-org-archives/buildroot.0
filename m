@@ -1,41 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:04:14 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libraw: needs
- autoreconf
-Message-ID: <20201103095148.4DB3E81133@busybox.osuosl.org>
+Date: Tue, 03 Nov 2020 11:10:24 +0100
+Subject: [Buildroot] [PATCH] package/qt5/qt5base: fix imx6 eglfs support
+ with imx-gpu-viv
+In-Reply-To: <20201027142833.1138548-1-gary.bisson@boundarydevices.com> (Gary
+ Bisson's message of "Tue, 27 Oct 2020 15:28:33 +0100")
+References: <20201027142833.1138548-1-gary.bisson@boundarydevices.com>
+Message-ID: <87blge92en.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a27f6cb5f4454e3b4d7ebf50120124554e01c1b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
-configure is older than configure.ac in official libraw 0.20.2 tarball:
-https://github.com/LibRaw/LibRaw/issues/353
+ > Last commit fixed eglfs_kms support for i.MX8 platforms that required to
+ > declare imx-gpu-viv as the gbm provider.
+ > However, this broke the eglfs "fbdev" imx6 support as gbm isn't provided
+ > in this case. So limit the gbm option to imx-gpu-viv when wayland
+ > backend is used only.
 
-Fixes:
- - http://autobuild.buildroot.org/results/abef2ac14a959093a6391cad28e738558e15ceec
+ > Fixes: 82fb51d3b5 ("package/qt5/qt5base: allow to use imx-gpu-viv as GBM
+ > provider")
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 082d0fea3deab17634a6b29e80579417440a6181)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libraw/libraw.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index acfa4dbe37..7f79000fd3 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -14,6 +14,8 @@ LIBRAW_CONF_OPTS += \
- LIBRAW_LICENSE = LGPL-2.1 or CDDL-1.0
- LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL README.md
- LIBRAW_DEPENDENCIES = host-pkgconf
-+# https://github.com/LibRaw/LibRaw/issues/353
-+LIBRAW_AUTORECONF = YES
- LIBRAW_CXXFLAGS = $(TARGET_CXXFLAGS)
- LIBRAW_CONF_ENV = CXXFLAGS="$(LIBRAW_CXXFLAGS)"
- 
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
