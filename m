@@ -1,134 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 20:57:05 +0100
-Subject: [Buildroot] [git commit] package/wireshark: bump to version 3.4.0
-Message-ID: <20201103194417.C1C7481628@busybox.osuosl.org>
+Date: Tue, 3 Nov 2020 20:53:52 +0100
+Subject: [Buildroot] [git commit] package/grpc: bump version to 1.33.2
+Message-ID: <20201103194417.A031587128@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bd8c591e326aa09853b9c2a05b972a7977c790f
+commit: https://git.buildroot.net/buildroot/commit/?id=60afdd7a46ab9a0ba6e4a651a4431ea3bebd298c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- c-ares is mandatory since
-  https://github.com/wireshark/wireshark/commit/451a241e50bd34ba097bd09a5f9f673170779aaf
-- Disable ilibc which is available and enabled by default since
-  https://github.com/wireshark/wireshark/commit/12a13a69264fdef4281e4b13c8c7d92a272cc99e
-- LTO can be enabled since
-  https://github.com/wireshark/wireshark/commit/e6b5bd09766a1320c5540f78eb0e4ba03ce8f108
-- opus is an optional dependency since
-  https://github.com/wireshark/wireshark/commit/6136c719da4ec9b96c01adb4b0fd7f01af171688
-
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.0.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/Config.in      |  1 +
- package/wireshark/wireshark.hash |  6 +++---
- package/wireshark/wireshark.mk   | 31 ++++++++++++++++++++++---------
- 3 files changed, 26 insertions(+), 12 deletions(-)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index b26aa7a3df..95fc9b38f3 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_WIRESHARK
- 	depends on BR2_USE_MMU # fork(), glib2
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGLIB2
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8d1a3b3a2e..667d8a371e 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.8.txt
--sha1  5fdcbbe3a50cea38a8fa5f10b21f58cbef31793e  wireshark-3.2.8.tar.xz
--sha256  a8a595d08f38c6bd083886f6c199b9d4fb007e363031b263667c7da72323cc32  wireshark-3.2.8.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.0.txt
-+sha1  6fdf4f394c287f1e21b48c5293ec1a6e6b627996  wireshark-3.4.0.tar.xz
-+sha256  67e4ebbd9153fc589fd67dc21b93176674c73adc3d5a43934c3ac69d8594a8ae  wireshark-3.4.0.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0d4fedb3f0..567c8cc115 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,12 +4,18 @@
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 57852ec63f..b264694800 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  58eaee5c0f1bd0b92ebe1fa0606ec8f14798500620e7444726afcaf65041cb63  grpc-1.33.1.tar.gz
++sha256  2060769f2d4b0d3535ba594b2ab614d7f68a492f786ab94b4318788d45e3278a  grpc-1.33.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index cca334dec5..04c741fe9d 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.2.8
-+WIRESHARK_VERSION = 3.4.0
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
- WIRESHARK_LICENSE_FILES = COPYING
--WIRESHARK_DEPENDENCIES = host-pkgconf host-python3 libgcrypt libpcap libglib2 \
-+WIRESHARK_DEPENDENCIES = \
-+	c-ares \
-+	host-pkgconf \
-+	host-python3 \
-+	libgcrypt \
-+	libglib2 \
-+	libpcap \
- 	speexdsp
- 
- WIRESHARK_MAKE_ENV = \
-@@ -18,6 +24,7 @@ WIRESHARK_MAKE_ENV = \
- 
- WIRESHARK_CONF_OPTS = \
- 	-DDISABLE_WERROR=ON \
-+	-DENABLE_ILBC=OFF \
- 	-DENABLE_PCAP=ON \
- 	-DENABLE_SMI=OFF
- 
-@@ -35,6 +42,12 @@ endef
- 
- WIRESHARK_PRE_BUILD_HOOKS += WIRESHARK_BUILD_LEMON_TOOL
- 
-+ifeq ($(BR2_GCC_ENABLE_LTO),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_LTO=ON
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_LTO=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_WIRESHARK_GUI),y)
- WIRESHARK_CONF_OPTS += -DBUILD_wireshark=ON
- WIRESHARK_DEPENDENCIES += qt5base qt5multimedia qt5svg qt5tools
-@@ -56,13 +69,6 @@ else
- WIRESHARK_CONF_OPTS += -DENABLE_BROTLI=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_C_ARES),y)
--WIRESHARK_CONF_OPTS += -DENABLE_CARES=ON
--WIRESHARK_DEPENDENCIES += c-ares
--else
--WIRESHARK_CONF_OPTS += -DENABLE_CARES=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- WIRESHARK_CONF_OPTS += -DENABLE_GNUTLS=ON
- WIRESHARK_DEPENDENCIES += gnutls
-@@ -127,6 +133,13 @@ else
- WIRESHARK_CONF_OPTS += -DENABLE_NGHTTP2=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_OPUS=ON
-+WIRESHARK_DEPENDENCIES += opus
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_OPUS=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_SBC),y)
- WIRESHARK_CONF_OPTS += -DENABLE_SBC=ON
- WIRESHARK_DEPENDENCIES += sbc
+-GRPC_VERSION = 1.33.1
++GRPC_VERSION = 1.33.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
