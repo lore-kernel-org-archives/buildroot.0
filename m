@@ -1,132 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Nov 2020 21:39:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: new package
-In-Reply-To: <20201027151407.2870851-2-gabibbo97@gmail.com>
-References: <20201027103643.01576b52@windsurf.home>
- <20201027151407.2870851-2-gabibbo97@gmail.com>
-Message-ID: <20201103213904.0264a6c1@windsurf.home>
+Date: Tue, 3 Nov 2020 21:43:44 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
+ via cross compiler
+In-Reply-To: <CAMKF1sodESjxJAwwJ9i5tFuU1j5dzL0cNx42FB97SSQYwEzpYA@mail.gmail.com>
+References: <20201023093641.619746-1-raj.khem@gmail.com>
+ <20201103201640.GI2887157@scaer>
+ <CAMKF1sodESjxJAwwJ9i5tFuU1j5dzL0cNx42FB97SSQYwEzpYA@mail.gmail.com>
+Message-ID: <20201103214344.65ac36cf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 3 Nov 2020 12:25:25 -0800
+Khem Raj <raj.khem@gmail.com> wrote:
 
-On Tue, 27 Oct 2020 16:14:08 +0100
-Giacomo Longo <gabibbo97@gmail.com> wrote:
+> >   - Buildroot does not officially support distributions' cross
+> >     toolchains, as they may contain extra libraries that are not
+> >     accoutned for by Buildroot,
+> 
+> yes that's fine, this patch does not claim to support all of them
+> either, it just
+> makes the situation a bit better without regressing the supported usecases
+> I think it helps lowering the build times on such distros for
+> developers and improve
+> first time experience
 
+This has not clarified things for me. Most distributions allow extra
+libraries to be installed in their cross-toolchains, i.e on Debian, you
+can install libxml2, zlib, and zillions of other libraries
+cross-compiled into your cross-compilation toolchain.
 
-> diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-> new file mode 100644
-> index 0000000000..4349a5778e
-> --- /dev/null
-> +++ b/package/uftrace/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_aarch64
-> +	default y if BR2_arm
-> +	default y if BR2_i386
-> +	default y if BR2_x86_64
-> +
-> +config BR2_PACKAGE_UFTRACE
-> +	bool "uftrace"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+Then things are confusing for Buildroot: when it copies the sysroot, it
+already contains more than just the C library... potentially libraries
+that will conflict with libraries that Buildroot will build.
 
-In fact the reason why you can only use glibc is two-fold:
-
- * You select elfutils, and elfutils does not build on musl.
-
- * uftrace uses ADDR_NO_RANDOMIZE, which isn't supported in uClibc
-
-So it would be good to write something like this:
-
-	# elfutils not available for musl, uClibc-ng does not 
-	# provide ADDR_NO_RANDOMIZE, so only glibc is supported
-	depends on BR2_TOOLCHAIN_USES_GLIBC
-
-> +comment "uftrace needs a glibc toolchain w/ C++, dynamic library, threads, wchar"
-> +	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-
-Could you cut this line at ~80 characters, using a backslash ? See
-other packages.
-
-> diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-> new file mode 100644
-> index 0000000000..8f38e7431d
-> --- /dev/null
-> +++ b/package/uftrace/uftrace.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha512 f73ad4461051b9c61668161e077897d118ac556d234ff204e32bf14ecdc2c0df148da30ea5d5054641e79ea20b29261d6f637908f5047f5669207ef244865358 uftrace-v0.9.4.tar.gz
-> +sha512 aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957 COPYING
-
-Could you use sha256 hashes instead ?
-
-> +UFTRACE_VERSION = v0.9.4
-> +UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
-
-Please don't encode the "v" in the version field. So please do:
-
-UFTRACE_VERSION = 0.9.4
-UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
-
-Indeed, this will allow UFTRACE_VERSION to be used to check if new
-uftrace releases are available, using release-monitoring.org.
-
-> +UFTRACE_LICENSE = GPL-2.0+
-> +UFTRACE_LICENSE_FILES = COPYING
-> +UFTRACE_DEPENDENCIES = elfutils
-> +
-> +UFTRACE_CONF_OPTS = \
-> +	--without-capstone \
-> +	--without-libpython
-> +
-> +ifeq ($(BR2_aarch64),y)
-> +UFTRACE_CONF_OPTS += --arch=aarch64
-> +else ifeq ($(BR2_arm),y)
-> +UFTRACE_CONF_OPTS += --arch=arm
-> +else ifeq ($(BR2_i386),y)
-> +UFTRACE_CONF_OPTS += --arch=i386
-> +else ifeq ($(BR2_x86_64),y)
-> +UFTRACE_CONF_OPTS += --arch=x86_64
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LUAJIT),n)
-
-BR2_PACKAGE_LUAJIT is never going to be "n", so this condition will
-never be true. Also, if luajit *is* there, you want luajit to be
-compiled before uftrace. So you want something like this:
-
-# No --with-<option> available
-ifeq ($(BR2_PACKAGE_LUAJIT),y)
-UFTRACE_DEPENDENCIES += luajit
-else
-UFTRACE_CONF_OPTS += --without-libluajit
-endif
-
-> +ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),n)
-> +UFTRACE_CONF_OPTS += --without-libncurses
-> +endif
-
-Same comment as above.
-
-> +$(eval $(autotools-package))
-
-This is not an autotools-based package: it uses a hand-written
-configure script, not one that is generated by autoconf. For example,
-this explains why it doesn't support --with-<foo>, but only
---without-<foo>.
-
-So, please use the generic-package infrastructure in this sort of
-cases. Using autotools-package should really only be done for packages
-that do use autoconf.
-
-Could you adjust your package according to this ?
-
-Thanks a lot!
+I don't see how this can work reliably.
 
 Thomas
 -- 
