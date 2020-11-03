@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:12:44 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark:
+Date: Tue, 3 Nov 2020 11:12:33 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark:
  security bump to version 3.2.8
-Message-ID: <20201103100014.6227A81544@busybox.osuosl.org>
+Message-ID: <20201103100021.3457A84239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=913ff39ca48b18d90f538c76748a56c8e0559903
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2a63d580b198e27a71f83ce717d8dc9ec11747dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 - Fix CVE-2020-26575: In Wireshark through 3.2.7, the Facebook Zero
   Protocol (aka FBZERO) dissector could enter an infinite loop. This was
