@@ -1,56 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2020 18:34:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d-headers: fix legal-info
-In-Reply-To: <20201103171629.22280-1-fontaine.fabrice@gmail.com>
-References: <20201103171629.22280-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201103173441.GH2887157@scaer>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 3 Nov 2020 18:50:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/optee-client: fix build with
+ gcc 4.8
+In-Reply-To: <20201103173043.29373-1-fontaine.fabrice@gmail.com>
+References: <20201103173043.29373-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAN5uoS_vwpka6+8g13_f=WrmeEhM9m65N3sEMpMq0Y9XY83nHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello Fabrice,
 
-On 2020-11-03 18:16 +0100, Fabrice Fontaine spake thusly:
-> Commit 9d874c9051cf46ef29b763ad8db0b638f3761605 forgot to update
-> MESA3D_HEADERS_LICENSE_FILES
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d75e90863525d4abd3d83f3f947261695a2f0d65
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
+Thanks for fixes.
 
 Regards,
-Yann E. MORIN.
+Etienne
 
+
+On Tue, 3 Nov 2020 at 18:31, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fix the following build failure with optee-client 3.11.0 and gcc 4.8:
+>
+> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+>   struct serializer obj = { };
+>          ^
+>
+> Build failure is raised since version 3.10.0 and
+> https://github.com/OP-TEE/optee_client/commit/c3279f424348bdd3378d236fd038fdd7bc76e10a
+> https://github.com/OP-TEE/optee_client/commit/e88c264ba358941d2166b18eeac448e617ffa887
+> https://github.com/OP-TEE/optee_client/commit/85a7ea7861339356b39c73926f2b5cb9added45b
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/mesa3d-headers/mesa3d-headers.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-> index 67dc765840..afb2e799c4 100644
-> --- a/package/mesa3d-headers/mesa3d-headers.mk
-> +++ b/package/mesa3d-headers/mesa3d-headers.mk
-> @@ -17,7 +17,7 @@ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
->  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
->  MESA3D_HEADERS_DL_SUBDIR = mesa3d
->  MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-> -MESA3D_HEADERS_LICENSE_FILES = docs/license.html
-> +MESA3D_HEADERS_LICENSE_FILES = docs/license.rst
->  
->  # Only installs header files
->  MESA3D_HEADERS_INSTALL_STAGING = YES
-> -- 
-> 2.28.0
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  .../0001-libckteec-replace-initializer.patch  | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+> (...)
