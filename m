@@ -1,44 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:09:26 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/qt5/qt5base: fix
- imx6 eglfs support with imx-gpu-viv
-Message-ID: <20201103095736.6CC7083FF5@busybox.osuosl.org>
+Date: Tue, 03 Nov 2020 11:13:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
+ version 3.2.8
+In-Reply-To: <20201031233227.1682264-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 1 Nov 2020 00:32:27 +0100")
+References: <20201031233227.1682264-1-fontaine.fabrice@gmail.com>
+Message-ID: <877dr292a4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94ab5fbb648f19151e563b9fdb980e8257127809
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Last commit fixed eglfs_kms support for i.MX8 platforms that required to
-declare imx-gpu-viv as the gbm provider.
-However, this broke the eglfs "fbdev" imx6 support as gbm isn't provided
-in this case. So limit the gbm option to imx-gpu-viv when wayland
-backend is used only.
+ > - Fix CVE-2020-26575: In Wireshark through 3.2.7, the Facebook Zero
+ >   Protocol (aka FBZERO) dissector could enter an infinite loop. This was
+ >   addressed in epan/dissectors/packet-fbzero.c by correcting the
+ >   implementation of offset advancement.
+ >   https://www.wireshark.org/security/wnpa-sec-2020-14.html
+ > - Fix GQUIC dissector crash:
+ >   https://www.wireshark.org/security/wnpa-sec-2020-15.html
 
-Fixes: 82fb51d3b5 ("package/qt5/qt5base: allow to use imx-gpu-viv as GBM
-provider")
+ > https://www.wireshark.org/docs/relnotes/wireshark-3.2.8.html
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 25f2191ed2ff1abc963dde45503bce9c9d48d47e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt5base/qt5base.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e0189599a7..ed308c1fa2 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -79,7 +79,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
- else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += ti-sgx-libgbm
--else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
-+else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
- QT5BASE_CONFIGURE_OPTS += -gbm
- QT5BASE_DEPENDENCIES += imx-gpu-viv
- else
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
