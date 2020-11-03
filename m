@@ -1,65 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2020 23:29:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/imlib2: fix md5 and sha1
-In-Reply-To: <20201103221303.243146-1-fontaine.fabrice@gmail.com>
-References: <20201103221303.243146-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201103222939.GM2887157@scaer>
+Date: Tue, 3 Nov 2020 23:32:38 +0100
+Subject: [Buildroot] [git commit] package/rt-tests: fix build issue for
+ unsupported architectures
+Message-ID: <20201103221949.991BC86719@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=73c8a2181e102e39e99be61cfd692c88ab7d9f25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-11-03 23:13 +0100, Fabrice Fontaine spake thusly:
-> Commit 23a79ddb45ed150cc36ddd3e16a0b5543b0342ad updated md5 and sha1 for
-> imlib2_loaders-1.6.1.tar.bz2 instead of imlib2-1.6.1.tar.bz2
-> 
-> Fix this mistake and, while at it, update indentation to two spaces
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release v1.9 introduced the oslat tool that only builds for supported
+architectures (i386, x86_64, PPC64) and leads to a build failure for the
+whole suite. An upstream patch changes this build error to a runtime warning.
 
-Applied to master, thanks!
+Fixes:
+  - http://autobuild.buildroot.net/results/72322cf7239a91211b0be74c01b55873340763f8
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...oslat-Allow-build-for-not-supported-archs.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-> ---
->  package/imlib2/imlib2.hash | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
-> index 7cfb674906..68f6c91db7 100644
-> --- a/package/imlib2/imlib2.hash
-> +++ b/package/imlib2/imlib2.hash
-> @@ -1,8 +1,8 @@
-> -# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.5.1/
-> -md5 da6a0b39bc3333f1833c791d96ed75a5  imlib2_loaders-1.6.1.tar.bz2
-> -sha1 29bc3c8d75cc8fb3bbd5d61e8ab29940d0943da8  imlib2_loaders-1.6.1.tar.bz2
-> +# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.6.1/
-> +md5  7b3fbcb974b48822b32b326c6a47764b  imlib2-1.6.1.tar.bz2
-> +sha1  3b5f850e83cbb7481e33061348fb9c7a555c8c60  imlib2-1.6.1.tar.bz2
->  
->  # Locally computed
-> -sha256 4d393a77e13da883c8ee2da3b029da3570210fe37d000c9ac33d9fce751b166d  imlib2-1.6.1.tar.bz2
-> -sha256 fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
-> -sha256 8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
-> +sha256  4d393a77e13da883c8ee2da3b029da3570210fe37d000c9ac33d9fce751b166d  imlib2-1.6.1.tar.bz2
-> +sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
-> +sha256  8c9a2e92ed4937e2d30c2ea95439c36ed3002fc47e34efee43455a460fee8ef5  COPYING-PLAIN
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch b/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch
+new file mode 100644
+index 0000000000..96b36d60dd
+--- /dev/null
++++ b/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch
+@@ -0,0 +1,52 @@
++From 165b597e3003c6870f5980e8902014d9344e6cf3 Mon Sep 17 00:00:00 2001
++From: Peter Xu <peterx@redhat.com>
++Date: Thu, 1 Oct 2020 14:47:26 -0400
++Subject: [PATCH] rt-tests: oslat: Allow build for not supported archs
++
++Now rt-tests won't build for archs other than x86/i386/ppc64 after oslat is
++merged.  Instead of failing the build, let's make it pass.  However, whenever
++oslat is executed, instead of running the real program, dump an error message,
++so that people can try to implement the frc() function for it when there's a
++real need for the new arch.
++
++Signed-off-by: Peter Xu <peterx@redhat.com>
++Signed-off-by: John Kacur <jkacur@redhat.com>
++
++[Taken from:
++https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/src/oslat/oslat.c?h=unstable/devel/latest&id=165b597e3003c6870f5980e8902014d9344e6cf3]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ src/oslat/oslat.c | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/src/oslat/oslat.c b/src/oslat/oslat.c
++index f1a82f2..a8b6155 100644
++--- a/src/oslat/oslat.c
+++++ b/src/oslat/oslat.c
++@@ -69,7 +69,9 @@ static inline void frc(uint64_t *pval)
++ 	__asm__ __volatile__("mfspr %0, 268\n" : "=r" (*pval));
++ }
++ # else
++-#  error Need frc() for this platform.
+++#  define relax()          do { } while (0)
+++#  define frc(x)
+++#  define FRC_MISSING
++ # endif
++ #else
++ # error Need to add support for this compiler.
++@@ -810,6 +812,12 @@ int main(int argc, char *argv[])
++ 	int i, n_cores;
++ 	cpu_set_t cpu_set;
++ 
+++#ifdef FRC_MISSING
+++	printf("This architecture is not yet supported. "
+++	       "Please implement frc() function first for %s.\n", argv[0]);
+++	return 0;
+++#endif
+++
++ 	CPU_ZERO(&cpu_set);
++ 
++ 	g.app_name = argv[0];
++-- 
++2.20.1
++
