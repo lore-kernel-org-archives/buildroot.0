@@ -1,21 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 21:01:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.1.0
-In-Reply-To: <20201103112920.23345-1-nicolas.cavallari@green-communications.fr>
- (Nicolas Cavallari's message of "Tue, 3 Nov 2020 12:29:20 +0100")
-References: <20201103112920.23345-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <87imam5hwb.fsf@dell.be.48ers.dk>
+Date: Tue, 3 Nov 2020 21:01:46 +0100
+Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.1.0
+Message-ID: <20201103194850.D28EA82965@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c6a096be739fd9ead36c8882d4459c18dd97f536
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 1cb12ea035..367ade3afe 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  689f442c39c4117df515d1a0ffd7b401b91a500d7e2875ac45a440d86f198f5a  libgit2-1.0.1.tar.gz
++sha256  ad73f845965cfd528e70f654e428073121a3fa0dc23caac81a1b1300277d4dba  libgit2-1.1.0.tar.gz
+ sha256  afc8bde99ba630012107c25d3c42dde628ec5f0cd3f428131f7e3a0f7d58ff42  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index d674f17c7f..30e6f24887 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.0.1
++LIBGIT2_VERSION = 1.1.0
+ LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v$(LIBGIT2_VERSION)
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
+ LIBGIT2_LICENSE_FILES = COPYING
