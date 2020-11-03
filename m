@@ -1,42 +1,50 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 3 Nov 2020 11:30:48 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-11-02
-Message-ID: <20201103113048.6f9d574b@x230_1.trabucayre.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Tue,  3 Nov 2020 12:29:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: bump version to 1.1.0
+Message-ID: <20201103112920.23345-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 03 Nov 2020 08:10:08 -0000
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
 
-> Hello,
-> 
-> Autobuilder failures
-> ====================
-> 
-> Below is a list of build failures reported by the Buildroot
-> autobuilders in relation to packages or CPU
-> architectures you are in charge of. Please help us
-> improving the quality of Buildroot by investigating
-> those build failures and sending patches to fix
-> them.Thanks!
-> 
-> Results for the '2020.02.x' branch
-> ----------------------------------
-> 
-> Build failures related to your packages:
-> 
->     arch     |             reason             |
->         url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
-> powerpc64le  | gr-osmosdr-46698a67e7e06419... |
-> http://autobuild.buildroot.net/results/06d216af8bf6c534bba57cca50befce399132470
-> 
-this was fixed by this commit:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200827154903.1107968-1-gwenj at trabucayre.com/
+no security patches
+tested with various test-pkg configurations on top of 105004f72, except
+the riscv32 toolchain which never works:
+>>> toolchain-external-bootlin 2020.08-1 Configuring
+f951: Warning: Reading file ?<stdin>? as free form
+RPC support not available in C library, please disable BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+make[1]: *** [package/pkg-generic.mk:240: /home/nc/br-test-pkg/br-riscv32/build/toolchain-external-bootlin-2020.08-1/.stamp_configured] Error 1
 
-Best regards
-Gwen
+---
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 1cb12ea035..367ade3afe 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  689f442c39c4117df515d1a0ffd7b401b91a500d7e2875ac45a440d86f198f5a  libgit2-1.0.1.tar.gz
++sha256  ad73f845965cfd528e70f654e428073121a3fa0dc23caac81a1b1300277d4dba  libgit2-1.1.0.tar.gz
+ sha256  afc8bde99ba630012107c25d3c42dde628ec5f0cd3f428131f7e3a0f7d58ff42  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index d674f17c7f..30e6f24887 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGIT2_VERSION = 1.0.1
++LIBGIT2_VERSION = 1.1.0
+ LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v$(LIBGIT2_VERSION)
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
+ LIBGIT2_LICENSE_FILES = COPYING
+-- 
+2.28.0
