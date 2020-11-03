@@ -1,33 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 20:09:02 +0100
-Subject: [Buildroot] [git commit] package/collectd: add comment about ssl
- support in rabbitmq-c
-Message-ID: <20201103185702.B1CE881569@busybox.osuosl.org>
+Date: Tue, 03 Nov 2020 20:26:36 +0100
+Subject: [Buildroot] [PATCH] toolchain: update ARC tools to
+ arc-2020.09-release
+In-Reply-To: <20201102145054.44935-1-Evgeniy.Didin@synopsys.com> (Evgeniy
+ Didin's message of "Mon, 2 Nov 2020 17:50:54 +0300")
+References: <20201102145054.44935-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <87lffi6y37.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea8e2d9d9388bb84c7eef7e36d7cc8faf9142fda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/collectd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > This commit bumps ARC toolchain to arc-2020.09-release.
+ > ARC GNU tools of version arc-2020.09-release bring some quite significant
+ > changes like:
+ > * Binutils 2.34.50 with additional ARC patches
+ > * GCC 10.0.2 with additional ARC patches
+ > * GDB 10.0.50 with additional ARC patches
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 39ecbcfe54..7037a8b383 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -582,7 +582,7 @@ comment "Select at least one for collectd to be useful"
- 
- config BR2_PACKAGE_COLLECTD_AMQP
- 	bool "amqp"
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL # needs rabbitmq-c with ssl support
- 	select BR2_PACKAGE_RABBITMQ_C
- 	help
- 	  Send/receive values via the Advanced Message Queuing Protocol
+ > Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: arc-buildroot at synopsys.com
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
