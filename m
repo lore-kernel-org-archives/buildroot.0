@@ -1,31 +1,17 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  3 Nov 2020 18:17:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/collectd: add comment about ssl
- support in rabbitmq-c
-Message-ID: <20201103171735.22512-1-fontaine.fabrice@gmail.com>
+From: daggs <daggs@gmx.com>
+Date: Tue, 3 Nov 2020 18:30:40 +0100
+Subject: [Buildroot] Failed to initialize driver 'nl80211' wlan0:
+ Unsupported driver 'nl80211'
+In-Reply-To: <AM0PR10MB243357223E03870295ABE43F82110@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+References: <AM0PR10MB2433EAA9F63F022A4C6764C582110@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+ <trinity-2332d7a9-9fe6-4053-9d87-241ec1f18361-1604413759972@3c-app-mailcom-bs14>
+ <AM0PR10MB243357223E03870295ABE43F82110@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+Message-ID: <trinity-cc1383a1-5a3d-4caf-a578-81afa03d6dc1-1604424640778@3c-app-mailcom-bs08>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/collectd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index d54d64ca9c..3e854ba518 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -582,7 +582,7 @@ comment "Select at least one for collectd to be useful"
- 
- config BR2_PACKAGE_COLLECTD_AMQP
- 	bool "amqp"
--	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL # needs rabbitmq-c with ssl support
- 	select BR2_PACKAGE_RABBITMQ_C
- 	help
- 	  Send/receive values via the Advanced Message Queuing Protocol
--- 
-2.28.0
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201103/22021e48/attachment.html>
