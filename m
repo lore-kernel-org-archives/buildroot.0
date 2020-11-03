@@ -1,43 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:16:34 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark: add
- zstd optional dependency
-Message-ID: <20201103100412.40D70835FB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Nov 2020 11:35:28 +0100
+Subject: [Buildroot] Enable gcc ADA support on latest LTS Buildroot
+In-Reply-To: <CAEzkdfrXmUQc7N7a+j2zHayLLdzoUAy5kncQmewOwQ0-fSGVGA@mail.gmail.com>
+References: <CAEzkdfrXmUQc7N7a+j2zHayLLdzoUAy5kncQmewOwQ0-fSGVGA@mail.gmail.com>
+Message-ID: <20201103113528.1f8e61a5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52c315baf71412f1e27aafa83dfd6ba8b24721ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Hello Matteo,
 
-zstd is available since version 3.1.1 and is enabled by default:
-https://github.com/wireshark/wireshark/commit/ad94c4d459d243c0cbbb9b222d5f7cdf8189ab86
+On Tue, 3 Nov 2020 08:53:48 +0100
+Matteo Pampolini <matteo.pampolini@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 105004f72acb56e86a778deb9c33eced3173db14)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> I would like to enable ADA language to gcc together with the needed target
+> libraries, I'm using the latest LTS version of Buildroot. I saw an email
+> with a patch some years ago but it seems it was never put into the
+> Buildroot mainline. I tried just setting --enable-languages=ada in gcc
+> options but it fails, both gcc 8.x and 9.x.
 
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0bcb97606a..0d4fedb3f0 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -155,6 +155,13 @@ else
- WIRESHARK_CONF_OPTS += -DBUILD_sdjournal=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=ON
-+WIRESHARK_DEPENDENCIES += zstd
-+else
-+WIRESHARK_CONF_OPTS += -DENABLE_ZSTD=OFF
-+endif
-+
- # Disable plugins as some of them (like l16mono) can't be built
- # statically. ENABLE_STATIC=ON actually means "disable shared library"
- # and ENABLE_STATIC=OFF means "enable shared library". So for the
+Could you give details about the failures you're seeing ?
+
+> May you please help me? Why is there no such configuration option just like
+> Fortran or D?
+
+Because nobody really pushed for that, but if you do so, we will be
+happy to include support for building gcc with Ada support. It
+certainly makes sense to have that in Buildroot.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
