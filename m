@@ -1,92 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 08:45:53 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/fastd: fix
- CVE-2020-27638
-Message-ID: <20201103075159.F1603832CC@busybox.osuosl.org>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Tue,  3 Nov 2020 09:05:39 +0100
+Subject: [Buildroot] [PATCH] package/grpc: bump version to 1.33.2
+Message-ID: <20201103080537.4942-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6998f42afa587ecc23b762837e25c0bc00614dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
-
-receive.c in fastd before v21 allows denial of service (assertion
-failure) when receiving packets with an invalid type code.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7e4af3ce3f9142f09f20c7904925c5454332ec24)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- ...uffer-leak-when-receiving-invalid-packets.patch | 45 ++++++++++++++++++++++
- package/fastd/fastd.mk                             |  3 ++
- 2 files changed, 48 insertions(+)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-new file mode 100644
-index 0000000000..f4a44fea6d
---- /dev/null
-+++ b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-@@ -0,0 +1,45 @@
-+From 737925113363b6130879729cdff9ccc46c33eaea Mon Sep 17 00:00:00 2001
-+From: Matthias Schiffer <mschiffer@universe-factory.net>
-+Date: Mon, 19 Oct 2020 21:08:16 +0200
-+Subject: [PATCH] receive: fix buffer leak when receiving invalid packets
-+
-+For fastd versions before v20, this was just a memory leak (which could
-+still be used for DoS, as it's remotely triggerable). With the new
-+buffer management of fastd v20, this will trigger an assertion failure
-+instead as soon as the buffer pool is empty.
-+
-+[Retrieved from:
-+https://github.com/NeoRaider/fastd/commit/737925113363b6130879729cdff9ccc46c33eaea]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/receive.c | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/src/receive.c b/src/receive.c
-+index 043c9f2..6bca9f4 100644
-+--- a/src/receive.c
-++++ b/src/receive.c
-+@@ -169,6 +169,11 @@ static inline void handle_socket_receive_known(
-+ 
-+ 	case PACKET_HANDSHAKE:
-+ 		fastd_handshake_handle(sock, local_addr, remote_addr, peer, buffer);
-++		break;
-++
-++	default:
-++		fastd_buffer_free(buffer);
-++		pr_debug("received packet with invalid type from %P[%I]", peer, remote_addr);
-+ 	}
-+ }
-+ 
-+@@ -195,6 +200,11 @@ static inline void handle_socket_receive_unknown(
-+ 
-+ 	case PACKET_HANDSHAKE:
-+ 		fastd_handshake_handle(sock, local_addr, remote_addr, NULL, buffer);
-++		break;
-++
-++	default:
-++		fastd_buffer_free(buffer);
-++		pr_debug("received packet with invalid type from unknown address %I", remote_addr);
-+ 	}
-+ }
-+ 
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index b1261f0fa5..d556e2fbb1 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -12,6 +12,9 @@ FASTD_LICENSE_FILES = COPYRIGHT
- FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
- FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 57852ec63f..b264694800 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  58eaee5c0f1bd0b92ebe1fa0606ec8f14798500620e7444726afcaf65041cb63  grpc-1.33.1.tar.gz
++sha256  2060769f2d4b0d3535ba594b2ab614d7f68a492f786ab94b4318788d45e3278a  grpc-1.33.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index cca334dec5..04c741fe9d 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
-+FASTD_IGNORE_CVES += CVE-2020-27638
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
- FASTD_DEPENDENCIES += openssl
+-GRPC_VERSION = 1.33.1
++GRPC_VERSION = 1.33.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
+-- 
+2.25.1
