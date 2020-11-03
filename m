@@ -1,68 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Nov 2020 22:40:53 +0100
-Subject: [Buildroot] [git commit] package/environment-setup: add configure
- alias
-Message-ID: <20201103213047.58FC58713D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 03 Nov 2020 22:44:13 +0100
+Subject: [Buildroot] [PATCH 1/1] grub-efi: align the rootfs to start at
+ 16MB offset from start of the image
+In-Reply-To: <20201022101512.56470-1-Florian.LaRoche@gmail.com> (Florian La
+ Roche via buildroot's message of "Thu, 22 Oct 2020 12:15:12 +0200")
+References: <20201022101512.56470-1-Florian.LaRoche@gmail.com>
+Message-ID: <87a6vy5d5e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26cb4e72e18a41bf24030cce64b281c740847426
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Florian" == Florian La Roche via buildroot <buildroot@busybox.net> writes:
 
-In order to simplify the usage of a buildroot toolchain within
-the buildroot shell, a "configure" alias is provided to call
-./configure with the correct flags.
+ > For grub-efi we can align the rootfs to start at exactly 16MB from the
+ > beginning of the disk. This can be done by reducing the vfat partition
+ > to be 32 KB smaller than its 16MB size, just like the offset of the vfat
+ > partition.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/using-buildroot-toolchain.txt      | 7 ++++---
- package/environment-setup/environment-setup    | 3 ++-
- package/environment-setup/environment-setup.mk | 2 ++
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ > Signed-off-by: Florian La Roche <Florian.LaRoche@gmail.com>
 
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 7a8b0c4c78..110be5939f 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -42,6 +42,7 @@ variables that will help cross-compile your projects using the
- Buildroot SDK: the +PATH+ will contain the SDK binaries, standard
- _autotools_ variables will be defined with the appropriate values, and
- +CONFIGURE_FLAGS+ will contain basic +./configure+ options to
--cross-compile _autotools_ projects. Note however that once this script
--is sourced, the environment is setup only for cross-compilation, and
--no longer for native compilation.
-+cross-compile _autotools_ projects. It also provides some useful
-+commands. Note however that once this script is sourced, the
-+environment is setup only for cross-compilation, and no longer for
-+native compilation.
-diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-index 6846361433..58701e4c71 100644
---- a/package/environment-setup/environment-setup
-+++ b/package/environment-setup/environment-setup
-@@ -10,7 +10,8 @@ cat <<'EOF'
- Some tips:
- * PATH now contains the SDK utilities
- * Standard autotools variables (CC, LD, CFLAGS) are exported
--* To configure do "./configure $CONFIGURE_FLAGS"
-+* To configure do "./configure $CONFIGURE_FLAGS" or use
-+  the "configure" alias
+Is there any specific reason for this or just that the offset looks
+"nicer"?
+
+ > ---
+ >  board/pc/genimage-efi.cfg | 6 +++---
+ >  1 file changed, 3 insertions(+), 3 deletions(-)
+
+ > diff --git a/board/pc/genimage-efi.cfg b/board/pc/genimage-efi.cfg
+ > index ea15ae5cfb..304e964f14 100644
+ > --- a/board/pc/genimage-efi.cfg
+ > +++ b/board/pc/genimage-efi.cfg
+ > @@ -10,7 +10,7 @@ image efi-part.vfat {
+ >        image = "bzImage"
+ >      }
+ >    }
+ > -  size = 16777216
+ > +  size = 16744448
+ >  }
  
- EOF
- SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 98b976acf7..be36cd452b 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -20,6 +20,8 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 		--sysconfdir=/etc \
- 		--localstatedir=/var \
- 		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
-+		>> $(ENVIRONMENT_SETUP_FILE)
- 	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
- 		-e 's%$(HOST_DIR)/bin/%%g' \
- 		-e '/^export "PATH=/c\' \
+ >  image disk.img {
+ > @@ -22,7 +22,7 @@ image disk.img {
+ >      image = "efi-part.vfat"
+ >      partition-type-uuid = c12a7328-f81f-11d2-ba4b-00a0c93ec93b
+ >      offset = 32768
+ > -    size = 16777216
+ > +    size = 16744448
+
+There is actually no need to specify the size here again, it will by
+default use the size of the vfat image.
+
+ >      bootable = true
+ >    }
+ 
+ > @@ -30,6 +30,6 @@ image disk.img {
+ >      partition-type-uuid = 44479540-f297-41b2-9af7-d131d5f0458a
+ >      partition-uuid = UUID_TMP
+ >      image = "rootfs.ext2"
+ > -    offset = 16809984
+ > +    offset = 16777216
+
+Same for the offset, it will by default be put after the vfat image.
+
+Committed with these changes, thanks.
+
+-- 
+Bye, Peter Korsgaard
