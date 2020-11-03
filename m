@@ -1,108 +1,482 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2020 23:33:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rt-tests: fix build issue for
- unsupported architectures
-In-Reply-To: <20201103220454.12557-1-heiko.thiery@gmail.com>
-References: <20201103220454.12557-1-heiko.thiery@gmail.com>
-Message-ID: <20201103223351.GN2887157@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 3 Nov 2020 23:34:39 +0100
+Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
+In-Reply-To: <20201004181215.2w225cjecin4pm6r@e107158-lin.cambridge.arm.com>
+References: <20200824181740.12878-1-jugurtha.belkalem@smile.fr>
+ <20200824181740.12878-2-jugurtha.belkalem@smile.fr>
+ <20201004181215.2w225cjecin4pm6r@e107158-lin.cambridge.arm.com>
+Message-ID: <f9f16fa3-dcd6-7848-5b16-226b51557cf8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Heiko, All,
+Hello Qais,
 
-On 2020-11-03 23:04 +0100, Heiko Thiery spake thusly:
-> Release v1.9 introduced the oslat tool that only builds for supported
-> architectures (i386, x86_64, PPC64) and leads to a build failure for the
-> whole suite. An upstream patch changes this build error to a runtime warning.
+Sorry for my late reply.
+
+Le 04/10/2020 ? 20:12, Qais Yousef a ?crit?:
+> Hi Jugurtha
 > 
-> Fixes:
->   - http://autobuild.buildroot.net/results/72322cf7239a91211b0be74c01b55873340763f8
+> I am very late to the party and missed earlier reviews. So apologies in advance
+> if any of my comments was already brought up/addressed.
 > 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Can you keep me on CC on future posting and any other related discussion
+> please?
 
-Applied to master, thanks.
+I'm reworking the series and I'm adding you in Cc for each patch.
+Jugurtha is not available at the moment, but he is still interested by BCC.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-Allow-build-for-not-supported-archs.patch | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch
 > 
-> diff --git a/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch b/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch
-> new file mode 100644
-> index 0000000000..96b36d60dd
-> --- /dev/null
-> +++ b/package/rt-tests/0002-rt-tests-oslat-Allow-build-for-not-supported-archs.patch
-> @@ -0,0 +1,52 @@
-> +From 165b597e3003c6870f5980e8902014d9344e6cf3 Mon Sep 17 00:00:00 2001
-> +From: Peter Xu <peterx@redhat.com>
-> +Date: Thu, 1 Oct 2020 14:47:26 -0400
-> +Subject: [PATCH] rt-tests: oslat: Allow build for not supported archs
-> +
-> +Now rt-tests won't build for archs other than x86/i386/ppc64 after oslat is
-> +merged.  Instead of failing the build, let's make it pass.  However, whenever
-> +oslat is executed, instead of running the real program, dump an error message,
-> +so that people can try to implement the frc() function for it when there's a
-> +real need for the new arch.
-> +
-> +Signed-off-by: Peter Xu <peterx@redhat.com>
-> +Signed-off-by: John Kacur <jkacur@redhat.com>
-> +
-> +[Taken from:
-> +https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/src/oslat/oslat.c?h=unstable/devel/latest&id=165b597e3003c6870f5980e8902014d9344e6cf3]
-> +Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> +---
-> + src/oslat/oslat.c | 10 +++++++++-
-> + 1 file changed, 9 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/oslat/oslat.c b/src/oslat/oslat.c
-> +index f1a82f2..a8b6155 100644
-> +--- a/src/oslat/oslat.c
-> ++++ b/src/oslat/oslat.c
-> +@@ -69,7 +69,9 @@ static inline void frc(uint64_t *pval)
-> + 	__asm__ __volatile__("mfspr %0, 268\n" : "=r" (*pval));
-> + }
-> + # else
-> +-#  error Need frc() for this platform.
-> ++#  define relax()          do { } while (0)
-> ++#  define frc(x)
-> ++#  define FRC_MISSING
-> + # endif
-> + #else
-> + # error Need to add support for this compiler.
-> +@@ -810,6 +812,12 @@ int main(int argc, char *argv[])
-> + 	int i, n_cores;
-> + 	cpu_set_t cpu_set;
-> + 
-> ++#ifdef FRC_MISSING
-> ++	printf("This architecture is not yet supported. "
-> ++	       "Please implement frc() function first for %s.\n", argv[0]);
-> ++	return 0;
-> ++#endif
-> ++
-> + 	CPU_ZERO(&cpu_set);
-> + 
-> + 	g.app_name = argv[0];
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
+> On 08/24/20 20:17, Jugurtha BELKALEM wrote:
+>> bcc is a front-end tool for eBPF :
+>> https://github.com/iovisor/bcc/blob/master/README.md.
+>> eBPF is the most powerful Linux tracer, and bcc
+>> allows to write eBPF scripts in C and PYTHON3.
+>>
+>> bcc can help to troubleshoot issues quickly on
+>> embedded systems (as long as Linux kernel
+>> version >= 4.1).
+>>
+>> bcc can also make it easy to create observabilty tools,
+>> SDN configuration, ddos mitigation, intrusion detection
+>> and secure containers. More information is available at:
+>> http://www.brendangregg.com/ebpf.html.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> There's the brand new ebpf website too
+> 
+> 	http://www.ebpf.io
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Link updated, thanks!
+
+> 
+>>
+>> BCC can be tested on the target :
+>> $ mount -t debugfs none /sys/kernel/debug
+> 
+> I wonder if this something we can automatically append to /etc/fstab when this
+> package is enabled..
+
+Sure, but this is a fstab customization. I don't think the bcc package should
+change the /etc/fstab.
+
+> 
+>> $ mkdir -p /lib/modules/KERNEL_VERSION/build
+>> $ cd /lib/modules/KERNEL_VERSION//build
+>> $ cp /sys/kernel/kheaders.tar.xz .
+>> $ unxz kheaders.tar.xz
+>> $ tar xf kheaders.tar
+> 
+> All the above is unnecessary. BCC automatically does this if it detects
+> /sys/kernel/kheaders.tar.xz is present. I had to enable BR2_PACKAGE_TAR for BCC
+> to handle this correctly. I guess busybox::tar is too limited to work with BCC
+> commands.
+
+Indeed, thanks for the info.
+Now I see:
+https://github.com/iovisor/bcc/blob/v0.17.0/src/cc/frontends/clang/kbuild_helper.cc#L172
+
+What was the error you get with busybox's tar ?
+bcc doesn't use advenced tar option that is not supported by busybox's tar.
+
+# tar --help
+BusyBox v1.31.1 (2020-05-01 00:37:37 CEST) multi-call binary.
+
+Usage: tar c|x|t [-hvokO] [-f TARFILE] [-C DIR] [-T FILE] [-X FILE] [--exclude
+PATTERN]... [FILE]...
+
+Create, extract, or list files from a tar file
+
+	c	Create
+	x	Extract
+	t	List
+	-f FILE	Name of TARFILE ('-' for stdin/out)
+	-C DIR	Change to DIR before operation
+	-v	Verbose
+	-O	Extract to stdout
+	-o	Don't restore user:group
+	-k	Don't replace existing files
+	-h	Follow symlinks
+	-T FILE	File with names to include
+	-X FILE	File with glob patterns to exclude
+	--exclude PATTERN	Glob pattern to exclude
+
+> 
+>> $ cd /usr/share/bcc/examples/tracing
+>> $ ./disksnoop.py
+> 
+> /usr/share/bcc/tools contains actual tools. I recommend picking up an example
+> from there.
+
+Fixed.
+
+> 
+>>
+>> V3
+>> - Bump to version 0.16.0.
+>> - Add required python dependency.
+>> - Remove unnecessary and duplicated
+>>   kernel flags (#Testing section) in bcc.mk.
+>> -------------
+>> V2
+>> - Add eBPF's required Kernel flags.
+>> - Fix submodule source fetch problem.
+>> - Add toolchain dependency.
+> 
+> Did you intend to include these in the commit message?
+
+No, it's a mistake. Fixed.
+
+> 
+>>
+>> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> ---
+>>  DEVELOPERS                                       |  1 +
+>>  package/Config.in                                |  1 +
+>>  package/bcc/0001-fix-aarch64-cross-compile.patch | 65 ++++++++++++++++++++++++
+>>  package/bcc/Config.in                            | 49 ++++++++++++++++++
+>>  package/bcc/bcc.hash                             |  3 ++
+>>  package/bcc/bcc.mk                               | 57 +++++++++++++++++++++
+>>  6 files changed, 176 insertions(+)
+>>  create mode 100644 package/bcc/0001-fix-aarch64-cross-compile.patch
+>>  create mode 100644 package/bcc/Config.in
+>>  create mode 100644 package/bcc/bcc.hash
+>>  create mode 100644 package/bcc/bcc.mk
+>>
+>> diff --git a/DEVELOPERS b/DEVELOPERS
+>> index 42fa5a4..bd836a6 100644
+>> --- a/DEVELOPERS
+>> +++ b/DEVELOPERS
+>> @@ -1396,6 +1396,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
+>>  F:	package/qt5/qt5wayland/
+>>  
+>>  N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> +F:	package/bcc/
+>>  F:	package/python-cycler/
+>>  F:	package/python-matplotlib/
+>>  
+>> diff --git a/package/Config.in b/package/Config.in
+>> index d7e79f4..8ec3932 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -83,6 +83,7 @@ menu "Compressors and decompressors"
+>>  endmenu
+>>  
+>>  menu "Debugging, profiling and benchmark"
+>> +	source "package/bcc/Config.in"
+>>  	source "package/blktrace/Config.in"
+>>  	source "package/bonnie/Config.in"
+>>  	source "package/cache-calibrator/Config.in"
+>> diff --git a/package/bcc/0001-fix-aarch64-cross-compile.patch b/package/bcc/0001-fix-aarch64-cross-compile.patch
+>> new file mode 100644
+>> index 0000000..6b42797
+>> --- /dev/null
+>> +++ b/package/bcc/0001-fix-aarch64-cross-compile.patch
+>> @@ -0,0 +1,65 @@
+>> +From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
+>> +From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> +Date: Thu, 2 May 2019 11:06:23 +0200
+>> +Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
+>> + cross-compiling
+> 
+> Is this luajit required to enable Lua front-end to BCC? Given python is the
+> most common front-end, I'd argue to make this an extra option that is only
+> enabled if the user selects it in the menu. Same way BPF backend in LLVM is
+> only compiled in if selected. IMHO that's a better default behavior.
+
+As far I can see in other packaging, BCC is using luajit as lua interpreter
+https://src.fedoraproject.org/rpms/bcc/blob/master/f/bcc.spec
+
+I'm agree that python is the most common front-end. I'll try to add a sub option
+to enable or disable it.
+
+> 
+>> +
+>> +Unlike CMAKE_SYSTEM_PROCESSOR which identifies aarch64
+>> +as a valid architecture, luajit does not recognize it.
+>> +luajit defines aarch64 as arm64.
+>> +
+>> +LuaJIT doesn't use usual arch naming, so we have to convert
+>> +between CMake and Luajit for each architectures while
+>> +cross-compiling.
+>> +
+>> +Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> +Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> +---
+>> +v2: Do the same for other architecture supported by LuaJIT.
+>> +https://github.com/iovisor/bcc/pull/2480
+>> +---
+>> + src/lua/CMakeLists.txt | 29 ++++++++++++++++++++++++++++-
+>> + 1 file changed, 28 insertions(+), 1 deletion(-)
+>> +
+>> +diff --git a/src/lua/CMakeLists.txt b/src/lua/CMakeLists.txt
+>> +index 7541d48df..226e1b1d2 100644
+>> +--- a/src/lua/CMakeLists.txt
+>> ++++ b/src/lua/CMakeLists.txt
+>> +@@ -13,9 +13,36 @@ if (LUAJIT_LIBRARIES AND LUAJIT)
+>> + 		DEPENDS ${SRC_LUA} ${CMAKE_CURRENT_SOURCE_DIR}/squishy
+>> + 	)
+>> + 
+>> ++	# LuaJIT doesn't use usual arch naming, so we have to convert
+>> ++	# between CMake and Luajit while cross-compiling.
+>> ++	if (CMAKE_CROSSCOMPILING)
+>> ++		SET (LUAJIT_TARGET_ARCH "-a")
+>> ++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L30
+>> ++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L65
+>> ++		if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64_be")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64be")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86)$")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x86")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mips")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mipsel")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "ppc")
+>> ++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+>> ++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x64")
+>> ++		else()
+>> ++			MESSAGE(FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} is not supported by LuaJIT")
+>> ++		endif()
+>> ++	endif()
+>> ++
+>> + 	ADD_CUSTOM_COMMAND(
+>> + 		OUTPUT bcc.o
+>> +-		COMMAND ${LUAJIT} -bg bcc.lua bcc.o
+>> ++		COMMAND ${LUAJIT} -bg bcc.lua ${LUAJIT_TARGET_ARCH} bcc.o
+>> + 		DEPENDS bcc.lua
+>> + 	)
+>> + 
+>> diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+>> new file mode 100644
+>> index 0000000..cf03927
+>> --- /dev/null
+>> +++ b/package/bcc/Config.in
+>> @@ -0,0 +1,49 @@
+>> +config BR2_PACKAGE_BCC
+>> +	bool "bcc"
+>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>> +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>> +	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
+>> +	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
+> 
+> This dependency on building the kernel in buildroot is not user friendly. For
+> example I never build the kernel in buildroot, and certainly would like to be
+> able to enable this package without having to build the kernel in buildroot.
+
+IIRC this option was adde because we used a previous version of BCC (0.8) with a
+kernel 4.x (at the time CONFIG_IKHEADERS didn't exist).
+But still, if we don't enforce building a kernel to select BCC it's the user
+responsibility to install the kernel sources (manually, rootfsoverlay or by a
+post build script).
+
+I'll remove this constrain.
+
+> 
+>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
+>> +	depends on BR2_INSTALL_LIBSTDCPP # clang
+> 
+>> +	select BR2_PACKAGE_AUDIT # runtime
+> 
+> This..
+> 
+>> +	select BR2_PACKAGE_CLANG
+>> +	select BR2_PACKAGE_ELFUTILS
+>> +	select BR2_PACKAGE_FLEX # needs FlexLexer.h
+> 
+>> +	select BR2_PACKAGE_IPERF3 # runtime
+> 
+> .. this..
+> 
+>> +	select BR2_PACKAGE_LLVM_BPF
+>> +	select BR2_PACKAGE_LUAJIT
+> 
+>> +	select BR2_PACKAGE_NETPERF # runtime
+> 
+> .. and this look odd to me. Can you expand which runtime requires them?
+
+for example, netperf is one of recommanded program for BCC.
+They are listed in debian/control
+https://github.com/iovisor/bcc/blob/v0.17.0/debian/control#L13
+
+I don't remenber about audit, Jugurtha ?
+
+> 
+>> +	select BR2_PACKAGE_PYTHON3
+>> +	select BR2_PACKAGE_XZ # Decompress kernel headers required by BCC
+> 
+> If you replace XZ with TAR, you should find that BCC automatically handles the
+> ikheader.tar.xz for you. There's now BPF Type Format (BTF) option in the kernel
+> that could replace the dependency on the headers. Haven't played much with that
+> yet though. BTF requires a tool called pahole. We can handle this support later
+> I guess.
+
+There is no package that provide pahole tool. Indeed this can be done later.
+
+> 
+>> +	help
+>> +	  BPF Compiler Collection (BCC)
+>> +
+>> +	  BCC is a toolkit for creating efficient kernel tracing and
+>> +	  manipulation programs, and includes several useful tools and
+>> +	  examples. It makes use of extended BPF (Berkeley Packet
+>> +	  Filters), formally known as eBPF, a new feature that was
+>> +	  first added to Linux 3.15. Much of what BCC uses requires
+>> +	  Linux 4.1 and above.
+>> +
+>> +	  Note: Before using bcc, you need either need to :
+>> +	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
+>> +	  to target folder /lib/module/<kernel_ver>/build.
+>> +	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
+>> +	  and use generated headers under /sys/kernel/kheaders.tar.xz
+>> +	  to populate /lib/module/<kernel_ver>/build.
+>> +
+>> +	  That's because the clang frontend build eBPF code at runtime.
+>> +
+>> +	  https://github.com/iovisor/bcc
+>> +
+>> +comment "bcc needs a Linux kernel to be built"
+>> +	depends on !BR2_LINUX_KERNEL
+> 
+> I must remove this to compile this patch. This hard dependency is not required
+> IMHO. You can still auto fix up the kernel if you like if the user is building
+> the kernel and has enabled BCC. Just keep in mind it's a fast moving target, so
+> the set of configs might require a bit of maintenance. Given it's all
+> documented in BCC website, I personally think it's better to leave correct
+> kernel configuration to the user to follow the right instructions from BCC
+> website rather than automatically handle it for them.
+
+You mean the bcc.mk shouldn't handler kernel options for BCC ?
+
+Ok to remove this constraint on the Linux kernel.
+
+> 
+>> +
+>> +comment "bcc needs a glibc toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8"
+>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>> +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+>> +	depends on BR2_LINUX_KERNEL
+>> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
+>> +		|| !BR2_INSTALL_LIBSTDCPP
+>> diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
+>> new file mode 100644
+>> index 0000000..e3fa662
+>> --- /dev/null
+>> +++ b/package/bcc/bcc.hash
+>> @@ -0,0 +1,3 @@
+>> +# locally calculated
+>> +sha256 38105c6c7e53d6a8d4c2be5c2e6dd46ebeaa1489600501711d85cfe9bc065e9d  bcc-v0.16.0.tar.gz
+>> +sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
+>> diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
+>> new file mode 100644
+>> index 0000000..4fe69cb
+>> --- /dev/null
+>> +++ b/package/bcc/bcc.mk
+>> @@ -0,0 +1,57 @@
+>> +################################################################################
+>> +#
+>> +# bcc
+>> +#
+>> +################################################################################
+>> +
+>> +BCC_VERSION = v0.16.0
+>> +BCC_SITE = https://github.com/iovisor/bcc.git
+>> +BCC_SITE_METHOD = git
+>> +BCC_GIT_SUBMODULES = YES
+>> +BCC_LICENSE = Apache-2.0
+>> +BCC_LICENSE_FILES = LICENSE.txt
+>> +# libbcc.so and libbpf.so
+>> +BCC_INSTALL_STAGING = YES
+>> +BCC_DEPENDENCIES = host-bison host-flex host-luajit clang elfutils flex llvm \
+>> +		   luajit python3
+>> +
+>> +# ENABLE_LLVM_SHARED=ON to use llvm.so.
+>> +# Force REVISION otherwise bcc will use git describe to generate a version number.
+>> +BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
+>> +	-DREVISION=$(BCC_VERSION) \
+>> +	-DENABLE_CLANG_JIT=ON \
+>> +	-DENABLE_MAN=OFF
+>> +
+>> +# BCC requires python-bcc (shiped under bcc/src/python) to work.
+>> +# However, BCC compiles bcc/src/python/setup.py.in into bcc/src/python.
+>> +# The generated compiled folder (bcc/src/python/bcc-python/bcc) should
+>> +# be copied to target python's site-packages directory.
+>> +define BCC_INSTALL_PYTHON_BCC
+>> +	cp -r $(BUILD_DIR)/bcc-$(BCC_VERSION)/src/python/bcc-python/bcc \
+>> +	$(TARGET_DIR)/usr/lib/python3.*/site-packages/
+>> +endef
+>> +BCC_POST_INSTALL_TARGET_HOOKS += BCC_INSTALL_PYTHON_BCC
+> 
+> I think you're hitting a bug in BCC build system which causes the package to be
+> installed in the wrong location on the target.
+
+I already told to Jugurtha that was a weird hack.
+
+> 
+> Does the attached patch help?
+
+Thanks I'll take a look.
+
+> 
+>> +
+>> +define BCC_LINUX_CONFIG_FIXUPS
+>> +	# Enable kernel support for eBPF
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
+>> +	# [for Linux kernel versions 4.1 through 4.6]
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
+>> +	# [for Linux kernel versions 4.7 and later]
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
+>> +	# [for Linux kernel versions 5.2 and later]
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
+>> +	# For running bcc networking examples on vanilla kernel
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCH_SFQ)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_POLICE)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_GACT)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
+>> +	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
+>> +endef
+> 
+> This will be a big maintenance headache. New dependency can come up and configs
+> like CONFIG_NET_* are not essential and seem to be specific to your usage.
+> 
+> I'm not in favour of them personally, but if you want them the list need to
+> shrink to the bare minimum and depend on user building the kernel in buildroot
+> IMO.
+
+As you said, bcc is moving fast and requires different kernel option depending
+on the kernel version or tool/example that will be running on the target.
+Agree it's may be a big maintenance headache.
+
+But on otherhand I find userfriendly to enable CONFIG_BPF to CONFIG_IKHEADERS
+option. OK to drop kernel options for networking examples.
+
+Thanks for your review!
+
+Best regards,
+Romain
+
+
+> 
+> Thanks!
+> 
+> --
+> Qais Yousef
+> 
+>> +
+>> +$(eval $(cmake-package))
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
