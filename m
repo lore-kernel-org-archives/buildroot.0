@@ -1,44 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  3 Nov 2020 22:32:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/alsa-utils: bump version to 1.2.4
-In-Reply-To: <20201103213221.727208-1-bernd.kuhls@t-online.de>
-References: <20201103213221.727208-1-bernd.kuhls@t-online.de>
-Message-ID: <20201103213221.727208-2-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Nov 2020 22:43:33 +0100
+Subject: [Buildroot] [git commit] package/environment-setup: add cmake alias
+Message-ID: <20201103213047.681448713D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.alsa-project.org/wiki/Changes_v1.2.3.2_v1.2.4
+commit: https://git.buildroot.net/buildroot/commit/?id=df17721f885d5433b1ea6c3afd75d33d781f1426
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+In order to simplify the usage of a buildroot toolchain within
+the buildroot shell, a "cmake" alias is provided to call cmake
+with the correct toolchain file and options.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/alsa-utils/alsa-utils.hash | 2 +-
- package/alsa-utils/alsa-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/environment-setup/environment-setup    | 1 +
+ package/environment-setup/environment-setup.mk | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/alsa-utils/alsa-utils.hash b/package/alsa-utils/alsa-utils.hash
-index aec86aee00..dda009c1af 100644
---- a/package/alsa-utils/alsa-utils.hash
-+++ b/package/alsa-utils/alsa-utils.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ff19ae48c22938de7a491bdb39db74a2eee2546013f39bf1a86185e426f921aa  alsa-utils-1.2.3.tar.bz2
-+sha256  98ffc2d599de0577d423a48fa5f20a992ca0b82d812ed1f2e58ade49ac6da426  alsa-utils-1.2.4.tar.bz2
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 4776a17454..d9f0fea7b4 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+index 58701e4c71..813aa01c7a 100644
+--- a/package/environment-setup/environment-setup
++++ b/package/environment-setup/environment-setup
+@@ -12,6 +12,7 @@ Some tips:
+ * Standard autotools variables (CC, LD, CFLAGS) are exported
+ * To configure do "./configure $CONFIGURE_FLAGS" or use
+   the "configure" alias
++* To build CMake-based projects, use the "cmake" alias
  
--ALSA_UTILS_VERSION = 1.2.3
-+ALSA_UTILS_VERSION = 1.2.4
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = https://www.alsa-project.org/files/pub/utils
- ALSA_UTILS_LICENSE = GPL-2.0
--- 
-2.27.0
+ EOF
+ SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
+index be36cd452b..fb87c6f0b7 100644
+--- a/package/environment-setup/environment-setup.mk
++++ b/package/environment-setup/environment-setup.mk
+@@ -22,6 +22,9 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
+ 		>> $(ENVIRONMENT_SETUP_FILE)
++	printf "alias cmake=\"cmake \
++		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
++		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
+ 		-e 's%$(HOST_DIR)/bin/%%g' \
+ 		-e '/^export "PATH=/c\' \
