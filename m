@@ -1,44 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 09:15:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/collectd: fix build with amqp
-In-Reply-To: <20201031161421.231545-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 31 Oct 2020 17:14:21 +0100")
-References: <20201031161421.231545-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wnz297qh.fsf@dell.be.48ers.dk>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Tue,  3 Nov 2020 09:17:21 +0100
+Subject: [Buildroot] [PATCH] package/re2: bump version to 2020-11-01
+Message-ID: <20201103081721.13297-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/re2/re2.hash | 2 +-
+ package/re2/re2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > collectd unconditionally uses amqp_ssl_socket.h since version 5.11.0 and
- > https://github.com/collectd/collectd/commit/e4808ad138de362fab5efa09648fbc101f97bd76
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/525abe0a5cca81ff517c9c07c092d85160c7eb62
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.08.x, thanks.
-
- > ---
- >  package/collectd/Config.in | 1 +
- >  1 file changed, 1 insertion(+)
-
- > diff --git a/package/collectd/Config.in b/package/collectd/Config.in
- > index 9723b1ae1c..39ecbcfe54 100644
- > --- a/package/collectd/Config.in
- > +++ b/package/collectd/Config.in
- > @@ -582,6 +582,7 @@ comment "Select at least one for collectd to be useful"
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index b502f12835..b5457a59b1 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  0915741f524ad87debb9eb0429fe6016772a1569e21dc6d492039562308fcb0f  re2-2020-10-01.tar.gz
++sha256  8903cc66c9d34c72e2bc91722288ebc7e3ec37787ecfef44d204b2d6281954d7  re2-2020-11-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 7d1857dbf9..585846d570 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  config BR2_PACKAGE_COLLECTD_AMQP
- >  	bool "amqp"
- > +	select BR2_PACKAGE_OPENSSL
-
-NIT: A comment stating something like "needs rabbitmq-c with ssl
-support" would be helpful.
-
+-RE2_VERSION = 2020-10-01
++RE2_VERSION = 2020-11-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.25.1
