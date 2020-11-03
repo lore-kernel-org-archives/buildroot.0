@@ -1,40 +1,37 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue,  3 Nov 2020 09:17:21 +0100
-Subject: [Buildroot] [PATCH] package/re2: bump version to 2020-11-01
-Message-ID: <20201103081721.13297-1-buildroot@heine.tech>
+Date: Tue, 03 Nov 2020 09:51:05 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5Bautobuild=2Ebuildroot=2Enet=5D_Your_dai?=
+ =?utf-8?q?ly_results_for_2020-11-02?=
+Message-ID: <49-5fa11a00-1-271de3c0@117826441>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/re2/re2.hash | 2 +-
- package/re2/re2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/package/re2/re2.hash b/package/re2/re2.hash
-index b502f12835..b5457a59b1 100644
---- a/package/re2/re2.hash
-+++ b/package/re2/re2.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  0915741f524ad87debb9eb0429fe6016772a1569e21dc6d492039562308fcb0f  re2-2020-10-01.tar.gz
-+sha256  8903cc66c9d34c72e2bc91722288ebc7e3ec37787ecfef44d204b2d6281954d7  re2-2020-11-01.tar.gz
- sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
-diff --git a/package/re2/re2.mk b/package/re2/re2.mk
-index 7d1857dbf9..585846d570 100644
---- a/package/re2/re2.mk
-+++ b/package/re2/re2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RE2_VERSION = 2020-10-01
-+RE2_VERSION = 2020-11-01
- RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
- RE2_LICENSE = BSD-3-Clause
- RE2_LICENSE_FILES = LICENSE
--- 
-2.25.1
+from time to time I get this build failure reported:
+
+On Tuesday, November 03, 2020 09:10 CET, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote: 
+> 
+> Results for the '2020.02.x' branch
+> ----------------------------------
+> 
+> Build failures related to your packages:
+> 
+>     arch     |             reason             |                                       url                                      
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>     or1k     |        host-grpc-1.25.0        | http://autobuild.buildroot.net/results/605a7e9911fac8785272d0ffdabdde9c8876daa5
+> 
+
+this was fixed by this commit:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20200915161107.1826-1-buildroot at heine.tech/ 
+
+Would it make sense to pick this for LTS?
+It fixes a corner-case with the autobuilder which uses gcc 4.8 on ubuntu, so I wouldn't say it's absolutely needed though. 
+
+Regards,
+Michael
