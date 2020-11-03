@@ -1,19 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 20:54:19 +0100
-Subject: [Buildroot] [PATCH] package/grpc: bump version to 1.33.2
-In-Reply-To: <20201103080537.4942-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Tue, 3 Nov 2020 09:05:39 +0100")
-References: <20201103080537.4942-1-buildroot@heine.tech>
-Message-ID: <87zh3y5i8k.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Nov 2020 20:55:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: fix build on mips r6
+In-Reply-To: <20201103171328.21757-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 3 Nov 2020 18:13:28 +0100")
+References: <20201103171328.21757-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9em5i71.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ > Fix build of pcre2 10.35 on mips r6:
+ > https://bugs.exim.org/show_bug.cgi?id=2667
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/eab208c050867c9bd12bd80dca33cbe0199b0a7d
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
