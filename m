@@ -1,74 +1,89 @@
-From: Matteo Pampolini <matteo.pampolini@gmail.com>
-Date: Tue, 3 Nov 2020 18:07:52 +0100
-Subject: [Buildroot] Enable gcc ADA support on latest LTS Buildroot
-In-Reply-To: <20201103113528.1f8e61a5@windsurf>
-References: <CAEzkdfrXmUQc7N7a+j2zHayLLdzoUAy5kncQmewOwQ0-fSGVGA@mail.gmail.com>
- <20201103113528.1f8e61a5@windsurf>
-Message-ID: <CAEzkdfp62Jz6KT5yUbrsOpoFqdCNtdOpSsYeVPUfrzExh=L__g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  3 Nov 2020 18:13:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: fix build on mips r6
+Message-ID: <20201103171328.21757-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fix build of pcre2 10.35 on mips r6:
+https://bugs.exim.org/show_bug.cgi?id=2667
 
-many thanks for your quick answer, please find attached 2 logs obtained
-with Buildroot 2020.02.6 setting gcc options to --enable-languages="ada",
-one refers to gcc 8.x and the other one to gcc 9.x, they both fail. Build
-system is Ubuntu 18.04.5 LTS with GNAT installed.
+Fixes:
+ - http://autobuild.buildroot.org/results/eab208c050867c9bd12bd80dca33cbe0199b0a7d
 
-Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...e-path-of-sljit_emit_cmov-on-mips-r6.patch | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 package/pcre2/0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch
 
-Matteo
-
-On Tue, Nov 3, 2020 at 11:35 AM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Matteo,
->
-> On Tue, 3 Nov 2020 08:53:48 +0100
-> Matteo Pampolini <matteo.pampolini@gmail.com> wrote:
->
-> > I would like to enable ADA language to gcc together with the needed
-> target
-> > libraries, I'm using the latest LTS version of Buildroot. I saw an email
-> > with a patch some years ago but it seems it was never put into the
-> > Buildroot mainline. I tried just setting --enable-languages=ada in gcc
-> > options but it fails, both gcc 8.x and 9.x.
->
-> Could you give details about the failures you're seeing ?
->
-> > May you please help me? Why is there no such configuration option just
-> like
-> > Fortran or D?
->
-> Because nobody really pushed for that, but if you do so, we will be
-> happy to include support for building gcc with Ada support. It
-> certainly makes sense to have that in Buildroot.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201103/d381f2ee/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: gcc9-ada.log
-Type: text/x-log
-Size: 19603 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201103/d381f2ee/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: gcc8-ada.log
-Type: text/x-log
-Size: 32437 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201103/d381f2ee/attachment-0001.bin>
+diff --git a/package/pcre2/0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch b/package/pcre2/0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch
+new file mode 100644
+index 0000000000..9d8e44a3af
+--- /dev/null
++++ b/package/pcre2/0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch
+@@ -0,0 +1,59 @@
++From 5d7f6573c1eef30a9720edd31a92c1a4b99b7d86 Mon Sep 17 00:00:00 2001
++From: Zoltan Herczeg <zherczeg.u-szeged@partner.samsung.com>
++Date: Tue, 3 Nov 2020 14:12:01 +0100
++Subject: [PATCH] Use the standard code path of sljit_emit_cmov on mips r6.
++ (#97)
++
++[Retrieved (and updated to fix paths) from:
++https://github.com/zherczeg/sljit/commit/5d7f6573c1eef30a9720edd31a92c1a4b99b7d86
++SVN commit: https://vcs.pcre.org/pcre2?view=revision&revision=1281]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ sljit_src/sljitLir.c               | 2 +-
++ sljit_src/sljitNativeMIPS_common.c | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/sljit/sljitLir.c b/src/sljit/sljitLir.c
++index 4078613..d817c90 100644
++--- a/src/sljit/sljitLir.c
+++++ b/src/sljit/sljitLir.c
++@@ -2043,7 +2043,7 @@ static SLJIT_INLINE sljit_s32 emit_mov_before_return(struct sljit_compiler *comp
++ #if (defined SLJIT_CONFIG_X86 && SLJIT_CONFIG_X86) \
++ 		|| (defined SLJIT_CONFIG_PPC && SLJIT_CONFIG_PPC) \
++ 		|| (defined SLJIT_CONFIG_SPARC_32 && SLJIT_CONFIG_SPARC_32) \
++-		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1))
+++		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6))
++ 
++ static SLJIT_INLINE sljit_s32 sljit_emit_cmov_generic(struct sljit_compiler *compiler, sljit_s32 type,
++ 	sljit_s32 dst_reg,
++diff --git a/src/sljit/sljitNativeMIPS_common.c b/src/sljit/sljitNativeMIPS_common.c
++index 8b8c12a..ecf4dac 100644
++--- a/src/sljit/sljitNativeMIPS_common.c
+++++ b/src/sljit/sljitNativeMIPS_common.c
++@@ -2186,14 +2186,14 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
++ 	sljit_s32 dst_reg,
++ 	sljit_s32 src, sljit_sw srcw)
++ {
++-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
+++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
++ 	sljit_ins ins;
++-#endif /* SLJIT_MIPS_REV >= 1 */
+++#endif /* SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6 */
++ 
++ 	CHECK_ERROR();
++ 	CHECK(check_sljit_emit_cmov(compiler, type, dst_reg, src, srcw));
++ 
++-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
+++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
++ 
++ 	if (SLJIT_UNLIKELY(src & SLJIT_IMM)) {
++ #if (defined SLJIT_CONFIG_MIPS_64 && SLJIT_CONFIG_MIPS_64)
++@@ -2250,7 +2250,7 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
++ 
++ 	return push_inst(compiler, ins | S(src) | D(dst_reg), DR(dst_reg));
++ 
++-#else /* SLJIT_MIPS_REV < 1 */
+++#else /* SLJIT_MIPS_REV < 1 || SLJIT_MIPS_REV >= 6 */
++ 	return sljit_emit_cmov_generic(compiler, type, dst_reg, src, srcw);
++ #endif /* SLJIT_MIPS_REV >= 1 */
++ }
+-- 
+2.28.0
