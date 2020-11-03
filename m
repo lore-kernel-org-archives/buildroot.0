@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:09:58 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5/qt5base: fix
+Date: Tue, 3 Nov 2020 11:09:26 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/qt5/qt5base: fix
  imx6 eglfs support with imx-gpu-viv
-Message-ID: <20201103095732.1EF5083FF5@busybox.osuosl.org>
+Message-ID: <20201103095736.6CC7083FF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1ca8b6b51931179c124cda4068ee09e770bf26e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=94ab5fbb648f19151e563b9fdb980e8257127809
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Last commit fixed eglfs_kms support for i.MX8 platforms that required to
 declare imx-gpu-viv as the gbm provider.
@@ -30,10 +30,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index f8f50530bc..3e4a7b5f16 100644
+index e0189599a7..ed308c1fa2 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
-@@ -84,7 +84,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
+@@ -79,7 +79,7 @@ QT5BASE_DEPENDENCIES += gcnano-binaries
  else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
  QT5BASE_CONFIGURE_OPTS += -gbm
  QT5BASE_DEPENDENCIES += ti-sgx-libgbm
