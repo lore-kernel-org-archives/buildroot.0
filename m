@@ -1,42 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 21:01:46 +0100
-Subject: [Buildroot] [git commit] package/libgit2: bump version to 1.1.0
-Message-ID: <20201103194850.D28EA82965@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Nov 2020 21:09:13 +0100
+Subject: [Buildroot] [git commit] package/python-remi: bump version to
+ 2020.10.30
+Message-ID: <20201103195617.93A3486FC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6a096be739fd9ead36c8882d4459c18dd97f536
+commit: https://git.buildroot.net/buildroot/commit/?id=d58a2267a61c1377e390aa132850d6098917cf88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-remi/python-remi.hash | 4 ++--
+ package/python-remi/python-remi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 1cb12ea035..367ade3afe 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
+diff --git a/package/python-remi/python-remi.hash b/package/python-remi/python-remi.hash
+index 2355380163..aecdbc0bb0 100644
+--- a/package/python-remi/python-remi.hash
++++ b/package/python-remi/python-remi.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  689f442c39c4117df515d1a0ffd7b401b91a500d7e2875ac45a440d86f198f5a  libgit2-1.0.1.tar.gz
-+sha256  ad73f845965cfd528e70f654e428073121a3fa0dc23caac81a1b1300277d4dba  libgit2-1.1.0.tar.gz
- sha256  afc8bde99ba630012107c25d3c42dde628ec5f0cd3f428131f7e3a0f7d58ff42  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index d674f17c7f..30e6f24887 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
+ # Locally computed
+-sha256 678c9caf1ecffc03c4a3d59931906520545d77e9a8027ff1a1ca90fc580f56e2  python-remi-2019.9.tar.gz
+-sha256 bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
++sha256  afe28d799d147d39954e18377e81101d045affe9c634eed5bf8dfdf888202650  python-remi-2020.10.30.tar.gz
++sha256  bc198f9846c1da3a1c1b1fa2b12909b021365d1e7fe9b4039245edfcec3b7f7f  LICENSE
+diff --git a/package/python-remi/python-remi.mk b/package/python-remi/python-remi.mk
+index df0e1df5a4..53836be9eb 100644
+--- a/package/python-remi/python-remi.mk
++++ b/package/python-remi/python-remi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGIT2_VERSION = 1.0.1
-+LIBGIT2_VERSION = 1.1.0
- LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v$(LIBGIT2_VERSION)
- LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
- LIBGIT2_LICENSE_FILES = COPYING
+-PYTHON_REMI_VERSION = 2019.9
++PYTHON_REMI_VERSION = 2020.10.30
+ PYTHON_REMI_SITE = $(call github,dddomodossola,remi,$(PYTHON_REMI_VERSION))
+ PYTHON_REMI_LICENSE = Apache-2.0
+ PYTHON_REMI_LICENSE_FILES = LICENSE
