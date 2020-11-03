@@ -1,85 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2020 22:14:12 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/abootimg: use util-linux-libs
-In-Reply-To: <20201103205745.123950-2-fontaine.fabrice@gmail.com>
-References: <20201103205745.123950-1-fontaine.fabrice@gmail.com>
- <20201103205745.123950-2-fontaine.fabrice@gmail.com>
-Message-ID: <20201103211412.GL2887157@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 3 Nov 2020 22:17:55 +0100
+Subject: [Buildroot] [git commit] package/systemd: add missing path options
+Message-ID: <20201103210517.56EE986D32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=acb62b3336d961486d8334670572cfb755eef102
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-11-03 21:57 +0100, Fabrice Fontaine spake thusly:
-> abootimg only needs libblkid from util-linux-libs
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Select util-linux-libs instead of util-linux
-> 
->  package/abootimg/Config.in   | 2 +-
->  package/abootimg/abootimg.mk | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/abootimg/Config.in b/package/abootimg/Config.in
-> index 30e5bd1fb0..8aa4cb414c 100644
-> --- a/package/abootimg/Config.in
-> +++ b/package/abootimg/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_ABOOTIMG
->  	bool "abootimg"
->  	depends on BR2_USE_MMU	# libblkid
-> -	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+If paths are not set, then meson will search the host system for the
+binaries (or the target, where those binaries are not yet installed).
+So add the missing paths.
 
-BR2_PACKAGE_UTIL_LINUX_LIBBLKID is an option of util-linux, so you can't
-drop the "select BR2_PACKAGE_UTIL_LINUX"
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Reviewed-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/systemd/systemd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-That's again probably my fault, because I was maybe not exhaustive
-enough on my previous reply in the libglib2 thread.
-
-However, please see what I replied to the v1 of this series.
-
-Still, it is not trivial, so we colectively need to think about it...
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Tool to manipulate Android Boot Images, either on files
-> diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
-> index e906546948..d139d58ceb 100644
-> --- a/package/abootimg/abootimg.mk
-> +++ b/package/abootimg/abootimg.mk
-> @@ -9,8 +9,8 @@ ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
->  ABOOTIMG_LICENSE = GPL-2.0+
->  ABOOTIMG_LICENSE_FILES = LICENSE
->  
-> -# depends on libblkid from util-linux
-> -ABOOTIMG_DEPENDENCIES = util-linux
-> +# depends on libblkid from util-linux-libs
-> +ABOOTIMG_DEPENDENCIES = util-linux-libs
-
->  define ABOOTIMG_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 6f04283bdc..50416cceb6 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -37,11 +37,15 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsystem-uid-max=999 \
+ 	-Dsystem-gid-max=999 \
+ 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
++	-Dquotaon-path=/usr/sbin/quotaon \
++	-Dquotacheck-path=/usr/sbin/quotacheck \
+ 	-Dkmod-path=/usr/bin/kmod \
+ 	-Dkexec-path=/usr/sbin/kexec \
+ 	-Dsulogin-path=/usr/sbin/sulogin \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dumount-path=/usr/bin/umount \
++	-Dloadkeys-path=/usr/bin/loadkeys \
++	-Dsetfont-path=/usr/bin/setfont \
+ 	-Didn=true \
+ 	-Dnss-systemd=true \
+ 	-Dportabled=false
