@@ -1,77 +1,66 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 3 Nov 2020 22:17:55 +0100
-Subject: [Buildroot] [git commit] systemd: sort SYSTEMD_CONF_OPTS
-Message-ID: <20201103210517.6E23986D32@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Nov 2020 22:23:04 +0100
+Subject: [Buildroot] [PATCH 2/3] package/systemd: fix telinit-path and
+ add missing pat options
+In-Reply-To: <20200710234150.185609-2-nolange79@gmail.com>
+References: <20200710234150.185609-1-nolange79@gmail.com>
+ <20200710234150.185609-2-nolange79@gmail.com>
+Message-ID: <e6bf17da-067f-92e5-c202-135c1cc0432d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15b4d396b9431634d339dde61cb1d52dcf9e0746
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Norbert,
 
-The meson options were in some semi-sorted order with no logic in it.
-Sort them alphabetically instead.
+On 11/07/2020 01:41, Norbert Lange wrote:
+> If paths are not set, then meson will search the host system for the
+> binaries (or the target, where those binaries are not yet installed).
+> So add the missing paths.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/systemd/systemd.mk | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ Applied to master, thanks, except:
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 63885993db..cb12f667d6 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -23,32 +23,32 @@ SYSTEMD_SELINUX_MODULES = systemd udev
- SYSTEMD_PROVIDES = udev
- 
- SYSTEMD_CONF_OPTS += \
--	-Drootlibdir='/usr/lib' \
--	-Dsysvinit-path= \
--	-Dsysvrcnd-path= \
--	-Dutmp=false \
--	-Dman=false \
-+	-Ddefault-hierarchy=hybrid \
-+	-Didn=true \
- 	-Dima=false \
-+	-Dkexec-path=/usr/sbin/kexec \
-+	-Dkmod-path=/usr/bin/kmod \
- 	-Dldconfig=false \
--	-Ddefault-hierarchy=hybrid \
--	-Dtests=false \
-+	-Dloadkeys-path=/usr/bin/loadkeys \
-+	-Dman=false \
-+	-Dmount-path=/usr/bin/mount \
-+	-Dnss-systemd=true \
-+	-Dportabled=false \
-+	-Dquotacheck-path=/usr/sbin/quotacheck \
-+	-Dquotaon-path=/usr/sbin/quotaon \
-+	-Drootlibdir='/usr/lib' \
-+	-Dsetfont-path=/usr/bin/setfont \
- 	-Dsplit-bin=true \
- 	-Dsplit-usr=false \
--	-Dsystem-uid-max=999 \
-+	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dsystem-gid-max=999 \
-+	-Dsystem-uid-max=999 \
-+	-Dsysvinit-path= \
-+	-Dsysvrcnd-path= \
- 	-Dtelinit-path= \
--	-Dquotaon-path=/usr/sbin/quotaon \
--	-Dquotacheck-path=/usr/sbin/quotacheck \
--	-Dkmod-path=/usr/bin/kmod \
--	-Dkexec-path=/usr/sbin/kexec \
--	-Dsulogin-path=/usr/sbin/sulogin \
--	-Dmount-path=/usr/bin/mount \
-+	-Dtests=false \
- 	-Dumount-path=/usr/bin/umount \
--	-Dloadkeys-path=/usr/bin/loadkeys \
--	-Dsetfont-path=/usr/bin/setfont \
--	-Didn=true \
--	-Dnss-systemd=true \
--	-Dportabled=false
-+	-Dutmp=false
- 
- ifeq ($(BR2_PACKAGE_ACL),y)
- SYSTEMD_DEPENDENCIES += acl
+> 
+> Also fixup the path to telinit (nice way to get a build path into the binary).
+
+ ... since in the end we explicitly removed sysv support from the config,
+keeping telinit makes no sense.
+
+ So, in a separate patch, I set telinit_path to nothing (like it's done for the
+other sysv stuff).
+
+ I also pushed a follow-up patch that sorts the options.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/systemd/systemd.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 05d8cb4934..176adb434a 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -32,12 +32,16 @@ SYSTEMD_CONF_OPTS += \
+>  	-Dsplit-usr=false \
+>  	-Dsystem-uid-max=999 \
+>  	-Dsystem-gid-max=999 \
+> -	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
+> +	-Dquotaon-path=/usr/sbin/quotaon \
+> +	-Dquotacheck-path=/usr/sbin/quotacheck \
+>  	-Dkmod-path=/usr/bin/kmod \
+>  	-Dkexec-path=/usr/sbin/kexec \
+>  	-Dsulogin-path=/usr/sbin/sulogin \
+>  	-Dmount-path=/usr/bin/mount \
+>  	-Dumount-path=/usr/bin/umount \
+> +	-Dloadkeys-path=/usr/bin/loadkeys \
+> +	-Dsetfont-path=/usr/bin/setfont \
+> +	-Dtelinit-path=/sbin/telinit \
+>  	-Dnobody-group=nogroup \
+>  	-Didn=true \
+>  	-Dnss-systemd=true
+> 
