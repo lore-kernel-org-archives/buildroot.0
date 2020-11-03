@@ -1,53 +1,144 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  3 Nov 2020 21:57:45 +0100
-Subject: [Buildroot] [PATCH v2,2/2] package/abootimg: use util-linux-libs
-In-Reply-To: <20201103205745.123950-1-fontaine.fabrice@gmail.com>
-References: <20201103205745.123950-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201103205745.123950-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Nov 2020 21:58:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/util-linux: select
+ BR2_PACKAGE_UTIL_LINUX_LIBS
+In-Reply-To: <20201101150619.1709959-1-fontaine.fabrice@gmail.com>
+References: <20201101150619.1709959-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201103205814.GK2887157@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-abootimg only needs libblkid from util-linux-libs
+Fabrice, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Select util-linux-libs instead of util-linux
++Thomas, +Peter, +Arnout, further reading and input from you required
+below...
 
- package/abootimg/Config.in   | 2 +-
- package/abootimg/abootimg.mk | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2020-11-01 16:06 +0100, Fabrice Fontaine spake thusly:
+> When util-linux is enabled, select BR2_PACKAGE_UTIL_LINUX_LIBS as
+> suggested by Yann E. Morin in
+> https://patchwork.ozlabs.org/project/buildroot/patch/20201101121536.1089498-1-fontaine.fabrice at gmail.com/
 
-diff --git a/package/abootimg/Config.in b/package/abootimg/Config.in
-index 30e5bd1fb0..8aa4cb414c 100644
---- a/package/abootimg/Config.in
-+++ b/package/abootimg/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_ABOOTIMG
- 	bool "abootimg"
- 	depends on BR2_USE_MMU	# libblkid
--	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	help
- 	  Tool to manipulate Android Boot Images, either on files
-diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
-index e906546948..d139d58ceb 100644
---- a/package/abootimg/abootimg.mk
-+++ b/package/abootimg/abootimg.mk
-@@ -9,8 +9,8 @@ ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
- ABOOTIMG_LICENSE = GPL-2.0+
- ABOOTIMG_LICENSE_FILES = LICENSE
- 
--# depends on libblkid from util-linux
--ABOOTIMG_DEPENDENCIES = util-linux
-+# depends on libblkid from util-linux-libs
-+ABOOTIMG_DEPENDENCIES = util-linux-libs
- 
- define ABOOTIMG_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+I think there is quite some misunderstanding in what I said; sorry, I
+was probably not completely clear in what I said...
+
+> As a result, drop BR2_PACKAGE_UTIL_LINUX_LIBS workaround from libglib2
+> and drop select of BR2_PACKAGE_UTIL_LINUX_LIBS from eudev and systemd
+
+Quite the opposite; it is what all packages should do.
+
+The rule should be:
+
+  - need util-linux tools?
+    -> select BR2_PACKAGE_UTIL_LINUX (and the subset of required tools,
+       if needed)
+
+  - need util-linux' libraries?
+    -> select BR2_PACKAGE_UTIL_LINUX_LIBS and the needed libraries
+
+So, to complement my previous reply:
+
+  - the BR2_PACKAGE_UTIL_LINUX_LIBMOUNT (for example) should berndn option
+    of util-linux-libs, so that the library is built by util-linux
+
+  - those options are what packages should select
+
+However, there is acatch, which we need to be careful about:
+
+  - if both util-linux and util-linux-libs install libraries, then that
+    would cause grief because that break the rule that no two packages
+    should install the same file in target/
+
+  - AFAICS, there is no (trivial) way to tell util-linux to only install
+    libs or programs, not both.
+
+One way around that would be to:
+
+  - ensure that both util-linux and util-linux-libs really build the
+    exact same libraries
+
+  - if util-linux is enabled, install it in target only, and install
+    util-linux-libs only in staging
+
+  - if util-linux is not enabled, install util-linux-libs in both
+    staging and target
+
+Yes, this is kinda a hack, so we'd need further input before actually
+comitting to this...
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/eudev/Config.in      | 1 -
+>  package/libglib2/libglib2.mk | 4 ----
+>  package/systemd/Config.in    | 1 -
+>  package/util-linux/Config.in | 1 +
+>  4 files changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+> index 0e5bd0cee9..b0ce76171a 100644
+> --- a/package/eudev/Config.in
+> +++ b/package/eudev/Config.in
+> @@ -7,7 +7,6 @@ config BR2_PACKAGE_EUDEV
+>  	select BR2_PACKAGE_HAS_UDEV
+>  	select BR2_PACKAGE_UDEV_GENTOO_SCRIPTS if BR2_INIT_OPENRC
+>  	select BR2_PACKAGE_UTIL_LINUX
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBS
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	select BR2_PACKAGE_KMOD
+>  	help
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index 6e9dbd7b26..43fcb27fae 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -86,12 +86,8 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+>  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
+> -ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
+>  LIBGLIB2_DEPENDENCIES += util-linux-libs
+>  else
+> -LIBGLIB2_DEPENDENCIES += util-linux
+> -endif
+> -else
+>  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
+>  endif
+>  
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index ec34478e3d..9188876d49 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -29,7 +29,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>  	select BR2_PACKAGE_DBUS # runtime dependency only
+>  	select BR2_PACKAGE_LIBCAP
+>  	select BR2_PACKAGE_UTIL_LINUX
+> -	select BR2_PACKAGE_UTIL_LINUX_LIBS
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+>  	select BR2_PACKAGE_UTIL_LINUX_AGETTY
+>  	select BR2_PACKAGE_UTIL_LINUX_MOUNT
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index 1f33eb5514..cee4649f67 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -1,5 +1,6 @@
+>  menuconfig BR2_PACKAGE_UTIL_LINUX
+>  	bool "util-linux"
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
+>  	help
+>  	  Various useful/essential linux libraries and utilities.
+>  
+> -- 
+> 2.28.0
+> 
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
