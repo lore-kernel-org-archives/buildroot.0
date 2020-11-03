@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 10:39:31 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/fastd: libcap is
+Date: Tue, 3 Nov 2020 10:39:38 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/fastd: libcap is
  optional not mandatory
-Message-ID: <20201103093820.B6F7486FC1@busybox.osuosl.org>
+Message-ID: <20201103093825.73A0386FC5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d3e10f7eb3ea0ad90d97ea0fcc54256b6275b0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=66197f976037bfb601186d1d10a1b6bf0068a287
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 libcap is an optional dependency which is available since version 7:
 https://github.com/NeoRaider/fastd/commit/eaac49427339a365aac2d3505f567572cfbdbb96
@@ -37,7 +37,7 @@ index c4f296dd63..5319d68503 100644
  	  Fast and Secure Tunneling Daemon
  
 diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index d556e2fbb1..43d3c242f3 100644
+index 157ba585f4..577ca6f04c 100644
 --- a/package/fastd/fastd.mk
 +++ b/package/fastd/fastd.mk
 @@ -10,11 +10,18 @@ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
