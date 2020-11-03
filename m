@@ -1,152 +1,135 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 3 Nov 2020 21:38:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
- dependency
-In-Reply-To: <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
-References: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
- <20201101130358.GE2887157@scaer>
- <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
-Message-ID: <20201103203837.GJ2887157@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Nov 2020 21:39:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: new package
+In-Reply-To: <20201027151407.2870851-2-gabibbo97@gmail.com>
+References: <20201027103643.01576b52@windsurf.home>
+ <20201027151407.2870851-2-gabibbo97@gmail.com>
+Message-ID: <20201103213904.0264a6c1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello,
 
-On 2020-11-01 16:03 +0100, Fabrice Fontaine spake thusly:
-> Le dim. 1 nov. 2020 ? 14:04, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
-> > On 2020-11-01 13:15 +0100, Fabrice Fontaine spake thusly:
-> > > Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
-> > > util-linux-libs but this raises the following build failure:
-> > >
-> > > Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-> > >
-> > > To fix this build failure, use util-linux or util-linux-libs depending
-> > > on BR2_PACKAGE_UTIL_LINUX_LIBS
-> >
-> > OK, so this is exactly what I did not like in this util-linux vs
-> > util-linus-libs split, and the fact that util-linux-libs is optional...
-> >
-> > IMHO:
-> >
-> >  1. util-linux-libs must be enabled as soon as util-linux is enabled,
-> >
-> >  2. packages should build-depend on util-linux-libs, and never on
-> >     util-linux, and should 'select BR2_PACKAGE_UTIL_LINUX_LIBS' if
-> >     all they need is a library.
-> We can't select BR2_PACKAGE_UTIL_LINUX_LIBS without selecting
-> BR2_PACKAGE_UTIL_LINUX as BR2_PACKAGE_UTIL_LINUX_LIBS is a hidden
-> option of BR2_PACKAGE_UTIL_LINUX.
+On Tue, 27 Oct 2020 16:14:08 +0100
+Giacomo Longo <gabibbo97@gmail.com> wrote:
 
-No, we really need to make util-linux-libs a real package, not a hidden
-one, like
 
-    config BR2_PACAKGE_UTIL_LINUX_LIBS
-        bool "util-linux-libs"
-        help
-          Only the libraries provided bby util-linux; if you need the
-          tools too, select util-linux.
+> diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+> new file mode 100644
+> index 0000000000..4349a5778e
+> --- /dev/null
+> +++ b/package/uftrace/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_aarch64
+> +	default y if BR2_arm
+> +	default y if BR2_i386
+> +	default y if BR2_x86_64
+> +
+> +config BR2_PACKAGE_UFTRACE
+> +	bool "uftrace"
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
 
-and:
+In fact the reason why you can only use glibc is two-fold:
 
-    config BR2_PACAKGE_UTIL_LINUX
-        bool "util-linux"
-        select BR2_PACAKGE_UTIL_LINUX_LIBS
+ * You select elfutils, and elfutils does not build on musl.
 
-    (or:)
+ * uftrace uses ADDR_NO_RANDOMIZE, which isn't supported in uClibc
 
-    config BR2_PACAKGE_UTIL_LINUX_LIBMOUNT
-        bool "libmount"
-        select BR2_PACAKGE_UTIL_LINUX_LIBS
+So it would be good to write something like this:
 
-> Moreover, we'll select BR2_PACKAGE_UTIL_LINUX_LIBS as soon as
-> BR2_PACKAGE_UTIL_LINUX is enabled (as per your first suggestion).
-> As a result, util-linux will always be selected even if packages (such
-> as abootimg) only build-depend on util-linux-libs.
+	# elfutils not available for musl, uClibc-ng does not 
+	# provide ADDR_NO_RANDOMIZE, so only glibc is supported
+	depends on BR2_TOOLCHAIN_USES_GLIBC
 
-Now that util-linux-libs is a full-gfledged package, it is selctable by
-packages. See for example eudev os systemd, which already both select
-BR2_PACKAGE_UTIL_LINUX_LIBS and biuld-depend on util-linux-libs.
+> +comment "uftrace needs a glibc toolchain w/ C++, dynamic library, threads, wchar"
+> +	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+> +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 
-> So, in the end, we'll fix/clean the build order but util-linux will
-> still be built but this is unavoidable unless util-linux-libs is moved
-> to its own package.
+Could you cut this line at ~80 characters, using a backslash ? See
+other packages.
 
-It is already its own package; just it is not "user-visible".
+> diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
+> new file mode 100644
+> index 0000000000..8f38e7431d
+> --- /dev/null
+> +++ b/package/uftrace/uftrace.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha512 f73ad4461051b9c61668161e077897d118ac556d234ff204e32bf14ecdc2c0df148da30ea5d5054641e79ea20b29261d6f637908f5047f5669207ef244865358 uftrace-v0.9.4.tar.gz
+> +sha512 aee80b1f9f7f4a8a00dcf6e6ce6c41988dcaedc4de19d9d04460cbfb05d99829ffe8f9d038468eabbfba4d65b38e8dbef5ecf5eb8a1b891d9839cda6c48ee957 COPYING
 
-> Did I misunderstood something?
+Could you use sha256 hashes instead ?
 
-The above, I guess. ;-)
+> +UFTRACE_VERSION = v0.9.4
+> +UFTRACE_SITE = $(call github,namhyung,uftrace,$(UFTRACE_VERSION))
 
-> I'll send a 2-patch serie that implements your first suggestion and
-> your second suggestion on abootimg. If it pleases you, I'll update the
-> other packages.
+Please don't encode the "v" in the version field. So please do:
 
-Well, we can do it multi-pass, of course; fixing packages to build-depend
-on util-linux-libs is not a lost effort anyway.
+UFTRACE_VERSION = 0.9.4
+UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
 
-Thanks for your work! :-)
+Indeed, this will allow UFTRACE_VERSION to be used to check if new
+uftrace releases are available, using release-monitoring.org.
 
-Regards,
-Yann E. MORIN.
+> +UFTRACE_LICENSE = GPL-2.0+
+> +UFTRACE_LICENSE_FILES = COPYING
+> +UFTRACE_DEPENDENCIES = elfutils
+> +
+> +UFTRACE_CONF_OPTS = \
+> +	--without-capstone \
+> +	--without-libpython
+> +
+> +ifeq ($(BR2_aarch64),y)
+> +UFTRACE_CONF_OPTS += --arch=aarch64
+> +else ifeq ($(BR2_arm),y)
+> +UFTRACE_CONF_OPTS += --arch=arm
+> +else ifeq ($(BR2_i386),y)
+> +UFTRACE_CONF_OPTS += --arch=i386
+> +else ifeq ($(BR2_x86_64),y)
+> +UFTRACE_CONF_OPTS += --arch=x86_64
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LUAJIT),n)
 
-> > So, for now I'll apply this patch, because we do need a fix.
-> >
-> > But ultimately, we wnat to sanitise this situation.
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  package/libglib2/libglib2.mk | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> > > index 43fcb27fae..6e9dbd7b26 100644
-> > > --- a/package/libglib2/libglib2.mk
-> > > +++ b/package/libglib2/libglib2.mk
-> > > @@ -86,8 +86,12 @@ endif
-> > >
-> > >  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-> > >  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
-> > > +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
-> > >  LIBGLIB2_DEPENDENCIES += util-linux-libs
-> > >  else
-> > > +LIBGLIB2_DEPENDENCIES += util-linux
-> > > +endif
-> > > +else
-> > >  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
-> > >  endif
-> > >
-> > > --
-> > > 2.28.0
-> > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
-> Best Regards,
-> 
-> Fabrice
+BR2_PACKAGE_LUAJIT is never going to be "n", so this condition will
+never be true. Also, if luajit *is* there, you want luajit to be
+compiled before uftrace. So you want something like this:
 
+# No --with-<option> available
+ifeq ($(BR2_PACKAGE_LUAJIT),y)
+UFTRACE_DEPENDENCIES += luajit
+else
+UFTRACE_CONF_OPTS += --without-libluajit
+endif
+
+> +ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),n)
+> +UFTRACE_CONF_OPTS += --without-libncurses
+> +endif
+
+Same comment as above.
+
+> +$(eval $(autotools-package))
+
+This is not an autotools-based package: it uses a hand-written
+configure script, not one that is generated by autoconf. For example,
+this explains why it doesn't support --with-<foo>, but only
+--without-<foo>.
+
+So, please use the generic-package infrastructure in this sort of
+cases. Using autotools-package should really only be done for packages
+that do use autoconf.
+
+Could you adjust your package according to this ?
+
+Thanks a lot!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
