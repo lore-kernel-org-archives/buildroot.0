@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 10:27:16 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/grpc: fix build
+Date: Tue, 3 Nov 2020 10:27:11 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/grpc: fix build
  on ubuntu gcc 4.8
-Message-ID: <20201103092255.D8DD08625E@busybox.osuosl.org>
+Message-ID: <20201103092300.68FEE8625E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbf5097d51fc322d470c8b21316aa9e1a7d01e3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=72fee02803097c2352bf376a9dc8fdcc6d9d32d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 gcc 4.8 on ubuntu 14.04 does some broken optimization at link-time
 which causes grpc to create a grpc_cpp_plugin which quits because
@@ -34,12 +34,12 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 8 insertions(+)
 
 diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 39f6123792..1c168f3359 100644
+index 087deac0c6..1b6474358f 100644
 --- a/package/grpc/grpc.mk
 +++ b/package/grpc/grpc.mk
-@@ -67,5 +67,13 @@ HOST_GRPC_CONF_OPTS = \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package
+@@ -70,5 +70,13 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_ZLIB_PROVIDER=package \
+ 	-DgRPC_ABSL_PROVIDER=package
  
 +# With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks
 +# the linkage of the grpc_cpp_plugin with libprotobuf and pthread. This
