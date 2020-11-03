@@ -1,151 +1,66 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 3 Nov 2020 12:25:25 -0800
-Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
- via cross compiler
-In-Reply-To: <20201103201640.GI2887157@scaer>
-References: <20201023093641.619746-1-raj.khem@gmail.com>
- <20201103201640.GI2887157@scaer>
-Message-ID: <CAMKF1sodESjxJAwwJ9i5tFuU1j5dzL0cNx42FB97SSQYwEzpYA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 3 Nov 2020 21:25:49 +0100
+Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 1.6
+In-Reply-To: <CAMRc=MdXOK1qScv+b3vr-b9gr9Nwb0Yv=CqdtiCNF6UMM2niMg@mail.gmail.com>
+References: <CAMRc=MfTQ4o8TTV6UDR27dGBPqbUJA9EAFykdO0Rb3LDjp4Gkw@mail.gmail.com>
+ <57-5f9bc680-3-4a87f08@125885651> <20201030091929.18f77130@windsurf.home>
+ <CAMRc=MexG_jDoNuuVzRmNqHD56yYJmwzq43JgGo38equmPiqzQ@mail.gmail.com>
+ <20201030101559.0a1fb98c@windsurf.home>
+ <CAMRc=MfwZVv10O2DsQitxDsXdpXRSC29VpvqTkC81CkOBUFoLQ@mail.gmail.com>
+ <20201030103450.57c772b3@windsurf.home>
+ <CAMRc=Mfmk7Bb+eEJ8ikeBfMRir0eBAj7z53eqDK=f-XJqEN5Cg@mail.gmail.com>
+ <20201030114153.4e47cdf8@windsurf.home>
+ <CAMRc=MdXOK1qScv+b3vr-b9gr9Nwb0Yv=CqdtiCNF6UMM2niMg@mail.gmail.com>
+Message-ID: <854f8b3d-20bd-769a-ee3d-3639529a5fc0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 3, 2020 at 12:16 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Khem, All,
->
-> On 2020-10-23 02:36 -0700, Khem Raj spake thusly:
-> > Using linux/version.h is assumed to be hardcoded inside sysroot but this
-> > does not consider the case where toolchains might be built with
-> > --with-native-system-header-dir which means the header directories will
-> > not be under <sysroot>/usr/include but customized, archlinux, debian
-> > built cross toolchains use these install settings ( due to multiarch )
-> > they have the headers installed like /usr/aarch64-linux-gnu/include and
-> > not /usr/aarch64-linux-gnu/usr/include
-> >
-> > This patch adds logic to use cross compiler to compute the path to
-> > linux/version.h on the fly, it means we do not really need to assume the
-> > install structure
-> >
-> > Fixes built when using external toolchains provided by archlinux e.g.
->
-> So, to summarise our previous discussion on IRC the other day:
->
->   - Buildroot does not officially support distributions' cross
->     toolchains, as they may contain extra libraries that are not
->     accoutned for by Buildroot,
->
 
-yes that's fine, this patch does not claim to support all of them
-either, it just
-makes the situation a bit better without regressing the supported usecases
-I think it helps lowering the build times on such distros for
-developers and improve
-first time experience
 
->   - those toolchains are also not always relocatable, even if some
->     might be.
+On 30/10/2020 11:53, Bartosz Golaszewski wrote:
+> On Fri, Oct 30, 2020 at 11:41 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> On Fri, 30 Oct 2020 11:16:04 +0100
+>> Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>>
+>>>> Well, that is an issue. An application that builds with 1.6 may not
+>>>> build with 1.4, so they are not compatible API-wise, and therefore
+>>>> having libgpiod.mk fall back to 1.4 automatically when the kernel
+>>>> headers are too old is going to potentially break applications that use
+>>>> 1.6-specific APIs.
+>>>
+>>> Versioning of libgpiod just follows the regular MAJOR.MINOR.BUGFIX
+>>> scheme. Major releases break API. Minor releases don't break API but
+>>> (may) introduce new features. Bugfix releases don't change API. I
+>>> think this is the standard for most libraries. So far no buildroot
+>>> package even depends on libgpiod so this could only affect out-of-tree
+>>> users. I'm not sure what the policy here is @buildroot though.
+>>
+>> This is perfectly OK. Where it clashes is when a new MAJOR.MINOR
+>> release drops support for kernels older than 5.5, which is a
+>> super-recent kernel version. This prevents from simply updating to the
+>> latest 1.6 release in all situations, causing a compatibility problem
+>> that is quite annoying to handle.
+>>
+> 
+> In that case I would advise to keep v1.4 exclusively in buildroot -
+> just like we do in meta-openembedded.
 
-right and in this case, they are working ok I tried with archlinux
-aarch64-linux-gnu-gcc package
-and it worked well, debian also worked ok
+ But that brings us back to the other problem: any package that relies on the
+new API in 1.6 can't be built.
 
->
-> Also, Thomas since replied with further questionning, so we really need
-> a bit more details in there, and how you manage to make it work.
->
+ I think the only *real* solution for that is to introduce a libgpiod16 package
+if people actually start to use the new APIs. But then we probably end up with
+two copies of libgpiod (1.4 and 1.6) because some packages use don't require the
+new APIs...
 
-right I have tried to clarify, feel free to ask more.
+ So, this reliance on 5.5 kernel headers is really putting limitations to your
+downstream users.
 
-> Regards,
-> Yann E. MORIN.
->
-> > Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
-> >  support/scripts/check-kernel-headers.sh           | 15 ++++++++++++++-
-> >  toolchain/helpers.mk                              |  2 +-
-> >  .../toolchain-external/pkg-toolchain-external.mk  |  3 ++-
-> >  3 files changed, 17 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
-> > index 4e6dce5487..5cedb9a082 100755
-> > --- a/support/scripts/check-kernel-headers.sh
-> > +++ b/support/scripts/check-kernel-headers.sh
-> > @@ -21,6 +21,9 @@ SYSROOT="${2}"
-> >  HDR_VER="${3}.0.0"
-> >  CHECK="${4}"  # 'strict' or 'loose'
-> >
-> > +# cross compiler passed in case of external toolchains
-> > +CROSS_CC="${5}"
-> > +
-> >  HDR_M="${HDR_VER%%.*}"
-> >  HDR_V="${HDR_VER#*.}"
-> >  HDR_m="${HDR_V%%.*}"
-> > @@ -36,11 +39,21 @@ trap 'rm -f "${EXEC}"' EXIT
-> >
-> >  EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
-> >
-> > +if [ -n "${CROSS_CC}" ]; then
-> > +  MAKE_VER_H=$(${CROSS_CC} -M -xc - <<_EOF_
-> > +#include <linux/version.h>
-> > +_EOF_
-> > +  )
-> > +  VER_H=`echo $MAKE_VER_H | awk 'END {print $NF}'`
-> > +else
-> > +  VER_H="${SYSROOT}/usr/include/linux/version.h"
-> > +fi
-> > +
-> >  # We do not want to account for the patch-level, since headers are
-> >  # not supposed to change for different patchlevels, so we mask it out.
-> >  # This only applies to kernels >= 3.0, but those are the only one
-> >  # we actually care about; we treat all 2.6.x kernels equally.
-> > -${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
-> > +${HOSTCC} -imacros "${VER_H}" \
-> >            -x c -o "${EXEC}" - <<_EOF_
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-> > diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> > index 17bc159f3e..51d840b176 100644
-> > --- a/toolchain/helpers.mk
-> > +++ b/toolchain/helpers.mk
-> > @@ -166,7 +166,7 @@ copy_toolchain_sysroot = \
-> >  #
-> >  check_kernel_headers_version = \
-> >       if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
-> > -             $(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
-> > +             $(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict) $(5); \
-> >       then \
-> >               exit 1; \
-> >       fi
-> > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > index 6d91cb5d1e..93f725dada 100644
-> > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> > @@ -549,7 +549,8 @@ define $(2)_CONFIGURE_CMDS
-> >               $$(BUILD_DIR),\
-> >               $$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
-> >               $$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
-> > -             $$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
-> > +             $$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict),\
-> > +             $$(TOOLCHAIN_EXTERNAL_CC)); \
-> >       $$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
-> >               $$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
-> >       if test "$$(BR2_arm)" = "y" ; then \
-> > --
-> > 2.29.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+
+ Regards,
+ Arnout
