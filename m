@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:16:47 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark: add
+Date: Tue, 3 Nov 2020 11:16:34 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark: add
  zstd optional dependency
-Message-ID: <20201103100407.4C21082DA2@busybox.osuosl.org>
+Message-ID: <20201103100412.40D70835FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed28e24083d2305a4a9c6f93ed41d2834e0817f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=52c315baf71412f1e27aafa83dfd6ba8b24721ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 zstd is available since version 3.1.1 and is enabled by default:
 https://github.com/wireshark/wireshark/commit/ad94c4d459d243c0cbbb9b222d5f7cdf8189ab86
