@@ -1,44 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Nov 2020 21:10:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: fix build with
- gcc 4.8
-In-Reply-To: <20201103173043.29373-1-fontaine.fabrice@gmail.com>
-References: <20201103173043.29373-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201103211020.4874100c@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Nov 2020 21:16:40 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
+ via cross compiler
+In-Reply-To: <20201023093641.619746-1-raj.khem@gmail.com>
+References: <20201023093641.619746-1-raj.khem@gmail.com>
+Message-ID: <20201103201640.GI2887157@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  3 Nov 2020 18:30:43 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Khem, All,
 
-> Fix the following build failure with optee-client 3.11.0 and gcc 4.8:
+On 2020-10-23 02:36 -0700, Khem Raj spake thusly:
+> Using linux/version.h is assumed to be hardcoded inside sysroot but this
+> does not consider the case where toolchains might be built with
+> --with-native-system-header-dir which means the header directories will
+> not be under <sysroot>/usr/include but customized, archlinux, debian
+> built cross toolchains use these install settings ( due to multiarch )
+> they have the headers installed like /usr/aarch64-linux-gnu/include and
+> not /usr/aarch64-linux-gnu/usr/include
 > 
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
-> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
->   struct serializer obj = { };
->          ^
+> This patch adds logic to use cross compiler to compute the path to
+> linux/version.h on the fly, it means we do not really need to assume the
+> install structure
 > 
-> Build failure is raised since version 3.10.0 and
-> https://github.com/OP-TEE/optee_client/commit/c3279f424348bdd3378d236fd038fdd7bc76e10a
-> https://github.com/OP-TEE/optee_client/commit/e88c264ba358941d2166b18eeac448e617ffa887
-> https://github.com/OP-TEE/optee_client/commit/85a7ea7861339356b39c73926f2b5cb9added45b
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Fixes built when using external toolchains provided by archlinux e.g.
+
+So, to summarise our previous discussion on IRC the other day:
+
+  - Buildroot does not officially support distributions' cross
+    toolchains, as they may contain extra libraries that are not
+    accoutned for by Buildroot,
+
+  - those toolchains are also not always relocatable, even if some
+    might be.
+
+Also, Thomas since replied with further questionning, so we really need
+a bit more details in there, and how you manage to make it work.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  .../0001-libckteec-replace-initializer.patch  | 93 +++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 package/optee-client/0001-libckteec-replace-initializer.patch
+>  support/scripts/check-kernel-headers.sh           | 15 ++++++++++++++-
+>  toolchain/helpers.mk                              |  2 +-
+>  .../toolchain-external/pkg-toolchain-external.mk  |  3 ++-
+>  3 files changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> index 4e6dce5487..5cedb9a082 100755
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -21,6 +21,9 @@ SYSROOT="${2}"
+>  HDR_VER="${3}.0.0"
+>  CHECK="${4}"  # 'strict' or 'loose'
+>  
+> +# cross compiler passed in case of external toolchains
+> +CROSS_CC="${5}"
+> +
+>  HDR_M="${HDR_VER%%.*}"
+>  HDR_V="${HDR_VER#*.}"
+>  HDR_m="${HDR_V%%.*}"
+> @@ -36,11 +39,21 @@ trap 'rm -f "${EXEC}"' EXIT
+>  
+>  EXEC="$(mktemp -p "${BUILDDIR}" -t .check-headers.XXXXXX)"
+>  
+> +if [ -n "${CROSS_CC}" ]; then
+> +  MAKE_VER_H=$(${CROSS_CC} -M -xc - <<_EOF_
+> +#include <linux/version.h>
+> +_EOF_
+> +  )
+> +  VER_H=`echo $MAKE_VER_H | awk 'END {print $NF}'`
+> +else
+> +  VER_H="${SYSROOT}/usr/include/linux/version.h"
+> +fi
+> +
+>  # We do not want to account for the patch-level, since headers are
+>  # not supposed to change for different patchlevels, so we mask it out.
+>  # This only applies to kernels >= 3.0, but those are the only one
+>  # we actually care about; we treat all 2.6.x kernels equally.
+> -${HOSTCC} -imacros "${SYSROOT}/usr/include/linux/version.h" \
+> +${HOSTCC} -imacros "${VER_H}" \
+>            -x c -o "${EXEC}" - <<_EOF_
+>  #include <stdio.h>
+>  #include <stdlib.h>
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 17bc159f3e..51d840b176 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -166,7 +166,7 @@ copy_toolchain_sysroot = \
+>  #
+>  check_kernel_headers_version = \
+>  	if ! support/scripts/check-kernel-headers.sh $(1) $(2) $(3) \
+> -		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict); \
+> +		$(if $(BR2_TOOLCHAIN_HEADERS_LATEST),$(4),strict) $(5); \
+>  	then \
+>  		exit 1; \
+>  	fi
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 6d91cb5d1e..93f725dada 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -549,7 +549,8 @@ define $(2)_CONFIGURE_CMDS
+>  		$$(BUILD_DIR),\
+>  		$$(call toolchain_find_sysroot,$$(TOOLCHAIN_EXTERNAL_CC)),\
+>  		$$(call qstrip,$$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)),\
+> -		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict)); \
+> +		$$(if $$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),loose,strict),\
+> +		$$(TOOLCHAIN_EXTERNAL_CC)); \
+>  	$$(call check_gcc_version,$$(TOOLCHAIN_EXTERNAL_CC),\
+>  		$$(call qstrip,$$(BR2_TOOLCHAIN_GCC_AT_LEAST))); \
+>  	if test "$$(BR2_arm)" = "y" ; then \
+> -- 
+> 2.29.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
