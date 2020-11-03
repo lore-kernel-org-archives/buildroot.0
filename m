@@ -1,135 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Nov 2020 22:28:17 +0100
-Subject: [Buildroot] [git commit] package/environment-setup: new package
-Message-ID: <20201103211541.C65B682DD8@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  3 Nov 2020 22:32:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/alsa-lib: bump version to 1.2.4
+Message-ID: <20201103213221.727208-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f56a715e3cc6ac49e3a0b701329419e5acae8532
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Rebased patch 0001, added patch 0002 to fix compile error with uClibc.
 
-Install an helper script to setup a build environment based on
-Buildroot. It's useful when a developer wants to use a Buildroot
-generated SDK to build an external project.
+Changelog: https://www.alsa-project.org/wiki/Changes_v1.2.3.2_v1.2.4
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Maury Anderson <maury.anderson@collins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- docs/manual/using-buildroot-toolchain.txt      | 13 +++++++++++
- package/Config.in.host                         |  1 +
- package/environment-setup/Config.in.host       |  6 +++++
- package/environment-setup/environment-setup    | 16 +++++++++++++
- package/environment-setup/environment-setup.mk | 31 ++++++++++++++++++++++++++
- 5 files changed, 67 insertions(+)
+ ...01-Don-t-use-fork-on-noMMU-platforms.patch |  4 ++-
+ .../0002-dlmisc-the-snd_plugin_dir_set.patch  | 34 +++++++++++++++++++
+ package/alsa-lib/alsa-lib.hash                |  2 +-
+ package/alsa-lib/alsa-lib.mk                  |  2 +-
+ 4 files changed, 39 insertions(+), 3 deletions(-)
+ create mode 100644 package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch
 
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 0c0c35fced..7a8b0c4c78 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -32,3 +32,16 @@ the tarball (e.g. because you will just be moving the +host+ directory,
- or will be generating the tarball on your own), Buildroot also allows
- you to just prepare the SDK with +make prepare-sdk+ without actually
- generating a tarball.
-+
-+For your convenience, by selecting the option
-++BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
-++setup-environment+ script installed in +output/host/+ and therefore
-+in your SDK.  This script can be sourced with
-++. your/sdk/path/environment-setup+ to export a number of environment
-+variables that will help cross-compile your projects using the
-+Buildroot SDK: the +PATH+ will contain the SDK binaries, standard
-+_autotools_ variables will be defined with the appropriate values, and
-++CONFIGURE_FLAGS+ will contain basic +./configure+ options to
-+cross-compile _autotools_ projects. Note however that once this script
-+is sourced, the environment is setup only for cross-compilation, and
-+no longer for native compilation.
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 546f1c226d..c69c756f3a 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -19,6 +19,7 @@ menu "Host utilities"
- 	source "package/dtc/Config.in.host"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
-+	source "package/environment-setup/Config.in.host"
- 	source "package/erofs-utils/Config.in.host"
- 	source "package/eudev/Config.in.host"
- 	source "package/exfatprogs/Config.in.host"
-diff --git a/package/environment-setup/Config.in.host b/package/environment-setup/Config.in.host
+diff --git a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
+index 5bf9dd2057..17b57d1f3d 100644
+--- a/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
++++ b/package/alsa-lib/0001-Don-t-use-fork-on-noMMU-platforms.patch
+@@ -10,6 +10,8 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [J?rg: update patch for 1.1.6]
+ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141376.html
++[Bernd: update patch for 1.2.4]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  configure.ac         |  2 ++
+  src/pcm/pcm_direct.c | 10 +++++++++-
+@@ -32,7 +34,7 @@ diff --git a/src/pcm/pcm_direct.c b/src/pcm/pcm_direct.c
+ index 2b07eff9..4dc3ea26 100644
+ --- a/src/pcm/pcm_direct.c
+ +++ b/src/pcm/pcm_direct.c
+-@@ -431,13 +431,21 @@ int snd_pcm_direct_server_create(snd_pcm_direct_t *dmix)
++@@ -437,13 +437,21 @@ int snd_pcm_direct_server_create(snd_pcm_direct_t *dmix)
+  		close(dmix->server_fd);
+  		return ret;
+  	}
+diff --git a/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch b/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch
 new file mode 100644
-index 0000000000..c67e375732
+index 0000000000..61d945455c
 --- /dev/null
-+++ b/package/environment-setup/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_ENVIRONMENT_SETUP
-+	bool "host environment-setup"
-+	help
-+	  Install an helper script to setup a build environment
-+	  based on Buildroot. It's useful when you export an sdk
-+	  and want to use Buildroot to build an external project.
-diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-new file mode 100644
-index 0000000000..6846361433
---- /dev/null
-+++ b/package/environment-setup/environment-setup
-@@ -0,0 +1,16 @@
-+cat <<'EOF'
-+ _           _ _     _                 _
-+| |__  _   _(_) | __| |_ __ ___   ___ | |_
-+| '_ \| | | | | |/ _` | '__/ _ \ / _ \| __|
-+| |_) | |_| | | | (_| | | | (_) | (_) | |_
-+|_.__/ \__,_|_|_|\__,_|_|  \___/ \___/ \__|
++++ b/package/alsa-lib/0002-dlmisc-the-snd_plugin_dir_set.patch
+@@ -0,0 +1,34 @@
++From ad8c8e5503980295dd8e5e54a6285d2d7e32eb1e Mon Sep 17 00:00:00 2001
++From: Jaroslav Kysela <perex@perex.cz>
++Date: Thu, 22 Oct 2020 20:57:32 +0200
++Subject: [PATCH] dlmisc: the snd_plugin_dir_set / snd_plugin_dir must be
++ declared even for \!DL_ORIGIN_AVAILABLE
 +
-+       Making embedded Linux easy!
++Fixes: 8580c081c2 ("dlsym: add support for ALSA_PLUGIN_DIR environment variable")
++BugLink: https://github.com/alsa-project/alsa-lib/issues/91
++Signed-off-by: Jaroslav Kysela <perex@perex.cz>
 +
-+Some tips:
-+* PATH now contains the SDK utilities
-+* Standard autotools variables (CC, LD, CFLAGS) are exported
-+* To configure do "./configure $CONFIGURE_FLAGS"
++Downloaded from upstream commit
++https://github.com/alsa-project/alsa-lib/commit/ad8c8e5503980295dd8e5e54a6285d2d7e32eb1e
 +
-+EOF
-+SDK_PATH=$(dirname $(realpath "${BASH_SOURCE[0]}"))
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-new file mode 100644
-index 0000000000..98b976acf7
---- /dev/null
-+++ b/package/environment-setup/environment-setup.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# environment-setup
-+#
-+################################################################################
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/dlmisc.c | 2 --
++ 1 file changed, 2 deletions(-)
 +
-+ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
-+
-+define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
-+	cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
-+	for var in $(TARGET_CONFIGURE_OPTS); do \
-+		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
-+	done
-+	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		--exec-prefix=/usr \
-+		--sysconfdir=/etc \
-+		--localstatedir=/var \
-+		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
-+		-e 's%$(HOST_DIR)/bin/%%g' \
-+		-e '/^export "PATH=/c\' \
-+		$(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
-+		>> $(ENVIRONMENT_SETUP_FILE)
-+endef
-+
-+$(eval $(host-generic-package))
++diff --git a/src/dlmisc.c b/src/dlmisc.c
++index c9517c55..f20eb593 100644
++--- a/src/dlmisc.c
+++++ b/src/dlmisc.c
++@@ -42,11 +42,9 @@
++ #ifndef PIC
++ struct snd_dlsym_link *snd_dlsym_start = NULL;
++ #endif
++-#ifdef DL_ORIGIN_AVAILABLE
++ static int snd_plugin_dir_set = 0;
++ static char *snd_plugin_dir = NULL;
++ #endif
++-#endif
++ 
++ #if defined(DL_ORIGIN_AVAILABLE) && defined(HAVE_LIBPTHREAD)
++ static pthread_mutex_t snd_dlpath_mutex = PTHREAD_MUTEX_INITIALIZER;
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 8a565e580b..6e65fb7166 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  e81fc5b7afcaee8c9fd7f64a1e3043e88d62e9ad2c4cff55f578df6b0a9abe15  alsa-lib-1.2.3.2.tar.bz2
++sha256  f7554be1a56cdff468b58fc1c29b95b64864c590038dd309c7a978c7116908f7  alsa-lib-1.2.4.tar.bz2
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256  bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 30f7c88153..728aec31a1 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ALSA_LIB_VERSION = 1.2.3.2
++ALSA_LIB_VERSION = 1.2.4
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = https://www.alsa-project.org/files/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
+-- 
+2.27.0
