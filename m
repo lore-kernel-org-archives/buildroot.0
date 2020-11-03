@@ -1,27 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 20:55:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pcre2: fix build on mips r6
-In-Reply-To: <20201103171328.21757-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 3 Nov 2020 18:13:28 +0100")
-References: <20201103171328.21757-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9em5i71.fsf@dell.be.48ers.dk>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 3 Nov 2020 20:55:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.26.6
+In-Reply-To: <87d00u6x7q.fsf@dell.be.48ers.dk>
+References: <20201102180927.31003-1-petr.vorel@gmail.com>
+ <87d00u6x7q.fsf@dell.be.48ers.dk>
+Message-ID: <20201103195545.GA137827@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi Peter,
 
- > Fix build of pcre2 10.35 on mips r6:
- > https://bugs.exim.org/show_bug.cgi?id=2667
+>  > Hi,
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/eab208c050867c9bd12bd80dca33cbe0199b0a7d
+>  > libqmi update is needed for ModemManager update.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I don't see a patch updating modem-manger?
+I haven't done it yet.
 
-Committed, thanks.
+> Committed, thanks.
+Thanks!
 
--- 
-Bye, Peter Korsgaard
+Kind regards,
+Petr
