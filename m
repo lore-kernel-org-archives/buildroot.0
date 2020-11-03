@@ -1,45 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Nov 2020 21:00:38 +0100
-Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
- via cross compiler
-In-Reply-To: <20201023093641.619746-1-raj.khem@gmail.com>
-References: <20201023093641.619746-1-raj.khem@gmail.com>
-Message-ID: <20201103210038.2afaada6@windsurf.home>
+Date: Tue, 3 Nov 2020 21:01:16 +0100
+Subject: [Buildroot] [git commit] package/libgpiod: bump version to 1.4.5
+Message-ID: <20201103194822.16FD88713B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Khem,
+commit: https://git.buildroot.net/buildroot/commit/?id=ff30bab61180be0eb6228f0c0487ce975f5b43c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the patch.
+* add a comment about the kernel header dependencies when bumping
+versions
+* set url to kernel.org as github is unmaintained and outdated
+* use two spaces in hash-file
 
-On Fri, 23 Oct 2020 02:36:41 -0700
-Khem Raj <raj.khem@gmail.com> wrote:
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgpiod/Config.in     | 2 +-
+ package/libgpiod/libgpiod.hash | 4 ++--
+ package/libgpiod/libgpiod.mk   | 4 +++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-> Using linux/version.h is assumed to be hardcoded inside sysroot but this
-> does not consider the case where toolchains might be built with
-> --with-native-system-header-dir which means the header directories will
-> not be under <sysroot>/usr/include but customized, archlinux, debian
-> built cross toolchains use these install settings ( due to multiarch )
-> they have the headers installed like /usr/aarch64-linux-gnu/include and
-> not /usr/aarch64-linux-gnu/usr/include
-
-I am wondering how this can work with Buildroot. Indeed all the logic
-of our external toolchains consists in copying the external toolchain
-sysroot to $STAGING_DIR, and then pointing the cross-compiler to it
-using --sysroot. But if the toolchain headers are not inside the
-sysroot, I think we would not copy them to STAGING_DIR, and therefore
-the rest of the Buildroot logic would not work.
-
-Could you give more details on how this work with regard to how we're
-copying the sysroot to STAGING_DIR ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
+index 63a7cb6e78..293eef6c89 100644
+--- a/package/libgpiod/Config.in
++++ b/package/libgpiod/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGPIOD
+ 	  This is a C library that abstracts the GPIO character
+ 	  device operations on linux.
+ 
+-	  https://github.com/brgl/libgpiod
++	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+ 
+ if BR2_PACKAGE_LIBGPIOD
+ 
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index f0009a7510..0ea15869b0 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
++sha256  a041b06907c956dd1c77836cccf4d392af29b9fe09c8ad18449a6da707b5ba2d  libgpiod-1.4.5.tar.xz
+ # Hash for license file
+-sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
++sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 2474ab90a2..83d5abb002 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.4.1
++# be careful when bumping versions, newer branches (e.g. >= 1.6)
++# depend on pretty recent kernel headers
++LIBGPIOD_VERSION = 1.4.5
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
