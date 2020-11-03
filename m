@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 11:04:18 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libraw: needs
+Date: Tue, 3 Nov 2020 11:04:14 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libraw: needs
  autoreconf
-Message-ID: <20201103095144.6A24486F28@busybox.osuosl.org>
+Message-ID: <20201103095148.4DB3E81133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb0cac50816d87d1742ea52a6fedcfc3ac9f5256
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a27f6cb5f4454e3b4d7ebf50120124554e01c1b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 configure is older than configure.ac in official libraw 0.20.2 tarball:
 https://github.com/LibRaw/LibRaw/issues/353
