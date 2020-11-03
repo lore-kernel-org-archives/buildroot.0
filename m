@@ -1,57 +1,92 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Nov 2020 08:42:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/samba4: security
- bump version to 4.11.15
-Message-ID: <20201103075153.C4AA4832CC@busybox.osuosl.org>
+Date: Tue, 3 Nov 2020 08:46:49 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/fastd: fix
+ CVE-2020-27638
+Message-ID: <20201103075153.D043C86F2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b576cf66f57e5c1978a1657c62410048a551ce2
+commit: https://git.buildroot.net/buildroot/commit/?id=7d275737cf0e73d7dcec77302b855722ba7b1ce5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes
-o CVE-2020-14318: Missing handle permissions check in SMB1/2/3 ChangeNotify.
-o CVE-2020-14323: Unprivileged user can crash winbind.
-o CVE-2020-14383: An authenticated user can crash the DCE/RPC DNS with easily
-                  crafted records.
+receive.c in fastd before v21 allows denial of service (assertion
+failure) when receiving packets with an invalid type code.
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.11.14.html (bugfix-only)
-https://www.samba.org/samba/history/samba-4.11.15.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Alexander Dahl <post@lespocky.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3adbb6d296e33bab7179abd78af7945c61a2ef56)
+(cherry picked from commit 7e4af3ce3f9142f09f20c7904925c5454332ec24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...uffer-leak-when-receiving-invalid-packets.patch | 45 ++++++++++++++++++++++
+ package/fastd/fastd.mk                             |  3 ++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 4d47871fc5..0ce22a8526 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.13.tar.asc
--sha256  e71ed29ae01c5ce7be8cee1f53e0530db86dd19b911accb08fae60224e686ba1  samba-4.11.13.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.11.15.tar.asc
-+sha256  922d461bb2e6e490cf7708b297a9312ea6cda1edc7bdfea4ee665f45ff99038a  samba-4.11.15.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 48ac48c180..51ee2c9c39 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+new file mode 100644
+index 0000000000..f4a44fea6d
+--- /dev/null
++++ b/package/fastd/0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
+@@ -0,0 +1,45 @@
++From 737925113363b6130879729cdff9ccc46c33eaea Mon Sep 17 00:00:00 2001
++From: Matthias Schiffer <mschiffer@universe-factory.net>
++Date: Mon, 19 Oct 2020 21:08:16 +0200
++Subject: [PATCH] receive: fix buffer leak when receiving invalid packets
++
++For fastd versions before v20, this was just a memory leak (which could
++still be used for DoS, as it's remotely triggerable). With the new
++buffer management of fastd v20, this will trigger an assertion failure
++instead as soon as the buffer pool is empty.
++
++[Retrieved from:
++https://github.com/NeoRaider/fastd/commit/737925113363b6130879729cdff9ccc46c33eaea]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/receive.c | 10 ++++++++++
++ 1 file changed, 10 insertions(+)
++
++diff --git a/src/receive.c b/src/receive.c
++index 043c9f2..6bca9f4 100644
++--- a/src/receive.c
+++++ b/src/receive.c
++@@ -169,6 +169,11 @@ static inline void handle_socket_receive_known(
++ 
++ 	case PACKET_HANDSHAKE:
++ 		fastd_handshake_handle(sock, local_addr, remote_addr, peer, buffer);
+++		break;
+++
+++	default:
+++		fastd_buffer_free(buffer);
+++		pr_debug("received packet with invalid type from %P[%I]", peer, remote_addr);
++ 	}
++ }
++ 
++@@ -195,6 +200,11 @@ static inline void handle_socket_receive_unknown(
++ 
++ 	case PACKET_HANDSHAKE:
++ 		fastd_handshake_handle(sock, local_addr, remote_addr, NULL, buffer);
+++		break;
+++
+++	default:
+++		fastd_buffer_free(buffer);
+++		pr_debug("received packet with invalid type from unknown address %I", remote_addr);
++ 	}
++ }
++ 
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index e67acdbf18..157ba585f4 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -12,6 +12,9 @@ FASTD_LICENSE_FILES = COPYRIGHT
+ FASTD_CONF_OPTS = -DENABLE_LIBSODIUM=ON
+ FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium libcap
  
--SAMBA4_VERSION = 4.11.13
-+SAMBA4_VERSION = 4.11.15
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
++# 0002-receive-fix-buffer-leak-when-receiving-invalid-packets.patch
++FASTD_IGNORE_CVES += CVE-2020-27638
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ FASTD_CONF_OPTS += -DENABLE_OPENSSL=ON
+ FASTD_DEPENDENCIES += openssl
