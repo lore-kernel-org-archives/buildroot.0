@@ -1,22 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 03 Nov 2020 20:09:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/collectd: add comment about ssl
+Date: Tue, 3 Nov 2020 20:09:02 +0100
+Subject: [Buildroot] [git commit] package/collectd: add comment about ssl
  support in rabbitmq-c
-In-Reply-To: <20201103171735.22512-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 3 Nov 2020 18:17:35 +0100")
-References: <20201103171735.22512-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn4u6yva.fsf@dell.be.48ers.dk>
+Message-ID: <20201103185702.B1CE881569@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ea8e2d9d9388bb84c7eef7e36d7cc8faf9142fda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 39ecbcfe54..7037a8b383 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -582,7 +582,7 @@ comment "Select at least one for collectd to be useful"
+ 
+ config BR2_PACKAGE_COLLECTD_AMQP
+ 	bool "amqp"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL # needs rabbitmq-c with ssl support
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Send/receive values via the Advanced Message Queuing Protocol
