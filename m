@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 3 Nov 2020 21:01:16 +0100
-Subject: [Buildroot] [git commit] package/libgpiod: bump version to 1.4.5
-Message-ID: <20201103194822.16FD88713B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/re2: bump version to 2020-11-01
+Message-ID: <20201103194822.0A2F48712B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff30bab61180be0eb6228f0c0487ce975f5b43c6
+commit: https://git.buildroot.net/buildroot/commit/?id=288fa9f5140a2e0b611d5f09469680d9de4a5d1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* add a comment about the kernel header dependencies when bumping
-versions
-* set url to kernel.org as github is unmaintained and outdated
-* use two spaces in hash-file
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgpiod/Config.in     | 2 +-
- package/libgpiod/libgpiod.hash | 4 ++--
- package/libgpiod/libgpiod.mk   | 4 +++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ package/re2/re2.hash | 2 +-
+ package/re2/re2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
-index 63a7cb6e78..293eef6c89 100644
---- a/package/libgpiod/Config.in
-+++ b/package/libgpiod/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGPIOD
- 	  This is a C library that abstracts the GPIO character
- 	  device operations on linux.
- 
--	  https://github.com/brgl/libgpiod
-+	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
- 
- if BR2_PACKAGE_LIBGPIOD
- 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index f0009a7510..0ea15869b0 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
-+sha256  a041b06907c956dd1c77836cccf4d392af29b9fe09c8ad18449a6da707b5ba2d  libgpiod-1.4.5.tar.xz
- # Hash for license file
--sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-+sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 2474ab90a2..83d5abb002 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,9 @@
+diff --git a/package/re2/re2.hash b/package/re2/re2.hash
+index b502f12835..b5457a59b1 100644
+--- a/package/re2/re2.hash
++++ b/package/re2/re2.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256  0915741f524ad87debb9eb0429fe6016772a1569e21dc6d492039562308fcb0f  re2-2020-10-01.tar.gz
++sha256  8903cc66c9d34c72e2bc91722288ebc7e3ec37787ecfef44d204b2d6281954d7  re2-2020-11-01.tar.gz
+ sha256  6040cda75d90b1738292a631d89934c411ef7ffd543c4d6a1b7edfc8edf29449  LICENSE
+diff --git a/package/re2/re2.mk b/package/re2/re2.mk
+index 7d1857dbf9..585846d570 100644
+--- a/package/re2/re2.mk
++++ b/package/re2/re2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPIOD_VERSION = 1.4.1
-+# be careful when bumping versions, newer branches (e.g. >= 1.6)
-+# depend on pretty recent kernel headers
-+LIBGPIOD_VERSION = 1.4.5
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+-RE2_VERSION = 2020-10-01
++RE2_VERSION = 2020-11-01
+ RE2_SITE = $(call github,google,re2,$(RE2_VERSION))
+ RE2_LICENSE = BSD-3-Clause
+ RE2_LICENSE_FILES = LICENSE
