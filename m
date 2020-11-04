@@ -1,63 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Nov 2020 17:54:03 +0100
-Subject: [Buildroot] [PATCH 01/10] support/scripts/cve.py: properly
- match CPEs with version '*'
-In-Reply-To: <CANQCQpb-yMdETe6FUTkGbqKK4oFzwsuAsBGNB_k79P-azdyemQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 4 Nov 2020 11:03:04 -0600
+Subject: [Buildroot] [PATCH 03/10] package/pkg-generic.mk: add CPE ID
+ related package variables
+In-Reply-To: <20201104145145.1316167-4-thomas.petazzoni@bootlin.com>
 References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-2-thomas.petazzoni@bootlin.com>
- <CANQCQpb-yMdETe6FUTkGbqKK4oFzwsuAsBGNB_k79P-azdyemQ@mail.gmail.com>
-Message-ID: <20201104175403.4fb8b39f@windsurf.home>
+ <20201104145145.1316167-4-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpbD8L4uOp9KCExwGcD4EPi8HGJatrqyqEV8_Ccd1=4x5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas / Greg,
 
-On Wed, 4 Nov 2020 10:45:32 -0600
-Matthew Weber <matthew.weber@collins.com> wrote:
+On Wed, Nov 4, 2020 at 8:53 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+>
+> Currently, the match between Buildroot packages and CVEs is solely
+> based on the package names. Unfortunately, as one can imagine, there
+> isn't necessarily a strict mapping between Buildroot package names,
+> and how software projects are referenced in the National Vulnerability
+> Database (NVD) which we use.
+>
+> The NVD has defined the concept of CPE (Common Platform Enumeration)
+> identifiers, which uniquely identifies software components based on
+> string looking like this:
+>
+>   cpe:2.3:a:netsurf-browser:libnsbmp:0.1.2:*:*:*:*:*:*:*
+>
+> In particular, this CPE identifier contains a vendor name (here
+> "netsurf-browser"), a product name (here "libnsbmp") and a version
+> (here "0.1.2").
+>
+> This patch series introduces the concept of CPE ID in Buildroot, where
+> each package can be associated to a CPE ID. A package can define one
+> or several of:
+>
+>  - <pkg>_CPE_ID_VENDOR
+>  - <pkg>_CPE_ID_PRODUCT
+>  - <pkg>_CPE_ID_VERSION
+>  - <pkg>_CPE_ID_VERSION_MINOR
+>  - <pkg>_CPE_ID_PREFIX
+>
+> If one or several of those variables are defined, then the
+> <pkg>_CPE_ID will be defined by the generic package infrastructure as
+> follows:
+>
+>   $(2)_CPE_ID = $$($(2)_CPE_ID_PREFIX):$$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION):$$($(2)_CPE_ID_VERSION_MINOR):*:*:*:*:*:*
+>
+> <pkg>_CPE_ID_* variables that are not explicitly specified by the
+> package will carry a default value defined by the generic package
+> infrastructure.
+>
+> If a package is happy with the default <pkg>_CPE_ID, and therefore
+> does not need to define any of <pkg>_CPE_ID_{VENDOR,PRODUCT,...}, it
+> can set <pkg>_CPE_ID_VALID = YES.
+>
+> If any of the <pkg>_CPE_ID_{VENDOR,PRODUCT,...} variables are defined
+> by the package, then <pkg>_CPE_ID_VALID = YES will be set by the
+> generic package infrastructure.
 
-> > So it should be taken into account. In this specific case, it is
-> > combined with an AND with CPE ID
-> > cpe:2.3:o:suse:suse_linux:10:*:enterprise_server:*:*:*:*:* but since
-> > we don't support this kind of matching, we'd better be on the safe
-> > side, and report this CVE as affecting tar, do an analysis of the CVE
-> > impact, and document it in TAR_IGNORE_CVES.  
-> 
-> I agree, it is better to over-report and give people the option of
-> setting the ignore entry or to go work with the CPE dictionary team to
-> make an update to how that CVE is being mapped to the CPE.
+Oh good call, so we don't need to explicitly set the VALID if we've
+already tailored it.
 
-That is the idea. And among the new CVEs that appear, there are really
-some CVEs where the NVD database just specify "*", without any
-combination with a particular operating system or distribution: i.e the
-CVE description is so imprecise that it doesn't even say which versions
-of the software component are affected.
+>
+> Then, it's only if <pkg>_CPE_ID_VALID = YES that a <pkg>_CPE_ID will
+> be defined. Indeed, we want to be able to distinguish packages for
+> which the CPE ID information has been checked and is considered valid,
+> from packages for which the CPE ID information has never been
+> verified. For thise reason, we cannot simply define a default value
 
-> I was interested to know if yocto has an existing listing of CVE they
-> are ignoring as well.  I looked a bit at the cve-checker[2] but I
-> couldn't find any existing list or metadata within yocto but instead a
-> few forked tools that all allow you to create a Software Bill Of
-> Materials (SBOM) and provide a list of overall excluded CVE [1].  It
-> seems better to keep the initial refinement within Buildroot or to
-> push instead for making a correction in the actual CVE mapping.  If
-> the user wants to whitelist it outside of Buildroot for their specific
-> use case, that could be a topic for a future patchset on creation of a
-> Software Bill Of Materials matching/tailored for their defconfig.
-> Thoughts?
+Spelling thise -> this
 
-Yes, we could certainly think of allowing the user to extend the list
-of ignored CVEs. I haven't tried doing <pkg>_IGNORE_CVES +=
-CVE-YYYY-XYZ in external.mk from an external tree. I don't know if it's
-going to play well with the expansion ordering, though.
+This was a good addition as now it is easy to tell what has been verified.
 
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
