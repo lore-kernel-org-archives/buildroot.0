@@ -1,34 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Nov 2020 08:31:23 +0100
-Subject: [Buildroot] [git commit] package/grpc: add host gcc >= 4.9 comment
-Message-ID: <20201104072057.36DBD81886@busybox.osuosl.org>
+Date: Wed, 4 Nov 2020 08:31:09 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.3
+Message-ID: <20201104072057.2831983673@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad89878c6f1d639f921c4ba15f71dcc2222fc99a
+commit: https://git.buildroot.net/buildroot/commit/?id=d4ecd940d10891d5d9b1f433998bbacf14ebfb63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit e98610f039b88a5d164b19343d5ecef2d1c01f6d forgot to update comment
+For details see [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grpc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 6151f4b3d1..d1bf0d078d 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_GRPC
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 0c8084a8c4..79bfc5d98b 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-October/041640.html
+-md5  7c0aca7bba3e8559a869ed15b2173b2e  libinput-1.16.2.tar.xz
+-sha1  bff5e91ea0ea45509532aaa3e1a876d476e3e82e  libinput-1.16.2.tar.xz
+-sha256  fc3d8c50fe7abc4dc4406bc01262a3f8149864557f87279adcf300e523c160a9  libinput-1.16.2.tar.xz
+-sha512  3394faeb0cdb0a543624e150f04a98f3bce8d67438e47455808bde8eec8ea9cdafb86056e5f8d3431352ae33714e490c55edeb51e0af1972c68fca07c1ef1daa  libinput-1.16.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
++md5  562614e91c10c75ab1c2b71e5d27f076  libinput-1.16.3.tar.xz
++sha1  ee1e93ee647bdd4598a5910eb654592563657d66  libinput-1.16.3.tar.xz
++sha256  dc5e1ae51ec1cc635ca96f61118b0f07dfea783cab0747a60f3555068bb077e4  libinput-1.16.3.tar.xz
++sha512  cdf87988b24dc0a44b7b6ed3e15e70c7702bf65f1cfe257924967677c7a1f1485011a9e30254ba8962c83885de78f824e7955cedb07322676332d42532ec4a39  libinput-1.16.3.tar.xz
  
- 	  http://github.com/grpc/grpc
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index f8a58a0fcf..e5578a3921 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
-+comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-LIBINPUT_VERSION = 1.16.2
++LIBINPUT_VERSION = 1.16.3
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
