@@ -1,209 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Nov 2020 20:50:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/trousers: bump to version 0.3.15
-Message-ID: <20201104195016.630157-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Nov 2020 21:01:52 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-10-25
+In-Reply-To: <CANQCQpaurhRXOqqe34dO6Kzw77_JpjQLFb=F2SMcYGC625ZO8g@mail.gmail.com>
+ (Matthew Weber's message of "Tue, 27 Oct 2020 08:32:39 -0500")
+References: <b56105e96c0bfb86b803acc2ef6e0aad@tudorholton.com>
+ <CANQCQpaurhRXOqqe34dO6Kzw77_JpjQLFb=F2SMcYGC625ZO8g@mail.gmail.com>
+Message-ID: <874km43n7z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop third and fourth patches (already in version)
-- Update indentation in hash file (two spaces)
+>>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
 
-https://sourceforge.net/p/trousers/trousers/ci/master/tree/ChangeLog
+ > Tudor,
+ > On Mon, Oct 26, 2020 at 4:08 AM Tudor Holton <tudor@tudorholton.com> wrote:
+ >> 
+ >> Hi all,
+ >> 
+ >> The CVE listed below appears only to relate to openjdk6 and openjdk7.
+ >> The current package builds openjdk11.0.8 or openjdk14.0.2.
+ >> 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-security-issues-that-are-present-if.patch | 90 -------------------
- .../0004-trousers-resolve-build-failure.patch | 41 ---------
- package/trousers/trousers.hash                | 10 +--
- package/trousers/trousers.mk                  |  5 +-
- 4 files changed, 6 insertions(+), 140 deletions(-)
- delete mode 100644 package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
- delete mode 100644 package/trousers/0004-trousers-resolve-build-failure.patch
+ > The vulnerability database must not be mapping the impacted versions
+ > correctly (ie.  CVE is applicable to which CPE or range of CPE
+ > versions).   When I look at
+ > https://nvd.nist.gov/vuln/detail/CVE-2013-0169 , I see specific
+ > entries for 1.6 / 1.7 / 1.8 and an entry of
+ > cpe:2.3:a:oracle:openjdk:-:*:*:*:*:*:*:* .  I wonder if we are
+ > incorrectly string matching that "-" as a version?  +Gregory  any
+ > ideas?
 
-diff --git a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch b/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-deleted file mode 100644
-index 609245dad8..0000000000
---- a/package/trousers/0003-Correct-multiple-security-issues-that-are-present-if.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From e74dd1d96753b0538192143adf58d04fcd3b242b Mon Sep 17 00:00:00 2001
--From: Matthias Gerstner <mgerstner@suse.de>
--Date: Fri, 14 Aug 2020 22:14:36 -0700
--Subject: [PATCH] Correct multiple security issues that are present if the tcsd
-- is started by root instead of the tss user.
--
--Patch fixes the following 3 CVEs:
--
--CVE-2020-24332
--If the tcsd daemon is started with root privileges,
--the creation of the system.data file is prone to symlink attacks
--
--CVE-2020-24330
--If the tcsd daemon is started with root privileges,
--it fails to drop the root gid after it is no longer needed
--
--CVE-2020-24331
--If the tcsd daemon is started with root privileges,
--the tss user has read and write access to the /etc/tcsd.conf file
--
--Authored-by: Matthias Gerstner <mgerstner@suse.de>
--Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/tcs/ps/tcsps.c   |  2 +-
-- src/tcsd/svrside.c   |  1 +
-- src/tcsd/tcsd_conf.c | 10 +++++-----
-- 3 files changed, 7 insertions(+), 6 deletions(-)
--
--diff --git a/src/tcs/ps/tcsps.c b/src/tcs/ps/tcsps.c
--index e47154b..85d45a9 100644
----- a/src/tcs/ps/tcsps.c
--+++ b/src/tcs/ps/tcsps.c
--@@ -72,7 +72,7 @@ get_file()
-- 	}
-- 
-- 	/* open and lock the file */
---	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR, 0600);
--+	system_ps_fd = open(tcsd_options.system_ps_file, O_CREAT|O_RDWR|O_NOFOLLOW, 0600);
-- 	if (system_ps_fd < 0) {
-- 		LogError("system PS: open() of %s failed: %s",
-- 				tcsd_options.system_ps_file, strerror(errno));
--diff --git a/src/tcsd/svrside.c b/src/tcsd/svrside.c
--index 1ae1636..1c12ff3 100644
----- a/src/tcsd/svrside.c
--+++ b/src/tcsd/svrside.c
--@@ -473,6 +473,7 @@ main(int argc, char **argv)
-- 		}
-- 		return TCSERR(TSS_E_INTERNAL_ERROR);
-- 	}
--+	setgid(pwd->pw_gid);
-- 	setuid(pwd->pw_uid);
-- #endif
-- #endif
--diff --git a/src/tcsd/tcsd_conf.c b/src/tcsd/tcsd_conf.c
--index a31503d..ea8ea13 100644
----- a/src/tcsd/tcsd_conf.c
--+++ b/src/tcsd/tcsd_conf.c
--@@ -743,7 +743,7 @@ conf_file_init(struct tcsd_config *conf)
-- #ifndef SOLARIS
-- 	struct group *grp;
-- 	struct passwd *pw;
---	mode_t mode = (S_IRUSR|S_IWUSR);
--+	mode_t mode = (S_IRUSR|S_IWUSR|S_IRGRP);
-- #endif /* SOLARIS */
-- 	TSS_RESULT result;
-- 
--@@ -798,15 +798,15 @@ conf_file_init(struct tcsd_config *conf)
-- 	}
-- 
-- 	/* make sure user/group TSS owns the conf file */
---	if (pw->pw_uid != stat_buf.st_uid || grp->gr_gid != stat_buf.st_gid) {
--+	if (stat_buf.st_uid != 0 || grp->gr_gid != stat_buf.st_gid) {
-- 		LogError("TCSD config file (%s) must be user/group %s/%s", tcsd_config_file,
---				TSS_USER_NAME, TSS_GROUP_NAME);
--+				"root", TSS_GROUP_NAME);
-- 		return TCSERR(TSS_E_INTERNAL_ERROR);
-- 	}
-- 
---	/* make sure only the tss user can manipulate the config file */
--+	/* make sure only the tss user can read (but not manipulate) the config file */
-- 	if (((stat_buf.st_mode & 0777) ^ mode) != 0) {
---		LogError("TCSD config file (%s) must be mode 0600", tcsd_config_file);
--+		LogError("TCSD config file (%s) must be mode 0640", tcsd_config_file);
-- 		return TCSERR(TSS_E_INTERNAL_ERROR);
-- 	}
-- #endif /* SOLARIS */
---- 
--2.20.1
--
-diff --git a/package/trousers/0004-trousers-resolve-build-failure.patch b/package/trousers/0004-trousers-resolve-build-failure.patch
-deleted file mode 100644
-index ea054ab2c5..0000000000
---- a/package/trousers/0004-trousers-resolve-build-failure.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From c9b8c4434f3b11bae4f7e72c3aec5b4f3459eecc Mon Sep 17 00:00:00 2001
--From: Jerry Snitselaar <jsnitsel@redhat.com>
--Date: Wed, 18 Mar 2020 14:10:35 -0700
--Subject: [PATCH] trousers: resolve build failure
--
--The global variables tcsd_sa_chld and tcsd_sa_int in tcsd.h are
--causing build failures in latest Fedora release:
--
--/usr/bin/ld: ../../src/tcs/libtcs.a(libtcs_a-tcsi_changeauth.o):/builddir/build/BUILD/trousers-0.3.13/src/tcs/../include/tcsd.h:169: multiple definition of `tcsd_sa_chld'; tcsd-svrside.o:/builddir/build/BUILD/trousers-0.3.13/src/tcsd/../../src/include/tcsd.h:169: first defined here
--/usr/bin/ld: ../../src/tcs/libtcs.a(libtcs_a-tcsi_changeauth.o):/builddir/build/BUILD/trousers-0.3.13/src/tcs/../include/tcsd.h:168: multiple definition of `tcsd_sa_int'; tcsd-svrside.o:/builddir/build/BUILD/trousers-0.3.13/src/tcsd/../../src/include/tcsd.h:168: first defined here
--
--They are no longer used since 9b40e581470b ("Improved daemon's signal
--handling") so just remove them.
--
--Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
--Signed-off-by: Debora Velarde Babb <debora@linux.ibm.com>
--[Retrieved from:
--https://sourceforge.net/p/trousers/trousers/ci/c9b8c4434f3b11bae4f7e72c3aec5b4f3459eecc]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/include/tcsd.h | 6 ------
-- 1 file changed, 6 deletions(-)
--
--diff --git a/src/include/tcsd.h b/src/include/tcsd.h
--index 5b9462b..f5c286e 100644
----- a/src/include/tcsd.h
--+++ b/src/include/tcsd.h
--@@ -164,10 +164,4 @@ TSS_RESULT tcsd_thread_create(int, char *);
-- void	   *tcsd_thread_run(void *);
-- void	   thread_signal_init();
-- 
---/* signal handling */
---#ifndef __APPLE__
---struct sigaction tcsd_sa_int;
---struct sigaction tcsd_sa_chld;
---#endif
---
-- #endif
---- 
--2.28.0
--
-diff --git a/package/trousers/trousers.hash b/package/trousers/trousers.hash
-index 20c65c450e..f6c3427462 100644
---- a/package/trousers/trousers.hash
-+++ b/package/trousers/trousers.hash
-@@ -1,6 +1,6 @@
--# http://sourceforge.net/projects/trousers/files/trousers/0.3.14/
--sha1 9ca2cc9e1179465f6c5d9055e2b855e25031b85a trousers-0.3.14.tar.gz
--md5  4a476b4f036dd20a764fb54fc24edbec         trousers-0.3.14.tar.gz
-+# http://sourceforge.net/projects/trousers/files/trousers/0.3.15/
-+sha1  75cd40e17c9385299e50ff2099905865442b59f1  trousers-0.3.15.tar.gz
-+md5  eb1b02e98c7d360749b9076196db3f0f  trousers-0.3.15.tar.gz
- # Locally computed
--sha256 ce50713a261d14b735ec9ccd97609f0ad5ce69540af560e8c3ce9eb5f2d28f47  trousers-0.3.14.tar.gz
--sha256 1ad596d12e7471549663c03e280b5b5d084a2e853fb86e4d766109818f9d7dae  LICENSE
-+sha256  1e5be93e518372acf1d92d2f567d01a46fdb0b730487e544e6fb896c59cac77f  trousers-0.3.15.tar.gz
-+sha256  1ad596d12e7471549663c03e280b5b5d084a2e853fb86e4d766109818f9d7dae  LICENSE
-diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
-index 5e6161ce4d..b2cfef0968 100644
---- a/package/trousers/trousers.mk
-+++ b/package/trousers/trousers.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TROUSERS_VERSION = 0.3.14
-+TROUSERS_VERSION = 0.3.15
- TROUSERS_SITE = http://downloads.sourceforge.net/project/trousers/trousers/$(TROUSERS_VERSION)
- TROUSERS_LICENSE = BSD-3-Clause
- TROUSERS_LICENSE_FILES = LICENSE
-@@ -13,9 +13,6 @@ TROUSERS_INSTALL_STAGING = YES
- TROUSERS_AUTORECONF = YES
- TROUSERS_DEPENDENCIES = host-pkgconf openssl
- 
--# 0003-Correct-multiple-security-issues-that-are-present-if.patch
--TROUSERS_IGNORE_CVES += CVE-2020-24330 CVE-2020-24331 CVE-2020-24332
--
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- TROUSERS_DEPENDENCIES += libiconv
- endif
+Yes, I believe we do so since:
+
+commit 008ca2c583cb9dc70cd30c5318b3b1cbef57b06a
+Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date:   Thu Aug 27 18:55:08 2020 +0200
+
+    support/scripts/pkg-stats: consider "-" as a wildcard when doing CVE version matching
+
+    Some CVE entries in the NVD database have version_value set to "-",
+    which seems to indicate that it applies to all versions of the
+    software project, or that they don't really know which versions are
+    affected, and which are not.
+
+    So, for the benefit of doubt, it seems more appropriate to consider
+    such CVEs as affecting our packages.
+
+    This makes the total number of CVEs affecting our next branch jump
+    from 141 CVEs to 658 CVEs, but that number will go back down once we
+    switch to the JSON 1.1 schema. Indeed, in the JSON 1.0 schema, there
+    are often cases where a version_value is set to "=" *and* specific
+    versions are set to.
+
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+
+How should a '-' be interpreted?
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
