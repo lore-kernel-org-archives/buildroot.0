@@ -1,79 +1,43 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 4 Nov 2020 11:33:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: add -syslog option
-In-Reply-To: <20201103221817.213528-1-jzignego@hedcontrols.com>
-References: <20201103221817.213528-1-jzignego@hedcontrols.com>
-Message-ID: <20201104113331.03437e4a@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 04 Nov 2020 12:19:16 +0100
+Subject: [Buildroot] [PATCH] package/python-remi: bump version to
+ 2020.10.30
+In-Reply-To: <20201104110531.7b3ae222@x230_1.trabucayre.com> (Gwenhael
+ Goavec-Merou's message of "Wed, 4 Nov 2020 11:05:31 +0100")
+References: <20201102140000.1753870-1-gwenj@trabucayre.com>
+ <87361p4kgd.fsf@dell.be.48ers.dk>
+ <20201104110531.7b3ae222@x230_1.trabucayre.com>
+Message-ID: <87tuu52wuj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jeff,
+>>>>> "Gwenhael" == Gwenhael Goavec-Merou <gwenj@trabucayre.com> writes:
 
-On Tue,  3 Nov 2020 16:18:17 -0600, jzignego--- via buildroot <buildroot@busybox.net> wrote:
+Hello,
 
-> From: Jeff Zignego <jzignego@hedcontrols.com>
->
-> When using sysvinit (or the busybox implementation) qt5 can output log
-> messages to the traditional syslog with the -syslog compile time
-> option. This is very similar to the -journald compile time option
-> already being leveraged in qt5base.mk
->
-> Signed-off-by: Jeff Zignego <jzignego@hedcontrols.com>
-> ---
->  package/qt5/qt5base/qt5base.mk | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index ed308c1fa2..d9b8ff279b 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -254,6 +254,20 @@ else
->  QT5BASE_CONFIGURE_OPTS += -no-journald
->  endif
->
-> +ifeq ($(BR2_PACKAGE_SYSVINIT),y)
-> +QT5BASE_CONIGURE_OPTS += -syslog
-> +QT5BASE_DEPENDENCIES += sysvinit
-> +else
-> +QT5BASE_CONFIGURE_OPTS += -no-syslog
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_INIT_BUSYBOX),y)
-> +QT5BASE_CONIGURE_OPTS += -syslog
-> +QT5BASE_DEPENDENCIES += busybox
-> +else
-> +QT5BASE_CONFIGURE_OPTS += -no-syslog
-> +endif
-> +
+ >> For example, if you're using pip, instead of
+ >> https://github.com/user/proj/archive/master.zip use
+ >> git+https://github.com/user/proj.git#egg=proj make: ***
+ >> [package/pkg-generic.mk:250:
+ >> /tmp/instance-0/output-1/build/python-remi-2020.10.30/.stamp_built] Error 1
+ >> 
+ >> http://autobuild.buildroot.net/results/3a6/3a62359d0e183d45e50e999fc2c58f7805bda142/build-end.log
+ >> 
+ > Weird: I'm unable to reproduce this failure... (in-tree and out-tree build). 
 
-This would result in busybox overwriting the sysvinit case, e.g. with
-BR2_PACKAGE_SYSVINIT set and BR2_PACKAGE_INIT_BUSYBOX unset:
-
-	QT5BASE_CONFIGURE_OPTS = ... -syslog -no-syslog ...
+Notice that both failures are with python 2.7, so possibly it is related
+to that?
 
 
-Not an init/syslog expert, but I believe the syslog feature is independent
-of the init system used (as long as a some daemon is listening on the /dev/log
-socket, something which even works with systemd) and the used syslog.h
-header file is provided by the C library already (no need for another
-compile time dependency)...
+ >> Any specific reason to not get the package from pypi?
+ >> 
+ > No. I will try it if it's fix this error. But this requires to downgrade
+ > python-remi to 2020.8.6
 
-For the Qt syslog feature I would suggest an extra config option
-(as some other packages do already, see e.g. BR2_PACKAGE_COLLECTD_SYSLOG,
-BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG), because enabling this
-changes the default Qt logging from stderr to syslog (see
-qt5base-5.15.1/src/corelib/global/qlogging.cpp), something
-not every user is expecting (yes I know this is not symmetrical
-for the systemd buildroot handling)...
+Ok. Mayve contact upstream and ask why pypi isn't updated?
 
-Regards,
-Peter
-
-
-
->  ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
->  # use vivante backend
->  QT5BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_viv
+-- 
+Bye, Peter Korsgaard
