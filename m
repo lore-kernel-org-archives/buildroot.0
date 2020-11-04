@@ -1,50 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Nov 2020 07:36:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/collectd: fix grpc dependency
-In-Reply-To: <20201104063637.3349-1-fontaine.fabrice@gmail.com>
-References: <20201104063637.3349-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201104063637.3349-2-fontaine.fabrice@gmail.com>
+From: Florian La Roche <florian.laroche@googlemail.com>
+Date: Wed, 4 Nov 2020 07:28:40 +0100
+Subject: [Buildroot] [PATCH 1/1] grub-efi: align the rootfs to start at
+ 16MB offset from start of the image
+In-Reply-To: <87a6vy5d5e.fsf@dell.be.48ers.dk>
+References: <20201022101512.56470-1-Florian.LaRoche@gmail.com>
+ <87a6vy5d5e.fsf@dell.be.48ers.dk>
+Message-ID: <CANZrA2ZrT_RF3URh4HbPNW66-U4XGGVuUyjZ2Jw9Wn7fHKQN9Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit e98610f039b88a5d164b19343d5ecef2d1c01f6d forgot to propagate
-libabseil-cpp dependencies to BR2_PACKAGE_COLLECTD_GRPC
+Hello Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/c9bacfb52ae46ab78a5f9097a8df83e10d23ccc4
+Am Di., 3. Nov. 2020 um 22:44 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
+> Is there any specific reason for this or just that the offset looks
+> "nicer"?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/collectd/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+"nicer" is the only reason, not sure if newer hardware has any real
+alignment reasons
+that would benefit from this.
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 7037a8b383..3e854ba518 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -605,15 +605,17 @@ config BR2_PACKAGE_COLLECTD_GRPC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC # grpc
- 	depends on BR2_INSTALL_LIBSTDCPP # grpc -> protobuf
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # grpc -> protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # grpc -> libabseil-cpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # grpc -> host-libabseil-cpp
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
- 	select BR2_PACKAGE_GRPC
- 	help
- 	  Send/receive values using the gRPC protocol.
- 
--comment "grpc needs a toolchain w/ C++, gcc >= 4.8"
-+comment "grpc needs a toolchain w/ C++, gcc >= 4.9, host gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
-+		|| !BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
- 
--- 
-2.28.0
+> Committed with these changes, thanks.
+
+Thanks,
+
+Florian La Roche
