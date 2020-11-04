@@ -1,58 +1,32 @@
-From: Khem Raj <raj.khem@gmail.com>
-Date: Tue, 3 Nov 2020 19:24:52 -0800
-Subject: [Buildroot] [PATCH] external-toolchain: Detect linux/version.h
- via cross compiler
-In-Reply-To: <20201103214344.65ac36cf@windsurf.home>
-References: <20201023093641.619746-1-raj.khem@gmail.com>
- <20201103201640.GI2887157@scaer>
- <CAMKF1sodESjxJAwwJ9i5tFuU1j5dzL0cNx42FB97SSQYwEzpYA@mail.gmail.com>
- <20201103214344.65ac36cf@windsurf.home>
-Message-ID: <CAMKF1srPCu8xV8d7xXSupMt_Ge5e+YpVVz+pZ-xAOFDbzb4J2g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  4 Nov 2020 07:36:36 +0100
+Subject: [Buildroot] [PATCH 1/2] package/grpc: add host gcc >= 4.9 comment
+Message-ID: <20201104063637.3349-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 3, 2020 at 12:43 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Tue, 3 Nov 2020 12:25:25 -0800
-> Khem Raj <raj.khem@gmail.com> wrote:
->
-> > >   - Buildroot does not officially support distributions' cross
-> > >     toolchains, as they may contain extra libraries that are not
-> > >     accoutned for by Buildroot,
-> >
-> > yes that's fine, this patch does not claim to support all of them
-> > either, it just
-> > makes the situation a bit better without regressing the supported usecases
-> > I think it helps lowering the build times on such distros for
-> > developers and improve
-> > first time experience
->
-> This has not clarified things for me. Most distributions allow extra
-> libraries to be installed in their cross-toolchains, i.e on Debian, you
-> can install libxml2, zlib, and zillions of other libraries
-> cross-compiled into your cross-compilation toolchain.
+Commit e98610f039b88a5d164b19343d5ecef2d1c01f6d forgot to update comment
 
-right, this change is only using compiler and compiler runtime
-(headers+libs) from those toolchains, everything else is built by
-buildroot.
-so there is clear separation since --sysroot would point to BR created
-sysroot for all target libs. I will install an additional lib and see
-how that pans out.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/grpc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Then things are confusing for Buildroot: when it copies the sysroot, it
-> already contains more than just the C library... potentially libraries
-> that will conflict with libraries that Buildroot will build.
-
->
-> I don't see how this can work reliably.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/grpc/Config.in b/package/grpc/Config.in
+index 6151f4b3d1..d1bf0d078d 100644
+--- a/package/grpc/Config.in
++++ b/package/grpc/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_GRPC
+ 
+ 	  http://github.com/grpc/grpc
+ 
+-comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9"
++comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.9, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-- 
+2.28.0
