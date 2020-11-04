@@ -1,51 +1,66 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  4 Nov 2020 18:34:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: disable spandsp
-Message-ID: <20201104173401.548668-1-fontaine.fabrice@gmail.com>
+Date: Wed,  4 Nov 2020 18:39:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump to version 2.5.0
+Message-ID: <20201104173904.549137-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-asterisk fails to build with spandsp since commit
-36c983bfa543de89ab8c9374a860d2fdf8a2fb87
+- Disable unit-tests which are enabled by default if cmocka is found:
+  https://github.com/OpenVPN/openvpn/commit/222e691739a111f5becbce39c4cceaa8fff3c284
+- Drop --enable-iproute2 to enable netlink(3) support (and so drop
+  IFCONFIG, IPROUTE and ROUTE environment variables and keep NETSTAT
+  even if it is only used by tests/t_client.sh.in).
+  netlink is much faster than calling ifconfig or route and also enables
+  OpenVPN to run with less privileges.
+- Update indentation in hash file (two spaces)
 
-Fixes:
- - http://autobuild.buildroot.org/results/c984738cad4186edb12a62b8e74115e68efe35f0
+https://github.com/OpenVPN/openvpn/blob/release/2.5/Changes.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/asterisk/asterisk.mk | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ package/openvpn/openvpn.hash | 4 ++--
+ package/openvpn/openvpn.mk   | 9 +++------
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index eb72104d9a..b9e2b80dd5 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -107,6 +107,9 @@ ASTERISK_CONF_OPTS = \
- # the time of this writing).
- ASTERISK_CONF_OPTS += --without-avcodec
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index b9b0a4d8d5..4e371fc87b 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256 641f3add8694b2ccc39fd4fd92554e4f089ad16a8db6d2b473ec284839a5ebe2  openvpn-2.4.9.tar.xz
+-sha256 1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
++sha256  029a426e44d656cb4e1189319c95fe6fc9864247724f5599d99df9c4c3478fbd  openvpn-2.5.0.tar.xz
++sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 1008c47b5a..3efc9e2354 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,19 +4,16 @@
+ #
+ ################################################################################
  
-+# asterisk is not compatible with freeswitch spandsp
-+ASTERISK_CONF_OPTS += --without-spandsp
-+
- ASTERISK_CONF_ENV = \
- 	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true \
- 	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
-@@ -232,13 +235,6 @@ else
- ASTERISK_CONF_OPTS += --without-ssl
- endif
+-OPENVPN_VERSION = 2.4.9
++OPENVPN_VERSION = 2.5.0
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
+ OPENVPN_LICENSE = GPL-2.0
+ OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
+ OPENVPN_CONF_OPTS = \
+-	--enable-iproute2 \
++	--disable-unit-tests \
+ 	$(if $(BR2_STATIC_LIBS),--disable-plugins)
+-OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
+-	NETSTAT=/bin/netstat \
+-	ROUTE=/sbin/route \
+-	IPROUTE=/sbin/ip
++OPENVPN_CONF_ENV = NETSTAT=/bin/netstat
  
--ifeq ($(BR2_PACKAGE_SPANDSP),y)
--ASTERISK_DEPENDENCIES += spandsp
--ASTERISK_CONF_OPTS += --with-spandsp
--else
--ASTERISK_CONF_OPTS += --without-spandsp
--endif
--
- ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- ASTERISK_DEPENDENCIES += speex
- ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
+ ifeq ($(BR2_PACKAGE_OPENVPN_SMALL),y)
+ OPENVPN_CONF_OPTS += \
 -- 
 2.28.0
