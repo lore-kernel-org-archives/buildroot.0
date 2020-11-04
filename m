@@ -1,24 +1,29 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 04 Nov 2020 21:43:29 +0000
-Subject: [Buildroot] [Bug 13291] BR2_DL_DIR is ignored when creating
- defconfig
-In-Reply-To: <bug-13291-163@https.bugs.busybox.net/>
-References: <bug-13291-163@https.bugs.busybox.net/>
-Message-ID: <bug-13291-163-pp9BYZXwgg@https.bugs.busybox.net/>
+Date: Wed, 04 Nov 2020 21:57:13 +0000
+Subject: [Buildroot] [Bug 11811] lsblk (util-linux) should depend on libudev
+ if available
+In-Reply-To: <bug-11811-163@https.bugs.busybox.net/>
+References: <bug-11811-163@https.bugs.busybox.net/>
+Message-ID: <bug-11811-163-oR1NKIaDqE@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13291
+https://bugs.busybox.net/show_bug.cgi?id=11811
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-This is a recent change done on purpose:
-https://git.buildroot.org/buildroot/commit/?id=36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-What is your use case for wanting to store a custom download directory location
-in the defconfig?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #11 from Peter Korsgaard <jacmet@uclibc.org> ---
+This has now finally been merged in
+https://git.buildroot.org/buildroot/commit/?id=8bafc6dc8ad13000a58af980650ff59a78399ae2,
+thanks
 
 -- 
 You are receiving this mail because:
