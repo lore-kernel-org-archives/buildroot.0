@@ -1,42 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Nov 2020 20:34:48 +0100
-Subject: [Buildroot] [git commit] package/feh: bump to version 3.5
-Message-ID: <20201104192313.25127811FC@busybox.osuosl.org>
+Date: Wed, 4 Nov 2020 20:30:33 +0100
+Subject: [Buildroot] [git commit] package/asterisk: disable spandsp
+Message-ID: <20201104192313.1A25086C6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72e447e251ae5967fb6a2d898e9e1212aa6a640e
+commit: https://git.buildroot.net/buildroot/commit/?id=22ed1ddc15a7347ee4ca2b943d43958d62a04aa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+asterisk fails to build with spandsp since commit 36c983bfa543de89a
+(package/spandsp: bump version to 3.0.0), so disable it.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/c984738cad4186edb12a62b8e74115e68efe35f0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/feh/feh.hash | 2 +-
- package/feh/feh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/feh/feh.hash b/package/feh/feh.hash
-index 20916af640..806bca08ce 100644
---- a/package/feh/feh.hash
-+++ b/package/feh/feh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 782463034ab0135bc8438515191f986db23a79d502154d23a7c07a7574907b7b  feh-3.4.1.tar.bz2
-+sha256 388f9dcc8284031023364355e23a82c276e79ca614f2dcd64d2f927857a4531e  feh-3.5.tar.bz2
- sha256 2c3a31327dc3cc3331aa6e759d378e4f66d0ece7174a0d5aa137f3cba4bf0509  COPYING
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 8ba9e40dd8..c1dae9db88 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index eb72104d9a..b9e2b80dd5 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -107,6 +107,9 @@ ASTERISK_CONF_OPTS = \
+ # the time of this writing).
+ ASTERISK_CONF_OPTS += --without-avcodec
  
--FEH_VERSION = 3.4.1
-+FEH_VERSION = 3.5
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org
- FEH_DEPENDENCIES = imlib2 libpng xlib_libXt
++# asterisk is not compatible with freeswitch spandsp
++ASTERISK_CONF_OPTS += --without-spandsp
++
+ ASTERISK_CONF_ENV = \
+ 	ac_cv_file_bridges_bridge_softmix_include_hrirs_h=true \
+ 	ac_cv_path_CONFIG_LIBXML2=$(STAGING_DIR)/usr/bin/xml2-config
+@@ -232,13 +235,6 @@ else
+ ASTERISK_CONF_OPTS += --without-ssl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SPANDSP),y)
+-ASTERISK_DEPENDENCIES += spandsp
+-ASTERISK_CONF_OPTS += --with-spandsp
+-else
+-ASTERISK_CONF_OPTS += --without-spandsp
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ ASTERISK_DEPENDENCIES += speex
+ ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
