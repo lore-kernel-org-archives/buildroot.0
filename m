@@ -1,108 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 4 Nov 2020 23:27:17 +0100
-Subject: [Buildroot] [git commit] CHANGES: Update for 2020.11-rc1
-Message-ID: <20201104221752.A74A4814CD@busybox.osuosl.org>
+Date: Wed, 4 Nov 2020 23:29:24 +0100
+Subject: [Buildroot] [git commit] Update for 2020.11-rc1
+Message-ID: <20201104221752.B8A96814CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a40358a1127168541a3cfb228931b3bcdbcf65f2
+commit: https://git.buildroot.net/buildroot/commit/?id=5b79a9cc47ff22e18c901d02d94f1e3c3cfdfae1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 82 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 13 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 31542fd972..4f7864c0e0 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,85 @@
-+2020.11-rc1, released November 4th, 2020
-+
-+	Fixes all over the tree and new features.
-+
-+	Architectures: Support for IBM s390x
-+
-+	Toolchain: use Secure-PLT rather than BSS-PLT for PowerPC
-+	32. Binutils 2.35.1 added, now defaulting to 2.34. ARC
-+	2020.09-release toolchain. GCC 7.x dropped. RISC-V support for
-+	uclibc-ng. Support for Bootlin external toolchains.
-+
-+	SELinux support improvements: File security contexts are now
-+	set when the file systems are created, so there is no need to
-+	run restorecon on first boot / read only rootfs is supported.
-+	An optimized / stripped refpolicy SELinux policy is now
-+	used. Packages can enable additional refpolicy modules using
-+	<pkg>_SELINUX_MODULES.
-+
-+	support/scripts/cve-checker: Utility script to check for known
-+	CVEs in just the packages enabled in a Buildroot configuration
-+	rather than all packages, by passing the output of 'make
-+	show-info' to it.
-+
-+	Go: Modules handling. The module name must be specified using
-+	<pkg>_GOMOD.
-+
-+	BR2_EXTERNAL: Support for defining skeleton and init system
-+	packages in external trees.
-+
-+	meson: Correct SDK cross-compilation.conf file when
-+	per-package builds were used to build SDK.
-+
-+	systemd: Use /run rather than /var/run for PID files in units.
-+
-+	Fakeroot scripts (BR2_ROOTFS_POST_FAKEROOT_SCRIPT) are now run
-+	after all finalization hooks (including pre-rootfs) to ensure
-+	they can override any late configuration done by packages.
-+
-+	support/script/pycompile: Rework logic to ensure .pyc files
-+	contain absolute target paths, fixing code inspection at
-+	runtime when executed with cwd != '/'.
-+
-+	support/scripts/setlocalversion: Correct Mercurial output to
-+	match behaviour with Git.
-+
-+	support/scripts/apply-patches.sh: Use patch
-+	--no-backup-if-mismatch, so we no longer blindly have to
-+	remove *.orig files after patching, fixing issues with
-+	packages containing such files.
-+
-+	New defconfigs: Acer chromebook elm, Friendlyarm nanopc-t4 and
-+	nanopi-m4, Hardkernel odroid-c2, Kontron SMARC-sAL28, NXP
-+	imx8mqevk, Orangepi RK3399 and zero+, PCengines APU2, Pine64
-+	rockpro64, QEMU s390x, Raxda rockpi-n8,
-+
-+	New packages: altera-stapl, asn1c, babeltrace2, cukinia,
-+	easyframes, environment-setup, frr, graphicsmagick, htpdate,
-+	ipcalc, libbacktrace, libblockdev, libbytesize, librelp,
-+	libuev, makedumpfile, meson-tools, mg, mrp, multipath-tools,
-+	netcalc, odroidc2-firmware, php-xdebug, python-aiofiles,
-+	python-ansicolors, python-boto3, python-botocore,
-+	python-bsdiff4, python-crayons, python-iniconfig,
-+	python-intelhex, python-ipdb, python-jmespath,
-+	python-m2crypto, python-opcua-asyncio, python-packaging,
-+	python-piexif, python-pluggy, python-pytest,
-+	python-s3transfer, python-xmodem, qprint, qt5lottie,
-+	qt5remoteobjects, re2, redir, s390-tools, sentry-cli,
-+	sentry-native, timescaledb, tinyhttpd, uhd, uredir, watchdog,
-+	wayland-utils, weston-imx
-+
-+	Removed packages: amd-catalyst, bellagio, gqview, libcroco,
-+	nvidia-tegra23, opencv
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11811: lsblk (util-linux) should depend on libudev if available
-+	#11931: Bugs in support/scripts/apply-patches.sh
-+	#12301: systemd-journal-gatewayd: config options broken
-+	#12911: usb_modeswitch installation race condition
-+	#13236: Can't compile linux 5.4.8 (with gcc 10 on host)
-+	#13286: The system hangs in vmware workstation on the line..
-+
- 2020.08.1, released October 12th, 2020
+diff --git a/Makefile b/Makefile
+index d4751e278e..5dc402e73e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- 	Important / security related fixes.
+ # Set and export the version string
+-export BR2_VERSION := 2020.11-git
++export BR2_VERSION := 2020.11-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1598992000
++BR2_VERSION_EPOCH = 1604528000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 9cf4c12e51..7d2a3c1c93 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,41 +75,41 @@
+ 	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2020.08-rc3</b></h3>
++
++      <h3 style="text-align: center;">Latest release candidate: <b>2020.11-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.08-rc3.tar.gz">buildroot-2020.08-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.11-rc1.tar.gz">buildroot-2020.11-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.11-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.08-rc3.tar.bz2">buildroot-2020.08-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.11-rc1.tar.bz2">buildroot-2020.11-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.11-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+--->
++
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 2322f818c7..5c4cea2d40 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.11-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>4 November 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11-rc1">CHANGES</a>
++	  file for more details.</p>
++
++	<p>Go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.11-rc1.tar.bz2">2020.11-rc1
++	  release</a>, and report any problems found to the
++         <a href="support.html">mailing list</a> or
++         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
