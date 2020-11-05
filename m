@@ -1,22 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 05 Nov 2020 09:48:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: bump version
- to 3.3.5
-In-Reply-To: <20201105071748.68780-1-xuminready@gmail.com> (Min Xu's message
- of "Wed, 4 Nov 2020 23:17:48 -0800")
-References: <20201105071748.68780-1-xuminready@gmail.com>
-Message-ID: <87a6vw196j.fsf@dell.be.48ers.dk>
+Date: Thu, 5 Nov 2020 09:46:53 +0100
+Subject: [Buildroot] [git commit branch/next] package/shadowsocks-libev:
+ bump version to 3.3.5
+Message-ID: <20201105083517.79E24877CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Min" == Min Xu <xuminready@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eb6e1d5dcb20d4ff43e96838552a106166d9c77f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index cc7993a54f..4f1d6d2fa5 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  fce47a956fad0c30def9c71821bcec450a40d3f881548e31e66cedf262b89eb1  shadowsocks-libev-3.3.4.tar.gz
++sha256  cfc8eded35360f4b67e18dc447b0c00cddb29cc57a3cec48b135e5fb87433488  shadowsocks-libev-3.3.5.tar.gz
+ 
+ # License files, locally calculated
+ sha256  736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 3ba4cb875c..8d7b00f139 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOWSOCKS_LIBEV_VERSION = 3.3.4
++SHADOWSOCKS_LIBEV_VERSION = 3.3.5
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
