@@ -1,84 +1,62 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 05 Nov 2020 20:15:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_conntrack: add
- libmnl to Libs.Private
-In-Reply-To: <20200412122107.1071258-1-fontaine.fabrice@gmail.com>
-References: <20200412122107.1071258-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eel7r7po.fsf@tarshish>
+Date: Thu,  5 Nov 2020 20:15:46 +0200
+Subject: [Buildroot] [PATCH] package/dnsmasq: bump to version 2.82
+Message-ID: <7b338b2824ea678728d4e983bc5dd90989a06714.1604600146.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice, all,
+Drop Makefile modification for pkg-config. Build time PATH ensures that
+the Buildroot pkg-config is used.
 
-On Sun, Apr 12 2020, Fabrice Fontaine wrote:
-> This will fix a static build failure with dnsmasq on latest
-> libnetfilter_conntrack
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
->
-> diff --git a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-> new file mode 100644
-> index 0000000000..921837df07
-> --- /dev/null
-> +++ b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-> @@ -0,0 +1,38 @@
-> +From 93bbd7e56cefc8488a61892b3bf5df63a175d20d Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 12 Apr 2020 14:05:15 +0200
-> +Subject: [PATCH] libnetfilter_conntrack.pc.in: add LIBMNL_LIBS to Libs.Private
-> +
-> +Since version 1.0.8 and commit
-> +c1c0f16c1fedb46547c2e104beeaaeac5933b214, libnetfilter_conntrack depends
-> +on libmnl so add it to Libs.Private.
-> +
-> +Otherwise, applications such as dnsmasq will fail to link on:
-> +
-> +/home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -Wl,-elf2flt -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnetfilter_conntrack -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnfnetlink
-> +/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
-> +api.c:(.text+0x34): undefined reference to `mnl_nlmsg_put_header'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: sent to Pablo Neira Ayuso <pablo@netfilter.org>]
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 8 +-------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-This patch is now upstream commit e94172f09e4d.
-
-Tested-by: Baruch Siach <baruch@tkos.co.il>
-
-Thanks,
-baruch
-
-> +---
-> + libnetfilter_conntrack.pc.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/libnetfilter_conntrack.pc.in b/libnetfilter_conntrack.pc.in
-> +index 857f993..fbd7132 100644
-> +--- a/libnetfilter_conntrack.pc.in
-> ++++ b/libnetfilter_conntrack.pc.in
-> +@@ -12,5 +12,5 @@ Version: @VERSION@
-> + Requires: libnfnetlink
-> + Conflicts:
-> + Libs: -L${libdir} -lnetfilter_conntrack
-> +-Libs.private: @LIBNFNETLINK_LIBS@
-> ++Libs.private: @LIBNFNETLINK_LIBS@ @LIBMNL_LIBS@
-> + Cflags: -I${includedir}
-> +-- 
-> +2.25.1
-
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 99e417f069b4..401f930bafc2 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.81.tar.xz.asc
+-sha256  749ca903537c5197c26444ac24b0dce242cf42595fdfe6b9a5b9e4c7ad32f8fb  dnsmasq-2.81.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.82.tar.xz.asc
++sha256  84523646f3116bb5e1151efb66e645030f6e6a8256f29aab444777a343ebc132  dnsmasq-2.82.tar.xz
+ # Locally calculated
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 4a7218a2b73c..117be38d4bcf 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.81
++DNSMASQ_VERSION = 2.82
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -77,13 +77,7 @@ DNSMASQ_DEPENDENCIES += ubus
+ DNSMASQ_COPTS += -DHAVE_UBUS
+ endif
+ 
+-define DNSMASQ_FIX_PKGCONFIG
+-	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+-		$(DNSMASQ_DIR)/Makefile
+-endef
+-
+ define DNSMASQ_BUILD_CMDS
+-	$(DNSMASQ_FIX_PKGCONFIG)
+ 	$(DNSMASQ_TWEAK_LIBLUA)
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.28.0
