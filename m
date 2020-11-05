@@ -1,203 +1,103 @@
-From: Giacomo Longo <gabibbo97@gmail.com>
-Date: Thu,  5 Nov 2020 13:19:59 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/uftrace: new package
-In-Reply-To: <20201103213904.0264a6c1@windsurf.home>
-References: <20201103213904.0264a6c1@windsurf.home>
-Message-ID: <20201105121959.656982-1-gabibbo97@gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Thu,  5 Nov 2020 11:04:01 -0300
+Subject: [Buildroot] [PATCH] package/pkg-generic.mk: fix generation of
+ package list in reinstall
+Message-ID: <20201105140401.1356161-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Giacomo Longo <gabibbo97@gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
 
+Running "make <pkg>-reinstall" always shows a message like these:
+
+comm: /.../build/pkg-x.y.z/.files-list.before: No such file or directory
+comm: /.../build/pkg-x.y.z/.files-list-staging.before: No such file or directory
+comm: /.../build/pkg-x.y.z/.files-list-host.before: No such file or directory
+
+This happens because pkg_size_after is called in the .stamp_installed
+target and removes .files-list$(2).before, so in a second installation
+the file is not there anymore. This results in an empty .files-list.txt
+file.
+
+Move the pkg_size_{before,after} calls from the .stamp_configured and
+.stamp_installed targets to the .stamp_{host,staging,target}_installed
+targets, respectively. This ensures that every pkg_size_after call has
+an immediately corresponding pkg_size_before call.
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
-Hopefully this message will end into the email (formatted as per BR docs
-21.5.5).
+ package/pkg-generic.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Following the helpful feedback from Thomas Petazzoni,
- I have improved upon my v2 patchset and included the changelogs
- below for reference.
-
-I have checked the patch as following:
-
-$ ./utils/check-package ./package/uftrace/*                         
-85 lines processed
-0 warnings generated
-
-$ ./utils/test-pkg -d ../test-pkg -c ../uftrace.config -p uftrace -a
-... (omitted for brevity)
-45 builds, 36 skipped, 0 build failed, 0 legal-info failed
-
-The package has also been tested with a virtualized ARMv7 rootfs.
-
-Changes v2 -> v3:
-	- added explainatation on why glibc is required
-	- splitted long lines in Config.in
-	- hashes are now calculated with sha256 instead of sha512
-	- package now leverages generic-package instead of autotools
-		- the prefix is now /usr instead of /usr/local to be more in line
-			with other packages
-		- definitions of the build commands are placed near the bottom of
-			the makefile
-		- added comments above the configuration options to explain why a
-			check is needed
-
-Changes v1 -> v2:
-	- added myself to DEVELOPERS
-	- removed configuration options that now are used in the makefile
-	- removed dependency on UTIL_LINUX that was not needed
-	- BR2_INSTALL_LIBSTDCPP is now "depends on" instead of "selects"
-	- comment in Config.in is now at the end of the file
-	- comment now will be shown only in the correct architecture
-	- makefile has been sorted:
-		- common configuration is at the top
-		- architecture configuration is in the middle
-		- feature flags are at the bottom
-
-Changes v1:
-	- initial proposal
-
----
- DEVELOPERS                   |  3 ++
- package/Config.in            |  1 +
- package/uftrace/Config.in    | 28 +++++++++++++++++++
- package/uftrace/uftrace.hash |  3 ++
- package/uftrace/uftrace.mk   | 54 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 89 insertions(+)
- create mode 100644 package/uftrace/Config.in
- create mode 100644 package/uftrace/uftrace.hash
- create mode 100644 package/uftrace/uftrace.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 43cc1b55ae..021be57a75 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -980,6 +980,9 @@ N:	Gerome Burlats <gerome.burlats@smile.fr>
- F:	board/qemu/
- F:	configs/qemu_*
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 54de03da03..b13ecc5d8e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -232,9 +232,6 @@ $(BUILD_DIR)/%/.stamp_configured:
+ 	@$(call MESSAGE,"Configuring")
+ 	$(Q)mkdir -p $(HOST_DIR) $(TARGET_DIR) $(STAGING_DIR) $(BINARIES_DIR)
+ 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DEPENDENCIES))
+-	@$(call pkg_size_before,$(TARGET_DIR))
+-	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+-	@$(call pkg_size_before,$(HOST_DIR),-host)
+ 	$(call fixup-libtool-files,$(NAME),$(STAGING_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
+ 	$($(PKG)_CONFIGURE_CMDS)
+@@ -256,9 +253,11 @@ $(BUILD_DIR)/%/.stamp_built::
+ $(BUILD_DIR)/%/.stamp_host_installed:
+ 	@$(call step_start,install-host)
+ 	@$(call MESSAGE,"Installing to host directory")
++	@$(call pkg_size_before,$(HOST_DIR),-host)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
++	@$(call pkg_size_after,$(HOST_DIR),-host)
+ 	@$(call step_end,install-host)
+ 	$(Q)touch $@
  
-+N: Giacomo Longo <gabibbo97@gmail.com>
-+F: package/uftrace/
-+
- N:	Gilles Talis <gilles.talis@gmail.com>
- F:	board/freescale/imx8mmevk/
- F:	configs/freescale_imx8mmevk_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..cbe6a30fd0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -140,6 +140,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/trace-cmd/Config.in"
- 	source "package/trinity/Config.in"
- 	source "package/uclibc-ng-test/Config.in"
-+	source "package/uftrace/Config.in"
- 	source "package/valgrind/Config.in"
- 	source "package/vmtouch/Config.in"
- 	source "package/whetstone/Config.in"
-diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
-new file mode 100644
-index 0000000000..1a9a974d6e
---- /dev/null
-+++ b/package/uftrace/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	default y if BR2_arm
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+
-+config BR2_PACKAGE_UFTRACE
-+	bool "uftrace"
-+	# elfutils is not available on musl
-+	# uClibc-ng does not support the ADDR_NO_RANDOMIZE personality
-+	# so only glibc is supported
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_WCHAR # elfutils
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
-+	select BR2_PACKAGE_ELFUTILS
-+	help
-+	  Tool to trace and analyze execution of a program.
-+
-+	  https://uftrace.github.io/slide
-+
-+comment "uftrace needs a glibc toolchain w/ C++, dynamic library, threads, wchar"
-+	depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
-+	           BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-new file mode 100644
-index 0000000000..ccf79ddeb7
---- /dev/null
-+++ b/package/uftrace/uftrace.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 418d30c959d3b6d0dcafd55e588a5d414a9984b30f2522a5af004a268824a5a2 uftrace-0.9.4.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-new file mode 100644
-index 0000000000..266be2e65b
---- /dev/null
-+++ b/package/uftrace/uftrace.mk
-@@ -0,0 +1,54 @@
-+################################################################################
-+#
-+# uftrace
-+#
-+################################################################################
-+
-+UFTRACE_VERSION = 0.9.4
-+UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
-+UFTRACE_LICENSE = GPL-2.0+
-+UFTRACE_LICENSE_FILES = COPYING
-+UFTRACE_DEPENDENCIES = elfutils
-+
-+UFTRACE_CONF_OPTS = \
-+	--without-capstone \
-+	--without-libpython
-+
-+ifeq ($(BR2_aarch64),y)
-+UFTRACE_CONF_OPTS += --arch=aarch64
-+else ifeq ($(BR2_arm),y)
-+UFTRACE_CONF_OPTS += --arch=arm
-+else ifeq ($(BR2_i386),y)
-+UFTRACE_CONF_OPTS += --arch=i386
-+else ifeq ($(BR2_x86_64),y)
-+UFTRACE_CONF_OPTS += --arch=x86_64
-+endif
-+
-+# No --with-luajit option available
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+UFTRACE_DEPENDENCIES += luajit
-+else
-+UFTRACE_CONF_OPTS += --without-libluajit
-+endif
-+
-+# No --with-ncurses option available
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+UFTRACE_DEPENDENCIES += ncurses
-+else
-+UFTRACE_CONF_OPTS += --without-libncurses
-+endif
-+
-+define UFTRACE_CONFIGURE_CMDS
-+	(cd $(@D) && ./configure --cross-compile=$(TARGET_CROSS) \
-+		--prefix=$(TARGET_DIR)/usr $(UFTRACE_CONF_OPTS))
-+endef
-+
-+define UFTRACE_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define UFTRACE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
+@@ -285,6 +284,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	@$(call step_start,install-staging)
+ 	@$(call MESSAGE,"Installing to staging directory")
++	@$(call pkg_size_before,$(STAGING_DIR),-staging)
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_STAGING_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+@@ -320,6 +320,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 			mv "$${la}.fixed" "$${la}"; \
+ 		fi || exit 1; \
+ 	done
++	@$(call pkg_size_after,$(STAGING_DIR),-staging)
+ 	@$(call step_end,install-staging)
+ 	$(Q)touch $@
+ 
+@@ -337,6 +338,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
+ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
++	@$(call pkg_size_before,$(TARGET_DIR))
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
+@@ -350,15 +352,13 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+ 	fi
++	@$(call pkg_size_after,$(TARGET_DIR))
+ 	@$(call step_end,install-target)
+ 	$(Q)touch $@
+ 
+ # Final installation step, completed when all installation steps
+ # (host, images, staging, target) have completed
+ $(BUILD_DIR)/%/.stamp_installed:
+-	@$(call pkg_size_after,$(TARGET_DIR))
+-	@$(call pkg_size_after,$(STAGING_DIR),-staging)
+-	@$(call pkg_size_after,$(HOST_DIR),-host)
+ 	@$(call check_bin_arch)
+ 	$(Q)touch $@
+ 
 -- 
-2.28.0
+2.27.0
