@@ -1,87 +1,55 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Thu, 5 Nov 2020 14:21:21 -0300
-Subject: [Buildroot] [PATCH] package/pkg-generic.mk: fix generation of
- package list in reinstall
-In-Reply-To: <20201105173349.76b4d206@windsurf.home>
-References: <20201105140401.1356161-1-unixmania@gmail.com>
- <20201105173349.76b4d206@windsurf.home>
-Message-ID: <CAJ4jsaftvtdepjTQG_ROvX3PAgRmzKqD60+Gf3rLHhZ3EFiQvQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 5 Nov 2020 11:20:49 -0600
+Subject: [Buildroot] [PATCH 08/10] support/script/pkg-stats: show CPE ID
+ in results
+In-Reply-To: <20201105180106.1c88c656@windsurf.home>
+References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
+ <20201104145145.1316167-9-thomas.petazzoni@bootlin.com>
+ <CANQCQpbN8-SXF8T4bxdn+JnyYrHSzpQy8J2ZzByCZ=yp_gtZNQ@mail.gmail.com>
+ <20201105180106.1c88c656@windsurf.home>
+Message-ID: <CANQCQpbCh3SRt4JQMdOT2QeJz7hQH4hBY_6J05ouUhOqbWY3vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 5, 2020 at 1:33 PM Thomas Petazzoni
+Thomas,
+
+
+On Thu, Nov 5, 2020 at 11:02 AM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello Carlos,
+> On Wed, 4 Nov 2020 11:18:50 -0600
+> Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
 >
-> On Thu,  5 Nov 2020 11:04:01 -0300
-> unixmania at gmail.com wrote:
->
-> > From: Carlos Santos <unixmania@gmail.com>
+> > > +        elif pkgvar.endswith("_CPE_ID"):
+> > > +            pkgvar = pkgvar[:-7]
+> > > +            Package.all_cpeids[pkgvar] = value
 > >
-> > Running "make <pkg>-reinstall" always shows a message like these:
-> >
-> > comm: /.../build/pkg-x.y.z/.files-list.before: No such file or directory
-> > comm: /.../build/pkg-x.y.z/.files-list-staging.before: No such file or directory
-> > comm: /.../build/pkg-x.y.z/.files-list-host.before: No such file or directory
-> >
-> > This happens because pkg_size_after is called in the .stamp_installed
-> > target and removes .files-list$(2).before, so in a second installation
-> > the file is not there anymore. This results in an empty .files-list.txt
-> > file.
-> >
-> > Move the pkg_size_{before,after} calls from the .stamp_configured and
-> > .stamp_installed targets to the .stamp_{host,staging,target}_installed
-> > targets, respectively. This ensures that every pkg_size_after call has
-> > an immediately corresponding pkg_size_before call.
+> > I haven't dug that deep yet in the script, but would this populate
+> > host and target CPE ID values?  I know the Infrastructure does note
+> > host/target so there is probably enough information to conditionally
+> > pull the value.
 >
-> Unfortunately, this breaks the very reason why the .stamp_installed
-> step was added, as explained in the commit log for the change that
-> introduced this:
+> pkg-stats doesn't have a notion of a package being a host or a target
+> package. It knows only about packages, be they target, host, or both.
 >
-> commit f2a12a8e9fa292ab61d99f963683a97f1283b7a3
-> Author: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Date:   Thu Apr 30 11:52:40 2020 +0200
+> Also, the CPE_ID values are automatically filled in for the host
+> variant of the package by deriving the one of the corresponding target
+> package. This is explained in PATCH 03/10 commit log, which states:
 >
->     package/pkg-generic.mk: introduce final 'install' step
->
->     We currently have four different install steps: target installation,
->     staging installation, images installation and host installation. These
->     steps are directly triggered from the $(1)-install make target, so
->     there is no place where we can run some logic once all installation
->     steps have completed.
->
->     However, as part of improving the reliability of the logic done in
->     step_pkg_size_before and step_pkg_size_after to detect the files
->     installed by packages, we would in fact need to run some logic after
->     all installation steps have completed. This will allow us to make sure
->     that all files are detected, even if a host package installs something
->     in the target directory, or if a target package installs something in
->     the host directory.
->
->     To achieve this, this commit implements a new stamp file,
->     .stamp_installed, which is a step that depends on all four install
->     steps. Currently, this step does nothing except creating the stamp
->     file.
->
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->     [yann.morin.1998 at free.fr: remove stampfile on foo-reinstall]
->     Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> I'll try to think about the issue you've reported and see if I can come
-> up with some useful suggestions.
->
-> Thanks,
->
-> Thomas
+> """
+> The <pkg>_CPE_ID_* values for the host package are inherited from the
+> same variables of the corresponding target package, as we normally do
+> for most package variables.
+> """
 
-I understand but wouldn't be a bug if a host package installed things
-on the target directory and vice-versa? Maybe the right thing to do is
-to ensure that this does not happen.
+Yep, agree I was tracking the fact a host package CPE ID was also
+being created.  I was just thinking you could end up with a case of
+two CPE IDs, one for a host vs target package.  I guess that really
+isn't the case so you can ignore this question.  I was really thinking
+of the case like libcurl where the package has two CPE IDs but that
+could really be a future patchset problem.
 
-
---
-Carlos Santos <unixmania@gmail.com>
+Matt
