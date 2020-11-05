@@ -1,44 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  5 Nov 2020 19:56:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libva-utils: bump version to 2.9.1
-Message-ID: <20201105185637.485339-1-bernd.kuhls@t-online.de>
+From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
+Date: Thu,  5 Nov 2020 19:59:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pybind: bump version to 2.6.0
+Message-ID: <20201105185923.29022-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-utils/libva-utils.hash | 6 +++---
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index a83e28389b..208da06592 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva-utils/releases/download/2.8.0/libva-utils-2.8.0.tar.bz2.sha1sum
--sha1  10351adf67aa03f5eeb54cb0aab3e2631ba4d102  libva-utils-2.8.0.tar.bz2
-+# From https://github.com/intel/libva-utils/releases/download/2.9.1/libva-utils-2.9.1.tar.bz2.sha1sum
-+sha1  92d8118e112bca8d8497c10a5f896610883a9775  libva-utils-2.9.1.tar.bz2
- # Locally computed
--sha256  8acad2c16bfef408643cf4de56c324345449f202e4a3a5b012a62a1d3af400ef  libva-utils-2.8.0.tar.bz2
-+sha256  66558051b280f0f82781b80d355c198105235b5887e6fcb703ef1a679646c814  libva-utils-2.9.1.tar.bz2
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 5d3fb95c41..2e26df7100 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/python-pybind/python-pybind.hash | 4 ++--
+ package/python-pybind/python-pybind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
+index 751b0bdf6e..f64f1409d2 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind/python-pybind.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind-2.5.0.tar.gz
++sha256  90b705137b69ee3b5fc655eaca66d0dc9862ea1759226f7ccd3098425ae69571   python-pybind-2.6.0.tar.gz
+ # License files, locally calculated
+-sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
++sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb   LICENSE
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index 634e869e40..435d4a9b50 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.8.0
-+LIBVA_UTILS_VERSION = 2.9.1
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
+-PYTHON_PYBIND_VERSION = 2.5.0
++PYTHON_PYBIND_VERSION = 2.6.0
+ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+ PYTHON_PYBIND_LICENSE = BSD-3-Clause
+ PYTHON_PYBIND_LICENSE_FILES = LICENSE
 -- 
-2.27.0
+2.20.1
