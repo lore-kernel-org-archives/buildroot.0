@@ -1,84 +1,89 @@
-From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Date: Thu, 5 Nov 2020 07:26:41 +0100
-Subject: [Buildroot] [PATCH] package/lzma-alone: new package
-In-Reply-To: <df98e4e7-163c-bdd3-04a9-ef88bd166e70@gmail.com>
-References: <20201026213433.4309-1-zajec5@gmail.com>
- <20201027101855.6e23b1ca@windsurf.home>
- <df98e4e7-163c-bdd3-04a9-ef88bd166e70@gmail.com>
-Message-ID: <e8613fbe-0796-6555-5c4b-bce6ef6cdabb@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  5 Nov 2020 07:36:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/oniguruma: security bump to version
+ 6.9.6
+Message-ID: <20201105063604.8934-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Drop patch (already in version)
 
-On 27.10.2020 15:33, Rafa? Mi?ecki wrote:
-> On 27.10.2020 10:18, Thomas Petazzoni wrote:
->> On Mon, 26 Oct 2020 22:34:33 +0100
->> Rafa? Mi?ecki <zajec5@gmail.com> wrote:
->>
->>> From: Rafa? Mi?ecki <rafal@milecki.pl>
->>>
->>> This new package provides "lzma_alone" host binary based on the original
->>> LZMA SDK. It provides few extra options when compared to the LZMA Utils
->>> project "lzma" binary (already packaged as the "lzma").
->>>
->>> This tool is required for preparing firmware images for some home
->>> routers with picky bootloaders. It's main advantage is support for
->>> specifying dictionary size and lc/lp/pb LZMA values.
->>>
->>> Broadcom CFE bootloader for MIPS BCM47xx devices is known to fail to
->>> boot images using LZMA compression with dictionary.
->>> Broadcom cferam bootloader for ARM64 BCM4908 devices is known to fail to
->>> boot images without uncompressed size specified.
->>> Broadcom CFE for BCM63xx DSL devices has even different requirements.
->>>
->>> Packaging LZMA SDK "lzma" as "lzma_alone" is how it's handled in the
->>> Arch, Debian and Ubuntu.
->>>
->>> Signed-off-by: Rafa? Mi?ecki <rafal@milecki.pl>
->>
->> I am a bit confused by all the different lzma projects out there.
->>
->> The Debian source package lzma (https://tracker.debian.org/pkg/lzma)
->> produces the lzma, lzma-alone and lzma-dev packages, and its source
->> package is apparently referring to what you suggest to use here.
->>
->> The Buildroot package lzma points to https://tukaani.org/lzma/, which
->> says "Users of LZMA Utils should move to XZ Utils." and where the
->> latest release is from 2008.
->>
->> And then, there is the LZMA SDK at https://www.7-zip.org/sdk.html,
->> where the latest release is 19.00, from 2019, at
->> https://www.7-zip.org/a/lzma1900.7z. This seems to be the same files
->> provided at
->> https://sourceforge.net/projects/sevenzip/files/LZMA%20SDK/, but you're
->> using the lzma922 version.
->>
->> Do you have some clarifications about this (apparent) mess ?
-> 
-> I wasn't fully aware of Debian solution. So it seems that Debian
-> developers:
-> 1. Switched from LZMA Utils to the LZMA SDK
-> 2. Kept "lzma" CLI from the LZMA Utils project
-> 
-> They did that by patching LZMA SDK sources (see
-> lzma_9.22-2.1.debian.tar-1.xz and its "patches"). They ported lzmp.cpp
-> from the LZMA Utils.
-> 
-> Advantages:
-> 1. Single code base
-> 2. Using the latest LZMA core code
-> 
-> Disadvantages:
-> 1. Some missing tools like lzmainfo
-> 
-> To make things worse, there is also a XZ Utils project that also
-> provides binaries lzma (with CLI like in LZMA Utils), unlzma & lzmainfo.
-> 
-> 
-> What strategy should buildroot follow in this case?
+Fixed many problems found by OSS-Fuzz
+Fixed many problems found by Coverity
 
-Any opinion on that?
+https://github.com/kkos/oniguruma/releases/tag/v6.9.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-207-Out-of-bounds-write.patch        | 25 -------------------
+ package/oniguruma/oniguruma.hash              |  2 +-
+ package/oniguruma/oniguruma.mk                |  5 +---
+ 3 files changed, 2 insertions(+), 30 deletions(-)
+ delete mode 100644 package/oniguruma/0001-207-Out-of-bounds-write.patch
+
+diff --git a/package/oniguruma/0001-207-Out-of-bounds-write.patch b/package/oniguruma/0001-207-Out-of-bounds-write.patch
+deleted file mode 100644
+index 3317449702..0000000000
+--- a/package/oniguruma/0001-207-Out-of-bounds-write.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0 Mon Sep 17 00:00:00 2001
+-From: "K.Kosako" <kkosako0@gmail.com>
+-Date: Mon, 21 Sep 2020 12:58:29 +0900
+-Subject: [PATCH] #207: Out-of-bounds write
+-
+-[Retrieved from:
+-https://github.com/kkos/oniguruma/commit/cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/regcomp.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/regcomp.c b/src/regcomp.c
+-index f6494b6d..a0a68561 100644
+---- a/src/regcomp.c
+-+++ b/src/regcomp.c
+-@@ -6257,7 +6257,7 @@ concat_opt_exact_str(OptStr* to, UChar* s, UChar* end, OnigEncoding enc)
+- 
+-   for (i = to->len, p = s; p < end && i < OPT_EXACT_MAXLEN; ) {
+-     len = enclen(enc, p);
+--    if (i + len > OPT_EXACT_MAXLEN) break;
+-+    if (i + len >= OPT_EXACT_MAXLEN) break;
+-     for (j = 0; j < len && p < end; j++)
+-       to->s[i++] = *p++;
+-   }
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index 82354d4b9e..668f21d37f 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2f25cc3165e6da4b12dcabdb6b77c48f436d835e127ec2e3cad7abae9ea8e9a6  onig-6.9.5.tar.gz
++sha256  bd0faeb887f748193282848d01ec2dad8943b5dfcb8dc03ed52dcc963549e819  onig-6.9.6.tar.gz
+ sha256  6c7038393e8f30fee16257e713f77e383712f1465d6d25929596746b10b42bd3  COPYING
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index c2330c7380..e7aaa43c2f 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ONIGURUMA_VERSION = 6.9.5
++ONIGURUMA_VERSION = 6.9.6
+ ONIGURUMA_SITE = \
+ 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
+ ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
+@@ -12,7 +12,4 @@ ONIGURUMA_LICENSE = BSD-2-Clause
+ ONIGURUMA_LICENSE_FILES = COPYING
+ ONIGURUMA_INSTALL_STAGING = YES
+ 
+-# 0001-207-Out-of-bounds-write.patch
+-ONIGURUMA_IGNORE_CVES += CVE-2020-26159
+-
+ $(eval $(autotools-package))
+-- 
+2.28.0
