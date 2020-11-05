@@ -1,20 +1,78 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Nov 2020 16:22:51 +0000
-Subject: [Buildroot] [Bug 13296] host-libcap failed to build
-In-Reply-To: <bug-13296-163@https.bugs.busybox.net/>
-References: <bug-13296-163@https.bugs.busybox.net/>
-Message-ID: <bug-13296-163-zOZQ0ADnk8@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu,  5 Nov 2020 17:30:18 +0100
+Subject: [Buildroot] [PATCH 0/5] Extend pkg-stats to replace cve-checker
+Message-ID: <20201105163024.1387248-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13296
+Hello,
 
---- Comment #2 from Heiko Thiery <heiko.thiery@gmail.com> ---
-Could you please test the attached patch?
+We recently introduced cve-checker (commit
+fafa3e4e293faabc0d38a714eb88a25252936a99). But thinking more about it,
+what it does is in fact very similar to pkg-stats. It even largely
+borrows from pkg-stats structure and logic.
+
+The main difference is that pkg-stats was originally written as a
+Buildroot maintainer-oriented tool, where the goal is to keep an eye
+on the entire set of Buildroot packages. On the other hand,
+cve-checker was written as a tool mainly for a Buildroot user, to keep
+an eye on the CVEs affecting just the packages currently enabled in
+the current configuration.
+
+So, what this patch series does is extend pkg-stats so that instead of
+producing its output only for all Buildroot packages, it can be done
+just for the set of packages enabled in the current configuration.
+
+Here is how it goes:
+
+ - PATCH 1 makes pkg-stats usable outside of the Buildroot top-level
+   directory. This will be useful to be able to run it from any output
+   directory.
+
+ - PATCH 2 really allows pkg-satts to generate its details based on
+   the set of currently configured packages. This mode is enabled
+   using the new -c option.
+
+ - PATCH 3 drops cve-checker
+
+ - PATCH 4 promotes the pkg-stats functionality as a Makefile
+   target. Note that only the "pkg-stats -c" mode is used here: we
+   target the use of pkg-stats by Buildroot users, who want results
+   based on their configuration. The use of pkg-stats as a maintainer
+   tool is different, and we assume maintainers will know how to run
+   pkg-stats.
+
+ - PATCH 5 adds some mentions of "make show-info" and "make pkg-stats"
+   in the Buildroot manual.
+
+Note: I think this series should be merged in master, not in
+next. Indeed, cve-checker is new in 2020.11-rc1, so it would probably
+be a bit silly to release 2020.11 with cve-checker and remove it right
+after.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (5):
+  support/scripts/pkg-stats: allow to run script outside of the
+    top-level directory
+  support/scripts/pkg-stats: support generating stats based on
+    configured packages
+  support/scripts/cve-checker: remove script
+  Makefile: add pkg-stats target
+  docs/manual: add some minimal documentation about show-info and
+    pkg-stats
+
+ Makefile                     |   9 ++
+ docs/manual/common-usage.txt |  23 ++++
+ support/scripts/cve-checker  | 196 -----------------------------------
+ support/scripts/pkg-stats    |  48 ++++++---
+ 4 files changed, 63 insertions(+), 213 deletions(-)
+ delete mode 100755 support/scripts/cve-checker
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
