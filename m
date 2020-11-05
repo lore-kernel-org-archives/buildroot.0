@@ -1,58 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 05 Nov 2020 09:10:15 +0000
-Subject: [Buildroot] [Bug 13296] New: host-libcap failed to build
-Message-ID: <bug-13296-163@https.bugs.busybox.net/>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Thu, 5 Nov 2020 09:21:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: fix build
+ without xsltproc
+In-Reply-To: <20201105074739.325141-1-fontaine.fabrice@gmail.com>
+References: <20201105074739.325141-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAAP7ucJ=1RbirSk+3_BNNiuQ8nmPqAq-83uaNu_r2vLj1WzZCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13296
+Hey,
 
-            Bug ID: 13296
-           Summary: host-libcap failed to build
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ian_ormshaw at waters.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+>
+> xsltproc is used to generate ModemManager-names.h since, at least,
+> version 0.7.990 and
+> https://github.com/freedesktop/ModemManager/commit/365b906a3e1bda05af10f92451a6b6ae60f8b879
+> However, this file is already available in the official tarball so drop
+> this unneeded dependency and set ac_cv_prog_XSLTPROC_CHECK to yes
+>
 
-On Fedora 33 2020.11-rc1 host-libcap 2.45 Building fails with error:
+Yes, this is true. xsltproc would only be needed when building from
+git, the same as autoconf-archive.
 
-make -C ../progs tcapsh-static
-gcc -fPIC
--I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap/include/uapi
--I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap/include
- -O2 -I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/include
--Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
--Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
--Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
--Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
--Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
--Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
--Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
--Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
--o tcapsh-static capsh.c
--L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap
--lcap -L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/lib
--Wl,-rpath,/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/lib
--L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/libcap
--L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/tests/../libcap
--L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/tests/../libcap
--L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap
---static
-/usr/bin/ld: cannot find -lc
+>  MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
+> +MODEM_MANAGER_CONF_ENV = ac_cv_prog_XSLTPROC_CHECK=yes
+>
 
-gcc (GCC) 10.2.1 20201016 (Red Hat 10.2.1-6)
+This is extremely ugly, but I understand it's the only way forward for
+now. I've created an upstream Issue to fix this in ModemManager
+itself:
+https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/issues/276
+
+Acked-by: Aleksander Morgado <aleksander@aleksander.es>
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Aleksander
+https://aleksander.es
