@@ -1,74 +1,84 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  5 Nov 2020 18:46:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsigrokdecode: fix build with
- python 3.9
-Message-ID: <20201105174623.933007-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 05 Nov 2020 20:15:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnetfilter_conntrack: add
+ libmnl to Libs.Private
+In-Reply-To: <20200412122107.1071258-1-fontaine.fabrice@gmail.com>
+References: <20200412122107.1071258-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eel7r7po.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix the following build failure with python 3.9 and
-sigrok-cli:
+Hi Fabrice, all,
 
-/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libsigrokdecode.so: undefined reference to `PyList_Insert'
+On Sun, Apr 12 2020, Fabrice Fontaine wrote:
+> This will fix a static build failure with dnsmasq on latest
+> libnetfilter_conntrack
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...ntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
+>
+> diff --git a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
+> new file mode 100644
+> index 0000000000..921837df07
+> --- /dev/null
+> +++ b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
+> @@ -0,0 +1,38 @@
+> +From 93bbd7e56cefc8488a61892b3bf5df63a175d20d Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Sun, 12 Apr 2020 14:05:15 +0200
+> +Subject: [PATCH] libnetfilter_conntrack.pc.in: add LIBMNL_LIBS to Libs.Private
+> +
+> +Since version 1.0.8 and commit
+> +c1c0f16c1fedb46547c2e104beeaaeac5933b214, libnetfilter_conntrack depends
+> +on libmnl so add it to Libs.Private.
+> +
+> +Otherwise, applications such as dnsmasq will fail to link on:
+> +
+> +/home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -Wl,-elf2flt -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnetfilter_conntrack -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnfnetlink
+> +/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
+> +api.c:(.text+0x34): undefined reference to `mnl_nlmsg_put_header'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: sent to Pablo Neira Ayuso <pablo@netfilter.org>]
 
-Fixes:
- - http://autobuild.buildroot.org/results/cc6447b926f8223c68d0086428d29a037b18252d
+This patch is now upstream commit e94172f09e4d.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...figure-ac-Add-support-for-Python-3-9.patch | 28 +++++++++++++++++++
- package/libsigrokdecode/libsigrokdecode.mk    |  2 ++
- 2 files changed, 30 insertions(+)
- create mode 100644 package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
+Tested-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
-new file mode 100644
-index 0000000000..804e931dcb
---- /dev/null
-+++ b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
-@@ -0,0 +1,28 @@
-+From 9b0ad5177bd692f7556a4756bdbd2da81d9c34ce Mon Sep 17 00:00:00 2001
-+From: =?utf8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
-+Date: Tue, 4 Aug 2020 09:19:44 +0200
-+Subject: [PATCH] configure.ac: Add support for Python 3.9.
-+
-+[Retrieved from:
-+https://sigrok.org/gitweb/?p=libsigrokdecode.git;a=commit;h=9b0ad5177bd692f7556a4756bdbd2da81d9c34ce]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f9958b3..2917cb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -100,7 +100,7 @@ SR_PKG_CHECK_SUMMARY([srd_pkglibs_summary])
-+ # first, since usually only that variant will add "-lpython3.8".
-+ # https://docs.python.org/3/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
-+ SR_PKG_CHECK([python3], [SRD_PKGLIBS],
-+-	[python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-++	[python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-+ AS_IF([test "x$sr_have_python3" = xno],
-+ 	[AC_MSG_ERROR([Cannot find Python 3 development headers.])])
-+ 
-+-- 
-+2.24.0.rc2
-+
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index 8c9488784c..18f2cbfee3 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -10,5 +10,7 @@ LIBSIGROKDECODE_LICENSE = GPL-3.0+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
- LIBSIGROKDECODE_INSTALL_STAGING = YES
- LIBSIGROKDECODE_DEPENDENCIES = host-pkgconf libglib2 python3
-+# We're patching configure.ac
-+LIBSIGROKDECODE_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+Thanks,
+baruch
+
+> +---
+> + libnetfilter_conntrack.pc.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/libnetfilter_conntrack.pc.in b/libnetfilter_conntrack.pc.in
+> +index 857f993..fbd7132 100644
+> +--- a/libnetfilter_conntrack.pc.in
+> ++++ b/libnetfilter_conntrack.pc.in
+> +@@ -12,5 +12,5 @@ Version: @VERSION@
+> + Requires: libnfnetlink
+> + Conflicts:
+> + Libs: -L${libdir} -lnetfilter_conntrack
+> +-Libs.private: @LIBNFNETLINK_LIBS@
+> ++Libs.private: @LIBNFNETLINK_LIBS@ @LIBMNL_LIBS@
+> + Cflags: -I${includedir}
+> +-- 
+> +2.25.1
+
 -- 
-2.28.0
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
