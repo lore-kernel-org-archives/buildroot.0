@@ -1,55 +1,74 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 5 Nov 2020 11:20:49 -0600
-Subject: [Buildroot] [PATCH 08/10] support/script/pkg-stats: show CPE ID
- in results
-In-Reply-To: <20201105180106.1c88c656@windsurf.home>
-References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-9-thomas.petazzoni@bootlin.com>
- <CANQCQpbN8-SXF8T4bxdn+JnyYrHSzpQy8J2ZzByCZ=yp_gtZNQ@mail.gmail.com>
- <20201105180106.1c88c656@windsurf.home>
-Message-ID: <CANQCQpbCh3SRt4JQMdOT2QeJz7hQH4hBY_6J05ouUhOqbWY3vg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  5 Nov 2020 18:46:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsigrokdecode: fix build with
+ python 3.9
+Message-ID: <20201105174623.933007-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+This will fix the following build failure with python 3.9 and
+sigrok-cli:
 
+/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libsigrokdecode.so: undefined reference to `PyList_Insert'
 
-On Thu, Nov 5, 2020 at 11:02 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Wed, 4 Nov 2020 11:18:50 -0600
-> Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > > +        elif pkgvar.endswith("_CPE_ID"):
-> > > +            pkgvar = pkgvar[:-7]
-> > > +            Package.all_cpeids[pkgvar] = value
-> >
-> > I haven't dug that deep yet in the script, but would this populate
-> > host and target CPE ID values?  I know the Infrastructure does note
-> > host/target so there is probably enough information to conditionally
-> > pull the value.
->
-> pkg-stats doesn't have a notion of a package being a host or a target
-> package. It knows only about packages, be they target, host, or both.
->
-> Also, the CPE_ID values are automatically filled in for the host
-> variant of the package by deriving the one of the corresponding target
-> package. This is explained in PATCH 03/10 commit log, which states:
->
-> """
-> The <pkg>_CPE_ID_* values for the host package are inherited from the
-> same variables of the corresponding target package, as we normally do
-> for most package variables.
-> """
+Fixes:
+ - http://autobuild.buildroot.org/results/cc6447b926f8223c68d0086428d29a037b18252d
 
-Yep, agree I was tracking the fact a host package CPE ID was also
-being created.  I was just thinking you could end up with a case of
-two CPE IDs, one for a host vs target package.  I guess that really
-isn't the case so you can ignore this question.  I was really thinking
-of the case like libcurl where the package has two CPE IDs but that
-could really be a future patchset problem.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...figure-ac-Add-support-for-Python-3-9.patch | 28 +++++++++++++++++++
+ package/libsigrokdecode/libsigrokdecode.mk    |  2 ++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
 
-Matt
+diff --git a/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
+new file mode 100644
+index 0000000000..804e931dcb
+--- /dev/null
++++ b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
+@@ -0,0 +1,28 @@
++From 9b0ad5177bd692f7556a4756bdbd2da81d9c34ce Mon Sep 17 00:00:00 2001
++From: =?utf8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
++Date: Tue, 4 Aug 2020 09:19:44 +0200
++Subject: [PATCH] configure.ac: Add support for Python 3.9.
++
++[Retrieved from:
++https://sigrok.org/gitweb/?p=libsigrokdecode.git;a=commit;h=9b0ad5177bd692f7556a4756bdbd2da81d9c34ce]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index f9958b3..2917cb3 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -100,7 +100,7 @@ SR_PKG_CHECK_SUMMARY([srd_pkglibs_summary])
++ # first, since usually only that variant will add "-lpython3.8".
++ # https://docs.python.org/3/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
++ SR_PKG_CHECK([python3], [SRD_PKGLIBS],
++-	[python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
+++	[python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
++ AS_IF([test "x$sr_have_python3" = xno],
++ 	[AC_MSG_ERROR([Cannot find Python 3 development headers.])])
++ 
++-- 
++2.24.0.rc2
++
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index 8c9488784c..18f2cbfee3 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
+@@ -10,5 +10,7 @@ LIBSIGROKDECODE_LICENSE = GPL-3.0+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
+ LIBSIGROKDECODE_INSTALL_STAGING = YES
+ LIBSIGROKDECODE_DEPENDENCIES = host-pkgconf libglib2 python3
++# We're patching configure.ac
++LIBSIGROKDECODE_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+-- 
+2.28.0
