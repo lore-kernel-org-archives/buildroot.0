@@ -1,39 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 05 Nov 2020 19:38:51 +0100
-Subject: [Buildroot] [PATCH 2/4] pkg-infra: add possiblity to
- check	downloaded files against known hashes
-References: <cover.1404416102.git.yann.morin.1998@free.fr>
- <3ab303bd4f1ee78900e7fafc90947e30319635b7.1404416102.git.yann.morin.1998@free.fr>
-Message-ID: <retd7hxdrv.ln2@ID-313208.user.individual.net>
+Date: Thu,  5 Nov 2020 19:42:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.33.0
+Message-ID: <20201105184218.254690-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Removed sha1 hash, not provided by upstream anymore.
+Sha3 hashes are currently not support by buildroot, for details see
+http://lists.busybox.net/pipermail/buildroot/2020-November/295957.html
 
-Am Thu, 03 Jul 2014 21:36:21 +0200 schrieb Yann E. MORIN:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/sqlite/sqlite.hash | 9 ++-------
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
-> +    # Note: sha3 is not supported, since there is currently no 
-implementation
-> +    #       (the NIST has yet to publish the parameters).
-
-sqlite.org started to release sha3 hashes for their tarballs:
-https://www.sqlite.org/download.html
-
-Apparently a sha3sum utility is not available so I tried
-
-openssl dgst -sha3-256 dl/sqlite/sqlite-autoconf-3330000.tar.gz
-
-which shows the hash mentioned upstream:
-
-SHA3-256(dl/sqlite/sqlite-autoconf-3330000.tar.gz)= 
-6e94e9453cedf8f2023e3923f856741d1e28a2271e9f93d24d95fa48870edaad
-
-Should we add the openssl-way to verify sha3 hashes?
-
-Should our hash files support different sha3 methods?
-Openssl support sha3-224, sha3-256, sha3-384 & sha3-512.
-
-Regards, Bernd
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 162b52d607..4f0e747c3d 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,8 +1,3 @@
+-# From https://www.sqlite.org/download.html
+-sha1  ea14ef2dc4cc7fcbc5ebbb018d3a03faa3a41cb4  sqlite-autoconf-3320300.tar.gz
+-
+-# Calculated based on the hash above
+-sha256  a31507123c1c2e3a210afec19525fd7b5bb1e19a6a34ae5b998fbd7302568b66  sqlite-autoconf-3320300.tar.gz
+-
+-# Locally calculated
++# Locally computed
++sha256  106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15  sqlite-autoconf-3330000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c8b9ba3150..3e8754901a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3320300
++SQLITE_VERSION = 3330000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2020
+ SQLITE_LICENSE = Public domain
+-- 
+2.27.0
