@@ -1,51 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Nov 2020 18:01:06 +0100
-Subject: [Buildroot] [PATCH 08/10] support/script/pkg-stats: show CPE ID
- in results
-In-Reply-To: <CANQCQpbN8-SXF8T4bxdn+JnyYrHSzpQy8J2ZzByCZ=yp_gtZNQ@mail.gmail.com>
+Date: Thu, 5 Nov 2020 18:02:26 +0100
+Subject: [Buildroot] [PATCH 03/10] package/pkg-generic.mk: add CPE ID
+ related package variables
+In-Reply-To: <CANQCQpbD8L4uOp9KCExwGcD4EPi8HGJatrqyqEV8_Ccd1=4x5w@mail.gmail.com>
 References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-9-thomas.petazzoni@bootlin.com>
- <CANQCQpbN8-SXF8T4bxdn+JnyYrHSzpQy8J2ZzByCZ=yp_gtZNQ@mail.gmail.com>
-Message-ID: <20201105180106.1c88c656@windsurf.home>
+ <20201104145145.1316167-4-thomas.petazzoni@bootlin.com>
+ <CANQCQpbD8L4uOp9KCExwGcD4EPi8HGJatrqyqEV8_Ccd1=4x5w@mail.gmail.com>
+Message-ID: <20201105180226.50270453@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 4 Nov 2020 11:18:50 -0600
+Hello,
+
+On Wed, 4 Nov 2020 11:03:04 -0600
 Matthew Weber <matthew.weber@rockwellcollins.com> wrote:
 
-> > +        elif pkgvar.endswith("_CPE_ID"):
-> > +            pkgvar = pkgvar[:-7]
-> > +            Package.all_cpeids[pkgvar] = value  
+> > If any of the <pkg>_CPE_ID_{VENDOR,PRODUCT,...} variables are defined
+> > by the package, then <pkg>_CPE_ID_VALID = YES will be set by the
+> > generic package infrastructure.  
 > 
-> I haven't dug that deep yet in the script, but would this populate
-> host and target CPE ID values?  I know the Infrastructure does note
-> host/target so there is probably enough information to conditionally
-> pull the value.
+> Oh good call, so we don't need to explicitly set the VALID if we've
+> already tailored it.
 
-pkg-stats doesn't have a notion of a package being a host or a target
-package. It knows only about packages, be they target, host, or both.
+That is the idea.
 
-Also, the CPE_ID values are automatically filled in for the host
-variant of the package by deriving the one of the corresponding target
-package. This is explained in PATCH 03/10 commit log, which states:
+The only thing I am not fully happy with is that a package can't set
+directly <pkg>_CPE_ID, only the infrastructure can do that. I couldn't
+figure out a reasonable way to allow a package to set <pkg>_CPE_ID
+while still keeping the generic-package code simple enough *and* match
+the other constraints that we have.
 
-"""
-The <pkg>_CPE_ID_* values for the host package are inherited from the
-same variables of the corresponding target package, as we normally do
-for most package variables.
-"""
-
-So, if you set any of the <pkg>_CPE_ID_* variables, or
-<pkg>_CPE_ID_VALID = YES, then it will apply to both the target and
-host package, unless of course you override HOST_<pkg>_CPE_ID_* for
-some reason.
-
-Does this help ?
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
