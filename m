@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:20:53 +0100
-Subject: [Buildroot] [git commit branch/next] configs/rock_pi_n8: use Python
- 3.x for U-Boot build
-Message-ID: <20201117203825.49F3B7FB95@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 5 Nov 2020 09:39:57 +0100
+Subject: [Buildroot] [git commit branch/next] package/oniguruma: security
+ bump to version 6.9.6
+Message-ID: <20201117203824.CFF6B86456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbac050caeb23c8f864c6367d0642f514e4426c0
+commit: https://git.buildroot.net/buildroot/commit/?id=969fe10855e2fbee623d545859a5209dea85534a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-New U-Boot versions (such as 2020.07 being used) need Python 3.x for
-pylibfdt.
+Drop patch (already in version)
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421210
+Fixed many problems found by OSS-Fuzz
+Fixed many problems found by Coverity
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://github.com/kkos/oniguruma/releases/tag/v6.9.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/rock_pi_n8_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ .../oniguruma/0001-207-Out-of-bounds-write.patch   | 25 ----------------------
+ package/oniguruma/oniguruma.hash                   |  2 +-
+ package/oniguruma/oniguruma.mk                     |  5 +----
+ 3 files changed, 2 insertions(+), 30 deletions(-)
 
-diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
-index 9c671d416e..b7135d6311 100644
---- a/configs/rock_pi_n8_defconfig
-+++ b/configs/rock_pi_n8_defconfig
-@@ -14,6 +14,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+Patch is too large, so refusing to show it
