@@ -1,49 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  5 Nov 2020 20:07:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libbluray: bump version to 1.2.1
-Message-ID: <20201105190701.653754-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Nov 2020 20:52:40 +0000
+Subject: [Buildroot] [Bug 13291] BR2_DL_DIR is ignored when creating
+ defconfig
+In-Reply-To: <bug-13291-163@https.bugs.busybox.net/>
+References: <bug-13291-163@https.bugs.busybox.net/>
+Message-ID: <bug-13291-163-3DokOzbaIm@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+https://bugs.busybox.net/show_bug.cgi?id=13291
 
-Release notes: https://www.videolan.org/news.html#news-2020-10-23
-"A minor release of libbluray was pushed today, focused on fixing bugs
- and improving the support for UHD Blurays."
+--- Comment #3 from Lance Fredrickson <lancethepants@gmail.com> ---
+For various projects I set BR2_DL_DIR using menuconfig to point to a central
+directory for source packages.  I use savedefconfig to store the config cause
+it looks nice and is easier to tell what is going on.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libbluray/libbluray.hash | 6 +++---
- package/libbluray/libbluray.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Is that commit talking about when BR2_DL_DIR is 'set' as an environment
+variable or as a value you 'set' in a config using menuconfig?  I can
+understand why you wouldn't want to pull in environment variabless while using
+savedefconfig. However, I would assume if it's left configurable in the
+menuconfig that it would be preserved in a minimalized version of that config.
 
-diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
-index c92d9f9549..430d477484 100644
---- a/package/libbluray/libbluray.hash
-+++ b/package/libbluray/libbluray.hash
-@@ -1,4 +1,4 @@
--# From http://download.videolan.org/pub/videolan/libbluray/1.2.0/libbluray-1.2.0.tar.bz2.sha512
--sha512 d10413b6b86ff2d2e7c4b0103546f2142727cc5209ddb7b227aa74e27384f2e0b9abee37bf8ccc5b0cdfcaeebfb0669cf20903a247df278a8ad6dbd27469d324  libbluray-1.2.0.tar.bz2
-+# From http://download.videolan.org/pub/videolan/libbluray/1.2.1/libbluray-1.2.1.tar.bz2.sha512
-+sha512  e9eeee433034266e88c05ae3469c0bd2bf700d7f16e17ad706f48426c143c823e83c16ab79a637f1e85e4eb858aa0577630671f87ba35d179db2a1d8bc8545c4  libbluray-1.2.1.tar.bz2
- # Locally computed
--sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
-+sha256  b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index 67ea139d58..e2d7fc0c7d 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBLURAY_VERSION = 1.2.0
-+LIBBLURAY_VERSION = 1.2.1
- LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
- LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
- LIBBLURAY_INSTALL_STAGING = YES
 -- 
-2.27.0
+You are receiving this mail because:
+You are on the CC list for the bug.
