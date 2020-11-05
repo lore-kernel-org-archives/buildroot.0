@@ -1,34 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 5 Nov 2020 09:55:27 +0100
-Subject: [Buildroot] [PATCH 09/10] support/scripts/{pkg-stats, cve.py,
- cve-checker}: support CPE ID based matching
-In-Reply-To: <87eel8198x.fsf@dell.be.48ers.dk>
-References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-10-thomas.petazzoni@bootlin.com>
- <CANQCQpbd3KhH9MLAFMXMzw6u=2wKX0o+jH2-VuoQDjiOnNt+aw@mail.gmail.com>
- <87eel8198x.fsf@dell.be.48ers.dk>
-Message-ID: <20201105095527.1888e77e@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 05 Nov 2020 09:10:15 +0000
+Subject: [Buildroot] [Bug 13296] New: host-libcap failed to build
+Message-ID: <bug-13296-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 05 Nov 2020 09:46:38 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=13296
 
-> Yes, I noticed that as well while updating CHANGES for 2020.11-rc1. It
-> also reads stdin before handling the command line arguments, so you
-> cannot just run ./support/scripts/cve-checker --help to get usage info
-> :/
+            Bug ID: 13296
+           Summary: host-libcap failed to build
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ian_ormshaw at waters.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-See patch 02/10 in this series, which fixes precisely this.
+On Fedora 33 2020.11-rc1 host-libcap 2.45 Building fails with error:
 
-However, I am about to send a patch series that drops cve-checker
-entirely, by making pkg-stats provide the same functionality.
+make -C ../progs tcapsh-static
+gcc -fPIC
+-I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap/include/uapi
+-I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap/include
+ -O2 -I/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/include
+-Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
+-Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
+-Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
+-Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
+-Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
+-Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
+-Dlinux -Wall -Wwrite-strings -Wpointer-arith -Wcast-qual -Wcast-align
+-Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Winline -Wshadow -g 
+-o tcapsh-static capsh.c
+-L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap
+-lcap -L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/lib
+-Wl,-rpath,/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/host/lib
+-L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/libcap
+-L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/tests/../libcap
+-L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/tests/../libcap
+-L/home/ian/build/hiwire-linux-19e60402-x86_64/buildroot/build/host-libcap-2.45/progs/../libcap
+--static
+/usr/bin/ld: cannot find -lc
 
-Thomas
+gcc (GCC) 10.2.1 20201016 (Red Hat 10.2.1-6)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
