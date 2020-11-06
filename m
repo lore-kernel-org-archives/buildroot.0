@@ -1,141 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Nov 2020 08:02:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/libdrm: bump version
- to 2.4.103
-Message-ID: <20201106065705.B7380879BF@busybox.osuosl.org>
+Date: Fri, 6 Nov 2020 08:02:56 +0100
+Subject: [Buildroot] [git commit branch/next] package/dnsmasq: bump to
+ version 2.82
+Message-ID: <20201106065705.C4C2D807E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e1495e7f11c4e9bb3020c2896784239f86bc68b
+commit: https://git.buildroot.net/buildroot/commit/?id=62257b3247d253639354a5519ac51ca1e4daff05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove patch 0003 which was applied upstream.
+Drop Makefile modification for pkg-config. Build time PATH ensures that
+the Buildroot pkg-config is used.
 
-Release notes:
-https://lists.freedesktop.org/archives/dri-devel/2020-November/285471.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libdrm/0003-xf86drm.c-fix-build-failure.patch  | 84 ----------------------
- package/libdrm/libdrm.hash                         |  6 +-
- package/libdrm/libdrm.mk                           |  2 +-
- 3 files changed, 4 insertions(+), 88 deletions(-)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 8 +-------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/libdrm/0003-xf86drm.c-fix-build-failure.patch b/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
-deleted file mode 100644
-index ba84114f14..0000000000
---- a/package/libdrm/0003-xf86drm.c-fix-build-failure.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From c7d89412884de2dbfa543720d185027377e62f21 Mon Sep 17 00:00:00 2001
--From: Heiko Thiery <heiko.thiery@gmail.com>
--Date: Fri, 5 Jun 2020 23:46:52 +0200
--Subject: [PATCH] xf86drm.c: fix build failure
--
--./xf86drm.c: In function 'drmNodeIsDRM':
--../xf86drm.c:2825:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-- #elif __FreeBSD__
--       ^
--../xf86drm.c: In function 'drmGetMinorNameForFD':
--../xf86drm.c:2938:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-- #elif __FreeBSD__
--       ^
--../xf86drm.c: In function 'drmParsePciBusInfo':
--../xf86drm.c:3258:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-- #elif __FreeBSD__
--       ^
--../xf86drm.c: In function 'drmParsePciDeviceInfo':
--../xf86drm.c:3427:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-- #elif __FreeBSD__
--       ^
--../xf86drm.c: In function 'drmGetDeviceNameFromFd2':
--../xf86drm.c:4305:7: error: "__FreeBSD__" is not defined [-Werror=undef]
-- #elif __FreeBSD__
--       ^
--
--Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
--[A merge-request with this fix is opened at https://gitlab.freedesktop.org/mesa/drm/-/merge_requests/75]
-----
-- xf86drm.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/xf86drm.c b/xf86drm.c
--index 07a18c44..50a6f092 100644
----- a/xf86drm.c
--+++ b/xf86drm.c
--@@ -2822,7 +2822,7 @@ static bool drmNodeIsDRM(int maj, int min)
--     snprintf(path, sizeof(path), "/sys/dev/char/%d:%d/device/drm",
--              maj, min);
--     return stat(path, &sbuf) == 0;
---#elif __FreeBSD__
--+#elif defined(__FreeBSD__)
--     char name[SPECNAMELEN];
-- 
--     if (!devname_r(makedev(maj, min), S_IFCHR, name, sizeof(name)))
--@@ -2935,7 +2935,7 @@ static char *drmGetMinorNameForFD(int fd, int type)
-- 
--     closedir(sysdir);
--     return NULL;
---#elif __FreeBSD__
--+#elif defined(__FreeBSD__)
--     struct stat sbuf;
--     char dname[SPECNAMELEN];
--     const char *mname;
--@@ -3255,7 +3255,7 @@ static int drmParsePciBusInfo(int maj, int min, drmPciBusInfoPtr info)
--     info->func = pinfo.func;
-- 
--     return 0;
---#elif __FreeBSD__
--+#elif defined(__FreeBSD__)
--     return get_sysctl_pci_bus_info(maj, min, info);
-- #else
-- #warning "Missing implementation of drmParsePciBusInfo"
--@@ -3424,7 +3424,7 @@ static int drmParsePciDeviceInfo(int maj, int min,
--     device->subdevice_id = pinfo.subdevice_id;
-- 
--     return 0;
---#elif __FreeBSD__
--+#elif defined(__FreeBSD__)
--     drmPciBusInfo info;
--     struct pci_conf_io pc;
--     struct pci_match_conf patterns[1];
--@@ -4302,7 +4302,7 @@ drm_public char *drmGetDeviceNameFromFd2(int fd)
--     free(value);
-- 
--     return strdup(path);
---#elif __FreeBSD__
--+#elif defined(__FreeBSD__)
--     return drmGetDeviceNameFromFd(fd);
-- #else
--     struct stat      sbuf;
---- 
--2.20.1
--
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 72330165d8..84caffc792 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,3 +1,3 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2020-May/267255.html
--sha256  8bcbf9336c28e393d76c1f16d7e79e394a7fce8a2e929d52d3ad7ad8525ba05b  libdrm-2.4.102.tar.xz
--sha512  386afd228efd809fe32776a6ff5d9dd95d1409a6a6a89b3806a3b42ed27e84f1e090f3b7834973f834d6b0d1342b7034447fe8690d072f85f03292d7795c3e0c  libdrm-2.4.102.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2020-November/285471.html
-+sha256 3fe0affdba6460166a7323290c18cf68e9b59edcb520722826cb244e9cb50222  libdrm-2.4.103.tar.xz
-+sha512 15b098b962008271400692b6b15ecb7e22676f8698e0220ad969735ac2315ccc737d19558afb6abda82bae15117e5f306c048184a2369f434b85ecaa670ca885  libdrm-2.4.103.tar.xz
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 9348b83295..0c332a4a9c 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 99e417f069..401f930baf 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.81.tar.xz.asc
+-sha256  749ca903537c5197c26444ac24b0dce242cf42595fdfe6b9a5b9e4c7ad32f8fb  dnsmasq-2.81.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.82.tar.xz.asc
++sha256  84523646f3116bb5e1151efb66e645030f6e6a8256f29aab444777a343ebc132  dnsmasq-2.82.tar.xz
+ # Locally calculated
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 4a7218a2b7..117be38d4b 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDRM_VERSION = 2.4.102
-+LIBDRM_VERSION = 2.4.103
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+-DNSMASQ_VERSION = 2.81
++DNSMASQ_VERSION = 2.82
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -77,13 +77,7 @@ DNSMASQ_DEPENDENCIES += ubus
+ DNSMASQ_COPTS += -DHAVE_UBUS
+ endif
+ 
+-define DNSMASQ_FIX_PKGCONFIG
+-	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+-		$(DNSMASQ_DIR)/Makefile
+-endef
+-
+ define DNSMASQ_BUILD_CMDS
+-	$(DNSMASQ_FIX_PKGCONFIG)
+ 	$(DNSMASQ_TWEAK_LIBLUA)
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
