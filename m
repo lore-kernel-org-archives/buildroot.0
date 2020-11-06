@@ -1,45 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Nov 2020 08:03:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-pybind: bump
- version to 2.6.0
-Message-ID: <20201106065705.E4A6C807E6@busybox.osuosl.org>
+Date: Fri, 6 Nov 2020 08:04:17 +0100
+Subject: [Buildroot] [git commit branch/next] package/libbluray: bump
+ version to 1.2.1
+Message-ID: <20201106065705.F00FA86B31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5abbb75e9da9de61fb21d2d3f652b676eecd475e
+commit: https://git.buildroot.net/buildroot/commit/?id=b317eb8802ddb9a3079d66cc1cefd3e60f0d9e72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Reformatted hashes.
+
+Release notes: https://www.videolan.org/news.html#news-2020-10-23
+"A minor release of libbluray was pushed today, focused on fixing bugs
+ and improving the support for UHD Blurays."
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pybind/python-pybind.hash | 4 ++--
- package/python-pybind/python-pybind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libbluray/libbluray.hash | 6 +++---
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
-index 751b0bdf6e..f64f1409d2 100644
---- a/package/python-pybind/python-pybind.hash
-+++ b/package/python-pybind/python-pybind.hash
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index c92d9f9549..430d477484 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
 @@ -1,4 +1,4 @@
- # Locally calculated
--sha256  97504db65640570f32d3fdf701c25a340c8643037c3b69aec469c10c93dc8504   python-pybind-2.5.0.tar.gz
-+sha256  90b705137b69ee3b5fc655eaca66d0dc9862ea1759226f7ccd3098425ae69571   python-pybind-2.6.0.tar.gz
- # License files, locally calculated
--sha256  9a37ea54aa3cf12c7f3292799f20822ffd4b9b7142b36a7a9997b28c39264dc9   LICENSE
-+sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb   LICENSE
-diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
-index 634e869e40..435d4a9b50 100644
---- a/package/python-pybind/python-pybind.mk
-+++ b/package/python-pybind/python-pybind.mk
+-# From http://download.videolan.org/pub/videolan/libbluray/1.2.0/libbluray-1.2.0.tar.bz2.sha512
+-sha512 d10413b6b86ff2d2e7c4b0103546f2142727cc5209ddb7b227aa74e27384f2e0b9abee37bf8ccc5b0cdfcaeebfb0669cf20903a247df278a8ad6dbd27469d324  libbluray-1.2.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libbluray/1.2.1/libbluray-1.2.1.tar.bz2.sha512
++sha512  e9eeee433034266e88c05ae3469c0bd2bf700d7f16e17ad706f48426c143c823e83c16ab79a637f1e85e4eb858aa0577630671f87ba35d179db2a1d8bc8545c4  libbluray-1.2.1.tar.bz2
+ # Locally computed
+-sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
++sha256  b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 67ea139d58..e2d7fc0c7d 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYBIND_VERSION = 2.5.0
-+PYTHON_PYBIND_VERSION = 2.6.0
- PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
- PYTHON_PYBIND_LICENSE = BSD-3-Clause
- PYTHON_PYBIND_LICENSE_FILES = LICENSE
+-LIBBLURAY_VERSION = 1.2.0
++LIBBLURAY_VERSION = 1.2.1
+ LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
