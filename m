@@ -1,53 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Nov 2020 08:01:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/sqlite: bump version
- to 3.33.0
-Message-ID: <20201106065705.A42BD86B31@busybox.osuosl.org>
+Date: Fri, 6 Nov 2020 08:03:27 +0100
+Subject: [Buildroot] [git commit branch/next] package/libva-utils: bump
+ version to 2.9.1
+Message-ID: <20201106065705.D42A4807E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd4e2e39b90e55bef6130b0f941a2343f5f72fbb
+commit: https://git.buildroot.net/buildroot/commit/?id=7395800a5f895b62f734e96ea6a7a1d63ad8fbc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Removed sha1 hash, not provided by upstream anymore.
-Sha3 hashes are currently not support by buildroot, for details see
-http://lists.busybox.net/pipermail/buildroot/2020-November/295957.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 9 ++-------
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 8 deletions(-)
+ package/libva-utils/libva-utils.hash | 6 +++---
+ package/libva-utils/libva-utils.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 162b52d607..4f0e747c3d 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,8 +1,3 @@
--# From https://www.sqlite.org/download.html
--sha1  ea14ef2dc4cc7fcbc5ebbb018d3a03faa3a41cb4  sqlite-autoconf-3320300.tar.gz
--
--# Calculated based on the hash above
--sha256  a31507123c1c2e3a210afec19525fd7b5bb1e19a6a34ae5b998fbd7302568b66  sqlite-autoconf-3320300.tar.gz
--
--# Locally calculated
-+# Locally computed
-+sha256  106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15  sqlite-autoconf-3330000.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index c8b9ba3150..3e8754901a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index a83e28389b..208da06592 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva-utils/releases/download/2.8.0/libva-utils-2.8.0.tar.bz2.sha1sum
+-sha1  10351adf67aa03f5eeb54cb0aab3e2631ba4d102  libva-utils-2.8.0.tar.bz2
++# From https://github.com/intel/libva-utils/releases/download/2.9.1/libva-utils-2.9.1.tar.bz2.sha1sum
++sha1  92d8118e112bca8d8497c10a5f896610883a9775  libva-utils-2.9.1.tar.bz2
+ # Locally computed
+-sha256  8acad2c16bfef408643cf4de56c324345449f202e4a3a5b012a62a1d3af400ef  libva-utils-2.8.0.tar.bz2
++sha256  66558051b280f0f82781b80d355c198105235b5887e6fcb703ef1a679646c814  libva-utils-2.9.1.tar.bz2
+ sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 5d3fb95c41..2e26df7100 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3320300
-+SQLITE_VERSION = 3330000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2020
- SQLITE_LICENSE = Public domain
+-LIBVA_UTILS_VERSION = 2.8.0
++LIBVA_UTILS_VERSION = 2.9.1
+ LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+ LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
