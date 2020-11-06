@@ -1,107 +1,66 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  6 Nov 2020 23:51:14 +0100
-Subject: [Buildroot] [PATCH v2] package/quickjs: new package
-Message-ID: <20201106225115.291042-1-francois.perrad@gadz.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 6 Nov 2020 23:54:02 +0100
+Subject: [Buildroot] [git commit] Revert "Makefile: exclude BR2_DL_DIR from
+ savedefconfig"
+Message-ID: <20201106224520.ACAF3853AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in            |  1 +
- package/quickjs/Config.in    | 15 +++++++++++++++
- package/quickjs/quickjs.hash |  2 ++
- package/quickjs/quickjs.mk   | 37 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+)
- create mode 100644 package/quickjs/Config.in
- create mode 100644 package/quickjs/quickjs.hash
- create mode 100644 package/quickjs/quickjs.mk
+commit: https://git.buildroot.net/buildroot/commit/?id=1482ef6bb8209044372ebcaf07081524f9b486fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1..8fcea0643 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1245,6 +1245,7 @@ menu "External python modules"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-+	source "package/quickjs/Config.in"
- 	source "package/ruby/Config.in"
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
-diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-new file mode 100644
-index 000000000..89346ceff
---- /dev/null
-+++ b/package/quickjs/Config.in
-@@ -0,0 +1,15 @@
-+
-+config BR2_PACKAGE_QUICKJS
-+	bool "quickjs"
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # No way to check for fenv support.
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  QuickJS is a small and embeddable Javascript engine.
-+	  It supports the ES2020 specification including modules,
-+	  asynchronous generators, proxies and BigInt.
-+
-+	  https://bellard.org/quickjs/
-+
-+comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-new file mode 100644
-index 000000000..076e4bddb
---- /dev/null
-+++ b/package/quickjs/quickjs.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0021a3e8cdc6b61e225411d05e2841d2437e1ccf4b4cabb9a5f7685ebfb57717  quickjs-2020-09-06.tar.xz
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-new file mode 100644
-index 000000000..557ffb196
---- /dev/null
-+++ b/package/quickjs/quickjs.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# quickjs
-+#
-+################################################################################
-+
-+QUICKJS_VERSION = 2020-09-06
-+QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
-+QUICKJS_SITE = https://bellard.org/quickjs
-+QUICKJS_LICENSE = MIT
-+QUICKJS_INSTALL_STAGING = YES
-+
-+define QUICKJS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		all
-+endef
-+
-+define QUICKJS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(STAGING_DIR) \
-+		STRIP=/bin/true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+define QUICKJS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(TARGET_DIR) \
-+		STRIP=/bin/true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.27.0
+Although BR2_DL_DIR is indeed a site-local setting, which does not
+actually define the target system, we've had it in the tree for a
+long time now, and people have been depending on it for a variety
+of use-cases.
+
+Furthermore, BR2_DL_DIR is far from the only such site-local setting,
+BR2_CCACHE_DIR springs to mind, and in the less-obvious category, we
+can also find BR2_JLEVEL, but also BR2_WGET, BR2_SVN, BR2_GIT et al.
+as they may be tweaked to set the timeout, number of retries or so on
+to work around stupid proxies. But of course, the most local site-local
+setting is probably BR2_PACKAGE_OVERRIDE_FILE, with its default value
+being explicitly just 'local.mk'.
+
+Ideally, we would like to have a clear separation between the
+configuration that actually defines the target system on one hand,
+and the site-local settings that drive and control how the build is
+performed, on the other hand. This is by far a much bigger endeavour
+than just dropping BR2_DL_DIR from the saved defconfig.
+
+This reverts commit 36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63 (adapted
+to keep the fix from 1a7873ec986c817fdd22cc2d9096d9482fee4381).
+
+Closes: #13291
+
+Note: thanks to Thomas; some phrasing above was borrowed from a
+discussion with him.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Lance Fredrickson <lancethepants@gmail.com>
+Cc: Sven Oliver Moll <buildroot@svol.li>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+---
+ Makefile | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 5dc402e73e..f9e9cfa968 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1027,9 +1027,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
+-	@$(SED) '/^BR2_DEFCONFIG=/d' \
+-		-e '/^BR2_DL_DIR=/d' \
+-		$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
++	@$(SED) '/^BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
+ 
+ .PHONY: defconfig savedefconfig update-defconfig
+ 
