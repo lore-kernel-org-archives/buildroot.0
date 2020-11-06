@@ -1,37 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 6 Nov 2020 15:07:07 +0100
-Subject: [Buildroot] Enable gcc ADA support on latest LTS Buildroot
-In-Reply-To: <CAEzkdfp62Jz6KT5yUbrsOpoFqdCNtdOpSsYeVPUfrzExh=L__g@mail.gmail.com>
-References: <CAEzkdfrXmUQc7N7a+j2zHayLLdzoUAy5kncQmewOwQ0-fSGVGA@mail.gmail.com>
- <20201103113528.1f8e61a5@windsurf>
- <CAEzkdfp62Jz6KT5yUbrsOpoFqdCNtdOpSsYeVPUfrzExh=L__g@mail.gmail.com>
-Message-ID: <20201106150707.18266cd7@windsurf.home>
+From: Kevin Tomary <kevin.tomary@hotmail.com>
+Date: Fri, 6 Nov 2020 14:35:45 +0000
+Subject: [Buildroot] Restpoint conenction/ Error: HTTP/1.1 502 Bad Gateway
+Message-ID: <AM0PR10MB24333F830CBE601C18B0D6EF82ED0@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 3 Nov 2020 18:07:52 +0100
-Matteo Pampolini <matteo.pampolini@gmail.com> wrote:
+Hello
 
-> many thanks for your quick answer, please find attached 2 logs obtained
-> with Buildroot 2020.02.6 setting gcc options to --enable-languages="ada",
-> one refers to gcc 8.x and the other one to gcc 9.x, they both fail. Build
-> system is Ubuntu 18.04.5 LTS with GNAT installed.
+I am getting the following error after trying to test the connection between my STM32MP1 and the Respoint chosen by a collegue.
+When I use the command :
+curl -i -k -X POST -H "Content-Type: application/json" https://dv7knsjzph.execute-api.eu-central-1.amazonaws.com/prod/boxtronic-devices/2/data/
 
-Since I'm not familiar with ADA support in general, I don't really much
-to say about the errors you're facing, it would require more
-investigation.
 
-Are you sure the GNAT version you have installed matches / is suitable
-for building those versions of gcc ? I guess you've done some Google
-search and/or asked gcc folks about those issues ?
 
-Best regards,
+  *   It works fine on Ubuntu 18.04 (LTS)
+  *   Not on my STM32MP1 using Buildroot as distro
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+We are using JSON and  AWS as Platform.
+
+Does someone have a solution?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201106/0f35fbff/attachment.html>
