@@ -1,10 +1,10 @@
 From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Fri, 06 Nov 2020 19:14:06 +0100
-Subject: [Buildroot] [PATCH v2] board: add Orangepi Zero Plus support
-In-Reply-To: <87k0v14m7z.fsf@dell.be.48ers.dk>
-References: <20201029195331.3894-1-m.niestroj@grinn-global.com>
- <87k0v14m7z.fsf@dell.be.48ers.dk>
-Message-ID: <87o8ka2w0h.fsf@grinn-global.com>
+Date: Fri, 06 Nov 2020 19:17:02 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/mx6sx_udoo_neo: select
+ host-openssl for the Linux kernel build
+In-Reply-To: <20201106133634.15452-1-festevam@gmail.com>
+References: <20201106133634.15452-1-festevam@gmail.com>
+Message-ID: <87lffe2vvl.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Peter Korsgaard <peter@korsgaard.com> writes:
+Fabio Estevam <festevam@gmail.com> writes:
 
->>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+> Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
+> build error:
 >
->  > Add initial support for Orangepi Zero Plus board:
->  > - U-Boot 2020.10
->  > - Linux 5.7.19
->  > - Default packages from buildroot
+> scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+>  #include <openssl/bio.h>
 >
->  > This patch is based on Orangepi Zero Plus2 board support, so genimage
->  > configuration and description is copy pasted. One difference is that
->  > newer Linux and U-Boot are selected. Another difference is Ethernet
->  > support (Plus) instead of WiFi (Plus2).
+> Fixes:
+>  https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
 >
->  > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->  > ---
->  > changes v1 -> v2:
->  >  * rebase on Buildroot master
->  >  * bump U-Boot from 2020.04 to 2020.10
->  >  * bump Linux from 5.6.6 to 5.7.19
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/mx6sx_udoo_neo_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> Committed, thanks.
->
-> I wonder if we could combine some of all these orangepi defconfigs and
-> create a single build that works on multiple boards rather than
-> maintaining all these almost similar files?
+> diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+> index 4a2f8b0bc056..2bdcade25296 100644
+> --- a/configs/mx6sx_udoo_neo_defconfig
+> +++ b/configs/mx6sx_udoo_neo_defconfig
+> @@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  # required tools to create the SD card image
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
 
-Both orangepi_zero_plus and orangepi_zero_plus2 use the same
-processor. It seems like a good idea to unify them. Maybe next time
-someone will want to bump orangepi_zero_plus2 it will be a good occasion
-to test both boards with same Linux + U-Boot versions.
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
 -- 
 Marcin Niestr?j
