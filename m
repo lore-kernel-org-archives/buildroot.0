@@ -1,46 +1,39 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 6 Nov 2020 10:28:01 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-11-05
-In-Reply-To: <20201106141335.192224f8@windsurf.home>
-References: <5fa504f3.1c69fb81.d8c61.c370SMTPIN_ADDED_MISSING@mx.google.com>
- <CAOMZO5DtJ-d4fxKE8DZYS_CcByA8my=MpA43+AF8fvxN=dUwcA@mail.gmail.com>
- <20201106141335.192224f8@windsurf.home>
-Message-ID: <CAOMZO5A+mMOGLQ94Hk+VxUDHR3RViPsdOik8ovw1uFYeF_neSw@mail.gmail.com>
+Date: Fri,  6 Nov 2020 10:36:33 -0300
+Subject: [Buildroot] [PATCH 1/2] configs/mx6sx_udoo_neo: select host-openssl
+ for the Linux kernel build
+Message-ID: <20201106133634.15452-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
+build error:
 
-On Fri, Nov 6, 2020 at 10:13 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
 
-> You need to download the full build log to get the actual error. To do
-> that, once you're at
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063, on the
-> right side there is a Job artifacts panel. Click "Browse". From there,
-> you can download build.log, which is the full build log.
+Fixes:
+ https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
 
-Thanks for the hint. I wasn't aware of the Browse button.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/mx6sx_udoo_neo_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> For the first build, the issue is that host-openssl is missing for the
-> kernel build:
->
-> scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
->  #include <openssl/bio.h>
->                          ^
-> compilation terminated.
-> scripts/Makefile.host:103: recipe for target 'scripts/extract-cert' failed
-> make[2]: *** [scripts/extract-cert] Error 1
-> make[2]: *** Waiting for unfinished jobs....
->
-> I haven't checked the second link, but I would suspect it's the same.
-
-Yes, I will send patches to fix these failures.
-
-Thanks,
-
-Fabio Estevam
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index 4a2f8b0bc056..2bdcade25296 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+-- 
+2.17.1
