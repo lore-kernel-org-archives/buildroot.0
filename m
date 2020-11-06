@@ -1,52 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  6 Nov 2020 19:02:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptsetup: break circular
- dependency
-Message-ID: <20201106180254.19672-1-fontaine.fabrice@gmail.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Fri, 06 Nov 2020 19:14:06 +0100
+Subject: [Buildroot] [PATCH v2] board: add Orangepi Zero Plus support
+In-Reply-To: <87k0v14m7z.fsf@dell.be.48ers.dk>
+References: <20201029195331.3894-1-m.niestroj@grinn-global.com>
+ <87k0v14m7z.fsf@dell.be.48ers.dk>
+Message-ID: <87o8ka2w0h.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails because of the following circular dependency:
 
-cryptsetup -> util-linux -> udev -> systemd -> cryptsetup
+Peter Korsgaard <peter@korsgaard.com> writes:
 
-which results in the following build failure:
+>>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+>
+>  > Add initial support for Orangepi Zero Plus board:
+>  > - U-Boot 2020.10
+>  > - Linux 5.7.19
+>  > - Default packages from buildroot
+>
+>  > This patch is based on Orangepi Zero Plus2 board support, so genimage
+>  > configuration and description is copy pasted. One difference is that
+>  > newer Linux and U-Boot are selected. Another difference is Ethernet
+>  > support (Plus) instead of WiFi (Plus2).
+>
+>  > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+>  > ---
+>  > changes v1 -> v2:
+>  >  * rebase on Buildroot master
+>  >  * bump U-Boot from 2020.04 to 2020.10
+>  >  * bump Linux from 5.6.6 to 5.7.19
+>
+> Committed, thanks.
+>
+> I wonder if we could combine some of all these orangepi defconfigs and
+> create a single build that works on multiple boards rather than
+> maintaining all these almost similar files?
 
-checking uuid/uuid.h usability... no
-checking uuid/uuid.h presence... no
-checking for uuid/uuid.h... no
-configure: error: You need the uuid library.
+Both orangepi_zero_plus and orangepi_zero_plus2 use the same
+processor. It seems like a good idea to unify them. Maybe next time
+someone will want to bump orangepi_zero_plus2 it will be a good occasion
+to test both boards with same Linux + U-Boot versions.
 
-To break it, apply the same ugly workaround that was applied for
-libglib2 until a better solution is found:
-https://patchwork.ozlabs.org/project/buildroot/patch/20201101150619.1709959-1-fontaine.fabrice at gmail.com/
-
-Fixes:
- - http://autobuild.buildroot.org/results/a1a020a3e1c2383a030fcd73eae7c0fe5f82b022
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cryptsetup/cryptsetup.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index a2abf776cc..60097595b4 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -8,8 +8,10 @@ CRYPTSETUP_VERSION_MAJOR = 2.3
- CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
--CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c libargon2 \
-+CRYPTSETUP_DEPENDENCIES = \
-+	lvm2 popt util-linux host-pkgconf json-c libargon2 \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
- 	$(TARGET_NLS_DEPENDENCIES)
- CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
 -- 
-2.28.0
+Marcin Niestr?j
