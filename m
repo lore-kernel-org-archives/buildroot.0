@@ -1,84 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  6 Nov 2020 21:46:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.17.0
-Message-ID: <20201106204602.276693-1-fontaine.fabrice@gmail.com>
+Date: Fri,  6 Nov 2020 21:47:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.5
+Message-ID: <20201106204726.277257-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (already in version)
-
-https://botan.randombit.net/news.html#version-2-17-0-2020-11-05
+https://www.mail-archive.com/haproxy at formilux.org/msg38809.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...d-data-arch-arm64.txt-add-aarch64_be.patch | 31 -------------------
- package/botan/botan.hash                      |  2 +-
- package/botan/botan.mk                        |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch b/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
-deleted file mode 100644
-index fd6a2ffddd..0000000000
---- a/package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From a93bc8503649028852402c61bdda531af2872d0e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 15 Oct 2020 09:15:06 +0200
--Subject: [PATCH] src/build-data/arch/arm64.txt: add aarch64_be
--
--Allow the user to set cpu value to aarch64_be.
--Endianness will be correctly guessed by choose_endian function because
--this alias ends with "be"
--
--Fixes:
-- - http://autobuild.buildroot.org/results/69ebf03c59b2af4140a39bc26f17d0396b6ec15d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/randombit/botan/commit/a93bc8503649028852402c61bdda531af2872d0e]
-----
-- src/build-data/arch/arm64.txt | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/build-data/arch/arm64.txt b/src/build-data/arch/arm64.txt
--index 056c5318ff..5205295125 100644
----- a/src/build-data/arch/arm64.txt
--+++ b/src/build-data/arch/arm64.txt
--@@ -5,6 +5,7 @@ family arm
-- 
-- <aliases>
-- aarch64
--+aarch64_be
-- armv8
-- armv8-a
-- </aliases>
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 003dd13e9c..612aa1e85a 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  92ed6ebc918d86bd1b04221ca518af4cf29cc326c4760740bd2d22e61cea2628  Botan-2.16.0.tar.xz
-+sha256  b97044b312aa718349af7851331b064bc7bd5352400d5f80793bace427d01343  Botan-2.17.0.tar.xz
- # Locally computed
- sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index d36324c7f7..79c45ffb5f 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index a127af9195..25975cb2ff 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
+-sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
++sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.5.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 70ff997fbe..1912a219e1 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BOTAN_VERSION = 2.16.0
-+BOTAN_VERSION = 2.17.0
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.28.0
