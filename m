@@ -1,66 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 Nov 2020 23:54:02 +0100
-Subject: [Buildroot] [git commit] Revert "Makefile: exclude BR2_DL_DIR from
- savedefconfig"
-Message-ID: <20201106224520.ACAF3853AB@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 06 Nov 2020 23:00:27 +0000
+Subject: [Buildroot] [Bug 13291] BR2_DL_DIR is ignored when creating
+ defconfig
+In-Reply-To: <bug-13291-163@https.bugs.busybox.net/>
+References: <bug-13291-163@https.bugs.busybox.net/>
+Message-ID: <bug-13291-163-brvTVZGxpQ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1482ef6bb8209044372ebcaf07081524f9b486fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=13291
 
-Although BR2_DL_DIR is indeed a site-local setting, which does not
-actually define the target system, we've had it in the tree for a
-long time now, and people have been depending on it for a variety
-of use-cases.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Furthermore, BR2_DL_DIR is far from the only such site-local setting,
-BR2_CCACHE_DIR springs to mind, and in the less-obvious category, we
-can also find BR2_JLEVEL, but also BR2_WGET, BR2_SVN, BR2_GIT et al.
-as they may be tweaked to set the timeout, number of retries or so on
-to work around stupid proxies. But of course, the most local site-local
-setting is probably BR2_PACKAGE_OVERRIDE_FILE, with its default value
-being explicitly just 'local.mk'.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998 at free.fr
 
-Ideally, we would like to have a clear separation between the
-configuration that actually defines the target system on one hand,
-and the site-local settings that drive and control how the build is
-performed, on the other hand. This is by far a much bigger endeavour
-than just dropping BR2_DL_DIR from the saved defconfig.
+--- Comment #4 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Lance Fredrickson from comment #3)
+> For various projects I set BR2_DL_DIR using menuconfig to point to a
+> central directory for source packages.
 
-This reverts commit 36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63 (adapted
-to keep the fix from 1a7873ec986c817fdd22cc2d9096d9482fee4381).
+I find it dubious that it is used as-is.
 
-Closes: #13291
+For example, in a team of many developpers, each working on their
+own machines, with their own usernames and filesystem layouts, surely
+a common BR2_DL_DIR does not make sense.
 
-Note: thanks to Thomas; some phrasing above was borrowed from a
-discussion with him.
+For a CI (or any similar build farm), then the CI setup is already
+taking care of making the shared BR2_DL_DIR mounted (or otherwise
+available) at that known central directory. It only makes sense that
+that CI setup also exports BR2_DL_DIR in the environment too. Doing
+so also ensures that no legacy is stored in a defconfig, so that old
+commits can still be built in a newer CI setup (e.g. one where the
+central directory was moved).
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Lance Fredrickson <lancethepants@gmail.com>
-Cc: Sven Oliver Moll <buildroot@svol.li>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Adam Duskett <aduskett@gmail.com>
----
- Makefile | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> Is that commit talking about when BR2_DL_DIR is 'set' as an environment
+> variable or as a value you 'set' in a config using menuconfig?
 
-diff --git a/Makefile b/Makefile
-index 5dc402e73e..f9e9cfa968 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1027,9 +1027,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
--	@$(SED) '/^BR2_DEFCONFIG=/d' \
--		-e '/^BR2_DL_DIR=/d' \
--		$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-+	@$(SED) '/^BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
- 
- .PHONY: defconfig savedefconfig update-defconfig
- 
+This was about not saving the Kconfig (menuconfig) variable. The environment
+variable had never been saved into the saved defconfig.
+
+> However, I would assume if it's left configurable in the menuconfig
+> that it would be preserved in a minimalized version of that config.
+
+I believe that this is mostly a historical accident that this is
+configurable in the menuconfig. Such site-local settings are not really
+configuration defining the target filesystem; rather, they settings that
+drive and control how the build is performed, not its output. As such
+they should not be part of the configuration.
+
+However, I've reverted that patch now, with commit 1482ef6bb8.
+
+Thanks for the report.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
