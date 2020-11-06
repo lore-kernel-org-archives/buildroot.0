@@ -1,37 +1,46 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri,  6 Nov 2020 19:27:00 +0100
-Subject: [Buildroot] [PATCH 2/3] configs/orangepi_pc: use Python 3.x
-In-Reply-To: <20201106182701.17410-1-m.niestroj@grinn-global.com>
-References: <20201106182701.17410-1-m.niestroj@grinn-global.com>
-Message-ID: <20201106182701.17410-3-m.niestroj@grinn-global.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  6 Nov 2020 21:26:32 +0100
+Subject: [Buildroot] [PATCH/next 2/2] package/rhash: add host variant
+In-Reply-To: <20201106202632.2424688-1-bernd.kuhls@t-online.de>
+References: <20201106202632.2424688-1-bernd.kuhls@t-online.de>
+Message-ID: <20201106202632.2424688-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New U-Boot versions (such as 2020.07 being used) need Python 3.x for
-pylibfdt.
+Needed to compute sha3 hashes.
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421100
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/orangepi_pc_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/rhash/rhash.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index 90ad50b783..c1afb8566a 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -23,6 +23,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
+index 55fb08ecea..a4ce1d20ea 100644
+--- a/package/rhash/rhash.mk
++++ b/package/rhash/rhash.mk
+@@ -35,6 +35,15 @@ define RHASH_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++define HOST_RHASH_CONFIGURE_CMDS
++	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure \
++		--prefix="$(HOST_DIR)" \
++		--disable-gettext \
++		--disable-openssl \
++		--extra-ldflags="$(HOST_LDFLAGS) -L $(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib" \
++	)
++endef
++
+ ifeq ($(BR2_SHARED_LIBS),y)
+ RHASH_BUILD_TARGETS = lib-shared build-shared
+ RHASH_INSTALL_TARGETS = install-lib-shared install-so-link
+@@ -71,3 +80,4 @@ define RHASH_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++$(eval $(host-autotools-package))
 -- 
-2.11.0
+2.27.0
