@@ -1,33 +1,52 @@
-From: Kevin Tomary <kevin.tomary@hotmail.com>
-Date: Fri, 6 Nov 2020 13:12:12 +0000
-Subject: [Buildroot] curl: (7) Failed to connect to .... port 80: Connection
- refused
-Message-ID: <AM0PR10MB24336FD9E371BA037F4DDCC982ED0@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 6 Nov 2020 14:13:35 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-11-05
+In-Reply-To: <CAOMZO5DtJ-d4fxKE8DZYS_CcByA8my=MpA43+AF8fvxN=dUwcA@mail.gmail.com>
+References: <5fa504f3.1c69fb81.d8c61.c370SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAOMZO5DtJ-d4fxKE8DZYS_CcByA8my=MpA43+AF8fvxN=dUwcA@mail.gmail.com>
+Message-ID: <20201106141335.192224f8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hello Fabio,
 
-I am new to curl and a colleague created a rest point to see if my STM32MP1 is communicating with it.
+On Fri, 6 Nov 2020 09:40:00 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-when I use
-:~$ curl -i -k -X POST -H "Content-Type: application/json" https://dv7knsjzph.execute-api.eu-central-1.amazonaws.com/prod/boxtronic-devices/1/data/
+> >                         defconfig |                        link to the job
+> > ----------------------------------+--------------------------------------------------------------
+> >                    mx6sx_udoo_neo |  https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
+> >                           mx6udoo |  https://gitlab.com/buildroot.org/buildroot/-/jobs/831421064  
+> 
+> Does anyone have any suggestions about these failures?
 
-I get this:
-curl: (7) Failed to connect to dv7knsjzph.execute-api.eu-central-1.amazonaws.com port 80: Connection refused
+You need to download the full build log to get the actual error. To do
+that, once you're at
+https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063, on the
+right side there is a Job artifacts panel. Click "Browse". From there,
+you can download build.log, which is the full build log.
 
-Does someone have a solution ?
+For the first build, the issue is that host-openssl is missing for the
+kernel build:
 
-Thanks
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
+                         ^
+compilation terminated.
+scripts/Makefile.host:103: recipe for target 'scripts/extract-cert' failed
+make[2]: *** [scripts/extract-cert] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
-Kevin
+I haven't checked the second link, but I would suspect it's the same.
 
+Best regards,
 
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201106/bab9f6dc/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
