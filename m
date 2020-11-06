@@ -1,48 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  6 Nov 2020 21:54:13 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/haproxy: bump to version 2.2.5
-Message-ID: <20201106205413.279288-1-fontaine.fabrice@gmail.com>
+Date: Fri,  6 Nov 2020 22:44:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kmscube: add license file
+Message-ID: <20201106214403.307410-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.mail-archive.com/haproxy at formilux.org/msg38809.html
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Update tarball hash
+ package/kmscube/kmscube.hash | 1 +
+ package/kmscube/kmscube.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index a127af9195..5140c6a944 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
--sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
-+sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 70ff997fbe..1912a219e1 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+index 6a4140c541..cb7abd48ea 100644
+--- a/package/kmscube/kmscube.hash
++++ b/package/kmscube/kmscube.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256  ec135069d8bee7f4fe38cb9dc96fbbd56e0057290fa25eff8b5b314ee473c502  kmscube-4660a7dca6512b6e658759d00cff7d4ad2a2059d.tar.gz
++sha256  f622099ab0d274133f6e62d5fccfe970b61134d80ed036f45f8cf1e90c3d5a05  COPYING
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index dc8c691864..7b458376dc 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -7,6 +7,7 @@
+ KMSCUBE_VERSION = 4660a7dca6512b6e658759d00cff7d4ad2a2059d
+ KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
+ KMSCUBE_LICENSE = MIT
++KMSCUBE_LICENSE_FILES = COPYING
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ $(eval $(meson-package))
 -- 
 2.28.0
