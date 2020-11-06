@@ -1,28 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 6 Nov 2020 09:40:00 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-11-05
-In-Reply-To: <5fa504f3.1c69fb81.d8c61.c370SMTPIN_ADDED_MISSING@mx.google.com>
-References: <5fa504f3.1c69fb81.d8c61.c370SMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAOMZO5DtJ-d4fxKE8DZYS_CcByA8my=MpA43+AF8fvxN=dUwcA@mail.gmail.com>
+From: Kevin Tomary <kevin.tomary@hotmail.com>
+Date: Fri, 6 Nov 2020 13:12:12 +0000
+Subject: [Buildroot] curl: (7) Failed to connect to .... port 80: Connection
+ refused
+Message-ID: <AM0PR10MB24336FD9E371BA037F4DDCC982ED0@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello
 
-On Fri, Nov 6, 2020 at 5:10 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+I am new to curl and a colleague created a rest point to see if my STM32MP1 is communicating with it.
 
-> Build failures related to your defconfigs:
->
->                         defconfig |                        link to the job
-> ----------------------------------+--------------------------------------------------------------
->                    mx6sx_udoo_neo |  https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
->                           mx6udoo |  https://gitlab.com/buildroot.org/buildroot/-/jobs/831421064
+when I use
+:~$ curl -i -k -X POST -H "Content-Type: application/json" https://dv7knsjzph.execute-api.eu-central-1.amazonaws.com/prod/boxtronic-devices/1/data/
 
-Does anyone have any suggestions about these failures?
+I get this:
+curl: (7) Failed to connect to dv7knsjzph.execute-api.eu-central-1.amazonaws.com port 80: Connection refused
+
+Does someone have a solution ?
 
 Thanks
+
+Kevin
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201106/bab9f6dc/attachment.html>
