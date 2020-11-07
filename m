@@ -1,63 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Nov 2020 19:52:56 +0100
-Subject: [Buildroot] [PATCH 2/2] package/xen: add slirp dependency for tools
-In-Reply-To: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
-References: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 07 Nov 2020 19:54:58 +0100
+Subject: [Buildroot] [PATCH] package/gcc: Fix libs building on ARC700
+ with atomics
+In-Reply-To: <20201021065923.22112-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Wed, 21 Oct 2020 09:59:23 +0300")
+References: <20201021065923.22112-1-abrodkin@synopsys.com>
+Message-ID: <87d00pxail.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build of xen tools fails if slirp is built before xen because xen is not
-compatible with spice slirp which does not provide libslirp.h:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-/home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
- #include <libslirp.h>
-          ^~~~~~~~~~~~
+ > As we many times by now discussed that - some ARC cores might
+ > not have atomic instructions implemented. Namely that's ARC700
+ > w/o explicitly added atomics during design creation/configuration.
 
-Indeed, xen prefers a system-provided slirp over its internal one
+ > Because of that when GCC gets configured for ARC700, i.e. via
+ > "--with-cpu=arc700" atomic ops are assumed disabled.
 
-So add slirp as a mandatory dependency (now that we switched to the up
-to date https://gitlab.freedesktop.org/slirp/libslirp)
+ > Usually it's not a problem as we add "-matomics" in the wraper for
+ > building all packages if targets CPU has atomis (BR2_ARC_ATOMIC_EXT).
 
-This build failure is raised since, at least, version 4.13.0
+ > But when bulding target's binaries which are essential parts of
+ > the GCC itself we don't use the wrapper. Instead xgcc is being used.
+ > That way we lose that important part of system's configuration about
+ > atomics and:
+ >  1. Atomic ops won't be used where otherwise they could have been used.
+ >  2. Some configuration checks might end-up thinking there're no atomics
 
-Fixes:
- - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
+ > In particular (2) leads to pretty obscure failure on bulding of some
+ > packages which use C++, for example:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xen/Config.in | 1 +
- package/xen/xen.mk    | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ > log4cplus: http://autobuild.buildroot.net/results/a7732fdb2ba526a114d9fb759814236c5332f8d7
+ ------------------------> 8--------------------
+ > ./.libs/liblog4cplus.so: undefined reference to `std::__atomic_futex_unsigned_base::_M_futex_notify_all(unsigned int*)'
+ > collect2: error: ld returned 1 exit status
+ ------------------------> 8--------------------
 
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 57ab40eba8..af6acd3530 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_SLIRP
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_YAJL
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 8f1fa7db76..8cbe532d2b 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -41,7 +41,8 @@ XEN_CONF_OPTS += --disable-xen
- endif
- 
- ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
--XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-+XEN_DEPENDENCIES += \
-+	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- XEN_DEPENDENCIES += argp-standalone
- endif
+ > bitcoin: http://autobuild.buildroot.net/results/f73/f73d4c77e5fd6223abdbc83e344addcfc93227b8
+ ------------------------> 8--------------------
+ > (.text+0x110c): undefined reference to
+ > `std::__atomic_futex_unsigned_base::_M_futex_wait_until(unsigned int*,
+ > unsigned int, bool, std::chrono::duration<long long, std::ratio<1ll,
+ 1ll> >, std::chrono::duration<long long, std::ratio<1ll, 1000000000ll>
+ >> )'
+ > collect2: error: ld returned 1 exit status
+ ------------------------> 8--------------------
+
+ > apcupsd: http://autobuild.buildroot.net/results/7a2/7a2cc7a4ac2237c185817f75e55e05d144efd100
+ ------------------------> 8--------------------
+ > /tmp/instance-0/output-1/host/lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld:
+ > eh_throw.cc:(.text._ZL23__gxx_exception_cleanup19_Unwind_Reason_CodeP17_Unwind_Exception+0x24):
+ > undefined reference to `__gnu_cxx::__exchange_and_add(int volatile*,
+ > int)'
+ > collect2: error: ld returned 1 exit status
+ ------------------------> 8--------------------
+
+ > ...and many more.
+
+ > Interesting enough that was not seen earlier because "-matomic"
+ > used to be added in TARGET_{C|CXX}FLAGS via TARGET_ABI,
+ > but later "-matomic" was moved to ARCH_TOOLCHAIN_WRAPPER_OPTS, see
+ > https://git.buildroot.org/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+ > and since then we started to see that new breakage which we now
+ > attempt to fix right where it hapens on GCC configuration.
+
+ > In contrast ARC HS family has atomic ops enabled by default thus
+ > we never spotted that kind of problem for it.
+
+ > More datails with analysis of what really happens under the hodd and
+ > how do error messages above are related to libs of GCC configuration could
+ > be found here: http://lists.busybox.net/pipermail/buildroot/2020-October/293614.html
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2020.02.x and 2020.08.x, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
