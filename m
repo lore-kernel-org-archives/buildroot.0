@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Nov 2020 18:45:56 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/zeromq: add
+Date: Sat, 7 Nov 2020 18:45:19 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/zeromq: add
  libbsd optional dependency
-Message-ID: <20201107174515.590A286F27@busybox.osuosl.org>
+Message-ID: <20201107174520.9125B870D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85b2995d13b836d60827a65d4e1743eb889010b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f744fc3a015e3990ac4b2fb3a2ad221609453c06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 libbsd is an optional dependency which is enabled by default since
 version 4.3.3 and
