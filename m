@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:44:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rocksdb: bump to version 6.13.3
-In-Reply-To: <20201105195905.986731-1-fontaine.fabrice@gmail.com>
-References: <20201105195905.986731-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201107134451.23ab317f@windsurf.home>
+Date: Sat, 7 Nov 2020 13:53:14 +0100
+Subject: [Buildroot] [git commit] configs/mx6udoo: select host-openssl for
+ the Linux kernel build
+Message-ID: <20201107124001.1FD5A814A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  5 Nov 2020 20:59:05 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=21d4061433a8dc3e03fea014bdd34bb427399aab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Refresh first patch
-> - Replace second patch (this new iteration of previous patch has not
->   been merged and does not apply cleanly on current version)
-> - Update hash of README.md (CircleCI gadget added with
->   https://github.com/facebook/rocksdb/commit/63b59f21d9971fc941e3ee2244783a3c16bd5ad4)
-> - LTO is supported since version 6.12.6 and
->   https://github.com/facebook/rocksdb/commit/c0c33a4854587e412742841f199edd4616be6c00
-> - DESTDIR and PREFIX are supported since version 6.13.2 and
->   https://github.com/facebook/rocksdb/commit/1e59800718b29d4a762b8ac356767a701f968a4d
-> 
-> https://github.com/facebook/rocksdb/releases/tag/v6.13.3
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a9798bb279a668a266c472fb026b68dbccf50431
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ls-build_detect_platform-fix-C-tests.patch |   67 +-
->  ...patiblity-fix-CRC32-C-implementation.patch | 3787 +++++++++++++++
->  ...e-POWER-crc32c-with-C-implementation.patch | 4058 -----------------
->  package/rocksdb/rocksdb.hash                  |    4 +-
->  package/rocksdb/rocksdb.mk                    |   16 +-
->  5 files changed, 3857 insertions(+), 4075 deletions(-)
->  create mode 100644 package/rocksdb/0002-POWER7-8-compatiblity-fix-CRC32-C-implementation.patch
->  delete mode 100644 package/rocksdb/0002-replace-POWER-crc32c-with-C-implementation.patch
+Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
+build error:
 
-Applied to next, thanks.
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ https://gitlab.com/buildroot.org/buildroot/-/jobs/831421064
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx6udoo_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index 058dc4534d..60436e8616 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -25,6 +25,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
