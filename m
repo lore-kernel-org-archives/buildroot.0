@@ -1,75 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Nov 2020 08:15:20 +0100
-Subject: [Buildroot] [git commit branch/next] package/libsigrokdecode: fix
- build with python 3.9
-Message-ID: <20201117203825.2366C86456@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Nov 2020 13:53:09 +0100
+Subject: [Buildroot] [git commit branch/next] configs/mx6sx_udoo_neo: select
+ host-openssl for the Linux kernel build
+Message-ID: <20201117203825.753A786A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46aab84c6fa1c242b304cbd9cd79a7fd94f7a31a
+commit: https://git.buildroot.net/buildroot/commit/?id=12acdaa322336a968ebf79a7bd5bebcb6cee3b79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This will fix the following build failure with python 3.9 and
-sigrok-cli:
+Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
+build error:
 
-/srv/storage/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-1/output-1/host/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libsigrokdecode.so: undefined reference to `PyList_Insert'
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
 
 Fixes:
- - http://autobuild.buildroot.org/results/cc6447b926f8223c68d0086428d29a037b18252d
+ https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-configure-ac-Add-support-for-Python-3-9.patch | 28 ++++++++++++++++++++++
- package/libsigrokdecode/libsigrokdecode.mk         |  2 ++
- 2 files changed, 30 insertions(+)
+ configs/mx6sx_udoo_neo_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
-new file mode 100644
-index 0000000000..804e931dcb
---- /dev/null
-+++ b/package/libsigrokdecode/0001-configure-ac-Add-support-for-Python-3-9.patch
-@@ -0,0 +1,28 @@
-+From 9b0ad5177bd692f7556a4756bdbd2da81d9c34ce Mon Sep 17 00:00:00 2001
-+From: =?utf8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
-+Date: Tue, 4 Aug 2020 09:19:44 +0200
-+Subject: [PATCH] configure.ac: Add support for Python 3.9.
-+
-+[Retrieved from:
-+https://sigrok.org/gitweb/?p=libsigrokdecode.git;a=commit;h=9b0ad5177bd692f7556a4756bdbd2da81d9c34ce]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index f9958b3..2917cb3 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -100,7 +100,7 @@ SR_PKG_CHECK_SUMMARY([srd_pkglibs_summary])
-+ # first, since usually only that variant will add "-lpython3.8".
-+ # https://docs.python.org/3/whatsnew/3.8.html#debug-build-uses-the-same-abi-as-release-build
-+ SR_PKG_CHECK([python3], [SRD_PKGLIBS],
-+-	[python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-++	[python-3.9-embed], [python-3.8-embed], [python-3.8 >= 3.8], [python-3.7 >= 3.7], [python-3.6 >= 3.6], [python-3.5 >= 3.5], [python-3.4 >= 3.4], [python-3.3 >= 3.3], [python-3.2 >= 3.2], [python3 >= 3.2])
-+ AS_IF([test "x$sr_have_python3" = xno],
-+ 	[AC_MSG_ERROR([Cannot find Python 3 development headers.])])
-+ 
-+-- 
-+2.24.0.rc2
-+
-diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
-index 8c9488784c..18f2cbfee3 100644
---- a/package/libsigrokdecode/libsigrokdecode.mk
-+++ b/package/libsigrokdecode/libsigrokdecode.mk
-@@ -10,5 +10,7 @@ LIBSIGROKDECODE_LICENSE = GPL-3.0+
- LIBSIGROKDECODE_LICENSE_FILES = COPYING
- LIBSIGROKDECODE_INSTALL_STAGING = YES
- LIBSIGROKDECODE_DEPENDENCIES = host-pkgconf libglib2 python3
-+# We're patching configure.ac
-+LIBSIGROKDECODE_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index 4a2f8b0bc0..2bdcade252 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
