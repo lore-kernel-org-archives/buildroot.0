@@ -1,34 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 14:36:15 +0100
-Subject: [Buildroot] [git commit] package/davfs2: add davfs2 user and group
-Message-ID: <20201107132326.6C2BD82883@busybox.osuosl.org>
+Date: Sat, 7 Nov 2020 14:37:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/davfs2: add davfs user and group
+In-Reply-To: <20201105131149.1124173-1-mail@klomp.eu>
+References: <20201105131149.1124173-1-mail@klomp.eu>
+Message-ID: <20201107143717.349a1144@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2b98a6add92e38dbcd4ca9fda25454a38c719e3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  5 Nov 2020 14:11:49 +0100
+Sven Klomp <mail@klomp.eu> wrote:
 
-mount.davfs expects the availability of the user and group davfs2.
+> mount.davfs expects the availability of the user and group davfs.
 
-Signed-off-by: Sven Klomp <mail@klomp.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/davfs2/davfs2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+"of the user and group davfs2" since that's the ones you're adding.
 
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index a82e9d2f7c..bc2aa79646 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -18,4 +18,8 @@ DAVFS2_CONF_ENV += \
- 	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config \
- 	LIBS=$(TARGET_NLS_LIBS)
- 
-+define DAVFS2_USERS
-+        davfs2 -1 davfs2 -1 * - - - davfs user
-+endef
-+
- $(eval $(autotools-package))
+Applied to master with the commit log updated. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
