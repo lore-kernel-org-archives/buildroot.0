@@ -1,56 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Nov 2020 00:23:49 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: exclude DL_DIR from
- savedefconfig
-In-Reply-To: <20201021200130.GL3466@scaer>
-References: <alpine.DEB.2.20.2010211133360.29285@defender.svolli.xa>
- <20201021200130.GL3466@scaer>
-Message-ID: <20201106232349.GA3971474@scaer>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  7 Nov 2020 01:28:33 +0100
+Subject: [Buildroot] [PATCH v4 1/4] package/llvm: add BPF backend
+Message-ID: <20201107002836.3101760-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sven, All,
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 
-On 2020-10-21 22:01 +0200, Yann E. MORIN spake thusly:
-> On 2020-10-21 12:34 +0200, Sven Oliver Moll spake thusly:
-> > Running "make savedefconfig" with DL_DIR set also saves that variable,
-> > which is only useful in local context.
-> > Signed-off-by: Sven Oliver Moll <buildroot@svol.li>
-> Applied to master, thanks.
+bcc is a front-end tool for eBPF :
+https://github.com/iovisor/bcc/blob/master/README.md.
+eBPF is the most powerful Linux tracer, and bcc
+allows to write eBPF scripts in C and PYTHON3.
 
-Unfortunately, I had to revert it. Some people were quick to complain on
-IRC the very moment I applied it, and we also recently got a bug report
-about it, see https://bugs.busybox.net/show_bug.cgi?id=13291
+BCC requires enabling LLVM backend BPF support.
 
-After discussing the subject between the maintainers, we've come to the
-conclusion that indeed, such site-local settings should not end up in
-the saved defconfig files.
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Qais Yousef <qais.yousef@arm.com>
+---
+ package/llvm/Config.in | 6 ++++++
+ package/llvm/llvm.mk   | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-However, the discussion also highlighted that there were quite a few
-other such configuration options that really are site-local settings:
-BR2_CCACHE_DIR, BR2_PACKAGE_OVERRIDE_FILE (which defaults to, guess
-what: 'local.mk'!), but also some less obvious ones, like BR2_WGET,
-BR2_SVN, BR2_GIT et al.
-
-Getting rid of those as configuration options, and converting them to
-site-local settings will require that we first get a means for easily
-handling such site-local settings.
-
-In the meantime, we've concluded that reverting was the best course of
-actions.
-
-Sorry that we had to revert your change.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 1d21d879da..6ec2ffcfe6 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -47,6 +47,12 @@ config BR2_PACKAGE_LLVM_RTTI
+ 
+ 	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
+ 
++config BR2_PACKAGE_LLVM_BPF
++	bool "BPF backend"
++	help
++	  Build BPF target. Select this option if you are going
++	  to install bcc on the target.
++
+ endif
+ 
+ comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 24d033d124..48a298191c 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build BPF backend
++ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
++LLVM_TARGETS_TO_BUILD += BPF
++endif
++
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.4
