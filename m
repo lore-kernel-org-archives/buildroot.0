@@ -1,38 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Nov 2020 18:38:40 +0100
-Subject: [Buildroot] curl: (7) Failed to connect to .... port 80:
- Connection refused
-In-Reply-To: <AM0PR10MB24336FD9E371BA037F4DDCC982ED0@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
- (Kevin Tomary's message of "Fri, 6 Nov 2020 13:12:12 +0000")
-References: <AM0PR10MB24336FD9E371BA037F4DDCC982ED0@AM0PR10MB2433.EURPRD10.PROD.OUTLOOK.COM>
-Message-ID: <87tuu1xe1r.fsf@dell.be.48ers.dk>
+Date: Sat, 07 Nov 2020 18:42:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump to version 0.15
+In-Reply-To: <20201029132429.392911-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 29 Oct 2020 14:24:29 +0100")
+References: <20201029132429.392911-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pn4pxdvc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Kevin" == Kevin Tomary <kevin.tomary@hotmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Hello
- > I am new to curl and a colleague created a rest point to see if my
- > STM32MP1 is communicating with it.
+ > - harfbuzz is mandatory since
+ >   https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
+ > - Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
+ >   call to `outline_stroke` causes a signed integer overflow.) through
+ >   https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
+ >   which does not apply cleanly over version 0.14.
+ >   It should be noted that version 0.15 also fixes other integer
+ >   overflows (which have no CVE assigned)
+ > - Update indentation in hash file (two spaces)
 
- > when I use
- > :~$ curl -i -k -X POST -H "Content-Type: application/json"
- > https://dv7knsjzph.execute-api.eu-central-1.amazonaws.com/prod/boxtronic-devices/1/data/
+ > https://github.com/libass/libass/releases/tag/0.15.0
 
- > I get this:
- > curl: (7) Failed to connect to
- > dv7knsjzph.execute-api.eu-central-1.amazonaws.com port 80: Connection
- > refused
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Does someone have a solution ?
-
-Does it work with a http:// URL instead of https://? Does adding -v give
-you any details about the failure?
-
-What is your network setup? Can you ping amazonaws.com?
+Committed to 2020.02.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
