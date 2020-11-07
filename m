@@ -1,144 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 6 Nov 2020 08:11:25 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing/tests: fix
- flake8 warnings
-Message-ID: <20201117203824.F0A9A86456@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Nov 2020 13:53:14 +0100
+Subject: [Buildroot] [git commit branch/next] configs/mx6udoo: select
+ host-openssl for the Linux kernel build
+Message-ID: <20201117203825.7F9DC86A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5c9f824aae7da90307193bc2f9410dcb8e0522
+commit: https://git.buildroot.net/buildroot/commit/?id=21d4061433a8dc3e03fea014bdd34bb427399aab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following flake8 warnings:
+Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
+build error:
 
-support/testing/tests/core/test_selinux.py:21:1: E302 expected 2 blank lines, found 1
-support/testing/tests/core/test_selinux.py:38:1: E302 expected 2 blank lines, found 1
-support/testing/tests/core/test_selinux.py:51:1: E302 expected 2 blank lines, found 1
-support/testing/tests/core/test_selinux.py:62:1: E302 expected 2 blank lines, found 1
-support/testing/tests/core/test_selinux.py:65:14: E127 continuation line over-indented for visual indent
-support/testing/tests/init/test_systemd_selinux.py:53:1: E302 expected 2 blank lines, found 1
-support/testing/tests/init/test_systemd_selinux.py:64:1: E302 expected 2 blank lines, found 1
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+ #include <openssl/bio.h>
 
-Interestingly, the "continuation line over-indented for visual indent"
-shows up only once, while the same pattern is there at multiple places
-in the file. We fix all places with that over-indentation pattern.
+Fixes:
+ https://gitlab.com/buildroot.org/buildroot/-/jobs/831421064
 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/core/test_selinux.py         | 44 ++++++++++++----------
- support/testing/tests/init/test_systemd_selinux.py |  2 +
- 2 files changed, 26 insertions(+), 20 deletions(-)
+ configs/mx6udoo_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/testing/tests/core/test_selinux.py b/support/testing/tests/core/test_selinux.py
-index 28d99d3a69..683a424d6f 100644
---- a/support/testing/tests/core/test_selinux.py
-+++ b/support/testing/tests/core/test_selinux.py
-@@ -5,12 +5,12 @@ import infra.basetest
- 
- class TestSELinuxInfra(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG +\
--             """
--             BR2_PACKAGE_REFPOLICY=y
--             BR2_PACKAGE_PYTHON3=y
--             BR2_PACKAGE_SETOOLS=y
--             BR2_TARGET_ROOTFS_CPIO=y
--             """
-+        """
-+        BR2_PACKAGE_REFPOLICY=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_SETOOLS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        """
- 
-     def base_test_run(self):
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-@@ -18,11 +18,12 @@ class TestSELinuxInfra(infra.basetest.BRTest):
-                            options=["-initrd", cpio_file])
-         self.emulator.login()
- 
-+
- class TestSELinuxExtraModules(TestSELinuxInfra):
-     config = TestSELinuxInfra.config + \
--             """
--             BR2_REFPOLICY_EXTRA_MODULES="ntp tor"
--             """
-+        """
-+        BR2_REFPOLICY_EXTRA_MODULES="ntp tor"
-+        """
- 
-     def test_run(self):
-         TestSELinuxInfra.base_test_run(self)
-@@ -35,11 +36,12 @@ class TestSELinuxExtraModules(TestSELinuxInfra):
-         self.assertEqual(ret, 0)
-         self.assertEqual(out[2].strip(), "tor_t")
- 
-+
- class TestSELinuxExtraModulesDirs(TestSELinuxInfra):
-     config = TestSELinuxInfra.config + \
--             """
--             BR2_REFPOLICY_EXTRA_MODULES_DIRS="{}"
--             """.format(infra.filepath("tests/core/test_selinux/extra_modules"))
-+        """
-+        BR2_REFPOLICY_EXTRA_MODULES_DIRS="{}"
-+        """.format(infra.filepath("tests/core/test_selinux/extra_modules"))
- 
-     def test_run(self):
-         TestSELinuxInfra.base_test_run(self)
-@@ -48,23 +50,25 @@ class TestSELinuxExtraModulesDirs(TestSELinuxInfra):
-         self.assertEqual(ret, 0)
-         self.assertEqual(out[2].strip(), "buildroot_test_t")
- 
-+
- class TestSELinuxCustomGit(TestSELinuxInfra):
-     config = TestSELinuxInfra.config + \
--             """
--             BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y
--             BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL="https://github.com/SELinuxProject/refpolicy.git"
--             BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION="RELEASE_2_20200818"
--             """
-+        """
-+        BR2_PACKAGE_REFPOLICY_CUSTOM_GIT=y
-+        BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL="https://github.com/SELinuxProject/refpolicy.git"
-+        BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_VERSION="RELEASE_2_20200818"
-+        """
- 
-     def test_run(self):
-         pass
- 
-+
- class TestSELinuxPackage(TestSELinuxInfra):
-     br2_external = [infra.filepath("tests/core/test_selinux/br2_external")]
-     config = TestSELinuxInfra.config + \
--             """
--             BR2_PACKAGE_SELINUX_TEST=y
--             """
-+        """
-+        BR2_PACKAGE_SELINUX_TEST=y
-+        """
- 
-     def test_run(self):
-         TestSELinuxInfra.base_test_run(self)
-diff --git a/support/testing/tests/init/test_systemd_selinux.py b/support/testing/tests/init/test_systemd_selinux.py
-index 9a98a32821..73604cfc32 100644
---- a/support/testing/tests/init/test_systemd_selinux.py
-+++ b/support/testing/tests/init/test_systemd_selinux.py
-@@ -50,6 +50,7 @@ class TestSELinuxSystemd(infra.basetest.BRTest):
-         self.assertEqual(ret, 0)
-         self.assertEqual(out[0], "system_u:system_r:init_t\0")
- 
-+
- class TestSELinuxSystemdExt4(TestSELinuxSystemd):
-     config = TestSELinuxSystemd.config + \
-         """
-@@ -61,6 +62,7 @@ class TestSELinuxSystemdExt4(TestSELinuxSystemd):
-     def test_run(self):
-         self.run_tests("ext4")
- 
-+
- class TestSELinuxSystemdSquashfs(TestSELinuxSystemd):
-     config = TestSELinuxSystemd.config + \
-         """
+diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
+index 058dc4534d..60436e8616 100644
+--- a/configs/mx6udoo_defconfig
++++ b/configs/mx6udoo_defconfig
+@@ -25,6 +25,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
