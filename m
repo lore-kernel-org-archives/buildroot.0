@@ -1,29 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Nov 2020 18:47:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: add libbsd optional
- dependency
-In-Reply-To: <20201102185757.79877-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 2 Nov 2020 19:57:57 +0100")
-References: <20201102185757.79877-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h7q1xdnr.fsf@dell.be.48ers.dk>
+Date: Sat, 7 Nov 2020 18:43:48 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/collectd: add
+ comment about ssl support in rabbitmq-c
+Message-ID: <20201107174515.4A26C86F27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=caa454737f95e8bfa27309a7f05fef7681e8a0a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > libbsd is an optional dependency which is enabled by default since
- > version 4.3.3 and
- > https://github.com/zeromq/libzmq/commit/068385c951c0608edec6264d55ba9c4c923acccc
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ea8e2d9d9388bb84c7eef7e36d7cc8faf9142fda)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/51220b1b82774e8f6f6ed8593c58d2e3c31a1531
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 5e526d9e0f..15f544fd6c 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -571,7 +571,7 @@ comment "Select at least one for collectd to be useful"
+ 
+ config BR2_PACKAGE_COLLECTD_AMQP
+ 	bool "amqp"
+-	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL # needs rabbitmq-c with ssl support
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Send/receive values via the Advanced Message Queuing Protocol
