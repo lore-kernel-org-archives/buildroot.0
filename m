@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:20:46 +0100
-Subject: [Buildroot] [git commit] configs/orangepi_zero_plus: use Python 3.x
- for U-Boot build
-Message-ID: <20201107120743.2E033876B8@busybox.osuosl.org>
+Date: Sat, 7 Nov 2020 13:20:53 +0100
+Subject: [Buildroot] [git commit] configs/rock_pi_n8: use Python 3.x for
+ U-Boot build
+Message-ID: <20201107120743.810FF83460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49624ab4555ea1b8c15e2c9e28a13946a15f04b3
+commit: https://git.buildroot.net/buildroot/commit/?id=fbac050caeb23c8f864c6367d0642f514e4426c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New U-Boot versions (such as 2020.10 being used) need Python 3.x for
+New U-Boot versions (such as 2020.07 being used) need Python 3.x for
 pylibfdt.
 
 Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421115
+ - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421210
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/orangepi_zero_plus_defconfig | 1 +
+ configs/rock_pi_n8_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/orangepi_zero_plus_defconfig b/configs/orangepi_zero_plus_defconfig
-index cff2788f04..cf82f8b3cc 100644
---- a/configs/orangepi_zero_plus_defconfig
-+++ b/configs/orangepi_zero_plus_defconfig
-@@ -21,6 +21,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero_plus"
+diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
+index 9c671d416e..b7135d6311 100644
+--- a/configs/rock_pi_n8_defconfig
++++ b/configs/rock_pi_n8_defconfig
+@@ -14,6 +14,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
