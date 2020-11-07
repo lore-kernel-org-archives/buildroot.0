@@ -1,33 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 07 Nov 2020 18:42:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libass: bump to version 0.15
-In-Reply-To: <20201029132429.392911-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 29 Oct 2020 14:24:29 +0100")
-References: <20201029132429.392911-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn4pxdvc.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Nov 2020 18:43:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xen: disable go tools
+Message-ID: <20201107174337.1076602-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+go tools are enabled by default since version 4.14.0 and
+https://github.com/xen-project/xen/commit/1e13ea98bbb8369d065af4666c45c26dab5240d5
 
- > - harfbuzz is mandatory since
- >   https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
- > - Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
- >   call to `outline_stroke` causes a signed integer overflow.) through
- >   https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
- >   which does not apply cleanly over version 0.14.
- >   It should be noted that version 0.15 also fixes other integer
- >   overflows (which have no CVE assigned)
- > - Update indentation in hash file (two spaces)
+Disable them to avoid the following build failure on arm or aarch64
+(when host-go is built before xen):
 
- > https://github.com/libass/libass/releases/tag/0.15.0
+aarch64-none-linux-gnu-gcc: error: unrecognized command line option '-m64'
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/08948e4c4a88fbf09cae524949e5b656882a6e9a
+ - http://autobuild.buildroot.org/results/d966585c931ca4a4ae6a854a21e07eec4c277a02
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/xen/xen.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 2427fb9115..3b888137b4 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -18,6 +18,7 @@ XEN_ARCH = arm32
+ endif
+ 
+ XEN_CONF_OPTS = \
++	--disable-golang \
+ 	--disable-ocamltools \
+ 	--with-initddir=/etc/init.d
+ 
 -- 
-Bye, Peter Korsgaard
+2.28.0
