@@ -1,50 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Nov 2020 17:01:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/guile: disable jit on ARM with gcc
- < 5
-Message-ID: <20201107160122.428274-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  7 Nov 2020 17:38:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tinyproxy: add hash for license file
+Message-ID: <20201107163844.1354286-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-jit is enabled by default since version 3.0.0 on x86-64, i686, ARMv7 and
-AArch64 targets however it raises the following build failure on ARM
-with gcc 4.8:
-
-jit.c:232:1: error: initializer element is not constant
- static const jit_gpr_t THREAD = JIT_V0;
- ^
-
-This build failure was also reported with ARM on gcc 4.9:
-https://www.mail-archive.com/guile-user at gnu.org/msg11497.html
-
-So just disable jit with ARM and gcc < 5
+Add hash for license file and update indentation (two spaces).
 
 Fixes:
- - http://autobuild.buildroot.org/results/ba051bb00a6cad3cfd5ffeb197de20ea0eaef33e
+http://autobuild.buildroot.net/results/b07/b07052de34ca24d5c62f6facec2ced5e092d26e2/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/guile/guile.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/tinyproxy/tinyproxy.hash | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 5750b85f49..f1623008c8 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -38,6 +38,11 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
- GUILE_CFLAGS += -O2
- endif
- 
-+# jit triggers build failures on ARM and gcc < 5
-+ifeq ($(BR2_arm):$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y:)
-+GUILE_CONF_OPTS += --disable-jit
-+endif
-+
- # It can use readline, but on the condition that it was build against
- # ncurses. If both aren't present disable readline support since the
- # host readline/ncurses support can poison the build.
+diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
+index 099c974881..8096741597 100644
+--- a/package/tinyproxy/tinyproxy.hash
++++ b/package/tinyproxy/tinyproxy.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+-sha256 a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7 tinyproxy-1.10.0.tar.bz2
++sha256  a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7  tinyproxy-1.10.0.tar.bz2
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 -- 
-2.28.0
+2.27.0
