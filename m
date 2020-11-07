@@ -1,65 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:35:43 +0100
-Subject: [Buildroot] [PATCH v2] package/quickjs: new package
-In-Reply-To: <20201106225115.291042-1-francois.perrad@gadz.org>
-References: <20201106225115.291042-1-francois.perrad@gadz.org>
-Message-ID: <20201107133543.2858b7f3@windsurf.home>
+Date: Sat, 7 Nov 2020 13:42:35 +0100
+Subject: [Buildroot] [git commit branch/next] package/rocksdb: bump to
+ version 6.13.3
+Message-ID: <20201107122923.3A3DF87893@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Nov 2020 23:51:14 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fcee4254aa50dc8866d3245e5a21ad63b9cbfd2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in            |  1 +
->  package/quickjs/Config.in    | 15 +++++++++++++++
->  package/quickjs/quickjs.hash |  2 ++
->  package/quickjs/quickjs.mk   | 37 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 55 insertions(+)
->  create mode 100644 package/quickjs/Config.in
->  create mode 100644 package/quickjs/quickjs.hash
->  create mode 100644 package/quickjs/quickjs.mk
+- Refresh first patch
+- Replace second patch (this new iteration of previous patch has not
+  been merged and does not apply cleanly on current version)
+- Update hash of README.md (CircleCI gadget added with
+  https://github.com/facebook/rocksdb/commit/63b59f21d9971fc941e3ee2244783a3c16bd5ad4)
+- LTO is supported since version 6.12.6 and
+  https://github.com/facebook/rocksdb/commit/c0c33a4854587e412742841f199edd4616be6c00
+- DESTDIR and PREFIX are supported since version 6.13.2 and
+  https://github.com/facebook/rocksdb/commit/1e59800718b29d4a762b8ac356767a701f968a4d
 
-The entry in the DEVELOPERS file was missing.
+https://github.com/facebook/rocksdb/releases/tag/v6.13.3
 
-> diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-> new file mode 100644
-> index 000000000..89346ceff
-> --- /dev/null
-> +++ b/package/quickjs/Config.in
-> @@ -0,0 +1,15 @@
-> +
+Fixes:
+ - http://autobuild.buildroot.org/results/a9798bb279a668a266c472fb026b68dbccf50431
 
-Spurious empty line.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...d_tools-build_detect_platform-fix-C-tests.patch |   67 +-
+ ...8-compatiblity-fix-CRC32-C-implementation.patch | 3787 ++++++++++++++++++
+ ...eplace-POWER-crc32c-with-C-implementation.patch | 4058 --------------------
+ package/rocksdb/rocksdb.hash                       |    4 +-
+ package/rocksdb/rocksdb.mk                         |   16 +-
+ 5 files changed, 3857 insertions(+), 4075 deletions(-)
 
-> +config BR2_PACKAGE_QUICKJS
-> +	bool "quickjs"
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC # No way to check for fenv support.
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  QuickJS is a small and embeddable Javascript engine.
-> +	  It supports the ES2020 specification including modules,
-> +	  asynchronous generators, proxies and BigInt.
-> +
-> +	  https://bellard.org/quickjs/
-> +
-> +comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
-
-	depends on BR2_USE_MMU
-
-was missing here.
-
-> +	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
-
-Applied to next after fixing those details. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Patch is too large, so refusing to show it
