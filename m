@@ -1,276 +1,218 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  7 Nov 2020 01:28:34 +0100
-Subject: [Buildroot] [PATCH v4 2/4] package/bcc: new package
+Date: Sat,  7 Nov 2020 01:28:36 +0100
+Subject: [Buildroot] [PATCH v4 4/4] package/bpftrace: new package
 In-Reply-To: <20201107002836.3101760-1-romain.naour@gmail.com>
 References: <20201107002836.3101760-1-romain.naour@gmail.com>
-Message-ID: <20201107002836.3101760-2-romain.naour@gmail.com>
+Message-ID: <20201107002836.3101760-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+From: Qais Yousef <qais.yousef@arm.com>
 
-bcc is a front-end tool for eBPF :
-https://github.com/iovisor/bcc/blob/master/README.md.
-eBPF is the most powerful Linux tracer, and bcc
-allows to write eBPF scripts in C and PYTHON3.
+bpftrace is a high-level tracing language for Linux enhanced Berkeley
+Packet Filter (eBPF) available in recent Linux kernels (4.x).
 
-bcc can help to troubleshoot issues quickly on
-embedded systems (as long as Linux kernel
-version >= 4.1).
+Only tested on x86_64 and aarch64. The package doesn't support i386 and
+aarch32.
 
-bcc can also make it easy to create observabilty tools,
-SDN configuration, ddos mitigation, intrusion detection
-and secure containers. More information is available at:
-https://ebpf.io/
-
-BCC can be tested on the target :
-$ mount -t debugfs none /sys/kernel/debug
-$ cd /usr/share/bcc/tools
-$ ./execsnoop
-
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Qais Yousef <qais.yousef@arm.com>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
-v4
-- Bump to version 0.17.0.
-- Remove kernel dependency (Qais)
-- Remove optional kernel option handling (Quais)
-- Update ebpf url (Quais)
-- Fix tools path in the commit log (Quais)
-- Add full tar dependency (used to extract the kernel sources from IKHEADERS module) (Quais)
-- Make luajit optional dependeny (Quais)
-- Remove python module install hook (Quais)
-- Keep BCC_LINUX_CONFIG_FIXUPS but only for kernel built by Buildroot.
-
-V3
-- Bump to version 0.16.0.
-- Add required python dependency.
-- Remove unnecessary and duplicated
-  kernel flags (#Testing section) in bcc.mk.
-
-V2
-- Add eBPF's required Kernel flags.
-- Fix submodule source fetch problem.
-- Add toolchain dependency.
+v2: patch to build bundled libraries statically
+    Add glibc dependency
+    Rework to select bcc, libbpf and llvm RTII dependencies.
+    Add reverse dependencies
+    Add BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
+    Bump the version to the latest (upcoming 0.12)
+      due to many build issues (and patch to backport) with
+      the latest release.
+    Add binutils optional dependency to provide libbfd and libopcodes.
+    Disable manpages.
 ---
- DEVELOPERS                                    |  1 +
  package/Config.in                             |  1 +
- .../bcc/0001-fix-aarch64-cross-compile.patch  | 65 +++++++++++++++++++
- package/bcc/Config.in                         | 42 ++++++++++++
- package/bcc/bcc.hash                          |  3 +
- package/bcc/bcc.mk                            | 46 +++++++++++++
- 6 files changed, 158 insertions(+)
- create mode 100644 package/bcc/0001-fix-aarch64-cross-compile.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.hash
- create mode 100644 package/bcc/bcc.mk
+ ...resources-parser-as-static-libraries.patch | 71 +++++++++++++++++++
+ package/bpftrace/Config.in                    | 40 +++++++++++
+ package/bpftrace/bpftrace.hash                |  3 +
+ package/bpftrace/bpftrace.mk                  | 21 ++++++
+ 5 files changed, 136 insertions(+)
+ create mode 100644 package/bpftrace/0001-cmake-link-ast-resources-parser-as-static-libraries.patch
+ create mode 100644 package/bpftrace/Config.in
+ create mode 100644 package/bpftrace/bpftrace.hash
+ create mode 100644 package/bpftrace/bpftrace.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 7643722f3c..2b06c18fcf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1388,6 +1388,7 @@ N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
- N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/bcc/
- F:	package/python-aiofiles/
- F:	package/python-crayons/
- F:	package/python-cycler/
 diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..27d201cfd2 100644
+index c0b8b06846..3fa16fdb2a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -83,6 +83,7 @@ endmenu
- 
- menu "Debugging, profiling and benchmark"
- 	source "package/babeltrace2/Config.in"
-+	source "package/bcc/Config.in"
+@@ -86,6 +86,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/bcc/Config.in"
  	source "package/blktrace/Config.in"
  	source "package/bonnie/Config.in"
++	source "package/bpftrace/Config.in"
  	source "package/cache-calibrator/Config.in"
-diff --git a/package/bcc/0001-fix-aarch64-cross-compile.patch b/package/bcc/0001-fix-aarch64-cross-compile.patch
+ 	source "package/clinfo/Config.in"
+ 	source "package/dacapo/Config.in"
+diff --git a/package/bpftrace/0001-cmake-link-ast-resources-parser-as-static-libraries.patch b/package/bpftrace/0001-cmake-link-ast-resources-parser-as-static-libraries.patch
 new file mode 100644
-index 0000000000..6b4279754c
+index 0000000000..d99b97c3a4
 --- /dev/null
-+++ b/package/bcc/0001-fix-aarch64-cross-compile.patch
-@@ -0,0 +1,65 @@
-+From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
-+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Date: Thu, 2 May 2019 11:06:23 +0200
-+Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
-+ cross-compiling
++++ b/package/bpftrace/0001-cmake-link-ast-resources-parser-as-static-libraries.patch
+@@ -0,0 +1,71 @@
++From 960d2b69975462e445733482ac8d6ea319d3c5b2 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 5 Nov 2020 01:19:54 +0100
++Subject: [PATCH] cmake: link ast, resources parser as static libraries
 +
-+Unlike CMAKE_SYSTEM_PROCESSOR which identifies aarch64
-+as a valid architecture, luajit does not recognize it.
-+luajit defines aarch64 as arm64.
-+
-+LuaJIT doesn't use usual arch naming, so we have to convert
-+between CMake and Luajit for each architectures while
-+cross-compiling.
-+
-+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+v2: Do the same for other architecture supported by LuaJIT.
-+https://github.com/iovisor/bcc/pull/2480
-+---
-+ src/lua/CMakeLists.txt | 29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
++ CMakeLists.txt           | 2 +-
++ resources/CMakeLists.txt | 2 +-
++ src/arch/CMakeLists.txt  | 8 ++++----
++ src/ast/CMakeLists.txt   | 2 +-
++ 4 files changed, 7 insertions(+), 7 deletions(-)
 +
-+diff --git a/src/lua/CMakeLists.txt b/src/lua/CMakeLists.txt
-+index 7541d48df..226e1b1d2 100644
-+--- a/src/lua/CMakeLists.txt
-++++ b/src/lua/CMakeLists.txt
-+@@ -13,9 +13,36 @@ if (LUAJIT_LIBRARIES AND LUAJIT)
-+ 		DEPENDS ${SRC_LUA} ${CMAKE_CURRENT_SOURCE_DIR}/squishy
-+ 	)
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index d732d23..4ebd3ce 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -91,7 +91,7 @@ find_package(FLEX REQUIRED)
++ bison_target(bison_parser src/parser.yy ${CMAKE_BINARY_DIR}/parser.tab.cc VERBOSE)
++ flex_target(flex_lexer src/lexer.l ${CMAKE_BINARY_DIR}/lex.yy.cc)
++ add_flex_bison_dependency(flex_lexer bison_parser)
++-add_library(parser ${BISON_bison_parser_OUTPUTS} ${FLEX_flex_lexer_OUTPUTS})
+++add_library(parser STATIC ${BISON_bison_parser_OUTPUTS} ${FLEX_flex_lexer_OUTPUTS})
++ target_compile_options(parser PRIVATE "-w")
++ target_include_directories(parser PUBLIC src src/ast ${CMAKE_BINARY_DIR})
 + 
-++	# LuaJIT doesn't use usual arch naming, so we have to convert
-++	# between CMake and Luajit while cross-compiling.
-++	if (CMAKE_CROSSCOMPILING)
-++		SET (LUAJIT_TARGET_ARCH "-a")
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L30
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L65
-++		if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64_be")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64be")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86)$")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x86")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mips")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mipsel")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "ppc")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x64")
-++		else()
-++			MESSAGE(FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} is not supported by LuaJIT")
-++		endif()
-++	endif()
-++
-+ 	ADD_CUSTOM_COMMAND(
-+ 		OUTPUT bcc.o
-+-		COMMAND ${LUAJIT} -bg bcc.lua bcc.o
-++		COMMAND ${LUAJIT} -bg bcc.lua ${LUAJIT_TARGET_ARCH} bcc.o
-+ 		DEPENDS bcc.lua
-+ 	)
++diff --git a/resources/CMakeLists.txt b/resources/CMakeLists.txt
++index a95c60a..2b05a68 100644
++--- a/resources/CMakeLists.txt
+++++ b/resources/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-add_library(resources headers.cpp)
+++add_library(resources STATIC headers.cpp)
 + 
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
++ target_include_directories(resources PUBLIC ../src)
++ 
++diff --git a/src/arch/CMakeLists.txt b/src/arch/CMakeLists.txt
++index a26c1c8..fca9a6b 100644
++--- a/src/arch/CMakeLists.txt
+++++ b/src/arch/CMakeLists.txt
++@@ -1,13 +1,13 @@
++ if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
++-    add_library(arch aarch64.cpp)
+++    add_library(arch STATIC aarch64.cpp)
++ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64" OR
++        CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
++-    add_library(arch ppc64.cpp)
+++    add_library(arch STATIC ppc64.cpp)
++ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "s390" OR
++        CMAKE_SYSTEM_PROCESSOR STREQUAL "s390x")
++-    add_library(arch s390.cpp)
+++    add_library(arch STATIC s390.cpp)
++ elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
++-    add_library(arch x86_64.cpp)
+++    add_library(arch STATIC x86_64.cpp)
++ else()
++   message(FATAL_ERROR "Unsupported architecture: ${CMAKE_SYSTEM_PROCESSOR}")
++ endif()
++diff --git a/src/ast/CMakeLists.txt b/src/ast/CMakeLists.txt
++index 649bf0a..477d809 100644
++--- a/src/ast/CMakeLists.txt
+++++ b/src/ast/CMakeLists.txt
++@@ -1,4 +1,4 @@
++-add_library(ast
+++add_library(ast STATIC
++   ast.cpp
++   attachpoint_parser.cpp
++   codegen_llvm.cpp
++-- 
++2.25.4
++
+diff --git a/package/bpftrace/Config.in b/package/bpftrace/Config.in
 new file mode 100644
-index 0000000000..b75984a36e
+index 0000000000..f627725afe
 --- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	select BR2_PACKAGE_AUDIT # runtime
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # to select tar package
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_IPERF3 # runtime
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_NETPERF # runtime
-+	select BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_TAR # Decompress kernel headers required by BCC
++++ b/package/bpftrace/Config.in
+@@ -0,0 +1,40 @@
++config BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_x86_64
++
++config BR2_PACKAGE_BPFTRACE
++	bool "bpftrace"
++	depends on BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # bcc
++	depends on BR2_TOOLCHAIN_USES_GLIBC # bcc
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # bcc, clang
++	depends on BR2_INSTALL_LIBSTDCPP # bcc, clang
++	select BR2_PACKAGE_BCC
++	select BR2_PACKAGE_LIBBPF
++	# LLVM RTTI mendatory: https://github.com/iovisor/bpftrace/issues/1156
++	select BR2_PACKAGE_LLVM_RTTI
 +	help
-+	  BPF Compiler Collection (BCC)
++	  bpftrace is a high-level tracing language for Linux enhanced
++	  Berkeley Packet Filter (eBPF) available in recent Linux
++	  kernels (4.x).
 +
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
++	  bpftrace uses LLVM as a backend to compile scripts to
++	  BPF-bytecode and makes use of BCC for interacting with the
++	  Linux BPF system, as well as existing Linux tracing
++	  capabilities: kernel dynamic tracing (kprobes), user-level
++	  dynamic tracing (uprobes), and tracepoints. The bpftrace
++	  language is inspired by awk and C, and predecessor tracers
++	  such as DTrace and SystemTap.
 +
-+	  Note: Before using bcc, you need either need to :
-+	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
-+	  to target folder /lib/module/<kernel_ver>/build.
-+	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
-+	  and use generated headers under /sys/kernel/kheaders.tar.xz
-+	  to populate /lib/module/<kernel_ver>/build.
++	  It's highly recommended to NOT strip bpftrace binary.
++	  To do so, add "bpftrace" to BR2_STRIP_EXCLUDE_FILES.
++	  See:
++	    https://bugzilla.redhat.com/show_bug.cgi?id=1865787
 +
-+	  That's because the clang frontend build eBPF code at runtime.
++	  https://www.github.com/iovisor/bpftrace
 +
-+	  https://github.com/iovisor/bcc
-+	  http://www.ebpf.io
-+
-+comment "bcc needs a glibc toolchain, C++, gcc >= 4.8, host gcc >= 4.8"
++comment "bpftrace needs a glibc toolchain w/ C++, gcc >= 4.8"
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
 +	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP \
 +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
+diff --git a/package/bpftrace/bpftrace.hash b/package/bpftrace/bpftrace.hash
 new file mode 100644
-index 0000000000..a9ca0a36cd
+index 0000000000..b48d9555fd
 --- /dev/null
-+++ b/package/bcc/bcc.hash
++++ b/package/bpftrace/bpftrace.hash
 @@ -0,0 +1,3 @@
 +# locally calculated
-+sha256  7a3ef28a493dcd7ee0797ebca8f13b30ffca08efc93ff73ff8fa9ba0234d7947  bcc-v0.17.0.tar.gz
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
++sha256  1f08661bac9dfa7d3d76b54b3b4d1738b02c3847049da90a5cff25093a9dc9c9  bpftrace-487dd815bfe4a24908950552f35ef17d6653b2f8.tar.gz
+diff --git a/package/bpftrace/bpftrace.mk b/package/bpftrace/bpftrace.mk
 new file mode 100644
-index 0000000000..d448563a1e
+index 0000000000..0d8640a184
 --- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,46 @@
++++ b/package/bpftrace/bpftrace.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# bcc
++# bpftrace
 +#
 +################################################################################
 +
-+BCC_VERSION = v0.17.0
-+BCC_SITE = https://github.com/iovisor/bcc.git
-+BCC_SITE_METHOD = git
-+BCC_GIT_SUBMODULES = YES
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+# libbcc.so and libbcc_bpf.so
-+BCC_INSTALL_STAGING = YES
-+BCC_DEPENDENCIES = host-bison host-flex clang elfutils flex llvm python3 tar
++# upcoming 0.12 version.
++BPFTRACE_VERSION = 487dd815bfe4a24908950552f35ef17d6653b2f8
++BPFTRACE_SITE = $(call github,iovisor,bpftrace,$(BPFTRACE_VERSION))
++BPFTRACE_LICENSE = Apache-2.0
++BPFTRACE_LICENSE_FILES = LICENSE
++BPFTRACE_DEPENDENCIES = host-bison host-flex bcc libbpf llvm
 +
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+BCC_DEPENDENCIES += luajit
++# libbfd, libopcodes
++ifeq ($(BR2_PACKAGE_BINUTILS),y)
++BPFTRACE_DEPENDENCIES += binutils
 +endif
 +
-+# ENABLE_LLVM_SHARED=ON to use llvm.so.
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
-+	-DREVISION=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT=ON \
-+	-DENABLE_MAN=OFF
-+
-+define BCC_LINUX_CONFIG_FIXUPS
-+	# Enable kernel support for eBPF
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
-+	# [for Linux kernel versions 4.1 through 4.6]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
-+	# [for Linux kernel versions 4.7 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
-+	# [for Linux kernel versions 5.2 and later]
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
-+	# bcc needs debugfs at runtime
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DEBUG_FS)
-+endef
++BPFTRACE_CONF_OPTS += -DENABLE_MAN=OFF
 +
 +$(eval $(cmake-package))
 -- 
