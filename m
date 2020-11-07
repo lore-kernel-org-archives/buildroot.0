@@ -1,29 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:23:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.17.0
-In-Reply-To: <20201106204602.276693-1-fontaine.fabrice@gmail.com>
-References: <20201106204602.276693-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201107132355.653ed6f7@windsurf.home>
+Date: Sat, 7 Nov 2020 13:24:04 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/haproxy: bump to version 2.2.5
+In-Reply-To: <20201106205413.279288-1-fontaine.fabrice@gmail.com>
+References: <20201106205413.279288-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201107132404.12bd3610@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Nov 2020 21:46:02 +0100
+On Fri,  6 Nov 2020 21:54:13 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Drop patch (already in version)
-> 
-> https://botan.randombit.net/news.html#version-2-17-0-2020-11-05
+> https://www.mail-archive.com/haproxy at formilux.org/msg38809.html
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...d-data-arch-arm64.txt-add-aarch64_be.patch | 31 -------------------
->  package/botan/botan.hash                      |  2 +-
->  package/botan/botan.mk                        |  2 +-
->  3 files changed, 2 insertions(+), 33 deletions(-)
->  delete mode 100644 package/botan/0001-src-build-data-arch-arm64.txt-add-aarch64_be.patch
+> Changes v1 -> v2:
+>  - Update tarball hash
 
 Applied to next, thanks.
 
