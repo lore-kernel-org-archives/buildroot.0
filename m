@@ -1,66 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 Nov 2020 23:54:02 +0100
-Subject: [Buildroot] [git commit branch/next] Revert "Makefile: exclude
- BR2_DL_DIR from savedefconfig"
-Message-ID: <20201117203825.2F41E7FB95@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Nov 2020 13:20:53 +0100
+Subject: [Buildroot] [git commit branch/next] configs/rock_pi_n8: use Python
+ 3.x for U-Boot build
+Message-ID: <20201117203825.49F3B7FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1482ef6bb8209044372ebcaf07081524f9b486fa
+commit: https://git.buildroot.net/buildroot/commit/?id=fbac050caeb23c8f864c6367d0642f514e4426c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Although BR2_DL_DIR is indeed a site-local setting, which does not
-actually define the target system, we've had it in the tree for a
-long time now, and people have been depending on it for a variety
-of use-cases.
+New U-Boot versions (such as 2020.07 being used) need Python 3.x for
+pylibfdt.
 
-Furthermore, BR2_DL_DIR is far from the only such site-local setting,
-BR2_CCACHE_DIR springs to mind, and in the less-obvious category, we
-can also find BR2_JLEVEL, but also BR2_WGET, BR2_SVN, BR2_GIT et al.
-as they may be tweaked to set the timeout, number of retries or so on
-to work around stupid proxies. But of course, the most local site-local
-setting is probably BR2_PACKAGE_OVERRIDE_FILE, with its default value
-being explicitly just 'local.mk'.
+Fixes:
+ - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421210
 
-Ideally, we would like to have a clear separation between the
-configuration that actually defines the target system on one hand,
-and the site-local settings that drive and control how the build is
-performed, on the other hand. This is by far a much bigger endeavour
-than just dropping BR2_DL_DIR from the saved defconfig.
-
-This reverts commit 36edacce9c2c3b90f9bb11a5d2208e8edf7bbe63 (adapted
-to keep the fix from 1a7873ec986c817fdd22cc2d9096d9482fee4381).
-
-Closes: #13291
-
-Note: thanks to Thomas; some phrasing above was borrowed from a
-discussion with him.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Lance Fredrickson <lancethepants@gmail.com>
-Cc: Sven Oliver Moll <buildroot@svol.li>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ configs/rock_pi_n8_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index 5dc402e73e..f9e9cfa968 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1027,9 +1027,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
--	@$(SED) '/^BR2_DEFCONFIG=/d' \
--		-e '/^BR2_DL_DIR=/d' \
--		$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
-+	@$(SED) '/^BR2_DEFCONFIG=/d' $(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig)
- 
- .PHONY: defconfig savedefconfig update-defconfig
- 
+diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
+index 9c671d416e..b7135d6311 100644
+--- a/configs/rock_pi_n8_defconfig
++++ b/configs/rock_pi_n8_defconfig
+@@ -14,6 +14,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
