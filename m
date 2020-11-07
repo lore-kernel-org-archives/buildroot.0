@@ -1,159 +1,170 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Nov 2020 18:40:55 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libass: security
- bump to version 0.15
-Message-ID: <20201107174515.3ACA9876F2@busybox.osuosl.org>
+Date: Sat, 7 Nov 2020 18:45:56 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/zeromq: add
+ libbsd optional dependency
+Message-ID: <20201107174515.590A286F27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19c24b7f039472cd0294b0c1bc3f1d1d4a493729
+commit: https://git.buildroot.net/buildroot/commit/?id=85b2995d13b836d60827a65d4e1743eb889010b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-- harfbuzz is mandatory since
-  https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
-- Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
-  call to `outline_stroke` causes a signed integer overflow.) through
-  https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
-  which does not apply cleanly over version 0.14.
-  It should be noted that version 0.15 also fixes other integer
-  overflows (which have no CVE assigned)
-- Update indentation in hash file (two spaces)
+libbsd is an optional dependency which is enabled by default since
+version 4.3.3 and
+https://github.com/zeromq/libzmq/commit/068385c951c0608edec6264d55ba9c4c923acccc
 
-https://github.com/libass/libass/releases/tag/0.15.0
+Fixes:
+ - http://autobuild.buildroot.org/results/51220b1b82774e8f6f6ed8593c58d2e3c31a1531
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4ae8ecea8fb042931cebf8f8d4cb4bc891073a77)
+(cherry picked from commit 25b5dc747a1bf4e1a18def00387246808c3c0a4e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |  8 ++++++++
- package/harfbuzz/Config.in                    |  2 +-
- package/kodi/Config.in                        |  2 ++
- package/libass/Config.in                      |  9 +++++++++
- package/libass/libass.hash                    |  4 ++--
- package/libass/libass.mk                      | 10 ++--------
- 6 files changed, 24 insertions(+), 11 deletions(-)
+ ...pat.hpp-fix-build-with-libbsd-and-strlcpy.patch | 107 +++++++++++++++++++++
+ package/zeromq/zeromq.mk                           |   9 ++
+ 2 files changed, 116 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 5a066cb179..2029776013 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -306,8 +306,16 @@ comment "plugins with external dependencies"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
- 	bool "assrender"
-+	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
- 	select BR2_PACKAGE_LIBASS
- 
-+comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch b/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch
+new file mode 100644
+index 0000000000..ea1166fd55
+--- /dev/null
++++ b/package/zeromq/0001-src-compat.hpp-fix-build-with-libbsd-and-strlcpy.patch
+@@ -0,0 +1,107 @@
++From 8cb5708829df9eacd58e1215ce7a1c135eb912b1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 2 Nov 2020 00:04:14 +0100
++Subject: [PATCH] src/compat.hpp: fix build with libbsd and strlcpy
 +
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
- 	bool "bluez"
- 	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-index e8f407bb8f..e283fd831e 100644
---- a/package/harfbuzz/Config.in
-+++ b/package/harfbuzz/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	  Harfbuzz can make optional use of cairo, freetype,
- 	  glib2 and icu packages if they are selected.
- 
--comment "harfbuzz needs a toolchain w/ C++, gcc => 4.8"
-+comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 2acb271992..31ad8630d6 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 
- comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.8"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-@@ -61,6 +62,7 @@ comment "kodi needs an OpenGL EGL backend with OpenGL support"
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/libass/Config.in b/package/libass/Config.in
-index c654d8212a..803f6b4438 100644
---- a/package/libass/Config.in
-+++ b/package/libass/Config.in
-@@ -1,9 +1,18 @@
- config BR2_PACKAGE_LIBASS
- 	bool "libass"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_LIBFRIBIDI
- 	help
- 	  libass is a portable subtitle renderer for the ASS/SSA
- 	  (Advanced Substation Alpha/Substation Alpha) subtitle format
- 
- 	  https://github.com/libass/libass
++Don't include bsd/string.h if strlcpy is also defined in string.h to
++avoid the following build failure on uclibc:
 +
-+comment "libass needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 74ea5f921d..cd3c3af61c 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2  libass-0.14.0.tar.xz
--sha256 f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-+sha256  9f09230c9a0aa68ef7aa6a9e2ab709ca957020f842e52c5b2e52b801a7d9e833  libass-0.15.0.tar.xz
-+sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 50600963ed..818bff234e 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++In file included from src/compat.hpp:41:0,
++                 from src/ipc_address.cpp:31:
++/tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/bsd/string.h:44:54: error: declaration of 'size_t strlcpy(char*, const char*, size_t)' has a different exception specifier
++ size_t strlcpy(char *dst, const char *src, size_t siz);
++                                                      ^
++In file included from src/compat.hpp:34:0,
++                 from src/ipc_address.cpp:31:
++/tmp/instance-0/output-1/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/string.h:424:15: error: from previous declaration 'size_t strlcpy(char*, const char*, size_t) throw ()'
++ extern size_t strlcpy(char *__restrict dst, const char *__restrict src,
++               ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/51220b1b82774e8f6f6ed8593c58d2e3c31a1531
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/zeromq/libzmq/commit/b2a0842063aaa464ca2d182f9d3fefc6493906d0]
++---
++ CMakeLists.txt |  4 +---
++ configure.ac   | 26 ++++++++++++--------------
++ src/compat.hpp |  4 +++-
++ 3 files changed, 16 insertions(+), 18 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 85747f626..74dd99ae0 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -250,9 +250,7 @@ if(NOT MSVC)
++       set(ZMQ_HAVE_LIBBSD 1)
++     endif()
++   endif()
++-  if(NOT WITH_LIBBSD OR NOT LIBBSD_FOUND)
++-    check_cxx_symbol_exists(strlcpy string.h ZMQ_HAVE_STRLCPY)
++-  endif()
+++  check_cxx_symbol_exists(strlcpy string.h ZMQ_HAVE_STRLCPY)
++ endif()
++ 
++ # Select curve encryption library, defaults to tweetnacl To use libsodium instead, use --with-libsodium(must be
++diff --git a/configure.ac b/configure.ac
++index 58a78e75e..a7a1609af 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -812,20 +812,18 @@ if test "x$enable_libbsd" != "xno"; then
++             fi
++         ])
++ fi
++-if test "x$found_libbsd" != "xyes"; then
++-    AC_MSG_CHECKING([whether strlcpy is available])
++-    AC_COMPILE_IFELSE(
++-        [AC_LANG_PROGRAM(
++-            [[#include <string.h>]],
++-            [[char buf [100]; size_t bar = strlcpy (buf, "foo", 100); (void)bar; return 0;]])
++-        ],[
++-            AC_MSG_RESULT([yes])
++-            AC_DEFINE(ZMQ_HAVE_STRLCPY, [1],
++-                [strlcpy is available])
++-        ],[
++-            AC_MSG_RESULT([no])
++-    ])
++-fi
+++AC_MSG_CHECKING([whether strlcpy is available])
+++AC_COMPILE_IFELSE(
+++    [AC_LANG_PROGRAM(
+++        [[#include <string.h>]],
+++        [[char buf [100]; size_t bar = strlcpy (buf, "foo", 100); (void)bar; return 0;]])
+++    ],[
+++        AC_MSG_RESULT([yes])
+++        AC_DEFINE(ZMQ_HAVE_STRLCPY, [1],
+++            [strlcpy is available])
+++    ],[
+++        AC_MSG_RESULT([no])
+++])
++ 
++ # pthread_setname is non-posix, and there are at least 4 different implementations
++ AC_MSG_CHECKING([whether signature of pthread_setname_np() has 1 argument])
++diff --git a/src/compat.hpp b/src/compat.hpp
++index 7c7a89275..47744b98e 100644
++--- a/src/compat.hpp
+++++ b/src/compat.hpp
++@@ -37,9 +37,10 @@
++ #define strcasecmp _stricmp
++ #define strtok_r strtok_s
++ #else
+++#ifndef ZMQ_HAVE_STRLCPY
++ #ifdef ZMQ_HAVE_LIBBSD
++ #include <bsd/string.h>
++-#elif !defined(ZMQ_HAVE_STRLCPY)
+++#else
++ static inline size_t
++ strlcpy (char *dest_, const char *src_, const size_t dest_size_)
++ {
++@@ -50,6 +51,7 @@ strlcpy (char *dest_, const char *src_, const size_t dest_size_)
++     return dest_size_ - remain;
++ }
++ #endif
+++#endif
++ template <size_t size>
++ static inline int strcpy_s (char (&dest_)[size], const char *const src_)
++ {
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 7840d03624..af44784b38 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -11,6 +11,8 @@ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
++# We're patching configure.ac
++ZEROMQ_AUTORECONF = YES
  
--LIBASS_VERSION = 0.14.0
-+LIBASS_VERSION = 0.15.0
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
-@@ -15,6 +15,7 @@ LIBASS_LICENSE_FILES = COPYING
- LIBASS_DEPENDENCIES = \
- 	host-pkgconf \
- 	freetype \
-+	harfbuzz \
- 	libfribidi \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
-@@ -31,11 +32,4 @@ else
- LIBASS_CONF_OPTS += --disable-fontconfig --disable-require-system-font-provider
+ # Assume these flags are always available. It is true, at least for
+ # SOCK_CLOEXEC, since linux v2.6.27.
+@@ -53,6 +55,13 @@ else
+ ZEROMQ_CONF_OPTS += --disable-drafts
  endif
  
--ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
--LIBASS_DEPENDENCIES += harfbuzz
--LIBASS_CONF_OPTS += --enable-harfbuzz
--else
--LIBASS_CONF_OPTS += --disable-harfbuzz
--endif
--
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_LIBBSD),y)
++ZEROMQ_DEPENDENCIES += host-pkgconf libbsd
++ZEROMQ_CONF_OPTS += --enable-libbsd
++else
++ZEROMQ_CONF_OPTS += --disable-libbsd
++endif
++
+ # ZeroMQ uses libsodium if it's available.
+ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ ZEROMQ_DEPENDENCIES += libsodium
