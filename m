@@ -1,65 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 17:05:09 +0100
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 20.2.2
-Message-ID: <20201117203826.175757FB95@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 7 Nov 2020 13:21:15 +0100
+Subject: [Buildroot] [git commit branch/next] package/kmscube: add license
+ file
+Message-ID: <20201117203825.544907FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=101878cd88f606f7e862d4c51a549025fa019119
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb2a9c3601d4ca665af731a92a9db38f113608d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes of this bugfix release::
-https://lists.freedesktop.org/archives/mesa-announce/2020-November/000604.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/kmscube/kmscube.hash | 1 +
+ package/kmscube/kmscube.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index afb2e799c4..12020e6551 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+index 6a4140c541..cb7abd48ea 100644
+--- a/package/kmscube/kmscube.hash
++++ b/package/kmscube/kmscube.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256  ec135069d8bee7f4fe38cb9dc96fbbd56e0057290fa25eff8b5b314ee473c502  kmscube-4660a7dca6512b6e658759d00cff7d4ad2a2059d.tar.gz
++sha256  f622099ab0d274133f6e62d5fccfe970b61134d80ed036f45f8cf1e90c3d5a05  COPYING
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index dc8c691864..7b458376dc 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -7,6 +7,7 @@
+ KMSCUBE_VERSION = 4660a7dca6512b6e658759d00cff7d4ad2a2059d
+ KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
+ KMSCUBE_LICENSE = MIT
++KMSCUBE_LICENSE_FILES = COPYING
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.2.1
-+MESA3D_HEADERS_VERSION = 20.2.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 287ddc1c0e..7d3a928822 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-October/000602.html
--sha256  d1a46d9a3f291bc0e0374600bdcb59844fa3eafaa50398e472a36fc65fd0244a  mesa-20.2.1.tar.xz
--sha512  5d609359754db3e3679bffd5306c1f1d1cf46a2ea98428a9451fe0d99bbf73da863c5d94e6561712cd2012ad13615666cf3d712e54f379b34c091fead39d4795  mesa-20.2.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-November/000604.html
-+sha256  1f93eb1090cf71490cd0e204e04f8427a82b6ed534b7f49ca50cea7dcc89b861  mesa-20.2.2.tar.xz
-+sha512  36673a44fad8c6db3516b23b75825a52df520b9fe1387160301dd5051f420ebf0d1c7b4f8ff96a5547b79c2ba42fd782305ae23ac956f688b695c07b8fe73192  mesa-20.2.2.tar.xz
- 
- # License
- sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 620a6eece3..a44d599b03 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.2.1
-+MESA3D_VERSION = 20.2.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+ $(eval $(meson-package))
