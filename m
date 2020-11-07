@@ -1,60 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:22:40 +0100
-Subject: [Buildroot] [git commit] package/freetype: security bump version to
- 2.10.4
-Message-ID: <20201107120926.54652876B5@busybox.osuosl.org>
+Date: Sat, 7 Nov 2020 13:23:00 +0100
+Subject: [Buildroot] [PATCH 1/2] package/ghostscript: fix build with
+ freetype >= 2.10.3
+In-Reply-To: <20201106214932.3051852-1-bernd.kuhls@t-online.de>
+References: <20201106214932.3051852-1-bernd.kuhls@t-online.de>
+Message-ID: <20201107132300.116b4087@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ffe654c6d4e5428520378feb0f04dc1f8c951a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  6 Nov 2020 22:49:31 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Fixes CVE-2020-15999, https://www.freetype.org/index.html#news
+> This patch is needed to fix the build with freetype >= 2.10.3.
+> 
+> https://www.freetype.org/index.html#news
+> "A warning for distribution maintainers: Version 2.10.3 and later may
+>  break the build of ghostscript, due to ghostscript's use of a with-
+>  drawn macro that wasn't intended for external usage."
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...g-702985-drop-use-of-FT_CALLBACK_DEF.patch | 55 +++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch
 
-"This is an emergency release, fixing a severe vulnerability in embedded
- PNG bitmap handling [...].
+Both applied to master. Thanks!
 
- All users should update immediately."
-
-Removed md5 hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/freetype/freetype.hash | 7 +++----
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 7fc00f1c97..36571b51af 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,8 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
--md5  7c0d5a39f232d7eb9f9d7da76bf08074  freetype-2.10.2.tar.xz
--sha1  b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875  freetype-2.10.2.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.4/
-+sha1  0181862673f7216ad2b5074f95fc131209e30b27  freetype-2.10.4.tar.xz
- 
- # Locally calculated
--sha256  1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b  freetype-2.10.2.tar.xz
-+sha256  86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784  freetype-2.10.4.tar.xz
- sha256  fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  docs/LICENSE.TXT
- sha256  08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1  docs/FTL.TXT
- sha256  c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18  docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index f4d71bedf7..e543aee0b2 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.10.2
-+FREETYPE_VERSION = 2.10.4
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
