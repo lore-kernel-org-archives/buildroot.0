@@ -1,47 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 7 Nov 2020 14:57:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lzlib: add license file
-In-Reply-To: <20201107141936.767f004a@windsurf.home>
-References: <20201106214936.307864-1-fontaine.fabrice@gmail.com>
- <20201107141936.767f004a@windsurf.home>
-Message-ID: <CAPi7W81MUo6MtP=zm6aU+gjpkL36b3k9+PXH1bH5XFTJRFzskQ@mail.gmail.com>
+From: Xavier Roumegue <xroumegue@gmail.com>
+Date: Sat,  7 Nov 2020 14:59:01 +0100
+Subject: [Buildroot] [PATCH v2 0/8] Add imx8mm platform using only upstream
+ components
+In-Reply-To: <20201103233934.1ab8a7fc@windsurf.home>
+References: <20201103233934.1ab8a7fc@windsurf.home>
+Message-ID: <20201107135909.1265116-1-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch set aims to add support for booting imx8m platforms with upstream
+BSP components, avoiding the use of proprietary imx-mkimage tool.
 
-Le sam. 7 nov. 2020 ? 14:19, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Fri,  6 Nov 2020 22:49:36 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > Add lzlib.c as the license file and, while at it, update indentation to
-> > two spaces
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/lzlib/lzlib.hash | 3 ++-
-> >  package/lzlib/lzlib.mk   | 1 +
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> Applied to master, thanks. For those cases where we need to use a
-> source file as the license file, I think it would be nice to contact
-> upstream and suggest them to have a proper, separate, license file.
-OK, I'll do it for projects that are still active.
-Concerning lzlib, I fear that this is not the case as the last commit
-has been made 5 years ago.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Uboot is using its embedded mkimage tool and a per platform configuration file
+to generate the boot medium thanks to additional imx specific makefile targets.
 
-Fabrice
+Delegating the bootable image generation to uboot requires proprietary SoC
+firmwares either involved in the boot flow or eventually requiring
+authentication to be copied in the uboot build directory.
+
+As per Thomas proposal, this patch set mainly adds an option to copy a files
+list, from binaries folder to uboot build directory as dependency of uboot
+build step.
+
+This was inspired from SolidRun patch below:
+https://github.com/SolidRun/buildroot/commit/0f2b2971e836b508bf9c2dac34426a59a9d83572
+but this was adapted to prevent uboot patches and generalize the approach to
+any platforms.
+
+Changes v1 -> v2:
+    - Initial patch set proposal was using a dedicated board script to
+      generate the boot image as buildroot step, templatizing the configuration
+      file used to define the boot image and reusing the firmwares from the
+      binaries folder.
+    - imx8mq platform does not boot with hdmi fw embedded in the boot image and
+      recent arm trusted firmware, so imx8mq config file is removed since a
+      change to uboot mkimage configuration file is required.
+
+Xavier Roumegue (8):
+  package/freescale-imx/firmware-imx: Add option to install all ddr fw
+    files
+  boot/uboot: Add option to install fw files list to uboot build
+    directory
+  freescale-imx/firmware-imx: Copy of all DDR files if uboot needs fw.
+  boot/uboot/imx8: Add new target needed for mainline u-boot
+  board/freescale/common/imx: Add Support for uboot 'flash.bin' image
+  board/freescale/common/imx8: Use post build generated uboot image if
+    present
+  board/freescale/common/imx8: Templatize uboot image name
+  configs/imx8mmevk: new defconfig
+
+ DEVELOPERS                                    |  3 ++
+ .../common/imx/genimage.cfg.template_imx8     |  2 +-
+ board/freescale/common/imx/post-image.sh      |  6 +++-
+ board/freescale/imx8mmevk/readme.txt          | 29 ++++++++++++++--
+ boot/uboot/Config.in                          | 19 +++++++++++
+ boot/uboot/uboot.mk                           | 15 ++++++++
+ configs/imx8mmevk_defconfig                   | 34 +++++++++++++++++++
+ package/freescale-imx/firmware-imx/Config.in  |  4 +++
+ .../firmware-imx/firmware-imx.mk              | 12 +++++++
+ 9 files changed, 120 insertions(+), 4 deletions(-)
+ create mode 100644 configs/imx8mmevk_defconfig
+
+--
+2.28.0
