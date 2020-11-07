@@ -1,125 +1,111 @@
-From: Graham Leva <celaxodon@gmail.com>
-Date: Fri,  6 Nov 2020 18:29:25 -0600
-Subject: [Buildroot] [PATCH 1/1] package/linux-nvidia: add nvidia linux
- kernel extensions package
-In-Reply-To: <20201107002925.6561-1-celaxodon@gmail.com>
-References: <20201107002925.6561-1-celaxodon@gmail.com>
-Message-ID: <20201107002925.6561-2-celaxodon@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 07 Nov 2020 08:10:00 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-11-06
+Message-ID: <20201107081007.1AB4A87306@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A required dependency for building NVIDIA's Linux for Tegra
-kernel for the Jetson line of boards.
+Hello,
 
-Signed-off-by: Graham Leva <celaxodon@gmail.com>
----
- DEVELOPERS                             |  3 +++
- linux/Config.ext.in                    | 10 ++++++++++
- package/Config.in                      |  1 +
- package/linux-nvidia/Config.in         |  7 +++++++
- package/linux-nvidia/linux-nvidia.hash |  2 ++
- package/linux-nvidia/linux-nvidia.mk   | 20 ++++++++++++++++++++
- 6 files changed, 43 insertions(+)
- create mode 100644 package/linux-nvidia/Config.in
- create mode 100644 package/linux-nvidia/linux-nvidia.hash
- create mode 100644 package/linux-nvidia/linux-nvidia.mk
+Autobuild statistics for 2020-11-06
+===================================
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b245c1cd7e..391688c1c9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1036,6 +1036,9 @@ F:	package/libsrtp/
- F:	package/libwebsock/
- F:	package/sofia-sip/
- 
-+N:  Graham Leva <celaxodon@gmail.com>
-+F:  package/linux-nvidia/
-+
- N:	Grzegorz Blach <grzegorz@blach.pl>
- F:	fs/f2fs/
- F:	package/bluez5_utils-headers/
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 734a52a533..e817b4da13 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -52,6 +52,16 @@ config BR2_LINUX_KERNEL_EXT_RTAI
- 	help
- 	  RTAI Kernel part.
- 
-+#-------------------------------------------------------------------------------
-+# NVIDIA Linux Tegra drivers and patches
-+config BR2_LINUX_KERNEL_EXT_LINUX_NVIDIA
-+    bool "NVIDIA Linux Tegra drivers and patches"
-+    select BR2_PACKAGE_LINUX_NVIDIA
-+    help
-+      NVIDIA Linux Tegra kernel drivers and patches
-+
-+      https://developer.nvidia.com/embedded/linux-tegra
-+
- #-------------------------------------------------------------------------------
- # ev3dev Linux drivers
- config BR2_LINUX_KERNEL_EXT_EV3DEV_LINUX_DRIVERS
-diff --git a/package/Config.in b/package/Config.in
-index 504cfec98e..e677f0acea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -481,6 +481,7 @@ endmenu
- 	source "package/libubootenv/Config.in"
- 	source "package/libuio/Config.in"
- 	source "package/linux-backports/Config.in"
-+        source "package/linux-nvidia/Config.in"
- 	source "package/linux-serial-test/Config.in"
- 	source "package/linuxconsoletools/Config.in"
- 	source "package/lirc-tools/Config.in"
-diff --git a/package/linux-nvidia/Config.in b/package/linux-nvidia/Config.in
-new file mode 100644
-index 0000000000..6693d59a96
---- /dev/null
-+++ b/package/linux-nvidia/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LINUX_NVIDIA
-+	bool "Linux for Tegra"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  NVIDIA Linux source code for Tegra
-+
-+	  https://developer.nvidia.com/embedded/linux-tegra
-diff --git a/package/linux-nvidia/linux-nvidia.hash b/package/linux-nvidia/linux-nvidia.hash
-new file mode 100644
-index 0000000000..394d5ca193
---- /dev/null
-+++ b/package/linux-nvidia/linux-nvidia.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  ed1102afdce44bad4a016c95f361d281129f2125b8fd5616c837b7e8224eccd0  linux-nvidia-tegra-l4t-r32.4.2.tar.gz
-diff --git a/package/linux-nvidia/linux-nvidia.mk b/package/linux-nvidia/linux-nvidia.mk
-new file mode 100644
-index 0000000000..c460ea1a66
---- /dev/null
-+++ b/package/linux-nvidia/linux-nvidia.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# NVIDIA Linux for Tegra
-+#
-+################################################################################
-+
-+LINUX_NVIDIA_VERSION = tegra-l4t-r32.4.2
-+LINUX_NVIDIA_SITE = git://nv-tegra.nvidia.com/linux-nvidia.git
-+LINUX_NVIDIA_LICENSE = GPL-2.0
-+LINUX_NVIDIA_LICENSE_FILES = drivers/Makefile
-+
-+# Must be defined here as well as in hardware-nvidia packages
-+export NV_BUILD_KERNEL_DTS_ROOT=$(BUILD_DIR)/hardware/nvidia
-+
-+# L4T build process requires specific directory layouts
-+define LINUX_NVIDIA_CONFIGURE_CMDS
-+	ln -s $(BUILD_DIR)/linux-nvidia-$(LINUX_NVIDIA_VERSION) $(BUILD_DIR)/nvidia
-+endef
-+
-+$(eval $(generic-package))
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 10  |  1  |  0  | 11  |
+  2020.08.x  |  9  |  1  |  0  | 10  |
+    master   | 64  | 12  |  0  | 76  |
+     next    | 10  | 10  |  0  | 20  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+        host-sentry-cli-1.57.0 | 4 
+                       unknown | 2 
+                  autofs-5.1.6 | 1 
+               domoticz-2020.1 | 1 
+glmark2-c493520253fbfe3676c... | 1 
+                    rpm-4.16.0 | 1 
+                    vlc-3.0.11 | 1 
+                    xen-4.14.0 | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arc      |          autofs-5.1.6          | NOK | http://autobuild.buildroot.net/results/f31ef4459cf34cf439a1ef828f3dbbd73260ed9a |     
+  riscv64    |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/99f24677f4b9d018017e80a1ffcaec07cc71d570 |     
+    arm      | glmark2-c493520253fbfe3676c... | NOK | http://autobuild.buildroot.net/results/361dc40e558e2646cb93f405c7b1f621d400fea3 |     
+    mips     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/a9b3e88565abc995ec52cbe767f9b8947cd69f7c |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/4b2d220630ccb023c1176e5b3884198be236a6c7 |     
+  nds32le    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/a5b000254f5fac98415653726956c28a503dc22b |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3045f1e4a6af697096208d02c59ca3aa2507bbdc |     
+  mips64el   |           rpm-4.16.0           | NOK | http://autobuild.buildroot.net/results/05dd945d24e8684aad6a2343ba7f6f8a7cea8349 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/2bf110469ba1af16bb997d44ceee1528316367c7 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/b07052de34ca24d5c62f6facec2ced5e092d26e2 |     
+    sh4      |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/e8ed20597c80f639ef7e8b71d5b37e2ba69fe450 |     
+  aarch64    |           xen-4.14.0           | NOK | http://autobuild.buildroot.net/results/d966585c931ca4a4ae6a854a21e07eec4c277a02 |     
+
+
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
+
+                 binutils-2.32 | 1 
+
+
+Detail of failures for 2020.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |         binutils-2.32          | NOK | http://autobuild.buildroot.net/results/34e5a8d68751ab228a835cc5b28bf92882dab486 |     
+
+
+Classification of failures by reason for 2020.08.x
+--------------------------------------------------
+
+                rocksdb-6.10.1 | 1 
+
+
+Detail of failures for 2020.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ powerpc64   |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/93c8edaedcbb18d07da928b9e29b1aff3b826f24 |     
+
+
+Classification of failures by reason for next
+---------------------------------------------
+
+                  bind-9.11.24 | 5 
+          modem-manager-1.14.6 | 2 
+              asterisk-16.13.0 | 1 
+        host-sentry-cli-1.57.0 | 1 
+                rocksdb-6.10.1 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |        asterisk-16.13.0        | NOK | http://autobuild.buildroot.net/results/11ca8d4e4e56fdd076e6eab3439e18144699b630 |     
+  aarch64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/b0f6d3ba15b63421b42d6f1c183d1ccc92bab3e4 | ORPH
+   nios2     |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/2d147c470734dd0c0cfff27752c8d020f5b1f8e6 | ORPH
+ powerpc64   |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/18ad13ffeb8a208eedd22033c2ddcbd0bd90dad8 | ORPH
+   x86_64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/7257f9d31bb52fc424c97b5d152b79fbd98603fe | ORPH
+    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/ff69e614e644d83d21fd140d319b549e5ffefbca | ORPH
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/86e47cf58c0a1c898b4256690f51fce19e2a10c7 |     
+  riscv64    |      modem-manager-1.14.6      | NOK | http://autobuild.buildroot.net/results/a8a384bd1c529c8151877362e120d3371ef1a0d5 |     
+  powerpc    |      modem-manager-1.14.6      | NOK | http://autobuild.buildroot.net/results/90a2980feb84f358b96bc41f8a5845f89f7124d5 |     
+    arm      |         rocksdb-6.10.1         | NOK | http://autobuild.buildroot.net/results/0dcdf7d8ecbd550fc439bc2c1668ecbdc357e97b |     
+
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
