@@ -1,159 +1,104 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Nov 2020 18:41:06 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libass: security
- bump to version 0.15
-Message-ID: <20201107174520.7F289870D5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  7 Nov 2020 19:52:55 +0100
+Subject: [Buildroot] [PATCH 1/2] package/slirp: security bump to version
+ 4.3.1
+Message-ID: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57aabd3ca16c299ee51c309f80641d05d0e44b78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
-
-- harfbuzz is mandatory since
-  https://github.com/libass/libass/commit/f3e2c97e1818598afb0b1c7010003ffe4823ff21
-- Fix CVE-2020-26682 (In libass 0.14.0, the `ass_outline_construct`'s
-  call to `outline_stroke` causes a signed integer overflow.) through
-  https://github.com/libass/libass/commit/676f9dc5b52ef406c5527bdadbcb947f11392929
-  which does not apply cleanly over version 0.14.
-  It should be noted that version 0.15 also fixes other integer
-  overflows (which have no CVE assigned)
-- Update indentation in hash file (two spaces)
-
-https://github.com/libass/libass/releases/tag/0.15.0
+- Use an up to date fork (spice slirp is archived and has not been
+  updated since 2012)
+- Add COPYRIGHT as the license file
+- BSD-4-Clause has been replaced by BSD-3-Clause since
+  https://gitlab.freedesktop.org/slirp/libslirp/-/commit/3bac39137a652b24b89d5b9e2a39600619fbe1d3
+  https://gitlab.freedesktop.org/slirp/libslirp/-/commit/f9f6e69c4e1d9a43af30bfe791b31789ffa04954
+- Add hash file
+- Switch to meson-package
+- Fix multiple security vulnerabilities: CVE-2014-3640, CVE-2017-11434,
+  CVE-2019-6778, CVE-2019-9824, CVE-2019-14378 and CVE-2020-10756
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4ae8ecea8fb042931cebf8f8d4cb4bc891073a77)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in |  8 ++++++++
- package/harfbuzz/Config.in                    |  2 +-
- package/kodi/Config.in                        |  2 ++
- package/libass/Config.in                      |  9 +++++++++
- package/libass/libass.hash                    |  4 ++--
- package/libass/libass.mk                      | 10 ++--------
- 6 files changed, 24 insertions(+), 11 deletions(-)
+ package/slirp/Config.in  | 17 ++++++-----------
+ package/slirp/slirp.hash |  3 +++
+ package/slirp/slirp.mk   | 20 +++++++-------------
+ 3 files changed, 16 insertions(+), 24 deletions(-)
+ create mode 100644 package/slirp/slirp.hash
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 08de5d2188..d4b305f0aa 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -306,8 +306,16 @@ comment "plugins with external dependencies"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
- 	bool "assrender"
-+	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
- 	select BR2_PACKAGE_LIBASS
- 
-+comment "assrender plugin needs a toolchain w/ C++, gcc => 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
- 	bool "bluez"
- 	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
-diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
-index e8f407bb8f..e283fd831e 100644
---- a/package/harfbuzz/Config.in
-+++ b/package/harfbuzz/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_HARFBUZZ
- 	  Harfbuzz can make optional use of cairo, freetype,
- 	  glib2 and icu packages if they are selected.
- 
--comment "harfbuzz needs a toolchain w/ C++, gcc => 4.8"
-+comment "harfbuzz needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b9eea78d57..daa0dbe5c1 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 
- comment "kodi needs python w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.8"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
-@@ -61,6 +62,7 @@ comment "kodi needs an OpenGL EGL backend with OpenGL support"
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-diff --git a/package/libass/Config.in b/package/libass/Config.in
-index c654d8212a..803f6b4438 100644
---- a/package/libass/Config.in
-+++ b/package/libass/Config.in
-@@ -1,9 +1,18 @@
- config BR2_PACKAGE_LIBASS
- 	bool "libass"
-+	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # harfbuzz
- 	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_HARFBUZZ
- 	select BR2_PACKAGE_LIBFRIBIDI
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+index 51dea9700f..8f57c4fa6a 100644
+--- a/package/slirp/Config.in
++++ b/package/slirp/Config.in
+@@ -1,16 +1,10 @@
+ config BR2_PACKAGE_SLIRP
+ 	bool "slirp"
  	help
- 	  libass is a portable subtitle renderer for the ASS/SSA
- 	  (Advanced Substation Alpha/Substation Alpha) subtitle format
+-	  The Spice project aims to provide a complete open source
+-	  solution for interaction with virtualized desktop devices.
+-	  The Spice project deals with both the virtualized devices
+-	  and the front-end. Interaction between front-end and
+-	  back-end is done using VD-Interfaces.
++	  libslirp is a user-mode networking library used by virtual
++	  machines, containers or various tools.
  
- 	  https://github.com/libass/libass
-+
-+comment "libass needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 74ea5f921d..cd3c3af61c 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2  libass-0.14.0.tar.xz
--sha256 f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-+sha256  9f09230c9a0aa68ef7aa6a9e2ab709ca957020f842e52c5b2e52b801a7d9e833  libass-0.15.0.tar.xz
-+sha256  f7e30699d02798351e7f839e3d3bfeb29ce65e44efa7735c225464c4fd7dfe9c  COPYING
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 50600963ed..818bff234e 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
+-	  This package implements the slirp-part for Spice. Slirp
+-	  emulates a PPP or SLIP connection over a normal terminal.
+-
+-	  http://www.spice-space.org/
++	  https://gitlab.freedesktop.org/slirp/libslirp/
+ 
+ 	  NOTE:
+ 	  This package has some history of a unique kind:
+@@ -21,5 +15,6 @@ config BR2_PACKAGE_SLIRP
+ 	    - during that period, QEMU (Fabrice BELLARD) forked the code
+ 	      and included it in QEMU
+ 	    - and it was imported from this breed by the Spice project
+-	      around May 2009
+-	    - which is what we use here
++	      around May 2009 which archived it in 2012
++	    - So we switched to
++	      https://gitlab.freedesktop.org/slirp/libslirp
+diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
+new file mode 100644
+index 0000000000..3051179df9
+--- /dev/null
++++ b/package/slirp/slirp.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  6b1641f04d41bc45f94018ac8d42d3c9f3ba0e463cbeacf5f26fe83fc050161e  libslirp-v4.3.1.tar.bz2
++sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index 7cfead65e2..4351818952 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -4,18 +4,12 @@
  #
  ################################################################################
  
--LIBASS_VERSION = 0.14.0
-+LIBASS_VERSION = 0.15.0
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
-@@ -15,6 +15,7 @@ LIBASS_LICENSE_FILES = COPYING
- LIBASS_DEPENDENCIES = \
- 	host-pkgconf \
- 	freetype \
-+	harfbuzz \
- 	libfribidi \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-# There's no tarball releases of slirp, so we use the git repo
+-# Also, there's no tag, so we use a random SHA1 (master's HEAD
+-# of today)
+-SLIRP_VERSION = 8c2da74c1385242f20799fec8c04f8378edc6550
+-SLIRP_SITE = git://anongit.freedesktop.org/spice/slirp
+-SLIRP_LICENSE = BSD-4-Clause, BSD-2-Clause
+-# Note: The license file 'COPYRIGHT' is missing from the sources,
+-# although some files refer to it.
++SLIRP_VERSION = 4.3.1
++SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
++SLIRP_SITE = \
++	https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
++SLIRP_LICENSE = BSD-3-Clause
++SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_INSTALL_STAGING = YES
  
-@@ -31,11 +32,4 @@ else
- LIBASS_CONF_OPTS += --disable-fontconfig --disable-require-system-font-provider
- endif
- 
--ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
--LIBASS_DEPENDENCIES += harfbuzz
--LIBASS_CONF_OPTS += --enable-harfbuzz
--else
--LIBASS_CONF_OPTS += --disable-harfbuzz
--endif
+-# As we're using the git tree, there's no ./configure,
+-# so we need to autoreconf.
+-SLIRP_AUTORECONF = YES
 -
- $(eval $(autotools-package))
+-$(eval $(autotools-package))
++$(eval $(meson-package))
+-- 
+2.28.0
