@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 14:19:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lzlib: add license file
-In-Reply-To: <20201106214936.307864-1-fontaine.fabrice@gmail.com>
-References: <20201106214936.307864-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201107141936.767f004a@windsurf.home>
+Date: Sat, 7 Nov 2020 14:36:15 +0100
+Subject: [Buildroot] [git commit] package/davfs2: add davfs2 user and group
+Message-ID: <20201107132326.6C2BD82883@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  6 Nov 2020 22:49:36 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b98a6add92e38dbcd4ca9fda25454a38c719e3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add lzlib.c as the license file and, while at it, update indentation to
-> two spaces
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lzlib/lzlib.hash | 3 ++-
->  package/lzlib/lzlib.mk   | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
+mount.davfs expects the availability of the user and group davfs2.
 
-Applied to master, thanks. For those cases where we need to use a
-source file as the license file, I think it would be nice to contact
-upstream and suggest them to have a proper, separate, license file.
+Signed-off-by: Sven Klomp <mail@klomp.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/davfs2/davfs2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index a82e9d2f7c..bc2aa79646 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -18,4 +18,8 @@ DAVFS2_CONF_ENV += \
+ 	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ 
++define DAVFS2_USERS
++        davfs2 -1 davfs2 -1 * - - - davfs user
++endef
++
+ $(eval $(autotools-package))
