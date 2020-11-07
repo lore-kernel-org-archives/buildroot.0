@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Nov 2020 19:53:33 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/gcc: Fix libs
+Date: Sat, 7 Nov 2020 19:53:37 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gcc: Fix libs
  building on ARC700 with atomics
-Message-ID: <20201107184550.05C3B8153C@busybox.osuosl.org>
+Message-ID: <20201107184555.9EC8E8624E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02c5b899fef6e1b581600264b45592536f754b21
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f3b39430ab6de206e6a1fa17c45eea22f8e1c8a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 As we many times by now discussed that - some ARC cores might
 not have atomic instructions implemented. Namely that's ARC700
@@ -80,10 +80,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index f061d36d5b..ef181a1d30 100644
+index 54b69b9d20..93d975ab6a 100644
 --- a/package/gcc/gcc.mk
 +++ b/package/gcc/gcc.mk
-@@ -98,6 +98,12 @@ ifeq ($(BR2_ENABLE_DEBUG),y)
+@@ -105,6 +105,12 @@ ifeq ($(BR2_ENABLE_DEBUG),y)
  GCC_COMMON_TARGET_CFLAGS += -Wno-error
  endif
  
