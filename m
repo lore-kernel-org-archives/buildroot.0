@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:20:53 +0100
-Subject: [Buildroot] [git commit] configs/rock_pi_n8: use Python 3.x for
- U-Boot build
-Message-ID: <20201107120743.810FF83460@busybox.osuosl.org>
+Date: Sat, 7 Nov 2020 13:21:15 +0100
+Subject: [Buildroot] [git commit] package/kmscube: add license file
+Message-ID: <20201107120801.9A1E383598@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbac050caeb23c8f864c6367d0642f514e4426c0
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb2a9c3601d4ca665af731a92a9db38f113608d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New U-Boot versions (such as 2020.07 being used) need Python 3.x for
-pylibfdt.
-
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421210
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/rock_pi_n8_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/kmscube/kmscube.hash | 1 +
+ package/kmscube/kmscube.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/configs/rock_pi_n8_defconfig b/configs/rock_pi_n8_defconfig
-index 9c671d416e..b7135d6311 100644
---- a/configs/rock_pi_n8_defconfig
-+++ b/configs/rock_pi_n8_defconfig
-@@ -14,6 +14,7 @@ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="ba120841bf40ebaed049d64bb4f980083a1cf6b7"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-n8-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+diff --git a/package/kmscube/kmscube.hash b/package/kmscube/kmscube.hash
+index 6a4140c541..cb7abd48ea 100644
+--- a/package/kmscube/kmscube.hash
++++ b/package/kmscube/kmscube.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256  ec135069d8bee7f4fe38cb9dc96fbbd56e0057290fa25eff8b5b314ee473c502  kmscube-4660a7dca6512b6e658759d00cff7d4ad2a2059d.tar.gz
++sha256  f622099ab0d274133f6e62d5fccfe970b61134d80ed036f45f8cf1e90c3d5a05  COPYING
+diff --git a/package/kmscube/kmscube.mk b/package/kmscube/kmscube.mk
+index dc8c691864..7b458376dc 100644
+--- a/package/kmscube/kmscube.mk
++++ b/package/kmscube/kmscube.mk
+@@ -7,6 +7,7 @@
+ KMSCUBE_VERSION = 4660a7dca6512b6e658759d00cff7d4ad2a2059d
+ KMSCUBE_SITE = https://gitlab.freedesktop.org/mesa/kmscube/-/archive/$(KMSCUBE_VERSION)
+ KMSCUBE_LICENSE = MIT
++KMSCUBE_LICENSE_FILES = COPYING
+ KMSCUBE_DEPENDENCIES = host-pkgconf mesa3d libdrm
+ 
+ $(eval $(meson-package))
