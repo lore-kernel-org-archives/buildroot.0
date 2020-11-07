@@ -1,75 +1,71 @@
 From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Sat,  7 Nov 2020 14:59:02 +0100
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx: Add
- option to install all ddr fw files
+Date: Sat,  7 Nov 2020 14:59:03 +0100
+Subject: [Buildroot] [PATCH v2 2/8] boot/uboot: Add option to install fw
+ files list to uboot build directory
 In-Reply-To: <20201103233934.1ab8a7fc@windsurf.home>
 References: <20201103233934.1ab8a7fc@windsurf.home>
-Message-ID: <20201107135909.1265116-2-xroumegue@gmail.com>
+Message-ID: <20201107135909.1265116-3-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Selecting this option will copy all ([lp]ddr4.bin) DDR training files to
-BINARIES_DIR.
+This copies a list of fw files, which have to be installed by others
+packages to BINARIES_DIR to uboot build directory.
+Some platforms, such as imx8, require firmware files located in the
+build directory to generate a bootable image.
 
 Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
 ---
- package/freescale-imx/firmware-imx/Config.in       |  3 +++
- package/freescale-imx/firmware-imx/firmware-imx.mk | 12 ++++++++++++
- 2 files changed, 15 insertions(+)
+ boot/uboot/Config.in | 14 ++++++++++++++
+ boot/uboot/uboot.mk  |  9 +++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 587f402426..2ed6d4254d 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -81,6 +81,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN
- 	help
- 	  The DMEM firmware will be padded to this length
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index e4a0f48deb..f44a5b4976 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -229,6 +229,20 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
  
-+config BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE
-+    bool
+ endchoice
+ 
++config BR2_TARGET_UBOOT_NEEDS_FW
++    bool "U-Boot needs FW files"
++    help
++      Some platforms (such as iMX8) requires subsystem firmware files
++      encapsulated within the u-boot payload such as this configure properly the
++      memory subystem or those later require authentication from boot ROM.
 +
- endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
++config BR2_TARGET_UBOOT_FW_FILES
++    depends on BR2_TARGET_UBOOT_NEEDS_FW
++    string "Firmware files list"
++    help
++      Specify the list of files to be copied in the u-boot build directory from
++      the binary folder.
++
+ menu "U-Boot binary format"
  
- endif # BR2_PACKAGE_FIRMWARE_IMX
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index fb3cfe640b..c5ae4fad25 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -36,6 +36,16 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
- 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ config BR2_TARGET_UBOOT_FORMAT_AIS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 72d5df412d..7a77fdb20b 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -428,6 +428,15 @@ define UBOOT_KCONFIG_FIXUP_CMDS
+ 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
  endef
  
-+ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE),y)
-+define FIRMWARE_IMX_COPY_DDR_FW
-+	cp $(1) $(BINARIES_DIR)/
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_FW),y)
++define UBOOT_COPY_TARGET_FW
++	$(foreach f,$(BR2_TARGET_UBOOT_FW_FILES), \
++		cp -f $(BINARIES_DIR)/$(call qstrip,$(f)) $(@D)/
++	)
 +endef
-+else
-+define FIRMWARE_IMX_COPY_DDR_FW
-+	true
-+endef
++UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TARGET_FW
 +endif
 +
- ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
- FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ ifeq ($(BR2_TARGET_UBOOT)$(BR_BUILDING),yy)
  
-@@ -51,6 +61,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
- 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
- 	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin)
- endef
- endif
- 
-@@ -69,6 +80,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
- 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
- 		$(BINARIES_DIR)/ddr4_201810_fw.bin
- 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-+	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/ddr4*.bin)
- endef
- endif
- 
+ #
 -- 
 2.28.0
