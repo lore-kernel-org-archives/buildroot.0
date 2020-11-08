@@ -1,62 +1,88 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 7 Nov 2020 21:05:10 -0300
-Subject: [Buildroot] [PATCH v2 8/8] configs/imx8mmevk: new defconfig
-In-Reply-To: <20201107135909.1265116-9-xroumegue@gmail.com>
-References: <20201103233934.1ab8a7fc@windsurf.home>
- <20201107135909.1265116-9-xroumegue@gmail.com>
-Message-ID: <CAOMZO5AyxDcLGyd2SEMd8pdFVsecMLRQRbDSJYf1tjE6J9nuLw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 08 Nov 2020 08:08:35 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-11-07
+Message-ID: <20201108080841.CB9A220414@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+Hello,
 
-On Sat, Nov 7, 2020 at 10:59 AM Xavier Roumegue <xroumegue@gmail.com> wrote:
->
-> Introduce NXP imx8mm evk board configuration that uses mainline atf,
-> uboot and kernel.
->
-> Mainline uboot mkimage tool generates the boot image.
+Autobuild statistics for 2020-11-07
+===================================
 
-Thanks for working on this series!
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  |  6  |  0  |  0  |  6  |
+  2020.08.x  |  8  |  0  |  0  |  8  |
+    master   | 46  | 18  |  0  | 64  |
+     next    | 11  |  4  |  0  | 15  |
 
-> +BR2_aarch64=y
-> +BR2_ARM_FPU_VFPV3=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+Classification of failures by reason for master
+-----------------------------------------------
 
-You missed to pass the specific kernel version like:
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
+                  boost-1.74.0 | 4 
+                   guile-3.0.4 | 3 
+        python-m2crypto-0.36.0 | 2 
+                apparmor-3.0.0 | 1 
+               domoticz-2020.1 | 1 
+     dovecot-pigeonhole-0.5.11 | 1 
+glmark2-c493520253fbfe3676c... | 1 
+        host-sentry-cli-1.57.0 | 1 
+                   httping-2.5 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+            qt5location-5.15.1 | 1 
+uclibc-ng-test-c64d6ac77f0e... | 1 
 
 
-> +BR2_PACKAGE_FREESCALE_IMX=y
-> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_FW_FILES="lpddr4*.bin"
-> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-> +BR2_TARGET_UBOOT_FORMAT_ELF=y
-> +BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
+Detail of failures for master
+-----------------------------
 
-You missed to pass the specific U-Boot version like:
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  aarch64    |         apparmor-3.0.0         | NOK | http://autobuild.buildroot.net/results/6a14d16009fdad68fd5c797195cd875b3e03d505 |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/b441e20553d108886a4d8303d60079681f25c73d |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/0cd932e75c90806f88aa77c89b7483a159d3156f |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/05ca26943c6d9b91bcad729334245d7ccf8a5387 |     
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/525631d7683375baf1436e31ebe88e593580ba5f |     
+    i586     |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/46610899d65935d0cccf33fc83ee3f1f717bd2dc |     
+ aarch64_be  |   dovecot-pigeonhole-0.5.11    | NOK | http://autobuild.buildroot.net/results/5fb1cd57bc3fdf4f75019c7b25d65ef887eea539 |     
+    arm      | glmark2-c493520253fbfe3676c... | NOK | http://autobuild.buildroot.net/results/fea50f0d4045c3feffbf0410c58b7efdef5214ff |     
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/ba051bb00a6cad3cfd5ffeb197de20ea0eaef33e | ORPH
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/03483083b766035223d685f450e8185145ef38cb | ORPH
+    arm      |          guile-3.0.4           | NOK | http://autobuild.buildroot.net/results/37ef970c3adcfb2747cdf2648117a3e9ac4ed451 | ORPH
+  mips64el   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/d8df89ce0510bc4f7c6d2e1c3c6744bb45104164 |     
+   xtensa    |          httping-2.5           | NOK | http://autobuild.buildroot.net/results/48f76cd24e72180696079be93b60f0a902d34bad |     
+    i586     |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/b6f160b267cef03fc4932c5ed9d2b7a8defc049d |     
+   mipsel    |     python-m2crypto-0.36.0     | NOK | http://autobuild.buildroot.net/results/d115a082418321e7dc4715c635f94b30b3cad387 |     
+    arm      |     python-m2crypto-0.36.0     | NOK | http://autobuild.buildroot.net/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368 |     
+   mipsel    |       qt5location-5.15.1       | NOK | http://autobuild.buildroot.net/results/fb23e12473da9ea682695d03cfcd57d86cec1bc9 |     
+  riscv64    | uclibc-ng-test-c64d6ac77f0e... | NOK | http://autobuild.buildroot.net/results/a34f8183ca754b5f65def96de931c48eb5757e99 |     
 
-Thanks
+
+Classification of failures by reason for next
+---------------------------------------------
+
+                  bind-9.11.24 | 2 
+                 mesa3d-20.2.1 | 1 
+          modem-manager-1.14.6 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+microblazeel |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/902fe575ecbbd0bb71bf1ca483c4d44807113682 | ORPH
+   x86_64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/efcda7a736f03de7d84ccacf5708a13c33d7a4bf | ORPH
+    arm      |         mesa3d-20.2.1          | NOK | http://autobuild.buildroot.net/results/9e99ca11461a04fe239f1c413e897e9d096e04ee |     
+  aarch64    |      modem-manager-1.14.6      | NOK | http://autobuild.buildroot.net/results/66be9dd23cfe6c243193c888992a619a0f4c4ad1 |     
+
+
+Gitlab CI results for 2020-11-07
+================================
+
+
+-- 
+http://autobuild.buildroot.net
