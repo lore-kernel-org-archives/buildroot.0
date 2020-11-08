@@ -1,108 +1,38 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  8 Nov 2020 18:15:00 +0100
-Subject: [Buildroot] [PATCH] board/qemu/ppc-mpc8544ds: apply Debian patch
- fixing wrong mcpu
-Message-ID: <20201108171500.3655310-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  8 Nov 2020 18:23:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: drop unrecognized
+ variables
+Message-ID: <20201108172347.63740-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building the linux kernel for PPC_85xx cpus with GCC 8, the build fail with:
+pgac_cv_snprintf_long_long_int_modifier has been dropped since version
+11.0 and
+https://github.com/postgres/postgres/commit/b929614f5e867c70721b3db31d3dec6cb35e1eb5
 
-  powerpc-e500v2-linux-gnuspe-gcc: error: unrecognized argument in option '-mcpu=powerpc'
-  powerpc-e500v2-linux-gnuspe-gcc: note: valid arguments to '-mcpu=' are: 8540 8548 native
+pgac_cv_snprintf_size_t_support has been dropped since version 12.0 and
+https://github.com/postgres/postgres/commit/96bf88d52711ad3a0a4cc2d1d9cb0e2acab85e63
 
-"GCC started treating "PowerPC" and "PowerPC SPE" as two different architectures and
-that's the reason for the reduced -mcpu list." [1]
-
-As suggested in the crosstool-ng issue [1], apply the Debian patch to avoid
--mcpu=powerpc or -mcpu=powerpc64.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981654
-
-[1] https://github.com/crosstool-ng/crosstool-ng/issues/1152
-[2] https://salsa.debian.org/kernel-team/linux/-/blob/buster/debian/patches/bugfix/powerpc/powerpc-fix-mcpu-options-for-spe-only-compiler.patch
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...x-mcpu-options-for-SPE-only-compiler.patch | 53 +++++++++++++++++++
- configs/qemu_ppc_mpc8544ds_defconfig          |  1 +
- 2 files changed, 54 insertions(+)
- create mode 100644 board/qemu/ppc-mpc8544ds/patches/linux/0001-powerpc-Fix-mcpu-options-for-SPE-only-compiler.patch
+ package/postgresql/postgresql.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/board/qemu/ppc-mpc8544ds/patches/linux/0001-powerpc-Fix-mcpu-options-for-SPE-only-compiler.patch b/board/qemu/ppc-mpc8544ds/patches/linux/0001-powerpc-Fix-mcpu-options-for-SPE-only-compiler.patch
-new file mode 100644
-index 0000000000..a7bc31bda2
---- /dev/null
-+++ b/board/qemu/ppc-mpc8544ds/patches/linux/0001-powerpc-Fix-mcpu-options-for-SPE-only-compiler.patch
-@@ -0,0 +1,53 @@
-+From 44e3424424b447b00fbe1f10ddba81b55817e970 Mon Sep 17 00:00:00 2001
-+From: Ben Hutchings <ben@decadent.org.uk>
-+Date: Wed, 26 Dec 2018 00:00:40 +0000
-+Subject: [PATCH] powerpc: Fix -mcpu= options for SPE-only compiler
-+
-+GCC for Debian's "powerpcspe" architecture only supports 32-bit
-+SPE targets, and using -mcpu=powerpc or -mcpu=powerpc64 is a fatal
-+error.
-+
-+* Change the test for a biarch compiler to pass both the -m32 and -m64
-+  options, so that it doesn't catch 32-bit-only compilers
-+* Add an ifdef CONFIG_PPC64 around the 64-bit CPU option definitions
-+
-+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
-+[Romain: Patch from Debian repository:
-+https://salsa.debian.org/kernel-team/linux/-/blob/buster/debian/patches/bugfix/powerpc/powerpc-fix-mcpu-options-for-spe-only-compiler.patch]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ arch/powerpc/Makefile | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-+index 37ac731a556b..5211ea4f48b1 100644
-+--- a/arch/powerpc/Makefile
-++++ b/arch/powerpc/Makefile
-+@@ -12,7 +12,7 @@
-+ # Rewritten by Cort Dougan and Paul Mackerras
-+ #
-+ 
-+-HAS_BIARCH	:= $(call cc-option-yn, -m32)
-++HAS_BIARCH	:= $(call cc-option-yn, -m32 -m64)
-+ 
-+ # Set default 32 bits cross compilers for vdso and boot wrapper
-+ CROSS32_COMPILE ?=
-+@@ -166,6 +166,7 @@ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option, $(MULTIPLEWORD))
-+ 
-+ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option,-mno-readonly-in-sdata)
-+ 
-++ifdef CONFIG_PPC64
-+ ifdef CONFIG_PPC_BOOK3S_64
-+ ifdef CONFIG_CPU_LITTLE_ENDIAN
-+ CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power8
-+@@ -177,6 +178,7 @@ endif
-+ else
-+ CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=powerpc64
-+ endif
-++endif
-+ 
-+ ifdef CONFIG_FUNCTION_TRACER
-+ CC_FLAGS_FTRACE := -pg
-+-- 
-+2.25.4
-+
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 98a10b3535..9ec94a4839 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -3,6 +3,7 @@ BR2_powerpc=y
- BR2_powerpc_8548=y
- 
- # System
-+BR2_GLOBAL_PATCH_DIR="board/qemu/ppc-mpc8544ds/patches"
- BR2_SYSTEM_DHCP="eth0"
- 
- # Filesystem
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 3630b5a385..d984235249 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -13,8 +13,6 @@ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ POSTGRESQL_CONF_ENV = \
+ 	ac_cv_type_struct_sockaddr_in6=yes \
+-	pgac_cv_snprintf_long_long_int_modifier="ll" \
+-	pgac_cv_snprintf_size_t_support=yes \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ POSTGRESQL_CONF_OPTS = --disable-rpath
+ POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
 -- 
-2.25.4
+2.28.0
