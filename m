@@ -1,52 +1,62 @@
-From: C Larbi <pkl2000us@gmail.com>
-Date: Sat, 7 Nov 2020 23:55:47 +0000
-Subject: [Buildroot] Issue with building HOST-LIBXML-PARSER-PERL
-Message-ID: <CANVomh-mxky6fEdMHY5cVi2oLt+Tb56NbK8F7mw3jMrCYN8xPw@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 7 Nov 2020 21:05:10 -0300
+Subject: [Buildroot] [PATCH v2 8/8] configs/imx8mmevk: new defconfig
+In-Reply-To: <20201107135909.1265116-9-xroumegue@gmail.com>
+References: <20201103233934.1ab8a7fc@windsurf.home>
+ <20201107135909.1265116-9-xroumegue@gmail.com>
+Message-ID: <CAOMZO5AyxDcLGyd2SEMd8pdFVsecMLRQRbDSJYf1tjE6J9nuLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all.
-I am newbie to buildroot and open source in general so please endulge me :)
+Hi Xavier,
 
-I am currently trying to test out a KIOSK application using Webkitgtk on a
-raspberry pi 4
+On Sat, Nov 7, 2020 at 10:59 AM Xavier Roumegue <xroumegue@gmail.com> wrote:
+>
+> Introduce NXP imx8mm evk board configuration that uses mainline atf,
+> uboot and kernel.
+>
+> Mainline uboot mkimage tool generates the boot image.
 
-My build machine is a fedora32 distro
+Thanks for working on this series!
 
-I started out with the "raspberrypi4_defconfig"
+> +BR2_aarch64=y
+> +BR2_ARM_FPU_VFPV3=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
-Later added graphic libraries (: Xorg, mesa etc) to give me a graphics
-stack.
-
-
-PROBLEM:
-Building host-libxml-parser-perl package always fails.
-
-It displays the error message "No targets specified and no makefile found"
-in the building stage.
-
-Also in the configuration stage, i get the warning that EXPAT cannot be
-found in the standard library directories
+You missed to pass the specific kernel version like:
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
 
 
-I did some digging around in the documentation and came up with following
-points
+> +BR2_PACKAGE_FREESCALE_IMX=y
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_FW_FILES="lpddr4*.bin"
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
 
-1. I can confirm that libexpat.so is in host/lib
+You missed to pass the specific U-Boot version like:
+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
 
-2. It looks to me like this is a perl package with a Makefile.pl file.
-
-3. Looking in the .mk file for the package, i don't see any support for the
-perl infrastructure.
-
-Any support will be greatly appreciated as i have spent the whole day
-trying to figure out the issue
-
-Regards
-Cerezo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201107/f0eaa640/attachment.html>
+Thanks
