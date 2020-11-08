@@ -1,38 +1,84 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  8 Nov 2020 18:23:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: drop unrecognized
- variables
-Message-ID: <20201108172347.63740-1-fontaine.fabrice@gmail.com>
+Date: Sun,  8 Nov 2020 18:28:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-m2crypto: fix build on arm
+ and mips
+Message-ID: <20201108172822.63987-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pgac_cv_snprintf_long_long_int_modifier has been dropped since version
-11.0 and
-https://github.com/postgres/postgres/commit/b929614f5e867c70721b3db31d3dec6cb35e1eb5
+Fix build failure on arm and mips (perhaps also other)
 
-pgac_cv_snprintf_size_t_support has been dropped since version 12.0 and
-https://github.com/postgres/postgres/commit/96bf88d52711ad3a0a4cc2d1d9cb0e2acab85e63
+Fixes:
+ - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
+ - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/postgresql/postgresql.mk | 2 --
- 1 file changed, 2 deletions(-)
+ ...swig-default-includes-before-openssl.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 3630b5a385..d984235249 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -13,8 +13,6 @@ POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = \
- 	ac_cv_type_struct_sockaddr_in6=yes \
--	pgac_cv_snprintf_long_long_int_modifier="ll" \
--	pgac_cv_snprintf_size_t_support=yes \
- 	LIBS=$(TARGET_NLS_LIBS)
- POSTGRESQL_CONF_OPTS = --disable-rpath
- POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+new file mode 100644
+index 0000000000..57fbd0126c
+--- /dev/null
++++ b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+@@ -0,0 +1,53 @@
++From 1aab31787a8d1ef9436d9cf81832691f729b6282 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 7 Nov 2020 23:26:30 +0100
++Subject: [PATCH] setup.py: move swig default includes before openssl
++
++Move swig default includes before openssl to avoid the following build
++failure when cross-compiling for some architectures (e.g. arm, mips):
++
++swig -python -py3 -D__x86_64__ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/python3.9 -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/openssl -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include-fixed -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/../../../../mipsel-buildroot-linux-gnu/include -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include -includeall -modern -builtin -outdir /srv/storage/autobuild/run/instance-0/output-1/build/python-m2crypto-0.36.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
++Deprecated command line option: -modern. This option is now always on.
++/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/types.h:139: Error: CPP #error "". Use the -cpperraswarn option to continue swig processing.
++
++This build failure is probably raised because swig includes a wrong types.h file
++from the openssl directory (e.g.
++/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
++ - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.com/m2crypto/m2crypto/-/merge_requests/248]
++---
++ setup.py | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 89d03bb..0045fda 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -154,6 +154,9 @@ class _M2CryptoBuildExt(build_ext.build_ext):
++         if sys.version_info[:1] >= (3,):
++             self.swig_opts.append('-py3')
++ 
+++        # swig seems to need the default header file directories
+++        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
+++
++         log.debug('self.include_dirs = %s', self.include_dirs)
++         log.debug('self.library_dirs = %s', self.library_dirs)
++ 
++@@ -204,8 +207,6 @@ class _M2CryptoBuildExt(build_ext.build_ext):
++             self.swig_opts.append(
++                 '-I' + os.path.join(openssl_include_dir, 'openssl'))
++ 
++-        # swig seems to need the default header file directories
++-        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
++         self.swig_opts.append('-includeall')
++         self.swig_opts.append('-modern')
++         self.swig_opts.append('-builtin')
++-- 
++2.28.0
++
 -- 
 2.28.0
