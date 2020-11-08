@@ -1,105 +1,54 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun,  8 Nov 2020 22:17:43 +0100
-Subject: [Buildroot] [PATCH v3 2/2] package/cups-filters: bump to version
- 1.28.4
-In-Reply-To: <20201108211743.1317675-1-angelo@amarulasolutions.com>
-References: <20201108211743.1317675-1-angelo@amarulasolutions.com>
-Message-ID: <20201108211743.1317675-2-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 8 Nov 2020 19:24:08 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] Revert "keepalived: needs
+ headers >= 3.4"
+Message-ID: <20201108210710.8387386CE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While bumping, removing upstreamed patches. Removing also autoreconf
-step cause we are not patching it anymore.
+commit: https://git.buildroot.net/buildroot/commit/?id=2ef3e19b7b026ad1f6839092428419011ba5d0f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
+
+Original commit  made restriction for Linux headers < 3.4 which was
+related to keepalived version 1.3.5, but it compiles fine now at least
+with a toolchain based on 3.2 headers and keepalived 2.0.15 together
+with ipset enabled.
+
+Probably it was fixed by this commit:
+
+    https://github.com/acassen/keepalived/commit/5a7f895bb795269f79e6353c6269dfbc0b782281
+
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c69a88190a73fae4b300c47182089117f16c8415)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v1 -> v2:
-  Fixing author
-v2 -> v3:
-  Removing autoreconf step (suggested by Baruch)
+ package/keepalived/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
- ...fix-cross-compilation-without-dejavu.patch | 41 -------------------
- package/cups-filters/cups-filters.hash        |  2 +-
- package/cups-filters/cups-filters.mk          |  4 +-
- 3 files changed, 2 insertions(+), 45 deletions(-)
- delete mode 100644 package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-
-diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-deleted file mode 100644
-index 650b90a89b..0000000000
---- a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 13 Jul 2020 23:02:50 +0200
--Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
--
--Cross-compilation is broken since commit 1d66106. Indeed, when
--cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
--path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
--provided through --with-test-font-path which will fix the build failure
--but will result in broken test programs.
--
--So when cross-compiling don't try to check if the test-font-path is
--valid or not and just use the one provided by the user or the default
--one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
--
--Fix #262
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
-----
-- configure.ac | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index aa905cf5d..4cc4fd6e5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
-- 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
-- )
-- 
---AS_IF([test -f "$with_test_font_path"],
---	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
--+AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
-- 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
-- )
--+AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
-- 
-- # ================
-- # Check for cflags
-diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
-index 61cb42a438..e36a00ab46 100644
---- a/package/cups-filters/cups-filters.hash
-+++ b/package/cups-filters/cups-filters.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
-+sha256 cf90b96b5c7a906a05070e757ee5566d9680db98a279e60567ea5421c38f11de  cups-filters-1.28.4.tar.gz
- sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
-diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
-index 237d8afe62..3ba031d5a1 100644
---- a/package/cups-filters/cups-filters.mk
-+++ b/package/cups-filters/cups-filters.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
+diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
+index c71821545c..2a0663fed0 100644
+--- a/package/keepalived/Config.in
++++ b/package/keepalived/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_KEEPALIVED
+ 	bool "keepalived"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS # uses libdl
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  The main goal of the keepalived project is to add a strong &
+@@ -15,6 +14,6 @@ config BR2_PACKAGE_KEEPALIVED
  
--CUPS_FILTERS_VERSION = 1.27.5
-+CUPS_FILTERS_VERSION = 1.28.4
- CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
- CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
- CUPS_FILTERS_LICENSE_FILES = COPYING
--# We're patching configure.ac
--CUPS_FILTERS_AUTORECONF = YES
+ 	  http://www.keepalived.org/
  
- CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
- 
--- 
-2.25.1
+-comment "keepalived needs a toolchain w/ dynamic library, headers >= 3.4"
++comment "keepalived needs a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++	depends on BR2_STATIC_LIBS
