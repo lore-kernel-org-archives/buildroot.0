@@ -1,44 +1,101 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun,  8 Nov 2020 17:57:55 +0100
-Subject: [Buildroot] [PATCH] package/python-can: bump to verison 3.3.4
-Message-ID: <20201108165755.1191036-1-angelo@amarulasolutions.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  8 Nov 2020 18:11:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libexif: add security fix for
+ CVE-2020-0198
+Message-ID: <20201108171142.1286536-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-can/python-can.hash | 4 ++--
- package/python-can/python-can.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ed-another-unsigned-integer-overflow.patch | 63 +++++++++++++++++++
+ package/libexif/libexif.mk                    |  2 +
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index ced51d8b75..5330e5899c 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://pypi.org/pypi/python-can/json
--sha256	ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488  python-can-3.3.3.tar.gz
-+# sha256 from https://pypi.org/pypi/python-can
-+sha256	2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449  python-can-3.3.4.tar.gz
- # Locally computed sha256 checksums
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 158e89f204..1ab813e2c9 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
+new file mode 100644
+index 0000000000..77bdfe89d2
+--- /dev/null
++++ b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
+@@ -0,0 +1,63 @@
++From ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c Mon Sep 17 00:00:00 2001
++From: Marcus Meissner <marcus@jet.franken.de>
++Date: Mon, 8 Jun 2020 17:27:06 +0200
++Subject: [PATCH] fixed another unsigned integer overflow
++
++first fixed by google in android fork,
++https://android.googlesource.com/platform/external/libexif/+/1e187b62682ffab5003c702657d6d725b4278f16%5E%21/#F0
++
++(use a more generic overflow check method, also check second overflow instance.)
++
++https://security-tracker.debian.org/tracker/CVE-2020-0198
++
++Downloaded from upstream commit:
++https://github.com/libexif/libexif/commit/ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libexif/exif-data.c | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/libexif/exif-data.c b/libexif/exif-data.c
++index 8b280d3..b495726 100644
++--- a/libexif/exif-data.c
+++++ b/libexif/exif-data.c
++@@ -47,6 +47,8 @@
++ #undef JPEG_MARKER_APP1
++ #define JPEG_MARKER_APP1 0xe1
++ 
+++#define CHECKOVERFLOW(offset,datasize,structsize) (( offset >= datasize) || (structsize > datasize) || (offset > datasize - structsize ))
+++
++ static const unsigned char ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
++ 
++ struct _ExifDataPrivate
++@@ -327,7 +329,7 @@ exif_data_load_data_thumbnail (ExifData *data, const unsigned char *d,
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail offset (%u).", o);
++ 		return;
++ 	}
++-	if (s > ds - o) {
+++	if (CHECKOVERFLOW(o,ds,s)) {
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail size (%u), max would be %u.", s, ds-o);
++ 		return;
++ 	}
++@@ -420,9 +422,9 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
++ 	}
++ 
++ 	/* Read the number of entries */
++-	if ((offset + 2 < offset) || (offset + 2 < 2) || (offset + 2 > ds)) {
+++	if (CHECKOVERFLOW(offset, ds, 2)) {
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_CORRUPT_DATA, "ExifData",
++-			  "Tag data past end of buffer (%u > %u)", offset+2, ds);
+++			  "Tag data past end of buffer (%u+2 > %u)", offset, ds);
++ 		return;
++ 	}
++ 	n = exif_get_short (d + offset, data->priv->order);
++@@ -431,7 +433,7 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
++ 	offset += 2;
++ 
++ 	/* Check if we have enough data. */
++-	if (offset + 12 * n > ds) {
+++	if (CHECKOVERFLOW(offset, ds, 12*n)) {
++ 		n = (ds - offset) / 12;
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData",
++ 				  "Short data; only loading %hu entries...", n);
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index c945c275a7..979d592447 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -12,5 +12,7 @@ LIBEXIF_INSTALL_STAGING = YES
+ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
++# 0001-fixed-another-unsigned-integer-overflow.patch
++LIBEXIF_IGNORE_CVES += CVE-2020-0198
  
--PYTHON_CAN_VERSION = 3.3.3
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/b0/fa/8c6eb8988130f256db4c3cf84537c44684dbb3d528d2e1a1d2209eac4d90
-+PYTHON_CAN_VERSION = 3.3.4
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/97/dd/5e5ae96db41ba57dde127e0600c3d324239ed692e167296c5fdb992cbf41
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ $(eval $(autotools-package))
 -- 
-2.25.1
+2.27.0
