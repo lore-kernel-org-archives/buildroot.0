@@ -1,39 +1,36 @@
-From: C Larbi <pkl2000us@gmail.com>
-Date: Sun, 8 Nov 2020 21:07:57 +0000
-Subject: [Buildroot] [ISSUE] webkitgtk/webkitgtk.mk
-Message-ID: <CANVomh9b1fBc6vzrqjttcFijQP3Pi6tFSRkWKWgpPrhh6MZa1g@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun,  8 Nov 2020 22:17:42 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/cups-filters: fix deamon path
+ for cups service
+Message-ID: <20201108211743.1317675-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling webkitgtk for a raspberrypi4 target using busybox as init throws
-a "requires systemd" error at configuration stage
+Fix a typo in service location, the right location is indeed /usr/bin.
 
-was solved adding command to configuration options in webkitgtk.mk:
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+v1 -> v2:
+  Fixing author
 
-WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
-	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
-	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
-WEBKITGTK_CONF_OPTS = \
-	-DENABLE_API_TESTS=OFF \
-	-DENABLE_GEOLOCATION=OFF \
-	-DENABLE_GTKDOC=OFF \
-	-DENABLE_INTROSPECTION=OFF \
-	-DENABLE_MINIBROWSER=ON \
-	-DENABLE_SPELLCHECK=ON \
-	-DPORT=GTK \
-+       *-DUSE_SYSTEMD=OFF \*
-	-DSILENCE_CROSS_COMPILATION_NOTICES=ON \
-	-DUSE_LIBNOTIFY=OFF \
-	-DUSE_LIBHYPHEN=OFF \
-	-DUSE_OPENJPEG=ON \
-	-DUSE_WOFF2=ON \
-	-DUSE_WPE_RENDERER=OFF
+ package/cups-filters/S82cups-browsed | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-regards
-Cerezo
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201108/895e0324/attachment.html>
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+index 08909c7f98..f17bbe7465 100644
+--- a/package/cups-filters/S82cups-browsed
++++ b/package/cups-filters/S82cups-browsed
+@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- -c /etc/cups/cups-browsed.conf
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+-- 
+2.25.1
