@@ -1,54 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Nov 2020 19:21:56 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] Revert "keepalived: needs
- headers >= 3.4"
-Message-ID: <20201108210715.6991786CE2@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun,  8 Nov 2020 22:29:40 +0100
+Subject: [Buildroot] [PATCH 1/2] linux: bump CIP kernel to version
+ 4.19.152-cip37
+Message-ID: <20201108212941.1332291-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=483b3c381a30f8e0169e4d2b8c512ff405cde29d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+This patch bumps Linux CIP to version 4.19.152-cip37
 
-This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
-
-Original commit  made restriction for Linux headers < 3.4 which was
-related to keepalived version 1.3.5, but it compiles fine now at least
-with a toolchain based on 3.2 headers and keepalived 2.0.15 together
-with ipset enabled.
-
-Probably it was fixed by this commit:
-
-    https://github.com/acassen/keepalived/commit/5a7f895bb795269f79e6353c6269dfbc0b782281
-
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c69a88190a73fae4b300c47182089117f16c8415)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/keepalived/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
-index c71821545c..2a0663fed0 100644
---- a/package/keepalived/Config.in
-+++ b/package/keepalived/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_KEEPALIVED
- 	bool "keepalived"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS # uses libdl
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 	select BR2_PACKAGE_OPENSSL
+diff --git a/linux/Config.in b/linux/Config.in
+index 6d9d0af067..5a29545d41 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.9)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (4.19.132-cip30)"
++	bool "Latest CIP SLTS version (4.19.152-cip37)"
  	help
- 	  The main goal of the keepalived project is to add a strong &
-@@ -15,6 +14,6 @@ config BR2_PACKAGE_KEEPALIVED
- 
- 	  http://www.keepalived.org/
- 
--comment "keepalived needs a toolchain w/ dynamic library, headers >= 3.4"
-+comment "keepalived needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	depends on BR2_STATIC_LIBS
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -126,8 +126,8 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
++	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.25.1
