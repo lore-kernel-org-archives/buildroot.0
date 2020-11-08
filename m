@@ -1,47 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Nov 2020 18:49:45 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: add
- missing path options
-Message-ID: <20201108180657.146DB8792B@busybox.osuosl.org>
+Date: Sun, 08 Nov 2020 20:31:25 +0100
+Subject: [Buildroot] [PATCH] Revert "keepalived: needs headers >= 3.4"
+In-Reply-To: <20201101234810.10137-1-vadym.kochan@plvision.eu> (Vadym Kochan's
+ message of "Mon, 2 Nov 2020 01:48:10 +0200")
+References: <20201101234810.10137-1-vadym.kochan@plvision.eu>
+Message-ID: <87r1p3wsqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8636f93e7a72fd896eaf860695954ac55e81639
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Vadym" == Vadym Kochan <vadym.kochan@plvision.eu> writes:
 
-If paths are not set, then meson will search the host system for the
-binaries (or the target, where those binaries are not yet installed).
-So add the missing paths.
+ > This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
+ > Original commit  made restriction for Linux headers < 3.4 which was
+ > related to keepalived version 1.3.5, but it compiles fine now at least
+ > with a toolchain based on 3.2 headers and keepalived 2.0.15 together
+ > with ipset enabled.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Reviewed-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit acb62b3336d961486d8334670572cfb755eef102)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/systemd/systemd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Probably it was fixed by this commit:
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index c01e8c9a3e..48c151fb34 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -34,11 +34,15 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsystem-uid-max=999 \
- 	-Dsystem-gid-max=999 \
- 	-Dtelinit-path=$(TARGET_DIR)/sbin/telinit \
-+	-Dquotaon-path=/usr/sbin/quotaon \
-+	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dkmod-path=/usr/bin/kmod \
- 	-Dkexec-path=/usr/sbin/kexec \
- 	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dumount-path=/usr/bin/umount \
-+	-Dloadkeys-path=/usr/bin/loadkeys \
-+	-Dsetfont-path=/usr/bin/setfont \
- 	-Dnobody-group=nogroup \
- 	-Didn=true \
- 	-Dnss-systemd=true
+ >     https://github.com/acassen/keepalived/commit/5a7f895bb795269f79e6353c6269dfbc0b782281
+
+ > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
