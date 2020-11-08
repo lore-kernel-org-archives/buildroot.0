@@ -1,50 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  8 Nov 2020 21:53:44 +0100
-Subject: [Buildroot] [PATCH] support/testing/tests/init/test_systemd: update
- to BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
-Message-ID: <20201108205344.3887700-1-romain.naour@gmail.com>
+From: C Larbi <pkl2000us@gmail.com>
+Date: Sun, 8 Nov 2020 21:07:57 +0000
+Subject: [Buildroot] [ISSUE] webkitgtk/webkitgtk.mk
+Message-ID: <CANVomh9b1fBc6vzrqjttcFijQP3Pi6tFSRkWKWgpPrhh6MZa1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit [1] moved systemd-journal-gatewayd into systemd-journal-remote
-option. Update to BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE in the testsuite
-when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is used.
+Compiling webkitgtk for a raspberrypi4 target using busybox as init throws
+a "requires systemd" error at configuration stage
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981805
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981811
+was solved adding command to configuration options in webkitgtk.mk:
 
-[1] e46fe9a6f2b7cef9789f5172332067cac5ff03bd
+WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+WEBKITGTK_CONF_OPTS = \
+	-DENABLE_API_TESTS=OFF \
+	-DENABLE_GEOLOCATION=OFF \
+	-DENABLE_GTKDOC=OFF \
+	-DENABLE_INTROSPECTION=OFF \
+	-DENABLE_MINIBROWSER=ON \
+	-DENABLE_SPELLCHECK=ON \
+	-DPORT=GTK \
++       *-DUSE_SYSTEMD=OFF \*
+	-DSILENCE_CROSS_COMPILATION_NOTICES=ON \
+	-DUSE_LIBNOTIFY=OFF \
+	-DUSE_LIBHYPHEN=OFF \
+	-DUSE_OPENJPEG=ON \
+	-DUSE_WOFF2=ON \
+	-DUSE_WPE_RENDERER=OFF
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- support/testing/tests/init/test_systemd.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 371be4ad7d..65c06d21b7 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -106,7 +106,7 @@ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
-         """
-         BR2_SYSTEM_DHCP="eth0"
-         # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
--        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
-+        BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=y
-         BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
-         BR2_PACKAGE_SYSTEMD_BINFMT=y
-         BR2_PACKAGE_SYSTEMD_COREDUMP=y
-@@ -136,7 +136,7 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
-     config = InitSystemSystemdBase.config + \
-         """
-         BR2_SYSTEM_DHCP="eth0"
--        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
-+        BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=y
-         BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
-         BR2_PACKAGE_SYSTEMD_BINFMT=y
-         BR2_PACKAGE_SYSTEMD_COREDUMP=y
--- 
-2.25.4
+regards
+Cerezo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201108/895e0324/attachment.html>
