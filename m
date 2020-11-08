@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 8 Nov 2020 19:24:08 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] Revert "keepalived: needs
+Date: Sun, 8 Nov 2020 19:21:56 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] Revert "keepalived: needs
  headers >= 3.4"
-Message-ID: <20201108210710.8387386CE2@busybox.osuosl.org>
+Message-ID: <20201108210715.6991786CE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ef3e19b7b026ad1f6839092428419011ba5d0f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=483b3c381a30f8e0169e4d2b8c512ff405cde29d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 This reverts commit d01b0bbad04b97a5e8e1dd3ac3c1026555f793fb.
 
