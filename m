@@ -1,62 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 10:43:05 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/freetype:
- security bump version to 2.10.4
-Message-ID: <20201109095104.E9C2A8816B@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 10:50:32 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/darkhttpd: add
+ license file
+Message-ID: <20201109095111.27FB888041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4be526c1eb90a5e580576753661689a2a2e2707f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=76bc74ddaece4dc53456886b0a46cdd5e0676eb2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes CVE-2020-15999, https://www.freetype.org/index.html#news
+Add license file and, while at it, update indentation to two spaces
 
-"This is an emergency release, fixing a severe vulnerability in embedded
- PNG bitmap handling [...].
-
- All users should update immediately."
-
-Removed md5 hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1ffe654c6d4e5428520378feb0f04dc1f8c951a0)
+(cherry picked from commit 1906912a040b8d0d0a890a1a9160e2ee221e732b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.hash | 7 +++----
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/darkhttpd/darkhttpd.hash | 3 ++-
+ package/darkhttpd/darkhttpd.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index 7fc00f1c97..36571b51af 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,8 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
--md5  7c0d5a39f232d7eb9f9d7da76bf08074  freetype-2.10.2.tar.xz
--sha1  b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875  freetype-2.10.2.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.4/
-+sha1  0181862673f7216ad2b5074f95fc131209e30b27  freetype-2.10.4.tar.xz
+diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
+index 39152e3cb9..b6618db89a 100644
+--- a/package/darkhttpd/darkhttpd.hash
++++ b/package/darkhttpd/darkhttpd.hash
+@@ -1,2 +1,3 @@
+ # Locally generated
+-sha256 a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505 darkhttpd-1.12.tar.bz2
++sha256  a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505  darkhttpd-1.12.tar.bz2
++sha256  6e1a2e45d8dd3c8835222e3c82e5cccde8e60f02d55555910e18715ec5dc6d04  darkhttpd.c
+diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
+index f4831a9426..4b65cffe60 100644
+--- a/package/darkhttpd/darkhttpd.mk
++++ b/package/darkhttpd/darkhttpd.mk
+@@ -8,6 +8,7 @@ DARKHTTPD_VERSION = 1.12
+ DARKHTTPD_SITE = https://unix4lyfe.org/darkhttpd
+ DARKHTTPD_SOURCE = darkhttpd-$(DARKHTTPD_VERSION).tar.bz2
+ DARKHTTPD_LICENSE = MIT
++DARKHTTPD_LICENSE_FILES = darkhttpd.c
  
- # Locally calculated
--sha256  1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b  freetype-2.10.2.tar.xz
-+sha256  86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784  freetype-2.10.4.tar.xz
- sha256  fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  docs/LICENSE.TXT
- sha256  08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1  docs/FTL.TXT
- sha256  c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18  docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index f4d71bedf7..e543aee0b2 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREETYPE_VERSION = 2.10.2
-+FREETYPE_VERSION = 2.10.4
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+ define DARKHTTPD_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
