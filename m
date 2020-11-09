@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 21:20:19 +0100
-Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: update Antoine Tenart's
- email address
-In-Reply-To: <20201109165125.89224-1-atenart@kernel.org> (Antoine Tenart's
- message of "Mon, 9 Nov 2020 17:51:24 +0100")
+Date: Mon, 09 Nov 2020 21:20:24 +0100
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: remove myself for wf111
+In-Reply-To: <20201109165125.89224-2-atenart@kernel.org> (Antoine Tenart's
+ message of "Mon, 9 Nov 2020 17:51:25 +0100")
 References: <20201109165125.89224-1-atenart@kernel.org>
-Message-ID: <87sg9iqo3g.fsf@dell.be.48ers.dk>
+ <20201109165125.89224-2-atenart@kernel.org>
+Message-ID: <87o8k6qo3b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 >>>>> "Antoine" == Antoine Tenart <atenart@kernel.org> writes:
+
+ > I haven't looked at that package and touched it for 6 years now, and
+ > clearly others have taken care of it when looking at the Git history.
 
  > Signed-off-by: Antoine Tenart <atenart@kernel.org>
 
