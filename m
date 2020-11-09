@@ -1,31 +1,57 @@
-From: Antoine Tenart <atenart@kernel.org>
-Date: Mon,  9 Nov 2020 17:51:24 +0100
-Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: update Antoine Tenart's email
- address
-Message-ID: <20201109165125.89224-1-atenart@kernel.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  9 Nov 2020 17:58:03 +0100
+Subject: [Buildroot] [PATCH] package/environment-setup: add better kernel
+ handling
+Message-ID: <20201109165803.2415518-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Exporting ARCH and KERNELDIR makes easier to compile an external kernel
+or out of tree kernel modules.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 43cc1b55ae77..d9d46dc3eae2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -182,7 +182,7 @@ F:	package/pkg-golang.mk
- N:	Anthony Viallard <viallard@syscom-instruments.com>
- F:	package/gnuplot/
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/environment-setup/environment-setup    | 1 +
+ package/environment-setup/environment-setup.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+index 813aa01c7a..e9bc36fdd0 100644
+--- a/package/environment-setup/environment-setup
++++ b/package/environment-setup/environment-setup
+@@ -10,6 +10,7 @@ cat <<'EOF'
+ Some tips:
+ * PATH now contains the SDK utilities
+ * Standard autotools variables (CC, LD, CFLAGS) are exported
++* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are exported
+ * To configure do "./configure $CONFIGURE_FLAGS" or use
+   the "configure" alias
+ * To build CMake-based projects, use the "cmake" alias
+diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
+index fb87c6f0b7..fcad013f0d 100644
+--- a/package/environment-setup/environment-setup.mk
++++ b/package/environment-setup/environment-setup.mk
+@@ -11,6 +11,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 	for var in $(TARGET_CONFIGURE_OPTS); do \
+ 		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
+ 	done
++	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -31,6 +32,10 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 		$(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+ 		>> $(ENVIRONMENT_SETUP_FILE)
++
++	$(if $(BR2_LINUX_KERNEL),\
++		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
++			>> $(ENVIRONMENT_SETUP_FILE),)
+ endef
  
--N:	Antoine T?nart <antoine.tenart@bootlin.com>
-+N:	Antoine Tenart <atenart@kernel.org>
- F:	package/libselinux/
- F:	package/refpolicy/
- F:	package/wf111/
+ $(eval $(host-generic-package))
 -- 
-2.28.0
+2.25.1
