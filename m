@@ -1,48 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:06:20 +0100
-Subject: [Buildroot] [git commit] package/go: bump to 1.15.4
-Message-ID: <20201109195939.17DAB81590@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:10:35 +0100
+Subject: [Buildroot] [git commit] support/testing:
+ TestInitSystemSystemdRwIfupdown test expect a RW rootfs
+Message-ID: <20201109195939.3958881590@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ba64976d3f51eb37a199935b9aaedb63ab04f52
+commit: https://git.buildroot.net/buildroot/commit/?id=14ed65e3a62999a7cef55c357b18789451522340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bugfix release. From the release notes:
+When running the TestInitSystemSystemdRwIfupdown test, the rootfs must
+be in read-write mode. The commit log [1] introducing systemd tests say
+so:
 
-go1.15.4 (released 2020/11/05) includes fixes to cgo, the compiler, linker,
-runtime, and the compress/flate, net/http, reflect, and time packages.
+"basic systemd, read-write, network w/ ifupdown"
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+With systemd 246.5, the service systemd-update-done return an error code
+when it can't write on the filesystem (/etc)
+
+[1] 117835d5fcd508f301d62dd08ee658c1982c7fa7
+[2] https://github.com/systemd/systemd/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981813
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 3 +--
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ support/testing/tests/init/test_systemd.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 9d651a1bfb..eb6fe6c85a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,4 +1,3 @@
- # From https://golang.org/dl/
--sha256	28bf9d0bcde251011caae230a4a05d917b172ea203f2a62f2c2f9533589d4b4d  go1.15.2.src.tar.gz
--sha256	896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888  go1.15.3.src.tar.gz
-+sha256  063da6a9a4186b8118a0e584532c8c94e65582e2cd951ed078bfd595d27d2367  go1.15.4.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index dc3b35ff50..ccfddd8001 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.15.3
-+GO_VERSION = 1.15.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 371be4ad7d..059fb397e8 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -91,7 +91,6 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+         """
+         BR2_SYSTEM_DHCP="eth0"
+         # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
+-        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+         BR2_TARGET_ROOTFS_EXT2=y
+         """
  
