@@ -1,44 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 21:11:22 +0100
-Subject: [Buildroot] [PATCH] support/testing:
- TestInitSystemSystemdRwIfupdown test expect a RW rootfs
-In-Reply-To: <20201108230009.439548-1-romain.naour@gmail.com> (Romain Naour's
- message of "Mon, 9 Nov 2020 00:00:09 +0100")
-References: <20201108230009.439548-1-romain.naour@gmail.com>
-Message-ID: <87a6vqs32t.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Nov 2020 21:12:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/glmark2: fix wayland build
+In-Reply-To: <20201108230932.465941-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 9 Nov 2020 00:09:32 +0100")
+References: <20201108230932.465941-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z6es30q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > When running the TestInitSystemSystemdRwIfupdown test, the rootfs must
- > be in read-write mode. The commit log [1] introducing systemd tests say
- > so:
-
- > "basic systemd, read-write, network w/ ifupdown"
-
- > With systemd 246.5, the service systemd-update-done return an error code
- > when it can't write on the filesystem (/etc)
-
- > [1] 117835d5fcd508f301d62dd08ee658c1982c7fa7
- > [2] https://github.com/systemd/systemd/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
+ > wayland-protocols is needed since
+ > https://github.com/glmark2/glmark2/commit/58763e2c13db39ad7c1a994c261146154e4f0afa
 
  > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981813
+ >  - http://autobuild.buildroot.org/results/6106f07602c014897331daac3de01ac4a74e2016
+ >  - http://autobuild.buildroot.org/results/b8d43fad291022cbc6e43988fe6bec14f594591a
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
- > ---
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
-
- > Note: systemd-update-done will continue to fail for other systemd tests
- > when the rootfs is in read-only mode.
-
-What is the impact of that? Anything we can do about it?
 
 -- 
 Bye, Peter Korsgaard
