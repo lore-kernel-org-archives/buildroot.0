@@ -1,35 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 17:05:45 +0100
-Subject: [Buildroot] [git commit branch/next] package/bitcoin: drop boost
- program-options
-Message-ID: <20201117203826.2429286A87@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:08:10 +0100
+Subject: [Buildroot] [git commit branch/next] linux: bump CIP kernel to
+ version 4.19.152-cip37
+Message-ID: <20201117203826.63DA18633A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2185877a805a2a1c6821b49ac74ee3aadfc68f58
+commit: https://git.buildroot.net/buildroot/commit/?id=b737c6b3513901f736299d842a872bf78073983d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-boost program-options is not needed since version 0.17.0 and
-https://github.com/bitcoin/bitcoin/commit/f447a0a7079619f0d650084df192781cca9fd826
+This patch bumps Linux CIP to version 4.19.152-cip37
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bitcoin/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-index 1f08f9f26f..89ee2e3938 100644
---- a/package/bitcoin/Config.in
-+++ b/package/bitcoin/Config.in
-@@ -19,7 +19,6 @@ config BR2_PACKAGE_BITCOIN
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_BOOST_CHRONO
--	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBEVENT
+diff --git a/linux/Config.in b/linux/Config.in
+index 6d9d0af067..5a29545d41 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.9)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (4.19.132-cip30)"
++	bool "Latest CIP SLTS version (4.19.152-cip37)"
  	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -126,8 +126,8 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
++	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
