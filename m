@@ -1,38 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 21:23:51 +0100
-Subject: [Buildroot] [PATCH] board/qemu/ppc-mpc8544ds: apply Debian
- patch fixing wrong mcpu
-In-Reply-To: <20201108171500.3655310-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 8 Nov 2020 18:15:00 +0100")
-References: <20201108171500.3655310-1-romain.naour@gmail.com>
-Message-ID: <87ft5iqnxk.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 9 Nov 2020 21:25:04 +0100
+Subject: [Buildroot] [PATCH] support/testing:
+ TestInitSystemSystemdRwIfupdown test expect a RW rootfs
+In-Reply-To: <87a6vqs32t.fsf@dell.be.48ers.dk>
+References: <20201108230009.439548-1-romain.naour@gmail.com>
+ <87a6vqs32t.fsf@dell.be.48ers.dk>
+Message-ID: <7238eb6c-51b2-cce7-8052-e83fd31a3990@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+Hello Peter,
 
- > When building the linux kernel for PPC_85xx cpus with GCC 8, the build fail with:
- >   powerpc-e500v2-linux-gnuspe-gcc: error: unrecognized argument in option '-mcpu=powerpc'
- >   powerpc-e500v2-linux-gnuspe-gcc: note: valid arguments to '-mcpu=' are: 8540 8548 native
+Le 09/11/2020 ? 21:11, Peter Korsgaard a ?crit?:
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+>  > When running the TestInitSystemSystemdRwIfupdown test, the rootfs must
+>  > be in read-write mode. The commit log [1] introducing systemd tests say
+>  > so:
+> 
+>  > "basic systemd, read-write, network w/ ifupdown"
+> 
+>  > With systemd 246.5, the service systemd-update-done return an error code
+>  > when it can't write on the filesystem (/etc)
+> 
+>  > [1] 117835d5fcd508f301d62dd08ee658c1982c7fa7
+>  > [2] https://github.com/systemd/systemd/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
+> 
+>  > Fixes:
+>  > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981813
+> 
+>  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>  > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+>  > ---
+> 
+> Committed, thanks.
+> 
+>  > Note: systemd-update-done will continue to fail for other systemd tests
+>  > when the rootfs is in read-only mode.
+> 
+> What is the impact of that? Anything we can do about it?
+> 
 
- > "GCC started treating "PowerPC" and "PowerPC SPE" as two different architectures and
- > that's the reason for the reduced -mcpu list." [1]
+The systemd-update-done service can't work for read-only filesystem even if
+previously the service didn't failed in such case.
 
- > As suggested in the crosstool-ng issue [1], apply the Debian patch to avoid
- > -mcpu=powerpc or -mcpu=powerpc64.
+I'll take a look if we can disable it at build time.
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981654
-
- > [1] https://github.com/crosstool-ng/crosstool-ng/issues/1152
- > [2] https://salsa.debian.org/kernel-team/linux/-/blob/buster/debian/patches/bugfix/powerpc/powerpc-fix-mcpu-options-for-spe-only-compiler.patch
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Romain
