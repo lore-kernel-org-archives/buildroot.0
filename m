@@ -1,67 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 10 Nov 2020 00:07:44 +0100
-Subject: [Buildroot] [PATCH] package/systemd: fix update-done service for
- read-only filesystem
-Message-ID: <20201109230744.1034392-1-romain.naour@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 10 Nov 2020 00:13:56 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/webkitgtk: add optional systemd
+ dependency
+In-Reply-To: <20201109231356.32230-1-ps.report@gmx.net>
+References: <20201109231356.32230-1-ps.report@gmx.net>
+Message-ID: <20201109231356.32230-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport an upstream patch to fix a regresion introduced in
-246.5 by [1].
-
-[1] https://github.com/systemd/systemd-stable/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
+- systemd support/USE_SYSTEMD option was added since 2.30.0,
+  so add an optional dependency
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981805
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+  -- Could NOT find Systemd (missing: Systemd_LIBRARY Systemd_INCLUDE_DIR)
+  CMake Error at Source/cmake/OptionsGTK.cmake:425 (message):
+    libsystemd is needed for USE_SYSTEMD
+
+Reported-by: C Larbi <pkl2000us@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...o-not-fail-with-read-only-etc-or-var.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
+ package/webkitgtk/webkitgtk.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch b/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
-new file mode 100644
-index 0000000000..01e7f1e906
---- /dev/null
-+++ b/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
-@@ -0,0 +1,34 @@
-+From e2a23672a1bbf4d3411dce0289051b5a72bd4a67 Mon Sep 17 00:00:00 2001
-+From: Felix Riemann <felix.riemann@sma.de>
-+Date: Mon, 19 Oct 2020 18:54:53 +0200
-+Subject: [PATCH] update-done: Do not fail with read-only /etc or /var
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 5209eeed2d..84078f8b9a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -104,6 +104,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
+ 
++ifeq ($(BR2_INIT_SYSTEMD),y)
++WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=ON
++WEBKITGTK_DEPENDENCIES += systemd
++else
++WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=OFF
++endif
 +
-+With the switch from log_debug() to log_debug_errno() in commit c413bb28df
-+systemd-update-done would fail without any error message if /etc
-+or /var were read-only. This restores the previous behaviour to
-+silently ignore these directories again.
-+
-+[Romain: backport from 1eee15c3885fcc9f6a40df7e42347cb8fca71280]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/update-done/update-done.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/update-done/update-done.c b/src/update-done/update-done.c
-+index e9d589e0e5..92c348d83b 100644
-+--- a/src/update-done/update-done.c
-++++ b/src/update-done/update-done.c
-+@@ -31,8 +31,8 @@ static int apply_timestamp(const char *path, struct timespec *ts) {
-+ 
-+         r = write_string_file_atomic_label_ts(path, message, ts);
-+         if (r == -EROFS)
-+-                return log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
-+-        if (r < 0)
-++                log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
-++        else if (r < 0)
-+                 return log_error_errno(r, "Failed to write \"%s\": %m", path);
-+         return 0;
-+ }
-+-- 
-+2.25.4
-+
+ # JIT is not supported for MIPS r6, but the WebKit build system does not
+ # have a check for these processors. The same goes for ARMv5 and ARMv6.
+ # Disable JIT forcibly here and use the CLoop interpreter instead.
 -- 
-2.25.4
+2.29.2
