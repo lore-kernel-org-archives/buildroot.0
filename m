@@ -1,128 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:16:40 +0100
-Subject: [Buildroot] [git commit branch/next] package/mp4v2: fix build with
- gcc 10
-Message-ID: <20201117203829.3EA8F7FD00@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:06:20 +0100
+Subject: [Buildroot] [git commit branch/next] package/go: bump to 1.15.4
+Message-ID: <20201117203826.58A9D86A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=710d71ad4a752ec5f2ea5f3769278c753e4d0fd6
+commit: https://git.buildroot.net/buildroot/commit/?id=6ba64976d3f51eb37a199935b9aaedb63ab04f52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/4655626f1827245648a566a7223f247a130714c5
+Bugfix release. From the release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+go1.15.4 (released 2020/11/05) includes fixes to cgo, the compiler, linker,
+runtime, and the compress/flate, net/http, reflect, and time packages.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...003-Static-cast-to-unsigned-int-for-cases.patch | 99 ++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
+ package/go/go.hash | 3 +--
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
-new file mode 100644
-index 0000000000..6c9b13bed8
---- /dev/null
-+++ b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
-@@ -0,0 +1,99 @@
-+From a5ca35b044bbf13c0b16f0066bf24646604bb218 Mon Sep 17 00:00:00 2001
-+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-+Date: Thu, 6 Aug 2020 15:22:04 +0200
-+Subject: [PATCH] Static cast to unsigned int for cases
-+
-+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-+[Retrieved from:
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libmp4v2/files/libmp4v2-2.0.0-unsigned-int-cast.patch]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libutil/Utility.cpp  | 2 +-
-+ util/mp4art.cpp      | 2 +-
-+ util/mp4chaps.cpp    | 2 +-
-+ util/mp4file.cpp     | 2 +-
-+ util/mp4subtitle.cpp | 2 +-
-+ util/mp4track.cpp    | 2 +-
-+ 6 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/libutil/Utility.cpp b/libutil/Utility.cpp
-+index 76cdd12..d6739d4 100644
-+--- a/libutil/Utility.cpp
-++++ b/libutil/Utility.cpp
-+@@ -493,7 +493,7 @@ Utility::process_impl()
-+         if( codes.find( code ) == codes.end() )
-+             continue;
-+ 
-+-        switch( code ) {
-++        switch( static_cast<unsigned int>( code ) ) {
-+             case 'z':
-+                 _optimize = true;
-+                 break;
-+diff --git a/util/mp4art.cpp b/util/mp4art.cpp
-+index add935e..6e7f531 100644
-+--- a/util/mp4art.cpp
-++++ b/util/mp4art.cpp
-+@@ -376,7 +376,7 @@ ArtUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int> ( code ) ) {
-+         case LC_ART_ANY:
-+             _artFilter = numeric_limits<uint32_t>::max();
-+             break;
-+diff --git a/util/mp4chaps.cpp b/util/mp4chaps.cpp
-+index 98400f8..ccc8b70 100644
-+--- a/util/mp4chaps.cpp
-++++ b/util/mp4chaps.cpp
-+@@ -632,7 +632,7 @@ ChapterUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int> ( code ) ) {
-+         case 'A':
-+         case LC_CHPT_ANY:
-+             _ChapterType = MP4ChapterTypeAny;
-+diff --git a/util/mp4file.cpp b/util/mp4file.cpp
-+index c27844b..b127cd1 100644
-+--- a/util/mp4file.cpp
-++++ b/util/mp4file.cpp
-+@@ -189,7 +189,7 @@ FileUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_LIST:
-+             _action = &FileUtility::actionList;
-+             break;
-+diff --git a/util/mp4subtitle.cpp b/util/mp4subtitle.cpp
-+index 7462153..19d977d 100644
-+--- a/util/mp4subtitle.cpp
-++++ b/util/mp4subtitle.cpp
-+@@ -164,7 +164,7 @@ SubtitleUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_LIST:
-+             _action = &SubtitleUtility::actionList;
-+             break;
-+diff --git a/util/mp4track.cpp b/util/mp4track.cpp
-+index d550506..cd63d7e 100644
-+--- a/util/mp4track.cpp
-++++ b/util/mp4track.cpp
-+@@ -788,7 +788,7 @@ TrackUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_TRACK_WILDCARD:
-+             _trackMode = TM_WILDCARD;
-+             break;
-+-- 
-+2.28.0
-+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9d651a1bfb..eb6fe6c85a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,4 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	28bf9d0bcde251011caae230a4a05d917b172ea203f2a62f2c2f9533589d4b4d  go1.15.2.src.tar.gz
+-sha256	896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888  go1.15.3.src.tar.gz
++sha256  063da6a9a4186b8118a0e584532c8c94e65582e2cd951ed078bfd595d27d2367  go1.15.4.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index dc3b35ff50..ccfddd8001 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.3
++GO_VERSION = 1.15.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
