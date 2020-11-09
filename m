@@ -1,31 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 17:06:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xen: disable go tools
-In-Reply-To: <20201107174337.1076602-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Nov 2020 18:43:37 +0100")
-References: <20201107174337.1076602-1-fontaine.fabrice@gmail.com>
-Message-ID: <874klytsz4.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Nov 2020 17:08:30 +0100
+Subject: [Buildroot] [PATCH for-master] package/elf2flt: add support for
+ binutils >= 2.34
+In-Reply-To: <20201107225535.1781080-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sat, 7 Nov 2020 23:55:35 +0100")
+References: <20201107225535.1781080-1-romain.naour@gmail.com>
+Message-ID: <87zh3qsebl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > go tools are enabled by default since version 4.14.0 and
- > https://github.com/xen-project/xen/commit/1e13ea98bbb8369d065af4666c45c26dab5240d5
+ > Various bfd section macros and functions like bfd_section_size() have been
+ > modified starting with binutils >= 2.34.
+ > Add a patch to handle this API change.
 
- > Disable them to avoid the following build failure on arm or aarch64
- > (when host-go is built before xen):
-
- > aarch64-none-linux-gnu-gcc: error: unrecognized command line option '-m64'
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/08948e4c4a88fbf09cae524949e5b656882a6e9a
- >  - http://autobuild.buildroot.org/results/d966585c931ca4a4ae6a854a21e07eec4c277a02
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
