@@ -1,48 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 21:02:53 +0100
-Subject: [Buildroot] [git commit branch/next] package/libpam-tacplus: remove
- duplicate LIBPAM_TACPLUS_AUTORECONF
-Message-ID: <20201117203829.CC7617FD00@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:10:35 +0100
+Subject: [Buildroot] [git commit branch/next] support/testing:
+ TestInitSystemSystemdRwIfupdown test expect a RW rootfs
+Message-ID: <20201117203826.7F14E8633A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b7753fb49a5bd4a412611c3f82efa71c58af435
+commit: https://git.buildroot.net/buildroot/commit/?id=14ed65e3a62999a7cef55c357b18789451522340
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The commit [1] added a second LIBPAM_TACPLUS_AUTORECONF
-because we are now patching configure.ac.
-But LIBPAM_TACPLUS_AUTORECONF was already used because the
-package is fetched from github.
+When running the TestInitSystemSystemdRwIfupdown test, the rootfs must
+be in read-write mode. The commit log [1] introducing systemd tests say
+so:
 
-[1] bd85d82f61af0578a64e74e1cfb56c3c1bf46fe1
+"basic systemd, read-write, network w/ ifupdown"
+
+With systemd 246.5, the service systemd-update-done return an error code
+when it can't write on the filesystem (/etc)
+
+[1] 117835d5fcd508f301d62dd08ee658c1982c7fa7
+[2] https://github.com/systemd/systemd/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/849509860
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981813
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpam-tacplus/libpam-tacplus.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ support/testing/tests/init/test_systemd.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-index 9dd8466bf2..b9630d8b37 100644
---- a/package/libpam-tacplus/libpam-tacplus.mk
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
-@@ -12,10 +12,9 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
- 	linux-pam \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
- # Fetching from github, we need to generate the configure script
-+# 0001-Add-an-option-to-disable-Werror.patch
- LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 371be4ad7d..059fb397e8 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -91,7 +91,6 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
+         """
+         BR2_SYSTEM_DHCP="eth0"
+         # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
+-        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+         BR2_TARGET_ROOTFS_EXT2=y
+         """
+ 
