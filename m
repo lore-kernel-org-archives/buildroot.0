@@ -1,33 +1,44 @@
 From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Mon,  9 Nov 2020 15:23:06 +0100
-Subject: [Buildroot] [PATCH v3 5/8] board/freescale/common/imx: Add Support
- for uboot 'flash.bin' image
+Date: Mon,  9 Nov 2020 15:23:07 +0100
+Subject: [Buildroot] [PATCH v3 6/8] board/freescale/common/imx8: Use post
+ build generated uboot image if present
 In-Reply-To: <20201107135909.1265116-1-xroumegue@gmail.com>
 References: <20201107135909.1265116-1-xroumegue@gmail.com>
-Message-ID: <20201109142309.1135596-6-xroumegue@gmail.com>
+Message-ID: <20201109142309.1135596-7-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Stick the uboot image filename to "imx8-boot-sd.bin" in case the
+final uboot image, embedding fw files, is generated thanks to a post
+build script.
+
+This takes precedence over all uboot images generating during uboot
+build.
+
+This should help to remove the dedicated imx8 config template file
+
 Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
 ---
- board/freescale/common/imx/post-image.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ board/freescale/common/imx/post-image.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 06ccaac3a4..1cca1849be 100755
+index 1cca1849be..7916b8dae6 100755
 --- a/board/freescale/common/imx/post-image.sh
 +++ b/board/freescale/common/imx/post-image.sh
-@@ -70,6 +70,8 @@ uboot_image()
+@@ -66,7 +66,9 @@ imx_offset()
+ 
+ uboot_image()
+ {
+-	if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
++	if [ -e "${BINARIES_DIR}"/imx8-boot-sd.bin ]; then
++		echo "imx8-boot-sd.bin"
++	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
  		echo "u-boot-dtb.imx"
  	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
  		echo "u-boot.imx"
-+	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y$" ${BR2_CONFIG}; then
-+		echo "flash.bin"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
- 	    echo "u-boot-dtb.img"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMG=y$" ${BR2_CONFIG}; then
 -- 
 2.28.0
