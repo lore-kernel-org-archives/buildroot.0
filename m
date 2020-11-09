@@ -1,10 +1,10 @@
 From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Mon,  9 Nov 2020 15:23:08 +0100
-Subject: [Buildroot] [PATCH v3 7/8] board/freescale/common/imx8: Templatize
- uboot image name
+Date: Mon,  9 Nov 2020 15:23:06 +0100
+Subject: [Buildroot] [PATCH v3 5/8] board/freescale/common/imx: Add Support
+ for uboot 'flash.bin' image
 In-Reply-To: <20201107135909.1265116-1-xroumegue@gmail.com>
 References: <20201107135909.1265116-1-xroumegue@gmail.com>
-Message-ID: <20201109142309.1135596-8-xroumegue@gmail.com>
+Message-ID: <20201109142309.1135596-6-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
 ---
- board/freescale/common/imx/genimage.cfg.template_imx8 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/freescale/common/imx/post-image.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_imx8 b/board/freescale/common/imx/genimage.cfg.template_imx8
-index 5689205083..b9d6dbde27 100644
---- a/board/freescale/common/imx/genimage.cfg.template_imx8
-+++ b/board/freescale/common/imx/genimage.cfg.template_imx8
-@@ -23,7 +23,7 @@ image sdcard.img {
- 
-   partition imx-boot {
-     in-partition-table = "no"
--    image = "imx8-boot-sd.bin"
-+    image = "%UBOOTBIN%"
-     offset = %IMXOFFSET%
-   }
- 
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index 06ccaac3a4..1cca1849be 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -70,6 +70,8 @@ uboot_image()
+ 		echo "u-boot-dtb.imx"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
+ 		echo "u-boot.imx"
++	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y$" ${BR2_CONFIG}; then
++		echo "flash.bin"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
+ 	    echo "u-boot-dtb.img"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMG=y$" ${BR2_CONFIG}; then
 -- 
 2.28.0
