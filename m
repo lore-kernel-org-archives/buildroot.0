@@ -1,43 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:53:09 +0100
-Subject: [Buildroot] [git commit branch/next] configs/mx6sx_udoo_neo: select
- host-openssl for the Linux kernel build
-Message-ID: <20201117203825.753A786A87@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 9 Nov 2020 21:20:12 +0100
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: remove myself for
+ wf111
+Message-ID: <20201117203826.A798186A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12acdaa322336a968ebf79a7bd5bebcb6cee3b79
+commit: https://git.buildroot.net/buildroot/commit/?id=19932c8e0288f4622611034c2d22fb7ed2cf9571
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to fix the following
-build error:
+I haven't looked at that package and touched it for 6 years now, and
+clearly others have taken care of it when looking at the Git history.
 
-scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
- #include <openssl/bio.h>
-
-Fixes:
- https://gitlab.com/buildroot.org/buildroot/-/jobs/831421063
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Tested-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/mx6sx_udoo_neo_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
-index 4a2f8b0bc0..2bdcade252 100644
---- a/configs/mx6sx_udoo_neo_defconfig
-+++ b/configs/mx6sx_udoo_neo_defconfig
-@@ -23,6 +23,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # required tools to create the SD card image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9d46dc3ea..257295358e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -185,7 +185,6 @@ F:	package/gnuplot/
+ N:	Antoine Tenart <atenart@kernel.org>
+ F:	package/libselinux/
+ F:	package/refpolicy/
+-F:	package/wf111/
+ F:	support/testing/tests/core/test_selinux/
+ F:	support/testing/tests/core/test_selinux.py
+ F:	support/testing/tests/init/test_systemd_selinux/
