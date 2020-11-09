@@ -1,44 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 14:18:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/darkhttpd: add license
- file
-Message-ID: <20201117203825.8C6F986A87@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 9 Nov 2020 16:59:58 +0100
+Subject: [Buildroot] [git commit branch/next] package/libexif: add security
+ fix for CVE-2020-0452
+Message-ID: <20201117203825.D017C86A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1906912a040b8d0d0a890a1a9160e2ee221e732b
+commit: https://git.buildroot.net/buildroot/commit/?id=70a036fb307da409652807dc7b7a6d20a8ef0b9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add license file and, while at it, update indentation to two spaces
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/darkhttpd/darkhttpd.hash | 3 ++-
- package/darkhttpd/darkhttpd.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../0002-fixed-a-incorrect-overflow-check.patch    | 36 ++++++++++++++++++++++
+ package/libexif/libexif.mk                         |  2 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
-index 39152e3cb9..b6618db89a 100644
---- a/package/darkhttpd/darkhttpd.hash
-+++ b/package/darkhttpd/darkhttpd.hash
-@@ -1,2 +1,3 @@
- # Locally generated
--sha256 a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505 darkhttpd-1.12.tar.bz2
-+sha256  a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505  darkhttpd-1.12.tar.bz2
-+sha256  6e1a2e45d8dd3c8835222e3c82e5cccde8e60f02d55555910e18715ec5dc6d04  darkhttpd.c
-diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
-index f4831a9426..4b65cffe60 100644
---- a/package/darkhttpd/darkhttpd.mk
-+++ b/package/darkhttpd/darkhttpd.mk
-@@ -8,6 +8,7 @@ DARKHTTPD_VERSION = 1.12
- DARKHTTPD_SITE = https://unix4lyfe.org/darkhttpd
- DARKHTTPD_SOURCE = darkhttpd-$(DARKHTTPD_VERSION).tar.bz2
- DARKHTTPD_LICENSE = MIT
-+DARKHTTPD_LICENSE_FILES = darkhttpd.c
+diff --git a/package/libexif/0002-fixed-a-incorrect-overflow-check.patch b/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
+new file mode 100644
+index 0000000000..1946f78228
+--- /dev/null
++++ b/package/libexif/0002-fixed-a-incorrect-overflow-check.patch
+@@ -0,0 +1,36 @@
++From 9266d14b5ca4e29b970fa03272318e5f99386e06 Mon Sep 17 00:00:00 2001
++From: Marcus Meissner <marcus@jet.franken.de>
++Date: Thu, 5 Nov 2020 09:50:08 +0100
++Subject: [PATCH] fixed a incorrect overflow check that could be optimized
++ away.
++
++inspired by:
++https://android.googlesource.com/platform/external/libexif/+/8e7345f3bc0bad06ac369d6cbc1124c8ceaf7d4b
++
++https://source.android.com/security/bulletin/2020-11-01
++
++CVE-2020-0452
++
++Downloaded from upstream commit, rebased for 0.6.22:
++https://github.com/libexif/libexif/commit/9266d14b5ca4e29b970fa03272318e5f99386e06
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libexif/exif-entry.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libexif/exif-entry.c b/libexif/exif-entry.c
++index 3fc0ff9..4b866ce 100644
++--- a/libexif/exif-entry.c
+++++ b/libexif/exif-entry.c
++@@ -1371,8 +1371,8 @@ exif_entry_get_value (ExifEntry *e, char *val, unsigned int maxlen)
++ 	{
++ 		unsigned char *utf16;
++ 
++-		/* Sanity check the size to prevent overflow */
++-		if (e->size+sizeof(uint16_t)+1 < e->size) break;
+++		/* Sanity check the size to prevent overflow. Note EXIF files are 64kb at most. */
+++		if (e->size >= 65536 - sizeof(uint16_t)*2) break;
++ 
++ 		/* The tag may not be U+0000-terminated , so make a local
++ 		   U+0000-terminated copy before converting it */
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index 979d592447..594e8855c5 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -14,5 +14,7 @@ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
+ # 0001-fixed-another-unsigned-integer-overflow.patch
+ LIBEXIF_IGNORE_CVES += CVE-2020-0198
++# 0002-fixed-a-incorrect-overflow-check.patch
++LIBEXIF_IGNORE_CVES += CVE-2020-0452
  
- define DARKHTTPD_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ $(eval $(autotools-package))
