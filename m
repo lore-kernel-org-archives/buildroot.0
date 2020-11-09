@@ -1,57 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:04:10 +0100
-Subject: [Buildroot] [git commit] package/stress-ng: disable libbsd on
- static build
-Message-ID: <20201109195939.0ABDD82189@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:06:20 +0100
+Subject: [Buildroot] [git commit] package/go: bump to 1.15.4
+Message-ID: <20201109195939.17DAB81590@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2d6c5ff9092aa7735c7a739d15180910ae734df
+commit: https://git.buildroot.net/buildroot/commit/?id=6ba64976d3f51eb37a199935b9aaedb63ab04f52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Static link with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
+Bugfix release. From the release notes:
 
-Add make options that disable all libbsd tests when linking statically.
+go1.15.4 (released 2020/11/05) includes fixes to cgo, the compiler, linker,
+runtime, and the compress/flate, net/http, reflect, and time packages.
 
-Fixes:
-http://autobuild.buildroot.net/results/2c77271b33c9d0e9a39cced2eda6d0df0d6b8124/
-http://autobuild.buildroot.net/results/2f98c5d9ca907dd62b30bedfe4e52b014bb3e8d1/
-http://autobuild.buildroot.net/results/51c4c065b93a6d11f6b4583f80f932481518905a/
-
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stress-ng/stress-ng.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/go/go.hash | 3 +--
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 57464e9bbf..4afdb0a329 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -10,8 +10,11 @@ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 9d651a1bfb..eb6fe6c85a 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,4 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	28bf9d0bcde251011caae230a4a05d917b172ea203f2a62f2c2f9533589d4b4d  go1.15.2.src.tar.gz
+-sha256	896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888  go1.15.3.src.tar.gz
++sha256  063da6a9a4186b8118a0e584532c8c94e65582e2cd951ed078bfd595d27d2367  go1.15.4.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index dc3b35ff50..ccfddd8001 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
- STRESS_NG_DEPENDENCIES += libbsd
-+else
-+STRESS_NG_MAKE_OPTS += HAVE_LIB_BSD=0 HAVE_WCSLCAT=0 \
-+	HAVE_WCSLCPY=0 HAVE_SETPROCTITLE=0
- endif
+-GO_VERSION = 1.15.3
++GO_VERSION = 1.15.4
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
-@@ -19,7 +22,7 @@ STRESS_NG_DEPENDENCIES += keyutils
- endif
- 
- define STRESS_NG_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(STRESS_NG_MAKE_OPTS) -C $(@D)
- endef
- 
- # Don't use make install otherwise stress-ng will be rebuild without
