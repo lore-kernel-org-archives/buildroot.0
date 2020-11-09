@@ -1,56 +1,75 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 9 Nov 2020 14:54:03 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-11-08
-Message-ID: <20201109135402.ddk3myxwpwf7mkey@falbala.internal.home.lespocky.de>
+From: Xavier Roumegue <xroumegue@gmail.com>
+Date: Mon,  9 Nov 2020 15:23:02 +0100
+Subject: [Buildroot] [PATCH v3 1/8] package/freescale-imx/firmware-imx: Add
+ option to install all ddr fw files
+In-Reply-To: <20201107135909.1265116-1-xroumegue@gmail.com>
+References: <20201107135909.1265116-1-xroumegue@gmail.com>
+Message-ID: <20201109142309.1135596-2-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Selecting this option will copy all ([lp]ddr4.bin) DDR training files to
+BINARIES_DIR.
 
-that vulnerability was fixed by Fabrice Fontaine
-with 148058a46293 ("package/fastd: bump to version 21") for master and
-with 7e4af3ce3f91 ("package/fastd: fix CVE-2020-27638") which got
-cherry-picked for the stable branches.
+Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+---
+ package/freescale-imx/firmware-imx/Config.in       |  3 +++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
 
-In the stable branches, there's a marker in FASTD_IGNORE_CVES in
-package/fastd/fastd.mk which probably silences such warnings. But how
-is this supposed to work if such vulnerabilities are closed via an
-ordinary release like that v21 in case of fastd? Just adding all CVE
-numbers to that variable could pile up a lot over time?
-
-Greets
-Alex
-
-On Mon, Nov 09, 2020 at 08:10:46AM -0000, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Packages with CVEs
-> ==================
-> 
-> This is the list of packages for which a known CVE is affecting
-> them, which means a security vulnerability exists for
-> those packages.
-> 
->              name              |       CVE        |                             link                            
-> -------------------------------+------------------+--------------------------------------------------------------
->                          fastd | CVE-2020-27638   | https://security-tracker.debian.org/tracker/CVE-2020-27638  
-> 
-> -- 
-> http://autobuild.buildroot.net
-
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 587f402426..2ed6d4254d 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -81,6 +81,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN
+ 	help
+ 	  The DMEM firmware will be padded to this length
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE
++    bool
++
+ endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 
+ endif # BR2_PACKAGE_FIRMWARE_IMX
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index fb3cfe640b..c5ae4fad25 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -36,6 +36,16 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ endef
+ 
++ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE),y)
++define FIRMWARE_IMX_COPY_DDR_FW
++	cp $(1) $(BINARIES_DIR)/
++endef
++else
++define FIRMWARE_IMX_COPY_DDR_FW
++	true
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ 
+@@ -51,6 +61,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+ 	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin)
+ endef
+ endif
+ 
+@@ -69,6 +80,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+ 		$(BINARIES_DIR)/ddr4_201810_fw.bin
+ 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/ddr4*.bin)
+ endef
+ endif
+ 
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201109/ef980b82/attachment.asc>
+2.28.0
