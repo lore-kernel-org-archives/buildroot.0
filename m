@@ -1,78 +1,43 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 9 Nov 2020 08:15:05 -0800
-Subject: [Buildroot] [PATCH 2/2] package/xen: add slirp dependency for
- tools
-In-Reply-To: <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
-References: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
- <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
-Message-ID: <CAKmqyKNTFt=4RmKkJgu_E3LKiS9-zr7bRpKH-o9FTwt5GdhkGw@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon,  9 Nov 2020 17:38:29 +0100
+Subject: [Buildroot] [PATCH] package/grep: bump to version 3.6
+Message-ID: <20201109163829.2378448-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 7, 2020 at 10:53 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Build of xen tools fails if slirp is built before xen because xen is not
-> compatible with spice slirp which does not provide libslirp.h:
->
-> /home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
->  #include <libslirp.h>
->           ^~~~~~~~~~~~
->
-> Indeed, xen prefers a system-provided slirp over its internal one
->
-> So add slirp as a mandatory dependency (now that we switched to the up
-> to date https://gitlab.freedesktop.org/slirp/libslirp)
->
-> This build failure is raised since, at least, version 4.13.0
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/grep/grep.hash | 4 ++--
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
-
-Alistair
-
-> ---
->  package/xen/Config.in | 1 +
->  package/xen/xen.mk    | 3 ++-
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/package/xen/Config.in b/package/xen/Config.in
-> index 57ab40eba8..af6acd3530 100644
-> --- a/package/xen/Config.in
-> +++ b/package/xen/Config.in
-> @@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
->         select BR2_PACKAGE_NCURSES
->         select BR2_PACKAGE_OPENSSL
->         select BR2_PACKAGE_PIXMAN
-> +       select BR2_PACKAGE_SLIRP
->         select BR2_PACKAGE_UTIL_LINUX
->         select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->         select BR2_PACKAGE_YAJL
-> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-> index 8f1fa7db76..8cbe532d2b 100644
-> --- a/package/xen/xen.mk
-> +++ b/package/xen/xen.mk
-> @@ -41,7 +41,8 @@ XEN_CONF_OPTS += --disable-xen
->  endif
->
->  ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
-> -XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-> +XEN_DEPENDENCIES += \
-> +       dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
->  ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
->  XEN_DEPENDENCIES += argp-standalone
->  endif
-> --
-> 2.28.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index fae3b73e80..9dfe2f2c23 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# http://ftp.gnu.org/gnu/grep/grep-3.5.tar.xz.sig
++# http://ftp.gnu.org/gnu/grep/grep-3.6.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a  grep-3.5.tar.xz
++sha256  667e15e8afe189e93f9f21a7cd3a7b3f776202f417330b248c2ad4f997d9373e  grep-3.6.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index bdc22fa46c..198dc854e9 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 3.5
++GREP_VERSION = 3.6
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
+-- 
+2.25.1
