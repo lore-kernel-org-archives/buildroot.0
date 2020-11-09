@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 17:01:30 +0100
-Subject: [Buildroot] [git commit branch/next] package/fbtft: add license file
-Message-ID: <20201117203825.D93E686A87@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 17:02:56 +0100
+Subject: [Buildroot] [git commit branch/next] package/guile: renumber patch
+Message-ID: <20201117203825.F1ECE7FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19275a1a56dbd2cebb9ef91430a0364c0d3a1214
+commit: https://git.buildroot.net/buildroot/commit/?id=dbf2ad443e7988cdb1bed5a153df747de9d2d7ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbtft/fbtft.hash | 1 +
- package/fbtft/fbtft.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ ...makeinfo.patch => 0003-Makefile.am-fix-build-without-makeinfo.patch} | 0
+ package/guile/guile.mk                                                  | 2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fbtft/fbtft.hash b/package/fbtft/fbtft.hash
-index 894d9794a9..5d08d0ef85 100644
---- a/package/fbtft/fbtft.hash
-+++ b/package/fbtft/fbtft.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  0e81de89fdd7ab810716fc0549e767527f342e829309dee5c2cca1e9d1728770  fbtft-274035404701245e7491c0c6471c5b72ade4d491.tar.gz
-+sha256  a9ca80d65a5ef10fe614a6c1e8c8d4d3b96637e8855a96c7cf0fa438526097a7  fbtft-core.c
-diff --git a/package/fbtft/fbtft.mk b/package/fbtft/fbtft.mk
-index b935e741d5..cc11d867fc 100644
---- a/package/fbtft/fbtft.mk
-+++ b/package/fbtft/fbtft.mk
-@@ -7,5 +7,6 @@
- FBTFT_VERSION = 274035404701245e7491c0c6471c5b72ade4d491
- FBTFT_SITE = $(call github,notro,fbtft,$(FBTFT_VERSION))
- FBTFT_LICENSE = GPL-2.0
-+FBTFT_LICENSE_FILES = fbtft-core.c
- 
- $(eval $(generic-package))
+diff --git a/package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch b/package/guile/0003-Makefile.am-fix-build-without-makeinfo.patch
+similarity index 100%
+rename from package/guile/0004-Makefile.am-fix-build-without-makeinfo.patch
+rename to package/guile/0003-Makefile.am-fix-build-without-makeinfo.patch
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index f1623008c8..5e901bb10f 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -9,7 +9,7 @@ GUILE_SOURCE = guile-$(GUILE_VERSION).tar.xz
+ GUILE_SITE = $(BR2_GNU_MIRROR)/guile
+ GUILE_INSTALL_STAGING = YES
+ # For 0002-calculate-csqrt_manually.patch and
+-# 0004-Makefile.am-fix-build-without-makeinfo.patch
++# 0003-Makefile.am-fix-build-without-makeinfo.patch
+ GUILE_AUTORECONF = YES
+ GUILE_LICENSE = LGPL-3.0+
+ GUILE_LICENSE_FILES = LICENSE COPYING COPYING.LESSER
