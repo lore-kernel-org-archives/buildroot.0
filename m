@@ -1,42 +1,22 @@
-From: Timo Ketola <timo.ketola@exertus.fi>
-Date: Mon,  9 Nov 2020 14:56:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fbgrab: bump to version 1.4
-Message-ID: <1604926605-27217-1-git-send-email-timo.ketola@exertus.fi>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Nov 2020 17:00:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libexif: add security fix for
+ CVE-2020-0198
+In-Reply-To: <20201108171142.1286536-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 8 Nov 2020 18:11:41 +0100")
+References: <20201108171142.1286536-1-bernd.kuhls@t-online.de>
+Message-ID: <87361iv7u1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for line length deviating from width
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
----
- package/fbgrab/fbgrab.hash | 2 +-
- package/fbgrab/fbgrab.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
-index 414a93c..4d9a6b9 100644
---- a/package/fbgrab/fbgrab.hash
-+++ b/package/fbgrab/fbgrab.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2bfdad379579c4ca1a910d0a8ac63183ef2c12a45e6b7d402fd045d83bb3faee  fbgrab-1.3.3.tar.gz
-+sha256  62d7aa82138ac36db0921832f3b5267b4cffc0dc22c8701857ebcb997960a32e  fbgrab-1.4.tar.gz
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 6d2f09b..1ae03ae 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FBGRAB_VERSION = 1.3.3
-+FBGRAB_VERSION = 1.4
- FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
- FBGRAB_DEPENDENCIES = libpng
- FBGRAB_LICENSE = GPL-2.0
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
