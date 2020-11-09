@@ -1,30 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Nov 2020 09:39:57 +0100
-Subject: [Buildroot] [git commit branch/next] package/oniguruma: security
- bump to version 6.9.6
-Message-ID: <20201117203824.CFF6B86456@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 17:01:30 +0100
+Subject: [Buildroot] [git commit branch/next] package/fbtft: add license file
+Message-ID: <20201117203825.D93E686A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=969fe10855e2fbee623d545859a5209dea85534a
+commit: https://git.buildroot.net/buildroot/commit/?id=19275a1a56dbd2cebb9ef91430a0364c0d3a1214
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Drop patch (already in version)
-
-Fixed many problems found by OSS-Fuzz
-Fixed many problems found by Coverity
-
-https://github.com/kkos/oniguruma/releases/tag/v6.9.6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../oniguruma/0001-207-Out-of-bounds-write.patch   | 25 ----------------------
- package/oniguruma/oniguruma.hash                   |  2 +-
- package/oniguruma/oniguruma.mk                     |  5 +----
- 3 files changed, 2 insertions(+), 30 deletions(-)
+ package/fbtft/fbtft.hash | 1 +
+ package/fbtft/fbtft.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-Patch is too large, so refusing to show it
+diff --git a/package/fbtft/fbtft.hash b/package/fbtft/fbtft.hash
+index 894d9794a9..5d08d0ef85 100644
+--- a/package/fbtft/fbtft.hash
++++ b/package/fbtft/fbtft.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  0e81de89fdd7ab810716fc0549e767527f342e829309dee5c2cca1e9d1728770  fbtft-274035404701245e7491c0c6471c5b72ade4d491.tar.gz
++sha256  a9ca80d65a5ef10fe614a6c1e8c8d4d3b96637e8855a96c7cf0fa438526097a7  fbtft-core.c
+diff --git a/package/fbtft/fbtft.mk b/package/fbtft/fbtft.mk
+index b935e741d5..cc11d867fc 100644
+--- a/package/fbtft/fbtft.mk
++++ b/package/fbtft/fbtft.mk
+@@ -7,5 +7,6 @@
+ FBTFT_VERSION = 274035404701245e7491c0c6471c5b72ade4d491
+ FBTFT_SITE = $(call github,notro,fbtft,$(FBTFT_VERSION))
+ FBTFT_LICENSE = GPL-2.0
++FBTFT_LICENSE_FILES = fbtft-core.c
+ 
+ $(eval $(generic-package))
