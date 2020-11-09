@@ -1,145 +1,56 @@
-From: Julien Olivain <ju.o@free.fr>
-Date: Mon, 09 Nov 2020 21:27:47 +0100
-Subject: [Buildroot] [PATCH v3 8/8] configs/imx8mmevk: new defconfig
-In-Reply-To: <20201109142309.1135596-9-xroumegue@gmail.com>
-References: <20201107135909.1265116-1-xroumegue@gmail.com>
- <20201109142309.1135596-9-xroumegue@gmail.com>
-Message-ID: <15ccd8047ca461c03196174b852477b1@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 09 Nov 2020 21:36:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-m2crypto: fix build on
+ arm and mips
+In-Reply-To: <20201108172822.63987-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 8 Nov 2020 18:28:22 +0100")
+References: <20201108172822.63987-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blg6qncn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 09/11/2020 15:23, Xavier Roumegue wrote:
-> Introduce NXP imx8mm evk board configuration that uses mainline atf,
-> uboot and kernel.
-> 
-> Mainline uboot mkimage tool generates the boot image.
-> 
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+ > Fix build failure on arm and mips (perhaps also other)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
+ >  - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
 
-Tested-by: Julien Olivain <ju.o@free.fr>
-[Julien: tested on i.MX8M Mini EVK Rev A with LPDDR4]
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  ...swig-default-includes-before-openssl.patch | 53 +++++++++++++++++++
+ >  1 file changed, 53 insertions(+)
+ >  create mode 100644 package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
 
-> 
-> ---
-> Changes v2 -> v3:
->     - Set a custom version to uboot/kernel (Suggested by Fabio Estevam)
-> ---
->  DEVELOPERS                           |  3 +++
->  board/freescale/imx8mmevk/readme.txt | 29 ++++++++++++++++++--
->  configs/imx8mmevk_defconfig          | 40 ++++++++++++++++++++++++++++
->  3 files changed, 70 insertions(+), 2 deletions(-)
->  create mode 100644 configs/imx8mmevk_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 43cc1b55ae..9f5e23b612 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2690,6 +2690,9 @@ F:	package/fwup/
->  N:	Yair Ben Avraham <yairba@protonmail.com>
->  F:	package/gloox/
-> 
-> +N:	Xavier Roumegue <xroumegue@gmail.com>
-> +F:	configs/imx8mmevk_defconfig
-> +
->  N:	Yann E. MORIN <yann.morin.1998@free.fr>
->  F:	board/friendlyarm/nanopi-neo/
->  F:	configs/nanopi_neo_defconfig
-> diff --git a/board/freescale/imx8mmevk/readme.txt
-> b/board/freescale/imx8mmevk/readme.txt
-> index 7b69405d30..be3b54e40d 100644
-> --- a/board/freescale/imx8mmevk/readme.txt
-> +++ b/board/freescale/imx8mmevk/readme.txt
-> @@ -5,8 +5,8 @@ Freescale i.MX8MM EVK board
->  This file documents the Buildroot support for the Freescale i.MX8MM
->  EVK board.
-> 
-> -Build
-> -=====
-> +Building with NXP ATF, U-Boot and kernel
-> +========================================
-> 
->  First, configure Buildroot for the i.MX8MM EVK board:
-> 
-> @@ -32,6 +32,31 @@ You will find in output/images/ the following files:
->    - u-boot-nodtb.bin
->    - u-boot-spl-ddr.bin
-> 
-> +Building with mainline ATF, U-Boot and kernel
-> +=============================================
-> +First, configure Buildroot for the i.MX8MM EVK board:
-> +
-> +  make imx8mmevk_defconfig
-> +
-> +Build all components:
-> +
-> +  make
-> +
-> +You will find in output/images/ the following files:
-> +    - bl31.bin
-> +    - boot.vfat
-> +    - ddr_fw.bin
-> +    - flash.bin
-> +    - Image
-> +    - imx8mm-evk.dtb
-> +    - [lp]ddr4_*.bin
-> +    - rootfs.ext2
-> +    - rootfs.ext4
-> +    - rootfs.tar
-> +    - sdcard.img
-> +    - u-boot-spl
-> +    - u-boot-spl.bin
-> +
->  Create a bootable SD card
->  =========================
-> 
-> diff --git a/configs/imx8mmevk_defconfig b/configs/imx8mmevk_defconfig
-> new file mode 100644
-> index 0000000000..089acd506c
-> --- /dev/null
-> +++ b/configs/imx8mmevk_defconfig
-> @@ -0,0 +1,40 @@
-> +BR2_aarch64=y
-> +BR2_ARM_FPU_VFPV3=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.18"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_PACKAGE_FREESCALE_IMX=y
-> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_FW_FILES="lpddr4*.bin"
-> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-> +BR2_TARGET_UBOOT_FORMAT_ELF=y
-> +BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
-> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ATF_LOAD_ADDR=0x920000"
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ > diff --git
+ > a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+ > b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+ > new file mode 100644
+ > index 0000000000..57fbd0126c
+ > --- /dev/null
+ > +++ b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+ > @@ -0,0 +1,53 @@
+ > +From 1aab31787a8d1ef9436d9cf81832691f729b6282 Mon Sep 17 00:00:00 2001
+ > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > +Date: Sat, 7 Nov 2020 23:26:30 +0100
+ > +Subject: [PATCH] setup.py: move swig default includes before openssl
+ > +
+ > +Move swig default includes before openssl to avoid the following build
+ > +failure when cross-compiling for some architectures (e.g. arm, mips):
+ > +
+ > +swig -python -py3 -D__x86_64__
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/python3.9
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/openssl
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include-fixed
+ > -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/../../../../mipsel-buildroot-linux-gnu/include
+
+The mailer / patchwork didn't like this very long line, so I had to fix
+that up manually and commit, thanks.
+
+-- 
+Bye, Peter Korsgaard
