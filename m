@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 17:05:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.2.2
-In-Reply-To: <20201107164243.1402324-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 7 Nov 2020 17:42:43 +0100")
-References: <20201107164243.1402324-1-bernd.kuhls@t-online.de>
-Message-ID: <87d00mtt1a.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Nov 2020 17:05:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: drop boost
+ program-options
+In-Reply-To: <20201107170559.722445-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Nov 2020 18:05:59 +0100")
+References: <20201107170559.722445-1-fontaine.fabrice@gmail.com>
+Message-ID: <878sbatt0j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Release notes of this bugfix release::
- > https://lists.freedesktop.org/archives/mesa-announce/2020-November/000604.html
+ > boost program-options is not needed since version 0.17.0 and
+ > https://github.com/bitcoin/bitcoin/commit/f447a0a7079619f0d650084df192781cca9fd826
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to master given the fixes, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
