@@ -1,55 +1,119 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  9 Nov 2020 18:18:08 +0200
-Subject: [Buildroot] [PATCH] package/stress-ng: disable libbsd on static
- build
-Message-ID: <dc3cb1b01e9ab89ae86079f39b6b043bdea1f709.1604938688.git.baruch@tkos.co.il>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 9 Nov 2020 08:14:17 -0800
+Subject: [Buildroot] [PATCH 1/2] package/slirp: security bump to version
+ 4.3.1
+In-Reply-To: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
+References: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAKmqyKOQ4=Fkn6ntdruthFhEza=0R=Tkqq8hupq+aygGm2TJpg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static link with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
+On Sat, Nov 7, 2020 at 10:53 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> - Use an up to date fork (spice slirp is archived and has not been
+>   updated since 2012)
+> - Add COPYRIGHT as the license file
+> - BSD-4-Clause has been replaced by BSD-3-Clause since
+>   https://gitlab.freedesktop.org/slirp/libslirp/-/commit/3bac39137a652b24b89d5b9e2a39600619fbe1d3
+>   https://gitlab.freedesktop.org/slirp/libslirp/-/commit/f9f6e69c4e1d9a43af30bfe791b31789ffa04954
+> - Add hash file
+> - Switch to meson-package
+> - Fix multiple security vulnerabilities: CVE-2014-3640, CVE-2017-11434,
+>   CVE-2019-6778, CVE-2019-9824, CVE-2019-14378 and CVE-2020-10756
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Add make options that disable all libbsd tests when linking statically.
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/2c77271b33c9d0e9a39cced2eda6d0df0d6b8124/
-http://autobuild.buildroot.net/results/2f98c5d9ca907dd62b30bedfe4e52b014bb3e8d1/
-http://autobuild.buildroot.net/results/51c4c065b93a6d11f6b4583f80f932481518905a/
+Alistair
 
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/stress-ng/stress-ng.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 57464e9bbff1..4afdb0a329c6 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -10,8 +10,11 @@ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
- STRESS_NG_DEPENDENCIES += libbsd
-+else
-+STRESS_NG_MAKE_OPTS += HAVE_LIB_BSD=0 HAVE_WCSLCAT=0 \
-+	HAVE_WCSLCPY=0 HAVE_SETPROCTITLE=0
- endif
- 
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
-@@ -19,7 +22,7 @@ STRESS_NG_DEPENDENCIES += keyutils
- endif
- 
- define STRESS_NG_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(STRESS_NG_MAKE_OPTS) -C $(@D)
- endef
- 
- # Don't use make install otherwise stress-ng will be rebuild without
--- 
-2.28.0
+> ---
+>  package/slirp/Config.in  | 17 ++++++-----------
+>  package/slirp/slirp.hash |  3 +++
+>  package/slirp/slirp.mk   | 20 +++++++-------------
+>  3 files changed, 16 insertions(+), 24 deletions(-)
+>  create mode 100644 package/slirp/slirp.hash
+>
+> diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+> index 51dea9700f..8f57c4fa6a 100644
+> --- a/package/slirp/Config.in
+> +++ b/package/slirp/Config.in
+> @@ -1,16 +1,10 @@
+>  config BR2_PACKAGE_SLIRP
+>         bool "slirp"
+>         help
+> -         The Spice project aims to provide a complete open source
+> -         solution for interaction with virtualized desktop devices.
+> -         The Spice project deals with both the virtualized devices
+> -         and the front-end. Interaction between front-end and
+> -         back-end is done using VD-Interfaces.
+> +         libslirp is a user-mode networking library used by virtual
+> +         machines, containers or various tools.
+>
+> -         This package implements the slirp-part for Spice. Slirp
+> -         emulates a PPP or SLIP connection over a normal terminal.
+> -
+> -         http://www.spice-space.org/
+> +         https://gitlab.freedesktop.org/slirp/libslirp/
+>
+>           NOTE:
+>           This package has some history of a unique kind:
+> @@ -21,5 +15,6 @@ config BR2_PACKAGE_SLIRP
+>             - during that period, QEMU (Fabrice BELLARD) forked the code
+>               and included it in QEMU
+>             - and it was imported from this breed by the Spice project
+> -             around May 2009
+> -           - which is what we use here
+> +             around May 2009 which archived it in 2012
+> +           - So we switched to
+> +             https://gitlab.freedesktop.org/slirp/libslirp
+> diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
+> new file mode 100644
+> index 0000000000..3051179df9
+> --- /dev/null
+> +++ b/package/slirp/slirp.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256  6b1641f04d41bc45f94018ac8d42d3c9f3ba0e463cbeacf5f26fe83fc050161e  libslirp-v4.3.1.tar.bz2
+> +sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+> diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+> index 7cfead65e2..4351818952 100644
+> --- a/package/slirp/slirp.mk
+> +++ b/package/slirp/slirp.mk
+> @@ -4,18 +4,12 @@
+>  #
+>  ################################################################################
+>
+> -# There's no tarball releases of slirp, so we use the git repo
+> -# Also, there's no tag, so we use a random SHA1 (master's HEAD
+> -# of today)
+> -SLIRP_VERSION = 8c2da74c1385242f20799fec8c04f8378edc6550
+> -SLIRP_SITE = git://anongit.freedesktop.org/spice/slirp
+> -SLIRP_LICENSE = BSD-4-Clause, BSD-2-Clause
+> -# Note: The license file 'COPYRIGHT' is missing from the sources,
+> -# although some files refer to it.
+> +SLIRP_VERSION = 4.3.1
+> +SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
+> +SLIRP_SITE = \
+> +       https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
+> +SLIRP_LICENSE = BSD-3-Clause
+> +SLIRP_LICENSE_FILES = COPYRIGHT
+>  SLIRP_INSTALL_STAGING = YES
+>
+> -# As we're using the git tree, there's no ./configure,
+> -# so we need to autoreconf.
+> -SLIRP_AUTORECONF = YES
+> -
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
+> --
+> 2.28.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
