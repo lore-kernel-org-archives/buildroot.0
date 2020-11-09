@@ -1,44 +1,41 @@
-From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Mon,  9 Nov 2020 15:23:07 +0100
-Subject: [Buildroot] [PATCH v3 6/8] board/freescale/common/imx8: Use post
- build generated uboot image if present
-In-Reply-To: <20201107135909.1265116-1-xroumegue@gmail.com>
-References: <20201107135909.1265116-1-xroumegue@gmail.com>
-Message-ID: <20201109142309.1135596-7-xroumegue@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 9 Nov 2020 16:00:31 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-11-08
+In-Reply-To: <20201109135402.ddk3myxwpwf7mkey@falbala.internal.home.lespocky.de>
+References: <20201109135402.ddk3myxwpwf7mkey@falbala.internal.home.lespocky.de>
+Message-ID: <20201109160031.3828bba8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stick the uboot image filename to "imx8-boot-sd.bin" in case the
-final uboot image, embedding fw files, is generated thanks to a post
-build script.
+Hello,
 
-This takes precedence over all uboot images generating during uboot
-build.
+On Mon, 9 Nov 2020 14:54:03 +0100
+Alexander Dahl <post@lespocky.de> wrote:
 
-This should help to remove the dedicated imx8 config template file
+> that vulnerability was fixed by Fabrice Fontaine
+> with 148058a46293 ("package/fastd: bump to version 21") for master and
+> with 7e4af3ce3f91 ("package/fastd: fix CVE-2020-27638") which got
+> cherry-picked for the stable branches.
+> 
+> In the stable branches, there's a marker in FASTD_IGNORE_CVES in
+> package/fastd/fastd.mk which probably silences such warnings. But how
+> is this supposed to work if such vulnerabilities are closed via an
+> ordinary release like that v21 in case of fastd? Just adding all CVE
+> numbers to that variable could pile up a lot over time?
 
-Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
----
- board/freescale/common/imx/post-image.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+CVE-2020-27638 should not be reported on v21 and later versions,
+because at https://nvd.nist.gov/vuln/detail/CVE-2020-27638, there is
+"Up to (excluding) 21.0".
 
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 1cca1849be..7916b8dae6 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -66,7 +66,9 @@ imx_offset()
- 
- uboot_image()
- {
--	if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
-+	if [ -e "${BINARIES_DIR}"/imx8-boot-sd.bin ]; then
-+		echo "imx8-boot-sd.bin"
-+	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
- 		echo "u-boot-dtb.imx"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
- 		echo "u-boot.imx"
+Are you seeing reports from Buildroot tooling where version v21 is said
+to be affected by this CVE ?
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
