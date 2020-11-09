@@ -1,52 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 9 Nov 2020 16:02:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-11-08
-In-Reply-To: <20201109160031.3828bba8@windsurf.home>
-References: <20201109135402.ddk3myxwpwf7mkey@falbala.internal.home.lespocky.de>
- <20201109160031.3828bba8@windsurf.home>
-Message-ID: <CAPi7W8016gz+ci+uNNO_O5VzW2s6yUYEBnZkc5DTLOKxeo4M=A@mail.gmail.com>
+From: Timo Ketola <timo.ketola@exertus.fi>
+Date: Mon,  9 Nov 2020 14:56:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fbgrab: bump to version 1.4
+Message-ID: <1604926605-27217-1-git-send-email-timo.ketola@exertus.fi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Add support for line length deviating from width
 
-Le lun. 9 nov. 2020 ? 16:00, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Mon, 9 Nov 2020 14:54:03 +0100
-> Alexander Dahl <post@lespocky.de> wrote:
->
-> > that vulnerability was fixed by Fabrice Fontaine
-> > with 148058a46293 ("package/fastd: bump to version 21") for master and
-> > with 7e4af3ce3f91 ("package/fastd: fix CVE-2020-27638") which got
-> > cherry-picked for the stable branches.
-> >
-> > In the stable branches, there's a marker in FASTD_IGNORE_CVES in
-> > package/fastd/fastd.mk which probably silences such warnings. But how
-> > is this supposed to work if such vulnerabilities are closed via an
-> > ordinary release like that v21 in case of fastd? Just adding all CVE
-> > numbers to that variable could pile up a lot over time?
->
-> CVE-2020-27638 should not be reported on v21 and later versions,
-> because at https://nvd.nist.gov/vuln/detail/CVE-2020-27638, there is
-> "Up to (excluding) 21.0".
->
-> Are you seeing reports from Buildroot tooling where version v21 is said
-> to be affected by this CVE ?
-http://autobuild.buildroot.org/stats/ is reporting that fastd 21 is
-affected by this CVE.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
+---
+ package/fbgrab/fbgrab.hash | 2 +-
+ package/fbgrab/fbgrab.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fabrice
+diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
+index 414a93c..4d9a6b9 100644
+--- a/package/fbgrab/fbgrab.hash
++++ b/package/fbgrab/fbgrab.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2bfdad379579c4ca1a910d0a8ac63183ef2c12a45e6b7d402fd045d83bb3faee  fbgrab-1.3.3.tar.gz
++sha256  62d7aa82138ac36db0921832f3b5267b4cffc0dc22c8701857ebcb997960a32e  fbgrab-1.4.tar.gz
+ sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 6d2f09b..1ae03ae 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FBGRAB_VERSION = 1.3.3
++FBGRAB_VERSION = 1.4
+ FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
+ FBGRAB_DEPENDENCIES = libpng
+ FBGRAB_LICENSE = GPL-2.0
+-- 
+2.7.4
