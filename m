@@ -1,39 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 11:01:05 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/davfs2: fix indent
-Message-ID: <20201109095111.57230834E4@busybox.osuosl.org>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Mon,  9 Nov 2020 13:35:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix zkey build
+Message-ID: <20201109123544.423826-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371df00b28d8366ea2a3762f3b8feae86325c530
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Linking of libekmfweb fails when zkey-ekmfweb.so build is enabled.
 
-Fix the following check-package warning added by commit
-a2b98a6add92e38dbcd4ca9fda25454a38c719e3:
-
-package/davfs2/davfs2.mk:22: expected indent with tabs
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 62bb541d99e24177ad0119d347040da00131b510)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
 ---
- package/davfs2/davfs2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...ey-ekmfweb-fix-linking-of-libekmfweb.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
 
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index 741baacc87..d3f09018b8 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -19,7 +19,7 @@ DAVFS2_CONF_ENV += \
- 	LIBS=$(TARGET_NLS_LIBS)
- 
- define DAVFS2_USERS
--        davfs2 -1 davfs2 -1 * - - - davfs user
-+	davfs2 -1 davfs2 -1 * - - - davfs user
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch b/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
+new file mode 100644
+index 0000000000..76a642af70
+--- /dev/null
++++ b/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
+@@ -0,0 +1,53 @@
++From a4e6f7239d8cee37e58eac974482d6deefa8a137 Mon Sep 17 00:00:00 2001
++From: Alexander Egorenkov <egorenar@linux.ibm.com>
++Date: Thu, 5 Nov 2020 17:42:58 +0100
++Subject: [PATCH 1/1] zkey/ekmfweb: fix linking of libekmfweb
++
++Use -L compiler's parameter instead of the environment variable
++LIBRARY_PATH.
++
++Fixes the following problem on buildroot:
++
++buildroot/qemu-s390x/host/bin/s390x-linux-gcc -shared -Wl,--version-script=zkey-ekmfweb.map -Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.1 zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o ../..//libutil/libutil.a -lekmfweb -ldl -lcrypto -o zkey-ekmfweb.so
++buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c udev_ccwgroup.c -o udev_ccwgroup.o
++buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c iscsi.c -o iscsi.o
++buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c dasd.c -o dasd.o
++buildroot/qemu-s390x/host/opt/ext-toolchain/bin/../lib/gcc/s390x-buildroot-linux-gnu/9.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: cannot find -lekmfweb
++collect2: error: ld returned 1 exit status
++make[4]: *** [Makefile:36: zkey-ekmfweb.so] Error 1
++make[3]: *** [Makefile:128: ekmfweb] Error 2
++buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c zfcp.c -o zfcp.o
++make[2]: *** [Makefile:43: zkey] Error 2
++make[2]: *** Waiting for unfinished jobs....
++
++Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
++Acked-by: Ingo Franzki <ifranzki@linux.ibm.com>
++---
++ zkey/ekmfweb/Makefile | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/zkey/ekmfweb/Makefile b/zkey/ekmfweb/Makefile
++index 79a16cb5..1a3a4977 100644
++--- a/zkey/ekmfweb/Makefile
+++++ b/zkey/ekmfweb/Makefile
++@@ -7,8 +7,6 @@ all: zkey-ekmfweb.so
++ 
++ libs = $(rootdir)/libutil/libutil.a
++ 
++-export LIBRARY_PATH = $(rootdir)/libekmfweb:$LIBRARY_PATH
++-
++ zkey-ekmfweb.o: zkey-ekmfweb.c zkey-ekmfweb.h ../kms-plugin.h \
++ 	../cca.h ../utils.h ../pkey.h ../properties.h \
++ 	$(rootdir)include/ekmfweb/ekmfweb.h libekmfweb.dep
++@@ -29,7 +27,7 @@ utils.o: ../utils.c ../utils.h ../pkey.h ../cca.h ../ep11.h
++ 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -fPIC -c $< -o $@
++ 
++ zkey-ekmfweb.so: ALL_CFLAGS += -fPIC
++-zkey-ekmfweb.so: LDLIBS = -lekmfweb -ldl -lcrypto
+++zkey-ekmfweb.so: LDLIBS = -L$(rootdir)/libekmfweb -lekmfweb -ldl -lcrypto
++ zkey-ekmfweb.so: ALL_LDFLAGS += -shared -Wl,--version-script=zkey-ekmfweb.map \
++ 	-Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.$(VERM)
++ zkey-ekmfweb.so: zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o $(libs)
++-- 
++2.26.2
++
+-- 
+2.26.2
