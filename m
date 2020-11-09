@@ -1,121 +1,102 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Nov 2020 22:14:57 +0100
-Subject: [Buildroot] [git commit branch/next] package/linux-backports: bump
- version to 5.8
-Message-ID: <20201117203829.81E8E7FB0D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 9 Nov 2020 16:59:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/libexif: add security
+ fix for CVE-2020-0198
+Message-ID: <20201117203825.C079686C67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2159da6a034b8287984f738974f9f8738bac1e6
+commit: https://git.buildroot.net/buildroot/commit/?id=06066336084e37ae038b67d0fa51411cc281e8e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Attempting to compile this package with newer Kernel version (e.g. v5.4)
-fails with message:
-
-   Generating local configuration database from kernel ...Kernel version parse failed!
-
-Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
-rather old and beat the very purpose of having newer drivers in older
-kernels.
-
-Since backports tag v4.14-rc4-1, the requirement on minimal kernel
-version changed from 3.0 to 3.10. See commit [1]. The minimal kernel
-version check is changed accordingly.
-
-License files are also updated: the linux backports package copies the
-license files from the kernel version used for its generation. v5.8 is
-now "GPL-2.0 WITH Linux-syscall-note". However, there is no such SPDX
-identifier (contrary to what is said in the COPYING file), so we keep it
-as GPL-2.0 (which also keeps it aligned to what we have in linux.mk).
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-[yann.morin.1998 at free.fr: keep license as GPL-2.0, like for linux]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-backports/Config.in            |  2 +-
- package/linux-backports/linux-backports.hash |  8 +++++---
- package/linux-backports/linux-backports.mk   | 19 ++++++++++++-------
- 3 files changed, 18 insertions(+), 11 deletions(-)
+ ...1-fixed-another-unsigned-integer-overflow.patch | 63 ++++++++++++++++++++++
+ package/libexif/libexif.mk                         |  2 +
+ 2 files changed, 65 insertions(+)
 
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-index 362e6e4bc7..251d202fd2 100644
---- a/package/linux-backports/Config.in
-+++ b/package/linux-backports/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LINUX_BACKPORTS
- 	  recent kernels, backported to older ones.
+diff --git a/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
+new file mode 100644
+index 0000000000..77bdfe89d2
+--- /dev/null
++++ b/package/libexif/0001-fixed-another-unsigned-integer-overflow.patch
+@@ -0,0 +1,63 @@
++From ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c Mon Sep 17 00:00:00 2001
++From: Marcus Meissner <marcus@jet.franken.de>
++Date: Mon, 8 Jun 2020 17:27:06 +0200
++Subject: [PATCH] fixed another unsigned integer overflow
++
++first fixed by google in android fork,
++https://android.googlesource.com/platform/external/libexif/+/1e187b62682ffab5003c702657d6d725b4278f16%5E%21/#F0
++
++(use a more generic overflow check method, also check second overflow instance.)
++
++https://security-tracker.debian.org/tracker/CVE-2020-0198
++
++Downloaded from upstream commit:
++https://github.com/libexif/libexif/commit/ce03ad7ef4e8aeefce79192bf5b6f69fae396f0c
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libexif/exif-data.c | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/libexif/exif-data.c b/libexif/exif-data.c
++index 8b280d3..b495726 100644
++--- a/libexif/exif-data.c
+++++ b/libexif/exif-data.c
++@@ -47,6 +47,8 @@
++ #undef JPEG_MARKER_APP1
++ #define JPEG_MARKER_APP1 0xe1
++ 
+++#define CHECKOVERFLOW(offset,datasize,structsize) (( offset >= datasize) || (structsize > datasize) || (offset > datasize - structsize ))
+++
++ static const unsigned char ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
++ 
++ struct _ExifDataPrivate
++@@ -327,7 +329,7 @@ exif_data_load_data_thumbnail (ExifData *data, const unsigned char *d,
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail offset (%u).", o);
++ 		return;
++ 	}
++-	if (s > ds - o) {
+++	if (CHECKOVERFLOW(o,ds,s)) {
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData", "Bogus thumbnail size (%u), max would be %u.", s, ds-o);
++ 		return;
++ 	}
++@@ -420,9 +422,9 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
++ 	}
++ 
++ 	/* Read the number of entries */
++-	if ((offset + 2 < offset) || (offset + 2 < 2) || (offset + 2 > ds)) {
+++	if (CHECKOVERFLOW(offset, ds, 2)) {
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_CORRUPT_DATA, "ExifData",
++-			  "Tag data past end of buffer (%u > %u)", offset+2, ds);
+++			  "Tag data past end of buffer (%u+2 > %u)", offset, ds);
++ 		return;
++ 	}
++ 	n = exif_get_short (d + offset, data->priv->order);
++@@ -431,7 +433,7 @@ exif_data_load_data_content (ExifData *data, ExifIfd ifd,
++ 	offset += 2;
++ 
++ 	/* Check if we have enough data. */
++-	if (offset + 12 * n > ds) {
+++	if (CHECKOVERFLOW(offset, ds, 12*n)) {
++ 		n = (ds - offset) / 12;
++ 		exif_log (data->priv->log, EXIF_LOG_CODE_DEBUG, "ExifData",
++ 				  "Short data; only loading %hu entries...", n);
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index c945c275a7..979d592447 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -12,5 +12,7 @@ LIBEXIF_INSTALL_STAGING = YES
+ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
++# 0001-fixed-another-unsigned-integer-overflow.patch
++LIBEXIF_IGNORE_CVES += CVE-2020-0198
  
- 	  This version of linux-backports supports kernels starting
--	  from 3.0.
-+	  from 3.10.
- 
- 	  https://backports.wiki.kernel.org
- 
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index f39bc2ed27..3e103424f5 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,4 +1,6 @@
--# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
--sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
-+sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
- # Locally computed
--sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-+sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-+sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
-+sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 1827ee18b7..068dcffcc8 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
-+LINUX_BACKPORTS_VERSION_MAJOR = 5.8
- LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
- LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
- LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
- LINUX_BACKPORTS_LICENSE = GPL-2.0
--LINUX_BACKPORTS_LICENSE_FILES = COPYING
-+LINUX_BACKPORTS_LICENSE_FILES = \
-+	COPYING \
-+	LICENSES/exceptions/Linux-syscall-note \
-+	LICENSES/preferred/GPL-2.0
- 
- # flex and bison are needed to generate kconfig parser. We use the
- # same logic as the linux kernel (we add host dependencies only if
-@@ -91,7 +94,7 @@ $(eval $(kconfig-package))
- # instead.
- #
- # Furthermore, we want to check the kernel version, since linux-backports
--# only supports kernels >= 3.0. To avoid overriding linux-backports'
-+# only supports kernels >= 3.10. To avoid overriding linux-backports'
- # KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
- # use an intermediate stamp-file.
- #
-@@ -103,10 +106,12 @@ $(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKP
- 
- .SECONDEXPANSION:
- $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
--	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
--	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
--		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
--			"$${LINUX_VERSION_PROBED}"; \
-+	$(Q)KVER=$(LINUX_VERSION_PROBED); \
-+	KVER_MAJOR=`echo $${KVER} | sed 's/^\([0-9]*\)\..*/\1/'`; \
-+	KVER_MINOR=`echo $${KVER} | sed 's/^[0-9]*\.\([0-9]*\).*/\1/'`; \
-+	if [ $${KVER_MAJOR} -lt 3 -o \( $${KVER_MAJOR} -eq 3 -a $${KVER_MINOR} -lt 10 \) ]; then \
-+		printf "Linux version '%s' is too old for linux-backports (needs 3.10 or later)\n" \
-+			"$${KVER}"; \
- 		exit 1; \
- 	fi
- 	$(Q)touch $(@)
+ $(eval $(autotools-package))
