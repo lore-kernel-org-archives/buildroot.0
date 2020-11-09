@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 11:00:44 +0100
+Date: Mon, 09 Nov 2020 11:00:49 +0100
 Subject: [Buildroot] [PATCH 1/1] package/davfs2: fix indent
 In-Reply-To: <20201107155540.427974-1-fontaine.fabrice@gmail.com> (Fabrice
  Fontaine's message of "Sat, 7 Nov 2020 16:55:40 +0100")
 References: <20201107155540.427974-1-fontaine.fabrice@gmail.com>
-Message-ID: <87blg6vohf.fsf@dell.be.48ers.dk>
+Message-ID: <877dquvoha.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed, thanks.
+Committed to 2020.02.x and 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
