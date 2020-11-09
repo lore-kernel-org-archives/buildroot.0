@@ -1,24 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 10:59:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: add davfs user and group
-In-Reply-To: <20201105131149.1124173-1-mail@klomp.eu> (Sven Klomp's message of
- "Thu, 5 Nov 2020 14:11:49 +0100")
-References: <20201105131149.1124173-1-mail@klomp.eu>
-Message-ID: <87ft5ivok3.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Nov 2020 11:00:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/davfs2: fix indent
+In-Reply-To: <20201107155540.427974-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Nov 2020 16:55:40 +0100")
+References: <20201107155540.427974-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blg6vohf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Klomp <mail@klomp.eu> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > mount.davfs expects the availability of the user and group davfs.
- > These are added using
+ > Fix the following check-package warning added by commit
+ > a2b98a6add92e38dbcd4ca9fda25454a38c719e3:
 
- > Signed-off-by: Sven Klomp <mail@klomp.eu>
+ > package/davfs2/davfs2.mk:22: expected indent with tabs
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
