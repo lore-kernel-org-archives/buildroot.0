@@ -1,95 +1,135 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:34:51 +0100
-Subject: [Buildroot] [git commit] package/python-m2crypto: fix build on arm
- and mips
-Message-ID: <20201109202325.C7A858225F@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  9 Nov 2020 21:40:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: security bump to version
+ 0.20.1
+Message-ID: <20201109204040.546966-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31c7e161c17bae2bc1109fd33e85b0e4df7906e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- openssl is not a dependency since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/8983ee3e6dd8ab658bd2caf97c326cc53ea50818
+- boost chrono is not needed since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/bd37f2bc26158f85ef1ab73b9ca1fc0da8ea562a
+- Update hash of COPYING (update in year:
+  https://github.com/bitcoin/bitcoin/commit/8dc9aa90c3c7990dd5b491937ddc0e39bc929d1c)
+- Update indentation in hash file (two spaces)
+- Tag as a security bump as having an up to date bitcoin is important:
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
 
-Fix build failure on arm and mips (perhaps also other)
-
-Fixes:
- - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
- - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.1.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.0.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.19.1.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...move-swig-default-includes-before-openssl.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ ...rc-randomenv.cpp-fix-build-on-uclibc.patch | 48 +++++++++++++++++++
+ package/bitcoin/Config.in                     |  2 -
+ package/bitcoin/bitcoin.hash                  |  6 +--
+ package/bitcoin/bitcoin.mk                    |  4 +-
+ 4 files changed, 53 insertions(+), 7 deletions(-)
+ create mode 100644 package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
 
-diff --git a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
 new file mode 100644
-index 0000000000..f4d7e428f1
+index 0000000000..8038a311d3
 --- /dev/null
-+++ b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
-@@ -0,0 +1,63 @@
-+From 1aab31787a8d1ef9436d9cf81832691f729b6282 Mon Sep 17 00:00:00 2001
++++ b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+@@ -0,0 +1,48 @@
++From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 7 Nov 2020 23:26:30 +0100
-+Subject: [PATCH] setup.py: move swig default includes before openssl
++Date: Mon, 9 Nov 2020 21:18:40 +0100
++Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
 +
-+Move swig default includes before openssl to avoid the following build
-+failure when cross-compiling for some architectures (e.g. arm, mips):
-+
-+swig -python -py3 -D__x86_64__ \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/python3.9 \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/openssl \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include-fixed \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/../../../../mipsel-buildroot-linux-gnu/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
-+ -includeall -modern -builtin -outdir \
-+ /srv/storage/autobuild/run/instance-0/output-1/build/python-m2crypto-0.36.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
-+Deprecated command line option: -modern. This option is now always on.
-+/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/types.h:139:
-+Error: CPP #error "". Use the -cpperraswarn option to continue swig processing.
-+
-+This build failure is probably raised because swig includes a wrong types.h file
-+from the openssl directory (e.g.
-+/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
-+ - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
++Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
++getauxval to avoid a build failure on uclibc
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.com/m2crypto/m2crypto/-/merge_requests/248]
++[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
 +---
-+ setup.py | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ src/randomenv.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/setup.py b/setup.py
-+index 89d03bb..0045fda 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -154,6 +154,9 @@ class _M2CryptoBuildExt(build_ext.build_ext):
-+         if sys.version_info[:1] >= (3,):
-+             self.swig_opts.append('-py3')
++diff --git a/src/randomenv.cpp b/src/randomenv.cpp
++index 07122b7f6..5e07c3db4 100644
++--- a/src/randomenv.cpp
+++++ b/src/randomenv.cpp
++@@ -53,7 +53,7 @@
++ #include <sys/vmmeter.h>
++ #endif
++ #endif
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++ #include <sys/auxv.h>
++ #endif
 + 
-++        # swig seems to need the default header file directories
-++        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
-++
-+         log.debug('self.include_dirs = %s', self.include_dirs)
-+         log.debug('self.library_dirs = %s', self.library_dirs)
++@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     // Bitcoin client version
++     hasher << CLIENT_VERSION;
 + 
-+@@ -204,8 +207,6 @@ class _M2CryptoBuildExt(build_ext.build_ext):
-+             self.swig_opts.append(
-+                 '-I' + os.path.join(openssl_include_dir, 'openssl'))
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++     // Information available through getauxval()
++ #  ifdef AT_HWCAP
++     hasher << getauxval(AT_HWCAP);
++@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     const char* exec_str = (const char*)getauxval(AT_EXECFN);
++     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
++ #  endif
++-#endif // __linux__
+++#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
 + 
-+-        # swig seems to need the default header file directories
-+-        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
-+         self.swig_opts.append('-includeall')
-+         self.swig_opts.append('-modern')
-+         self.swig_opts.append('-builtin')
++ #ifdef HAVE_GETCPUID
++     AddAllCPUID(hasher);
 +-- 
 +2.28.0
 +
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 89ee2e3938..65af15293d 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -18,8 +18,6 @@ config BR2_PACKAGE_BITCOIN
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Bitcoin Core is an open source project which maintains and
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index fe7c1562a8..d39eb38e92 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,5 +1,5 @@
+-# From https://bitcoincore.org/bin/bitcoin-core-0.19.0.1/SHA256SUMS.asc
+-sha256 7ac9f972249a0a16ed01352ca2a199a5448fe87a4ea74923404a40b4086de284  bitcoin-0.19.0.1.tar.gz
++# From https://bitcoincore.org/bin/bitcoin-core-0.20.1/SHA256SUMS.asc
++sha256  4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978  bitcoin-0.20.1.tar.gz
+ 
+ # Hash for license file
+-sha256 9a0f75d688e9cf5c69d3efdaa2a83af496700d252b212ec6a72f7784b47fed0c  COPYING
++sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 040c55b8a6..d5e3973d9c 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-BITCOIN_VERSION = 0.19.0.1
++BITCOIN_VERSION = 0.20.1
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
+ BITCOIN_LICENSE_FILES = COPYING
+-BITCOIN_DEPENDENCIES = host-pkgconf boost openssl libevent
++BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+ 	--disable-wallet \
+-- 
+2.28.0
