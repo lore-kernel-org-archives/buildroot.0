@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 11:00:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: fix indent
-In-Reply-To: <20201107155540.427974-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Nov 2020 16:55:40 +0100")
-References: <20201107155540.427974-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dquvoha.fsf@dell.be.48ers.dk>
+Date: Mon, 9 Nov 2020 11:00:11 +0100
+Subject: [Buildroot] [git commit] package/davfs2: fix indent
+Message-ID: <20201109094755.5FC2C8803F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=62bb541d99e24177ad0119d347040da00131b510
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fix the following check-package warning added by commit
- > a2b98a6add92e38dbcd4ca9fda25454a38c719e3:
+Fix the following check-package warning added by commit
+a2b98a6add92e38dbcd4ca9fda25454a38c719e3:
 
- > package/davfs2/davfs2.mk:22: expected indent with tabs
+package/davfs2/davfs2.mk:22: expected indent with tabs
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/davfs2/davfs2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index bc2aa79646..1099f1b13b 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -19,7 +19,7 @@ DAVFS2_CONF_ENV += \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ 
+ define DAVFS2_USERS
+-        davfs2 -1 davfs2 -1 * - - - davfs user
++	davfs2 -1 davfs2 -1 * - - - davfs user
+ endef
+ 
+ $(eval $(autotools-package))
