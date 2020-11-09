@@ -1,57 +1,56 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon,  9 Nov 2020 17:58:03 +0100
-Subject: [Buildroot] [PATCH] package/environment-setup: add better kernel
- handling
-Message-ID: <20201109165803.2415518-1-angelo@amarulasolutions.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon,  9 Nov 2020 19:22:16 +0100
+Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.11.0
+Message-ID: <20201109182216.279643-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Exporting ARCH and KERNELDIR makes easier to compile an external kernel
-or out of tree kernel modules.
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/environment-setup/environment-setup    | 1 +
- package/environment-setup/environment-setup.mk | 5 +++++
- 2 files changed, 6 insertions(+)
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-index 813aa01c7a..e9bc36fdd0 100644
---- a/package/environment-setup/environment-setup
-+++ b/package/environment-setup/environment-setup
-@@ -10,6 +10,7 @@ cat <<'EOF'
- Some tips:
- * PATH now contains the SDK utilities
- * Standard autotools variables (CC, LD, CFLAGS) are exported
-+* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are exported
- * To configure do "./configure $CONFIGURE_FLAGS" or use
-   the "configure" alias
- * To build CMake-based projects, use the "cmake" alias
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index fb87c6f0b7..fcad013f0d 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -11,6 +11,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	for var in $(TARGET_CONFIGURE_OPTS); do \
- 		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
- 	done
-+	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
- 		--host=$(GNU_TARGET_NAME) \
-@@ -31,6 +32,10 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 		$(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
- 		>> $(ENVIRONMENT_SETUP_FILE)
-+
-+	$(if $(BR2_LINUX_KERNEL),\
-+		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
-+			>> $(ENVIRONMENT_SETUP_FILE),)
- endef
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 3b354e64d0..239c95bf90 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- $(eval $(host-generic-package))
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2020.09.0"
++	bool "2020.11.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2020.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2020.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index 77c75b6b5b..3644601bbc 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,8 +1,8 @@
+-# From https://www.barebox.org/download/barebox-2020.09.0.tar.bz2.md5
+-md5  907dc813298fcded06fa9c788d3fb6c8  barebox-2020.09.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2020.11.0.tar.bz2.md5
++md5  1fc2c1a03d7b44dc12fbf4cf1fc6ffe0  barebox-2020.11.0.tar.bz2
+ 
+ # Locally calculated
+-sha256  aad3b0736aa8d368d185736260d81fb3785251f376897be3cec745182fd51869  barebox-2020.09.0.tar.bz2
++sha256  049d2b1b887d0397f4b5390255459fb0240200b06a3276ffaefdeab7fb243554  barebox-2020.11.0.tar.bz2
+ 
+ # License files, locally computed
+ sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
 -- 
-2.25.1
+2.29.2
