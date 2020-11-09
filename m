@@ -1,46 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 10:50:32 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/darkhttpd: add
- license file
-Message-ID: <20201109095111.27FB888041@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 10:52:20 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/davfs2: add
+ davfs2 user and group
+Message-ID: <20201109095111.49CE6834E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76bc74ddaece4dc53456886b0a46cdd5e0676eb2
+commit: https://git.buildroot.net/buildroot/commit/?id=cb56a4169e227c4309d56f95e35e7c5e7a13c00f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Add license file and, while at it, update indentation to two spaces
+mount.davfs expects the availability of the user and group davfs2.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sven Klomp <mail@klomp.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1906912a040b8d0d0a890a1a9160e2ee221e732b)
+(cherry picked from commit a2b98a6add92e38dbcd4ca9fda25454a38c719e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/darkhttpd/darkhttpd.hash | 3 ++-
- package/darkhttpd/darkhttpd.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/davfs2/davfs2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/darkhttpd/darkhttpd.hash b/package/darkhttpd/darkhttpd.hash
-index 39152e3cb9..b6618db89a 100644
---- a/package/darkhttpd/darkhttpd.hash
-+++ b/package/darkhttpd/darkhttpd.hash
-@@ -1,2 +1,3 @@
- # Locally generated
--sha256 a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505 darkhttpd-1.12.tar.bz2
-+sha256  a50417b622b32b5f421b3132cb94ebeff04f02c5fb87fba2e31147d23de50505  darkhttpd-1.12.tar.bz2
-+sha256  6e1a2e45d8dd3c8835222e3c82e5cccde8e60f02d55555910e18715ec5dc6d04  darkhttpd.c
-diff --git a/package/darkhttpd/darkhttpd.mk b/package/darkhttpd/darkhttpd.mk
-index f4831a9426..4b65cffe60 100644
---- a/package/darkhttpd/darkhttpd.mk
-+++ b/package/darkhttpd/darkhttpd.mk
-@@ -8,6 +8,7 @@ DARKHTTPD_VERSION = 1.12
- DARKHTTPD_SITE = https://unix4lyfe.org/darkhttpd
- DARKHTTPD_SOURCE = darkhttpd-$(DARKHTTPD_VERSION).tar.bz2
- DARKHTTPD_LICENSE = MIT
-+DARKHTTPD_LICENSE_FILES = darkhttpd.c
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index 90f73f4df0..741baacc87 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -18,4 +18,8 @@ DAVFS2_CONF_ENV += \
+ 	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config \
+ 	LIBS=$(TARGET_NLS_LIBS)
  
- define DARKHTTPD_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++define DAVFS2_USERS
++        davfs2 -1 davfs2 -1 * - - - davfs user
++endef
++
+ $(eval $(autotools-package))
