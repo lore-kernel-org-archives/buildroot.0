@@ -1,56 +1,112 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon,  9 Nov 2020 19:22:16 +0100
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2020.11.0
-Message-ID: <20201109182216.279643-1-b.bilas@grinn-global.com>
+From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+Date: Mon,  9 Nov 2020 14:41:31 -0300
+Subject: [Buildroot] [PATCH 1/1] package/wqy-zenhei: new package
+Message-ID: <20201109174131.7321-1-klaus@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/wqy-zenhei/Config.in       | 13 +++++++++++++
+ package/wqy-zenhei/wqy-zenhei.hash |  3 +++
+ package/wqy-zenhei/wqy-zenhei.mk   | 28 ++++++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/wqy-zenhei/Config.in
+ create mode 100644 package/wqy-zenhei/wqy-zenhei.hash
+ create mode 100644 package/wqy-zenhei/wqy-zenhei.mk
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 3b354e64d0..239c95bf90 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 43cc1b55ae..5a874708c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1461,6 +1461,9 @@ F:	package/ramsmp/
+ N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
+ F:	package/libcamera/
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2020.09.0"
-+	bool "2020.11.0"
++N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
++F:	package/wqy-zenhei/
++
+ N:	Koen Martens <gmc@sonologic.nl>
+ F:	package/capnproto/
+ F:	package/linuxconsoletools/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..43bcd80ad4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -240,6 +240,7 @@ comment "Fonts"
+ 	source "package/ghostscript-fonts/Config.in"
+ 	source "package/inconsolata/Config.in"
+ 	source "package/liberation/Config.in"
++	source "package/wqy-zenhei/Config.in"
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2020.09.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2020.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 77c75b6b5b..3644601bbc 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2020.09.0.tar.bz2.md5
--md5  907dc813298fcded06fa9c788d3fb6c8  barebox-2020.09.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2020.11.0.tar.bz2.md5
-+md5  1fc2c1a03d7b44dc12fbf4cf1fc6ffe0  barebox-2020.11.0.tar.bz2
- 
- # Locally calculated
--sha256  aad3b0736aa8d368d185736260d81fb3785251f376897be3cec745182fd51869  barebox-2020.09.0.tar.bz2
-+sha256  049d2b1b887d0397f4b5390255459fb0240200b06a3276ffaefdeab7fb243554  barebox-2020.11.0.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
+ comment "Icons"
+ 	source "package/adwaita-icon-theme/Config.in"
+diff --git a/package/wqy-zenhei/Config.in b/package/wqy-zenhei/Config.in
+new file mode 100644
+index 0000000000..26fd1e8a93
+--- /dev/null
++++ b/package/wqy-zenhei/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_WQY_ZENHEI
++	bool "wqy-zenhei (Free Chinese-capable fonts)"
++	help
++	  "WenQuanYi Zen Hei" is a Hei-Ti Style (sans-serif) Chinese
++	  font capable of text formatting and on-screen display of both
++	  simplified and traditional forms of Chinese Hanzi glyphs
++	  (among many other languages). Both the proportional
++	  "WenQuanYi Zen Hei", as well as the monospaced typeface
++	  "WenQuanYi Zen Hei Mono" provides over 35,000 glyphs,
++	  including over 21,000 Chinese Hanzi. This font provides full
++	  coverage of GBK (CP936) charset, CJK Unified Ideographs, as
++	  well as the code-points needed for zh_CN, zh_SG, zh_TW, zh_HK,
++	  zh_MO, ja (Japanese) and ko (Korean) locales for fontconfig.
+diff --git a/package/wqy-zenhei/wqy-zenhei.hash b/package/wqy-zenhei/wqy-zenhei.hash
+new file mode 100644
+index 0000000000..86ae38da4f
+--- /dev/null
++++ b/package/wqy-zenhei/wqy-zenhei.hash
+@@ -0,0 +1,3 @@
++# locally computed sha256 from:
++# https://downloads.sourceforge.net/project/wqy/wqy-zenhei/0.9.45%20%28Fighting-state%20RC1%29/wqy-zenhei-0.9.45.tar.gz
++sha256 e4b7e306475bf9427d1757578f0e4528930c84c44eaa3f167d4c42f110ee75d6  wqy-zenhei-0.9.45.tar.gz
+diff --git a/package/wqy-zenhei/wqy-zenhei.mk b/package/wqy-zenhei/wqy-zenhei.mk
+new file mode 100644
+index 0000000000..ae0915add4
+--- /dev/null
++++ b/package/wqy-zenhei/wqy-zenhei.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# wqy-zenhei
++#
++################################################################################
++
++WQY_ZENHEI_VERSION = 0.9.45
++WQY_ZENHEI_SITE = https://downloads.sourceforge.net/project/wqy/wqy-zenhei/$(WQY_ZENHEI_VERSION)%20%28Fighting-state%20RC1%29
++WQY_ZENHEI_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/wqy-zenhei
++WQY_ZENHEI_LICENSE =  GPL-v2
++WQY_ZENHEI_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++define WQY_ZENHEI_FONTCONFIG_CONF_INSTALL_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/43-wqy-zenhei-sharp.conf \
++	    $(TARGET_DIR)/usr/share/fontconfig/conf.avail/43-wqy-zenhei-sharp.conf
++	$(INSTALL) -D -m 0644 $(@D)/44-wqy-zenhei.conf \
++	    $(TARGET_DIR)/usr/share/fontconfig/conf.avail/44-wqy-zenhei.conf
++endef
++endif
++
++define WQY_ZENHEI_INSTALL_TARGET_CMDS
++	mkdir -p $(WQY_ZENHEI_TARGET_DIR)
++	$(INSTALL) -m 644 $(@D)/wqy-zenhei.ttc $(WQY_ZENHEI_TARGET_DIR)
++	$(WQY_ZENHEI_FONTCONFIG_CONF_INSTALL_CMDS)
++endef
++
++$(eval $(generic-package))
 -- 
-2.29.2
+2.17.1
