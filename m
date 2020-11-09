@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 11:00:11 +0100
-Subject: [Buildroot] [git commit branch/next] package/davfs2: fix indent
-Message-ID: <20201117203825.B562986C65@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:54:10 +0100
+Subject: [Buildroot] [git commit branch/next] Revert "linux: bump CIP kernel
+ to version 4.19.152-cip37"
+Message-ID: <20201117203826.CA57886A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62bb541d99e24177ad0119d347040da00131b510
+commit: https://git.buildroot.net/buildroot/commit/?id=73163b3f1a7ac2ce524770bf07b9504223241a85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following check-package warning added by commit
-a2b98a6add92e38dbcd4ca9fda25454a38c719e3:
+This reverts commit b737c6b3513901f736299d842a872bf78073983d.  This was not
+supposed to be committed, as the patch did not update linux.hash.
 
-package/davfs2/davfs2.mk:22: expected indent with tabs
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/davfs2/davfs2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index bc2aa79646..1099f1b13b 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -19,7 +19,7 @@ DAVFS2_CONF_ENV += \
- 	LIBS=$(TARGET_NLS_LIBS)
+diff --git a/linux/Config.in b/linux/Config.in
+index 2c69b842f3..5e8390647a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.9)"
  
- define DAVFS2_USERS
--        davfs2 -1 davfs2 -1 * - - - davfs user
-+	davfs2 -1 davfs2 -1 * - - - davfs user
- endef
- 
- $(eval $(autotools-package))
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (4.19.152-cip37)"
++	bool "Latest CIP SLTS version (4.19.132-cip30)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -126,8 +126,8 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+-	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
