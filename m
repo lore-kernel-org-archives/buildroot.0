@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Nov 2020 21:08:59 +0100
-Subject: [Buildroot] [PATCH 1/2] linux: bump CIP kernel to version
- 4.19.152-cip37
-In-Reply-To: <20201108212941.1332291-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 8 Nov 2020 22:29:40 +0100")
+Date: Mon, 09 Nov 2020 21:09:12 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: bump CIP RT kernel to version
+ 4.19.152-cip37-rt16
+In-Reply-To: <20201108212941.1332291-2-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Sun, 8 Nov 2020 22:29:41 +0100")
 References: <20201108212941.1332291-1-angelo@amarulasolutions.com>
-Message-ID: <87mtzqs36s.fsf@dell.be.48ers.dk>
+ <20201108212941.1332291-2-angelo@amarulasolutions.com>
+Message-ID: <87imaes36f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +15,7 @@ To: buildroot@busybox.net
 
 >>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
- > This patch bumps Linux CIP to version 4.19.152-cip37
+ > This patch bumps Linux CIP RT to version 4.19.152-cip37-rt16
  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
  > ---
  >  linux/Config.in | 4 ++--
