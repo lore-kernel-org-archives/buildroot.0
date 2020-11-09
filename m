@@ -1,62 +1,50 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon,  9 Nov 2020 22:33:04 +0100
-Subject: [Buildroot] [PATCH v2 2/2] linux: bump CIP RT kernel to version
- 4.19.152-cip37-rt16
-In-Reply-To: <20201109213304.2549190-1-angelo@amarulasolutions.com>
-References: <20201109213304.2549190-1-angelo@amarulasolutions.com>
-Message-ID: <20201109213304.2549190-2-angelo@amarulasolutions.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  9 Nov 2020 22:38:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ dvbsubenc needs gcc 4.9
+Message-ID: <20201109213856.610071-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps Linux CIP RT to version 4.19.152-cip37-rt16
+dvbsubenc fails to build with gcc 4.8 due to restrict keyword and for
+loop declarations:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+../gst/dvbsubenc/libimagequant/blur.c:10:46: error: expected ';', ',' or ')' before 'src'
+ transposing_1d_blur (unsigned char *restrict src, unsigned char *restrict dst,
+                                              ^
+../gst/dvbsubenc/libimagequant/blur.c: In function 'liq_min3':
+../gst/dvbsubenc/libimagequant/blur.c:101:5: error: 'for' loop initial declarations are only allowed in C99 mode
+     for (unsigned int i = 0; i < width - 1; i++) {
+     ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/183e876d63340b5c204f47a4653cbfebb0523277
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v1->v2:
-* Fixing hash
+ package/gstreamer1/gst1-plugins-bad/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- linux/Config.in  | 4 ++--
- linux/linux.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 2c69b842f3..b6c5c02a5e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -50,7 +50,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	  https://www.cip-project.org
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 191820df1d..87a047b779 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -89,9 +89,13 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DEBUGUTILS
  
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	bool "Latest CIP RT SLTS version (4.19.132-cip30-rt12)"
-+	bool "Latest CIP RT SLTS version (4.19.152-cip37-rt16)"
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBENC
+ 	bool "dvbsubenc"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
- 	  variant.
-@@ -126,8 +126,8 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 99bda363df..f4fedfcb5a 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -9,7 +9,7 @@ sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-
- sha256  f2f709ef086a4d8cb3c15a857daa44dfecf1b88d7d7c53c980fb180f6dccbace  linux-4.19.150.tar.xz
- # Locally computed
- sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
--sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-+sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+ 	  DVB subpicture encoding support
  
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
++comment "dvbsubenc plugin needs a toolchain w/ gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DVBSUBOVERLAY
+ 	bool "dvbsuboverlay"
+ 	help
 -- 
-2.25.1
+2.28.0
