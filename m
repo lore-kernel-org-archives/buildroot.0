@@ -1,39 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:56:58 +0100
-Subject: [Buildroot] [git commit branch/next] package/apparmor: fix
- permission bits for apparmor.service
-Message-ID: <20201117203828.8FCE07FD00@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 17:05:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/bitcoin: drop boost
+ program-options
+Message-ID: <20201117203826.2429286A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a325eefc1b1e0be4848fc67265c7395abdf08945
+commit: https://git.buildroot.net/buildroot/commit/?id=2185877a805a2a1c6821b49ac74ee3aadfc68f58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Avoid setting executable bits for apparmor.service. This gets rid of a
-corresponding warning during installation:
-  Configuration file ../target/usr/lib/systemd/system/apparmor.service
-  is marked executable. Please remove executable permission bits.
-  Proceeding anyway.
+boost program-options is not needed since version 0.17.0 and
+https://github.com/bitcoin/bitcoin/commit/f447a0a7079619f0d650084df192781cca9fd826
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apparmor/apparmor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bitcoin/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 4d08b0433b..7ea0fabd91 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -88,7 +88,7 @@ endef
- define APPARMOR_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.systemd \
- 		$(TARGET_DIR)/lib/apparmor/apparmor.systemd
--	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.service \
-+	$(INSTALL) -D -m 0644 $(@D)/parser/apparmor.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/apparmor.service
- endef
- 
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 1f08f9f26f..89ee2e3938 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -19,7 +19,6 @@ config BR2_PACKAGE_BITCOIN
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
