@@ -1,92 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 10:32:53 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/oniguruma:
- security bump to version 6.9.6
-Message-ID: <20201109092714.6E57C88044@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 10:37:44 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jsoncpp: security
+ bump version to 1.9.4
+Message-ID: <20201109092714.8BA6988044@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4330f5dc68ee990085a6e5e811e0c4e9958ce5b
+commit: https://git.buildroot.net/buildroot/commit/?id=9bb3817d333c2be1d5f0c67a561fe17c9cf19781
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Drop patch (already in version)
+Release notes of this "Security and build system fixes" release:
+https://github.com/open-source-parsers/jsoncpp/releases/tag/1.9.4
 
-Fixed many problems found by OSS-Fuzz
-Fixed many problems found by Coverity
-
-https://github.com/kkos/oniguruma/releases/tag/v6.9.6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 969fe10855e2fbee623d545859a5209dea85534a)
+(cherry picked from commit b2019a5183b28d36e52eacc64d50c3e0fc402fb0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../oniguruma/0001-207-Out-of-bounds-write.patch   | 25 ----------------------
- package/oniguruma/oniguruma.hash                   |  2 +-
- package/oniguruma/oniguruma.mk                     |  5 +----
- 3 files changed, 2 insertions(+), 30 deletions(-)
+ package/jsoncpp/jsoncpp.hash | 2 +-
+ package/jsoncpp/jsoncpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/oniguruma/0001-207-Out-of-bounds-write.patch b/package/oniguruma/0001-207-Out-of-bounds-write.patch
-deleted file mode 100644
-index 3317449702..0000000000
---- a/package/oniguruma/0001-207-Out-of-bounds-write.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0 Mon Sep 17 00:00:00 2001
--From: "K.Kosako" <kkosako0@gmail.com>
--Date: Mon, 21 Sep 2020 12:58:29 +0900
--Subject: [PATCH] #207: Out-of-bounds write
--
--[Retrieved from:
--https://github.com/kkos/oniguruma/commit/cbe9f8bd9cfc6c3c87a60fbae58fa1a85db59df0]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/regcomp.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/regcomp.c b/src/regcomp.c
--index f6494b6d..a0a68561 100644
----- a/src/regcomp.c
--+++ b/src/regcomp.c
--@@ -6257,7 +6257,7 @@ concat_opt_exact_str(OptStr* to, UChar* s, UChar* end, OnigEncoding enc)
-- 
--   for (i = to->len, p = s; p < end && i < OPT_EXACT_MAXLEN; ) {
--     len = enclen(enc, p);
---    if (i + len > OPT_EXACT_MAXLEN) break;
--+    if (i + len >= OPT_EXACT_MAXLEN) break;
--     for (j = 0; j < len && p < end; j++)
--       to->s[i++] = *p++;
--   }
-diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
-index 82354d4b9e..668f21d37f 100644
---- a/package/oniguruma/oniguruma.hash
-+++ b/package/oniguruma/oniguruma.hash
+diff --git a/package/jsoncpp/jsoncpp.hash b/package/jsoncpp/jsoncpp.hash
+index 45f0b161ff..0070a1874e 100644
+--- a/package/jsoncpp/jsoncpp.hash
++++ b/package/jsoncpp/jsoncpp.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2f25cc3165e6da4b12dcabdb6b77c48f436d835e127ec2e3cad7abae9ea8e9a6  onig-6.9.5.tar.gz
-+sha256  bd0faeb887f748193282848d01ec2dad8943b5dfcb8dc03ed52dcc963549e819  onig-6.9.6.tar.gz
- sha256  6c7038393e8f30fee16257e713f77e383712f1465d6d25929596746b10b42bd3  COPYING
-diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
-index c2330c7380..e7aaa43c2f 100644
---- a/package/oniguruma/oniguruma.mk
-+++ b/package/oniguruma/oniguruma.mk
+ # Locally computed
+-sha256  8593c1d69e703563d94d8c12244e2e18893eeb9a8a9f8aa3d09a327aa45c8f7d  jsoncpp-1.9.3.tar.gz
++sha256  e34a628a8142643b976c7233ef381457efad79468c67cb1ae0b83a33d7493999  jsoncpp-1.9.4.tar.gz
+ sha256  95039d77a20e75b428207740d9a8f97b2dce3c89da4b21f1ad862b5997160e0a  LICENSE
+diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
+index 2766716947..cfded2bf07 100644
+--- a/package/jsoncpp/jsoncpp.mk
++++ b/package/jsoncpp/jsoncpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ONIGURUMA_VERSION = 6.9.5
-+ONIGURUMA_VERSION = 6.9.6
- ONIGURUMA_SITE = \
- 	https://github.com/kkos/oniguruma/releases/download/v$(ONIGURUMA_VERSION)
- ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
-@@ -12,7 +12,4 @@ ONIGURUMA_LICENSE = BSD-2-Clause
- ONIGURUMA_LICENSE_FILES = COPYING
- ONIGURUMA_INSTALL_STAGING = YES
- 
--# 0001-207-Out-of-bounds-write.patch
--ONIGURUMA_IGNORE_CVES += CVE-2020-26159
--
- $(eval $(autotools-package))
+-JSONCPP_VERSION = 1.9.3
++JSONCPP_VERSION = 1.9.4
+ JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
+ JSONCPP_LICENSE = Public Domain or MIT
+ JSONCPP_LICENSE_FILES = LICENSE
