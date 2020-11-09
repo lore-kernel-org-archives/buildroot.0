@@ -1,90 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 10:42:45 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ghostscript: fix
- build with freetype >= 2.10.3
-Message-ID: <20201109095104.DC4AC86201@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 10:43:05 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/freetype:
+ security bump version to 2.10.4
+Message-ID: <20201109095104.E9C2A8816B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e6be8a59ff0a2ac807322cee179b58d48ee335b
+commit: https://git.buildroot.net/buildroot/commit/?id=4be526c1eb90a5e580576753661689a2a2e2707f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-This patch is needed to fix the build with freetype >= 2.10.3.
+Fixes CVE-2020-15999, https://www.freetype.org/index.html#news
 
-https://www.freetype.org/index.html#news
-"A warning for distribution maintainers: Version 2.10.3 and later may
- break the build of ghostscript, due to ghostscript's use of a with-
- drawn macro that wasn't intended for external usage."
+"This is an emergency release, fixing a severe vulnerability in embedded
+ PNG bitmap handling [...].
+
+ All users should update immediately."
+
+Removed md5 hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5177f726a08f77f669d763e762cf663449131ab2)
+(cherry picked from commit 1ffe654c6d4e5428520378feb0f04dc1f8c951a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ package/freetype/freetype.hash | 7 +++----
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch b/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch
-new file mode 100644
-index 0000000000..044dcc72f1
---- /dev/null
-+++ b/package/ghostscript/0001-bug-702985-drop-use-of-FT_CALLBACK_DEF.patch
-@@ -0,0 +1,55 @@
-+From 41ef9a0bc36b9db7115fbe9623f989bfb47bbade Mon Sep 17 00:00:00 2001
-+From: Chris Liddell <chris.liddell@artifex.com>
-+Date: Tue, 20 Oct 2020 09:49:45 +0100
-+Subject: [PATCH] Bug 702985: drop use of FT_CALLBACK_DEF() def
-+
-+From 2.10.3, Freetype disappeared the FT_CALLBACK_DEF() macro, which is what
-+we used when defining our callbacks from Freetype.
-+
-+No guidance forthcoming from the Freetype developer who made those changes,
-+so change to explicitly declaring the callbacks file static.
-+
-+Should fix the reported build failures.
-+
-+Downloaded from upstream commit:
-+https://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=41ef9a0bc36b
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ base/fapi_ft.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/base/fapi_ft.c b/base/fapi_ft.c
-+index 65fa6dcf4..21aef2f06 100644
-+--- a/base/fapi_ft.c
-++++ b/base/fapi_ft.c
-+@@ -125,7 +125,7 @@ static void
-+ delete_inc_int_info(gs_fapi_server * a_server,
-+                     FT_IncrementalRec * a_inc_int_info);
-+ 
-+-FT_CALLBACK_DEF(void *)
-++static void *
-+ FF_alloc(FT_Memory memory, long size)
-+ {
-+     gs_memory_t *mem = (gs_memory_t *) memory->user;
-+@@ -133,7 +133,7 @@ FF_alloc(FT_Memory memory, long size)
-+     return (gs_malloc(mem, size, 1, "FF_alloc"));
-+ }
-+ 
-+-FT_CALLBACK_DEF(void *)
-++static void *
-+     FF_realloc(FT_Memory memory, long cur_size, long new_size, void *block)
-+ {
-+     gs_memory_t *mem = (gs_memory_t *) memory->user;
-+@@ -153,7 +153,7 @@ FT_CALLBACK_DEF(void *)
-+     return (tmp);
-+ }
-+ 
-+-FT_CALLBACK_DEF(void)
-++static void
-+     FF_free(FT_Memory memory, void *block)
-+ {
-+     gs_memory_t *mem = (gs_memory_t *) memory->user;
-+-- 
-+2.17.1
-+
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 7fc00f1c97..36571b51af 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,9 +1,8 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.2/
+-md5  7c0d5a39f232d7eb9f9d7da76bf08074  freetype-2.10.2.tar.xz
+-sha1  b074d5c34dc0e3cc150be6e7aa6b07c9ec4ed875  freetype-2.10.2.tar.xz
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.4/
++sha1  0181862673f7216ad2b5074f95fc131209e30b27  freetype-2.10.4.tar.xz
+ 
+ # Locally calculated
+-sha256  1543d61025d2e6312e0a1c563652555f17378a204a61e99928c9fcef030a2d8b  freetype-2.10.2.tar.xz
++sha256  86a854d8905b19698bbc8f23b860bc104246ce4854dcea8e3b0fb21284f75784  freetype-2.10.4.tar.xz
+ sha256  fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb  docs/LICENSE.TXT
+ sha256  08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1  docs/FTL.TXT
+ sha256  c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18  docs/GPLv2.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index f4d71bedf7..e543aee0b2 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION = 2.10.2
++FREETYPE_VERSION = 2.10.4
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
