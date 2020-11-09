@@ -1,10 +1,11 @@
 From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 9 Nov 2020 08:14:17 -0800
-Subject: [Buildroot] [PATCH 1/2] package/slirp: security bump to version
- 4.3.1
-In-Reply-To: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
+Date: Mon, 9 Nov 2020 08:15:05 -0800
+Subject: [Buildroot] [PATCH 2/2] package/xen: add slirp dependency for
+ tools
+In-Reply-To: <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
 References: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAKmqyKOQ4=Fkn6ntdruthFhEza=0R=Tkqq8hupq+aygGm2TJpg@mail.gmail.com>
+ <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
+Message-ID: <CAKmqyKNTFt=4RmKkJgu_E3LKiS9-zr7bRpKH-o9FTwt5GdhkGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +15,22 @@ To: buildroot@busybox.net
 On Sat, Nov 7, 2020 at 10:53 AM Fabrice Fontaine
 <fontaine.fabrice@gmail.com> wrote:
 >
-> - Use an up to date fork (spice slirp is archived and has not been
->   updated since 2012)
-> - Add COPYRIGHT as the license file
-> - BSD-4-Clause has been replaced by BSD-3-Clause since
->   https://gitlab.freedesktop.org/slirp/libslirp/-/commit/3bac39137a652b24b89d5b9e2a39600619fbe1d3
->   https://gitlab.freedesktop.org/slirp/libslirp/-/commit/f9f6e69c4e1d9a43af30bfe791b31789ffa04954
-> - Add hash file
-> - Switch to meson-package
-> - Fix multiple security vulnerabilities: CVE-2014-3640, CVE-2017-11434,
->   CVE-2019-6778, CVE-2019-9824, CVE-2019-14378 and CVE-2020-10756
+> Build of xen tools fails if slirp is built before xen because xen is not
+> compatible with spice slirp which does not provide libslirp.h:
+>
+> /home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
+>  #include <libslirp.h>
+>           ^~~~~~~~~~~~
+>
+> Indeed, xen prefers a system-provided slirp over its internal one
+>
+> So add slirp as a mandatory dependency (now that we switched to the up
+> to date https://gitlab.freedesktop.org/slirp/libslirp)
+>
+> This build failure is raised since, at least, version 4.13.0
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
 >
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -32,84 +39,36 @@ Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Alistair
 
 > ---
->  package/slirp/Config.in  | 17 ++++++-----------
->  package/slirp/slirp.hash |  3 +++
->  package/slirp/slirp.mk   | 20 +++++++-------------
->  3 files changed, 16 insertions(+), 24 deletions(-)
->  create mode 100644 package/slirp/slirp.hash
+>  package/xen/Config.in | 1 +
+>  package/xen/xen.mk    | 3 ++-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/package/slirp/Config.in b/package/slirp/Config.in
-> index 51dea9700f..8f57c4fa6a 100644
-> --- a/package/slirp/Config.in
-> +++ b/package/slirp/Config.in
-> @@ -1,16 +1,10 @@
->  config BR2_PACKAGE_SLIRP
->         bool "slirp"
->         help
-> -         The Spice project aims to provide a complete open source
-> -         solution for interaction with virtualized desktop devices.
-> -         The Spice project deals with both the virtualized devices
-> -         and the front-end. Interaction between front-end and
-> -         back-end is done using VD-Interfaces.
-> +         libslirp is a user-mode networking library used by virtual
-> +         machines, containers or various tools.
+> diff --git a/package/xen/Config.in b/package/xen/Config.in
+> index 57ab40eba8..af6acd3530 100644
+> --- a/package/xen/Config.in
+> +++ b/package/xen/Config.in
+> @@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
+>         select BR2_PACKAGE_NCURSES
+>         select BR2_PACKAGE_OPENSSL
+>         select BR2_PACKAGE_PIXMAN
+> +       select BR2_PACKAGE_SLIRP
+>         select BR2_PACKAGE_UTIL_LINUX
+>         select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>         select BR2_PACKAGE_YAJL
+> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+> index 8f1fa7db76..8cbe532d2b 100644
+> --- a/package/xen/xen.mk
+> +++ b/package/xen/xen.mk
+> @@ -41,7 +41,8 @@ XEN_CONF_OPTS += --disable-xen
+>  endif
 >
-> -         This package implements the slirp-part for Spice. Slirp
-> -         emulates a PPP or SLIP connection over a normal terminal.
-> -
-> -         http://www.spice-space.org/
-> +         https://gitlab.freedesktop.org/slirp/libslirp/
->
->           NOTE:
->           This package has some history of a unique kind:
-> @@ -21,5 +15,6 @@ config BR2_PACKAGE_SLIRP
->             - during that period, QEMU (Fabrice BELLARD) forked the code
->               and included it in QEMU
->             - and it was imported from this breed by the Spice project
-> -             around May 2009
-> -           - which is what we use here
-> +             around May 2009 which archived it in 2012
-> +           - So we switched to
-> +             https://gitlab.freedesktop.org/slirp/libslirp
-> diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-> new file mode 100644
-> index 0000000000..3051179df9
-> --- /dev/null
-> +++ b/package/slirp/slirp.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256  6b1641f04d41bc45f94018ac8d42d3c9f3ba0e463cbeacf5f26fe83fc050161e  libslirp-v4.3.1.tar.bz2
-> +sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-> diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-> index 7cfead65e2..4351818952 100644
-> --- a/package/slirp/slirp.mk
-> +++ b/package/slirp/slirp.mk
-> @@ -4,18 +4,12 @@
->  #
->  ################################################################################
->
-> -# There's no tarball releases of slirp, so we use the git repo
-> -# Also, there's no tag, so we use a random SHA1 (master's HEAD
-> -# of today)
-> -SLIRP_VERSION = 8c2da74c1385242f20799fec8c04f8378edc6550
-> -SLIRP_SITE = git://anongit.freedesktop.org/spice/slirp
-> -SLIRP_LICENSE = BSD-4-Clause, BSD-2-Clause
-> -# Note: The license file 'COPYRIGHT' is missing from the sources,
-> -# although some files refer to it.
-> +SLIRP_VERSION = 4.3.1
-> +SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
-> +SLIRP_SITE = \
-> +       https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
-> +SLIRP_LICENSE = BSD-3-Clause
-> +SLIRP_LICENSE_FILES = COPYRIGHT
->  SLIRP_INSTALL_STAGING = YES
->
-> -# As we're using the git tree, there's no ./configure,
-> -# so we need to autoreconf.
-> -SLIRP_AUTORECONF = YES
-> -
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
+>  ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
+> -XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
+> +XEN_DEPENDENCIES += \
+> +       dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
+>  ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+>  XEN_DEPENDENCIES += argp-standalone
+>  endif
 > --
 > 2.28.0
 >
