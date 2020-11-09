@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 10:51:58 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/davfs2: add
- davfs2 user and group
-Message-ID: <20201109095105.1A2C582AA9@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 10:51:13 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/lzlib: add
+ license file
+Message-ID: <20201109095105.100E588170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fba22d79f7530786e44e1241a4c3e884fe27d93
+commit: https://git.buildroot.net/buildroot/commit/?id=bb81d673b577ef24c7c2ba1e1760acd9e925a872
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-mount.davfs expects the availability of the user and group davfs2.
+Add lzlib.c as the license file and, while at it, update indentation to
+two spaces
 
-Signed-off-by: Sven Klomp <mail@klomp.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a2b98a6add92e38dbcd4ca9fda25454a38c719e3)
+(cherry picked from commit afdaeab7290e8226b47d712290f88a664c07bcda)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/davfs2/davfs2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lzlib/lzlib.hash | 3 ++-
+ package/lzlib/lzlib.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index a82e9d2f7c..bc2aa79646 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -18,4 +18,8 @@ DAVFS2_CONF_ENV += \
- 	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config \
- 	LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+index f983862e41..4bb4c52c8c 100644
+--- a/package/lzlib/lzlib.hash
++++ b/package/lzlib/lzlib.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb lzlib-0.4.3.tar.gz
++sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
++sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index f468a1c839..74624d5019 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -8,6 +8,7 @@ LZLIB_VERSION = 0.4.3
+ LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+ LZLIB_DEPENDENCIES = lua zlib
+ LZLIB_LICENSE = MIT
++LZLIB_LICENSE_FILES = lzlib.c
+ LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
+ 	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
  
-+define DAVFS2_USERS
-+        davfs2 -1 davfs2 -1 * - - - davfs user
-+endef
-+
- $(eval $(autotools-package))
