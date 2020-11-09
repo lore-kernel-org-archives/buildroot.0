@@ -1,61 +1,124 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:57:20 +0100
-Subject: [Buildroot] [git commit branch/next] package/asterisk: security
- bump to version 16.14.1
-Message-ID: <20201117203828.9981381590@busybox.osuosl.org>
+Date: Mon, 9 Nov 2020 21:11:37 +0100
+Subject: [Buildroot] [git commit branch/next] package/glmark2: fix wayland
+ build
+Message-ID: <20201117203826.8C8498633A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=339d3e82e8e121204523829bb0900fce4b99c923
+commit: https://git.buildroot.net/buildroot/commit/?id=9c068b4be804588799ca89b1f6959b4e2b1ffba8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+wayland-protocols is needed since
+https://github.com/glmark2/glmark2/commit/58763e2c13db39ad7c1a994c261146154e4f0afa
 
-- AST-2020-001: Remote crash in res_pjsip_session
-  Upon receiving a new SIP Invite, Asterisk did not return the created
-  dialog locked or referenced.
+Fixes:
+ - http://autobuild.buildroot.org/results/6106f07602c014897331daac3de01ac4a74e2016
+ - http://autobuild.buildroot.org/results/b8d43fad291022cbc6e43988fe6bec14f594591a
 
-- AST-2020-002: Outbound INVITE loop on challenge with different nonce
-  If Asterisk is challenged on an outbound INVITE and the nonce is changed
-  in each response, Asterisk will continually send INVITEs in a loop.  This
-  causes Asterisk to consume more and more memory since the transaction will
-  never terminate (even if the call is hung up), ultimately leading to a
-  restart or shutdown of Asterisk.  Outbound authentication must be
-  configured on the endpoint for this to occur.
-
-For details, see the announcement:
-https://www.asterisk.org/asterisk-news/asterisk-13-37-1-16-14-1-17-8-1-18-0-1-and-16-8-cert5-now-available-security/
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-use-find_program-to-find-wayland-scanner.patch | 50 ++++++++++++++++++++++
+ package/glmark2/Config.in                          |  2 +
+ package/glmark2/glmark2.mk                         |  4 +-
+ 3 files changed, 54 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 1bb5da7d06..bd83636271 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5ebefa6387f89695361b8c105e2ad7ee6381f87a99012aeb85b886ddf6d518ac  asterisk-16.13.0.tar.gz
-+sha256  226eaef400d2d335ce29d7b3c8aca8dfdfc5e854c215e0c47615c095ced12171  asterisk-16.14.1.tar.gz
+diff --git a/package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch b/package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch
+new file mode 100644
+index 0000000000..681f0c6794
+--- /dev/null
++++ b/package/glmark2/0001-wscript-use-find_program-to-find-wayland-scanner.patch
+@@ -0,0 +1,50 @@
++From 303d5c4fef1760ede5786bc62c7012dd7ae93722 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 Nov 2020 23:46:49 +0100
++Subject: [PATCH] wscript: use find_program to find wayland-scanner
++
++Use find_program instead of check_cfg to find wayland-scanner. This will
++fix the following build failure when cross-compiling:
++
++[ 3/73] Compiling doc/glmark2.1.in
++/bin/sh: 1: /usr/bin/wayland-scanner: not found
++
++Fixes:
++ - http://autobuild.buildroot.org/results//361dc40e558e2646cb93f405c7b1f621d400fea3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/wscript_build | 2 +-
++ wscript           | 3 +--
++ 2 files changed, 2 insertions(+), 3 deletions(-)
++
++diff --git a/src/wscript_build b/src/wscript_build
++index bbe7a77..ed3e8d6 100644
++--- a/src/wscript_build
+++++ b/src/wscript_build
++@@ -51,7 +51,7 @@ else:
++ 
++ if 'WAYLAND_SCANNER_wayland_scanner' in bld.env.keys():
++     def wayland_scanner_cmd(arg, src):
++-        return '%s %s < %s > ${TGT}' % (bld.env['WAYLAND_SCANNER_wayland_scanner'], arg, src)
+++        return '%s %s < %s > ${TGT}' % (bld.env['WAYLAND_SCANNER_wayland_scanner'][0], arg, src)
++ 
++     def wayland_proto_src_path(proto, ver):
++         wp_dir = bld.env['WAYLAND_PROTOCOLS_pkgdatadir']
++diff --git a/wscript b/wscript
++index e09fa78..fe2494f 100644
++--- a/wscript
+++++ b/wscript
++@@ -227,8 +227,7 @@ def configure_linux(ctx):
++         # wayland-protocols >= 1.12 required for xdg-shell stable
++         ctx.check_cfg(package = 'wayland-protocols', atleast_version = '1.12',
++                       variables = ['pkgdatadir'], uselib_store = 'WAYLAND_PROTOCOLS')
++-        ctx.check_cfg(package = 'wayland-scanner', variables = ['wayland_scanner'],
++-                      uselib_store = 'WAYLAND_SCANNER')
+++        ctx.find_program('wayland-scanner', var = 'WAYLAND_SCANNER_wayland_scanner')
++ 
++     # Prepend CXX flags so that they can be overriden by the
++     # CXXFLAGS environment variable
++-- 
++2.28.0
++
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index 153eb3b0af..40d0adcc8a 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -24,6 +24,7 @@ config BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GLESV2
+ 	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
  
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index b9e2b80dd5..fb3eb6ec8a 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL
+ 	bool
+@@ -32,6 +33,7 @@ config BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+ 	depends on BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_GLMARK2_FLAVOR_ANY
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
  
--ASTERISK_VERSION = 16.13.0
-+ASTERISK_VERSION = 16.14.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ config BR2_PACKAGE_GLMARK2_FLAVOR_X11_GLESV2
+ 	bool
+diff --git a/package/glmark2/glmark2.mk b/package/glmark2/glmark2.mk
+index ec62faada2..9e47b426fe 100644
+--- a/package/glmark2/glmark2.mk
++++ b/package/glmark2/glmark2.mk
+@@ -31,12 +31,12 @@ GLMARK2_FLAVORS += x11-gl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GLESV2),y)
+-GLMARK2_DEPENDENCIES += libgles wayland
++GLMARK2_DEPENDENCIES += libgles wayland wayland-protocols
+ GLMARK2_FLAVORS += wayland-glesv2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GLMARK2_FLAVOR_WAYLAND_GL),y)
+-GLMARK2_DEPENDENCIES += libgl wayland
++GLMARK2_DEPENDENCIES += libgl wayland wayland-protocols
+ GLMARK2_FLAVORS += wayland-gl
+ endif
+ 
