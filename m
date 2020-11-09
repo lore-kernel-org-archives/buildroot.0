@@ -1,50 +1,52 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Nov 2020 00:13:55 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/webkitgtk: fix opengl configure
- option
-Message-ID: <20201109231356.32230-1-ps.report@gmx.net>
+Date: Tue, 10 Nov 2020 00:18:00 +0100
+Subject: [Buildroot] [ISSUE] webkitgtk/webkitgtk.mk
+In-Reply-To: <CANVomh9b1fBc6vzrqjttcFijQP3Pi6tFSRkWKWgpPrhh6MZa1g@mail.gmail.com>
+References: <CANVomh9b1fBc6vzrqjttcFijQP3Pi6tFSRkWKWgpPrhh6MZa1g@mail.gmail.com>
+Message-ID: <20201110001800.47d64dcc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- option was renamed from ENABLE_OPENGL to ENABLE_GRAPHICS_CONTEXT_GL
-  since 2.30.0
+Hello Cerezo,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/webkitgtk/webkitgtk.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Sun, 8 Nov 2020 21:07:57 +0000, C Larbi <pkl2000us@gmail.com> wrote:
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 1f8582daf5..5209eeed2d 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -66,7 +66,7 @@ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_ACCELERATED_2D_CANVAS=ON \
- 	-DENABLE_GLES2=OFF \
--	-DENABLE_OPENGL=ON \
-+	-DENABLE_GRAPHICS_CONTEXT_GL=ON \
- 	-DENABLE_X11_TARGET=ON
- WEBKITGTK_DEPENDENCIES += libgl \
- 	xlib_libXcomposite xlib_libXdamage xlib_libXrender xlib_libXt
-@@ -84,13 +84,13 @@ WEBKITGTK_DEPENDENCIES += libegl
- ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
- WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_GLES2=ON \
--	-DENABLE_OPENGL=ON
-+	-DENABLE_GRAPHICS_CONTEXT_GL=ON
- WEBKITGTK_DEPENDENCIES += libgles
- else
- # Disable general OpenGL (shading) if there's no GLESv2
- WEBKITGTK_CONF_OPTS += \
- 	-DENABLE_GLES2=OFF \
--	-DENABLE_OPENGL=OFF
-+	-DENABLE_GRAPHICS_CONTEXT_GL=OFF
- endif
- # We must explicitly state the wayland target
- ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
--- 
-2.29.2
+> Compiling webkitgtk for a raspberrypi4 target using busybox as init throws
+> a "requires systemd" error at configuration stage
+>
+> was solved adding command to configuration options in webkitgtk.mk:
+>
+> WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+> 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+> 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+> WEBKITGTK_CONF_OPTS = \
+> 	-DENABLE_API_TESTS=OFF \
+> 	-DENABLE_GEOLOCATION=OFF \
+> 	-DENABLE_GTKDOC=OFF \
+> 	-DENABLE_INTROSPECTION=OFF \
+> 	-DENABLE_MINIBROWSER=ON \
+> 	-DENABLE_SPELLCHECK=ON \
+> 	-DPORT=GTK \
+> +       *-DUSE_SYSTEMD=OFF \*
+> 	-DSILENCE_CROSS_COMPILATION_NOTICES=ON \
+> 	-DUSE_LIBNOTIFY=OFF \
+> 	-DUSE_LIBHYPHEN=OFF \
+> 	-DUSE_OPENJPEG=ON \
+> 	-DUSE_WOFF2=ON \
+> 	-DUSE_WPE_RENDERER=OFF
+>
+
+Thanks for the bug report and the suggested fix, feel free
+to test the suggested patches [1] and [2]...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201109231356.32230-1-ps.report at gmx.net/
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/20201109231356.32230-2-ps.report at gmx.net/
+
+> regards
+> Cerezo
