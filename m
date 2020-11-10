@@ -1,72 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 11:57:57 +0100
-Subject: [Buildroot] [git commit branch/next] package/mesa3d: Add xcb-fixes
- to loader when using x11 and dri3
-Message-ID: <20201117203828.13B527FB0D@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 10:33:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/slirp: security bump
+ to version 4.3.1
+Message-ID: <20201117203827.34F70813C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=091e2aec683f2a28b3ef5f9014455b56167dc42b
+commit: https://git.buildroot.net/buildroot/commit/?id=97fcae8ddf71b02402225ed1b3d0e3d5ea367ed5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-"loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link.
-This is dependent on with_platform_x11 and with_dri3.
-But the source meson file does not set this up dependent on with_dri3."
+- Use an up to date fork (spice slirp is archived and has not been
+  updated since 2012)
+- Add COPYRIGHT as the license file
+- BSD-4-Clause has been replaced by BSD-3-Clause since
+  https://gitlab.freedesktop.org/slirp/libslirp/-/commit/3bac39137a652b24b89d5b9e2a39600619fbe1d3
+  https://gitlab.freedesktop.org/slirp/libslirp/-/commit/f9f6e69c4e1d9a43af30bfe791b31789ffa04954
+- Add hash file
+- Switch to meson-package
+- Fix multiple security vulnerabilities: CVE-2014-3640, CVE-2017-11434,
+  CVE-2019-6778, CVE-2019-9824, CVE-2019-14378 and CVE-2020-10756
 
-i686-buildroot-linux-gnu/bin/ld: src/loader/libloader_dri3_helper.a(loader_dri3_helper.c.o): in function `loader_dri3_swap_buffers_msc':
-loader_dri3_helper.c:(.text.loader_dri3_swap_buffers_msc+0x33e): undefined reference to `xcb_xfixes_create_region'
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981830
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cb-fixes-to-loader-when-using-x11-and-dri.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/slirp/Config.in  | 17 ++++++-----------
+ package/slirp/slirp.hash |  3 +++
+ package/slirp/slirp.mk   | 20 +++++++-------------
+ 3 files changed, 16 insertions(+), 24 deletions(-)
 
-diff --git a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+index 51dea9700f..8f57c4fa6a 100644
+--- a/package/slirp/Config.in
++++ b/package/slirp/Config.in
+@@ -1,16 +1,10 @@
+ config BR2_PACKAGE_SLIRP
+ 	bool "slirp"
+ 	help
+-	  The Spice project aims to provide a complete open source
+-	  solution for interaction with virtualized desktop devices.
+-	  The Spice project deals with both the virtualized devices
+-	  and the front-end. Interaction between front-end and
+-	  back-end is done using VD-Interfaces.
++	  libslirp is a user-mode networking library used by virtual
++	  machines, containers or various tools.
+ 
+-	  This package implements the slirp-part for Spice. Slirp
+-	  emulates a PPP or SLIP connection over a normal terminal.
+-
+-	  http://www.spice-space.org/
++	  https://gitlab.freedesktop.org/slirp/libslirp/
+ 
+ 	  NOTE:
+ 	  This package has some history of a unique kind:
+@@ -21,5 +15,6 @@ config BR2_PACKAGE_SLIRP
+ 	    - during that period, QEMU (Fabrice BELLARD) forked the code
+ 	      and included it in QEMU
+ 	    - and it was imported from this breed by the Spice project
+-	      around May 2009
+-	    - which is what we use here
++	      around May 2009 which archived it in 2012
++	    - So we switched to
++	      https://gitlab.freedesktop.org/slirp/libslirp
+diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
 new file mode 100644
-index 0000000000..5746bc221e
+index 0000000000..3051179df9
 --- /dev/null
-+++ b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
-@@ -0,0 +1,35 @@
-+From da691ec75cc8a7b2d0ac0c5894521afda4bc601d Mon Sep 17 00:00:00 2001
-+From: Duncan Hopkins <duncan@duncanhopkins.me.uk>
-+Date: Thu, 15 Oct 2020 12:14:57 +0100
-+Subject: [PATCH] meson: Add xcb-fixes to loader when using x11 and dri3. Fixes
-+ undefined symbol for xcb_xfixes_create_region in loader_dri3_helper.c
-+
-+loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link. This is dependent on with_platform_x11 and with_dri3.
-+But the source meson file does not set this up dependent on with_dri3.
-+The build was initialsed using platforms=x11 and gallium-drivers=zink,swrast.
-+
-+Reviewed-by: Eric Anholt <eric@anholt.net>
-+Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/7164>
-+(cherry picked from commit cf17d6251653f4a98e7c4f904ea2f0bc0ecedd5c)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ meson.build | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index fbd3c4b8e8d..670cb521a2b 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1742,7 +1742,8 @@ if with_platform_x11
-+       dep_xxf86vm = dependency('xxf86vm')
-+     endif
-+   endif
-+-  if (with_egl or (
-++  if (with_egl or 
-++      with_dri3 or (
-+       with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
-+       with_gallium_omx != 'disabled'))
-+     dep_xcb_xfixes = dependency('xcb-xfixes')
-+-- 
-+2.25.4
-+
++++ b/package/slirp/slirp.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  6b1641f04d41bc45f94018ac8d42d3c9f3ba0e463cbeacf5f26fe83fc050161e  libslirp-v4.3.1.tar.bz2
++sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index 7cfead65e2..4351818952 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -4,18 +4,12 @@
+ #
+ ################################################################################
+ 
+-# There's no tarball releases of slirp, so we use the git repo
+-# Also, there's no tag, so we use a random SHA1 (master's HEAD
+-# of today)
+-SLIRP_VERSION = 8c2da74c1385242f20799fec8c04f8378edc6550
+-SLIRP_SITE = git://anongit.freedesktop.org/spice/slirp
+-SLIRP_LICENSE = BSD-4-Clause, BSD-2-Clause
+-# Note: The license file 'COPYRIGHT' is missing from the sources,
+-# although some files refer to it.
++SLIRP_VERSION = 4.3.1
++SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
++SLIRP_SITE = \
++	https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
++SLIRP_LICENSE = BSD-3-Clause
++SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_INSTALL_STAGING = YES
+ 
+-# As we're using the git tree, there's no ./configure,
+-# so we need to autoreconf.
+-SLIRP_AUTORECONF = YES
+-
+-$(eval $(autotools-package))
++$(eval $(meson-package))
