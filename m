@@ -1,101 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 09:07:28 +0100
-Subject: [Buildroot] [git commit branch/next] docs/website: update for
- 2020.02.8
-Message-ID: <20201117203830.477907FD00@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 23:19:19 +0100
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: add
+ optional systemd dependency
+Message-ID: <20201117203827.847F07FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bbb6efc81fee71f8045530742f715c933361f77
+commit: https://git.buildroot.net/buildroot/commit/?id=b98934170eaf6b5e4417341e9f6a0e4df9832840
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
+be set to avoid CMake from trying to use systemd unconditionally.
+
+Based on a similar patch for package/webkitgtk by Peter Seiderer.
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/wpewebkit/wpewebkit.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 4f9a755df0..774b82d733 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 6233505ca7..6f83775e96 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -63,6 +63,13 @@ else
+ WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
+ endif
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.7</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.8</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.02.7.tar.gz">buildroot-2020.02.7.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.7.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.8.tar.gz">buildroot-2020.02.8.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.8.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02.7.tar.bz2">buildroot-2020.02.7.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.7.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.8.tar.bz2">buildroot-2020.02.8.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.8.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ab6c525eca..879eef9b15 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.8 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>17 November 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.8 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.7 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.8">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296838.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.8.tar.bz2">2020.02.8 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++ifeq ($(BR2_INIT_SYSTEMD),y)
++WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
++WPEWEBKIT_DEPENDENCIES += systemd
++else
++WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
++endif
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ # JIT is not supported for MIPS r6, but the WebKit build system does not
+ # have a check for these processors. The same goes for ARMv5 and ARMv6.
+ # Disable JIT forcibly here and use the CLoop interpreter instead.
