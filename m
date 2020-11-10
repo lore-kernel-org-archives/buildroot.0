@@ -1,44 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 23:19:19 +0100
-Subject: [Buildroot] [git commit branch/next] package/wpewebkit: add
- optional systemd dependency
-Message-ID: <20201117203827.847F07FB95@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 10:34:26 +0100
+Subject: [Buildroot] [git commit branch/next] package/xen: add slirp
+ dependency for tools
+Message-ID: <20201117203827.3EB7F86A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b98934170eaf6b5e4417341e9f6a0e4df9832840
+commit: https://git.buildroot.net/buildroot/commit/?id=a0a5c184efe4fec3bf7edb0a7a8e40bb4ddbea13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
-be set to avoid CMake from trying to use systemd unconditionally.
+Build of xen tools fails if slirp is built before xen because xen is not
+compatible with spice slirp which does not provide libslirp.h:
 
-Based on a similar patch for package/webkitgtk by Peter Seiderer.
+/home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
+ #include <libslirp.h>
+          ^~~~~~~~~~~~
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Indeed, xen prefers a system-provided slirp over its internal one
+
+So add slirp as a mandatory dependency (now that we switched to the up
+to date https://gitlab.freedesktop.org/slirp/libslirp)
+
+This build failure is raised since, at least, version 4.13.0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/xen/Config.in | 1 +
+ package/xen/xen.mk    | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6233505ca7..6f83775e96 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -63,6 +63,13 @@ else
- WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index 57ab40eba8..af6acd3530 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_SLIRP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_YAJL
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 8f1fa7db76..8cbe532d2b 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -41,7 +41,8 @@ XEN_CONF_OPTS += --disable-xen
  endif
  
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
-+WPEWEBKIT_DEPENDENCIES += systemd
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
-+endif
-+
- # JIT is not supported for MIPS r6, but the WebKit build system does not
- # have a check for these processors. The same goes for ARMv5 and ARMv6.
- # Disable JIT forcibly here and use the CLoop interpreter instead.
+ ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
+-XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
++XEN_DEPENDENCIES += \
++	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ XEN_DEPENDENCIES += argp-standalone
+ endif
