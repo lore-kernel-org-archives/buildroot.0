@@ -1,83 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 08:39:07 +0100
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{4, 8, 9}.x series
-Message-ID: <20201110073013.0922B8121C@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 08:31:40 +0100
+Subject: [Buildroot] [git commit] package/bitcoin: security bump to version
+ 0.20.1
+Message-ID: <20201110073012.F2403811E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=493b1d7b254a881a3eff43e818cefb3ddc917a8f
+commit: https://git.buildroot.net/buildroot/commit/?id=b62e8beea89fc1a2f8b749d5258a3d9984e1da5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- openssl is not a dependency since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/8983ee3e6dd8ab658bd2caf97c326cc53ea50818
+- boost chrono is not needed since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/bd37f2bc26158f85ef1ab73b9ca1fc0da8ea562a
+- Update hash of COPYING (update in year:
+  https://github.com/bitcoin/bitcoin/commit/8dc9aa90c3c7990dd5b491937ddc0e39bc929d1c)
+- Update indentation in hash file (two spaces)
+- Tag as a security bump as having an up to date bitcoin is important:
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
+
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.1.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.0.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.19.1.md
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ ...001-src-randomenv.cpp-fix-build-on-uclibc.patch | 48 ++++++++++++++++++++++
+ package/bitcoin/Config.in                          |  2 -
+ package/bitcoin/bitcoin.hash                       |  6 +--
+ package/bitcoin/bitcoin.mk                         |  4 +-
+ 4 files changed, 53 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5e8390647a..64efc20394 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
+diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+new file mode 100644
+index 0000000000..8038a311d3
+--- /dev/null
++++ b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+@@ -0,0 +1,48 @@
++From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 9 Nov 2020 21:18:40 +0100
++Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
++
++Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
++getauxval to avoid a build failure on uclibc
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
++---
++ src/randomenv.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/randomenv.cpp b/src/randomenv.cpp
++index 07122b7f6..5e07c3db4 100644
++--- a/src/randomenv.cpp
+++++ b/src/randomenv.cpp
++@@ -53,7 +53,7 @@
++ #include <sys/vmmeter.h>
++ #endif
++ #endif
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++ #include <sys/auxv.h>
++ #endif
++ 
++@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     // Bitcoin client version
++     hasher << CLIENT_VERSION;
++ 
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++     // Information available through getauxval()
++ #  ifdef AT_HWCAP
++     hasher << getauxval(AT_HWCAP);
++@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     const char* exec_str = (const char*)getauxval(AT_EXECFN);
++     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
++ #  endif
++-#endif // __linux__
+++#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
++ 
++ #ifdef HAVE_GETCPUID
++     AddAllCPUID(hasher);
++-- 
++2.28.0
++
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 89ee2e3938..65af15293d 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -18,8 +18,6 @@ config BR2_PACKAGE_BITCOIN
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Bitcoin Core is an open source project which maintains and
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index fe7c1562a8..d39eb38e92 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
+@@ -1,5 +1,5 @@
+-# From https://bitcoincore.org/bin/bitcoin-core-0.19.0.1/SHA256SUMS.asc
+-sha256 7ac9f972249a0a16ed01352ca2a199a5448fe87a4ea74923404a40b4086de284  bitcoin-0.19.0.1.tar.gz
++# From https://bitcoincore.org/bin/bitcoin-core-0.20.1/SHA256SUMS.asc
++sha256  4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978  bitcoin-0.20.1.tar.gz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.9.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.132-cip30" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.132-cip30-rt12" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 4b76398c5d..a12192c137 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,12 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  3239a4ee1250bf2048be988cc8cb46c487b2c8a0de5b1b032d38394d5c6b1a06  linux-5.9.tar.xz
--sha256  ee767991808d234ad9acd17f0ba94ba7979d30c528876bee6fba337ea540f0af  linux-5.8.14.tar.xz
--sha256  c0b3d8085c5ba235df38b00b740e053659709e8a5ca21957a239f6bc22c45007  linux-5.4.70.tar.xz
-+sha256  6cc182fe19a8f3958c24d453f4ab68eb73fb5cfb8af4c95b02f3db049e655370  linux-5.9.6.tar.xz
-+sha256  4ab4a3f694b7b4cfbe78871eab34c8039ad33692144c45c669827a594da85534  linux-5.8.18.tar.xz
-+sha256  d2466fd6eb5433e7bf287b617b11b2640c65a7ea93a57eb7a80d7f537cbc1470  linux-5.4.75.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  067814035c17e77dee84076dcc06a95eb675344cd926b7b79a16b80fee593364  linux-4.4.238.tar.xz
--sha256  b1eaf60b771ec4df0546d2b7539e164355008ea2f680a0642ae430e9cb134a3f  linux-4.9.238.tar.xz
--sha256  5d404a0224a34b5379f1871cc46825487d557c2660459d2b5c3cd4871d699a38  linux-4.14.200.tar.xz
--sha256  f2f709ef086a4d8cb3c15a857daa44dfecf1b88d7d7c53c980fb180f6dccbace  linux-4.19.150.tar.xz
-+sha256  32fe14f120436c927d895d3c59a37ca50c0ae3648ba3599d9cab57ffa4699214  linux-4.4.241.tar.xz
-+sha256  c4c6d04f91d881e68524bda6062b5c1835f285bd03344bf8f2eaeef3394bb32c  linux-4.9.241.tar.xz
-+sha256  9e832899ec75dbfce393c9f7a07df24183b28f0bb95ad4dd8b1fa027bc668ad9  linux-4.14.204.tar.xz
-+sha256  cbc648f5405cb2b554b7a0f23885742d9969a11d22692287ee756adf940a48d2  linux-4.19.155.tar.xz
- # Locally computed
- sha256  c20f9014b89ea3e27f55f1d407aa5a4724ed38ac520c197291e9d644f164c43a  linux-cip-4.19.132-cip30.tar.gz
- sha256  81dd791d9ad6c3fddaeaffc6d7d8df0e13831283a5fe494c437ac7820d79ca39  linux-cip-4.19.132-cip30-rt12.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 16af0449a5..97c30c9b3d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -346,13 +346,13 @@ endchoice
+ # Hash for license file
+-sha256 9a0f75d688e9cf5c69d3efdaa2a83af496700d252b212ec6a72f7784b47fed0c  COPYING
++sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 040c55b8a6..d5e3973d9c 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.238"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.238"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.200"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.150"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.70"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.14"	if BR2_KERNEL_HEADERS_5_8
--	default "5.9"		if BR2_KERNEL_HEADERS_5_9
-+	default "4.4.241"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.241"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.204"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.155"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.75"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.8.18"	if BR2_KERNEL_HEADERS_5_8
-+	default "5.9.6"		if BR2_KERNEL_HEADERS_5_9
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-BITCOIN_VERSION = 0.19.0.1
++BITCOIN_VERSION = 0.20.1
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
+ BITCOIN_LICENSE_FILES = COPYING
+-BITCOIN_DEPENDENCIES = host-pkgconf boost openssl libevent
++BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+ 	--disable-wallet \
