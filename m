@@ -1,93 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 10:36:51 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-pillow: bump to
- version 8.0.1
-Message-ID: <20201110092412.A7D2E81D88@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 10 Nov 2020 11:47:13 +0200
+Subject: [Buildroot] [ISSUE] webkitgtk/webkitgtk.mk
+In-Reply-To: <20201110001800.47d64dcc@gmx.net>
+References: <CANVomh9b1fBc6vzrqjttcFijQP3Pi6tFSRkWKWgpPrhh6MZa1g@mail.gmail.com>
+ <20201110001800.47d64dcc@gmx.net>
+Message-ID: <20201110114713.GB528686@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7a68dd9cf175acdd9266fd4067af2d6b986d992
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Bumping the package requires two fixes:
-* pillow looks for header files in paths returned by pkg-config.
-  On buildroot, pkg-config returns nothing if PKG_CONFIG_ALLOW_SYSTEM_CFLAGS
-  is disabled.
-* png is the default pillow image format and png format is working only
-  if python zlib module is available.
+On Tue, 10 Nov 2020 00:18:00 +0100 Peter Seiderer <ps.report@gmx.net> wrote:
+> Hello Cerezo,
+> 
+> On Sun, 8 Nov 2020 21:07:57 +0000, C Larbi <pkl2000us@gmail.com> wrote:
+> 
+> > Compiling webkitgtk for a raspberrypi4 target using busybox as init throws
+> > a "requires systemd" error at configuration stage
+> >
+> > was solved adding command to configuration options in webkitgtk.mk:
+> >
+> > WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+> > 	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+> > 	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+> > WEBKITGTK_CONF_OPTS = \
+> > 	-DENABLE_API_TESTS=OFF \
+> > 	-DENABLE_GEOLOCATION=OFF \
+> > 	-DENABLE_GTKDOC=OFF \
+> > 	-DENABLE_INTROSPECTION=OFF \
+> > 	-DENABLE_MINIBROWSER=ON \
+> > 	-DENABLE_SPELLCHECK=ON \
+> > 	-DPORT=GTK \
+> > +       *-DUSE_SYSTEMD=OFF \*
+> > 	-DSILENCE_CROSS_COMPILATION_NOTICES=ON \
+> > 	-DUSE_LIBNOTIFY=OFF \
+> > 	-DUSE_LIBHYPHEN=OFF \
+> > 	-DUSE_OPENJPEG=ON \
+> > 	-DUSE_WOFF2=ON \
+> > 	-DUSE_WPE_RENDERER=OFF
+> >
+> 
+> Thanks for the bug report and the suggested fix, feel free
+> to test the suggested patches [1] and [2]...
+> 
+> Regards,
+> Peter
+> 
+> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20201109231356.32230-1-ps.report at gmx.net/
+> [2] https://patchwork.ozlabs.org/project/buildroot/patch/20201109231356.32230-2-ps.report at gmx.net/
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pillow/Config.in          |  1 +
- package/python-pillow/python-pillow.hash |  3 +--
- package/python-pillow/python-pillow.mk   | 13 ++++---------
- 3 files changed, 6 insertions(+), 11 deletions(-)
+Patches LGTM, thanks for submitting those! I have also made a version of the
+USE_SYSTEMD one for WPE WebKit:
 
-diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
-index f98a4a9e5b..ae6d8c8346 100644
---- a/package/python-pillow/Config.in
-+++ b/package/python-pillow/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_PILLOW
- 	bool "python-pillow"
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB
- 	help
- 	  Pillow is the "friendly" PIL fork by Alex Clark and
- 	  Contributors. PIL is the Python Imaging Library by Fredrik
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index f80b79fe5f..0849577f66 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,5 +1,4 @@
- # md5, sha256 from https://pypi.org/project/Pillow/
--md5	f1f7592c51260e5080d3cd71781ea675  Pillow-7.1.2.tar.gz
--sha256	97f9e7953a77d5a70f49b9a48da7776dc51e9b738151b22dacf101641594a626  Pillow-7.2.0.tar.gz
-+sha256	11c5c6e9b02c9dac08af04f093eb5a2f84857df70a7d4a6a6ad461aca803fb9e  Pillow-8.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256	37de42abe33a247e8f03d2313657a0f174a239a198f526add6544ff3e2643b81  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 931dce53d2..60a0bb3e1b 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 7.2.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/3e/02/b09732ca4b14405ff159c470a612979acfc6e8645dc32f83ea0129709f7a
-+PYTHON_PILLOW_VERSION = 8.0.1
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/2b/06/93bf1626ef36815010e971a5ce90f49919d84ab5d2fa310329f843a74bc1
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
-@@ -47,15 +47,9 @@ else
- PYTHON_PILLOW_BUILD_OPTS += --disable-webp
- endif
- 
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--PYTHON_PILLOW_DEPENDENCIES += zlib
--PYTHON_PILLOW_BUILD_OPTS += --enable-zlib
--else
--PYTHON_PILLOW_BUILD_OPTS += --disable-zlib
--endif
--
- define PYTHON_PILLOW_BUILD_CMDS
- 	cd $(PYTHON_PILLOW_BUILDDIR); \
-+		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
- 		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
- 		$(PYTHON_PILLOW_BASE_BUILD_OPTS) $(PYTHON_PILLOW_BUILD_OPTS)
-@@ -63,6 +57,7 @@ endef
- 
- define PYTHON_PILLOW_INSTALL_TARGET_CMDS
- 	cd $(PYTHON_PILLOW_BUILDDIR); \
-+		PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
- 		$(PYTHON_PILLOW_BASE_ENV) $(PYTHON_PILLOW_ENV) \
- 		$(PYTHON_PILLOW_PYTHON_INTERPRETER) setup.py build_ext \
- 		$(PYTHON_PILLOW_BUILD_OPTS) install \
+  https://patchwork.ozlabs.org/project/buildroot/patch/20201110090204.1581432-1-aperez at igalia.com/
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201110/397c8007/attachment.asc>
