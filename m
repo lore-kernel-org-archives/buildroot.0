@@ -1,41 +1,40 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 10 Nov 2020 11:02:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add optional systemd
- dependency
-Message-ID: <20201110090204.1581432-1-aperez@igalia.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Nov 2020 09:33:53 +0000
+Subject: [Buildroot] [Bug 13296] host-libcap failed to build
+In-Reply-To: <bug-13296-163@https.bugs.busybox.net/>
+References: <bug-13296-163@https.bugs.busybox.net/>
+Message-ID: <bug-13296-163-eEGFDc9P7R@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
-be set to avoid CMake from trying to use systemd unconditionally.
+https://bugs.busybox.net/show_bug.cgi?id=13296
 
-Based on a similar patch for package/webkitgtk by Peter Seiderer.
+Heiko Thiery <heiko.thiery@gmail.com> changed:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/wpewebkit/wpewebkit.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #8631|0                           |1
+        is obsolete|                            |
+   Attachment #8636|0                           |1
+        is obsolete|                            |
+                 CC|                            |heiko.thiery at gmail.com
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6233505ca7..6f83775e96 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -63,6 +63,13 @@ else
- WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
- endif
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
-+WPEWEBKIT_DEPENDENCIES += systemd
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
-+endif
-+
- # JIT is not supported for MIPS r6, but the WebKit build system does not
- # have a check for these processors. The same goes for ARMv5 and ARMv6.
- # Disable JIT forcibly here and use the CLoop interpreter instead.
+--- Comment #11 from Heiko Thiery <heiko.thiery@gmail.com> ---
+Created attachment 8656
+  --> https://bugs.busybox.net/attachment.cgi?id=8656&action=edit
+third iteration of the patch
+
+I added a patch for libcap that should prevent adding the --static flag. Please
+give it a try.
+
+I also started a request to the libcap maintainer get feedback if this is the
+correct way.
+
+Thank you
+
 -- 
-2.29.2
+You are receiving this mail because:
+You are on the CC list for the bug.
