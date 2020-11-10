@@ -1,32 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 10 Nov 2020 21:17:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: set BITCOIN_GENBUILD_NO_GIT
-Message-ID: <20201110201707.517081-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Nov 2020 20:58:16 +0100
+Subject: [Buildroot] [git commit] Revert
+ "configs/qemu_arm_versatile_defconfig: increase SD card image size to
+ 64MiB"
+Message-ID: <20201110200457.30D2C81E74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set BITCOIN_GENBUILD_NO_GIT which is available since version 0.15.0 and
-https://github.com/bitcoin/bitcoin/commit/e98e3dde6a976a2c8f266ee963d6931fd4b37262
+commit: https://git.buildroot.net/buildroot/commit/?id=80cbc2922ab95980b7cffac077d58ce43bdfba8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+qemu_arm_versatile doesn't use SD card interface but SCSI, so there is no
+need to increase the image size.
+The change was for qemu_arm_vexpress_defconfig instead (notice the
+name of the defconfig used in gitlab).
+
+This reverts commit cb62a8e0a2b88b6c1b3ffe74e9eb370bf686fa62.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bitcoin/bitcoin.mk | 1 +
- 1 file changed, 1 insertion(+)
+ configs/qemu_arm_versatile_defconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index d5e3973d9c..9d2094c02c 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -10,6 +10,7 @@ BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
- BITCOIN_LICENSE_FILES = COPYING
- BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
-+BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
- BITCOIN_CONF_OPTS = \
- 	--disable-bench \
- 	--disable-wallet \
--- 
-2.28.0
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 280c313407..6dc212397c 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -13,8 +13,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Image
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-# Qemu >= 5.1 requires SD card size to be a power of 2, e.g. 64 MiB.
+-BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+ 
+ # Linux headers same as kernel, a 5.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
