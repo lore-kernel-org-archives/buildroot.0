@@ -1,62 +1,58 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 10 Nov 2020 10:29:07 +0200
-Subject: [Buildroot] [PATCH v1 1/2] package/webkitgtk: fix opengl
- configure option
-In-Reply-To: <20201109231356.32230-1-ps.report@gmx.net>
+Date: Tue, 10 Nov 2020 10:32:28 +0200
+Subject: [Buildroot] [PATCH v1 2/2] package/webkitgtk: add optional
+ systemd dependency
+In-Reply-To: <20201109231356.32230-2-ps.report@gmx.net>
 References: <20201109231356.32230-1-ps.report@gmx.net>
-Message-ID: <20201110102907.GB476055@momiji>
+ <20201109231356.32230-2-ps.report@gmx.net>
+Message-ID: <20201110103228.GD476055@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi Peter,
 
-You beat me to this fix, somehow I managed to forget about the option
-rename when bumping the package to 2.30.x ? thanks for the patch!
+This is a good one as well, thanks!
 
-On Tue, 10 Nov 2020 00:13:55 +0100 Peter Seiderer <ps.report@gmx.net> wrote:
-> - option was renamed from ENABLE_OPENGL to ENABLE_GRAPHICS_CONTEXT_GL
->   since 2.30.0
+On Tue, 10 Nov 2020 00:13:56 +0100 Peter Seiderer <ps.report@gmx.net> wrote:
+> - systemd support/USE_SYSTEMD option was added since 2.30.0,
+>   so add an optional dependency
 > 
+> Fixes:
+> 
+>   -- Could NOT find Systemd (missing: Systemd_LIBRARY Systemd_INCLUDE_DIR)
+>   CMake Error at Source/cmake/OptionsGTK.cmake:425 (message):
+>     libsystemd is needed for USE_SYSTEMD
+> 
+> Reported-by: C Larbi <pkl2000us@gmail.com>
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Acked-by: Adrian Perez de Castro <aperez@igalia.com>
 
 > ---
->  package/webkitgtk/webkitgtk.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/webkitgtk/webkitgtk.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
 > diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 1f8582daf5..5209eeed2d 100644
+> index 5209eeed2d..84078f8b9a 100644
 > --- a/package/webkitgtk/webkitgtk.mk
 > +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -66,7 +66,7 @@ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
->  WEBKITGTK_CONF_OPTS += \
->  	-DENABLE_ACCELERATED_2D_CANVAS=ON \
->  	-DENABLE_GLES2=OFF \
-> -	-DENABLE_OPENGL=ON \
-> +	-DENABLE_GRAPHICS_CONTEXT_GL=ON \
->  	-DENABLE_X11_TARGET=ON
->  WEBKITGTK_DEPENDENCIES += libgl \
->  	xlib_libXcomposite xlib_libXdamage xlib_libXrender xlib_libXt
-> @@ -84,13 +84,13 @@ WEBKITGTK_DEPENDENCIES += libegl
->  ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
->  WEBKITGTK_CONF_OPTS += \
->  	-DENABLE_GLES2=ON \
-> -	-DENABLE_OPENGL=ON
-> +	-DENABLE_GRAPHICS_CONTEXT_GL=ON
->  WEBKITGTK_DEPENDENCIES += libgles
->  else
->  # Disable general OpenGL (shading) if there's no GLESv2
->  WEBKITGTK_CONF_OPTS += \
->  	-DENABLE_GLES2=OFF \
-> -	-DENABLE_OPENGL=OFF
-> +	-DENABLE_GRAPHICS_CONTEXT_GL=OFF
+> @@ -104,6 +104,13 @@ else
+>  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
 >  endif
->  # We must explicitly state the wayland target
->  ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+>  
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=ON
+> +WEBKITGTK_DEPENDENCIES += systemd
+> +else
+> +WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=OFF
+> +endif
+> +
+>  # JIT is not supported for MIPS r6, but the WebKit build system does not
+>  # have a check for these processors. The same goes for ARMv5 and ARMv6.
+>  # Disable JIT forcibly here and use the CLoop interpreter instead.
 > -- 
 > 2.29.2
 > 
@@ -66,4 +62,4 @@ Name: not available
 Type: application/pgp-signature
 Size: 195 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201110/12abf618/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201110/281c0d63/attachment.asc>
