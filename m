@@ -1,35 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:20:12 +0100
-Subject: [Buildroot] [git commit branch/next] DEVELOPERS: remove myself for
- wf111
-Message-ID: <20201117203826.A798186A87@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 08:29:37 +0100
+Subject: [Buildroot] [git commit branch/next] package/libiqrf: add license
+ file
+Message-ID: <20201117203826.D67BD7FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19932c8e0288f4622611034c2d22fb7ed2cf9571
+commit: https://git.buildroot.net/buildroot/commit/?id=062e5d8a65f31f44723a51ad2086b47bd6d04949
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I haven't looked at that package and touched it for 6 years now, and
-clearly others have taken care of it when looking at the Git history.
+Add license file and, while at it, update indentation to two spaces
 
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ package/libiqrf/libiqrf.hash | 3 ++-
+ package/libiqrf/libiqrf.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d9d46dc3ea..257295358e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -185,7 +185,6 @@ F:	package/gnuplot/
- N:	Antoine Tenart <atenart@kernel.org>
- F:	package/libselinux/
- F:	package/refpolicy/
--F:	package/wf111/
- F:	support/testing/tests/core/test_selinux/
- F:	support/testing/tests/core/test_selinux.py
- F:	support/testing/tests/init/test_systemd_selinux/
+diff --git a/package/libiqrf/libiqrf.hash b/package/libiqrf/libiqrf.hash
+index b7f3b9bf2c..df749def17 100644
+--- a/package/libiqrf/libiqrf.hash
++++ b/package/libiqrf/libiqrf.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
++sha256  8111031dd9dd6093a1927eb32dd7476fe22cfee9190043aa8e4c88003c104b16  libiqrf-0.1.2.tar.gz
++sha256  11e0700d7c23604d86fa1e7c54c7caa778d79eeb0035be8f80b5a552224ef015  src/iqrf.c
+diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+index cd03373dec..3f4e3e8498 100644
+--- a/package/libiqrf/libiqrf.mk
++++ b/package/libiqrf/libiqrf.mk
+@@ -9,5 +9,6 @@ LIBIQRF_SITE = $(call github,nandra,libiqrf,v$(LIBIQRF_VERSION))
+ LIBIQRF_INSTALL_STAGING = YES
+ LIBIQRF_DEPENDENCIES = libusb
+ LIBIQRF_LICENSE = LGPL-2.1+
++LIBIQRF_LICENSE_FILES = src/iqrf.c
+ 
+ $(eval $(cmake-package))
