@@ -1,73 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 17:14:27 +0100
-Subject: [Buildroot] [git commit branch/next] package/redis: security bump
- to version 6.0.9
-Message-ID: <20201117203829.973137FB0D@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 08:31:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/bitcoin: security bump
+ to version 0.20.1
+Message-ID: <20201117203826.E14DD86A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1bce086f6eb174e154a753c6608b3636345fd62
+commit: https://git.buildroot.net/buildroot/commit/?id=b62e8beea89fc1a2f8b749d5258a3d9984e1da5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This release fixes a potential heap overflow when using a heap allocator
-other than jemalloc or glibc's malloc. See:
-https://github.com/redis/redis/pull/7963
+- openssl is not a dependency since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/8983ee3e6dd8ab658bd2caf97c326cc53ea50818
+- boost chrono is not needed since version 0.20.0 and
+  https://github.com/bitcoin/bitcoin/commit/bd37f2bc26158f85ef1ab73b9ca1fc0da8ea562a
+- Update hash of COPYING (update in year:
+  https://github.com/bitcoin/bitcoin/commit/8dc9aa90c3c7990dd5b491937ddc0e39bc929d1c)
+- Update indentation in hash file (two spaces)
+- Tag as a security bump as having an up to date bitcoin is important:
+  https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
 
-https://raw.githubusercontent.com/redis/redis/6.0/00-RELEASENOTES
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.1.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.20.0.md
+https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.19.1.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/redis/0001-uclibc.patch | 4 +++-
- package/redis/redis.hash        | 2 +-
- package/redis/redis.mk          | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ ...001-src-randomenv.cpp-fix-build-on-uclibc.patch | 48 ++++++++++++++++++++++
+ package/bitcoin/Config.in                          |  2 -
+ package/bitcoin/bitcoin.hash                       |  6 +--
+ package/bitcoin/bitcoin.mk                         |  4 +-
+ 4 files changed, 53 insertions(+), 7 deletions(-)
 
-diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
-index 3329a60edc..197f43e7a7 100644
---- a/package/redis/0001-uclibc.patch
-+++ b/package/redis/0001-uclibc.patch
-@@ -10,6 +10,8 @@ Signed-off-by: Daniel Price <daniel.price@gmail.com>
- Signed-off-by: Martin Bark <martin@barkynet.com>
- [Titouan: adapt to 5.0.4]
- Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[Fabrice: update for 6.0.9]
+diff --git a/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+new file mode 100644
+index 0000000000..8038a311d3
+--- /dev/null
++++ b/package/bitcoin/0001-src-randomenv.cpp-fix-build-on-uclibc.patch
+@@ -0,0 +1,48 @@
++From 330cb33985d0ce97c20f4a0f0bbda0fbffe098d4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 9 Nov 2020 21:18:40 +0100
++Subject: [PATCH] src/randomenv.cpp: fix build on uclibc
++
++Check for HAVE_STRONG_GETAUXVAL or HAVE_WEAK_GETAUXVAL before using
++getauxval to avoid a build failure on uclibc
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- =========================================================================
- diff -ur old/src/config.h new/src/config.h
-@@ -21,6 +23,6 @@ diff -ur old/src/config.h new/src/config.h
-  /* Test for backtrace() */
- -#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
- +#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
--     defined(__FreeBSD__) || (defined(__OpenBSD__) && defined(USE_BACKTRACE))\
-+     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__)) && defined(USE_BACKTRACE))\
-   || defined(__DragonFly__)
-  #define HAVE_BACKTRACE 1
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d686d59847..a16bf9dffb 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
++[Upstream status: https://github.com/bitcoin/bitcoin/pull/20358]
++---
++ src/randomenv.cpp | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/randomenv.cpp b/src/randomenv.cpp
++index 07122b7f6..5e07c3db4 100644
++--- a/src/randomenv.cpp
+++++ b/src/randomenv.cpp
++@@ -53,7 +53,7 @@
++ #include <sys/vmmeter.h>
++ #endif
++ #endif
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++ #include <sys/auxv.h>
++ #endif
++ 
++@@ -326,7 +326,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     // Bitcoin client version
++     hasher << CLIENT_VERSION;
++ 
++-#ifdef __linux__
+++#if defined(HAVE_STRONG_GETAUXVAL) || defined(HAVE_WEAK_GETAUXVAL)
++     // Information available through getauxval()
++ #  ifdef AT_HWCAP
++     hasher << getauxval(AT_HWCAP);
++@@ -346,7 +346,7 @@ void RandAddStaticEnv(CSHA512& hasher)
++     const char* exec_str = (const char*)getauxval(AT_EXECFN);
++     if (exec_str) hasher.Write((const unsigned char*)exec_str, strlen(exec_str) + 1);
++ #  endif
++-#endif // __linux__
+++#endif // HAVE_STRONG_GETAUXVAL || HAVE_WEAK_GETAUXVAL
++ 
++ #ifdef HAVE_GETCPUID
++     AddAllCPUID(hasher);
++-- 
++2.28.0
++
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 89ee2e3938..65af15293d 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -18,8 +18,6 @@ config BR2_PACKAGE_BITCOIN
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  Bitcoin Core is an open source project which maintains and
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+index fe7c1562a8..d39eb38e92 100644
+--- a/package/bitcoin/bitcoin.hash
++++ b/package/bitcoin/bitcoin.hash
 @@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
-+sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
+-# From https://bitcoincore.org/bin/bitcoin-core-0.19.0.1/SHA256SUMS.asc
+-sha256 7ac9f972249a0a16ed01352ca2a199a5448fe87a4ea74923404a40b4086de284  bitcoin-0.19.0.1.tar.gz
++# From https://bitcoincore.org/bin/bitcoin-core-0.20.1/SHA256SUMS.asc
++sha256  4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978  bitcoin-0.20.1.tar.gz
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c567d3200d..b0d8e1cd51 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
+ # Hash for license file
+-sha256 9a0f75d688e9cf5c69d3efdaa2a83af496700d252b212ec6a72f7784b47fed0c  COPYING
++sha256  96fe807030b21f88305adc32af62f9aa19915f2783509fd6f52aea02cf83f644  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+index 040c55b8a6..d5e3973d9c 100644
+--- a/package/bitcoin/bitcoin.mk
++++ b/package/bitcoin/bitcoin.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--REDIS_VERSION = 6.0.8
-+REDIS_VERSION = 6.0.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-BITCOIN_VERSION = 0.19.0.1
++BITCOIN_VERSION = 0.20.1
+ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
+ BITCOIN_AUTORECONF = YES
+ BITCOIN_LICENSE = MIT
+ BITCOIN_LICENSE_FILES = COPYING
+-BITCOIN_DEPENDENCIES = host-pkgconf boost openssl libevent
++BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
+ BITCOIN_CONF_OPTS = \
+ 	--disable-bench \
+ 	--disable-wallet \
