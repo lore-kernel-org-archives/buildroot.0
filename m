@@ -1,31 +1,60 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Nov 2020 22:19:22 +0000
-Subject: [Buildroot] [Bug 13306] wpewebkit build problem in 2020-11-rc1
-In-Reply-To: <bug-13306-163@https.bugs.busybox.net/>
-References: <bug-13306-163@https.bugs.busybox.net/>
-Message-ID: <bug-13306-163-5BVx8iQBhM@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Nov 2020 23:19:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add optional systemd
+ dependency
+In-Reply-To: <20201110225028.259a7d76@gmx.net> (Peter Seiderer's message of
+ "Tue, 10 Nov 2020 22:50:28 +0100")
+References: <20201110090204.1581432-1-aperez@igalia.com>
+ <20201110225028.259a7d76@gmx.net>
+Message-ID: <87blg4onw1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13306
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Peter Seiderer <ps.report@gmx.net> changed:
+ > Hello Adrian,
+ > On Tue, 10 Nov 2020 11:02:04 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |ps.report at gmx.net
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
+ >> WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
+ >> be set to avoid CMake from trying to use systemd unconditionally.
+ >> 
+ >> Based on a similar patch for package/webkitgtk by Peter Seiderer.
+ >> 
+ >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ >> ---
+ >> package/wpewebkit/wpewebkit.mk | 7 +++++++
+ >> 1 file changed, 7 insertions(+)
+ >> 
+ >> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+ >> index 6233505ca7..6f83775e96 100644
+ >> --- a/package/wpewebkit/wpewebkit.mk
+ >> +++ b/package/wpewebkit/wpewebkit.mk
+ >> @@ -63,6 +63,13 @@ else
+ >> WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
+ >> endif
+ >> 
+ >> +ifeq ($(BR2_INIT_SYSTEMD),y)
+ >> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
+ >> +WPEWEBKIT_DEPENDENCIES += systemd
+ >> +else
+ >> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
+ >> +endif
+ >> +
+ >> # JIT is not supported for MIPS r6, but the WebKit build system does not
+ >> # have a check for these processors. The same goes for ARMv5 and ARMv6.
+ >> # Disable JIT forcibly here and use the CLoop interpreter instead.
 
---- Comment #5 from Peter Seiderer <ps.report@gmx.net> ---
-Thanks for the config, for suggested fix/patch see [1]...
+ > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-[1]
-https://patchwork.ozlabs.org/project/buildroot/patch/20201110221629.7011-1-ps.report at gmx.net/
+Committed, thanks.
+
+ > Note: the status for this patch in patchwork is 'Superseded' [1] (by mistake?)...
+
+I got confused with webkitgtk/wpewebkit and thought it was identical to
+your patch, sorry.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
