@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:30:19 +0100
-Subject: [Buildroot] [git commit branch/next] package/rauc: disable systemd
- for host build
-Message-ID: <20201117203829.674247FB0D@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 20:58:16 +0100
+Subject: [Buildroot] [git commit branch/next] Revert
+ "configs/qemu_arm_versatile_defconfig: increase SD card image size to
+ 64MiB"
+Message-ID: <20201117203827.4BCBF86C67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abeebe1ea84ef56608b09d07b724a39da4f35fa5
+commit: https://git.buildroot.net/buildroot/commit/?id=80cbc2922ab95980b7cffac077d58ce43bdfba8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since there is not necessary to have support of systemd within the host
-variant let's disable it unconditionally to solve the following errors:
+qemu_arm_versatile doesn't use SD card interface but SCSI, so there is no
+need to increase the image size.
+The change was for qemu_arm_vexpress_defconfig instead (notice the
+name of the defconfig used in gitlab).
 
-/usr/bin/install -c -m 644 data/rauc.service '/usr/lib/systemd/system'
-/usr/bin/install: cannot create regular file '/usr/lib/systemd/system/rauc.service': Permission denied
-/usr/bin/install -c -m 644 data/de.pengutronix.rauc.conf 'no'
-make[4]: *** [Makefile:1700: install-nodist_systemdunitDATA] Error 1
-make[4]: *** Waiting for unfinished jobs....
+This reverts commit cb62a8e0a2b88b6c1b3ffe74e9eb370bf686fa62.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/rauc.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/qemu_arm_versatile_defconfig | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index 61c50ab316..a6c7c01095 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -46,7 +46,8 @@ HOST_RAUC_CONF_OPTS += \
- 	--disable-network \
- 	--disable-json \
- 	--disable-service \
--	--without-dbuspolicydir
-+	--without-dbuspolicydir \
-+	--with-systemdunitdir=no
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 280c313407..6dc212397c 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -13,8 +13,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Image
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-# Qemu >= 5.1 requires SD card size to be a power of 2, e.g. 64 MiB.
+-BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # Linux headers same as kernel, a 5.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
