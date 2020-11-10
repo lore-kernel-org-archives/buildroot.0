@@ -1,52 +1,46 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 10 Nov 2020 17:40:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wlroots: bump to version 0.12.0
-Message-ID: <20201110154022.1739043-1-aperez@igalia.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 10 Nov 2020 18:41:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/guile: disable jit for host and
+ target gcc < 5
+Message-ID: <20201110174114.102917-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/wlroots/wlroots.hash | 4 ++--
- package/wlroots/wlroots.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+jit also raises build failures with host gcc 4.9.2 and x86_64 so disable
+it if host gcc < 5 and update workaround added by commit
+d8dad069c861468b17397f01875b95e7375891d7 to apply it for all
+architectures and not only ARM
 
-diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
-index 636f391011..2fab9b30b4 100644
---- a/package/wlroots/wlroots.hash
-+++ b/package/wlroots/wlroots.hash
-@@ -1,5 +1,5 @@
--# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.11.0/wlroots-0.11.0.tar.gz.sig
--sha256  a7645e77229aab4942748c621be8bdb8b073d94f35f3e032b867246862bf2d01  wlroots-0.11.0.tar.gz
-+# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.12.0/wlroots-0.12.0.tar.gz.sig
-+sha256  c9e9f4f6d2f526d0b2886daf3ec37e64831773059aa669fb98a88522a1626bdb  wlroots-0.12.0.tar.gz
+Fixes:
+ - http://autobuild.buildroot.org/results/c2c/c2c31ff5c206bd3791d64d953dc1574546644b05
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/guile/guile.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/guile/guile.mk b/package/guile/guile.mk
+index 5e901bb10f..0e7328f199 100644
+--- a/package/guile/guile.mk
++++ b/package/guile/guile.mk
+@@ -38,10 +38,13 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
+ GUILE_CFLAGS += -O2
+ endif
  
- # Hashes for license files:
- sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index c1771df41d..5665d5a956 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-# jit triggers build failures on ARM and gcc < 5
+-ifeq ($(BR2_arm):$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y:)
++# jit triggers build failures with gcc < 5
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
+ GUILE_CONF_OPTS += --disable-jit
+ endif
++ifeq ($(BR2_HOST_GCC_AT_LEAST_5),)
++HOST_GUILE_CONF_OPTS += --disable-jit
++endif
  
--WLROOTS_VERSION = 0.11.0
-+WLROOTS_VERSION = 0.12.0
- WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
- WLROOTS_LICENSE = MIT
- WLROOTS_LICENSE_FILES = LICENSE
-@@ -21,7 +21,7 @@ WLROOTS_DEPENDENCIES = \
- 	wayland \
- 	wayland-protocols
- 
--WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled
-+WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled -Dlibseat=disabled
- 
- ifeq ($(BR2_PACKAGE_FFMPEG),y)
- WLROOTS_DEPENDENCIES += ffmpeg
+ # It can use readline, but on the condition that it was build against
+ # ncurses. If both aren't present disable readline support since the
 -- 
-2.29.2
+2.28.0
