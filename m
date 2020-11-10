@@ -1,44 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 23:19:19 +0100
-Subject: [Buildroot] [git commit] package/wpewebkit: add optional systemd
- dependency
-Message-ID: <20201110220642.872AA82A95@busybox.osuosl.org>
+Date: Tue, 10 Nov 2020 23:15:37 +0100
+Subject: [Buildroot] [git commit] package/cups-filters: fix daemon path for
+ cups service
+Message-ID: <20201110220642.7A58882A95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b98934170eaf6b5e4417341e9f6a0e4df9832840
+commit: https://git.buildroot.net/buildroot/commit/?id=cfc63898f4dbdf7d9eb7c01252ea8ba4c5242229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
-be set to avoid CMake from trying to use systemd unconditionally.
+Fix a typo in service location, the right location is indeed /usr/sbin.
 
-Based on a similar patch for package/webkitgtk by Peter Seiderer.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cups-filters/S82cups-browsed | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 6233505ca7..6f83775e96 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -63,6 +63,13 @@ else
- WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
- endif
- 
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
-+WPEWEBKIT_DEPENDENCIES += systemd
-+else
-+WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
-+endif
-+
- # JIT is not supported for MIPS r6, but the WebKit build system does not
- # have a check for these processors. The same goes for ARMv5 and ARMv6.
- # Disable JIT forcibly here and use the CLoop interpreter instead.
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+index 08909c7f98..f17bbe7465 100644
+--- a/package/cups-filters/S82cups-browsed
++++ b/package/cups-filters/S82cups-browsed
+@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- -c /etc/cups/cups-browsed.conf
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
