@@ -1,54 +1,76 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 10 Nov 2020 22:50:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add optional systemd
- dependency
-In-Reply-To: <20201110090204.1581432-1-aperez@igalia.com>
-References: <20201110090204.1581432-1-aperez@igalia.com>
-Message-ID: <20201110225028.259a7d76@gmx.net>
+Date: Tue, 10 Nov 2020 23:16:29 +0100
+Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without video
+ support
+Message-ID: <20201110221629.7011-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+Fixes:
 
-On Tue, 10 Nov 2020 11:02:04 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
+  - https://bugs.busybox.net/show_bug.cgi?id=13306
 
-> WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
-> be set to avoid CMake from trying to use systemd unconditionally.
->
-> Based on a similar patch for package/webkitgtk by Peter Seiderer.
->
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  package/wpewebkit/wpewebkit.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-> index 6233505ca7..6f83775e96 100644
-> --- a/package/wpewebkit/wpewebkit.mk
-> +++ b/package/wpewebkit/wpewebkit.mk
-> @@ -63,6 +63,13 @@ else
->  WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
->  endif
->
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
-> +WPEWEBKIT_DEPENDENCIES += systemd
-> +else
-> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
-> +endif
-> +
->  # JIT is not supported for MIPS r6, but the WebKit build system does not
->  # have a check for these processors. The same goes for ARMv5 and ARMv6.
->  # Disable JIT forcibly here and use the CLoop interpreter instead.
+      .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ?class WebCore::Settings? has no member named ?setGenericCueAPIEnabled?; did you mean ?setBeaconAPIEnabled??
+                   page->settings().setGenericCueAPIEnabled(enabled);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~
+                                    setBeaconAPIEnabled
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...tedBundle-fix-compile-without-video-.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
 
-Note: the status for this patch in patchwork is 'Superseded' [1] (by mistake?)...
-
-Regards,
-Peter
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201110090204.1581432-1-aperez at igalia.com/
+diff --git a/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch b/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
+new file mode 100644
+index 0000000000..e684c4e3e7
+--- /dev/null
++++ b/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
+@@ -0,0 +1,42 @@
++From 1ca7dea56db25969844699bc82fe7c78cb3d2eda Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 10 Nov 2020 23:06:45 +0100
++Subject: [PATCH] WebProcess/InjectedBundle: fix compile without video support
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Fixes:
++
++  .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ?class WebCore::Settings? has no member named ?setGenericCueAPIEnabled?; did you mean ?setBeaconAPIEnabled??
++               page->settings().setGenericCueAPIEnabled(enabled);
++                                ^~~~~~~~~~~~~~~~~~~~~~~
++                                setBeaconAPIEnabled
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
++index 61326f2e..d7776997 100644
++--- a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
+++++ b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
++@@ -236,12 +236,14 @@ void InjectedBundle::overrideBoolPreferenceForTestRunner(WebPageGroupProxy* page
++         RuntimeEnabledFeatures::sharedFeatures().setWebRTCMDNSICECandidatesEnabled(enabled);
++ #endif
++ 
+++#if ENABLE(VIDEO)
++     if (preference == "WebKitGenericCueAPIEnabled") {
++         WebPreferencesStore::overrideBoolValueForKey(WebPreferencesKey::genericCueAPIEnabledKey(), enabled);
++         for (auto* page : pages)
++             page->settings().setGenericCueAPIEnabled(enabled);
++         return;
++     }
+++#endif
++ 
++ #if ENABLE(GPU_PROCESS)
++     if (preference == "WebKitUseGPUProcessForMedia" || preference == "WebKitCaptureAudioInGPUProcessEnabledKey") {
++-- 
++2.29.2
++
+-- 
+2.29.2
