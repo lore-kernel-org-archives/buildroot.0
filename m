@@ -1,65 +1,33 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 10 Nov 2020 10:32:28 +0200
-Subject: [Buildroot] [PATCH v1 2/2] package/webkitgtk: add optional
- systemd dependency
-In-Reply-To: <20201109231356.32230-2-ps.report@gmx.net>
-References: <20201109231356.32230-1-ps.report@gmx.net>
- <20201109231356.32230-2-ps.report@gmx.net>
-Message-ID: <20201110103228.GD476055@momiji>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 10 Nov 2020 09:54:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ dvbsubenc needs gcc 4.9
+In-Reply-To: <20201109213856.610071-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 9 Nov 2020 22:38:56 +0100")
+References: <20201109213856.610071-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imadpp61.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-This is a good one as well, thanks!
+ > dvbsubenc fails to build with gcc 4.8 due to restrict keyword and for
+ > loop declarations:
 
-On Tue, 10 Nov 2020 00:13:56 +0100 Peter Seiderer <ps.report@gmx.net> wrote:
-> - systemd support/USE_SYSTEMD option was added since 2.30.0,
->   so add an optional dependency
-> 
-> Fixes:
-> 
->   -- Could NOT find Systemd (missing: Systemd_LIBRARY Systemd_INCLUDE_DIR)
->   CMake Error at Source/cmake/OptionsGTK.cmake:425 (message):
->     libsystemd is needed for USE_SYSTEMD
-> 
-> Reported-by: C Larbi <pkl2000us@gmail.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ../gst/dvbsubenc/libimagequant/blur.c:10:46: error: expected ';', ',' or ')' before 'src'
+ >  transposing_1d_blur (unsigned char *restrict src, unsigned char *restrict dst,
+ >                                               ^
+ > ../gst/dvbsubenc/libimagequant/blur.c: In function 'liq_min3':
+ > ../gst/dvbsubenc/libimagequant/blur.c:101:5: error: 'for' loop initial declarations are only allowed in C99 mode
+ >      for (unsigned int i = 0; i < width - 1; i++) {
+ >      ^
 
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+I have instead pushed a commit to pass -std=c99 in CFLAGS. The festival
+plugin also had issues with this toolchain because of the old glibc
+version, so I pushed another commit to fix that as well.
 
-> ---
->  package/webkitgtk/webkitgtk.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-> index 5209eeed2d..84078f8b9a 100644
-> --- a/package/webkitgtk/webkitgtk.mk
-> +++ b/package/webkitgtk/webkitgtk.mk
-> @@ -104,6 +104,13 @@ else
->  WEBKITGTK_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
->  endif
->  
-> +ifeq ($(BR2_INIT_SYSTEMD),y)
-> +WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=ON
-> +WEBKITGTK_DEPENDENCIES += systemd
-> +else
-> +WEBKITGTK_CONF_OPTS += -DUSE_SYSTEMD=OFF
-> +endif
-> +
->  # JIT is not supported for MIPS r6, but the WebKit build system does not
->  # have a check for these processors. The same goes for ARMv5 and ARMv6.
->  # Disable JIT forcibly here and use the CLoop interpreter instead.
-> -- 
-> 2.29.2
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201110/281c0d63/attachment.asc>
+-- 
+Bye, Peter Korsgaard
