@@ -1,55 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 21:18:21 +0100
-Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_defconfig:
- increase SD card image size to 64MiB
-Message-ID: <20201110200457.40981818D4@busybox.osuosl.org>
+From: Xavier Roumegue <xroumegue@gmail.com>
+Date: Tue, 10 Nov 2020 21:23:14 +0100
+Subject: [Buildroot] [PATCH v2 8/8] configs/imx8mmevk: new defconfig
+In-Reply-To: <CAOMZO5AyxDcLGyd2SEMd8pdFVsecMLRQRbDSJYf1tjE6J9nuLw@mail.gmail.com>
+References: <20201103233934.1ab8a7fc@windsurf.home>
+ <20201107135909.1265116-9-xroumegue@gmail.com>
+ <CAOMZO5AyxDcLGyd2SEMd8pdFVsecMLRQRbDSJYf1tjE6J9nuLw@mail.gmail.com>
+Message-ID: <20201110202314.GA1147901@frodon.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bd2a317a7d6c3b3b19396a9459816da76b2c796
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Nov 07, 2020 at 09:05:10PM -0300, Fabio Estevam wrote:
+Hi Fabio,
+> Hi Xavier,
+>
+> On Sat, Nov 7, 2020 at 10:59 AM Xavier Roumegue <xroumegue@gmail.com> wrote:
+> >
+> > Introduce NXP imx8mm evk board configuration that uses mainline atf,
+> > uboot and kernel.
+> >
+> > Mainline uboot mkimage tool generates the boot image.
+>
+> Thanks for working on this series!
+>
+> > +BR2_aarch64=y
+> > +BR2_ARM_FPU_VFPV3=y
+> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
+> > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>
+> You missed to pass the specific kernel version like:
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
+>
+>
+> > +BR2_PACKAGE_FREESCALE_IMX=y
+> > +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+> > +BR2_TARGET_UBOOT=y
+> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+> > +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> > +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> > +BR2_TARGET_UBOOT_FW_FILES="lpddr4*.bin"
+> > +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> > +BR2_TARGET_UBOOT_FORMAT_ELF=y
+> > +BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y
+> > +BR2_TARGET_UBOOT_SPL=y
+> > +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
+>
+> You missed to pass the specific U-Boot version like:
+> BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
 
-Since Qemu 5.1, this defconfig doesn't boot due to the to small SD card image size (60MB).
+Thanks for catching my mistake.
+Patch series updated to v3
 
-qemu-system-arm: sd_init failed: Invalid SD card size: 60 MiB
-SD card size has to be a power of 2, e.g. 64 MiB.
-You can resize disk images with 'qemu-img resize <imagefile> <new-size>'
-(note that this will lose data if you make the image smaller than it currently is).
-qemu-system-arm: sd_init failed
-
-From [1]:
-"While the possibility to use small SD card images has been seen as
-a feature, it became a bug with CVE-2020-13253, where the guest is
-able to do OOB read/write accesses past the image size end."
-
-The qemu_arm_vexpress_tz_defconfig doesn't trigger such issue since
-it doesn't use the same filesystem support (i.e doesn't use
--drive file=output/images/rootfs.ext2,if=sd,format=raw).
-
-Fixes:
-https://gitlab.com/kubu93/buildroot/-/jobs/766482935
-
-[1] https://git.qemu.org/?p=qemu.git;a=commitdiff;h=a9bcedd15a5834ca9ae6c3a97933e85ac7edbd36
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/qemu_arm_vexpress_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index f99b87c17a..a106530ec8 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -16,6 +16,8 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Image
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+# Qemu >= 5.1 requires an SD card size to be a power of 2, e.g. 64 MiB.
-+BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
- 
- # Linux headers same as kernel, a 5.4 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+Xavier
