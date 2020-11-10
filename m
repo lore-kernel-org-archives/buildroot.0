@@ -1,39 +1,554 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 10 Nov 2020 21:56:51 +0100
-Subject: [Buildroot] [PATCH] support/testing/test_syslinux: add missing
- Kconfig symbol
-Message-ID: <20201110205651.1135087-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 10 Nov 2020 21:58:26 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libunwind: bump to version
+ 1.5.0
+Message-ID: <20201110205826.910569-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
-custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
+Drop second and third patch (already in version)
 
-Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
+https://savannah.nongnu.org/forum/forum.php?forum_id=9854
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981734
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981733
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- support/testing/tests/boot/test_syslinux.py | 1 +
- 1 file changed, 1 insertion(+)
+ ...t_t-instead-of-__sigset_t-on-AArch64.patch |  46 --
+ ...0003-Fix-compilation-with-fno-common.patch | 445 ------------------
+ package/libunwind/libunwind.hash              |   2 +-
+ package/libunwind/libunwind.mk                |   2 +-
+ 4 files changed, 2 insertions(+), 493 deletions(-)
+ delete mode 100644 package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+ delete mode 100644 package/libunwind/0003-Fix-compilation-with-fno-common.patch
 
-diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
-index f25cddfb6c..467d564e18 100644
---- a/support/testing/tests/boot/test_syslinux.py
-+++ b/support/testing/tests/boot/test_syslinux.py
-@@ -6,6 +6,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
-         """
-         BR2_x86_i686=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-         BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
-         BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+diff --git a/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch b/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
+deleted file mode 100644
+index 035bdae803..0000000000
+--- a/package/libunwind/0002-Use-sigset_t-instead-of-__sigset_t-on-AArch64.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From b9627ed74ab1f58be0de075be68d5cd2e96b8750 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Sun, 3 May 2020 23:08:54 +0200
+-Subject: [PATCH] Use sigset_t instead of __sigset_t on AArch64
+-
+-This fixes the build with the musl C library. sigset_t is the
+-documented type exposed by <signal.h>.
+-
+-This fix comes from Alpine Linux:
+-
+-  https://git.alpinelinux.org/aports/plain/main/libunwind/fix-aarch64-sigset_t.patch
+-
+-It was authored by Leo <thinkabit.ukim@gmail.com>.
+-
+-The issue has been reported upstream at
+-https://github.com/libunwind/libunwind/issues/176.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- include/libunwind-aarch64.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/include/libunwind-aarch64.h b/include/libunwind-aarch64.h
+-index 778b4362..926fbbc0 100644
+---- a/include/libunwind-aarch64.h
+-+++ b/include/libunwind-aarch64.h
+-@@ -34,6 +34,7 @@ extern "C" {
+- #include <inttypes.h>
+- #include <stddef.h>
+- #include <ucontext.h>
+-+#include <signal.h>
+- 
+- #define UNW_TARGET      aarch64
+- #define UNW_TARGET_AARCH64      1
+-@@ -192,7 +193,7 @@ typedef struct
+- 	unsigned long uc_flags;
+- 	struct ucontext *uc_link;
+- 	stack_t uc_stack;
+--	__sigset_t uc_sigmask;
+-+	sigset_t uc_sigmask;
+- 	struct unw_sigcontext uc_mcontext;
+-   } unw_tdep_context_t;
+- 
+--- 
+-2.26.2
+-
+diff --git a/package/libunwind/0003-Fix-compilation-with-fno-common.patch b/package/libunwind/0003-Fix-compilation-with-fno-common.patch
+deleted file mode 100644
+index 5ef2aeb324..0000000000
+--- a/package/libunwind/0003-Fix-compilation-with-fno-common.patch
++++ /dev/null
+@@ -1,445 +0,0 @@
+-From 29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e Mon Sep 17 00:00:00 2001
+-From: Yichao Yu <yyc1992@gmail.com>
+-Date: Tue, 31 Mar 2020 00:43:32 -0400
+-Subject: [PATCH] Fix compilation with -fno-common.
+-
+-Making all other archs consistent with IA64 which should not have this problem.
+-Also move the FIXME to the correct place.
+-
+-Also add some minimum comments about this...
+-[Retrieved from:
+-https://github.com/libunwind/libunwind/commit/29e17d8d2ccbca07c423e3089a6d5ae8a1c9cb6e]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/aarch64/Ginit.c                        | 15 +++++++--------
+- src/arm/Ginit.c                            | 15 +++++++--------
+- src/coredump/_UPT_get_dyn_info_list_addr.c |  5 +++++
+- src/hppa/Ginit.c                           | 15 +++++++--------
+- src/ia64/Ginit.c                           |  1 +
+- src/mi/Gfind_dynamic_proc_info.c           |  1 +
+- src/mips/Ginit.c                           | 15 +++++++--------
+- src/ppc32/Ginit.c                          | 11 +++++++----
+- src/ppc64/Ginit.c                          | 11 +++++++----
+- src/ptrace/_UPT_get_dyn_info_list_addr.c   |  5 +++++
+- src/s390x/Ginit.c                          | 15 +++++++--------
+- src/sh/Ginit.c                             | 15 +++++++--------
+- src/tilegx/Ginit.c                         | 15 +++++++--------
+- src/x86/Ginit.c                            | 15 +++++++--------
+- src/x86_64/Ginit.c                         | 15 +++++++--------
+- 15 files changed, 89 insertions(+), 80 deletions(-)
+-
+-diff --git a/src/aarch64/Ginit.c b/src/aarch64/Ginit.c
+-index dec235c82..35389762f 100644
+---- a/src/aarch64/Ginit.c
+-+++ b/src/aarch64/Ginit.c
+-@@ -61,13 +61,6 @@ tdep_uc_addr (unw_tdep_context_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -78,7 +71,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/arm/Ginit.c b/src/arm/Ginit.c
+-index 2720d063a..0bac0d72d 100644
+---- a/src/arm/Ginit.c
+-+++ b/src/arm/Ginit.c
+-@@ -57,18 +57,17 @@ tdep_uc_addr (unw_tdep_context_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/coredump/_UPT_get_dyn_info_list_addr.c b/src/coredump/_UPT_get_dyn_info_list_addr.c
+-index 0d1190556..739ed0569 100644
+---- a/src/coredump/_UPT_get_dyn_info_list_addr.c
+-+++ b/src/coredump/_UPT_get_dyn_info_list_addr.c
+-@@ -74,6 +74,11 @@ get_list_addr (unw_addr_space_t as, unw_word_t *dil_addr, void *arg,
+- 
+- #else
+- 
+-+/* XXX fix me: there is currently no way to locate the dyn-info list
+-+       by a remote unwinder.  On ia64, this is done via a special
+-+       unwind-table entry.  Perhaps something similar can be done with
+-+       DWARF2 unwind info.  */
+-+
+- static inline int
+- get_list_addr (unw_addr_space_t as, unw_word_t *dil_addr, void *arg,
+-                int *countp)
+-diff --git a/src/hppa/Ginit.c b/src/hppa/Ginit.c
+-index 461e4b93d..265455a68 100644
+---- a/src/hppa/Ginit.c
+-+++ b/src/hppa/Ginit.c
+-@@ -64,13 +64,6 @@ _Uhppa_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -81,7 +74,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/ia64/Ginit.c b/src/ia64/Ginit.c
+-index b09a2ad57..8601bb3ca 100644
+---- a/src/ia64/Ginit.c
+-+++ b/src/ia64/Ginit.c
+-@@ -68,6 +68,7 @@ get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-   if (!_U_dyn_info_list_addr)
+-     return -UNW_ENOINFO;
+- #endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-   *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+-diff --git a/src/mi/Gfind_dynamic_proc_info.c b/src/mi/Gfind_dynamic_proc_info.c
+-index 98d350128..2e7c62e5e 100644
+---- a/src/mi/Gfind_dynamic_proc_info.c
+-+++ b/src/mi/Gfind_dynamic_proc_info.c
+-@@ -49,6 +49,7 @@ local_find_proc_info (unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
+-     return -UNW_ENOINFO;
+- #endif
+- 
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-   list = (unw_dyn_info_list_t *) (uintptr_t) _U_dyn_info_list_addr ();
+-   for (di = list->first; di; di = di->next)
+-     if (ip >= di->start_ip && ip < di->end_ip)
+-diff --git a/src/mips/Ginit.c b/src/mips/Ginit.c
+-index 3df170c75..bf7a8f5a8 100644
+---- a/src/mips/Ginit.c
+-+++ b/src/mips/Ginit.c
+-@@ -69,13 +69,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -86,7 +79,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) (intptr_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/ppc32/Ginit.c b/src/ppc32/Ginit.c
+-index ba302448a..7b4545580 100644
+---- a/src/ppc32/Ginit.c
+-+++ b/src/ppc32/Ginit.c
+-@@ -91,9 +91,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -104,7 +101,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/ppc64/Ginit.c b/src/ppc64/Ginit.c
+-index 4c88cd6e7..7bfb395a7 100644
+---- a/src/ppc64/Ginit.c
+-+++ b/src/ppc64/Ginit.c
+-@@ -95,9 +95,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -108,7 +105,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/ptrace/_UPT_get_dyn_info_list_addr.c b/src/ptrace/_UPT_get_dyn_info_list_addr.c
+-index cc5ed0441..16671d453 100644
+---- a/src/ptrace/_UPT_get_dyn_info_list_addr.c
+-+++ b/src/ptrace/_UPT_get_dyn_info_list_addr.c
+-@@ -71,6 +71,11 @@ get_list_addr (unw_addr_space_t as, unw_word_t *dil_addr, void *arg,
+- 
+- #else
+- 
+-+/* XXX fix me: there is currently no way to locate the dyn-info list
+-+       by a remote unwinder.  On ia64, this is done via a special
+-+       unwind-table entry.  Perhaps something similar can be done with
+-+       DWARF2 unwind info.  */
+-+
+- static inline int
+- get_list_addr (unw_addr_space_t as, unw_word_t *dil_addr, void *arg,
+-                int *countp)
+-diff --git a/src/s390x/Ginit.c b/src/s390x/Ginit.c
+-index f0886ac93..db01743c0 100644
+---- a/src/s390x/Ginit.c
+-+++ b/src/s390x/Ginit.c
+-@@ -50,8 +50,6 @@ static struct unw_addr_space local_addr_space;
+- 
+- unw_addr_space_t unw_local_addr_space = &local_addr_space;
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+- static inline void *
+- uc_addr (ucontext_t *uc, int reg)
+- {
+-@@ -75,11 +73,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -90,7 +83,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/sh/Ginit.c b/src/sh/Ginit.c
+-index 52988a721..9fe96d2bd 100644
+---- a/src/sh/Ginit.c
+-+++ b/src/sh/Ginit.c
+-@@ -58,13 +58,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -75,7 +68,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/tilegx/Ginit.c b/src/tilegx/Ginit.c
+-index 7564a558b..925e64132 100644
+---- a/src/tilegx/Ginit.c
+-+++ b/src/tilegx/Ginit.c
+-@@ -64,13 +64,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -81,7 +74,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) (intptr_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/x86/Ginit.c b/src/x86/Ginit.c
+-index f6b8dc27d..3cec74a21 100644
+---- a/src/x86/Ginit.c
+-+++ b/src/x86/Ginit.c
+-@@ -54,13 +54,6 @@ tdep_uc_addr (ucontext_t *uc, int reg)
+- 
+- # endif /* UNW_LOCAL_ONLY */
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -71,7 +64,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+-diff --git a/src/x86_64/Ginit.c b/src/x86_64/Ginit.c
+-index a865d3385..fd8d418b1 100644
+---- a/src/x86_64/Ginit.c
+-+++ b/src/x86_64/Ginit.c
+-@@ -49,13 +49,6 @@ static struct unw_addr_space local_addr_space;
+- 
+- unw_addr_space_t unw_local_addr_space = &local_addr_space;
+- 
+--HIDDEN unw_dyn_info_list_t _U_dyn_info_list;
+--
+--/* XXX fix me: there is currently no way to locate the dyn-info list
+--       by a remote unwinder.  On ia64, this is done via a special
+--       unwind-table entry.  Perhaps something similar can be done with
+--       DWARF2 unwind info.  */
+--
+- static void
+- put_unwind_info (unw_addr_space_t as, unw_proc_info_t *proc_info, void *arg)
+- {
+-@@ -66,7 +59,13 @@ static int
+- get_dyn_info_list_addr (unw_addr_space_t as, unw_word_t *dyn_info_list_addr,
+-                         void *arg)
+- {
+--  *dyn_info_list_addr = (unw_word_t) &_U_dyn_info_list;
+-+#ifndef UNW_LOCAL_ONLY
+-+# pragma weak _U_dyn_info_list_addr
+-+  if (!_U_dyn_info_list_addr)
+-+    return -UNW_ENOINFO;
+-+#endif
+-+  // Access the `_U_dyn_info_list` from `LOCAL_ONLY` library, i.e. libunwind.so.
+-+  *dyn_info_list_addr = _U_dyn_info_list_addr ();
+-   return 0;
+- }
+- 
+diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
+index e3709b1b1a..de00c59988 100644
+--- a/package/libunwind/libunwind.hash
++++ b/package/libunwind/libunwind.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  df59c931bd4d7ebfd83ee481c943edf015138089b8e50abed8d9c57ba9338435  libunwind-1.4.0.tar.gz
++sha256  90337653d92d4a13de590781371c604f9031cdb50520366aa1e3a91e1efb1017  libunwind-1.5.0.tar.gz
+ 
+ # Hash for license file
+ sha256  6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
+diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
+index a5bcec6be6..abdec86761 100644
+--- a/package/libunwind/libunwind.mk
++++ b/package/libunwind/libunwind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNWIND_VERSION = 1.4.0
++LIBUNWIND_VERSION = 1.5.0
+ LIBUNWIND_SITE = http://download.savannah.gnu.org/releases/libunwind
+ LIBUNWIND_INSTALL_STAGING = YES
+ LIBUNWIND_LICENSE_FILES = COPYING
 -- 
-2.25.4
+2.28.0
