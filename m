@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:06:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bitcoin: set
- BITCOIN_GENBUILD_NO_GIT
-In-Reply-To: <20201110201707.517081-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 10 Nov 2020 21:17:07 +0100")
-References: <20201110201707.517081-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2j8mfdd.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Nov 2020 10:08:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/guile: disable jit for host and
+ target gcc < 5
+In-Reply-To: <20201110174114.102917-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 10 Nov 2020 18:41:14 +0100")
+References: <20201110174114.102917-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tutwmfb0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Set BITCOIN_GENBUILD_NO_GIT which is available since version 0.15.0 and
- > https://github.com/bitcoin/bitcoin/commit/e98e3dde6a976a2c8f266ee963d6931fd4b37262
+ > jit also raises build failures with host gcc 4.9.2 and x86_64 so disable
+ > it if host gcc < 5 and update workaround added by commit
+ > d8dad069c861468b17397f01875b95e7375891d7 to apply it for all
+ > architectures and not only ARM
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c2c/c2c31ff5c206bd3791d64d953dc1574546644b05
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
