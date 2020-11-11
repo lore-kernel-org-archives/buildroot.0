@@ -1,73 +1,119 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 11 Nov 2020 10:20:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add optional systemd
- dependency
-In-Reply-To: <87blg4onw1.fsf@dell.be.48ers.dk>
-References: <20201110090204.1581432-1-aperez@igalia.com>
- <20201110225028.259a7d76@gmx.net> <87blg4onw1.fsf@dell.be.48ers.dk>
-Message-ID: <20201111102029.GC634430@momiji>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 11 Nov 2020 09:18:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: fix regression for static
+ linking issue
+Message-ID: <20201111081807.16075-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+9c13e02c35c74eca56e69f2bbfde452b51860f5e already fixed the static linking
+issue for host-libcap on some distros (e.g. on Fedora32 and openSUSE).
 
-On Tue, 10 Nov 2020 23:19:58 +0100 Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
-> 
->  > Hello Adrian,
->  > On Tue, 10 Nov 2020 11:02:04 +0200, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
->  >> WPE WebKit 2.30.0 added an USE_SYSTEMD buil option, which needs to
->  >> be set to avoid CMake from trying to use systemd unconditionally.
->  >> 
->  >> Based on a similar patch for package/webkitgtk by Peter Seiderer.
->  >> 
->  >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
->  >> ---
->  >> package/wpewebkit/wpewebkit.mk | 7 +++++++
->  >> 1 file changed, 7 insertions(+)
->  >> 
->  >> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
->  >> index 6233505ca7..6f83775e96 100644
->  >> --- a/package/wpewebkit/wpewebkit.mk
->  >> +++ b/package/wpewebkit/wpewebkit.mk
->  >> @@ -63,6 +63,13 @@ else
->  >> WPEWEBKIT_CONF_OPTS += -DUSE_WOFF2=OFF
->  >> endif
->  >> 
->  >> +ifeq ($(BR2_INIT_SYSTEMD),y)
->  >> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=ON
->  >> +WPEWEBKIT_DEPENDENCIES += systemd
->  >> +else
->  >> +WPEWEBKIT_CONF_OPTS += -DUSE_SYSTEMD=OFF
->  >> +endif
->  >> +
->  >> # JIT is not supported for MIPS r6, but the WebKit build system does not
->  >> # have a check for these processors. The same goes for ARMv5 and ARMv6.
->  >> # Disable JIT forcibly here and use the CLoop interpreter instead.
-> 
->  > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> Committed, thanks.
-> 
->  > Note: the status for this patch in patchwork is 'Superseded' [1] (by mistake?)...
-> 
-> I got confused with webkitgtk/wpewebkit and thought it was identical to
-> your patch, sorry.
+This regression was introduced by 8d38eb052e7006b6e74e9453351d7f245144481e.
 
-No worries, it could happen to anyone. I can see how it's easy to mix both
-wpewebkit and webkitgtk, specially when there are patches that we need for
-both ^_^
+An upstream patch [1] is added to address this problem [2].
 
-Cheers,
--Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201111/5654b4a1/attachment.asc>
+Fixes:
+Bug 13296
+
+[1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=210135
+
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Dr I J Ormshaw <ian_ormshaw@waters.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ ...ding-progs-tcapsh-static-to-sudotest.patch | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch
+
+diff --git a/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch b/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch
+new file mode 100644
+index 0000000000..856b7b1bbf
+--- /dev/null
++++ b/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch
+@@ -0,0 +1,79 @@
++From 9b1c003748d4df78416d50fce139f0875224440b Mon Sep 17 00:00:00 2001
++From: "Andrew G. Morgan" <morgan@kernel.org>
++Date: Tue, 10 Nov 2020 20:47:45 -0800
++Subject: [PATCH] Migrate building progs/tcapsh-static to sudotest
++
++This addresses:
++
++  https://bugzilla.kernel.org/show_bug.cgi?id=210135
++  https://bugs.busybox.net/show_bug.cgi?id=13296
++
++Some notes on expectations:
++
++When building DYNAMIC=yes folk want to avoid depending on a
++static libc.a file in their build tree. The best we can do is
++to move building static test tool objects to sudotest.
++
++  make DYNAMIC=yes clean all test
++
++will build the progs binaries and run the tests with all dynamic
++linking. It will, however, build the libcap.a etc libraries too
++even though they are not used for linking.
++
++  make DYNAMIC=no clean all test
++
++will build the progs binaries and run the tests with all static
++linking. It will, however, build the libcap.so etc libraries too
++even though they are not used for linking.
++
++  make SHARED=no clean all test
++
++will build and link progs and test binaries statically against
++libcap.a. No shared libraries (libcap.so etc) will be built.
++
++In all cases, whether linked against or not, libcap.a is built.
++
++Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
++[Patch taken from upstream:
++https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ tests/Makefile | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/tests/Makefile b/tests/Makefile
++index fc39fee..1e7039d 100644
++--- a/tests/Makefile
+++++ b/tests/Makefile
++@@ -17,13 +17,13 @@ install: all
++ 
++ ifeq ($(DYNAMIC),yes)
++ LINKEXTRA=-Wl,-rpath,../libcap
++-DEPS=../libcap/libcap.so ../progs/tcapsh-static
+++DEPS=../libcap/libcap.so
++ ifeq ($(PTHREADS),yes)
++ DEPS += ../libcap/libpsx.so
++ endif
++ else
++ LDFLAGS += --static
++-DEPS=../libcap/libcap.a ../progs/tcapsh-static
+++DEPS=../libcap/libcap.a
++ ifeq ($(PTHREADS),yes)
++ DEPS +=  ../libcap/libpsx.a
++ endif
++@@ -71,10 +71,10 @@ libcap_psx_test: libcap_psx_test.c $(DEPS)
++ 	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LINKEXTRA) $(LIBCAPLIB) $(LIBPSXLIB) $(LDFLAGS)
++ 
++ # privileged
++-run_libcap_launch_test: libcap_launch_test noop
+++run_libcap_launch_test: libcap_launch_test noop ../progs/tcapsh-static
++ 	sudo ./libcap_launch_test
++ 
++-run_libcap_psx_launch_test: libcap_psx_launch_test
+++run_libcap_psx_launch_test: libcap_psx_launch_test ../progs/tcapsh-static
++ 	sudo ./libcap_psx_launch_test
++ 
++ libcap_launch_test: libcap_launch_test.c $(DEPS)
++-- 
++2.20.1
++
+-- 
+2.20.1
