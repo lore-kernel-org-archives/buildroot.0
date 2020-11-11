@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:11:20 +0100
-Subject: [Buildroot] [PATCH] support/testing/test_hardening: add missing
- Kconfig symbol
-In-Reply-To: <20201110222701.1289137-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 10 Nov 2020 23:27:01 +0100")
-References: <20201110222701.1289137-1-romain.naour@gmail.com>
-Message-ID: <87lff8mf5z.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Nov 2020 10:13:34 +0100
+Subject: [Buildroot] [PATCH] support/testing: update to the new text
+ representation of capabilities
+In-Reply-To: <20201110222901.1289515-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 10 Nov 2020 23:29:01 +0100")
+References: <20201110222901.1289515-1-romain.naour@gmail.com>
+Message-ID: <87h7pwmf29.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,17 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
- > custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
+ > Since libcap 2.41, the text representation of capabilities now use
+ > the '=' instead of '+' [1].
 
- > Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
+ > This break our capabilities tests since we still use the old
+ > representation.
 
- > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981738
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981739
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981740
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981741
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981742
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981743
+ > [1] https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=177cd418031b1acfcf73fe3b1af9f3279828681c
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Committed, thanks.
+Committed after adding the fixes line, thanks.
 
 -- 
 Bye, Peter Korsgaard
