@@ -1,65 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Nov 2020 10:34:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/xen: add slirp
- dependency for tools
-Message-ID: <20201117203827.3EB7F86A87@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 11:49:59 +0100
+Subject: [Buildroot] [git commit branch/next]
+ support/testing/tests/init/test_systemd: update to
+ BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
+Message-ID: <20201117203827.F27687FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0a5c184efe4fec3bf7edb0a7a8e40bb4ddbea13
+commit: https://git.buildroot.net/buildroot/commit/?id=1989a49feb47b3fbefec8d178b1aac1a1a2e6399
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Build of xen tools fails if slirp is built before xen because xen is not
-compatible with spice slirp which does not provide libslirp.h:
-
-/home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
- #include <libslirp.h>
-          ^~~~~~~~~~~~
-
-Indeed, xen prefers a system-provided slirp over its internal one
-
-So add slirp as a mandatory dependency (now that we switched to the up
-to date https://gitlab.freedesktop.org/slirp/libslirp)
-
-This build failure is raised since, at least, version 4.13.0
+The commit [1] moved systemd-journal-gatewayd into systemd-journal-remote
+option. Update to BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE in the testsuite
+when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is used.
 
 Fixes:
- - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981805
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981811
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+[1] e46fe9a6f2b7cef9789f5172332067cac5ff03bd
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/Config.in | 1 +
- package/xen/xen.mk    | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ support/testing/tests/init/test_systemd.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 57ab40eba8..af6acd3530 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_SLIRP
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_YAJL
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 8f1fa7db76..8cbe532d2b 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -41,7 +41,8 @@ XEN_CONF_OPTS += --disable-xen
- endif
- 
- ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
--XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-+XEN_DEPENDENCIES += \
-+	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- XEN_DEPENDENCIES += argp-standalone
- endif
+diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
+index 059fb397e8..c0ef5e1202 100644
+--- a/support/testing/tests/init/test_systemd.py
++++ b/support/testing/tests/init/test_systemd.py
+@@ -105,7 +105,7 @@ class TestInitSystemSystemdRoFull(InitSystemSystemdBase):
+         """
+         BR2_SYSTEM_DHCP="eth0"
+         # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+-        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
++        BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=y
+         BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
+         BR2_PACKAGE_SYSTEMD_BINFMT=y
+         BR2_PACKAGE_SYSTEMD_COREDUMP=y
+@@ -135,7 +135,7 @@ class TestInitSystemSystemdRwFull(InitSystemSystemdBase):
+     config = InitSystemSystemdBase.config + \
+         """
+         BR2_SYSTEM_DHCP="eth0"
+-        BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY=y
++        BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE=y
+         BR2_PACKAGE_SYSTEMD_BACKLIGHT=y
+         BR2_PACKAGE_SYSTEMD_BINFMT=y
+         BR2_PACKAGE_SYSTEMD_COREDUMP=y
