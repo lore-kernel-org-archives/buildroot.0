@@ -1,36 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:04:54 +0100
-Subject: [Buildroot] [git commit] package/bitcoin: set
- BITCOIN_GENBUILD_NO_GIT
-Message-ID: <20201111090020.918A7819E6@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 10:12:48 +0100
+Subject: [Buildroot] [git commit] support/testing: update to the new text
+ representation of capabilities
+Message-ID: <20201111090020.BF4BB819E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82d6abda1a84a2fc126af0bbda532bd545073c0e
+commit: https://git.buildroot.net/buildroot/commit/?id=f52a9835fa02b02db06ee4ce06708d7b2cdfcfb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set BITCOIN_GENBUILD_NO_GIT to not include (Buildroot) git version info in
-build, which is available since version 0.15.0 and
-https://github.com/bitcoin/bitcoin/commit/e98e3dde6a976a2c8f266ee963d6931fd4b37262
+Since libcap 2.41, the text representation of capabilities now use
+the '=' instead of '+' [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This break our capabilities tests since we still use the old
+representation.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=177cd418031b1acfcf73fe3b1af9f3279828681c
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981737
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bitcoin/bitcoin.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/testing/tests/core/test_file_capabilities.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index d5e3973d9c..9d2094c02c 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -10,6 +10,7 @@ BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
- BITCOIN_LICENSE_FILES = COPYING
- BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
-+BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
- BITCOIN_CONF_OPTS = \
- 	--disable-bench \
- 	--disable-wallet \
+diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
+index 945b48a4c3..b9ece18d7b 100644
+--- a/support/testing/tests/core/test_file_capabilities.py
++++ b/support/testing/tests/core/test_file_capabilities.py
+@@ -44,4 +44,4 @@ class TestFileCapabilities(infra.basetest.BRTest):
+         self.assertIn("cap_kill", output[0])
+         self.assertIn("cap_sys_nice", output[0])
+         self.assertIn("cap_sys_time", output[0])
+-        self.assertIn("+eip", output[0])
++        self.assertIn("=eip", output[0])
