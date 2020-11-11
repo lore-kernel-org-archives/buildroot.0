@@ -1,27 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Nov 2020 08:55:00 +0000
-Subject: [Buildroot] [Bug 13306] wpewebkit build problem in 2020-11-rc1
-In-Reply-To: <bug-13306-163@https.bugs.busybox.net/>
-References: <bug-13306-163@https.bugs.busybox.net/>
-Message-ID: <bug-13306-163-SaMOrGgpzY@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Nov 2020 10:06:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: set
+ BITCOIN_GENBUILD_NO_GIT
+In-Reply-To: <20201110201707.517081-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 10 Nov 2020 21:17:07 +0100")
+References: <20201110201707.517081-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2j8mfdd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13306
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-HiFiBerry (Daniel) <info@hifiberry.com> changed:
+ > Set BITCOIN_GENBUILD_NO_GIT which is available since version 0.15.0 and
+ > https://github.com/bitcoin/bitcoin/commit/e98e3dde6a976a2c8f266ee963d6931fd4b37262
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
---- Comment #6 from HiFiBerry (Daniel) <info@hifiberry.com> ---
-That patch worked. Thank you!
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
