@@ -1,69 +1,52 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 11 Nov 2020 07:53:50 -0600
-Subject: [Buildroot] [PATCH 1/2] package/coremark: new package
-In-Reply-To: <20201111073415.814-1-judge.packham@gmail.com>
-References: <20201111073415.814-1-judge.packham@gmail.com>
-Message-ID: <CANQCQpbKX0g4Jc6-5aJWBp1C-3D1sJnKkzcqyUf=9g684PK=Sw@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 11 Nov 2020 15:25:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: fix regression for
+ static linking issue
+In-Reply-To: <CAEyMn7at1nswAkAxdWf+VJ=C4-DYe2J-tF_5WtnmjnRVTbFM+w@mail.gmail.com>
+References: <20201111081807.16075-1-heiko.thiery@gmail.com>
+ <CAEyMn7at1nswAkAxdWf+VJ=C4-DYe2J-tF_5WtnmjnRVTbFM+w@mail.gmail.com>
+Message-ID: <CAEyMn7YX3=eOwrVqj9x=bLYeMXBOGULPLrMgjWKzPJ6CnyXndQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris,
+Hi All,
 
-On Wed, Nov 11, 2020 at 1:35 AM Chris Packham <judge.packham@gmail.com> wrote:
+Am Mi., 11. Nov. 2020 um 11:32 Uhr schrieb Heiko Thiery
+<heiko.thiery@gmail.com>:
 >
-> CoreMark is a simple, yet sophisticated benchmark that is designed
-> specifically to test the functionality of a processor core. Running
-> CoreMark produces a single-number score allowing users to make quick
-> comparisons between processors.
+> Hi Peter, Hi Jan,
 >
-> https://www.eembc.org/coremark/
->
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> Am Mi., 11. Nov. 2020 um 09:27 Uhr schrieb Heiko Thiery
+> <heiko.thiery@gmail.com>:
+> >
+> > 9c13e02c35c74eca56e69f2bbfde452b51860f5e already fixed the static linking
+> > issue for host-libcap on some distros (e.g. on Fedora32 and openSUSE).
+> >
+> > This regression was introduced by 8d38eb052e7006b6e74e9453351d7f245144481e.
+> >
+> > An upstream patch [1] is added to address this problem [2].
+> >
+> > Fixes:
+> > Bug 13296
+> >
+> > [1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b
+> > [2] https://bugzilla.kernel.org/show_bug.cgi?id=210135
+> >
+> > Cc: Peter Seiderer <ps.report@gmx.net>
+> > Cc: Dr I J Ormshaw <ian_ormshaw@waters.com>
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-./utils/test-pkg -k  -d foo_coremark -p coremark
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: OK
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
+Tested-by: Ian Ormshaw <ian_ormshaw@waters.com>
+
+I've got feedback from Ian about testing the patch. Unfortunately he
+is not registered to the mailing list to send the tested-by by
+himself. So I will do that in his name.
 
 
-***Runtime test with QEMU***
 
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-BR2_PACKAGE_COREMARK=y
-BR2_PACKAGE_COREMARK_PRO=y
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-# coremark
-2K performance run parameters for coremark.
-CoreMark Size    : 666
-Total ticks      : 13102
-Total time (secs): 13.102000
-Iterations/Sec   : 1526.484506
-Iterations       : 20000
-Compiler version : GCC9.2.1 20191025
-Compiler flags   : -O2   -lrt
-Memory location  : Please put data memory location here
-                       (e.g. code in flash, data on heap etc)
-seedcrc          : 0xe9f5
-[0]crclist       : 0xe714
-[0]crcmatrix     : 0x1fd7
-[0]crcstate      : 0x8e3a
-[0]crcfinal      : 0x382f
-Correct operation validated. See readme.txt for run and reporting rules.
-CoreMark 1.0 : 1526.484506 / GCC9.2.1 20191025 -O2   -lrt / Heap
-
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Thank you
+-- 
+Heiko
