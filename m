@@ -1,38 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 13:20:50 +0100
-Subject: [Buildroot] [git commit branch/next] configs/orangepi_pc: use
- Python 3.x for U-Boot build
-Message-ID: <20201117203825.401A87FB95@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 11 Nov 2020 09:08:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/s390-tools: fix license
+Message-ID: <20201117203827.9A473813C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec726bde4818d43a7d258ec4182f3653f4a0b9c4
+commit: https://git.buildroot.net/buildroot/commit/?id=50e4434fc307a209c91a7941a44a3a026263275a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-New U-Boot versions (such as 2020.07 being used) need Python 3.x for
-pylibfdt.
+Fix license file name in hash file
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/831421100
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepi_pc_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/s390-tools/s390-tools.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index 90ad50b783..c1afb8566a 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -23,6 +23,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+index 4f60b22b05..1de2399e03 100644
+--- a/package/s390-tools/s390-tools.hash
++++ b/package/s390-tools/s390-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+ sha256  8dc1180031018756ccd5acf6c26c4175bcac79e512e8a2ea8569fdf5d3f9bd6c  s390-tools-2.15.1.tar.gz
+-sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  COPYING
++sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
