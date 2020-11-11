@@ -1,52 +1,96 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 11 Nov 2020 21:47:21 +0100
-Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-shark: bump version
- to v0.7.2
-In-Reply-To: <20201111075156.4955-1-judge.packham@gmail.com>
-References: <20201111075156.4955-1-judge.packham@gmail.com>
-Message-ID: <20201111214721.251d57d5@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Nov 2020 21:58:16 +0100
+Subject: [Buildroot] [RFC PATCH] toolchain/toolchain-wrapper: remove
+ --build-id=none option
+In-Reply-To: <20201111194840.2949984-1-john@metanate.com>
+References: <20201111194840.2949984-1-john@metanate.com>
+Message-ID: <20201111205816.GD3971474@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+Jihn, all,
 
-On Wed, 11 Nov 2020 20:51:56 +1300, Chris Packham <judge.packham@gmail.com> wrote:
+On 2020-11-11 19:48 +0000, John Keeping spake thusly:
+> The only build-id style that is not reproducible is "uuid", but the
+> default is "sha1" so packages would have to go out of their way to
+> choose a non-reproducible build-id.  Having build IDs in general is
+> useful as it can be used to match split debuginfo.
 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  package/gstreamer1/gst1-shark/gst1-shark.hash | 2 +-
->  package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
-> index 6f8365cb16..81b0ecae31 100644
-> --- a/package/gstreamer1/gst1-shark/gst1-shark.hash
-> +++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
-> @@ -1,5 +1,5 @@
->  # locally computed hash
-> -sha256 aec7f0bbb81775922da2c94a4f84b64b5efd38a616f0d07eb4c3ddb5770b728d  gst1-shark-v0.7.1.tar.gz
-> +sha256 24d910c2e7b4c66c804e53e9f3fc18fb61b0d3b82d8580f0fa9c2b1c563e5ab3  gst1-shark-v0.7.2.tar.gz
->
->  # Hashes for license files:
->  sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
-> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
-> index 146d1f8456..ea0c5a29cd 100644
-> --- a/package/gstreamer1/gst1-shark/gst1-shark.mk
-> +++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -GST1_SHARK_VERSION = v0.7.1
-> +GST1_SHARK_VERSION = v0.7.2
->  GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
->  GST1_SHARK_SITE_METHOD = git
->  GST1_SHARK_GIT_SUBMODULES = YES
+I would think we would then want to make sha1 the explicit build-id,
+rather than merely depend on the default (even though it has been sha1
+since 2007, it may change with future binutils versions).
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> I haven't seen any packages that do this, and if there are any that use
+
+Try mot to use first person in commit message; instead, use a neutral
+third-person. Also, I find your commit message to have things a bit
+shuffled around. We usually liek to have commit logs that explain the
+current status, explain why this is a problem, and explain what is done
+to overcome the problem, For example:
+
+    When a reproducible build is attempted (with BR2_REPRODUCIBLE=y), we forcibly
+    disable the use of build-ids, on the assumption that they are not reproducible,
+    as explained in b285c80143 (toolchain/toolchain-wrapper: explicitly pass
+    --build-id=none if BR2_REPRODUCIBLE).
+
+    However, only the 'uuid' build-id is not reproducible. 'sha1' (and 'md5') are
+    based on the "normative parts of the output contents", so are stable accross
+    builds.
+
+    Re-enable use of the build-id even in reproducible builds. We do ensure that
+    the same build-id type is used, by forcing it to 'sha1'
+
+However, I would still doubt that build-ids are reproducible, even when
+explicitly set to 'sha1', which has been the default since 2007 now, and
+given that the commit referenced above was done because indeed they were
+not reproducible...
+
+So, I am not sure what the "normative parts of the output contents" are,
+but it seems that there is something that is not reproducible, that
+influences the build-id. See also the snippet referenced from that
+commit https://gitlab.com/snippets/1886180/raw , which found that the
+the only delta between two reproducible builds was exactly only the
+sha1-based build-id...
 
 Regards,
-Peter
+Yann E. MORIN.
+
+> non-reproducible build-ids then that should be treated as a bug in that
+> package like any other reproducibility issue; there is no reason to
+> globally disable build IDs when BR2_REPRODUCIBLE is set.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>  toolchain/toolchain-wrapper.mk | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+> index 8b551e3a18..56d86fa1ea 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -22,7 +22,6 @@ TOOLCHAIN_WRAPPER_OPTS = \
+>  	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+>  
+>  ifeq ($(BR2_REPRODUCIBLE),y)
+> -TOOLCHAIN_WRAPPER_OPTS += -Wl,--build-id=none
+>  ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
+>  TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
+>  else
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
