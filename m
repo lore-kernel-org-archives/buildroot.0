@@ -1,95 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:34:51 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-m2crypto: fix
- build on arm and mips
-Message-ID: <20201117203826.C197C7FD00@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 11:57:57 +0100
+Subject: [Buildroot] [git commit branch/next] package/mesa3d: Add xcb-fixes
+ to loader when using x11 and dri3
+Message-ID: <20201117203828.13B527FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31c7e161c17bae2bc1109fd33e85b0e4df7906e8
+commit: https://git.buildroot.net/buildroot/commit/?id=091e2aec683f2a28b3ef5f9014455b56167dc42b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build failure on arm and mips (perhaps also other)
+"loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link.
+This is dependent on with_platform_x11 and with_dri3.
+But the source meson file does not set this up dependent on with_dri3."
+
+i686-buildroot-linux-gnu/bin/ld: src/loader/libloader_dri3_helper.a(loader_dri3_helper.c.o): in function `loader_dri3_swap_buffers_msc':
+loader_dri3_helper.c:(.text.loader_dri3_swap_buffers_msc+0x33e): undefined reference to `xcb_xfixes_create_region'
 
 Fixes:
- - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
- - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981830
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...move-swig-default-includes-before-openssl.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ ...cb-fixes-to-loader-when-using-x11-and-dri.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+diff --git a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
 new file mode 100644
-index 0000000000..f4d7e428f1
+index 0000000000..5746bc221e
 --- /dev/null
-+++ b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
-@@ -0,0 +1,63 @@
-+From 1aab31787a8d1ef9436d9cf81832691f729b6282 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 7 Nov 2020 23:26:30 +0100
-+Subject: [PATCH] setup.py: move swig default includes before openssl
++++ b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
+@@ -0,0 +1,35 @@
++From da691ec75cc8a7b2d0ac0c5894521afda4bc601d Mon Sep 17 00:00:00 2001
++From: Duncan Hopkins <duncan@duncanhopkins.me.uk>
++Date: Thu, 15 Oct 2020 12:14:57 +0100
++Subject: [PATCH] meson: Add xcb-fixes to loader when using x11 and dri3. Fixes
++ undefined symbol for xcb_xfixes_create_region in loader_dri3_helper.c
 +
-+Move swig default includes before openssl to avoid the following build
-+failure when cross-compiling for some architectures (e.g. arm, mips):
++loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link. This is dependent on with_platform_x11 and with_dri3.
++But the source meson file does not set this up dependent on with_dri3.
++The build was initialsed using platforms=x11 and gallium-drivers=zink,swrast.
 +
-+swig -python -py3 -D__x86_64__ \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/python3.9 \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/openssl \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include-fixed \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/../../../../mipsel-buildroot-linux-gnu/include \
-+ -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
-+ -includeall -modern -builtin -outdir \
-+ /srv/storage/autobuild/run/instance-0/output-1/build/python-m2crypto-0.36.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
-+Deprecated command line option: -modern. This option is now always on.
-+/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/types.h:139:
-+Error: CPP #error "". Use the -cpperraswarn option to continue swig processing.
-+
-+This build failure is probably raised because swig includes a wrong types.h file
-+from the openssl directory (e.g.
-+/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
-+ - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.com/m2crypto/m2crypto/-/merge_requests/248]
++Reviewed-by: Eric Anholt <eric@anholt.net>
++Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/7164>
++(cherry picked from commit cf17d6251653f4a98e7c4f904ea2f0bc0ecedd5c)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
 +---
-+ setup.py | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ meson.build | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/setup.py b/setup.py
-+index 89d03bb..0045fda 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -154,6 +154,9 @@ class _M2CryptoBuildExt(build_ext.build_ext):
-+         if sys.version_info[:1] >= (3,):
-+             self.swig_opts.append('-py3')
-+ 
-++        # swig seems to need the default header file directories
-++        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
-++
-+         log.debug('self.include_dirs = %s', self.include_dirs)
-+         log.debug('self.library_dirs = %s', self.library_dirs)
-+ 
-+@@ -204,8 +207,6 @@ class _M2CryptoBuildExt(build_ext.build_ext):
-+             self.swig_opts.append(
-+                 '-I' + os.path.join(openssl_include_dir, 'openssl'))
-+ 
-+-        # swig seems to need the default header file directories
-+-        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
-+         self.swig_opts.append('-includeall')
-+         self.swig_opts.append('-modern')
-+         self.swig_opts.append('-builtin')
++diff --git a/meson.build b/meson.build
++index fbd3c4b8e8d..670cb521a2b 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -1742,7 +1742,8 @@ if with_platform_x11
++       dep_xxf86vm = dependency('xxf86vm')
++     endif
++   endif
++-  if (with_egl or (
+++  if (with_egl or 
+++      with_dri3 or (
++       with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
++       with_gallium_omx != 'disabled'))
++     dep_xcb_xfixes = dependency('xcb-xfixes')
 +-- 
-+2.28.0
++2.25.4
 +
