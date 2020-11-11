@@ -1,30 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:13:34 +0100
-Subject: [Buildroot] [PATCH] support/testing: update to the new text
- representation of capabilities
-In-Reply-To: <20201110222901.1289515-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 10 Nov 2020 23:29:01 +0100")
-References: <20201110222901.1289515-1-romain.naour@gmail.com>
-Message-ID: <87h7pwmf29.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Nov 2020 10:11:12 +0100
+Subject: [Buildroot] [git commit] support/testing/test_hardening: add
+ missing Kconfig symbol
+Message-ID: <20201111090020.B557D815F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7b9762f4ab5bf21bdb1cf29cc833c5d4d1ec009d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Since libcap 2.41, the text representation of capabilities now use
- > the '=' instead of '+' [1].
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
+custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
 
- > This break our capabilities tests since we still use the old
- > representation.
+Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
 
- > [1] https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=177cd418031b1acfcf73fe3b1af9f3279828681c
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981738
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981739
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981740
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981741
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981742
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981743
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/testing/tests/core/test_hardening.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed after adding the fixes line, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+index edfb3315db..60e14303a3 100644
+--- a/support/testing/tests/core/test_hardening.py
++++ b/support/testing/tests/core/test_hardening.py
+@@ -10,6 +10,7 @@ class TestHardeningBase(infra.basetest.BRTest):
+         BR2_powerpc64=y
+         BR2_powerpc_e5500=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+         BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
