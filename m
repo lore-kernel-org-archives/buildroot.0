@@ -1,52 +1,34 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 11 Nov 2020 15:25:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcap: fix regression for
- static linking issue
-In-Reply-To: <CAEyMn7at1nswAkAxdWf+VJ=C4-DYe2J-tF_5WtnmjnRVTbFM+w@mail.gmail.com>
-References: <20201111081807.16075-1-heiko.thiery@gmail.com>
- <CAEyMn7at1nswAkAxdWf+VJ=C4-DYe2J-tF_5WtnmjnRVTbFM+w@mail.gmail.com>
-Message-ID: <CAEyMn7YX3=eOwrVqj9x=bLYeMXBOGULPLrMgjWKzPJ6CnyXndQ@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 11 Nov 2020 16:46:15 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2020-11-02
+In-Reply-To: <notmuch-sha1-b4794100ef702a3659a6eb92965001e8055c9c8c>
+References: <notmuch-sha1-b4794100ef702a3659a6eb92965001e8055c9c8c>
+Message-ID: <20201111164615.GC677382@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+On Tue, 03 Nov 2020 08:10:05 +0000 Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Am Mi., 11. Nov. 2020 um 11:32 Uhr schrieb Heiko Thiery
-<heiko.thiery@gmail.com>:
->
-> Hi Peter, Hi Jan,
->
-> Am Mi., 11. Nov. 2020 um 09:27 Uhr schrieb Heiko Thiery
-> <heiko.thiery@gmail.com>:
-> >
-> > 9c13e02c35c74eca56e69f2bbfde452b51860f5e already fixed the static linking
-> > issue for host-libcap on some distros (e.g. on Fedora32 and openSUSE).
-> >
-> > This regression was introduced by 8d38eb052e7006b6e74e9453351d7f245144481e.
-> >
-> > An upstream patch [1] is added to address this problem [2].
-> >
-> > Fixes:
-> > Bug 13296
-> >
-> > [1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b
-> > [2] https://bugzilla.kernel.org/show_bug.cgi?id=210135
-> >
-> > Cc: Peter Seiderer <ps.report@gmx.net>
-> > Cc: Dr I J Ormshaw <ian_ormshaw@waters.com>
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> Build failures related to your packages:
+> 
+>     arch     |             reason             |                                       url                                      
+> -------------+--------------------------------+---------------------------------------------------------------------------------
+>   aarch64    |        webkitgtk-2.30.2        | http://autobuild.buildroot.net/results/2f548362cda36a61254edebc38ce2427ae749f78
 
-Tested-by: Ian Ormshaw <ian_ormshaw@waters.com>
+This should be fixed by this patch, which has been already merged:
 
-I've got feedback from Ian about testing the patch. Unfortunately he
-is not registered to the mailing list to send the tested-by by
-himself. So I will do that in his name.
+  https://patchwork.ozlabs.org/project/buildroot/patch/20201109231356.32230-1-ps.report at gmx.net/
 
-
-
-Thank you
--- 
-Heiko
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201111/3929acfa/attachment.asc>
