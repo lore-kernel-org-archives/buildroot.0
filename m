@@ -1,31 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 09:08:34 +0100
-Subject: [Buildroot] [git commit] package/s390-tools: fix license
-Message-ID: <20201111075647.420F67FADE@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 09:06:03 +0100
+Subject: [Buildroot] [git commit] support/testing/test_syslinux: add missing
+ Kconfig symbol
+Message-ID: <20201111075647.36C0281EFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50e4434fc307a209c91a7941a44a3a026263275a
+commit: https://git.buildroot.net/buildroot/commit/?id=ddf40cffeab1552d350a07c26129c9e83239399c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix license file name in hash file
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
+custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981734
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981733
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/s390-tools/s390-tools.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/boot/test_syslinux.py | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-index 4f60b22b05..1de2399e03 100644
---- a/package/s390-tools/s390-tools.hash
-+++ b/package/s390-tools/s390-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
- sha256  8dc1180031018756ccd5acf6c26c4175bcac79e512e8a2ea8569fdf5d3f9bd6c  s390-tools-2.15.1.tar.gz
--sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  COPYING
-+sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+diff --git a/support/testing/tests/boot/test_syslinux.py b/support/testing/tests/boot/test_syslinux.py
+index f25cddfb6c..467d564e18 100644
+--- a/support/testing/tests/boot/test_syslinux.py
++++ b/support/testing/tests/boot/test_syslinux.py
+@@ -6,6 +6,7 @@ class TestSysLinuxBase(infra.basetest.BRTest):
+         """
+         BR2_x86_i686=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+         BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+         BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-i686/tarballs/x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2"
+         BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
