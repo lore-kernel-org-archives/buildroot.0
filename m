@@ -1,40 +1,35 @@
-From: John Keeping <john@metanate.com>
-Date: Wed, 11 Nov 2020 19:48:40 +0000
-Subject: [Buildroot] [RFC PATCH] toolchain/toolchain-wrapper: remove
- --build-id=none option
-Message-ID: <20201111194840.2949984-1-john@metanate.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 11 Nov 2020 17:31:31 -0300
+Subject: [Buildroot] [PATCH v3 8/8] configs/imx8mmevk: new defconfig
+In-Reply-To: <20201109142309.1135596-9-xroumegue@gmail.com>
+References: <20201107135909.1265116-1-xroumegue@gmail.com>
+ <20201109142309.1135596-9-xroumegue@gmail.com>
+Message-ID: <CAOMZO5AVb08ttoNjqWPbQLi+Lf-m=CFYB4UwUVT8U4cOS6CfVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The only build-id style that is not reproducible is "uuid", but the
-default is "sha1" so packages would have to go out of their way to
-choose a non-reproducible build-id.  Having build IDs in general is
-useful as it can be used to match split debuginfo.
+Hi Xavier,
 
-I haven't seen any packages that do this, and if there are any that use
-non-reproducible build-ids then that should be treated as a bug in that
-package like any other reproducibility issue; there is no reason to
-globally disable build IDs when BR2_REPRODUCIBLE is set.
+On Mon, Nov 9, 2020 at 11:23 AM Xavier Roumegue <xroumegue@gmail.com> wrote:
+>
+> Introduce NXP imx8mm evk board configuration that uses mainline atf,
+> uboot and kernel.
+>
+> Mainline uboot mkimage tool generates the boot image.
+>
+> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+>
+> ---
+> Changes v2 -> v3:
+>     - Set a custom version to uboot/kernel (Suggested by Fabio Estevam)
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- toolchain/toolchain-wrapper.mk | 1 -
- 1 file changed, 1 deletion(-)
+It looks good now:
 
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 8b551e3a18..56d86fa1ea 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -22,7 +22,6 @@ TOOLCHAIN_WRAPPER_OPTS = \
- 	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
- ifeq ($(BR2_REPRODUCIBLE),y)
--TOOLCHAIN_WRAPPER_OPTS += -Wl,--build-id=none
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
- TOOLCHAIN_WRAPPER_OPTS += -ffile-prefix-map=$(BASE_DIR)=buildroot
- else
--- 
-2.29.2
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+
+Looking forward to seeing this patch series applied :-)
+
+Thanks for your work!
