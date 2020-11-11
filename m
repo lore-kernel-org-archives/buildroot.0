@@ -1,59 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 11:47:19 +0100
-Subject: [Buildroot] [git commit branch/next] package/slirp: add libglib2
- mandatory dependency
-Message-ID: <20201117203827.EA0AC7FB0D@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 12:07:51 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: add pkg-stats target
+Message-ID: <20201117203828.396367FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88a62fac1f659ccf00030e59e2a0720a9f346edf
+commit: https://git.buildroot.net/buildroot/commit/?id=78568465228724efca9d0d98f247c0f253cfa8eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-slirp depends on libglib2, don't update xen as it already depends on it
+Now that pkg-stats is not just a maintainer-oriented tool, but a tool
+generally useful to users, introduce a make target to run
+pkg-stats. Of course, it is run with the newly introduced -c option,
+which produces a pkg-stats output for just the selection of packages
+of the currently defined configuration.
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slirp/Config.in | 8 ++++++++
- package/slirp/slirp.mk  | 1 +
- 2 files changed, 9 insertions(+)
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/slirp/Config.in b/package/slirp/Config.in
-index 8f57c4fa6a..38fd5277af 100644
---- a/package/slirp/Config.in
-+++ b/package/slirp/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_SLIRP
- 	bool "slirp"
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  libslirp is a user-mode networking library used by virtual
- 	  machines, containers or various tools.
-@@ -18,3 +22,7 @@ config BR2_PACKAGE_SLIRP
- 	      around May 2009 which archived it in 2012
- 	    - So we switched to
- 	      https://gitlab.freedesktop.org/slirp/libslirp
-+
-+comment "slirp needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index d046e0cf75..ed6d8855e5 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -12,5 +12,6 @@ SLIRP_SITE = https://elmarco.fedorapeople.org
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_INSTALL_STAGING = YES
-+SLIRP_DEPENDENCIES = libglib2
+diff --git a/Makefile b/Makefile
+index f9e9cfa968..fa648d5d54 100644
+--- a/Makefile
++++ b/Makefile
+@@ -937,6 +937,14 @@ show-info:
+ 		) \
+ 	)
  
- $(eval $(meson-package))
++.PHONY: pkg-stats
++pkg-stats:
++	@cd "$(CONFIG_DIR)" ; \
++	$(TOPDIR)/support/scripts/pkg-stats -c \
++		--json $(O)/pkg-stats.json \
++		--html $(O)/pkg-stats.html \
++		--nvd-path $(DL_DIR)/buildroot-nvd
++
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ # Some subdirectories are also package names. To avoid that "make linux"
+@@ -1154,6 +1162,7 @@ help:
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+ 	@echo '  show-info              - generate info about packages, as a JSON blurb'
++	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
+ 	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
