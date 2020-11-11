@@ -1,35 +1,39 @@
-From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Date: Wed, 11 Nov 2020 07:08:09 +0100
-Subject: [Buildroot] WiFi-Problem STM32MP157C-DK2
-In-Reply-To: <AM9PR10MB4563302E866A6B542E93CC3F82E90@AM9PR10MB4563.EURPRD10.PROD.OUTLOOK.COM>
-References: <AM9PR10MB4563302E866A6B542E93CC3F82E90@AM9PR10MB4563.EURPRD10.PROD.OUTLOOK.COM>
-Message-ID: <CACna6rz64h0-P6ovH5Ed6+omb9aW+9gFBYZ0iREp+XaByGYM1w@mail.gmail.com>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Wed, 11 Nov 2020 08:09:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix license
+In-Reply-To: <20201110205242.844897-1-fontaine.fabrice@gmail.com>
+References: <20201110205242.844897-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eel0mkst.fsf@oc8242746057.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 11 Nov 2020 at 00:22, Kevin Tomary <kevin.tomary@hotmail.com> wrote:
-> When I boot I get these errors
->
->
-> Could not read interface wlan0 flags: No such device
->
-> nl80211: Driver does not support authentication/association or connect commands
-> nl80211: deinit ifname=wlan0 disabled_11b_rates=0
-> Could not read interface wlan0 flags: No such device
-> wlan0: Failed to initialize driver interface
-> FAIL
-> Starting dhcpcd...
-> no interfaces have a carrier
-> forked to background, child pid 171
-> Starting sshd: OK
-> Starting DHCP server: FAIL
+Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-They look like supplicant messages, not boot messages.
+> Fix license file name in hash file
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/s390-tools/s390-tools.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
+> index 4f60b22b05..1de2399e03 100644
+> --- a/package/s390-tools/s390-tools.hash
+> +++ b/package/s390-tools/s390-tools.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+>  sha256  8dc1180031018756ccd5acf6c26c4175bcac79e512e8a2ea8569fdf5d3f9bd6c  s390-tools-2.15.1.tar.gz
+> -sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  COPYING
+> +sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
+> -- 
+> 2.28.0
 
-Does wireless PHY exist at all? Provide boot log.
+Thanks for fixing.
 
--- 
-Rafa?
+Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+
+Regards
+Alex
