@@ -1,84 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 11:44:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/s390-tools: fix zkey
- build
-Message-ID: <20201117203827.D31DF7FD00@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 12:09:41 +0100
+Subject: [Buildroot] [git commit branch/next] docs/manual: add some minimal
+ documentation about show-info and pkg-stats
+Message-ID: <20201117203828.41C197FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48d74924dd6f5c3ee8578a17a5cdfadbc8745d8e
+commit: https://git.buildroot.net/buildroot/commit/?id=9b9d3dedbb1c690850fc222609cfa7f9613ef8b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Linking of libekmfweb fails when zkey-ekmfweb.so build is enabled.
-
-Fixes:
-- http://autobuild.buildroot.net/results/d41bca3be35d1a48f962be03920f2b81c3e9bb9f
-
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-zkey-ekmfweb-fix-linking-of-libekmfweb.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ docs/manual/common-usage.txt | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch b/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
-new file mode 100644
-index 0000000000..76a642af70
---- /dev/null
-+++ b/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
-@@ -0,0 +1,53 @@
-+From a4e6f7239d8cee37e58eac974482d6deefa8a137 Mon Sep 17 00:00:00 2001
-+From: Alexander Egorenkov <egorenar@linux.ibm.com>
-+Date: Thu, 5 Nov 2020 17:42:58 +0100
-+Subject: [PATCH 1/1] zkey/ekmfweb: fix linking of libekmfweb
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 7cfda10365..9ba87a8339 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -157,6 +157,29 @@ your filesystem, those parts may not be all-zeroes when read back). You
+ should only use sparse files when handling files on the build machine, not
+ when transferring them to an actual device that will be used on the target.
+ 
++=== Details about packages
 +
-+Use -L compiler's parameter instead of the environment variable
-+LIBRARY_PATH.
++[[package-details]]
 +
-+Fixes the following problem on buildroot:
++Buildroot can produce a JSON blurb that describes the set of enabled
++packages in the current configuration, together with their
++dependencies, licenses and other metadata. This JSON blurb is produced
++by using the +show-info+ make target:
 +
-+buildroot/qemu-s390x/host/bin/s390x-linux-gcc -shared -Wl,--version-script=zkey-ekmfweb.map -Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.1 zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o ../..//libutil/libutil.a -lekmfweb -ldl -lcrypto -o zkey-ekmfweb.so
-+buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c udev_ccwgroup.c -o udev_ccwgroup.o
-+buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c iscsi.c -o iscsi.o
-+buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c dasd.c -o dasd.o
-+buildroot/qemu-s390x/host/opt/ext-toolchain/bin/../lib/gcc/s390x-buildroot-linux-gnu/9.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: cannot find -lekmfweb
-+collect2: error: ld returned 1 exit status
-+make[4]: *** [Makefile:36: zkey-ekmfweb.so] Error 1
-+make[3]: *** [Makefile:128: ekmfweb] Error 2
-+buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c zfcp.c -o zfcp.o
-+make[2]: *** [Makefile:43: zkey] Error 2
-+make[2]: *** Waiting for unfinished jobs....
++------------------------
++make show-info
++------------------------
 +
-+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-+Acked-by: Ingo Franzki <ifranzki@linux.ibm.com>
-+---
-+ zkey/ekmfweb/Makefile | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
++Buildroot can also produce details about packages as HTML and JSON
++output using the +pkg-stats+ make target. Amongst other things, these
++details include whether known CVEs (security vulnerabilities) affect
++the packages in your current configuration. It also shows if there is
++a newer upstream version for those packages.
 +
-+diff --git a/zkey/ekmfweb/Makefile b/zkey/ekmfweb/Makefile
-+index 79a16cb5..1a3a4977 100644
-+--- a/zkey/ekmfweb/Makefile
-++++ b/zkey/ekmfweb/Makefile
-+@@ -7,8 +7,6 @@ all: zkey-ekmfweb.so
-+ 
-+ libs = $(rootdir)/libutil/libutil.a
-+ 
-+-export LIBRARY_PATH = $(rootdir)/libekmfweb:$LIBRARY_PATH
-+-
-+ zkey-ekmfweb.o: zkey-ekmfweb.c zkey-ekmfweb.h ../kms-plugin.h \
-+ 	../cca.h ../utils.h ../pkey.h ../properties.h \
-+ 	$(rootdir)include/ekmfweb/ekmfweb.h libekmfweb.dep
-+@@ -29,7 +27,7 @@ utils.o: ../utils.c ../utils.h ../pkey.h ../cca.h ../ep11.h
-+ 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -fPIC -c $< -o $@
-+ 
-+ zkey-ekmfweb.so: ALL_CFLAGS += -fPIC
-+-zkey-ekmfweb.so: LDLIBS = -lekmfweb -ldl -lcrypto
-++zkey-ekmfweb.so: LDLIBS = -L$(rootdir)/libekmfweb -lekmfweb -ldl -lcrypto
-+ zkey-ekmfweb.so: ALL_LDFLAGS += -shared -Wl,--version-script=zkey-ekmfweb.map \
-+ 	-Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.$(VERM)
-+ zkey-ekmfweb.so: zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o $(libs)
-+-- 
-+2.26.2
++------------------------
++make pkg-stats
++------------------------
 +
+ === Graphing the dependencies between packages
+ 
+ [[graph-depends]]
