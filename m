@@ -1,35 +1,52 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 11 Nov 2020 17:31:31 -0300
-Subject: [Buildroot] [PATCH v3 8/8] configs/imx8mmevk: new defconfig
-In-Reply-To: <20201109142309.1135596-9-xroumegue@gmail.com>
-References: <20201107135909.1265116-1-xroumegue@gmail.com>
- <20201109142309.1135596-9-xroumegue@gmail.com>
-Message-ID: <CAOMZO5AVb08ttoNjqWPbQLi+Lf-m=CFYB4UwUVT8U4cOS6CfVw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 11 Nov 2020 21:47:21 +0100
+Subject: [Buildroot] [PATCH] package/gstreamer1/gst1-shark: bump version
+ to v0.7.2
+In-Reply-To: <20201111075156.4955-1-judge.packham@gmail.com>
+References: <20201111075156.4955-1-judge.packham@gmail.com>
+Message-ID: <20201111214721.251d57d5@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+Hello Chris,
 
-On Mon, Nov 9, 2020 at 11:23 AM Xavier Roumegue <xroumegue@gmail.com> wrote:
->
-> Introduce NXP imx8mm evk board configuration that uses mainline atf,
-> uboot and kernel.
->
-> Mainline uboot mkimage tool generates the boot image.
->
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
->
+On Wed, 11 Nov 2020 20:51:56 +1300, Chris Packham <judge.packham@gmail.com> wrote:
+
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
-> Changes v2 -> v3:
->     - Set a custom version to uboot/kernel (Suggested by Fabio Estevam)
+>  package/gstreamer1/gst1-shark/gst1-shark.hash | 2 +-
+>  package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
+> index 6f8365cb16..81b0ecae31 100644
+> --- a/package/gstreamer1/gst1-shark/gst1-shark.hash
+> +++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
+> @@ -1,5 +1,5 @@
+>  # locally computed hash
+> -sha256 aec7f0bbb81775922da2c94a4f84b64b5efd38a616f0d07eb4c3ddb5770b728d  gst1-shark-v0.7.1.tar.gz
+> +sha256 24d910c2e7b4c66c804e53e9f3fc18fb61b0d3b82d8580f0fa9c2b1c563e5ab3  gst1-shark-v0.7.2.tar.gz
+>
+>  # Hashes for license files:
+>  sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
+> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
+> index 146d1f8456..ea0c5a29cd 100644
+> --- a/package/gstreamer1/gst1-shark/gst1-shark.mk
+> +++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -GST1_SHARK_VERSION = v0.7.1
+> +GST1_SHARK_VERSION = v0.7.2
+>  GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
+>  GST1_SHARK_SITE_METHOD = git
+>  GST1_SHARK_GIT_SUBMODULES = YES
 
-It looks good now:
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-
-Looking forward to seeing this patch series applied :-)
-
-Thanks for your work!
+Regards,
+Peter
