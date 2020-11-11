@@ -1,174 +1,66 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu, 12 Nov 2020 11:41:02 +1300
-Subject: [Buildroot] [PATCH v2 2/2] package/coremark-pro: new package
-In-Reply-To: <20201111224102.28799-1-judge.packham@gmail.com>
-References: <20201111224102.28799-1-judge.packham@gmail.com>
-Message-ID: <20201111224102.28799-2-judge.packham@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 12 Nov 2020 00:34:29 +0100
+Subject: [Buildroot] [PATCH 2/2] package/python-lmdb: bump to version 0.99
+In-Reply-To: <20201111233429.2245255-1-romain.naour@gmail.com>
+References: <20201111233429.2245255-1-romain.naour@gmail.com>
+Message-ID: <20201111233429.2245255-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CoreMark-Pro is a comprehensive, advanced processor benchmark that
-works with and enhances the market-proven industry-standard EEMBC
-CoreMark benchmark.
+This version fix the runtime issue with python 3.9 since _Py_ForgetReference()
+was removed from the limited C API [1].
 
-https://www.eembc.org/coremark-pro/
+$ python sample_python_crossbar.py
+/usr/bin/python3.9: symbol '_Py_ForgetReference': can't resolve symbol
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+python-lmbd 0.99 contain a refactoring removing _Py_ForgetReference()
+from the code.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+
+[1] https://docs.python.org/3/whatsnew/3.9.html#id3
+[2] https://github.com/jnwatson/py-lmdb/commit/22a3724bdcda62853e8a250094f512eb20abe01f
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
-Changes in v2:
-- Add depends on BR2_USE_MMU (thanks Matt)
+The version 0.99 is a bug fix release AFAIK.
+---
+ package/python-lmdb/python-lmdb.hash | 4 ++--
+ package/python-lmdb/python-lmdb.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/coremark-pro/Config.in         |  8 +++++
- package/coremark-pro/coremark-pro.hash |  3 ++
- package/coremark-pro/coremark-pro.mk   | 42 ++++++++++++++++++++++++++
- package/coremark-pro/coremark-pro.sh   | 36 ++++++++++++++++++++++
- 6 files changed, 91 insertions(+)
- create mode 100644 package/coremark-pro/Config.in
- create mode 100644 package/coremark-pro/coremark-pro.hash
- create mode 100644 package/coremark-pro/coremark-pro.mk
- create mode 100755 package/coremark-pro/coremark-pro.sh
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ff823a2e3d..291dd41286 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -491,6 +491,7 @@ F:	configs/orangepi_plus_defconfig
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+index 569d1d0bd6..cb28536d3f 100644
+--- a/package/python-lmdb/python-lmdb.hash
++++ b/package/python-lmdb/python-lmdb.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/lmdb/json
+-md5	ae2efef18202e51c9e4a807a47900ce2  lmdb-0.98.tar.gz
+-sha256	0625bc28bf0893e6000a83be7234f915ca078c32f9e73d8ae48b3508db7af708  lmdb-0.98.tar.gz
++md5	507049767b995c3c6a93b3bd97567c71  lmdb-0.99.tar.gz
++sha256	f9eb844aaaacc8a4bc175e1c1f8a8fb538c330e378fd9eb40e8708d4dca7dc89  lmdb-0.99.tar.gz
+ # Locally computed sha256 checksums
+ sha256	310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+index f92c7f775b..bf98ba19c8 100644
+--- a/package/python-lmdb/python-lmdb.mk
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/coremark/
-+F:	package/coremark-pro/
- F:	package/gstreamer1/gst1-shark/
- F:	package/micropython/
- F:	package/micropython-lib/
-diff --git a/package/Config.in b/package/Config.in
-index 16fd95fe38..0011ccd684 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/clinfo/Config.in"
- 	source "package/coremark/Config.in"
-+	source "package/coremark-pro/Config.in"
- 	source "package/dacapo/Config.in"
- 	source "package/dhrystone/Config.in"
- 	source "package/dieharder/Config.in"
-diff --git a/package/coremark-pro/Config.in b/package/coremark-pro/Config.in
-new file mode 100644
-index 0000000000..dd6821056c
---- /dev/null
-+++ b/package/coremark-pro/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_COREMARK_PRO
-+	bool "coremark-pro"
-+	depends on BR2_USE_MMU # perl uses fork()
-+	select BR2_PACKAGE_PERL
-+	help
-+	  CoreMark-PRO is a comprehensive, advanced processor benchmark.
-+
-+	  https://www.eembc.org/coremark-pro/
-diff --git a/package/coremark-pro/coremark-pro.hash b/package/coremark-pro/coremark-pro.hash
-new file mode 100644
-index 0000000000..16b121edb3
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.hash
-@@ -0,0 +1,3 @@
-+#locally computed
-+sha256  440223554134832efec4ad220795611769ded3869fbc3ce3c59b05b7ddeb9f6d  coremark-pro-1.1.2743.tar.gz
-+sha256  0d7775bd793ea71fef3594c18164a08ed2f5f66c898958d0644f7a236a536f2b  LICENSE.md
-diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-new file mode 100644
-index 0000000000..d3e99fcdfd
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# CoreMark-PRO
-+#
-+################################################################################
-+
-+COREMARK_PRO_VERSION = 1.1.2743
-+COREMARK_PRO_SITE = $(call github,eembc,coremark-pro,v$(COREMARK_PRO_VERSION))
-+COREMARK_PRO_LICENSE = Apache-2.0
-+COREMARK_PRO_LICENSE_FILES = LICENSE.md
-+COREMARK_PRO_DEPENDENCIES = perl
-+
-+ifeq ($(BR2_ENDIAN),"BIG")
-+COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1 EE_LITTLE_ENDIAN=0'
-+else
-+COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0 EE_LITTLE_ENDIAN=1'
-+endif
-+
-+COREMARK_PRO_MAKE_OPTS += \
-+	TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
-+	EXE=
-+
-+define COREMARK_PRO_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
-+		$(COREMARK_PRO_MAKE_OPTS) build
-+endef
-+
-+COREMARK_PRO_MARKS = cjpeg-rose7-preset core linear_alg-mid-100x100-sp loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test
-+COREMARK_PRO_SCRIPTS = results_parser.pl cert_median.pl cert_mark.pl headings.txt
-+
-+define COREMARK_PRO_INSTALL_TARGET_CMDS
-+	mkdir -p  $(TARGET_DIR)/usr/share/coremark-pro/logs
-+	$(foreach m,$(COREMARK_PRO_MARKS),\
-+		$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/bin/$(m) $(TARGET_DIR)/usr/bin/$(m)$(sep) \
-+		size $(TARGET_DIR)/usr/bin/$(m) > $(TARGET_DIR)/usr/share/coremark-pro/logs/$(m).size.log$(sep))
-+	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
-+	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
-+		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
-+	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh
-new file mode 100755
-index 0000000000..65ad9df645
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.sh
-@@ -0,0 +1,36 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: Apache-2.0
-+
-+workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
-+    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
-+
-+rm -rf /tmp/coremark-pro
-+mkdir -p /tmp/coremark-pro
-+cp /usr/share/coremark-pro/Rose256.bmp /tmp/coremark-pro
-+cp /usr/share/coremark-pro/logs/*.size.log /tmp/coremark-pro
-+
-+cd /tmp/coremark-pro
-+
-+for contype in single best; do
-+    cat /usr/share/coremark-pro/util/perl/headings.txt >>result.log
-+    for wld in $workloads; do
-+        [ "$contype" = "single" ] && XCMD="-c1 -w1"
-+        [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
-+        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
-+        echo "Verification run for $wld"
-+        $wld $XCMD -v1 > $wld.run.log
-+        LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
-+        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >>$wld-$contype-result.log
-+        echo "Performance run for $wld"
-+        for i in 1 2 3; do
-+            $wld $XCMD -v0 > $wld.run.log
-+            LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
-+        done
-+        echo "#Median for final result $wld" >>$wld-$contype-result.log
-+        LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_median.pl $wld-$contype-result.log $contype >>$wld-$contype-result.log
-+        cat $wld-$contype-result.log >>result.log
-+    done
-+done
-+LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_mark.pl -i result.log -s coremarkpro > result.mark
-+cat result.mark
-+cd - >/dev/null
+-PYTHON_LMDB_VERSION = 0.98
++PYTHON_LMDB_VERSION = 0.99
+ PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+-PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/c0/5c/d56dbc2532ecf14fa004c543927500c0f645eaca8bd7ec39420c7546396a
++PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/3b/66/aa6f3a3e338a3ca263575ce6f722c2fdcd21039a03b55c722e0ae0b216db
+ PYTHON_LMDB_LICENSE = OLDAP-2.8
+ PYTHON_LMDB_LICENSE_FILES = LICENSE
+ PYTHON_LMDB_SETUP_TYPE = setuptools
 -- 
-2.29.2
+2.25.4
