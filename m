@@ -1,25 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 11:47:29 +0100
-Subject: [Buildroot] [PATCH 2/2] package/slirp: add libglib2 mandatory
- dependency
-In-Reply-To: <20201111101152.2088027-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 11 Nov 2020 11:11:52 +0100")
-References: <20201111101152.2088027-1-fontaine.fabrice@gmail.com>
- <20201111101152.2088027-2-fontaine.fabrice@gmail.com>
-Message-ID: <871rh0mapq.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Nov 2020 11:50:31 +0100
+Subject: [Buildroot] [PATCH] support/testing/tests/init/test_systemd:
+ update to BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
+In-Reply-To: <20201108205344.3887700-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 8 Nov 2020 21:53:44 +0100")
+References: <20201108205344.3887700-1-romain.naour@gmail.com>
+Message-ID: <87wnyskw08.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > slirp depends on libglib2, don't update xen as it already depends on it
+ > The commit [1] moved systemd-journal-gatewayd into systemd-journal-remote
+ > option. Update to BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE in the testsuite
+ > when BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY is used.
+
  > Fixes:
- >  - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981805
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981811
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [1] e46fe9a6f2b7cef9789f5172332067cac5ff03bd
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
