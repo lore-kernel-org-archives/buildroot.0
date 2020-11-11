@@ -1,44 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:53:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/fbset: add license file
-Message-ID: <20201117203828.7AFED7FA87@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 12:03:55 +0100
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
+ support generating stats based on configured packages
+Message-ID: <20201117203828.25C0A7FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1379ef161bb95636aa5b0f7666cdaa3dbefe11d7
+commit: https://git.buildroot.net/buildroot/commit/?id=7a607dab336e7f78ab069cff1b503d0688950583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use fbset.c as the license file and, while at it, also update
-indentation in hash file (two spaces)
+pkg-stats was initially a Buildroot maintenance oriented tool: it was
+designed to examine all Buildroot packages and provide
+statistics/details about them.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+However, it turns out that a number of details provided by pkg-stats,
+especially CVEs, are relevant also for Buildroot users, who would like
+to check regularly if their specific Buildroot configuration is
+affected by CVEs or not, and possibly check if all packages have
+license information, license files, etc.
+
+The cve-checker script was recently introduced to provide an output
+relatively similar to pkg-stats, but focused on CVEs only.
+
+But in fact, its main difference is on the set of packages that we
+consider: pkg-stats considers all packages, while cve-checker uses
+"make show-info" to only consider packages enabled in the current
+configuration.
+
+So, this commit introduces a -c option to pkg-stats, to tell pkg-stats
+to generate its output based on the list of configured packages. -c is
+mutually exclusive with the -p option (explicit list of packages) and
+-n option (a number of packages, picked randomly).
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbset/fbset.hash | 3 ++-
- package/fbset/fbset.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
-index ca8cc6d1f0..5d9785d90a 100644
---- a/package/fbset/fbset.hash
-+++ b/package/fbset/fbset.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
-+sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
-+sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 787b4e1dca..8d2a477f8b 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
- FBSET_DEPENDENCIES = host-bison host-flex
- FBSET_LICENSE = GPL-2.0
-+FBSET_LICENSE_FILES = fbset.c
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index fd6e370c18..d44f8241c1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -333,6 +333,12 @@ def get_pkglist(npackages, package_list):
+     return packages
  
- define FBSET_BUILD_CMDS
- 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ 
++def get_config_packages():
++    cmd = ["make", "--no-print-directory", "show-info"]
++    js = json.loads(subprocess.check_output(cmd))
++    return js.keys()
++
++
+ def package_init_make_info():
+     # Fetch all variables at once
+     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
+@@ -929,6 +935,8 @@ def parse_args():
+     output.add_argument('--json', dest='json', type=resolvepath,
+                         help='JSON output file')
+     packages = parser.add_mutually_exclusive_group()
++    packages.add_argument('-c', dest='configpackages', action='store_true',
++                          help='Apply to packages enabled in current configuration')
+     packages.add_argument('-n', dest='npackages', type=int, action='store',
+                           help='Number of packages')
+     packages.add_argument('-p', dest='packages', action='store',
+@@ -945,6 +953,8 @@ def __main__():
+     args = parse_args()
+     if args.packages:
+         package_list = args.packages.split(",")
++    elif args.configpackages:
++        package_list = get_config_packages()
+     else:
+         package_list = None
+     date = datetime.datetime.utcnow()
