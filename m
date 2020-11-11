@@ -1,78 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 12:03:55 +0100
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: support
- generating stats based on configured packages
-Message-ID: <20201111110343.91D66814EC@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 12:07:51 +0100
+Subject: [Buildroot] [git commit] Makefile: add pkg-stats target
+Message-ID: <20201111110343.A76E6814EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a607dab336e7f78ab069cff1b503d0688950583
+commit: https://git.buildroot.net/buildroot/commit/?id=78568465228724efca9d0d98f247c0f253cfa8eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pkg-stats was initially a Buildroot maintenance oriented tool: it was
-designed to examine all Buildroot packages and provide
-statistics/details about them.
-
-However, it turns out that a number of details provided by pkg-stats,
-especially CVEs, are relevant also for Buildroot users, who would like
-to check regularly if their specific Buildroot configuration is
-affected by CVEs or not, and possibly check if all packages have
-license information, license files, etc.
-
-The cve-checker script was recently introduced to provide an output
-relatively similar to pkg-stats, but focused on CVEs only.
-
-But in fact, its main difference is on the set of packages that we
-consider: pkg-stats considers all packages, while cve-checker uses
-"make show-info" to only consider packages enabled in the current
-configuration.
-
-So, this commit introduces a -c option to pkg-stats, to tell pkg-stats
-to generate its output based on the list of configured packages. -c is
-mutually exclusive with the -p option (explicit list of packages) and
--n option (a number of packages, picked randomly).
+Now that pkg-stats is not just a maintainer-oriented tool, but a tool
+generally useful to users, introduce a make target to run
+pkg-stats. Of course, it is run with the newly introduced -c option,
+which produces a pkg-stats output for just the selection of packages
+of the currently defined configuration.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Makefile | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index fd6e370c18..d44f8241c1 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -333,6 +333,12 @@ def get_pkglist(npackages, package_list):
-     return packages
+diff --git a/Makefile b/Makefile
+index f9e9cfa968..fa648d5d54 100644
+--- a/Makefile
++++ b/Makefile
+@@ -937,6 +937,14 @@ show-info:
+ 		) \
+ 	)
  
++.PHONY: pkg-stats
++pkg-stats:
++	@cd "$(CONFIG_DIR)" ; \
++	$(TOPDIR)/support/scripts/pkg-stats -c \
++		--json $(O)/pkg-stats.json \
++		--html $(O)/pkg-stats.html \
++		--nvd-path $(DL_DIR)/buildroot-nvd
++
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
-+def get_config_packages():
-+    cmd = ["make", "--no-print-directory", "show-info"]
-+    js = json.loads(subprocess.check_output(cmd))
-+    return js.keys()
-+
-+
- def package_init_make_info():
-     # Fetch all variables at once
-     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
-@@ -929,6 +935,8 @@ def parse_args():
-     output.add_argument('--json', dest='json', type=resolvepath,
-                         help='JSON output file')
-     packages = parser.add_mutually_exclusive_group()
-+    packages.add_argument('-c', dest='configpackages', action='store_true',
-+                          help='Apply to packages enabled in current configuration')
-     packages.add_argument('-n', dest='npackages', type=int, action='store',
-                           help='Number of packages')
-     packages.add_argument('-p', dest='packages', action='store',
-@@ -945,6 +953,8 @@ def __main__():
-     args = parse_args()
-     if args.packages:
-         package_list = args.packages.split(",")
-+    elif args.configpackages:
-+        package_list = get_config_packages()
-     else:
-         package_list = None
-     date = datetime.datetime.utcnow()
+ # Some subdirectories are also package names. To avoid that "make linux"
+@@ -1154,6 +1162,7 @@ help:
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+ 	@echo '  show-info              - generate info about packages, as a JSON blurb'
++	@echo '  pkg-stats              - generate info about packages as JSON and HTML'
+ 	@echo '  printvars              - dump internal variables selected with VARS=...'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
