@@ -1,59 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 11 Nov 2020 11:11:52 +0100
-Subject: [Buildroot] [PATCH 2/2] package/slirp: add libglib2 mandatory
- dependency
-In-Reply-To: <20201111101152.2088027-1-fontaine.fabrice@gmail.com>
-References: <20201111101152.2088027-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201111101152.2088027-2-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 11 Nov 2020 11:32:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: fix regression for
+ static linking issue
+In-Reply-To: <20201111081807.16075-1-heiko.thiery@gmail.com>
+References: <20201111081807.16075-1-heiko.thiery@gmail.com>
+Message-ID: <CAEyMn7at1nswAkAxdWf+VJ=C4-DYe2J-tF_5WtnmjnRVTbFM+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-slirp depends on libglib2, don't update xen as it already depends on it
+Hi Peter, Hi Jan,
 
-Fixes:
- - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
+Am Mi., 11. Nov. 2020 um 09:27 Uhr schrieb Heiko Thiery
+<heiko.thiery@gmail.com>:
+>
+> 9c13e02c35c74eca56e69f2bbfde452b51860f5e already fixed the static linking
+> issue for host-libcap on some distros (e.g. on Fedora32 and openSUSE).
+>
+> This regression was introduced by 8d38eb052e7006b6e74e9453351d7f245144481e.
+>
+> An upstream patch [1] is added to address this problem [2].
+>
+> Fixes:
+> Bug 13296
+>
+> [1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b
+> [2] https://bugzilla.kernel.org/show_bug.cgi?id=210135
+>
+> Cc: Peter Seiderer <ps.report@gmx.net>
+> Cc: Dr I J Ormshaw <ian_ormshaw@waters.com>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/slirp/Config.in | 8 ++++++++
- package/slirp/slirp.mk  | 1 +
- 2 files changed, 9 insertions(+)
+Could someone please recheck that patch and add a tested-by?
 
-diff --git a/package/slirp/Config.in b/package/slirp/Config.in
-index 8f57c4fa6a..38fd5277af 100644
---- a/package/slirp/Config.in
-+++ b/package/slirp/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_SLIRP
- 	bool "slirp"
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  libslirp is a user-mode networking library used by virtual
- 	  machines, containers or various tools.
-@@ -18,3 +22,7 @@ config BR2_PACKAGE_SLIRP
- 	      around May 2009 which archived it in 2012
- 	    - So we switched to
- 	      https://gitlab.freedesktop.org/slirp/libslirp
-+
-+comment "slirp needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index d046e0cf75..ed6d8855e5 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -12,5 +12,6 @@ SLIRP_SITE = https://elmarco.fedorapeople.org
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_INSTALL_STAGING = YES
-+SLIRP_DEPENDENCIES = libglib2
- 
- $(eval $(meson-package))
+Thank you. Regards
 -- 
-2.28.0
+Heiko
