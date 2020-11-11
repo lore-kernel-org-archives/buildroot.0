@@ -1,54 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 12:09:41 +0100
-Subject: [Buildroot] [git commit] docs/manual: add some minimal
- documentation about show-info and pkg-stats
-Message-ID: <20201111110343.B46EB82A90@busybox.osuosl.org>
+Date: Wed, 11 Nov 2020 12:03:55 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: support
+ generating stats based on configured packages
+Message-ID: <20201111110343.91D66814EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b9d3dedbb1c690850fc222609cfa7f9613ef8b4
+commit: https://git.buildroot.net/buildroot/commit/?id=7a607dab336e7f78ab069cff1b503d0688950583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+pkg-stats was initially a Buildroot maintenance oriented tool: it was
+designed to examine all Buildroot packages and provide
+statistics/details about them.
+
+However, it turns out that a number of details provided by pkg-stats,
+especially CVEs, are relevant also for Buildroot users, who would like
+to check regularly if their specific Buildroot configuration is
+affected by CVEs or not, and possibly check if all packages have
+license information, license files, etc.
+
+The cve-checker script was recently introduced to provide an output
+relatively similar to pkg-stats, but focused on CVEs only.
+
+But in fact, its main difference is on the set of packages that we
+consider: pkg-stats considers all packages, while cve-checker uses
+"make show-info" to only consider packages enabled in the current
+configuration.
+
+So, this commit introduces a -c option to pkg-stats, to tell pkg-stats
+to generate its output based on the list of configured packages. -c is
+mutually exclusive with the -p option (explicit list of packages) and
+-n option (a number of packages, picked randomly).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/common-usage.txt | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ support/scripts/pkg-stats | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 7cfda10365..9ba87a8339 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -157,6 +157,29 @@ your filesystem, those parts may not be all-zeroes when read back). You
- should only use sparse files when handling files on the build machine, not
- when transferring them to an actual device that will be used on the target.
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index fd6e370c18..d44f8241c1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -333,6 +333,12 @@ def get_pkglist(npackages, package_list):
+     return packages
  
-+=== Details about packages
-+
-+[[package-details]]
-+
-+Buildroot can produce a JSON blurb that describes the set of enabled
-+packages in the current configuration, together with their
-+dependencies, licenses and other metadata. This JSON blurb is produced
-+by using the +show-info+ make target:
-+
-+------------------------
-+make show-info
-+------------------------
-+
-+Buildroot can also produce details about packages as HTML and JSON
-+output using the +pkg-stats+ make target. Amongst other things, these
-+details include whether known CVEs (security vulnerabilities) affect
-+the packages in your current configuration. It also shows if there is
-+a newer upstream version for those packages.
-+
-+------------------------
-+make pkg-stats
-+------------------------
-+
- === Graphing the dependencies between packages
  
- [[graph-depends]]
++def get_config_packages():
++    cmd = ["make", "--no-print-directory", "show-info"]
++    js = json.loads(subprocess.check_output(cmd))
++    return js.keys()
++
++
+ def package_init_make_info():
+     # Fetch all variables at once
+     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
+@@ -929,6 +935,8 @@ def parse_args():
+     output.add_argument('--json', dest='json', type=resolvepath,
+                         help='JSON output file')
+     packages = parser.add_mutually_exclusive_group()
++    packages.add_argument('-c', dest='configpackages', action='store_true',
++                          help='Apply to packages enabled in current configuration')
+     packages.add_argument('-n', dest='npackages', type=int, action='store',
+                           help='Number of packages')
+     packages.add_argument('-p', dest='packages', action='store',
+@@ -945,6 +953,8 @@ def __main__():
+     args = parse_args()
+     if args.packages:
+         package_list = args.packages.split(",")
++    elif args.configpackages:
++        package_list = get_config_packages()
+     else:
+         package_list = None
+     date = datetime.datetime.utcnow()
