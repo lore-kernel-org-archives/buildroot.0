@@ -1,98 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Nov 2020 22:06:33 +0100
-Subject: [Buildroot] [PATCH 1/2] package/linux-backports: use buildroot
- host flex and bison
-In-Reply-To: <20201111162208.362275-1-ju.o@free.fr>
-References: <20201111162208.362275-1-ju.o@free.fr>
-Message-ID: <20201111210633.GF3971474@scaer>
+Date: Wed, 11 Nov 2020 22:13:32 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: Add new option for
+ Qualcomm/Atheros 10k (QCA9377)
+Message-ID: <20201111210306.128E88218E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=edb8823c4c8b1ada67cb987075a34c9eb12d53fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-11-11 17:22 +0100, Julien Olivain spake thusly:
-> Upstream backports package does not define the LEX/YACC Makefile
-> variables, contrary to the Kernel which is defining those in [1]. The
-> default "lex" and "yacc" are then used. On some systems, "yacc" is
-> Berkeley Yacc. Kconfig parser files are using non-Posix Bison
-> constructs.
-> 
-> Attempting to generate the parser with byacc fails with error:
-> 
->     yacc: e - line 97 of "zconf.y", syntax error
->     %destructor {
->     ^
-> 
-> This patch adds the missing dependencies on host-flex and host-bison,
-> and make sure the package compilation will use those, to fix this issue.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  package/linux-backports/linux-backports.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> index 1d7d6e7f00..fafb8efb91 100644
-> --- a/package/linux-backports/linux-backports.mk
-> +++ b/package/linux-backports/linux-backports.mk
-> @@ -11,6 +11,8 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
->  LINUX_BACKPORTS_LICENSE = GPL-2.0
->  LINUX_BACKPORTS_LICENSE_FILES = COPYING
->  
-> +LINUX_BACKPORTS_DEPENDENCIES = host-bison host-flex
+Initial Atheros ath10k QCA9377 support was introduced in Kernel v4.4
+[1]. More recently, in v5.7 [2], the SDIO support was also added. This
+patch adds a new option to install firmware files for this device.
 
-As far as I understand it, this is need for the kconfig infra (mconf et
-al.), right?
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a226b519d43a2a6b37267fea051aacb4a79c9614
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6e51b0e4913ca2c93059f73ca477ca30ea95b6a0
 
-If so, can we instead use:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-    LINUX_BACKPORTS_DEPENDENCIES = \
-        $(BR2_BISON_HOST_DEPENDENCY) \
-        $(BR2_FLEX_HOST_DEPENDENCY)
-
-... along with...
-
->  ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
->  LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
->  else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-> @@ -33,6 +35,8 @@ LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
->  # LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
->  #
->  LINUX_BACKPORTS_MAKE_OPTS = \
-> +	LEX="$(HOST_DIR)/bin/flex" \
-> +	YACC="$(HOST_DIR)/bin/bison" \
-
-    LEX=flex \
-    YACC=bison \
-
-Thoughts?
-
-See for example: linux/linux.mk lines 80-85
-and for reference: support/dependencies/check-host-bison-flex.mk
-
-Regards,
-Yann E. MORIN.
-
->  	BACKPORT_DIR=$(@D) \
->  	KLIB_BUILD=$(LINUX_DIR) \
->  	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
-> -- 
-> 2.28.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 9b999034da..105daf42b8 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -113,6 +113,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+ 	help
+ 	  Firmware files for the Atheros 9271 module
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377
++	bool "Atheros 10k (QCA9377)"
++	help
++	  Firmware files for the Atheros QCA9377 module
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X
+ 	bool "Atheros 10k (QCA998X)"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index d9ad942903..8808b5284c 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -189,6 +189,14 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+ endif
+ 
+ # ath10k
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377),y)
++LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
++			ath10k/QCA9377/hw1.0/board.bin \
++			ath10k/QCA9377/hw1.0/firmware-5.bin \
++			ath10k/QCA9377/hw1.0/firmware-6.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X),y)
+ LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
+ 			ath10k/QCA988X/hw2.0/firmware-4.bin \
