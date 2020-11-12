@@ -1,47 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:52:22 +0100
-Subject: [Buildroot] [git commit branch/next] package/argp-standalone: add
- license file
-Message-ID: <20201117203828.6891D7FD00@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 21:57:20 +0100
+Subject: [Buildroot] [git commit branch/next] package/asterisk: security
+ bump to version 16.14.1
+Message-ID: <20201117203828.9981381590@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad0e1d609be6c9fce1d85e8aeff87af63d9ce158
+commit: https://git.buildroot.net/buildroot/commit/?id=339d3e82e8e121204523829bb0900fce4b99c923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use argp.h as the license file and, while at it, update indentation in
-hash file
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- AST-2020-001: Remote crash in res_pjsip_session
+  Upon receiving a new SIP Invite, Asterisk did not return the created
+  dialog locked or referenced.
+
+- AST-2020-002: Outbound INVITE loop on challenge with different nonce
+  If Asterisk is challenged on an outbound INVITE and the nonce is changed
+  in each response, Asterisk will continually send INVITEs in a loop.  This
+  causes Asterisk to consume more and more memory since the transaction will
+  never terminate (even if the call is hung up), ultimately leading to a
+  restart or shutdown of Asterisk.  Outbound authentication must be
+  configured on the endpoint for this to occur.
+
+For details, see the announcement:
+https://www.asterisk.org/asterisk-news/asterisk-13-37-1-16-14-1-17-8-1-18-0-1-and-16-8-cert5-now-available-security/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/argp-standalone/argp-standalone.hash | 5 ++++-
- package/argp-standalone/argp-standalone.mk   | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
-index 5798214406..c780f9e53f 100644
---- a/package/argp-standalone/argp-standalone.hash
-+++ b/package/argp-standalone/argp-standalone.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
-+sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
-+
-+# License file
-+sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
-diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
-index 977b9547b6..651bc400f4 100644
---- a/package/argp-standalone/argp-standalone.mk
-+++ b/package/argp-standalone/argp-standalone.mk
-@@ -8,6 +8,7 @@ ARGP_STANDALONE_VERSION = 1.3
- ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
- ARGP_STANDALONE_INSTALL_STAGING = YES
- ARGP_STANDALONE_LICENSE = LGPL-2.0+
-+ARGP_STANDALONE_LICENSE_FILES = argp.h
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 1bb5da7d06..bd83636271 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  5ebefa6387f89695361b8c105e2ad7ee6381f87a99012aeb85b886ddf6d518ac  asterisk-16.13.0.tar.gz
++sha256  226eaef400d2d335ce29d7b3c8aca8dfdfc5e854c215e0c47615c095ced12171  asterisk-16.14.1.tar.gz
  
- ARGP_STANDALONE_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index b9e2b80dd5..fb3eb6ec8a 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 16.13.0
++ASTERISK_VERSION = 16.14.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
