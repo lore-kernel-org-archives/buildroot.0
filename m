@@ -1,48 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:07:46 +0100
-Subject: [Buildroot] [git commit branch/next] package/guile: disable jit for
- host and target gcc < 5
-Message-ID: <20201117203827.ADA2A7FD00@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 21:56:58 +0100
+Subject: [Buildroot] [git commit branch/next] package/apparmor: fix
+ permission bits for apparmor.service
+Message-ID: <20201117203828.8FCE07FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbfe0858851dae6a203cf0437adea3b056d9137a
+commit: https://git.buildroot.net/buildroot/commit/?id=a325eefc1b1e0be4848fc67265c7395abdf08945
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-jit also raises build failures with host gcc 4.9.2 and x86_64 so disable
-it if host gcc < 5 and update workaround added by commit
-d8dad069c861468b17397f01875b95e7375891d7 to apply it for all
-architectures and not only ARM
+Avoid setting executable bits for apparmor.service. This gets rid of a
+corresponding warning during installation:
+  Configuration file ../target/usr/lib/systemd/system/apparmor.service
+  is marked executable. Please remove executable permission bits.
+  Proceeding anyway.
 
-Fixes:
- - http://autobuild.buildroot.org/results/c2c/c2c31ff5c206bd3791d64d953dc1574546644b05
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/guile/guile.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/apparmor/apparmor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 5e901bb10f..0e7328f199 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -38,10 +38,13 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM)$(BR2_OPTIMIZE_S),yy)
- GUILE_CFLAGS += -O2
- endif
+diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+index 4d08b0433b..7ea0fabd91 100644
+--- a/package/apparmor/apparmor.mk
++++ b/package/apparmor/apparmor.mk
+@@ -88,7 +88,7 @@ endef
+ define APPARMOR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.systemd \
+ 		$(TARGET_DIR)/lib/apparmor/apparmor.systemd
+-	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.service \
++	$(INSTALL) -D -m 0644 $(@D)/parser/apparmor.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/apparmor.service
+ endef
  
--# jit triggers build failures on ARM and gcc < 5
--ifeq ($(BR2_arm):$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y:)
-+# jit triggers build failures with gcc < 5
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
- GUILE_CONF_OPTS += --disable-jit
- endif
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_5),)
-+HOST_GUILE_CONF_OPTS += --disable-jit
-+endif
- 
- # It can use readline, but on the condition that it was build against
- # ncurses. If both aren't present disable readline support since the
