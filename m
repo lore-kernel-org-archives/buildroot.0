@@ -1,71 +1,63 @@
 From: Julien Olivain <ju.o@free.fr>
-Date: Thu, 12 Nov 2020 13:01:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/linux-backports: use flex and
- bison to generate kconfig parser
-In-Reply-To: <20201111162208.362275-1-ju.o@free.fr>
+Date: Thu, 12 Nov 2020 13:01:55 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/linux-backports: bump version to
+ 5.8
+In-Reply-To: <20201112120155.333290-1-ju.o@free.fr>
 References: <20201111162208.362275-1-ju.o@free.fr>
-Message-ID: <20201112120155.333290-1-ju.o@free.fr>
+ <20201112120155.333290-1-ju.o@free.fr>
+Message-ID: <20201112120155.333290-2-ju.o@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream backports package does not define the LEX/YACC Makefile
-variables, contrary to the Kernel which is defining those in [1]. The
-default "lex" and "yacc" are then used. On some systems, "yacc" is
-Berkeley Yacc. Kconfig parser files are using non-Posix Bison
-constructs.
+Attempting to compile this package with newer Kernel version (e.g. v5.4)
+fails with message:
 
-Attempting to generate the parser with byacc fails with error:
+   Generating local configuration database from kernel ...Kernel version parse failed!
 
-    yacc: e - line 97 of "zconf.y", syntax error
-    %destructor {
-    ^
+Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
+rather old and beat the very purpose of having newer drivers in older
+kernels.
 
-This patch defines the LEX and YACC Makefile variable to use flex and
-bison, to fix this issue. The host-bison and host-flex dependencies are
-added only if the host does not have them, following the same logic of
-the Kernel.
+Note that since backports tag v4.14-rc4-1, the requirement on minimal
+kernel version changed from 3.0 to 3.10. See commit [1].
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
 Changes v1 -> v2:
-  - Include suggestions from Yann:
-    Follow the same logic as the Kernel for kconfig flex/bison.
+  - Add a note about the change in minimal kernel version (3.0 -> 3.10).
 ---
- package/linux-backports/linux-backports.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/linux-backports/linux-backports.hash | 4 ++--
+ package/linux-backports/linux-backports.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
+index f39bc2ed27..0d60955b02 100644
+--- a/package/linux-backports/linux-backports.hash
++++ b/package/linux-backports/linux-backports.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
+-sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
++# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
++sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
+ # Locally computed
+ sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
 diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 1d7d6e7f00..030d7a2864 100644
+index 030d7a2864..7e725147dc 100644
 --- a/package/linux-backports/linux-backports.mk
 +++ b/package/linux-backports/linux-backports.mk
-@@ -11,6 +11,14 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
- LINUX_BACKPORTS_LICENSE = GPL-2.0
- LINUX_BACKPORTS_LICENSE_FILES = COPYING
- 
-+# flex and bison are needed to generate kconfig parser. We use the
-+# same logic as the linux kernel (we add host dependencies only if
-+# host does not have them). See linux/linux.mk and
-+# support/dependencies/check-host-bison-flex.mk.
-+LINUX_BACKPORTS_DEPENDENCIES = \
-+	$(BR2_BISON_HOST_DEPENDENCY) \
-+	$(BR2_FLEX_HOST_DEPENDENCY)
-+
- ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
- LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
- else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
-@@ -33,6 +41,8 @@ LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
- # LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
+@@ -4,7 +4,7 @@
  #
- LINUX_BACKPORTS_MAKE_OPTS = \
-+	LEX=flex \
-+	YACC=bison \
- 	BACKPORT_DIR=$(@D) \
- 	KLIB_BUILD=$(LINUX_DIR) \
- 	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
+ ################################################################################
+ 
+-LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
++LINUX_BACKPORTS_VERSION_MAJOR = 5.8
+ LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
+ LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
+ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
 -- 
 2.28.0
