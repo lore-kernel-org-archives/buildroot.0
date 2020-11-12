@@ -1,47 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 14:28:18 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/wireguard-linux-compat: bump version to 1.0.20201112
-Message-ID: <20201117203828.F1BD57FB0D@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 22:32:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/python3: uClibc-ng
+ doesn't set errno when encryption method is not available
+Message-ID: <20201117203828.C1BD07FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=041cde5c26cd054ec7a822f289747856328286e0
+commit: https://git.buildroot.net/buildroot/commit/?id=5333ada9713f88c8ff87a8ce1d6f2f99ded56712
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes a build issue with linux 5.4.76+.  For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
+Since commit [1] in cpython, an exception is raised when an encryption method
+is not available. This eception is handled only if errno is set to EINVAL by
+crypt() but uClibc-ng doesn't set errno in crypt() [2].
 
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+
+[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
+[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...Clibc-ng-doesn-t-set-errno-when-encryptio.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 833e1af2fc..8895875cf6 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
--sha256  ad33b2d2267a37e0f65c97e65e7d4d926d5aef7d530c251b63fbf919048eead9  wireguard-linux-compat-1.0.20200908.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
-+sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 082d10c53b..76585e0bc4 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200908
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+diff --git a/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+new file mode 100644
+index 0000000000..880277eb1d
+--- /dev/null
++++ b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+@@ -0,0 +1,40 @@
++From 3c83eedcc2df3ecf6c4a17953ca24dff60c1378e Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 12 Nov 2020 00:16:18 +0100
++Subject: [PATCH] lib/crypt: uClibc-ng doesn't set errno when encryption method
++ is not available
++
++Since commit [1] in cpython, an exception is raised when an encryption method
++is not available. This eception is handled only if errno is set to EINVAL by
++crypt() but uClibc-ng doesn't set errno in crypt() [2].
++
++Fixes:
++https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
++https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
++
++[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
++[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ Lib/crypt.py | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/Lib/crypt.py b/Lib/crypt.py
++index 33dbc46bb3..4692a5270c 100644
++--- a/Lib/crypt.py
+++++ b/Lib/crypt.py
++@@ -94,7 +94,9 @@ def _add_method(name, *args, rounds=None):
++         result = crypt('', salt)
++     except OSError as e:
++         # Not all libc libraries support all encryption methods.
++-        if e.errno == errno.EINVAL:
+++        # Not all libc libraries set errno when encryption method is not
+++        # available.
+++        if e.errno == errno.EINVAL or e.errno == 0:
++             return False
++         raise
++     if result and len(result) == method.total_size:
++-- 
++2.25.4
++
