@@ -1,99 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 23:16:30 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/sshfs: bump to version 3.7.1
-Message-ID: <20201112221630.820452-1-fontaine.fabrice@gmail.com>
+From: Robert Hancock <robert.hancock@calian.com>
+Date: Thu, 12 Nov 2020 22:27:11 +0000
+Subject: [Buildroot] Proper Out-of-tree Devicetree Source
+In-Reply-To: <CA+fik51jHvB4POdaGEJ+Ru2K6Yt1xmepibr3WGUaGQAYkiG55g@mail.gmail.com>
+References: <CAE_FxYsuX33=WuESanaB01YkD_DU=z+Q1hYr=Tp0kiXgHGtt4Q@mail.gmail.com>
+ <CA+fik51jHvB4POdaGEJ+Ru2K6Yt1xmepibr3WGUaGQAYkiG55g@mail.gmail.com>
+Message-ID: <298f9cd98b159b2020a96e4473c367ba959f6cf4.camel@calian.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patch (already in version)
+On Thu, 2020-11-12 at 16:14 -0600, Brandon Maier wrote:
+> On Wed, Nov 11, 2020 at 8:57 PM Garret Kelly <garret.kelly@gmail.com>
+> wrote:
+> > Hi buildroot!
+> > I'm trying to figure out the right way to use an out-of-tree device
+> > tree (for uboot, to begin with, but definitely also TF-A and
+> > Linux).
+> > So far, I've found that setting BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+> > results in the files named there being copied into the arch/arm/dts
+> > directory in the uboot build directory. However, these files aren't
+> > referenced by the arch/arm/dts/Makefile, and therefore the DTBs are
+> > never built.
+> 
+> Same, I recently was trying to build a custom DTS with U-Boot and
+> this
+> is the behaviour I saw. From talking on the U-Boot IRC it doesn't
+> seem
+> there is an "officially" supported way to build external dts without
+> manually patching the dts into the Makefile.
+> 
+> > I found that I could add "dtb-y=whatever.dtb" to
+> > BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS, which does result in the DTS
+> > getting
+> > compiled, but seems a little hacky. Not that I mind.
+> 
+> I don't have a problem with it if it works. Otherwise U-Boot would
+> need to be updated to properly support this. For example Linux
+> supports this with a special dtb target[1].
 
-https://github.com/libfuse/sshfs/blob/sshfs-3.7.1/ChangeLog.rst
+In general U-Boot needs some level of board-specific support for things
+like memory initialization, so I believe usually one would patch U-Boot 
+to add in that support and the reference to that board's .dts files at
+the same time.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-sshfs.c-fix-build-with-gcc-4.8.patch | 47 -------------------
- package/sshfs/sshfs.hash                      |  2 +-
- package/sshfs/sshfs.mk                        |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
- delete mode 100644 package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+Specifying a custom .dts for Linux makes more sense as the kernel build
+itself can be generic, but there is not really such a thing as a
+generic U-Boot build across boards unless they are very similar.
 
-diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 312985d8dc..0000000000
---- a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 31 Oct 2020 21:08:53 +0100
--Subject: [PATCH] sshfs.c: fix build with gcc 4.8
--
--Fix the following build failure with gcc 4.8:
--
--../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < sshfs.max_conns; i++) {
--  ^
--
--This build failure has been added with
--https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/libfuse/sshfs/pull/233]
-----
-- sshfs.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/sshfs.c b/sshfs.c
--index d5f2ff7..2c2db42 100644
----- a/sshfs.c
--+++ b/sshfs.c
--@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-- 			     const char *path)
-- {
-- 	struct conntab_entry *ce;
--+	int i;
-- 
-- 	if (sshfs.max_conns == 1)
-- 		return &sshfs.conns[0];
--@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-- 
-- 	int best_index = 0;
-- 	uint64_t best_score = ~0ULL; /* smaller is better */
---	for (int i = 0; i < sshfs.max_conns; i++) {
--+	for (i = 0; i < sshfs.max_conns; i++) {
-- 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
-- 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
-- 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
---- 
--2.28.0
--
-diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
-index b8488013a7..106f06f09f 100644
---- a/package/sshfs/sshfs.hash
-+++ b/package/sshfs/sshfs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
-+sha256  fe5d3436d61b46974889e0c4515899c21a9d67851e3793c209989f72353d7750  sshfs-3.7.1.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 70e7feab1d..6759f6ab3b 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SSHFS_VERSION = 3.7.0
-+SSHFS_VERSION = 3.7.1
- SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
- SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
- SSHFS_LICENSE = GPL-2.0
+> 
+> [1] 
+> https://can01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.9.8%2Fsource%2FMakefile%23L1333&amp;data=04%7C01%7Crobert.hancock%40calian.com%7C9a73abd8e5e0486aca0308d88758697e%7C23b57807562f49ad92c43bb0f07a1fdf%7C0%7C0%7C637408161089689701%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=uXsp%2FC08O1onRPwp4e%2Fb%2BXdFGFox52cAK%2Fgq57ZWKvk%3D&amp;reserved=0
+> 
+> > I was thinking about adding the dtb-y inclusion trick to uboot.mk,
+> > but
+> > I realized as I was doing this that "DTS source files" probably
+> > also
+> > implies .dtsi files, and so those can't be added. I suppose I could
+> > filter out non-.dts files from being turned into targets, that
+> > might
+> > be the most ergonomic way.
+> 
+> This appears to be what BR2_LINUX_KERNEL_CUSTOM_DTS_PATH does[2], so
+> it seems like there is at least precedent.
+> 
+> [2] 
+> https://can01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.busybox.net%2Fbuildroot%2Ftree%2Flinux%2Flinux.mk%3Fh%3D2020.11-rc1%23n175&amp;data=04%7C01%7Crobert.hancock%40calian.com%7C9a73abd8e5e0486aca0308d88758697e%7C23b57807562f49ad92c43bb0f07a1fdf%7C0%7C0%7C637408161089689701%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=p6TazGhd0IlFlZPFplGSijuUgcK9VlLgdhUKtKCmciI%3D&amp;reserved=0
+> 
 -- 
-2.28.0
+Robert Hancock
+Senior Hardware Designer, Calian Advanced Technologies
+www.calian.com
