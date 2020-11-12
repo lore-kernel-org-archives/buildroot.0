@@ -1,44 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:53:32 +0100
-Subject: [Buildroot] [git commit] package/fbset: add license file
-Message-ID: <20201112205658.01B0883BF0@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 22:03:20 +0100
+Subject: [Buildroot] [git commit] package/busybox: Fix hwclock for glibc
+ 2.31+
+Message-ID: <20201112205658.2D83183BED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1379ef161bb95636aa5b0f7666cdaa3dbefe11d7
+commit: https://git.buildroot.net/buildroot/commit/?id=8b4b9289aac5b6d77a8c8e4644326dafe88bc335
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use fbset.c as the license file and, while at it, also update
-indentation in hash file (two spaces)
+Pick the below patch from upstream, in order to fix
+'settimeofday: Invalid argument' introduced by using glibc v2.31+.
+(busybox hasn't tagged a new version since).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
+
+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbset/fbset.hash | 3 ++-
- package/fbset/fbset.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ ...-hwclock-Fix-settimeofday-for-glibc-v2.31.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
-index ca8cc6d1f0..5d9785d90a 100644
---- a/package/fbset/fbset.hash
-+++ b/package/fbset/fbset.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
-+sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
-+sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 787b4e1dca..8d2a477f8b 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
- FBSET_DEPENDENCIES = host-bison host-flex
- FBSET_LICENSE = GPL-2.0
-+FBSET_LICENSE_FILES = fbset.c
- 
- define FBSET_BUILD_CMDS
- 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+diff --git a/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+new file mode 100644
+index 0000000000..cab346acf3
+--- /dev/null
++++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+@@ -0,0 +1,58 @@
++From 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b Mon Sep 17 00:00:00 2001
++From: Eddie James <eajames@linux.ibm.com>
++Date: Mon, 10 Aug 2020 09:59:02 -0500
++Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
++
++The glibc implementation changed for settimeofday, resulting in "invalid
++argument" error when attempting to set both timezone and time with a single
++call. Fix this by calling settimeofday twice
++
++Signed-off-by: Eddie James <eajames@linux.ibm.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++ util-linux/hwclock.c | 14 +++++++++++---
++ 1 file changed, 11 insertions(+), 3 deletions(-)
++
++diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
++index dc97d8fb4..2479e7416 100644
++--- a/util-linux/hwclock.c
+++++ b/util-linux/hwclock.c
++@@ -122,16 +122,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
++ 	struct timeval tv;
++ 	struct timezone tz;
++ 
++-	tz.tz_minuteswest = timezone/60;
+++	tz.tz_minuteswest = timezone / 60;
++ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
++ 	 * daylight!=0 means "this timezone has some DST
++ 	 * during the year", not "DST is in effect now".
++ 	 */
++ 	tz.tz_dsttime = 0;
++ 
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_simple_perror_msg_and_die("settimeofday");
+++
++ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
++ 	tv.tv_usec = 0;
++-	if (settimeofday(&tv, &tz))
+++	if (settimeofday(&tv, NULL))
++ 		bb_simple_perror_msg_and_die("settimeofday");
++ }
++ 
++@@ -283,7 +287,11 @@ static void set_system_clock_timezone(int utc)
++ 	gettimeofday(&tv, NULL);
++ 	if (!utc)
++ 		tv.tv_sec += tz.tz_minuteswest * 60;
++-	if (settimeofday(&tv, &tz))
+++
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_simple_perror_msg_and_die("settimeofday");
+++	if (settimeofday(&tv, NULL))
++ 		bb_simple_perror_msg_and_die("settimeofday");
++ }
++ 
++-- 
++2.17.1
++
