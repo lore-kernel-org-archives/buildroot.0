@@ -1,66 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Nov 2020 22:20:23 +0100
-Subject: [Buildroot] [git commit branch/next] package/linux-backports: fix
- kernel version check
-Message-ID: <20201117203829.2B97D7FB0D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 21:49:21 +0100
+Subject: [Buildroot] [git commit branch/next] package/tmux: add upstream
+ security fix for CVE-2020-27347
+Message-ID: <20201117203828.5F59A7FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=464bb73b92cacdafd19515d7474a53d8401940dd
+commit: https://git.buildroot.net/buildroot/commit/?id=7e0f81a9f65b57c0228466b7f59d222f2011e4d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
-do not rely on package's .config as a timestamp" broke the kernel
-version check of this linux-backports package (it was no longer
-executed). Since linux-4.19, the kernel's build system internally
-touches its .config file, so it can no longer be used as a stamp file.
-The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
-pkg-kconfig infra need to be used instead.
+Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
+input.c contained a stack-based buffer-overflow that can be exploited by
+terminal output.
 
-This commit fixes the kernel version check.
+For details, see:
+https://www.openwall.com/lists/oss-security/2020/11/05/3
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-backports/linux-backports.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ ...e-after-the-end-of-the-array-and-overwrit.patch | 35 ++++++++++++++++++++++
+ package/tmux/tmux.mk                               |  3 ++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 030d7a2864..1827ee18b7 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -85,21 +85,24 @@ $(eval $(kconfig-package))
- # not have been parsed yet, so the Linux build dir LINUX_DIR is not yet
- # known. Thus, we use a "secondary expansion" so the rule is re-evaluated
- # after all Makefiles are parsed, and thus at that time we will have the
--# LINUX_DIR variable set to the proper value.
-+# LINUX_DIR variable set to the proper value. Moreover, since linux-4.19,
-+# the kernel's build system internally touches its .config file, so we
-+# can't use it as a stamp file. We use the LINUX_KCONFIG_STAMP_DOTCONFIG
-+# instead.
- #
- # Furthermore, we want to check the kernel version, since linux-backports
- # only supports kernels >= 3.0. To avoid overriding linux-backports'
--# .config rule defined in the kconfig-package infra, we use an
--# intermediate stamp-file.
-+# KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
-+# use an intermediate stamp-file.
- #
- # Finally, it must also come after the call to kconfig-package, so we get
- # LINUX_BACKPORTS_DIR properly defined (because the target part of the
- # rule is not re-evaluated).
- #
--$(LINUX_BACKPORTS_DIR)/.config: $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
-+$(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
+diff --git a/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
+new file mode 100644
+index 0000000000..d169322ed7
+--- /dev/null
++++ b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
+@@ -0,0 +1,35 @@
++From a868bacb46e3c900530bed47a1c6f85b0fbe701c Mon Sep 17 00:00:00 2001
++From: nicm <nicm>
++Date: Thu, 29 Oct 2020 16:33:01 +0000
++Subject: [PATCH] Do not write after the end of the array and overwrite the
++ stack when colon-separated SGR sequences contain empty arguments. Reported by
++ Sergey Nizovtsev.
++
++[Peter: Fixes CVE-2020-27347]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ input.c | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/input.c b/input.c
++index 42a60c92..c280c0d9 100644
++--- a/input.c
+++++ b/input.c
++@@ -1976,8 +1976,13 @@ input_csi_dispatch_sgr_colon(struct input_ctx *ictx, u_int i)
++ 				free(copy);
++ 				return;
++ 			}
++-		} else
+++		} else {
++ 			n++;
+++			if (n == nitems(p)) {
+++				free(copy);
+++				return;
+++			}
+++		}
++ 		log_debug("%s: %u = %d", __func__, n - 1, p[n - 1]);
++ 	}
++ 	free(copy);
++-- 
++2.20.1
++
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 169c9bb83f..00e77ad762 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -10,6 +10,9 @@ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
  
- .SECONDEXPANSION:
--$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/.config
-+$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
- 	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
- 	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
- 		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
++# 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
++TMUX_IGNORE_CVES += CVE-2020-27347
++
+ # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
+ # can reject the user connection. See man shells.
+ define TMUX_ADD_TMUX_TO_SHELLS
