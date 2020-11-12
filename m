@@ -1,63 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Nov 2020 22:13:32 +0100
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware: Add
- new option for Qualcomm/Atheros 10k (QCA9377)
-Message-ID: <20201117203828.4CA227FD00@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 21:53:32 +0100
+Subject: [Buildroot] [git commit branch/next] package/fbset: add license file
+Message-ID: <20201117203828.7AFED7FA87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edb8823c4c8b1ada67cb987075a34c9eb12d53fd
+commit: https://git.buildroot.net/buildroot/commit/?id=1379ef161bb95636aa5b0f7666cdaa3dbefe11d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Initial Atheros ath10k QCA9377 support was introduced in Kernel v4.4
-[1]. More recently, in v5.7 [2], the SDIO support was also added. This
-patch adds a new option to install firmware files for this device.
+Use fbset.c as the license file and, while at it, also update
+indentation in hash file (two spaces)
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a226b519d43a2a6b37267fea051aacb4a79c9614
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=6e51b0e4913ca2c93059f73ca477ca30ea95b6a0
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 8 ++++++++
- 2 files changed, 13 insertions(+)
+ package/fbset/fbset.hash | 3 ++-
+ package/fbset/fbset.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9b999034da..105daf42b8 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -113,6 +113,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
- 	help
- 	  Firmware files for the Atheros 9271 module
+diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
+index ca8cc6d1f0..5d9785d90a 100644
+--- a/package/fbset/fbset.hash
++++ b/package/fbset/fbset.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
++sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
++sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 787b4e1dca..8d2a477f8b 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
+ FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
+ FBSET_DEPENDENCIES = host-bison host-flex
+ FBSET_LICENSE = GPL-2.0
++FBSET_LICENSE_FILES = fbset.c
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377
-+	bool "Atheros 10k (QCA9377)"
-+	help
-+	  Firmware files for the Atheros QCA9377 module
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X
- 	bool "Atheros 10k (QCA998X)"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d9ad942903..8808b5284c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -189,6 +189,14 @@ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
- 
- # ath10k
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377),y)
-+LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
-+			ath10k/QCA9377/hw1.0/board.bin \
-+			ath10k/QCA9377/hw1.0/firmware-5.bin \
-+			ath10k/QCA9377/hw1.0/firmware-6.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA998X),y)
- LINUX_FIRMWARE_FILES += ath10k/QCA988X/hw2.0/board.bin \
- 			ath10k/QCA988X/hw2.0/firmware-4.bin \
+ define FBSET_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
