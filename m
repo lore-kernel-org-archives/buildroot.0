@@ -1,101 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 12 Nov 2020 20:30:28 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/linux-backports: bump
- version to 5.8
-In-Reply-To: <20201112120155.333290-2-ju.o@free.fr>
-References: <20201111162208.362275-1-ju.o@free.fr>
- <20201112120155.333290-1-ju.o@free.fr>
- <20201112120155.333290-2-ju.o@free.fr>
-Message-ID: <20201112203028.2fc11f90@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 20:31:28 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/python-yatl: bump to version
+ 20200711.1
+Message-ID: <20201112193128.440625-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+https://github.com/web2py/yatl/compare/v20200430.1...master
 
-On Thu, 12 Nov 2020 13:01:55 +0100, Julien Olivain <ju.o@free.fr> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-yatl/python-yatl.hash | 4 ++--
+ package/python-yatl/python-yatl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> Attempting to compile this package with newer Kernel version (e.g. v5.4)
-> fails with message:
->
->    Generating local configuration database from kernel ...Kernel version parse failed!
->
-> Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
-> rather old and beat the very purpose of having newer drivers in older
-> kernels.
->
-> Note that since backports tag v4.14-rc4-1, the requirement on minimal
-> kernel version changed from 3.0 to 3.10. See commit [1].
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
->
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Changes v1 -> v2:
->   - Add a note about the change in minimal kernel version (3.0 -> 3.10).
-> ---
->  package/linux-backports/linux-backports.hash | 4 ++--
->  package/linux-backports/linux-backports.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-> index f39bc2ed27..0d60955b02 100644
-> --- a/package/linux-backports/linux-backports.hash
-> +++ b/package/linux-backports/linux-backports.hash
-> @@ -1,4 +1,4 @@
-> -# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
-> -sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
-> +# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
-> +sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
->  # Locally computed
->  sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-
-	$ sha256sum backports-4.4.2-1/COPYING backports-5.8-1/COPYING
-af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  backports-4.4.2-1/COPYING
-fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  backports-5.8-1/COPYING
-
-
-	$ cat backports-5.8-1/COPYING
-The Linux Kernel is provided under:
-
-	SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-
-Being under the terms of the GNU General Public License version 2 only,
-according with:
-
-	LICENSES/preferred/GPL-2.0
-
-With an explicit syscall exception, as stated at:
-
-	LICENSES/exceptions/Linux-syscall-note
-
-In addition, other licenses may also apply. Please see:
-
-	Documentation/process/license-rules.rst
-
-for more details.
-
-All contributions to the Linux Kernel are subject to this COPYING file.
-
-
-Seems the license info needs an update too...
-
-Regards,
-Peter
-
-
-> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> index 030d7a2864..7e725147dc 100644
-> --- a/package/linux-backports/linux-backports.mk
-> +++ b/package/linux-backports/linux-backports.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
-> +LINUX_BACKPORTS_VERSION_MAJOR = 5.8
->  LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
->  LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
->  LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
+diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
+index 9238e71b22..534d74b654 100644
+--- a/package/python-yatl/python-yatl.hash
++++ b/package/python-yatl/python-yatl.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/yatl/json
+-md5  930be78b3d6e33f3f920619d673c345a  yatl-20200430.1.tar.gz
+-sha256  5220390b27f010046642c00aded9ffc694e383a3d7a47985c8809d8482c8478a  yatl-20200430.1.tar.gz
++md5  3368146e56b35ba5569ff64054c2a3fd  yatl-20200711.1.tar.gz
++sha256  d37b90e7679d2d2873ac634e66adfcd0cd7e4c34438e76a3192cf984faba2595  yatl-20200711.1.tar.gz
+diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
+index fca39bb5ef..6df5fcd83e 100644
+--- a/package/python-yatl/python-yatl.mk
++++ b/package/python-yatl/python-yatl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_YATL_VERSION = 20200430.1
++PYTHON_YATL_VERSION = 20200711.1
+ PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
+-PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/7f/bd/aa36c1a1d876757e3fa365e6c455097ebd3f2e8e7ded23e75901ff9c9ecf
++PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/b4/f5/b6020f8ccb3e156fbe0ed7e4a35fbdce4d6a7ef6a9ab0c54cb8880fb7c04
+ PYTHON_YATL_SETUP_TYPE = setuptools
+ PYTHON_YATL_LICENSE = BSD-3-Clause
+ 
+-- 
+2.28.0
