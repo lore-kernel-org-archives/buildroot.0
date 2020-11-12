@@ -1,44 +1,99 @@
 From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-Date: Thu, 12 Nov 2020 19:48:55 -0300
-Subject: [Buildroot] [PATCH 1/1] package/busybox: Fix hwclock for glibc
- 2.31+
+Date: Thu, 12 Nov 2020 19:50:16 -0300
+Subject: [Buildroot] [PATCH v2] package/busybox: Fix hwclock for glibc 2.31+
 In-Reply-To: <87wnyqi8x4.fsf@dell.be.48ers.dk>
-References: <20201112164844.18731-1-klaus@linux.vnet.ibm.com>
- <87wnyqi8x4.fsf@dell.be.48ers.dk>
-Message-ID: <7ba2b5f8-f871-2e84-fe3c-bcea0c89d5c5@linux.vnet.ibm.com>
+References: <87wnyqi8x4.fsf@dell.be.48ers.dk>
+Message-ID: <20201112225016.20297-1-klaus@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Pick the below patch from upstream, in order to fix
+'settimeofday: Invalid argument' introduced by using glibc v2.31+.
+(busybox hasn't tagged a new version since).
 
+See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
 
-On 11/12/2020 6:04 PM, Peter Korsgaard wrote:
->>>>>> "Klaus" == Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com> writes:
->   > ---
->   > +++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
->   > @@ -0,0 +1,58 @@
->   > +From a4faa9af79c2a0f2b501c0fd507842e4966fc23b Mon Sep 17 00:00:00 2001
-> 
-> How did you end up with a different git hash here?
+  commit 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b
+  Author: Eddie James <eajames@linux.ibm.com>
 
-I took busybox tag 1_32_0, applied the patches found on buildroot/package/busybox,
-then cherry-picked the above patch and git format-patch HEAD^
+      hwclock: Fix settimeofday for glibc v2.31+
 
-Guess I was being too cautious by applying the patches locally first?
+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+---
+Changes v1 -> V2:
+  - format-patch from the commit itself, instead of applying staged
+    patches on top of 1_32_0
+---
+ ...ock-Fix-settimeofday-for-glibc-v2.31.patch | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
 
-At any rate, I'm sending a second version where I format-patch'ed the patch itself
-(i.e., from busybox master), instead of applying it on top of a local 1_32_0 tree
-along with other buildroot build-time patches.
-
-> 
-> Committed after fixing that, thanks.
-> 
-
-
-Thanks,
-
-  -Klaus
+diff --git a/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+new file mode 100644
+index 0000000000..486d3dead3
+--- /dev/null
++++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+@@ -0,0 +1,58 @@
++From 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b Mon Sep 17 00:00:00 2001
++From: Eddie James <eajames@linux.ibm.com>
++Date: Mon, 10 Aug 2020 09:59:02 -0500
++Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
++
++The glibc implementation changed for settimeofday, resulting in "invalid
++argument" error when attempting to set both timezone and time with a single
++call. Fix this by calling settimeofday twice
++
++Signed-off-by: Eddie James <eajames@linux.ibm.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++---
++ util-linux/hwclock.c | 14 +++++++++++---
++ 1 file changed, 11 insertions(+), 3 deletions(-)
++
++diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
++index 357906cca..e85bca2b2 100644
++--- a/util-linux/hwclock.c
+++++ b/util-linux/hwclock.c
++@@ -121,16 +121,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
++ 	struct timeval tv;
++ 	struct timezone tz;
++ 
++-	tz.tz_minuteswest = timezone/60;
+++	tz.tz_minuteswest = timezone / 60;
++ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
++ 	 * daylight!=0 means "this timezone has some DST
++ 	 * during the year", not "DST is in effect now".
++ 	 */
++ 	tz.tz_dsttime = 0;
++ 
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_simple_perror_msg_and_die("settimeofday");
+++
++ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
++ 	tv.tv_usec = 0;
++-	if (settimeofday(&tv, &tz))
+++	if (settimeofday(&tv, NULL))
++ 		bb_simple_perror_msg_and_die("settimeofday");
++ }
++ 
++@@ -282,7 +286,11 @@ static void set_system_clock_timezone(int utc)
++ 	gettimeofday(&tv, NULL);
++ 	if (!utc)
++ 		tv.tv_sec += tz.tz_minuteswest * 60;
++-	if (settimeofday(&tv, &tz))
+++
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_simple_perror_msg_and_die("settimeofday");
+++	if (settimeofday(&tv, NULL))
++ 		bb_simple_perror_msg_and_die("settimeofday");
++ }
++ 
++-- 
++2.17.1
++
 -- 
-Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+2.17.1
