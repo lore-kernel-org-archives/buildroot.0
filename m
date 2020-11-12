@@ -1,42 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:55:11 +0100
-Subject: [Buildroot] [git commit] package/waf: add license
-Message-ID: <20201112205658.0C86081680@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 21:53:32 +0100
+Subject: [Buildroot] [git commit] package/fbset: add license file
+Message-ID: <20201112205658.01B0883BF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c77548fa93e159572e71d4cb2208ab0706aea11
+commit: https://git.buildroot.net/buildroot/commit/?id=1379ef161bb95636aa5b0f7666cdaa3dbefe11d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Use fbset.c as the license file and, while at it, also update
+indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/waf/waf.hash | 1 +
- package/waf/waf.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/fbset/fbset.hash | 3 ++-
+ package/fbset/fbset.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 15db32f384..afca0f31bf 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,3 +1,4 @@
- # Locally computed
- sha1  92212071a63ce38fdfd69fb8332f04e84d1f6635  waf-2.0.20
- sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf-2.0.20
-+sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index 56b6d9e033..9c5e72d9eb 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -7,6 +7,8 @@
- WAF_VERSION = 2.0.20
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
-+WAF_LICENSE = BSD-3-Clause
-+WAF_LICENSE_FILES = waf
+diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
+index ca8cc6d1f0..5d9785d90a 100644
+--- a/package/fbset/fbset.hash
++++ b/package/fbset/fbset.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
++sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
++sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 787b4e1dca..8d2a477f8b 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
+ FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
+ FBSET_DEPENDENCIES = host-bison host-flex
+ FBSET_LICENSE = GPL-2.0
++FBSET_LICENSE_FILES = fbset.c
  
- define HOST_WAF_EXTRACT_CMDS
- 	$(INSTALL) -D -m 0755 $(HOST_WAF_DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
+ define FBSET_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
