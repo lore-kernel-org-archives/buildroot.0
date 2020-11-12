@@ -1,75 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Nov 2020 14:34:04 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/linux-backports: bump
- version to 5.8
-In-Reply-To: <20201112120155.333290-2-ju.o@free.fr>
-References: <20201111162208.362275-1-ju.o@free.fr>
- <20201112120155.333290-1-ju.o@free.fr> <20201112120155.333290-2-ju.o@free.fr>
-Message-ID: <87lff6bvpf.fsf@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 13:44:08 +0100
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
+ 16.14.1
+Message-ID: <20201112124409.21779-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Fixes the following security issues:
 
-On Thu, Nov 12 2020, Julien Olivain wrote:
-> Attempting to compile this package with newer Kernel version (e.g. v5.4)
-> fails with message:
->
->    Generating local configuration database from kernel ...Kernel version parse failed!
->
-> Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
-> rather old and beat the very purpose of having newer drivers in older
-> kernels.
->
-> Note that since backports tag v4.14-rc4-1, the requirement on minimal
-> kernel version changed from 3.0 to 3.10. See commit [1].
+- AST-2020-001: Remote crash in res_pjsip_session
+  Upon receiving a new SIP Invite, Asterisk did not return the created
+  dialog locked or referenced.
 
-The help text of BR2_PACKAGE_LINUX_BACKPORTS in Config.in should be
-updated.
+- AST-2020-002: Outbound INVITE loop on challenge with different nonce
+  If Asterisk is challenged on an outbound INVITE and the nonce is changed
+  in each response, Asterisk will continually send INVITEs in a loop.  This
+  causes Asterisk to consume more and more memory since the transaction will
+  never terminate (even if the call is hung up), ultimately leading to a
+  restart or shutdown of Asterisk.  Outbound authentication must be
+  configured on the endpoint for this to occur.
 
-baruch
+For details, see the announcement:
+https://www.asterisk.org/asterisk-news/asterisk-13-37-1-16-14-1-17-8-1-18-0-1-and-16-8-cert5-now-available-security/
 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
->
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
-> Changes v1 -> v2:
->   - Add a note about the change in minimal kernel version (3.0 -> 3.10).
-> ---
->  package/linux-backports/linux-backports.hash | 4 ++--
->  package/linux-backports/linux-backports.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-> index f39bc2ed27..0d60955b02 100644
-> --- a/package/linux-backports/linux-backports.hash
-> +++ b/package/linux-backports/linux-backports.hash
-> @@ -1,4 +1,4 @@
-> -# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
-> -sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
-> +# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
-> +sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
->  # Locally computed
->  sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-> diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-> index 030d7a2864..7e725147dc 100644
-> --- a/package/linux-backports/linux-backports.mk
-> +++ b/package/linux-backports/linux-backports.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
-> +LINUX_BACKPORTS_VERSION_MAJOR = 5.8
->  LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
->  LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
->  LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 1bb5da7d06..bd83636271 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  5ebefa6387f89695361b8c105e2ad7ee6381f87a99012aeb85b886ddf6d518ac  asterisk-16.13.0.tar.gz
++sha256  226eaef400d2d335ce29d7b3c8aca8dfdfc5e854c215e0c47615c095ced12171  asterisk-16.14.1.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index b9e2b80dd5..fb3eb6ec8a 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 16.13.0
++ASTERISK_VERSION = 16.14.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.20.1
