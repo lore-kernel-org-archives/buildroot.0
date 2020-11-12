@@ -1,44 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 20:01:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/argp-standalone: add license file
-Message-ID: <20201112190117.430827-1-fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 20:06:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bandwidthd: add license file
+Message-ID: <20201112190610.432032-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use argp.h as the license file and, while at it, update indentation in
-hash file
+Use README as the license file until upstream provides one:
+https://github.com/nroach44/bandwidthd/issues/2
+
+While at it, also update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/argp-standalone/argp-standalone.hash | 5 ++++-
- package/argp-standalone/argp-standalone.mk   | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/bandwidthd/bandwidthd.hash | 3 ++-
+ package/bandwidthd/bandwidthd.mk   | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
-index 5798214406..c780f9e53f 100644
---- a/package/argp-standalone/argp-standalone.hash
-+++ b/package/argp-standalone/argp-standalone.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
-+sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
-+
-+# License file
-+sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
-diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
-index 977b9547b6..651bc400f4 100644
---- a/package/argp-standalone/argp-standalone.mk
-+++ b/package/argp-standalone/argp-standalone.mk
-@@ -8,6 +8,7 @@ ARGP_STANDALONE_VERSION = 1.3
- ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
- ARGP_STANDALONE_INSTALL_STAGING = YES
- ARGP_STANDALONE_LICENSE = LGPL-2.0+
-+ARGP_STANDALONE_LICENSE_FILES = argp.h
+diff --git a/package/bandwidthd/bandwidthd.hash b/package/bandwidthd/bandwidthd.hash
+index c73584de2e..5b1bbce978 100644
+--- a/package/bandwidthd/bandwidthd.hash
++++ b/package/bandwidthd/bandwidthd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 0270d0def6cc53c8d47d59a9dd093d51fbca1620adeef85c15e35a32010e26ab  bandwidthd-2.0.1-auto-r11.tar.gz
++sha256  0270d0def6cc53c8d47d59a9dd093d51fbca1620adeef85c15e35a32010e26ab  bandwidthd-2.0.1-auto-r11.tar.gz
++sha256  58573c40770e0c0b91f3eef8192952832321a344f66a4fb2d966095cbbfc86c2  README
+diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
+index 990d8c5d8f..88222a910e 100644
+--- a/package/bandwidthd/bandwidthd.mk
++++ b/package/bandwidthd/bandwidthd.mk
+@@ -10,6 +10,7 @@ BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,v$(BANDWIDTHD_VERSION))
+ # Specified as "any version of the GPL that is current as of your
+ # download" by upstream.
+ BANDWIDTHD_LICENSE = GPL
++BANDWIDTHD_LICENSE_FILES = README
  
- ARGP_STANDALONE_CONF_ENV = \
- 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
+ BANDWIDTHD_DEPENDENCIES = gd libpng libpcap host-pkgconf
+ 
 -- 
 2.28.0
