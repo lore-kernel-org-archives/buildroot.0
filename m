@@ -1,122 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Nov 2020 22:21:25 +0100
-Subject: [Buildroot] [git commit branch/next] package/libcap: fix regression
- for static linking issue
-Message-ID: <20201117203828.55AA17FD00@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 22:32:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/wpewebkit: fix compile
+ without video support
+Message-ID: <20201117203828.B84767FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7540fbe877d48d75113338430ce3304a00a82cb1
+commit: https://git.buildroot.net/buildroot/commit/?id=6e5f672139011570a9e099c6bc0d76d1b81e1e36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-9c13e02c35c74eca56e69f2bbfde452b51860f5e already fixed the static linking
-issue for host-libcap on some distros (e.g. on Fedora32 and openSUSE).
-
-This regression was introduced by 8d38eb052e7006b6e74e9453351d7f245144481e.
-
-An upstream patch [1] is added to address this problem [2].
-
 Fixes:
-Bug 13296
 
-[1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=210135
+  - https://bugs.busybox.net/show_bug.cgi?id=13306
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Dr I J Ormshaw <ian_ormshaw@waters.com>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Tested-by: Ian Ormshaw <ian_ormshaw@waters.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+      .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ???class WebCore::Settings??? has no member named ???setGenericCueAPIEnabled???; did you mean ???setBeaconAPIEnabled????
+                   page->settings().setGenericCueAPIEnabled(enabled);
+                                    ^~~~~~~~~~~~~~~~~~~~~~~
+                                    setBeaconAPIEnabled
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-building-progs-tcapsh-static-to-sudotest.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ ...InjectedBundle-fix-compile-without-video-.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch b/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch
+diff --git a/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch b/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
 new file mode 100644
-index 0000000000..856b7b1bbf
+index 0000000000..e684c4e3e7
 --- /dev/null
-+++ b/package/libcap/0001-Migrate-building-progs-tcapsh-static-to-sudotest.patch
-@@ -0,0 +1,79 @@
-+From 9b1c003748d4df78416d50fce139f0875224440b Mon Sep 17 00:00:00 2001
-+From: "Andrew G. Morgan" <morgan@kernel.org>
-+Date: Tue, 10 Nov 2020 20:47:45 -0800
-+Subject: [PATCH] Migrate building progs/tcapsh-static to sudotest
++++ b/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
+@@ -0,0 +1,42 @@
++From 1ca7dea56db25969844699bc82fe7c78cb3d2eda Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 10 Nov 2020 23:06:45 +0100
++Subject: [PATCH] WebProcess/InjectedBundle: fix compile without video support
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+This addresses:
++Fixes:
 +
-+  https://bugzilla.kernel.org/show_bug.cgi?id=210135
-+  https://bugs.busybox.net/show_bug.cgi?id=13296
++  .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ???class WebCore::Settings??? has no member named ???setGenericCueAPIEnabled???; did you mean ???setBeaconAPIEnabled????
++               page->settings().setGenericCueAPIEnabled(enabled);
++                                ^~~~~~~~~~~~~~~~~~~~~~~
++                                setBeaconAPIEnabled
 +
-+Some notes on expectations:
-+
-+When building DYNAMIC=yes folk want to avoid depending on a
-+static libc.a file in their build tree. The best we can do is
-+to move building static test tool objects to sudotest.
-+
-+  make DYNAMIC=yes clean all test
-+
-+will build the progs binaries and run the tests with all dynamic
-+linking. It will, however, build the libcap.a etc libraries too
-+even though they are not used for linking.
-+
-+  make DYNAMIC=no clean all test
-+
-+will build the progs binaries and run the tests with all static
-+linking. It will, however, build the libcap.so etc libraries too
-+even though they are not used for linking.
-+
-+  make SHARED=no clean all test
-+
-+will build and link progs and test binaries statically against
-+libcap.a. No shared libraries (libcap.so etc) will be built.
-+
-+In all cases, whether linked against or not, libcap.a is built.
-+
-+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
-+[Patch taken from upstream:
-+https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=9b1c003748d4df78416d50fce139f0875224440b]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ tests/Makefile | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/tests/Makefile b/tests/Makefile
-+index fc39fee..1e7039d 100644
-+--- a/tests/Makefile
-++++ b/tests/Makefile
-+@@ -17,13 +17,13 @@ install: all
++diff --git a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
++index 61326f2e..d7776997 100644
++--- a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
+++++ b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
++@@ -236,12 +236,14 @@ void InjectedBundle::overrideBoolPreferenceForTestRunner(WebPageGroupProxy* page
++         RuntimeEnabledFeatures::sharedFeatures().setWebRTCMDNSICECandidatesEnabled(enabled);
++ #endif
 + 
-+ ifeq ($(DYNAMIC),yes)
-+ LINKEXTRA=-Wl,-rpath,../libcap
-+-DEPS=../libcap/libcap.so ../progs/tcapsh-static
-++DEPS=../libcap/libcap.so
-+ ifeq ($(PTHREADS),yes)
-+ DEPS += ../libcap/libpsx.so
-+ endif
-+ else
-+ LDFLAGS += --static
-+-DEPS=../libcap/libcap.a ../progs/tcapsh-static
-++DEPS=../libcap/libcap.a
-+ ifeq ($(PTHREADS),yes)
-+ DEPS +=  ../libcap/libpsx.a
-+ endif
-+@@ -71,10 +71,10 @@ libcap_psx_test: libcap_psx_test.c $(DEPS)
-+ 	$(CC) $(CFLAGS) $(IPATH) $< -o $@ $(LINKEXTRA) $(LIBCAPLIB) $(LIBPSXLIB) $(LDFLAGS)
+++#if ENABLE(VIDEO)
++     if (preference == "WebKitGenericCueAPIEnabled") {
++         WebPreferencesStore::overrideBoolValueForKey(WebPreferencesKey::genericCueAPIEnabledKey(), enabled);
++         for (auto* page : pages)
++             page->settings().setGenericCueAPIEnabled(enabled);
++         return;
++     }
+++#endif
 + 
-+ # privileged
-+-run_libcap_launch_test: libcap_launch_test noop
-++run_libcap_launch_test: libcap_launch_test noop ../progs/tcapsh-static
-+ 	sudo ./libcap_launch_test
-+ 
-+-run_libcap_psx_launch_test: libcap_psx_launch_test
-++run_libcap_psx_launch_test: libcap_psx_launch_test ../progs/tcapsh-static
-+ 	sudo ./libcap_psx_launch_test
-+ 
-+ libcap_launch_test: libcap_launch_test.c $(DEPS)
++ #if ENABLE(GPU_PROCESS)
++     if (preference == "WebKitUseGPUProcessForMedia" || preference == "WebKitCaptureAudioInGPUProcessEnabledKey") {
 +-- 
-+2.20.1
++2.29.2
 +
