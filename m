@@ -1,53 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 19:46:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpm: disable openmp
-Message-ID: <20201112184600.427081-1-fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 20:01:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/argp-standalone: add license file
+Message-ID: <20201112190117.430827-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable openmp to fix a build failure with codesourcery toolchain that
-doesn't have OpenMP >= 4.5 indeed upstream doesn't want to remove the
-build failure if the user provides --enable-openmp and OpenMP is < 4.5:
-https://github.com/rpm-software-management/rpm/pull/1433
-
-Fixes:
- - http://autobuild.buildroot.org/results/05dd945d24e8684aad6a2343ba7f6f8a7cea8349
+Use argp.h as the license file and, while at it, update indentation in
+hash file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rpm/rpm.mk | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ package/argp-standalone/argp-standalone.hash | 5 ++++-
+ package/argp-standalone/argp-standalone.mk   | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 661409294b..b6c76df216 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -20,7 +20,10 @@ RPM_DEPENDENCIES = \
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
+diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
+index 5798214406..c780f9e53f 100644
+--- a/package/argp-standalone/argp-standalone.hash
++++ b/package/argp-standalone/argp-standalone.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++
++# License file
++sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 977b9547b6..651bc400f4 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -8,6 +8,7 @@ ARGP_STANDALONE_VERSION = 1.3
+ ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
+ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
++ARGP_STANDALONE_LICENSE_FILES = argp.h
  
-+# Disable openmp as it fails to build with OpenMP < 4.5:
-+# https://github.com/rpm-software-management/rpm/pull/1433
- RPM_CONF_OPTS = \
-+	--disable-openmp \
- 	--disable-python \
- 	--disable-rpath \
- 	--with-external-db \
-@@ -106,12 +109,6 @@ else
- RPM_CONF_OPTS += --disable-zstd
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
--RPM_CONF_OPTS += --enable-openmp
--else
--RPM_CONF_OPTS += --disable-openmp
--endif
--
- # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
- RPM_CONF_ENV = \
- 	ac_cv_prog_cc_c99='-std=gnu99' \
+ ARGP_STANDALONE_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
 -- 
 2.28.0
