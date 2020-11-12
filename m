@@ -1,50 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Nov 2020 20:34:45 +0200
-Subject: [Buildroot] [PATCH v2] package/luajit: drop static build handling
-Message-ID: <790909caf28e2610e07b358113168deee7ff87c3.1605206085.git.baruch@tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 19:46:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rpm: disable openmp
+Message-ID: <20201112184600.427081-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static build of luajit is disabled since commit b2e8f28efac
-("package/luajit: disable for static build"). Remove the related
-BUILDMODE handling as well.
+Disable openmp to fix a build failure with codesourcery toolchain that
+doesn't have OpenMP >= 4.5 indeed upstream doesn't want to remove the
+build failure if the user provides --enable-openmp and OpenMP is < 4.5:
+https://github.com/rpm-software-management/rpm/pull/1433
 
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: fix commit title
----
- package/luajit/luajit.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/05dd945d24e8684aad6a2343ba7f6f8a7cea8349
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 68e6af4f5e7c..defa21dd3ffd 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -17,12 +17,6 @@ ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
- LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_LUA52COMPAT
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/rpm/rpm.mk | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 661409294b..b6c76df216 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -20,7 +20,10 @@ RPM_DEPENDENCIES = \
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+ 
++# Disable openmp as it fails to build with OpenMP < 4.5:
++# https://github.com/rpm-software-management/rpm/pull/1433
+ RPM_CONF_OPTS = \
++	--disable-openmp \
+ 	--disable-python \
+ 	--disable-rpath \
+ 	--with-external-db \
+@@ -106,12 +109,6 @@ else
+ RPM_CONF_OPTS += --disable-zstd
  endif
  
--ifeq ($(BR2_STATIC_LIBS),y)
--LUAJIT_BUILDMODE = static
+-ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
+-RPM_CONF_OPTS += --enable-openmp
 -else
--LUAJIT_BUILDMODE = dynamic
+-RPM_CONF_OPTS += --disable-openmp
 -endif
 -
- # The luajit build procedure requires the host compiler to have the
- # same bitness as the target compiler. Therefore, on a x86 build
- # machine, we can't build luajit for x86_64, which is checked in
-@@ -50,7 +44,7 @@ define LUAJIT_BUILD_CMDS
- 		HOST_CC="$(LUAJIT_HOST_CC)" \
- 		HOST_CFLAGS="$(HOST_CFLAGS)" \
- 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
--		BUILDMODE=$(LUAJIT_BUILDMODE) \
-+		BUILDMODE=dynamic \
- 		XCFLAGS=$(LUAJIT_XCFLAGS) \
- 		-C $(@D) amalg
- endef
+ # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
+ RPM_CONF_ENV = \
+ 	ac_cv_prog_cc_c99='-std=gnu99' \
 -- 
 2.28.0
