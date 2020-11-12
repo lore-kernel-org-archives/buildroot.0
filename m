@@ -1,26 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:57:07 +0100
-Subject: [Buildroot] [PATCH] package/apparmor: fix permission bits for
- apparmor.service
-In-Reply-To: <46b899ee9f607f3d03a2881b83d355751cc07f64.1605212315.git.stefan@agner.ch>
- (Stefan Agner's message of "Thu, 12 Nov 2020 21:21:34 +0100")
-References: <46b899ee9f607f3d03a2881b83d355751cc07f64.1605212315.git.stefan@agner.ch>
-Message-ID: <875z6ajnto.fsf@dell.be.48ers.dk>
+Date: Thu, 12 Nov 2020 21:57:25 +0100
+Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
+ 16.14.1
+In-Reply-To: <20201112124409.21779-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 12 Nov 2020 13:44:08 +0100")
+References: <20201112124409.21779-1-peter@korsgaard.com>
+Message-ID: <871rgyjnt6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Agner <stefan@agner.ch> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Avoid setting executable bits for apparmor.service. This gets rid of a
- > corresponding warning during installation:
- >   Configuration file ../target/usr/lib/systemd/system/apparmor.service
- >   is marked executable. Please remove executable permission bits.
- >   Proceeding anyway.
+ > Fixes the following security issues:
+ > - AST-2020-001: Remote crash in res_pjsip_session
+ >   Upon receiving a new SIP Invite, Asterisk did not return the created
+ >   dialog locked or referenced.
 
- > Signed-off-by: Stefan Agner <stefan@agner.ch>
+ > - AST-2020-002: Outbound INVITE loop on challenge with different nonce
+ >   If Asterisk is challenged on an outbound INVITE and the nonce is changed
+ >   in each response, Asterisk will continually send INVITEs in a loop.  This
+ >   causes Asterisk to consume more and more memory since the transaction will
+ >   never terminate (even if the call is hung up), ultimately leading to a
+ >   restart or shutdown of Asterisk.  Outbound authentication must be
+ >   configured on the endpoint for this to occur.
+
+ > For details, see the announcement:
+ > https://www.asterisk.org/asterisk-news/asterisk-13-37-1-16-14-1-17-8-1-18-0-1-and-16-8-cert5-now-available-security/
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
