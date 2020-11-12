@@ -1,90 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 22:03:20 +0100
-Subject: [Buildroot] [git commit] package/busybox: Fix hwclock for glibc
- 2.31+
-Message-ID: <20201112205658.2D83183BED@busybox.osuosl.org>
+Date: Thu, 12 Nov 2020 21:57:20 +0100
+Subject: [Buildroot] [git commit] package/asterisk: security bump to version
+ 16.14.1
+Message-ID: <20201112205658.23E0E81680@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b4b9289aac5b6d77a8c8e4644326dafe88bc335
+commit: https://git.buildroot.net/buildroot/commit/?id=339d3e82e8e121204523829bb0900fce4b99c923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pick the below patch from upstream, in order to fix
-'settimeofday: Invalid argument' introduced by using glibc v2.31+.
-(busybox hasn't tagged a new version since).
+Fixes the following security issues:
 
-See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
+- AST-2020-001: Remote crash in res_pjsip_session
+  Upon receiving a new SIP Invite, Asterisk did not return the created
+  dialog locked or referenced.
 
-Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+- AST-2020-002: Outbound INVITE loop on challenge with different nonce
+  If Asterisk is challenged on an outbound INVITE and the nonce is changed
+  in each response, Asterisk will continually send INVITEs in a loop.  This
+  causes Asterisk to consume more and more memory since the transaction will
+  never terminate (even if the call is hung up), ultimately leading to a
+  restart or shutdown of Asterisk.  Outbound authentication must be
+  configured on the endpoint for this to occur.
+
+For details, see the announcement:
+https://www.asterisk.org/asterisk-news/asterisk-13-37-1-16-14-1-17-8-1-18-0-1-and-16-8-cert5-now-available-security/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-hwclock-Fix-settimeofday-for-glibc-v2.31.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-new file mode 100644
-index 0000000000..cab346acf3
---- /dev/null
-+++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-@@ -0,0 +1,58 @@
-+From 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b Mon Sep 17 00:00:00 2001
-+From: Eddie James <eajames@linux.ibm.com>
-+Date: Mon, 10 Aug 2020 09:59:02 -0500
-+Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
-+
-+The glibc implementation changed for settimeofday, resulting in "invalid
-+argument" error when attempting to set both timezone and time with a single
-+call. Fix this by calling settimeofday twice
-+
-+Signed-off-by: Eddie James <eajames@linux.ibm.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ util-linux/hwclock.c | 14 +++++++++++---
-+ 1 file changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
-+index dc97d8fb4..2479e7416 100644
-+--- a/util-linux/hwclock.c
-++++ b/util-linux/hwclock.c
-+@@ -122,16 +122,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
-+ 	struct timeval tv;
-+ 	struct timezone tz;
-+ 
-+-	tz.tz_minuteswest = timezone/60;
-++	tz.tz_minuteswest = timezone / 60;
-+ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
-+ 	 * daylight!=0 means "this timezone has some DST
-+ 	 * during the year", not "DST is in effect now".
-+ 	 */
-+ 	tz.tz_dsttime = 0;
-+ 
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++
-+ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
-+ 	tv.tv_usec = 0;
-+-	if (settimeofday(&tv, &tz))
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+@@ -283,7 +287,11 @@ static void set_system_clock_timezone(int utc)
-+ 	gettimeofday(&tv, NULL);
-+ 	if (!utc)
-+ 		tv.tv_sec += tz.tz_minuteswest * 60;
-+-	if (settimeofday(&tv, &tz))
-++
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 1bb5da7d06..bd83636271 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  5ebefa6387f89695361b8c105e2ad7ee6381f87a99012aeb85b886ddf6d518ac  asterisk-16.13.0.tar.gz
++sha256  226eaef400d2d335ce29d7b3c8aca8dfdfc5e854c215e0c47615c095ced12171  asterisk-16.14.1.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index b9e2b80dd5..fb3eb6ec8a 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 16.13.0
++ASTERISK_VERSION = 16.14.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
