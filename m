@@ -1,42 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 20:10:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fbset: add license file
-Message-ID: <20201112191042.433763-1-fontaine.fabrice@gmail.com>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Thu, 12 Nov 2020 20:04:55 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCH_2/2=5D_package/perf=3A_if_zs?=
+ =?iso-8859-1?q?td_is_enabled=2C_depend_on_it?=
+In-Reply-To: <20201111160008.2010373-2-sir.venceslas@gmail.com>
+References: <20201111160008.2010373-1-sir.venceslas@gmail.com>
+ <20201111160008.2010373-2-sir.venceslas@gmail.com>
+Message-ID: <563b42d1-ec08-41be-bf94-29853e7e2cd3@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use fbset.c as the license file and, while at it, also update
-indentation in hash file (two spaces)
+On st?eda 11. listopadu 2020 17:00:08 CET, V?clav Kubern?t wrote:
+> Enables the "-z" flag.
+>
+> Signed-off-by: V?clav Kubern?t <sir.venceslas@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/fbset/fbset.hash | 3 ++-
- package/fbset/fbset.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+This makes sense when you have limited space in your tmpfs which happens to 
+be the only writable space.
 
-diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
-index ca8cc6d1f0..5d9785d90a 100644
---- a/package/fbset/fbset.hash
-+++ b/package/fbset/fbset.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
-+sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
-+sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 787b4e1dca..8d2a477f8b 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
- FBSET_DEPENDENCIES = host-bison host-flex
- FBSET_LICENSE = GPL-2.0
-+FBSET_LICENSE_FILES = fbset.c
- 
- define FBSET_BUILD_CMDS
- 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--- 
-2.28.0
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+
+(disclaimer: I'm Vaclav's co-worker)
+
+> ---
+>  package/linux-tools/linux-tool-perf.mk.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/linux-tools/linux-tool-perf.mk.in 
+> b/package/linux-tools/linux-tool-perf.mk.in
+> index e54f019888..efa747cf8d 100644
+> --- a/package/linux-tools/linux-tool-perf.mk.in
+> +++ b/package/linux-tools/linux-tool-perf.mk.in
+> @@ -69,6 +69,10 @@ else
+>  PERF_MAKE_FLAGS += NO_LIBAUDIT=1
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_ZSTD),y)
+> +PERF_DEPENDENCIES += zstd
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+>  PERF_DEPENDENCIES += libunwind
+>  else
