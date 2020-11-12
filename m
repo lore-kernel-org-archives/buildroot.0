@@ -1,41 +1,24 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 12 Nov 2020 21:53:24 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/linux-backports: use flex
- and bison to generate kconfig parser
-In-Reply-To: <20201112120155.333290-1-ju.o@free.fr>
-References: <20201111162208.362275-1-ju.o@free.fr>
- <20201112120155.333290-1-ju.o@free.fr>
-Message-ID: <20201112205324.GA60815@pevik>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 21:53:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fbset: add license file
+In-Reply-To: <20201112191042.433763-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 12 Nov 2020 20:10:42 +0100")
+References: <20201112191042.433763-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eekyjnzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Upstream backports package does not define the LEX/YACC Makefile
-> variables, contrary to the Kernel which is defining those in [1]. The
-> default "lex" and "yacc" are then used. On some systems, "yacc" is
-> Berkeley Yacc. Kconfig parser files are using non-Posix Bison
-> constructs.
+ > Use fbset.c as the license file and, while at it, also update
+ > indentation in hash file (two spaces)
 
-> Attempting to generate the parser with byacc fails with error:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
->     yacc: e - line 97 of "zconf.y", syntax error
->     %destructor {
->     ^
+Committed, thanks.
 
-> This patch defines the LEX and YACC Makefile variable to use flex and
-> bison, to fix this issue. The host-bison and host-flex dependencies are
-> added only if the host does not have them, following the same logic of
-> the Kernel.
-
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
-
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-
-Thank you!
-
-Kind regards,
-Petr
+-- 
+Bye, Peter Korsgaard
