@@ -1,77 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 22:32:38 +0100
-Subject: [Buildroot] [git commit] package/python3: uClibc-ng doesn't set
- errno when encryption method is not available
-Message-ID: <20201112211901.D02DA80E57@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 12 Nov 2020 22:37:34 +0100
+Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without
+ video support
+In-Reply-To: <87sg9ei86d.fsf@dell.be.48ers.dk>
+References: <20201110221629.7011-1-ps.report@gmx.net>
+ <87sg9ei86d.fsf@dell.be.48ers.dk>
+Message-ID: <20201112223734.007ff25d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5333ada9713f88c8ff87a8ce1d6f2f99ded56712
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-Since commit [1] in cpython, an exception is raised when an encryption method
-is not available. This eception is handled only if errno is set to EINVAL by
-crypt() but uClibc-ng doesn't set errno in crypt() [2].
+On Thu, 12 Nov 2020 22:20:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:  
+> 
+>  > Fixes:
+>  >   - https://bugs.busybox.net/show_bug.cgi?id=13306  
+> 
+>  >       .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ?class WebCore::Settings? has no member named ?setGenericCueAPIEnabled?; did you mean ?setBeaconAPIEnabled??
+>  >  page-> settings().setGenericCueAPIEnabled(enabled);
+>  >                                     ^~~~~~~~~~~~~~~~~~~~~~~
+>  >                                     setBeaconAPIEnabled  
+> 
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> 
+> Committed, thanks. Don't forget to submit the patch upstream.
+> 
 
-[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
+Patch seems upstream already superseded by [1] 'Remove remaining alternative
+preference setting mechanisms from LayoutTests' (removing the code)...
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Clibc-ng-doesn-t-set-errno-when-encryptio.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Regards,
+Peter
 
-diff --git a/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-new file mode 100644
-index 0000000000..880277eb1d
---- /dev/null
-+++ b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-@@ -0,0 +1,40 @@
-+From 3c83eedcc2df3ecf6c4a17953ca24dff60c1378e Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 12 Nov 2020 00:16:18 +0100
-+Subject: [PATCH] lib/crypt: uClibc-ng doesn't set errno when encryption method
-+ is not available
-+
-+Since commit [1] in cpython, an exception is raised when an encryption method
-+is not available. This eception is handled only if errno is set to EINVAL by
-+crypt() but uClibc-ng doesn't set errno in crypt() [2].
-+
-+Fixes:
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
-+
-+[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-+[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ Lib/crypt.py | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Lib/crypt.py b/Lib/crypt.py
-+index 33dbc46bb3..4692a5270c 100644
-+--- a/Lib/crypt.py
-++++ b/Lib/crypt.py
-+@@ -94,7 +94,9 @@ def _add_method(name, *args, rounds=None):
-+         result = crypt('', salt)
-+     except OSError as e:
-+         # Not all libc libraries support all encryption methods.
-+-        if e.errno == errno.EINVAL:
-++        # Not all libc libraries set errno when encryption method is not
-++        # available.
-++        if e.errno == errno.EINVAL or e.errno == 0:
-+             return False
-+         raise
-+     if result and len(result) == method.total_size:
-+-- 
-+2.25.4
-+
+
+[1] https://trac.webkit.org/changeset?reponame=webkit&new=269236%40trunk%2FSource%2FWebKit%2FWebProcess%2FInjectedBundle%2FInjectedBundle.cpp&old=269111%40trunk%2FSource%2FWebKit%2FWebProcess%2FInjectedBundle%2FInjectedBundle.cpp
