@@ -1,97 +1,48 @@
-From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-Date: Thu, 12 Nov 2020 13:48:44 -0300
-Subject: [Buildroot] [PATCH 1/1] package/busybox: Fix hwclock for glibc 2.31+
-Message-ID: <20201112164844.18731-1-klaus@linux.vnet.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Nov 2020 20:33:16 +0200
+Subject: [Buildroot] [PATCH] package/luajit: drop
+Message-ID: <344b3dabebc5502a44fbe4309bf786cee77a89cb.1605205996.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pick the below patch from upstream, in order to fix
-'settimeofday: Invalid argument' introduced by using glibc v2.31+.
-(busybox hasn't tagged a new version since).
+Static build of luajit is disabled since commit b2e8f28efac
+("package/luajit: disable for static build"). Remove the related
+BUILDMODE handling as well.
 
-See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
-
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-  commit 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b
-  Author: Eddie James <eajames@linux.ibm.com>
+ package/luajit/luajit.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-      hwclock: Fix settimeofday for glibc v2.31+
----
-
-Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-
-Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
----
- ...ock-Fix-settimeofday-for-glibc-v2.31.patch | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-
-diff --git a/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-new file mode 100644
-index 0000000000..98a0b01430
---- /dev/null
-+++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-@@ -0,0 +1,58 @@
-+From a4faa9af79c2a0f2b501c0fd507842e4966fc23b Mon Sep 17 00:00:00 2001
-+From: Eddie James <eajames@linux.ibm.com>
-+Date: Mon, 10 Aug 2020 09:59:02 -0500
-+Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
-+
-+The glibc implementation changed for settimeofday, resulting in "invalid
-+argument" error when attempting to set both timezone and time with a single
-+call. Fix this by calling settimeofday twice
-+
-+Signed-off-by: Eddie James <eajames@linux.ibm.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ util-linux/hwclock.c | 14 +++++++++++---
-+ 1 file changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
-+index dc97d8fb4..2479e7416 100644
-+--- a/util-linux/hwclock.c
-++++ b/util-linux/hwclock.c
-+@@ -122,16 +122,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
-+ 	struct timeval tv;
-+ 	struct timezone tz;
-+ 
-+-	tz.tz_minuteswest = timezone/60;
-++	tz.tz_minuteswest = timezone / 60;
-+ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
-+ 	 * daylight!=0 means "this timezone has some DST
-+ 	 * during the year", not "DST is in effect now".
-+ 	 */
-+ 	tz.tz_dsttime = 0;
-+ 
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++
-+ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
-+ 	tv.tv_usec = 0;
-+-	if (settimeofday(&tv, &tz))
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+@@ -283,7 +287,11 @@ static void set_system_clock_timezone(int utc)
-+ 	gettimeofday(&tv, NULL);
-+ 	if (!utc)
-+ 		tv.tv_sec += tz.tz_minuteswest * 60;
-+-	if (settimeofday(&tv, &tz))
-++
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 68e6af4f5e7c..defa21dd3ffd 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -17,12 +17,6 @@ ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
+ LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_LUA52COMPAT
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LUAJIT_BUILDMODE = static
+-else
+-LUAJIT_BUILDMODE = dynamic
+-endif
+-
+ # The luajit build procedure requires the host compiler to have the
+ # same bitness as the target compiler. Therefore, on a x86 build
+ # machine, we can't build luajit for x86_64, which is checked in
+@@ -50,7 +44,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+-		BUILDMODE=$(LUAJIT_BUILDMODE) \
++		BUILDMODE=dynamic \
+ 		XCFLAGS=$(LUAJIT_XCFLAGS) \
+ 		-C $(@D) amalg
+ endef
 -- 
-2.17.1
+2.28.0
