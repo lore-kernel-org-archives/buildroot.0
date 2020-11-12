@@ -1,44 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 7 Nov 2020 14:19:01 +0100
-Subject: [Buildroot] [git commit branch/next] package/lzlib: add license file
-Message-ID: <20201117203825.952BD8633A@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Nov 2020 21:55:11 +0100
+Subject: [Buildroot] [git commit branch/next] package/waf: add license
+Message-ID: <20201117203828.86F027FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afdaeab7290e8226b47d712290f88a664c07bcda
+commit: https://git.buildroot.net/buildroot/commit/?id=8c77548fa93e159572e71d4cb2208ab0706aea11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add lzlib.c as the license file and, while at it, update indentation to
-two spaces
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lzlib/lzlib.hash | 3 ++-
- package/lzlib/lzlib.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/waf/waf.hash | 1 +
+ package/waf/waf.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
-index f983862e41..4bb4c52c8c 100644
---- a/package/lzlib/lzlib.hash
-+++ b/package/lzlib/lzlib.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb lzlib-0.4.3.tar.gz
-+sha256  cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb  lzlib-0.4.3.tar.gz
-+sha256  f817d4a37077e94e9adf379f46ba5cc0b68775d7add2bbd5b2ca68ba140ad5bb  lzlib.c
-diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
-index f468a1c839..74624d5019 100644
---- a/package/lzlib/lzlib.mk
-+++ b/package/lzlib/lzlib.mk
-@@ -8,6 +8,7 @@ LZLIB_VERSION = 0.4.3
- LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
- LZLIB_DEPENDENCIES = lua zlib
- LZLIB_LICENSE = MIT
-+LZLIB_LICENSE_FILES = lzlib.c
- LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
- 	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 15db32f384..afca0f31bf 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,3 +1,4 @@
+ # Locally computed
+ sha1  92212071a63ce38fdfd69fb8332f04e84d1f6635  waf-2.0.20
+ sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf-2.0.20
++sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index 56b6d9e033..9c5e72d9eb 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -7,6 +7,8 @@
+ WAF_VERSION = 2.0.20
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
++WAF_LICENSE = BSD-3-Clause
++WAF_LICENSE_FILES = waf
  
+ define HOST_WAF_EXTRACT_CMDS
+ 	$(INSTALL) -D -m 0755 $(HOST_WAF_DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
