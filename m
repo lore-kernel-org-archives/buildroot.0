@@ -1,76 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 12 Nov 2020 00:34:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/python3: uClibc-ng doesn't set
- errno when encryption method is not available
-Message-ID: <20201111233429.2245255-1-romain.naour@gmail.com>
+From: Garret Kelly <garret.kelly@gmail.com>
+Date: Wed, 11 Nov 2020 21:53:48 -0500
+Subject: [Buildroot] Proper Out-of-tree Devicetree Source
+Message-ID: <CAE_FxYsuX33=WuESanaB01YkD_DU=z+Q1hYr=Tp0kiXgHGtt4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit [1] in cpython, an exception is raised when an encryption method
-is not available. This eception is handled only if errno is set to EINVAL by
-crypt() but uClibc-ng doesn't set errno in crypt() [2].
+Hi buildroot!
+I'm trying to figure out the right way to use an out-of-tree device
+tree (for uboot, to begin with, but definitely also TF-A and Linux).
+So far, I've found that setting BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
+results in the files named there being copied into the arch/arm/dts
+directory in the uboot build directory. However, these files aren't
+referenced by the arch/arm/dts/Makefile, and therefore the DTBs are
+never built.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+I found that I could add "dtb-y=whatever.dtb" to
+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS, which does result in the DTS getting
+compiled, but seems a little hacky. Not that I mind.
 
-[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
+I was thinking about adding the dtb-y inclusion trick to uboot.mk, but
+I realized as I was doing this that "DTS source files" probably also
+implies .dtsi files, and so those can't be added. I suppose I could
+filter out non-.dts files from being turned into targets, that might
+be the most ergonomic way.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...-ng-doesn-t-set-errno-when-encryptio.patch | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
+Kind of as an aside: I then started wondering if there shouldn't be
+something like BR2_TARGET_DTS_SOURCE which is used to automatically
+configure uboot, TF-A, and Linux devicetree configurations so that you
+can easily share a single set of devicetree source among the
+packages...
 
-diff --git a/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-new file mode 100644
-index 0000000000..880277eb1d
---- /dev/null
-+++ b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-@@ -0,0 +1,40 @@
-+From 3c83eedcc2df3ecf6c4a17953ca24dff60c1378e Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 12 Nov 2020 00:16:18 +0100
-+Subject: [PATCH] lib/crypt: uClibc-ng doesn't set errno when encryption method
-+ is not available
-+
-+Since commit [1] in cpython, an exception is raised when an encryption method
-+is not available. This eception is handled only if errno is set to EINVAL by
-+crypt() but uClibc-ng doesn't set errno in crypt() [2].
-+
-+Fixes:
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
-+
-+[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-+[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ Lib/crypt.py | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Lib/crypt.py b/Lib/crypt.py
-+index 33dbc46bb3..4692a5270c 100644
-+--- a/Lib/crypt.py
-++++ b/Lib/crypt.py
-+@@ -94,7 +94,9 @@ def _add_method(name, *args, rounds=None):
-+         result = crypt('', salt)
-+     except OSError as e:
-+         # Not all libc libraries support all encryption methods.
-+-        if e.errno == errno.EINVAL:
-++        # Not all libc libraries set errno when encryption method is not
-++        # available.
-++        if e.errno == errno.EINVAL or e.errno == 0:
-+             return False
-+         raise
-+     if result and len(result) == method.total_size:
-+-- 
-+2.25.4
-+
--- 
-2.25.4
+Garret
