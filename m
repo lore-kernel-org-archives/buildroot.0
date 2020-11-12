@@ -1,42 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 21:22:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/suricata: link with libatomic if
- needed
-Message-ID: <20201112202202.661849-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 12 Nov 2020 21:26:13 +0100
+Subject: [Buildroot] [PATCH] package/apparmor: fix permission bits for
+ apparmor.service
+In-Reply-To: <46b899ee9f607f3d03a2881b83d355751cc07f64.1605212315.git.stefan@agner.ch>
+References: <46b899ee9f607f3d03a2881b83d355751cc07f64.1605212315.git.stefan@agner.ch>
+Message-ID: <20201112212613.414ad97c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of suricata 6.0.0 with mips32r6
+Hello Stefan,
 
-app-layer-ftp.o: In function `FTPCheckMemcap':
-app-layer-ftp.c:(.text+0x284): undefined reference to `__atomic_load_8'
-app-layer-ftp.c:(.text+0x2d8): undefined reference to `__atomic_fetch_add_8'
+Thanks for your patch!
 
-Fixes:
- - http://autobuild.buildroot.org/results/f574005204905250702df32b61c85d427ab4feda
+On Thu, 12 Nov 2020 21:21:34 +0100
+Stefan Agner <stefan@agner.ch> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/suricata/suricata.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> Avoid setting executable bits for apparmor.service. This gets rid of a
+> corresponding warning during installation:
+>   Configuration file ../target/usr/lib/systemd/system/apparmor.service
+>   is marked executable. Please remove executable permission bits.
+>   Proceeding anyway.
+> 
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
+> ---
+>  package/apparmor/apparmor.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+> index 4d08b0433b..7ea0fabd91 100644
+> --- a/package/apparmor/apparmor.mk
+> +++ b/package/apparmor/apparmor.mk
+> @@ -88,7 +88,7 @@ endef
+>  define APPARMOR_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.systemd \
+>  		$(TARGET_DIR)/lib/apparmor/apparmor.systemd
 
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index f131fad1be..94c4784dd4 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -43,6 +43,10 @@ SURICATA_CONF_OPTS = \
- #               download through wget/curl)
- SURICATA_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install-conf
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+SURICATA_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_FILE),y)
- SURICATA_DEPENDENCIES += file
- SURICATA_CONF_OPTS += --enable-libmagic
+Any reason not to change this one as well ?
+
+Thomas
 -- 
-2.28.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
