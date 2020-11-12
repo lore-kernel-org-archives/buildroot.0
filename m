@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Nov 2020 20:33:16 +0200
-Subject: [Buildroot] [PATCH] package/luajit: drop
-Message-ID: <344b3dabebc5502a44fbe4309bf786cee77a89cb.1605205996.git.baruch@tkos.co.il>
+Date: Thu, 12 Nov 2020 20:34:45 +0200
+Subject: [Buildroot] [PATCH v2] package/luajit: drop static build handling
+Message-ID: <790909caf28e2610e07b358113168deee7ff87c3.1605206085.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +14,8 @@ BUILDMODE handling as well.
 
 Cc: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2: fix commit title
 ---
  package/luajit/luajit.mk | 8 +-------
  1 file changed, 1 insertion(+), 7 deletions(-)
