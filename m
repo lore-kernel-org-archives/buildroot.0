@@ -1,82 +1,125 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 10:21:45 +0100
-Subject: [Buildroot] [PATCH] package/tmux: add upstream security fix for
- CVE-2020-27347
-Message-ID: <20201112092146.31467-1-peter@korsgaard.com>
+From: Julien Olivain <ju.o@free.fr>
+Date: Thu, 12 Nov 2020 11:55:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/linux-backports: use buildroot
+ host flex and bison
+In-Reply-To: <20201111210633.GF3971474@scaer>
+References: <20201111162208.362275-1-ju.o@free.fr>
+ <20201111210633.GF3971474@scaer>
+Message-ID: <17093ff9bd66110ba270b27bfca9b457@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
-input.c contained a stack-based buffer-overflow that can be exploited by
-terminal output.
+Yann, All,
 
-For details, see:
-https://www.openwall.com/lists/oss-security/2020/11/05/3
+Thanks for the review,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...er-the-end-of-the-array-and-overwrit.patch | 35 +++++++++++++++++++
- package/tmux/tmux.mk                          |  3 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
+On 11/11/2020 22:06, Yann E. MORIN wrote:
+> Julien, All,
+> 
+> On 2020-11-11 17:22 +0100, Julien Olivain spake thusly:
+>> Upstream backports package does not define the LEX/YACC Makefile
+>> variables, contrary to the Kernel which is defining those in [1]. The
+>> default "lex" and "yacc" are then used. On some systems, "yacc" is
+>> Berkeley Yacc. Kconfig parser files are using non-Posix Bison
+>> constructs.
+>> 
+>> Attempting to generate the parser with byacc fails with error:
+>> 
+>>     yacc: e - line 97 of "zconf.y", syntax error
+>>     %destructor {
+>>     ^
+>> 
+>> This patch adds the missing dependencies on host-flex and host-bison,
+>> and make sure the package compilation will use those, to fix this 
+>> issue.
+>> 
+>> [1] 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
+>> 
+>> Signed-off-by: Julien Olivain <ju.o@free.fr>
+>> ---
+>>  package/linux-backports/linux-backports.mk | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>> 
+>> diff --git a/package/linux-backports/linux-backports.mk 
+>> b/package/linux-backports/linux-backports.mk
+>> index 1d7d6e7f00..fafb8efb91 100644
+>> --- a/package/linux-backports/linux-backports.mk
+>> +++ b/package/linux-backports/linux-backports.mk
+>> @@ -11,6 +11,8 @@ LINUX_BACKPORTS_SITE = 
+>> $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
+>>  LINUX_BACKPORTS_LICENSE = GPL-2.0
+>>  LINUX_BACKPORTS_LICENSE_FILES = COPYING
+>> 
+>> +LINUX_BACKPORTS_DEPENDENCIES = host-bison host-flex
+> 
+> As far as I understand it, this is need for the kconfig infra (mconf et
+> al.), right?
+> 
+> If so, can we instead use:
+> 
+>     LINUX_BACKPORTS_DEPENDENCIES = \
+>         $(BR2_BISON_HOST_DEPENDENCY) \
+>         $(BR2_FLEX_HOST_DEPENDENCY)
+> 
+> ... along with...
+> 
+>>  ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+>>  LINUX_BACKPORTS_KCONFIG_FILE = 
+>> $(LINUX_BACKPORTS_DIR)/defconfigs/$(call 
+>> qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+>>  else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+>> @@ -33,6 +35,8 @@ LINUX_BACKPORTS_KCONFIG_OPTS = 
+>> $(LINUX_BACKPORTS_MAKE_OPTS)
+>>  # LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module 
+>> infra.
+>>  #
+>>  LINUX_BACKPORTS_MAKE_OPTS = \
+>> +	LEX="$(HOST_DIR)/bin/flex" \
+>> +	YACC="$(HOST_DIR)/bin/bison" \
+> 
+>     LEX=flex \
+>     YACC=bison \
+> 
+> Thoughts?
+> 
+> See for example: linux/linux.mk lines 80-85
+> and for reference: support/dependencies/check-host-bison-flex.mk
 
-diff --git a/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-new file mode 100644
-index 0000000000..d169322ed7
---- /dev/null
-+++ b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-@@ -0,0 +1,35 @@
-+From a868bacb46e3c900530bed47a1c6f85b0fbe701c Mon Sep 17 00:00:00 2001
-+From: nicm <nicm>
-+Date: Thu, 29 Oct 2020 16:33:01 +0000
-+Subject: [PATCH] Do not write after the end of the array and overwrite the
-+ stack when colon-separated SGR sequences contain empty arguments. Reported by
-+ Sergey Nizovtsev.
-+
-+[Peter: Fixes CVE-2020-27347]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ input.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/input.c b/input.c
-+index 42a60c92..c280c0d9 100644
-+--- a/input.c
-++++ b/input.c
-+@@ -1976,8 +1976,13 @@ input_csi_dispatch_sgr_colon(struct input_ctx *ictx, u_int i)
-+ 				free(copy);
-+ 				return;
-+ 			}
-+-		} else
-++		} else {
-+ 			n++;
-++			if (n == nitems(p)) {
-++				free(copy);
-++				return;
-++			}
-++		}
-+ 		log_debug("%s: %u = %d", __func__, n - 1, p[n - 1]);
-+ 	}
-+ 	free(copy);
-+-- 
-+2.20.1
-+
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 169c9bb83f..00e77ad762 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -10,6 +10,9 @@ TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
-+# 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-+TMUX_IGNORE_CVES += CVE-2020-27347
-+
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define TMUX_ADD_TMUX_TO_SHELLS
--- 
-2.20.1
+I agree it will be better to follow the same logic as in the Linux 
+Kernel.
+I'll update the patches with your suggestions.
+
+Best regrads,
+
+Julien.
+
+
+> Regards,
+> Yann E. MORIN.
+> 
+>>  	BACKPORT_DIR=$(@D) \
+>>  	KLIB_BUILD=$(LINUX_DIR) \
+>>  	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
+>> --
+>> 2.28.0
+>> 
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___        
+>        |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There 
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   
+> conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
