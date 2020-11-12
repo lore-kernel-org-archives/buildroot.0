@@ -1,72 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 11:53:19 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/libnetfilter_conntrack: add libmnl to Libs.Private
-Message-ID: <20201117203828.07D9481590@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 12 Nov 2020 22:18:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/linux-backports: use
+ flex and bison to generate kconfig parser
+Message-ID: <20201117203828.AE3FB7FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=083dbf4cca7fd032ad07f3bde97422134b4e0b86
+commit: https://git.buildroot.net/buildroot/commit/?id=ec493ea4899f7be6500f495a32b4150feff355ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This will fix a static build failure with dnsmasq on latest
-libnetfilter_conntrack
+Upstream backports package does not define the LEX/YACC Makefile
+variables, contrary to the Kernel which is defining those in [1]. The
+default "lex" and "yacc" are then used. On some systems, "yacc" is
+Berkeley Yacc. Kconfig parser files are using non-Posix Bison
+constructs.
 
-Fixes:
- - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
+Attempting to generate the parser with byacc fails with error:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Baruch Siach <baruch@tkos.co.il>
-[Peter: adjust upstream status as pointed out by Baruch]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    yacc: e - line 97 of "zconf.y", syntax error
+    %destructor {
+    ^
+
+This patch defines the LEX and YACC Makefile variable to use flex and
+bison, to fix this issue. The host-bison and host-flex dependencies are
+added only if the host does not have them, following the same logic of
+the Kernel.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...r_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/linux-backports/linux-backports.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-new file mode 100644
-index 0000000000..0b373d9261
---- /dev/null
-+++ b/package/libnetfilter_conntrack/0001-libnetfilter_conntrack.pc.in-add-LIBMNL_LIBS-to-Libs.patch
-@@ -0,0 +1,38 @@
-+From 93bbd7e56cefc8488a61892b3bf5df63a175d20d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 12 Apr 2020 14:05:15 +0200
-+Subject: [PATCH] libnetfilter_conntrack.pc.in: add LIBMNL_LIBS to Libs.Private
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 1d7d6e7f00..030d7a2864 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -11,6 +11,14 @@ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stab
+ LINUX_BACKPORTS_LICENSE = GPL-2.0
+ LINUX_BACKPORTS_LICENSE_FILES = COPYING
+ 
++# flex and bison are needed to generate kconfig parser. We use the
++# same logic as the linux kernel (we add host dependencies only if
++# host does not have them). See linux/linux.mk and
++# support/dependencies/check-host-bison-flex.mk.
++LINUX_BACKPORTS_DEPENDENCIES = \
++	$(BR2_BISON_HOST_DEPENDENCY) \
++	$(BR2_FLEX_HOST_DEPENDENCY)
 +
-+Since version 1.0.8 and commit
-+c1c0f16c1fedb46547c2e104beeaaeac5933b214, libnetfilter_conntrack depends
-+on libmnl so add it to Libs.Private.
-+
-+Otherwise, applications such as dnsmasq will fail to link on:
-+
-+/home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -Wl,-elf2flt -static -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o tables.o loop.o inotify.o poll.o rrfilter.o edns0.o arp.o crypto.o dump.o ubus.o metrics.o -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnetfilter_conntrack -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib -lnfnetlink
-+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-0/output-1/host/bin/../arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
-+api.c:(.text+0x34): undefined reference to `mnl_nlmsg_put_header'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3fdc2cba20162eb86eaa5c49a056fb40fb18a392
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: commit e94172f09e4d]
-+---
-+ libnetfilter_conntrack.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libnetfilter_conntrack.pc.in b/libnetfilter_conntrack.pc.in
-+index 857f993..fbd7132 100644
-+--- a/libnetfilter_conntrack.pc.in
-++++ b/libnetfilter_conntrack.pc.in
-+@@ -12,5 +12,5 @@ Version: @VERSION@
-+ Requires: libnfnetlink
-+ Conflicts:
-+ Libs: -L${libdir} -lnetfilter_conntrack
-+-Libs.private: @LIBNFNETLINK_LIBS@
-++Libs.private: @LIBNFNETLINK_LIBS@ @LIBMNL_LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.25.1
-+
+ ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+ else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+@@ -33,6 +41,8 @@ LINUX_BACKPORTS_KCONFIG_OPTS = $(LINUX_BACKPORTS_MAKE_OPTS)
+ # LINUX_BACKPORTS_MODULE_MAKE_OPTS is used by the kernel-module infra.
+ #
+ LINUX_BACKPORTS_MAKE_OPTS = \
++	LEX=flex \
++	YACC=bison \
+ 	BACKPORT_DIR=$(@D) \
+ 	KLIB_BUILD=$(LINUX_DIR) \
+ 	KLIB=$(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED) \
