@@ -1,99 +1,59 @@
-From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-Date: Thu, 12 Nov 2020 19:50:16 -0300
-Subject: [Buildroot] [PATCH v2] package/busybox: Fix hwclock for glibc 2.31+
-In-Reply-To: <87wnyqi8x4.fsf@dell.be.48ers.dk>
-References: <87wnyqi8x4.fsf@dell.be.48ers.dk>
-Message-ID: <20201112225016.20297-1-klaus@linux.vnet.ibm.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 13 Nov 2020 00:20:52 +0100
+Subject: [Buildroot] [PATCH] toolchain/toolchain-buildroot: only riscv64 is
+ supported by uClibc-ng
+Message-ID: <20201112232052.3137986-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pick the below patch from upstream, in order to fix
-'settimeofday: Invalid argument' introduced by using glibc v2.31+.
-(busybox hasn't tagged a new version since).
+The commit [1] enabled riscv32 and riscv64 for uClibc-ng
+internal toolchain backend but only riscv64 is curently
+supported by uClibc-ng.
 
-See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
+The initial patch [2] from Mark Corbin is only about riscv64.
 
-  commit 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b
-  Author: Eddie James <eajames@linux.ibm.com>
+Remove riscv32 from uClibc-ng supported architecture list.
 
-      hwclock: Fix settimeofday for glibc v2.31+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981656
 
-Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+[1] 209a082478fca143394512bb9a6c0822f12cfe2c
+[2] bd9810e176273914eca1208bcba23f0de9e446b3
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> V2:
-  - format-patch from the commit itself, instead of applying staged
-    patches on top of 1_32_0
----
- ...ock-Fix-settimeofday-for-glibc-v2.31.patch | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+ package/uclibc/Config.in                | 1 -
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-new file mode 100644
-index 0000000000..486d3dead3
---- /dev/null
-+++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-@@ -0,0 +1,58 @@
-+From 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b Mon Sep 17 00:00:00 2001
-+From: Eddie James <eajames@linux.ibm.com>
-+Date: Mon, 10 Aug 2020 09:59:02 -0500
-+Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
-+
-+The glibc implementation changed for settimeofday, resulting in "invalid
-+argument" error when attempting to set both timezone and time with a single
-+call. Fix this by calling settimeofday twice
-+
-+Signed-off-by: Eddie James <eajames@linux.ibm.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ util-linux/hwclock.c | 14 +++++++++++---
-+ 1 file changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
-+index 357906cca..e85bca2b2 100644
-+--- a/util-linux/hwclock.c
-++++ b/util-linux/hwclock.c
-+@@ -121,16 +121,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
-+ 	struct timeval tv;
-+ 	struct timezone tz;
-+ 
-+-	tz.tz_minuteswest = timezone/60;
-++	tz.tz_minuteswest = timezone / 60;
-+ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
-+ 	 * daylight!=0 means "this timezone has some DST
-+ 	 * during the year", not "DST is in effect now".
-+ 	 */
-+ 	tz.tz_dsttime = 0;
-+ 
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++
-+ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
-+ 	tv.tv_usec = 0;
-+-	if (settimeofday(&tv, &tz))
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+@@ -282,7 +286,11 @@ static void set_system_clock_timezone(int utc)
-+ 	gettimeofday(&tv, NULL);
-+ 	if (!utc)
-+ 		tv.tv_sec += tz.tz_minuteswest * 60;
-+-	if (settimeofday(&tv, &tz))
-++
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_simple_perror_msg_and_die("settimeofday");
-++	if (settimeofday(&tv, NULL))
-+ 		bb_simple_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 494758bd9d..e59fef3c69 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -107,7 +107,6 @@ config BR2_UCLIBC_TARGET_ARCH
+ 	default "i386"	   if BR2_i386
+ 	default "x86_64"   if BR2_x86_64
+ 	default "riscv64"  if BR2_RISCV_64
+-	default "riscv32"  if BR2_RISCV_32
+ 
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 6c4ede8d4c..25ac9759f1 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -30,7 +30,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 		   BR2_arm     || BR2_armeb    || \
+ 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
+ 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+-		   BR2_or1k    || BR2_powerpc || BR2_riscv || BR2_sh2a   || \
++		   BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || BR2_sh2a   || \
+ 		   BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
+ 		   BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_UCLIBC
 -- 
-2.17.1
+2.25.4
