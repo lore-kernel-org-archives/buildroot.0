@@ -1,36 +1,82 @@
-From: Garret Kelly <garret.kelly@gmail.com>
-Date: Wed, 11 Nov 2020 21:53:48 -0500
-Subject: [Buildroot] Proper Out-of-tree Devicetree Source
-Message-ID: <CAE_FxYsuX33=WuESanaB01YkD_DU=z+Q1hYr=Tp0kiXgHGtt4Q@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 12 Nov 2020 08:36:27 +0100
+Subject: [Buildroot] [PATCH 04/10] docs/manual: document <pkg>_CPE_ID
+ variables
+In-Reply-To: <20201104145145.1316167-5-thomas.petazzoni@bootlin.com>
+References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
+ <20201104145145.1316167-5-thomas.petazzoni@bootlin.com>
+Message-ID: <CAEyMn7a+RoDmn0Hdk-djJ1=fYA-jqpWaci8JxA9TUCc+Q1xd3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi buildroot!
-I'm trying to figure out the right way to use an out-of-tree device
-tree (for uboot, to begin with, but definitely also TF-A and Linux).
-So far, I've found that setting BR2_TARGET_UBOOT_CUSTOM_DTS_PATH
-results in the files named there being copied into the arch/arm/dts
-directory in the uboot build directory. However, these files aren't
-referenced by the arch/arm/dts/Makefile, and therefore the DTBs are
-never built.
+Hi Thomas,
 
-I found that I could add "dtb-y=whatever.dtb" to
-BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS, which does result in the DTS getting
-compiled, but seems a little hacky. Not that I mind.
+Am Mi., 4. Nov. 2020 um 15:52 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  docs/manual/adding-packages-generic.txt | 39 +++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index b8bfcb4aff..3fcf741a1a 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -502,6 +502,45 @@ LIBFOO_IGNORE_CVES += CVE-2020-12345
+>  LIBFOO_IGNORE_CVES += CVE-2020-54321
+>  ----------------------
+>
+> +* +LIBFOO_CPE_ID_*+ variables is a set of variables that allows the
+> +  package to define its https://nvd.nist.gov/products/cpe[CPE
+> +  identifier]. The available variables are:
+> ++
+> +--
+> +** +LIBFOO_CPE_ID_PREFIX+, specifies the prefix of the CPE identifier,
+> +   i.e the first three fields. When not defined, the default value is
+> +   +cpe:2.3:a+.
+> +
+> +** +LIBFOO_CPE_ID_VENDOR+, specifies the vendor part of the CPE
+> +   identifier. When not defined, the default value is
+> +   +<pkgname>_project+.
+> +
+> +** +LIBFOO_CPE_ID_PRODUCT+, specifies the product part of the CPE
+> +   identifier. When not defined, the default value is +<pkgname>+.
+> +
+> +** +LIBFOO_CPE_ID_VERSION+, specifies the version part of the CPE
+> +   identifier. When not defined the default value is
+> +   +$(LIBFOO_VERSION)+.
+> +
+> +** +LIBFOO_CPE_ID_VERSION_MINOR+ specifies the _update_ part of the
+> +   CPE identifier. When not defined the default value is +*+.
+> +--
+> ++
+> +If any of those variables is defined, then the generic package
+> +infrastructure assumes the package provides valid CPE information. In
+> +this case, +LIBFOO_CPE_ID_VALID = YES+ will be sent, and the generic
 
-I was thinking about adding the dtb-y inclusion trick to uboot.mk, but
-I realized as I was doing this that "DTS source files" probably also
-implies .dtsi files, and so those can't be added. I suppose I could
-filter out non-.dts files from being turned into targets, that might
-be the most ergonomic way.
+s/sent/set/ ?
 
-Kind of as an aside: I then started wondering if there shouldn't be
-something like BR2_TARGET_DTS_SOURCE which is used to automatically
-configure uboot, TF-A, and Linux devicetree configurations so that you
-can easily share a single set of devicetree source among the
-packages...
+> +package infrastructure will define +LIBFOO_CPE_ID+.
+> ++
+> +Alternatively, a package can also explicitly set +LIBFOO_CPE_ID_VALID
+> += YES+ if the default values for +LIBFOO_CPE_ID_PREFIX+,
+> ++LIBFOO_CPE_ID_VENDOR+, +LIBFOO_CPE_ID_PRODUCT+,
+> ++LIBFOO_CPE_ID_VERSION+, +LIBFOO_CPE_ID_VERSION_MINOR+ are all correct
+> +for this package and don't need to be explicitly overridden.
+> ++
+> +For a host package, if its +LIBFOO_CPE_ID_*+ variables are not
+> +defined, it inherits the value of those variables from the
+> +corresponding target package.
+> +
+>  The recommended way to define these variables is to use the following
+>  syntax:
+>
 
-Garret
+Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+-- 
+Heiko
