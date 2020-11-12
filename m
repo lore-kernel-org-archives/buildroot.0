@@ -1,44 +1,42 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 12 Nov 2020 20:06:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bandwidthd: add license file
-Message-ID: <20201112190610.432032-1-fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 20:10:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fbset: add license file
+Message-ID: <20201112191042.433763-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use README as the license file until upstream provides one:
-https://github.com/nroach44/bandwidthd/issues/2
-
-While at it, also update indentation in hash file (two spaces)
+Use fbset.c as the license file and, while at it, also update
+indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bandwidthd/bandwidthd.hash | 3 ++-
- package/bandwidthd/bandwidthd.mk   | 1 +
+ package/fbset/fbset.hash | 3 ++-
+ package/fbset/fbset.mk   | 1 +
  2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/bandwidthd/bandwidthd.hash b/package/bandwidthd/bandwidthd.hash
-index c73584de2e..5b1bbce978 100644
---- a/package/bandwidthd/bandwidthd.hash
-+++ b/package/bandwidthd/bandwidthd.hash
+diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
+index ca8cc6d1f0..5d9785d90a 100644
+--- a/package/fbset/fbset.hash
++++ b/package/fbset/fbset.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
--sha256 0270d0def6cc53c8d47d59a9dd093d51fbca1620adeef85c15e35a32010e26ab  bandwidthd-2.0.1-auto-r11.tar.gz
-+sha256  0270d0def6cc53c8d47d59a9dd093d51fbca1620adeef85c15e35a32010e26ab  bandwidthd-2.0.1-auto-r11.tar.gz
-+sha256  58573c40770e0c0b91f3eef8192952832321a344f66a4fb2d966095cbbfc86c2  README
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-index 990d8c5d8f..88222a910e 100644
---- a/package/bandwidthd/bandwidthd.mk
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -10,6 +10,7 @@ BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,v$(BANDWIDTHD_VERSION))
- # Specified as "any version of the GPL that is current as of your
- # download" by upstream.
- BANDWIDTHD_LICENSE = GPL
-+BANDWIDTHD_LICENSE_FILES = README
+-sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
++sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
++sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 787b4e1dca..8d2a477f8b 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
+ FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
+ FBSET_DEPENDENCIES = host-bison host-flex
+ FBSET_LICENSE = GPL-2.0
++FBSET_LICENSE_FILES = fbset.c
  
- BANDWIDTHD_DEPENDENCIES = gd libpng libpcap host-pkgconf
- 
+ define FBSET_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 -- 
 2.28.0
