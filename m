@@ -1,56 +1,71 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 12 Nov 2020 22:01:03 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/linux-backports: bump
- version to 5.8
-In-Reply-To: <20201112120155.333290-2-ju.o@free.fr>
-References: <20201111162208.362275-1-ju.o@free.fr>
- <20201112120155.333290-1-ju.o@free.fr>
- <20201112120155.333290-2-ju.o@free.fr>
-Message-ID: <20201112210103.GB60815@pevik>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 12 Nov 2020 22:03:00 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/python-thrift: bump to version
+ 0.13.0
+Message-ID: <20201112210300.665872-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Updated through scanpypi
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
 
-> Attempting to compile this package with newer Kernel version (e.g. v5.4)
-> fails with message:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-thrift/Config.in          | 5 ++---
+ package/python-thrift/python-thrift.hash | 6 +++---
+ package/python-thrift/python-thrift.mk   | 8 ++++----
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
->    Generating local configuration database from kernel ...Kernel version parse failed!
-
-> Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
-> rather old and beat the very purpose of having newer drivers in older
-> kernels.
-
-> Note that since backports tag v4.14-rc4-1, the requirement on minimal
-> kernel version changed from 3.0 to 3.10. See commit [1].
-Good catch!
-
-In that case, can please person who merges this update
-package/linux-backports/Config.in?
-
-
-Kind regards,
-Petr
-
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
-
-Update also package/linux-backports/Config.in:
-
-diff --git package/linux-backports/Config.in package/linux-backports/Config.in
-index 362e6e4bc7..251d202fd2 100644
---- package/linux-backports/Config.in
-+++ package/linux-backports/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LINUX_BACKPORTS
- 	  recent kernels, backported to older ones.
+diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
+index 1ecfda357b..71fef5be81 100644
+--- a/package/python-thrift/Config.in
++++ b/package/python-thrift/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_THRIFT
+ 	bool "python-thrift"
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+-	  python-thrift is a Python bindings for the Apache Thrift RPC
+-	  system.
++	  Python bindings for the Apache Thrift RPC system.
  
- 	  This version of linux-backports supports kernels starting
--	  from 3.0.
-+	  from 3.10.
+-	  http://thrift.apache.org/
++	  https://thrift.apache.org
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 56d99f2a54..1d1d628908 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/thrift/json
+-md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
+-sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
++md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
++sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
++sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 21f2355f63..3a908ca91c 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
- 	  https://backports.wiki.kernel.org
+-PYTHON_THRIFT_VERSION = 0.11.0
++PYTHON_THRIFT_VERSION = 0.13.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
+-PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = setup.py
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
++PYTHON_THRIFT_LICENSE = Apache-2.0
++PYTHON_THRIFT_LICENSE_FILES = LICENSE
  
+ $(eval $(python-package))
+-- 
+2.28.0
