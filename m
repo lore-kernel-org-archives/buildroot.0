@@ -1,25 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 14:28:28 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
- version to 1.0.20201112
-In-Reply-To: <20201113100124.10277-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 13 Nov 2020 11:01:23 +0100")
-References: <20201113100124.10277-1-peter@korsgaard.com>
-Message-ID: <87zh3lgzcz.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 13 Nov 2020 14:33:02 +0100
+Subject: [Buildroot] [PATCH] package/rauc: fix host build with systemd
+In-Reply-To: <3e457876-5396-1982-2cbb-8ef04cf1e064@grinn-global.com>
+References: <20201113122605.901352-1-b.bilas@grinn-global.com>
+ <20201113140806.5f376fc4@windsurf.home>
+ <3e457876-5396-1982-2cbb-8ef04cf1e064@grinn-global.com>
+Message-ID: <20201113143302.4c3d87d6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > Fixes a build issue with linux 5.4.76+.  For details, see the announcement:
- > https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
+On Fri, 13 Nov 2020 14:28:01 +0100
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ouch, I meant about HOST_DIR but I typed STAGING_DIR for some reason... 
+> Shouldn't we pass the --prefix=/usr to configure and DESTDIR=$(HOST_DIR) 
+> to make in that case?
 
-Committed, thanks.
+No. --prefix= is where the software will be executed from, so from host
+binaries it must be --prefix=$(HOST_DIR), and DESTDIR not used.
 
+It is when you're cross-compiling that there is a difference between
+where the software will be executed from (--prefix) and where you
+install it after the build (DESTDIR). That's why when cross-compiling
+you have --prefix=/usr, and DESTDIR=$(TARGET_DIR) or
+DESTDIR=$(STAGING_DIR). This means "at runtime the software will be in
+/usr, but for the installation please put it in TARGET_DIR/usr".
+
+Does that make sense ?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
