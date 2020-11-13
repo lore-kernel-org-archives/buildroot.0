@@ -1,98 +1,109 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Nov 2020 21:00:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: disable -Werror
-Message-ID: <20201113200039.519577-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Nov 2020 21:21:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tcpdump: fix CVE-2020-8037
+Message-ID: <20201113202115.538340-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
+The ppp decapsulator in tcpdump 4.9.3 can be convinced to allocate a
+large amount of memory.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0001-Add-an-option-to-disable-Werror.patch | 55 +++++++++++++++++++
- package/libpam-tacplus/libpam-tacplus.mk      |  3 +
- 2 files changed, 58 insertions(+)
- create mode 100644 package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+ ...ng-don-t-allocate-a-too-large-buffer.patch | 67 +++++++++++++++++++
+ package/tcpdump/tcpdump.mk                    |  3 +
+ 2 files changed, 70 insertions(+)
+ create mode 100644 package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
 
-diff --git a/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+diff --git a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
 new file mode 100644
-index 0000000000..80da2f35b4
+index 0000000000..9e8674ac90
 --- /dev/null
-+++ b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
-@@ -0,0 +1,55 @@
-+From 88c78901503d50d0a62d85c96994ca4d67ab61e0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 13 Nov 2020 20:50:27 +0100
-+Subject: [PATCH] Add an option to disable -Werror
++++ b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+@@ -0,0 +1,67 @@
++From 32027e199368dad9508965aae8cd8de5b6ab5231 Mon Sep 17 00:00:00 2001
++From: Guy Harris <guy@alum.mit.edu>
++Date: Sat, 18 Apr 2020 14:04:59 -0700
++Subject: [PATCH] PPP: When un-escaping, don't allocate a too-large buffer.
 +
-+Allow the user to disable -Werror to avoid the following build failure
-+with gcc 4.8:
++The buffer should be big enough to hold the captured data, but it
++doesn't need to be big enough to hold the entire on-the-network packet,
++if we haven't captured all of it.
 +
-+libtac/lib/magic.c:138:13: error: ignoring return value of 'read', declared with attribute warn_unused_result [-Werror=unused-result]
-+             (void) read(rfd, &seed, sizeof(seed));
-+             ^
++(backported from commit e4add0b010ed6f2180dcb05a13026242ed935334)
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
-+
++[Retrieved from:
++https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ Makefile.am  | 6 +++++-
-+ configure.ac | 3 +++
-+ 2 files changed, 8 insertions(+), 1 deletion(-)
++ print-ppp.c | 18 ++++++++++++++----
++ 1 file changed, 14 insertions(+), 4 deletions(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 0be3cdb..4a137e9 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -8,7 +8,11 @@
++diff --git a/print-ppp.c b/print-ppp.c
++index 891761728..33fb03412 100644
++--- a/print-ppp.c
+++++ b/print-ppp.c
++@@ -1367,19 +1367,29 @@ print_bacp_config_options(netdissect_options *ndo,
++ 	return 0;
++ }
 + 
-+ ACLOCAL_AMFLAGS = -I config
-+ AUTOMAKE_OPTIONS = subdir-objects
-+-AM_CFLAGS = -Wall -Wextra -Werror
-++AM_CFLAGS = -Wall -Wextra
+++/*
+++ * Un-escape RFC 1662 PPP in HDLC-like framing, with octet escapes.
+++ * The length argument is the on-the-wire length, not the captured
+++ * length; we can only un-escape the captured part.
+++ */
++ static void
++ ppp_hdlc(netdissect_options *ndo,
++          const u_char *p, int length)
++ {
+++	u_int caplen = ndo->ndo_snapend - p;
++ 	u_char *b, *t, c;
++ 	const u_char *s;
++-	int i, proto;
+++	u_int i;
+++	int proto;
++ 	const void *se;
++ 
+++	if (caplen == 0)
+++		return;
 ++
-++if ENABLE_WERROR
-++AM_CFLAGS += -Werror
-++endif
++         if (length <= 0)
++                 return;
 + 
-+ if TACC
-+ bin_PROGRAMS = tacc
-+diff --git a/configure.ac b/configure.ac
-+index d0c5eba..dd8a966 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -100,6 +100,9 @@ AC_SUBST(pamdir)
-+ AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc], [do not build docs]))
-+ AM_CONDITIONAL(DOC, test "x$enable_doc" != "xno")
++-	b = (u_char *)malloc(length);
+++	b = (u_char *)malloc(caplen);
++ 	if (b == NULL)
++ 		return;
 + 
-++AC_ARG_ENABLE(werror, AS_HELP_STRING([--disable-werror], [do not build with -Werror]))
-++AM_CONDITIONAL(ENABLE_WERROR, test "x$enable_werror" != "xno")
-++
-+ dnl --------------------------------------------------------------------
-+ dnl Switch for run-time debugging
-+ AC_ARG_ENABLE(runtime-debugging, [AS_HELP_STRING([--enable-runtime-debugging],
-+-- 
-+2.28.0
-+
-diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
-index 4e1f8bd173..9dd8466bf2 100644
---- a/package/libpam-tacplus/libpam-tacplus.mk
-+++ b/package/libpam-tacplus/libpam-tacplus.mk
-@@ -14,7 +14,10 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
- # Fetching from github, we need to generate the configure script
- LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LIBPAM_TACPLUS_AUTORECONF = YES
- LIBPAM_TACPLUS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
-+LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
++@@ -1388,10 +1398,10 @@ ppp_hdlc(netdissect_options *ndo,
++ 	 * Do this so that we dont overwrite the original packet
++ 	 * contents.
++ 	 */
++-	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
+++	for (s = p, t = b, i = caplen; i != 0; i--) {
++ 		c = *s++;
++ 		if (c == 0x7d) {
++-			if (i <= 1 || !ND_TTEST(*s))
+++			if (i <= 1)
++ 				break;
++ 			i--;
++ 			c = *s++ ^ 0x20;
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 01a46b9b5f..8db35694ea 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -18,6 +18,9 @@ TCPDUMP_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES = libpcap
  
- $(eval $(autotools-package))
++# 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
++TCPDUMP_IGNORE_CVES += CVE-2020-8037
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
+ endif
 -- 
 2.28.0
