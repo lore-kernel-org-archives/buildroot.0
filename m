@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 23:42:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libiqrf: add
+Date: Fri, 13 Nov 2020 23:42:34 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libiqrf: add
  license file
-Message-ID: <20201113222856.6C486820E7@busybox.osuosl.org>
+Message-ID: <20201113222902.3B5348078E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e29a7c4f8412182f5d9462dc3142c65ceaa08dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3786ea320d647449630593ab426e35a1e3f2a8fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Add license file and, while at it, update indentation to two spaces
 
