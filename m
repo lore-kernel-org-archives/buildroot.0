@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 23:34:25 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] linux: fix linux CIP
+Date: Fri, 13 Nov 2020 23:34:01 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] linux: fix linux CIP
  description typo
-Message-ID: <20201113222108.3216D8216C@busybox.osuosl.org>
+Message-ID: <20201113222113.5C5AE82B63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cca053d1bafc8913635bac0998a87bcb49ab67c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=45ceb0b0d9a7f8932bef110993e7abb6f07cbaa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Version is 4.19 and not 4.4.
 
@@ -23,7 +23,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index f83474e1ee..1d08042110 100644
+index 7c2ede8ce2..3130995be6 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -43,7 +43,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
