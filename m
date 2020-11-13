@@ -1,36 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 22:12:40 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/tinyproxy: add
- hash for license file
-Message-ID: <20201113205925.72B0B83680@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 22:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bitcoin: drop boost
+ program-options
+In-Reply-To: <20201107170559.722445-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 7 Nov 2020 18:05:59 +0100")
+References: <20201107170559.722445-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2j5dj76.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18ca3cea6c1d9ba919a0935f14c491c23e9758c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Add hash for license file and update indentation (two spaces).
+ > boost program-options is not needed since version 0.17.0 and
+ > https://github.com/bitcoin/bitcoin/commit/f447a0a7079619f0d650084df192781cca9fd826
 
-Fixes:
-http://autobuild.buildroot.net/results/b07/b07052de34ca24d5c62f6facec2ced5e092d26e2/
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e214b41b00f2feeed46cb953f1a0004df3156320)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tinyproxy/tinyproxy.hash | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Committed to 2020.02.x and 2020.08.x, thanks.
 
-diff --git a/package/tinyproxy/tinyproxy.hash b/package/tinyproxy/tinyproxy.hash
-index 099c974881..8096741597 100644
---- a/package/tinyproxy/tinyproxy.hash
-+++ b/package/tinyproxy/tinyproxy.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256 a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7 tinyproxy-1.10.0.tar.bz2
-+sha256  a23a8f647f622f01e51b93fa882ea5a15c20e026d45c3aafa81ec579e464daf7  tinyproxy-1.10.0.tar.bz2
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+-- 
+Bye, Peter Korsgaard
