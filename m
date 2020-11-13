@@ -1,101 +1,168 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:08:26 +0100
-Subject: [Buildroot] [git commit branch/next] package/sshfs: bump to version
- 3.7.1
-Message-ID: <20201113180318.C5E8F8214E@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 19:12:03 +0100
+Subject: [Buildroot] [git commit branch/next] package/quota: bump to version
+ 4.06
+Message-ID: <20201113180318.EA661814A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75750b45ef7005f49ac6b0433ec5c42c7c28a8bf
+commit: https://git.buildroot.net/buildroot/commit/?id=7f156471ab1a18676d7ec24c68173a66e5553df5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop patch (already in version)
+- Drop patch (already in version) and so autoreconf
+- Update hash of COPYING (mailing address updated:
+  https://sourceforge.net/p/linuxquota/code/ci/b6bb53e1124e6b813fe4de5682b9d9a9f8a1fba8)
+- Update indentation in hash file (two spaces)
 
-https://github.com/libfuse/sshfs/blob/sshfs-3.7.1/ChangeLog.rst
+https://sourceforge.net/p/linuxquota/code/ci/v4.06/tree/Changelog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-sshfs.c-fix-build-with-gcc-4.8.patch      | 47 ----------------------
- package/sshfs/sshfs.hash                           |  2 +-
- package/sshfs/sshfs.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
+ .../0001-configure.ac-add-disable-pie-option.patch | 55 ----------------------
+ ...a-Use-realloc-3-instead-of-reallocarray-3.patch | 34 +++++++++++++
+ package/quota/quota.hash                           | 10 ++--
+ package/quota/quota.mk                             |  5 +-
+ 4 files changed, 40 insertions(+), 64 deletions(-)
 
-diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+diff --git a/package/quota/0001-configure.ac-add-disable-pie-option.patch b/package/quota/0001-configure.ac-add-disable-pie-option.patch
 deleted file mode 100644
-index 312985d8dc..0000000000
---- a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+index c3b57fea66..0000000000
+--- a/package/quota/0001-configure.ac-add-disable-pie-option.patch
 +++ /dev/null
-@@ -1,47 +0,0 @@
--From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
+@@ -1,55 +0,0 @@
+-From cb20e19028a8996de9305502ba5e5da3bd1181bf Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 31 Oct 2020 21:08:53 +0100
--Subject: [PATCH] sshfs.c: fix build with gcc 4.8
+-Date: Tue, 2 Apr 2019 09:19:36 +0200
+-Subject: [PATCH] configure.ac: add --disable-pie option
 -
--Fix the following build failure with gcc 4.8:
+-PIE is not necessarily supported on all architectures, so add an option
+-to allow the user to disable the PIE.
 -
--../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < sshfs.max_conns; i++) {
--  ^
--
--This build failure has been added with
--https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
+-This fixes the build on the m68k architecture:
+- - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/libfuse/sshfs/pull/233]
+-[Upstream status: merged]
 ----
-- sshfs.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
+- Makefile.am  |  2 +-
+- configure.ac | 12 ++++++++++++
+- 2 files changed, 13 insertions(+), 1 deletion(-)
 -
--diff --git a/sshfs.c b/sshfs.c
--index d5f2ff7..2c2db42 100644
----- a/sshfs.c
--+++ b/sshfs.c
--@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-- 			     const char *path)
-- {
-- 	struct conntab_entry *ce;
--+	int i;
+-diff --git a/Makefile.am b/Makefile.am
+-index 638198d..332bd67 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -1,5 +1,5 @@
+- ACLOCAL_AMFLAGS = -I m4
+--AM_LDFLAGS = -pie
+-+AM_LDFLAGS = @PIE_LDFLAGS@
 - 
-- 	if (sshfs.max_conns == 1)
-- 		return &sshfs.conns[0];
--@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
+- doc_DATA = \
+-        README.mailserver \
+-diff --git a/configure.ac b/configure.ac
+-index 095ff86..5af4235 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -55,6 +55,18 @@ AS_IF([test "x${prefix}" = "xNONE"], [
+-   AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/share/locale", [Locale-specific data directory])
+- ])
 - 
-- 	int best_index = 0;
-- 	uint64_t best_score = ~0ULL; /* smaller is better */
---	for (int i = 0; i < sshfs.max_conns; i++) {
--+	for (i = 0; i < sshfs.max_conns; i++) {
-- 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
-- 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
-- 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
+-+# ================
+-+# Check for ldflags
+-+# ================
+-+AC_ARG_ENABLE([pie],
+-+   [AS_HELP_STRING([--disable-pie], [Disable Position Independent Executable])],
+-+   [enable_pie="$enableval"],
+-+   [enable_pie=yes]
+-+)
+-+AS_IF([test x"$enable_pie" != "xno"], [
+-+    PIE_LDFLAGS="-pie"
+-+])
+-+AC_SUBST([PIE_LDFLAGS])
+- 
+- # ================
+- # Check for cflags
 --- 
--2.28.0
+-2.14.1
 -
-diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
-index b8488013a7..106f06f09f 100644
---- a/package/sshfs/sshfs.hash
-+++ b/package/sshfs/sshfs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
-+sha256  fe5d3436d61b46974889e0c4515899c21a9d67851e3793c209989f72353d7750  sshfs-3.7.1.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 70e7feab1d..6759f6ab3b 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
+new file mode 100644
+index 0000000000..093d7cc821
+--- /dev/null
++++ b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
+@@ -0,0 +1,34 @@
++From 02b222a335527f1031cc9495d8c5ebc1bc5b1d4e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 11 Nov 2020 15:00:47 +0100
++Subject: [PATCH] quota: Use realloc(3) instead of reallocarray(3)
++
++reallocarray(3) has been added to glibc relatively recently (version
++2.26, from 2017) and apparently not all users run new enough glibc. Just
++use realloc(3) for now since in this case there's no real risk of
++overflow.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Jan Kara <jack@suse.cz>
++[Retrieved from:
++https://sourceforge.net/p/linuxquota/code/ci/02b222a335527f1031cc9495d8c5ebc1bc5b1d4e]
++---
++ quota.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/quota.c b/quota.c
++index a6ed61f..a60de12 100644
++--- a/quota.c
+++++ b/quota.c
++@@ -385,7 +385,7 @@ int main(int argc, char **argv)
++ 			  break;
++ 		  case 259:
++ 			  fscount++;
++-			  fsnames = reallocarray(fsnames, fscount, sizeof(char *));
+++			  fsnames = realloc(fsnames, fscount * sizeof(char *));
++ 			  if (!fsnames)
++ 				die(1, _("Not enough memory for filesystem names"));
++ 			  fsnames[fscount - 1] = optarg;
++-- 
++2.28.0
++
+diff --git a/package/quota/quota.hash b/package/quota/quota.hash
+index d9f42e51c7..354a3e2de4 100644
+--- a/package/quota/quota.hash
++++ b/package/quota/quota.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.05/ (click on info button)
+-md5	1c1dbd2cd3d680ccac661239b067e147	quota-4.05.tar.gz
+-sha1	d23711f3b204e0a86b8378c32545c95fb149168d	quota-4.05.tar.gz
++# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.06/ (click on info button)
++md5  aef94648438832b684978d46fdf75110  quota-4.06.tar.gz
++sha1  98288699cc14da42f762301c2b6731ec7c777681  quota-4.06.tar.gz
+ 
+ # Locally calculated
+-sha256	ef3b5b5d1014ed1344b46c1826145e20cbef8db967b522403c9a060761cf7ab9	quota-4.05.tar.gz
+-sha256	35b2d9797b83bce16076da9c3273f264f50b8d02f492ee32cd4c51ba6897bceb	COPYING
++sha256  2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d  quota-4.06.tar.gz
++sha256  32a5fd41e7a257f7f0373988ea8d45cebdbf376060703c242c11c000751b1203  COPYING
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index f4bf9e5c58..18502da9aa 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -4,14 +4,11 @@
  #
  ################################################################################
  
--SSHFS_VERSION = 3.7.0
-+SSHFS_VERSION = 3.7.1
- SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
- SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
- SSHFS_LICENSE = GPL-2.0
+-QUOTA_VERSION = 4.05
++QUOTA_VERSION = 4.06
+ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
+-# We're patching configure.ac
+-QUOTA_AUTORECONF = YES
+-QUOTA_GETTEXTIZE = YES
+ QUOTA_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
+ QUOTA_CONF_OPTS = --disable-pie
+ 
