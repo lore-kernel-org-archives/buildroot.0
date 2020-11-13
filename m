@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:17:19 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libexif: add security fix for
- CVE-2020-0452
-In-Reply-To: <20201108171142.1286536-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 8 Nov 2020 18:11:42 +0100")
+Date: Fri, 13 Nov 2020 19:17:15 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libexif: add security fix for
+ CVE-2020-0198
+In-Reply-To: <20201108171142.1286536-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 8 Nov 2020 18:11:41 +0100")
 References: <20201108171142.1286536-1-bernd.kuhls@t-online.de>
- <20201108171142.1286536-2-bernd.kuhls@t-online.de>
-Message-ID: <87blg1f7f4.fsf@dell.be.48ers.dk>
+Message-ID: <87ft5df7f8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
