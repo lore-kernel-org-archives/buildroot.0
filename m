@@ -1,43 +1,126 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 13 Nov 2020 20:07:17 +0100
-Subject: [Buildroot] [PATCH v3 2/2] package/linux-backports: bump
- version to 5.8
-In-Reply-To: <20201113130941.67928-2-ju.o@free.fr>
-References: <20201112120155.333290-1-ju.o@free.fr>
- <20201113130941.67928-1-ju.o@free.fr>
- <20201113130941.67928-2-ju.o@free.fr>
-Message-ID: <20201113190717.GB88501@pevik>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 13 Nov 2020 20:41:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mp4v2: fix build with gcc 10
+Message-ID: <20201113194107.432688-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julien,
+Fixes:
+ - http://autobuild.buildroot.org/results/4655626f1827245648a566a7223f247a130714c5
 
-> Attempting to compile this package with newer Kernel version (e.g. v5.4)
-> fails with message:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tatic-cast-to-unsigned-int-for-cases.patch | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100644 package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
 
->    Generating local configuration database from kernel ...Kernel version parse failed!
-
-> Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
-> rather old and beat the very purpose of having newer drivers in older
-> kernels.
-
-> Since backports tag v4.14-rc4-1, the requirement on minimal kernel
-> version changed from 3.0 to 3.10. See commit [1]. The minimal kernel
-> version check is changed accordingly.
-
-> License files are also updated: the linux backports package copies the
-> license files from the kernel version used for its generation. v5.8 is now
-> "GPL-2.0 WITH Linux-syscall-note".
-
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
-
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-
-Thanks for your fixes!
-
-Kind regards,
-Petr
+diff --git a/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+new file mode 100644
+index 0000000000..6c9b13bed8
+--- /dev/null
++++ b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+@@ -0,0 +1,99 @@
++From a5ca35b044bbf13c0b16f0066bf24646604bb218 Mon Sep 17 00:00:00 2001
++From: "Jason A. Donenfeld" <Jason@zx2c4.com>
++Date: Thu, 6 Aug 2020 15:22:04 +0200
++Subject: [PATCH] Static cast to unsigned int for cases
++
++Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
++[Retrieved from:
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libmp4v2/files/libmp4v2-2.0.0-unsigned-int-cast.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libutil/Utility.cpp  | 2 +-
++ util/mp4art.cpp      | 2 +-
++ util/mp4chaps.cpp    | 2 +-
++ util/mp4file.cpp     | 2 +-
++ util/mp4subtitle.cpp | 2 +-
++ util/mp4track.cpp    | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/libutil/Utility.cpp b/libutil/Utility.cpp
++index 76cdd12..d6739d4 100644
++--- a/libutil/Utility.cpp
+++++ b/libutil/Utility.cpp
++@@ -493,7 +493,7 @@ Utility::process_impl()
++         if( codes.find( code ) == codes.end() )
++             continue;
++ 
++-        switch( code ) {
+++        switch( static_cast<unsigned int>( code ) ) {
++             case 'z':
++                 _optimize = true;
++                 break;
++diff --git a/util/mp4art.cpp b/util/mp4art.cpp
++index add935e..6e7f531 100644
++--- a/util/mp4art.cpp
+++++ b/util/mp4art.cpp
++@@ -376,7 +376,7 @@ ArtUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case LC_ART_ANY:
++             _artFilter = numeric_limits<uint32_t>::max();
++             break;
++diff --git a/util/mp4chaps.cpp b/util/mp4chaps.cpp
++index 98400f8..ccc8b70 100644
++--- a/util/mp4chaps.cpp
+++++ b/util/mp4chaps.cpp
++@@ -632,7 +632,7 @@ ChapterUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case 'A':
++         case LC_CHPT_ANY:
++             _ChapterType = MP4ChapterTypeAny;
++diff --git a/util/mp4file.cpp b/util/mp4file.cpp
++index c27844b..b127cd1 100644
++--- a/util/mp4file.cpp
+++++ b/util/mp4file.cpp
++@@ -189,7 +189,7 @@ FileUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &FileUtility::actionList;
++             break;
++diff --git a/util/mp4subtitle.cpp b/util/mp4subtitle.cpp
++index 7462153..19d977d 100644
++--- a/util/mp4subtitle.cpp
+++++ b/util/mp4subtitle.cpp
++@@ -164,7 +164,7 @@ SubtitleUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &SubtitleUtility::actionList;
++             break;
++diff --git a/util/mp4track.cpp b/util/mp4track.cpp
++index d550506..cd63d7e 100644
++--- a/util/mp4track.cpp
+++++ b/util/mp4track.cpp
++@@ -788,7 +788,7 @@ TrackUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_TRACK_WILDCARD:
++             _trackMode = TM_WILDCARD;
++             break;
++-- 
++2.28.0
++
+-- 
+2.28.0
