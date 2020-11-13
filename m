@@ -1,57 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 13 Nov 2020 14:08:06 +0100
-Subject: [Buildroot] [PATCH] package/rauc: fix host build with systemd
-In-Reply-To: <20201113122605.901352-1-b.bilas@grinn-global.com>
-References: <20201113122605.901352-1-b.bilas@grinn-global.com>
-Message-ID: <20201113140806.5f376fc4@windsurf.home>
+From: Julien Olivain <ju.o@free.fr>
+Date: Fri, 13 Nov 2020 14:09:40 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/linux-backports: fix kernel
+ version check
+In-Reply-To: <20201112120155.333290-1-ju.o@free.fr>
+References: <20201112120155.333290-1-ju.o@free.fr>
+Message-ID: <20201113130941.67928-1-ju.o@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 13 Nov 2020 13:26:05 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
+do not rely on package's .config as a timestamp" broke the kernel
+version check of this linux-backports package (it was no longer
+executed). Since linux-4.19, the kernel's build system internally
+touches its .config file, so it can no longer be used as a stamp file.
+The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
+pkg-kconfig infra need to be used instead.
 
-> For some reason, autotools pkg infra doesn't pass
-> DESTDIR variable to the host make env which causes
-> errors during the package install step because it
-> tries to install files into its own system
-> instead of host directory.
-> 
-> That fixes the following errors:
->   /usr/bin/install -c -m 644 data/rauc.service '/usr/lib/systemd/system'
->   /usr/bin/install: cannot create regular file '/usr/lib/systemd/system/rauc.service': Permission denied
->   /usr/bin/install -c -m 644 data/de.pengutronix.rauc.conf 'no'
->   make[4]: *** [Makefile:1700: install-nodist_systemdunitDATA] Error 1
->   make[4]: *** Waiting for unfinished jobs....
-> 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  package/rauc/rauc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-> index 61c50ab316..3cd1c85ee7 100644
-> --- a/package/rauc/rauc.mk
-> +++ b/package/rauc/rauc.mk
-> @@ -36,6 +36,10 @@ define RAUC_INSTALL_INIT_SYSTEMD
->  		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf  
->  endef
->  
-> +HOST_RAUC_MAKE_ENV = \
-> +	$(HOST_MAKE_ENV) \
-> +	DESTDIR=$(STAGING_DIR)
+This commit fixes the kernel version check.
 
-A DESTDIR of $(STAGING_DIR) when building host-rauc doesn't seem
-correct. It's an autotools package, so we're passing
---prefix=$(HOST_DIR) when building host-rauc. If that's not sufficient,
-then the rauc Makefile.am should be fixed.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v3:
+  - new patch to fix kernel version check
+---
+ package/linux-backports/linux-backports.mk | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 030d7a2864..1827ee18b7 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -85,21 +85,24 @@ $(eval $(kconfig-package))
+ # not have been parsed yet, so the Linux build dir LINUX_DIR is not yet
+ # known. Thus, we use a "secondary expansion" so the rule is re-evaluated
+ # after all Makefiles are parsed, and thus at that time we will have the
+-# LINUX_DIR variable set to the proper value.
++# LINUX_DIR variable set to the proper value. Moreover, since linux-4.19,
++# the kernel's build system internally touches its .config file, so we
++# can't use it as a stamp file. We use the LINUX_KCONFIG_STAMP_DOTCONFIG
++# instead.
+ #
+ # Furthermore, we want to check the kernel version, since linux-backports
+ # only supports kernels >= 3.0. To avoid overriding linux-backports'
+-# .config rule defined in the kconfig-package infra, we use an
+-# intermediate stamp-file.
++# KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
++# use an intermediate stamp-file.
+ #
+ # Finally, it must also come after the call to kconfig-package, so we get
+ # LINUX_BACKPORTS_DIR properly defined (because the target part of the
+ # rule is not re-evaluated).
+ #
+-$(LINUX_BACKPORTS_DIR)/.config: $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
++$(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
+ 
+ .SECONDEXPANSION:
+-$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/.config
++$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
+ 	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
+ 	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
+ 		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0
