@@ -1,113 +1,37 @@
-From: Sergey Bobrenok <bobrofon@gmail.com>
-Date: Sat, 14 Nov 2020 00:18:45 +0700
-Subject: [Buildroot] [PATCH v3 1/1] package/sdbus-cpp: new package
-In-Reply-To: <20201029142346.144261-1-bobrofon@gmail.com>
-References: <20201029142346.144261-1-bobrofon@gmail.com>
-Message-ID: <20201113171845.63359-1-bobrofon@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Nov 2020 19:06:09 +0100
+Subject: [Buildroot] [PATCH] toolchain/toolchain-buildroot: only riscv64
+ is supported by uClibc-ng
+In-Reply-To: <20201112232052.3137986-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 13 Nov 2020 00:20:52 +0100")
+References: <20201112232052.3137986-1-romain.naour@gmail.com>
+Message-ID: <875z69gmi6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sdbus-c++ is a high-level C++ D-Bus library for Linux.
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-The target build produces sdbus-c++ library itself. The host build
-produces helper tool sdbus-c++-xml2cpp. sdbus-c++-xml2cpp can be used
-to generate sdbus-c++ stub .h files from xml files.
+ > The commit [1] enabled riscv32 and riscv64 for uClibc-ng
+ > internal toolchain backend but only riscv64 is curently
+ > supported by uClibc-ng.
 
-Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
----
- DEVELOPERS                       |  3 +++
- package/Config.in                |  1 +
- package/sdbus-cpp/Config.in      | 16 ++++++++++++++++
- package/sdbus-cpp/sdbus-cpp.hash |  3 +++
- package/sdbus-cpp/sdbus-cpp.mk   | 18 ++++++++++++++++++
- 5 files changed, 41 insertions(+)
- create mode 100644 package/sdbus-cpp/Config.in
- create mode 100644 package/sdbus-cpp/sdbus-cpp.hash
- create mode 100644 package/sdbus-cpp/sdbus-cpp.mk
+ > The initial patch [2] from Mark Corbin is only about riscv64.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6b8083eb47..cbb3c82ff8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2328,6 +2328,9 @@ F:	package/libbson/
- F:	package/lua-resty-http/
- F:	package/mpir/
- 
-+N:	Sergey Bobrenok <bobrofon@gmail.com>
-+F:	package/sdbus-cpp/
-+
- N:	Sergey Matyukevich <geomatsi@gmail.com>
- F:	boot/arm-trusted-firmware/
- F:	boot/binaries-marvell/
-diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..be054cbf0d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2441,6 +2441,7 @@ menu "System tools"
- 	source "package/s6-rc/Config.in"
- 	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
-+	source "package/sdbus-cpp/Config.in"
- 	source "package/sdbusplus/Config.in"
- 	source "package/smack/Config.in"
- 	source "package/start-stop-daemon/Config.in"
-diff --git a/package/sdbus-cpp/Config.in b/package/sdbus-cpp/Config.in
-new file mode 100644
-index 0000000000..85f149eaa1
---- /dev/null
-+++ b/package/sdbus-cpp/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_SDBUS_CPP
-+	bool "sdbus-c++"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_SYSTEMD
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	help
-+	  sdbus-c++ is a high-level C++ D-Bus library for Linux
-+	  designed to provide expressive, easy-to-use API in modern C++.
-+
-+	  This will build the target library.
-+
-+	  https://github.com/Kistler-Group/sdbus-cpp
-+
-+comment "sdbus-c++ needs systemd and a toolchain w/ C++, gcc >= 7"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_SYSTEMD || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
-new file mode 100644
-index 0000000000..8b87653dfd
---- /dev/null
-+++ b/package/sdbus-cpp/sdbus-cpp.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  0fd575ae0f463773dd9141242d1133731e2b780fd6526650ce992ba711d88628  v0.8.3.tar.gz
-+sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
-diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
-new file mode 100644
-index 0000000000..1b892ae943
---- /dev/null
-+++ b/package/sdbus-cpp/sdbus-cpp.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# sdbus-c++
-+#
-+################################################################################
-+
-+SDBUS_CPP_VERSION = 0.8.3
-+SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
-+SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
-+SDBUS_CPP_INSTALL_STAGING = YES
-+SDBUS_CPP_DEPENDENCIES = systemd
-+SDBUS_CPP_LICENSE = LGPL-2.1+
-+SDBUS_CPP_LICENSE_FILES = COPYING
-+HOST_SDBUS_CPP_SUBDIR = tools
-+HOST_SDBUS_CPP_DEPENDENCIES = host-expat
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+ > Remove riscv32 from uClibc-ng supported architecture list.
+
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981656
+
+ > [1] 209a082478fca143394512bb9a6c0822f12cfe2c
+ > [2] bd9810e176273914eca1208bcba23f0de9e446b3
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed, thanks.
+
 -- 
-2.28.0
+Bye, Peter Korsgaard
