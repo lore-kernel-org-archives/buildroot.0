@@ -1,49 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:09:00 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-yatl: bump to
- version 20200711.1
-Message-ID: <20201113180318.D0A03814A9@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 19:08:26 +0100
+Subject: [Buildroot] [git commit branch/next] package/sshfs: bump to version
+ 3.7.1
+Message-ID: <20201113180318.C5E8F8214E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3ef4d26dcab297e3480ba129c26b5e899643a64
+commit: https://git.buildroot.net/buildroot/commit/?id=75750b45ef7005f49ac6b0433ec5c42c7c28a8bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/web2py/yatl/compare/v20200430.1...master
+Drop patch (already in version)
+
+https://github.com/libfuse/sshfs/blob/sshfs-3.7.1/ChangeLog.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-yatl/python-yatl.hash | 4 ++--
- package/python-yatl/python-yatl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-sshfs.c-fix-build-with-gcc-4.8.patch      | 47 ----------------------
+ package/sshfs/sshfs.hash                           |  2 +-
+ package/sshfs/sshfs.mk                             |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
 
-diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
-index 9238e71b22..534d74b654 100644
---- a/package/python-yatl/python-yatl.hash
-+++ b/package/python-yatl/python-yatl.hash
+diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 312985d8dc..0000000000
+--- a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 31 Oct 2020 21:08:53 +0100
+-Subject: [PATCH] sshfs.c: fix build with gcc 4.8
+-
+-Fix the following build failure with gcc 4.8:
+-
+-../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
+-  for (int i = 0; i < sshfs.max_conns; i++) {
+-  ^
+-
+-This build failure has been added with
+-https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/libfuse/sshfs/pull/233]
+----
+- sshfs.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/sshfs.c b/sshfs.c
+-index d5f2ff7..2c2db42 100644
+---- a/sshfs.c
+-+++ b/sshfs.c
+-@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
+- 			     const char *path)
+- {
+- 	struct conntab_entry *ce;
+-+	int i;
+- 
+- 	if (sshfs.max_conns == 1)
+- 		return &sshfs.conns[0];
+-@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
+- 
+- 	int best_index = 0;
+- 	uint64_t best_score = ~0ULL; /* smaller is better */
+--	for (int i = 0; i < sshfs.max_conns; i++) {
+-+	for (i = 0; i < sshfs.max_conns; i++) {
+- 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
+- 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
+- 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
+--- 
+-2.28.0
+-
+diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
+index b8488013a7..106f06f09f 100644
+--- a/package/sshfs/sshfs.hash
++++ b/package/sshfs/sshfs.hash
 @@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/yatl/json
--md5  930be78b3d6e33f3f920619d673c345a  yatl-20200430.1.tar.gz
--sha256  5220390b27f010046642c00aded9ffc694e383a3d7a47985c8809d8482c8478a  yatl-20200430.1.tar.gz
-+md5  3368146e56b35ba5569ff64054c2a3fd  yatl-20200711.1.tar.gz
-+sha256  d37b90e7679d2d2873ac634e66adfcd0cd7e4c34438e76a3192cf984faba2595  yatl-20200711.1.tar.gz
-diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
-index fca39bb5ef..6df5fcd83e 100644
---- a/package/python-yatl/python-yatl.mk
-+++ b/package/python-yatl/python-yatl.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated after checking pgp signature
+-sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
++sha256  fe5d3436d61b46974889e0c4515899c21a9d67851e3793c209989f72353d7750  sshfs-3.7.1.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index 70e7feab1d..6759f6ab3b 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_YATL_VERSION = 20200430.1
-+PYTHON_YATL_VERSION = 20200711.1
- PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
--PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/7f/bd/aa36c1a1d876757e3fa365e6c455097ebd3f2e8e7ded23e75901ff9c9ecf
-+PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/b4/f5/b6020f8ccb3e156fbe0ed7e4a35fbdce4d6a7ef6a9ab0c54cb8880fb7c04
- PYTHON_YATL_SETUP_TYPE = setuptools
- PYTHON_YATL_LICENSE = BSD-3-Clause
- 
+-SSHFS_VERSION = 3.7.0
++SSHFS_VERSION = 3.7.1
+ SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
+ SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
+ SSHFS_LICENSE = GPL-2.0
