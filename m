@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 22:45:36 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bitcoin: drop
+Date: Fri, 13 Nov 2020 22:45:31 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/bitcoin: drop
  boost program-options
-Message-ID: <20201113213218.62AC283BDC@busybox.osuosl.org>
+Message-ID: <20201113213224.02B9A85E69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8af5345bf6e34c7d427b10ae88819933913e82a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c8e958167524065e769cc09c6ddfd2727d953915
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 boost program-options is not needed since version 0.17.0 and
 https://github.com/bitcoin/bitcoin/commit/f447a0a7079619f0d650084df192781cca9fd826
