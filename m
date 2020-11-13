@@ -1,73 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:09:23 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-thrift: bump to
- version 0.13.0
-Message-ID: <20201113180318.DD406814A9@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 19:14:09 +0100
+Subject: [Buildroot] [git commit branch/next] package/luajit: drop static
+ build handling
+Message-ID: <20201113180318.F38F3814A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e39b019becdf9ab54069200b44a6d8fec6c8d7e3
+commit: https://git.buildroot.net/buildroot/commit/?id=2310d3588cd75f9f503e4e219da2b85762ed3247
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Updated through scanpypi
+Static build of luajit is disabled since commit b2e8f28efac
+("package/luajit: disable for static build"). Remove the related
+BUILDMODE handling as well.
 
-https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-thrift/Config.in          | 5 ++---
- package/python-thrift/python-thrift.hash | 6 +++---
- package/python-thrift/python-thrift.mk   | 8 ++++----
- 3 files changed, 9 insertions(+), 10 deletions(-)
+ package/luajit/luajit.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
-index 1ecfda357b..71fef5be81 100644
---- a/package/python-thrift/Config.in
-+++ b/package/python-thrift/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_THRIFT
- 	bool "python-thrift"
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
--	  python-thrift is a Python bindings for the Apache Thrift RPC
--	  system.
-+	  Python bindings for the Apache Thrift RPC system.
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 68e6af4f5e..defa21dd3f 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -17,12 +17,6 @@ ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
+ LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_LUA52COMPAT
+ endif
  
--	  http://thrift.apache.org/
-+	  https://thrift.apache.org
-diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
-index 56d99f2a54..1d1d628908 100644
---- a/package/python-thrift/python-thrift.hash
-+++ b/package/python-thrift/python-thrift.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/thrift/json
--md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
--sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
-+md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
-+sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
- # Locally computed sha256 checksums
--sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
-+sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 21f2355f63..3a908ca91c 100644
---- a/package/python-thrift/python-thrift.mk
-+++ b/package/python-thrift/python-thrift.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_THRIFT_VERSION = 0.11.0
-+PYTHON_THRIFT_VERSION = 0.13.0
- PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
--PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
--PYTHON_THRIFT_LICENSE = Apache-2.0
--PYTHON_THRIFT_LICENSE_FILES = setup.py
-+PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
- PYTHON_THRIFT_SETUP_TYPE = setuptools
-+PYTHON_THRIFT_LICENSE = Apache-2.0
-+PYTHON_THRIFT_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LUAJIT_BUILDMODE = static
+-else
+-LUAJIT_BUILDMODE = dynamic
+-endif
+-
+ # The luajit build procedure requires the host compiler to have the
+ # same bitness as the target compiler. Therefore, on a x86 build
+ # machine, we can't build luajit for x86_64, which is checked in
+@@ -50,7 +44,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+-		BUILDMODE=$(LUAJIT_BUILDMODE) \
++		BUILDMODE=dynamic \
+ 		XCFLAGS=$(LUAJIT_XCFLAGS) \
+ 		-C $(@D) amalg
+ endef
