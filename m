@@ -1,45 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 11:03:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/busybox: Fix hwclock for glibc
- 2.31+
-In-Reply-To: <7ba2b5f8-f871-2e84-fe3c-bcea0c89d5c5@linux.vnet.ibm.com> (Klaus
- Heinrich Kiwi's message of "Thu, 12 Nov 2020 19:48:55 -0300")
-References: <20201112164844.18731-1-klaus@linux.vnet.ibm.com>
- <87wnyqi8x4.fsf@dell.be.48ers.dk>
- <7ba2b5f8-f871-2e84-fe3c-bcea0c89d5c5@linux.vnet.ibm.com>
-Message-ID: <87d00hinfu.fsf@dell.be.48ers.dk>
+From: pawnrob at gmail.com <pawnrob@gmail.com>
+Date: Fri, 13 Nov 2020 10:10:26 +0000
+Subject: [Buildroot] [PATCH 1/1]
+ package/freescale-imx/firmware-imx/Config.in: install imx6q binaries for
+ IM6UL platform
+Message-ID: <20201113101026.1824-1-pawnrob@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Klaus" == Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com> writes:
+From: RMellor <Rob.Mellor@ultra-pals.com>
 
- > On 11/12/2020 6:04 PM, Peter Korsgaard wrote:
- >>>>>>> "Klaus" == Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com> writes:
- >> > ---
- >> > +++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
- >> > @@ -0,0 +1,58 @@
- >> > +From a4faa9af79c2a0f2b501c0fd507842e4966fc23b Mon Sep 17 00:00:00 2001
- >> 
- >> How did you end up with a different git hash here?
+linux-*/arch/arm/boot/dts/imx6ul.dtsi
+requires the install of the sdma-imx6q.bin as stated in
+line 727: fsl,sdma-ram-script-name = "imx/sdma/sdma-imx6q.bin";
 
- > I took busybox tag 1_32_0, applied the patches found on buildroot/package/busybox,
- > then cherry-picked the above patch and git format-patch HEAD^
+without the BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME being set to "imx6q"
+line 102 of firmware-imx.mk does not install the firmware to to target
 
- > Guess I was being too cautious by applying the patches locally first?
+Signed-off-by: RMellor <Rob.Mellor@ultra-pals.com>
+---
+ package/freescale-imx/firmware-imx/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-That is also fine, but then use the -x option to git cherry-pick so the
-original git hash is tracked.
-
- > At any rate, I'm sending a second version where I format-patch'ed the patch itself
- > (i.e., from busybox master), instead of applying it on top of a local 1_32_0 tree
- > along with other buildroot build-time patches.
-
-That is not needed as I already applied this patch.
-
-Thanks!
-
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 587f402426..fcf22c55b3 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
+ 	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+ 	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+ 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
 -- 
-Bye, Peter Korsgaard
+2.17.1
