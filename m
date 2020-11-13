@@ -1,92 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 11:31:11 +0100
-Subject: [Buildroot] [PATCH] package/go: security bump to 1.15.5
-Message-ID: <20201113103112.12954-1-peter@korsgaard.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Fri, 13 Nov 2020 11:30:03 +0100
+Subject: [Buildroot] [PATCH] package/pixz: bump version to v1.0.7
+Message-ID: <20201113103003.9756-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+- Update the hash accordingly.
+- Remove a patch, as its fix is in this new version of pixz.
 
-- math/big: panic during recursive division of very large numbers
-
-  A number of math/big.Int methods (Div, Exp, DivMod, Quo, Rem, QuoRem, Mod,
-  ModInverse, ModSqrt, Jacobi, and GCD) can panic when provided crafted
-  large inputs.  For the panic to happen, the divisor or modulo argument
-  must be larger than 3168 bits (on 32-bit architectures) or 6336 bits (on
-  64-bit architectures).  Multiple math/big.Rat methods are similarly affected.
-
-  crypto/rsa.VerifyPSS, crypto/rsa.VerifyPKCS1v15, and crypto/dsa.Verify may
-  panic when provided crafted public keys and signatures.  crypto/ecdsa and
-  crypto/elliptic operations may only be affected if custom CurveParams with
-  unusually large field sizes (several times larger than the largest
-  supported curve, P-521) are in use.  Using crypto/x509.Verify on a crafted
-  X.509 certificate chain can lead to a panic, even if the certificates
-  don?t chain to a trusted root.  The chain can be delivered via a
-  crypto/tls connection to a client, or to a server that accepts and
-  verifies client certificates.  net/http clients can be made to crash by an
-  HTTPS server, while net/http servers that accept client certificates will
-  recover the panic and are unaffected.
-
-  Moreover, an application might crash invoking
-  crypto/x509.(*CertificateRequest).CheckSignature on an X.509 certificate
-  request or during a golang.org/x/crypto/otr conversation.  Parsing a
-  golang.org/x/crypto/openpgp Entity or verifying a signature may crash.
-  Finally, a golang.org/x/crypto/ssh client can panic due to a malformed
-  host key, while a server could panic if either PublicKeyCallback accepts a
-  malformed public key, or if IsUserAuthority accepts a certificate with a
-  malformed public key.
-
-  Thanks to the Go Ethereum team and the OSS-Fuzz project for reporting
-  this.  Thanks to R?my Oudompheng and Robert Griesemer for their help
-  developing and validating the fix.
-
-  This issue is CVE-2020-28362 and Go issue golang.org/issue/42552.
-
-- cmd/go: arbitrary code execution at build time through cgo
-
-  The go command may execute arbitrary code at build time when cgo is in
-  use.  This may occur when running go get on a malicious package, or any
-  other command that builds untrusted code.
-
-  This can be caused by malicious gcc flags specified via a #cgo directive,
-  or by a malicious symbol name in a linked object file.
-
-  Thanks to Imre Rad and to Chris Brown and Tempus Ex respectively for
-  reporting these issues.
-
-  These issues are CVE-2020-28367 and CVE-2020-28366, and Go issues
-  golang.org/issue/42556 and golang.org/issue/42559 respectively.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pixz/0001-fix-linkage.patch | 41 -----------------------------
+ package/pixz/pixz.hash              |  2 +-
+ package/pixz/pixz.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
+ delete mode 100644 package/pixz/0001-fix-linkage.patch
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index eb6fe6c85a..79d6abe8df 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/pixz/0001-fix-linkage.patch b/package/pixz/0001-fix-linkage.patch
+deleted file mode 100644
+index 712c280ec2..0000000000
+--- a/package/pixz/0001-fix-linkage.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From f385e7be8adb620ca7eb89f84abe4d1df94c1029 Mon Sep 17 00:00:00 2001
+-From: Dave Vasilevsky <dave@vasilevsky.ca>
+-Date: Sat, 25 Apr 2020 19:16:05 -0400
+-Subject: [PATCH] fix linkage
+-
+-[Retrieved from:
+-https://github.com/vasi/pixz/commit/f385e7be8adb620ca7eb89f84abe4d1df94c1029]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/common.c | 2 +-
+- src/pixz.h   | 4 ++--
+- 2 files changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/common.c b/src/common.c
+-index 59d3273..5938633 100644
+---- a/src/common.c
+-+++ b/src/common.c
+-@@ -7,7 +7,7 @@
+- 
+- #pragma mark UTILS
+- 
+--FILE *gInFile = NULL;
+-+FILE *gInFile = NULL, *gOutFile = NULL;
+- lzma_stream gStream = LZMA_STREAM_INIT;
+- 
+- 
+-diff --git a/src/pixz.h b/src/pixz.h
+-index 0fa60f2..0939a9a 100644
+---- a/src/pixz.h
+-+++ b/src/pixz.h
+-@@ -54,8 +54,8 @@ void pixz_read(bool verify, size_t nspecs, char **specs);
+- 
+- #pragma mark UTILS
+- 
+--FILE *gInFile, *gOutFile;
+--lzma_stream gStream;
+-+extern FILE *gInFile, *gOutFile;
+-+extern lzma_stream gStream;
+- 
+- extern lzma_index *gIndex;
+- 
+diff --git a/package/pixz/pixz.hash b/package/pixz/pixz.hash
+index 5491a016dc..9e2a211cdc 100644
+--- a/package/pixz/pixz.hash
++++ b/package/pixz/pixz.hash
 @@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  063da6a9a4186b8118a0e584532c8c94e65582e2cd951ed078bfd595d27d2367  go1.15.4.src.tar.gz
-+sha256  c1076b90cf94b73ebed62a81d802cd84d43d02dea8c07abdc922c57a071c84f1  go1.15.5.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index ccfddd8001..d2ab9b81dd 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally computed:
+-sha256  02c50746b134fa1b1aae41fcc314d7c6f1919b3d48bcdea01bf11769f83f72e8  pixz-1.0.6.tar.xz
++sha256  e5e32c6eb0bf112b98e74a5da8fb63b9f2cae71800f599d97ce540e150c8ddc5  pixz-1.0.7.tar.xz
+ sha256  d036806b4d1efee7c6d86276451c4d833e9798751417e25daae62dfbe348641b  LICENSE
+diff --git a/package/pixz/pixz.mk b/package/pixz/pixz.mk
+index 8d80f78617..680c05c32c 100644
+--- a/package/pixz/pixz.mk
++++ b/package/pixz/pixz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.15.4
-+GO_VERSION = 1.15.5
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-PIXZ_VERSION = 1.0.6
++PIXZ_VERSION = 1.0.7
+ PIXZ_SITE = https://github.com/vasi/pixz/releases/download/v$(PIXZ_VERSION)
+ PIXZ_SOURCE = pixz-$(PIXZ_VERSION).tar.xz
+ PIXZ_DEPENDENCIES = host-pkgconf libarchive xz
 -- 
-2.20.1
+2.28.0
