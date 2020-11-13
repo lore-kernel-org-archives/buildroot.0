@@ -1,21 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 22:11:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fbtft: add license file
-In-Reply-To: <20201107140626.169811-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Nov 2020 15:06:26 +0100")
-References: <20201107140626.169811-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dqpezd4.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Nov 2020 22:11:03 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/fbtft: add
+ license file
+Message-ID: <20201113205739.DDBE183687@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9469abe42dd92f6276472aaee476b246539d2f18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 19275a1a56dbd2cebb9ef91430a0364c0d3a1214)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fbtft/fbtft.hash | 1 +
+ package/fbtft/fbtft.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fbtft/fbtft.hash b/package/fbtft/fbtft.hash
+index 894d9794a9..5d08d0ef85 100644
+--- a/package/fbtft/fbtft.hash
++++ b/package/fbtft/fbtft.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  0e81de89fdd7ab810716fc0549e767527f342e829309dee5c2cca1e9d1728770  fbtft-274035404701245e7491c0c6471c5b72ade4d491.tar.gz
++sha256  a9ca80d65a5ef10fe614a6c1e8c8d4d3b96637e8855a96c7cf0fa438526097a7  fbtft-core.c
+diff --git a/package/fbtft/fbtft.mk b/package/fbtft/fbtft.mk
+index b935e741d5..cc11d867fc 100644
+--- a/package/fbtft/fbtft.mk
++++ b/package/fbtft/fbtft.mk
+@@ -7,5 +7,6 @@
+ FBTFT_VERSION = 274035404701245e7491c0c6471c5b72ade4d491
+ FBTFT_SITE = $(call github,notro,fbtft,$(FBTFT_VERSION))
+ FBTFT_LICENSE = GPL-2.0
++FBTFT_LICENSE_FILES = fbtft-core.c
+ 
+ $(eval $(generic-package))
