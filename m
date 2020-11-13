@@ -1,45 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 13 Nov 2020 14:50:34 -0800
-Subject: [Buildroot] [PATCH 1/1] package/openssh: bump to version 8.4p1
-Message-ID: <20201113225034.71491-1-christian@paral.in>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 13 Nov 2020 23:52:07 +0100
+Subject: [Buildroot] [PATCH] package/cryptsetup: really break circular
+ dependency
+Message-ID: <20201113225207.302037-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Baruch Siach <baruch@tkos.co.il>
+The commit [1] should fix a circular dependency by
+using util-linux-libs instead of util-linux if
+BR2_PACKAGE_UTIL_LINUX_LIBS is set.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Christian Stewart <christian@paral.in>
+But util-linux is still in CRYPTSETUP_DEPENDENCIES.
+Remove it to really break the circular dependency.
+
+[1] e3c86f5c9e466ed5135e824d6dcebcfd7f5ac1ab
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/openssh/openssh.hash | 2 +-
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/cryptsetup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 1d7dc14fb6..3e0dddf54a 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
- # From https://www.openssh.com/txt/release-8.3 (base64 encoded)
--sha256  f2befbe0472fe7eb75d23340eb17531cb6b3aac24075e2066b41f814e12387b2  openssh-8.3p1.tar.gz
-+sha256  5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24  openssh-8.4p1.tar.gz
- # Locally calculated
- sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 64ac22181b..1e1f425181 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 8.3p1
-+OPENSSH_VERSION = 8.4p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 60097595b4..a59a0c7570 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -9,7 +9,7 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
+-	lvm2 popt util-linux host-pkgconf json-c libargon2 \
++	lvm2 popt host-pkgconf json-c libargon2 \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
+ 	$(TARGET_NLS_DEPENDENCIES)
 -- 
-2.29.2
+2.25.4
