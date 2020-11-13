@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 11:01:23 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 1.0.20201112
-Message-ID: <20201113100124.10277-1-peter@korsgaard.com>
+Date: Fri, 13 Nov 2020 11:03:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/busybox: Fix hwclock for glibc
+ 2.31+
+In-Reply-To: <7ba2b5f8-f871-2e84-fe3c-bcea0c89d5c5@linux.vnet.ibm.com> (Klaus
+ Heinrich Kiwi's message of "Thu, 12 Nov 2020 19:48:55 -0300")
+References: <20201112164844.18731-1-klaus@linux.vnet.ibm.com>
+ <87wnyqi8x4.fsf@dell.be.48ers.dk>
+ <7ba2b5f8-f871-2e84-fe3c-bcea0c89d5c5@linux.vnet.ibm.com>
+Message-ID: <87d00hinfu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a build issue with linux 5.4.76+.  For details, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
+>>>>> "Klaus" == Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > On 11/12/2020 6:04 PM, Peter Korsgaard wrote:
+ >>>>>>> "Klaus" == Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com> writes:
+ >> > ---
+ >> > +++ b/package/busybox/0003-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+ >> > @@ -0,0 +1,58 @@
+ >> > +From a4faa9af79c2a0f2b501c0fd507842e4966fc23b Mon Sep 17 00:00:00 2001
+ >> 
+ >> How did you end up with a different git hash here?
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 833e1af2fc..8895875cf6 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
--sha256  ad33b2d2267a37e0f65c97e65e7d4d926d5aef7d530c251b63fbf919048eead9  wireguard-linux-compat-1.0.20200908.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
-+sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 082d10c53b..76585e0bc4 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200908
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+ > I took busybox tag 1_32_0, applied the patches found on buildroot/package/busybox,
+ > then cherry-picked the above patch and git format-patch HEAD^
+
+ > Guess I was being too cautious by applying the patches locally first?
+
+That is also fine, but then use the -x option to git cherry-pick so the
+original git hash is tracked.
+
+ > At any rate, I'm sending a second version where I format-patch'ed the patch itself
+ > (i.e., from busybox master), instead of applying it on top of a local 1_32_0 tree
+ > along with other buildroot build-time patches.
+
+That is not needed as I already applied this patch.
+
+Thanks!
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
