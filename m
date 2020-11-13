@@ -1,37 +1,113 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Fri, 13 Nov 2020 11:10:44 -0600
-Subject: [Buildroot] Proper Out-of-tree Devicetree Source
-In-Reply-To: <298f9cd98b159b2020a96e4473c367ba959f6cf4.camel@calian.com>
-References: <CAE_FxYsuX33=WuESanaB01YkD_DU=z+Q1hYr=Tp0kiXgHGtt4Q@mail.gmail.com>
- <CA+fik51jHvB4POdaGEJ+Ru2K6Yt1xmepibr3WGUaGQAYkiG55g@mail.gmail.com>
- <298f9cd98b159b2020a96e4473c367ba959f6cf4.camel@calian.com>
-Message-ID: <CA+fik53EkrGWWcOCU3oWDL2bkxKes_euHoek35mCvv=DCWkWpg@mail.gmail.com>
+From: Sergey Bobrenok <bobrofon@gmail.com>
+Date: Sat, 14 Nov 2020 00:18:45 +0700
+Subject: [Buildroot] [PATCH v3 1/1] package/sdbus-cpp: new package
+In-Reply-To: <20201029142346.144261-1-bobrofon@gmail.com>
+References: <20201029142346.144261-1-bobrofon@gmail.com>
+Message-ID: <20201113171845.63359-1-bobrofon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 12, 2020 at 4:28 PM Robert Hancock
-<robert.hancock@calian.com> wrote:
->
-> In general U-Boot needs some level of board-specific support for things
-> like memory initialization, so I believe usually one would patch U-Boot
-> to add in that support and the reference to that board's .dts files at
-> the same time.
->
-> Specifying a custom .dts for Linux makes more sense as the kernel build
-> itself can be generic, but there is not really such a thing as a
-> generic U-Boot build across boards unless they are very similar.
->
+sdbus-c++ is a high-level C++ D-Bus library for Linux.
 
-At least in our case they are very similar. We have a platform based
-on the ZynqMP SoC, and the U-Boot ZynqMP code is almost all common,
-configuration is handled by U-Boot KConfig, U-Boot env file, and
-Xilinx's ps7/psu init. The only thing I am patching onto U-Boot is the
-dts.
+The target build produces sdbus-c++ library itself. The host build
+produces helper tool sdbus-c++-xml2cpp. sdbus-c++-xml2cpp can be used
+to generate sdbus-c++ stub .h files from xml files.
 
-Buildroot already has an option to copy the dts into U-Boot. And we do
-that as the dts uses the common zynqmp dtsi from U-Boot. Adding
-support to build the dts is the only missing piece for us to not need
-to patch U-Boot.
+Signed-off-by: Sergey Bobrenok <bobrofon@gmail.com>
+---
+ DEVELOPERS                       |  3 +++
+ package/Config.in                |  1 +
+ package/sdbus-cpp/Config.in      | 16 ++++++++++++++++
+ package/sdbus-cpp/sdbus-cpp.hash |  3 +++
+ package/sdbus-cpp/sdbus-cpp.mk   | 18 ++++++++++++++++++
+ 5 files changed, 41 insertions(+)
+ create mode 100644 package/sdbus-cpp/Config.in
+ create mode 100644 package/sdbus-cpp/sdbus-cpp.hash
+ create mode 100644 package/sdbus-cpp/sdbus-cpp.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6b8083eb47..cbb3c82ff8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2328,6 +2328,9 @@ F:	package/libbson/
+ F:	package/lua-resty-http/
+ F:	package/mpir/
+ 
++N:	Sergey Bobrenok <bobrofon@gmail.com>
++F:	package/sdbus-cpp/
++
+ N:	Sergey Matyukevich <geomatsi@gmail.com>
+ F:	boot/arm-trusted-firmware/
+ F:	boot/binaries-marvell/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..be054cbf0d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2441,6 +2441,7 @@ menu "System tools"
+ 	source "package/s6-rc/Config.in"
+ 	source "package/scrub/Config.in"
+ 	source "package/scrypt/Config.in"
++	source "package/sdbus-cpp/Config.in"
+ 	source "package/sdbusplus/Config.in"
+ 	source "package/smack/Config.in"
+ 	source "package/start-stop-daemon/Config.in"
+diff --git a/package/sdbus-cpp/Config.in b/package/sdbus-cpp/Config.in
+new file mode 100644
+index 0000000000..85f149eaa1
+--- /dev/null
++++ b/package/sdbus-cpp/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_SDBUS_CPP
++	bool "sdbus-c++"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_PACKAGE_SYSTEMD
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	help
++	  sdbus-c++ is a high-level C++ D-Bus library for Linux
++	  designed to provide expressive, easy-to-use API in modern C++.
++
++	  This will build the target library.
++
++	  https://github.com/Kistler-Group/sdbus-cpp
++
++comment "sdbus-c++ needs systemd and a toolchain w/ C++, gcc >= 7"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_SYSTEMD || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/sdbus-cpp/sdbus-cpp.hash b/package/sdbus-cpp/sdbus-cpp.hash
+new file mode 100644
+index 0000000000..8b87653dfd
+--- /dev/null
++++ b/package/sdbus-cpp/sdbus-cpp.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  0fd575ae0f463773dd9141242d1133731e2b780fd6526650ce992ba711d88628  v0.8.3.tar.gz
++sha256  20c17d8b8c48a600800dfd14f95d5cb9ff47066a9641ddeab48dc54aec96e331  COPYING
+diff --git a/package/sdbus-cpp/sdbus-cpp.mk b/package/sdbus-cpp/sdbus-cpp.mk
+new file mode 100644
+index 0000000000..1b892ae943
+--- /dev/null
++++ b/package/sdbus-cpp/sdbus-cpp.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# sdbus-c++
++#
++################################################################################
++
++SDBUS_CPP_VERSION = 0.8.3
++SDBUS_CPP_SOURCE = v$(SDBUS_CPP_VERSION).tar.gz
++SDBUS_CPP_SITE = $(call github,Kistler-Group,sdbus-cpp,v$(SDBUS_CPP_VERSION))
++SDBUS_CPP_INSTALL_STAGING = YES
++SDBUS_CPP_DEPENDENCIES = systemd
++SDBUS_CPP_LICENSE = LGPL-2.1+
++SDBUS_CPP_LICENSE_FILES = COPYING
++HOST_SDBUS_CPP_SUBDIR = tools
++HOST_SDBUS_CPP_DEPENDENCIES = host-expat
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+-- 
+2.28.0
