@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:07:36 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libexif: add
+Date: Fri, 13 Nov 2020 19:08:04 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libexif: add
  security fix for CVE-2020-0452
-Message-ID: <20201113180339.63C0081119@busybox.osuosl.org>
+Message-ID: <20201113180344.48254812D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d97a723c03d688b8ebca0d477dc2ea4b709298e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=177215e289a51714df436d1243d47cd4025d193f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
