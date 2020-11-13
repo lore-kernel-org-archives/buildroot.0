@@ -1,7 +1,7 @@
 From: Heiko Stuebner <heiko@sntech.de>
-Date: Fri, 13 Nov 2020 13:28:22 +0100
-Subject: [Buildroot] [PATCH] package/icu: bump to version 68-1
-Message-ID: <20201113122822.2462122-1-heiko@sntech.de>
+Date: Fri, 13 Nov 2020 13:28:35 +0100
+Subject: [Buildroot] [PATCH] package/jpeg-turbo: bump to version 2.0.5
+Message-ID: <20201113122835.2462192-1-heiko@sntech.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +10,42 @@ To: buildroot@busybox.net
 
 From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-This includes the fix [0] for CVE-2020-10531 .
-
-[0] https://github.com/unicode-org/icu/commit/b7d08bc04a4296982fcef8b6b8a354a9e4e7afca
+This also includes the fix for CVE-2020-13790 .
 
 Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 ---
- package/icu/icu.hash | 2 +-
- package/icu/icu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/icu/icu.hash b/package/icu/icu.hash
-index 5c10008d8a..8067b8e217 100644
---- a/package/icu/icu.hash
-+++ b/package/icu/icu.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 874f04fc82..abf129bd93 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.4/
+-sha1 163d8f96d0999526a117de0388624241b54dcd67  libjpeg-turbo-2.0.4.tar.gz
+-md5  d01d9e0c28c27bc0de9f4e2e8ff49855 libjpeg-turbo-2.0.4.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
++sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
  # Locally computed
--sha256  94a80cd6f251a53bd2a997f6f1b5ac6653fe791dfab66e1eb0227740fb86d5dc  icu4c-67_1-src.tgz
-+sha256  a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d  icu4c-68_1-src.tgz
- sha256  25e21013a7bc2fad735e28c5278a120e4c7f1c327c8c8b9b4df1751748cddbb2  LICENSE
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index c07ca2da3b..8d0288578c 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -7,7 +7,7 @@
- # Git tags (and therefore versions on release-monitoring.org) use the
- # XX-Y format, but the tarballs are named XX_Y and the containing
- # directories XX.Y.
--ICU_VERSION = 67-1
-+ICU_VERSION = 68-1
- ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
- ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+-sha256 33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406  libjpeg-turbo-2.0.4.tar.gz
++sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+ sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+ sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 65debb2510..ddb22bc20b 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 2.0.4
++JPEG_TURBO_VERSION = 2.0.5
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
 -- 
 2.28.0
