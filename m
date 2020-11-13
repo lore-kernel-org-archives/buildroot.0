@@ -1,168 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:12:03 +0100
-Subject: [Buildroot] [git commit branch/next] package/quota: bump to version
- 4.06
-Message-ID: <20201113180318.EA661814A9@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 19:09:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/python-thrift: bump to
+ version 0.13.0
+Message-ID: <20201113180318.DD406814A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f156471ab1a18676d7ec24c68173a66e5553df5
+commit: https://git.buildroot.net/buildroot/commit/?id=e39b019becdf9ab54069200b44a6d8fec6c8d7e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Drop patch (already in version) and so autoreconf
-- Update hash of COPYING (mailing address updated:
-  https://sourceforge.net/p/linuxquota/code/ci/b6bb53e1124e6b813fe4de5682b9d9a9f8a1fba8)
-- Update indentation in hash file (two spaces)
+Updated through scanpypi
 
-https://sourceforge.net/p/linuxquota/code/ci/v4.06/tree/Changelog
+https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-configure.ac-add-disable-pie-option.patch | 55 ----------------------
- ...a-Use-realloc-3-instead-of-reallocarray-3.patch | 34 +++++++++++++
- package/quota/quota.hash                           | 10 ++--
- package/quota/quota.mk                             |  5 +-
- 4 files changed, 40 insertions(+), 64 deletions(-)
+ package/python-thrift/Config.in          | 5 ++---
+ package/python-thrift/python-thrift.hash | 6 +++---
+ package/python-thrift/python-thrift.mk   | 8 ++++----
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/quota/0001-configure.ac-add-disable-pie-option.patch b/package/quota/0001-configure.ac-add-disable-pie-option.patch
-deleted file mode 100644
-index c3b57fea66..0000000000
---- a/package/quota/0001-configure.ac-add-disable-pie-option.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From cb20e19028a8996de9305502ba5e5da3bd1181bf Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 2 Apr 2019 09:19:36 +0200
--Subject: [PATCH] configure.ac: add --disable-pie option
--
--PIE is not necessarily supported on all architectures, so add an option
--to allow the user to disable the PIE.
--
--This fixes the build on the m68k architecture:
-- - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: merged]
-----
-- Makefile.am  |  2 +-
-- configure.ac | 12 ++++++++++++
-- 2 files changed, 13 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 638198d..332bd67 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,5 +1,5 @@
-- ACLOCAL_AMFLAGS = -I m4
---AM_LDFLAGS = -pie
--+AM_LDFLAGS = @PIE_LDFLAGS@
-- 
-- doc_DATA = \
--        README.mailserver \
--diff --git a/configure.ac b/configure.ac
--index 095ff86..5af4235 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -55,6 +55,18 @@ AS_IF([test "x${prefix}" = "xNONE"], [
--   AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/share/locale", [Locale-specific data directory])
-- ])
-- 
--+# ================
--+# Check for ldflags
--+# ================
--+AC_ARG_ENABLE([pie],
--+   [AS_HELP_STRING([--disable-pie], [Disable Position Independent Executable])],
--+   [enable_pie="$enableval"],
--+   [enable_pie=yes]
--+)
--+AS_IF([test x"$enable_pie" != "xno"], [
--+    PIE_LDFLAGS="-pie"
--+])
--+AC_SUBST([PIE_LDFLAGS])
-- 
-- # ================
-- # Check for cflags
---- 
--2.14.1
--
-diff --git a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
-new file mode 100644
-index 0000000000..093d7cc821
---- /dev/null
-+++ b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
-@@ -0,0 +1,34 @@
-+From 02b222a335527f1031cc9495d8c5ebc1bc5b1d4e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 11 Nov 2020 15:00:47 +0100
-+Subject: [PATCH] quota: Use realloc(3) instead of reallocarray(3)
-+
-+reallocarray(3) has been added to glibc relatively recently (version
-+2.26, from 2017) and apparently not all users run new enough glibc. Just
-+use realloc(3) for now since in this case there's no real risk of
-+overflow.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Jan Kara <jack@suse.cz>
-+[Retrieved from:
-+https://sourceforge.net/p/linuxquota/code/ci/02b222a335527f1031cc9495d8c5ebc1bc5b1d4e]
-+---
-+ quota.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/quota.c b/quota.c
-+index a6ed61f..a60de12 100644
-+--- a/quota.c
-++++ b/quota.c
-+@@ -385,7 +385,7 @@ int main(int argc, char **argv)
-+ 			  break;
-+ 		  case 259:
-+ 			  fscount++;
-+-			  fsnames = reallocarray(fsnames, fscount, sizeof(char *));
-++			  fsnames = realloc(fsnames, fscount * sizeof(char *));
-+ 			  if (!fsnames)
-+ 				die(1, _("Not enough memory for filesystem names"));
-+ 			  fsnames[fscount - 1] = optarg;
-+-- 
-+2.28.0
-+
-diff --git a/package/quota/quota.hash b/package/quota/quota.hash
-index d9f42e51c7..354a3e2de4 100644
---- a/package/quota/quota.hash
-+++ b/package/quota/quota.hash
-@@ -1,7 +1,7 @@
--# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.05/ (click on info button)
--md5	1c1dbd2cd3d680ccac661239b067e147	quota-4.05.tar.gz
--sha1	d23711f3b204e0a86b8378c32545c95fb149168d	quota-4.05.tar.gz
-+# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.06/ (click on info button)
-+md5  aef94648438832b684978d46fdf75110  quota-4.06.tar.gz
-+sha1  98288699cc14da42f762301c2b6731ec7c777681  quota-4.06.tar.gz
+diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
+index 1ecfda357b..71fef5be81 100644
+--- a/package/python-thrift/Config.in
++++ b/package/python-thrift/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_THRIFT
+ 	bool "python-thrift"
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+-	  python-thrift is a Python bindings for the Apache Thrift RPC
+-	  system.
++	  Python bindings for the Apache Thrift RPC system.
  
- # Locally calculated
--sha256	ef3b5b5d1014ed1344b46c1826145e20cbef8db967b522403c9a060761cf7ab9	quota-4.05.tar.gz
--sha256	35b2d9797b83bce16076da9c3273f264f50b8d02f492ee32cd4c51ba6897bceb	COPYING
-+sha256  2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d  quota-4.06.tar.gz
-+sha256  32a5fd41e7a257f7f0373988ea8d45cebdbf376060703c242c11c000751b1203  COPYING
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index f4bf9e5c58..18502da9aa 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -4,14 +4,11 @@
+-	  http://thrift.apache.org/
++	  https://thrift.apache.org
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 56d99f2a54..1d1d628908 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/thrift/json
+-md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
+-sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
++md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
++sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
++sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 21f2355f63..3a908ca91c 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--QUOTA_VERSION = 4.05
-+QUOTA_VERSION = 4.06
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
- QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
- QUOTA_LICENSE = GPL-2.0+
- QUOTA_LICENSE_FILES = COPYING
--# We're patching configure.ac
--QUOTA_AUTORECONF = YES
--QUOTA_GETTEXTIZE = YES
- QUOTA_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
- QUOTA_CONF_OPTS = --disable-pie
+-PYTHON_THRIFT_VERSION = 0.11.0
++PYTHON_THRIFT_VERSION = 0.13.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
+-PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = setup.py
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
++PYTHON_THRIFT_LICENSE = Apache-2.0
++PYTHON_THRIFT_LICENSE_FILES = LICENSE
  
+ $(eval $(python-package))
