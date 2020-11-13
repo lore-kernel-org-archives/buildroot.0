@@ -1,26 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 14:50:11 +0100
-Subject: [Buildroot] [PATCH] package/rauc: prevent occurring the error
+Date: Fri, 13 Nov 2020 14:50:07 +0100
+Subject: [Buildroot] [git commit] package/rauc: prevent occurring the error
  when directory exists
-In-Reply-To: <20201113113940.842415-1-b.bilas@grinn-global.com> (Bartosz
- Bilas's message of "Fri, 13 Nov 2020 12:39:40 +0100")
-References: <20201113113940.842415-1-b.bilas@grinn-global.com>
-Message-ID: <87mtzlgycs.fsf@dell.be.48ers.dk>
+Message-ID: <20201113133817.CB5EA81469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fefdd0511e99676aceb09403063f336e631d5067
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add -p argument that ignore that specified directory already exists.
- > Fixes:
- >  mkdir: cannot create directory ?/home/bartekk/buildroot-2020.11-rc1/output/target/usr/lib/systemd/system/rauc.service.d?: File exists
+Add -p argument that ignore that specified directory already exists.
 
- > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Fixes:
+ mkdir: cannot create directory ???/home/bartekk/buildroot-2020.11-rc1/output/target/usr/lib/systemd/system/rauc.service.d???: File exists
 
-Committed, thanks.
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rauc/rauc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 1915c783aa..61c50ab316 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,7 +31,7 @@ RAUC_DEPENDENCIES += systemd
+ endif
+ 
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf
+ endef
