@@ -1,11 +1,12 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 13 Nov 2020 20:06:52 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/linux-backports: fix kernel
- version check
-In-Reply-To: <20201113130941.67928-1-ju.o@free.fr>
+Date: Fri, 13 Nov 2020 20:07:17 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/linux-backports: bump
+ version to 5.8
+In-Reply-To: <20201113130941.67928-2-ju.o@free.fr>
 References: <20201112120155.333290-1-ju.o@free.fr>
  <20201113130941.67928-1-ju.o@free.fr>
-Message-ID: <20201113190652.GA88501@pevik>
+ <20201113130941.67928-2-ju.o@free.fr>
+Message-ID: <20201113190717.GB88501@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,29 @@ To: buildroot@busybox.net
 
 Hi Julien,
 
-> The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
-> do not rely on package's .config as a timestamp" broke the kernel
-> version check of this linux-backports package (it was no longer
-> executed). Since linux-4.19, the kernel's build system internally
-> touches its .config file, so it can no longer be used as a stamp file.
-> The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
-> pkg-kconfig infra need to be used instead.
+> Attempting to compile this package with newer Kernel version (e.g. v5.4)
+> fails with message:
 
-> This commit fixes the kernel version check.
+>    Generating local configuration database from kernel ...Kernel version parse failed!
+
+> Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
+> rather old and beat the very purpose of having newer drivers in older
+> kernels.
+
+> Since backports tag v4.14-rc4-1, the requirement on minimal kernel
+> version changed from 3.0 to 3.10. See commit [1]. The minimal kernel
+> version check is changed accordingly.
+
+> License files are also updated: the linux backports package copies the
+> license files from the kernel version used for its generation. v5.8 is now
+> "GPL-2.0 WITH Linux-syscall-note".
+
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
+
 Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Tested-by: Petr Vorel <petr.vorel@gmail.com>
+
+Thanks for your fixes!
 
 Kind regards,
 Petr
