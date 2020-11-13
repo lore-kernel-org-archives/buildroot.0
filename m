@@ -1,109 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Nov 2020 21:21:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tcpdump: fix CVE-2020-8037
-Message-ID: <20201113202115.538340-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Nov 2020 21:30:37 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/qdecoder: bump to version
+ 12.0.8
+Message-ID: <20201113203037.541260-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ppp decapsulator in tcpdump 4.9.3 can be convinced to allocate a
-large amount of memory.
+Update indentation in hash file (two spaces)
+
+https://github.com/wolkykim/qdecoder/releases/tag/v12.0.8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ng-don-t-allocate-a-too-large-buffer.patch | 67 +++++++++++++++++++
- package/tcpdump/tcpdump.mk                    |  3 +
- 2 files changed, 70 insertions(+)
- create mode 100644 package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+ package/qdecoder/qdecoder.hash | 4 ++--
+ package/qdecoder/qdecoder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-new file mode 100644
-index 0000000000..9e8674ac90
---- /dev/null
-+++ b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-@@ -0,0 +1,67 @@
-+From 32027e199368dad9508965aae8cd8de5b6ab5231 Mon Sep 17 00:00:00 2001
-+From: Guy Harris <guy@alum.mit.edu>
-+Date: Sat, 18 Apr 2020 14:04:59 -0700
-+Subject: [PATCH] PPP: When un-escaping, don't allocate a too-large buffer.
-+
-+The buffer should be big enough to hold the captured data, but it
-+doesn't need to be big enough to hold the entire on-the-network packet,
-+if we haven't captured all of it.
-+
-+(backported from commit e4add0b010ed6f2180dcb05a13026242ed935334)
-+
-+[Retrieved from:
-+https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ print-ppp.c | 18 ++++++++++++++----
-+ 1 file changed, 14 insertions(+), 4 deletions(-)
-+
-+diff --git a/print-ppp.c b/print-ppp.c
-+index 891761728..33fb03412 100644
-+--- a/print-ppp.c
-++++ b/print-ppp.c
-+@@ -1367,19 +1367,29 @@ print_bacp_config_options(netdissect_options *ndo,
-+ 	return 0;
-+ }
-+ 
-++/*
-++ * Un-escape RFC 1662 PPP in HDLC-like framing, with octet escapes.
-++ * The length argument is the on-the-wire length, not the captured
-++ * length; we can only un-escape the captured part.
-++ */
-+ static void
-+ ppp_hdlc(netdissect_options *ndo,
-+          const u_char *p, int length)
-+ {
-++	u_int caplen = ndo->ndo_snapend - p;
-+ 	u_char *b, *t, c;
-+ 	const u_char *s;
-+-	int i, proto;
-++	u_int i;
-++	int proto;
-+ 	const void *se;
-+ 
-++	if (caplen == 0)
-++		return;
-++
-+         if (length <= 0)
-+                 return;
-+ 
-+-	b = (u_char *)malloc(length);
-++	b = (u_char *)malloc(caplen);
-+ 	if (b == NULL)
-+ 		return;
-+ 
-+@@ -1388,10 +1398,10 @@ ppp_hdlc(netdissect_options *ndo,
-+ 	 * Do this so that we dont overwrite the original packet
-+ 	 * contents.
-+ 	 */
-+-	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
-++	for (s = p, t = b, i = caplen; i != 0; i--) {
-+ 		c = *s++;
-+ 		if (c == 0x7d) {
-+-			if (i <= 1 || !ND_TTEST(*s))
-++			if (i <= 1)
-+ 				break;
-+ 			i--;
-+ 			c = *s++ ^ 0x20;
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 01a46b9b5f..8db35694ea 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -18,6 +18,9 @@ TCPDUMP_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = libpcap
+diff --git a/package/qdecoder/qdecoder.hash b/package/qdecoder/qdecoder.hash
+index 0c95d2c27b..a662ac339a 100644
+--- a/package/qdecoder/qdecoder.hash
++++ b/package/qdecoder/qdecoder.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 01d4852b9343757abe98bbdb9d4bf0dc142ccb602ec921906ddde32c16164376  qdecoder-12.0.7.tar.gz
+-sha256 17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
++sha256  01d4852b9343757abe98bbdb9d4bf0dc142ccb602ec921906ddde32c16164376  qdecoder-12.0.8.tar.gz
++sha256  17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index ab95885c32..12784fc451 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-+TCPDUMP_IGNORE_CVES += CVE-2020-8037
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
- endif
+-QDECODER_VERSION = 12.0.7
++QDECODER_VERSION = 12.0.8
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+ QDECODER_LICENSE = BSD-2
+ QDECODER_LICENSE_FILES = COPYING
 -- 
 2.28.0
