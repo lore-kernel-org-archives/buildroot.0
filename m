@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:09:06 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/python-yatl: bump to
- version 20200711.1
-In-Reply-To: <20201112193128.440625-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 12 Nov 2020 20:31:28 +0100")
-References: <20201112193128.440625-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wnypf7st.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Nov 2020 19:11:17 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/python-thrift: bump to
+ version 0.13.0
+In-Reply-To: <20201112210300.665872-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 12 Nov 2020 22:03:00 +0100")
+References: <20201112210300.665872-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sg9df7p6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > https://github.com/web2py/yatl/compare/v20200430.1...master
+ > Updated through scanpypi
+ > https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to next, thanks.
