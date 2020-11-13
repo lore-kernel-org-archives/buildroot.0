@@ -1,63 +1,66 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 13 Nov 2020 23:50:46 +0200
-Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without
- video support
-In-Reply-To: <20201112223734.007ff25d@gmx.net>
-References: <20201110221629.7011-1-ps.report@gmx.net>
- <87sg9ei86d.fsf@dell.be.48ers.dk> <20201112223734.007ff25d@gmx.net>
-Message-ID: <20201113235046.GB184214@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 13 Nov 2020 22:20:23 +0100
+Subject: [Buildroot] [git commit] package/linux-backports: fix kernel
+ version check
+Message-ID: <20201113215334.8666F840AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello there!
+commit: https://git.buildroot.net/buildroot/commit/?id=464bb73b92cacdafd19515d7474a53d8401940dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 Nov 2020 22:37:34 +0100 Peter Seiderer <ps.report@gmx.net> wrote:
-> Hello Peter,
-> 
-> On Thu, 12 Nov 2020 22:20:26 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
-> 
-> > >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:  
-> > 
-> >  > Fixes:
-> >  >   - https://bugs.busybox.net/show_bug.cgi?id=13306  
-> > 
-> >  >       .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ?class WebCore::Settings? has no member named ?setGenericCueAPIEnabled?; did you mean ?setBeaconAPIEnabled??
-> >  >  page-> settings().setGenericCueAPIEnabled(enabled);
-> >  >                                     ^~~~~~~~~~~~~~~~~~~~~~~
-> >  >                                     setBeaconAPIEnabled  
-> > 
-> >  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
-> > 
-> > Committed, thanks. Don't forget to submit the patch upstream.
-> > 
-> 
-> Patch seems upstream already superseded by [1] 'Remove remaining alternative
-> preference setting mechanisms from LayoutTests' (removing the code)...
+The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
+do not rely on package's .config as a timestamp" broke the kernel
+version check of this linux-backports package (it was no longer
+executed). Since linux-4.19, the kernel's build system internally
+touches its .config file, so it can no longer be used as a stamp file.
+The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
+pkg-kconfig infra need to be used instead.
 
-I looked a bit into backporting this patch (and a few dependent ones) into the
-stable release branch and it got complicated quickly. I think that it may be
-better to have the fix that just uses the ENABLE(VIDEO) guards merged in the
-release branch.
+This commit fixes the kernel version check.
 
-I have just created an issue in WebKit's Bugzilla:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-backports/linux-backports.mk | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-  https://bugs.webkit.org/show_bug.cgi?id=218921
-
-and I will have a fix done which will be included in version 2.30.3, which
-is to be released soon and will also include security fixes. Maybe we would
-prefer to wait until that version is released and update Buildroot to it
-before ending the release candidate period. WDYT?
-
-?Adri?n
-
-> [1] https://trac.webkit.org/changeset?reponame=webkit&new=269236%40trunk%2FSource%2FWebKit%2FWebProcess%2FInjectedBundle%2FInjectedBundle.cpp&old=269111%40trunk%2FSource%2FWebKit%2FWebProcess%2FInjectedBundle%2FInjectedBundle.cpp
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201113/5521474b/attachment.asc>
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 030d7a2864..1827ee18b7 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -85,21 +85,24 @@ $(eval $(kconfig-package))
+ # not have been parsed yet, so the Linux build dir LINUX_DIR is not yet
+ # known. Thus, we use a "secondary expansion" so the rule is re-evaluated
+ # after all Makefiles are parsed, and thus at that time we will have the
+-# LINUX_DIR variable set to the proper value.
++# LINUX_DIR variable set to the proper value. Moreover, since linux-4.19,
++# the kernel's build system internally touches its .config file, so we
++# can't use it as a stamp file. We use the LINUX_KCONFIG_STAMP_DOTCONFIG
++# instead.
+ #
+ # Furthermore, we want to check the kernel version, since linux-backports
+ # only supports kernels >= 3.0. To avoid overriding linux-backports'
+-# .config rule defined in the kconfig-package infra, we use an
+-# intermediate stamp-file.
++# KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
++# use an intermediate stamp-file.
+ #
+ # Finally, it must also come after the call to kconfig-package, so we get
+ # LINUX_BACKPORTS_DIR properly defined (because the target part of the
+ # rule is not re-evaluated).
+ #
+-$(LINUX_BACKPORTS_DIR)/.config: $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
++$(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
+ 
+ .SECONDEXPANSION:
+-$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/.config
++$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
+ 	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
+ 	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
+ 		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
