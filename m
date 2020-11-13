@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Nov 2020 20:41:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mp4v2: fix build with gcc 10
-Message-ID: <20201113194107.432688-1-fontaine.fabrice@gmail.com>
+Date: Fri, 13 Nov 2020 21:00:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpam-tacplus: disable -Werror
+Message-ID: <20201113200039.519577-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,118 +9,90 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/4655626f1827245648a566a7223f247a130714c5
+ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...tatic-cast-to-unsigned-int-for-cases.patch | 99 +++++++++++++++++++
- 1 file changed, 99 insertions(+)
- create mode 100644 package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+ ...0001-Add-an-option-to-disable-Werror.patch | 55 +++++++++++++++++++
+ package/libpam-tacplus/libpam-tacplus.mk      |  3 +
+ 2 files changed, 58 insertions(+)
+ create mode 100644 package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
 
-diff --git a/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+diff --git a/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
 new file mode 100644
-index 0000000000..6c9b13bed8
+index 0000000000..80da2f35b4
 --- /dev/null
-+++ b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
-@@ -0,0 +1,99 @@
-+From a5ca35b044bbf13c0b16f0066bf24646604bb218 Mon Sep 17 00:00:00 2001
-+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-+Date: Thu, 6 Aug 2020 15:22:04 +0200
-+Subject: [PATCH] Static cast to unsigned int for cases
++++ b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+@@ -0,0 +1,55 @@
++From 88c78901503d50d0a62d85c96994ca4d67ab61e0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 13 Nov 2020 20:50:27 +0100
++Subject: [PATCH] Add an option to disable -Werror
 +
-+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-+[Retrieved from:
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libmp4v2/files/libmp4v2-2.0.0-unsigned-int-cast.patch]
++Allow the user to disable -Werror to avoid the following build failure
++with gcc 4.8:
++
++libtac/lib/magic.c:138:13: error: ignoring return value of 'read', declared with attribute warn_unused_result [-Werror=unused-result]
++             (void) read(rfd, &seed, sizeof(seed));
++             ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ libutil/Utility.cpp  | 2 +-
-+ util/mp4art.cpp      | 2 +-
-+ util/mp4chaps.cpp    | 2 +-
-+ util/mp4file.cpp     | 2 +-
-+ util/mp4subtitle.cpp | 2 +-
-+ util/mp4track.cpp    | 2 +-
-+ 6 files changed, 6 insertions(+), 6 deletions(-)
++ Makefile.am  | 6 +++++-
++ configure.ac | 3 +++
++ 2 files changed, 8 insertions(+), 1 deletion(-)
 +
-+diff --git a/libutil/Utility.cpp b/libutil/Utility.cpp
-+index 76cdd12..d6739d4 100644
-+--- a/libutil/Utility.cpp
-++++ b/libutil/Utility.cpp
-+@@ -493,7 +493,7 @@ Utility::process_impl()
-+         if( codes.find( code ) == codes.end() )
-+             continue;
++diff --git a/Makefile.am b/Makefile.am
++index 0be3cdb..4a137e9 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -8,7 +8,11 @@
 + 
-+-        switch( code ) {
-++        switch( static_cast<unsigned int>( code ) ) {
-+             case 'z':
-+                 _optimize = true;
-+                 break;
-+diff --git a/util/mp4art.cpp b/util/mp4art.cpp
-+index add935e..6e7f531 100644
-+--- a/util/mp4art.cpp
-++++ b/util/mp4art.cpp
-+@@ -376,7 +376,7 @@ ArtUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
++ ACLOCAL_AMFLAGS = -I config
++ AUTOMAKE_OPTIONS = subdir-objects
++-AM_CFLAGS = -Wall -Wextra -Werror
+++AM_CFLAGS = -Wall -Wextra
+++
+++if ENABLE_WERROR
+++AM_CFLAGS += -Werror
+++endif
 + 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int> ( code ) ) {
-+         case LC_ART_ANY:
-+             _artFilter = numeric_limits<uint32_t>::max();
-+             break;
-+diff --git a/util/mp4chaps.cpp b/util/mp4chaps.cpp
-+index 98400f8..ccc8b70 100644
-+--- a/util/mp4chaps.cpp
-++++ b/util/mp4chaps.cpp
-+@@ -632,7 +632,7 @@ ChapterUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
++ if TACC
++ bin_PROGRAMS = tacc
++diff --git a/configure.ac b/configure.ac
++index d0c5eba..dd8a966 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -100,6 +100,9 @@ AC_SUBST(pamdir)
++ AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc], [do not build docs]))
++ AM_CONDITIONAL(DOC, test "x$enable_doc" != "xno")
 + 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int> ( code ) ) {
-+         case 'A':
-+         case LC_CHPT_ANY:
-+             _ChapterType = MP4ChapterTypeAny;
-+diff --git a/util/mp4file.cpp b/util/mp4file.cpp
-+index c27844b..b127cd1 100644
-+--- a/util/mp4file.cpp
-++++ b/util/mp4file.cpp
-+@@ -189,7 +189,7 @@ FileUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_LIST:
-+             _action = &FileUtility::actionList;
-+             break;
-+diff --git a/util/mp4subtitle.cpp b/util/mp4subtitle.cpp
-+index 7462153..19d977d 100644
-+--- a/util/mp4subtitle.cpp
-++++ b/util/mp4subtitle.cpp
-+@@ -164,7 +164,7 @@ SubtitleUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_LIST:
-+             _action = &SubtitleUtility::actionList;
-+             break;
-+diff --git a/util/mp4track.cpp b/util/mp4track.cpp
-+index d550506..cd63d7e 100644
-+--- a/util/mp4track.cpp
-++++ b/util/mp4track.cpp
-+@@ -788,7 +788,7 @@ TrackUtility::utility_option( int code, bool& handled )
-+ {
-+     handled = true;
-+ 
-+-    switch( code ) {
-++    switch( static_cast<unsigned int>( code ) ) {
-+         case LC_TRACK_WILDCARD:
-+             _trackMode = TM_WILDCARD;
-+             break;
+++AC_ARG_ENABLE(werror, AS_HELP_STRING([--disable-werror], [do not build with -Werror]))
+++AM_CONDITIONAL(ENABLE_WERROR, test "x$enable_werror" != "xno")
+++
++ dnl --------------------------------------------------------------------
++ dnl Switch for run-time debugging
++ AC_ARG_ENABLE(runtime-debugging, [AS_HELP_STRING([--enable-runtime-debugging],
 +-- 
 +2.28.0
 +
+diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
+index 4e1f8bd173..9dd8466bf2 100644
+--- a/package/libpam-tacplus/libpam-tacplus.mk
++++ b/package/libpam-tacplus/libpam-tacplus.mk
+@@ -14,7 +14,10 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
+ # Fetching from github, we need to generate the configure script
+ LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_INSTALL_STAGING = YES
++# We're patching configure.ac
++LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
+ 
+ $(eval $(autotools-package))
 -- 
 2.28.0
