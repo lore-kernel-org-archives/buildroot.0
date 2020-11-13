@@ -1,22 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 23:34:45 +0100
-Subject: [Buildroot] [PATCH] linux: fix linux CIP description typo
-In-Reply-To: <20201108213313.1336774-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 8 Nov 2020 22:33:13 +0100")
-References: <20201108213313.1336774-1-angelo@amarulasolutions.com>
-Message-ID: <87pn4gevi2.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Nov 2020 23:34:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] linux: fix linux CIP
+ description typo
+Message-ID: <20201113222108.3216D8216C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3cca053d1bafc8913635bac0998a87bcb49ab67c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Version is 4.19 and not 4.4.
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Version is 4.19 and not 4.4.
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 642f821ce51588bd69fa3ca5fcd2ae53097257cd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index f83474e1ee..1d08042110 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -43,7 +43,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	  implementation of software building blocks that meet
+ 	  these requirements.
+ 
+-	  The CIP community plans to maintain 4.4 for security and
++	  The CIP community plans to maintain 4.19 for security and
+ 	  bug fixes for more than 10 years.
+ 
+ 	  https://www.cip-project.org
