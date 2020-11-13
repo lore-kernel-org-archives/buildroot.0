@@ -1,51 +1,94 @@
-From: Heiko Stuebner <heiko@sntech.de>
-Date: Fri, 13 Nov 2020 13:28:35 +0100
-Subject: [Buildroot] [PATCH] package/jpeg-turbo: bump to version 2.0.5
-Message-ID: <20201113122835.2462192-1-heiko@sntech.de>
+From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+Date: Fri, 13 Nov 2020 09:39:17 -0300
+Subject: [Buildroot] [PATCH 2020.08.x] package/busybox: Fix hwclock for
+ glibc 2.31+
+Message-ID: <20201113123917.22425-1-klaus@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Pick the below patch from upstream, in order to fix
+'settimeofday: Invalid argument' introduced by using glibc v2.31+.
+(upstream fix 8b4b928 with a small change to apply on busybox 1.31.1)
 
-This also includes the fix for CVE-2020-13790 .
+See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
 
-Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
- package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...ock-Fix-settimeofday-for-glibc-v2.31.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 874f04fc82..abf129bd93 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.4/
--sha1 163d8f96d0999526a117de0388624241b54dcd67  libjpeg-turbo-2.0.4.tar.gz
--md5  d01d9e0c28c27bc0de9f4e2e8ff49855 libjpeg-turbo-2.0.4.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
-+sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
-+md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
- # Locally computed
--sha256 33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406  libjpeg-turbo-2.0.4.tar.gz
-+sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
- sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
- sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 65debb2510..ddb22bc20b 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 2.0.4
-+JPEG_TURBO_VERSION = 2.0.5
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+diff --git a/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+new file mode 100644
+index 0000000000..9364a91db6
+--- /dev/null
++++ b/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
+@@ -0,0 +1,63 @@
++From b226d7730b2c4ca73fc569b404cd6adff1c5b05f Mon Sep 17 00:00:00 2001
++From: Eddie James <eajames@linux.ibm.com>
++Date: Mon, 10 Aug 2020 09:59:02 -0500
++Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
++
++The glibc implementation changed for settimeofday, resulting in "invalid
++argument" error when attempting to set both timezone and time with a single
++call. Fix this by calling settimeofday twice
++
++Signed-off-by: Eddie James <eajames@linux.ibm.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++
++(cherry picked from commit 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b)
++(Klaus: use bb_perror_msg_and_die() instead of
++bb_simple_perror_msg_and_die() for 1_31_1 backport)
++Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
++---
++ util-linux/hwclock.c | 14 +++++++++++---
++ 1 file changed, 11 insertions(+), 3 deletions(-)
++
++diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
++index 29f51021e..d2c68efbe 100644
++--- a/util-linux/hwclock.c
+++++ b/util-linux/hwclock.c
++@@ -122,16 +122,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
++ 	struct timeval tv;
++ 	struct timezone tz;
++ 
++-	tz.tz_minuteswest = timezone/60;
+++	tz.tz_minuteswest = timezone / 60;
++ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
++ 	 * daylight!=0 means "this timezone has some DST
++ 	 * during the year", not "DST is in effect now".
++ 	 */
++ 	tz.tz_dsttime = 0;
++ 
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_perror_msg_and_die("settimeofday");
+++
++ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
++ 	tv.tv_usec = 0;
++-	if (settimeofday(&tv, &tz))
+++	if (settimeofday(&tv, NULL))
++ 		bb_perror_msg_and_die("settimeofday");
++ }
++ 
++@@ -283,7 +287,11 @@ static void set_system_clock_timezone(int utc)
++ 	gettimeofday(&tv, NULL);
++ 	if (!utc)
++ 		tv.tv_sec += tz.tz_minuteswest * 60;
++-	if (settimeofday(&tv, &tz))
+++
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_perror_msg_and_die("settimeofday");
+++	if (settimeofday(&tv, NULL))
++ 		bb_perror_msg_and_die("settimeofday");
++ }
++ 
++-- 
++2.17.1
++
 -- 
-2.28.0
+2.17.1
