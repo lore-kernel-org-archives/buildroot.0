@@ -1,59 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 13 Nov 2020 00:20:52 +0100
-Subject: [Buildroot] [PATCH] toolchain/toolchain-buildroot: only riscv64 is
- supported by uClibc-ng
-Message-ID: <20201112232052.3137986-1-romain.naour@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 13 Nov 2020 07:24:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: security bump version to
+ 0.4.4.6
+Message-ID: <20201113062450.37070-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The commit [1] enabled riscv32 and riscv64 for uClibc-ng
-internal toolchain backend but only riscv64 is curently
-supported by uClibc-ng.
+Release notes: https://blog.torproject.org/node/1952
 
-The initial patch [2] from Mark Corbin is only about riscv64.
+Fixes TROVE-2020-005.
 
-Remove riscv32 from uClibc-ng supported architecture list.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981656
-
-[1] 209a082478fca143394512bb9a6c0822f12cfe2c
-[2] bd9810e176273914eca1208bcba23f0de9e446b3
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/uclibc/Config.in                | 1 -
- toolchain/toolchain-buildroot/Config.in | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 494758bd9d..e59fef3c69 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -107,7 +107,6 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default "i386"	   if BR2_i386
- 	default "x86_64"   if BR2_x86_64
- 	default "riscv64"  if BR2_RISCV_64
--	default "riscv32"  if BR2_RISCV_32
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ddf1a880ff..7aa7280f2b 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
++sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
+ sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index fe9b52670b..b7095aa39c 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_UCLIBC_MIPS_ABI
- 	string
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 6c4ede8d4c..25ac9759f1 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -30,7 +30,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 		   BR2_arm     || BR2_armeb    || \
- 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
--		   BR2_or1k    || BR2_powerpc || BR2_riscv || BR2_sh2a   || \
-+		   BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || BR2_sh2a   || \
- 		   BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
- 		   BR2_x86_64
- 	select BR2_TOOLCHAIN_USES_UCLIBC
+-TOR_VERSION = 0.4.4.5
++TOR_VERSION = 0.4.4.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
-2.25.4
+2.27.0
