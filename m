@@ -1,78 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 12:03:55 +0100
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats:
- support generating stats based on configured packages
-Message-ID: <20201117203828.25C0A7FB95@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 14:50:07 +0100
+Subject: [Buildroot] [git commit branch/next] package/rauc: prevent
+ occurring the error when directory exists
+Message-ID: <20201117203829.101A67FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a607dab336e7f78ab069cff1b503d0688950583
+commit: https://git.buildroot.net/buildroot/commit/?id=fefdd0511e99676aceb09403063f336e631d5067
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-pkg-stats was initially a Buildroot maintenance oriented tool: it was
-designed to examine all Buildroot packages and provide
-statistics/details about them.
+Add -p argument that ignore that specified directory already exists.
 
-However, it turns out that a number of details provided by pkg-stats,
-especially CVEs, are relevant also for Buildroot users, who would like
-to check regularly if their specific Buildroot configuration is
-affected by CVEs or not, and possibly check if all packages have
-license information, license files, etc.
+Fixes:
+ mkdir: cannot create directory ???/home/bartekk/buildroot-2020.11-rc1/output/target/usr/lib/systemd/system/rauc.service.d???: File exists
 
-The cve-checker script was recently introduced to provide an output
-relatively similar to pkg-stats, but focused on CVEs only.
-
-But in fact, its main difference is on the set of packages that we
-consider: pkg-stats considers all packages, while cve-checker uses
-"make show-info" to only consider packages enabled in the current
-configuration.
-
-So, this commit introduces a -c option to pkg-stats, to tell pkg-stats
-to generate its output based on the list of configured packages. -c is
-mutually exclusive with the -p option (explicit list of packages) and
--n option (a number of packages, picked randomly).
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/rauc/rauc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index fd6e370c18..d44f8241c1 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -333,6 +333,12 @@ def get_pkglist(npackages, package_list):
-     return packages
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 1915c783aa..61c50ab316 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,7 +31,7 @@ RAUC_DEPENDENCIES += systemd
+ endif
  
- 
-+def get_config_packages():
-+    cmd = ["make", "--no-print-directory", "show-info"]
-+    js = json.loads(subprocess.check_output(cmd))
-+    return js.keys()
-+
-+
- def package_init_make_info():
-     # Fetch all variables at once
-     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
-@@ -929,6 +935,8 @@ def parse_args():
-     output.add_argument('--json', dest='json', type=resolvepath,
-                         help='JSON output file')
-     packages = parser.add_mutually_exclusive_group()
-+    packages.add_argument('-c', dest='configpackages', action='store_true',
-+                          help='Apply to packages enabled in current configuration')
-     packages.add_argument('-n', dest='npackages', type=int, action='store',
-                           help='Number of packages')
-     packages.add_argument('-p', dest='packages', action='store',
-@@ -945,6 +953,8 @@ def __main__():
-     args = parse_args()
-     if args.packages:
-         package_list = args.packages.split(",")
-+    elif args.configpackages:
-+        package_list = get_config_packages()
-     else:
-         package_list = None
-     date = datetime.datetime.utcnow()
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf
+ endef
