@@ -1,77 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 22:32:38 +0100
-Subject: [Buildroot] [git commit branch/next] package/python3: uClibc-ng
- doesn't set errno when encryption method is not available
-Message-ID: <20201117203828.C1BD07FB0D@busybox.osuosl.org>
+Date: Fri, 13 Nov 2020 11:39:06 +0100
+Subject: [Buildroot] [git commit branch/next] package/tor: security bump
+ version to 0.4.4.6
+Message-ID: <20201117203828.DDA167FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5333ada9713f88c8ff87a8ce1d6f2f99ded56712
+commit: https://git.buildroot.net/buildroot/commit/?id=345b4aa6ce7d2eaa3b5f88e64a03309b71e1695f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since commit [1] in cpython, an exception is raised when an encryption method
-is not available. This eception is handled only if errno is set to EINVAL by
-crypt() but uClibc-ng doesn't set errno in crypt() [2].
+Release notes: https://blog.torproject.org/node/1952
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
+Fixes TROVE-2020-005.
 
-[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Clibc-ng-doesn-t-set-errno-when-encryptio.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-new file mode 100644
-index 0000000000..880277eb1d
---- /dev/null
-+++ b/package/python3/0034-lib-crypt-uClibc-ng-doesn-t-set-errno-when-encryptio.patch
-@@ -0,0 +1,40 @@
-+From 3c83eedcc2df3ecf6c4a17953ca24dff60c1378e Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Thu, 12 Nov 2020 00:16:18 +0100
-+Subject: [PATCH] lib/crypt: uClibc-ng doesn't set errno when encryption method
-+ is not available
-+
-+Since commit [1] in cpython, an exception is raised when an encryption method
-+is not available. This eception is handled only if errno is set to EINVAL by
-+crypt() but uClibc-ng doesn't set errno in crypt() [2].
-+
-+Fixes:
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981961
-+https://gitlab.com/buildroot.org/buildroot/-/jobs/830981979
-+
-+[1] https://github.com/python/cpython/commit/0d3fe8ae4961bf551e7d5e42559e2ede1a08fd7c
-+[2] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libcrypt/crypt.c?h=v1.0.36#n29
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ Lib/crypt.py | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/Lib/crypt.py b/Lib/crypt.py
-+index 33dbc46bb3..4692a5270c 100644
-+--- a/Lib/crypt.py
-++++ b/Lib/crypt.py
-+@@ -94,7 +94,9 @@ def _add_method(name, *args, rounds=None):
-+         result = crypt('', salt)
-+     except OSError as e:
-+         # Not all libc libraries support all encryption methods.
-+-        if e.errno == errno.EINVAL:
-++        # Not all libc libraries set errno when encryption method is not
-++        # available.
-++        if e.errno == errno.EINVAL or e.errno == 0:
-+             return False
-+         raise
-+     if result and len(result) == method.total_size:
-+-- 
-+2.25.4
-+
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ddf1a880ff..7aa7280f2b 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
++sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
+ sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index fe9b52670b..b7095aa39c 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.4.5
++TOR_VERSION = 0.4.4.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
