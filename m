@@ -1,47 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 11:39:06 +0100
-Subject: [Buildroot] [git commit] package/tor: security bump version to
- 0.4.4.6
-Message-ID: <20201113105318.485EC83BDC@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Fri, 13 Nov 2020 12:39:40 +0100
+Subject: [Buildroot] [PATCH] package/rauc: prevent occurring the error when
+ directory exists
+Message-ID: <20201113113940.842415-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=345b4aa6ce7d2eaa3b5f88e64a03309b71e1695f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add -p argument that ignore that specified directory already exists.
 
-Release notes: https://blog.torproject.org/node/1952
+Fixes:
+ mkdir: cannot create directory ?/home/bartekk/buildroot-2020.11-rc1/output/target/usr/lib/systemd/system/rauc.service.d?: File exists
 
-Fixes TROVE-2020-005.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rauc/rauc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index ddf1a880ff..7aa7280f2b 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
-+sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index fe9b52670b..b7095aa39c 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 1915c783aa..61c50ab316 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,7 +31,7 @@ RAUC_DEPENDENCIES += systemd
+ endif
  
--TOR_VERSION = 0.4.4.5
-+TOR_VERSION = 0.4.4.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf
+ endef
+-- 
+2.29.2
