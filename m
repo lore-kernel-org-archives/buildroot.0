@@ -1,36 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:29:31 +0100
-Subject: [Buildroot] kernel module from BR2_EXTERNAL-layer does not
- build automatically
-In-Reply-To: <alpine.DEB.2.20.2011131229170.5784@defender.svolli.xa> (Sven
- Oliver Moll's message of "Fri, 13 Nov 2020 15:31:06 +0100 (CET)")
-References: <alpine.DEB.2.20.2011131229170.5784@defender.svolli.xa>
-Message-ID: <87zh3k83t0.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Nov 2020 14:30:59 +0100
+Subject: [Buildroot] [PATCH] package/rauc: disable systemd for host build
+In-Reply-To: <20201113151558.1041972-1-b.bilas@grinn-global.com> (Bartosz
+ Bilas's message of "Fri, 13 Nov 2020 16:15:58 +0100")
+References: <20201113151558.1041972-1-b.bilas@grinn-global.com>
+Message-ID: <87v9e883qk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Oliver Moll <buildroot@svol.li> writes:
+>>>>> "Bartosz" == Bartosz Bilas <b.bilas@grinn-global.com> writes:
 
- > Hello,
- > for a private project, I have implemented a kernel module as a package
- > in a BR2_EXTERNAL-defined layer. It's rather simple as
- > lttng-modules. When I build it using "make kernel-package", it gets
- > installed in target/... just fine, but if I make a clean build, the
- > package will not be compiled and not be installed almost like it's not
- > selected in .config at all, even though it is.
+ > Since there is no necessity to have the support of systemd
+ > within the host variant let's disable it unconditionally
+ > to solve the following errors:
 
- > Any idea what's causing this, and how I could workaround this problem?
- > It happens on 2020.02.6 as well as 2020.08. Even a hint on what to
- > investigage would help.
+ > /usr/bin/install -c -m 644 data/rauc.service '/usr/lib/systemd/system'
+ > /usr/bin/install: cannot create regular file '/usr/lib/systemd/system/rauc.service': Permission denied
+ > /usr/bin/install -c -m 644 data/de.pengutronix.rauc.conf 'no'
+ > make[4]: *** [Makefile:1700: install-nodist_systemdunitDATA] Error 1
+ > make[4]: *** Waiting for unfinished jobs....
 
-It sounds like the variable in your Config.in file doesn't match the
-directory/filename of the .mk file, but it is hard to tell without more
-details.
+ > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-Can you paste your Config.in / kernel-package.mk files?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
