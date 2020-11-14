@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:13:48 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/apparmor: fix
- permission bits for apparmor.service
-Message-ID: <20201114130012.6E6B48615E@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:12:54 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/waf: add license
+Message-ID: <20201114130012.63AEF85F60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1f9bb026ae2f8e20a4f91dde98d016c25554d55
+commit: https://git.buildroot.net/buildroot/commit/?id=a173f9d586b2994b2911abd8178205732ff102b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Avoid setting executable bits for apparmor.service. This gets rid of a
-corresponding warning during installation:
-  Configuration file ../target/usr/lib/systemd/system/apparmor.service
-  is marked executable. Please remove executable permission bits.
-  Proceeding anyway.
-
-Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a325eefc1b1e0be4848fc67265c7395abdf08945)
+(cherry picked from commit 8c77548fa93e159572e71d4cb2208ab0706aea11)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apparmor/apparmor.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/waf/waf.hash | 1 +
+ package/waf/waf.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
-index 51820999eb..0044413d6c 100644
---- a/package/apparmor/apparmor.mk
-+++ b/package/apparmor/apparmor.mk
-@@ -88,7 +88,7 @@ endef
- define APPARMOR_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.systemd \
- 		$(TARGET_DIR)/lib/apparmor/apparmor.systemd
--	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.service \
-+	$(INSTALL) -D -m 0644 $(@D)/parser/apparmor.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/apparmor.service
- endef
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 15db32f384..afca0f31bf 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,3 +1,4 @@
+ # Locally computed
+ sha1  92212071a63ce38fdfd69fb8332f04e84d1f6635  waf-2.0.20
+ sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf-2.0.20
++sha256  bf971e98edc2414968a262c6aa6b88541a26c3cd248689c89f4c57370955ee7f  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index 56b6d9e033..9c5e72d9eb 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -7,6 +7,8 @@
+ WAF_VERSION = 2.0.20
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
++WAF_LICENSE = BSD-3-Clause
++WAF_LICENSE_FILES = waf
  
+ define HOST_WAF_EXTRACT_CMDS
+ 	$(INSTALL) -D -m 0755 $(HOST_WAF_DL_DIR)/waf-$(WAF_VERSION) $(@D)/waf
