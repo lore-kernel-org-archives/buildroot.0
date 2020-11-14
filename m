@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:09:53 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tmux: add
+Date: Sat, 14 Nov 2020 14:09:45 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/tmux: add
  upstream security fix for CVE-2020-27347
-Message-ID: <20201114125714.DC7428615E@busybox.osuosl.org>
+Message-ID: <20201114125723.7382B86162@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3183bff9eed6e824d21d9c5e688f50cd820518c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7d6a8fc1aae317470bce7e6e3feb2902b0cbf540
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
 input.c contained a stack-based buffer-overflow that can be exploited by
