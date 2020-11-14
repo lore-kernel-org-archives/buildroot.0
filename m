@@ -1,29 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:10:45 +0100
-Subject: [Buildroot] [PATCH] package/tmux: add upstream security fix for
- CVE-2020-27347
-In-Reply-To: <20201112092146.31467-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 12 Nov 2020 10:21:45 +0100")
-References: <20201112092146.31467-1-peter@korsgaard.com>
-Message-ID: <87blg0axt6.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Nov 2020 14:11:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/argp-standalone:
+ add license file
+Message-ID: <20201114125715.12768821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=77c523b62da09d2d85c68a336746c83745bca118
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
- > input.c contained a stack-based buffer-overflow that can be exploited by
- > terminal output.
+Use argp.h as the license file and, while at it, update indentation in
+hash file
 
- > For details, see:
- > https://www.openwall.com/lists/oss-security/2020/11/05/3
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ad0e1d609be6c9fce1d85e8aeff87af63d9ce158)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/argp-standalone/argp-standalone.hash | 5 ++++-
+ package/argp-standalone/argp-standalone.mk   | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
+index 5798214406..c780f9e53f 100644
+--- a/package/argp-standalone/argp-standalone.hash
++++ b/package/argp-standalone/argp-standalone.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++
++# License file
++sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 977b9547b6..651bc400f4 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -8,6 +8,7 @@ ARGP_STANDALONE_VERSION = 1.3
+ ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
+ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
++ARGP_STANDALONE_LICENSE_FILES = argp.h
+ 
+ ARGP_STANDALONE_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
