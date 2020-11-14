@@ -1,59 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Nov 2020 16:25:18 +0100
-Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and
- nvidia OpenGL provider
-In-Reply-To: <20201114144554.1795422-1-romain.naour@gmail.com>
-References: <20201114144554.1795422-1-romain.naour@gmail.com>
-Message-ID: <20201114162518.2587e563@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Nov 2020 17:51:00 +0100
+Subject: [Buildroot] [PATCH/RFC 1/1] package/clamav: disable on riscv64
+Message-ID: <20201114165100.2220981-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+http://autobuild.buildroot.net/results/6ad/6adc1ff74be4848c057aaf7bd02cc4b7d3610b1c/
 
-On Sat, 14 Nov 2020 15:45:54 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+The real fix is to add
 
-> Even if piglit could be used to test any OpenGl implementation, it's really a
-> mesa's project because it follow closely the mesa implementation (API).
-> 
-> Other OpenGl vendor (binary blob) are quickly out of date and incompatible with
-> piglit. Especially ARM OpenGl vendors such TI, Allwinner (sunxi) and rpi.
-> 
-> So introduce BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS to list all supported
-> OpenGL providers. For now only mesa and Nvidia are supported.
-> 
-> Fixes:
-> [BR2_PACKAGE_PROVIDES_LIBEGL="sunxi-mali-mainline"]:
-> http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0
-> 
-> [BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"]:
-> http://autobuild.buildroot.net/results/2cb799919d47e57eb401b7ece00b65707f9bd3ec
+    "#define __ARCH_WANT_RENAMEAT"
 
-I'm not sure this is the best way to handle this. Perhaps we need to
-have a better handling of OpenGL/EGL versions.
+to the kernel headers in arch/riscv/include/uapi/asm/unistd.h
+Inspired by https://lore.kernel.org/patchwork/patch/856923/#1053531
 
-Indeed, looking at the failures with sunxi-mali-mainline, the issue is
-that some EGLDeviceEXT stuff is used. From a quick look, this seems to
-be related to the EXT_device_base EGL extension, documented at
-https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_device_base.txt,
-and which appeared in EGL 1.5.
+But patching kernel headers/image seems to be complicated.
+Because I did not find a way to do so I am sending this patch as RFC
+combined with a request for help.
 
-So perhaps we should instead have some logic that allows OpenGL and EGL
-providers to also declare which version of the OpenGL/EGL spec they
-provide, so that users can appropriate depend on OpenEGL and EGL
-providers that are suitable ?
+ package/clamav/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This is something I already intend to work on about libgbm: we need a
-virtual package for libgbm, but not all OpenGL implementations provide
-the same version of the libgbm API.
-
-What do you think ?
-
-Thomas
+diff --git a/package/clamav/Config.in b/package/clamav/Config.in
+index 990a818b5c..21add35c91 100644
+--- a/package/clamav/Config.in
++++ b/package/clamav/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_CLAMAV
+ 	bool "clamav"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_RISCV_64 # renameat
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen
+@@ -20,3 +21,4 @@ comment "clamav needs a toolchain w/ C++, dynamic library, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
++	depends on !BR2_RISCV_64
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.27.0
