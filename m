@@ -1,44 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 09:09:04 +0100
-Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without
- video support
-In-Reply-To: <20201113235046.GB184214@momiji> (Adrian Perez de Castro's
- message of "Fri, 13 Nov 2020 23:50:46 +0200")
-References: <20201110221629.7011-1-ps.report@gmx.net>
- <87sg9ei86d.fsf@dell.be.48ers.dk> <20201112223734.007ff25d@gmx.net>
- <20201113235046.GB184214@momiji>
-Message-ID: <87ima8cqcf.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Nov 2020 09:09:26 +0100
+Subject: [Buildroot] [git commit] package/cryptsetup: really break circular
+ dependency
+Message-ID: <20201114075631.AA24883BD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3277694825cdc3fb8993bbe42609dd93c8959971
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The commit [1] should fix a circular dependency by
+using util-linux-libs instead of util-linux if
+BR2_PACKAGE_UTIL_LINUX_LIBS is set.
 
- >> Patch seems upstream already superseded by [1] 'Remove remaining alternative
- >> preference setting mechanisms from LayoutTests' (removing the code)...
+But util-linux is still in CRYPTSETUP_DEPENDENCIES.
+Remove it to really break the circular dependency.
 
- > I looked a bit into backporting this patch (and a few dependent ones) into the
- > stable release branch and it got complicated quickly. I think that it may be
- > better to have the fix that just uses the ENABLE(VIDEO) guards merged in the
- > release branch.
+[1] e3c86f5c9e466ed5135e824d6dcebcfd7f5ac1ab
 
- > I have just created an issue in WebKit's Bugzilla:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/cryptsetup/cryptsetup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >   https://bugs.webkit.org/show_bug.cgi?id=218921
-
-Thanks!
-
- > and I will have a fix done which will be included in version 2.30.3, which
- > is to be released soon and will also include security fixes. Maybe we would
- > prefer to wait until that version is released and update Buildroot to it
- > before ending the release candidate period. WDYT?
-
-I normally only cut the final release at the very end of the month /
-early December, so if "soon" is before that, it should be fine.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 60097595b4..a59a0c7570 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -9,7 +9,7 @@ CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
+-	lvm2 popt util-linux host-pkgconf json-c libargon2 \
++	lvm2 popt host-pkgconf json-c libargon2 \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBS),util-linux-libs,util-linux) \
+ 	$(TARGET_NLS_DEPENDENCIES)
