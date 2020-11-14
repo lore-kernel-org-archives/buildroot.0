@@ -1,73 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Nov 2020 11:48:07 +0100
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
- NEON
-Message-ID: <20201114104807.511480-1-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 14 Nov 2020 12:17:18 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/cups-filters: fix
+ daemon path for cups service
+Message-ID: <20201114110447.4C71F81358@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
-found out that a system generated with the ARM toolchain from Arm
-didn't boot. It turns out that this ARM toolchain is built with:
+commit: https://git.buildroot.net/buildroot/commit/?id=90da0697ee574b31adfefcd77407d1aeb309c884
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-  --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
+Fix a typo in service location, the right location is indeed /usr/sbin.
 
-So, it uses NEON as its FPU, which means it can only work on CPU cores
-that have NEON support. This commit adds the appropriate dependency to
-the toolchain-external-arm-arm package, and adjusts the Config.in help
-text accordingly.
-
-While at it, it also drops the part of the Config.in help text that
-says the code is tuned for Cortex-A9, as it is not the case: it was
-the case for the Linaro toolchain (built with --with-tune=cortex-a9),
-but not for the ARM toolchain, for which no specific --with-tune is
-passed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cfc63898f4dbdf7d9eb7c01252ea8ba4c5242229)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external-arm-arm/Config.in            | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ package/cups-filters/S82cups-browsed | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 4748ab53ae..29509635a3 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -1,12 +1,13 @@
--comment "Arm toolchains available for Cortex-A + EABIhf"
-+comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
- 	depends on BR2_arm
--	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
-+	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
- 	depends on !BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	bool "Arm ARM 2019.12"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
-+	depends on BR2_ARM_CPU_HAS_NEON
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
-@@ -20,10 +21,10 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
--	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code that
--	  runs on all Cortex-A profile devices, but tuned for the
--	  Cortex-A9. The code generated uses the hard floating point
--	  calling convention, and uses the VFPv3-D16 FPU instructions.
-+	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
-+	  that runs on all Cortex-A profile devices. The code
-+	  generated uses the hard floating point calling convention,
-+	  and uses the NEON FPU instructions.
- 
- 	  This is the same toolchain that was previously distributed by
- 	  Linaro.
--- 
-2.28.0
+diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
+index 08909c7f98..f17bbe7465 100644
+--- a/package/cups-filters/S82cups-browsed
++++ b/package/cups-filters/S82cups-browsed
+@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting
+-	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
+ 		-- -c /etc/cups/cups-browsed.conf
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
