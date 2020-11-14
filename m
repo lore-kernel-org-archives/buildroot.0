@@ -1,56 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 10:58:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/slirp: switch
- official tarball
-Message-ID: <20201114101641.43DED8367A@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 10:59:00 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/xen: add slirp
+ dependency for tools
+Message-ID: <20201114101641.58E5D817D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=062f732520c5fd6a8ba6cefeadd66a6f409ed9e5
+commit: https://git.buildroot.net/buildroot/commit/?id=2f55d265a9791520fe62bf129d365838ed9dac9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Other "official" tarballs don't ship .tarball-version resulting in a build
-failure: https://gitlab.freedesktop.org/slirp/libslirp/-/issues/24
+Build of xen tools fails if slirp is built before xen because xen is not
+compatible with spice slirp which does not provide libslirp.h:
+
+/home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
+ #include <libslirp.h>
+          ^~~~~~~~~~~~
+
+Indeed, xen prefers a system-provided slirp over its internal one
+
+So add slirp as a mandatory dependency (now that we switched to the up
+to date https://gitlab.freedesktop.org/slirp/libslirp)
+
+This build failure is raised since, at least, version 4.13.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
+ - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 47ffaa992ca8a179b7cacf5f0c30ea0398eb2fe0)
+(cherry picked from commit a0a5c184efe4fec3bf7edb0a7a8e40bb4ddbea13)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slirp/slirp.hash | 2 +-
- package/slirp/slirp.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/xen/Config.in | 1 +
+ package/xen/xen.mk    | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index 3051179df9..fe295b3bfb 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  6b1641f04d41bc45f94018ac8d42d3c9f3ba0e463cbeacf5f26fe83fc050161e  libslirp-v4.3.1.tar.bz2
-+sha256  388b4b08a8cc0996cc5155cb027a097dc1a7f2cfe84b1121496608ab5366cc48  libslirp-4.3.1.tar.xz
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 4351818952..d046e0cf75 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -5,9 +5,10 @@
- ################################################################################
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index 57ab40eba8..af6acd3530 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_SLIRP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_YAJL
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index ee5e9847fe..337aa21ca4 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -42,7 +42,8 @@ XEN_CONF_OPTS += --disable-xen
+ endif
  
- SLIRP_VERSION = 4.3.1
--SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
--SLIRP_SITE = \
--	https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
-+SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
-+# Other "official" tarballs don't ship .tarball-version resulting in a build
-+# failure: https://gitlab.freedesktop.org/slirp/libslirp/-/issues/24
-+SLIRP_SITE = https://elmarco.fedorapeople.org
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
+-XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
++XEN_DEPENDENCIES += \
++	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ XEN_DEPENDENCIES += argp-standalone
+ endif
