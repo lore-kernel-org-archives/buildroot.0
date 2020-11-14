@@ -1,48 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Nov 2020 17:51:00 +0100
-Subject: [Buildroot] [PATCH/RFC 1/1] package/clamav: disable on riscv64
-Message-ID: <20201114165100.2220981-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 14 Nov 2020 17:58:12 +0100
+Subject: [Buildroot] [RFC] support/scripts: reduce the number of jobs
+ created when a tag is added
+Message-ID: <20201114165812.1912291-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/6ad/6adc1ff74be4848c057aaf7bd02cc4b7d3610b1c/
+Currently when a tag is added to the Buildroot git tree, the gitlab-ci
+create 613 jobs. This trigger the error "pipeline job activity limit exceeded"
+and created jobs are stuck indefinitely (we need to restart manually a
+job to execute the pipeline).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+In order to reduce the number of jobs created, we keep only the runtime
+tests and the Qemu's defconfigs.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
-The real fix is to add
+I would like to keep Qemu runtime testing when a tag is added because
+it test the toolchain provided by default by Buildroot on several
+architectures.
+---
+ support/scripts/generate-gitlab-ci-yml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-    "#define __ARCH_WANT_RENAMEAT"
-
-to the kernel headers in arch/riscv/include/uapi/asm/unistd.h
-Inspired by https://lore.kernel.org/patchwork/patch/856923/#1053531
-
-But patching kernel headers/image seems to be complicated.
-Because I did not find a way to do so I am sending this patch as RFC
-combined with a request for help.
-
- package/clamav/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/clamav/Config.in b/package/clamav/Config.in
-index 990a818b5c..21add35c91 100644
---- a/package/clamav/Config.in
-+++ b/package/clamav/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CLAMAV
- 	bool "clamav"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_RISCV_64 # renameat
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen
-@@ -20,3 +21,4 @@ comment "clamav needs a toolchain w/ C++, dynamic library, threads, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
-+	depends on !BR2_RISCV_64
+diff --git a/support/scripts/generate-gitlab-ci-yml b/support/scripts/generate-gitlab-ci-yml
+index 4d979dd819..eaa3b226aa 100755
+--- a/support/scripts/generate-gitlab-ci-yml
++++ b/support/scripts/generate-gitlab-ci-yml
+@@ -36,6 +36,9 @@ gen_tests() {
+              )
+ 
+     if [ -n "${CI_COMMIT_TAG}" ]; then
++        # When a tag is added to the Buildroot git tree, we want
++        # to run the runtime tests and only testing Qemu defconfigs.
++        defconfigs=( $(cd configs; LC_ALL=C ls -1 qemu_*_defconfig) )
+         do_basics=true
+         do_defconfigs=base
+         do_runtime=true
 -- 
-2.27.0
+2.25.4
