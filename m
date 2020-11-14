@@ -1,127 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Nov 2020 22:53:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with 64 bits time_t
-Message-ID: <20201114215303.951794-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Nov 2020 23:10:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: fix build with
+ per-package directories
+Message-ID: <20201114221007.262746-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of qemu 5.0.0 and above with 64 bites time_t
+Fix wrong path in usr/lib/dovecot-config which was copied from the
+dovecot staging dir.
 
 Fixes:
- - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
+http://autobuild.buildroot.net/results/5fb/5fb1cd57bc3fdf4f75019c7b25d65ef887eea539/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-Fix-build-with-64-bits-time_t.patch  | 98 +++++++++++++++++++
- 1 file changed, 98 insertions(+)
- create mode 100644 package/qemu/0002-Fix-build-with-64-bits-time_t.patch
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/qemu/0002-Fix-build-with-64-bits-time_t.patch b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-new file mode 100644
-index 0000000000..7a72047136
---- /dev/null
-+++ b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-@@ -0,0 +1,98 @@
-+From 839e51aa452345b440f8d2d0df84ab58bdedfcd1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 14 Nov 2020 21:54:17 +0100
-+Subject: [PATCH] Fix build with 64 bits time_t
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index d7068cd873..462c992902 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -13,4 +13,12 @@ DOVECOT_PIGEONHOLE_DEPENDENCIES = dovecot
+ 
+ DOVECOT_PIGEONHOLE_CONF_OPTS = --with-dovecot=$(STAGING_DIR)/usr/lib
+ 
++ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
++define DOVECOT_PIGEONHOLE_FIXUP_DOVECOT_CONFIG
++	$(SED) 's,$(PER_PACKAGE_DIR)/dovecot/,$(PER_PACKAGE_DIR)/dovecot-pigeonhole/,g' \
++		$(STAGING_DIR)/usr/lib/dovecot-config
++endef
++DOVECOT_PIGEONHOLE_PRE_CONFIGURE_HOOKS = DOVECOT_PIGEONHOLE_FIXUP_DOVECOT_CONFIG
++endif
 +
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
-+
-+This will avoid the following build failure:
-+
-+hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
-+hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
-+  198 |     if (gettimeofday(&evdev.time, NULL)) {
-+      |                            ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
-+ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
-+
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ contrib/vhost-user-input/main.c | 10 +++++++++-
-+ hw/input/virtio-input-host.c    | 10 +++++++++-
-+ 2 files changed, 18 insertions(+), 2 deletions(-)
-+
-+diff --git a/contrib/vhost-user-input/main.c b/contrib/vhost-user-input/main.c
-+index 6020c6f33a..e688c3e0a9 100644
-+--- a/contrib/vhost-user-input/main.c
-++++ b/contrib/vhost-user-input/main.c
-+@@ -17,6 +17,11 @@
-+ #include "standard-headers/linux/virtio_input.h"
-+ #include "qapi/error.h"
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ enum {
-+     VHOST_USER_INPUT_MAX_QUEUES = 2,
-+ };
-+@@ -115,13 +120,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
-+ static void vi_handle_status(VuInput *vi, virtio_input_event *event)
-+ {
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("vi_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16toh(event->type);
-+     evdev.code = le16toh(event->code);
-+     evdev.value = le32toh(event->value);
-+diff --git a/hw/input/virtio-input-host.c b/hw/input/virtio-input-host.c
-+index 85daf73f1a..2e261737e1 100644
-+--- a/hw/input/virtio-input-host.c
-++++ b/hw/input/virtio-input-host.c
-+@@ -16,6 +16,11 @@
-+ #include <sys/ioctl.h>
-+ #include "standard-headers/linux/input.h"
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ /* ----------------------------------------------------------------- */
-+ 
-+ static struct virtio_input_config virtio_input_host_config[] = {
-+@@ -193,13 +198,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
-+ {
-+     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("virtio_input_host_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16_to_cpu(event->type);
-+     evdev.code = le16_to_cpu(event->code);
-+     evdev.value = le32_to_cpu(event->value);
-+-- 
-+2.29.2
-+
+ $(eval $(autotools-package))
 -- 
-2.29.2
+2.27.0
