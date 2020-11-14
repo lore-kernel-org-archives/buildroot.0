@@ -1,59 +1,64 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Sat, 14 Nov 2020 16:27:30 +0200
-Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without
- video support
-In-Reply-To: <87ima8cqcf.fsf@dell.be.48ers.dk>
-References: <20201110221629.7011-1-ps.report@gmx.net>
- <87sg9ei86d.fsf@dell.be.48ers.dk> <20201112223734.007ff25d@gmx.net>
- <20201113235046.GB184214@momiji> <87ima8cqcf.fsf@dell.be.48ers.dk>
-Message-ID: <20201114162730.GD203851@momiji>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 14 Nov 2020 15:45:54 +0100
+Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and nvidia
+ OpenGL provider
+Message-ID: <20201114144554.1795422-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Even if piglit could be used to test any OpenGl implementation, it's really a
+mesa's project because it follow closely the mesa implementation (API).
 
-On Sat, 14 Nov 2020 09:09:04 +0100 Peter Korsgaard <peter@korsgaard.com> wrote:
-> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
-> 
-> Hi,
-> 
->  >> Patch seems upstream already superseded by [1] 'Remove remaining alternative
->  >> preference setting mechanisms from LayoutTests' (removing the code)...
-> 
->  > I looked a bit into backporting this patch (and a few dependent ones) into the
->  > stable release branch and it got complicated quickly. I think that it may be
->  > better to have the fix that just uses the ENABLE(VIDEO) guards merged in the
->  > release branch.
-> 
->  > I have just created an issue in WebKit's Bugzilla:
-> 
->  >   https://bugs.webkit.org/show_bug.cgi?id=218921
-> 
-> Thanks!
-> 
->  > and I will have a fix done which will be included in version 2.30.3, which
->  > is to be released soon and will also include security fixes. Maybe we would
->  > prefer to wait until that version is released and update Buildroot to it
->  > before ending the release candidate period. WDYT?
-> 
-> I normally only cut the final release at the very end of the month /
-> early December, so if "soon" is before that, it should be fine.
+Other OpenGl vendor (binary blob) are quickly out of date and incompatible with
+piglit. Especially ARM OpenGl vendors such TI, Allwinner (sunxi) and rpi.
 
-The person in charge of the WebKitGTK releases and myself (for WPE WebKit)
-have been talking about when to make the new releases happen, and it's likely
-that we will put out the tarballs and an accompanying WSA by Friday 20th.
-If, for some reason, that cannot happen in the end, I will add submit this
-patch to be included in the Buildroot release instead of the version bump.
+So introduce BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS to list all supported
+OpenGL providers. For now only mesa and Nvidia are supported.
 
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201114/4f1e40d9/attachment.asc>
+Fixes:
+[BR2_PACKAGE_PROVIDES_LIBEGL="sunxi-mali-mainline"]:
+http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0
+
+[BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"]:
+http://autobuild.buildroot.net/results/2cb799919d47e57eb401b7ece00b65707f9bd3ec
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/piglit/Config.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/package/piglit/Config.in b/package/piglit/Config.in
+index 736fd95d71..bfa2ba4e9a 100644
+--- a/package/piglit/Config.in
++++ b/package/piglit/Config.in
+@@ -1,7 +1,19 @@
++config BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
++	bool
++	# Only mesa3d is officially supported, other opengl provider
++	# (binary blob) could break piglit at build or runtime.
++	# At least the binary-only driver blob for NVidia cards is
++	# still able to build piglit.
++	default y if BR2_PACKAGE_MESA3D_OPENGL_GLX || \
++		BR2_PACKAGE_MESA3D_OPENGL_EGL || \
++		BR2_PACKAGE_MESA3D_OPENGL_ES || \
++		BR2_PACKAGE_NVIDIA_DRIVER_XORG
++
+ config BR2_PACKAGE_PIGLIT
+ 	bool "piglit"
+ 	depends on BR2_PACKAGE_PYTHON3 # python3 only script
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
+ 	depends on BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
+ 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
+@@ -32,4 +44,5 @@ config BR2_PACKAGE_PIGLIT
+ 	  https://piglit.freedesktop.org
+ 
+ comment "piglit needs glibc or musl"
++	depends on BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+-- 
+2.25.4
