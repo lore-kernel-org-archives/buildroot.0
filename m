@@ -1,110 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:18:27 +0100
-Subject: [Buildroot] [git commit] package/tcpdump: fix CVE-2020-8037
-Message-ID: <20201114131308.0F78885FD3@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:20:12 +0100
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
+ NEON
+Message-ID: <20201114131308.1C85681050@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3a663f5705c492f52128b4a7ff514480332b6df
+commit: https://git.buildroot.net/buildroot/commit/?id=8477c41244c1d55b6496195c3a69f261b546dc8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ppp decapsulator in tcpdump 4.9.3 can be convinced to allocate a
-large amount of memory.
+While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
+found out that a system generated with the ARM toolchain from Arm
+didn't boot. It turns out that this ARM toolchain is built with:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
+
+So, it uses NEON as its FPU, which means it can only work on CPU cores
+that have NEON support. This commit adds the appropriate dependency to
+the toolchain-external-arm-arm package, and adjusts the Config.in help
+text accordingly.
+
+While at it, it also drops the part of the Config.in help text that
+says the code is tuned for Cortex-A9, as it is not the case: it was
+the case for the Linaro toolchain (built with --with-tune=cortex-a9),
+but not for the ARM toolchain, for which no specific --with-tune is
+passed.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...scaping-don-t-allocate-a-too-large-buffer.patch | 67 ++++++++++++++++++++++
- package/tcpdump/tcpdump.mk                         |  3 +
- 2 files changed, 70 insertions(+)
+ .../toolchain-external/toolchain-external-arm-arm/Config.in | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-new file mode 100644
-index 0000000000..9e8674ac90
---- /dev/null
-+++ b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-@@ -0,0 +1,67 @@
-+From 32027e199368dad9508965aae8cd8de5b6ab5231 Mon Sep 17 00:00:00 2001
-+From: Guy Harris <guy@alum.mit.edu>
-+Date: Sat, 18 Apr 2020 14:04:59 -0700
-+Subject: [PATCH] PPP: When un-escaping, don't allocate a too-large buffer.
-+
-+The buffer should be big enough to hold the captured data, but it
-+doesn't need to be big enough to hold the entire on-the-network packet,
-+if we haven't captured all of it.
-+
-+(backported from commit e4add0b010ed6f2180dcb05a13026242ed935334)
-+
-+[Retrieved from:
-+https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ print-ppp.c | 18 ++++++++++++++----
-+ 1 file changed, 14 insertions(+), 4 deletions(-)
-+
-+diff --git a/print-ppp.c b/print-ppp.c
-+index 891761728..33fb03412 100644
-+--- a/print-ppp.c
-++++ b/print-ppp.c
-+@@ -1367,19 +1367,29 @@ print_bacp_config_options(netdissect_options *ndo,
-+ 	return 0;
-+ }
-+ 
-++/*
-++ * Un-escape RFC 1662 PPP in HDLC-like framing, with octet escapes.
-++ * The length argument is the on-the-wire length, not the captured
-++ * length; we can only un-escape the captured part.
-++ */
-+ static void
-+ ppp_hdlc(netdissect_options *ndo,
-+          const u_char *p, int length)
-+ {
-++	u_int caplen = ndo->ndo_snapend - p;
-+ 	u_char *b, *t, c;
-+ 	const u_char *s;
-+-	int i, proto;
-++	u_int i;
-++	int proto;
-+ 	const void *se;
-+ 
-++	if (caplen == 0)
-++		return;
-++
-+         if (length <= 0)
-+                 return;
-+ 
-+-	b = (u_char *)malloc(length);
-++	b = (u_char *)malloc(caplen);
-+ 	if (b == NULL)
-+ 		return;
-+ 
-+@@ -1388,10 +1398,10 @@ ppp_hdlc(netdissect_options *ndo,
-+ 	 * Do this so that we dont overwrite the original packet
-+ 	 * contents.
-+ 	 */
-+-	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
-++	for (s = p, t = b, i = caplen; i != 0; i--) {
-+ 		c = *s++;
-+ 		if (c == 0x7d) {
-+-			if (i <= 1 || !ND_TTEST(*s))
-++			if (i <= 1)
-+ 				break;
-+ 			i--;
-+ 			c = *s++ ^ 0x20;
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 01a46b9b5f..8db35694ea 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -18,6 +18,9 @@ TCPDUMP_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = libpcap
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 4748ab53ae..29509635a3 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -1,12 +1,13 @@
+-comment "Arm toolchains available for Cortex-A + EABIhf"
++comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on BR2_arm
+-	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
+ 	depends on !BR2_STATIC_LIBS
  
-+# 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-+TCPDUMP_IGNORE_CVES += CVE-2020-8037
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
- endif
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	bool "Arm ARM 2019.12"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
++	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+@@ -20,10 +21,10 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+ 	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
+-	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code that
+-	  runs on all Cortex-A profile devices, but tuned for the
+-	  Cortex-A9. The code generated uses the hard floating point
+-	  calling convention, and uses the VFPv3-D16 FPU instructions.
++	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
++	  that runs on all Cortex-A profile devices. The code
++	  generated uses the hard floating point calling convention,
++	  and uses the NEON FPU instructions.
+ 
+ 	  This is the same toolchain that was previously distributed by
+ 	  Linaro.
