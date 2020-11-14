@@ -1,64 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 14 Nov 2020 16:19:53 +0100
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
- 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
-In-Reply-To: <20201008215931.0a4056cd@windsurf.hq.k.grp>
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
- <20201002155931.1529915-2-romain.naour@gmail.com>
- <20201008215931.0a4056cd@windsurf.hq.k.grp>
-Message-ID: <ca30d14c-6182-f97b-56c5-e206ed2839e2@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 14 Nov 2020 16:25:18 +0100
+Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and
+ nvidia OpenGL provider
+In-Reply-To: <20201114144554.1795422-1-romain.naour@gmail.com>
+References: <20201114144554.1795422-1-romain.naour@gmail.com>
+Message-ID: <20201114162518.2587e563@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-Sorry for my late reply...
+On Sat, 14 Nov 2020 15:45:54 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Le 08/10/2020 ? 21:59, Thomas Petazzoni a ?crit?:
-> Hello Romain,
+> Even if piglit could be used to test any OpenGl implementation, it's really a
+> mesa's project because it follow closely the mesa implementation (API).
 > 
-> On Fri,  2 Oct 2020 17:59:31 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
+> Other OpenGl vendor (binary blob) are quickly out of date and incompatible with
+> piglit. Especially ARM OpenGl vendors such TI, Allwinner (sunxi) and rpi.
 > 
->> - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
->>   Remove the ARC specific version.
->>
->> - Remove --enable-obsolete-rpc configure option.
+> So introduce BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS to list all supported
+> OpenGL providers. For now only mesa and Nvidia are supported.
 > 
-> If I read this, and upstream glibc commit
-> 5500cdba4018ddbda7909bc7f4f9718610b43cf0, it's not just the
-> --enable-obsolete-rpc flag that has been removed, but really all the
-> RPC code.
+> Fixes:
+> [BR2_PACKAGE_PROVIDES_LIBEGL="sunxi-mali-mainline"]:
+> http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0
 > 
-> Therefore, with glibc 2.32, this is no longer true:
-> 
-> config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->         bool "glibc"
-> 	[...]
->         # our glibc.mk enables RPC support
->         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> [BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"]:
+> http://autobuild.buildroot.net/results/2cb799919d47e57eb401b7ece00b65707f9bd3ec
 
-Indeed, we need to remove it.
+I'm not sure this is the best way to handle this. Perhaps we need to
+have a better handling of OpenGL/EGL versions.
 
-> 
-> So to me, it seems like this needs a bit more work. Could you for
-> example try to build libnfs, with glibc 2.32, and libtirpc disabled ?
+Indeed, looking at the failures with sunxi-mali-mainline, the issue is
+that some EGLDeviceEXT stuff is used. From a quick look, this seems to
+be related to the EXT_device_base EGL extension, documented at
+https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_device_base.txt,
+and which appeared in EGL 1.5.
 
-libnfs already select libtirpc when BR2_TOOLCHAIN_HAS_NATIVE_RPC is not set
-(musl or uclibc).
-So we can't use libnfs without BR2_TOOLCHAIN_HAS_NATIVE_RPC and libtirpc
-package. Each packages that require RPC seems to do the same.
-So, I don't think there is something to do at Buildroot level but we need to do
-some runtime testing (I hope libnfs is working with uclibc or musl :p ).
+So perhaps we should instead have some logic that allows OpenGL and EGL
+providers to also declare which version of the OpenGL/EGL spec they
+provide, so that users can appropriate depend on OpenEGL and EGL
+providers that are suitable ?
 
-Best regards,
-Romain
+This is something I already intend to work on about libgbm: we need a
+virtual package for libgbm, but not all OpenGL implementations provide
+the same version of the libgbm API.
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
+What do you think ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
