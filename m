@@ -1,67 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 10:58:05 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/xen: add slirp
- dependency for tools
-Message-ID: <20201114101646.7CBF581506@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 10:57:43 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/slirp: add
+ libglib2 mandatory dependency
+Message-ID: <20201114101646.69B8581506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5bce3432e7ba04c4a706b20b332aed019c3d35b
+commit: https://git.buildroot.net/buildroot/commit/?id=89ce8d0d3118b0e53284723089310bf443b6feb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Build of xen tools fails if slirp is built before xen because xen is not
-compatible with spice slirp which does not provide libslirp.h:
-
-/home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
- #include <libslirp.h>
-          ^~~~~~~~~~~~
-
-Indeed, xen prefers a system-provided slirp over its internal one
-
-So add slirp as a mandatory dependency (now that we switched to the up
-to date https://gitlab.freedesktop.org/slirp/libslirp)
-
-This build failure is raised since, at least, version 4.13.0
+slirp depends on libglib2, don't update xen as it already depends on it
 
 Fixes:
- - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
+ - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a0a5c184efe4fec3bf7edb0a7a8e40bb4ddbea13)
+(cherry picked from commit 88a62fac1f659ccf00030e59e2a0720a9f346edf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/Config.in | 1 +
- package/xen/xen.mk    | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/slirp/Config.in | 8 ++++++++
+ package/slirp/slirp.mk  | 1 +
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-index 57ab40eba8..af6acd3530 100644
---- a/package/xen/Config.in
-+++ b/package/xen/Config.in
-@@ -28,6 +28,7 @@ config BR2_PACKAGE_XEN_TOOLS
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_SLIRP
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_YAJL
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index ee5e9847fe..337aa21ca4 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -42,7 +42,8 @@ XEN_CONF_OPTS += --disable-xen
- endif
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+index 8f57c4fa6a..38fd5277af 100644
+--- a/package/slirp/Config.in
++++ b/package/slirp/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_SLIRP
+ 	bool "slirp"
++	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	select BR2_PACKAGE_LIBGLIB2
+ 	help
+ 	  libslirp is a user-mode networking library used by virtual
+ 	  machines, containers or various tools.
+@@ -18,3 +22,7 @@ config BR2_PACKAGE_SLIRP
+ 	      around May 2009 which archived it in 2012
+ 	    - So we switched to
+ 	      https://gitlab.freedesktop.org/slirp/libslirp
++
++comment "slirp needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index d046e0cf75..ed6d8855e5 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -12,5 +12,6 @@ SLIRP_SITE = https://elmarco.fedorapeople.org
+ SLIRP_LICENSE = BSD-3-Clause
+ SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_INSTALL_STAGING = YES
++SLIRP_DEPENDENCIES = libglib2
  
- ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
--XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-+XEN_DEPENDENCIES += \
-+	dtc libaio libglib2 ncurses openssl pixman slirp util-linux yajl
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- XEN_DEPENDENCIES += argp-standalone
- endif
+ $(eval $(meson-package))
