@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 11:30:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/xen: add slirp dependency for
- tools
-In-Reply-To: <20201107185256.1175545-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 7 Nov 2020 19:52:56 +0100")
-References: <20201107185256.1175545-1-fontaine.fabrice@gmail.com>
- <20201107185256.1175545-2-fontaine.fabrice@gmail.com>
-Message-ID: <87a6vkcjtd.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Nov 2020 11:30:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/slirp: switch official tarball
+In-Reply-To: <20201111101152.2088027-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 11 Nov 2020 11:11:51 +0100")
+References: <20201111101152.2088027-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z68cjt1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Build of xen tools fails if slirp is built before xen because xen is not
- > compatible with spice slirp which does not provide libslirp.h:
-
- > /home/buildroot/autobuild/instance-2/output-1/build/xen-4.13.0/tools/qemu-xen/net/slirp.c:40:10: fatal error: libslirp.h: No such file or directory
- >  #include <libslirp.h>
- >           ^~~~~~~~~~~~
-
- > Indeed, xen prefers a system-provided slirp over its internal one
-
- > So add slirp as a mandatory dependency (now that we switched to the up
- > to date https://gitlab.freedesktop.org/slirp/libslirp)
-
- > This build failure is raised since, at least, version 4.13.0
+ > Other "official" tarballs don't ship .tarball-version resulting in a build
+ > failure: https://gitlab.freedesktop.org/slirp/libslirp/-/issues/24
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/b80b33ed558518f7bbb0a3c8586bf2d0b8acc36f
+ >  - http://autobuild.buildroot.org/results/0b9cff1bc650876a6fff6102b2cb31dcdf4c5e8f
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
