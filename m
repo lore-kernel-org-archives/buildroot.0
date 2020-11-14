@@ -1,64 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 14 Nov 2020 15:45:54 +0100
-Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and nvidia
- OpenGL provider
-Message-ID: <20201114144554.1795422-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 14 Nov 2020 15:48:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to version
+ 6.0.9
+Message-ID: <20201114144847.373915-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even if piglit could be used to test any OpenGl implementation, it's really a
-mesa's project because it follow closely the mesa implementation (API).
+This release fixes a potential heap overflow when using a heap allocator
+other than jemalloc or glibc's malloc. See:
+https://github.com/redis/redis/pull/7963
 
-Other OpenGl vendor (binary blob) are quickly out of date and incompatible with
-piglit. Especially ARM OpenGl vendors such TI, Allwinner (sunxi) and rpi.
+https://raw.githubusercontent.com/redis/redis/6.0/00-RELEASENOTES
 
-So introduce BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS to list all supported
-OpenGL providers. For now only mesa and Nvidia are supported.
-
-Fixes:
-[BR2_PACKAGE_PROVIDES_LIBEGL="sunxi-mali-mainline"]:
-http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0
-
-[BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"]:
-http://autobuild.buildroot.net/results/2cb799919d47e57eb401b7ece00b65707f9bd3ec
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/piglit/Config.in | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/redis/0001-uclibc.patch | 4 +++-
+ package/redis/redis.hash        | 2 +-
+ package/redis/redis.mk          | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/piglit/Config.in b/package/piglit/Config.in
-index 736fd95d71..bfa2ba4e9a 100644
---- a/package/piglit/Config.in
-+++ b/package/piglit/Config.in
-@@ -1,7 +1,19 @@
-+config BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
-+	bool
-+	# Only mesa3d is officially supported, other opengl provider
-+	# (binary blob) could break piglit at build or runtime.
-+	# At least the binary-only driver blob for NVidia cards is
-+	# still able to build piglit.
-+	default y if BR2_PACKAGE_MESA3D_OPENGL_GLX || \
-+		BR2_PACKAGE_MESA3D_OPENGL_EGL || \
-+		BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+		BR2_PACKAGE_NVIDIA_DRIVER_XORG
-+
- config BR2_PACKAGE_PIGLIT
- 	bool "piglit"
- 	depends on BR2_PACKAGE_PYTHON3 # python3 only script
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
- 	depends on BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
- 		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
-@@ -32,4 +44,5 @@ config BR2_PACKAGE_PIGLIT
- 	  https://piglit.freedesktop.org
+diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
+index 3329a60edc..197f43e7a7 100644
+--- a/package/redis/0001-uclibc.patch
++++ b/package/redis/0001-uclibc.patch
+@@ -10,6 +10,8 @@ Signed-off-by: Daniel Price <daniel.price@gmail.com>
+ Signed-off-by: Martin Bark <martin@barkynet.com>
+ [Titouan: adapt to 5.0.4]
+ Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
++[Fabrice: update for 6.0.9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  
- comment "piglit needs glibc or musl"
-+	depends on BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
+ =========================================================================
+ diff -ur old/src/config.h new/src/config.h
+@@ -21,6 +23,6 @@ diff -ur old/src/config.h new/src/config.h
+  /* Test for backtrace() */
+ -#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
+ +#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
+-     defined(__FreeBSD__) || (defined(__OpenBSD__) && defined(USE_BACKTRACE))\
++     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__)) && defined(USE_BACKTRACE))\
+   || defined(__DragonFly__)
+  #define HAVE_BACKTRACE 1
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index d686d59847..a16bf9dffb 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
++sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index c567d3200d..b0d8e1cd51 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.8
++REDIS_VERSION = 6.0.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-2.25.4
+2.29.2
