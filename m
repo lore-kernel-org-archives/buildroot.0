@@ -1,37 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 12:17:18 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/cups-filters: fix
- daemon path for cups service
-Message-ID: <20201114110447.4C71F81358@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 12:19:58 +0100
+Subject: [Buildroot] [PATCH] support/testing/test_syslinux: add missing
+ Kconfig symbol
+In-Reply-To: <20201110205651.1135087-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 10 Nov 2020 21:56:51 +0100")
+References: <20201110205651.1135087-1-romain.naour@gmail.com>
+Message-ID: <87sg9cb2xt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90da0697ee574b31adfefcd77407d1aeb309c884
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Fix a typo in service location, the right location is indeed /usr/sbin.
+ > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
+ > custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cfc63898f4dbdf7d9eb7c01252ea8ba4c5242229)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cups-filters/S82cups-browsed | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
 
-diff --git a/package/cups-filters/S82cups-browsed b/package/cups-filters/S82cups-browsed
-index 08909c7f98..f17bbe7465 100644
---- a/package/cups-filters/S82cups-browsed
-+++ b/package/cups-filters/S82cups-browsed
-@@ -6,7 +6,7 @@ PIDFILE="/var/run/$DAEMON.pid"
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
- 	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/sbin/$DAEMON" \
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
- 		-- -c /etc/cups/cups-browsed.conf
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981734
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981733
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+
+Committed to 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
