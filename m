@@ -1,84 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:09:45 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/tmux: add
- upstream security fix for CVE-2020-27347
-Message-ID: <20201114125723.7382B86162@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:11:11 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/argp-standalone:
+ add license file
+Message-ID: <20201114125723.8333582624@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d6a8fc1aae317470bce7e6e3feb2902b0cbf540
+commit: https://git.buildroot.net/buildroot/commit/?id=b9ab0b5825072d6dccbac4b0c5b51ad591652a79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
-input.c contained a stack-based buffer-overflow that can be exploited by
-terminal output.
+Use argp.h as the license file and, while at it, update indentation in
+hash file
 
-For details, see:
-https://www.openwall.com/lists/oss-security/2020/11/05/3
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7e0f81a9f65b57c0228466b7f59d222f2011e4d0)
+(cherry picked from commit ad0e1d609be6c9fce1d85e8aeff87af63d9ce158)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-after-the-end-of-the-array-and-overwrit.patch | 35 ++++++++++++++++++++++
- package/tmux/tmux.mk                               |  3 ++
- 2 files changed, 38 insertions(+)
+ package/argp-standalone/argp-standalone.hash | 5 ++++-
+ package/argp-standalone/argp-standalone.mk   | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-new file mode 100644
-index 0000000000..d169322ed7
---- /dev/null
-+++ b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-@@ -0,0 +1,35 @@
-+From a868bacb46e3c900530bed47a1c6f85b0fbe701c Mon Sep 17 00:00:00 2001
-+From: nicm <nicm>
-+Date: Thu, 29 Oct 2020 16:33:01 +0000
-+Subject: [PATCH] Do not write after the end of the array and overwrite the
-+ stack when colon-separated SGR sequences contain empty arguments. Reported by
-+ Sergey Nizovtsev.
+diff --git a/package/argp-standalone/argp-standalone.hash b/package/argp-standalone/argp-standalone.hash
+index 5798214406..c780f9e53f 100644
+--- a/package/argp-standalone/argp-standalone.hash
++++ b/package/argp-standalone/argp-standalone.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
++sha256  dec79694da1319acd2238ce95df57f3680fea2482096e483323fddf3d818d8be  argp-standalone-1.3.tar.gz
 +
-+[Peter: Fixes CVE-2020-27347]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ input.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/input.c b/input.c
-+index 42a60c92..c280c0d9 100644
-+--- a/input.c
-++++ b/input.c
-+@@ -1976,8 +1976,13 @@ input_csi_dispatch_sgr_colon(struct input_ctx *ictx, u_int i)
-+ 				free(copy);
-+ 				return;
-+ 			}
-+-		} else
-++		} else {
-+ 			n++;
-++			if (n == nitems(p)) {
-++				free(copy);
-++				return;
-++			}
-++		}
-+ 		log_debug("%s: %u = %d", __func__, n - 1, p[n - 1]);
-+ 	}
-+ 	free(copy);
-+-- 
-+2.20.1
-+
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 169c9bb83f..00e77ad762 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -10,6 +10,9 @@ TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
++# License file
++sha256  bbb8919aa520069b0234faf5e83a94052d278419ffe97ca8e843ecc9b212d1ab  argp.h
+diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
+index 977b9547b6..651bc400f4 100644
+--- a/package/argp-standalone/argp-standalone.mk
++++ b/package/argp-standalone/argp-standalone.mk
+@@ -8,6 +8,7 @@ ARGP_STANDALONE_VERSION = 1.3
+ ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
+ ARGP_STANDALONE_INSTALL_STAGING = YES
+ ARGP_STANDALONE_LICENSE = LGPL-2.0+
++ARGP_STANDALONE_LICENSE_FILES = argp.h
  
-+# 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-+TMUX_IGNORE_CVES += CVE-2020-27347
-+
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define TMUX_ADD_TMUX_TO_SHELLS
+ ARGP_STANDALONE_CONF_ENV = \
+ 	CFLAGS="$(TARGET_CFLAGS) -fPIC -fgnu89-inline"
