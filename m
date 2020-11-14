@@ -1,60 +1,128 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 17:14:52 +0100
-Subject: [Buildroot] [git commit branch/next] package/postgresql: security
- bump to version 12.5
-Message-ID: <20201117203829.A43A17FD00@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:16:40 +0100
+Subject: [Buildroot] [git commit branch/next] package/mp4v2: fix build with
+ gcc 10
+Message-ID: <20201117203829.3EA8F7FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e68f00b91126191b642401d13e2be973ce91e8e
+commit: https://git.buildroot.net/buildroot/commit/?id=710d71ad4a752ec5f2ea5f3769278c753e4d0fd6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the following CVEs:
-- CVE-2020-25695: Multiple features escape "security restricted
-  operation" sandbox
-- CVE-2020-25694: Reconnection can downgrade connection security
-  settings
-- CVE-2020-25696: psql's \gset allows overwriting specially treated
-  variables
-
-https://www.postgresql.org/about/news/postgresql-131-125-1110-1015-9620-and-9524-released-2111
+Fixes:
+ - http://autobuild.buildroot.org/results/4655626f1827245648a566a7223f247a130714c5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...003-Static-cast-to-unsigned-int-for-cases.patch | 99 ++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 4e410d187a..64fa220714 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.md5
--md5  80ebbf0e55193b123760e5f8e48c6cff  postgresql-12.4.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.sha256
--sha256  bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc  postgresql-12.4.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.md5
-+md5  f19e48090bbd59ea81826b5fd99e7e97  postgresql-12.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.sha256
-+sha256  bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95  postgresql-12.5.tar.bz2
- 
- # License file, Locally calculated
- sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 3630b5a385..4c5f200bdf 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 12.4
-+POSTGRESQL_VERSION = 12.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+new file mode 100644
+index 0000000000..6c9b13bed8
+--- /dev/null
++++ b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+@@ -0,0 +1,99 @@
++From a5ca35b044bbf13c0b16f0066bf24646604bb218 Mon Sep 17 00:00:00 2001
++From: "Jason A. Donenfeld" <Jason@zx2c4.com>
++Date: Thu, 6 Aug 2020 15:22:04 +0200
++Subject: [PATCH] Static cast to unsigned int for cases
++
++Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
++[Retrieved from:
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libmp4v2/files/libmp4v2-2.0.0-unsigned-int-cast.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libutil/Utility.cpp  | 2 +-
++ util/mp4art.cpp      | 2 +-
++ util/mp4chaps.cpp    | 2 +-
++ util/mp4file.cpp     | 2 +-
++ util/mp4subtitle.cpp | 2 +-
++ util/mp4track.cpp    | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/libutil/Utility.cpp b/libutil/Utility.cpp
++index 76cdd12..d6739d4 100644
++--- a/libutil/Utility.cpp
+++++ b/libutil/Utility.cpp
++@@ -493,7 +493,7 @@ Utility::process_impl()
++         if( codes.find( code ) == codes.end() )
++             continue;
++ 
++-        switch( code ) {
+++        switch( static_cast<unsigned int>( code ) ) {
++             case 'z':
++                 _optimize = true;
++                 break;
++diff --git a/util/mp4art.cpp b/util/mp4art.cpp
++index add935e..6e7f531 100644
++--- a/util/mp4art.cpp
+++++ b/util/mp4art.cpp
++@@ -376,7 +376,7 @@ ArtUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case LC_ART_ANY:
++             _artFilter = numeric_limits<uint32_t>::max();
++             break;
++diff --git a/util/mp4chaps.cpp b/util/mp4chaps.cpp
++index 98400f8..ccc8b70 100644
++--- a/util/mp4chaps.cpp
+++++ b/util/mp4chaps.cpp
++@@ -632,7 +632,7 @@ ChapterUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case 'A':
++         case LC_CHPT_ANY:
++             _ChapterType = MP4ChapterTypeAny;
++diff --git a/util/mp4file.cpp b/util/mp4file.cpp
++index c27844b..b127cd1 100644
++--- a/util/mp4file.cpp
+++++ b/util/mp4file.cpp
++@@ -189,7 +189,7 @@ FileUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &FileUtility::actionList;
++             break;
++diff --git a/util/mp4subtitle.cpp b/util/mp4subtitle.cpp
++index 7462153..19d977d 100644
++--- a/util/mp4subtitle.cpp
+++++ b/util/mp4subtitle.cpp
++@@ -164,7 +164,7 @@ SubtitleUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &SubtitleUtility::actionList;
++             break;
++diff --git a/util/mp4track.cpp b/util/mp4track.cpp
++index d550506..cd63d7e 100644
++--- a/util/mp4track.cpp
+++++ b/util/mp4track.cpp
++@@ -788,7 +788,7 @@ TrackUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_TRACK_WILDCARD:
++             _trackMode = TM_WILDCARD;
++             break;
++-- 
++2.28.0
++
