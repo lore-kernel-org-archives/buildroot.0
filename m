@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 12:23:06 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Sat, 14 Nov 2020 12:23:01 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  support/testing/test_hardening: add missing Kconfig symbol
-Message-ID: <20201114110939.716E08367C@busybox.osuosl.org>
+Message-ID: <20201114110958.800BE82624@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd8bada8030d30ecd4e7436e2eb86618aa3c3964
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3eed851a0ab597a2b1a9cf07535a96a5585fc36c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
 custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
