@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 12:19:58 +0100
-Subject: [Buildroot] [PATCH] support/testing/test_syslinux: add missing
- Kconfig symbol
-In-Reply-To: <20201110205651.1135087-1-romain.naour@gmail.com> (Romain Naour's
- message of "Tue, 10 Nov 2020 21:56:51 +0100")
-References: <20201110205651.1135087-1-romain.naour@gmail.com>
-Message-ID: <87sg9cb2xt.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Nov 2020 12:21:20 +0100
+Subject: [Buildroot] [PATCH] package/systemd: fix update-done service
+ for read-only filesystem
+In-Reply-To: <20201109230744.1034392-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 10 Nov 2020 00:07:44 +0100")
+References: <20201109230744.1034392-1-romain.naour@gmail.com>
+Message-ID: <87o8k0b2vj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y is needed to use the
- > custom external toolchain x86-i686--glibc--bleeding-edge-2018.11-1.tar.bz2
+ > Backport an upstream patch to fix a regresion introduced in
+ > 246.5 by [1].
 
- > Otherwise the symbol BR2_TOOLCHAIN_EXTERNAL_URL is lost.
+ > [1] https://github.com/systemd/systemd-stable/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
 
  > Fixes:
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981734
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981733
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/830981805
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
