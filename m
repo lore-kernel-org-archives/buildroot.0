@@ -1,11 +1,11 @@
 From: Sven Oliver Moll <buildroot@svol.li>
-Date: Sat, 14 Nov 2020 16:05:39 +0100 (CET)
+Date: Sat, 14 Nov 2020 16:10:37 +0100 (CET)
 Subject: [Buildroot] kernel module from BR2_EXTERNAL-layer does not
  build automatically
 In-Reply-To: <87zh3k83t0.fsf@dell.be.48ers.dk>
 References: <alpine.DEB.2.20.2011131229170.5784@defender.svolli.xa>
  <87zh3k83t0.fsf@dell.be.48ers.dk>
-Message-ID: <alpine.DEB.2.20.2011141602231.5784@defender.svolli.xa>
+Message-ID: <alpine.DEB.2.20.2011141607430.5784@defender.svolli.xa>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -32,14 +32,15 @@ On Sat, 14 Nov 2020, Peter Korsgaard wrote:
 > directory/filename of the .mk file, but it is hard to tell without more
 > details.
 
-That was it! I had a typo in the .mk file, which I corrected. But I never 
-took a look, if the I copy/pasted that typo from/to Config.in.
+That was it. Thanks. I was struggling with a typo in the .mk file, and never 
+double checked if the typo was carried over from/to the Config.in file. Now
+everything works.
 
 
 Thanks,
 SvOlli
 -- 
 |  _______       |
-| (  /\          | You're never more alone than the first time someone puts
-|__)v\/lli a.k.a.| a gun to your favorite head and asks you to dance.
-|Sven Oliver Moll|   -- Andromeda S3E04, "Cui Bono"
+| (  /\          | Wow, I must be tired -- I just turned on the television, and
+|__)v\/lli a.k.a.| MTV is actually moving too fast for me to understand it.
+|Sven Oliver Moll|   -- Jamie Zawinski
