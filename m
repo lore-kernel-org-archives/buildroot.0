@@ -1,75 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:20:12 +0100
-Subject: [Buildroot] [git commit]
- toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
- NEON
-Message-ID: <20201114131308.1C85681050@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:17:56 +0100
+Subject: [Buildroot] [git commit] package/libpam-tacplus: disable -Werror
+Message-ID: <20201114131308.02DD981050@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8477c41244c1d55b6496195c3a69f261b546dc8e
+commit: https://git.buildroot.net/buildroot/commit/?id=bd85d82f61af0578a64e74e1cfb56c3c1bf46fe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
-found out that a system generated with the ARM toolchain from Arm
-didn't boot. It turns out that this ARM toolchain is built with:
+Fixes:
+ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
 
-  --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
-
-So, it uses NEON as its FPU, which means it can only work on CPU cores
-that have NEON support. This commit adds the appropriate dependency to
-the toolchain-external-arm-arm package, and adjusts the Config.in help
-text accordingly.
-
-While at it, it also drops the part of the Config.in help text that
-says the code is tuned for Cortex-A9, as it is not the case: it was
-the case for the Linaro toolchain (built with --with-tune=cortex-a9),
-but not for the ARM toolchain, for which no specific --with-tune is
-passed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external/toolchain-external-arm-arm/Config.in | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ .../0001-Add-an-option-to-disable-Werror.patch     | 55 ++++++++++++++++++++++
+ package/libpam-tacplus/libpam-tacplus.mk           |  3 ++
+ 2 files changed, 58 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 4748ab53ae..29509635a3 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -1,12 +1,13 @@
--comment "Arm toolchains available for Cortex-A + EABIhf"
-+comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
- 	depends on BR2_arm
--	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
-+	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
- 	depends on !BR2_STATIC_LIBS
+diff --git a/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+new file mode 100644
+index 0000000000..80da2f35b4
+--- /dev/null
++++ b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+@@ -0,0 +1,55 @@
++From 88c78901503d50d0a62d85c96994ca4d67ab61e0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 13 Nov 2020 20:50:27 +0100
++Subject: [PATCH] Add an option to disable -Werror
++
++Allow the user to disable -Werror to avoid the following build failure
++with gcc 4.8:
++
++libtac/lib/magic.c:138:13: error: ignoring return value of 'read', declared with attribute warn_unused_result [-Werror=unused-result]
++             (void) read(rfd, &seed, sizeof(seed));
++             ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  | 6 +++++-
++ configure.ac | 3 +++
++ 2 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 0be3cdb..4a137e9 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -8,7 +8,11 @@
++ 
++ ACLOCAL_AMFLAGS = -I config
++ AUTOMAKE_OPTIONS = subdir-objects
++-AM_CFLAGS = -Wall -Wextra -Werror
+++AM_CFLAGS = -Wall -Wextra
+++
+++if ENABLE_WERROR
+++AM_CFLAGS += -Werror
+++endif
++ 
++ if TACC
++ bin_PROGRAMS = tacc
++diff --git a/configure.ac b/configure.ac
++index d0c5eba..dd8a966 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -100,6 +100,9 @@ AC_SUBST(pamdir)
++ AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc], [do not build docs]))
++ AM_CONDITIONAL(DOC, test "x$enable_doc" != "xno")
++ 
+++AC_ARG_ENABLE(werror, AS_HELP_STRING([--disable-werror], [do not build with -Werror]))
+++AM_CONDITIONAL(ENABLE_WERROR, test "x$enable_werror" != "xno")
+++
++ dnl --------------------------------------------------------------------
++ dnl Switch for run-time debugging
++ AC_ARG_ENABLE(runtime-debugging, [AS_HELP_STRING([--enable-runtime-debugging],
++-- 
++2.28.0
++
+diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
+index 4e1f8bd173..9dd8466bf2 100644
+--- a/package/libpam-tacplus/libpam-tacplus.mk
++++ b/package/libpam-tacplus/libpam-tacplus.mk
+@@ -14,7 +14,10 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
+ # Fetching from github, we need to generate the configure script
+ LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_INSTALL_STAGING = YES
++# We're patching configure.ac
++LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
  
- config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	bool "Arm ARM 2019.12"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
-+	depends on BR2_ARM_CPU_HAS_NEON
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
-@@ -20,10 +21,10 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
--	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code that
--	  runs on all Cortex-A profile devices, but tuned for the
--	  Cortex-A9. The code generated uses the hard floating point
--	  calling convention, and uses the VFPv3-D16 FPU instructions.
-+	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
-+	  that runs on all Cortex-A profile devices. The code
-+	  generated uses the hard floating point calling convention,
-+	  and uses the NEON FPU instructions.
- 
- 	  This is the same toolchain that was previously distributed by
- 	  Linaro.
+ $(eval $(autotools-package))
