@@ -1,71 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 14 Nov 2020 15:48:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to version
- 6.0.9
-Message-ID: <20201114144847.373915-1-fontaine.fabrice@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 14 Nov 2020 15:51:58 +0100
+Subject: [Buildroot] [PATCH] package/libpam-tacplus: remove duplicate
+ LIBPAM_TACPLUS_AUTORECONF
+Message-ID: <20201114145158.1795983-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release fixes a potential heap overflow when using a heap allocator
-other than jemalloc or glibc's malloc. See:
-https://github.com/redis/redis/pull/7963
+The commit [1] added a second LIBPAM_TACPLUS_AUTORECONF
+because we are now patching configure.ac.
+But LIBPAM_TACPLUS_AUTORECONF was already used because the
+package is fetched from github.
 
-https://raw.githubusercontent.com/redis/redis/6.0/00-RELEASENOTES
+[1] bd85d82f61af0578a64e74e1cfb56c3c1bf46fe1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/849509860
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/redis/0001-uclibc.patch | 4 +++-
- package/redis/redis.hash        | 2 +-
- package/redis/redis.mk          | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/libpam-tacplus/libpam-tacplus.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
-index 3329a60edc..197f43e7a7 100644
---- a/package/redis/0001-uclibc.patch
-+++ b/package/redis/0001-uclibc.patch
-@@ -10,6 +10,8 @@ Signed-off-by: Daniel Price <daniel.price@gmail.com>
- Signed-off-by: Martin Bark <martin@barkynet.com>
- [Titouan: adapt to 5.0.4]
- Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-+[Fabrice: update for 6.0.9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- =========================================================================
- diff -ur old/src/config.h new/src/config.h
-@@ -21,6 +23,6 @@ diff -ur old/src/config.h new/src/config.h
-  /* Test for backtrace() */
- -#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
- +#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
--     defined(__FreeBSD__) || (defined(__OpenBSD__) && defined(USE_BACKTRACE))\
-+     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__)) && defined(USE_BACKTRACE))\
-   || defined(__DragonFly__)
-  #define HAVE_BACKTRACE 1
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index d686d59847..a16bf9dffb 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
-+sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c567d3200d..b0d8e1cd51 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 6.0.8
-+REDIS_VERSION = 6.0.9
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
+index 9dd8466bf2..b9630d8b37 100644
+--- a/package/libpam-tacplus/libpam-tacplus.mk
++++ b/package/libpam-tacplus/libpam-tacplus.mk
+@@ -12,10 +12,9 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
+ 	linux-pam \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+ # Fetching from github, we need to generate the configure script
++# 0001-Add-an-option-to-disable-Werror.patch
+ LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_INSTALL_STAGING = YES
+-# We're patching configure.ac
+-LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
+ LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
 -- 
-2.29.2
+2.25.4
