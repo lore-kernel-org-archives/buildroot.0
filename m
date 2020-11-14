@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:11:53 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bandwidthd: add
+Date: Sat, 14 Nov 2020 14:11:43 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/bandwidthd: add
  license file
-Message-ID: <20201114125939.3D51C82A17@busybox.osuosl.org>
+Message-ID: <20201114130012.4779E86126@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b38cc29ec19432477d27f964b887df32dd7732ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0b9c1b3216c8b8113fc1198dd4a67365eea92f38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Use README as the license file until upstream provides one:
 https://github.com/nroach44/bandwidthd/issues/2
