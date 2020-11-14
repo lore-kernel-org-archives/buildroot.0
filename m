@@ -1,82 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Nov 2020 21:49:21 +0100
-Subject: [Buildroot] [git commit branch/next] package/tmux: add upstream
- security fix for CVE-2020-27347
-Message-ID: <20201117203828.5F59A7FB95@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:17:56 +0100
+Subject: [Buildroot] [git commit branch/next] package/libpam-tacplus:
+ disable -Werror
+Message-ID: <20201117203829.4BB337FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e0f81a9f65b57c0228466b7f59d222f2011e4d0
+commit: https://git.buildroot.net/buildroot/commit/?id=bd85d82f61af0578a64e74e1cfb56c3c1bf46fe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2020-27347: The function input_csi_dispatch_sgr_colon() in file
-input.c contained a stack-based buffer-overflow that can be exploited by
-terminal output.
+Fixes:
+ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
 
-For details, see:
-https://www.openwall.com/lists/oss-security/2020/11/05/3
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...e-after-the-end-of-the-array-and-overwrit.patch | 35 ++++++++++++++++++++++
- package/tmux/tmux.mk                               |  3 ++
- 2 files changed, 38 insertions(+)
+ .../0001-Add-an-option-to-disable-Werror.patch     | 55 ++++++++++++++++++++++
+ package/libpam-tacplus/libpam-tacplus.mk           |  3 ++
+ 2 files changed, 58 insertions(+)
 
-diff --git a/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
+diff --git a/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
 new file mode 100644
-index 0000000000..d169322ed7
+index 0000000000..80da2f35b4
 --- /dev/null
-+++ b/package/tmux/0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-@@ -0,0 +1,35 @@
-+From a868bacb46e3c900530bed47a1c6f85b0fbe701c Mon Sep 17 00:00:00 2001
-+From: nicm <nicm>
-+Date: Thu, 29 Oct 2020 16:33:01 +0000
-+Subject: [PATCH] Do not write after the end of the array and overwrite the
-+ stack when colon-separated SGR sequences contain empty arguments. Reported by
-+ Sergey Nizovtsev.
++++ b/package/libpam-tacplus/0001-Add-an-option-to-disable-Werror.patch
+@@ -0,0 +1,55 @@
++From 88c78901503d50d0a62d85c96994ca4d67ab61e0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 13 Nov 2020 20:50:27 +0100
++Subject: [PATCH] Add an option to disable -Werror
 +
-+[Peter: Fixes CVE-2020-27347]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Allow the user to disable -Werror to avoid the following build failure
++with gcc 4.8:
++
++libtac/lib/magic.c:138:13: error: ignoring return value of 'read', declared with attribute warn_unused_result [-Werror=unused-result]
++             (void) read(rfd, &seed, sizeof(seed));
++             ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5c17226f12eba104d907693ec37fc101cc6d447f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ input.c | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
++ Makefile.am  | 6 +++++-
++ configure.ac | 3 +++
++ 2 files changed, 8 insertions(+), 1 deletion(-)
 +
-+diff --git a/input.c b/input.c
-+index 42a60c92..c280c0d9 100644
-+--- a/input.c
-++++ b/input.c
-+@@ -1976,8 +1976,13 @@ input_csi_dispatch_sgr_colon(struct input_ctx *ictx, u_int i)
-+ 				free(copy);
-+ 				return;
-+ 			}
-+-		} else
-++		} else {
-+ 			n++;
-++			if (n == nitems(p)) {
-++				free(copy);
-++				return;
-++			}
-++		}
-+ 		log_debug("%s: %u = %d", __func__, n - 1, p[n - 1]);
-+ 	}
-+ 	free(copy);
++diff --git a/Makefile.am b/Makefile.am
++index 0be3cdb..4a137e9 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -8,7 +8,11 @@
++ 
++ ACLOCAL_AMFLAGS = -I config
++ AUTOMAKE_OPTIONS = subdir-objects
++-AM_CFLAGS = -Wall -Wextra -Werror
+++AM_CFLAGS = -Wall -Wextra
+++
+++if ENABLE_WERROR
+++AM_CFLAGS += -Werror
+++endif
++ 
++ if TACC
++ bin_PROGRAMS = tacc
++diff --git a/configure.ac b/configure.ac
++index d0c5eba..dd8a966 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -100,6 +100,9 @@ AC_SUBST(pamdir)
++ AC_ARG_ENABLE(doc, AS_HELP_STRING([--disable-doc], [do not build docs]))
++ AM_CONDITIONAL(DOC, test "x$enable_doc" != "xno")
++ 
+++AC_ARG_ENABLE(werror, AS_HELP_STRING([--disable-werror], [do not build with -Werror]))
+++AM_CONDITIONAL(ENABLE_WERROR, test "x$enable_werror" != "xno")
+++
++ dnl --------------------------------------------------------------------
++ dnl Switch for run-time debugging
++ AC_ARG_ENABLE(runtime-debugging, [AS_HELP_STRING([--enable-runtime-debugging],
 +-- 
-+2.20.1
++2.28.0
 +
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 169c9bb83f..00e77ad762 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -10,6 +10,9 @@ TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
+diff --git a/package/libpam-tacplus/libpam-tacplus.mk b/package/libpam-tacplus/libpam-tacplus.mk
+index 4e1f8bd173..9dd8466bf2 100644
+--- a/package/libpam-tacplus/libpam-tacplus.mk
++++ b/package/libpam-tacplus/libpam-tacplus.mk
+@@ -14,7 +14,10 @@ LIBPAM_TACPLUS_DEPENDENCIES = \
+ # Fetching from github, we need to generate the configure script
+ LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_INSTALL_STAGING = YES
++# We're patching configure.ac
++LIBPAM_TACPLUS_AUTORECONF = YES
+ LIBPAM_TACPLUS_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
++LIBPAM_TACPLUS_CONF_OPTS = --disable-werror
  
-+# 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
-+TMUX_IGNORE_CVES += CVE-2020-27347
-+
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
- # can reject the user connection. See man shells.
- define TMUX_ADD_TMUX_TO_SHELLS
+ $(eval $(autotools-package))
