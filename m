@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:20:49 +0100
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
- NEON
-In-Reply-To: <20201114104807.511480-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sat, 14 Nov 2020 11:48:07 +0100")
-References: <20201114104807.511480-1-thomas.petazzoni@bootlin.com>
-Message-ID: <878sb49iry.fsf@dell.be.48ers.dk>
+Date: Sat, 14 Nov 2020 14:26:46 +0100
+Subject: [Buildroot] Package without external sources
+In-Reply-To: <70b69772-0747-d241-77a7-3e17b9ec56e5@klomp.eu> (Sven Klomp's
+ message of "Sat, 14 Nov 2020 13:56:05 +0100")
+References: <70b69772-0747-d241-77a7-3e17b9ec56e5@klomp.eu>
+Message-ID: <874kls9ii1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Sven" == Sven Klomp <mail@klomp.eu> writes:
 
- > While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
- > found out that a system generated with the ARM toolchain from Arm
- > didn't boot. It turns out that this ARM toolchain is built with:
+ > Hello,
+ > I want to create a package without external sources. photoframe.mk
+ > looks like:
+ > PHOTOFRAME_VERSION = 0.0.1
+ > PHOTOFRAME_LICENSE = GPL-3.0+
 
- >   --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
+ > define PHOTOFRAME_INSTALL_TARGET_CMDS
+ > ??? $(INSTALL) -D -m 0755 $(LIBFOO_PKGDIR)/photoframe.sh $(TARGET_DIR)/bin
+ > endef
 
- > So, it uses NEON as its FPU, which means it can only work on CPU cores
- > that have NEON support. This commit adds the appropriate dependency to
- > the toolchain-external-arm-arm package, and adjusts the Config.in help
- > text accordingly.
+ > $(eval $(autotools-package))
 
- > While at it, it also drops the part of the Config.in help text that
- > says the code is tuned for Cortex-A9, as it is not the case: it was
- > the case for the Linaro toolchain (built with --with-tune=cortex-a9),
- > but not for the ARM toolchain, for which no specific --with-tune is
- > passed.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
- > Cc: Romain Naour <romain.naour@gmail.com>
+ > However, the it complains with
+ > "PHOTOFRAME_SITE cannot be empty when PHOTOFRAME_SOURCE is not"
 
-Committed, thanks.
+ > I wonder, as PHOTOFRAME_SOURCE is not set as shown above.
+
+It is because PHOTOFRAME_SOURCE defaults to
+photoframe-$(PHOTOFRAME_VERSION).tar.gz. If you don't have any external
+source code, just drop PHOTOFRAME_VERSION to disable this, talking about
+the photoframe version when it is part of the buildroot tree anyway
+doesn't make a lot of sense.
 
 -- 
 Bye, Peter Korsgaard
