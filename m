@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:12:25 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/fbset: add
- license file
-Message-ID: <20201114130012.550B685F60@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:13:48 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/apparmor: fix
+ permission bits for apparmor.service
+Message-ID: <20201114130012.6E6B48615E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81c7a9b7f45dd583823938c5fbc1b08ee339dd32
+commit: https://git.buildroot.net/buildroot/commit/?id=e1f9bb026ae2f8e20a4f91dde98d016c25554d55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Use fbset.c as the license file and, while at it, also update
-indentation in hash file (two spaces)
+Avoid setting executable bits for apparmor.service. This gets rid of a
+corresponding warning during installation:
+  Configuration file ../target/usr/lib/systemd/system/apparmor.service
+  is marked executable. Please remove executable permission bits.
+  Proceeding anyway.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1379ef161bb95636aa5b0f7666cdaa3dbefe11d7)
+(cherry picked from commit a325eefc1b1e0be4848fc67265c7395abdf08945)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbset/fbset.hash | 3 ++-
- package/fbset/fbset.mk   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ package/apparmor/apparmor.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fbset/fbset.hash b/package/fbset/fbset.hash
-index ca8cc6d1f0..5d9785d90a 100644
---- a/package/fbset/fbset.hash
-+++ b/package/fbset/fbset.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20	fbset-2.1.tar.gz
-+sha256  40ff4ab0247b75138a0887ed40f81c1a6184f340b77126c16d074b1075b41c20  fbset-2.1.tar.gz
-+sha256  c3285709a0840899a789faefae1704e87f96f757e905a38a1931a9d4fde95ddd  fbset.c
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 787b4e1dca..8d2a477f8b 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -8,6 +8,7 @@ FBSET_VERSION = 2.1
- FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
- FBSET_DEPENDENCIES = host-bison host-flex
- FBSET_LICENSE = GPL-2.0
-+FBSET_LICENSE_FILES = fbset.c
+diff --git a/package/apparmor/apparmor.mk b/package/apparmor/apparmor.mk
+index 51820999eb..0044413d6c 100644
+--- a/package/apparmor/apparmor.mk
++++ b/package/apparmor/apparmor.mk
+@@ -88,7 +88,7 @@ endef
+ define APPARMOR_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.systemd \
+ 		$(TARGET_DIR)/lib/apparmor/apparmor.systemd
+-	$(INSTALL) -D -m 0755 $(@D)/parser/apparmor.service \
++	$(INSTALL) -D -m 0644 $(@D)/parser/apparmor.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/apparmor.service
+ endef
  
- define FBSET_BUILD_CMDS
- 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
