@@ -1,61 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Nov 2020 19:05:05 +0100
-Subject: [Buildroot] [git commit branch/next] toolchain/toolchain-buildroot:
- only riscv64 is supported by uClibc-ng
-Message-ID: <20201117203829.21ADF7FB0D@busybox.osuosl.org>
+Date: Sat, 14 Nov 2020 14:20:12 +0100
+Subject: [Buildroot] [git commit branch/next]
+ toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
+ NEON
+Message-ID: <20201117203829.5E8C07FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a5873ce5ae6aab1f4ebf6e8cbc798d8cd2ddf96
+commit: https://git.buildroot.net/buildroot/commit/?id=8477c41244c1d55b6496195c3a69f261b546dc8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The commit [1] enabled riscv32 and riscv64 for uClibc-ng
-internal toolchain backend but only riscv64 is curently
-supported by uClibc-ng.
+While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
+found out that a system generated with the ARM toolchain from Arm
+didn't boot. It turns out that this ARM toolchain is built with:
 
-The initial patch [2] from Mark Corbin is only about riscv64.
+  --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
 
-Remove riscv32 from uClibc-ng supported architecture list.
+So, it uses NEON as its FPU, which means it can only work on CPU cores
+that have NEON support. This commit adds the appropriate dependency to
+the toolchain-external-arm-arm package, and adjusts the Config.in help
+text accordingly.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981656
+While at it, it also drops the part of the Config.in help text that
+says the code is tuned for Cortex-A9, as it is not the case: it was
+the case for the Linaro toolchain (built with --with-tune=cortex-a9),
+but not for the ARM toolchain, for which no specific --with-tune is
+passed.
 
-[1] 209a082478fca143394512bb9a6c0822f12cfe2c
-[2] bd9810e176273914eca1208bcba23f0de9e446b3
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in                | 1 -
- toolchain/toolchain-buildroot/Config.in | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ .../toolchain-external/toolchain-external-arm-arm/Config.in | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 494758bd9d..e59fef3c69 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -107,7 +107,6 @@ config BR2_UCLIBC_TARGET_ARCH
- 	default "i386"	   if BR2_i386
- 	default "x86_64"   if BR2_x86_64
- 	default "riscv64"  if BR2_RISCV_64
--	default "riscv32"  if BR2_RISCV_32
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 4748ab53ae..29509635a3 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -1,12 +1,13 @@
+-comment "Arm toolchains available for Cortex-A + EABIhf"
++comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on BR2_arm
+-	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
++	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
+ 	depends on !BR2_STATIC_LIBS
  
- config BR2_UCLIBC_MIPS_ABI
- 	string
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index f34dd84c29..2058ff1eb9 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -31,7 +31,7 @@ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 		   BR2_arm     || BR2_armeb    || \
- 		   BR2_i386    || BR2_m68k   || BR2_microblaze || \
- 		   BR2_mips    || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
--		   BR2_or1k    || BR2_powerpc || BR2_riscv || BR2_sh2a   || \
-+		   BR2_or1k    || BR2_powerpc || BR2_RISCV_64 || BR2_sh2a   || \
- 		   BR2_sh4     || BR2_sh4eb   || BR2_sparc || BR2_xtensa || \
- 		   BR2_x86_64
- 	select BR2_TOOLCHAIN_USES_UCLIBC
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	bool "Arm ARM 2019.12"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
++	depends on BR2_ARM_CPU_HAS_NEON
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	depends on BR2_ARM_EABIHF
+ 	depends on !BR2_STATIC_LIBS
+@@ -20,10 +21,10 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+ 	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
+-	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code that
+-	  runs on all Cortex-A profile devices, but tuned for the
+-	  Cortex-A9. The code generated uses the hard floating point
+-	  calling convention, and uses the VFPv3-D16 FPU instructions.
++	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
++	  that runs on all Cortex-A profile devices. The code
++	  generated uses the hard floating point calling convention,
++	  and uses the NEON FPU instructions.
+ 
+ 	  This is the same toolchain that was previously distributed by
+ 	  Linaro.
