@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Nov 2020 14:22:29 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/asterisk: bump
+Date: Sun, 15 Nov 2020 14:21:35 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/asterisk: bump
  version to 16.13.0
-Message-ID: <20201115130930.D142A86301@busybox.osuosl.org>
+Message-ID: <20201115130935.8022082285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8524d035ac19ca4d504040281cfb05a6e03f70ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=803aacfbc3f3da7fb15f4df0555f8a09b44abdfb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Release notes:
 https://www.asterisk.org/asterisk-news/asterisk-16-13-0-now-available/
