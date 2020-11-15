@@ -1,76 +1,58 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 15 Nov 2020 11:23:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build without threads
-Message-ID: <20201115102352.145892-1-fontaine.fabrice@gmail.com>
+Date: Sun, 15 Nov 2020 11:51:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump to
+ version 12.5
+Message-ID: <20201115105103.195998-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
+Fix the following CVEs:
+- CVE-2020-25695: Multiple features escape "security restricted
+  operation" sandbox
+- CVE-2020-25694: Reconnection can downgrade connection security
+  settings
+- CVE-2020-25696: psql's \gset allows overwriting specially treated
+  variables
+
+https://www.postgresql.org/about/news/postgresql-131-125-1110-1015-9620-and-9524-released-2111
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0002-meson.build-check-for-pthread.h.patch | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-new file mode 100644
-index 0000000000..128876dfb7
---- /dev/null
-+++ b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-@@ -0,0 +1,49 @@
-+From 96bbf3a3af45d86f790afdf91a6686c37421e92b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 15 Nov 2020 10:57:37 +0100
-+Subject: [PATCH] meson.build: check for pthread.h
-+
-+Check for pthread.h otherwise the build will fail with some toolchains
-+that have libphtread.so but not pthread.h:
-+
-+Run-time dependency threads found: YES
-+
-+../src/hb-mutex.hh:53:10: fatal error: pthread.h: No such file or directory
-+ #include <pthread.h>
-+          ^~~~~~~~~~~
-+
-+Moreover, fix detection of pthread fallback
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index bf3925db..6d263d48 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -284,13 +284,15 @@ endif
-+ # threads
-+ thread_dep = null_dep
-+ if host_machine.system() != 'windows'
-+-  thread_dep = dependency('threads', required: false)
-++  if cpp.has_header('pthread.h')
-++    thread_dep = dependency('threads', required: false)
-++  endif
-+ 
-+   if thread_dep.found()
-+     conf.set('HAVE_PTHREAD', 1)
-+   else
-+     check_headers += ['sched.h']
-+-    check_funcs += ['sched_yield', {'link_with': 'rt'}]
-++    check_funcs += [['sched_yield', {'link_with': 'rt'}]]
-+   endif
-+ endif
-+ 
-+-- 
-+2.29.2
-+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 4e410d187a..64fa220714 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.md5
+-md5  80ebbf0e55193b123760e5f8e48c6cff  postgresql-12.4.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.bz2.sha256
+-sha256  bee93fbe2c32f59419cb162bcc0145c58da9a8644ee154a30b9a5ce47de606cc  postgresql-12.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.md5
++md5  f19e48090bbd59ea81826b5fd99e7e97  postgresql-12.5.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.sha256
++sha256  bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95  postgresql-12.5.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index d984235249..4d675e9e28 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 12.4
++POSTGRESQL_VERSION = 12.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
 2.29.2
