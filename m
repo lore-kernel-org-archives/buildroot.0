@@ -1,47 +1,44 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Nov 2020 15:36:06 +0100
-Subject: [Buildroot] [=PATCH v3 1/4] board/qemu/post-image.sh: rename
- IMAGE_DIR to BINARIES_DIR
-Message-ID: <20201115143609.2160080-1-romain.naour@gmail.com>
+Date: Sun, 15 Nov 2020 15:36:09 +0100
+Subject: [Buildroot] [=PATCH v3 4/4] support/scripts/boot-qemu-image.py:
+ don't fail if start-qemu.sh is missing
+In-Reply-To: <20201115143609.2160080-1-romain.naour@gmail.com>
+References: <20201115143609.2160080-1-romain.naour@gmail.com>
+Message-ID: <20201115143609.2160080-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The output/images directory is called BINARIES_DIR in the
-Buildroot manual, not IMAGE_DIR.
+When boot-qemu-image.py script was added, we wanted to run
+each qemu defconfig in gitlab, so we expect that all qemu
+defconfig generate the script start-qemu.sh in images
+directory.
+
+Don't make it a hard requirement even if we prefer to be
+able to do a runtime test for each qemu defconfig.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/qemu/post-image.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/boot-qemu-image.py | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
-index 9a4d216274..f34bf5043a 100755
---- a/board/qemu/post-image.sh
-+++ b/board/qemu/post-image.sh
-@@ -19,9 +19,9 @@ if [ -z "${QEMU_CMD_LINE}" ]; then
-     exit 0
- fi
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index dbbba552ad..4066788c88 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -18,6 +18,10 @@ def main():
+     if not sys.argv[1].startswith('qemu_'):
+         sys.exit(0)
  
--# Replace output/images path by ${IMAGE_DIR} since the script
-+# Replace output/images path by ${BINARIES_DIR} since the script
- # will be in the same directory as the kernel and the rootfs images.
--QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}"
-+QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${BINARIES_DIR\}}"
++    if not os.path.exists('output/images/start-qemu.sh'):
++        print('qemu-start.sh is missing, cannot test.')
++        sys.exit(0)
++
+     qemu_start = os.path.join(os.getcwd(), 'output/images/start-qemu.sh')
  
- # Remove -serial stdio if present, keep it as default args
- DEFAULT_ARGS="$(sed -r -e '/-serial stdio/!d; s/.*(-serial stdio).*/\1/' <<<"${QEMU_CMD_LINE}")"
-@@ -40,7 +40,7 @@ esac
- 
- cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
- 	#!/bin/sh
--	IMAGE_DIR="\${0%/*}/"
-+	BINARIES_DIR="\${0%/*}/"
- 
- 	if [ "\${1}" = "serial-only" ]; then
- 	    EXTRA_ARGS='${SERIAL_ARGS}'
+     child = pexpect.spawn(qemu_start, ['serial-only'],
 -- 
 2.25.4
