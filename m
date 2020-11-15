@@ -1,50 +1,65 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Nov 2020 17:05:08 +0100
-Subject: [Buildroot] [PATCH 1/2] support/scripts/gen-bootlin-toolchains:
- riscv32 use a pre-2.33 glibc version without RPC support
-Message-ID: <20201115160509.2165474-1-romain.naour@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sun, 15 Nov 2020 21:56:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{libuv,
+ uvw}: bump to versions 1.40.0, 2.8.0_libuv_v1.40
+Message-ID: <20201115195654.88212-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-riscv32 has been merged into glibc 2.33 where RPC support has been removed [1].
-
-Add a special handling for the riscv32 Bootlin bleeding-edge 2020.08-1 toolchain
-since it used a re-2.33 glibc version where RPC support has been removed [2].
-
-Other glibc Bootlin toolchain use glibc 2.31 with RPC support enabled.
-
-This special handling must be removed when all Bootlin toolchain has been
-rebuild with glibc > 2.32.
-
-[1] https://sourceware.org/pipermail/libc-announce/2020/000029.html
-[2] https://git.buildroot.net/buildroot/commit/?id=a4889545aa653e7f001f212eda169e7d676aefc0
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- support/scripts/gen-bootlin-toolchains | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 2 +-
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index fce75c51c2..645584d07e 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -263,8 +263,11 @@ class Toolchain:
-                 # glibc doesn't support static only configuration
-                 depends.append("!BR2_STATIC_LIBS")
-                 selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
--                # all glibc toolchains have RPC support
--                selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
-+
-+                # riscv32 has been merged into glibc 2.33 where RPC support has been removed.
-+                if not self.arch.startswith("riscv32"):
-+                    # all glibc < 2.32 toolchains have RPC support
-+                    selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
-             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL"):
-                 # musl needs mmu support
-                 depends.append("BR2_USE_MMU")
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 2aba18490e..c682affae7 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2cd9a757fe6c512440933e2bdcab21143d4aa6249b2541399908ce038b756c9d  libuv-1.38.0.tar.gz
++sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 493168cd99..5876ab8935 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.38.0
++LIBUV_VERSION = 1.40.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index f842345ea6..ba8c7b893d 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2695276bb4b154174ac0a6401bde5c0768bca99a43c9a469af67526f7e2e9410  uvw-2.6.0_libuv-v1.38.tar.gz
++sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
+ sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index dd9b6b27dc..39952caa11 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UVW_VERSION = 2.6.0_libuv-v1.38
++UVW_VERSION = 2.8.0_libuv_v1.40
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
 -- 
-2.25.4
+2.27.0
