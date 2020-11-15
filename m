@@ -1,78 +1,71 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Nov 2020 15:36:08 +0100
-Subject: [Buildroot] [=PATCH v3 3/4] configs/qemu_arm_vexpress_tz_defconfig:
- build start-qemu.sh
+Date: Sun, 15 Nov 2020 15:36:07 +0100
+Subject: [Buildroot] [=PATCH v3 2/4] board/qemu/post-image.sh: execute from
+ BINARIES_DIR
 In-Reply-To: <20201115143609.2160080-1-romain.naour@gmail.com>
 References: <20201115143609.2160080-1-romain.naour@gmail.com>
-Message-ID: <20201115143609.2160080-3-romain.naour@gmail.com>
+Message-ID: <20201115143609.2160080-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When tags was added by commit 011206b2bffd509b29365bc1eaa761414ee13726
-to detect the qemu command line, the qemu_arm_vexpress_tz_defconfig
-was ignored due to a build issue.
+Usually the qemu command line start directly with "qemu-system-<arch> ...".
+But the command line for qemu_arm_vexpress_tz_defconfig start by doing
+"cd output/images && ../host/bin/qemu-system-arm". This is necessary
+since boot binaries, except BL1, are primarily loaded via semi-hosting
+so all binaries has to reside in the same directory as QEMU is started
+from [1].
 
-This build issue has been fixed by previous patches, so we can
-enable the runtime testing by adding the tag in the readme.txt
-and the post-image script in the defconfig.
+To order to handle this case correctly, update the post-image.sh used
+by all qemu defconfigs to execute qemu from BINARIES_DIR.
 
-Since Qemu from HOST_DIR is now executed directly from BINARIES_DIR,
-we can remove all the string before "qemu-system-*".
+Since we have to change the current directory use a subshell to
+restore the current directory after Qemu execution.
+
+[1] https://github.com/ARM-software/arm-trusted-firmware/blob/4ebbea9592ab37fc62217d0ac62fa13a3e063527/docs/plat/qemu.rst
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Tested with: ./support/scripts/boot-qemu-image.py qemu_arm_vexpress_tz_defconfig
----
- board/qemu/arm-vexpress-tz/readme.txt  | 2 +-
- board/qemu/post-image.sh               | 3 +++
- configs/qemu_arm_vexpress_tz_defconfig | 4 ++++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+ board/qemu/post-image.sh | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index b235ba5cd7..abce750291 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -18,7 +18,7 @@ secure and non-secure worlds.
- 	-serial stdio \
- 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
- 	-semihosting-config enable,target=native \
--	-bios bl1.bin
-+	-bios bl1.bin # qemu_arm_vexpress_tz_defconfig
- 
- The boot stage traces (if any) followed by the login prompt will appear
- in the terminal that started QEMU.
 diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
-index b7ee418e07..bb4abfc0c4 100755
+index f34bf5043a..b7ee418e07 100755
 --- a/board/qemu/post-image.sh
 +++ b/board/qemu/post-image.sh
-@@ -27,6 +27,9 @@ QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/}"
+@@ -19,9 +19,9 @@ if [ -z "${QEMU_CMD_LINE}" ]; then
+     exit 0
+ fi
+ 
+-# Replace output/images path by ${BINARIES_DIR} since the script
+-# will be in the same directory as the kernel and the rootfs images.
+-QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${BINARIES_DIR\}}"
++# Remove output/images path since the script will be in
++# the same directory as the kernel and the rootfs images.
++QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/}"
+ 
+ # Remove -serial stdio if present, keep it as default args
  DEFAULT_ARGS="$(sed -r -e '/-serial stdio/!d; s/.*(-serial stdio).*/\1/' <<<"${QEMU_CMD_LINE}")"
- QEMU_CMD_LINE="${QEMU_CMD_LINE//-serial stdio/}"
+@@ -40,7 +40,9 @@ esac
  
-+# Remove any sting before qemu-system-*
-+QEMU_CMD_LINE=${QEMU_CMD_LINE##*/}
-+
- # Disable graphical output and redirect serial I/Os to console
- case ${DEFCONFIG_NAME} in
-   (qemu_sh4eb_r2d_defconfig|qemu_sh4_r2d_defconfig)
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 5aeb6b4290..7f5a06f0ab 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -43,6 +43,10 @@ BR2_PACKAGE_OPTEE_BENCHMARK=y
- BR2_PACKAGE_OPTEE_EXAMPLES=y
- BR2_PACKAGE_OPTEE_TEST=y
+ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+ 	#!/bin/sh
++	(
+ 	BINARIES_DIR="\${0%/*}/"
++	cd \${BINARIES_DIR}
  
-+# Image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
-+
- # U-boot for booting the dear Linux kernel
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ 	if [ "\${1}" = "serial-only" ]; then
+ 	    EXTRA_ARGS='${SERIAL_ARGS}'
+@@ -50,6 +52,7 @@ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+ 
+ 	export PATH="${HOST_DIR}/bin:\${PATH}"
+ 	exec ${QEMU_CMD_LINE} \${EXTRA_ARGS}
++	)
+ _EOF_
+ 
+ chmod +x "${START_QEMU_SCRIPT}"
 -- 
 2.25.4
