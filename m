@@ -1,95 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 15 Nov 2020 14:23:36 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/busybox: Fix
- hwclock for glibc 2.31+
-Message-ID: <20201115131024.4523F81255@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 15 Nov 2020 15:36:06 +0100
+Subject: [Buildroot] [=PATCH v3 1/4] board/qemu/post-image.sh: rename
+ IMAGE_DIR to BINARIES_DIR
+Message-ID: <20201115143609.2160080-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eceb1ec8afa25c3d719bad47510988e501287aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+The output/images directory is called BINARIES_DIR in the
+Buildroot manual, not IMAGE_DIR.
 
-Pick the below patch from upstream, in order to fix
-'settimeofday: Invalid argument' introduced by using glibc v2.31+.
-(upstream fix 8b4b928 with a small change to apply on busybox 1.31.1)
-
-See https://bugs.busybox.net/show_bug.cgi?id=12756 for more info.
-
-Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-hwclock-Fix-settimeofday-for-glibc-v2.31.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ board/qemu/post-image.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch b/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-new file mode 100644
-index 0000000000..9364a91db6
---- /dev/null
-+++ b/package/busybox/0008-hwclock-Fix-settimeofday-for-glibc-v2.31.patch
-@@ -0,0 +1,63 @@
-+From b226d7730b2c4ca73fc569b404cd6adff1c5b05f Mon Sep 17 00:00:00 2001
-+From: Eddie James <eajames@linux.ibm.com>
-+Date: Mon, 10 Aug 2020 09:59:02 -0500
-+Subject: [PATCH] hwclock: Fix settimeofday for glibc v2.31+
-+
-+The glibc implementation changed for settimeofday, resulting in "invalid
-+argument" error when attempting to set both timezone and time with a single
-+call. Fix this by calling settimeofday twice
-+
-+Signed-off-by: Eddie James <eajames@linux.ibm.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+
-+(cherry picked from commit 1a5d6fcbb5e606ab4acdf22afa26361a25f1d43b)
-+(Klaus: use bb_perror_msg_and_die() instead of
-+bb_simple_perror_msg_and_die() for 1_31_1 backport)
-+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
-+---
-+ util-linux/hwclock.c | 14 +++++++++++---
-+ 1 file changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/util-linux/hwclock.c b/util-linux/hwclock.c
-+index 29f51021e..d2c68efbe 100644
-+--- a/util-linux/hwclock.c
-++++ b/util-linux/hwclock.c
-+@@ -122,16 +122,20 @@ static void to_sys_clock(const char **pp_rtcname, int utc)
-+ 	struct timeval tv;
-+ 	struct timezone tz;
-+ 
-+-	tz.tz_minuteswest = timezone/60;
-++	tz.tz_minuteswest = timezone / 60;
-+ 	/* ^^^ used to also subtract 60*daylight, but it's wrong:
-+ 	 * daylight!=0 means "this timezone has some DST
-+ 	 * during the year", not "DST is in effect now".
-+ 	 */
-+ 	tz.tz_dsttime = 0;
-+ 
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_perror_msg_and_die("settimeofday");
-++
-+ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
-+ 	tv.tv_usec = 0;
-+-	if (settimeofday(&tv, &tz))
-++	if (settimeofday(&tv, NULL))
-+ 		bb_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+@@ -283,7 +287,11 @@ static void set_system_clock_timezone(int utc)
-+ 	gettimeofday(&tv, NULL);
-+ 	if (!utc)
-+ 		tv.tv_sec += tz.tz_minuteswest * 60;
-+-	if (settimeofday(&tv, &tz))
-++
-++	/* glibc v2.31+ returns an error if both args are non-NULL */
-++	if (settimeofday(NULL, &tz))
-++		bb_perror_msg_and_die("settimeofday");
-++	if (settimeofday(&tv, NULL))
-+ 		bb_perror_msg_and_die("settimeofday");
-+ }
-+ 
-+-- 
-+2.17.1
-+
+diff --git a/board/qemu/post-image.sh b/board/qemu/post-image.sh
+index 9a4d216274..f34bf5043a 100755
+--- a/board/qemu/post-image.sh
++++ b/board/qemu/post-image.sh
+@@ -19,9 +19,9 @@ if [ -z "${QEMU_CMD_LINE}" ]; then
+     exit 0
+ fi
+ 
+-# Replace output/images path by ${IMAGE_DIR} since the script
++# Replace output/images path by ${BINARIES_DIR} since the script
+ # will be in the same directory as the kernel and the rootfs images.
+-QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${IMAGE_DIR\}}"
++QEMU_CMD_LINE="${QEMU_CMD_LINE//output\/images/\${BINARIES_DIR\}}"
+ 
+ # Remove -serial stdio if present, keep it as default args
+ DEFAULT_ARGS="$(sed -r -e '/-serial stdio/!d; s/.*(-serial stdio).*/\1/' <<<"${QEMU_CMD_LINE}")"
+@@ -40,7 +40,7 @@ esac
+ 
+ cat <<-_EOF_ > "${START_QEMU_SCRIPT}"
+ 	#!/bin/sh
+-	IMAGE_DIR="\${0%/*}/"
++	BINARIES_DIR="\${0%/*}/"
+ 
+ 	if [ "\${1}" = "serial-only" ]; then
+ 	    EXTRA_ARGS='${SERIAL_ARGS}'
+-- 
+2.25.4
