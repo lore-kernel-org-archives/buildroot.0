@@ -1,79 +1,76 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Nov 2020 11:24:24 +0100
-Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and
- nvidia OpenGL provider
-In-Reply-To: <20201114162518.2587e563@windsurf.home>
-References: <20201114144554.1795422-1-romain.naour@gmail.com>
- <20201114162518.2587e563@windsurf.home>
-Message-ID: <011bb2fd-02a7-5876-6439-e97ad0f60c24@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 15 Nov 2020 11:23:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build without threads
+Message-ID: <20201115102352.145892-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes:
+ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
 
-Le 14/11/2020 ? 16:25, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Sat, 14 Nov 2020 15:45:54 +0100
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> Even if piglit could be used to test any OpenGl implementation, it's really a
->> mesa's project because it follow closely the mesa implementation (API).
->>
->> Other OpenGl vendor (binary blob) are quickly out of date and incompatible with
->> piglit. Especially ARM OpenGl vendors such TI, Allwinner (sunxi) and rpi.
->>
->> So introduce BR2_PACKAGE_PIGLIT_SUPPORTED_GL_PROVIDERS to list all supported
->> OpenGL providers. For now only mesa and Nvidia are supported.
->>
->> Fixes:
->> [BR2_PACKAGE_PROVIDES_LIBEGL="sunxi-mali-mainline"]:
->> http://autobuild.buildroot.net/results/76212834a3065c4c3d479a49a16297d4679098a0
->>
->> [BR2_PACKAGE_PROVIDES_LIBEGL="rpi-userland"]:
->> http://autobuild.buildroot.net/results/2cb799919d47e57eb401b7ece00b65707f9bd3ec
-> 
-> I'm not sure this is the best way to handle this. Perhaps we need to
-> have a better handling of OpenGL/EGL versions.
-> 
-> Indeed, looking at the failures with sunxi-mali-mainline, the issue is
-> that some EGLDeviceEXT stuff is used. From a quick look, this seems to
-> be related to the EXT_device_base EGL extension, documented at
-> https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_device_base.txt,
-> and which appeared in EGL 1.5.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0002-meson.build-check-for-pthread.h.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
 
-Indeed, that what I meant by "mesa implementation (API)"
-(ok my explanation was not really precise :p)
-
-> 
-> So perhaps we should instead have some logic that allows OpenGL and EGL
-> providers to also declare which version of the OpenGL/EGL spec they
-> provide, so that users can appropriate depend on OpenEGL and EGL
-> providers that are suitable ?
-
-Something like BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION ?
-
-> 
-> This is something I already intend to work on about libgbm: we need a
-> virtual package for libgbm, but not all OpenGL implementations provide
-> the same version of the libgbm API.
-> 
-> What do you think ?
-
-I believe it's worth the effort if other packages can also benefit from
-OpenGL/EGL version spec provided by providers.
-
-For piglit, I'm not sure. (I'm only using/testing piglit with mesa).
-Piglit will always requires the same OpenGL/EGL API than mesa package.
-
-I guess piglit still build with nvidia provider because it's not yet out of date.
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
+new file mode 100644
+index 0000000000..128876dfb7
+--- /dev/null
++++ b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
+@@ -0,0 +1,49 @@
++From 96bbf3a3af45d86f790afdf91a6686c37421e92b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 15 Nov 2020 10:57:37 +0100
++Subject: [PATCH] meson.build: check for pthread.h
++
++Check for pthread.h otherwise the build will fail with some toolchains
++that have libphtread.so but not pthread.h:
++
++Run-time dependency threads found: YES
++
++../src/hb-mutex.hh:53:10: fatal error: pthread.h: No such file or directory
++ #include <pthread.h>
++          ^~~~~~~~~~~
++
++Moreover, fix detection of pthread fallback
++
++Fixes:
++ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index bf3925db..6d263d48 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -284,13 +284,15 @@ endif
++ # threads
++ thread_dep = null_dep
++ if host_machine.system() != 'windows'
++-  thread_dep = dependency('threads', required: false)
+++  if cpp.has_header('pthread.h')
+++    thread_dep = dependency('threads', required: false)
+++  endif
++ 
++   if thread_dep.found()
++     conf.set('HAVE_PTHREAD', 1)
++   else
++     check_headers += ['sched.h']
++-    check_funcs += ['sched_yield', {'link_with': 'rt'}]
+++    check_funcs += [['sched_yield', {'link_with': 'rt'}]]
++   endif
++ endif
++ 
++-- 
++2.29.2
++
+-- 
+2.29.2
