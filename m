@@ -1,86 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 15 Nov 2020 15:49:28 +0100
-Subject: [Buildroot] [PATCH 2/2] package/glibc: bump to version
- 2.32-4-g69beb5cbf85cae1c61fe7432500ac10880dc7b07
-In-Reply-To: <ca30d14c-6182-f97b-56c5-e206ed2839e2@gmail.com>
-References: <20201002155931.1529915-1-romain.naour@gmail.com>
- <20201002155931.1529915-2-romain.naour@gmail.com>
- <20201008215931.0a4056cd@windsurf.hq.k.grp>
- <ca30d14c-6182-f97b-56c5-e206ed2839e2@gmail.com>
-Message-ID: <87ff0258-3abf-c8a5-e33c-234adeb2fe39@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 15 Nov 2020 16:09:22 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/linux-backports: use flex
+ and bison to generate kconfig parser
+In-Reply-To: <20201112120155.333290-1-ju.o@free.fr> (Julien Olivain's message
+ of "Thu, 12 Nov 2020 13:01:54 +0100")
+References: <20201111162208.362275-1-ju.o@free.fr>
+ <20201112120155.333290-1-ju.o@free.fr>
+Message-ID: <87361a8xnh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-Le 14/11/2020 ? 16:19, Romain Naour a ?crit?:
-> Hello Thomas,
-> 
-> Sorry for my late reply...
-> 
-> Le 08/10/2020 ? 21:59, Thomas Petazzoni a ?crit?:
->> Hello Romain,
->>
->> On Fri,  2 Oct 2020 17:59:31 +0200
->> Romain Naour <romain.naour@gmail.com> wrote:
->>
->>> - Support for Synopsys ARC HS cores (ARCv2 ISA) running Linux has been added.
->>>   Remove the ARC specific version.
->>>
->>> - Remove --enable-obsolete-rpc configure option.
->>
->> If I read this, and upstream glibc commit
->> 5500cdba4018ddbda7909bc7f4f9718610b43cf0, it's not just the
->> --enable-obsolete-rpc flag that has been removed, but really all the
->> RPC code.
->>
->> Therefore, with glibc 2.32, this is no longer true:
->>
->> config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->>         bool "glibc"
->> 	[...]
->>         # our glibc.mk enables RPC support
->>         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> 
-> Indeed, we need to remove it.
+ > Upstream backports package does not define the LEX/YACC Makefile
+ > variables, contrary to the Kernel which is defining those in [1]. The
+ > default "lex" and "yacc" are then used. On some systems, "yacc" is
+ > Berkeley Yacc. Kconfig parser files are using non-Posix Bison
+ > constructs.
 
-I believe the change in the toolchain-external-custom is annoying
+ > Attempting to generate the parser with byacc fails with error:
 
-config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
-	bool "Toolchain has RPC support?"
-	default y if BR2_TOOLCHAIN_EXTERNAL_GLIBC
-	depends on !BR2_TOOLCHAIN_EXTERNAL_MUSL
-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ >     yacc: e - line 97 of "zconf.y", syntax error
+ >     %destructor {
+ >     ^
 
-We have to disable BR2_TOOLCHAIN_EXTERNAL_INET_RPC by default for glibc external
-toolchains.
+ > This patch defines the LEX and YACC Makefile variable to use flex and
+ > bison, to fix this issue. The host-bison and host-flex dependencies are
+ > added only if the host does not have them, following the same logic of
+ > the Kernel.
 
-But currently most glibc toolchains in the wild still use a glibc < 2.32.
+ > [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=73a4f6dbe70a1b93c11e2d1d6ca68f3522daf434
 
-Best regards,
-Romain
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Changes v1 -> v2:
+ >   - Include suggestions from Yann:
+ >     Follow the same logic as the Kernel for kconfig flex/bison.
 
-> 
->>
->> So to me, it seems like this needs a bit more work. Could you for
->> example try to build libnfs, with glibc 2.32, and libtirpc disabled ?
-> 
-> libnfs already select libtirpc when BR2_TOOLCHAIN_HAS_NATIVE_RPC is not set
-> (musl or uclibc).
-> So we can't use libnfs without BR2_TOOLCHAIN_HAS_NATIVE_RPC and libtirpc
-> package. Each packages that require RPC seems to do the same.
-> So, I don't think there is something to do at Buildroot level but we need to do
-> some runtime testing (I hope libnfs is working with uclibc or musl :p ).
-> 
-> Best regards,
-> Romain
-> 
->>
->> Thanks,
->>
->> Thomas
->>
-> 
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
