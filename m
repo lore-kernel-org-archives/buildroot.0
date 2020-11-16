@@ -1,226 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 12:07:37 +0100
-Subject: [Buildroot] [git commit branch/next] support/scripts/cve-checker:
- remove script
-Message-ID: <20201117203828.2EB667FB95@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 17:14:27 +0100
+Subject: [Buildroot] [git commit branch/next] package/redis: security bump
+ to version 6.0.9
+Message-ID: <20201117203829.973137FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3de93377814275e07e77f6f9a8616037851de540
+commit: https://git.buildroot.net/buildroot/commit/?id=f1bce086f6eb174e154a753c6608b3636345fd62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that pkg-stats is able to generate its output based on the list of
-packages enabled in the current configuration, cve-checker doesn't
-serve any purpose.
+This release fixes a potential heap overflow when using a heap allocator
+other than jemalloc or glibc's malloc. See:
+https://github.com/redis/redis/pull/7963
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+https://raw.githubusercontent.com/redis/redis/6.0/00-RELEASENOTES
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/cve-checker | 196 --------------------------------------------
- 1 file changed, 196 deletions(-)
+ package/redis/0001-uclibc.patch | 4 +++-
+ package/redis/redis.hash        | 2 +-
+ package/redis/redis.mk          | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/cve-checker b/support/scripts/cve-checker
-deleted file mode 100755
-index 998ea5b8af..0000000000
---- a/support/scripts/cve-checker
-+++ /dev/null
-@@ -1,196 +0,0 @@
--#!/usr/bin/env python
--
--# Copyright (C) 2009 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--# Copyright (C) 2020 by Gregory CLEMENT <gregory.clement@bootlin.com>
--#
--# This program is free software; you can redistribute it and/or modify
--# it under the terms of the GNU General Public License as published by
--# the Free Software Foundation; either version 2 of the License, or
--# (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful,
--# but WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
--# General Public License for more details.
--#
--# You should have received a copy of the GNU General Public License
--# along with this program; if not, write to the Free Software
--# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
--
--import argparse
--import datetime
--import os
--import json
--import sys
--import cve as cvecheck
--
--
--class Package:
--    def __init__(self, name, version, ignored_cves):
--        self.name = name
--        self.version = version
--        self.cves = list()
--        self.ignored_cves = ignored_cves
--
--
--def check_package_cves(nvd_path, packages):
--    if not os.path.isdir(nvd_path):
--        os.makedirs(nvd_path)
--
--    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
--        for pkg_name in cve.pkg_names:
--            pkg = packages.get(pkg_name, '')
--            if pkg and cve.affects(pkg.name, pkg.version, pkg.ignored_cves) == cve.CVE_AFFECTS:
--                pkg.cves.append(cve.identifier)
--
--
--html_header = """
--<head>
--<script src=\"https://www.kryogenix.org/code/browser/sorttable/sorttable.js\"></script>
--<style type=\"text/css\">
--table {
--  width: 100%;
--}
--td {
--  border: 1px solid black;
--}
--td.centered {
--  text-align: center;
--}
--td.wrong {
--  background: #ff9a69;
--}
--td.correct {
--  background: #d2ffc4;
--}
--
--</style>
--<title>CVE status for Buildroot configuration</title>
--</head>
--
--<p id=\"sortable_hint\"></p>
--"""
--
--
--html_footer = """
--</body>
--<script>
--if (typeof sorttable === \"object\") {
--  document.getElementById(\"sortable_hint\").innerHTML =
--  \"hint: the table can be sorted by clicking the column headers\"
--}
--</script>
--</html>
--"""
--
--
--def dump_html_pkg(f, pkg):
--    f.write(" <tr>\n")
--    f.write("  <td>%s</td>\n" % pkg.name)
--
--    # Current version
--    if len(pkg.version) > 20:
--        version = pkg.version[:20] + "..."
--    else:
--        version = pkg.version
--    f.write("  <td class=\"centered\">%s</td>\n" % version)
--
--    # CVEs
--    td_class = ["centered"]
--    if len(pkg.cves) == 0:
--        td_class.append("correct")
--    else:
--        td_class.append("wrong")
--    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
--    for cve in pkg.cves:
--        f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
--    f.write("  </td>\n")
--
--    f.write(" </tr>\n")
--
--
--def dump_html_all_pkgs(f, packages):
--    f.write("""
--<table class=\"sortable\">
--<tr>
--<td>Package</td>
--<td class=\"centered\">Version</td>
--<td class=\"centered\">CVEs</td>
--</tr>
--""")
--    for pkg in packages:
--        dump_html_pkg(f, pkg)
--    f.write("</table>")
--
--
--def dump_html_gen_info(f, date):
--    f.write("<p><i>Generated on %s</i></p>\n" % (str(date)))
--
--
--def dump_html(packages, date, output):
--    with open(output, 'w') as f:
--        f.write(html_header)
--        dump_html_all_pkgs(f, packages)
--        dump_html_gen_info(f, date)
--        f.write(html_footer)
--
--
--def dump_json(packages, date, output):
--    # Format packages as a dictionnary instead of a list
--    pkgs = {
--        pkg.name: {
--            "version": pkg.version,
--            "cves": pkg.cves,
--        } for pkg in packages
--    }
--    # The actual structure to dump, add date to it
--    final = {'packages': pkgs,
--             'date': str(date)}
--    with open(output, 'w') as f:
--        json.dump(final, f, indent=2, separators=(',', ': '))
--        f.write('\n')
--
--
--def resolvepath(path):
--        return os.path.abspath(os.path.expanduser(path))
--
--
--def parse_args():
--    parser = argparse.ArgumentParser()
--    output = parser.add_argument_group('output', 'Output file(s)')
--    output.add_argument('--html', dest='html', type=resolvepath,
--                        help='HTML output file')
--    output.add_argument('--json', dest='json', type=resolvepath,
--                        help='JSON output file')
--    parser.add_argument('--nvd-path', dest='nvd_path',
--                        help='Path to the local NVD database', type=resolvepath,
--                        required=True)
--    args = parser.parse_args()
--    if not args.html and not args.json:
--        parser.error('at least one of --html or --json (or both) is required')
--    return args
--
--
--def __main__():
--    packages = list()
--    content = json.load(sys.stdin)
--    for item in content:
--        pkg = content[item]
--        p = Package(item, pkg.get('version', ''), pkg.get('ignore_cves', ''))
--        packages.append(p)
--
--    args = parse_args()
--    date = datetime.datetime.utcnow()
--
--    print("Checking packages CVEs")
--    check_package_cves(args.nvd_path, {p.name: p for p in packages})
--
--    if args.html:
--        print("Write HTML")
--        dump_html(packages, date, args.html)
--    if args.json:
--        print("Write JSON")
--        dump_json(packages, date, args.json)
--
--
--__main__()
+diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
+index 3329a60edc..197f43e7a7 100644
+--- a/package/redis/0001-uclibc.patch
++++ b/package/redis/0001-uclibc.patch
+@@ -10,6 +10,8 @@ Signed-off-by: Daniel Price <daniel.price@gmail.com>
+ Signed-off-by: Martin Bark <martin@barkynet.com>
+ [Titouan: adapt to 5.0.4]
+ Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
++[Fabrice: update for 6.0.9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ 
+ =========================================================================
+ diff -ur old/src/config.h new/src/config.h
+@@ -21,6 +23,6 @@ diff -ur old/src/config.h new/src/config.h
+  /* Test for backtrace() */
+ -#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
+ +#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
+-     defined(__FreeBSD__) || (defined(__OpenBSD__) && defined(USE_BACKTRACE))\
++     defined(__FreeBSD__) || ((defined(__OpenBSD__) || defined(__NetBSD__)) && defined(USE_BACKTRACE))\
+   || defined(__DragonFly__)
+  #define HAVE_BACKTRACE 1
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index d686d59847..a16bf9dffb 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  04fa1fddc39bd1aecb6739dd5dd73858a3515b427acd1e2947a66dadce868d68  redis-6.0.8.tar.gz
++sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index c567d3200d..b0d8e1cd51 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.8
++REDIS_VERSION = 6.0.9
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
