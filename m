@@ -1,68 +1,130 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 15:47:56 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/linux-backports:
- fix kernel version check
-Message-ID: <20201116143543.274E883493@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 15:49:41 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/mp4v2: fix build
+ with gcc 10
+Message-ID: <20201116143543.367B283493@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c3ab578c33452b2c3e6de2c02ef8c542714ec7e
+commit: https://git.buildroot.net/buildroot/commit/?id=7a85d0338b251e3b3348d6de41311e63e244f9af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
-do not rely on package's .config as a timestamp" broke the kernel
-version check of this linux-backports package (it was no longer
-executed). Since linux-4.19, the kernel's build system internally
-touches its .config file, so it can no longer be used as a stamp file.
-The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
-pkg-kconfig infra need to be used instead.
+Fixes:
+ - http://autobuild.buildroot.org/results/4655626f1827245648a566a7223f247a130714c5
 
-This commit fixes the kernel version check.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 464bb73b92cacdafd19515d7474a53d8401940dd)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 710d71ad4a752ec5f2ea5f3769278c753e4d0fd6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-backports/linux-backports.mk | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ ...003-Static-cast-to-unsigned-int-for-cases.patch | 99 ++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
 
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 030d7a2864..1827ee18b7 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -85,21 +85,24 @@ $(eval $(kconfig-package))
- # not have been parsed yet, so the Linux build dir LINUX_DIR is not yet
- # known. Thus, we use a "secondary expansion" so the rule is re-evaluated
- # after all Makefiles are parsed, and thus at that time we will have the
--# LINUX_DIR variable set to the proper value.
-+# LINUX_DIR variable set to the proper value. Moreover, since linux-4.19,
-+# the kernel's build system internally touches its .config file, so we
-+# can't use it as a stamp file. We use the LINUX_KCONFIG_STAMP_DOTCONFIG
-+# instead.
- #
- # Furthermore, we want to check the kernel version, since linux-backports
- # only supports kernels >= 3.0. To avoid overriding linux-backports'
--# .config rule defined in the kconfig-package infra, we use an
--# intermediate stamp-file.
-+# KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
-+# use an intermediate stamp-file.
- #
- # Finally, it must also come after the call to kconfig-package, so we get
- # LINUX_BACKPORTS_DIR properly defined (because the target part of the
- # rule is not re-evaluated).
- #
--$(LINUX_BACKPORTS_DIR)/.config: $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
-+$(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version
- 
- .SECONDEXPANSION:
--$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/.config
-+$(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
- 	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
- 	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
- 		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
+diff --git a/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+new file mode 100644
+index 0000000000..6c9b13bed8
+--- /dev/null
++++ b/package/mp4v2/0003-Static-cast-to-unsigned-int-for-cases.patch
+@@ -0,0 +1,99 @@
++From a5ca35b044bbf13c0b16f0066bf24646604bb218 Mon Sep 17 00:00:00 2001
++From: "Jason A. Donenfeld" <Jason@zx2c4.com>
++Date: Thu, 6 Aug 2020 15:22:04 +0200
++Subject: [PATCH] Static cast to unsigned int for cases
++
++Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
++[Retrieved from:
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libmp4v2/files/libmp4v2-2.0.0-unsigned-int-cast.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ libutil/Utility.cpp  | 2 +-
++ util/mp4art.cpp      | 2 +-
++ util/mp4chaps.cpp    | 2 +-
++ util/mp4file.cpp     | 2 +-
++ util/mp4subtitle.cpp | 2 +-
++ util/mp4track.cpp    | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/libutil/Utility.cpp b/libutil/Utility.cpp
++index 76cdd12..d6739d4 100644
++--- a/libutil/Utility.cpp
+++++ b/libutil/Utility.cpp
++@@ -493,7 +493,7 @@ Utility::process_impl()
++         if( codes.find( code ) == codes.end() )
++             continue;
++ 
++-        switch( code ) {
+++        switch( static_cast<unsigned int>( code ) ) {
++             case 'z':
++                 _optimize = true;
++                 break;
++diff --git a/util/mp4art.cpp b/util/mp4art.cpp
++index add935e..6e7f531 100644
++--- a/util/mp4art.cpp
+++++ b/util/mp4art.cpp
++@@ -376,7 +376,7 @@ ArtUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case LC_ART_ANY:
++             _artFilter = numeric_limits<uint32_t>::max();
++             break;
++diff --git a/util/mp4chaps.cpp b/util/mp4chaps.cpp
++index 98400f8..ccc8b70 100644
++--- a/util/mp4chaps.cpp
+++++ b/util/mp4chaps.cpp
++@@ -632,7 +632,7 @@ ChapterUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int> ( code ) ) {
++         case 'A':
++         case LC_CHPT_ANY:
++             _ChapterType = MP4ChapterTypeAny;
++diff --git a/util/mp4file.cpp b/util/mp4file.cpp
++index c27844b..b127cd1 100644
++--- a/util/mp4file.cpp
+++++ b/util/mp4file.cpp
++@@ -189,7 +189,7 @@ FileUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &FileUtility::actionList;
++             break;
++diff --git a/util/mp4subtitle.cpp b/util/mp4subtitle.cpp
++index 7462153..19d977d 100644
++--- a/util/mp4subtitle.cpp
+++++ b/util/mp4subtitle.cpp
++@@ -164,7 +164,7 @@ SubtitleUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_LIST:
++             _action = &SubtitleUtility::actionList;
++             break;
++diff --git a/util/mp4track.cpp b/util/mp4track.cpp
++index d550506..cd63d7e 100644
++--- a/util/mp4track.cpp
+++++ b/util/mp4track.cpp
++@@ -788,7 +788,7 @@ TrackUtility::utility_option( int code, bool& handled )
++ {
++     handled = true;
++ 
++-    switch( code ) {
+++    switch( static_cast<unsigned int>( code ) ) {
++         case LC_TRACK_WILDCARD:
++             _trackMode = TM_WILDCARD;
++             break;
++-- 
++2.28.0
++
