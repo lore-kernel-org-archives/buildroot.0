@@ -1,36 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 15:49:15 +0100
-Subject: [Buildroot] [PATCH v3 1/2] package/linux-backports: fix kernel
- version check
-In-Reply-To: <20201113130941.67928-1-ju.o@free.fr> (Julien Olivain's message
- of "Fri, 13 Nov 2020 14:09:40 +0100")
-References: <20201112120155.333290-1-ju.o@free.fr>
- <20201113130941.67928-1-ju.o@free.fr>
-Message-ID: <87d00d73x0.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 15:45:27 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/rauc: prevent
+ occurring the error when directory exists
+Message-ID: <20201116143527.D229083493@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8c822798a5380cdefbaf63f09f626acf7e88b272
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > The commit 05fea6e4a60a38a797d9bacbf318a2cd7dbd435f "infra/pkg-kconfig:
- > do not rely on package's .config as a timestamp" broke the kernel
- > version check of this linux-backports package (it was no longer
- > executed). Since linux-4.19, the kernel's build system internally
- > touches its .config file, so it can no longer be used as a stamp file.
- > The stamp file defined in KCONFIG_STAMP_DOTCONFIG variable of
- > pkg-kconfig infra need to be used instead.
+Add -p argument that ignore that specified directory already exists.
 
- > This commit fixes the kernel version check.
+Fixes:
+ mkdir: cannot create directory ???/home/bartekk/buildroot-2020.11-rc1/output/target/usr/lib/systemd/system/rauc.service.d???: File exists
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
- > ---
- > Changes v1 -> v3:
- >   - new patch to fix kernel version check
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit fefdd0511e99676aceb09403063f336e631d5067)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rauc/rauc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 5a208e07ae..8080180a48 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -31,7 +31,7 @@ RAUC_DEPENDENCIES += systemd
+ endif
+ 
+ define RAUC_INSTALL_INIT_SYSTEMD
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d
+ 	printf '[Install]\nWantedBy=multi-user.target\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/rauc.service.d/buildroot-enable.conf
+ endef
