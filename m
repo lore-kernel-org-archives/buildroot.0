@@ -1,40 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:30:13 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/numactl: needs
- -fPIC
-Message-ID: <20201116211736.11AF78124D@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 22:34:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with 64 bits
+ time_t
+In-Reply-To: <20201114215303.951794-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 14 Nov 2020 22:53:03 +0100")
+References: <20201114215303.951794-1-fontaine.fabrice@gmail.com>
+Message-ID: <874klp2dga.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bd7849beddfd14075c207ca36a98782f6f6acfa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-This will avoid the following build failure with qemu 5.0.0 and above:
+ > Fix build of qemu 5.0.0 and above with 64 bites time_t
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
 
-/srv/storage/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-2/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libnuma.a(libnuma.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a PIE object; recompile with -fPIC
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/616dff216a215dc0494c846d337e03e0795b2fb2
+Committed to 2020.08.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6fe0298eecb50a5145bc20411af24dc22cfcf861)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/numactl/numactl.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
-index 4d3ceeb6c7..6fa05dca69 100644
---- a/package/numactl/numactl.mk
-+++ b/package/numactl/numactl.mk
-@@ -10,5 +10,6 @@ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
- NUMACTL_LICENSE_FILES = README.md
- NUMACTL_INSTALL_STAGING = YES
- NUMACTL_AUTORECONF = YES
-+NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
- 
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
