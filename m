@@ -1,41 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Nov 2020 10:12:48 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing: update to the
- new text representation of capabilities
-Message-ID: <20201117203827.C91D47FD00@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 23:46:25 +0100
+Subject: [Buildroot] [git commit branch/next] docs/website: update for
+ 2020.08.2
+Message-ID: <20201117203830.2CD527FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f52a9835fa02b02db06ee4ce06708d7b2cdfcfb4
+commit: https://git.buildroot.net/buildroot/commit/?id=e2f77f00af50a44ef7d5cc05e24282acf72ecefc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since libcap 2.41, the text representation of capabilities now use
-the '=' instead of '+' [1].
-
-This break our capabilities tests since we still use the old
-representation.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/morgan/libcap.git/commit/?id=177cd418031b1acfcf73fe3b1af9f3279828681c
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981737
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/core/test_file_capabilities.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
-index 945b48a4c3..b9ece18d7b 100644
---- a/support/testing/tests/core/test_file_capabilities.py
-+++ b/support/testing/tests/core/test_file_capabilities.py
-@@ -44,4 +44,4 @@ class TestFileCapabilities(infra.basetest.BRTest):
-         self.assertIn("cap_kill", output[0])
-         self.assertIn("cap_sys_nice", output[0])
-         self.assertIn("cap_sys_time", output[0])
--        self.assertIn("+eip", output[0])
-+        self.assertIn("=eip", output[0])
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 07627d0f34..4f9a755df0 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2020.08.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.2.tar.gz">buildroot-2020.08.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.2.tar.bz2">buildroot-2020.08.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index eab11e2f8a..ab6c525eca 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.08.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 November 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.08.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.08.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296830.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.08.2.tar.bz2">2020.08.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
