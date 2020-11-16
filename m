@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:24:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xorriso: fix host option
-In-Reply-To: <20201115215530.553826-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 15 Nov 2020 22:55:30 +0100")
-References: <20201115215530.553826-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn4d2dxf.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 22:25:26 +0100
+Subject: [Buildroot] [PATCH] package/openntpd: needs host-bison
+In-Reply-To: <b1b574df250b1e34cd750b809a8409b9b182f51e.1605525509.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 16 Nov 2020 13:18:29 +0200")
+References: <b1b574df250b1e34cd750b809a8409b9b182f51e.1605525509.git.baruch@tkos.co.il>
+Message-ID: <87lff12dvd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > --disable-bzip2 is not a recognized option so replace it by
- > --disable-libbz2
+ > Build fails when no yacc alternative is installed.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/1ba8e339cbb5646663d0bf4e158d89e54433b242/
+ > http://autobuild.buildroot.net/results/a00a53d6635c64e72c50d4841658155de5380110/
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2020.02.x and 2020.08.x, thanks.
 
