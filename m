@@ -1,27 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:30:58 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: fix custom repo error
- message
-In-Reply-To: <20201115044043.1885405-1-garret.kelly@gmail.com> (Garret Kelly's
- message of "Sat, 14 Nov 2020 23:40:43 -0500")
-References: <20201115044043.1885405-1-garret.kelly@gmail.com>
-Message-ID: <878sb12dm5.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 22:30:44 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] boot/uboot: fix custom
+ repo error message
+Message-ID: <20201116211701.845A6814C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Garret" == Garret Kelly <garret.kelly@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=422f0599e5e3b9453cff18f7ea8aa6ba059fe6e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > When using a custom git or mercurial repository for u-boot the error message
- > indicating a version had not been provided incorrectly stated that the URL was
- > missing. Update the error message to indicate that it's the version that's
- > missing.
+When using a custom git or mercurial repository for u-boot the error message
+indicating a version had not been provided incorrectly stated that the URL was
+missing. Update the error message to indicate that it's the version that's
+missing.
 
- > Signed-off-by: Garret Kelly <garret.kelly@gmail.com>
+Signed-off-by: Garret Kelly <garret.kelly@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1271867831a9fcf8e7ef52a1691386c63205474c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 9cbd81b05b..830daca892 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -485,7 +485,7 @@ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL)),)
+ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_URL setting)
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_URL
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION)),)
+-$(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION setting)
++$(error No custom U-Boot repository version specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION setting)
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
+ endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ 
