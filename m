@@ -1,111 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 14 Nov 2020 14:18:27 +0100
-Subject: [Buildroot] [git commit branch/next] package/tcpdump: fix
- CVE-2020-8037
-Message-ID: <20201117203829.55FC27FA87@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 21:40:45 +0100
+Subject: [Buildroot] [git commit branch/next] package/qemu: fix build with
+ 64 bits time_t
+Message-ID: <20201117203830.0ABD07FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3a663f5705c492f52128b4a7ff514480332b6df
+commit: https://git.buildroot.net/buildroot/commit/?id=61de073194c46426760ec06372a7863a0eece248
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The ppp decapsulator in tcpdump 4.9.3 can be convinced to allocate a
-large amount of memory.
+Fix build of qemu 5.0.0 and above with 64 bites time_t
+
+Fixes:
+ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...scaping-don-t-allocate-a-too-large-buffer.patch | 67 ++++++++++++++++++++++
- package/tcpdump/tcpdump.mk                         |  3 +
- 2 files changed, 70 insertions(+)
+ .../qemu/0002-Fix-build-with-64-bits-time_t.patch  | 98 ++++++++++++++++++++++
+ 1 file changed, 98 insertions(+)
 
-diff --git a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+diff --git a/package/qemu/0002-Fix-build-with-64-bits-time_t.patch b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
 new file mode 100644
-index 0000000000..9e8674ac90
+index 0000000000..7a72047136
 --- /dev/null
-+++ b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-@@ -0,0 +1,67 @@
-+From 32027e199368dad9508965aae8cd8de5b6ab5231 Mon Sep 17 00:00:00 2001
-+From: Guy Harris <guy@alum.mit.edu>
-+Date: Sat, 18 Apr 2020 14:04:59 -0700
-+Subject: [PATCH] PPP: When un-escaping, don't allocate a too-large buffer.
++++ b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
+@@ -0,0 +1,98 @@
++From 839e51aa452345b440f8d2d0df84ab58bdedfcd1 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 14 Nov 2020 21:54:17 +0100
++Subject: [PATCH] Fix build with 64 bits time_t
 +
-+The buffer should be big enough to hold the captured data, but it
-+doesn't need to be big enough to hold the entire on-the-network packet,
-+if we haven't captured all of it.
++time element is deprecated on new input_event structure in kernel's
++input.h [1]
 +
-+(backported from commit e4add0b010ed6f2180dcb05a13026242ed935334)
++This will avoid the following build failure:
 +
-+[Retrieved from:
-+https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231]
++hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
++hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
++  198 |     if (gettimeofday(&evdev.time, NULL)) {
++      |                            ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
++ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
++
++[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ print-ppp.c | 18 ++++++++++++++----
-+ 1 file changed, 14 insertions(+), 4 deletions(-)
++ contrib/vhost-user-input/main.c | 10 +++++++++-
++ hw/input/virtio-input-host.c    | 10 +++++++++-
++ 2 files changed, 18 insertions(+), 2 deletions(-)
 +
-+diff --git a/print-ppp.c b/print-ppp.c
-+index 891761728..33fb03412 100644
-+--- a/print-ppp.c
-++++ b/print-ppp.c
-+@@ -1367,19 +1367,29 @@ print_bacp_config_options(netdissect_options *ndo,
-+ 	return 0;
-+ }
++diff --git a/contrib/vhost-user-input/main.c b/contrib/vhost-user-input/main.c
++index 6020c6f33a..e688c3e0a9 100644
++--- a/contrib/vhost-user-input/main.c
+++++ b/contrib/vhost-user-input/main.c
++@@ -17,6 +17,11 @@
++ #include "standard-headers/linux/virtio_input.h"
++ #include "qapi/error.h"
 + 
-++/*
-++ * Un-escape RFC 1662 PPP in HDLC-like framing, with octet escapes.
-++ * The length argument is the on-the-wire length, not the captured
-++ * length; we can only un-escape the captured part.
-++ */
-+ static void
-+ ppp_hdlc(netdissect_options *ndo,
-+          const u_char *p, int length)
-+ {
-++	u_int caplen = ndo->ndo_snapend - p;
-+ 	u_char *b, *t, c;
-+ 	const u_char *s;
-+-	int i, proto;
-++	u_int i;
-++	int proto;
-+ 	const void *se;
-+ 
-++	if (caplen == 0)
-++		return;
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
 ++
-+         if (length <= 0)
-+                 return;
++ enum {
++     VHOST_USER_INPUT_MAX_QUEUES = 2,
++ };
++@@ -115,13 +120,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
++ static void vi_handle_status(VuInput *vi, virtio_input_event *event)
++ {
++     struct input_event evdev;
+++    struct timeval tval;
++     int rc;
 + 
-+-	b = (u_char *)malloc(length);
-++	b = (u_char *)malloc(caplen);
-+ 	if (b == NULL)
-+ 		return;
++-    if (gettimeofday(&evdev.time, NULL)) {
+++    if (gettimeofday(&tval, NULL)) {
++         perror("vi_handle_status: gettimeofday");
++         return;
++     }
 + 
-+@@ -1388,10 +1398,10 @@ ppp_hdlc(netdissect_options *ndo,
-+ 	 * Do this so that we dont overwrite the original packet
-+ 	 * contents.
-+ 	 */
-+-	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
-++	for (s = p, t = b, i = caplen; i != 0; i--) {
-+ 		c = *s++;
-+ 		if (c == 0x7d) {
-+-			if (i <= 1 || !ND_TTEST(*s))
-++			if (i <= 1)
-+ 				break;
-+ 			i--;
-+ 			c = *s++ ^ 0x20;
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index 01a46b9b5f..8db35694ea 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -18,6 +18,9 @@ TCPDUMP_CONF_OPTS = \
- 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = libpcap
- 
-+# 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
-+TCPDUMP_IGNORE_CVES += CVE-2020-8037
+++    evdev.input_event_sec = tval.tv_sec;
+++    evdev.input_event_usec = tval.tv_usec;
++     evdev.type = le16toh(event->type);
++     evdev.code = le16toh(event->code);
++     evdev.value = le32toh(event->value);
++diff --git a/hw/input/virtio-input-host.c b/hw/input/virtio-input-host.c
++index 85daf73f1a..2e261737e1 100644
++--- a/hw/input/virtio-input-host.c
+++++ b/hw/input/virtio-input-host.c
++@@ -16,6 +16,11 @@
++ #include <sys/ioctl.h>
++ #include "standard-headers/linux/input.h"
++ 
+++#ifndef input_event_sec
+++#define input_event_sec time.tv_sec
+++#define input_event_usec time.tv_usec
+++#endif
+++
++ /* ----------------------------------------------------------------- */
++ 
++ static struct virtio_input_config virtio_input_host_config[] = {
++@@ -193,13 +198,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
++ {
++     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
++     struct input_event evdev;
+++    struct timeval tval;
++     int rc;
++ 
++-    if (gettimeofday(&evdev.time, NULL)) {
+++    if (gettimeofday(&tval, NULL)) {
++         perror("virtio_input_host_handle_status: gettimeofday");
++         return;
++     }
++ 
+++    evdev.input_event_sec = tval.tv_sec;
+++    evdev.input_event_usec = tval.tv_usec;
++     evdev.type = le16_to_cpu(event->type);
++     evdev.code = le16_to_cpu(event->code);
++     evdev.value = le32_to_cpu(event->value);
++-- 
++2.29.2
 +
- ifeq ($(BR2_STATIC_LIBS),y)
- TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
- endif
