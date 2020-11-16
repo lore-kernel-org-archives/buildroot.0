@@ -1,38 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:24:00 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/xorriso: fix host
- option
-Message-ID: <20201116211239.7225881560@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 22:25:00 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/openntpd: needs
+ host-bison
+Message-ID: <20201116211239.837D481560@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdd953d1805a2cfb2b53f9183bfa46c729cc77a8
+commit: https://git.buildroot.net/buildroot/commit/?id=9008ea83a7ccbb4a9af6627d852ad59d7f8eb341
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
---disable-bzip2 is not a recognized option so replace it by
---disable-libbz2 to match the target logic.
+Build fails when no yacc alternative is installed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/1ba8e339cbb5646663d0bf4e158d89e54433b242/
+http://autobuild.buildroot.net/results/a00a53d6635c64e72c50d4841658155de5380110/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 41236c61b186028dcfef3d71c34cf31ca889b090)
+(cherry picked from commit b8de3cb3741712dff891568cc57751dee7111334)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xorriso/xorriso.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/openntpd/openntpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index 56bf39f764..472623ea5e 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -14,7 +14,7 @@ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
- HOST_XORRISO_CONF_OPTS = \
- 	--disable-xattr-h-pref-attr \
- 	--disable-zlib \
--	--disable-bzip2 \
-+	--disable-libbz2 \
- 	--disable-libcdio \
- 	--disable-libreadline \
- 	--disable-libedit \
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index f2eaee7efd..9076f3ddda 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -8,6 +8,7 @@ OPENNTPD_VERSION = 6.2p3
+ OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+ OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
+ OPENNTPD_LICENSE_FILES = COPYING
++OPENNTPD_DEPENDENCIES = host-bison
+ # Need to autoreconf for our libtool patch to apply properly
+ OPENNTPD_AUTORECONF = YES
+ 
