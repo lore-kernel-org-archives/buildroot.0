@@ -1,77 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 16:05:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- toolchain/toolchain-external/toolchain-external-arm-arm: add dependency on
- NEON
-Message-ID: <20201116145234.6298780DB6@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 17:15:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to version
+ 6.0.9
+In-Reply-To: <20201114144847.373915-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 14 Nov 2020 15:48:47 +0100")
+References: <20201114144847.373915-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1ot5lc2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c0d2b5cd3b626e27f0a164a8feee4c5ec13cde0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-While testing Buildroot on a Cortex-A5 that doesn't provide NEON, we
-found out that a system generated with the ARM toolchain from Arm
-didn't boot. It turns out that this ARM toolchain is built with:
+ > This release fixes a potential heap overflow when using a heap allocator
+ > other than jemalloc or glibc's malloc. See:
+ > https://github.com/redis/redis/pull/7963
 
-  --with-arch=armv7-a --with-fpu=neon --with-float=hard --with-mode=thumb
+ > https://raw.githubusercontent.com/redis/redis/6.0/00-RELEASENOTES
 
-So, it uses NEON as its FPU, which means it can only work on CPU cores
-that have NEON support. This commit adds the appropriate dependency to
-the toolchain-external-arm-arm package, and adjusts the Config.in help
-text accordingly.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-While at it, it also drops the part of the Config.in help text that
-says the code is tuned for Cortex-A9, as it is not the case: it was
-the case for the Linaro toolchain (built with --with-tune=cortex-a9),
-but not for the ARM toolchain, for which no specific --with-tune is
-passed.
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8477c41244c1d55b6496195c3a69f261b546dc8e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../toolchain-external/toolchain-external-arm-arm/Config.in | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 4748ab53ae..29509635a3 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -1,12 +1,13 @@
--comment "Arm toolchains available for Cortex-A + EABIhf"
-+comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
- 	depends on BR2_arm
--	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF
-+	depends on !BR2_ARM_CPU_ARMV7A || !BR2_ARM_EABIHF || !BR2_ARM_CPU_HAS_NEON
- 	depends on !BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	bool "Arm ARM 2019.12"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
-+	depends on BR2_ARM_CPU_HAS_NEON
- 	depends on BR2_HOSTARCH = "x86_64"
- 	depends on BR2_ARM_EABIHF
- 	depends on !BR2_STATIC_LIBS
-@@ -20,10 +21,10 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HAS_OPENMP
- 	help
- 	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
--	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code that
--	  runs on all Cortex-A profile devices, but tuned for the
--	  Cortex-A9. The code generated uses the hard floating point
--	  calling convention, and uses the VFPv3-D16 FPU instructions.
-+	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
-+	  that runs on all Cortex-A profile devices. The code
-+	  generated uses the hard floating point calling convention,
-+	  and uses the NEON FPU instructions.
- 
- 	  This is the same toolchain that was previously distributed by
- 	  Linaro.
+-- 
+Bye, Peter Korsgaard
