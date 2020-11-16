@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 13:28:14 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/tor: security
+Date: Mon, 16 Nov 2020 13:25:21 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/tor: security
  bump to version 0.4.3.7
-Message-ID: <20201116121419.03A9E7F893@busybox.osuosl.org>
+Message-ID: <20201116121539.07C3986524@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c57a3463cdbde554cd109036667a5756b7684eaa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8be68ab280981121e4ed24e682514b338a40fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
