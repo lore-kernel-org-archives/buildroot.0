@@ -1,48 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:06:20 +0100
-Subject: [Buildroot] [git commit branch/next] package/go: bump to 1.15.4
-Message-ID: <20201117203826.58A9D86A87@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 21:29:58 +0100
+Subject: [Buildroot] [git commit branch/next] package/numactl: needs -fPIC
+Message-ID: <20201117203829.E31177FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ba64976d3f51eb37a199935b9aaedb63ab04f52
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe0298eecb50a5145bc20411af24dc22cfcf861
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bugfix release. From the release notes:
+This will avoid the following build failure with qemu 5.0.0 and above:
 
-go1.15.4 (released 2020/11/05) includes fixes to cgo, the compiler, linker,
-runtime, and the compress/flate, net/http, reflect, and time packages.
+/srv/storage/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /srv/storage/autobuild/run/instance-2/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/../lib64/libnuma.a(libnuma.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a PIE object; recompile with -fPIC
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Fixes:
+ - http://autobuild.buildroot.org/results/616dff216a215dc0494c846d337e03e0795b2fb2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 3 +--
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/numactl/numactl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 9d651a1bfb..eb6fe6c85a 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,4 +1,3 @@
- # From https://golang.org/dl/
--sha256	28bf9d0bcde251011caae230a4a05d917b172ea203f2a62f2c2f9533589d4b4d  go1.15.2.src.tar.gz
--sha256	896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888  go1.15.3.src.tar.gz
-+sha256  063da6a9a4186b8118a0e584532c8c94e65582e2cd951ed078bfd595d27d2367  go1.15.4.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index dc3b35ff50..ccfddd8001 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/numactl/numactl.mk b/package/numactl/numactl.mk
+index d0dd5c26f4..cf9c759693 100644
+--- a/package/numactl/numactl.mk
++++ b/package/numactl/numactl.mk
+@@ -10,5 +10,6 @@ NUMACTL_LICENSE = LGPL-2.1 (libnuma), GPL-2.0 (programs)
+ NUMACTL_LICENSE_FILES = README.md
+ NUMACTL_INSTALL_STAGING = YES
+ NUMACTL_AUTORECONF = YES
++NUMACTL_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -fPIC"
  
--GO_VERSION = 1.15.3
-+GO_VERSION = 1.15.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ $(eval $(autotools-package))
