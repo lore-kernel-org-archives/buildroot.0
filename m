@@ -1,68 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Nov 2020 01:02:56 +0000
-Subject: [Buildroot] [Bug 13316] New: beaglebone_qt5_defconfig: PowerVR
- fails to start
-Message-ID: <bug-13316-163@https.bugs.busybox.net/>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Mon, 16 Nov 2020 20:09:18 +0000
+Subject: [Buildroot] [PATCH 1/1] package/chrony: bump to version 4.0
+Message-ID: <20201116200918.18087-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13316
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/chrony/chrony.hash | 4 ++--
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-            Bug ID: 13316
-           Summary: beaglebone_qt5_defconfig: PowerVR fails to start
-           Product: buildroot
-           Version: 2020.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: desmondjgood at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Hello,
-
-It seems like an image built with beaglebone_qt5_defconfig is broken for my
-BeagleBone Black Wireless but I'm pretty new to playing around with Buildroot
-so apologies if I'm missing something simple.
-
-During the boot process, I can see a failure in the /etc/init.d/S80ti-sgx
-startup script:
-
-Starting PowerVR services: FAIL
-
-The script attempts to load the pvrsrvkm module and then runs
-"/usr/bin/pvrsrvctl --start --no-module", which then fails (or returns a
-non-zero return code). Attempting to run the command manually yields:
-
-PVR:(Error): OpenServices: PVRDRMOpenRender failed [0, ]
-PVR:(Error): PVRSRVInitSrvConnect: PVRSRVConnect failed [0, ]
-PVR:(Error): SrvInit: PVRSRVInitSrvConnect failed (4) [0, ]
-/usr/bin/pvrsrvctl: SrvInit failed (already initialized?)
-(err=PVRSRV_ERROR_INIT_FAILURE)
-
-I've been using the following resource to help determine where my configuration
-has gone wrong:
-https://elinux.org/BeagleBoneBlack/SGX_%2B_Qt_EGLFS_%2B_Weston#Check_access_of_SGX_drivers
-
-From that, I'm thinking there's a problem with the SGX drivers since
-/sys/devices/platform/ocp/56000000.sgx isn't there. I think the config is using
-the TI version of the kernel and the device tree looks okay. So I'm not sure
-what's wrong at this point and not quite knowledgable enough to try to debug
-where it's failing further.
-
-Any help is appreciated!
-
-Desmond Good
-Computer Engineering Student
-University of Waterloo
-
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 57ce91ac80..87e0cf8ea0 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,4 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
+-sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/10/msg00000.html
++sha256  be27ea14c55e7a4434b2fa51d53018c7051c42fa6a3198c9aa6a1658bae0c625  chrony-4.0.tar.gz
+ # Locally calculated
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index f8938a80f5..dcaac0c8ac 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 3.5.1
++CHRONY_VERSION = 4.0
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
