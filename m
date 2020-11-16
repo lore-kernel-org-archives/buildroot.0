@@ -1,34 +1,35 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 16 Nov 2020 12:40:33 +0100
-Subject: [Buildroot] [PATCH] package/nfs-utils: select BR2_PACKAGE_RPCBIND
- only if needed
-Message-ID: <20201116114033.844188-1-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Nov 2020 13:04:09 +0100
+Subject: [Buildroot] [PATCH v1] package/wpewebkit: fix compile without
+ video support
+In-Reply-To: <20201116131935.GB245193@momiji> (Adrian Perez de Castro's
+ message of "Mon, 16 Nov 2020 13:19:35 +0200")
+References: <20201110221629.7011-1-ps.report@gmx.net>
+ <87sg9ei86d.fsf@dell.be.48ers.dk> <20201112223734.007ff25d@gmx.net>
+ <20201113235046.GB184214@momiji> <87ima8cqcf.fsf@dell.be.48ers.dk>
+ <20201114162730.GD203851@momiji> <20201116131935.GB245193@momiji>
+Message-ID: <87y2j17bk6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rpcbind is only used by nfsd to export nfs share supporting older
-v2, v3 protocols.
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/nfs-utils/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index cfca034019..36d799486a 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_NFS_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
--	select BR2_PACKAGE_RPCBIND # runtime
-+	select BR2_PACKAGE_RPCBIND if BR2_PACKAGE_NFS_UTILS_RPC_NFSD # runtime# runtime
- 	help
- 	  The NFS Linux kernel server.
- 
+ >> The person in charge of the WebKitGTK releases and myself (for WPE WebKit)
+ >> have been talking about when to make the new releases happen, and it's likely
+ >> that we will put out the tarballs and an accompanying WSA by Friday 20th.
+ >> If, for some reason, that cannot happen in the end, I will add submit this
+ >> patch to be included in the Buildroot release instead of the version bump.
+
+ > Confirmed, we will have new releases of WebKitGTK and WPE WebKit by the end
+ > of this week. I'll submit patches to update the Buildroot packages as soon as
+ > the releases are out.
+
+Great, thanks!
+
 -- 
-2.25.1
+Bye, Peter Korsgaard
