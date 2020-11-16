@@ -1,25 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 15:32:39 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
- version to 1.0.20201112
-In-Reply-To: <20201113100124.10277-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 13 Nov 2020 11:01:23 +0100")
-References: <20201113100124.10277-1-peter@korsgaard.com>
-Message-ID: <87lff174oo.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 15:21:42 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/wireguard-linux-compat: bump version to 1.0.20201112
+Message-ID: <20201116141842.1316982A2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=31fdf8528b01b8bc6db6503208d29ce17346a8d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fixes a build issue with linux 5.4.76+.  For details, see the announcement:
- > https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
+Fixes a build issue with linux 5.4.76+.  For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 041cde5c26cd054ec7a822f289747856328286e0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 833e1af2fc..8895875cf6 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-September/005817.html
+-sha256  ad33b2d2267a37e0f65c97e65e7d4d926d5aef7d530c251b63fbf919048eead9  wireguard-linux-compat-1.0.20200908.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
++sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 7239da6d87..7d6ebf0f7e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20200908
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
