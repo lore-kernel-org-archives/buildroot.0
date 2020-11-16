@@ -1,131 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:33:35 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/qemu: fix build
- with 64 bits time_t
-Message-ID: <20201116212031.D68B9813DC@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 23:13:14 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] Update for 2020.08.2
+Message-ID: <20201116215959.6132286724@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db0aa57d9487fedc314e23c29df75b7dc310ae97
+commit: https://git.buildroot.net/buildroot/commit/?id=5a90d87d331aa440cd024c7269a0673d94792896
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fix build of qemu 5.0.0 and above with 64 bites time_t
-
-Fixes:
- - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 61de073194c46426760ec06372a7863a0eece248)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../qemu/0002-Fix-build-with-64-bits-time_t.patch  | 98 ++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+ CHANGES  | 27 +++++++++++++++++++++++++++
+ Makefile |  2 +-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
-diff --git a/package/qemu/0002-Fix-build-with-64-bits-time_t.patch b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-new file mode 100644
-index 0000000000..7a72047136
---- /dev/null
-+++ b/package/qemu/0002-Fix-build-with-64-bits-time_t.patch
-@@ -0,0 +1,98 @@
-+From 839e51aa452345b440f8d2d0df84ab58bdedfcd1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 14 Nov 2020 21:54:17 +0100
-+Subject: [PATCH] Fix build with 64 bits time_t
+diff --git a/CHANGES b/CHANGES
+index 570be1f7dc..ffe98aa294 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,30 @@
++2020.08.2, released November 16th, 2020
 +
-+time element is deprecated on new input_event structure in kernel's
-+input.h [1]
++	Important / security related fixes.
 +
-+This will avoid the following build failure:
++	Toolchain-wrapper: Pass -fno-tree-loop-distribute-patterns to
++	fix kernel build on microblaze with gcc 10.x when
++	optimizations are enabled.
 +
-+hw/input/virtio-input-host.c: In function 'virtio_input_host_handle_status':
-+hw/input/virtio-input-host.c:198:28: error: 'struct input_event' has no member named 'time'
-+  198 |     if (gettimeofday(&evdev.time, NULL)) {
-+      |                            ^
++	Updated/fixed packages: apparmor, argp-standalone, asterisk,
++	bandwidthd, binutils, bitcoin, busybox, collectd, cryptsetup,
++	cups-filters, darkhttpd, davfs2, dvb-apps, docker-cli,
++	docker-containerd, docker-engine, dovecot-pigeonhole, elf2flt,
++	fastd, fbset, fbtft, freetype, gcc, ghostscript, grpc,
++	gst1-plugins-bad, jsoncpp, kernel-module-imx-gpu-viv,
++	keepalived, kmscube, libass, libexif, libiqrf,
++	libnetfilter_conntrack, libpam-tacplus, libraw,
++	linux-backports, linux-firmware, lzlib, mp4v2, netsnmp, nginx,
++	numactl, oniguruma, opencv3, openntpd, patchelf, php,
++	pistache, postgresql, python-pyqt5, qemu, qt5base, rauc,
++	redis, samba4, slirp, systemd, tcpdump, tinyproxy, tmux, tor,
++	waf, webkitgtk, wine, wireguard-linux-compat, wireshark,
++	wpewebkit, xen, xorriso, xvisor, zeromq, zxing-cpp
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a538167e288c14208d557cd45446df86d3d599d5
-+ - http://autobuild.buildroot.org/results/efd4474fb4b6c0ce0ab3838ce130429c51e43bbb
++	Issues resolved (http://bugs.uclibc.org):
 +
-+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=152194fe9c3f
++	#11931: Bugs in support/scripts/apply-patches.sh
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ contrib/vhost-user-input/main.c | 10 +++++++++-
-+ hw/input/virtio-input-host.c    | 10 +++++++++-
-+ 2 files changed, 18 insertions(+), 2 deletions(-)
-+
-+diff --git a/contrib/vhost-user-input/main.c b/contrib/vhost-user-input/main.c
-+index 6020c6f33a..e688c3e0a9 100644
-+--- a/contrib/vhost-user-input/main.c
-++++ b/contrib/vhost-user-input/main.c
-+@@ -17,6 +17,11 @@
-+ #include "standard-headers/linux/virtio_input.h"
-+ #include "qapi/error.h"
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ enum {
-+     VHOST_USER_INPUT_MAX_QUEUES = 2,
-+ };
-+@@ -115,13 +120,16 @@ vi_evdev_watch(VuDev *dev, int condition, void *data)
-+ static void vi_handle_status(VuInput *vi, virtio_input_event *event)
-+ {
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("vi_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16toh(event->type);
-+     evdev.code = le16toh(event->code);
-+     evdev.value = le32toh(event->value);
-+diff --git a/hw/input/virtio-input-host.c b/hw/input/virtio-input-host.c
-+index 85daf73f1a..2e261737e1 100644
-+--- a/hw/input/virtio-input-host.c
-++++ b/hw/input/virtio-input-host.c
-+@@ -16,6 +16,11 @@
-+ #include <sys/ioctl.h>
-+ #include "standard-headers/linux/input.h"
-+ 
-++#ifndef input_event_sec
-++#define input_event_sec time.tv_sec
-++#define input_event_usec time.tv_usec
-++#endif
-++
-+ /* ----------------------------------------------------------------- */
-+ 
-+ static struct virtio_input_config virtio_input_host_config[] = {
-+@@ -193,13 +198,16 @@ static void virtio_input_host_handle_status(VirtIOInput *vinput,
-+ {
-+     VirtIOInputHost *vih = VIRTIO_INPUT_HOST(vinput);
-+     struct input_event evdev;
-++    struct timeval tval;
-+     int rc;
-+ 
-+-    if (gettimeofday(&evdev.time, NULL)) {
-++    if (gettimeofday(&tval, NULL)) {
-+         perror("virtio_input_host_handle_status: gettimeofday");
-+         return;
-+     }
-+ 
-++    evdev.input_event_sec = tval.tv_sec;
-++    evdev.input_event_usec = tval.tv_usec;
-+     evdev.type = le16_to_cpu(event->type);
-+     evdev.code = le16_to_cpu(event->code);
-+     evdev.value = le32_to_cpu(event->value);
-+-- 
-+2.29.2
-+
+ 2020.08.1, released October 12th, 2020
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 4ebf671af2..5a2fad5a05 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,7 +92,7 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.08.1
++export BR2_VERSION := 2020.08.2
+ # Actual time the release is cut (for reproducible builds)
+ BR2_VERSION_EPOCH = 1602507000
+ 
