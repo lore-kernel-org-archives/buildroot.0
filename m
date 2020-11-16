@@ -1,53 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 19:54:35 +0100
-Subject: [Buildroot] [PATCH] package/openntpd: needs host-bison
-In-Reply-To: <20201116180745.GK771438@scaer> (Yann E. MORIN's message of "Mon, 
- 16 Nov 2020 19:07:45 +0100")
-References: <b1b574df250b1e34cd750b809a8409b9b182f51e.1605525509.git.baruch@tkos.co.il>
- <87a6vh5l6m.fsf@dell.be.48ers.dk> <878sb1qle4.fsf@tarshish>
- <20201116180745.GK771438@scaer>
-Message-ID: <871rgt5dzo.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 19:54:51 +0100
+Subject: [Buildroot] [git commit] package/openntpd: needs host-bison
+Message-ID: <20201116184056.7827F80E53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b8de3cb3741712dff891568cc57751dee7111334
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Build fails when no yacc alternative is installed.
 
- >> > Can we not use $(BR2_BISON_HOST_DEPENDENCY) instead?
- >> 
- >> We surly can. But for some reason no other package under package/ uses
- >> BR2_BISON_HOST_DEPENDENCY. Plain host-bison is used there instead. Only
- >> Barebox, U-Boot and the kernel use it. Why is that?
- >> 
- >> Commit b01100cc901a83 ("linux: kconfig may need host-{flex, bison} to
- >> build the configurators") mentions kconfig. Is that related?
- >> 
- >> I guess that BR2_BISON_HOST_DEPENDENCY is more susceptible to
- >> incompatibility due to different host installed bison versions (and same
- >> for flex).
+Fixes:
+http://autobuild.buildroot.net/results/1ba8e339cbb5646663d0bf4e158d89e54433b242/
+http://autobuild.buildroot.net/results/a00a53d6635c64e72c50d4841658155de5380110/
 
- > The rule is that we can depend on $(BR2_BISON_HOST_DEPENDENCY) to build host
- > tools, but we really want to depend on host-bison when we generate code
- > that is built for the target.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openntpd/openntpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Indeed, different versions of bison will generate different C code, and
- > thus the resulting binary will change. This is not very reproducible.
- > (Yes, I've already experienced that, and finding the root cause of the
- > delta cost me about two weeks full-time...)
-
- > AFAICS, the openntd code will be running on the target, so we do want
- > the host-bison dependency.
-
- > Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Ok, we should probably add a sensible note about that in
-check-host-bison-flex.mk to make that clear.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index f2eaee7efd..9076f3ddda 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -8,6 +8,7 @@ OPENNTPD_VERSION = 6.2p3
+ OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+ OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
+ OPENNTPD_LICENSE_FILES = COPYING
++OPENNTPD_DEPENDENCIES = host-bison
+ # Need to autoreconf for our libtool patch to apply properly
+ OPENNTPD_AUTORECONF = YES
+ 
