@@ -1,95 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 23:37:47 +0100
-Subject: [Buildroot] Buildroot 2020.08.2 released
-Message-ID: <87zh3h0vyc.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Nov 2020 23:46:25 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2020.08.2
+Message-ID: <20201116223233.E98BB86A98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=e2f77f00af50a44ef7d5cc05e24282acf72ecefc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Buildroot 2020.08.2 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2020.08.2.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2020.08.2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.08.2 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2020.08.1 release.
-
-- Fixes for various compilation issues with GCC 10.x.
-
-- Toolchain-wrapper: Pass -fno-tree-loop-distribute-patterns to fix
-  kernel build on microblaze with gcc 10.x when optimizations are
-  enabled.
-
-- Security fixes for asterisk, bitcoin, cryptsetup, docker-containerd,
-  fastd, freetype, jsoncpp, libass, libexif, libpam-tacplus, libraw,
-  oniguruma, php, postgresql, redis, samba4, slirp, tcpdump, tmux, tor,
-  wireshark
-
-- Fixes for download/compilation/runtime/license issues in apparmor,
-  binutils, bitcoin, busybox, collectd, cups-filters, davfs2,
-  docker-cli, docker-engine, dovecot-pigeonhole, dvb-apps, elf2flt, gcc,
-  ghostscript, grpc, kernel-module-imx-gpu-viv, linux-backports,
-  linux-firmware, libnetfilter_conntrack, mp4v2, netsnmp, nginx,
-  numactl, opencv3, openntpd, patchelf, pistache, python-pyqt5, qemu,
-  qt5base, rauc, samba4, systemd, webkitgtk, wine,
-  wireguard-linux-compat, wpewebkit, xen, xorriso, xvisor, zeromq,
-  zxing-cpp
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.2
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.08.1..
-    50  Fabrice Fontaine
-    10  Bernd Kuhls
-     9  Peter Korsgaard
-     6  Romain Naour
-     5  Thomas Petazzoni
-     4  Adrian Perez de Castro
-     4  Angelo Compagnucci
-     2  Antoine Tenart
-     2  Bartosz Bilas
-     2  Christian Stewart
-     2  Julien Olivain
-     2  Michael Nosthoff
-     2  Yann E. MORIN
-     1  Alexander Egorenkov
-     1  Alexey Brodkin
-     1  Andr? Hentschel
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Baruch Siach
-     1  Conrad Ratschan
-     1  Dagg Stompler
-     1  Doug Kehn
-     1  Frank Hunleth
-     1  Garret Kelly
-     1  Gary Bisson
-     1  Klaus Heinrich Kiwi
-     1  Matt Weber
-     1  Norbert Lange
-     1  Ryan Coe
-     1  Stefan Agner
-     1  Sven Klomp
-     1  Vadym Kochan
-     1  Waldemar Brodkorb
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 07627d0f34..4f9a755df0 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2020.08.2</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.2.tar.gz">buildroot-2020.08.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.08.2.tar.bz2">buildroot-2020.08.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.08.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index eab11e2f8a..ab6c525eca 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.08.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 November 2020</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.08.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.08.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296830.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.08.2.tar.bz2">2020.08.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
