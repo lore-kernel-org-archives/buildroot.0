@@ -1,100 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Mon, 16 Nov 2020 23:46:25 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.08.2
-Message-ID: <20201116223233.E98BB86A98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2020.08.2
+Message-ID: <20201116223233.D891C86A95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2f77f00af50a44ef7d5cc05e24282acf72ecefc
+commit: https://git.buildroot.net/buildroot/commit/?id=3e71de910359e20796a50407338b240c9c6397c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5a90d87d331aa440cd024c7269a0673d94792896)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 07627d0f34..4f9a755df0 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/CHANGES b/CHANGES
+index 9957622c34..41d5ee7a7a 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -106,6 +106,34 @@
+ 	#13236: Can't compile linux 5.4.8 (with gcc 10 on host)
+ 	#13286: The system hangs in vmware workstation on the line..
  
--      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.08.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.2.tar.gz">buildroot-2020.08.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.2.tar.bz2">buildroot-2020.08.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index eab11e2f8a..ab6c525eca 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.08.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 November 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.08.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.08.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296830.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.08.2.tar.bz2">2020.08.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2020.08.2, released November 16th, 2020
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Toolchain-wrapper: Pass -fno-tree-loop-distribute-patterns to
++	fix kernel build on microblaze with gcc 10.x when
++	optimizations are enabled.
++
++	Updated/fixed packages: apparmor, argp-standalone, asterisk,
++	bandwidthd, binutils, bitcoin, busybox, collectd, cryptsetup,
++	cups-filters, darkhttpd, davfs2, docker-cli,
++	docker-containerd, docker-engine, dovecot-pigeonhole,
++	dvb-apps, elf2flt, fastd, fbset, fbtft, freetype, gcc,
++	ghostscript, grpc, gst1-plugins-bad, jsoncpp,
++	kernel-module-imx-gpu-viv, keepalived, kmscube, libass,
++	libexif, libiqrf, libnetfilter_conntrack, libpam-tacplus,
++	libraw, linux-backports, linux-firmware, lzlib, mp4v2,
++	netsnmp, nginx, numactl, oniguruma, opencv3, openntpd,
++	patchelf, php, pistache, postgresql, python-pyqt5, qemu,
++	qt5base, rauc, redis, samba4, slirp, systemd, tcpdump,
++	tinyproxy, tmux, tor, waf, webkitgtk, wine,
++	wireguard-linux-compat, wireshark, wpewebkit, xen, xorriso,
++	xvisor, zeromq, zxing-cpp
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11931: Bugs in support/scripts/apply-patches.sh
++
+ 2020.08.1, released October 12th, 2020
+ 
+ 	Important / security related fixes.
