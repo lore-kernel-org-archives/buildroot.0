@@ -1,52 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 09:05:20 +0100
-Subject: [Buildroot] [git commit branch/next] Update for 2020.02.8
-Message-ID: <20201117203830.3C8CB7FD00@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 21:32:30 +0100
+Subject: [Buildroot] [git commit branch/next] package/harfbuzz: fix build
+ without threads
+Message-ID: <20201117203830.010317FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00e80cb1769047ad8c768d35003ae68fb4c3b0f0
+commit: https://git.buildroot.net/buildroot/commit/?id=00e644adb182681a51d39375d70d0a888d0b950f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a4832641bcab4e3487a986ac31110fb2c006b2c0)
-[Peter: drop Makefile changes]
+Fixes:
+ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ .../0002-meson.build-check-for-pthread.h.patch     | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 41d5ee7a7a..7393f4134c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -640,6 +640,26 @@
- 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
- 	#12811: bootstrap stuck and no login prompt
- 
-+2020.02.8, released November 16th, 2020
+diff --git a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
+new file mode 100644
+index 0000000000..128876dfb7
+--- /dev/null
++++ b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
+@@ -0,0 +1,49 @@
++From 96bbf3a3af45d86f790afdf91a6686c37421e92b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 15 Nov 2020 10:57:37 +0100
++Subject: [PATCH] meson.build: check for pthread.h
 +
-+	Important / security related fixes.
++Check for pthread.h otherwise the build will fail with some toolchains
++that have libphtread.so but not pthread.h:
 +
-+	Updated/fixed packages: angularjs, argp-standalone, asterisk,
-+	bandwidthd, bitcoin, busybox, cryptsetup, darkhttpd, davfs2,
-+	docker-cli, docker-containerd, docker-engine,
-+	dovecot-pigeonhole, fastd, fbset, fbtft, freetype, gcc,
-+	ghostscript, gnuradio, grpc, gst1-plugins-bad, jsoncpp,
-+	keepalived, libass, libexif, libiqrf, libpam-tacplus, libraw,
-+	linux-backports, linux-firmware, lzlib, netsnmp, nginx,
-+	oniguruma, opencv3, openntpd, patchelf, php, postgresql,
-+	python-pyqt5, qt5base, rauc, redis, samba4, slirp, systemd,
-+	tcpdump, tmux, tor, webkitgtk, wireguard-linux-compat,
-+	wireshark, wpewebkit, xen, xorriso, zeromq, zxing-cpp
++Run-time dependency threads found: YES
 +
-+	Issues resolved (http://bugs.uclibc.org):
++../src/hb-mutex.hh:53:10: fatal error: pthread.h: No such file or directory
++ #include <pthread.h>
++          ^~~~~~~~~~~
 +
-+	#11931: Bugs in support/scripts/apply-patches.sh
++Moreover, fix detection of pthread fallback
 +
- 2020.02.7, released October 12th, 2020
- 
- 	Important / security related fixes.
++Fixes:
++ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 6 ++++--
++ 1 file changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index bf3925db..6d263d48 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -284,13 +284,15 @@ endif
++ # threads
++ thread_dep = null_dep
++ if host_machine.system() != 'windows'
++-  thread_dep = dependency('threads', required: false)
+++  if cpp.has_header('pthread.h')
+++    thread_dep = dependency('threads', required: false)
+++  endif
++ 
++   if thread_dep.found()
++     conf.set('HAVE_PTHREAD', 1)
++   else
++     check_headers += ['sched.h']
++-    check_funcs += ['sched_yield', {'link_with': 'rt'}]
+++    check_funcs += [['sched_yield', {'link_with': 'rt'}]]
++   endif
++ endif
++ 
++-- 
++2.29.2
++
