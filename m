@@ -1,48 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Nov 2020 21:10:35 +0100
-Subject: [Buildroot] [git commit branch/next] support/testing:
- TestInitSystemSystemdRwIfupdown test expect a RW rootfs
-Message-ID: <20201117203826.7F14E8633A@busybox.osuosl.org>
+Date: Mon, 16 Nov 2020 21:30:56 +0100
+Subject: [Buildroot] [git commit branch/next] boot/uboot: fix custom repo
+ error message
+Message-ID: <20201117203829.EB6F07FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ed65e3a62999a7cef55c357b18789451522340
+commit: https://git.buildroot.net/buildroot/commit/?id=1271867831a9fcf8e7ef52a1691386c63205474c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When running the TestInitSystemSystemdRwIfupdown test, the rootfs must
-be in read-write mode. The commit log [1] introducing systemd tests say
-so:
+When using a custom git or mercurial repository for u-boot the error message
+indicating a version had not been provided incorrectly stated that the URL was
+missing. Update the error message to indicate that it's the version that's
+missing.
 
-"basic systemd, read-write, network w/ ifupdown"
-
-With systemd 246.5, the service systemd-update-done return an error code
-when it can't write on the filesystem (/etc)
-
-[1] 117835d5fcd508f301d62dd08ee658c1982c7fa7
-[2] https://github.com/systemd/systemd/commit/8019995e9af9c6d7b5985198cedccd24eda3e26e
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/830981813
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Garret Kelly <garret.kelly@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/init/test_systemd.py | 1 -
- 1 file changed, 1 deletion(-)
+ boot/uboot/uboot.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/init/test_systemd.py b/support/testing/tests/init/test_systemd.py
-index 371be4ad7d..059fb397e8 100644
---- a/support/testing/tests/init/test_systemd.py
-+++ b/support/testing/tests/init/test_systemd.py
-@@ -91,7 +91,6 @@ class TestInitSystemSystemdRwIfupdown(InitSystemSystemdBase):
-         """
-         BR2_SYSTEM_DHCP="eth0"
-         # BR2_PACKAGE_SYSTEMD_NETWORKD is not set
--        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-         BR2_TARGET_ROOTFS_EXT2=y
-         """
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 72d5df412d..d2b4e8dc60 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -477,7 +477,7 @@ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL)),)
+ $(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_URL setting)
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_URL
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION)),)
+-$(error No custom U-Boot repository URL specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION setting)
++$(error No custom U-Boot repository version specified. Check your BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION setting)
+ endif # qstrip BR2_TARGET_UBOOT_CUSTOM_CUSTOM_REPO_VERSION
+ endif # BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
  
