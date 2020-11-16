@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 15:51:00 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tcpdump: fix
+Date: Mon, 16 Nov 2020 15:50:45 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/tcpdump: fix
  CVE-2020-8037
-Message-ID: <20201116143719.377427FFA2@busybox.osuosl.org>
+Message-ID: <20201116143728.67D6781262@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20d3a17f64cb0e018512b736009cf7ae82e8b7fb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f96df56d66fb15a49cfbd35fc67291d5a875f536
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 The ppp decapsulator in tcpdump 4.9.3 can be convinced to allocate a
 large amount of memory.
