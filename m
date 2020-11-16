@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 22:28:52 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Mon, 16 Nov 2020 22:28:24 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  package/dovecot-pigeonhole: fix build with per-package directories
-Message-ID: <20201116211701.78BCB862F7@busybox.osuosl.org>
+Message-ID: <20201116211735.F33D78124D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50a984d07a91e26ede9ba61c4d6d1704442d7d2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=02da94e9e21099ef4e7dd006e943682bf780eae8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fix wrong path in usr/lib/dovecot-config which was copied from the
 dovecot staging dir.
