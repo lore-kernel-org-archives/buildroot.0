@@ -1,99 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Nov 2020 22:20:50 +0100
-Subject: [Buildroot] [git commit branch/next] Revert
- "package/linux-backports: bump version to 5.8"
-Message-ID: <20201117203829.8B9687FB0D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2020 20:57:50 +0100
+Subject: [Buildroot] [git commit branch/next] package/c-ares: security bump
+ to version 1.17.0
+Message-ID: <20201117203830.50D157FB0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8721261c742a6af8bcc2fa9179364e07bf20353
+commit: https://git.buildroot.net/buildroot/commit/?id=c7a369a907f988cf193b06fd4a7ce5547976c21a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit d2159da6a034b8287984f738974f9f8738bac1e6.
-which should not have been applied to master, but to next...
+- avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
+  fuzzing
+- Avoid theoretical buffer overflow in RC4 loop comparison
+- Empty hquery->name could lead to invalid memory access
+- ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
+  passed in
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+https://c-ares.haxx.se/changelog.html#1_17_0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-backports/Config.in            |  2 +-
- package/linux-backports/linux-backports.hash |  8 +++-----
- package/linux-backports/linux-backports.mk   | 19 +++++++------------
- 3 files changed, 11 insertions(+), 18 deletions(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
-index 251d202fd2..362e6e4bc7 100644
---- a/package/linux-backports/Config.in
-+++ b/package/linux-backports/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_LINUX_BACKPORTS
- 	  recent kernels, backported to older ones.
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index 04a87402e9..a24f3d72ea 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce  c-ares-1.16.1.tar.gz
++sha256  1cecd5dbe21306c7263f8649aa6e9a37aecb985995a3489f487d98df2b40757d  c-ares-1.17.0.tar.gz
  
- 	  This version of linux-backports supports kernels starting
--	  from 3.10.
-+	  from 3.0.
- 
- 	  https://backports.wiki.kernel.org
- 
-diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
-index 3e103424f5..f39bc2ed27 100644
---- a/package/linux-backports/linux-backports.hash
-+++ b/package/linux-backports/linux-backports.hash
-@@ -1,6 +1,4 @@
--# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
--sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
-+# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
-+sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
- # Locally computed
--sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
--sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
--sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
-+sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
-diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
-index 068dcffcc8..1827ee18b7 100644
---- a/package/linux-backports/linux-backports.mk
-+++ b/package/linux-backports/linux-backports.mk
-@@ -4,15 +4,12 @@
+ # Hash for license file
+ sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index f07a7e566f..d3510b3c81 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_BACKPORTS_VERSION_MAJOR = 5.8
-+LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
- LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
- LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
- LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
- LINUX_BACKPORTS_LICENSE = GPL-2.0
--LINUX_BACKPORTS_LICENSE_FILES = \
--	COPYING \
--	LICENSES/exceptions/Linux-syscall-note \
--	LICENSES/preferred/GPL-2.0
-+LINUX_BACKPORTS_LICENSE_FILES = COPYING
- 
- # flex and bison are needed to generate kconfig parser. We use the
- # same logic as the linux kernel (we add host dependencies only if
-@@ -94,7 +91,7 @@ $(eval $(kconfig-package))
- # instead.
- #
- # Furthermore, we want to check the kernel version, since linux-backports
--# only supports kernels >= 3.10. To avoid overriding linux-backports'
-+# only supports kernels >= 3.0. To avoid overriding linux-backports'
- # KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
- # use an intermediate stamp-file.
- #
-@@ -106,12 +103,10 @@ $(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKP
- 
- .SECONDEXPANSION:
- $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
--	$(Q)KVER=$(LINUX_VERSION_PROBED); \
--	KVER_MAJOR=`echo $${KVER} | sed 's/^\([0-9]*\)\..*/\1/'`; \
--	KVER_MINOR=`echo $${KVER} | sed 's/^[0-9]*\.\([0-9]*\).*/\1/'`; \
--	if [ $${KVER_MAJOR} -lt 3 -o \( $${KVER_MAJOR} -eq 3 -a $${KVER_MINOR} -lt 10 \) ]; then \
--		printf "Linux version '%s' is too old for linux-backports (needs 3.10 or later)\n" \
--			"$${KVER}"; \
-+	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
-+	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
-+		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
-+			"$${LINUX_VERSION_PROBED}"; \
- 		exit 1; \
- 	fi
- 	$(Q)touch $(@)
+-C_ARES_VERSION = 1.16.1
++C_ARES_VERSION = 1.17.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
