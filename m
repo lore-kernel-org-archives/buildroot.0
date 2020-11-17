@@ -1,37 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 20:59:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bctoolbox: drop GIT_EXECUTABLE
-In-Reply-To: <20201117070451.11844-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 17 Nov 2020 08:04:51 +0100")
-References: <20201117070451.11844-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtzf21qp.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2020 21:15:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/chrony: bump to version 4.0
+In-Reply-To: <20201116200918.18087-1-mark@dibsco.co.uk> (Mark Corbin's message
+ of "Mon, 16 Nov 2020 20:09:18 +0000")
+References: <20201116200918.18087-1-mark@dibsco.co.uk>
+Message-ID: <87ft57210o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Mark" == Mark Corbin <mark@dibsco.co.uk> writes:
 
- > GIT_EXECUTABLE is not needed since version 4.3.0 and
- > https://github.com/BelledonneCommunications/bctoolbox/commit/a92ea8672fc0a736c9018de31588aeeeef4a4157
- > https://github.com/BelledonneCommunications/bctoolbox/commit/6c2e02ffb16f999e270c5de29bbf4dd13b9e986d
+ > Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
 
- > CMake Warning:
- >   Manually-specified variables were not used by the project:
+What about the new / removed features in 4.0? According to the website,
+GNU readline support has been dropped and NTS support has been added.
 
- >     BUILD_DOC
- >     BUILD_DOCS
- >     BUILD_EXAMPLE
- >     BUILD_EXAMPLES
- >     BUILD_TEST
- >     BUILD_TESTING
- >     BUILD_TESTS
- >     GIT_EXECUTABLE
+pkg-config seems to also be used now to detect nettle/gnutls/libnss
+support.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+There also seems to be some changes related to hardening flags.
 
-Committed to next, thanks.
+Care to look into those issues and take care of the added/removed
+configure flags?
+
+
+ > ---
+
+ >  package/chrony/chrony.hash | 4 ++--
+ >  package/chrony/chrony.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 3 deletions(-)
+
+ > diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+ > index 57ce91ac80..87e0cf8ea0 100644
+ > --- a/package/chrony/chrony.hash
+ > +++ b/package/chrony/chrony.hash
+ > @@ -1,4 +1,4 @@
+ > -# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
+ > -sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
+ > +# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/10/msg00000.html
+ > +sha256  be27ea14c55e7a4434b2fa51d53018c7051c42fa6a3198c9aa6a1658bae0c625  chrony-4.0.tar.gz
+ >  # Locally calculated
+ >  sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ > diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+ > index f8938a80f5..dcaac0c8ac 100644
+ > --- a/package/chrony/chrony.mk
+ > +++ b/package/chrony/chrony.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -CHRONY_VERSION = 3.5.1
+ > +CHRONY_VERSION = 4.0
+ >  CHRONY_SITE = http://download.tuxfamily.org/chrony
+ >  CHRONY_LICENSE = GPL-2.0
+ >  CHRONY_LICENSE_FILES = COPYING
+ > -- 
+ > 2.17.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
