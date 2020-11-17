@@ -1,52 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 17 Nov 2020 08:10:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-ares: security bump to version
- 1.17.0
-Message-ID: <20201117071054.22525-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2020 08:56:27 +0100
+Subject: [Buildroot] Buildroot 2020.02.8 released
+Message-ID: <87v9e41kno.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
-  fuzzing
-- Avoid theoretical buffer overflow in RC4 loop comparison
-- Empty hquery->name could lead to invalid memory access
-- ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
-  passed in
+Hi,
 
-https://c-ares.haxx.se/changelog.html#1_17_0
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/c-ares/c-ares.hash | 2 +-
- package/c-ares/c-ares.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Buildroot 2020.02.8 is released - Go download it at:
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 04a87402e9..a24f3d72ea 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce  c-ares-1.16.1.tar.gz
-+sha256  1cecd5dbe21306c7263f8649aa6e9a37aecb985995a3489f487d98df2b40757d  c-ares-1.17.0.tar.gz
- 
- # Hash for license file
- sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index f07a7e566f..d3510b3c81 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_ARES_VERSION = 1.16.1
-+C_ARES_VERSION = 1.17.0
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
+http://buildroot.org/downloads/buildroot-2020.02.8.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.02.8.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.8 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.7 release. The 2020.02.x series is
+supported until April 2021.
+
+- Security fixes for angularjs, asterisk, bitcoin, cryptsetup,
+  docker-containerd, fastd, freetype, jsoncpp, libass, libexif,
+  libpam-tacplus, libraw, oniguruma, php, postgresql, redis, samba4,
+  slirp, tcpdump, tmux, tor, wireshark
+
+- Fixes for download/compilation/runtime/license issues in bitcoin,
+  busybox, davfs2, docker-cli, docker-engine, dovecot-pigeonhole, gcc,
+  ghostscript, gnuradio, grpc, keepalived, libpam-tacplus,
+  linux-backports, linux-firmware, netsnmp, nginx, opencv3, openntpd,
+  patchelf, python-pyqt5, qt5base, rauc, samba4, systemd, webkitgtk,
+  wireguard-linux-compat, wpewebkit, xen, xorriso, zeromq, zxing-cpp
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.8
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.7..
+
+    40  Fabrice Fontaine
+    12  Bernd Kuhls
+    11  Peter Korsgaard
+     5  Thomas Petazzoni
+     4  Adrian Perez de Castro
+     3  Angelo Compagnucci
+     2  Antoine Tenart
+     2  Bartosz Bilas
+     2  Christian Stewart
+     2  Julien Olivain
+     2  Michael Nosthoff
+     2  Romain Naour
+     1  Alexey Brodkin
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Baruch Siach
+     1  Conrad Ratschan
+     1  Doug Kehn
+     1  Frank Hunleth
+     1  Garret Kelly
+     1  Gary Bisson
+     1  Gwenhael Goavec-Merou
+     1  Ignacy Gaw?dzki
+     1  Matt Weber
+     1  Norbert Lange
+     1  Ryan Coe
+     1  Sven Klomp
+     1  Vadym Kochan
+     1  Waldemar Brodkorb
+     1  Yann E. MORIN
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
