@@ -1,22 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 23:51:35 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: update email address for
- Pierre-Jean Texier
-In-Reply-To: <20201117212208.29485-1-texier.pj2@gmail.com> (Pierre-Jean
- Texier's message of "Tue, 17 Nov 2020 22:22:08 +0100")
-References: <20201117212208.29485-1-texier.pj2@gmail.com>
-Message-ID: <87r1ory4ug.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2020 23:50:01 +0100
+Subject: [Buildroot] [git commit] package/uhd: fix typo
+Message-ID: <20201117223739.0D49486A95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <texier.pj2@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c0cd4a700afd0ea61d9d15ce6844ad7294bf375c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Replace ENABLE_DPKD by ENABLE_DPDK to fix the following error:
 
-Committed, thanks.
+  Manually-specified variables were not used by the project:
 
--- 
-Bye, Peter Korsgaard
+    BUILD_DOC
+    BUILD_DOCS
+    BUILD_EXAMPLE
+    BUILD_EXAMPLES
+    BUILD_TEST
+    BUILD_TESTING
+    BUILD_TESTS
+    ENABLE_DPKD
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uhd/uhd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
+index adb7579019..2a40efdd23 100644
+--- a/package/uhd/uhd.mk
++++ b/package/uhd/uhd.mk
+@@ -23,7 +23,7 @@ UHD_CONF_OPTS = \
+ 	-DRUNTIME_PYTHON_EXECUTABLE=/usr/bin/python \
+ 	-DENABLE_C_API=ON \
+ 	-DENABLE_DOXYGEN=OFF \
+-	-DENABLE_DPKD=OFF \
++	-DENABLE_DPDK=OFF \
+ 	-DENABLE_LIBUHD=ON \
+ 	-DENABLE_N230=OFF \
+ 	-DENABLE_N300=OFF \
