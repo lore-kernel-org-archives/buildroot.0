@@ -1,78 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 21:32:30 +0100
-Subject: [Buildroot] [git commit branch/next] package/harfbuzz: fix build
- without threads
-Message-ID: <20201117203830.010317FB0D@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 17 Nov 2020 21:51:22 +0100
+Subject: [Buildroot] [git commit branch/next] Merge branch 'master' into next
+Message-ID: <20201117203830.734C1818AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00e644adb182681a51d39375d70d0a888d0b950f
+commit: https://git.buildroot.net/buildroot/commit/?id=982e2a177d981e553bc01143088eb00c390dfa1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0002-meson.build-check-for-pthread.h.patch     | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-new file mode 100644
-index 0000000000..128876dfb7
---- /dev/null
-+++ b/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-@@ -0,0 +1,49 @@
-+From 96bbf3a3af45d86f790afdf91a6686c37421e92b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 15 Nov 2020 10:57:37 +0100
-+Subject: [PATCH] meson.build: check for pthread.h
-+
-+Check for pthread.h otherwise the build will fail with some toolchains
-+that have libphtread.so but not pthread.h:
-+
-+Run-time dependency threads found: YES
-+
-+../src/hb-mutex.hh:53:10: fatal error: pthread.h: No such file or directory
-+ #include <pthread.h>
-+          ^~~~~~~~~~~
-+
-+Moreover, fix detection of pthread fallback
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/70c98e89b1d5e5b651d1f6928dc53f465103f57a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ meson.build | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index bf3925db..6d263d48 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -284,13 +284,15 @@ endif
-+ # threads
-+ thread_dep = null_dep
-+ if host_machine.system() != 'windows'
-+-  thread_dep = dependency('threads', required: false)
-++  if cpp.has_header('pthread.h')
-++    thread_dep = dependency('threads', required: false)
-++  endif
-+ 
-+   if thread_dep.found()
-+     conf.set('HAVE_PTHREAD', 1)
-+   else
-+     check_headers += ['sched.h']
-+-    check_funcs += ['sched_yield', {'link_with': 'rt'}]
-++    check_funcs += [['sched_yield', {'link_with': 'rt'}]]
-+   endif
-+ endif
-+ 
-+-- 
-+2.29.2
-+
+* master: (125 commits)
+  package/jpeg-turbo: security bump to version 2.0.5
+  package/modem-manager: bump to version 1.14.8
+  package/c-ares: security bump to version 1.17.0
+  docs/website: update for 2020.02.8
+  Update for 2020.02.8
+  docs/website: update for 2020.08.2
+  Update for 2020.08.2
+  package/qemu: fix build with 64 bits time_t
+  package/harfbuzz: fix build without threads
+  boot/uboot: fix custom repo error message
+  package/numactl: needs -fPIC
+  package/dovecot-pigeonhole: fix build with per-package directories
+  package/libpam-tacplus: remove duplicate LIBPAM_TACPLUS_AUTORECONF
+  package/openntpd: needs host-bison
+  package/xorriso: fix host option
+  DEVELOPERS: drop Trent Piepho
+  package/postgresql: security bump to version 12.5
+  package/redis: security bump to version 6.0.9
+  Revert "package/linux-backports: bump version to 5.8"
+  package/linux-backports: bump version to 5.8
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
