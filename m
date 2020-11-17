@@ -1,47 +1,31 @@
-From: Eugen.Hristev at microchip.com <Eugen.Hristev@microchip.com>
-Date: Tue, 17 Nov 2020 17:47:37 +0000
-Subject: [Buildroot] [PATCH 0/3] libcamera: Fix and update libcamera
- package
-In-Reply-To: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
-References: <20200904095148.844292-1-kieran.bingham@ideasonboard.com>
-Message-ID: <b172f6f0-065b-4eee-0821-b92194fed303@microchip.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2020 20:58:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/c-ares: security bump to
+ version 1.17.0
+In-Reply-To: <20201117071054.22525-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 17 Nov 2020 08:10:54 +0100")
+References: <20201117071054.22525-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1or21sw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04.09.2020 12:51, Kieran Bingham wrote:
-> Prevent compilation of libcamera on m68k architectures as we experience
-> build failures there, and do not currently support that target with
-> libcamera.
-> 
-> Then, update the build to require C++17, in anticipation of bumping the
-> version to the latest upstream.
-> 
-> Kieran Bingham (3):
->    package/libcamera: Prevent builds on m68k
->    package/libcamera: Update requirements for C++17
->    package/libcamera: bump version to e59713c6
-> 
->   package/libcamera/Config.in      | 8 +++++---
->   package/libcamera/libcamera.hash | 2 +-
->   package/libcamera/libcamera.mk   | 2 +-
->   3 files changed, 7 insertions(+), 5 deletions(-)
-> 
-> --
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Hello Keiran,
+ > - avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
+ >   fuzzing
+ > - Avoid theoretical buffer overflow in RC4 loop comparison
+ > - Empty hquery->name could lead to invalid memory access
+ > - ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
+ >   passed in
 
-Just a small question if I am not bothering too much: Do we have a 
-buildroot config option to build the gstreamer plugin for libcamera ? I 
-am interested to try it out.
+ > https://c-ares.haxx.se/changelog.html#1_17_0
 
-Thanks !
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
