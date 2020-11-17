@@ -1,100 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 09:07:28 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.02.8
-Message-ID: <20201117075354.DDD0380F8F@busybox.osuosl.org>
+From: Mircea GLIGA <gliga.mircea@gmail.com>
+Date: Tue, 17 Nov 2020 10:22:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mbuffer: bump to version 20200929
+Message-ID: <20201117082244.1012421-1-mgliga@bitdefender.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bbb6efc81fee71f8045530742f715c933361f77
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/mbuffer/mbuffer.hash | 4 ++--
+ package/mbuffer/mbuffer.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 4f9a755df0..774b82d733 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
+index 688ada6900..c229c753be 100644
+--- a/package/mbuffer/mbuffer.hash
++++ b/package/mbuffer/mbuffer.hash
+@@ -1,8 +1,8 @@
+ # From http://www.maier-komor.de/mbuffer.html
+-md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
++md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200505.tgz
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.7</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.8</b></h3>
+ # Locally computed after checking signature upstream
+-sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
++sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.7.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.02.7.tar.gz">buildroot-2020.02.7.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.7.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.8.tar.gz">buildroot-2020.02.8.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.8.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.7.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
+ # Hash for license file
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
+index 6aaf29c9ca..90a72ce657 100644
+--- a/package/mbuffer/mbuffer.mk
++++ b/package/mbuffer/mbuffer.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  <h3><a href="/downloads/buildroot-2020.02.7.tar.bz2">buildroot-2020.02.7.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.7.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.8.tar.bz2">buildroot-2020.02.8.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.8.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index ab6c525eca..879eef9b15 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.8 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>17 November 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.8 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.7 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.8">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296838.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.8.tar.bz2">2020.02.8 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-MBUFFER_VERSION = 20200505
++MBUFFER_VERSION = 20200929
+ MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
+ MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
+ MBUFFER_LICENSE = GPL-3.0+
+-- 
+2.29.2
