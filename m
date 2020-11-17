@@ -1,77 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 00:04:03 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.8
-Message-ID: <20201116225135.7F2F683675@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Nov 2020 01:02:56 +0000
+Subject: [Buildroot] [Bug 13316] New: beaglebone_qt5_defconfig: PowerVR
+ fails to start
+Message-ID: <bug-13316-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4832641bcab4e3487a986ac31110fb2c006b2c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+https://bugs.busybox.net/show_bug.cgi?id=13316
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES                  | 20 ++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 23 insertions(+), 3 deletions(-)
+            Bug ID: 13316
+           Summary: beaglebone_qt5_defconfig: PowerVR fails to start
+           Product: buildroot
+           Version: 2020.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: desmondjgood at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/CHANGES b/CHANGES
-index 77e274f5ce..389e305a50 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,23 @@
-+2020.02.8, released November 16th, 2020
-+
-+	Important / security related fixes.
-+
-+	Updated/fixed packages: angularjs, argp-standalone, asterisk,
-+	bandwidthd, bitcoin, busybox, cryptsetup, darkhttpd, davfs2,
-+	docker-cli, docker-containerd, docker-engine,
-+	dovecot-pigeonhole, fastd, fbset, fbtft, freetype, gcc,
-+	ghostscript, gnuradio, grpc, gst1-plugins-bad, jsoncpp,
-+	keepalived, libass, libexif, libiqrf, libpam-tacplus, libraw,
-+	linux-backports, linux-firmware, lzlib, netsnmp, nginx,
-+	oniguruma, opencv3, openntpd, patchelf, php, postgresql,
-+	python-pyqt5, qt5base, rauc, redis, samba4, slirp, systemd,
-+	tcpdump, tmux, tor, webkitgtk, wireguard-linux-compat,
-+	wireshark, wpewebkit, xen, xorriso, zeromq, zxing-cpp
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11931: Bugs in support/scripts/apply-patches.sh
-+
- 2020.02.7, released October 12th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index bf17f52f8a..a3fc46e6f2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.7
-+export BR2_VERSION := 2020.02.8
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1602538000
-+BR2_VERSION_EPOCH = 1605567000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index f08806df97..1695972664 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2020.02.7'
-+RELEASE='2020.02.8'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+Hello,
+
+It seems like an image built with beaglebone_qt5_defconfig is broken for my
+BeagleBone Black Wireless but I'm pretty new to playing around with Buildroot
+so apologies if I'm missing something simple.
+
+During the boot process, I can see a failure in the /etc/init.d/S80ti-sgx
+startup script:
+
+Starting PowerVR services: FAIL
+
+The script attempts to load the pvrsrvkm module and then runs
+"/usr/bin/pvrsrvctl --start --no-module", which then fails (or returns a
+non-zero return code). Attempting to run the command manually yields:
+
+PVR:(Error): OpenServices: PVRDRMOpenRender failed [0, ]
+PVR:(Error): PVRSRVInitSrvConnect: PVRSRVConnect failed [0, ]
+PVR:(Error): SrvInit: PVRSRVInitSrvConnect failed (4) [0, ]
+/usr/bin/pvrsrvctl: SrvInit failed (already initialized?)
+(err=PVRSRV_ERROR_INIT_FAILURE)
+
+I've been using the following resource to help determine where my configuration
+has gone wrong:
+https://elinux.org/BeagleBoneBlack/SGX_%2B_Qt_EGLFS_%2B_Weston#Check_access_of_SGX_drivers
+
+From that, I'm thinking there's a problem with the SGX drivers since
+/sys/devices/platform/ocp/56000000.sgx isn't there. I think the config is using
+the TI version of the kernel and the device tree looks okay. So I'm not sure
+what's wrong at this point and not quite knowledgable enough to try to debug
+where it's failing further.
+
+Any help is appreciated!
+
+Desmond Good
+Computer Engineering Student
+University of Waterloo
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
