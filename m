@@ -1,50 +1,42 @@
-From: Mircea GLIGA <gliga.mircea@gmail.com>
-Date: Tue, 17 Nov 2020 10:37:48 +0200
-Subject: [Buildroot] [PATCH v2] package/mbuffer: bump to version 20200929
-In-Reply-To: <20201117082244.1012421-1-mgliga@bitdefender.com>
-References: <20201117082244.1012421-1-mgliga@bitdefender.com>
-Message-ID: <20201117083748.1014236-1-mgliga@bitdefender.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Tue, 17 Nov 2020 11:25:34 +0100
+Subject: [Buildroot] [PATCH] package/dt-utils: install barebox-state lock
+ file
+Message-ID: <20201117102534.107484-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
----
-Changes v1 -> v2:
-  - Update hash file with correct filename for md5
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+By default there is no /var/lock/barebox-state file what causes
+the following error when we try to execute barebox-state command:
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 688ada6900..73a8d3cf44 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
-+md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200929.tgz
+# barebox-state
+Failed to open lock-file /var/lock/barebox-state
+
+Fix it by adding an empty file in post install hook.
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/dt-utils/dt-utils.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 25c287d434..454b00e3d6 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -12,4 +12,11 @@ DT_UTILS_LICENSE_FILES = COPYING
+ DT_UTILS_DEPENDENCIES = udev
+ DT_UTILS_AUTORECONF = YES
  
- # Locally computed after checking signature upstream
--sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
-+sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index 6aaf29c9ca..90a72ce657 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBUFFER_VERSION = 20200505
-+MBUFFER_VERSION = 20200929
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
++define DT_UTILS_INSTALL_LOCK_FILE
++	rm -f $(TARGET_DIR)/var/lock/barebox-state
++	mkdir -p $(TARGET_DIR)/var/lock
++	touch $(TARGET_DIR)/var/lock/barebox-state
++endef
++DT_UTILS_POST_INSTALL_TARGET_HOOKS += DT_UTILS_INSTALL_LOCK_FILE
++
+ $(eval $(autotools-package))
 -- 
 2.29.2
