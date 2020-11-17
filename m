@@ -1,101 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 16 Nov 2020 23:46:25 +0100
-Subject: [Buildroot] [git commit branch/next] docs/website: update for
- 2020.08.2
-Message-ID: <20201117203830.2CD527FB0D@busybox.osuosl.org>
+Date: Tue, 17 Nov 2020 21:39:13 +0100
+Subject: [Buildroot] [git commit branch/next] package/jpeg-turbo: security
+ bump to version 2.0.5
+Message-ID: <20201117203830.638707FD00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2f77f00af50a44ef7d5cc05e24282acf72ecefc
+commit: https://git.buildroot.net/buildroot/commit/?id=105d61c85062b18bc9555011f909c8c8a5a33277
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fixes the following security issue:
+
+- CVE-2020-13790: ibjpeg-turbo 2.0.4, and mozjpeg 4.0.0, has a heap-based
+  buffer over-read in get_rgb_row() in rdppm.c via a malformed PPM input
+  file
+
+For more details, see the release notes:
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.0.5
+
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+[Peter: mark as security bump / extend commit message]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 07627d0f34..4f9a755df0 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 874f04fc82..abf129bd93 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.4/
+-sha1 163d8f96d0999526a117de0388624241b54dcd67  libjpeg-turbo-2.0.4.tar.gz
+-md5  d01d9e0c28c27bc0de9f4e2e8ff49855 libjpeg-turbo-2.0.4.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
++sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406  libjpeg-turbo-2.0.4.tar.gz
++sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+ sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+ sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 65debb2510..ddb22bc20b 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--      <h3 style="text-align: center;">Latest stable release: <b>2020.08.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.08.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.08.1.tar.gz">buildroot-2020.08.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.2.tar.gz">buildroot-2020.08.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.08.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.08.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.08.1.tar.bz2">buildroot-2020.08.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.08.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.08.2.tar.bz2">buildroot-2020.08.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.08.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index eab11e2f8a..ab6c525eca 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.08.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>16 November 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.08.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.08.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-November/296830.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.08.2.tar.bz2">2020.08.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+-JPEG_TURBO_VERSION = 2.0.4
++JPEG_TURBO_VERSION = 2.0.5
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
