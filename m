@@ -1,94 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 22:08:48 +0100
-Subject: [Buildroot] [git commit branch/next] package/pixz: bump version to
- v1.0.7
-Message-ID: <20201117205518.F0F01865F9@busybox.osuosl.org>
+Date: Tue, 17 Nov 2020 22:13:20 +0100
+Subject: [Buildroot] [git commit branch/next] package/qdecoder: bump to
+ version 12.0.8
+Message-ID: <20201117205927.13D7781677@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31f915eaa9175b0aa07985c287037a01aba3bf3f
+commit: https://git.buildroot.net/buildroot/commit/?id=32455cb7358aa717e2448c554e3604b5433329f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Update the hash accordingly.
-- Remove a patch, as its fix is in this new version of pixz.
+Update indentation in hash file (two spaces)
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+https://github.com/wolkykim/qdecoder/releases/tag/v12.0.8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pixz/0001-fix-linkage.patch | 41 -------------------------------------
- package/pixz/pixz.hash              |  2 +-
- package/pixz/pixz.mk                |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/qdecoder/qdecoder.hash | 4 ++--
+ package/qdecoder/qdecoder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pixz/0001-fix-linkage.patch b/package/pixz/0001-fix-linkage.patch
-deleted file mode 100644
-index 712c280ec2..0000000000
---- a/package/pixz/0001-fix-linkage.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From f385e7be8adb620ca7eb89f84abe4d1df94c1029 Mon Sep 17 00:00:00 2001
--From: Dave Vasilevsky <dave@vasilevsky.ca>
--Date: Sat, 25 Apr 2020 19:16:05 -0400
--Subject: [PATCH] fix linkage
--
--[Retrieved from:
--https://github.com/vasi/pixz/commit/f385e7be8adb620ca7eb89f84abe4d1df94c1029]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/common.c | 2 +-
-- src/pixz.h   | 4 ++--
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/common.c b/src/common.c
--index 59d3273..5938633 100644
----- a/src/common.c
--+++ b/src/common.c
--@@ -7,7 +7,7 @@
-- 
-- #pragma mark UTILS
-- 
---FILE *gInFile = NULL;
--+FILE *gInFile = NULL, *gOutFile = NULL;
-- lzma_stream gStream = LZMA_STREAM_INIT;
-- 
-- 
--diff --git a/src/pixz.h b/src/pixz.h
--index 0fa60f2..0939a9a 100644
----- a/src/pixz.h
--+++ b/src/pixz.h
--@@ -54,8 +54,8 @@ void pixz_read(bool verify, size_t nspecs, char **specs);
-- 
-- #pragma mark UTILS
-- 
---FILE *gInFile, *gOutFile;
---lzma_stream gStream;
--+extern FILE *gInFile, *gOutFile;
--+extern lzma_stream gStream;
-- 
-- extern lzma_index *gIndex;
-- 
-diff --git a/package/pixz/pixz.hash b/package/pixz/pixz.hash
-index 5491a016dc..9e2a211cdc 100644
---- a/package/pixz/pixz.hash
-+++ b/package/pixz/pixz.hash
+diff --git a/package/qdecoder/qdecoder.hash b/package/qdecoder/qdecoder.hash
+index 0c95d2c27b..e3fb837597 100644
+--- a/package/qdecoder/qdecoder.hash
++++ b/package/qdecoder/qdecoder.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  02c50746b134fa1b1aae41fcc314d7c6f1919b3d48bcdea01bf11769f83f72e8  pixz-1.0.6.tar.xz
-+sha256  e5e32c6eb0bf112b98e74a5da8fb63b9f2cae71800f599d97ce540e150c8ddc5  pixz-1.0.7.tar.xz
- sha256  d036806b4d1efee7c6d86276451c4d833e9798751417e25daae62dfbe348641b  LICENSE
-diff --git a/package/pixz/pixz.mk b/package/pixz/pixz.mk
-index 8d80f78617..680c05c32c 100644
---- a/package/pixz/pixz.mk
-+++ b/package/pixz/pixz.mk
+ # Locally calculated
+-sha256 01d4852b9343757abe98bbdb9d4bf0dc142ccb602ec921906ddde32c16164376  qdecoder-12.0.7.tar.gz
+-sha256 17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
++sha256  3911576ad8766697a9c8c767458edc953ae686eb53cd31d21e38edd7831ed9aa  qdecoder-12.0.8.tar.gz
++sha256  17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index ab95885c32..12784fc451 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PIXZ_VERSION = 1.0.6
-+PIXZ_VERSION = 1.0.7
- PIXZ_SITE = https://github.com/vasi/pixz/releases/download/v$(PIXZ_VERSION)
- PIXZ_SOURCE = pixz-$(PIXZ_VERSION).tar.xz
- PIXZ_DEPENDENCIES = host-pkgconf libarchive xz
+-QDECODER_VERSION = 12.0.7
++QDECODER_VERSION = 12.0.8
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+ QDECODER_LICENSE = BSD-2
+ QDECODER_LICENSE_FILES = COPYING
