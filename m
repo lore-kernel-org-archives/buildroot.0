@@ -1,43 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 17 Nov 2020 21:19:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uhd: fix typo
-Message-ID: <20201117201941.138091-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2020 21:19:10 +0100
+Subject: [Buildroot] [git commit branch/next] package/{libuv,
+ uvw}: bump to versions 1.40.0, 2.8.0_libuv_v1.40
+Message-ID: <20201117200547.9FF5485E66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace ENABLE_DPKD by ENABLE_DPDK to fix the following error:
+commit: https://git.buildroot.net/buildroot/commit/?id=1931f9abf9821140bc9e2685fbf10861234b633a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  Manually-specified variables were not used by the project:
-
-    BUILD_DOC
-    BUILD_DOCS
-    BUILD_EXAMPLE
-    BUILD_EXAMPLES
-    BUILD_TEST
-    BUILD_TESTING
-    BUILD_TESTS
-    ENABLE_DPKD
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uhd/uhd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ package/uvw/uvw.hash     | 2 +-
+ package/uvw/uvw.mk       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
-index adb7579019..2a40efdd23 100644
---- a/package/uhd/uhd.mk
-+++ b/package/uhd/uhd.mk
-@@ -23,7 +23,7 @@ UHD_CONF_OPTS = \
- 	-DRUNTIME_PYTHON_EXECUTABLE=/usr/bin/python \
- 	-DENABLE_C_API=ON \
- 	-DENABLE_DOXYGEN=OFF \
--	-DENABLE_DPKD=OFF \
-+	-DENABLE_DPDK=OFF \
- 	-DENABLE_LIBUHD=ON \
- 	-DENABLE_N230=OFF \
- 	-DENABLE_N300=OFF \
--- 
-2.29.2
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 2aba18490e..c682affae7 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2cd9a757fe6c512440933e2bdcab21143d4aa6249b2541399908ce038b756c9d  libuv-1.38.0.tar.gz
++sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 493168cd99..5876ab8935 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -6,7 +6,7 @@
+ 
+ # When bumping libuv, check if a new version of uvw is available
+ # and bump it too.
+-LIBUV_VERSION = 1.38.0
++LIBUV_VERSION = 1.40.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index f842345ea6..ba8c7b893d 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2695276bb4b154174ac0a6401bde5c0768bca99a43c9a469af67526f7e2e9410  uvw-2.6.0_libuv-v1.38.tar.gz
++sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
+ sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index dd9b6b27dc..39952caa11 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UVW_VERSION = 2.6.0_libuv-v1.38
++UVW_VERSION = 2.8.0_libuv_v1.40
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
