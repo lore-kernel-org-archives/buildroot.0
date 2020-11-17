@@ -1,49 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 21:28:18 +0100
-Subject: [Buildroot] [git commit branch/next] package/mbuffer: bump to
- version 20200929
-Message-ID: <20201117201430.2236186ABF@busybox.osuosl.org>
+From: Markus Zehnder <zehnder@live.com>
+Date: Tue, 17 Nov 2020 14:30:20 -0600 (CST)
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-{km,
+ um}: bump to SDK 06.01.00.08 versions
+In-Reply-To: <CAFSsvmr1GpWw1Zno8qa8wNOOZn7Hf0KhbqTZ9eEcXAOsS4yjZQ@mail.gmail.com>
+References: <20200702201125.3639873-1-aduskett@gmail.com>
+ <CAFSsvmr1GpWw1Zno8qa8wNOOZn7Hf0KhbqTZ9eEcXAOsS4yjZQ@mail.gmail.com>
+Message-ID: <1605645020061-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee64a2eaad38a0d8564c27acdeac0ea29d2dabd3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+I'm the happy ti-sgx patch user and newly subscribed to the mailing list.
+BR2_PACKAGE_TI_SGX_DEMOS, the Qt examples and the famous
+BR2_PACKAGE_QT5CINEX_HD are working now in Qt 5.12.8 and 5.15.0.
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For the patch to work I had to add two small things:
+- patching qt5base.mk as mentioned in the description, but missing in the
+patch
+- patch Qt core to fix a compile error with the eglfs backend, related to:
+https://bugreports.qt.io/browse/QTBUG-72567
+
+What's the proper way to proceed with the patch, resubmit a new patch
+series? It would be great if it could be included.
+If anyone needs them immediately, here's what I've added to Adam's patch:
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e0189599a7..c402f42008 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -76,9 +76,9 @@ QT5BASE_DEPENDENCIES += mesa3d
+ else ifeq ($(BR2_PACKAGE_GCNANO_BINARIES),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += gcnano-binaries
+-else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
++else ifeq ($(BR2_PACKAGE_TI_SGX_UM),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+-QT5BASE_DEPENDENCIES += ti-sgx-libgbm
++QT5BASE_DEPENDENCIES += ti-sgx-um
+ else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+ QT5BASE_CONFIGURE_OPTS += -gbm
+ QT5BASE_DEPENDENCIES += imx-gpu-viv
+
+qt5base patch:
+
+diff -Naur
+a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
 ---
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
++++
+b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+@@ -80,7 +80,8 @@
+     }
+ 
+     if (getPlatformDisplay) {
+-        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay,
+nullptr);
++        qintptr nativeDisplayPtr =
+reinterpret_cast<qintptr>(nativeDisplay);
++        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR,
+reinterpret_cast<void *>(&nativeDisplayPtr), nullptr);
+     } else {
+         qCDebug(qLcEglfsKmsDebug, "No eglGetPlatformDisplay for GBM,
+falling back to eglGetDisplay");
+         display = eglGetDisplay(nativeDisplay);
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 688ada6900..73a8d3cf44 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
-+md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200929.tgz
- 
- # Locally computed after checking signature upstream
--sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
-+sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index 6aaf29c9ca..90a72ce657 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBUFFER_VERSION = 20200505
-+MBUFFER_VERSION = 20200929
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
