@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 20:58:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-ares: security bump to
- version 1.17.0
-In-Reply-To: <20201117071054.22525-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 17 Nov 2020 08:10:54 +0100")
-References: <20201117071054.22525-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1or21sw.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2020 20:59:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bctoolbox: drop GIT_EXECUTABLE
+In-Reply-To: <20201117070451.11844-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 17 Nov 2020 08:04:51 +0100")
+References: <20201117070451.11844-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mtzf21qp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,25 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
- >   fuzzing
- > - Avoid theoretical buffer overflow in RC4 loop comparison
- > - Empty hquery->name could lead to invalid memory access
- > - ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
- >   passed in
+ > GIT_EXECUTABLE is not needed since version 4.3.0 and
+ > https://github.com/BelledonneCommunications/bctoolbox/commit/a92ea8672fc0a736c9018de31588aeeeef4a4157
+ > https://github.com/BelledonneCommunications/bctoolbox/commit/6c2e02ffb16f999e270c5de29bbf4dd13b9e986d
 
- > https://c-ares.haxx.se/changelog.html#1_17_0
+ > CMake Warning:
+ >   Manually-specified variables were not used by the project:
+
+ >     BUILD_DOC
+ >     BUILD_DOCS
+ >     BUILD_EXAMPLE
+ >     BUILD_EXAMPLES
+ >     BUILD_TEST
+ >     BUILD_TESTING
+ >     BUILD_TESTS
+ >     GIT_EXECUTABLE
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed, thanks.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
