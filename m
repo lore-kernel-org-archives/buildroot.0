@@ -1,37 +1,34 @@
-From: Julien Olivain <ju.o@free.fr>
-Date: Tue, 17 Nov 2020 22:21:45 +0100
-Subject: [Buildroot] [PATCH 3/3] package/linux-firmware: install Ath10k
- QCA9377 sdio firmware
-In-Reply-To: <20201117212145.12198-1-ju.o@free.fr>
-References: <20201117212145.12198-1-ju.o@free.fr>
-Message-ID: <20201117212145.12198-3-ju.o@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 17 Nov 2020 22:25:19 +0100
+Subject: [Buildroot] [PATCH v1] package/libcamera: fix
+ BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS handling
+Message-ID: <20201117212519.7559-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linux-firmware version 20201022 introduced a new sdio firmware for
-QCA9377 sdio devices. Install it when support is selected.
+Fix BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS handling, change from
+'depends on BR2_m68k' to 'depends on !BR2_m68k'.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/linux-firmware/linux-firmware.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/libcamera/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index dc7f392800..c0ca98c45c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -193,7 +193,8 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377),y)
- LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
- 			ath10k/QCA9377/hw1.0/board.bin \
- 			ath10k/QCA9377/hw1.0/firmware-5.bin \
--			ath10k/QCA9377/hw1.0/firmware-6.bin
-+			ath10k/QCA9377/hw1.0/firmware-6.bin \
-+			ath10k/QCA9377/hw1.0/firmware-sdio-5.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index aadea56d19..b9c243084e 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	# Invalid packing size of ControlValue struct on m68k
+-	depends on BR2_m68k
++	depends on !BR2_m68k
  
+ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	bool "libcamera"
 -- 
-2.28.0
+2.29.2
