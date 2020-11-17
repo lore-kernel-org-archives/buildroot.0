@@ -1,40 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 23:47:01 +0100
-Subject: [Buildroot] [git commit] utils/getdeveloperlib.py: fix issue with
- hasfile()
-Message-ID: <20201117223530.A806D86AD9@busybox.osuosl.org>
+Date: Tue, 17 Nov 2020 23:50:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uhd: fix typo
+In-Reply-To: <20201117201941.138091-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 17 Nov 2020 21:19:41 +0100")
+References: <20201117201941.138091-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9e3y4wy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=afc112b0e4627a01e95887f7770437b0d060cf43
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-pkg-stats is not able anymore to set the developers for defconfigs and
-packages. This issue is introduced with
-ae86067a151b6596ca492d6f94ed513f4f8e18d7. The hasfile() method from
-Developer object tries to check an absolute path against a relative path.
+ > Replace ENABLE_DPKD by ENABLE_DPDK to fix the following error:
+ >   Manually-specified variables were not used by the project:
 
-Convert the filepath to be checked also into an absolute path.
+ >     BUILD_DOC
+ >     BUILD_DOCS
+ >     BUILD_EXAMPLE
+ >     BUILD_EXAMPLES
+ >     BUILD_TEST
+ >     BUILD_TESTING
+ >     BUILD_TESTS
+ >     ENABLE_DPKD
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- utils/getdeveloperlib.py | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index dc0cc07cc7..f57f41887b 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -126,6 +126,7 @@ class Developer:
-     def hasfile(self, f):
-         f = os.path.abspath(f)
-         for fs in self.files:
-+            fs = os.path.abspath(fs)
-             if f.startswith(fs):
-                 return True
-         return False
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
