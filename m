@@ -1,86 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 08:56:27 +0100
-Subject: [Buildroot] Buildroot 2020.02.8 released
-Message-ID: <87v9e41kno.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Nov 2020 09:05:20 +0100
+Subject: [Buildroot] [git commit] Update for 2020.02.8
+Message-ID: <20201117075354.D657086B1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=00e80cb1769047ad8c768d35003ae68fb4c3b0f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a4832641bcab4e3487a986ac31110fb2c006b2c0)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Buildroot 2020.02.8 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2020.02.8.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2020.02.8.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2020.02.8 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2020.02.7 release. The 2020.02.x series is
-supported until April 2021.
-
-- Security fixes for angularjs, asterisk, bitcoin, cryptsetup,
-  docker-containerd, fastd, freetype, jsoncpp, libass, libexif,
-  libpam-tacplus, libraw, oniguruma, php, postgresql, redis, samba4,
-  slirp, tcpdump, tmux, tor, wireshark
-
-- Fixes for download/compilation/runtime/license issues in bitcoin,
-  busybox, davfs2, docker-cli, docker-engine, dovecot-pigeonhole, gcc,
-  ghostscript, gnuradio, grpc, keepalived, libpam-tacplus,
-  linux-backports, linux-firmware, netsnmp, nginx, opencv3, openntpd,
-  patchelf, python-pyqt5, qt5base, rauc, samba4, systemd, webkitgtk,
-  wireguard-linux-compat, wpewebkit, xen, xorriso, zeromq, zxing-cpp
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.8
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2020.02.7..
-
-    40  Fabrice Fontaine
-    12  Bernd Kuhls
-    11  Peter Korsgaard
-     5  Thomas Petazzoni
-     4  Adrian Perez de Castro
-     3  Angelo Compagnucci
-     2  Antoine Tenart
-     2  Bartosz Bilas
-     2  Christian Stewart
-     2  Julien Olivain
-     2  Michael Nosthoff
-     2  Romain Naour
-     1  Alexey Brodkin
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Baruch Siach
-     1  Conrad Ratschan
-     1  Doug Kehn
-     1  Frank Hunleth
-     1  Garret Kelly
-     1  Gary Bisson
-     1  Gwenhael Goavec-Merou
-     1  Ignacy Gaw?dzki
-     1  Matt Weber
-     1  Norbert Lange
-     1  Ryan Coe
-     1  Sven Klomp
-     1  Vadym Kochan
-     1  Waldemar Brodkorb
-     1  Yann E. MORIN
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 41d5ee7a7a..7393f4134c 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -640,6 +640,26 @@
+ 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
+ 	#12811: bootstrap stuck and no login prompt
+ 
++2020.02.8, released November 16th, 2020
++
++	Important / security related fixes.
++
++	Updated/fixed packages: angularjs, argp-standalone, asterisk,
++	bandwidthd, bitcoin, busybox, cryptsetup, darkhttpd, davfs2,
++	docker-cli, docker-containerd, docker-engine,
++	dovecot-pigeonhole, fastd, fbset, fbtft, freetype, gcc,
++	ghostscript, gnuradio, grpc, gst1-plugins-bad, jsoncpp,
++	keepalived, libass, libexif, libiqrf, libpam-tacplus, libraw,
++	linux-backports, linux-firmware, lzlib, netsnmp, nginx,
++	oniguruma, opencv3, openntpd, patchelf, php, postgresql,
++	python-pyqt5, qt5base, rauc, redis, samba4, slirp, systemd,
++	tcpdump, tmux, tor, webkitgtk, wireguard-linux-compat,
++	wireshark, wpewebkit, xen, xorriso, zeromq, zxing-cpp
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11931: Bugs in support/scripts/apply-patches.sh
++
+ 2020.02.7, released October 12th, 2020
+ 
+ 	Important / security related fixes.
