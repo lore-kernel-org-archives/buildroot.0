@@ -1,25 +1,24 @@
-From: Markus Zehnder <zehnder@live.com>
-Date: Tue, 17 Nov 2020 14:41:39 -0600 (CST)
-Subject: [Buildroot] [Bug 13316] beaglebone_qt5_defconfig: PowerVR fails
- to start
-In-Reply-To: <bug-13316-163-L33VEomwRZ@https.bugs.busybox.net/>
-References: <bug-13316-163@https.bugs.busybox.net/>
- <bug-13316-163-L33VEomwRZ@https.bugs.busybox.net/>
-Message-ID: <1605645699368-0.post@n4.nabble.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Nov 2020 21:41:59 +0100
+Subject: [Buildroot] [PATCH] package/jpeg-turbo: bump to version 2.0.5
+In-Reply-To: <20201113122835.2462192-1-heiko@sntech.de> (Heiko Stuebner's
+ message of "Fri, 13 Nov 2020 13:28:35 +0100")
+References: <20201113122835.2462192-1-heiko@sntech.de>
+Message-ID: <87lfezzpew.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've just commented on the mentioned patch what was required for me to get it
-working:
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-1-1-package-ti-sgx-km-um-bump-to-SDK-06-01-00-08-versions-tp259034.html
+>>>>> "Heiko" == Heiko Stuebner <heiko@sntech.de> writes:
 
-My Qt Quick app now happily runs on eglfs after struggling for a long time
-to get it working!
+ > From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+ > This also includes the fix for CVE-2020-13790 .
 
+ > Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
+Committed after extending the commit message / marking it as a security bump, thanks.
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+Bye, Peter Korsgaard
