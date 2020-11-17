@@ -1,43 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Nov 2020 21:19:23 +0100
-Subject: [Buildroot] [git commit branch/next] package/spdlog: bump to
- version 1.8.1
-Message-ID: <20201117200547.B07D685E66@busybox.osuosl.org>
+Date: Tue, 17 Nov 2020 21:21:09 +0100
+Subject: [Buildroot] [PATCH] package/modem-manager: bump to version
+ 1.14.8
+In-Reply-To: <20201116094439.137637-1-aleksander@aleksander.es> (Aleksander
+ Morgado's message of "Mon, 16 Nov 2020 10:44:39 +0100")
+References: <20201116094439.137637-1-aleksander@aleksander.es>
+Message-ID: <87361720qy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74486e3ce1747cb7cec948a5c8985157b2bf49ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Aleksander" == Aleksander Morgado <aleksander@aleksander.es> writes:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > There should be no longer any need for the ac_cv_prog_XSLTPROC_CHECK
+ > hack, this release already removes xsltproc from being a build
+ > dependency when building from dist tarballs.
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 68dd7f1978..abb8bf9bdd 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1e68e9b40cf63bb022a4b18cdc1c9d88eb5d97e4fd64fa981950a9cacf57a4bf  spdlog-1.8.0.tar.gz
-+sha256  5197b3147cfcfaa67dd564db7b878e4a4b3d9f3443801722b3915cdeced656cb  spdlog-1.8.1.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 8d8c3888bf..3c745f60ad 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPDLOG_VERSION = 1.8.0
-+SPDLOG_VERSION = 1.8.1
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+ > https://lists.freedesktop.org/archives/modemmanager-devel/2020-November/008279.html
+
+ > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+
+Committed to master given the bugfixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
