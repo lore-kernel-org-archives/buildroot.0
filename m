@@ -1,38 +1,212 @@
 From: Christian Stewart <christian@paral.in>
-Date: Tue, 17 Nov 2020 18:52:51 -0800
-Subject: [Buildroot] [PATCH v3 4/5] board: add nvidia jetson tx2 support
+Date: Tue, 17 Nov 2020 18:52:52 -0800
+Subject: [Buildroot] [PATCH v3 5/5] board: add nvidia jetson nano support
 In-Reply-To: <20201118025252.3806860-1-christian@paral.in>
 References: <20201118025252.3806860-1-christian@paral.in>
-Message-ID: <20201118025252.3806860-4-christian@paral.in>
+Message-ID: <20201118025252.3806860-5-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tested-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- board/jetson/tx2/readme.txt | 83 +++++++++++++++++++++++++++++++++++++
- board/jetsontx2             |  1 +
- configs/jetsontx2_defconfig | 55 ++++++++++++++++++++++++
- 3 files changed, 139 insertions(+)
- create mode 100644 board/jetson/tx2/readme.txt
- create mode 120000 board/jetsontx2
- create mode 100644 configs/jetsontx2_defconfig
+ board/jetson/nano/format-sd.sh | 167 +++++++++++++++++++++++++++++++++
+ board/jetson/nano/readme.txt   |  57 +++++++++++
+ board/jetsonnano               |   1 +
+ configs/jetsonnano_defconfig   |  55 +++++++++++
+ 4 files changed, 280 insertions(+)
+ create mode 100644 board/jetson/nano/format-sd.sh
+ create mode 100644 board/jetson/nano/readme.txt
+ create mode 120000 board/jetsonnano
+ create mode 100644 configs/jetsonnano_defconfig
 
-diff --git a/board/jetson/tx2/readme.txt b/board/jetson/tx2/readme.txt
+diff --git a/board/jetson/nano/format-sd.sh b/board/jetson/nano/format-sd.sh
 new file mode 100644
-index 0000000000..45fdb50a56
+index 0000000000..1d3b6c442a
 --- /dev/null
-+++ b/board/jetson/tx2/readme.txt
-@@ -0,0 +1,83 @@
-+NVIDIA Jetson TX2
++++ b/board/jetson/nano/format-sd.sh
+@@ -0,0 +1,167 @@
++#!/bin/bash
++set -eo pipefail
++
++# NOTE: The following copyright applies to linux4tegra and associated tools:
++
++# Copyright (c) 2019-2020, NVIDIA Corporation.  All Rights Reserved.
++#
++# NVIDIA Corporation and its licensors retain all intellectual property
++# and proprietary rights in and to this software, related documentation
++# and any modifications thereto.  Any use, reproduction, disclosure or
++# distribution of this software and related documentation without an express
++# license agreement from NVIDIA Corporation is strictly prohibited.
++
++if [ $EUID != 0 ]; then
++  echo "This script requires root."
++fi
++
++if [ -z "$NVIDIA_SD" ]; then
++    echo "Please set NVIDIA_SD and try again."
++    exit 1
++fi
++
++if [ ! -b "$NVIDIA_SD" ]; then
++    echo "$NVIDIA_SD is not a block device or doesn't exist."
++    exit 1
++fi
++
++IMAGES_DIR=$1
++if [ -z $IMAGES_DIR ]; then
++    echo "usage: $0 path/to/images/dir"
++    exit 1
++fi
++
++uimg_path=$IMAGES_DIR/Image
++if [ ! -f "$uimg_path" ]; then
++  echo "Image not found, make sure Buildroot is done compiling."
++  exit 1
++fi
++
++l4t_tools_path=$IMAGES_DIR/linux4tegra/tools
++if [ ! -d $l4t_tools_path ]; then
++    echo "linux4tegra tools not found, ensure buildroot is done compiling."
++    exit 1
++fi
++
++# jetson-nano
++boardid="3448"
++target="jetson-nano-qspi-sd"
++storage="sdcard"
++rev="300" # from 100, 200, 300
++chipid="0x21"
++
++l4t_dir=${IMAGES_DIR}/linux4tegra
++rootfs_img=$IMAGES_DIR/rootfs.ext2
++
++# TODO: dynamic rootfs size: the following /almost/ works:
++#rootfs_size=$(du -ms ${rootfs_img} | awk '{print $1}')
++#rootfs_size=$((rootfs_size + (rootfs_size / 10)))
++
++rootfs_size=2048
++
++echo "creating signed images"
++pushd ${l4t_dir}
++export BOARDID="${boardid}"
++export FAB="${rev}"
++
++${l4t_dir}/flash.sh \
++          --no-flash \
++          --sign \
++          --no-systemimg \
++          -x ${chipid} \
++          -B ${boardid} \
++          -S "${rootfs_size}MiB" \
++          -I $IMAGES_DIR/rootfs.ext2 \
++          -K $IMAGES_DIR/u-boot-dtb.bin \
++          -d $IMAGES_DIR/tegra210-p3448-0000-p3449-0000-b00.dtb \
++          "${target}" "mmcblk0p1"
++popd
++
++bootloader_dir=${l4t_dir}/bootloader
++if [ ! -f "${bootloader_dir}/flashcmd.txt" ]; then
++		echo "ERROR: ${bootloader_dir}/flashcmd.txt not found"
++		exit 1
++fi
++
++signed_image_dir=${bootloader_dir}/signed
++if [ ! -d "${signed_image_dir}" ]; then
++		echo "ERROR: ${signed_image_dir} not found"
++		exit 1
++fi
++
++chipid=$(sed -nr 's/.*chip ([^ ]*).*/\1/p' "${bootloader_dir}/flashcmd.txt")
++if [ "${chipid}" = "0x21" ]; then
++		signed_cfg="flash.xml"
++else
++		signed_cfg="flash.xml.tmp"
++fi
++
++if [ ! -f "${signed_image_dir}/${signed_cfg}" ]; then
++		echo "ERROR: ${signed_image_dir}/${signed_cfg} not found"
++		exit 1
++fi
++
++echo "create partitions"
++partitions=($(${l4t_tools_path}/nvptparser.py "${signed_image_dir}/${signed_cfg}" "${storage}"))
++part_type=8300 # Linux Filesystem
++
++sgdisk -og "${NVIDIA_SD}"
++for part in "${partitions[@]}"; do
++		eval "${part}"
++		if [ "${part_name}" = "master_boot_record" ]; then
++			  continue
++		fi
++		part_size=$((${part_size} / 512)) # convert to sectors
++		sgdisk -n "${part_num}":0:+"${part_size}" \
++			     -c "${part_num}":"${part_name}" \
++			     -t "${part_num}":"${part_type}" "${NVIDIA_SD}"
++done
++
++# prefer root partprobe
++PARTPROBE=partprobe
++if [ -f /usr/sbin/partprobe ]; then
++    PARTPROBE=/usr/sbin/partprobe
++fi
++
++$PARTPROBE ${NVIDIA_SD} || true
++sleep 1
++if $PARTPROBE ${NVIDIA_SD}; then
++    # wait for partitions to settle
++    sleep 1
++fi
++
++echo "write partitions"
++for part in "${partitions[@]}"; do
++		eval "${part}"
++		target_file=""
++		if [ "${part_name}" = "APP" ]; then
++			  target_file="${IMAGES_DIR}/rootfs.ext2" # Buildroot target system.
++		elif [ -e "${signed_image_dir}/${part_file}" ]; then
++			  target_file="${signed_image_dir}/${part_file}"
++		elif [ -e "${bootloader_dir}/${part_file}" ]; then
++			  target_file="${bootloader_dir}/${part_file}"
++		fi
++
++		echo "writing partition ${part_name}"
++		if [ "${part_name}" = "master_boot_record" ]; then
++			  echo "writing ${part_file}"
++			  dd conv=notrunc conv=fsync if="${signed_image_dir}/${part_file}" of="${NVIDIA_SD}" bs="${part_size}" count=1
++			  continue
++		fi
++
++		if [ "${target_file}" != "" ] && [ "${part_file}" != "" ]; then
++			  echo "writing ${target_file}"
++        target_part=${NVIDIA_SD}p${part_num}
++        if [ ! -b ${target_part} ]; then
++            target_part=${NVIDIA_SD}${part_num}
++        fi
++        if [ ! -b ${target_part} ]; then
++            echo "Partition block device ${target_part} or ${NVIDIA_SD}p${part_num} does not exist!"
++            exit 1
++        fi
++			  sudo dd conv=fsync if="${target_file}" of="${target_part}"
++		fi
++done
++
++echo "Successfully flashed $NVIDIA_SD"
++
+diff --git a/board/jetson/nano/readme.txt b/board/jetson/nano/readme.txt
+new file mode 100644
+index 0000000000..8161c7e60f
+--- /dev/null
++++ b/board/jetson/nano/readme.txt
+@@ -0,0 +1,57 @@
++NVIDIA Jetson Nano
 +
 +Intro
 +=====
 +
-+This configuration supports the Jetson TX2 devkit.
++This configuration adds support for the Jetson Nano devkit.
 +
 +Building
 +========
@@ -40,9 +214,9 @@ index 0000000000..45fdb50a56
 +Configure Buildroot
 +-------------------
 +
-+For Jetson TX2:
++For Jetson Nano:
 +
-+  $ make jetsontx2_defconfig
++  $ make jetsonnano_defconfig
 +
 +Build the rootfs
 +----------------
@@ -56,46 +230,22 @@ index 0000000000..45fdb50a56
 +========
 +
 +Once the build process is finished you will have the target binaries in the
-+output/images directory, with a copy of linux4tegra.
++output/images directory with a copy of linux4tegra.
 +
-+Flashing to the internal eMMC is done by booting to the official recovery mode,
-+and flashing the system from there. The default factory-flashed TX2 is suitable.
++To format your SD card with the required partition layout, use the
++"format-sd.sh" script located under board/jetson/nano/format-sd.sh:
 +
-+There are a lot of cases where the TX2 will not boot properly unless all of the
-+peripherals are fully disconnected, power is disconnected, everything fully
-+resets, and then the power is introduced back again.
++  sudo \
++    NVIDIA_SD=/dev/sdX \
++    PATH=$(pwd)/output/host/sbin:$PATH \
++    bash board/jetson/nano/format-sd.sh ./output/images
 +
-+The recovery mode of the Jetson is used to flash. Entering recovery:
-+
-+ - Start with the machine powered off + fully unplugged.
-+ - Plug in the device to power, and connect a HDMI display.
-+ - Connect a micro-USB cable from the host PC to the target board.
-+ - Power on the device by holding the start button until the red light is lit.
-+ - Hold down the RST button and REC button simultaneously.
-+ - Release the RST button while holding down the REC button.
-+ - Wait a few seconds, then release the REC button.
-+
-+To flash over USB:
-+
-+```
-+cd output/images/linux4tegra
-+sudo bash ./flash.sh \
-+     -I ../rootfs.ext2 \
-+     -K ../Image \
-+     -L ../u-boot-dtb.bin \
-+     -C "ramdisk_size=100000 net.ifnames=0 elevator=deadline" \
-+     -d ../tegra186-quill-p3310-1000-c03-00-base.dtb \
-+     jetson-tx2-devkit mmcblk0p1
-+```
-+
-+This will run the `flash.sh` script from L4T, and will setup the kernel, u-boot,
-+persist + boot-up partition mmcblk0p1. This may overwrite your existing work so
-+use it for initial setup only.
++This will also flash the ext4 rootfs image to the SD card.
 +
 +Bootup Process
 +==============
 +
-+The TX2 boots from the internal eMMC, at mmcblk0p1.
++The Jetson Nano can boot to a SD card.
 +
 +A "secure boot" process is used, with multiple bootloaders:
 +
@@ -105,24 +255,22 @@ index 0000000000..45fdb50a56
 + - Uboot
 + - Kernel
 + 
-+Uboot is flashed to the mmcblk0p1 emmc partition.
-+
 +Cboot could be compiled from source, and the source is available from the
 +official sources, however, we do not (yet) compile cboot.
 +
-diff --git a/board/jetsontx2 b/board/jetsontx2
+diff --git a/board/jetsonnano b/board/jetsonnano
 new file mode 120000
-index 0000000000..7404114cc3
+index 0000000000..808abfb405
 --- /dev/null
-+++ b/board/jetsontx2
++++ b/board/jetsonnano
 @@ -0,0 +1 @@
-+./jetson/tx2
++./jetson/nano
 \ No newline at end of file
-diff --git a/configs/jetsontx2_defconfig b/configs/jetsontx2_defconfig
+diff --git a/configs/jetsonnano_defconfig b/configs/jetsonnano_defconfig
 new file mode 100644
-index 0000000000..c0eab3e50e
+index 0000000000..77600b8e98
 --- /dev/null
-+++ b/configs/jetsontx2_defconfig
++++ b/configs/jetsonnano_defconfig
 @@ -0,0 +1,55 @@
 +BR2_aarch64=y
 +BR2_cortex_a57=y
@@ -147,12 +295,12 @@ index 0000000000..c0eab3e50e
 +
 +# Build the DTB from the kernel sources
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/tegra186-quill-p3310-1000-c03-00-base"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-0000-p3449-0000-a02 _ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t210/porg/kernel-dts/tegra210-p3448-0000-p3449-0000-b00"
 +
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +
 +BR2_PACKAGE_LINUX4TEGRA=y
-+BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF=y
++BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T210REF=y
 +
 +# TODO: NVIDIA_CONTAINER_TOOLKIT requires a go-module integration.
 +# BR2_PACKAGE_NVIDIA_CONTAINER_TOOLKIT=y
@@ -173,10 +321,10 @@ index 0000000000..c0eab3e50e
 +
 +# Uboot
 +BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="p2771-0000-500"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="p3450-porg"
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,paralin,u-boot-tegra,e6da093be3cc593ef4294e1922b3391ede9c94da)/u-boot-tegra-l4t-r32.4-v2016.7.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,paralin,u-boot-tegra,45dfa3dff43f880243a9fe68f3d911e99a240654)/u-boot-tegra-l4t-r32.4.2-v2016.07.tar.gz"
 +BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 -- 
