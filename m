@@ -1,85 +1,43 @@
-From: kjn <kirby@kjn.com.au>
-Date: Tue, 17 Nov 2020 21:34:50 -0600 (CST)
-Subject: [Buildroot] [Bug] Python3 "_sqlite3" module cannot be found at
- build time.
-Message-ID: <1605670490553-0.post@n4.nabble.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 18 Nov 2020 08:00:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: fix license hash
+Message-ID: <20201118070006.200706-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-           Product: buildroot
-           Version: 2020.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
+Commit 105d61c85062b18bc9555011f909c8c8a5a33277 forgot to update hash of
+LICENSE.md (update in year:
+https://github.com/libjpeg-turbo/libjpeg-turbo/commit/00607ec260efa4cfe10f9b36d6e3d3590ae92d79)
 
-Seems similar to https://bugs.busybox.net/show_bug.cgi?id=7478
+While at it, also update indentation in hash file (two spaces)
 
-Correct dependencies are selected for build, however the build fails looking
-for "_sqlite3".
+Fixes:
+ - http://autobuild.buildroot.org/results/66fb5c0171af73d4c1c93241b285fac8f8f494f7
 
-However can confirm that if the offending package requiring is deselected,
-_sqlite3 is available on the target.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-/Traceback (most recent call last):
-  File "setup.py", line 5, in <module>
-    import diskcache
-  File
-"/home/buildroot-2020.05.1/output/build/python-diskcache-5.1.0/diskcache/__init__.py",
-line 9, in <module>
-    from .core import (
-  File
-"/home/buildroot-2020.05.1/output/build/python-diskcache-5.1.0/diskcache/core.py",
-line 15, in <module>
-    import sqlite3
-  File
-"/home/buildroot-2020.05.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/python3.8/sqlite3/__init__.py",
-line 23, in <module>
-    from sqlite3.dbapi2 import *
-  File
-"/home/buildroot-2020.05.1/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/python3.8/sqlite3/dbapi2.py",
-line 27, in <module>
-    from _sqlite3 import *
-ModuleNotFoundError: No module named '_sqlite3'
-make[1]: *** [package/pkg-generic.mk:269:
-/home/buildroot-2020.05.1/output/build/python-diskcache-5.1.0/.stamp_built]
-Error 1
-make: *** [Makefile:84: _all] Error 2/
-
-Both the host and target are setup with python 3.8.5 (and also python 2.7 in
-case of the host -- ubuntu 20.04).
-Sqlite3 is installed and functional on both as a core module of 3.8.
-
-*From the target (ARM-Cortex A7 Board - compiled sans diskcache):*
-
-/# python
-Python 3.8.5 (default, Nov 13 2020, 21:11:28)
-[GCC 8.4.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import sqlite3
->>> import _sqlite3
->>>/
-
-*From the host (Ubuntu 20.04 - VM):*
-
-/kjn at ubuntu:~/buildroot-2020.05.1$ python3
-Python 3.8.5 (default, Jul 28 2020, 12:59:40) 
-[GCC 9.3.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import _sqlite3
->>> import sqlite3
->>>
-/
-
-
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index abf129bd93..c4d4a0274f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
+-sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
+-md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
++sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+-sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+-sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
++sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
++sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
++sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
+-- 
+2.29.2
