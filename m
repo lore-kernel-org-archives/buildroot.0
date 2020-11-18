@@ -1,48 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 18 Nov 2020 16:14:28 +0100
-Subject: [Buildroot] [PATCH] package/gvfs: show warning when
- BR2_STATIC_LIBS=y
-In-Reply-To: <20201118131323.3166176-1-buildroot@heine.tech>
-References: <20201118131323.3166176-1-buildroot@heine.tech>
-Message-ID: <CAPi7W827aSiD8oGJ61x+gaUOoeGUYdLRB3fvAFu+DaiwwCXwXQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 18 Nov 2020 16:47:42 +0100
+Subject: [Buildroot] [PATCH] package/python-flask-cors: security bump to
+ version 3.0.9
+Message-ID: <20201118154742.6179-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes the following security issue:
 
-Le mer. 18 nov. 2020 ? 14:13, Michael Nosthoff <buildroot@heine.tech> a ?crit :
->
-> Fixes:
->
-> showing "gvfs needs a toolchain w/ wchar, threads, dynamic library"
-> while also showing "gvfs[ ]"
-> when !BR2_STATIC_LIBS
-Thanks for fixing this mistake.
-Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> introduced by 4266c9f54f635e8a9d0a7fdedfb1c84c1de10785
->
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  package/gvfs/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
-> index 5a6b3e73ec..68ad291436 100644
-> --- a/package/gvfs/Config.in
-> +++ b/package/gvfs/Config.in
-> @@ -20,4 +20,4 @@ config BR2_PACKAGE_GVFS
->  comment "gvfs needs a toolchain w/ wchar, threads, dynamic library"
->         depends on BR2_USE_MMU
->         depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-> -               !BR2_STATIC_LIBS
-> +               BR2_STATIC_LIBS
-> --
-> 2.25.1
->
-Best Regards,
+- CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
+  for Flask) before 3.0.9.  It allows ../ directory traversal to access
+  private resources because resource matching does not ensure that pathnames
+  are in a canonical format.
 
-Fabrice
+Also drop outdated md5 checksum and fix .hash indentation.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-flask-cors/python-flask-cors.hash | 7 +++----
+ package/python-flask-cors/python-flask-cors.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
+index a893b7c890..15b7d41a32 100644
+--- a/package/python-flask-cors/python-flask-cors.hash
++++ b/package/python-flask-cors/python-flask-cors.hash
+@@ -1,5 +1,4 @@
+-# md5, sha256 from https://pypi.org/pypi/flask-cors/json
+-md5	551cc4c0305a171d28caa2b3bc838867  Flask-Cors-3.0.8.tar.gz
+-sha256	72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16  Flask-Cors-3.0.8.tar.gz
++# sha256 from https://pypi.org/pypi/flask-cors/json
++sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
++sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index 60454e27c4..d712109002 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FLASK_CORS_VERSION = 3.0.8
++PYTHON_FLASK_CORS_VERSION = 3.0.9
+ PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+-PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/9e/11/ca8b95c5bf9644471601e425f0de8cbd09a506bb6c24842cb17a6cd1eea8
++PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+ PYTHON_FLASK_CORS_LICENSE = MIT
+ PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
+-- 
+2.20.1
