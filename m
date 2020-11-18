@@ -1,8 +1,7 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed, 18 Nov 2020 14:13:22 +0100
-Subject: [Buildroot] [PATCH] package/gvfs: show warning when
- BR2_STATIC_LIBS=y
-Message-ID: <20201118131323.3166176-1-buildroot@heine.tech>
+Date: Wed, 18 Nov 2020 14:40:37 +0100
+Subject: [Buildroot] [PATCH] package/systemd: fix homed dependency warning
+Message-ID: <20201118134036.3733968-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,26 +10,29 @@ To: buildroot@busybox.net
 
 Fixes:
 
-showing "gvfs needs a toolchain w/ wchar, threads, dynamic library"
-while also showing "gvfs[ ]"
-when !BR2_STATIC_LIBS
+showing "enable home daemon"
+and "homed support needs a toolchain w/ threads, dynamic library, kernel headers >= 4.12"
+when BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
 
-introduced by 4266c9f54f635e8a9d0a7fdedfb1c84c1de10785
+introduced by fa62b5165ca41e4800e00a84af9026bfa5fb9155
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/gvfs/Config.in | 2 +-
+ package/systemd/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
-index 5a6b3e73ec..68ad291436 100644
---- a/package/gvfs/Config.in
-+++ b/package/gvfs/Config.in
-@@ -20,4 +20,4 @@ config BR2_PACKAGE_GVFS
- comment "gvfs needs a toolchain w/ wchar, threads, dynamic library"
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ec34478e3d..a558275901 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -233,7 +233,7 @@ comment "homed support needs a toolchain w/ threads, dynamic library, kernel hea
  	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+ 
+ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+ 	bool "enable hostname daemon"
 -- 
 2.25.1
