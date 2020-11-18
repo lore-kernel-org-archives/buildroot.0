@@ -1,41 +1,76 @@
-From: Ignacy =?utf-8?B?R2F3xJlkemtp?= <ignacy.gawedzki@green-communications.fr>
-Date: Wed, 18 Nov 2020 18:50:40 +0100
-Subject: [Buildroot] [PATCH] package/json-for-modern-cpp: bump to version
- 3.9.0
-Message-ID: <20201118175040.dn5umfkagovvuac5@zenon.in.qult.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 18 Nov 2020 19:02:24 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_13321=5D_New=3A_utils/scanpypi=3A_f?=
+ =?utf-8?q?ails_with_packages_that_define_a_package=E2=80=99s_metadata_in_?=
+ =?utf-8?q?setup=2Ecfg?=
+Message-ID: <bug-13321-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
----
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=13321
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index 4d540f2404..eb9270b311 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
-+sha256  9943db11eeaa5b23e58a88fbc26c453faccef7b546e55063ad00e7caaaf76d0b  json-3.9.0.tar.gz
- sha256  50be9457e5c9faaba5e60d9c73f8eabe9e0737a2d9c3e58357d856661862c18e  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index afc900b7dd..6e21723fd4 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JSON_FOR_MODERN_CPP_VERSION = 3.8.0
-+JSON_FOR_MODERN_CPP_VERSION = 3.9.0
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
+            Bug ID: 13321
+           Summary: utils/scanpypi: fails with packages that define a
+                    package?s metadata in setup.cfg
+           Product: buildroot
+           Version: 2020.08.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bartosz.bilas at hotmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+There is a couple(or more than couple) of packages on PyPi that doesn't work
+with the scanpypi script (for example wheel/importlib_resources). The reason of
+that is that it uses setup.cfg in conjunction with setup.py to package metadata
+configuration. Use of scanpypi on these packages fails with the following
+errors:
+
+utils/scanpypi:23: DeprecationWarning: the imp module is deprecated in favour
+of importlib; see the module's documentation for alternative uses
+  import imp
+spdx_lookup module is not installed. This can lead to an inaccurate licence
+detection. Please install it via
+pip install spdx_lookup
+buildroot package name for wheel: python-wheel
+Package: python-wheel
+Fetching package wheel
+Downloading package wheel from
+https://files.pythonhosted.org/packages/83/72/611c121b6bd15479cb62f1a425b2e3372e121b324228df28e64cc28b01c2/wheel-0.35.1.tar.gz...
+Traceback (most recent call last):
+  File "utils/scanpypi", line 754, in <module>
+    main()
+  File "utils/scanpypi", line 702, in main
+    package.load_setup()
+  File "utils/scanpypi", line 302, in load_setup
+    setup = imp.load_module('setup', s_file, s_path, s_desc)
+  File "/usr/lib/python3.8/imp.py", line 234, in load_module
+    return load_source(name, filename, file)
+  File "/usr/lib/python3.8/imp.py", line 171, in load_source
+    module = _load(spec)
+  File "<frozen importlib._bootstrap>", line 702, in _load
+  File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 783, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/tmp/scanpypi-evf4l461/python-wheel/wheel-0.35.1/setup.py", line 4, in
+<module>
+  File "utils/scanpypi", line 63, in closure
+    BuildrootPackage.setup_args[kwargs['name']] = kwargs
+KeyError: 'name'
+
+
+To reproduce just type: 
+
+utils/scanpypi wheel
+
 -- 
-2.25.1
+You are receiving this mail because:
+You are on the CC list for the bug.
