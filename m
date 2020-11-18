@@ -1,57 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Nov 2020 16:47:42 +0100
-Subject: [Buildroot] [PATCH] package/python-flask-cors: security bump to
- version 3.0.9
-Message-ID: <20201118154742.6179-1-peter@korsgaard.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Wed, 18 Nov 2020 08:56:13 -0800
+Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-{km,
+ um}: bump to SDK 06.01.00.08 versions
+In-Reply-To: <1605645020061-0.post@n4.nabble.com>
+References: <20200702201125.3639873-1-aduskett@gmail.com>
+ <CAFSsvmr1GpWw1Zno8qa8wNOOZn7Hf0KhbqTZ9eEcXAOsS4yjZQ@mail.gmail.com>
+ <1605645020061-0.post@n4.nabble.com>
+Message-ID: <CAFSsvmrTthn5s4+_XPUYCv5C-CVGaa=x_jcd_SVCzpuUKKUuBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Hey Markus! Thanks for the comment!
 
-- CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
-  for Flask) before 3.0.9.  It allows ../ directory traversal to access
-  private resources because resource matching does not ensure that pathnames
-  are in a canonical format.
+Ideally, your patch would come next after my patch is applied
+upstream. I can attempt to ping the maintainers directly for a review;
+however, I believe they are more focused on the 2020.11 release.
 
-Also drop outdated md5 checksum and fix .hash indentation.
+Adam
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-flask-cors/python-flask-cors.hash | 7 +++----
- package/python-flask-cors/python-flask-cors.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
-index a893b7c890..15b7d41a32 100644
---- a/package/python-flask-cors/python-flask-cors.hash
-+++ b/package/python-flask-cors/python-flask-cors.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/flask-cors/json
--md5	551cc4c0305a171d28caa2b3bc838867  Flask-Cors-3.0.8.tar.gz
--sha256	72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16  Flask-Cors-3.0.8.tar.gz
-+# sha256 from https://pypi.org/pypi/flask-cors/json
-+sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
- # Locally computed sha256 checksums
--sha256	6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-+sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index 60454e27c4..d712109002 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_CORS_VERSION = 3.0.8
-+PYTHON_FLASK_CORS_VERSION = 3.0.9
- PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
--PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/9e/11/ca8b95c5bf9644471601e425f0de8cbd09a506bb6c24842cb17a6cd1eea8
-+PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
--- 
-2.20.1
+On Tue, Nov 17, 2020 at 12:30 PM Markus Zehnder <zehnder@live.com> wrote:
+>
+> I'm the happy ti-sgx patch user and newly subscribed to the mailing list.
+> BR2_PACKAGE_TI_SGX_DEMOS, the Qt examples and the famous
+> BR2_PACKAGE_QT5CINEX_HD are working now in Qt 5.12.8 and 5.15.0.
+>
+> For the patch to work I had to add two small things:
+> - patching qt5base.mk as mentioned in the description, but missing in the
+> patch
+> - patch Qt core to fix a compile error with the eglfs backend, related to:
+> https://bugreports.qt.io/browse/QTBUG-72567
+>
+> What's the proper way to proceed with the patch, resubmit a new patch
+> series? It would be great if it could be included.
+> If anyone needs them immediately, here's what I've added to Adam's patch:
+>
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index e0189599a7..c402f42008 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -76,9 +76,9 @@ QT5BASE_DEPENDENCIES += mesa3d
+>  else ifeq ($(BR2_PACKAGE_GCNANO_BINARIES),y)
+>  QT5BASE_CONFIGURE_OPTS += -gbm
+>  QT5BASE_DEPENDENCIES += gcnano-binaries
+> -else ifeq ($(BR2_PACKAGE_TI_SGX_LIBGBM),y)
+> +else ifeq ($(BR2_PACKAGE_TI_SGX_UM),y)
+>  QT5BASE_CONFIGURE_OPTS += -gbm
+> -QT5BASE_DEPENDENCIES += ti-sgx-libgbm
+> +QT5BASE_DEPENDENCIES += ti-sgx-um
+>  else ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+>  QT5BASE_CONFIGURE_OPTS += -gbm
+>  QT5BASE_DEPENDENCIES += imx-gpu-viv
+>
+> qt5base patch:
+>
+> diff -Naur
+> a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+> b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+> ---
+> a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+> +++
+> b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+> @@ -80,7 +80,8 @@
+>      }
+>
+>      if (getPlatformDisplay) {
+> -        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay,
+> nullptr);
+> +        qintptr nativeDisplayPtr =
+> reinterpret_cast<qintptr>(nativeDisplay);
+> +        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR,
+> reinterpret_cast<void *>(&nativeDisplayPtr), nullptr);
+>      } else {
+>          qCDebug(qLcEglfsKmsDebug, "No eglGetPlatformDisplay for GBM,
+> falling back to eglGetDisplay");
+>          display = eglGetDisplay(nativeDisplay);
+>
+>
+>
+>
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
