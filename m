@@ -1,29 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Nov 2020 17:59:50 +0100
-Subject: [Buildroot] [PATCH] package/gvfs: show warning when
+Date: Wed, 18 Nov 2020 17:58:14 +0100
+Subject: [Buildroot] [git commit] package/gvfs: show warning when
  BR2_STATIC_LIBS=y
-In-Reply-To: <20201118131323.3166176-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Wed, 18 Nov 2020 14:13:22 +0100")
-References: <20201118131323.3166176-1-buildroot@heine.tech>
-Message-ID: <87d00ay515.fsf@dell.be.48ers.dk>
+Message-ID: <20201118164552.5599C8673B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4c8a6d3aa66b93b1e0320f0160938314c1915534
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- > showing "gvfs needs a toolchain w/ wchar, threads, dynamic library"
- > while also showing "gvfs[ ]"
- > when !BR2_STATIC_LIBS
+Commit 4266c9f54f (package/gvfs: needs dynamic library) updated the
+dependency of gvfs, but inverted the comment dependency, causing it to only
+be shown if !static - Fix that.
 
- > introduced by 4266c9f54f635e8a9d0a7fdedfb1c84c1de10785
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Reviewed-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gvfs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gvfs/Config.in b/package/gvfs/Config.in
+index 5a6b3e73ec..68ad291436 100644
+--- a/package/gvfs/Config.in
++++ b/package/gvfs/Config.in
+@@ -20,4 +20,4 @@ config BR2_PACKAGE_GVFS
+ comment "gvfs needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_STATIC_LIBS
++		BR2_STATIC_LIBS
