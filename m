@@ -1,58 +1,118 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Nov 2020 23:50:18 -0800
-Subject: [Buildroot] [PATCH v3 4/5] board: add nvidia jetson tx2 support
-In-Reply-To: <61b867a9-96d4-1ab2-813b-c1529c3fed1b@smile.fr>
-References: <20201118025252.3806860-1-christian@paral.in>
- <20201118025252.3806860-4-christian@paral.in>
- <61b867a9-96d4-1ab2-813b-c1529c3fed1b@smile.fr>
-Message-ID: <CA+h8R2ohK8Y+Dfii=sFYO_eYc9_Zbp4C3bUwWTAkZS0EGnRbwg@mail.gmail.com>
+Date: Wed, 18 Nov 2020 23:53:24 -0800
+Subject: [Buildroot] [PATCH v4 1/5] package/nvidia-modprobe: new package
+Message-ID: <20201119075328.8599-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+nvidia-modprobe package adds a utility and headers for probing the NVIDIA
+hardware at runtime.
 
-On Wed, Nov 18, 2020 at 6:59 AM Romain Naour <romain.naour@smile.fr> wrote:
+https://github.com/NVIDIA/nvidia-modprobe
 
-> > +# Toolchain reference: docs.nvidia.com: "Jetson Linux Driver Package Toolchain"
-> > +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > +BR2_BINUTILS_VERSION_2_32_X=y
->
-> AFAIK, the nvidia sdk requires a specific gcc version too. I'm not sure it can
-> build with GCC 9 or 10. Cuda libraries seems requires GCC 8.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/Config.in                            |  1 +
+ package/nvidia-modprobe/Config.in            | 12 ++++++
+ package/nvidia-modprobe/nvidia-modprobe.hash |  3 ++
+ package/nvidia-modprobe/nvidia-modprobe.mk   | 45 ++++++++++++++++++++
+ 4 files changed, 61 insertions(+)
+ create mode 100644 package/nvidia-modprobe/Config.in
+ create mode 100644 package/nvidia-modprobe/nvidia-modprobe.hash
+ create mode 100644 package/nvidia-modprobe/nvidia-modprobe.mk
 
-This has been tested under my Skiff project with the following:
-
-BR2_TOOLCHAIN_BUILDROOT=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_BINUTILS_VERSION_2_32_X=y
-BR2_GCC_VERSION_7_X=y
-BR2_GCC_ENABLE_LTO=n
-BR2_USE_MMU=y
-
-I have submitted another series revision with the additional GCC
-Version specifier.
-
-Note: both the tx2 and nano have been tested and known to work well even w/ GPU.
-
-> The vanilla linux kernel doesn't even build with gcc 8, Matt Madison (the OE4T
-> maintainer) backported a lot of patches on the kernel 4.9.140 released by Nvidia
-> to fixes those issues.
-
-As noted above this has been tested against gcc 7, so I'm not sure
-about > gcc 7.
-
-> Also this kernel include nvidia kernel stack, there is a hard dependency on the
-> linux4tegra version (32.4.3).
-
-This series includes l4t 32.4.3.
-
-Thanks for the review.
-
-Best regards,
-Christian Stewart
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..fa1b5d35e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -502,6 +502,7 @@ endmenu
+ 	source "package/nanocom/Config.in"
+ 	source "package/neard/Config.in"
+ 	source "package/nvidia-driver/Config.in"
++	source "package/nvidia-modprobe/Config.in"
+ 	source "package/nvme/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvidia-modprobe/Config.in b/package/nvidia-modprobe/Config.in
+new file mode 100644
+index 0000000000..35953a33d4
+--- /dev/null
++++ b/package/nvidia-modprobe/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_NVIDIA_MODPROBE
++	bool "nvidia-modprobe"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  nvidia-modprobe package adds a utility and headers for
++	  probing the NVIDIA hardware at runtime.
++
++	  https://github.com/NVIDIA/nvidia-modprobe
++
++comment "nvidia-modprobe needs a glibc toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
+diff --git a/package/nvidia-modprobe/nvidia-modprobe.hash b/package/nvidia-modprobe/nvidia-modprobe.hash
+new file mode 100644
+index 0000000000..99908680f0
+--- /dev/null
++++ b/package/nvidia-modprobe/nvidia-modprobe.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 396b4102d3075a2dee3024652fae206a1b38ace54b8efb1e2c20757a11ec19f1  nvidia-modprobe-450.57.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/nvidia-modprobe/nvidia-modprobe.mk b/package/nvidia-modprobe/nvidia-modprobe.mk
+new file mode 100644
+index 0000000000..7eeee6716c
+--- /dev/null
++++ b/package/nvidia-modprobe/nvidia-modprobe.mk
+@@ -0,0 +1,45 @@
++################################################################################
++#
++# nvidia-modprobe
++#
++################################################################################
++
++NVIDIA_MODPROBE_VERSION = 450.57
++NVIDIA_MODPROBE_SITE = $(call github,NVIDIA,nvidia-modprobe,$(NVIDIA_MODPROBE_VERSION))
++NVIDIA_MODPROBE_LICENSE = GPL-2
++NVIDIA_MODPROBE_LICENSE_FILES = COPYING
++
++NVIDIA_MODPROBE_DEPENDENCIES = host-pkgconf
++NVIDIA_MODPROBE_INSTALL_STAGING = YES
++
++define NVIDIA_MODPROBE_BUILD_CMDS
++	mkdir -p $(@D)/bin
++	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		-I $(@D)/common-utils -I $(@D)/modprobe-utils \
++		-o $(@D)/bin/nvidia-modprobe \
++		-DNV_LINUX=true -DPROGRAM_NAME=\"nvidia-modprobe\" \
++		-DNVIDIA_VERSION=\"$(NVIDIA_MODPROBE_VERSION)\" \
++		$(@D)/nvidia-modprobe.c $(@D)/modprobe-utils/nvidia-modprobe-utils.c \
++		$(@D)/modprobe-utils/pci-sysfs.c $(@D)/common-utils/common-utils.c \
++		$(@D)/common-utils/msg.c $(@D)/common-utils/nvgetopt.c
++endef
++
++define NVIDIA_MODPROBE_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/nvidia-modprobe-utils.h \
++		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-modprobe-utils.h
++	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/pci-enum.h \
++		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/pci-enum.h
++	$(INSTALL) -D -m 644 $(@D)/common-utils/common-utils.h \
++		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-common-utils.h
++	$(INSTALL) -D -m 644 $(@D)/common-utils/msg.h \
++		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/msg.h
++	$(INSTALL) -D -m 644 $(@D)/common-utils/nvgetopt.h \
++		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvgetopt.h
++endef
++
++define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
++		$(TARGET_DIR)/usr/bin/nvidia-modprobe
++endef
++
++$(eval $(generic-package))
+-- 
+2.29.2
