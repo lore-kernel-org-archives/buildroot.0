@@ -1,40 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Nov 2020 23:11:25 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qt5/qt5coap: new package
-In-Reply-To: <20201119220142.1054287-1-angelo@amarulasolutions.com>
-References: <20201119220142.1054287-1-angelo@amarulasolutions.com>
-Message-ID: <20201119231125.369c16bb@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 19 Nov 2020 23:11:40 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/bind: fix license hash
+Message-ID: <20201119221140.15637-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e forgot to update hash of
+COPYRIGHT which was updated to replace http by https:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/400171aee8db87c3973987980327051a58a20a80
 
-Thanks a lot those three packages, they obviously look good. I only have one question.
+Fixes:
+ - http://autobuild.buildroot.org/results/db614a6fa1e17af2fa5c1d4a0d51cdf770893ca9
 
-On Thu, 19 Nov 2020 23:01:40 +0100
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/bind/bind.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +QT5COAP_VERSION = $(QT5_VERSION)
-> +QT5COAP_SITE = $(call github,qt,qtcoap,v$(QT5_VERSION))
-> +QT5COAP_INSTALL_STAGING = YES
-> +QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
-> +QT5COAP_LICENSE_FILES = LICENSE.GPL3 LICENSE.FDL
-> +QT5COAP_DEPENDENCIES = host-perl
-> +
-> +define QT5COAP_FIX_INCLUDE
-> +	cd $(@D); $(HOST_DIR)/bin/syncqt.pl -module QtCoap -version $(QT5_VERSION)
-> +endef
-
-Why is this syncqt.pl invocation needed for those 3 packages? What
-makes them different from the other Qt5 packages we have?
-
-Thanks!
-
-Thomas
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index e02c06ff3e..cbd9562b56 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
+ # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
+ sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
+-sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
++sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
