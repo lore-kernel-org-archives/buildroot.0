@@ -1,92 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Nov 2020 23:25:41 +0100
-Subject: [Buildroot] [PATCH 0/7] support/download: reproducible archives
- whatever tar version (branch yem/dl-git-tar-pax)
-In-Reply-To: <20201119225327.48a2a6d2@windsurf.home>
-References: <cover.1605821010.git.yann.morin.1998@free.fr>
- <20201119225327.48a2a6d2@windsurf.home>
-Message-ID: <20201119222541.GN771438@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Nov 2020 23:25:49 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/qt5/qt5coap: new package
+In-Reply-To: <20201119220142.1054287-1-angelo@amarulasolutions.com>
+References: <20201119220142.1054287-1-angelo@amarulasolutions.com>
+Message-ID: <20201119232549.2dab1118@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Angelo,
 
-On 2020-11-19 22:53 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 19 Nov 2020 22:23:47 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > Yann E. MORIN (7):
-> >       core/pkg-infra: prepare for alternate default source archives
-> >       WIP: support/download: change format of archives generated from git
-> >       WIP: boot+packages: update hash to new git-tarballs format
-> >       WIP: support/testing: update git-hash checks with new archive format
-> >       support/download: change format of archives generated from svn
-> >       support/dependencies: drop check for maximal tar version
-> >       package/tar: drop specific version for host variant
-> 
-> I reviewed the series, and overall it looks good to me. Of course, I
-> haven't actually tested/verified that the new magic set of tar options
-> makes things reproducible, but it seems like the amount of research on
-> this has been significant.
+On Thu, 19 Nov 2020 23:01:40 +0100, Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-There is a Makefile as a post-commit note in patch 2, that can be used to
-reproduce the experiment.
+> The Qt CoAP module implements the client side of CoAP defined by RFC
+> 7252.
+>
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+> Changelog
+> v1 -> v2:
+>  fixed hash file (suggested by Peter)
+>
+>  DEVELOPERS                       |  1 +
+>  package/qt5/Config.in            |  1 +
+>  package/qt5/qt5coap/Config.in    | 11 +++++++++++
+>  package/qt5/qt5coap/qt5coap.hash |  6 ++++++
+>  package/qt5/qt5coap/qt5coap.mk   | 19 +++++++++++++++++++
+>  5 files changed, 38 insertions(+)
+>  create mode 100644 package/qt5/qt5coap/Config.in
+>  create mode 100644 package/qt5/qt5coap/qt5coap.hash
+>  create mode 100644 package/qt5/qt5coap/qt5coap.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9ab1e125f4..3f5fa20ebc 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -169,6 +169,7 @@ F:	package/python-pillow/
+>  F:	package/python-pydal/
+>  F:	package/python-spidev/
+>  F:	package/python-web2py/
+> +F:	package/qt5/qt5coap/
+>  F:	package/sam-ba/
+>  F:	package/sshguard/
+>  F:	package/sunwait/
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index fc0e68e8b7..9431f4980d 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -40,6 +40,7 @@ if BR2_PACKAGE_QT5
+>  source "package/qt5/qt53d/Config.in"
+>  source "package/qt5/qt5base/Config.in"
+>  source "package/qt5/qt5charts/Config.in"
+> +source "package/qt5/qt5coap/Config.in"
+>  source "package/qt5/qt5connectivity/Config.in"
+>  source "package/qt5/qt5declarative/Config.in"
+>  source "package/qt5/qt5enginio/Config.in"
+> diff --git a/package/qt5/qt5coap/Config.in b/package/qt5/qt5coap/Config.in
+> new file mode 100644
+> index 0000000000..b5bed342a9
+> --- /dev/null
+> +++ b/package/qt5/qt5coap/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_QT5COAP
+> +	bool "qt5coap"
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  CoAP is a protocol for IoT devices, and machine to machine
+> +	  communication. The Qt CoAP module implements the client side
+> +	  of CoAP defined by RFC 7252.
+> +
+> +	  https://doc.qt.io/QtCoAP/qtcoap-index.html
+> diff --git a/package/qt5/qt5coap/qt5coap.hash b/package/qt5/qt5coap/qt5coap.hash
+> new file mode 100644
+> index 0000000000..3f3390ebd4
+> --- /dev/null
+> +++ b/package/qt5/qt5coap/qt5coap.hash
+> @@ -0,0 +1,6 @@
+> +# Hash locally calculated
+> +sha256  f2addd89e94fb3945fc6ee6db795b0736cd3396760b31e04c01cd02558c53e07  qt5coap-5.15.1.tar.gz
+> +
+> +# Hashes for license files:
+> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+> +sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
 
-I highly suggest anyone to test that in their own setup as well, to
-gather more data points on reproducibility.
-
-> The only thing that bothers me a bit is that this series uses the
-> one-time bullet of switching from .tar.gz to .tar.xz, and I'm wondering
-> if we will not have other situations like this, and we won't have much
-> solution as we would already be using .tar.xz.
-
-We could still switch to lzo, lz4, lz, bz2, tbz2, and closing the loop
-with tgz, giving us 6 more extensions, and thus openning 6 more
-switching opportunities!
-
-(Just kidding.)
-
-> Just in my Go/Cargo vendoring, I'm encountering a similar problem: due
-> to the vendoring, the tarballs are changing and so are their hashes.
-> Since only two packages are impacted, I'm using the trick of bumping
-> them at the same time as I enable vendoring for them. But perhaps it
-> would be better to have a mechanism to support having different
-> tarballs for the same package ? I'm not sure how that would work
-> really, I don't have any clear idea.
-
-I am not so sure we would have such a big breakage in the near future.
-Near, as in the next twwo to three years, that is (but heck, with those
-package managers and the new cool kidz on the block, who knows what's
-coming next month, even less soo next year...)
-
-Alternatively, if we want to envision this, then we will have no
-alternative than to add a post-version string, like most distribution
-do, to add after the version and before the extension.
-
-    foo-1.2.3.tar.gz                        # Current state
-
-    foo-1.2.3_br-vendored.tar.gz            # Cargo vendored
-
-    foo-1.2.3_br-vendored-fixed.tar.gz      # We fixed a corner case in our cargo infra
-
-    foo-1.2.3_br-vendored-fixed-recursive.tar.gz    # We extend our Cargo infra to recurse
-                                                    # into vendored sub-modules located on
-                                                    # the HTTP4 remote server over TOR with
-                                                    # the distributed DOHoTOR name resolver
-
-    foo-1.2.3_4.tar.gz      # We got lazy when further extending the infra.
-
-You get the idea. ;-)
+---------^ o.k.
+---------------------------------------------------------------------------^ not o.k. should be two spaces
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> diff --git a/package/qt5/qt5coap/qt5coap.mk b/package/qt5/qt5coap/qt5coap.mk
+> new file mode 100644
+> index 0000000000..210cebf13a
+> --- /dev/null
+> +++ b/package/qt5/qt5coap/qt5coap.mk
+> @@ -0,0 +1,19 @@
+> +################################################################################
+> +#
+> +# qt5coap
+> +#
+> +################################################################################
+> +
+> +QT5COAP_VERSION = $(QT5_VERSION)
+> +QT5COAP_SITE = $(call github,qt,qtcoap,v$(QT5_VERSION))
+> +QT5COAP_INSTALL_STAGING = YES
+> +QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
+> +QT5COAP_LICENSE_FILES = LICENSE.GPL3 LICENSE.FDL
+> +QT5COAP_DEPENDENCIES = host-perl
+> +
+> +define QT5COAP_FIX_INCLUDE
+> +	cd $(@D); $(HOST_DIR)/bin/syncqt.pl -module QtCoap -version $(QT5_VERSION)
+> +endef
+> +QT5COAP_PRE_CONFIGURE_HOOKS = QT5COAP_FIX_INCLUDE
+> +
+> +$(eval $(qmake-package))
