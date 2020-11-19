@@ -1,50 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Nov 2020 22:23:51 +0100
-Subject: [Buildroot] [PATCH 7/7] package/tar: drop specific version for host
- variant
+Date: Thu, 19 Nov 2020 22:23:49 +0100
+Subject: [Buildroot] [PATCH 5/7] support/download: change format of archives
+ generated from svn
 In-Reply-To: <cover.1605821010.git.yann.morin.1998@free.fr>
 References: <cover.1605821010.git.yann.morin.1998@free.fr>
-Message-ID: <52689e338580e652fe12fec63f9b2a10018610e8.1605821010.git.yann.morin.1998@free.fr>
+Message-ID: <999da6d23d25a51db60924c9fbfc5324f38c129e.1605821010.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now we can generate reproducible archives, with all known tar versions
-starting with 1.27, we don't need to clamp the host-tar version to the
-old 1.29, and can now bump to any later version.
+Like we recently did for git, switch the archives generated from
+subversion to be reproducible whatever the tar version. This implies
+changing the compression to xz (and the extension accordingly).
 
-Drop the host-tar version, and use the same as the target variant.
-
-Note that we still need the _SOURCE trick, to avoid depending on tar to
-extract the tar tarball...
+We have no in-tree users of the svn backend, that also has hashes.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Vincent Fazio <vfazio@xes-inc.com>
 ---
- package/tar/tar.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ package/pkg-generic.mk |  2 +-
+ support/download/svn   | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 9e0a40e561..7822b1dada 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -29,14 +29,10 @@ endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 115115a345..af259766ab 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -564,7 +564,7 @@ ifndef $(2)_DL_OPTS
+  endif
+ endif
  
- $(eval $(autotools-package))
+-ifneq ($$(filter git,$$($(2)_SITE_METHOD)),)
++ifneq ($$(filter git svn,$$($(2)_SITE_METHOD)),)
+ $(2)_SOURCE_EXT = .tar.xz
+ else
+ $(2)_SOURCE_EXT = .tar.gz
+diff --git a/support/download/svn b/support/download/svn
+index 012f286dd9..42307eb236 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -52,12 +52,16 @@ find "${basename}" -not -type d \
+        -and -not -path "./.svn/*" >"${output}.list"
+ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
  
--# host-tar is used to create the archives in the VCS download backends and tar
--# 1.30 and forward have changed the archive format. So archives generated with
--# earlier versions are not bit-for-bit reproducible and the hashes would not
--# match. Hence host-tar must be kept at version 1.29.
--HOST_TAR_VERSION = 1.29
- # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
- # of needing tar to build tar.
--HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
-+HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
+-# Create GNU-format tarballs, since that's the format of the tarballs on
+-# sources.buildroot.org and used in the *.hash files
++pax_options="delete=atime,delete=ctime,delete=mtime"
++pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
 +
- define HOST_TAR_EXTRACT_CMDS
- 	mkdir -p $(@D)
- 	cd $(@D) && \
++# Create POSIX tarballs, since that's the format the most reproducible
+ tar cf - --transform="s#^\./#${basename}/#" \
+-         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
++         --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++         --format=posix \
++         --pax-option="${pax_options}" \
+          -T "${output}.list.sorted" >"${output}.tar"
+-gzip -6 -n <"${output}.tar" >"${output}"
++xz -9 <"${output}.tar" >"${output}"
+ 
+ rm -f "${output}.list"
+ rm -f "${output}.list.sorted"
 -- 
 2.25.1
