@@ -1,66 +1,122 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 19 Nov 2020 23:04:59 +0100
-Subject: [Buildroot] [PATCH 1/3] package/qt5/qt5coap: new package
-In-Reply-To: <20201119202931.2b493b09@gmx.net>
-References: <20201119102150.714800-1-angelo@amarulasolutions.com>
- <20201119202052.3221b62c@gmx.net> <20201119202931.2b493b09@gmx.net>
-Message-ID: <CA+TH9V=32S+dZr+-nGLJkxpWaDrjawr9EL=wu1eVZ5CXO5NDYQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Nov 2020 23:00:57 +0100
+Subject: [Buildroot] [git commit branch/next] package/qcom-db410c-firmware:
+ new package
+Message-ID: <20201119215317.3B2DA8688A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il giorno gio 19 nov 2020 alle ore 20:29 Peter Seiderer
-<ps.report@gmx.net> ha scritto:
->
-> Hello Angelo,
->
-> On Thu, 19 Nov 2020 20:20:52 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > > diff --git a/package/qt5/qt5coap/qt5coap.hash b/package/qt5/qt5coap/qt5coap.hash
-> > > new file mode 100644
-> > > index 0000000000..423278e652
-> > > --- /dev/null
-> > > +++ b/package/qt5/qt5coap/qt5coap.hash
-> > > @@ -0,0 +1,6 @@
-> > > +# Hash locally calculated
-> > > +sha256  f2addd89e94fb3945fc6ee6db795b0736cd3396760b31e04c01cd02558c53e07  qt5coap-5.15.1.tar.gz
-> > > +
-> > > +# Hashes for license files:
-> > > +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-> > > +sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
-> >
-> > Preferred style is with two spaces as separators (see [1]), with this fixed
-> > you can add my:
-> >
-> > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-> >
-> > Regards,
-> > Peter
-> >
->
-> ...and the missing reference/link:
->
-> [1] https://buildroot.org/downloads/manual/manual.html#adding-packages-hash
->
->   The format of this file is one line for each file for which to check the hash,
->   each line with the following three fields separated by two spaces.
+commit: https://git.buildroot.net/buildroot/commit/?id=7c51fc3897ab98630f9a9896f41afe32092b36fc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I took the hash file from another qt5 package, hence the error.
+Installs the required Wifi/BT firmware blobs for the Qualcomm
+Dragonboard 410c SBC.
 
-Out of curiosity, I wrote a simple python script to look for hash
-files with wrong syntax, we have 2k+ of them!
+Signed-off-by: Mike Frampton <mikeframpo@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ package/qcom-db410c-firmware/Config.in             |  7 ++++
+ .../qcom-db410c-firmware/qcom-db410c-firmware.hash |  3 ++
+ .../qcom-db410c-firmware/qcom-db410c-firmware.mk   | 41 ++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
 
->
-> Regards,
-> Peter
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0c9c16423..a76b539285 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1864,6 +1864,9 @@ N:	Michel Stempin <michel.stempin@wanadoo.fr>
+ F:	board/licheepi/
+ F:	configs/licheepi_zero_defconfig
+ 
++N:	Mike Frampton <mikeframpo@gmail.com>
++F:	package/qcom-db410c-firmware/
++
+ N:	Mike Harmony <mike.harmony@snapav.com>
+ F:	board/sinovoip/m2-plus/
+ F:	configs/bananapi_m2_plus_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index d32a271113..3c5664f723 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -402,6 +402,7 @@ menu "Firmware"
+ 	source "package/linux-firmware/Config.in"
+ 	source "package/murata-cyw-fw/Config.in"
+ 	source "package/odroidc2-firmware/Config.in"
++	source "package/qcom-db410c-firmware/Config.in"
+ 	source "package/rpi-bt-firmware/Config.in"
+ 	source "package/rpi-firmware/Config.in"
+ 	source "package/rpi-wifi-firmware/Config.in"
+diff --git a/package/qcom-db410c-firmware/Config.in b/package/qcom-db410c-firmware/Config.in
+new file mode 100644
+index 0000000000..9f68857490
+--- /dev/null
++++ b/package/qcom-db410c-firmware/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QCOM_DB410C_FIRMWARE
++	bool "qcom-db410c-firmware"
++	select BR2_PACKAGE_HOST_MTOOLS
++	help
++	  Wifi/BT firmware for Qualcomm Dragonboard 410c SBC.
++
++	  https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware/
+diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.hash b/package/qcom-db410c-firmware/qcom-db410c-firmware.hash
+new file mode 100644
+index 0000000000..e8ac31eb39
+--- /dev/null
++++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  46953b974c5c58c7ca66db414437c0268b033ac9d28127e98d9c4e1a49359da5  linux-board-support-package-r1034.2.1.zip
++sha256  11e60ad6f83c2a86e40dca374c24230b53650dd3e0adf2e72c15f8cafedc2e5a  LICENSE
+diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+new file mode 100644
+index 0000000000..9ef32cc9d4
+--- /dev/null
++++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# qcom-db410c-firmware
++#
++################################################################################
++
++QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
++QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
++QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
++QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
++QCOM_DB410C_FIRMWARE_LICENCE = Qualcomm firmware license
++QCOM_DB410C_FIRMWARE_LICENSE_FILES = LICENSE
++QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
++
++define QCOM_DB410C_FIRMWARE_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) \
++		$(QCOM_DB410C_FIRMWARE_DL_DIR)/$(QCOM_DB410C_FIRMWARE_SOURCE)
++	mv $(@D)/$(QCOM_DB410C_FIRMWARE_BASE)/* $(@D)
++	rmdir $(@D)/$(QCOM_DB410C_FIRMWARE_BASE)
++endef
++
++# Install the Wifi/Bt firmware blobs to target. These commands are
++# based on firmware-qcom-dragonboard410c_*.bb in the OpenEmbedded
++# meta-qcom layer, see https://github.com/ndechesne/meta-qcom
++define QCOM_DB410C_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 \
++		$(@D)/efs-seed/fs_image_linux.tar.gz.mbn.img \
++		$(TARGET_DIR)/boot/modem_fsg
++
++	$(INSTALL) -d $(TARGET_DIR)/lib/firmware
++	cp -r $(@D)/proprietary-linux/wlan \
++		$(TARGET_DIR)/lib/firmware/
++
++	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/qcom/msm8916
++	MTOOLS_SKIP_CHECK=1 $(HOST_DIR)/bin/mcopy -n -i \
++		$(@D)/bootloaders-linux/NON-HLOS.bin \
++		::image/modem.* ::image/mba.mbn ::image/wcnss.* \
++		$(TARGET_DIR)/lib/firmware/qcom/msm8916
++endef
++
++$(eval $(generic-package))
