@@ -1,62 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Nov 2020 22:36:46 +0100
-Subject: [Buildroot] [PATCH next 01/12] support/download/dl-wrapper: add
- concept of download post-processing
+Date: Thu, 19 Nov 2020 22:36:48 +0100
+Subject: [Buildroot] [PATCH next 03/12] package/pkg-download.mk: add
+ <pkg>_DL_ENV variable
 In-Reply-To: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
 References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201119213658.1232531-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20201119213658.1232531-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to support package managers such as Cargo (Rust) or Go, we
-want to run some custom logic after the main download, but before
-packing the tarball and checking the hash.
+This variable can be used by package to pass extra environment
+variables to the download logic. It will be used for the Go/Cargo
+vendoring.
 
-To implement this, this commit introduces a concept of download
-post-processing: if -p <something> is passed to the dl-wrapper, then
-support/download/<something>-post-process will be called.
+The <pkg>_DL_ENV variable is intentionally not documented: at this
+point, it is not meant to be used by packages directly, but only by
+package infrastructures.
 
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/dl-wrapper | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-download.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 3315bd410e..2d74554213 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -25,7 +25,7 @@ main() {
-     local -a uris
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 175b9d7dba..c914d016e2 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -99,7 +99,9 @@ endif
  
-     # Parse our options; anything after '--' is for the backend
--    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
-+    while getopts ":c:d:D:o:n:N:H:rf:u:qp:" OPT; do
-         case "${OPT}" in
-         c)  cset="${OPTARG}";;
-         d)  dl_dir="${OPTARG}";;
-@@ -37,6 +37,7 @@ main() {
-         r)  recurse="-r";;
-         f)  filename="${OPTARG}";;
-         u)  uris+=( "${OPTARG}" );;
-+        p)  post_process="${OPTARG}";;
-         q)  quiet="-q";;
-         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-         \?) error "unknown option '%s'\n" "${OPTARG}";;
-@@ -135,6 +136,12 @@ main() {
-             continue
-         fi
- 
-+        if [ -n "${post_process}" ] ; then
-+                ${OLDPWD}/support/download/${post_process}-post-process \
-+                         -o "${tmpf}" \
-+                         -n "${raw_base_name}"
-+        fi
-+
-         # cd back to free the temp-dir, so we can remove it later
-         cd "${OLDPWD}"
- 
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) \
++		$($(2)_DL_ENV) \
++		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
+ 		-d '$($(2)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
 -- 
 2.28.0
