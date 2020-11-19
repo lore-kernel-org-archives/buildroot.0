@@ -1,34 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 19 Nov 2020 23:11:40 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/bind: fix license hash
-Message-ID: <20201119221140.15637-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Nov 2020 23:11:53 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/qcom-db410c-firmware: new
+ package
+In-Reply-To: <20201119090854.48955-2-mikeframpo@gmail.com>
+References: <20201119090854.48955-1-mikeframpo@gmail.com>
+ <20201119090854.48955-2-mikeframpo@gmail.com>
+Message-ID: <20201119231153.5acac240@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e forgot to update hash of
-COPYRIGHT which was updated to replace http by https:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/400171aee8db87c3973987980327051a58a20a80
+On Thu, 19 Nov 2020 22:08:52 +1300
+Mike Frampton <mikeframpo@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/db614a6fa1e17af2fa5c1d4a0d51cdf770893ca9
+> Installs the required Wifi/BT firmware blobs for the Qualcomm
+> Dragonboard 410c SBC.
+> 
+> Signed-off-by: Mike Frampton <mikeframpo@gmail.com>
+> ---
+>  DEVELOPERS                                    |  3 ++
+>  package/Config.in                             |  1 +
+>  package/qcom-db410c-firmware/Config.in        |  6 +++
+>  .../qcom-db410c-firmware.hash                 |  3 ++
+>  .../qcom-db410c-firmware.mk                   | 41 +++++++++++++++++++
+>  5 files changed, 54 insertions(+)
+>  create mode 100644 package/qcom-db410c-firmware/Config.in
+>  create mode 100644 package/qcom-db410c-firmware/qcom-db410c-firmware.hash
+>  create mode 100644 package/qcom-db410c-firmware/qcom-db410c-firmware.mk
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/bind/bind.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In fact, I fixed up the minor issues that remained, and applied your
+patch to next. Thanks!
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index e02c06ff3e..cbd9562b56 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
- # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
- sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
--sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-+sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
