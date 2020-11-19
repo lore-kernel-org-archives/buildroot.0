@@ -1,43 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 19 Nov 2020 13:03:47 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/radvd: fix build without
- stack-protector
-Message-ID: <20201119120347.1871672-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Nov 2020 14:27:12 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/qcom-db410c-firmware: new
+ package
+In-Reply-To: <20201119090854.48955-2-mikeframpo@gmail.com>
+References: <20201119090854.48955-1-mikeframpo@gmail.com>
+ <20201119090854.48955-2-mikeframpo@gmail.com>
+Message-ID: <20201119142712.5bb25684@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 6e85ab44493624748398ffb2c6bf4bda409f2de7 forgot to manage the new
---{with,without}-stack-protector option which has been added with
-https://github.com/reubenhwk/radvd/commit/f2cb35449f35b5815f3804161c968fde5ef2982b
-and is enabled by default
+Hello Mike,
 
-Fixes:
- - http://autobuild.buildroot.org/results/e778df96f0a382a5b119724ee69f956ad455c452
+Thanks for this new iteration!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/radvd/radvd.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Thu, 19 Nov 2020 22:08:52 +1300
+Mike Frampton <mikeframpo@gmail.com> wrote:
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 7a650dc3c5..bed6367841 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -15,6 +15,12 @@ RADVD_CONF_ENV = \
- RADVD_LICENSE = BSD-4-Clause-like
- RADVD_LICENSE_FILES = COPYRIGHT
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-+RADVD_CONF_OPTS += --with-stack-protector
-+else
-+RADVD_CONF_OPTS += --without-stack-protector
-+endif
-+
- # We don't provide /etc/radvd.conf, so disable the service by default.
- define RADVD_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 package/radvd/50-radvd.preset \
+> diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.hash b/package/qcom-db410c-firmware/qcom-db410c-firmware.hash
+> new file mode 100644
+> index 0000000000..e8ac31eb39
+> --- /dev/null
+> +++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  46953b974c5c58c7ca66db414437c0268b033ac9d28127e98d9c4e1a49359da5  linux-board-support-package-r1034.2.1.zip
+> +sha256  11e60ad6f83c2a86e40dca374c24230b53650dd3e0adf2e72c15f8cafedc2e5a  LICENSE
+> diff --git a/package/qcom-db410c-firmware/qcom-db410c-firmware.mk b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+> new file mode 100644
+> index 0000000000..15c97e9dc2
+> --- /dev/null
+> +++ b/package/qcom-db410c-firmware/qcom-db410c-firmware.mk
+> @@ -0,0 +1,41 @@
+> +################################################################################
+> +#
+> +# qcom-db410c-firmware
+> +#
+> +################################################################################
+> +
+> +QCOM_DB410C_FIRMWARE_VERSION = 1034.2.1
+> +QCOM_DB410C_FIRMWARE_BASE = linux-board-support-package-r$(QCOM_DB410C_FIRMWARE_VERSION)
+> +QCOM_DB410C_FIRMWARE_SOURCE = $(QCOM_DB410C_FIRMWARE_BASE).zip
+> +QCOM_DB410C_FIRMWARE_SITE = https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware
+
+I think you're missing
+
+QCOM_DB410C_FIRMWARE_DEPENDENCIES = host-mtools
+
+here, as your INSTALL_TARGET_CMDS is using $(HOST_DIR)/bin/mcopy.
+
+Otherwise, it looks good to me!
+
+Thanks,
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
