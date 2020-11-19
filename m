@@ -1,116 +1,337 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 18 Nov 2020 23:53:24 -0800
-Subject: [Buildroot] [PATCH v4 1/5] package/nvidia-modprobe: new package
-Message-ID: <20201119075328.8599-1-christian@paral.in>
+Date: Wed, 18 Nov 2020 23:53:25 -0800
+Subject: [Buildroot] [PATCH v4 2/5] package/linux4tegra: new package
+In-Reply-To: <20201119075328.8599-1-christian@paral.in>
+References: <20201119075328.8599-1-christian@paral.in>
+Message-ID: <20201119075328.8599-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nvidia-modprobe package adds a utility and headers for probing the NVIDIA
-hardware at runtime.
+NVIDIA Linux4Tegra utilities and binaries.
 
-https://github.com/NVIDIA/nvidia-modprobe
+https://developer.nvidia.com/embedded/linux-tegra-archive
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+
+v1 -> v2:
+
+ - cjs: add license hashes
+
+v2 -> v3:
+
+ - cjs: fix broken LICENSE hash
+ - cjs: add support for t210ref
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                            |  1 +
- package/nvidia-modprobe/Config.in            | 12 ++++++
- package/nvidia-modprobe/nvidia-modprobe.hash |  3 ++
- package/nvidia-modprobe/nvidia-modprobe.mk   | 45 ++++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 package/nvidia-modprobe/Config.in
- create mode 100644 package/nvidia-modprobe/nvidia-modprobe.hash
- create mode 100644 package/nvidia-modprobe/nvidia-modprobe.mk
+ package/Config.in                             |   1 +
+ ...for-flashing-Buildroot-produced-disk.patch |  58 +++++++++
+ package/linux4tegra/Config.in                 |  28 ++++
+ package/linux4tegra/linux4tegra.hash          |  55 ++++++++
+ package/linux4tegra/linux4tegra.mk            | 120 ++++++++++++++++++
+ 5 files changed, 262 insertions(+)
+ create mode 100644 package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
+ create mode 100644 package/linux4tegra/Config.in
+ create mode 100644 package/linux4tegra/linux4tegra.hash
+ create mode 100644 package/linux4tegra/linux4tegra.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..fa1b5d35e9 100644
+index fa1b5d35e9..01072c3e45 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -502,6 +502,7 @@ endmenu
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
- 	source "package/nvidia-driver/Config.in"
-+	source "package/nvidia-modprobe/Config.in"
- 	source "package/nvme/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/on2-8170-modules/Config.in"
-diff --git a/package/nvidia-modprobe/Config.in b/package/nvidia-modprobe/Config.in
+@@ -482,6 +482,7 @@ endmenu
+ 	source "package/libuio/Config.in"
+ 	source "package/linux-backports/Config.in"
+ 	source "package/linux-serial-test/Config.in"
++	source "package/linux4tegra/Config.in"
+ 	source "package/linuxconsoletools/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+diff --git a/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
 new file mode 100644
-index 0000000000..35953a33d4
+index 0000000000..4ace27bddc
 --- /dev/null
-+++ b/package/nvidia-modprobe/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NVIDIA_MODPROBE
-+	bool "nvidia-modprobe"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
++++ b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
+@@ -0,0 +1,58 @@
++From fbd0d35995a23351d4b50ed0b814442a6873ded2 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@paral.in>
++Date: Fri, 17 Jul 2020 13:58:43 -0700
++Subject: [PATCH] Adjust flash.sh for flashing Buildroot-produced disk image
++
++Signed-off-by: Christian Stewart <christian@paral.in>
++---
++ flash.sh | 19 ++++++++++---------
++ 1 file changed, 10 insertions(+), 9 deletions(-)
++
++diff --git a/flash.sh b/flash.sh
++index 38c0cbb..c27b41b 100755
++--- a/flash.sh
+++++ b/flash.sh
++@@ -1339,9 +1339,10 @@ elif [ "${target_rootdev}" == "internal" ] || \
++ 		usage allunknown 1;
++ 	fi
++ 
++-	cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
+++	# cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
+++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
++ else
++-	cmdline+="root=/dev/${target_rootdev} rw rootwait rootfstype=ext4 "
+++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
++ fi;
++ 
++ if [ "${CMDLINE_ADD}" != "" ]; then
++@@ -1512,11 +1513,7 @@ if [ "${write_image_name}" != "" ]; then
++ 	fi
++ fi
++ 
++-if [ "${INITRD_IN_BOOTIMG}" = "yes" ]; then
++-	ramdisk=initrd;
++-else
++-	ramdisk="/dev/null"
++-fi
+++ramdisk="/dev/null"
++ echo -n "Making Boot image... ";
++ MKBOOTARG+="--kernel ${kernel_image} ";
++ MKBOOTARG+="--ramdisk ${ramdisk} ";
++@@ -1977,8 +1974,12 @@ if [ "${reuse_systemimg}" = "true" ] || [ "${skip_systemimg}" = "true" ]; then
++ elif [ "${rootdev_type}" = "internal" ]; then
++ 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
++ 	if [ "${target_partname}" = "" -o "${target_partname}" = "APP" ]; then
++-		build_fsimg "$localsysfile" "$fillpat" \
++-		    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
+++    echo "Skipping image build and setting target_partfile to INITRD."
+++    # target_partfile=${INITRD}
+++    # cp ${INITRD} ./system.img
+++    ln -fs ${INITRD} ./system.img
+++		#build_fsimg "$localsysfile" "$fillpat" \
+++		#    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
++ 	fi;
++ elif [ "${rootdev_type}" = "network" -o "${rootdev_type}" = "external" ]; then
++ 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
++-- 
++2.27.0
++
+diff --git a/package/linux4tegra/Config.in b/package/linux4tegra/Config.in
+new file mode 100644
+index 0000000000..71f29494dc
+--- /dev/null
++++ b/package/linux4tegra/Config.in
+@@ -0,0 +1,28 @@
++config BR2_PACKAGE_LINUX4TEGRA
++	bool "linux4tegra"
 +	help
-+	  nvidia-modprobe package adds a utility and headers for
-+	  probing the NVIDIA hardware at runtime.
++	  NVIDIA Linux4Tegra utilities and binaries.
 +
-+	  https://github.com/NVIDIA/nvidia-modprobe
++	  https://developer.nvidia.com/embedded/linux-tegra-archive
 +
-+comment "nvidia-modprobe needs a glibc toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
-diff --git a/package/nvidia-modprobe/nvidia-modprobe.hash b/package/nvidia-modprobe/nvidia-modprobe.hash
++if BR2_PACKAGE_LINUX4TEGRA
++
++choice
++	prompt "Platform"
++	default BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF
++	help
++	  Select the platform variant for linux4tegra.
++
++config BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF
++	bool "t186ref"
++	help
++	  Jetson AGX Xavier, Xavier NX, or TX2
++
++config BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T210REF
++	bool "t210ref"
++	help
++	  Jetson Nano or Jetson TX1
++
++endchoice
++
++endif # if BR2_PACKAGE_LINUX4TEGRA
+diff --git a/package/linux4tegra/linux4tegra.hash b/package/linux4tegra/linux4tegra.hash
 new file mode 100644
-index 0000000000..99908680f0
+index 0000000000..5e5f9b02c8
 --- /dev/null
-+++ b/package/nvidia-modprobe/nvidia-modprobe.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 396b4102d3075a2dee3024652fae206a1b38ace54b8efb1e2c20757a11ec19f1  nvidia-modprobe-450.57.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/nvidia-modprobe/nvidia-modprobe.mk b/package/nvidia-modprobe/nvidia-modprobe.mk
++++ b/package/linux4tegra/linux4tegra.hash
+@@ -0,0 +1,55 @@
++# locally computed
++sha256	9a2d13b1f4b67fef97a428d54724b23e84e14636eedfa22f338c2d1ea62558e2  Tegra186_Linux_R32.4.3_aarch64.tbz2
++sha256	0c8590218be814eeec2a6f8b4fd01271893e4881ef2c66d130792c1d62737642  Tegra210_Linux_R32.4.3_aarch64.tbz2
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE
++sha256	496f3bc5456694cce764d28a93565bb0d0967dbd95256759e4168a9587406949  bootloader/LICENSE.adsp
++sha256	d4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f  bootloader/LICENSE.bpmp
++sha256	fd4513e2857a0d91c521dfbb924733563b55d5a2d42d4fb688d2506ed34df0c4  bootloader/LICENSE.bpmp_t194
++sha256	205a391eb9cfc69854cc0c3082de204d30124607cedecbdd3f47420b5f37f302  bootloader/LICENSE.camera-rtcpu
++sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot
++sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot_t194
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.chkbdinfo
++sha256	7bf7d9fae6472452d585ec38dd684daa86dc83638984d1cb14ee35239a868543  bootloader/LICENSE.mce_c10_prod_cr
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkbctpart
++sha256	9b0ccf575cfd9febc97b8f9967216f06341db2d44abc69df92c3127cc1a2608f  bootloader/LICENSE.mkbootimg
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkgpt
++sha256	cddaa9d5583a7705cd4734a6af4b421bca9016ba6af854c51efbfcbe19a4a893  bootloader/LICENSE.nv_smd_generator
++sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe.bin
++sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe_t194.bin
++sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware
++sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware
++sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty.img.trusty
++sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware
++sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty_t194.img.trusty
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
++sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/LICENSE.brcm_patchram_plus
++sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img
++sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/LICENSE.libnvargus
++sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/LICENSE.libnvcam_imageencoder
++sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnveventlib
++sha256	1f1bf0c752f072a447b1013fc9d76268ddf098c37ddc63988d60e4973cbee2f4  nv_tegra/LICENSE.libnvscf
++sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnvtracebuf
++sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/LICENSE.libtegrav4l2
++sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/LICENSE.minigbm
++sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/LICENSE.nvbootctrl
++sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/LICENSE.nvdla
++sha256	8b6a8553e4a1668a6267b9789bd69ffe105bffd8f2af59e2fc74a5910bb159ab  nv_tegra/LICENSE.weston
++sha256	a34730970264d619f352598bf30295ad505a60fc3a493add8aa851645ce3ea47  nv_tegra/LICENSE.weston-data
++sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img
++sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus
++sha256	89786bfd7060f6a60feae03257da6f3206b0f777352cf750c67b3b560dd087a5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt
++sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus
++sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder
++sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib
++sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf
++sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2
++sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert
++sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2
++sha256	fbef9c34b63148c0e670e6ac07705b25bebcc1f963b48bf7447ee61cfaadcc1e  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1
++sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm
++sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla
++sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt
++sha256	f3f3ecff94537e7d5944fdbae7c6bd02d5eddca8fe1c29d8699ff2e54d26cebc  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors
++sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl
++sha256	5f28c11f8b1b3f97b9d42c74b85371ebf4127f241b799279bcecd69f7ee542dc  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
+diff --git a/package/linux4tegra/linux4tegra.mk b/package/linux4tegra/linux4tegra.mk
 new file mode 100644
-index 0000000000..7eeee6716c
+index 0000000000..48061f4c98
 --- /dev/null
-+++ b/package/nvidia-modprobe/nvidia-modprobe.mk
-@@ -0,0 +1,45 @@
++++ b/package/linux4tegra/linux4tegra.mk
+@@ -0,0 +1,120 @@
 +################################################################################
 +#
-+# nvidia-modprobe
++# linux4tegra
 +#
 +################################################################################
 +
-+NVIDIA_MODPROBE_VERSION = 450.57
-+NVIDIA_MODPROBE_SITE = $(call github,NVIDIA,nvidia-modprobe,$(NVIDIA_MODPROBE_VERSION))
-+NVIDIA_MODPROBE_LICENSE = GPL-2
-+NVIDIA_MODPROBE_LICENSE_FILES = COPYING
++LINUX4TEGRA_VERSION = 32.4.3
 +
-+NVIDIA_MODPROBE_DEPENDENCIES = host-pkgconf
-+NVIDIA_MODPROBE_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF),y)
++LINUX4TEGRA_SITE = https://developer.nvidia.com/embedded/L4T/r32_Release_v4.3/t186ref_release_aarch64
++LINUX4TEGRA_SOURCE = Tegra186_Linux_R$(LINUX4TEGRA_VERSION)_aarch64.tbz2
++else # ifeq ($(BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T210REF),y)
++LINUX4TEGRA_SITE = https://developer.nvidia.com/embedded/L4T/r32_Release_v4.3/t210ref_release_aarch64
++LINUX4TEGRA_SOURCE = Tegra210_Linux_R$(LINUX4TEGRA_VERSION)_aarch64.tbz2
++endif
 +
-+define NVIDIA_MODPROBE_BUILD_CMDS
-+	mkdir -p $(@D)/bin
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		-I $(@D)/common-utils -I $(@D)/modprobe-utils \
-+		-o $(@D)/bin/nvidia-modprobe \
-+		-DNV_LINUX=true -DPROGRAM_NAME=\"nvidia-modprobe\" \
-+		-DNVIDIA_VERSION=\"$(NVIDIA_MODPROBE_VERSION)\" \
-+		$(@D)/nvidia-modprobe.c $(@D)/modprobe-utils/nvidia-modprobe-utils.c \
-+		$(@D)/modprobe-utils/pci-sysfs.c $(@D)/common-utils/common-utils.c \
-+		$(@D)/common-utils/msg.c $(@D)/common-utils/nvgetopt.c
++LINUX4TEGRA_LICENSE = NVIDIA Software License, GPL-2.0, LGPL, Apache-2.0, MIT
++LINUX4TEGRA_LICENSE_FILES = \
++	bootloader/LICENSE \
++	bootloader/LICENSE.adsp \
++	bootloader/LICENSE.bpmp \
++	bootloader/LICENSE.bpmp_t194 \
++	bootloader/LICENSE.camera-rtcpu \
++	bootloader/LICENSE.cboot \
++	bootloader/LICENSE.cboot_t194 \
++	bootloader/LICENSE.chkbdinfo \
++	bootloader/LICENSE.mce_c10_prod_cr \
++	bootloader/LICENSE.mkbctpart \
++	bootloader/LICENSE.mkbootimg \
++	bootloader/LICENSE.mkgpt \
++	bootloader/LICENSE.nv_smd_generator \
++	bootloader/LICENSE.spe.bin \
++	bootloader/LICENSE.spe_t194.bin \
++	bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware \
++	bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware \
++	bootloader/LICENSE.tos-trusty.img.trusty \
++	bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware \
++	bootloader/LICENSE.tos-trusty_t194.img.trusty \
++	nv_tegra/LICENSE \
++	nv_tegra/LICENSE \
++	nv_tegra/LICENSE.brcm_patchram_plus \
++	nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img \
++	nv_tegra/LICENSE.libnvargus \
++	nv_tegra/LICENSE.libnvcam_imageencoder \
++	nv_tegra/LICENSE.libnveventlib \
++	nv_tegra/LICENSE.libnvscf \
++	nv_tegra/LICENSE.libnvtracebuf \
++	nv_tegra/LICENSE.libtegrav4l2 \
++	nv_tegra/LICENSE.minigbm \
++	nv_tegra/LICENSE.nvbootctrl \
++	nv_tegra/LICENSE.nvdla \
++	nv_tegra/LICENSE.weston \
++	nv_tegra/LICENSE.weston-data \
++	nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2 \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2 \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1 \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt \
++	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors \
++	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl \
++	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
++
++LINUX4TEGRA_INSTALL_IMAGES = YES
++
++define LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
++	@mkdir -p $(@D)/nv_tegra/nvidia_drivers
++	$(call suitable-extractor,nvidia_drivers.tbz2) \
++		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
++		$(TAR) -C $(@D)/nv_tegra/nvidia_drivers $(TAR_OPTIONS) -
 +endef
 +
-+define NVIDIA_MODPROBE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/nvidia-modprobe-utils.h \
-+		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-modprobe-utils.h
-+	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/pci-enum.h \
-+		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/pci-enum.h
-+	$(INSTALL) -D -m 644 $(@D)/common-utils/common-utils.h \
-+		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-common-utils.h
-+	$(INSTALL) -D -m 644 $(@D)/common-utils/msg.h \
-+		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/msg.h
-+	$(INSTALL) -D -m 644 $(@D)/common-utils/nvgetopt.h \
-+		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvgetopt.h
++LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
++
++define LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
++	@mkdir -p $(@D)/nv_tegra/nvidia_configs
++	$(call suitable-extractor,config.tbz2) \
++		$(@D)/nv_tegra/config.tbz2 | \
++		$(TAR) -C $(@D)/nv_tegra/nvidia_configs $(TAR_OPTIONS) -
 +endef
 +
-+define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
-+		$(TARGET_DIR)/usr/bin/nvidia-modprobe
++LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
++
++define LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
++	@mkdir -p $(@D)/nv_tegra/nvidia_tools
++	$(call suitable-extractor,nv_tools.tbz2) \
++		$(@D)/nv_tegra/nv_tools.tbz2 | \
++		$(TAR) -C $(@D)/nv_tegra/nvidia_tools $(TAR_OPTIONS) -
++endef
++
++LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
++
++# copy linux4tegra to the target dir
++define LINUX4TEGRA_INSTALL_IMAGES_CMDS
++	cp -r $(@D)/. $(BINARIES_DIR)/linux4tegra
++endef
++
++LINUX4TEGRA_RSYNC = \
++	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
++		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
++		--keep-dirlinks --exclude=ld.so.conf.d
++
++define LINUX4TEGRA_INSTALL_TARGET_CMDS
++	# install nvidia_drivers
++	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
++	# install nvidia_configs
++	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
++	# install nvidia_tools
++	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
 +endef
 +
 +$(eval $(generic-package))
