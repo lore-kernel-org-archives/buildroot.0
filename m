@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Nov 2020 22:58:52 +0100
-Subject: [Buildroot] [PATCH] package/qt5/qt5base: fix typo
-In-Reply-To: <20201119212545.3459584-1-jzignego@hedcontrols.com>
-References: <20201119212545.3459584-1-jzignego@hedcontrols.com>
-Message-ID: <20201119225852.7cd4d1a0@windsurf.home>
+Date: Thu, 19 Nov 2020 22:58:56 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/radvd: fix build without
+ stack-protector
+In-Reply-To: <20201119120347.1871672-1-fontaine.fabrice@gmail.com>
+References: <20201119120347.1871672-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201119225856.491e9c01@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 19 Nov 2020 15:25:45 -0600
-jzignego--- via buildroot <buildroot@busybox.net> wrote:
+On Thu, 19 Nov 2020 13:03:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> From: Jeff Zignego <jzignego@hedcontrols.com>
+> Commit 6e85ab44493624748398ffb2c6bf4bda409f2de7 forgot to manage the new
+> --{with,without}-stack-protector option which has been added with
+> https://github.com/reubenhwk/radvd/commit/f2cb35449f35b5815f3804161c968fde5ef2982b
+> and is enabled by default
 > 
-> Fix typo from 109df4deba86839704d902204d130714e32df0fa that added this
-> option.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/e778df96f0a382a5b119724ee69f956ad455c452
 > 
-> Signed-off-by: Jeff Zignego <jzignego@hedcontrols.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/qt5/qt5base/qt5base.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/radvd/radvd.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Applied to next, thanks. It's applied to next, as it's a fix for a
-change that was introduced only in next.
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
