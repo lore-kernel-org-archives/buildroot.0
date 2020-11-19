@@ -1,97 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Nov 2020 22:36:51 +0100
-Subject: [Buildroot] [PATCH next 06/12] package/tinifier: new package
+Date: Thu, 19 Nov 2020 22:36:49 +0100
+Subject: [Buildroot] [PATCH next 04/12]
+ support/download/post-process-helpers: add helper function for post process
+ scripts
 In-Reply-To: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
 References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201119213658.1232531-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20201119213658.1232531-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a Go package that needs vendor modules to be downloaded at
-build time.
+download post process scripts will often need to unpack the source
+code tarball, do some operation, and then repack it. In order to help
+with this, post-process-helpers provide an unpack() function and a
+repack() function.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/tinifier/Config.in     | 10 ++++++++++
- package/tinifier/tinifier.hash |  3 +++
- package/tinifier/tinifier.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/tinifier/Config.in
- create mode 100644 package/tinifier/tinifier.hash
- create mode 100644 package/tinifier/tinifier.mk
+ support/download/post-process-helpers | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 support/download/post-process-helpers
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d0c9c16423..eb97cfeac0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2590,6 +2590,7 @@ F:	package/rtc-tools/
- F:	package/sam-ba/
- F:	package/scons/
- F:	package/squashfs/
-+F:	package/tinifier/
- F:	package/wayland/
- F:	package/weston/
- F:	support/testing/tests/boot/test_syslinux.py
-diff --git a/package/Config.in b/package/Config.in
-index d32a271113..a93959ada8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -298,6 +298,7 @@ comment "Graphic applications"
- 	source "package/rrdtool/Config.in"
- 	source "package/stellarium/Config.in"
- 	source "package/tesseract-ocr/Config.in"
-+	source "package/tinifier/Config.in"
- 
- comment "Graphic libraries"
- 	source "package/cegui/Config.in"
-diff --git a/package/tinifier/Config.in b/package/tinifier/Config.in
+diff --git a/support/download/post-process-helpers b/support/download/post-process-helpers
 new file mode 100644
-index 0000000000..fbadfe6bd9
+index 0000000000..bed8df2577
 --- /dev/null
-+++ b/package/tinifier/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_TINIFIER
-+	bool "tinifier"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  CLI tool for images compressing
++++ b/support/download/post-process-helpers
+@@ -0,0 +1,30 @@
 +
-+	  This tool uses tinypng.com API endpoint for compressing your
-+	  local jpg/png images (it supports parallel jobs).
++unpack() {
++        dest="$1"
++        tarball="$2"
 +
-+	  https://github.com/tarampampam/tinifier
-diff --git a/package/tinifier/tinifier.hash b/package/tinifier/tinifier.hash
-new file mode 100644
-index 0000000000..146700817b
---- /dev/null
-+++ b/package/tinifier/tinifier.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  707a1d9e55aab8c83b65bb10f3ec8c3bc094d77cd576b266f821d9f39133ac3c  tinifier-2.1.0.tar.gz
-+sha256  791d8fd993ace44d4d83e2f4820a64d5ad3e37412f029afad46d17a9259de2b6  LICENSE
-diff --git a/package/tinifier/tinifier.mk b/package/tinifier/tinifier.mk
-new file mode 100644
-index 0000000000..b47d265a8e
---- /dev/null
-+++ b/package/tinifier/tinifier.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tinifier
-+#
-+################################################################################
++        mkdir ${dest}
++        tar -C ${dest} --strip-components=1 -xf ${tarball}
++}
 +
-+TINIFIER_VERSION = 2.1.0
-+TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
-+TINIFIER_LICENSE = MIT
-+TINIFIER_LICENSE_FILES = LICENSE
-+TINIFIER_GOMOD = tinifier
++repack() {
++        src="$1"
++        tarball="$2"
 +
-+$(eval $(golang-package))
++        # Generate the archive, sort with the C locale so that it is reproducible.
++        find "$(basename ${src})" -not -type d -print0 >files.list
++        LC_ALL=C sort -z <files.list >files.list.sorted
++
++        # let's use a fixed hardcoded date to be reproducible
++        date="2020-02-06 01:02:03 +0000"
++
++        # Create GNU-format tarballs, since that's the format of the tarballs on
++        # sources.buildroot.org and used in the *.hash files
++        tar cf new.tar --null --verbatim-files-from --numeric-owner --format=gnu \
++            --owner=0 --group=0 --mtime="${date}" -T files.list.sorted
++        gzip -6 -n <new.tar >new.tar.gz
++        mv "${tarball}" "${tarball}".old
++        mv new.tar.gz "${tarball}"
++        rm "${tarball}".old
++        rm -rf ${src}
++}
 -- 
 2.28.0
