@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Nov 2020 18:14:58 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libgpiod: bump
+Date: Fri, 20 Nov 2020 18:14:32 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libgpiod: bump
  version to 1.4.5
-Message-ID: <20201120170214.37C0082B6F@busybox.osuosl.org>
+Message-ID: <20201120170229.A792886B14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c61e99f65d1b69cf521fa9e3a17cb35e0b52c94c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e26656b53c2e6e67a9a8aa908cd3008021d3f84c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 * add a comment about the kernel header dependencies when bumping
 versions
