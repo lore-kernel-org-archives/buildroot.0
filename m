@@ -1,65 +1,70 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 20 Nov 2020 10:36:37 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qt5/qt5coap: new package
-In-Reply-To: <20201119231125.369c16bb@windsurf.home>
-References: <20201119220142.1054287-1-angelo@amarulasolutions.com>
- <20201119231125.369c16bb@windsurf.home>
-Message-ID: <CA+_SqVbEkASp_tHrSLuxOENEBUxgg+KN6gt3yy6vTC7Bz3aXZA@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 20 Nov 2020 11:02:41 +0100
+Subject: [Buildroot] [PATCH 1/4] support/scripts/pkg-stats: import cve
+ module only when needed
+In-Reply-To: <20201119145354.1175043-1-thomas.petazzoni@bootlin.com>
+References: <20201119145354.1175043-1-thomas.petazzoni@bootlin.com>
+Message-ID: <CAEyMn7aTyCYLo3-1E3QNOWJrj=a_s0wvevkKOkvncignJzBtdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 19, 2020 at 11:11 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Angelo,
->
-> Thanks a lot those three packages, they obviously look good. I only have one question.
->
-> On Thu, 19 Nov 2020 23:01:40 +0100
-> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
->
-> > +QT5COAP_VERSION = $(QT5_VERSION)
-> > +QT5COAP_SITE = $(call github,qt,qtcoap,v$(QT5_VERSION))
-> > +QT5COAP_INSTALL_STAGING = YES
-> > +QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
-> > +QT5COAP_LICENSE_FILES = LICENSE.GPL3 LICENSE.FDL
-> > +QT5COAP_DEPENDENCIES = host-perl
-> > +
-> > +define QT5COAP_FIX_INCLUDE
-> > +     cd $(@D); $(HOST_DIR)/bin/syncqt.pl -module QtCoap -version $(QT5_VERSION)
-> > +endef
->
-> Why is this syncqt.pl invocation needed for those 3 packages? What
-> makes them different from the other Qt5 packages we have?
+Hi Thomas,
 
-If you open one of the other packages, you can find the "include"
-directory already populated, instead when compiling from source the
-folder is missing. qmake runs syncqt.pl automatically when you run
-qmake from a cloned repo (when there is a .git folder). This is the
-way the qt everywhere source packages are built.
-Buildroot removes the .git folder and so the script isn't triggered. I
-had to choose if adding a fake .git directory or call the script
-manually, I choose the latter because I think it's more clear.
+Am Do., 19. Nov. 2020 um 15:54 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> The cve module needs ijson, which may not be installed. Since cve
+> matching is only enabled when --nvd-path is passed, it is a bit silly
+> to error out about ijson being missing if it's not used.
+>
+> So instead of unconditionally importing the cve module, only do it
+> conditionally.
+>
+> However, instead of doing it right at the point where it is used, we
+> do it at the beginning of the main() function. Indeed, if the cve
+> module is needed but cannot be imported, we want to error out
+> immediately rather than doing a whole bunch of things, and failing on
+> the user later on in the middle of the pkg-stats execution.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 
+> ---
+>  support/scripts/pkg-stats | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index d44f8241c1..2676cc49dd 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -32,7 +32,6 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+>
+>  sys.path.append(os.path.join(brpath, "utils"))
+>  from getdeveloperlib import parse_developers  # noqa: E402
+> -import cve as cvecheck  # noqa: E402
+>
+>
+>  INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
+> @@ -950,7 +949,13 @@ def parse_args():
+>
+>
+>  def __main__():
+> +    global cvecheck
+> +
+>      args = parse_args()
+> +
+> +    if args.nvd_path:
+> +        import cve as cvecheck
+> +
+>      if args.packages:
+>          package_list = args.packages.split(",")
+>      elif args.configpackages:
 
+Thank you
 -- 
-
-Angelo Compagnucci
-Amarula Solutions SRL
-Embedded Linux Developer
-Via Le Canevare 30 31100 Treviso IT
-T. +390422435310
-[`as] https://www.amarulasolutions.com|
+Heiko
