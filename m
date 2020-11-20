@@ -1,47 +1,46 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 20 Nov 2020 21:29:06 +0100
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 1.0.2
-Message-ID: <20201120202906.25604-1-ps.report@gmx.net>
+From: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@theobroma-systems.com>
+Date: Fri, 20 Nov 2020 22:35:55 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: Forward stack
+ protection configuration
+Message-ID: <20201120213555.2994761-1-christoph.muellner@theobroma-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+TF-A supports stack smashing protection (-fstack-protector-*).
+Since we already forward the required compiler flag, let's
+also tell TF-A that we actually want the required symbols
+(e.g. __stack_chk_guard) to be available.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
 ---
- package/libxkbcommon/libxkbcommon.hash | 4 ++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c643f1c4ac..1725eaecfb 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041609.html
--sha256  ab68b25341c99f2218d7cf3dad459c1827f411219901ade05bbccbdb856b6c8d  libxkbcommon-1.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
-+sha256  0ea2f88f4472bbf8170c5a7112f5af8848a908ca15df9e9086c3de0189612b2b  libxkbcommon-1.0.2.tar.xz
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index a3553e36cf..f5be39100e 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -100,6 +100,18 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
+ ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
+ endif
  
- # License file:
- sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index bf1bd058cb..cce5c02735 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++ifeq ($(BR2_SSP_REGULAR),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
++endif
++
++ifeq ($(BR2_SSP_STRONG),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
++endif
++
++ifeq ($(BR2_SSP_ALL),y)
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
++endif
++
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
  
--LIBXKBCOMMON_VERSION = 1.0.1
-+LIBXKBCOMMON_VERSION = 1.0.2
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
 -- 
-2.29.2
+2.28.0
