@@ -1,46 +1,36 @@
-From: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@theobroma-systems.com>
-Date: Fri, 20 Nov 2020 22:29:12 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: Forward stack
- protection configuration
-Message-ID: <20201120212912.2993985-1-christoph.muellner@theobroma-systems.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 20 Nov 2020 23:09:49 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/abootimg: fix host build
+Message-ID: <20201120220949.603454-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TF-A supports stack smashing protection (-fstack-protector-*).
-Since we already forward the required compiler flag, let's
-also tell TF-A that we actually want the required symbols
-(e.g. __stack_chk_guard) to be available.
+Commit 05b11e24c3d4013d3caa0453d9bada9905795e35 wrongly added
+ABOOTIMG_HOST_DEPENDENCIES instead of HOST_ABOOTIMG_DEPENDENCIES
 
-Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c13b5424cec151cd3ad71b1cb38d6ad8ff68afa0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/abootimg/abootimg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a3553e36cf..f5be39100e 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -100,6 +100,18 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
- endif
+diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
+index 64cee13c32..ab6c709318 100644
+--- a/package/abootimg/abootimg.mk
++++ b/package/abootimg/abootimg.mk
+@@ -11,7 +11,7 @@ ABOOTIMG_LICENSE_FILES = LICENSE
  
-+ifeq ($(BR2_SSP_REGULAR),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
-+endif
-+
-+ifeq ($(BR2_SSP_STRONG),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
-+endif
-+
-+ifeq ($(BR2_SSP_ALL),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
-+endif
-+
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+ # depends on libblkid from util-linux
+ ABOOTIMG_DEPENDENCIES = util-linux
+-ABOOTIMG_HOST_DEPENDENCIES = host-util-linux
++HOST_ABOOTIMG_DEPENDENCIES = host-util-linux
  
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+ define ABOOTIMG_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 -- 
-2.28.0
+2.29.2
