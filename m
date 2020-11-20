@@ -1,8 +1,8 @@
 From: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@theobroma-systems.com>
-Date: Fri, 20 Nov 2020 22:35:55 +0100
+Date: Fri, 20 Nov 2020 22:29:12 +0100
 Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: Forward stack
  protection configuration
-Message-ID: <20201120213555.2994761-1-christoph.muellner@theobroma-systems.com>
+Message-ID: <20201120212912.2993985-1-christoph.muellner@theobroma-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
