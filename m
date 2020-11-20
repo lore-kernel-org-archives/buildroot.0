@@ -1,24 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Nov 2020 18:15:30 +0100
-Subject: [Buildroot] [git commit] package/libgpiod: bump version to 1.4.5
-In-Reply-To: <CA+fik50t3TnfMqtzKfa0Uga+oC1xxjvRwx4Ozc+a3m68QXvMbg@mail.gmail.com>
- (Brandon Maier's message of "Thu, 19 Nov 2020 11:31:18 -0600")
-References: <20201103194822.16FD88713B@busybox.osuosl.org>
- <CA+fik50t3TnfMqtzKfa0Uga+oC1xxjvRwx4Ozc+a3m68QXvMbg@mail.gmail.com>
-Message-ID: <878sawx83x.fsf@dell.be.48ers.dk>
+Date: Fri, 20 Nov 2020 18:14:58 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libgpiod: bump
+ version to 1.4.5
+Message-ID: <20201120170214.37C0082B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Brandon" == Brandon Maier <brandon.maier@collins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c61e99f65d1b69cf521fa9e3a17cb35e0b52c94c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Hi Peter, can we get this bugfix release for libgpiod cherry-picked to
- > 2020.0{2,5,8}.x? Thanks (commit
- > ff30bab61180be0eb6228f0c0487ce975f5b43c6).
+* add a comment about the kernel header dependencies when bumping
+versions
+* set url to kernel.org as github is unmaintained and outdated
+* use two spaces in hash-file
 
-2020.05.x is EOL, but I have added it to 2020.02.x / 2020.08.x, thanks.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ff30bab61180be0eb6228f0c0487ce975f5b43c6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgpiod/Config.in     | 2 +-
+ package/libgpiod/libgpiod.hash | 4 ++--
+ package/libgpiod/libgpiod.mk   | 4 +++-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgpiod/Config.in b/package/libgpiod/Config.in
+index 63a7cb6e78..293eef6c89 100644
+--- a/package/libgpiod/Config.in
++++ b/package/libgpiod/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBGPIOD
+ 	  This is a C library that abstracts the GPIO character
+ 	  device operations on linux.
+ 
+-	  https://github.com/brgl/libgpiod
++	  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
+ 
+ if BR2_PACKAGE_LIBGPIOD
+ 
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index f0009a7510..0ea15869b0 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 21ae8fd1f8dafc2eb2ba50e652390cf533d21351419a7426255895cb52e21b1c  libgpiod-1.4.1.tar.xz
++sha256  a041b06907c956dd1c77836cccf4d392af29b9fe09c8ad18449a6da707b5ba2d  libgpiod-1.4.5.tar.xz
+ # Hash for license file
+-sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
++sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 2474ab90a2..83d5abb002 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.4.1
++# be careful when bumping versions, newer branches (e.g. >= 1.6)
++# depend on pretty recent kernel headers
++LIBGPIOD_VERSION = 1.4.5
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
