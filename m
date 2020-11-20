@@ -1,7 +1,7 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 20 Nov 2020 18:19:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.30.3
-Message-ID: <20201120161918.222066-1-aperez@igalia.com>
+Date: Fri, 20 Nov 2020 18:19:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: bump to version 2.30.3
+Message-ID: <20201120161937.222193-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,42 +11,95 @@ To: buildroot@busybox.net
 This is a minor release which solved a build issues and fixes a number
 of rendering issues. Release notes:
 
-  https://webkitgtk.org/2020/11/20/webkitgtk2.30.3-released.html
+  https://wpewebkit.org/release/wpewebkit-2.30.3.html
+
+Patch "0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch"
+can be removed because a similar fix is included in this release.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...tedBundle-fix-compile-without-video-.patch | 42 -------------------
+ package/wpewebkit/wpewebkit.hash              |  8 ++--
+ package/wpewebkit/wpewebkit.mk                |  2 +-
+ 3 files changed, 5 insertions(+), 47 deletions(-)
+ delete mode 100644 package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 30b8e4f11f..1849d9eff9 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
+diff --git a/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch b/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
+deleted file mode 100644
+index e684c4e3e7..0000000000
+--- a/package/wpewebkit/0002-WebProcess-InjectedBundle-fix-compile-without-video-.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 1ca7dea56db25969844699bc82fe7c78cb3d2eda Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Tue, 10 Nov 2020 23:06:45 +0100
+-Subject: [PATCH] WebProcess/InjectedBundle: fix compile without video support
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes:
+-
+-  .../wpewebkit-2.30.2/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp:242:30: error: ?class WebCore::Settings? has no member named ?setGenericCueAPIEnabled?; did you mean ?setBeaconAPIEnabled??
+-               page->settings().setGenericCueAPIEnabled(enabled);
+-                                ^~~~~~~~~~~~~~~~~~~~~~~
+-                                setBeaconAPIEnabled
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
+-index 61326f2e..d7776997 100644
+---- a/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
+-+++ b/Source/WebKit/WebProcess/InjectedBundle/InjectedBundle.cpp
+-@@ -236,12 +236,14 @@ void InjectedBundle::overrideBoolPreferenceForTestRunner(WebPageGroupProxy* page
+-         RuntimeEnabledFeatures::sharedFeatures().setWebRTCMDNSICECandidatesEnabled(enabled);
+- #endif
+- 
+-+#if ENABLE(VIDEO)
+-     if (preference == "WebKitGenericCueAPIEnabled") {
+-         WebPreferencesStore::overrideBoolValueForKey(WebPreferencesKey::genericCueAPIEnabledKey(), enabled);
+-         for (auto* page : pages)
+-             page->settings().setGenericCueAPIEnabled(enabled);
+-         return;
+-     }
+-+#endif
+- 
+- #if ENABLE(GPU_PROCESS)
+-     if (preference == "WebKitUseGPUProcessForMedia" || preference == "WebKitCaptureAudioInGPUProcessEnabledKey") {
+--- 
+-2.29.2
+-
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 2bd5fd3fba..3534abf0e4 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
 @@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.30.2.tar.xz.sums
--md5  2163f1f982c63cb8fa75bf1b36396304  webkitgtk-2.30.2.tar.xz
--sha1  e27d336570226645f861b5a00116c17da39f9df4  webkitgtk-2.30.2.tar.xz
--sha256  c467e0bc2bc610c2570928e3fd63cedaadc4719cbf9b04aa99f79dd71ad5682a  webkitgtk-2.30.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.30.3.tar.xz.sums
-+md5  3db32cffeab82efcade1ce77f94865c2  webkitgtk-2.30.3.tar.xz
-+sha1  6eed6e8a3c2f47533821169679fe381ceb0550be  webkitgtk-2.30.3.tar.xz
-+sha256  6dea14f03916882816f2fed9497a5103fc54b2ab8602ab145ca991e4951e5e7f  webkitgtk-2.30.3.tar.xz
+-# From https://wpewebkit.org/releases/wpewebkit-2.30.2.tar.xz.sums
+-md5  5b0fed3333b53dbb36e572935fd54a7b  wpewebkit-2.30.2.tar.xz
+-sha1  a143723fb77c2ea20bad888b95ccc37a7dd5b375  wpewebkit-2.30.2.tar.xz
+-sha256  c94925ca2d655c7fc07dbc2d4b7a47a822c7699816a8cca35ed9efd676b5ba86  wpewebkit-2.30.2.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.30.3.tar.xz.sums
++md5  75f6ef1819b182043a25b916272ebec6  wpewebkit-2.30.3.tar.xz
++sha1  2ed723f779513205449e0c5b7c080eb19d635aee  wpewebkit-2.30.3.tar.xz
++sha256  f2dfc1a6279810353f601bb9bd0d8ef671b41b38352d679b93d01631c2bf7b4b  wpewebkit-2.30.3.tar.xz
  
  # Hashes for license files:
  sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 84078f8b9a..0310f058f1 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 6f83775e96..66f86edf4d 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.30.2
-+WEBKITGTK_VERSION = 2.30.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-WPEWEBKIT_VERSION = 2.30.2
++WPEWEBKIT_VERSION = 2.30.3
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
 -- 
 2.29.2
