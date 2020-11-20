@@ -1,42 +1,47 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 20 Nov 2020 20:41:30 +0100
-Subject: [Buildroot] [PATCH v1] package/wireless-regdb: bump version to
- 2020.11.20
-Message-ID: <20201120194130.20906-1-ps.report@gmx.net>
+Date: Fri, 20 Nov 2020 21:29:06 +0100
+Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to 1.0.2
+Message-ID: <20201120202906.25604-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+For details see [1].
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libxkbcommon/libxkbcommon.hash | 4 ++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 9271073fd9..5403110be4 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  89fd031aed5977c219a71501e144375a10e7c90d1005d5d086ea7972886a2c7a  wireless-regdb-2020.04.29.tar.xz
-+sha256  b4164490d82ff7b0086e812ac42ab27baf57be24324d4c0ee1c5dd6ba27f2a52  wireless-regdb-2020.11.20.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 52a0e0cffc..e40c4beb10 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index c643f1c4ac..1725eaecfb 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041609.html
+-sha256  ab68b25341c99f2218d7cf3dad459c1827f411219901ade05bbccbdb856b6c8d  libxkbcommon-1.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
++sha256  0ea2f88f4472bbf8170c5a7112f5af8848a908ca15df9e9086c3de0189612b2b  libxkbcommon-1.0.2.tar.xz
+ 
+ # License file:
+ sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index bf1bd058cb..cce5c02735 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2020.04.29
-+WIRELESS_REGDB_VERSION = 2020.11.20
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-LIBXKBCOMMON_VERSION = 1.0.1
++LIBXKBCOMMON_VERSION = 1.0.2
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
 -- 
 2.29.2
