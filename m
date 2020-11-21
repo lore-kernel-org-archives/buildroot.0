@@ -1,83 +1,79 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 21 Nov 2020 19:49:29 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: Forward
- stack protection configuration
-In-Reply-To: <d2e4f4d0-c3b1-71de-dbfd-b80ba5235ca2@theobroma-systems.com>
-References: <20201120212912.2993985-1-christoph.muellner@theobroma-systems.com>
- <87eekmy7as.fsf@tarshish>
- <d2e4f4d0-c3b1-71de-dbfd-b80ba5235ca2@theobroma-systems.com>
-Message-ID: <87blfqy506.fsf@tarshish>
+Date: Sat, 21 Nov 2020 19:50:54 +0200
+Subject: [Buildroot] [PATCH next] package/daemon: bump to version 0.7
+Message-ID: <1fd6d6ff9eaedda5e3b3e85c4c5c0b950dcbaec8.1605981054.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christoph,
+The configure script now runs 'make ready'. Drop it from BUILD_CMDS.
 
-On Sat, Nov 21 2020, Christoph M?llner wrote:
-> On 11/21/20 5:59 PM, Baruch Siach wrote:
->> On Fri, Nov 20 2020, Christoph M?llner wrote:
->>> TF-A supports stack smashing protection (-fstack-protector-*).
->>> Since we already forward the required compiler flag, let's
->>> also tell TF-A that we actually want the required symbols
->>> (e.g. __stack_chk_guard) to be available.
->>>
->>> Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
->>> ---
->>>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 12 ++++++++++++
->>>  1 file changed, 12 insertions(+)
->>>
->>> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
->>> index a3553e36cf..f5be39100e 100644
->>> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
->>> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
->>> @@ -100,6 +100,18 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
->>>  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
->>>  endif
->>>  
->>> +ifeq ($(BR2_SSP_REGULAR),y)
->>> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
->>> +endif
->>> +
->>> +ifeq ($(BR2_SSP_STRONG),y)
->>> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
->>> +endif
->>> +
->>> +ifeq ($(BR2_SSP_ALL),y)
->>> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
->>> +endif
->> 
->> It looks like the toolchain wrapper does that already. See
->> toolchain/toolchain-wrapper.mk. Are you sure this is needed?
->
-> Hi Baruch,
->
-> I don't see this functionality there.
->
-> Note, that you need two things for getting the stack protector working:
->
-> 1) Toolchain to emit additional code requiring external symbols
-> 2) Runtime that provides the required external symbols
->
-> The toolchain wrapper correctly addresses 1) by providing "-fstack-protector*" flags
-> and your libc will then provide the required symbols for 2).
-> However, TF-A does not link against libc and requires these build flags
-> (ENABLE_STACK_PROTECTOR=x) in order to emit the required symbols.
+Refresh the musl support path.
 
-Thanks for the additional explanation. Your commit log mentions that
-already, but maybe it needs to be more verbose. Especially the fact that
-ATF needs to provide the symbols itself because it is self contained
-would be nice to mention in the commit log.
+Upstream now provides sha256 hashes. Format hashes with two spaces.
 
-One more thing. Since all these BR2_SSP_ options are mutually
-exclusive, I think you should use 'else ifeq' instead of separate
-conditionals.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/daemon/0001-fix-musl.patch | 4 ++--
+ package/daemon/daemon.hash         | 7 +++----
+ package/daemon/daemon.mk           | 5 ++---
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-Thanks,
-baruch
-
+diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
+index 9454d72ae635..5ebb645973f0 100644
+--- a/package/daemon/0001-fix-musl.patch
++++ b/package/daemon/0001-fix-musl.patch
+@@ -8,11 +8,11 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
+ --- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
+ +++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
+-@@ -665,6 +665,7 @@
++@@ -864,6 +864,7 @@
+  #ifdef _RESTORE_POSIX_SOURCE
+  #define _POSIX_SOURCE
+  #endif
+ +#include <sys/ttydefaults.h>
++ #include <dirent.h>
+  #include <sys/wait.h>
+  #include <sys/stat.h>
+- #include <sys/select.h>
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+index ad8637ee81f9..b1c1dcdc2c5d 100644
+--- a/package/daemon/daemon.hash
++++ b/package/daemon/daemon.hash
+@@ -1,4 +1,3 @@
+-# md5 from http://www.libslack.org/daemon/; sha256 locally calculated
+-md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
+-sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
+-sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 LICENSE
++# From http://www.libslack.org/daemon/
++sha256  f66af2ece784c16dcb5219de1f4fa3ae5787bb3374e44bd4b1d3e275e8ff272c  daemon-0.7.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+index 79cf3f7aab74..f3a1917fadc1 100644
+--- a/package/daemon/daemon.mk
++++ b/package/daemon/daemon.mk
+@@ -4,17 +4,16 @@
+ #
+ ################################################################################
+ 
+-DAEMON_VERSION = 0.6.4
++DAEMON_VERSION = 0.7
+ DAEMON_SITE = http://libslack.org/daemon/download
+ DAEMON_LICENSE = GPL-2.0+
+ DAEMON_LICENSE_FILES = LICENSE
+ 
+ define DAEMON_CONFIGURE_CMDS
+-	(cd $(@D); ./config)
++	(cd $(@D); ./configure)
+ endef
+ 
+ define DAEMON_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) ready
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.29.2
