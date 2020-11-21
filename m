@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Nov 2020 12:21:27 +0100
-Subject: [Buildroot] [PATCH/next 2/6] package/x11r7/xapp_xkbcomp: bump
- version to 1.4.4
+Date: Sat, 21 Nov 2020 12:21:30 +0100
+Subject: [Buildroot] [PATCH/next 5/6] package/x11r7/xdriver_xf86-video-vesa:
+ bump version to 2.5.0
 In-Reply-To: <20201121112131.756930-1-bernd.kuhls@t-online.de>
 References: <20201121112131.756930-1-bernd.kuhls@t-online.de>
-Message-ID: <20201121112131.756930-2-bernd.kuhls@t-online.de>
+Message-ID: <20201121112131.756930-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,38 @@ Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 8 ++++----
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ .../xdriver_xf86-video-vesa.hash                       | 10 ++++------
+ .../xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk |  2 +-
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index 98bd0c43a3..7191d5520e 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-February/003037.html
--sha256 06242c169fc11caf601cac46d781d467748c6a330e15b36dce46520b8ac8d435  xkbcomp-1.4.3.tar.bz2
--sha512 827713c0413aecdcad2b61edb7b8c7c7a002e18505b9041f570e2f680907193cb5ff8a5b424695e21110b2d06c145cbf0e397e52347421ee946f06e2a51f135d  xkbcomp-1.4.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-November/003063.html
-+sha256  59cce603a607a17722a0a1cf99010f4894e7812beb5d695abbc08474d59af27e  xkbcomp-1.4.4.tar.bz2
-+sha512  971eb06277a49083b42154472596f1452fa94cdee28bad345bbcd85b028441bfd975763c20ed92aa69d6605b3fb23d27fee89df91501963b77c863667bae41c4  xkbcomp-1.4.4.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+index ee27690093..d179228a74 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002837.html
+-md5 8134201beaf6f77150c7809c3cc802e6  xf86-video-vesa-2.4.0.tar.bz2
+-sha1 99b69044c34292ba062e365c07dcd024462e794b  xf86-video-vesa-2.4.0.tar.bz2
+-sha256 bf443c94d7bf6cd4e248f8a3147f4647be04dc4c80250d9405006263bbdee38c  xf86-video-vesa-2.4.0.tar.bz2
+-sha512 4af5c0a7fd64eba503980198cf510688dff2f33482ceac446455d97255dcc828613387ac57828eb6dce080cb15a8644a2b2e278bf356705fdeaea873ab07c2de  xf86-video-vesa-2.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-September/003060.html
++sha256  1f1624f3c73906801ad1bc98335a2cb5676a7a4d18e5374d9a1d18464e54c659  xf86-video-vesa-2.5.0.tar.bz2
++sha512  36fd921f54f33eb25966b5f9ea1e1b3e9009965c012c8b9c676686b472111719921b80cf62dafc746058878253e21f0ef341a2ff2d650df22ca1e35e81716a8b  xf86-video-vesa-2.5.0.tar.bz2
  # Locally computed
--sha256 f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
-+sha256  f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index e97f8fdd8b..69d4aefb94 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+-sha256 bda49ba1e860501c20fd444423bc790f6da4f769561b69acc0cbe5abff9409b6  COPYING
++sha256  bda49ba1e860501c20fd444423bc790f6da4f769561b69acc0cbe5abff9409b6  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+index 425280a119..b08bab4ec8 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.4.3
-+XAPP_XKBCOMP_VERSION = 1.4.4
- XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_VESA_VERSION = 2.4.0
++XDRIVER_XF86_VIDEO_VESA_VERSION = 2.5.0
+ XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VESA_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VESA_LICENSE = MIT
 -- 
 2.27.0
