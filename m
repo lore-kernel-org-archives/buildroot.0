@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 21 Nov 2020 22:12:47 +0100
-Subject: [Buildroot] [PATCH v1 20/31] package/qt5tools: format hash file
- according to two spaces guideline
+Date: Sat, 21 Nov 2020 22:12:32 +0100
+Subject: [Buildroot] [PATCH v1 05/31] package/qt5connectivity: format hash
+ file according to two spaces guideline
 In-Reply-To: <20201121211258.12068-1-ps.report@gmx.net>
 References: <20201121211258.12068-1-ps.report@gmx.net>
-Message-ID: <20201121211258.12068-20-ps.report@gmx.net>
+Message-ID: <20201121211258.12068-5-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,15 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/qt5/qt5tools/qt5tools.hash | 10 +++++-----
+ package/qt5/qt5connectivity/qt5connectivity.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
-index 04761f48be..e52d8e6df7 100644
---- a/package/qt5/qt5tools/qt5tools.hash
-+++ b/package/qt5/qt5tools/qt5tools.hash
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
+index e53fee0908..3edc2d666a 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.hash
++++ b/package/qt5/qt5connectivity/qt5connectivity.hash
 @@ -2,8 +2,8 @@
- sha256  c189d0ce1ff7c739db9a3ace52ac3e24cb8fd6dbf234e49f075249b38f43c1cc  qttools-everywhere-src-5.15.2.tar.xz
+ sha256  0380327871f76103e5b8c2a305988d76d352b6a982b3e7b3bc3cdc184c64bfa0  qtconnectivity-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
