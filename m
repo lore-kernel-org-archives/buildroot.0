@@ -1,73 +1,62 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 21 Nov 2020 22:25:54 +0100
-Subject: [Buildroot] [PATCH v2 1/3] package/qt5/qt5coap: new package
-In-Reply-To: <CA+_SqVbEkASp_tHrSLuxOENEBUxgg+KN6gt3yy6vTC7Bz3aXZA@mail.gmail.com>
-References: <20201119220142.1054287-1-angelo@amarulasolutions.com>
- <20201119231125.369c16bb@windsurf.home>
- <CA+_SqVbEkASp_tHrSLuxOENEBUxgg+KN6gt3yy6vTC7Bz3aXZA@mail.gmail.com>
-Message-ID: <20201121222554.7b2f58b7@gmx.net>
+Date: Sat, 21 Nov 2020 23:12:14 +0100
+Subject: [Buildroot] [PATCH v4 4/5] board: add nvidia jetson tx2 support
+In-Reply-To: <CA+h8R2p7m1ej43si0mENKBbRvo0gQ5_h+-pL4nd4sp0hW8hWCw@mail.gmail.com>
+References: <20201119075328.8599-1-christian@paral.in>
+ <20201119075328.8599-4-christian@paral.in>
+ <bcfb1b77-8962-674f-1c08-fa7e60ec208e@smile.fr>
+ <f48b6a5d-9d98-7d5e-cb17-66e846b7508f@smile.fr>
+ <CA+h8R2p7m1ej43si0mENKBbRvo0gQ5_h+-pL4nd4sp0hW8hWCw@mail.gmail.com>
+Message-ID: <20201121231214.6d22c37b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Hello Christian,
 
-On Fri, 20 Nov 2020 10:36:37 +0100, Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+On Sat, 21 Nov 2020 13:12:46 -0800, Christian Stewart <christian@paral.in> wrote:
 
-> On Thu, Nov 19, 2020 at 11:11 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Angelo,
-> >
-> > Thanks a lot those three packages, they obviously look good. I only have one question.
-> >
-> > On Thu, 19 Nov 2020 23:01:40 +0100
-> > Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
-> >
-> > > +QT5COAP_VERSION = $(QT5_VERSION)
-> > > +QT5COAP_SITE = $(call github,qt,qtcoap,v$(QT5_VERSION))
-> > > +QT5COAP_INSTALL_STAGING = YES
-> > > +QT5COAP_LICENSE = GPL-3.0, GFDL-1.3
-> > > +QT5COAP_LICENSE_FILES = LICENSE.GPL3 LICENSE.FDL
-> > > +QT5COAP_DEPENDENCIES = host-perl
-> > > +
-> > > +define QT5COAP_FIX_INCLUDE
-> > > +     cd $(@D); $(HOST_DIR)/bin/syncqt.pl -module QtCoap -version $(QT5_VERSION)
-> > > +endef
-> >
-> > Why is this syncqt.pl invocation needed for those 3 packages? What
-> > makes them different from the other Qt5 packages we have?
+> hi Romain,
 >
-> If you open one of the other packages, you can find the "include"
-> directory already populated, instead when compiling from source the
-> folder is missing. qmake runs syncqt.pl automatically when you run
-> qmake from a cloned repo (when there is a .git folder). This is the
-> way the qt everywhere source packages are built.
-> Buildroot removes the .git folder and so the script isn't triggered. I
-> had to choose if adding a fake .git directory or call the script
-> manually, I choose the latter because I think it's more clear.
+>
+> On Sat, Nov 21, 2020 at 2:06 AM Romain Naour <romain.naour@gmail.com> wrote:
+> >
+> > Actually I would suggest to use the Linaro aarch64 2018.05
+> > (BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64) because it's the toolchain recommended
+> > and used by Nvidia.
+> >
+> > See: https://developer.nvidia.com/gcc-linaro-731-201805-sources
+>
+> When using this EXTERNAL_LINARO_AARCH64 I'm getting the build error -
+>
+> libnvidia-container-1.2.0/src/drivera-container-1.2.0/src/nvc_ldcache.lo]
+> Error 1
+>    10 | #include <rpc/rpc.h>
+>
+> Even with libtirpc in the dependencies. So I guess two things:
+>
+>  - rpc.h is coming from the toolchain
+>  - linaro toolchain doesn't have it (?)
+>  - libtirpc is probably unnecessary since it's not actually being used
+>
+> How to fix?
 
-Thanks for the detailed explanation (I can confirm the build failure without
-the syncqt.pl call), maybe worth a short comment, e.g.:
+The libtirpc include files are installed to ./host/aarch64-buildroot-linux-gnu/sysroot/usr/include/tirpc,
+e.g.:
+	./host/aarch64-buildroot-linux-gnu/sysroot/usr/include/tirpc/rpc/rpc.h
 
-	# needed for build from sources from git (but without .git directory)
-
-and/or enhancement of the commit message?
+Add the /usr/include/tirpc directory to the libnvidia-container compile header search
+path...
 
 Regards,
 Peter
 
 >
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
->
->
->
+> Best,
+> Christian
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
