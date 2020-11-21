@@ -1,52 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Nov 2020 12:21:28 +0100
-Subject: [Buildroot] [PATCH/next 3/6] package/x11r7/xapp_xprop: bump version
- to 1.2.5
+Date: Sat, 21 Nov 2020 12:21:29 +0100
+Subject: [Buildroot] [PATCH/next 4/6] package/x11r7/xcb-proto: bump version
+ to 1.14.1
 In-Reply-To: <20201121112131.756930-1-bernd.kuhls@t-online.de>
 References: <20201121112131.756930-1-bernd.kuhls@t-online.de>
-Message-ID: <20201121112131.756930-3-bernd.kuhls@t-online.de>
+Message-ID: <20201121112131.756930-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Reformatted hashes, updated _SITE.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xprop/xapp_xprop.hash | 10 ++++------
- package/x11r7/xapp_xprop/xapp_xprop.mk   |  2 +-
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/x11r7/xcb-proto/xcb-proto.hash | 8 ++++----
+ package/x11r7/xcb-proto/xcb-proto.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
-index f513e12c24..43eed80ba4 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.hash
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
-@@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002969.html
--md5 cc369c28383a5d7144e7197ee7d30bfa  xprop-1.2.4.tar.bz2
--sha1 0549a927d01930218f1d0089d0157eb9538b34a5  xprop-1.2.4.tar.bz2
--sha256 8c77fb096e46c60032b7e2bde9492c3ffcc18734f50b395085a5f10bfd3cf753  xprop-1.2.4.tar.bz2
--sha512 6e770cb89ba87ae057858cc9f0f5498979e78c3ef66ce86361b7c646cc0b70c41a18d76e55ed7225fe715b22b62bc07c56272519a2631b92832e9403ce260da7  xprop-1.2.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-November/003064.html
-+sha256  9b92ed0316bf2486121d8bac88bd1878f16b43bd335f18009b1f941f1eca93a1  xprop-1.2.5.tar.bz2
-+sha512  93cfa621fa76ca6e8e780a252c508380b6dc9db39b67bfca16bb9800f0d39110f5d18189409a8577ef79e98bf5eece17f5e23f2218ca72ae8bb04ee7b429d559  xprop-1.2.5.tar.bz2
+diff --git a/package/x11r7/xcb-proto/xcb-proto.hash b/package/x11r7/xcb-proto/xcb-proto.hash
+index c6d2d8e341..e6bc2379bf 100644
+--- a/package/x11r7/xcb-proto/xcb-proto.hash
++++ b/package/x11r7/xcb-proto/xcb-proto.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-February/003038.html
+-sha256 186a3ceb26f9b4a015f5a44dcc814c93033a5fc39684f36f1ecc79834416a605  xcb-proto-1.14.tar.xz
+-sha512 de66d568163b6da2be9d6c59984f3afa3acd119a781378638045fd68018665ef5c9af98f024e9962ba3eb7c7a4d85c27ba70ffafceb2324ccc6940f34de16690  xcb-proto-1.14.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2020-October/003061.html
++sha256  f04add9a972ac334ea11d9d7eb4fc7f8883835da3e4859c9afa971efdf57fcc3  xcb-proto-1.14.1.tar.xz
++sha512  140fbf48483bacc7f6b70fdcf76f9e4ff0e87df9cb3a071cea47d8fe4574407cdefcfbd674099014d297e5fc010748e71d8609fca4cc32e8b25c634f928b727d  xcb-proto-1.14.1.tar.xz
  # Locally computed
--sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-+sha256  f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
-index a0ad4302cb..75f0d37cdc 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.mk
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
-@@ -4,7 +4,7 @@
+-sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
++sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
+diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
+index f7a3ad55b1..8bfe24f848 100644
+--- a/package/x11r7/xcb-proto/xcb-proto.mk
++++ b/package/x11r7/xcb-proto/xcb-proto.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XPROP_VERSION = 1.2.4
-+XAPP_XPROP_VERSION = 1.2.5
- XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
- XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XPROP_LICENSE = MIT
+-XCB_PROTO_VERSION = 1.14
++XCB_PROTO_VERSION = 1.14.1
+ XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.xz
+-XCB_PROTO_SITE = http://xcb.freedesktop.org/dist
++XCB_PROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
+ XCB_PROTO_LICENSE = MIT
+ XCB_PROTO_LICENSE_FILES = COPYING
+ 
 -- 
 2.27.0
