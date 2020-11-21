@@ -1,42 +1,37 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 21 Nov 2020 13:12:46 -0800
-Subject: [Buildroot] [PATCH v4 4/5] board: add nvidia jetson tx2 support
-In-Reply-To: <f48b6a5d-9d98-7d5e-cb17-66e846b7508f@smile.fr>
-References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-4-christian@paral.in>
- <bcfb1b77-8962-674f-1c08-fa7e60ec208e@smile.fr>
- <f48b6a5d-9d98-7d5e-cb17-66e846b7508f@smile.fr>
-Message-ID: <CA+h8R2p7m1ej43si0mENKBbRvo0gQ5_h+-pL4nd4sp0hW8hWCw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 21 Nov 2020 22:12:33 +0100
+Subject: [Buildroot] [PATCH v1 06/31] package/qt5declarative: format hash
+ file according to two spaces guideline
+In-Reply-To: <20201121211258.12068-1-ps.report@gmx.net>
+References: <20201121211258.12068-1-ps.report@gmx.net>
+Message-ID: <20201121211258.12068-6-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi Romain,
+---
+ package/qt5/qt5declarative/qt5declarative.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-
-On Sat, Nov 21, 2020 at 2:06 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> Actually I would suggest to use the Linaro aarch64 2018.05
-> (BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64) because it's the toolchain recommended
-> and used by Nvidia.
->
-> See: https://developer.nvidia.com/gcc-linaro-731-201805-sources
-
-When using this EXTERNAL_LINARO_AARCH64 I'm getting the build error -
-
-libnvidia-container-1.2.0/src/drivera-container-1.2.0/src/nvc_ldcache.lo]
-Error 1
-   10 | #include <rpc/rpc.h>
-
-Even with libtirpc in the dependencies. So I guess two things:
-
- - rpc.h is coming from the toolchain
- - linaro toolchain doesn't have it (?)
- - libtirpc is probably unnecessary since it's not actually being used
-
-How to fix?
-
-Best,
-Christian
+diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
+index ca7f1fe29f..ab83b71814 100644
+--- a/package/qt5/qt5declarative/qt5declarative.hash
++++ b/package/qt5/qt5declarative/qt5declarative.hash
+@@ -2,8 +2,8 @@
+ sha256  c600d09716940f75d684f61c5bdaced797f623a86db1627da599027f6c635651  qtdeclarative-everywhere-src-5.15.2.tar.xz
+ 
+ # Hashes for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+-sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+-- 
+2.29.2
