@@ -1,71 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 22 Nov 2020 00:10:48 +0100
-Subject: [Buildroot] [PATCH v4 2/5] package/linux4tegra: new package
-In-Reply-To: <CA+h8R2r0J8iaMXNOPcQFK9mNbfHfLu-rZckAyihMDVYE0+28Qw@mail.gmail.com>
-References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-2-christian@paral.in>
- <25b062ad-cd77-fc0b-8ed0-934f48669bf1@gmail.com>
- <CA+h8R2r0J8iaMXNOPcQFK9mNbfHfLu-rZckAyihMDVYE0+28Qw@mail.gmail.com>
-Message-ID: <9c9aba6d-77bc-6538-22ba-27f38b2076b1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Nov 2020 00:21:49 +0100
+Subject: [Buildroot] [PATCH] package/libkrb5: security bump to version 1.18.3
+Message-ID: <20201121232149.7823-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Fixes the following security issues:
 
-Le 21/11/2020 ? 21:45, Christian Stewart a ?crit?:
-> Hi Romain,
-> 
-> On Sat, Nov 21, 2020 at 2:40 AM Romain Naour <romain.naour@gmail.com> wrote:
-> [snip]
-> 
-> I applied the requested comment changes, patch change, and hash file
-> tabs -> spaces change to the latest revision:
-> 
-> https://github.com/skiffos/buildroot/tree/tx2
-> 
-> 
->>> +define LINUX4TEGRA_INSTALL_IMAGES_CMDS
->>> +     cp -r $(@D)/. $(BINARIES_DIR)/linux4tegra
->>> +endef
->>> +
->>> +LINUX4TEGRA_RSYNC = \
->>> +     rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
->>> +             --chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
->>> +             --keep-dirlinks --exclude=ld.so.conf.d
->>> +
->>> +define LINUX4TEGRA_INSTALL_TARGET_CMDS
->>> +     # install nvidia_drivers
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
->>> +     # install nvidia_configs
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
->>> +     # install nvidia_tools
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
->>> +endef
->>
->> This install a lot for prebuild binaries for example libGLX_nvidia.so.0.
->> This means that this package should be at least a LIBGL provider etc.
->>
->> There is a long list of shared libraries provided by this package, make sure to
->> not override anything already installed by anoter package (ex: libdrm.so.2)
-> 
-> Unfortunately this is beyond my scope in Buildroot, so if someone else
-> has a chance to take a look at marking LIBGL provided by this package,
-> please go ahead.
-> 
-> I'm not actually using the graphics libraries provided by Buildroot in
-> my applications, so it's important to me that linux4tegra compile even
-> if the graphics packages are not available.
+- CVE-2020-28196: MIT Kerberos 5 (aka krb5) before 1.17.2 and 1.18.x before
+  1.18.3 allows unbounded recursion via an ASN.1-encoded Kerberos message
+  because the lib/krb5/asn.1/asn1_encode.c support for BER indefinite
+  lengths lacks a recursion limit.
 
-I'm using meta-tegra for a customer project, I don't think I will be able to
-work with Buildroot for this project and continue the LIBGL part.
+Also fix .hash file indentation.
 
-Best regards,
-Romain
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libkrb5/libkrb5.hash | 4 ++--
+ package/libkrb5/libkrb5.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> Best regards,
-> Christian
-> 
+diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
+index 658c4539f6..e5b24a3f70 100644
+--- a/package/libkrb5/libkrb5.hash
++++ b/package/libkrb5/libkrb5.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	02a4e700f10936f937cd1a4c303cab8687a11abecc6107bd4b706b9329cd5400	krb5-1.18.1.tar.gz
++sha256	e61783c292b5efd9afb45c555a80dd267ac67eebabca42185362bee6c4fbd719  krb5-1.18.3.tar.gz
+ 
+ # Hash for license file:
+-sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d	NOTICE
++sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d  NOTICE
+diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
+index f7cd677def..b46e7c6c50 100644
+--- a/package/libkrb5/libkrb5.mk
++++ b/package/libkrb5/libkrb5.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBKRB5_VERSION_MAJOR = 1.18
+-LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
++LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).3
+ LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
+ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
+ LIBKRB5_SUBDIR = src
+-- 
+2.20.1
