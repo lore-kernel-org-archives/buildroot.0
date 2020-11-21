@@ -1,53 +1,118 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 21 Nov 2020 16:10:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jpeg-turbo: bump to version 2.0.6
-Message-ID: <20201121151052.87140-1-fontaine.fabrice@gmail.com>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Sat, 21 Nov 2020 10:37:20 -0600
+Subject: [Buildroot] [PATCH next 06/12] package/tinifier: new package
+In-Reply-To: <20201119213658.1232531-7-thomas.petazzoni@bootlin.com>
+References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
+ <20201119213658.1232531-7-thomas.petazzoni@bootlin.com>
+Message-ID: <CALq67GDBMGctf5xsftX+nWfn8e7arP_1XN5S2Amt9h9nE-H2pQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash of README.ijg (URLs updated and Usenet info removed with
-https://github.com/libjpeg-turbo/libjpeg-turbo/commit/26e3aedbe569329d8ab005bad5481bcbd1f43ac8)
+Thomas,
 
-https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6
+I've taken a preliminary look at your pkg-mgr patch series and will be
+providing additional feedback over the next few days as I have a
+chance to test it further.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
- package/jpeg-turbo/jpeg-turbo.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+On Thu, Nov 19, 2020 at 3:37 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> This is a Go package that needs vendor modules to be downloaded at
+> build time.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/tinifier/Config.in     | 10 ++++++++++
+>  package/tinifier/tinifier.hash |  3 +++
+>  package/tinifier/tinifier.mk   | 13 +++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/tinifier/Config.in
+>  create mode 100644 package/tinifier/tinifier.hash
+>  create mode 100644 package/tinifier/tinifier.mk
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index c4d4a0274f..1a22b1d6ff 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
--sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
--md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.6/
-+sha1  5406c7676d7df89fb4da791ad5af51202910fb25  libjpeg-turbo-2.0.6.tar.gz
-+md5  4cada3f0bdc93d826fa31bf9e4469ef6  libjpeg-turbo-2.0.6.tar.gz
- # Locally computed
--sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
-+sha256  d74b92ac33b0e3657123ddcf6728788c90dc84dcb6a52013d758af3c4af481bb  libjpeg-turbo-2.0.6.tar.gz
- sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
--sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-+sha256  01ccef626ec864773c681d4a4056f72af9052d619e0609df0d369117f8b3efdf  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index ddb22bc20b..cd12756618 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 2.0.5
-+JPEG_TURBO_VERSION = 2.0.6
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
--- 
-2.29.2
+[...]
+
+> diff --git a/package/tinifier/tinifier.mk b/package/tinifier/tinifier.mk
+> new file mode 100644
+> index 0000000000..b47d265a8e
+> --- /dev/null
+> +++ b/package/tinifier/tinifier.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# tinifier
+> +#
+> +################################################################################
+> +
+> +TINIFIER_VERSION = 2.1.0
+> +TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
+> +TINIFIER_LICENSE = MIT
+> +TINIFIER_LICENSE_FILES = LICENSE
+
+I took a look at the legal-info side in regards to downloading
+packages with the post-processing support. This has been discussed
+previously on the patch "[v3,09/10] package/ripgrep: add legal-info
+for dependencies":
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20200220160119.3407-9-patrick.havelange at essensium.com/
+
+When I ran 'make legal-info' for the tinifier package all that is
+mentioned in the 'manifest.csv' file for the package is:
+
+   "tinifier","2.1.0","MIT","LICENSE","tinifier-2.1.0.tar.gz","https://github.com/tarampampam/tinifier/archive/v2.1.0","skeleton-init-common
+[unknown] skeleton-init-none [unknown] toolchain-external-bootlin
+[unknown]"
+
+This doesn't give any indication or warnings that dependencies were
+downloaded or that other open source license could be needed by
+including this package. As user of buildroot who may not have any
+knowledge in regards to 'go' or 'cargo'. When they see tinifier row in
+the manifest.csv file, they could just think that the tinifier package
+would only have/introduce the MIT license to their product. Which is
+not the case because it downloads the following vendor packages:
+
+  bou.ke/monkey v1.0.2
+  github.com/dustin/go-humanize v1.0.0
+  github.com/jessevdk/go-flags v1.4.1-0.20181221193153-c0795c8afcf4
+  github.com/json-iterator/go v1.1.10
+  github.com/kami-zh/go-capturer v0.0.0-20171211120116-e492ea43421d
+  github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+  github.com/modern-go/reflect2 v1.0.1 // indirect
+  github.com/olekukonko/tablewriter v0.0.4
+  github.com/schollz/progressbar/v3 v3.3.3
+  github.com/stretchr/testify v1.6.1
+
+I understand add/showing these license and how to exactly handle this
+are future additions.  However, I re-read the section in regards to
+the "legal-info" in the buildroot manual I came across this:
+
+  Moreover, due to technical limitations, Buildroot does not produce some
+  material that you will or may need, such as the toolchain source code for
+  some of the external toolchains and the Buildroot source code itself.
+  When you run +make legal-info+, Buildroot produces warnings in the +README+
+  file to inform you of relevant material that could not be saved.
+
+So would it be possible to put a warning into the 'legal-info/README'
+file that not all the dependency licenses could be downloaded/added to
+manifest.csv file?
+
+Maybe a hint could be given to go take a look at the tinifier/go.mod
+under the requires section to figure out the licenses. I think this
+could be a good temporary solution under a more "dynamic legal-info"
+infrastructure could be introduced. Would there be a way to detect if
+there are any vendor packages downloaded and then add a warning in the
+'legal-info/README' file easily?
+
+Thanks,
+-Ryan Barnett
+
+> +TINIFIER_GOMOD = tinifier
+> +
+> +$(eval $(golang-package))
+> --
+> 2.28.0
