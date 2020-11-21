@@ -1,79 +1,195 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Nov 2020 11:50:49 +0100
-Subject: [Buildroot] [PATCH] package/raptor: fix CVE-2017-18926
-Message-ID: <20201121105050.1165-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 21 Nov 2020 11:55:51 +0100
+Subject: [Buildroot] [PATCH v4 3/5] package/libnvidia-container: new
+ package
+In-Reply-To: <20201119075328.8599-3-christian@paral.in>
+References: <20201119075328.8599-1-christian@paral.in>
+ <20201119075328.8599-3-christian@paral.in>
+Message-ID: <5f5c5a57-72c4-d7c9-5395-9042b49a5441@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-raptor_xml_writer_start_element_common in raptor_xml_writer.c in Raptor RDF
-Syntax Library 2.0.15 miscalculates the maximum nspace declarations for the
-XML writer, leading to heap-based buffer overflows (sometimes seen in
-raptor_qname_format_as_xml).
+Hello Christian,
 
-For more details, see the oss-security discussion:
-https://www.openwall.com/lists/oss-security/2020/11/13/1
+Le 19/11/2020 ? 08:53, Christian Stewart a ?crit?:
+> The libnvidia-container package adds a library and CLI for GPU-backed
+> containers, agnostic to container runtime.
+> 
+> https://github.com/NVIDIA/libnvidia-container
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> 
+> v1 -> v2:
+> 
+>  - cjs: thanks Asaf thanks for review
+>  - cjs: remove extra include dirs
+>  - cjs: simplify configuration opts
+> 
+> v2 -> v3:
+> 
+>  - cjs: add fixup for go-module support
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in                             |    1 +
+>  ...d-fixes-from-vowstar-portage-overlay.patch | 1890 +++++++++++++++++
+>  ...ve-dependency-handling-from-Makefile.patch |  698 ++++++
+>  package/libnvidia-container/Config.in         |   18 +
+>  .../libnvidia-container.hash                  |    3 +
+>  .../libnvidia-container.mk                    |   44 +
+>  6 files changed, 2654 insertions(+)
+>  create mode 100644 package/libnvidia-container/0001-Build-fixes-from-vowstar-portage-overlay.patch
+>  create mode 100644 package/libnvidia-container/0002-Remove-dependency-handling-from-Makefile.patch
+>  create mode 100644 package/libnvidia-container/Config.in
+>  create mode 100644 package/libnvidia-container/libnvidia-container.hash
+>  create mode 100644 package/libnvidia-container/libnvidia-container.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 01072c3e45..ef01361fdb 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1532,6 +1532,7 @@ menu "Hardware handling"
+>  	source "package/libllcp/Config.in"
+>  	source "package/libmbim/Config.in"
+>  	source "package/libnfc/Config.in"
+> +	source "package/libnvidia-container/Config.in"
+>  	source "package/libpciaccess/Config.in"
+>  	source "package/libphidget/Config.in"
+>  	source "package/libpri/Config.in"
+> diff --git a/package/libnvidia-container/0001-Build-fixes-from-vowstar-portage-overlay.patch b/package/libnvidia-container/0001-Build-fixes-from-vowstar-portage-overlay.patch
+> new file mode 100644
+> index 0000000000..7232e76d97
+> --- /dev/null
+> +++ b/package/libnvidia-container/0001-Build-fixes-from-vowstar-portage-overlay.patch
+> @@ -0,0 +1,1890 @@
+> +From bd633a208446c86e11097e3cd3b019a086738ae3 Mon Sep 17 00:00:00 2001
+> +From: Christian Stewart <christian@paral.in>
+> +Date: Sun, 19 Jul 2020 09:56:42 -0700
+> +Subject: [PATCH] Build fixes from vowstar portage overlay
+> +
+> +This commit brings in build fixes written by @vowstar in the overlay:
+> +
+> +https://github.com/vowstar/vowstar-overlay/tree/master/app-emulation/libnvidia-container/files
+> +
+> +Signed-off-by: Christian Stewart <christian@paral.in>
+> +---
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...pace-declarations-correctly-for-XML-.patch | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/raptor/0002-Calcualte-max-nspace-declarations-correctly-for-XML-.patch
+This is really a huge patch...
 
-diff --git a/package/raptor/0002-Calcualte-max-nspace-declarations-correctly-for-XML-.patch b/package/raptor/0002-Calcualte-max-nspace-declarations-correctly-for-XML-.patch
-new file mode 100644
-index 0000000000..406e265cf3
---- /dev/null
-+++ b/package/raptor/0002-Calcualte-max-nspace-declarations-correctly-for-XML-.patch
-@@ -0,0 +1,47 @@
-+From 590681e546cd9aa18d57dc2ea1858cb734a3863f Mon Sep 17 00:00:00 2001
-+From: Dave Beckett <dave@dajobe.org>
-+Date: Sun, 16 Apr 2017 23:15:12 +0100
-+Subject: [PATCH] Calcualte max nspace declarations correctly for XML writer
-+
-+(raptor_xml_writer_start_element_common): Calculate max including for
-+each attribute a potential name and value.
-+
-+Fixes Issues #0000617 http://bugs.librdf.org/mantis/view.php?id=617
-+and #0000618 http://bugs.librdf.org/mantis/view.php?id=618
-+
-+[Peter: fixes CVE-2017-18926, upstream:
-+ https://github.com/dajobe/raptor/commit/590681e546cd9aa18d57dc2ea1858cb734a3863f]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/raptor_xml_writer.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/raptor_xml_writer.c b/src/raptor_xml_writer.c
-+index 693b9468..0d3a36a5 100644
-+--- a/src/raptor_xml_writer.c
-++++ b/src/raptor_xml_writer.c
-+@@ -181,9 +181,10 @@ raptor_xml_writer_start_element_common(raptor_xml_writer* xml_writer,
-+   size_t nspace_declarations_count = 0;  
-+   unsigned int i;
-+ 
-+-  /* max is 1 per element and 1 for each attribute + size of declared */
-+   if(nstack) {
-+-    int nspace_max_count = element->attribute_count+1;
-++    int nspace_max_count = element->attribute_count * 2; /* attr and value */
-++    if(element->name->nspace)
-++      nspace_max_count++;
-+     if(element->declared_nspaces)
-+       nspace_max_count += raptor_sequence_size(element->declared_nspaces);
-+     if(element->xml_language)
-+@@ -237,7 +238,7 @@ raptor_xml_writer_start_element_common(raptor_xml_writer* xml_writer,
-+         }
-+       }
-+ 
-+-      /* Add the attribute + value */
-++      /* Add the attribute's value */
-+       nspace_declarations[nspace_declarations_count].declaration=
-+         raptor_qname_format_as_xml(element->attributes[i],
-+                                    &nspace_declarations[nspace_declarations_count].length);
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+> diff --git a/package/libnvidia-container/0002-Remove-dependency-handling-from-Makefile.patch b/package/libnvidia-container/0002-Remove-dependency-handling-from-Makefile.patch
+> new file mode 100644
+> index 0000000000..d4ba9dfe80
+> --- /dev/null
+> +++ b/package/libnvidia-container/0002-Remove-dependency-handling-from-Makefile.patch
+> @@ -0,0 +1,698 @@
+> +From 6752d8d5e315eb3f061498a9c35558f90f9600e2 Mon Sep 17 00:00:00 2001
+> +From: Christian Stewart <christian@paral.in>
+> +Date: Sat, 18 Jul 2020 15:26:22 -0700
+> +Subject: [PATCH] Remove dependency handling from Makefile
+> +
+> +Buildroot will handle this for the makefile.
+> +
+> +Signed-off-by: Christian Stewart <christian@paral.in>
+> +---
+
+Same
+
+> diff --git a/package/libnvidia-container/Config.in b/package/libnvidia-container/Config.in
+> new file mode 100644
+> index 0000000000..7a452c3635
+> --- /dev/null
+> +++ b/package/libnvidia-container/Config.in
+> @@ -0,0 +1,18 @@
+> +config BR2_PACKAGE_LIBNVIDIA_CONTAINER
+> +	bool "libnvidia-container"
+> +	depends on BR2_SHARED_LIBS
+
+BR2_SHARED_STATIC_LIBS maybe
+
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # tirpc
+
+Already selected by glibc toolchain.
+
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC # fexecve
+> +	select BR2_PACKAGE_ELFUTILS
+> +	select BR2_PACKAGE_LIBCAP
+> +	select BR2_PACKAGE_LIBTIRPC
+> +	select BR2_PACKAGE_NVIDIA_MODPROBE
+> +	help
+> +	  The libnvidia-container package adds a library and CLI for
+> +	  GPU-backed containers, agnostic to container runtime.
+> +
+> +	  https://github.com/NVIDIA/libnvidia-container
+> +
+> +comment "libnvidia-container needs a shared glibc toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC || \
+> +		!BR2_SHARED_LIBS
+> diff --git a/package/libnvidia-container/libnvidia-container.hash b/package/libnvidia-container/libnvidia-container.hash
+> new file mode 100644
+> index 0000000000..d356eb2b1e
+> --- /dev/null
+> +++ b/package/libnvidia-container/libnvidia-container.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 fd447629fd65d171b68edb62fa2e581c67fdb450ff540f486987ab826150d06e  libnvidia-container-1.2.0.tar.gz
+> +sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/libnvidia-container/libnvidia-container.mk b/package/libnvidia-container/libnvidia-container.mk
+> new file mode 100644
+> index 0000000000..b040c0baaa
+> --- /dev/null
+> +++ b/package/libnvidia-container/libnvidia-container.mk
+> @@ -0,0 +1,44 @@
+> +################################################################################
+> +#
+> +# libnvidia-container
+> +#
+> +################################################################################
+> +
+> +LIBNVIDIA_CONTAINER_VERSION = 1.2.0
+> +LIBNVIDIA_CONTAINER_SITE = $(call github,NVIDIA,libnvidia-container,v$(LIBNVIDIA_CONTAINER_VERSION))
+> +LIBNVIDIA_CONTAINER_LICENSE = Apache-2.0
+> +LIBNVIDIA_CONTAINER_LICENSE_FILES = LICENSE
+> +
+> +LIBNVIDIA_CONTAINER_DEPENDENCIES = elfutils libcap libtirpc nvidia-modprobe \
+> +	host-pkgconf host-elfutils host-libcap
+> +
+> +LIBNVIDIA_CONTAINER_MAKE_OPTS = \
+> +	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+> +	OBJCPY="$(TARGET_OBJCOPY)" \
+> +	RPCGEN="$(HOST_DIR)/bin/rpcgen" \
+> +	WITH_LIBELF=yes \
+> +	WITH_TIRPC=no
+
+Why adding libtirpc in the dependencies and using WITH_TIRPC=no ?
+
+Best regards,
+Romain
+
+> +
+> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> +LIBNVIDIA_CONTAINER_MAKE_OPTS += WITH_SECCOMP=yes
+> +LIBNVIDIA_CONTAINER_DEPENDENCIES += libseccomp
+> +else
+> +LIBNVIDIA_CONTAINER_MAKE_OPTS += WITH_SECCOMP=no
+> +endif
+> +
+> +define LIBNVIDIA_CONTAINER_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		$(LIBNVIDIA_CONTAINER_MAKE_OPTS) \
+> +		shared tools
+> +endef
+> +
+> +define LIBNVIDIA_CONTAINER_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		$(LIBNVIDIA_CONTAINER_MAKE_OPTS) \
+> +		DESTDIR="$(TARGET_DIR)" \
+> +		install
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
