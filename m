@@ -1,364 +1,249 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 21 Nov 2020 11:40:37 +0100
-Subject: [Buildroot] [PATCH v4 2/5] package/linux4tegra: new package
-In-Reply-To: <20201119075328.8599-2-christian@paral.in>
-References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-2-christian@paral.in>
-Message-ID: <25b062ad-cd77-fc0b-8ed0-934f48669bf1@gmail.com>
+From: Alexander Egorenkov <egorenar-dev@posteo.net>
+Date: Sat, 21 Nov 2020 11:44:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: bump to version
+ 0.8.5
+Message-ID: <20201121104412.28360-1-egorenar-dev@posteo.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Change github URL to https://github.com/opensvc/multipath-tools
+which offers proper releases.
 
-Le 19/11/2020 ? 08:53, Christian Stewart a ?crit?:
-> NVIDIA Linux4Tegra utilities and binaries.
-> 
-> https://developer.nvidia.com/embedded/linux-tegra-archive
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> 
-> v1 -> v2:
-> 
->  - cjs: add license hashes
-> 
-> v2 -> v3:
-> 
->  - cjs: fix broken LICENSE hash
->  - cjs: add support for t210ref
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in                             |   1 +
->  ...for-flashing-Buildroot-produced-disk.patch |  58 +++++++++
->  package/linux4tegra/Config.in                 |  28 ++++
->  package/linux4tegra/linux4tegra.hash          |  55 ++++++++
->  package/linux4tegra/linux4tegra.mk            | 120 ++++++++++++++++++
->  5 files changed, 262 insertions(+)
->  create mode 100644 package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
->  create mode 100644 package/linux4tegra/Config.in
->  create mode 100644 package/linux4tegra/linux4tegra.hash
->  create mode 100644 package/linux4tegra/linux4tegra.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index fa1b5d35e9..01072c3e45 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -482,6 +482,7 @@ endmenu
->  	source "package/libuio/Config.in"
->  	source "package/linux-backports/Config.in"
->  	source "package/linux-serial-test/Config.in"
-> +	source "package/linux4tegra/Config.in"
->  	source "package/linuxconsoletools/Config.in"
->  	source "package/lirc-tools/Config.in"
->  	source "package/lm-sensors/Config.in"
-> diff --git a/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
-> new file mode 100644
-> index 0000000000..4ace27bddc
-> --- /dev/null
-> +++ b/package/linux4tegra/0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch
-> @@ -0,0 +1,58 @@
-> +From fbd0d35995a23351d4b50ed0b814442a6873ded2 Mon Sep 17 00:00:00 2001
-> +From: Christian Stewart <christian@paral.in>
-> +Date: Fri, 17 Jul 2020 13:58:43 -0700
-> +Subject: [PATCH] Adjust flash.sh for flashing Buildroot-produced disk image
-> +
-> +Signed-off-by: Christian Stewart <christian@paral.in>
-> +---
-> + flash.sh | 19 ++++++++++---------
-> + 1 file changed, 10 insertions(+), 9 deletions(-)
-> +
-> +diff --git a/flash.sh b/flash.sh
-> +index 38c0cbb..c27b41b 100755
-> +--- a/flash.sh
-> ++++ b/flash.sh
-> +@@ -1339,9 +1339,10 @@ elif [ "${target_rootdev}" == "internal" ] || \
-> + 		usage allunknown 1;
-> + 	fi
-> + 
-> +-	cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
-> ++	# cmdline+="root=PARTUUID=${rootfsuuid} rw rootwait rootfstype=ext4 "
+Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+---
+ ...ath-use-pkg-config-to-get-path-to-he.patch | 28 +++++++++----
+ ...le-systemd-if-ENABLE_SYSTEMD-is-def.patch} |  0
+ ...bmpathpersist-depend-on-libmultipath.patch | 31 --------------
+ ...3-fix-boolean-value-with-json-c-0.14.patch | 41 -------------------
+ ...ools-Makefile-add-install-dependency.patch | 34 ---------------
+ package/multipath-tools/multipath-tools.hash  |  2 +-
+ package/multipath-tools/multipath-tools.mk    |  4 +-
+ 7 files changed, 22 insertions(+), 118 deletions(-)
+ rename package/multipath-tools/{0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch => 0002-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch} (100%)
+ delete mode 100644 package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+ delete mode 100644 package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
+ delete mode 100644 package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch
 
-Remove the commented line.
-
-> ++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
-> + else
-> +-	cmdline+="root=/dev/${target_rootdev} rw rootwait rootfstype=ext4 "
-> ++	cmdline+="root=/dev/${target_rootdev} rw rootwait"
-> + fi;
-> + 
-> + if [ "${CMDLINE_ADD}" != "" ]; then
-> +@@ -1512,11 +1513,7 @@ if [ "${write_image_name}" != "" ]; then
-> + 	fi
-> + fi
-> + 
-> +-if [ "${INITRD_IN_BOOTIMG}" = "yes" ]; then
-> +-	ramdisk=initrd;
-> +-else
-> +-	ramdisk="/dev/null"
-> +-fi
-> ++ramdisk="/dev/null"
-> + echo -n "Making Boot image... ";
-> + MKBOOTARG+="--kernel ${kernel_image} ";
-> + MKBOOTARG+="--ramdisk ${ramdisk} ";
-> +@@ -1977,8 +1974,12 @@ if [ "${reuse_systemimg}" = "true" ] || [ "${skip_systemimg}" = "true" ]; then
-> + elif [ "${rootdev_type}" = "internal" ]; then
-> + 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
-> + 	if [ "${target_partname}" = "" -o "${target_partname}" = "APP" ]; then
-> +-		build_fsimg "$localsysfile" "$fillpat" \
-> +-		    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
-> ++    echo "Skipping image build and setting target_partfile to INITRD."
-> ++    # target_partfile=${INITRD}
-> ++    # cp ${INITRD} ./system.img
-> ++    ln -fs ${INITRD} ./system.img
-> ++		#build_fsimg "$localsysfile" "$fillpat" \
-> ++		#    "$rootfssize" "$rootfs_type" "$rootfs_dir" "$cmdline";
-
-Remove the commented lines.
-
-> + 	fi;
-> + elif [ "${rootdev_type}" = "network" -o "${rootdev_type}" = "external" ]; then
-> + 	APP_TAG+="-e s/APPFILE/${localsysfile}/ ";
-> +-- 
-> +2.27.0
-> +
-> diff --git a/package/linux4tegra/Config.in b/package/linux4tegra/Config.in
-> new file mode 100644
-> index 0000000000..71f29494dc
-> --- /dev/null
-> +++ b/package/linux4tegra/Config.in
-> @@ -0,0 +1,28 @@
-> +config BR2_PACKAGE_LINUX4TEGRA
-> +	bool "linux4tegra"
-> +	help
-> +	  NVIDIA Linux4Tegra utilities and binaries.
-> +
-> +	  https://developer.nvidia.com/embedded/linux-tegra-archive
-> +
-> +if BR2_PACKAGE_LINUX4TEGRA
-> +
-> +choice
-> +	prompt "Platform"
-> +	default BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF
-> +	help
-> +	  Select the platform variant for linux4tegra.
-> +
-> +config BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF
-> +	bool "t186ref"
-> +	help
-> +	  Jetson AGX Xavier, Xavier NX, or TX2
-> +
-> +config BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T210REF
-> +	bool "t210ref"
-> +	help
-> +	  Jetson Nano or Jetson TX1
-> +
-> +endchoice
-> +
-> +endif # if BR2_PACKAGE_LINUX4TEGRA
-> diff --git a/package/linux4tegra/linux4tegra.hash b/package/linux4tegra/linux4tegra.hash
-> new file mode 100644
-> index 0000000000..5e5f9b02c8
-> --- /dev/null
-> +++ b/package/linux4tegra/linux4tegra.hash
-> @@ -0,0 +1,55 @@
-> +# locally computed
-> +sha256	9a2d13b1f4b67fef97a428d54724b23e84e14636eedfa22f338c2d1ea62558e2  Tegra186_Linux_R32.4.3_aarch64.tbz2
-> +sha256	0c8590218be814eeec2a6f8b4fd01271893e4881ef2c66d130792c1d62737642  Tegra210_Linux_R32.4.3_aarch64.tbz2
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE
-> +sha256	496f3bc5456694cce764d28a93565bb0d0967dbd95256759e4168a9587406949  bootloader/LICENSE.adsp
-> +sha256	d4885fa44934935d6a178c84a16aec49dae1bd4f41f14bbbd781bafcf704885f  bootloader/LICENSE.bpmp
-> +sha256	fd4513e2857a0d91c521dfbb924733563b55d5a2d42d4fb688d2506ed34df0c4  bootloader/LICENSE.bpmp_t194
-> +sha256	205a391eb9cfc69854cc0c3082de204d30124607cedecbdd3f47420b5f37f302  bootloader/LICENSE.camera-rtcpu
-> +sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot
-> +sha256	3cc8cfbf77eb7f086d9b6f68de92251ebbcf13fd7a20fec2749cab30348bf9b1  bootloader/LICENSE.cboot_t194
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.chkbdinfo
-> +sha256	7bf7d9fae6472452d585ec38dd684daa86dc83638984d1cb14ee35239a868543  bootloader/LICENSE.mce_c10_prod_cr
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkbctpart
-> +sha256	9b0ccf575cfd9febc97b8f9967216f06341db2d44abc69df92c3127cc1a2608f  bootloader/LICENSE.mkbootimg
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  bootloader/LICENSE.mkgpt
-> +sha256	cddaa9d5583a7705cd4734a6af4b421bca9016ba6af854c51efbfcbe19a4a893  bootloader/LICENSE.nv_smd_generator
-> +sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe.bin
-> +sha256	7b699cea50c65de6679ea0617e8276cf24a523d6068e2502e637fadf9bc49713  bootloader/LICENSE.spe_t194.bin
-> +sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware
-> +sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware
-> +sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty.img.trusty
-> +sha256	0ef77b4d7ffb0195540e394863dd969594ba8e21cb4b810822b4d42c1ab8ef72  bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware
-> +sha256	5a316570e2f1d43b09e51432e613c408b240d0ea0ce30134a7de16c25b832130  bootloader/LICENSE.tos-trusty_t194.img.trusty
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/LICENSE
-> +sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/LICENSE.brcm_patchram_plus
-> +sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img
-> +sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/LICENSE.libnvargus
-> +sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/LICENSE.libnvcam_imageencoder
-> +sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnveventlib
-> +sha256	1f1bf0c752f072a447b1013fc9d76268ddf098c37ddc63988d60e4973cbee2f4  nv_tegra/LICENSE.libnvscf
-> +sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/LICENSE.libnvtracebuf
-> +sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/LICENSE.libtegrav4l2
-> +sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/LICENSE.minigbm
-> +sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/LICENSE.nvbootctrl
-> +sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/LICENSE.nvdla
-> +sha256	8b6a8553e4a1668a6267b9789bd69ffe105bffd8f2af59e2fc74a5910bb159ab  nv_tegra/LICENSE.weston
-> +sha256	a34730970264d619f352598bf30295ad505a60fc3a493add8aa851645ce3ea47  nv_tegra/LICENSE.weston-data
-> +sha256	88e408dec7796e0440b0bf5131f88f0d97bc4014fc389562ec0d5cc7ed1c45ad  nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img
-> +sha256	a85e1af5d521f0d68aa08806292076bb9bda8a31a496f17063fafab121053e4d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus
-> +sha256	89786bfd7060f6a60feae03257da6f3206b0f777352cf750c67b3b560dd087a5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt
-> +sha256	1467d3bd35f6ad87ffb24c0e665c2d028dda6e943dff66b347f0051370dcf88d  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus
-> +sha256	7ea9279fe435e009307da026ea72a1f47ecbdeef3a6a7f6bb04a2dec7bbdfcd5  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder
-> +sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib
-> +sha256	c19b803d92378a0acc9c7dc02e018022f821b8284a5d918e2628e6d1d9376245  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf
-> +sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2
-> +sha256	dee27dbeddf4f7d093df765624022e72fb28c818d60fa3fd9d1dd77b392e4d31  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert
-> +sha256	b4e0f72b067cd11afa0875d20144423a80b7293e4309cca43190cf8c1d4ba200  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2
-> +sha256	fbef9c34b63148c0e670e6ac07705b25bebcc1f963b48bf7447ee61cfaadcc1e  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1
-> +sha256	8610954adbca6c6b85d8b1ae5613b44b0014e437d32fcad6683bb27541411686  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm
-> +sha256	fa776c507a543cc43d9d66407cfe5d685f35207fd9631e7fd77ee4f42ef92be6  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla
-> +sha256	bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt
-> +sha256	f3f3ecff94537e7d5944fdbae7c6bd02d5eddca8fe1c29d8699ff2e54d26cebc  nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors
-> +sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl
-> +sha256	5f28c11f8b1b3f97b9d42c74b85371ebf4127f241b799279bcecd69f7ee542dc  nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
-
-Please use two space instead of a tab between sha256 and the hash.
-
-> diff --git a/package/linux4tegra/linux4tegra.mk b/package/linux4tegra/linux4tegra.mk
-> new file mode 100644
-> index 0000000000..48061f4c98
-> --- /dev/null
-> +++ b/package/linux4tegra/linux4tegra.mk
-> @@ -0,0 +1,120 @@
-> +################################################################################
-> +#
-> +# linux4tegra
-> +#
-> +################################################################################
-> +
-> +LINUX4TEGRA_VERSION = 32.4.3
-> +
-> +ifeq ($(BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF),y)
-> +LINUX4TEGRA_SITE = https://developer.nvidia.com/embedded/L4T/r32_Release_v4.3/t186ref_release_aarch64
-> +LINUX4TEGRA_SOURCE = Tegra186_Linux_R$(LINUX4TEGRA_VERSION)_aarch64.tbz2
-> +else # ifeq ($(BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T210REF),y)
-> +LINUX4TEGRA_SITE = https://developer.nvidia.com/embedded/L4T/r32_Release_v4.3/t210ref_release_aarch64
-> +LINUX4TEGRA_SOURCE = Tegra210_Linux_R$(LINUX4TEGRA_VERSION)_aarch64.tbz2
-> +endif
-> +
-> +LINUX4TEGRA_LICENSE = NVIDIA Software License, GPL-2.0, LGPL, Apache-2.0, MIT
-> +LINUX4TEGRA_LICENSE_FILES = \
-> +	bootloader/LICENSE \
-> +	bootloader/LICENSE.adsp \
-> +	bootloader/LICENSE.bpmp \
-> +	bootloader/LICENSE.bpmp_t194 \
-> +	bootloader/LICENSE.camera-rtcpu \
-> +	bootloader/LICENSE.cboot \
-> +	bootloader/LICENSE.cboot_t194 \
-> +	bootloader/LICENSE.chkbdinfo \
-> +	bootloader/LICENSE.mce_c10_prod_cr \
-> +	bootloader/LICENSE.mkbctpart \
-> +	bootloader/LICENSE.mkbootimg \
-> +	bootloader/LICENSE.mkgpt \
-> +	bootloader/LICENSE.nv_smd_generator \
-> +	bootloader/LICENSE.spe.bin \
-> +	bootloader/LICENSE.spe_t194.bin \
-> +	bootloader/LICENSE.tos-mon-only.img.arm-trusted-firmware \
-> +	bootloader/LICENSE.tos-trusty.img.arm-trusted-firmware \
-> +	bootloader/LICENSE.tos-trusty.img.trusty \
-> +	bootloader/LICENSE.tos-trusty_t194.img.arm-trusted-firmware \
-> +	bootloader/LICENSE.tos-trusty_t194.img.trusty \
-> +	nv_tegra/LICENSE \
-> +	nv_tegra/LICENSE \
-> +	nv_tegra/LICENSE.brcm_patchram_plus \
-> +	nv_tegra/LICENSE.l4t-usb-device-mode-filesystem.img \
-> +	nv_tegra/LICENSE.libnvargus \
-> +	nv_tegra/LICENSE.libnvcam_imageencoder \
-> +	nv_tegra/LICENSE.libnveventlib \
-> +	nv_tegra/LICENSE.libnvscf \
-> +	nv_tegra/LICENSE.libnvtracebuf \
-> +	nv_tegra/LICENSE.libtegrav4l2 \
-> +	nv_tegra/LICENSE.minigbm \
-> +	nv_tegra/LICENSE.nvbootctrl \
-> +	nv_tegra/LICENSE.nvdla \
-> +	nv_tegra/LICENSE.weston \
-> +	nv_tegra/LICENSE.weston-data \
-> +	nv_tegra/nvidia_configs/opt/nvidia/l4t-usb-device-mode/LICENSE.filesystem.img \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.brcm_patchram_plus \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.cypress_wifibt \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvargus \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvcam_imageencoder \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnveventlib \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvtracebuf \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4l2 \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libnvv4lconvert \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libtegrav4l2 \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.libvulkan1 \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.minigbm \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.nvdla \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.realtek_8822ce_wifibt \
-> +	nv_tegra/nvidia_drivers/usr/share/doc/nvidia-tegra/LICENSE.tegra_sensors \
-> +	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.nvbootctrl \
-> +	nv_tegra/nvidia_tools/usr/share/doc/nvidia-tegra/LICENSE.tipc_test
-> +
-> +LINUX4TEGRA_INSTALL_IMAGES = YES
-> +
-> +define LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
-> +	@mkdir -p $(@D)/nv_tegra/nvidia_drivers
-> +	$(call suitable-extractor,nvidia_drivers.tbz2) \
-> +		$(@D)/nv_tegra/nvidia_drivers.tbz2 | \
-> +		$(TAR) -C $(@D)/nv_tegra/nvidia_drivers $(TAR_OPTIONS) -
-> +endef
-> +
-> +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_DRIVERS
-> +
-> +define LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
-> +	@mkdir -p $(@D)/nv_tegra/nvidia_configs
-> +	$(call suitable-extractor,config.tbz2) \
-> +		$(@D)/nv_tegra/config.tbz2 | \
-> +		$(TAR) -C $(@D)/nv_tegra/nvidia_configs $(TAR_OPTIONS) -
-> +endef
-> +
-> +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_CONFIGS
-> +
-> +define LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
-> +	@mkdir -p $(@D)/nv_tegra/nvidia_tools
-> +	$(call suitable-extractor,nv_tools.tbz2) \
-> +		$(@D)/nv_tegra/nv_tools.tbz2 | \
-> +		$(TAR) -C $(@D)/nv_tegra/nvidia_tools $(TAR_OPTIONS) -
-> +endef
-> +
-> +LINUX4TEGRA_POST_EXTRACT_HOOKS += LINUX4TEGRA_EXTRACT_NVIDIA_TOOLS
-> +
-> +# copy linux4tegra to the target dir
-
-The comment is wrong because BINARIES_DIR is acually output/images.
-
-> +define LINUX4TEGRA_INSTALL_IMAGES_CMDS
-> +	cp -r $(@D)/. $(BINARIES_DIR)/linux4tegra
-> +endef
-> +
-> +LINUX4TEGRA_RSYNC = \
-> +	rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> +		--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> +		--keep-dirlinks --exclude=ld.so.conf.d
-> +
-> +define LINUX4TEGRA_INSTALL_TARGET_CMDS
-> +	# install nvidia_drivers
-> +	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
-> +	# install nvidia_configs
-> +	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
-> +	# install nvidia_tools
-> +	$(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
-> +endef
-
-This install a lot for prebuild binaries for example libGLX_nvidia.so.0.
-This means that this package should be at least a LIBGL provider etc.
-
-There is a long list of shared libraries provided by this package, make sure to
-not override anything already installed by anoter package (ex: libdrm.so.2)
-
-Best regards,
-Romain
-
-> +
-> +$(eval $(generic-package))
-> 
+diff --git a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
+index 43cf165f7b..26081dd816 100644
+--- a/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
++++ b/package/multipath-tools/0001-kpartx-libmultipath-use-pkg-config-to-get-path-to-he.patch
+@@ -1,7 +1,7 @@
+-From f55b1a37e2c43b67e7fd7f6a39afe2b2316b7cf9 Mon Sep 17 00:00:00 2001
++From 922855e245c8bdadc0d24b5b706549b18fb5f079 Mon Sep 17 00:00:00 2001
+ From: Alexander Egorenkov <egorenar-dev@posteo.net>
+-Date: Mon, 31 Aug 2020 19:05:46 +0200
+-Subject: [PATCH] kpartx, libmultipath: use pkg-config to get path to
++Date: Sat, 21 Nov 2020 11:08:56 +0100
++Subject: [PATCH 1/1] kpartx, libmultipath: use pkg-config to get path to
+  headers
+ 
+ Use pkg-config in Makefile to find path to devmapper and udev headers
+@@ -9,9 +9,9 @@ to enable cross-compilation.
+ 
+ Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+ ---
+- kpartx/Makefile       | 2 +-
+- libmultipath/Makefile | 8 ++++----
+- 2 files changed, 5 insertions(+), 5 deletions(-)
++ kpartx/Makefile       |  2 +-
++ libmultipath/Makefile | 12 ++++++------
++ 2 files changed, 7 insertions(+), 7 deletions(-)
+ 
+ diff --git a/kpartx/Makefile b/kpartx/Makefile
+ index 2906a984..29573890 100644
+@@ -27,10 +27,10 @@ index 2906a984..29573890 100644
+  endif
+  
+ diff --git a/libmultipath/Makefile b/libmultipath/Makefile
+-index e5651e49..51ad0193 100644
++index 62ba16e8..3ad9130c 100644
+ --- a/libmultipath/Makefile
+ +++ b/libmultipath/Makefile
+-@@ -20,19 +20,19 @@ ifdef SYSTEMD
++@@ -20,27 +20,27 @@ ifdef SYSTEMD
+  	endif
+  endif
+  
+@@ -39,6 +39,11 @@ index e5651e49..51ad0193 100644
+  	CFLAGS += -DLIBDM_API_FLUSH -D_GNU_SOURCE
+  endif
+  
++-ifneq ($(call check_func,dm_task_get_errno,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_task_get_errno,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_GET_ERRNO
++ endif
++ 
+ -ifneq ($(call check_func,dm_task_set_cookie,/usr/include/libdevmapper.h),0)
+ +ifneq ($(call check_func,dm_task_set_cookie,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
+  	CFLAGS += -DLIBDM_API_COOKIE
+@@ -54,6 +59,11 @@ index e5651e49..51ad0193 100644
+  	CFLAGS += -DLIBDM_API_DEFERRED
+  endif
+  
++-ifneq ($(call check_func,dm_hold_control_dev,/usr/include/libdevmapper.h),0)
+++ifneq ($(call check_func,dm_hold_control_dev,$(shell $(PKG_CONFIG) --variable=includedir devmapper)/libdevmapper.h),0)
++ 	CFLAGS += -DLIBDM_API_HOLD_CONTROL
++ endif
++ 
+ -- 
+-2.28.0
++2.29.2
+ 
+diff --git a/package/multipath-tools/0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch b/package/multipath-tools/0002-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch
+similarity index 100%
+rename from package/multipath-tools/0005-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch
+rename to package/multipath-tools/0002-Makefile.inc-Enable-systemd-if-ENABLE_SYSTEMD-is-def.patch
+diff --git a/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch b/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
+deleted file mode 100644
+index cdd4081224..0000000000
+--- a/package/multipath-tools/0002-libmpathpersist-depend-on-libmultipath.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 48f537b9fef4f9db761466b8951fb63243f06602 Mon Sep 17 00:00:00 2001
+-From: Christian Hesse <mail@eworm.de>
+-Date: Wed, 6 May 2020 09:35:47 +0200
+-Subject: [PATCH] libmpathpersist: depend on libmultipath
+-
+-Without this the build fails with:
+-
+-/usr/bin/ld: cannot find -lmultipath
+-
+-Signed-off-by: Christian Hesse <mail@eworm.de>
+-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+----
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 1dee3680..ba1d73ba 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -28,7 +28,7 @@ all:	$(BUILDDIRS)
+- $(BUILDDIRS):
+- 	$(MAKE) -C $@
+- 
+--multipath multipathd mpathpersist: libmultipath
+-+libmpathpersist multipath multipathd mpathpersist: libmultipath
+- mpathpersist:  libmpathpersist
+- 
+- $(BUILDDIRS.clean):
+--- 
+-2.28.0
+-
+diff --git a/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch b/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
+deleted file mode 100644
+index 5154eb4297..0000000000
+--- a/package/multipath-tools/0003-fix-boolean-value-with-json-c-0.14.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 82129852d74785267f95ef598ac483ff9af38a55 Mon Sep 17 00:00:00 2001
+-From: "mail at eworm.de" <mail@eworm.de>
+-Date: Sat, 25 Apr 2020 21:11:13 +0200
+-Subject: [PATCH] fix boolean value with json-c 0.14
+-
+-Upstream json-c removed the TRUE and FALSE defines in commit
+-0992aac61f8b087efd7094e9ac2b84fa9c040fcd.
+-
+-[mwilck]: Use stdbool.h, and keep the log message unchanged.
+-
+-Signed-off-by: Christian Hesse <mail@eworm.de>
+-Signed-off-by: Martin Wilck <mwilck@suse.com>
+-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+----
+- libdmmp/libdmmp_private.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/libdmmp/libdmmp_private.h b/libdmmp/libdmmp_private.h
+-index ac85b63f..b1a6ddea 100644
+---- a/libdmmp/libdmmp_private.h
+-+++ b/libdmmp/libdmmp_private.h
+-@@ -30,6 +30,7 @@
+- #include <stdint.h>
+- #include <string.h>
+- #include <assert.h>
+-+#include <stdbool.h>
+- #include <json.h>
+- 
+- #include "libdmmp/libdmmp.h"
+-@@ -82,7 +83,7 @@ static out_type func_name(struct dmmp_context *ctx, const char *var_name) { \
+- do { \
+- 	json_type j_type = json_type_null; \
+- 	json_object *j_obj_tmp = NULL; \
+--	if (json_object_object_get_ex(j_obj, key, &j_obj_tmp) != TRUE) { \
+-+	if (json_object_object_get_ex(j_obj, key, &j_obj_tmp) != true) { \
+- 		_error(ctx, "Invalid JSON output from multipathd IPC: " \
+- 		       "key '%s' not found", key); \
+- 		rc = DMMP_ERR_IPC_ERROR; \
+--- 
+-2.28.0
+-
+diff --git a/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch b/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch
+deleted file mode 100644
+index 43bb305856..0000000000
+--- a/package/multipath-tools/0004-multipath-tools-Makefile-add-install-dependency.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From ec2b935d2af33651f34de8bd6e428156005c2e3d Mon Sep 17 00:00:00 2001
+-From: Martin Wilck <mwilck@suse.com>
+-Date: Tue, 12 May 2020 22:13:51 +0200
+-Subject: [PATCH] multipath-tools Makefile: add install dependency
+-
+-$(libdir) must exist before running "make install" on prioritizer, checker,
+-and foreign libraries.
+-
+-Cc: Christian Hesse <mail@eworm.de>
+-
+-Signed-off-by: Martin Wilck <mwilck@suse.com>
+-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
+----
+- Makefile | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/Makefile b/Makefile
+-index fec3b73b..8bcaba66 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -32,6 +32,10 @@ libmultipath libdmmp: libmpathcmd
+- libmpathpersist multipath multipathd: libmultipath
+- mpathpersist multipathd:  libmpathpersist
+- 
+-+libmultipath/checkers.install \
+-+	libmultipath/prioritizers.install \
+-+	libmultipath/foreign.install: libmultipath.install
+-+
+- $(BUILDDIRS.clean):
+- 	$(MAKE) -C ${@:.clean=} clean
+- 
+--- 
+-2.28.0
+-
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index 7eaf246094..b6ce6164b6 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  ccd73bf67621161d9e42d1a770c3a7efff6e252433e8b8ed5f64a88cb5e7151d  multipath-tools-0.8.4.tar.gz
++sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 60ca90b700..d5cca7ba57 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MULTIPATH_TOOLS_VERSION = 0.8.4
+-MULTIPATH_TOOLS_SITE = $(call github,openSUSE,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
++MULTIPATH_TOOLS_VERSION = 0.8.5
++MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+ MULTIPATH_TOOLS_LICENSE = LGPL-2.0
+ MULTIPATH_TOOLS_LICENSE_FILES = COPYING
+ MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
+-- 
+2.29.2
