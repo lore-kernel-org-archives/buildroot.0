@@ -1,11 +1,9 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 21 Nov 2020 11:06:18 +0100
-Subject: [Buildroot] [PATCH v4 4/5] board: add nvidia jetson tx2 support
-In-Reply-To: <bcfb1b77-8962-674f-1c08-fa7e60ec208e@smile.fr>
+Date: Sat, 21 Nov 2020 11:18:58 +0100
+Subject: [Buildroot] [PATCH v4 1/5] package/nvidia-modprobe: new package
+In-Reply-To: <20201119075328.8599-1-christian@paral.in>
 References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-4-christian@paral.in>
- <bcfb1b77-8962-674f-1c08-fa7e60ec208e@smile.fr>
-Message-ID: <f48b6a5d-9d98-7d5e-cb17-66e846b7508f@smile.fr>
+Message-ID: <c39da99f-96c6-66ef-8f49-4655112a5441@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,148 +12,135 @@ To: buildroot@busybox.net
 
 Hello Christian,
 
-Le 19/11/2020 ? 14:40, Romain Naour a ?crit?:
-> Hello Christian,
+Le 19/11/2020 ? 08:53, Christian Stewart a ?crit?:
+> nvidia-modprobe package adds a utility and headers for probing the NVIDIA
+> hardware at runtime.
 > 
-> Le 19/11/2020 ? 08:53, Christian Stewart a ?crit?:
->> Tested-by: Asaf Kahlon <asafka7@gmail.com>
->> Signed-off-by: Christian Stewart <christian@paral.in>
->>
->> ---
->>
->> v3 -> v4:
->>
->>  - thanks Romain for the review
->>  - cjs: added gcc + binutils version specifiers
->>  - tested against devkit hardware
->>
->> Signed-off-by: Christian Stewart <christian@paral.in>
->> ---
->>  board/jetson/tx2/readme.txt | 83 +++++++++++++++++++++++++++++++++++++
->>  board/jetsontx2             |  1 +
->>  configs/jetsontx2_defconfig | 64 ++++++++++++++++++++++++++++
->>  3 files changed, 148 insertions(+)
->>  create mode 100644 board/jetson/tx2/readme.txt
->>  create mode 120000 board/jetsontx2
->>  create mode 100644 configs/jetsontx2_defconfig
->>
-
-[...]
-
->> +++ b/configs/jetsontx2_defconfig
->> @@ -0,0 +1,64 @@
->> +BR2_aarch64=y
->> +BR2_cortex_a57=y
->> +BR2_ARM_FPU_FP_ARMV8=y
->> +
->> +# enable specific optimizations
->> +BR2_TARGET_OPTIMIZATION="-march=armv8-a+crypto -mcpu=cortex-a57+crypto"
->> +
->> +# Toolchain reference: docs.nvidia.com: "Jetson Linux Driver Package Toolchain"
->> +BR2_TOOLCHAIN_BUILDROOT=y
->> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
->> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
->> +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-
-Glibc toolchains already select locale and whar support.
-
->> +BR2_BINUTILS_VERSION_2_32_X=y
-
-I'm not sure why you need this version.
-
->> +BR2_GCC_VERSION_7_X=y
+> https://github.com/NVIDIA/nvidia-modprobe
 > 
-> This means that you are not working on Buildroot master because gcc 7 has been
-> removed already.
+> Signed-off-by: Christian Stewart <christian@paral.in>
+> ---
+>  package/Config.in                            |  1 +
+>  package/nvidia-modprobe/Config.in            | 12 ++++++
+>  package/nvidia-modprobe/nvidia-modprobe.hash |  3 ++
+>  package/nvidia-modprobe/nvidia-modprobe.mk   | 45 ++++++++++++++++++++
+>  4 files changed, 61 insertions(+)
+>  create mode 100644 package/nvidia-modprobe/Config.in
+>  create mode 100644 package/nvidia-modprobe/nvidia-modprobe.hash
+>  create mode 100644 package/nvidia-modprobe/nvidia-modprobe.mk
 > 
-> This is anoying... either the latest NVIDIA SDK (jetpack 4.4.1) is already out
-> of date because it require an old gcc version or gcc is moving too fast for such
-> sdk.
-> 
-> Your work on this series must be discussed with other maintainers.
-> Wait some time before sending v5.
+> diff --git a/package/Config.in b/package/Config.in
+> index 016a99ed1a..fa1b5d35e9 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -502,6 +502,7 @@ endmenu
+>  	source "package/nanocom/Config.in"
+>  	source "package/neard/Config.in"
+>  	source "package/nvidia-driver/Config.in"
+> +	source "package/nvidia-modprobe/Config.in"
+>  	source "package/nvme/Config.in"
+>  	source "package/ofono/Config.in"
+>  	source "package/on2-8170-modules/Config.in"
+> diff --git a/package/nvidia-modprobe/Config.in b/package/nvidia-modprobe/Config.in
+> new file mode 100644
+> index 0000000000..35953a33d4
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_NVIDIA_MODPROBE
+> +	bool "nvidia-modprobe"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-Actually I would suggest to use the Linaro aarch64 2018.05
-(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64) because it's the toolchain recommended
-and used by Nvidia.
+glibc toolchains already select BR2_TOOLCHAIN_HAS_THREADS.
 
-See: https://developer.nvidia.com/gcc-linaro-731-201805-sources
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  nvidia-modprobe package adds a utility and headers for
+> +	  probing the NVIDIA hardware at runtime.
+> +
+> +	  https://github.com/NVIDIA/nvidia-modprobe
+> +
+> +comment "nvidia-modprobe needs a glibc toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAN_USES_GLIBC
+> diff --git a/package/nvidia-modprobe/nvidia-modprobe.hash b/package/nvidia-modprobe/nvidia-modprobe.hash
+> new file mode 100644
+> index 0000000000..99908680f0
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/nvidia-modprobe.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed:
+> +sha256 396b4102d3075a2dee3024652fae206a1b38ace54b8efb1e2c20757a11ec19f1  nvidia-modprobe-450.57.tar.gz
+> +sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/nvidia-modprobe/nvidia-modprobe.mk b/package/nvidia-modprobe/nvidia-modprobe.mk
+> new file mode 100644
+> index 0000000000..7eeee6716c
+> --- /dev/null
+> +++ b/package/nvidia-modprobe/nvidia-modprobe.mk
+> @@ -0,0 +1,45 @@
+> +################################################################################
+> +#
+> +# nvidia-modprobe
+> +#
+> +################################################################################
+> +
+> +NVIDIA_MODPROBE_VERSION = 450.57
+> +NVIDIA_MODPROBE_SITE = $(call github,NVIDIA,nvidia-modprobe,$(NVIDIA_MODPROBE_VERSION))
+> +NVIDIA_MODPROBE_LICENSE = GPL-2
 
-> 
->> +BR2_GCC_ENABLE_LTO=n
-> 
-> Should be:
-> # BR2_GCC_ENABLE_LTO is not set
-> 
-> Best regards,
-> Romain
-> 
-> 
->> +BR2_USE_MMU=y
->> +
->> +BR2_SYSTEM_DHCP="eth0"
->> +
->> +# Linux headers same as kernel, a 4.9 series
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
->> +BR2_KERNEL_HEADERS_AS_KERNEL=y
+The license should use identifier like GPL-2.0 or GPL-2.0+.
+Here it should be GPL-2.0.
 
-We don't need this if we use the Linaro toolchain.
+> +NVIDIA_MODPROBE_LICENSE_FILES = COPYING
+> +
+> +NVIDIA_MODPROBE_DEPENDENCIES = host-pkgconf
 
->> +
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->> +# patches-l4t-r32.4
->> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,madisongh,linux-tegra-4.9,0be1a57448010ae60505acf4e2153638455cee7c)/linux-tegra-4.9.140-r1.tar.gz"
->> +BR2_LINUX_KERNEL_DEFCONFIG="tegra"
->> +
->> +# Build the DTB from the kernel sources
->> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
->> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="_ddot_/_ddot_/_ddot_/_ddot_/nvidia/platform/t18x/quill/kernel-dts/tegra186-quill-p3310-1000-c03-00-base"
->> +
->> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->> +
->> +BR2_PACKAGE_LINUX4TEGRA=y
->> +BR2_PACKAGE_LINUX4TEGRA_PLATFORM_T186REF=y
->> +
->> +# TODO: NVIDIA_CONTAINER_TOOLKIT requires a go-module integration.
->> +# BR2_PACKAGE_NVIDIA_CONTAINER_TOOLKIT=y
->> +
->> +BR2_PACKAGE_LINUX_FIRMWARE=y
->> +BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
->> +
->> +# Required tools to create the image
->> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
->> +BR2_PACKAGE_HOST_JQ=y
->> +BR2_PACKAGE_HOST_PARTED=y
->> +
->> +# Filesystem / image
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +BR2_TARGET_ROOTFS_EXT2_4=y
->> +BR2_TARGET_ROOTFS_EXT2_SIZE="2000M"
+Why ? the binary is build by using gcc directly without any build system.
 
-This is huge, here target directory is only 215Mo after building this defconfig.
+> +NVIDIA_MODPROBE_INSTALL_STAGING = YES
+> +
+> +define NVIDIA_MODPROBE_BUILD_CMDS
+> +	mkdir -p $(@D)/bin
+> +	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+> +		-I $(@D)/common-utils -I $(@D)/modprobe-utils \
+> +		-o $(@D)/bin/nvidia-modprobe \
+> +		-DNV_LINUX=true -DPROGRAM_NAME=\"nvidia-modprobe\" \
+> +		-DNVIDIA_VERSION=\"$(NVIDIA_MODPROBE_VERSION)\" \
+> +		$(@D)/nvidia-modprobe.c $(@D)/modprobe-utils/nvidia-modprobe-utils.c \
+> +		$(@D)/modprobe-utils/pci-sysfs.c $(@D)/common-utils/common-utils.c \
+> +		$(@D)/common-utils/msg.c $(@D)/common-utils/nvgetopt.c
+> +endef
 
-[target]$ du -hs .
-215M
+There is a Makefile why not using it ?
+Ok it want to install the man pages but it should be easy to fix it.
+
+> +
+> +define NVIDIA_MODPROBE_INSTALL_STAGING_CMDS
+> +	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/nvidia-modprobe-utils.h \
+> +		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-modprobe-utils.h
+> +	$(INSTALL) -D -m 644 $(@D)/modprobe-utils/pci-enum.h \
+> +		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/pci-enum.h
+> +	$(INSTALL) -D -m 644 $(@D)/common-utils/common-utils.h \
+> +		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvidia-common-utils.h
+> +	$(INSTALL) -D -m 644 $(@D)/common-utils/msg.h \
+> +		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/msg.h
+> +	$(INSTALL) -D -m 644 $(@D)/common-utils/nvgetopt.h \
+> +		$(STAGING_DIR)/usr/include/nvidia-modprobe-utils/nvgetopt.h
+> +endef
+
+Same, we really don't want to maintain the gcc command line and the list of
+installed files. The Makefile must do it for us :)
+
+> +
+> +define NVIDIA_MODPROBE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 0755 $(@D)/bin/nvidia-modprobe \
+> +		$(TARGET_DIR)/usr/bin/nvidia-modprobe
+> +endef
+
+Same.
 
 Best regards,
 Romain
 
->> +# BR2_TARGET_ROOTFS_TAR is not set
->> +
->> +# Uboot
->> +BR2_TARGET_UBOOT=y
->> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="p2771-0000-500"
->> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
->> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,paralin,u-boot-tegra,e6da093be3cc593ef4294e1922b3391ede9c94da)/u-boot-tegra-l4t-r32.4-v2016.7.tar.gz"
->> +BR2_TARGET_UBOOT_FORMAT_DTB_BIN=y
->> +BR2_TARGET_UBOOT_NEEDS_DTC=y
->>
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +
+> +$(eval $(generic-package))
 > 
