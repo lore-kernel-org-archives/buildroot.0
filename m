@@ -1,11 +1,12 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 21 Nov 2020 12:45:23 -0800
-Subject: [Buildroot] [PATCH v4 2/5] package/linux4tegra: new package
-In-Reply-To: <25b062ad-cd77-fc0b-8ed0-934f48669bf1@gmail.com>
+Date: Sat, 21 Nov 2020 12:54:44 -0800
+Subject: [Buildroot] [PATCH v4 3/5] package/libnvidia-container: new
+ package
+In-Reply-To: <5f5c5a57-72c4-d7c9-5395-9042b49a5441@gmail.com>
 References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-2-christian@paral.in>
- <25b062ad-cd77-fc0b-8ed0-934f48669bf1@gmail.com>
-Message-ID: <CA+h8R2r0J8iaMXNOPcQFK9mNbfHfLu-rZckAyihMDVYE0+28Qw@mail.gmail.com>
+ <20201119075328.8599-3-christian@paral.in>
+ <5f5c5a57-72c4-d7c9-5395-9042b49a5441@gmail.com>
+Message-ID: <CA+h8R2oXi6Bf4LnP=H5jcm7j3QodnffCDAWgnU8UU1gykmdu0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,46 +15,56 @@ To: buildroot@busybox.net
 
 Hi Romain,
 
-On Sat, Nov 21, 2020 at 2:40 AM Romain Naour <romain.naour@gmail.com> wrote:
-[snip]
+On Sat, Nov 21, 2020 at 2:55 AM Romain Naour <romain.naour@gmail.com> wrote:
 
-I applied the requested comment changes, patch change, and hash file
-tabs -> spaces change to the latest revision:
+> This is really a huge patch...
 
-https://github.com/skiffos/buildroot/tree/tx2
+Because it includes a couple of headers from nvidia-modprobe. It's
+necessary for the build to work. I wouldn't add the patch otherwise.
 
+If you would like to take the time to find some alternative...
 
-> > +define LINUX4TEGRA_INSTALL_IMAGES_CMDS
-> > +     cp -r $(@D)/. $(BINARIES_DIR)/linux4tegra
-> > +endef
+> > +Subject: [PATCH] Remove dependency handling from Makefile
 > > +
-> > +LINUX4TEGRA_RSYNC = \
-> > +     rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> > +             --chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
-> > +             --keep-dirlinks --exclude=ld.so.conf.d
+> > +Buildroot will handle this for the makefile.
 > > +
-> > +define LINUX4TEGRA_INSTALL_TARGET_CMDS
-> > +     # install nvidia_drivers
-> > +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
-> > +     # install nvidia_configs
-> > +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
-> > +     # install nvidia_tools
-> > +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
-> > +endef
+> > +Signed-off-by: Christian Stewart <christian@paral.in>
+> > +---
 >
-> This install a lot for prebuild binaries for example libGLX_nvidia.so.0.
-> This means that this package should be at least a LIBGL provider etc.
+> Same
+
+??
+
+> > @@ -0,0 +1,18 @@
+> > +config BR2_PACKAGE_LIBNVIDIA_CONTAINER
+> > +     bool "libnvidia-container"
+> > +     depends on BR2_SHARED_LIBS
 >
-> There is a long list of shared libraries provided by this package, make sure to
-> not override anything already installed by anoter package (ex: libdrm.so.2)
+> BR2_SHARED_STATIC_LIBS maybe
 
-Unfortunately this is beyond my scope in Buildroot, so if someone else
-has a chance to take a look at marking LIBGL provided by this package,
-please go ahead.
+??
 
-I'm not actually using the graphics libraries provided by Buildroot in
-my applications, so it's important to me that linux4tegra compile even
-if the graphics packages are not available.
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # tirpc
+>
+> Already selected by glibc toolchain.
 
-Best regards,
+OK noted & removed.
+
+> > +
+> > +LIBNVIDIA_CONTAINER_MAKE_OPTS = \
+> > +     CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+> > +     OBJCPY="$(TARGET_OBJCOPY)" \
+> > +     RPCGEN="$(HOST_DIR)/bin/rpcgen" \
+> > +     WITH_LIBELF=yes \
+> > +     WITH_TIRPC=no
+>
+> Why adding libtirpc in the dependencies and using WITH_TIRPC=no ?
+
+Because, without it, we get this build error:
+
+libnvidia-container-1.2.0/src/driver.c:23:10: fatal error:
+driver_rpc.h: No such file or directory
+   23 | #include "driver_rpc.h"
+
+Best,
 Christian
