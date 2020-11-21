@@ -1,52 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 00:21:49 +0100
-Subject: [Buildroot] [PATCH] package/libkrb5: security bump to version 1.18.3
-Message-ID: <20201121232149.7823-1-peter@korsgaard.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 22 Nov 2020 00:25:22 +0100
+Subject: [Buildroot] [PATCH v4 3/5] package/libnvidia-container: new
+ package
+In-Reply-To: <CA+h8R2oXi6Bf4LnP=H5jcm7j3QodnffCDAWgnU8UU1gykmdu0w@mail.gmail.com>
+References: <20201119075328.8599-1-christian@paral.in>
+ <20201119075328.8599-3-christian@paral.in>
+ <5f5c5a57-72c4-d7c9-5395-9042b49a5441@gmail.com>
+ <CA+h8R2oXi6Bf4LnP=H5jcm7j3QodnffCDAWgnU8UU1gykmdu0w@mail.gmail.com>
+Message-ID: <a07239dd-839a-7f77-baa7-f6d2cee52473@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hello Christian,
 
-- CVE-2020-28196: MIT Kerberos 5 (aka krb5) before 1.17.2 and 1.18.x before
-  1.18.3 allows unbounded recursion via an ASN.1-encoded Kerberos message
-  because the lib/krb5/asn.1/asn1_encode.c support for BER indefinite
-  lengths lacks a recursion limit.
+Le 21/11/2020 ? 21:54, Christian Stewart a ?crit?:
+> Hi Romain,
+> 
+> On Sat, Nov 21, 2020 at 2:55 AM Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>> This is really a huge patch...
+> 
+> Because it includes a couple of headers from nvidia-modprobe. It's
+> necessary for the build to work. I wouldn't add the patch otherwise.
+> 
+> If you would like to take the time to find some alternative...
 
-Also fix .hash file indentation.
+I don't have the time to search an test any alternative solution.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libkrb5/libkrb5.hash | 4 ++--
- package/libkrb5/libkrb5.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+>>> +Subject: [PATCH] Remove dependency handling from Makefile
+>>> +
+>>> +Buildroot will handle this for the makefile.
+>>> +
+>>> +Signed-off-by: Christian Stewart <christian@paral.in>
+>>> +---
+>>
+>> Same
+> 
+> ??
 
-diff --git a/package/libkrb5/libkrb5.hash b/package/libkrb5/libkrb5.hash
-index 658c4539f6..e5b24a3f70 100644
---- a/package/libkrb5/libkrb5.hash
-+++ b/package/libkrb5/libkrb5.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	02a4e700f10936f937cd1a4c303cab8687a11abecc6107bd4b706b9329cd5400	krb5-1.18.1.tar.gz
-+sha256	e61783c292b5efd9afb45c555a80dd267ac67eebabca42185362bee6c4fbd719  krb5-1.18.3.tar.gz
- 
- # Hash for license file:
--sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d	NOTICE
-+sha256	b7a5f14a8719bce5e49a761998aa55438fc890fb40f71228d6a49546f6d5690d  NOTICE
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index f7cd677def..b46e7c6c50 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBKRB5_VERSION_MAJOR = 1.18
--LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).1
-+LIBKRB5_VERSION = $(LIBKRB5_VERSION_MAJOR).3
- LIBKRB5_SITE = https://web.mit.edu/kerberos/dist/krb5/$(LIBKRB5_VERSION_MAJOR)
- LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
- LIBKRB5_SUBDIR = src
--- 
-2.20.1
+Another big patch impossible to review.
+
+I'm not sure if maintainers will accept it as is.
+
+> 
+>>> @@ -0,0 +1,18 @@
+>>> +config BR2_PACKAGE_LIBNVIDIA_CONTAINER
+>>> +     bool "libnvidia-container"
+>>> +     depends on BR2_SHARED_LIBS
+>>
+>> BR2_SHARED_STATIC_LIBS maybe
+> 
+> ??
+
+I meant, maybe you only need to use:
+depends on !BR2_STATIC_LIBS
+
+> 
+>>> +     depends on BR2_TOOLCHAIN_HAS_THREADS # tirpc
+>>
+>> Already selected by glibc toolchain.
+> 
+> OK noted & removed.
+> 
+>>> +
+>>> +LIBNVIDIA_CONTAINER_MAKE_OPTS = \
+>>> +     CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+>>> +     OBJCPY="$(TARGET_OBJCOPY)" \
+>>> +     RPCGEN="$(HOST_DIR)/bin/rpcgen" \
+>>> +     WITH_LIBELF=yes \
+>>> +     WITH_TIRPC=no
+>>
+>> Why adding libtirpc in the dependencies and using WITH_TIRPC=no ?
+> 
+> Because, without it, we get this build error:
+> 
+> libnvidia-container-1.2.0/src/driver.c:23:10: fatal error:
+> driver_rpc.h: No such file or directory
+>    23 | #include "driver_rpc.h"
+
+So you can remove libtirpc from dependency ?
+
+Best regards,
+Romain
+
+
+> 
+> Best,
+> Christian
+> 
