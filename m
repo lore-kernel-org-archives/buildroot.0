@@ -1,123 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 22 Nov 2020 18:04:14 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/spandsp: disable MMX on i686
-Message-ID: <20201122170414.932130-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 22 Nov 2020 19:27:40 +0200
+Subject: [Buildroot] [PATCH v2 1/1] boot/arm-trusted-firmware: Forward
+ stack protection configuration
+In-Reply-To: <20201122143731.3374802-2-christoph.muellner@theobroma-systems.com>
+References: <20201122143731.3374802-1-christoph.muellner@theobroma-systems.com>
+ <20201122143731.3374802-2-christoph.muellner@theobroma-systems.com>
+Message-ID: <87wnydwbcj.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MMX raises the following build failure on i686:
+Hi Christoph,
 
-gsm0610_rpe.c: In function 'gsm0610_rpe_encoding':
-gsm0610_rpe.c:132:5: error: invalid 'asm': invalid constraints for operand
-     __asm__ __volatile__(
-     ^~~~~~~
+On Sun, Nov 22 2020, Christoph M?llner wrote:
+> TF-A supports stack smashing protection (-fstack-protector-*).
+> However it currenlty fails to build when built with BR2_SSP_*
+> enabled, because stack protection needs to be enabled for the
+> TF-A build process itself as well to generate the required
+> symbols (e.g. __stack_chk_guard).
 
-Fixes:
- - http://autobuild.buildroot.org/results/3e986c3109c392afe47fc98446a2563ac9776cf6
- - http://autobuild.buildroot.org/results/00ed4a4285b35d8ec0be09217e5b503e4820d971
+So you are saying that the toolchain wrapper actually breaks ATF build
+when SSP is enabled. Is that correct? If so, this patch is not (only)
+about enabling the SSP feature for ATF, but about fixing the ATF
+build. Can you add the build failure error message to the commit log?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Baruch Siach):
- - MMX is always enabled on x86_64 so enable MMX depending on BR2_x86_64
-   value and drop BR2_X86_CPU_HAS_MMX
+Also, the subject line should say something like "fix build with SSP
+enabled".
 
- ...igure.ac-fix-AVX-SSE-and-MMX-options.patch | 60 +++++++++++++++++++
- package/spandsp/spandsp.mk                    |  5 +-
- 2 files changed, 64 insertions(+), 1 deletion(-)
- create mode 100644 package/spandsp/0001-configure.ac-fix-AVX-SSE-and-MMX-options.patch
+This patch should be applied to the master branch, and backported to
+stable branches, I believe.
 
-diff --git a/package/spandsp/0001-configure.ac-fix-AVX-SSE-and-MMX-options.patch b/package/spandsp/0001-configure.ac-fix-AVX-SSE-and-MMX-options.patch
-new file mode 100644
-index 0000000000..50eecfbf4b
---- /dev/null
-+++ b/package/spandsp/0001-configure.ac-fix-AVX-SSE-and-MMX-options.patch
-@@ -0,0 +1,60 @@
-+From e7330bfe63efd0062fa51d50a4aaa0f1abd5ff75 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 22 Nov 2020 17:02:43 +0100
-+Subject: [PATCH] configure.ac: fix AVX, SSE and MMX options
-+
-+AVX, SSE and MMX options are broken since
-+https://github.com/freeswitch/spandsp/commit/87a900c70df73e128a5926587047f529105f5f64
-+
-+For example, when the user enables SSE, it will also enable MMX and the
-+user can't disable MMX
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/freeswitch/spandsp/pull/20]
-+---
-+ configure.ac | 8 --------
-+ 1 file changed, 8 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 83fb3fd..ac2592e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -486,35 +486,27 @@ armv7[bl] | armv7-*)
-+ x86_64-* | i386-* | i686-*)
-+     if test "$enable_avx2" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_AVX2], [1], [Use the AVX2 instruction set (i386 and x86_64 only).])
-+-        enable_avx="yes"
-+     fi
-+     if test "$enable_avx" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_AVX], [1], [Use the AVX instruction set (i386 and x86_64 only).])
-+-        enable_sse4_2="yes"
-+     fi
-+     if test "$enable_sse4_2" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSE4_2], [1], [Use the SSE4.2 instruction set (i386 and x86_64 only).])
-+-        enable_sse4_1="yes"
-+     fi
-+     if test "$enable_sse4_1" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSE4_1], [1], [Use the SSE4.1 instruction set (i386 and x86_64 only).])
-+-        enable_ssse3="yes"
-+     fi
-+     if test "$enable_ssse3" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSSE3], [1], [Use the SSSE3 instruction set (i386 and x86_64 only).])
-+-        enable_sse3="yes"
-+     fi
-+     if test "$enable_sse3" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSE3], [1], [Use the SSE3 instruction set (i386 and x86_64 only).])
-+-        enable_sse2="yes"
-+     fi
-+     if test "$enable_sse2" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSE2], [1], [Use the SSE2 instruction set (i386 and x86_64 only).])
-+-        enable_sse="yes"
-+     fi
-+     if test "$enable_sse" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_SSE], [1], [Use the SSE instruction set (i386 and x86_64 only).])
-+-        enable_mmx="yes"
-+     fi
-+     if test "$enable_mmx" = "yes" ; then
-+         AC_DEFINE([SPANDSP_USE_MMX], [1], [Use the MMX instruction set (i386 and x86_64 only).])
-+-- 
-+2.29.2
-+
-diff --git a/package/spandsp/spandsp.mk b/package/spandsp/spandsp.mk
-index 42c0e3bb69..4735212f31 100644
---- a/package/spandsp/spandsp.mk
-+++ b/package/spandsp/spandsp.mk
-@@ -8,14 +8,17 @@ SPANDSP_VERSION = 3.0.0-6ec23e5a7e
- SPANDSP_SITE = https://files.freeswitch.org/downloads/libs
- SPANDSP_LICENSE = LGPL-2.1 (library), GPL-2.0 (test suite)
- SPANDSP_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+SPANDSP_AUTORECONF = YES
- 
- SPANDSP_DEPENDENCIES = tiff host-pkgconf
- SPANDSP_INSTALL_STAGING = YES
- SPANDSP_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
- 
-+# MMX on i686 raises a build failure
- SPANDSP_CONF_OPTS = \
- 	--disable-builtin-tiff \
--	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx) \
-+	$(if $(BR2_x86_64),--enable-mmx,--disable-mmx) \
- 	$(if $(BR2_X86_CPU_HAS_SSE),--enable-sse,--disable-sse) \
- 	$(if $(BR2_X86_CPU_HAS_SSE2),--enable-sse2,--disable-sse2) \
- 	$(if $(BR2_X86_CPU_HAS_SSE3),--enable-sse3,--disable-sse3) \
+baruch
+
+> So in case we see that BR2_SSP_* is enabled, let's enable
+> the corresponding build flag for TF-A as documented in
+> the TF-A user guide.
+>
+> Tested on a Rockchip PX30 based system.
+>
+> Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
+> ---
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index a3553e36cf..0597cecf71 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -100,6 +100,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
+>  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
+>  endif
+>  
+> +ifeq ($(BR2_SSP_REGULAR),y)
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
+> +else ifeq ($(BR2_SSP_STRONG),y)
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
+> +else ifeq ($(BR2_SSP_ALL),y)
+> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
+> +endif
+> +
+>  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
+>  
+>  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+
+
 -- 
-2.29.2
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
