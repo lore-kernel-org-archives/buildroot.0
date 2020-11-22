@@ -1,66 +1,39 @@
-From: Sam Voss <sam.voss@gmail.com>
-Date: Sun, 22 Nov 2020 14:25:16 -0600
-Subject: [Buildroot] [PATCH next 06/12] package/tinifier: new package
-In-Reply-To: <CA+h8R2pMyptpELtQrtxtCN2W+s=zU_rwyYPOLrApotqD1AgCeQ@mail.gmail.com>
-References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
- <20201119213658.1232531-7-thomas.petazzoni@bootlin.com>
- <CALq67GDBMGctf5xsftX+nWfn8e7arP_1XN5S2Amt9h9nE-H2pQ@mail.gmail.com>
- <20201121180418.GP771438@scaer>
- <CA+h8R2pMyptpELtQrtxtCN2W+s=zU_rwyYPOLrApotqD1AgCeQ@mail.gmail.com>
-Message-ID: <CAK714xJX1V5S9tbJQ3aL8qUKfiFMRbw4ay63zHN8Jm0Vhj80_Q@mail.gmail.com>
+From: Ismael Luceno <ismael@iodev.co.uk>
+Date: Sun, 22 Nov 2020 21:51:53 +0100
+Subject: [Buildroot] [PATCH] package/axel: bump version to 2.17.10
+Message-ID: <20201122205153.7707-1-ismael@iodev.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, Yann,
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+---
+ package/axel/axel.hash | 2 +-
+ package/axel/axel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, Nov 22, 2020 at 12:09 AM Christian Stewart <christian@paral.in> wrote:
->
-> Yann,
->
->
-> On Sat, Nov 21, 2020 at 10:04 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > I took a look at the legal-info side in regards to downloading
-> > > packages with the post-processing support. This has been discussed
-> > > previously on the patch "[v3,09/10] package/ripgrep: add legal-info
-> > > for dependencies":
-> > >
-> > > https://patchwork.ozlabs.org/project/buildroot/patch/20200220160119.3407-9-patrick.havelange at essensium.com/
-> >
-> > legal-info is also something Thomas and I discussed and IRC when he
-> > posted his series.
-> >
-> > We know it is not perfect, but this can be extended in a followup
-> > series.
->
-> > > I understand add/showing these license and how to exactly handle this
-> > > are future additions.
-> >
-> > My idea is that the go/cargo/... infras would be responsible for
-> > providing "some kind of" post-legal-info hooks, so they can extend the
-> > licenses list and license files list as well.
-> >
-> > But really, I would like to make that a next step, so that the technical
-> > side of the support for package managers can get in sooner rather than
-> > later.
-> >
-> > If we can not in the end come up woth a satifying licensing report for
-> > those (or for some of those) package managers, we would at least have
-> > support for building them.
-> >
-> > FTR, Thomas and I already adressed that issue quite a while ago, and we
-> > concluded that it was not so obvious as one may initially think (I'd
-> > have to dig my IRC logs to find the explanations...)
->
-> If you're open to building + running host Go code as part of this
-> process, then it is straightforward to extract the module dependency
-> graph and the Licenses.
->
-> If we're doing this bash + makefile purism, then this is definitely not easy.
-
-Same with cargo - unfortunately though for cargo it isn't baked in and
-you need to install a plugin to do it. Not the best...but possible.
-
-Sam
+diff --git a/package/axel/axel.hash b/package/axel/axel.hash
+index 66d56b658177..552f9406521d 100644
+--- a/package/axel/axel.hash
++++ b/package/axel/axel.hash
+@@ -1,2 +1,2 @@
+-sha256  f1364d9b55d435efc6d32218097a50a63be7b1300138e698133cf19ad3aa3a54  axel-2.17.9.tar.xz
++sha256  46eb4f10a11c4e50320ae6a034ef03ffe59dc11c3c6542a9867a3e4dc0c4b44e  axel-2.17.10.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 0d5fc2a3c6b6..2118a3438ed0 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AXEL_VERSION = 2.17.9
++AXEL_VERSION = 2.17.10
+ AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/v$(AXEL_VERSION)
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
+ AXEL_LICENSE = GPL-2.0+
+-- 
+2.28.0
