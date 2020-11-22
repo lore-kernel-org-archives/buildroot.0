@@ -1,37 +1,147 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 15:26:49 +0100
-Subject: [Buildroot] [git commit] package/monkey: drop wrong comment
-Message-ID: <20201122141535.DC30B8390C@busybox.osuosl.org>
+Date: Sun, 22 Nov 2020 15:27:12 +0100
+Subject: [Buildroot] [git commit] package/musl: add upstream security fix
+ for CVE-2020-28928
+Message-ID: <20201122141535.E8CB786911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4ea32d0061585a41ef724124b82be337442ce2a
+commit: https://git.buildroot.net/buildroot/commit/?id=09caefda2a8aac8ea4dd3744791621a1c8321dab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 5fea6e2a2fa816c0c551bca184fb64fc96d76a08 forgot to remove the
-generic-package comment
+The wcsnrtombs function has been found to have multiple bugs in handling of
+destination buffer size when limiting the input character count, which can
+lead to infinite loop with no forward progress (no overflow) or writing past
+the end of the destination buffer.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For more details, see the advisory:
+https://www.openwall.com/lists/oss-security/2020/11/20/4
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/monkey/monkey.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ ...nrtombs-to-fix-buffer-overflow-and-other-.patch | 114 +++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
 
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index 6159f5522e..5264713120 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -10,10 +10,6 @@ MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
- MONKEY_LICENSE = Apache-2.0
- MONKEY_LICENSE_FILES = LICENSE
- 
--# This package has a configure script, but it's not using
--# autoconf/automake, so we're using the generic-package
--# infrastructure.
--
- MONKEY_CONF_OPTS = \
- 	-DINSTALL_SYSCONFDIR=/etc/monkey \
- 	-DINSTALL_WEBROOTDIR=/var/www \
+diff --git a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch b/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
+new file mode 100644
+index 0000000000..2fb29940a9
+--- /dev/null
++++ b/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
+@@ -0,0 +1,114 @@
++From 3ab2a4e02682df1382955071919d8aa3c3ec40d4 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Thu, 19 Nov 2020 17:12:43 -0500
++Subject: [PATCH] rewrite wcsnrtombs to fix buffer overflow and other bugs
++
++the original wcsnrtombs implementation, which has been largely
++untouched since 0.5.0, attempted to build input-length-limiting
++conversion on top of wcsrtombs, which only limits output length. as
++best I recall, this choice was made out of a mix of disdain over
++having yet another variant function to implement (added in POSIX 2008;
++not standard C) and preference not to switch things around and
++implement the wcsrtombs in terms of the more general new function,
++probably over namespace issues. the strategy employed was to impose
++output limits that would ensure the input limit wasn't exceeded, then
++finish up the tail character-at-a-time. unfortunately, none of that
++worked correctly.
++
++first, the logic in the wcsrtombs loop was wrong in that it could
++easily get stuck making no forward progress, by imposing an output
++limit too small to convert even one character.
++
++the character-at-a-time loop that followed was even worse. it made no
++effort to ensure that the converted multibyte character would fit in
++the remaining output space, only that there was a nonzero amount of
++output space remaining. it also employed an incorrect interpretation
++of wcrtomb's interface contract for converting the null character,
++thereby failing to act on end of input, and remaining space accounting
++was subject to unsigned wrap-around. together these errors allow
++unbounded overflow of the destination buffer, controlled by input
++length limit and input wchar_t string contents.
++
++given the extent to which this function was broken, it's plausible
++that most applications that would have been rendered exploitable were
++sufficiently broken not to be usable in the first place. however, it's
++also plausible that common (especially ASCII-only) inputs succeeded in
++the wcsrtombs loop, which mostly worked, while leaving the wildly
++erroneous code in the second loop exposed to particular non-ASCII
++inputs.
++
++CVE-2020-28928 has been assigned for this issue.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/multibyte/wcsnrtombs.c | 46 ++++++++++++++++----------------------
++ 1 file changed, 19 insertions(+), 27 deletions(-)
++
++diff --git a/src/multibyte/wcsnrtombs.c b/src/multibyte/wcsnrtombs.c
++index 676932b5..95e25e70 100644
++--- a/src/multibyte/wcsnrtombs.c
+++++ b/src/multibyte/wcsnrtombs.c
++@@ -1,41 +1,33 @@
++ #include <wchar.h>
+++#include <limits.h>
+++#include <string.h>
++ 
++ size_t wcsnrtombs(char *restrict dst, const wchar_t **restrict wcs, size_t wn, size_t n, mbstate_t *restrict st)
++ {
++-	size_t l, cnt=0, n2;
++-	char *s, buf[256];
++ 	const wchar_t *ws = *wcs;
++-	const wchar_t *tmp_ws;
++-
++-	if (!dst) s = buf, n = sizeof buf;
++-	else s = dst;
++-
++-	while ( ws && n && ( (n2=wn)>=n || n2>32 ) ) {
++-		if (n2>=n) n2=n;
++-		tmp_ws = ws;
++-		l = wcsrtombs(s, &ws, n2, 0);
++-		if (!(l+1)) {
++-			cnt = l;
++-			n = 0;
+++	size_t cnt = 0;
+++	if (!dst) n=0;
+++	while (ws && wn) {
+++		char tmp[MB_LEN_MAX];
+++		size_t l = wcrtomb(n<MB_LEN_MAX ? tmp : dst, *ws, 0);
+++		if (l==-1) {
+++			cnt = -1;
++ 			break;
++ 		}
++-		if (s != buf) {
++-			s += l;
+++		if (dst) {
+++			if (n<MB_LEN_MAX) {
+++				if (l>n) break;
+++				memcpy(dst, tmp, l);
+++			}
+++			dst += l;
++ 			n -= l;
++ 		}
++-		wn = ws ? wn - (ws - tmp_ws) : 0;
++-		cnt += l;
++-	}
++-	if (ws) while (n && wn) {
++-		l = wcrtomb(s, *ws, 0);
++-		if ((l+1)<=1) {
++-			if (!l) ws = 0;
++-			else cnt = l;
+++		if (!*ws) {
+++			ws = 0;
++ 			break;
++ 		}
++-		ws++; wn--;
++-		/* safe - this loop runs fewer than sizeof(buf) times */
++-		s+=l; n-=l;
+++		ws++;
+++		wn--;
++ 		cnt += l;
++ 	}
++ 	if (dst) *wcs = ws;
++-- 
++2.20.1
++
