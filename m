@@ -1,54 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 15:25:45 +0100
-Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.30.3
-Message-ID: <20201122141535.623FD86891@busybox.osuosl.org>
+Date: Sun, 22 Nov 2020 15:27:39 +0100
+Subject: [Buildroot] [git commit] package/cdrkit: fix static build with
+ libmagic
+Message-ID: <20201122141536.0264D86911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4485b583562eae8c8803a4ebd1af855efa0790f9
+commit: https://git.buildroot.net/buildroot/commit/?id=6ca1b3ee2a153d0bcde89576b41146155c03b8f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a minor release which solved a build issues and fixes a number
-of rendering issues. Release notes:
+libmagic is an optional dependency of gensoimage that can raise the
+following build failure:
 
-  https://webkitgtk.org/2020/11/20/webkitgtk2.30.3-released.html
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
+compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x828): undefined reference to `lzma_code'
+/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x848): undefined reference to `lzma_end'
+collect2: error: ld returned 1 exit status
+genisoimage/CMakeFiles/genisoimage.dir/build.make:628: recipe for target 'genisoimage/genisoimage' failed
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/7e06edc363817c9c9a1687ec89e9984a90a2012d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/cdrkit/cdrkit.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 30b8e4f11f..1849d9eff9 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.30.2.tar.xz.sums
--md5  2163f1f982c63cb8fa75bf1b36396304  webkitgtk-2.30.2.tar.xz
--sha1  e27d336570226645f861b5a00116c17da39f9df4  webkitgtk-2.30.2.tar.xz
--sha256  c467e0bc2bc610c2570928e3fd63cedaadc4719cbf9b04aa99f79dd71ad5682a  webkitgtk-2.30.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.30.3.tar.xz.sums
-+md5  3db32cffeab82efcade1ce77f94865c2  webkitgtk-2.30.3.tar.xz
-+sha1  6eed6e8a3c2f47533821169679fe381ceb0550be  webkitgtk-2.30.3.tar.xz
-+sha256  6dea14f03916882816f2fed9497a5103fc54b2ab8602ab145ca991e4951e5e7f  webkitgtk-2.30.3.tar.xz
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index f49d5150f3..67814f1418 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -18,5 +18,14 @@ else
+ CDRKIT_CONF_OPTS += -DBITFIELDS_HTOL=0
+ endif
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 84078f8b9a..0310f058f1 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.30.2
-+WEBKITGTK_VERSION = 2.30.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_FILE),y)
++CDRKIT_DEPENDENCIES += host-pkgconf file
++CDRKIT_CONF_OPTS += \
++	-DUSE_MAGIC=ON \
++	-DEXTRA_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libmagic`"
++else
++CDRKIT_CONF_OPTS += -DUSE_MAGIC=OFF
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
