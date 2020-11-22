@@ -1,22 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 15:27:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/monkey: drop wrong comment
-In-Reply-To: <20201120170045.422231-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 20 Nov 2020 18:00:45 +0100")
-References: <20201120170045.422231-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtz9wjpn.fsf@dell.be.48ers.dk>
+Date: Sun, 22 Nov 2020 15:27:17 +0100
+Subject: [Buildroot] [PATCH] package/musl: add upstream security fix for
+ CVE-2020-28928
+In-Reply-To: <20201120174632.28003-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 20 Nov 2020 18:46:32 +0100")
+References: <20201120174632.28003-1-peter@korsgaard.com>
+Message-ID: <87im9xwjp6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Commit 5fea6e2a2fa816c0c551bca184fb64fc96d76a08 forgot to remove the
- > generic-package comment
+ > The wcsnrtombs function has been found to have multiple bugs in handling of
+ > destination buffer size when limiting the input character count, which can
+ > lead to infinite loop with no forward progress (no overflow) or writing past
+ > the end of the destination buffer.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the advisory:
+ > https://www.openwall.com/lists/oss-security/2020/11/20/4
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
