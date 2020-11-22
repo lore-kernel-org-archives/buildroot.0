@@ -1,74 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 16:30:38 +0100
-Subject: [Buildroot] [PATCH] package/xinetd: add upstream security fix for
- CVE-2013-4342
-Message-ID: <20201122153038.8350-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 22 Nov 2020 16:33:01 +0100
+Subject: [Buildroot] [PATCH v1] package/wireless-regdb: bump version to
+ 2020.11.20
+In-Reply-To: <87a6v9wjn7.fsf@dell.be.48ers.dk>
+References: <20201120194130.20906-1-ps.report@gmx.net>
+ <87a6v9wjn7.fsf@dell.be.48ers.dk>
+Message-ID: <20201122163301.190f8b0b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xinetd does not enforce the user and group configuration directives for
-TCPMUX services, which causes these services to be run as root and makes it
-easier for remote attackers to gain privileges by leveraging another
-vulnerability in a service.
+Hello Peter,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...netd-ignores-user-and-group-directiv.patch | 29 +++++++++++++++++++
- package/xinetd/xinetd.mk                      |  3 ++
- 2 files changed, 32 insertions(+)
- create mode 100644 package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+On Sun, 22 Nov 2020 15:28:28 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-diff --git a/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
-new file mode 100644
-index 0000000000..bb2ee1fc9a
---- /dev/null
-+++ b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
-@@ -0,0 +1,29 @@
-+From 91e2401a219121eae15244a6b25d2e79c1af5864 Mon Sep 17 00:00:00 2001
-+From: Thomas Swan <thomas.swan@gmail.com>
-+Date: Wed, 2 Oct 2013 23:17:17 -0500
-+Subject: [PATCH] CVE-2013-4342: xinetd: ignores user and group directives for
-+ TCPMUX services
-+
-+Originally reported to Debian in 2005 <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=324678> and rediscovered <https://bugzilla.redhat.com/show_bug.cgi?id=1006100>, xinetd would execute TCPMUX services without dropping privilege to match the service configuration allowing the service to run with same privilege as the xinetd process (root).
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xinetd/builtins.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/xinetd/builtins.c b/xinetd/builtins.c
-+index 3b85579..34a5bac 100644
-+--- a/xinetd/builtins.c
-++++ b/xinetd/builtins.c
-+@@ -617,7 +617,7 @@ static void tcpmux_handler( const struct server *serp )
-+    if( SC_IS_INTERNAL( scp ) ) {
-+       SC_INTERNAL(scp, nserp);
-+    } else {
-+-      exec_server(nserp);
-++      child_process(nserp);
-+    }
-+ }
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index a2ba10df74..6d6767766b 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -9,6 +9,9 @@ XINETD_SITE = $(call github,xinetd-org,xinetd,xinetd-$(XINETD_VERSION))
- XINETD_LICENSE = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
- 
-+# 0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
-+XINETD_IGNORE_CVES += CVE-2013-4342
-+
- XINETD_CFLAGS = $(TARGET_CFLAGS)
- 
- # Three cases here:
--- 
-2.20.1
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> You didn't mark this for next. Is there a specific reason why this
+> should be applied to master?
+>
+
+At your choice ;-) (I was too undecided if a up-to-date wireless-regdb is
+important enough/accounts as bug fix or is stuff for next, but tending more
+to the up-to-date case...)
+
+Regards,
+Peter
+
+
+Short commit log taken from [1]:
+
+wireless-regdb: update regulatory database based on preceding
+wireless-regdb: Update regulatory rules for Kazakhstan (KZ)
+wireless-regdb: update 5.8 GHz regulatory rule for GB	Seth Forshee
+wireless-regdb: Update regulatory rules for Pakistan (PK) on 5GHz
+wireless-regdb: Update regulatory rules for Croatia (HR)
+wireless-regdb: restore channel 12 & 13 limitation in the US
+wireless-regdb: update regulatory rules for Egypt (EG)
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git/log/
