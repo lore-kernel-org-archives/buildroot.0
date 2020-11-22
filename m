@@ -1,51 +1,46 @@
-From: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@theobroma-systems.com>
-Date: Sun, 22 Nov 2020 15:37:31 +0100
-Subject: [Buildroot] [PATCH v2 1/1] boot/arm-trusted-firmware: Forward stack
- protection configuration
-In-Reply-To: <20201122143731.3374802-1-christoph.muellner@theobroma-systems.com>
-References: <20201122143731.3374802-1-christoph.muellner@theobroma-systems.com>
-Message-ID: <20201122143731.3374802-2-christoph.muellner@theobroma-systems.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Nov 2020 15:38:15 +0100
+Subject: [Buildroot] [git commit branch/next] package/jpeg-turbo: fix
+ license hash
+Message-ID: <20201122142352.2AEAB86575@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TF-A supports stack smashing protection (-fstack-protector-*).
-However it currenlty fails to build when built with BR2_SSP_*
-enabled, because stack protection needs to be enabled for the
-TF-A build process itself as well to generate the required
-symbols (e.g. __stack_chk_guard).
+commit: https://git.buildroot.net/buildroot/commit/?id=0279850fef955f03690d0df106e42ca2dab2ef4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-So in case we see that BR2_SSP_* is enabled, let's enable
-the corresponding build flag for TF-A as documented in
-the TF-A user guide.
+Commit 105d61c85062b18bc9555011f909c8c8a5a33277 forgot to update hash of
+LICENSE.md (update in year:
+https://github.com/libjpeg-turbo/libjpeg-turbo/commit/00607ec260efa4cfe10f9b36d6e3d3590ae92d79)
 
-Tested on a Rockchip PX30 based system.
+While at it, also update indentation in hash file (two spaces)
 
-Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/66fb5c0171af73d4c1c93241b285fac8f8f494f7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a3553e36cf..0597cecf71 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -100,6 +100,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
- endif
- 
-+ifeq ($(BR2_SSP_REGULAR),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
-+else ifeq ($(BR2_SSP_STRONG),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
-+else ifeq ($(BR2_SSP_ALL),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
-+endif
-+
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
--- 
-2.28.0
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index abf129bd93..c4d4a0274f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
+-sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
+-md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
++sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+-sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+-sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
++sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
++sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
++sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
