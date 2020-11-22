@@ -1,49 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 22 Nov 2020 15:28:56 +0100
-Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 1.0.2
-Message-ID: <20201122141536.109968390C@busybox.osuosl.org>
+Date: Sun, 22 Nov 2020 15:25:45 +0100
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.30.3
+Message-ID: <20201122141535.623FD86891@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55e28a526e0d123634790fb68454680679164b3d
+commit: https://git.buildroot.net/buildroot/commit/?id=4485b583562eae8c8803a4ebd1af855efa0790f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+This is a minor release which solved a build issues and fixes a number
+of rendering issues. Release notes:
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
+  https://webkitgtk.org/2020/11/20/webkitgtk2.30.3-released.html
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxkbcommon/libxkbcommon.hash | 4 ++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index c643f1c4ac..1725eaecfb 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-September/041609.html
--sha256  ab68b25341c99f2218d7cf3dad459c1827f411219901ade05bbccbdb856b6c8d  libxkbcommon-1.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
-+sha256  0ea2f88f4472bbf8170c5a7112f5af8848a908ca15df9e9086c3de0189612b2b  libxkbcommon-1.0.2.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 30b8e4f11f..1849d9eff9 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.2.tar.xz.sums
+-md5  2163f1f982c63cb8fa75bf1b36396304  webkitgtk-2.30.2.tar.xz
+-sha1  e27d336570226645f861b5a00116c17da39f9df4  webkitgtk-2.30.2.tar.xz
+-sha256  c467e0bc2bc610c2570928e3fd63cedaadc4719cbf9b04aa99f79dd71ad5682a  webkitgtk-2.30.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.30.3.tar.xz.sums
++md5  3db32cffeab82efcade1ce77f94865c2  webkitgtk-2.30.3.tar.xz
++sha1  6eed6e8a3c2f47533821169679fe381ceb0550be  webkitgtk-2.30.3.tar.xz
++sha256  6dea14f03916882816f2fed9497a5103fc54b2ab8602ab145ca991e4951e5e7f  webkitgtk-2.30.3.tar.xz
  
- # License file:
- sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index bf1bd058cb..cce5c02735 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 84078f8b9a..0310f058f1 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBXKBCOMMON_VERSION = 1.0.1
-+LIBXKBCOMMON_VERSION = 1.0.2
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+-WEBKITGTK_VERSION = 2.30.2
++WEBKITGTK_VERSION = 2.30.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
