@@ -1,65 +1,39 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Sun, 22 Nov 2020 15:30:54 +0100
-Subject: [Buildroot] [PATCH] package/python-pip: needs hashlib module
-Message-ID: <20201122143054.2184089-1-b.bilas@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 22 Nov 2020 15:30:56 +0100
+Subject: [Buildroot] [git commit branch/next] package/abootimg: fix host
+ build
+Message-ID: <20201122141634.8F3AF86953@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without hashlib module pip returns the following errors:
+commit: https://git.buildroot.net/buildroot/commit/?id=189880db3a41098596942ebf328a1dca704a729a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-# pip
-ValueError: unsupported hash type sha224
-ERROR:root:code for hash sha256 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha256
-ERROR:root:code for hash sha384 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha384
-ERROR:root:code for hash sha512 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha512
-Traceback (most recent call last):
-  File "/usr/bin/pip", line 11, in <module>
-    load_entry_point('pip==20.0.2', 'console_scripts', 'pip')()
-  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/main.py", line 73, in main
-  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/__init__.py", line 96, in create_command
-  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
-  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/install.py", line 24, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/req_command.py", line 15, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/index/package_finder.py", line 21, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/index/collector.py", line 12, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/requests/__init__.py", line 43, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/__init__.py", line 7, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connectionpool.py", line 29, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connection.py", line 40, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/__init__.py", line 7, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/ssl_.py", line 8, in <module>
-ImportError: cannot import name md5
+Commit 05b11e24c3d4013d3caa0453d9bada9905795e35 wrongly added
+ABOOTIMG_HOST_DEPENDENCIES instead of HOST_ABOOTIMG_DEPENDENCIES
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/c13b5424cec151cd3ad71b1cb38d6ad8ff68afa0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/abootimg/abootimg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
-index d1b7e7f74b..61d8d7d317 100644
---- a/package/python-pip/Config.in
-+++ b/package/python-pip/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PIP
- 	bool "python-pip"
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
--- 
-2.29.2
+diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
+index 64cee13c32..ab6c709318 100644
+--- a/package/abootimg/abootimg.mk
++++ b/package/abootimg/abootimg.mk
+@@ -11,7 +11,7 @@ ABOOTIMG_LICENSE_FILES = LICENSE
+ 
+ # depends on libblkid from util-linux
+ ABOOTIMG_DEPENDENCIES = util-linux
+-ABOOTIMG_HOST_DEPENDENCIES = host-util-linux
++HOST_ABOOTIMG_DEPENDENCIES = host-util-linux
+ 
+ define ABOOTIMG_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
