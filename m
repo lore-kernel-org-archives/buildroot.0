@@ -1,103 +1,61 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 23 Nov 2020 22:42:33 +0100
-Subject: [Buildroot] [PATCH v3 4/4] package/qt5/qt5knx: new package
-In-Reply-To: <20201123214233.1465433-1-angelo@amarulasolutions.com>
-References: <20201123214233.1465433-1-angelo@amarulasolutions.com>
-Message-ID: <20201123214233.1465433-4-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 23 Nov 2020 22:42:44 +0100
+Subject: [Buildroot] [PATCH 2/2] cage: package des not require locale
+ support
+In-Reply-To: <20201122160008.44129-2-paul@crapouillou.net> (Paul Cercueil's
+ message of "Sun, 22 Nov 2020 16:00:08 +0000")
+References: <20201122160008.44129-1-paul@crapouillou.net>
+ <20201122160008.44129-2-paul@crapouillou.net>
+Message-ID: <87d003u4vf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qt KNX module implements the client side of a connection between a
-client and a KNXnet/IP server.
+>>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- DEVELOPERS                     |  1 +
- package/qt5/Config.in          |  1 +
- package/qt5/qt5knx/Config.in   | 12 ++++++++++++
- package/qt5/qt5knx/qt5knx.hash |  6 ++++++
- package/qt5/qt5knx/qt5knx.mk   | 14 ++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/qt5/qt5knx/Config.in
- create mode 100644 package/qt5/qt5knx/qt5knx.hash
- create mode 100644 package/qt5/qt5knx/qt5knx.mk
+s/des/does/, and the prefix should be package/cage, not just cage:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d45e584709..9fadedb4de 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -170,6 +170,7 @@ F:	package/python-pydal/
- F:	package/python-spidev/
- F:	package/python-web2py/
- F:	package/qt5/qt5coap/
-+F:	package/qt5/qt5knx/
- F:	package/qt5/qt5mqtt/
- F:	package/sam-ba/
- F:	package/sshguard/
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index c15d27ba7c..6714c6271d 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -46,6 +46,7 @@ source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
-+source "package/qt5/qt5knx/Config.in"
- source "package/qt5/qt5location/Config.in"
- source "package/qt5/qt5lottie/Config.in"
- source "package/qt5/qt5mqtt/Config.in"
-diff --git a/package/qt5/qt5knx/Config.in b/package/qt5/qt5knx/Config.in
-new file mode 100644
-index 0000000000..991e93c8cb
---- /dev/null
-+++ b/package/qt5/qt5knx/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QT5KNX
-+	bool "qt5knx"
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  The Qt KNX module implements the client side of a connection
-+	  between a client and a KNXnet/IP server. This connection
-+	  can be used to send messages to the KNX bus and to control
-+	  the functionalities of the KNX devices.
-+
-+	  https://doc.qt.io/QtKNX/index.html
-diff --git a/package/qt5/qt5knx/qt5knx.hash b/package/qt5/qt5knx/qt5knx.hash
-new file mode 100644
-index 0000000000..05abe706af
---- /dev/null
-+++ b/package/qt5/qt5knx/qt5knx.hash
-@@ -0,0 +1,6 @@
-+# Hash locally calculated
-+sha256  8ee0df130fad39ef6b9a0bef390b648d3ad6539ffca33e22fb569e889d0bd043  qt5knx-5.15.1.tar.gz
-+
-+# Hashes for license files:
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
-diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
-new file mode 100644
-index 0000000000..46d8bb19f2
---- /dev/null
-+++ b/package/qt5/qt5knx/qt5knx.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# qt5knx
-+#
-+################################################################################
-+
-+QT5KNX_VERSION = $(QT5_VERSION)
-+QT5KNX_SITE = $(call github,qt,qtknx,v$(QT5_VERSION))
-+QT5KNX_INSTALL_STAGING = YES
-+QT5KNX_LICENSE = GPL-3.0 with exception
-+QT5KNX_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
-+QT5KNX_INCLUDE_FIXUP = YES
-+
-+$(eval $(qmake-package))
+Committed with that fixed, thanks.
+
+ > Drop dependency on BR2_ENABLE_LOCALE, which was marked as a dependency
+ > of wlroots, but wlroots does not depend on it anymore.
+
+ > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+ > ---
+ >  package/cage/Config.in | 4 +---
+ >  1 file changed, 1 insertion(+), 3 deletions(-)
+
+ > diff --git a/package/cage/Config.in b/package/cage/Config.in
+ > index c8097751f0..3bef08f037 100644
+ > --- a/package/cage/Config.in
+ > +++ b/package/cage/Config.in
+ > @@ -3,16 +3,14 @@ comment "cage needs udev, mesa3d w/ EGL and GLES support"
+ >  		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
+ >  		!BR2_PACKAGE_HAS_UDEV
+ 
+ > -comment "cage needs a toolchain w/ threads, locale, dynamic library"
+ > +comment "cage needs a toolchain w/ threads, dynamic library"
+ >  	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ > -		!BR2_ENABLE_LOCALE || \
+ >  		BR2_STATIC_LIBS
+ 
+ >  config BR2_PACKAGE_CAGE
+ >  	bool "cage"
+ >  	depends on !BR2_STATIC_LIBS # wlroots
+ >  	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+ > -	depends on BR2_ENABLE_LOCALE # wlroots
+ >  	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+ >  	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
+ >  	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
+ > -- 
+ > 2.29.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+Bye, Peter Korsgaard
