@@ -1,81 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Nov 2020 22:44:01 +0100
-Subject: [Buildroot] [git commit] package/openrc: fix build with gcc 10
-Message-ID: <20201123213325.2407D81171@busybox.osuosl.org>
+Date: Mon, 23 Nov 2020 22:35:30 +0100
+Subject: [Buildroot] [git commit] package/python-pip: needs hashlib module
+Message-ID: <20201123213324.CBFCF82AA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d40f49dbba80da723268826487846930e61c64b
+commit: https://git.buildroot.net/buildroot/commit/?id=d5e3e1144e2b1795ab9ca4deb9e25f6f98456232
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - https://bugs.busybox.net/show_bug.cgi?id=13331
+Without hashlib module pip returns the following errors:
 
-Cc: mscdex at mscdex.net
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+# pip
+ValueError: unsupported hash type sha224
+ERROR:root:code for hash sha256 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha256
+ERROR:root:code for hash sha384 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha384
+ERROR:root:code for hash sha512 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha512
+Traceback (most recent call last):
+  File "/usr/bin/pip", line 11, in <module>
+    load_entry_point('pip==20.0.2', 'console_scripts', 'pip')()
+  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/main.py", line 73, in main
+  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/__init__.py", line 96, in create_command
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/install.py", line 24, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/req_command.py", line 15, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/index/package_finder.py", line 21, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/index/collector.py", line 12, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/requests/__init__.py", line 43, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/__init__.py", line 7, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connectionpool.py", line 29, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connection.py", line 40, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/__init__.py", line 7, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/ssl_.py", line 8, in <module>
+ImportError: cannot import name md5
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...logger.h-fix-build-failure-against-gcc-10.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/python-pip/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
-new file mode 100644
-index 0000000000..9fded3ca90
---- /dev/null
-+++ b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
-@@ -0,0 +1,52 @@
-+From 375ef42393f3dc6edbaa2cb70c79b2366072db38 Mon Sep 17 00:00:00 2001
-+From: Sergei Trofimovich <slyfox@gentoo.org>
-+Date: Sun, 19 Jan 2020 15:24:20 +0000
-+Subject: [PATCH] src/rc/rc-logger.h: fix build failure against gcc-10
-+
-+On gcc-10 (and gcc-9 -fno-common) build fails as:
-+
-+```
-+cc  -L../librc -L../libeinfo -O2 -g -std=c99 -Wall -Wextra -Wimplicit -Wshadow \
-+  -Wformat=2 -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn \
-+  -Wmissing-format-attribute -Wnested-externs -Winline -Wwrite-strings \
-+  -Wcast-align -Wcast-qual -Wpointer-arith -Wdeclaration-after-statement \
-+  -Wsequence-point -Werror=implicit-function-declaration    \
-+  -Wl,-rpath=/lib   -o openrc rc.o rc-logger.o rc-misc.o rc-plugin.o _usage.o -lutil -lrc -leinfo -Wl,-Bdynamic -ldl
-+ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:16:
-+  multiple definition of `rc_logger_pid'; rc.o:openrc/src/rc/rc-logger.h:16: first defined here
-+ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:17:
-+  multiple definition of `rc_logger_tty'; rc.o:openrc/src/rc/rc-logger.h:17: first defined here
-+```
-+
-+gcc-10 will change the default from -fcommon to fno-common:
-+https://gcc.gnu.org/PR85678.
-+
-+The error also happens if CFLAGS=-fno-common passed explicitly.
-+
-+This fixes #348.
-+
-+[Patch taken from upstream:
-+https://github.com/OpenRC/openrc/commit/375ef42393f3dc6edbaa2cb70c79b2366072db38]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ src/rc/rc-logger.h | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/rc/rc-logger.h b/src/rc/rc-logger.h
-+index bf6e3e57..1da294b0 100644
-+--- a/src/rc/rc-logger.h
-++++ b/src/rc/rc-logger.h
-+@@ -13,8 +13,8 @@
-+ #ifndef RC_LOGGER_H
-+ #define RC_LOGGER_H
-+ 
-+-pid_t rc_logger_pid;
-+-int rc_logger_tty;
-++extern pid_t rc_logger_pid;
-++extern int rc_logger_tty;
-+ extern bool rc_in_logger;
-+ 
-+ void rc_logger_open(const char *runlevel);
-+-- 
-+2.20.1
-+
+diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+index d1b7e7f74b..61d8d7d317 100644
+--- a/package/python-pip/Config.in
++++ b/package/python-pip/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PIP
+ 	bool "python-pip"
++	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
