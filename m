@@ -1,103 +1,104 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Nov 2020 22:12:48 +0100
-Subject: [Buildroot] [PATCH v1] package/thermald: fix time_t related compile
- failure
-Message-ID: <20201123211248.23828-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 23 Nov 2020 22:12:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: fix static build
+ with netfilter_conntrack
+Message-ID: <20201123211258.496624-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch [1] to fix (musl) time_t related compile failure.
-
 Fixes:
+ - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
 
-  - https://bugs.busybox.net/show_bug.cgi?id=13336
-
-  src/thd_trip_point.cpp: In member function ?bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)?:
-  src/thd_trip_point.cpp:250:19: error: format ?%ld? expects argument of type ?long int?, but argument 6 has type ?time_t? {aka ?long long int?} [-Werror=format=]
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    251 |        zone_id, cdev->thd_cdev_get_index(),
-    252 |        tm - cdevs[i].last_op_time);
-        |        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |           |
-        |           time_t {aka long long int}
-  src/thermald.h:82:57: note: in definition of macro ?thd_log_info?
-     82 | #define thd_log_info(...) g_log(NULL, G_LOG_LEVEL_INFO, __VA_ARGS__)
-        |                                                         ^~~~~~~~~~~
-  src/thd_trip_point.cpp:250:59: note: format string is defined here
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                                                         ~~^
-        |                                                           |
-        |                                                           long int
-        |                                                         %lld
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ix-32-bit-build-error-with-musl-v1.2.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
+ ...-pkg-config-to-find-netfilter_conntr.patch | 62 +++++++++++++++++++
+ .../shadowsocks-libev/shadowsocks-libev.mk    |  2 +
+ 2 files changed, 64 insertions(+)
+ create mode 100644 package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
 
-diff --git a/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
+diff --git a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
 new file mode 100644
-index 0000000000..db5bc99a91
+index 0000000000..781d3c0e64
 --- /dev/null
-+++ b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
-@@ -0,0 +1,53 @@
-+From 074575bf3640485ab6d43ae1efed3eff9cebae13 Mon Sep 17 00:00:00 2001
-+From: Naveen Saini <naveen.kumar.saini@intel.com>
-+Date: Thu, 5 Mar 2020 13:45:57 +0800
-+Subject: [PATCH] thd_trip_point: fix 32-bit build error with musl v1.2.0
++++ b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+@@ -0,0 +1,62 @@
++From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 23 Nov 2020 21:16:38 +0100
++Subject: [PATCH] configure.ac: use pkg-config to find netfilter_conntrack
 +
-+Error log:
-+ ../git/src/thd_trip_point.cpp: In member function 'bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)':
-+| ../git/src/thd_trip_point.cpp:250:19: error: format '%ld' expects argument of type 'long int', but argument 6 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+|   250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
++Use pkg-config to retrieve the dependencies of netfilter_conntrack
++and avoid the following build failure when building statically:
 +
-+musl 1.2.0 have new feature:
-+time_t is now 64-bit on all archs (not just 64-bit archs)
++configure:13096: /data/buildroot-test/instance-1/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -I/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -DPCRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -L/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lnetfilter_conntrack -lnfnetlink -lev  -lcares -lsodium -lmbedcrypto -lpcre  >&5
++/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
++api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header'
 +
-+Commit id:
-+https://git.musl-libc.org/cgit/musl/commit/?id=38143339646a4ccce8afe298c34467767c899f51
++Fixes:
++ - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
 +
-+Release note link for musl 1.2.0:
-+https://git.musl-libc.org/cgit/musl/diff/
-+
-+use %jd and typecast with intmax_t which is maximum width integer type
-+
-+Signed-off-by: Naveen Saini <naveen.kumar.saini@intel.com>
-+[Upstream: https://github.com/intel/thermal_daemon/commit/a7136682b9e6ebdb53c3c8b472bcd5039d62dc78.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/shadowsocks/shadowsocks-libev/pull/2773]
 +---
-+ src/thd_trip_point.cpp | 10 ++--------
-+ 1 file changed, 2 insertions(+), 8 deletions(-)
++ configure.ac    | 5 +++--
++ src/Makefile.am | 2 +-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
-+diff --git a/src/thd_trip_point.cpp b/src/thd_trip_point.cpp
-+index 46f692d..6358c27 100644
-+--- a/src/thd_trip_point.cpp
-++++ b/src/thd_trip_point.cpp
-+@@ -242,15 +242,9 @@ bool cthd_trip_point::thd_trip_point_check(int id, unsigned int read_temp,
-+ 				time_t tm;
-+ 				time(&tm);
-+ 				if ((tm - cdevs[i].last_op_time) < cdevs[i].sampling_priod) {
-+-#if defined __x86_64__ && defined __ILP32__
-+-					thd_log_info("Too early to act zone:%d index %d tm %lld\n",
-++					thd_log_info("Too early to act zone:%d index %d tm %jd\n",
-+ 							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#else
-+-					thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-+-							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#endif
-++							(intmax_t)tm - cdevs[i].last_op_time);
-+ 					break;
-+ 				}
-+ 				cdevs[i].last_op_time = tm;
++diff --git a/configure.ac b/configure.ac
++index 9787bc2..207c041 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,
++ if test x"$enable_connmarktos" = "xyes" ; then
++ 	AC_MSG_NOTICE([Linux Netfilter Conntrack support requested by --enable-connmarktos: ${enable_connmarktos}])
++ 	if test "x$enable_connmarktos" != "xno"; then
++-	    AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
+++	    PKG_CHECK_MODULES([NETFILTER_CONNTRACK], [libnetfilter_conntrack],,
+++	    [AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
++ 	        if test x"$enable_connmarktos" = "xyes"; then
++ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
++ 	        fi
++@@ -262,7 +263,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
++ 	        if test x"$enable_connmarktos" = "xyes"; then
++ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack headers not found])
++ 	        fi
++-	        with_netfilter_conntrack=no])
+++	        with_netfilter_conntrack=no])])
++ 	  # If nothing is broken; enable the libraries usage.
++ 	  if test "x$with_netfilter_conntrack" != "xno"; then
++ 		with_netfilter_conntrack=yes
++diff --git a/src/Makefile.am b/src/Makefile.am
++index c261ed0..b81ced7 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -9,7 +9,7 @@ AM_CFLAGS += -I$(top_srcdir)/libcork/include
++ endif
++ AM_CFLAGS += $(LIBPCRE_CFLAGS)
++ 
++-SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
+++SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS) $(NETFILTER_CONNTRACK_LIBS)
++ if !USE_SYSTEM_SHARED_LIB
++ SS_COMMON_LIBS += $(top_builddir)/libbloom/libbloom.la \
++                   $(top_builddir)/libipset/libipset.la \
 +-- 
 +2.29.2
 +
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 3ba4cb875c..d69a377851 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+ SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
+ SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
++# We're patching configure.ac
++SHADOWSOCKS_LIBEV_AUTORECONF = YES
+ SHADOWSOCKS_LIBEV_CONF_OPTS = \
+ 	--with-pcre=$(STAGING_DIR)/usr \
+ 	--disable-ssp
 -- 
 2.29.2
