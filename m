@@ -1,45 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Nov 2020 22:42:09 +0100
-Subject: [Buildroot] [git commit] package/cage: package does not require
- locale support
-Message-ID: <20201123213325.1162482AA5@busybox.osuosl.org>
+Date: Mon, 23 Nov 2020 22:44:01 +0100
+Subject: [Buildroot] [git commit] package/openrc: fix build with gcc 10
+Message-ID: <20201123213325.2407D81171@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=210e9b7b245d6388097ba0dac0c51b82964d09fc
+commit: https://git.buildroot.net/buildroot/commit/?id=9d40f49dbba80da723268826487846930e61c64b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop dependency on BR2_ENABLE_LOCALE, which was marked as a dependency
-of wlroots, but wlroots does not depend on it anymore.
+Fixes:
+ - https://bugs.busybox.net/show_bug.cgi?id=13331
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Cc: mscdex at mscdex.net
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cage/Config.in | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ ...logger.h-fix-build-failure-against-gcc-10.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/package/cage/Config.in b/package/cage/Config.in
-index c8097751f0..3bef08f037 100644
---- a/package/cage/Config.in
-+++ b/package/cage/Config.in
-@@ -3,16 +3,14 @@ comment "cage needs udev, mesa3d w/ EGL and GLES support"
- 		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
- 		!BR2_PACKAGE_HAS_UDEV
- 
--comment "cage needs a toolchain w/ threads, locale, dynamic library"
-+comment "cage needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_ENABLE_LOCALE || \
- 		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_CAGE
- 	bool "cage"
- 	depends on !BR2_STATIC_LIBS # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
--	depends on BR2_ENABLE_LOCALE # wlroots
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
+diff --git a/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..9fded3ca90
+--- /dev/null
++++ b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,52 @@
++From 375ef42393f3dc6edbaa2cb70c79b2366072db38 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Sun, 19 Jan 2020 15:24:20 +0000
++Subject: [PATCH] src/rc/rc-logger.h: fix build failure against gcc-10
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++cc  -L../librc -L../libeinfo -O2 -g -std=c99 -Wall -Wextra -Wimplicit -Wshadow \
++  -Wformat=2 -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn \
++  -Wmissing-format-attribute -Wnested-externs -Winline -Wwrite-strings \
++  -Wcast-align -Wcast-qual -Wpointer-arith -Wdeclaration-after-statement \
++  -Wsequence-point -Werror=implicit-function-declaration    \
++  -Wl,-rpath=/lib   -o openrc rc.o rc-logger.o rc-misc.o rc-plugin.o _usage.o -lutil -lrc -leinfo -Wl,-Bdynamic -ldl
++ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:16:
++  multiple definition of `rc_logger_pid'; rc.o:openrc/src/rc/rc-logger.h:16: first defined here
++ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:17:
++  multiple definition of `rc_logger_tty'; rc.o:openrc/src/rc/rc-logger.h:17: first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++This fixes #348.
++
++[Patch taken from upstream:
++https://github.com/OpenRC/openrc/commit/375ef42393f3dc6edbaa2cb70c79b2366072db38]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ src/rc/rc-logger.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/rc/rc-logger.h b/src/rc/rc-logger.h
++index bf6e3e57..1da294b0 100644
++--- a/src/rc/rc-logger.h
+++++ b/src/rc/rc-logger.h
++@@ -13,8 +13,8 @@
++ #ifndef RC_LOGGER_H
++ #define RC_LOGGER_H
++ 
++-pid_t rc_logger_pid;
++-int rc_logger_tty;
+++extern pid_t rc_logger_pid;
+++extern int rc_logger_tty;
++ extern bool rc_in_logger;
++ 
++ void rc_logger_open(const char *runlevel);
++-- 
++2.20.1
++
