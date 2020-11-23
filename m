@@ -1,87 +1,80 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 23 Nov 2020 20:23:59 +0200
-Subject: [Buildroot] [PATCH v4 1/1] boot/arm-trusted-firmware: Forward
- stack protection configuration
-In-Reply-To: <20201123131506.834183-1-christoph.muellner@theobroma-systems.com>
-References: <20201123131506.834183-1-christoph.muellner@theobroma-systems.com>
-Message-ID: <87o8jovsn4.fsf@tarshish>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 23 Nov 2020 20:17:27 +0100
+Subject: [Buildroot] [PATCH 1/2] package/openrc: fix build with gcc 10
+Message-ID: <20201123191729.2557-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christoph,
+Fixes:
+ - https://bugs.busybox.net/show_bug.cgi?id=13331
 
-On Mon, Nov 23 2020, Christoph M?llner wrote:
-> TF-A supports stack smashing protection (-fstack-protector-*).
-> However, that feature is currenlty silently disabled because
-> ENABLE_STACK_PROTECTOR is not set during build time.
->
-> As documented in the TF-A user guide, the flag ENABLE_STACK_PROTECTOR
-> is required to enable stack protection support. When enabled the symbols
-> for the stack protector (e.g. __stack_chk_guard) are built.
-> This needs to be done because TF-A does not link against an external
-> library that provides that symbols (e.g. libc).
->
-> So in case we see that BR2_SSP_* is enabled, let's enable the corresponding
-> ENABLE_STACK_PROTECTOR build flag for TF-A as documented in the TF-A user guide.
->
-> This patch also fixes a the following linker errors with older TF-A versions
-> if BR2_SSP_* is enabled (i.e. -fstack-protector-* is used as compiler flag)
-> and ENABLE_STACK_PROTECTOR is not set, which are caused by the missing
-> stack protector symbols:
->
->   [...]
->   params_setup.c:(.text.params_early_setup+0xc): undefined reference to `__stack_chk_guard'
->   aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x14): undefined reference to `__stack_chk_guard'
->   aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x104): undefined reference to `__stack_chk_guard'
->   aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x118): undefined reference to `__stack_chk_fail'
->   aarch64-none-linux-gnu-ld: ./build/px30/release/bl31/pmu.o: in function `rockchip_soc_sys_pwr_dm_suspend':
->   pmu.c:(.text.rockchip_soc_sys_pwr_dm_suspend+0xc): undefined reference to `__stack_chk_guard'
->   [...]
->
-> TF-A releases after Nov 2019, that include 7af195e29a4, will circumvent
-> these issue by explicitliy and silently disabling the stack protector
-> by appending '-fno-stack-protector' to the compiler flags in case
-> ENABLE_STACK_PROTECTOR is not set.
->
-> Tested on a Rockchip PX30 based system (TF-A v2.2 and upstream/master).
->
-> Signed-off-by: Christoph M?llner <christoph.muellner@theobroma-systems.com>
+Cc: mscdex at mscdex.net
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ ...r.h-fix-build-failure-against-gcc-10.patch | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
 
-Thanks. FWIW,
-
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-
-baruch
-
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index a3553e36cf..0597cecf71 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -100,6 +100,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
->  ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
->  endif
->  
-> +ifeq ($(BR2_SSP_REGULAR),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
-> +else ifeq ($(BR2_SSP_STRONG),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
-> +else ifeq ($(BR2_SSP_ALL),y)
-> +ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
-> +endif
-> +
->  ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
->  
->  ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
-
-
+diff --git a/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..9fded3ca90
+--- /dev/null
++++ b/package/openrc/0006-src-rc-rc-logger.h-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,52 @@
++From 375ef42393f3dc6edbaa2cb70c79b2366072db38 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Sun, 19 Jan 2020 15:24:20 +0000
++Subject: [PATCH] src/rc/rc-logger.h: fix build failure against gcc-10
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++cc  -L../librc -L../libeinfo -O2 -g -std=c99 -Wall -Wextra -Wimplicit -Wshadow \
++  -Wformat=2 -Wmissing-prototypes -Wmissing-declarations -Wmissing-noreturn \
++  -Wmissing-format-attribute -Wnested-externs -Winline -Wwrite-strings \
++  -Wcast-align -Wcast-qual -Wpointer-arith -Wdeclaration-after-statement \
++  -Wsequence-point -Werror=implicit-function-declaration    \
++  -Wl,-rpath=/lib   -o openrc rc.o rc-logger.o rc-misc.o rc-plugin.o _usage.o -lutil -lrc -leinfo -Wl,-Bdynamic -ldl
++ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:16:
++  multiple definition of `rc_logger_pid'; rc.o:openrc/src/rc/rc-logger.h:16: first defined here
++ld: rc-logger.o:/home/slyfox/dev/git/openrc/src/rc/rc-logger.h:17:
++  multiple definition of `rc_logger_tty'; rc.o:openrc/src/rc/rc-logger.h:17: first defined here
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++This fixes #348.
++
++[Patch taken from upstream:
++https://github.com/OpenRC/openrc/commit/375ef42393f3dc6edbaa2cb70c79b2366072db38]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
++---
++ src/rc/rc-logger.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/rc/rc-logger.h b/src/rc/rc-logger.h
++index bf6e3e57..1da294b0 100644
++--- a/src/rc/rc-logger.h
+++++ b/src/rc/rc-logger.h
++@@ -13,8 +13,8 @@
++ #ifndef RC_LOGGER_H
++ #define RC_LOGGER_H
++ 
++-pid_t rc_logger_pid;
++-int rc_logger_tty;
+++extern pid_t rc_logger_pid;
+++extern int rc_logger_tty;
++ extern bool rc_in_logger;
++ 
++ void rc_logger_open(const char *runlevel);
++-- 
++2.20.1
++
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.20.1
