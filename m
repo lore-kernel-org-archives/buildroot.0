@@ -1,46 +1,50 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sun, 22 Nov 2020 20:24:41 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-janus: bump to version 0.6.1
-Message-ID: <20201123032441.2065584-1-james.hilliard1@gmail.com>
+Date: Sun, 22 Nov 2020 20:29:19 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-aiorwlock: bump to version
+ 1.0.0
+Message-ID: <20201123032919.2086054-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+License hash changed due to year update.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-janus/python-janus.hash | 4 ++--
- package/python-janus/python-janus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-aiorwlock/python-aiorwlock.hash | 6 +++---
+ package/python-aiorwlock/python-aiorwlock.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-janus/python-janus.hash b/package/python-janus/python-janus.hash
-index 9108db6325..7d914389d2 100644
---- a/package/python-janus/python-janus.hash
-+++ b/package/python-janus/python-janus.hash
+diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+index 8556f5ebd3..2398b15424 100644
+--- a/package/python-aiorwlock/python-aiorwlock.hash
++++ b/package/python-aiorwlock/python-aiorwlock.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/janus/json
--md5  577c3c8939ef945c5dc00319bd59484f  janus-0.5.0.tar.gz
--sha256  0700f5537d076521851d19b7625545c5e76f6d5792ab17984f28230adcc3b34c  janus-0.5.0.tar.gz
-+md5  dad6a03e7664cb800ce45ef8bcf12439  janus-0.6.1.tar.gz
-+sha256  4712e0ef75711fe5947c2db855bc96221a9a03641b52e5ae8e25c2b705dd1d0c  janus-0.6.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
+-md5	8eccf28315b4f851f6f7e9332edeec52  aiorwlock-0.6.0.tar.gz
+-sha256	cd310f33a7ea3bf6fd76fcf0c1ba6e4d7eef4d5ded59e95859494425fb7e599d  aiorwlock-0.6.0.tar.gz
++md5  8d89ed0d80820aad8d9320204779fd62  aiorwlock-1.0.0.tar.gz
++sha256  4f773e31d78037e3ec27056a22200af482768b43da66e2cc33dd64aa5ea6518a  aiorwlock-1.0.0.tar.gz
  # Locally computed sha256 checksums
- sha256  8b177cccb6ddec12a9fc97bd49e7e2bbcd92464625624bd8bdbfad799ae606e9  LICENSE
-diff --git a/package/python-janus/python-janus.mk b/package/python-janus/python-janus.mk
-index b5fa44f727..2b08733c18 100644
---- a/package/python-janus/python-janus.mk
-+++ b/package/python-janus/python-janus.mk
+-sha256	56fb2baf14d84c59c15abbfbb1fdf30a724017e2ce97894a8236764513d10397  LICENSE
++sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
+diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+index 48e74c02fd..f6f3c97404 100644
+--- a/package/python-aiorwlock/python-aiorwlock.mk
++++ b/package/python-aiorwlock/python-aiorwlock.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JANUS_VERSION = 0.5.0
-+PYTHON_JANUS_VERSION = 0.6.1
- PYTHON_JANUS_SOURCE = janus-$(PYTHON_JANUS_VERSION).tar.gz
--PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/9a/76/fbb89aa5d3cb5f3fec6ce74d34cf980ccd475b015d1a59cb5a14fe4cd2c5
-+PYTHON_JANUS_SITE = https://files.pythonhosted.org/packages/7c/1b/8769c2dca84dd8ca92e48b14750c7106ff4313df4fee651dbc3cd9e345a9
- PYTHON_JANUS_SETUP_TYPE = setuptools
- PYTHON_JANUS_LICENSE = Apache-2.0
- PYTHON_JANUS_LICENSE_FILES = LICENSE
+-PYTHON_AIORWLOCK_VERSION = 0.6.0
++PYTHON_AIORWLOCK_VERSION = 1.0.0
+ PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
+-PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/77/cf/2a2584c4fc1096ae959d7d189f205eb9c872ec58aca2cde16009d2d83b9e
++PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/40/af/e55b3266352f3383c723e0a3304b0df46a59dfc6235b0b1a0a416afd60c1
+ PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
+ PYTHON_AIORWLOCK_LICENSE = Apache-2.0
+ PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
 -- 
 2.25.1
