@@ -1,59 +1,61 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Nov 2020 20:40:30 +0100
-Subject: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump version to
- bff705f
-In-Reply-To: <20201122214304.266821-3-davidb@230ruedubac.fr>
-References: <20201122214304.266821-1-davidb@230ruedubac.fr>
- <20201122214304.266821-3-davidb@230ruedubac.fr>
-Message-ID: <20201123204030.08778ca4@gmx.net>
+From: Maxime Brunelle <mbrunelle@distech-controls.com>
+Date: Mon, 23 Nov 2020 15:13:37 -0500
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.65.3
+Message-ID: <20201123201337.765168-1-mbrunelle@distech-controls.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+Fixes https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524
+package/libglib2 reference: https://gitlab.gnome.org/GNOME/glib/-/issues/2091
 
-thanks for taking care to update the rpi packages...
+Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
+---
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-On Sun, 22 Nov 2020 22:43:03 +0100, David Barbion <davidb@230ruedubac.fr> wrote:
-
-> Signed-off-by: David Barbion <davidb@230ruedubac.fr>
-> ---
->  package/rpi-firmware/rpi-firmware.hash | 2 +-
->  package/rpi-firmware/rpi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-> index 8730ec959b..117e95cffe 100644
-> --- a/package/rpi-firmware/rpi-firmware.hash
-> +++ b/package/rpi-firmware/rpi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  c7a8c2b8cfe1977095d62086d340d6c15a383562aba2742e21df7f5f792aeb4b  rpi-firmware-358f4c271f2bc10931aae8fe0879ffaded8b9c44.tar.gz
-> +sha256  e60363ce94c4a78e4a2d41c982a887ac9d31c4997fe793c37ab5690beed3078d  rpi-firmware-bff705fffe59ad3eea33999beb29c3f26408de40.tar.gz
->  sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index 8b2b2c7154..bcd52578a6 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -RPI_FIRMWARE_VERSION = 358f4c271f2bc10931aae8fe0879ffaded8b9c44
-> +RPI_FIRMWARE_VERSION = bff705fffe59ad3eea33999beb29c3f26408de40
->  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
->  RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-
-A bump of rpi-firmware version should although bump rpi-userland and the rpi
-defconfigs (LINUX_KERNEL) to keep them in sync....
-
-Mind to re-spin your patchset (maybe updated to latest, 6 hour old, bump to
-kernel 5.4.79 ;-) [1])...
-
-Regards,
-Peter
-
-[1]  https://github.com/raspberrypi/firmware/commit/8f13114b9ea29bd004151d4a8afa500b2df721be
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 7e447a9efc..d19aa34616 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.64.4',
++   version : '2.65.3',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 55f0bb1678..41bf39435c 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.64/glib-2.64.4.sha256sum
+-sha256  f7e0b325b272281f0462e0f7fff25a833820cac19911ff677251daf6d87bce50  glib-2.64.4.tar.xz
++# https://download.gnome.org/sources/glib/2.65/glib-2.65.3.sha256sum
++sha256  efd894e4693068bca945cb20d168b088510fa24d48a577f5edaf3d55912c60c2  glib-2.65.3.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6e9dbd7b26..d35f53abb6 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.64
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
++LIBGLIB2_VERSION_MAJOR = 2.65
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
+-- 
+2.29.2
