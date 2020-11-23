@@ -1,20 +1,17 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 23 Nov 2020 22:42:30 +0100
-Subject: [Buildroot] [PATCH v3 1/4] package/pkg-qmake: adding
- FOO_INCLUDE_FIXUP
-Message-ID: <20201123214233.1465433-1-angelo@amarulasolutions.com>
+Date: Mon, 23 Nov 2020 22:42:32 +0100
+Subject: [Buildroot] [PATCH v3 3/4] package/qt5/qt5mqtt: new package
+In-Reply-To: <20201123214233.1465433-1-angelo@amarulasolutions.com>
+References: <20201123214233.1465433-1-angelo@amarulasolutions.com>
+Message-ID: <20201123214233.1465433-3-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some qmake based packages need to call the syncqt.pl script before
-building to have a properly populated "include" directory inside
-the package build tree.
-This script is automatically executed by qmake when a source tree
-is from a git clone: buildroot purges the .git directory hence the
-script never runs.
+The Qt MQTT module provides a standard compliant implementation of the
+MQTT protocol specification.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
@@ -24,44 +21,89 @@ v1 -> v2:
 v2 -> v3:
 * Moved to use FOO_INCLUDE_FIXUP
 
- docs/manual/adding-packages-qmake.txt | 4 ++++
- package/pkg-qmake.mk                  | 5 +++++
- 2 files changed, 9 insertions(+)
+ DEVELOPERS                       |  1 +
+ package/qt5/Config.in            |  1 +
+ package/qt5/qt5mqtt/Config.in    | 12 ++++++++++++
+ package/qt5/qt5mqtt/qt5mqtt.hash |  6 ++++++
+ package/qt5/qt5mqtt/qt5mqtt.mk   | 14 ++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/qt5/qt5mqtt/Config.in
+ create mode 100644 package/qt5/qt5mqtt/qt5mqtt.hash
+ create mode 100644 package/qt5/qt5mqtt/qt5mqtt.mk
 
-diff --git a/docs/manual/adding-packages-qmake.txt b/docs/manual/adding-packages-qmake.txt
-index e1621e914e..de508dbea4 100644
---- a/docs/manual/adding-packages-qmake.txt
-+++ b/docs/manual/adding-packages-qmake.txt
-@@ -79,3 +79,7 @@ also be defined.
- * +LIBFOO_INSTALL_TARGET_OPTS+, to specify additional targets to pass
-   to the +make+ command during the target installation step. By default,
-   +install+.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3f5fa20ebc..d45e584709 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -170,6 +170,7 @@ F:	package/python-pydal/
+ F:	package/python-spidev/
+ F:	package/python-web2py/
+ F:	package/qt5/qt5coap/
++F:	package/qt5/qt5mqtt/
+ F:	package/sam-ba/
+ F:	package/sshguard/
+ F:	package/sunwait/
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 9431f4980d..c15d27ba7c 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -48,6 +48,7 @@ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5lottie/Config.in"
++source "package/qt5/qt5mqtt/Config.in"
+ source "package/qt5/qt5multimedia/Config.in"
+ source "package/qt5/qt5quickcontrols/Config.in"
+ source "package/qt5/qt5quickcontrols2/Config.in"
+diff --git a/package/qt5/qt5mqtt/Config.in b/package/qt5/qt5mqtt/Config.in
+new file mode 100644
+index 0000000000..509b18089d
+--- /dev/null
++++ b/package/qt5/qt5mqtt/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_QT5MQTT
++	bool "qt5mqtt"
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
 +
-+* +LIBFOO_INCLUDE_FIXUP+, to run syncqt.pl before qmake. Some packages
-+  need this to have a properly populated include directory before
-+  running the build.
-diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
-index 27727119d7..9d2a036ac3 100644
---- a/package/pkg-qmake.mk
-+++ b/package/pkg-qmake.mk
-@@ -44,6 +44,10 @@ ifneq ($(1),qt5base)
- $(2)_DEPENDENCIES 		+= qt5base
- endif
- 
-+ifdef $(2)_INCLUDE_FIXUP
-+$(2)_DEPENDENCIES 		+= host-perl
-+endif
++	  The Qt MQTT module provides a standard compliant implementation
++	  of the MQTT protocol specification. It enables applications to
++	  act as telemetry displays and devices to publish telemetry data.
++	  The supported versions are MQTT 3.1, MQTT 3.1.1, and MQTT 5.0.
 +
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file.
-@@ -52,6 +56,7 @@ ifndef $(2)_CONFIGURE_CMDS
- define $(2)_CONFIGURE_CMDS
- 	$$(QT5_QT_CONF_FIXUP)
- 	cd $$($(2)_BUILDDIR) && \
-+	$$(if $$($(2)_INCLUDE_FIXUP), $(HOST_DIR)/bin/syncqt.pl -version $(QT5_VERSION) &&) \
- 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
- endef
- endif
++	  https://doc.qt.io/QtMQTT/index.html
+diff --git a/package/qt5/qt5mqtt/qt5mqtt.hash b/package/qt5/qt5mqtt/qt5mqtt.hash
+new file mode 100644
+index 0000000000..ddf2aa4fc0
+--- /dev/null
++++ b/package/qt5/qt5mqtt/qt5mqtt.hash
+@@ -0,0 +1,6 @@
++# Hash locally calculated
++sha256  603f81095ec837cb28b93189fd26dbbae32ecaedd80f6dd88c85050b51e18008  qt5mqtt-5.15.1.tar.gz
++
++# Hashes for license files:
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
+diff --git a/package/qt5/qt5mqtt/qt5mqtt.mk b/package/qt5/qt5mqtt/qt5mqtt.mk
+new file mode 100644
+index 0000000000..1bde2d5401
+--- /dev/null
++++ b/package/qt5/qt5mqtt/qt5mqtt.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# qt5mqtt
++#
++################################################################################
++
++QT5MQTT_VERSION = $(QT5_VERSION)
++QT5MQTT_SITE = $(call github,qt,qtmqtt,v$(QT5_VERSION))
++QT5MQTT_INSTALL_STAGING = YES
++QT5MQTT_LICENSE = GPL-3.0 with exception
++QT5MQTT_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
++QT5MQTT_INCLUDE_FIXUP = YES
++
++$(eval $(qmake-package))
 -- 
 2.25.1
