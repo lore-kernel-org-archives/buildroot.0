@@ -1,46 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 23 Nov 2020 16:27:20 +0000
-Subject: [Buildroot] [Bug 13331] New: openrc-0.42.1 compilation failure on
- gcc-10
-Message-ID: <bug-13331-163@https.bugs.busybox.net/>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 23 Nov 2020 17:30:35 +0100
+Subject: [Buildroot] [PATCH] mksh: update to 59c
+Message-ID: <20201123163035.GA29492@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13331
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/mksh/mksh.hash | 4 ++--
+ package/mksh/mksh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-            Bug ID: 13331
-           Summary: openrc-0.42.1 compilation failure on gcc-10
-           Product: buildroot
-           Version: 2020.08.2
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: mscdex at mscdex.net
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Created attachment 8676
-  --> https://bugs.busybox.net/attachment.cgi?id=8676&action=edit
-Fix for GCC 10
-
-Host machine: Ubuntu 18.04
-Buildroot version: 2020.08.2
-Target: i586-buildroot-linux-musl-gcc (GCC 10.2.0)
-
-Trying to build OpenRC 0.42.1 fails when compiling with GCC 10.x. It evidently
-will also fail with prior major versions when the '-fno-common' flag is
-explicitly used (this flag seems to be the default now on GCC 10.x, hence the
-failure).
-
-I've attached a patch I found from Gentoo that fixes this issue.
-
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 7fc34fa3e3..d81deccb39 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
++sha256  77ae1665a337f1c48c61d6b961db3e52119b38e58884d1c89684af31f87bc506  mksh-R59c.tgz
+ # Locally computed
+-sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
++sha256  abf44a61ec777c98f8ae7e08e4fe25fe258e0c470215e2eeb22816f6bae72c80  mksh.1
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 05ddc3f4c9..386b1bd016 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MKSH_VERSION = 59b
++MKSH_VERSION = 59c
+ MKSH_SOURCE = mksh-R$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
