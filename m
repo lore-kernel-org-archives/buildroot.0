@@ -1,108 +1,93 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 23 Nov 2020 22:18:26 +0100
-Subject: [Buildroot] [PATCH v2] package/thermald: fix time_t related compile
- failure
-Message-ID: <20201123211826.24245-1-ps.report@gmx.net>
+From: Brunelle, Maxime <mbrunelle@distech-controls.com>
+Date: Mon, 23 Nov 2020 21:27:07 +0000
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.65.3
+In-Reply-To: <CAPi7W80A-gQ=U=-_RTwbrJCCObqfZCWLSAe0YuEg++XbcqG2hw@mail.gmail.com>
+References: <20201123200420.764354-1-mbrunelle@distech-controls.com>,
+ <CAPi7W80A-gQ=U=-_RTwbrJCCObqfZCWLSAe0YuEg++XbcqG2hw@mail.gmail.com>
+Message-ID: <SN2PR01MB21924F146F71E46C1C07F4E98EFC0@SN2PR01MB2192.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch [1] to fix (musl) time_t related compile failure.
+Hi Fabrice,
 
-Fixes:
+Version 2.64.6 doesn't have the fix for the segmentation fault I'm seeing with NetworkManager, so I'll produce a new patch for 2.66.3 instead.
 
-  - https://bugs.busybox.net/show_bug.cgi?id=13336
+Thank you and best regards,
 
-  src/thd_trip_point.cpp: In member function ?bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)?:
-  src/thd_trip_point.cpp:250:19: error: format ?%ld? expects argument of type ?long int?, but argument 6 has type ?time_t? {aka ?long long int?} [-Werror=format=]
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    251 |        zone_id, cdev->thd_cdev_get_index(),
-    252 |        tm - cdevs[i].last_op_time);
-        |        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |           |
-        |           time_t {aka long long int}
-  src/thermald.h:82:57: note: in definition of macro ?thd_log_info?
-     82 | #define thd_log_info(...) g_log(NULL, G_LOG_LEVEL_INFO, __VA_ARGS__)
-        |                                                         ^~~~~~~~~~~
-  src/thd_trip_point.cpp:250:59: note: format string is defined here
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                                                         ~~^
-        |                                                           |
-        |                                                           long int
-        |                                                         %lld
+Maxime
 
-[1] https://github.com/intel/thermal_daemon/commit/a7136682b9e6ebdb53c3c8b472bcd5039d62dc78.patch
+________________________________
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Sent: November 23, 2020 15:50
+To: Brunelle, Maxime <mbrunelle@distech-controls.com>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>
+Subject: Re: [PATCH 1/1] package/libglib2: bump version to 2.65.3
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - add missing patch link
----
- ...ix-32-bit-build-error-with-musl-v1.2.patch | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
+Hi Maxime,
 
-diff --git a/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
-new file mode 100644
-index 0000000000..db5bc99a91
---- /dev/null
-+++ b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
-@@ -0,0 +1,53 @@
-+From 074575bf3640485ab6d43ae1efed3eff9cebae13 Mon Sep 17 00:00:00 2001
-+From: Naveen Saini <naveen.kumar.saini@intel.com>
-+Date: Thu, 5 Mar 2020 13:45:57 +0800
-+Subject: [PATCH] thd_trip_point: fix 32-bit build error with musl v1.2.0
-+
-+Error log:
-+ ../git/src/thd_trip_point.cpp: In member function 'bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)':
-+| ../git/src/thd_trip_point.cpp:250:19: error: format '%ld' expects argument of type 'long int', but argument 6 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+|   250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-+
-+musl 1.2.0 have new feature:
-+time_t is now 64-bit on all archs (not just 64-bit archs)
-+
-+Commit id:
-+https://git.musl-libc.org/cgit/musl/commit/?id=38143339646a4ccce8afe298c34467767c899f51
-+
-+Release note link for musl 1.2.0:
-+https://git.musl-libc.org/cgit/musl/diff/
-+
-+use %jd and typecast with intmax_t which is maximum width integer type
-+
-+Signed-off-by: Naveen Saini <naveen.kumar.saini@intel.com>
-+[Upstream: https://github.com/intel/thermal_daemon/commit/a7136682b9e6ebdb53c3c8b472bcd5039d62dc78.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/thd_trip_point.cpp | 10 ++--------
-+ 1 file changed, 2 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/thd_trip_point.cpp b/src/thd_trip_point.cpp
-+index 46f692d..6358c27 100644
-+--- a/src/thd_trip_point.cpp
-++++ b/src/thd_trip_point.cpp
-+@@ -242,15 +242,9 @@ bool cthd_trip_point::thd_trip_point_check(int id, unsigned int read_temp,
-+ 				time_t tm;
-+ 				time(&tm);
-+ 				if ((tm - cdevs[i].last_op_time) < cdevs[i].sampling_priod) {
-+-#if defined __x86_64__ && defined __ILP32__
-+-					thd_log_info("Too early to act zone:%d index %d tm %lld\n",
-++					thd_log_info("Too early to act zone:%d index %d tm %jd\n",
-+ 							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#else
-+-					thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-+-							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#endif
-++							(intmax_t)tm - cdevs[i].last_op_time);
-+ 					break;
-+ 				}
-+ 				cdevs[i].last_op_time = tm;
-+-- 
-+2.29.2
-+
--- 
-2.29.2
+Le lun. 23 nov. 2020 ? 21:06, Maxime Brunelle
+<mbrunelle@distech-controls.com> a ?crit :
+>
+> Fixes https://urldefense.com/v3/__https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524__;!!Po4YltK3bPMkYw!hzblQjKv7RMImOmwCxe7wq87L3Y21sU-E4KMU5OJhiFinOtqOuleOjgOslmygCMOnU8ijpnf$
+> package/libglib2 reference: https://urldefense.com/v3/__https://gitlab.gnome.org/GNOME/glib/-/issues/2091__;!!Po4YltK3bPMkYw!hzblQjKv7RMImOmwCxe7wq87L3Y21sU-E4KMU5OJhiFinOtqOuleOjgOslmygCMOnYpoCEes$
+>
+> Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
+> ---
+>  package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+>  package/libglib2/libglib2.hash                     | 4 ++--
+>  package/libglib2/libglib2.mk                       | 4 ++--
+>  3 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+> index 7e447a9efc..d19aa34616 100644
+> --- a/package/libglib2/0003-remove-cpp-requirement.patch
+> +++ b/package/libglib2/0003-remove-cpp-requirement.patch
+> @@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+>  @@ -1,4 +1,4 @@
+>  -project('glib', 'c', 'cpp',
+>  +project('glib', 'c',
+> -   version : '2.64.4',
+> +   version : '2.65.3',
+2.65.x serie is a development serie, it would be better to bump to
+2.64.6 or 2.66.x serie.
+>     # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+>     meson_version : '>= 0.49.2',
+>  @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+> diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+> index 55f0bb1678..41bf39435c 100644
+> --- a/package/libglib2/libglib2.hash
+> +++ b/package/libglib2/libglib2.hash
+> @@ -1,4 +1,4 @@
+> -# https://urldefense.com/v3/__https://download.gnome.org/sources/glib/2.64/glib-2.64.4.sha256sum__;!!Po4YltK3bPMkYw!hzblQjKv7RMImOmwCxe7wq87L3Y21sU-E4KMU5OJhiFinOtqOuleOjgOslmygCMOnQhV0LSP$
+> -sha256  f7e0b325b272281f0462e0f7fff25a833820cac19911ff677251daf6d87bce50  glib-2.64.4.tar.xz
+> +# https://urldefense.com/v3/__https://download.gnome.org/sources/glib/2.65/glib-2.65.3.sha256sum__;!!Po4YltK3bPMkYw!hzblQjKv7RMImOmwCxe7wq87L3Y21sU-E4KMU5OJhiFinOtqOuleOjgOslmygCMOnebWRZgO$
+> +sha256  efd894e4693068bca945cb20d168b088510fa24d48a577f5edaf3d55912c60c2  glib-2.65.3.tar.xz
+>  # License files, locally calculated
+>  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index 6e9dbd7b26..d35f53abb6 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>
+> -LIBGLIB2_VERSION_MAJOR = 2.64
+> -LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+> +LIBGLIB2_VERSION_MAJOR = 2.65
+> +LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+>  LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+>  LIBGLIB2_SITE = https://urldefense.com/v3/__http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)__;!!Po4YltK3bPMkYw!hzblQjKv7RMImOmwCxe7wq87L3Y21sU-E4KMU5OJhiFinOtqOuleOjgOslmygCMOnUOmyr2f$
+>  LIBGLIB2_LICENSE = LGPL-2.1+
+> --
+> 2.29.2
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201123/5b28694c/attachment.html>
