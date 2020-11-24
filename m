@@ -1,50 +1,50 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 23 Nov 2020 18:59:27 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-jinja2: bump to
- version 1.4.2
-Message-ID: <20201124015927.2259157-1-james.hilliard1@gmail.com>
+Date: Mon, 23 Nov 2020 19:07:37 -0700
+Subject: [Buildroot] [PATCH 1/1] package/python-serial-asyncio: bump to
+ version 0.5
+Message-ID: <20201124020737.2280532-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License hash changed due to formatting change.
+License hash changed due to year update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash | 6 +++---
- package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 4 ++--
+ package/python-serial-asyncio/python-serial-asyncio.hash | 6 +++---
+ package/python-serial-asyncio/python-serial-asyncio.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-index 3563d2ab4b..44e2ae463f 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
+index 268c7d83f5..f5d1d9e485 100644
+--- a/package/python-serial-asyncio/python-serial-asyncio.hash
++++ b/package/python-serial-asyncio/python-serial-asyncio.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
--md5	7eb1a9be9e776c94d3bff73330c213d0  aiohttp-jinja2-1.2.0.tar.gz
--sha256	2dfe29cfd278d07cd0a851afb98471bc8ce2a830968443e40d67636f3c035d79  aiohttp-jinja2-1.2.0.tar.gz
-+md5  d474a6440ac906a9d818a03a540830ba  aiohttp-jinja2-1.4.2.tar.gz
-+sha256  9c22a0e48e3b277fc145c67dd8c3b8f609dab36bce9eb337f70dfe716663c9a0  aiohttp-jinja2-1.4.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
+-md5     67244fdc11cc31cf0ebf675c271c71d8  pyserial-asyncio-0.4.tar.gz
+-sha256  c40677a8874d8c24d4423a97498746de776f6dbcd0efbb8fa43dcf011a589aee  pyserial-asyncio-0.4.tar.gz
++md5  64d15bfb20982b2129b02070321f49f3  pyserial-asyncio-0.5.tar.gz
++sha256  1641e5433a866eeaf6464b3ab88b741e7a89dd8cd0f851b3343b15f425138d33  pyserial-asyncio-0.5.tar.gz
  # Locally computed sha256 checksums
--sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
-+sha256  d9d867affaeac220a60381cc544681dcd37c668ed6ea5ddbf9948617f828889a  LICENSE
-diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-index 94a0c9d75a..724acdb601 100644
---- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
-+++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+-sha256	f8ded3a7460d3b2850b0cf673e986c70e9d997fd0732d8ab3f3c84f1f191087d  LICENSE.txt
++sha256  ebc84abdbdec7f9fa6962612c110123897db47b79529d5ae41191ef584b88f2c  LICENSE.txt
+diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
+index 39c3476d9e..bc95f2c44a 100644
+--- a/package/python-serial-asyncio/python-serial-asyncio.mk
++++ b/package/python-serial-asyncio/python-serial-asyncio.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_JINJA2_VERSION = 1.2.0
-+PYTHON_AIOHTTP_JINJA2_VERSION = 1.4.2
- PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
--PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/9c/fb/8f1f8941e1e1937247c6de552668d73ab8ef860a1d633072d9f4e3c9b542
-+PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/da/4f/3b1a0c7177fdb0417308a95bfa8340f19cf84b44f8f2d734cd3052f56644
- PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
+-PYTHON_SERIAL_ASYNCIO_VERSION = 0.4
++PYTHON_SERIAL_ASYNCIO_VERSION = 0.5
+ PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
+-PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/41/3f/e26f71269cbc0890a527a736d9afc5c0d5838a2c188be680558d635b7dc2
++PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/e1/97/8dd1bf656796668ed4bd86058c815b130303a00a7b70cf79758e4918814a
+ PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
+ PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
+ PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
 -- 
 2.25.1
