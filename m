@@ -1,49 +1,69 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 23 Nov 2020 19:12:59 -0700
-Subject: [Buildroot] [PATCH 1/1] package/python-serial: bump to version 3.5
-Message-ID: <20201124021259.2301618-1-james.hilliard1@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 24 Nov 2020 07:59:14 +0100
+Subject: [Buildroot] [PATCH v4 1/4] package/pkg-qmake: adding
+ FOO_SYNC_HEADERS
+Message-ID: <20201124065917.1567055-1-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-License hash changed due to year update.
+Some qmake based packages need to call the syncqt.pl script before
+building to have a properly populated "include" directory inside
+the package build tree.
+This script is automatically executed by qmake when a source tree
+is from a git clone: buildroot purges the .git directory hence the
+script never runs.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/python-serial/python-serial.hash | 6 +++---
- package/python-serial/python-serial.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changelog
+v1 -> v2:
+* Fixed hash file (suggested by Peter)
+v2 -> v3:
+* Moved to use FOO_INCLUDE_FIXUP
+v3 -> v4:
+* Renamed FOO_INCLUDE_FIXUP to FOO_SYNC_HEADERS
 
-diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
-index 96209a9965..d885d3c0c8 100644
---- a/package/python-serial/python-serial.hash
-+++ b/package/python-serial/python-serial.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyserial/json
--md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
--sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
-+md5  1cf25a76da59b530dbfc2cf99392dc83  pyserial-3.5.tar.gz
-+sha256  3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb  pyserial-3.5.tar.gz
- # Locally computed sha256 checksums
--sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
-+sha256  f91cb9813de6a5b142b8f7f2dede630b5134160aedaeaf55f4d6a7e2593ca3f3  LICENSE.txt
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index d583ac65ab..249ea9d5a3 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ docs/manual/adding-packages-qmake.txt | 4 ++++
+ package/pkg-qmake.mk                  | 5 +++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/docs/manual/adding-packages-qmake.txt b/docs/manual/adding-packages-qmake.txt
+index e1621e914e..c7e6ff354a 100644
+--- a/docs/manual/adding-packages-qmake.txt
++++ b/docs/manual/adding-packages-qmake.txt
+@@ -79,3 +79,7 @@ also be defined.
+ * +LIBFOO_INSTALL_TARGET_OPTS+, to specify additional targets to pass
+   to the +make+ command during the target installation step. By default,
+   +install+.
++
++* +LIBFOO_SYNC_HEADERS+, to run syncqt.pl before qmake. Some packages
++  need this to have a properly populated include directory before
++  running the build.
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index 27727119d7..24bf0f7940 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -44,6 +44,10 @@ ifneq ($(1),qt5base)
+ $(2)_DEPENDENCIES 		+= qt5base
+ endif
  
--PYTHON_SERIAL_VERSION = 3.4
-+PYTHON_SERIAL_VERSION = 3.5
- PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
--PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
-+PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/1e/7d/ae3f0a63f41e4d2f6cb66a5b57197850f919f59e558159a4dd3a818f5082
- PYTHON_SERIAL_LICENSE = BSD-3-Clause
- PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
++ifdef $(2)_SYNC_HEADERS
++$(2)_DEPENDENCIES 		+= host-perl
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file.
+@@ -52,6 +56,7 @@ ifndef $(2)_CONFIGURE_CMDS
+ define $(2)_CONFIGURE_CMDS
+ 	$$(QT5_QT_CONF_FIXUP)
+ 	cd $$($(2)_BUILDDIR) && \
++	$$(if $$($(2)_SYNC_HEADERS), $(HOST_DIR)/bin/syncqt.pl -version $(QT5_VERSION) &&) \
+ 	$$(TARGET_MAKE_ENV) $$($(2)_CONF_ENV) $$(QT5_QMAKE) $$($(2)_CONF_OPTS)
+ endef
+ endif
 -- 
 2.25.1
