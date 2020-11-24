@@ -1,160 +1,329 @@
-From: Graham Leva <celaxodon@gmail.com>
-Date: Tue, 24 Nov 2020 10:30:30 -0600
-Subject: [Buildroot] [PATCH v4 4/5] board: add nvidia jetson tx2 support
-In-Reply-To: <df06db36-3e78-9303-e811-bdc1c5cf095a@smile.fr>
-References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-4-christian@paral.in>
- <bcfb1b77-8962-674f-1c08-fa7e60ec208e@smile.fr>
- <CA+h8R2pOAr8qXM23Na9KeB+a-vLyY2QaM21dK114DUfM7SAVOQ@mail.gmail.com>
- <df06db36-3e78-9303-e811-bdc1c5cf095a@smile.fr>
-Message-ID: <CAA7H50u8hKH-w9h9reZ2RW-uLE9CDEW-8hg2dR8o4fFuwRR7+w@mail.gmail.com>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Tue, 24 Nov 2020 16:41:17 +0000
+Subject: [Buildroot] [PATCH 2/2] package/bcc: new package
+In-Reply-To: <f9f16fa3-dcd6-7848-5b16-226b51557cf8@gmail.com>
+References: <20200824181740.12878-1-jugurtha.belkalem@smile.fr>
+ <20200824181740.12878-2-jugurtha.belkalem@smile.fr>
+ <20201004181215.2w225cjecin4pm6r@e107158-lin.cambridge.arm.com>
+ <f9f16fa3-dcd6-7848-5b16-226b51557cf8@gmail.com>
+Message-ID: <20201124164117.nn2uuwfmyotlv6jv@e107158-lin.cambridge.arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+Hi Romain
 
-I wanted to follow up here with some feedback. I work for NVIDIA and have
-been working on similar things as you, integrating the Jetson line of
-boards into Buildroot. Usual disclaimer, all opinions expressed here are my
-own and do not reflect those of my employer. I'm very excited to see others
-working on this though!
+On 11/03/20 23:34, Romain Naour wrote:
+> Hello Qais,
+> 
+> Sorry for my late reply.
 
-I don't want to derail this discussion in any way, but I thought I might be
-able to help some. A couple of issues I noticed:
+And sorry for my late reply too. I was off for 2 weeks.
 
-1. Package name -- this should be "tegra210" or "tegra210-linux" -- this
-package is for the BSP (Board Support Package), not Linux4Tegra, the custom
-kernel NVIDIA provides for its Tegra line of chips. Other boards require
-different BSPs, and still use Linux4Tegra for the kernel.
+> 
+> Le 04/10/2020 ??? 20:12, Qais Yousef a ???crit???:
+> > Hi Jugurtha
+> > 
+> > I am very late to the party and missed earlier reviews. So apologies in advance
+> > if any of my comments was already brought up/addressed.
+> > 
+> > Can you keep me on CC on future posting and any other related discussion
+> > please?
+> 
+> I'm reworking the series and I'm adding you in Cc for each patch.
+> Jugurtha is not available at the moment, but he is still interested by BCC.
 
-2. Root permissions -- you can remove the root permissions requirement by
-not using the flash.sh script NVIDIA provides. It's really a high-level
-wrapper around other scripts and image signing tools that require root.
-This should eliminate the need for your custom patch
-(0001-Adjust-flash.sh-for-flashing-Buildroot-produced-disk.patch). Happy to
-work with you on this. The way NVIDIA flashes boards and defines the
-partition layout through xml files and parsing can be difficult to
-translate to genimage or another Buildroot-compatibile tool. The way I've
-gone here was to define a layout based on the output from NVIDIA's scripts,
-and then target different layouts based on the board configuration
-parameters. This is more work up-front and requires some thinking about how
-each of the boards can be structured within Buildroot, but I think the
-flexibility (and not having root permissions) outweighs. I personally find
-having a genimage.cfg much clearer than the XML files for referencing
-partition layouts too.
+Great. Thanks for that. I will allocate time to review it soon.
 
-3. BSP software (everything under nv_tegra directory) -- this is a tough
-issue. Ideally, I would like to see NVIDIA offer some static download URLs
-for each of these pieces of software so we could create them as individual
-Buildroot packages, rather than just installed altogether as part of the
-BSP. I think this would be more in line with Buildroot's approach towards
-building minimal firmware with only the packages you need. I understand if
-this works for your use case, but there's a lot of system setup also
-included in this directory (nv_tegra/config.tbz2) that has implications on
-the Buildroot port and currently assumes you're building an Ubuntu-based
-system. How to handle udev configuration, for example -- I would suggest
-copying configurations over should be opt-in based on whether the user has
-selected BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y.
-
-> Cuda libraries requires a specific gcc version, see the tegra-demo-distro
-layer
-> [1]. I guess nivida only use gcc 7 (or maybe gcc 8) because they are using
-> ubuntu on this platform.
->
-> Also, the kernel you use come from github OE4T [2] where ~20 kernel
-patches have
-> been backported to fix gcc >= 8 issues. But this is not really the kernel
-from
-> Nvidia SDK.
-
-Romain is correct about the Linux4Tegra kernel here. I have a patch (really
-a series) I started to submit to add this in to Buildroot (see:
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-1-package-linux-nvidia-for-Jetson-Nano-SD-td269064.html#a269065),
-and hopefully you can build on it. L4T should be able to work and compile
-fine with GCC 8 or 9, but the kernel compilation currently breaks with 10.x.
-
-Kind regards,
-Graham Leva
-
-On Tue, Nov 24, 2020 at 8:52 AM Romain Naour <romain.naour@smile.fr> wrote:
-
-> Hello Christian,
->
-> Le 24/11/2020 ? 00:07, Christian Stewart a ?crit :
-> > Hi Romain,
-> >
-> > On Thu, Nov 19, 2020 at 5:40 AM Romain Naour <romain.naour@smile.fr>
-> wrote:
-> >>> +# Toolchain reference: docs.nvidia.com: "Jetson Linux Driver Package
-> Toolchain"
-> >>> +BR2_TOOLCHAIN_BUILDROOT=y
-> >>> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> >>> +BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> >>> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> >>> +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> >>> +BR2_BINUTILS_VERSION_2_32_X=y
-> >>> +BR2_GCC_VERSION_7_X=y
+> 
+> > 
+> > On 08/24/20 20:17, Jugurtha BELKALEM wrote:
+> >> bcc is a front-end tool for eBPF :
+> >> https://github.com/iovisor/bcc/blob/master/README.md.
+> >> eBPF is the most powerful Linux tracer, and bcc
+> >> allows to write eBPF scripts in C and PYTHON3.
 > >>
-> >> This means that you are not working on Buildroot master because gcc 7
-> has been
-> >> removed already.
+> >> bcc can help to troubleshoot issues quickly on
+> >> embedded systems (as long as Linux kernel
+> >> version >= 4.1).
 > >>
-> >> This is anoying... either the latest NVIDIA SDK (jetpack 4.4.1) is
-> already out
-> >> of date because it require an old gcc version or gcc is moving too fast
-> for such
-> >> sdk.
-> >
-> > I have tested this against GCC 8 and Buildroot 2020.08.x:
-> >
-> > BR2_TOOLCHAIN_BUILDROOT=y
-> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> > BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> > BR2_BINUTILS_VERSION_2_32_X=y
-> > BR2_GCC_VERSION_8_X=y
-> > BR2_USE_MMU=y
-> >
-> > ... and all works fine. Why do you think it won't work with GCC 8?
->
-> Cuda libraries requires a specific gcc version, see the tegra-demo-distro
-> layer
-> [1]. I guess nivida only use gcc 7 (or maybe gcc 8) because they are using
-> ubuntu on this platform.
->
-> Also, the kernel you use come from github OE4T [2] where ~20 kernel
-> patches have
-> been backported to fix gcc >= 8 issues. But this is not really the kernel
-> from
-> Nvidia SDK.
->
-> I understand that the nvidia sdk is difficult to package into Buildroot or
-> Yocto. My review is absolutely not a no-go for merging this BSP. You did a
-> great
-> job since you're able to use it with Buildroot :)
->
-> [1]
->
-> https://github.com/OE4T/tegra-demo-distro/blob/master/layers/meta-tegrademo/conf/distro/tegrademo.conf#L58
-> [2] https://github.com/OE4T/linux-tegra-4.9
->
-> Best regards,
-> Romain
->
-> >
-> > Best,
-> > Christian
-> >
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201124/93014645/attachment.html>
+> >> bcc can also make it easy to create observabilty tools,
+> >> SDN configuration, ddos mitigation, intrusion detection
+> >> and secure containers. More information is available at:
+> >> http://www.brendangregg.com/ebpf.html.
+> > 
+> > There's the brand new ebpf website too
+> > 
+> > 	http://www.ebpf.io
+> 
+> Link updated, thanks!
+> 
+> > 
+> >>
+> >> BCC can be tested on the target :
+> >> $ mount -t debugfs none /sys/kernel/debug
+> > 
+> > I wonder if this something we can automatically append to /etc/fstab when this
+> > package is enabled..
+> 
+> Sure, but this is a fstab customization. I don't think the bcc package should
+> change the /etc/fstab.
+> 
+> > 
+> >> $ mkdir -p /lib/modules/KERNEL_VERSION/build
+> >> $ cd /lib/modules/KERNEL_VERSION//build
+> >> $ cp /sys/kernel/kheaders.tar.xz .
+> >> $ unxz kheaders.tar.xz
+> >> $ tar xf kheaders.tar
+> > 
+> > All the above is unnecessary. BCC automatically does this if it detects
+> > /sys/kernel/kheaders.tar.xz is present. I had to enable BR2_PACKAGE_TAR for BCC
+> > to handle this correctly. I guess busybox::tar is too limited to work with BCC
+> > commands.
+> 
+> Indeed, thanks for the info.
+> Now I see:
+> https://github.com/iovisor/bcc/blob/v0.17.0/src/cc/frontends/clang/kbuild_helper.cc#L172
+> 
+> What was the error you get with busybox's tar ?
+
+Sadly I completely forgot. I can try to reproduce it. If you managed to resolve
+this in a different way, it works for me.
+
+> bcc doesn't use advenced tar option that is not supported by busybox's tar.
+> 
+> # tar --help
+> BusyBox v1.31.1 (2020-05-01 00:37:37 CEST) multi-call binary.
+> 
+> Usage: tar c|x|t [-hvokO] [-f TARFILE] [-C DIR] [-T FILE] [-X FILE] [--exclude
+> PATTERN]... [FILE]...
+> 
+> Create, extract, or list files from a tar file
+> 
+> 	c	Create
+> 	x	Extract
+> 	t	List
+> 	-f FILE	Name of TARFILE ('-' for stdin/out)
+> 	-C DIR	Change to DIR before operation
+> 	-v	Verbose
+> 	-O	Extract to stdout
+> 	-o	Don't restore user:group
+> 	-k	Don't replace existing files
+> 	-h	Follow symlinks
+> 	-T FILE	File with names to include
+> 	-X FILE	File with glob patterns to exclude
+> 	--exclude PATTERN	Glob pattern to exclude
+> 
+
+[...]
+
+> >>  menu "Debugging, profiling and benchmark"
+> >> +	source "package/bcc/Config.in"
+> >>  	source "package/blktrace/Config.in"
+> >>  	source "package/bonnie/Config.in"
+> >>  	source "package/cache-calibrator/Config.in"
+> >> diff --git a/package/bcc/0001-fix-aarch64-cross-compile.patch b/package/bcc/0001-fix-aarch64-cross-compile.patch
+> >> new file mode 100644
+> >> index 0000000..6b42797
+> >> --- /dev/null
+> >> +++ b/package/bcc/0001-fix-aarch64-cross-compile.patch
+> >> @@ -0,0 +1,65 @@
+> >> +From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
+> >> +From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> >> +Date: Thu, 2 May 2019 11:06:23 +0200
+> >> +Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
+> >> + cross-compiling
+> > 
+> > Is this luajit required to enable Lua front-end to BCC? Given python is the
+> > most common front-end, I'd argue to make this an extra option that is only
+> > enabled if the user selects it in the menu. Same way BPF backend in LLVM is
+> > only compiled in if selected. IMHO that's a better default behavior.
+> 
+> As far I can see in other packaging, BCC is using luajit as lua interpreter
+> https://src.fedoraproject.org/rpms/bcc/blob/master/f/bcc.spec
+> 
+> I'm agree that python is the most common front-end. I'll try to add a sub option
+> to enable or disable it.
+
+I think a sub option is the better way to go. Thanks!
+
+[...]
+
+> >> diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+> >> new file mode 100644
+> >> index 0000000..cf03927
+> >> --- /dev/null
+> >> +++ b/package/bcc/Config.in
+> >> @@ -0,0 +1,49 @@
+> >> +config BR2_PACKAGE_BCC
+> >> +	bool "bcc"
+> >> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> >> +	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+> >> +	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
+> >> +	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
+> > 
+> > This dependency on building the kernel in buildroot is not user friendly. For
+> > example I never build the kernel in buildroot, and certainly would like to be
+> > able to enable this package without having to build the kernel in buildroot.
+> 
+> IIRC this option was adde because we used a previous version of BCC (0.8) with a
+> kernel 4.x (at the time CONFIG_IKHEADERS didn't exist).
+> But still, if we don't enforce building a kernel to select BCC it's the user
+> responsibility to install the kernel sources (manually, rootfsoverlay or by a
+> post build script).
+> 
+> I'll remove this constrain.
+
+Thanks. IMO relying on users reading the documentation to enable kernel
+support is a better option.
+
+> 
+> > 
+> >> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
+> >> +	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
+> >> +	depends on BR2_INSTALL_LIBSTDCPP # clang
+> > 
+> >> +	select BR2_PACKAGE_AUDIT # runtime
+> > 
+> > This..
+> > 
+> >> +	select BR2_PACKAGE_CLANG
+> >> +	select BR2_PACKAGE_ELFUTILS
+> >> +	select BR2_PACKAGE_FLEX # needs FlexLexer.h
+> > 
+> >> +	select BR2_PACKAGE_IPERF3 # runtime
+> > 
+> > .. this..
+> > 
+> >> +	select BR2_PACKAGE_LLVM_BPF
+> >> +	select BR2_PACKAGE_LUAJIT
+> > 
+> >> +	select BR2_PACKAGE_NETPERF # runtime
+> > 
+> > .. and this look odd to me. Can you expand which runtime requires them?
+> 
+> for example, netperf is one of recommanded program for BCC.
+> They are listed in debian/control
+> https://github.com/iovisor/bcc/blob/v0.17.0/debian/control#L13
+> 
+> I don't remenber about audit, Jugurtha ?
+
+I think this is a specific use case for a class of people who would like to use
+BCC. I don't think we should impose netperf on them as a requirement. They can
+enable it independently if they want it, no?
+
+If you see a big value in enabling these packages automatically, can we hide
+them behind another sub option at least?
+
+Image bloat is a problem I faced in the past, and being able to have the bare
+minimum only is always good to have.
+
+> 
+> > 
+> >> +	select BR2_PACKAGE_PYTHON3
+> >> +	select BR2_PACKAGE_XZ # Decompress kernel headers required by BCC
+> > 
+> > If you replace XZ with TAR, you should find that BCC automatically handles the
+> > ikheader.tar.xz for you. There's now BPF Type Format (BTF) option in the kernel
+> > that could replace the dependency on the headers. Haven't played much with that
+> > yet though. BTF requires a tool called pahole. We can handle this support later
+> > I guess.
+> 
+> There is no package that provide pahole tool. Indeed this can be done later.
+
++1
+
+> 
+> > 
+> >> +	help
+> >> +	  BPF Compiler Collection (BCC)
+> >> +
+> >> +	  BCC is a toolkit for creating efficient kernel tracing and
+> >> +	  manipulation programs, and includes several useful tools and
+> >> +	  examples. It makes use of extended BPF (Berkeley Packet
+> >> +	  Filters), formally known as eBPF, a new feature that was
+> >> +	  first added to Linux 3.15. Much of what BCC uses requires
+> >> +	  Linux 4.1 and above.
+> >> +
+> >> +	  Note: Before using bcc, you need either need to :
+> >> +	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
+> >> +	  to target folder /lib/module/<kernel_ver>/build.
+> >> +	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
+> >> +	  and use generated headers under /sys/kernel/kheaders.tar.xz
+> >> +	  to populate /lib/module/<kernel_ver>/build.
+> >> +
+> >> +	  That's because the clang frontend build eBPF code at runtime.
+> >> +
+> >> +	  https://github.com/iovisor/bcc
+> >> +
+> >> +comment "bcc needs a Linux kernel to be built"
+> >> +	depends on !BR2_LINUX_KERNEL
+> > 
+> > I must remove this to compile this patch. This hard dependency is not required
+> > IMHO. You can still auto fix up the kernel if you like if the user is building
+> > the kernel and has enabled BCC. Just keep in mind it's a fast moving target, so
+> > the set of configs might require a bit of maintenance. Given it's all
+> > documented in BCC website, I personally think it's better to leave correct
+> > kernel configuration to the user to follow the right instructions from BCC
+> > website rather than automatically handle it for them.
+> 
+> You mean the bcc.mk shouldn't handler kernel options for BCC ?
+
+Yep.
+
+> 
+> Ok to remove this constraint on the Linux kernel.
+
+Thanks!
+
+[...]
+
+> > 
+> >> +
+> >> +define BCC_LINUX_CONFIG_FIXUPS
+> >> +	# Enable kernel support for eBPF
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CLS_BPF)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_BPF)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_JIT)
+> >> +	# [for Linux kernel versions 4.1 through 4.6]
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_BPF_JIT)
+> >> +	# [for Linux kernel versions 4.7 and later]
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_HAVE_EBPF_JIT)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_EVENTS)
+> >> +	# [for Linux kernel versions 5.2 and later]
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_IKHEADERS)
+> >> +	# For running bcc networking examples on vanilla kernel
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_SCH_SFQ)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_POLICE)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_ACT_GACT)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
+> >> +	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
+> >> +endef
+> > 
+> > This will be a big maintenance headache. New dependency can come up and configs
+> > like CONFIG_NET_* are not essential and seem to be specific to your usage.
+> > 
+> > I'm not in favour of them personally, but if you want them the list need to
+> > shrink to the bare minimum and depend on user building the kernel in buildroot
+> > IMO.
+> 
+> As you said, bcc is moving fast and requires different kernel option depending
+> on the kernel version or tool/example that will be running on the target.
+> Agree it's may be a big maintenance headache.
+> 
+> But on otherhand I find userfriendly to enable CONFIG_BPF to CONFIG_IKHEADERS
+> option. OK to drop kernel options for networking examples.
+> 
+> Thanks for your review!
+
+Thanks for taking care of the issues and sending a new version too! I'll review
+as soon as I can.
+
+Cheers
+
+--
+Qais Yousef
