@@ -1,123 +1,38 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Wed, 25 Nov 2020 15:07:00 -0600
-Subject: [Buildroot] [PATCH next 05/12]
- support/download/go-post-process: implement Go vendoring support
-In-Reply-To: <20201119213658.1232531-6-thomas.petazzoni@bootlin.com>
-References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
- <20201119213658.1232531-6-thomas.petazzoni@bootlin.com>
-Message-ID: <CALq67GBxOe=U_25AKWG9EB8bNeUveE-SX5tNyd9BG=0gqe9uEw@mail.gmail.com>
+From: Kevin Tomary <kevin.tomary@hotmail.com>
+Date: Wed, 25 Nov 2020 21:09:48 +0000
+Subject: [Buildroot] part rootfs size (268435456) too small for rootfs.ext4
+ (283115520)
+Message-ID: <AM9PR10MB4563BD0E8F2DCD86C358D08482FA0@AM9PR10MB4563.EURPRD10.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello
 
-I've tried out the new go vendoring support and I am running into an
-issue with cleaning the build directory when using this series. I've
-added a new package on your pkg-mgr branch called maddy with the
-following at package/maddy/maddy.mk:
+I have a problem. I wanted to update my build with adding some packages for my embedded system(stm32mp157)
 
-MADDY_VERSION = 0.4.2
-MADDY_SITE = $(call github,foxcpp,maddy,v$(MADDY_VERSION))
+In menuconfig --> Filesystem images I chose an exact size of 270M which generated the above error.
 
-$(eval $(golang-package))
+I tested the exact size and I for
 
-Then I run the following commands:
 
-make maddy
-make clean
+  *   exact file size <265 :mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
+*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
+fs/ext2/ext2.mk:46: recipe for target '/home/mehdi/buildroot/output/images/rootfs.ext2' failed
 
-The error I get is as follows:
 
-rm -rf /home/ryan/projects/br/br-pkg-mgr/output/target
-/home/ryan/projects/br/br-pkg-mgr/output/images
-/home/ryan/projects/br/br-pkg-mgr/output/host  \
-        /home/ryan/projects/br/br-pkg-mgr/output/build
-/home/ryan/projects/br/br-pkg-mgr/output/staging \
-        /home/ryan/projects/br/br-pkg-mgr/output/legal-info
-/home/ryan/projects/br/br-pkg-mgr/output/graphs
-/home/ryan/projects/br/br-pkg-mgr/output/per-package
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/README.md':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_amd64.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_amd64.s':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_test.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/go.mod':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhsum/xxhsum.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhsum/.gitignore':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_unsafe.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_other.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/LICENSE.txt':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/go.sum':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/.travis.yml':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_safe.go':
-Permission denied
-rm: cannot remove
-'/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_unsafe_test.go':
-Permission denied
+  *   exact file size superior or equal to 265 I got : part rootfs size (268435456) too small for rootfs.ext4 (283115520)
 
-There are about 1000 more lines with this error. The only way I can do
-a clean is by running:
+What should I do? I am beginning my project and I may need further packages and modules for what is coming.
 
-sudo rm -rf output/*
+What should I do?
 
-Here are the permissions on one of the files:
 
-$ ls -al /home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_unsafe_test.go
--r--r--r-- 1 ryan ryan 402 Nov 25 15:01
-/home/ryan/projects/br/br-pkg-mgr/output/host/share/go-path/pkg/mod/github.com/cespare/xxhash/v2 at v2.1.1/xxhash_unsafe_test.go
+Best Regards
 
-I've tried that same package on the latest version of master and I do
-not see this error. With that same maddy.mk file on master I am able
-to successfully build the package and run `make clean`. I believe the
-error I see it is due to the vendoring of go modules. Before today,
-I've never build a go package so I'm not familiar with how those files
-could be have incorrect permissions.
-
-Thanks,
--Ryan
-
-On Thu, Nov 19, 2020 at 3:37 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This commit introduces the download post-process script
-> support/download/go-post-process, and hooks it into the Go package
-> infrastructure.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-golang.mk            |  7 ++++++-
->  support/download/go-post-process | 29 +++++++++++++++++++++++++++++
->  2 files changed, 35 insertions(+), 1 deletion(-)
->  create mode 100755 support/download/go-post-process
-
-[...]
+Kevin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201125/940f5288/attachment.html>
