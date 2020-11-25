@@ -1,73 +1,79 @@
 From: Xavier Roumegue <xroumegue@gmail.com>
-Date: Wed, 25 Nov 2020 19:30:09 +0100
-Subject: [Buildroot] [PATCH v4 0/8] Add imx8mm platform using only upstream
- components
+Date: Wed, 25 Nov 2020 19:30:10 +0100
+Subject: [Buildroot] [PATCH v4 1/8] package/freescale-imx/firmware-imx: Add
+ option to install all ddr fw files
 In-Reply-To: <20201109142309.1135596-2-xroumegue@gmail.com>
 References: <20201109142309.1135596-2-xroumegue@gmail.com>
-Message-ID: <20201125183017.15585-1-xroumegue@gmail.com>
+Message-ID: <20201125183017.15585-2-xroumegue@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch set aims to add support for booting imx8m platforms with upstream
-BSP components, avoiding the use of proprietary imx-mkimage tool.
+Selecting this option will copy all ([lp]ddr4.bin) DDR training files to
+BINARIES_DIR.
 
-Uboot is using its embedded mkimage tool and a per platform configuration file
-to generate the boot medium thanks to additional imx specific makefile targets.
+Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
 
-Delegating the bootable image generation to uboot requires proprietary SoC
-firmwares either involved in the boot flow or eventually requiring
-authentication to be copied in the uboot build directory.
-
-As per Thomas proposal, this patch set mainly adds an option to copy a files
-list, from binaries folder to uboot build directory as dependency of uboot
-build step.
-
-This was inspired from SolidRun patch below:
-https://github.com/SolidRun/buildroot/commit/0f2b2971e836b508bf9c2dac34426a59a9d83572
-but this was adapted to prevent uboot patches and generalize the approach to
-any platforms.
-
-Changes v1 -> v2:
-    - Initial patch set proposal was using a dedicated board script to
-      generate the boot image as buildroot step, templatizing the configuration
-      file used to define the boot image and reusing the firmwares from the
-      binaries folder.
-    - imx8mq platform does not boot with hdmi fw embedded in the boot image and
-      recent arm trusted firmware, so imx8mq config file is removed since a
-      change to uboot mkimage configuration file is required.
-Changes v2 -> v3:
-    - Use custom version for kernel, uboot (Suggested by Fabio Estevam)
+---
 Changes v3 -> v4:
-    - Fix check-package reported issues (Reported by Stephane Viau)
+    - Fix indentation issue (detected by Stephane Viau)
+---
+ package/freescale-imx/firmware-imx/Config.in       |  3 +++
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
 
-Xavier Roumegue (8):
-  package/freescale-imx/firmware-imx: Add option to install all ddr fw
-    files
-  boot/uboot: Add option to install fw files list to uboot build
-    directory
-  package/freescale-imx/firmware-imx: Copy of all DDR files if uboot
-    needs fw.
-  boot/uboot/imx8: Add new target needed for mainline u-boot
-  board/freescale/common/imx: Add Support for uboot 'flash.bin' image
-  board/freescale/common/imx8: Use post build generated uboot image if
-    present
-  board/freescale/common/imx8: Templatize uboot image name
-  configs/imx8mmevk: new defconfig
-
- DEVELOPERS                                    |  3 ++
- .../common/imx/genimage.cfg.template_imx8     |  2 +-
- board/freescale/common/imx/post-image.sh      |  6 ++-
- board/freescale/imx8mmevk/readme.txt          | 29 +++++++++++++-
- boot/uboot/Config.in                          | 20 ++++++++++
- boot/uboot/uboot.mk                           | 15 +++++++
- configs/imx8mmevk_defconfig                   | 40 +++++++++++++++++++
- package/freescale-imx/firmware-imx/Config.in  |  4 ++
- .../firmware-imx/firmware-imx.mk              | 12 ++++++
- 9 files changed, 127 insertions(+), 4 deletions(-)
- create mode 100644 configs/imx8mmevk_defconfig
-
---
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 587f402426..09ccacb0c1 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -81,6 +81,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN
+ 	help
+ 	  The DMEM firmware will be padded to this length
+ 
++config BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE
++	bool
++
+ endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
+ 
+ endif # BR2_PACKAGE_FIRMWARE_IMX
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index fb3cfe640b..c5ae4fad25 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -36,6 +36,16 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
+ endef
+ 
++ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE),y)
++define FIRMWARE_IMX_COPY_DDR_FW
++	cp $(1) $(BINARIES_DIR)/
++endef
++else
++define FIRMWARE_IMX_COPY_DDR_FW
++	true
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
+ FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
+ 
+@@ -51,6 +61,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
+ 		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
+ 	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin)
+ endef
+ endif
+ 
+@@ -69,6 +80,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
+ 		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
+ 		$(BINARIES_DIR)/ddr4_201810_fw.bin
+ 	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
++	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/ddr4*.bin)
+ endef
+ endif
+ 
+-- 
 2.29.2
