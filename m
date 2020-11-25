@@ -1,66 +1,41 @@
-From: Francois Gervais <fgervais@distech-controls.com>
-Date: Wed, 25 Nov 2020 17:39:56 -0500
-Subject: [Buildroot] [PATCH v2 2/2] package/systemd: add a menu entry to
- enable portable services
-In-Reply-To: <20201125223956.24847-1-fgervais@distech-controls.com>
-References: <20201125223956.24847-1-fgervais@distech-controls.com>
-Message-ID: <20201125223956.24847-2-fgervais@distech-controls.com>
+From: Gervais, Francois <FGervais@distech-controls.com>
+Date: Wed, 25 Nov 2020 22:53:38 +0000
+Subject: [Buildroot] [PATCH 1/1] Revert "package/systemd: disable
+ portabled"
+In-Reply-To: <CADYdroOGDZoHtbruupAjFJASOhMQxUmQE2Qsi33STyxTrWV76g@mail.gmail.com>
+References: <20201125152717.1984-1-fgervais@distech-controls.com>
+ <CADYdroNf18UG_dm9rWqLaW5morJm=5kz6LUZ-rMVmC--ixS8pA@mail.gmail.com>
+ <DM6PR01MB3755A13BD450506C5E7312BEF3FA0@DM6PR01MB3755.prod.exchangelabs.com>,
+ <CADYdroOGDZoHtbruupAjFJASOhMQxUmQE2Qsi33STyxTrWV76g@mail.gmail.com>
+Message-ID: <DM6PR01MB37551BBEB5EFC4271E66E90BF3FA0@DM6PR01MB3755.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
----
- package/systemd/Config.in  | 17 +++++++++++++++++
- package/systemd/systemd.mk |  6 ++++++
- 2 files changed, 23 insertions(+)
+I sent a new version of the patch which adds the menu entry.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ec34478e3d..3966ba2fc7 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -343,6 +343,23 @@ comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_USE_WCHAR
- 
-+config BR2_PACKAGE_SYSTEMD_PORTABLED
-+	bool "enable portable services"
-+	help
-+	  Portable services are systemd services that can be dynamically
-+	  attached and detached from the system.
-+
-+	  These services must come with their own root directory which
-+	  they are bond to through an automatically generated drop-in.
-+
-+	  They also have restrictions applied by the host system in the
-+	  form of profiles.
-+
-+	  This functionality is provided by the system service systemd-portabled
-+	  along with the corresponding CLI portablectl.
-+
-+	  https://systemd.io/PORTABLE_SERVICES/
-+
- config BR2_PACKAGE_SYSTEMD_QUOTACHECK
- 	bool "enable quotacheck tools"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index e24c357ccf..5aed87f452 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -416,6 +416,12 @@ else
- SYSTEMD_CONF_OPTS += -Dpolkit=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
-+SYSTEMD_CONF_OPTS += -Dportabled=true
-+else
-+SYSTEMD_CONF_OPTS += -Dportabled=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
--- 
-2.17.1
+This patch however has not been marked as Superseded in patchwork.
+
+Is this something manually done by the admins or it there
+something I should have done differently?
+
+
+From: Norbert Lange <nolange79@gmail.com>
+Sent: November 25, 2020 1:14 PM
+To: Gervais, Francois <FGervais@distech-controls.com>
+Cc: buildroot <buildroot@buildroot.org>; Maxime Hadjinlian <maxime.hadjinlian@gmail.com>; Yann E . MORIN <yann.morin.1998@free.fr>
+Subject: Re: [PATCH 1/1] Revert "package/systemd: disable portabled" 
+?
+Am Mi., 25. Nov. 2020 um 18:05 Uhr schrieb Gervais, Francois
+<FGervais@distech-controls.com>:
+
+You are right, I mixed up systemd-portabled and portablectl.
+The reasons I disabled portabled was that
+
+-?? its still labeled as preview at https://systemd.io/PORTABLE_SERVICES/
+-?? buildroot should attempt to be minimalistic by default
+-?? no one objected
+
+Norbert
