@@ -1,53 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Nov 2020 21:35:58 +0100
-Subject: [Buildroot] [PATCH next 07/12] package/pkg-cargo.mk: introduce
- the cargo package infrastructure
-In-Reply-To: <CALq67GAGhUt56n2d9eLtufxH4jdNYPy14iuMwEK95qhkgWPvDQ@mail.gmail.com>
+Date: Wed, 25 Nov 2020 21:37:04 +0100
+Subject: [Buildroot] [PATCH next 05/12]
+ support/download/go-post-process: implement Go vendoring support
+In-Reply-To: <CA+h8R2rY05=7NZbOf+fU30qV+xdq0g2GhBpZSMBfg5uRm4x9XA@mail.gmail.com>
 References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
- <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
- <CALq67GAGhUt56n2d9eLtufxH4jdNYPy14iuMwEK95qhkgWPvDQ@mail.gmail.com>
-Message-ID: <20201125213558.31151101@windsurf.home>
+ <20201119213658.1232531-6-thomas.petazzoni@bootlin.com>
+ <CA+h8R2rY05=7NZbOf+fU30qV+xdq0g2GhBpZSMBfg5uRm4x9XA@mail.gmail.com>
+Message-ID: <20201125213704.569c52dc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+Hello Christian,
 
-On Wed, 25 Nov 2020 13:46:38 -0600
-Ryan Barnett <ryanbarnett3@gmail.com> wrote:
+Thanks for the feedback!
 
-> error: no matching package named `aho-corasick` found
-> location searched: registry `https://github.com/rust-lang/crates.io-index`
-> required by package `globset v0.4.5
-> (/home/ryan/projects/br/br-pkg-mgr/output/build/ripgrep-12.1.1/crates/globset)`
-> As a reminder, you're using offline mode (--offline) which can
-> sometimes cause surprising resolution failures, if this error is too
-> confusing you may wish to retry without the offline flag.
-> make[1]: *** [package/pkg-generic.mk:250:
-> /home/ryan/projects/br/br-pkg-mgr/output/build/ripgrep-12.1.1/.stamp_built]
-> Error 101
-> make: *** [Makefile:84: _all] Error 2
+On Wed, 25 Nov 2020 12:28:31 -0800
+Christian Stewart <christian@paral.in> wrote:
+
+> This looks good. There's only one problem - if the package does not
+> come with a go.mod file (which is the case with
+> nvidia-container-toolkit).
 > 
-> I get this error by running the following commands:
+> In this case we need to run the $(2)_GEN_GOMOD script before running
+> the download post-process.
 > 
-> make ripgrep
-> make clean ripgrep
+> Today, this is written as so and creates a go.mod if it doesn't already exist:
+> 
+> # Generate a go.mod file if it doesn't exist. Note: Go is configured
+> # to use the "vendor" dir and not make network calls.
+> define $(2)_GEN_GOMOD
+> if [ ! -f $$(@D)/go.mod ]; then \
+>   printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
+> fi
+> endef
+> $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
 
-[...]
+Ah, good point. Do you have an example of such a package (publicly
+available)? That would help testing a solution.
 
-> So it appears that after the rippackage has been downloaded there is
-> an issue with doing a clean build. I'm not familiar with cargo/rust
-> builds and how the offline component works but it appears that the
-> introduction of this cargo infrastructure and the downloading of
-> vendor dependencies is not currently reproducible.
-
-Thanks for the report, I'll try to have a look as time permits. I'm
-also not that familiar with the Cargo stuff, but we'll see if I can
-find something.
-
-Thanks!
+I guess the best solution is to modify the POST_PATCH_HOOKS to be done
+by the download post-process script ?
 
 Thomas
 -- 
