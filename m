@@ -1,53 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 08:52:46 +0100
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.4
-Message-ID: <20201203092227.8EAE9821E0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 26 Nov 2020 16:31:37 +0100
+Subject: [Buildroot] [git commit] support/scripts/cve.py: properly match
+ CPEs with version '*'
+Message-ID: <20201203092227.400A5821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=840f5065b3b1ff6e16b229fc62385b6c971f28de
+commit: https://git.buildroot.net/buildroot/commit/?id=1ff7f003e1cfc02241aef8f35429462edd60ed09
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+Currently, when the version encoded in a CPE is '-', we assume all
+versions are affected, but when it's '*' with no further range
+information, we assume no version is affected.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
+This doesn't make sense, so instead, we handle '*' and '-' in the same
+way. If there's no version information available in the CVE CPE ID, we
+assume all versions are affected.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This increases quite a bit the number of CVEs and package affected:
+
+-    "total-cves": 302,
+-    "pkg-cves": 100,
++    "total-cves": 597,
++    "pkg-cves": 135,
+
+For example, CVE-2007-4476 has a CPE ID of:
+
+    cpe:2.3:a:gnu:tar:*:*:*:*:*:*:*:*
+
+So it should be taken into account. In this specific case, it is
+combined with an AND with CPE ID
+cpe:2.3:o:suse:suse_linux:10:*:enterprise_server:*:*:*:*:* but since
+we don't support this kind of matching, we'd better be on the safe
+side, and report this CVE as affecting tar, do an analysis of the CVE
+impact, and document it in TAR_IGNORE_CVES.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libinput/libinput.hash | 8 +++-----
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ support/scripts/cve.py | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 79bfc5d98b..f2cea28ee3 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
--md5  562614e91c10c75ab1c2b71e5d27f076  libinput-1.16.3.tar.xz
--sha1  ee1e93ee647bdd4598a5910eb654592563657d66  libinput-1.16.3.tar.xz
--sha256  dc5e1ae51ec1cc635ca96f61118b0f07dfea783cab0747a60f3555068bb077e4  libinput-1.16.3.tar.xz
--sha512  cdf87988b24dc0a44b7b6ed3e15e70c7702bf65f1cfe257924967677c7a1f1485011a9e30254ba8962c83885de78f824e7955cedb07322676332d42532ec4a39  libinput-1.16.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
-+sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
-+sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index 6396019e0e..e7472cd470 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -144,10 +144,6 @@ class CVE:
+                 # Version is defined, this is a '=' match
+                 op_start = '='
+                 v_start = version
+-            elif version == '-':
+-                # no version information is available
+-                op_start = '='
+-                v_start = version
+             else:
+                 # Parse start version, end version and operators
+                 if 'versionStartIncluding' in cpe:
+@@ -206,11 +202,8 @@ class CVE:
+         for cpe in self.each_cpe():
+             if cpe['product'] != name:
+                 continue
+-            if cpe['v_start'] == '-':
+-                return self.CVE_AFFECTS
+             if not cpe['v_start'] and not cpe['v_end']:
+-                print("No CVE affected version")
+-                continue
++                return self.CVE_AFFECTS
+             if not pkg_version:
+                 continue
  
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index e5578a3921..3b459d6fb5 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.16.3
-+LIBINPUT_VERSION = 1.16.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
