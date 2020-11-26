@@ -1,84 +1,54 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Thu, 26 Nov 2020 16:28:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: always enable
- systemd-tmpfilesd
-Message-ID: <20201126152805.1102228-1-nolange79@gmail.com>
+Date: Thu, 26 Nov 2020 16:28:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: Allow extra config options
+Message-ID: <20201126152832.1115350-1-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-this tool and service is pretty much expected to be enabled,
-making this a certainty will enable future improvements.
-
-remove the related BR2_PACKAGE_SYSTEMD Config option tree-wide.
+Systemd has very many options, adding a way for the user
+to set custom options can help customizations
+without changing buildroot files.
 
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/dhcp/Config.in     |  1 -
- package/systemd/Config.in  | 11 -----------
- package/systemd/systemd.mk |  7 +------
- 3 files changed, 1 insertion(+), 18 deletions(-)
+ package/systemd/Config.in  | 8 ++++++++
+ package/systemd/systemd.mk | 2 ++
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index e6e70908dd..515040c612 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -13,7 +13,6 @@ if BR2_PACKAGE_DHCP
- 
- config BR2_PACKAGE_DHCP_SERVER
- 	bool "dhcp server"
--	select BR2_PACKAGE_SYSTEMD_TMPFILES if BR2_PACKAGE_SYSTEMD
- 	help
- 	  DHCP server from the ISC DHCP distribution.
- 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index d576e6035b..2c89538987 100644
+index 2c89538987..946b2d9905 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -451,17 +451,6 @@ config BR2_PACKAGE_SYSTEMD_TIMESYNCD
+@@ -89,6 +89,14 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-timesyncd.html
- 
--config BR2_PACKAGE_SYSTEMD_TMPFILES
--	bool "enable tmpfiles support"
--	default y
--	help
--	  systemd-tmpfiles creates, deletes, and cleans up volatile
--	  and temporary files and directories, based on the
--	  configuration file format and location specified in
--	  tmpfiles.d(5).
--
--	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
--
- config BR2_PACKAGE_SYSTEMD_USERDB
- 	bool "enable userdb daemon"
- 	help
++config BR2_PACKAGE_SYSTEMD_EXTRA_CONFIG
++	string "Additional target systemd options"
++	default ""
++	help
++	  Any additional systemd configure options you may want to
++	  include. The options are appended to Buildroot generated
++	  options and can override these.
++
+ config BR2_PACKAGE_SYSTEMD_BOOT
+ 	bool "systemd-boot"
+ 	depends on BR2_i386 || BR2_x86_64
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 629f4022d7..2f1d898e0d 100644
+index 2f1d898e0d..878e99ed00 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -47,6 +47,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dsysvrcnd-path= \
- 	-Dtelinit-path= \
- 	-Dtests=false \
-+	-Dtmpfiles=true \
- 	-Dumount-path=/usr/bin/umount \
- 	-Dutmp=false
- 
-@@ -299,12 +300,6 @@ else
- SYSTEMD_CONF_OPTS += -Dquotacheck=false
+@@ -500,6 +500,8 @@ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
  endif
  
--ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
--SYSTEMD_CONF_OPTS += -Dtmpfiles=true
--else
--SYSTEMD_CONF_OPTS += -Dtmpfiles=false
--endif
--
- ifeq ($(BR2_PACKAGE_SYSTEMD_SYSUSERS),y)
- SYSTEMD_CONF_OPTS += -Dsysusers=true
- else
++SYSTEMD_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_SYSTEMD_EXTRA_CONFIG))
++
+ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs multi-user.target \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/default.target
 -- 
 2.29.2
