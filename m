@@ -1,65 +1,89 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 26 Nov 2020 17:49:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linux-pam: security bump to
- version 1.5.1
-In-Reply-To: <87v9dsrtkn.fsf@dell.be.48ers.dk>
-References: <20201126192950.135871-1-fontaine.fabrice@gmail.com>
- <87v9dsrtkn.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80kywrSZ5pd0FH-2eqDF0RNsNEE28wEs06-LKSiR4Otbw@mail.gmail.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Thu, 26 Nov 2020 17:58:30 +0100
+Subject: [Buildroot] [PATCH] configs/arm_foundationv8: bump to Linux 5.9.11
+Message-ID: <20201126165831.6341-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le jeu. 26 nov. 2020 ? 17:06, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Fix CVE-2020-27780 - authentication bypass when a user doesn't exist and
->  > root password is blank
->
->  > https://github.com/linux-pam/linux-pam/releases/tag/v1.5.1
->
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > ---
->  >  package/linux-pam/linux-pam.hash | 4 ++--
->  >  package/linux-pam/linux-pam.mk   | 2 +-
->  >  2 files changed, 3 insertions(+), 3 deletions(-)
->
->  > diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
->  > index 15e67a5e4c..10cd7be9c4 100644
->  > --- a/package/linux-pam/linux-pam.hash
->  > +++ b/package/linux-pam/linux-pam.hash
->  > @@ -1,6 +1,6 @@
->  >  # Locally computed hashes after checking signature at
->  > -# https://github.com/linux-pam/linux-pam/releases/download/v1.5.0/Linux-PAM-1.5.0.tar.xz.asc
->  > +# https://github.com/linux-pam/linux-pam/releases/download/v1.5.1/Linux-PAM-1.5.1.tar.xz.asc
->  >  # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
->  > -sha256  02d39854b508fae9dc713f7733bbcdadbe17b50de965aedddd65bcb6cc7852c8  Linux-PAM-1.5.0.tar.xz
->  > +sha256  201d40730b1135b1b3cdea09f2c28ac634d73181ccd0172ceddee3649c5792fc  Linux-PAM-1.5.1.tar.xz
->  >  # Locally computed
->  >  sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
->  > diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
->  > index 176830c1d3..61d9542c02 100644
->  > --- a/package/linux-pam/linux-pam.mk
->  > +++ b/package/linux-pam/linux-pam.mk
->  > @@ -4,7 +4,7 @@
->  >  #
->  >  ################################################################################
->
->  > -LINUX_PAM_VERSION = 1.5.0
->  > +LINUX_PAM_VERSION = 1.5.1
->
-> Ehh, we only have 1.4.0 in master and next?
-Indeed, the patch to bump linux-pam to version 1.5.0 was not applied
-yet, I'll send a v2.
->
-> It would be good to notice that this security issue only exists in pam
-> 1.5.0.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+- Bump to the latest kernel v5.9.11.
+- Switch to PSCI for bringing up the secondary CPUs.
+- Update the instruction in the readme.txt to use the latest FVP v8
+  Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
 
-Fabrice
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
+
+
+Hi,
+
+Here is a first step to "modernize" the arm_foundationv8_defconfig. I think
+turning on more than one core with PSCI makes sense. Let me know if this is ok
+for you. Also, in the future I would like to switch to GICv3 but I am not there
+yet.
+
+Best regards,
+Vincent.
+
+
+ board/arm/foundation-v8/readme.txt | 8 +++++---
+ configs/arm_foundationv8_defconfig | 9 +++++----
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
+index 1dedf68cba..359aeda1e1 100644
+--- a/board/arm/foundation-v8/readme.txt
++++ b/board/arm/foundation-v8/readme.txt
+@@ -3,17 +3,19 @@ ARM software simulator of the AArch64 architecture.
+ 
+ First, one has to download the AArch64 software simulator from:
+ 
+-  https://silver.arm.com/download/download.tm?pv=2663527
++  https://silver.arm.com/download/download.tm?pv=4807186
+ 
+ Then, use the arm_foundationv8_defconfig configuration to build your
+ Buildroot system.
+ 
+ Finally, boot your system with:
+ 
+- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
++ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
+     --image output/images/linux-system.axf \
+     --block-device output/images/rootfs.ext2 \
+-    --network=nat
++    --network=nat \
++    --no-gicv3 \
++    --cores 4
+ 
+ You can get network access from within the simulated environment
+ by requesting an IP address using DHCP (run the command 'udhcpc').
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index ea19f35502..0f84103690 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,15 +1,16 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 5.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-psci"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_BOOT_WRAPPER_AARCH64=y
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
++BR2_TARGET_BOOT_WRAPPER_AARCH64_PSCI=y
+-- 
+2.29.2
