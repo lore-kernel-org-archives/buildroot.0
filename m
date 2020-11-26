@@ -1,453 +1,95 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 27 Nov 2020 18:13:36 +0100
-Subject: [Buildroot] [PATCH/next v2,
- 1/1] package/linux-pam: bump to version 1.5.1
-Message-ID: <20201127171336.5466-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 26 Nov 2020 18:34:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.13
+Message-ID: <20201126173430.540104-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patches (already in version) and so autoreconf
-- cracklib is not a dependency since
-  https://github.com/linux-pam/linux-pam/commit/d702ff714c309069111899fd07c09e31c414c166
+Rebased patches.
 
-https://github.com/linux-pam/linux-pam/releases/tag/v1.5.0
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.13
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+According to the release notes this is a "security bug fix release":
+https://news-web.php.net/php.announce/301
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2 (after review of Peter Korsgaard):
- - Bump from 1.4.0 to 1.5.1 beacuse patch bumping to 1.5.0 was not
-   applied yet
- - Remove security statement about CVE-2020-27780 as the security issue
-   has been added in version 1.5.0
+ package/php/0002-iconv-tweak-iconv-detection.patch     | 4 ++--
+ package/php/0003-configure-disable-the-phar-tool.patch | 4 ++--
+ package/php/php.hash                                   | 2 +-
+ package/php/php.mk                                     | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
- ...when-crypt-does-not-require-libcrypt.patch |  37 --
- .../linux-pam/0002-fix-build-on-musl.patch    | 320 ------------------
- package/linux-pam/linux-pam.hash              |   4 +-
- package/linux-pam/linux-pam.mk                |  11 +-
- 4 files changed, 3 insertions(+), 369 deletions(-)
- delete mode 100644 package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch
- delete mode 100644 package/linux-pam/0002-fix-build-on-musl.patch
-
-diff --git a/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch b/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch
-deleted file mode 100644
-index ebcb81aa91..0000000000
---- a/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From aef363c7e8e942224e6cffc4398366c6e5d31749 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 11 Jun 2020 00:04:32 +0200
--Subject: [PATCH] configure.ac: fix build failure when crypt() does not require
-- libcrypt
--
--Since commit 522246d20e4cd92fadc2d760228cb7e78cbeb4c5, the build fails
--if "none required" is returned by AC_SEARCH_LIBS for libcrypt.
--
--Resolves: https://github.com/linux-pam/linux-pam/pull/235
--Fixes: http://autobuild.buildroot.org/results/92b3dd7c984d2b843ac9aacacd69eec99f28743e
--Fixes: v1.4.0~228 ("Use cached 'crypt' library result correctly")
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://github.com/linux-pam/linux-pam/commit/aef363c7e8e942224e6cffc4398366c6e5d31749]
-----
-- configure.ac | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index ea08a7a3..c1862ea7 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -428,7 +428,11 @@ AS_IF([test "x$ac_cv_header_xcrypt_h" = "xyes"],
--   [crypt_libs="crypt"])
-- 
-- BACKUP_LIBS=$LIBS
---AC_SEARCH_LIBS([crypt],[$crypt_libs], LIBCRYPT="${ac_cv_search_crypt}", LIBCRYPT="")
--+AC_SEARCH_LIBS([crypt],[$crypt_libs])
--+case "$ac_cv_search_crypt" in
--+	-l*) LIBCRYPT="$ac_cv_search_crypt" ;;
--+	*) LIBCRYPT="" ;;
--+esac
-- AC_CHECK_FUNCS(crypt_r crypt_gensalt_r)
-- LIBS=$BACKUP_LIBS
-- AC_SUBST(LIBCRYPT)
-diff --git a/package/linux-pam/0002-fix-build-on-musl.patch b/package/linux-pam/0002-fix-build-on-musl.patch
-deleted file mode 100644
-index 44fceccc88..0000000000
---- a/package/linux-pam/0002-fix-build-on-musl.patch
-+++ /dev/null
-@@ -1,320 +0,0 @@
--From 295bf7403364b23ab03287ecdd95ea266d6f4d89 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 11 Jun 2020 17:39:03 +0200
--Subject: [PATCH] fix build on musl
--
--Rename check_user_in_passwd from pam_localuser.c to
--pam_modutil_check_user_in_passwd and use it in pam_faillock.c instead of
--fgetpwent_r which is not available on musl
--
--Fix #236
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0432736ffee376dd84757469434a4bbcfdcdaf4b
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/linux-pam/linux-pam/pull/237]
-----
-- libpam/Makefile.am                        |  1 +
-- libpam/include/security/pam_modutil.h     |  5 ++
-- libpam/libpam.map                         |  5 ++
-- libpam/pam_modutil_check_user_in_passwd.c | 89 +++++++++++++++++++++++
-- modules/pam_faillock/pam_faillock.c       | 37 +---------
-- modules/pam_localuser/pam_localuser.c     | 86 +---------------------
-- 6 files changed, 103 insertions(+), 120 deletions(-)
-- create mode 100644 libpam/pam_modutil_check_user_in_passwd.c
--
--diff --git a/libpam/Makefile.am b/libpam/Makefile.am
--index 9252a837..a8fc428d 100644
----- a/libpam/Makefile.am
--+++ b/libpam/Makefile.am
--@@ -35,6 +35,7 @@ libpam_la_SOURCES = pam_account.c pam_auth.c pam_data.c pam_delay.c \
-- 	pam_misc.c pam_password.c pam_prelude.c \
-- 	pam_session.c pam_start.c pam_strerror.c \
-- 	pam_vprompt.c pam_syslog.c pam_dynamic.c pam_audit.c \
--+	pam_modutil_check_user_in_passwd.c \
-- 	pam_modutil_cleanup.c pam_modutil_getpwnam.c pam_modutil_ioloop.c \
-- 	pam_modutil_getgrgid.c pam_modutil_getpwuid.c pam_modutil_getgrnam.c \
-- 	pam_modutil_getspnam.c pam_modutil_getlogin.c pam_modutil_ingroup.c \
--diff --git a/libpam/include/security/pam_modutil.h b/libpam/include/security/pam_modutil.h
--index 3a6aec6a..33f87b90 100644
----- a/libpam/include/security/pam_modutil.h
--+++ b/libpam/include/security/pam_modutil.h
--@@ -58,6 +58,11 @@ extern "C" {
-- 
-- #include <security/_pam_types.h>
-- 
--+extern int PAM_NONNULL((1,2))
--+pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
--+                                 const char *user_name,
--+                                 const char *file_name);
--+
-- extern struct passwd * PAM_NONNULL((1,2))
-- pam_modutil_getpwnam(pam_handle_t *pamh, const char *user);
-- 
--diff --git a/libpam/libpam.map b/libpam/libpam.map
--index c9690a91..3cc7ef35 100644
----- a/libpam/libpam.map
--+++ b/libpam/libpam.map
--@@ -82,3 +82,8 @@ LIBPAM_1.4 {
--   global:
--     pam_start_confdir;
-- } LIBPAM_1.0;
--+
--+LIBPAM_MODUTIL_1.4.1 {
--+  global:
--+    pam_modutil_check_user_in_passwd;
--+} LIBPAM_MODUTIL_1.3.2;
--diff --git a/libpam/pam_modutil_check_user_in_passwd.c b/libpam/pam_modutil_check_user_in_passwd.c
--new file mode 100644
--index 00000000..b998aa25
----- /dev/null
--+++ b/libpam/pam_modutil_check_user_in_passwd.c
--@@ -0,0 +1,89 @@
--+#include "pam_modutil_private.h"
--+#include <security/pam_ext.h>
--+
--+#include <stdio.h>
--+#include <syslog.h>
--+
--+int
--+pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
--+                                 const char *user_name,
--+                                 const char *file_name)
--+{
--+	int rc;
--+	size_t user_len;
--+	FILE *fp;
--+	char line[BUFSIZ];
--+
--+	/* Validate the user name.  */
--+	if ((user_len = strlen(user_name)) == 0) {
--+		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
--+		return PAM_SERVICE_ERR;
--+	}
--+
--+	if (user_len > sizeof(line) - sizeof(":")) {
--+		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
--+		return PAM_SERVICE_ERR;
--+	}
--+
--+	if (strchr(user_name, ':') != NULL) {
--+		/*
--+		 * "root:x" is not a local user name even if the passwd file
--+		 * contains a line starting with "root:x:".
--+		 */
--+		return PAM_PERM_DENIED;
--+	}
--+
--+	/* Open the passwd file.  */
--+	if (file_name == NULL) {
--+		file_name = "/etc/passwd";
--+	}
--+	if ((fp = fopen(file_name, "r")) == NULL) {
--+		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
--+		return PAM_SERVICE_ERR;
--+	}
--+
--+	/*
--+	 * Scan the file using fgets() instead of fgetpwent_r() because
--+	 * the latter is not flexible enough in handling long lines
--+	 * in passwd files.
--+	 */
--+	rc = PAM_PERM_DENIED;
--+	while (fgets(line, sizeof(line), fp) != NULL) {
--+		size_t line_len;
--+		const char *str;
--+
--+		/*
--+		 * Does this line start with the user name
--+		 * followed by a colon?
--+		 */
--+		if (strncmp(user_name, line, user_len) == 0 &&
--+		    line[user_len] == ':') {
--+			rc = PAM_SUCCESS;
--+			break;
--+		}
--+		/* Has a newline been read?  */
--+		line_len = strlen(line);
--+		if (line_len < sizeof(line) - 1 ||
--+		    line[line_len - 1] == '\n') {
--+			/* Yes, continue with the next line.  */
--+			continue;
--+		}
--+
--+		/* No, read till the end of this line first.  */
--+		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
--+			line_len = strlen(line);
--+			if (line_len == 0 ||
--+			    line[line_len - 1] == '\n') {
--+				break;
--+			}
--+		}
--+		if (str == NULL) {
--+			/* fgets returned NULL, we are done.  */
--+			break;
--+		}
--+		/* Continue with the next line.  */
--+	}
--+
--+	fclose(fp);
--+	return rc;
--+}
--diff --git a/modules/pam_faillock/pam_faillock.c b/modules/pam_faillock/pam_faillock.c
--index f592d0a2..8bca46ca 100644
----- a/modules/pam_faillock/pam_faillock.c
--+++ b/modules/pam_faillock/pam_faillock.c
--@@ -348,42 +348,7 @@ set_conf_opt(pam_handle_t *pamh, struct options *opts, const char *name, const c
-- static int
-- check_local_user (pam_handle_t *pamh, const char *user)
-- {
---	struct passwd pw, *pwp;
---	char buf[16384];
---	int found = 0;
---	FILE *fp;
---	int errn;
---
---	fp = fopen(PATH_PASSWD, "r");
---	if (fp == NULL) {
---		pam_syslog(pamh, LOG_ERR, "unable to open %s: %m",
---			   PATH_PASSWD);
---		return -1;
---	}
---
---	for (;;) {
---		errn = fgetpwent_r(fp, &pw, buf, sizeof (buf), &pwp);
---		if (errn == ERANGE) {
---			pam_syslog(pamh, LOG_WARNING, "%s contains very long lines; corrupted?",
---				   PATH_PASSWD);
---			break;
---		}
---		if (errn != 0)
---			break;
---		if (strcmp(pwp->pw_name, user) == 0) {
---			found = 1;
---			break;
---		}
---	}
---
---	fclose (fp);
---
---	if (errn != 0 && errn != ENOENT) {
---		pam_syslog(pamh, LOG_ERR, "unable to enumerate local accounts: %m");
---		return -1;
---	} else {
---		return found;
---	}
--+	return pam_modutil_check_user_in_passwd(pamh, user, NULL);
-- }
-- 
-- static int
--diff --git a/modules/pam_localuser/pam_localuser.c b/modules/pam_localuser/pam_localuser.c
--index cb507524..a9f2233c 100644
----- a/modules/pam_localuser/pam_localuser.c
--+++ b/modules/pam_localuser/pam_localuser.c
--@@ -45,92 +45,10 @@
-- #include <unistd.h>
-- 
-- #include <security/pam_modules.h>
--+#include <security/pam_modutil.h>
-- #include <security/pam_ext.h>
-- #include "pam_inline.h"
-- 
---static int
---check_user_in_passwd(pam_handle_t *pamh, const char *user_name,
---		     const char *file_name)
---{
---	int rc;
---	size_t user_len;
---	FILE *fp;
---	char line[BUFSIZ];
---
---	/* Validate the user name.  */
---	if ((user_len = strlen(user_name)) == 0) {
---		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
---		return PAM_SERVICE_ERR;
---	}
---
---	if (user_len > sizeof(line) - sizeof(":")) {
---		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
---		return PAM_SERVICE_ERR;
---	}
---
---	if (strchr(user_name, ':') != NULL) {
---		/*
---		 * "root:x" is not a local user name even if the passwd file
---		 * contains a line starting with "root:x:".
---		 */
---		return PAM_PERM_DENIED;
---	}
---
---	/* Open the passwd file.  */
---	if (file_name == NULL) {
---		file_name = "/etc/passwd";
---	}
---	if ((fp = fopen(file_name, "r")) == NULL) {
---		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
---		return PAM_SERVICE_ERR;
---	}
---
---	/*
---	 * Scan the file using fgets() instead of fgetpwent_r() because
---	 * the latter is not flexible enough in handling long lines
---	 * in passwd files.
---	 */
---	rc = PAM_PERM_DENIED;
---	while (fgets(line, sizeof(line), fp) != NULL) {
---		size_t line_len;
---		const char *str;
---
---		/*
---		 * Does this line start with the user name
---		 * followed by a colon?
---		 */
---		if (strncmp(user_name, line, user_len) == 0 &&
---		    line[user_len] == ':') {
---			rc = PAM_SUCCESS;
---			break;
---		}
---		/* Has a newline been read?  */
---		line_len = strlen(line);
---		if (line_len < sizeof(line) - 1 ||
---		    line[line_len - 1] == '\n') {
---			/* Yes, continue with the next line.  */
---			continue;
---		}
---
---		/* No, read till the end of this line first.  */
---		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
---			line_len = strlen(line);
---			if (line_len == 0 ||
---			    line[line_len - 1] == '\n') {
---				break;
---			}
---		}
---		if (str == NULL) {
---			/* fgets returned NULL, we are done.  */
---			break;
---		}
---		/* Continue with the next line.  */
---	}
---
---	fclose(fp);
---	return rc;
---}
---
-- int
-- pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
-- 		    int argc, const char **argv)
--@@ -173,7 +91,7 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
-- 		return rc == PAM_CONV_AGAIN ? PAM_INCOMPLETE : rc;
-- 	}
-- 
---	return check_user_in_passwd(pamh, user_name, file_name);
--+	return pam_modutil_check_user_in_passwd(pamh, user_name, file_name);
-- }
-- 
-- int
---- 
--2.26.2
--
-diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
-index 608908cb00..be7cabf6dc 100644
---- a/package/linux-pam/linux-pam.hash
-+++ b/package/linux-pam/linux-pam.hash
-@@ -1,6 +1,6 @@
- # Locally computed hashes after checking signature at
--# https://github.com/linux-pam/linux-pam/releases/download/v1.4.0/Linux-PAM-1.4.0.tar.xz.asc
-+# https://github.com/linux-pam/linux-pam/releases/download/v1.5.0/Linux-PAM-1.5.1.tar.xz.asc
- # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
--sha256  cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034  Linux-PAM-1.4.0.tar.xz
-+sha256  201d40730b1135b1b3cdea09f2c28ac634d73181ccd0172ceddee3649c5792fc  Linux-PAM-1.5.1.tar.xz
- # Locally computed
- sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 57fb2c9cfd..61d9542c02 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index a12041603d..959afd80da 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -16,7 +16,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [aduskett at gmail.com: Update for 7.3.0]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: rebased for 7.4.10]
++[Bernd: rebased for 7.4.10 & 7.4.13]
+ ---
+  build/php.m4        |  2 +-
+  ext/iconv/config.m4 | 22 ----------------------
+@@ -26,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1965,7 +1965,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1967,7 +1967,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
+  
+diff --git a/package/php/0003-configure-disable-the-phar-tool.patch b/package/php/0003-configure-disable-the-phar-tool.patch
+index aface92d77..4a25ec05c1 100644
+--- a/package/php/0003-configure-disable-the-phar-tool.patch
++++ b/package/php/0003-configure-disable-the-phar-tool.patch
+@@ -13,7 +13,7 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ [Aduskett: update for 7.3.0]
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: rebased for 7.4.10]
++[Bernd: rebased for 7.4.10 & 7.4.13]
+ ---
+  configure.ac | 9 ++-------
+  1 file changed, 2 insertions(+), 7 deletions(-)
+@@ -22,7 +22,7 @@ diff --git a/configure.ac b/configure.ac
+ index 0dfab302..6026fb66 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -1453,13 +1453,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
++@@ -1454,13 +1454,8 @@ CFLAGS="\$(CFLAGS_CLEAN) $standard_libtool_flag"
+  INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
+  CXXFLAGS="$CXXFLAGS $standard_libtool_flag \$(PROF_FLAGS)"
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 8e8131d301..5078228f48 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  e82d2bcead05255f6b7d2ff4e2561bc334204955820cabc2457b5239fde96b76  php-7.4.12.tar.xz
++sha256  aead303e3abac23106529560547baebbedba0bb2943b91d5aa08fff1f41680f4  php-7.4.13.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ce0e3e4a49..0feb96e97a 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_PAM_VERSION = 1.4.0
-+LINUX_PAM_VERSION = 1.5.1
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
- LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
- LINUX_PAM_INSTALL_STAGING = YES
-@@ -20,8 +20,6 @@ LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf \
- 	$(TARGET_NLS_DEPENDENCIES)
- LINUX_PAM_LICENSE = BSD-3-Clause
- LINUX_PAM_LICENSE_FILES = Copyright
--# We're patching configure.ac
--LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-@@ -42,13 +40,6 @@ else
- LINUX_PAM_CONF_OPTS += --disable-audit
- endif
- 
--ifeq ($(BR2_PACKAGE_CRACKLIB),y)
--LINUX_PAM_CONF_OPTS += --enable-cracklib
--LINUX_PAM_DEPENDENCIES += cracklib
--else
--LINUX_PAM_CONF_OPTS += --disable-cracklib
--endif
--
- # Install default pam config (deny everything except login)
- define LINUX_PAM_INSTALL_CONFIG
- 	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
+-PHP_VERSION = 7.4.12
++PHP_VERSION = 7.4.13
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-2.29.2
+2.27.0
