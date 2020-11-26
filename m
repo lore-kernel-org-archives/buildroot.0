@@ -1,38 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Nov 2020 16:38:34 +0100
-Subject: [Buildroot] [PATCH 07/10] support/scripts/cve-checker: show CPE
- ID in results
-In-Reply-To: <20201104145145.1316167-8-thomas.petazzoni@bootlin.com>
-References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-8-thomas.petazzoni@bootlin.com>
-Message-ID: <20201126163834.296257b9@windsurf.home>
+From: Francois Gervais <fgervais@distech-controls.com>
+Date: Thu, 26 Nov 2020 10:55:33 -0500
+Subject: [Buildroot] [PATCH v3 1/1] package/systemd: add a menu entry to
+ enable portable services
+Message-ID: <20201126155533.28179-1-fgervais@distech-controls.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  4 Nov 2020 15:51:41 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+Reviewed-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/systemd/Config.in  | 17 +++++++++++++++++
+ package/systemd/systemd.mk |  7 ++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
-> From: Gregory CLEMENT <gregory.clement@bootlin.com>
-> 
-> This commit improves the cve-checker script to show the CPE ID of
-> packages, if available. For now, it doesn't use CPE IDs to match CVEs.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  support/scripts/cve-checker | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-
-Since cve-checker is no longer part of Buildroot, this patch no longer
-makes sense, and I marked it as Non Applicable in patchwork.
-
-Best regards,
-
-Thomas
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index ec34478e3d..3966ba2fc7 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -343,6 +343,23 @@ comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_USE_WCHAR
+ 
++config BR2_PACKAGE_SYSTEMD_PORTABLED
++	bool "enable portable services"
++	help
++	  Portable services are systemd services that can be dynamically
++	  attached and detached from the system.
++
++	  These services must come with their own root directory which
++	  they are bond to through an automatically generated drop-in.
++
++	  They also have restrictions applied by the host system in the
++	  form of profiles.
++
++	  This functionality is provided by the system service systemd-portabled
++	  along with the corresponding CLI portablectl.
++
++	  https://systemd.io/PORTABLE_SERVICES/
++
+ config BR2_PACKAGE_SYSTEMD_QUOTACHECK
+ 	bool "enable quotacheck tools"
+ 	help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index cb12f667d6..5aed87f452 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -33,7 +33,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dman=false \
+ 	-Dmount-path=/usr/bin/mount \
+ 	-Dnss-systemd=true \
+-	-Dportabled=false \
+ 	-Dquotacheck-path=/usr/sbin/quotacheck \
+ 	-Dquotaon-path=/usr/sbin/quotaon \
+ 	-Drootlibdir='/usr/lib' \
+@@ -417,6 +416,12 @@ else
+ SYSTEMD_CONF_OPTS += -Dpolkit=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
++SYSTEMD_CONF_OPTS += -Dportabled=true
++else
++SYSTEMD_CONF_OPTS += -Dportabled=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPTS += -Dnetworkd=true
+ SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
