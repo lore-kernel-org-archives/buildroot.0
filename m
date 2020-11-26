@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Nov 2020 17:13:27 +0100
-Subject: [Buildroot] [PATCH 1/1] Revert "package/systemd: disable
- portabled"
-In-Reply-To: <DM6PR01MB37551BBEB5EFC4271E66E90BF3FA0@DM6PR01MB3755.prod.exchangelabs.com>
- (Francois via buildroot Gervais's message of "Wed, 25 Nov 2020
- 22:53:38 +0000")
-References: <20201125152717.1984-1-fgervais@distech-controls.com>
- <CADYdroNf18UG_dm9rWqLaW5morJm=5kz6LUZ-rMVmC--ixS8pA@mail.gmail.com>
- <DM6PR01MB3755A13BD450506C5E7312BEF3FA0@DM6PR01MB3755.prod.exchangelabs.com>
- <CADYdroOGDZoHtbruupAjFJASOhMQxUmQE2Qsi33STyxTrWV76g@mail.gmail.com>
- <DM6PR01MB37551BBEB5EFC4271E66E90BF3FA0@DM6PR01MB3755.prod.exchangelabs.com>
-Message-ID: <87mtz4rt94.fsf@dell.be.48ers.dk>
+Date: Thu, 26 Nov 2020 17:10:02 +0100
+Subject: [Buildroot] [git commit] package/efl: fix build with wepb
+Message-ID: <20201126155846.5E43F87349@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gervais," == Gervais, Francois via buildroot <buildroot@busybox.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=854ea9a98eebeedb9b2c05460994f29c0c9cea9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > I sent a new version of the patch which adds the menu entry.
+webpdemux support in webp is mandatory since version 1.25.0 and
+https://github.com/Enlightenment/efl/commit/df06418b6f39f3b8d73631bda33308b67736bb9d
 
-Thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/736357e669c35bd56e818c0c7fabd1b455f40a5f
 
- > This patch however has not been marked as Superseded in patchwork.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/efl/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Is this something manually done by the admins or it there
- > something I should have done differently?
-
-You can create an account yourself:
-
-https://patchwork.ozlabs.org/register/
-
-And update the state of your patches, but I have done it for this patch
-already.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index e4e4c72161..d4a8762de0 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -256,6 +256,7 @@ config BR2_PACKAGE_EFL_TIFF
+ config BR2_PACKAGE_EFL_WEBP
+ 	bool "libevas webp image loader"
+ 	select BR2_PACKAGE_WEBP
++	select BR2_PACKAGE_WEBP_DEMUX
+ 	help
+ 	  This enables the loader code that loads images using WebP.
+ 
