@@ -1,11 +1,8 @@
 From: Leonid Yuriev <leo@yuriev.ru>
-Date: Fri, 27 Nov 2020 16:47:12 +0300
+Date: Fri, 27 Nov 2020 16:51:43 +0300
 Subject: [Buildroot] [PATCH v5 1/1] package/libmdbx: new package
  (library/database).
-In-Reply-To: <20201127134713.1103936-1-leo@yuriev.ru>
-References: <CAO2+NUDJUL_FYfQ3E_cmmu20F3VOagxDpy_243a6mU3oAeASNA@mail.gmail.com>
- <20201006192709.8265-2-leo@yuriev.ru>
-Message-ID: <20201127134713.1103936-2-leo@yuriev.ru>
+Message-ID: <20201127135143.1104192-1-leo@yuriev.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
