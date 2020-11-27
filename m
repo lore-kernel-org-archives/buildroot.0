@@ -1,214 +1,58 @@
 From: Leonid Yuriev <leo@yuriev.ru>
-Date: Fri, 27 Nov 2020 16:47:11 +0300
-Subject: [Buildroot] [PATCH v5 0/1] cover letter for package/libmdbx: new
- package (library/database)
-Message-ID: <20201127134713.1103936-1-leo@yuriev.ru>
+Date: Fri, 27 Nov 2020 16:47:12 +0300
+Subject: [Buildroot] [PATCH v5 1/1] package/libmdbx: new package
+ (library/database).
+In-Reply-To: <20201127134713.1103936-1-leo@yuriev.ru>
+References: <CAO2+NUDJUL_FYfQ3E_cmmu20F3VOagxDpy_243a6mU3oAeASNA@mail.gmail.com>
+ <20201006192709.8265-2-leo@yuriev.ru>
+Message-ID: <20201127134713.1103936-2-leo@yuriev.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds libmdbx v0.9.2 and below is a brief overview of libmdbx.
-Please merge.
+This patch adds libmdbx v0.9.2:
+ - libmdbx is one of the fastest compact embeddable key-value ACID database.
+ - libmdbx has a specific set of properties and capabilities,
+   focused on creating unique lightweight solutions.
+ - libmdbx surpasses the legendary LMDB (Lightning Memory-Mapped Database)
+   in terms of reliability, features and performance.
+ - https://github.com/erthink/libmdbx
 
-Regards,
-Leonid.
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
 
---
+---
+Changes v1 -> v2:
+  - libmdbx version v0.8.2 -> v0.9.1 (released 2020-09-30)
 
-libmdbx is an extremely fast, compact, powerful, embedded, transactional
-key-value database, with permissive license. libmdbx has a specific set
-of properties and capabilities, focused on creating unique lightweight
-solutions.
+Changes v2 -> v3:
+  - removed outcommented stuff (suggested by Heiko Thiery).
+  - cleaned up and simplified the makefile (suggested by Heiko Thiery).
+  - added patch for C++ header installation.
+  - added patch with fix minor copy&paste typo.
+  - added patch with pthread workaround for buggy toolchain/cmake/buildroot.
+  - added patch for `pthread_yield()`.
+  - passed `utils/check-package package/libmdbx/*` (suggested by Heiko Thiery)
+  - passed `utils/test-pkg -a -p libmdbx`,
+    except w/o threads & w/o MMU (suggested by Heiko Thiery).
 
-Historically, libmdbx (MDBX) is a deeply revised and extended descendant
-of the legendary LMDB (Lightning Memory-Mapped Database). libmdbx
-inherits all benefits from LMDB, but resolves some issues and adds a set
-of improvements.
+Changes v3 -> v4:
+  - fix passing BR2_PACKAGE_LIBMDBX_TOOLS option to cmake.
+  - fix using `depend on` instead of `select`,
+    and add `comment` for C++ toolchain (suggested by Heiko Thiery).
+  - fix minor help typo.
 
-According to developers, for now libmdbx surpasses the LMDB in terms of
-reliability, features and performance.
+Changes v4 -> v5:
+  - libmdbx version v0.9.1 -> v0.9.2 (released 2020-11-27)
+  - dropped all patch since not needed.
+  - cosmetic changes (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
+  - added dependence of BR2_TOOLCHAIN_HAS_SYNC_4 (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
+  - added dependence of !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
+  - take in account the BR2_SHARED_STATIC_LIBS (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
 
-
-The most important differences MDBX from LMDB:
-==============================================
-
-1. More attention is paid to the quality of the code, to an
-"unbreakability" of the API, to testing and automatic checks (i.e.
-sanitizers, etc). So there:
- - more control during operation;
- - more checking parameters, internal audit of database structures;
- - no warnings from compiler;
- - no issues from ASAN, UBSAN, Valgrind, Coverity;
- - etc.
-
-2. Keys could be more than 2 times longer than LMDB.
-
-3. Up to 20% faster than LMDB in CRUD benchmarks.
-
-4. Automatic on-the-fly database size adjustment,
-both increment and reduction.
-
-5. Automatic continuous zero-overhead database compactification.
-
-6. The same database format for 32- and 64-bit builds.
-
-7. LIFO policy for Garbage Collection recycling (this can significantly
-increase write performance due write-back disk cache up to several times
-in a best case scenario).
-
-8. Range query estimation.
-
-9. Utility for checking the integrity of the database structure with
-some recovery capabilities.
-
-For more info please refer:
- - https://github.com/erthink/libmdbx for source code and README.
- - https://erthink.github.io/libmdbx for API description.
-
---
-
-MDBX is a Btree-based database management library modeled loosely on the
-BerkeleyDB API, but much simplified. The entire database (aka
-"environment") is exposed in a memory map, and all data fetches return
-data directly from the mapped memory, so no malloc's or memcpy's occur
-during data fetches. As such, the library is extremely simple because it
-requires no page caching layer of its own, and it is extremely high
-performance and memory-efficient. It is also fully transactional with
-full ACID semantics, and when the memory map is read-only, the database
-integrity cannot be corrupted by stray pointer writes from application
-code.
-
-The library is fully thread-aware and supports concurrent read/write
-access from multiple processes and threads. Data pages use a
-copy-on-write strategy so no active data pages are ever overwritten,
-which also provides resistance to corruption and eliminates the need of
-any special recovery procedures after a system crash. Writes are fully
-serialized; only one write transaction may be active at a time, which
-guarantees that writers can never deadlock. The database structure is
-multi-versioned so readers run with no locks; writers cannot block
-readers, and readers don't block writers.
-
-Unlike other well-known database mechanisms which use either write-ahead
-transaction logs or append-only data writes, MDBX requires no
-maintenance during operation. Both write-ahead loggers and append-only
-databases require periodic checkpointing and/or compaction of their log
-or database files otherwise they grow without bound. MDBX tracks
-retired/freed pages within the database and re-uses them for new write
-operations, so the database size does not grow without bound in normal
-use.
-
-The memory map can be used as a read-only or read-write map. It is
-read-only by default as this provides total immunity to corruption.
-Using read-write mode offers much higher write performance, but adds the
-possibility for stray application writes thru pointers to silently
-corrupt the database.
-
-
-Features
-========
-
-- Key-value data model, keys are always sorted.
-
-- Fully ACID-compliant, through to MVCC and CoW.
-
-- Multiple key-value sub-databases within a single datafile.
-
-- Range lookups, including range query estimation.
-
-- Efficient support for short fixed length keys, including native
-  32/64-bit integers.
-
-- Ultra-efficient support for multimaps. Multi-values sorted, searchable
-  and iterable. Keys stored without duplication.
-
-- Data is memory-mapped and accessible directly/zero-copy. Traversal of
-  database records is extremely-fast.
-
-- Transactions for readers and writers, ones do not block others.
-
-- Writes are strongly serialized. No transaction conflicts nor
-  deadlocks.
-
-- Readers are non-blocking, notwithstanding snapshot isolation.
-
-- Nested write transactions.
-
-- Reads scale linearly across CPUs.
-
-- Continuous zero-overhead database compactification.
-
-- Automatic on-the-fly database size adjustment.
-
-- Customizable database page size.
-
-- Olog(N) cost of lookup, insert, update, and delete operations by
-  virtue of B+ tree characteristics.
-
-- Online hot backup.
-
-- Append operation for efficient bulk insertion of pre-sorted data.
-
-- No WAL nor any transaction journal. No crash recovery needed. No
-  maintenance is required.
-
-- No internal cache and/or memory management, all done by basic OS
-  services.
-
-
-Limitations
-===========
-
-- Page size: a power of 2, maximum 65536 bytes, default 4096 bytes.
-
-- Key size: minimum 0, maximum ?? pagesize (1300 bytes for default 4K
-  pagesize, 21780 bytes for 64K pagesize).
-
-- Value size: minimum 0, maximum 2146435072 (0x7FF00000) bytes for maps,
-  ?? pagesize for multimaps (1348 bytes default 4K pagesize, 21828 bytes
-  for 64K pagesize).
-
-- Write transaction size: up to 4194301 (0x3FFFFD) pages (16 GiB for
-  default 4K pagesize, 256 GiB for 64K pagesize).
-
-- Database size: up to 2147483648 pages (8 TiB for default 4K pagesize,
-  128 TiB for 64K pagesize).
-
-- Maximum sub-databases: 32765.
-
-
-Gotchas
-=======
-
-- There cannot be more than one writer at a time, i.e. no more than one
-  write transaction at a time.
-
-- libmdbx is based on B+ tree, so access to database pages is mostly
-  random. Thus SSDs provide a significant performance boost over
-  spinning disks for large databases.
-
-- libmdbx uses shadow paging instead of WAL. Thus syncing data to disk
-  might be a bottleneck for write intensive workload.
-
-- libmdbx uses copy-on-write for snapshot isolation during updates, but
-  read transactions prevents recycling an old retired/freed pages, since
-  it read ones. Thus altering of data during a parallel long-lived read
-  operation will increase the process work set, may exhaust entire free
-  database space, the database can grow quickly, and result in
-  performance degradation. Try to avoid long running read transactions.
-
-- libmdbx is extraordinarily fast and provides minimal overhead for data
-  access, so you should reconsider using brute force techniques and
-  double check your code. On the one hand, in the case of libmdbx, a
-  simple linear search may be more profitable than complex indexes. On
-  the other hand, if you make something suboptimally, you can notice
-  detrimentally only on sufficiently large data.
-
---
-Leonid Yuriev (1):
-  package/libmdbx: new package (library/database).
-
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+---
  DEVELOPERS                   |  3 +++
  package/Config.in            |  1 +
  package/libmdbx/Config.in    | 45 ++++++++++++++++++++++++++++++++++++
@@ -219,5 +63,132 @@ Leonid Yuriev (1):
  create mode 100644 package/libmdbx/libmdbx.hash
  create mode 100644 package/libmdbx/libmdbx.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ab1e125f4..758ff6a2d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1482,6 +1482,9 @@ N:	Leon Anavi <leon.anavi@konsulko.com>
+ F:	board/olimex/a10_olinuxino
+ F:	configs/olimex_a10_olinuxino_lime_defconfig
+ 
++N:	Leonid Yuriev <leo@yuriev.ru>
++F:	package/libmdbx/
++
+ N:	Lionel Flandrin <lionel@svkt.org>
+ F:	package/python-babel/
+ F:	package/python-daemonize/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..a6f95bfaa9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1372,6 +1372,7 @@ menu "Database"
+ 	source "package/kompexsqlite/Config.in"
+ 	source "package/leveldb/Config.in"
+ 	source "package/libgit2/Config.in"
++	source "package/libmdbx/Config.in"
+ 	source "package/libodb/Config.in"
+ 	source "package/libodb-boost/Config.in"
+ 	source "package/libodb-mysql/Config.in"
+diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+new file mode 100644
+index 0000000000..d13f73938f
+--- /dev/null
++++ b/package/libmdbx/Config.in
+@@ -0,0 +1,45 @@
++config BR2_PACKAGE_LIBMDBX
++	bool "libmdbx"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++	help
++	  One of the fastest compact key-value ACID database
++	  without WAL. libmdbx has a specific set of properties
++	  and capabilities, focused on creating unique lightweight
++	  solutions.
++
++	  libmdbx surpasses the legendary LMDB in terms of
++	  reliability, features and performance.
++
++	  https://github.com/erthink/libmdbx
++
++if BR2_PACKAGE_LIBMDBX
++
++config BR2_PACKAGE_LIBMDBX_TOOLS
++	bool "install tools"
++	help
++	  Install libmdbx tools for checking, dump, restore
++	  and show statistics of databases.
++
++config BR2_PACKAGE_LIBMDBX_CXX
++	bool "C++ API"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++	help
++	  Enable modern C++11/14/17/20 API for libmdbx.
++
++comment "libmdbx C++ support needs a toolchain w/ C++11, gcc >= 4.8 w/o bug#64735"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
++endif
++
++comment "libmdbx needs MMU, a toolchain w/ threads, gcc >= 4.4 w/ 4-byte atomics"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_SYNC_4 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+new file mode 100644
+index 0000000000..0d3501f1d9
+--- /dev/null
++++ b/package/libmdbx/libmdbx.hash
+@@ -0,0 +1,5 @@
++# Hashes from: https://github.com/erthink/libmdbx/releases/
++sha256  c35cc53d66d74ebfc86e39441ba26276541ac7892bf91dba1e70c83665a02767  libmdbx-amalgamated-0.9.2.tar.gz
++
++# Locally calculated
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+new file mode 100644
+index 0000000000..f3720130ec
+--- /dev/null
++++ b/package/libmdbx/libmdbx.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# libmdbx
++#
++################################################################################
++
++LIBMDBX_VERSION = 0.9.2
++LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
++LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
++LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
++LIBMDBX_LICENSE = OLDAP-2.8
++LIBMDBX_LICENSE_FILES = LICENSE
++LIBMDBX_REDISTRIBUTE = YES
++LIBMDBX_STRIP_COMPONENTS = 0
++LIBMDBX_INSTALL_STAGING = YES
++
++LIBMDBX_CONF_OPTS = -DMDBX_INSTALL_MANPAGES=OFF -DBUILD_FOR_NATIVE_CPU=OFF \
++	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
++	-DMDBX_BUILD_TOOLS=$(if $(BR2_PACKAGE_LIBMDBX_TOOLS),ON,OFF)
++
++ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC=ON
++else
++LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC=OFF
++endif
++
++ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY=ON -DMDBX_LINK_TOOLS_NONSTATIC=ON
++else
++LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY=OFF -DMDBX_LINK_TOOLS_NONSTATIC=OFF
++endif
++
++$(eval $(cmake-package))
 -- 
 2.29.2
