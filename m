@@ -1,235 +1,446 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Nov 2020 16:36:56 +0100
-Subject: [Buildroot] [git commit] support/testing/tests/core/test_cpeid: new
- test
-Message-ID: <20201203092227.666B4821E0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Nov 2020 17:47:33 +0100
+Subject: [Buildroot] [git commit] package/linux-pam: bump to version 1.5.1
+Message-ID: <20201203092227.710EB821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3950c53cd0d062c1bb446d0837fee2c005cae009
+commit: https://git.buildroot.net/buildroot/commit/?id=276f1e0a896698abec85500a86686bf72c79eb91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a number of test cases to verify that the CPE_ID_*
-variables are properly handled by the generic package infrastructure
-and that the "make show-info" JSON output matches what we expect.
+- Drop patches (already in version) and so autoreconf
+- cracklib is not a dependency since
+  https://github.com/linux-pam/linux-pam/commit/d702ff714c309069111899fd07c09e31c414c166
 
-A total of 5 different example packages are used to exercise different
-scenarios of CPE_ID_* variables usage.
+https://github.com/linux-pam/linux-pam/releases/tag/v1.5.0
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../tests/core/cpeid-br2-external/Config.in        |   0
- .../tests/core/cpeid-br2-external/external.desc    |   1 +
- .../tests/core/cpeid-br2-external/external.mk      |   1 +
- .../package/cpe-id-pkg1/cpe-id-pkg1.mk             |   4 +
- .../package/cpe-id-pkg2/cpe-id-pkg2.mk             |   3 +
- .../package/cpe-id-pkg3/cpe-id-pkg3.mk             |   5 +
- .../package/cpe-id-pkg4/cpe-id-pkg4.mk             |   9 ++
- .../package/cpe-id-pkg5/cpe-id-pkg5.mk             |  16 +++
- support/testing/tests/core/test_cpeid.py           | 109 +++++++++++++++++++++
- 9 files changed, 148 insertions(+)
+ ...lure-when-crypt-does-not-require-libcrypt.patch |  37 ---
+ package/linux-pam/0002-fix-build-on-musl.patch     | 320 ---------------------
+ package/linux-pam/linux-pam.hash                   |   4 +-
+ package/linux-pam/linux-pam.mk                     |  11 +-
+ 4 files changed, 3 insertions(+), 369 deletions(-)
 
-diff --git a/support/testing/tests/core/cpeid-br2-external/Config.in b/support/testing/tests/core/cpeid-br2-external/Config.in
-new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/support/testing/tests/core/cpeid-br2-external/external.desc b/support/testing/tests/core/cpeid-br2-external/external.desc
-new file mode 100644
-index 0000000000..d19ae79e7a
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/external.desc
-@@ -0,0 +1 @@
-+name: CPE_ID
-diff --git a/support/testing/tests/core/cpeid-br2-external/external.mk b/support/testing/tests/core/cpeid-br2-external/external.mk
-new file mode 100644
-index 0000000000..47492d7f82
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/external.mk
-@@ -0,0 +1 @@
-+include $(sort $(wildcard $(BR2_EXTERNAL_CPE_ID_PATH)/package/*/*.mk))
-diff --git a/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg1/cpe-id-pkg1.mk b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg1/cpe-id-pkg1.mk
-new file mode 100644
-index 0000000000..5e7460286b
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg1/cpe-id-pkg1.mk
-@@ -0,0 +1,4 @@
-+CPE_ID_PKG1_VERSION = 42
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg2/cpe-id-pkg2.mk b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg2/cpe-id-pkg2.mk
-new file mode 100644
-index 0000000000..12b3f3223f
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg2/cpe-id-pkg2.mk
-@@ -0,0 +1,3 @@
-+CPE_ID_PKG2_VERSION = 67
-+
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg3/cpe-id-pkg3.mk b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg3/cpe-id-pkg3.mk
-new file mode 100644
-index 0000000000..5added78df
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg3/cpe-id-pkg3.mk
-@@ -0,0 +1,5 @@
-+CPE_ID_PKG3_VERSION = 67
-+CPE_ID_PKG3_CPE_ID_VALID = YES
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg4/cpe-id-pkg4.mk b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg4/cpe-id-pkg4.mk
-new file mode 100644
-index 0000000000..c37f73fa82
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg4/cpe-id-pkg4.mk
-@@ -0,0 +1,9 @@
-+CPE_ID_PKG4_VERSION = 67
-+CPE_ID_PKG4_CPE_ID_VENDOR = foo
-+CPE_ID_PKG4_CPE_ID_NAME = bar
-+CPE_ID_PKG4_CPE_ID_VERSION = 42
-+CPE_ID_PKG4_CPE_ID_VERSION_MINOR = b2
-+CPE_ID_PKG4_CPE_ID_PREFIX = cpe:2.4:a
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg5/cpe-id-pkg5.mk b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg5/cpe-id-pkg5.mk
-new file mode 100644
-index 0000000000..18e98c4ca4
---- /dev/null
-+++ b/support/testing/tests/core/cpeid-br2-external/package/cpe-id-pkg5/cpe-id-pkg5.mk
-@@ -0,0 +1,16 @@
-+CPE_ID_PKG5_VERSION = 57
-+
-+CPE_ID_PKG5_CPE_ID_VENDOR = foo
-+CPE_ID_PKG5_CPE_ID_NAME = bar
-+CPE_ID_PKG5_CPE_ID_VERSION = 42
-+CPE_ID_PKG5_CPE_ID_VERSION_MINOR = b2
-+CPE_ID_PKG5_CPE_ID_PREFIX = cpe:2.4:a
-+
-+HOST_CPE_ID_PKG5_CPE_ID_VENDOR = baz
-+HOST_CPE_ID_PKG5_CPE_ID_NAME = fuz
-+HOST_CPE_ID_PKG5_CPE_ID_VERSION = 43
-+HOST_CPE_ID_PKG5_CPE_ID_VERSION_MINOR = b3
-+HOST_CPE_ID_PKG5_CPE_ID_PREFIX = cpe:2.5:a
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/support/testing/tests/core/test_cpeid.py b/support/testing/tests/core/test_cpeid.py
-new file mode 100644
-index 0000000000..23471e4444
---- /dev/null
-+++ b/support/testing/tests/core/test_cpeid.py
-@@ -0,0 +1,109 @@
-+import infra
-+import subprocess
-+import json
-+
-+class CpeIdTest(infra.basetest.BRConfigTest):
-+    config = ""
-+    br2_external = [infra.filepath("tests/core/cpeid-br2-external")]
-+
-+    def get_vars(self, var):
-+        cmd = ["make", "--no-print-directory", "-C", self.b.builddir,
-+               "VARS=%s%%" % var, "printvars"]
-+        lines = subprocess.check_output(cmd).splitlines()
-+        return dict([str(x, "utf-8").split("=") for x in lines])
-+
-+    def get_json(self, pkg):
-+        cmd = ["make", "--no-print-directory", "-C", self.b.builddir,
-+               "%s-show-info" % pkg]
-+        return json.loads(subprocess.check_output(cmd))
-+
-+    def test_pkg1(self):
-+        # this package has no CPE ID information, it should not have
-+        # any CPE_ID variable defined.
-+        pkg_vars = self.get_vars("CPE_ID_PKG1_CPE_ID")
-+        cpe_vars = ["CPE_ID_VALID", "CPE_ID_NAME", "CPE_ID_VERSION", "CPE_ID_VERSION_MINOR",
-+                    "CPE_ID_PREFIX", "CPE_ID"]
-+        for v in cpe_vars:
-+            self.assertNotIn("CPE_ID_PKG1_%s" % v, pkg_vars)
-+        pkg_json = self.get_json("cpe-id-pkg1")
-+        self.assertNotIn("cpe-id", pkg_json['cpe-id-pkg1'])
-+
-+        pkg_vars = self.get_vars("HOST_CPE_ID_PKG1_CPE_ID")
-+        for v in cpe_vars:
-+            self.assertNotIn("HOST_CPE_ID_PKG1_%s" % v, pkg_vars)
-+        pkg_json = self.get_json("host-cpe-id-pkg1")
-+        self.assertNotIn("cpe-id", pkg_json['host-cpe-id-pkg1'])
-+
-+    def test_pkg2(self):
-+        # this package has no CPE ID information, it should not have
-+        # any CPE_ID variable defined.
-+        pkg_vars = self.get_vars("HOST_CPE_ID_PKG2_CPE_ID")
-+        cpe_vars = ["CPE_ID_VALID", "CPE_ID_NAME", "CPE_ID_VERSION", "CPE_ID_VERSION_MINOR",
-+                    "CPE_ID_PREFIX", "CPE_ID"]
-+        for v in cpe_vars:
-+            self.assertNotIn("HOST_CPE_ID_PKG2_%s" % v, pkg_vars)
-+        pkg_json = self.get_json("host-cpe-id-pkg2")
-+        self.assertNotIn("cpe-id", pkg_json['host-cpe-id-pkg2'])
-+
-+    def test_pkg3(self):
-+        # this package has just <pkg>_CPE_ID_VALID defined, so verify
-+        # it has the default CPE_ID value, and that inheritance of the
-+        # values for the host package is working
-+        pkg_vars = self.get_vars("CPE_ID_PKG3_CPE_ID")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG3_CPE_ID"],
-+                         "cpe:2.3:a:cpe-id-pkg3_project:cpe-id-pkg3:67:*:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG3_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("cpe-id-pkg3")
-+        self.assertEqual(pkg_json['cpe-id-pkg3']['cpe-id'],
-+                         "cpe:2.3:a:cpe-id-pkg3_project:cpe-id-pkg3:67:*:*:*:*:*:*:*")
-+
-+        pkg_vars = self.get_vars("HOST_CPE_ID_PKG3_CPE_ID")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG3_CPE_ID"],
-+                         "cpe:2.3:a:cpe-id-pkg3_project:cpe-id-pkg3:67:*:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG3_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("host-cpe-id-pkg3")
-+        self.assertEqual(pkg_json['host-cpe-id-pkg3']['cpe-id'],
-+                         "cpe:2.3:a:cpe-id-pkg3_project:cpe-id-pkg3:67:*:*:*:*:*:*:*")
-+
-+    def test_pkg4(self):
-+        # this package defines
-+        # <pkg>_CPE_ID_{VENDOR,NAME,VERSION,VERSION_MINOR,PREFIX},
-+        # make sure we get the computed <pkg>_CPE_ID, and that it is
-+        # inherited by the host variant
-+        pkg_vars = self.get_vars("CPE_ID_PKG4_CPE_ID")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG4_CPE_ID"],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG4_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("cpe-id-pkg4")
-+        self.assertEqual(pkg_json['cpe-id-pkg4']['cpe-id'],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+
-+        pkg_vars = self.get_vars("HOST_CPE_ID_PKG4_CPE_ID")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG4_CPE_ID"],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG4_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("host-cpe-id-pkg4")
-+        self.assertEqual(pkg_json['host-cpe-id-pkg4']['cpe-id'],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+
-+    def test_pkg5(self):
-+        # this package defines
-+        # <pkg>_CPE_ID_{VENDOR,NAME,VERSION,VERSION_MINOR,PREFIX} and
-+        # HOST_<pkg>_CPE_ID_{VENDOR,NAME,VERSION,VERSION_MINOR,PREFIX}
-+        # separately, with different values. Make sure we get the
-+        # right <pkg>_CPE_ID and HOST_<pkg>_CPE_ID values.
-+        pkg_vars = self.get_vars("CPE_ID_PKG5_CPE_ID")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG5_CPE_ID"],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["CPE_ID_PKG5_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("cpe-id-pkg5")
-+        self.assertEqual(pkg_json['cpe-id-pkg5']['cpe-id'],
-+                         "cpe:2.4:a:foo:bar:42:b2:*:*:*:*:*:*")
-+
-+        pkg_vars = self.get_vars("HOST_CPE_ID_PKG5_CPE_ID")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG5_CPE_ID"],
-+                         "cpe:2.5:a:baz:fuz:43:b3:*:*:*:*:*:*")
-+        self.assertEqual(pkg_vars["HOST_CPE_ID_PKG5_CPE_ID_VALID"], "YES")
-+        pkg_json = self.get_json("host-cpe-id-pkg5")
-+        self.assertEqual(pkg_json['host-cpe-id-pkg5']['cpe-id'],
-+                         "cpe:2.5:a:baz:fuz:43:b3:*:*:*:*:*:*")
+diff --git a/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch b/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch
+deleted file mode 100644
+index ebcb81aa91..0000000000
+--- a/package/linux-pam/0001-configure-ac-fix-build-failure-when-crypt-does-not-require-libcrypt.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From aef363c7e8e942224e6cffc4398366c6e5d31749 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 11 Jun 2020 00:04:32 +0200
+-Subject: [PATCH] configure.ac: fix build failure when crypt() does not require
+- libcrypt
+-
+-Since commit 522246d20e4cd92fadc2d760228cb7e78cbeb4c5, the build fails
+-if "none required" is returned by AC_SEARCH_LIBS for libcrypt.
+-
+-Resolves: https://github.com/linux-pam/linux-pam/pull/235
+-Fixes: http://autobuild.buildroot.org/results/92b3dd7c984d2b843ac9aacacd69eec99f28743e
+-Fixes: v1.4.0~228 ("Use cached 'crypt' library result correctly")
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/linux-pam/linux-pam/commit/aef363c7e8e942224e6cffc4398366c6e5d31749]
+----
+- configure.ac | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ea08a7a3..c1862ea7 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -428,7 +428,11 @@ AS_IF([test "x$ac_cv_header_xcrypt_h" = "xyes"],
+-   [crypt_libs="crypt"])
+- 
+- BACKUP_LIBS=$LIBS
+--AC_SEARCH_LIBS([crypt],[$crypt_libs], LIBCRYPT="${ac_cv_search_crypt}", LIBCRYPT="")
+-+AC_SEARCH_LIBS([crypt],[$crypt_libs])
+-+case "$ac_cv_search_crypt" in
+-+	-l*) LIBCRYPT="$ac_cv_search_crypt" ;;
+-+	*) LIBCRYPT="" ;;
+-+esac
+- AC_CHECK_FUNCS(crypt_r crypt_gensalt_r)
+- LIBS=$BACKUP_LIBS
+- AC_SUBST(LIBCRYPT)
+diff --git a/package/linux-pam/0002-fix-build-on-musl.patch b/package/linux-pam/0002-fix-build-on-musl.patch
+deleted file mode 100644
+index 44fceccc88..0000000000
+--- a/package/linux-pam/0002-fix-build-on-musl.patch
++++ /dev/null
+@@ -1,320 +0,0 @@
+-From 295bf7403364b23ab03287ecdd95ea266d6f4d89 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 11 Jun 2020 17:39:03 +0200
+-Subject: [PATCH] fix build on musl
+-
+-Rename check_user_in_passwd from pam_localuser.c to
+-pam_modutil_check_user_in_passwd and use it in pam_faillock.c instead of
+-fgetpwent_r which is not available on musl
+-
+-Fix #236
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/0432736ffee376dd84757469434a4bbcfdcdaf4b
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/linux-pam/linux-pam/pull/237]
+----
+- libpam/Makefile.am                        |  1 +
+- libpam/include/security/pam_modutil.h     |  5 ++
+- libpam/libpam.map                         |  5 ++
+- libpam/pam_modutil_check_user_in_passwd.c | 89 +++++++++++++++++++++++
+- modules/pam_faillock/pam_faillock.c       | 37 +---------
+- modules/pam_localuser/pam_localuser.c     | 86 +---------------------
+- 6 files changed, 103 insertions(+), 120 deletions(-)
+- create mode 100644 libpam/pam_modutil_check_user_in_passwd.c
+-
+-diff --git a/libpam/Makefile.am b/libpam/Makefile.am
+-index 9252a837..a8fc428d 100644
+---- a/libpam/Makefile.am
+-+++ b/libpam/Makefile.am
+-@@ -35,6 +35,7 @@ libpam_la_SOURCES = pam_account.c pam_auth.c pam_data.c pam_delay.c \
+- 	pam_misc.c pam_password.c pam_prelude.c \
+- 	pam_session.c pam_start.c pam_strerror.c \
+- 	pam_vprompt.c pam_syslog.c pam_dynamic.c pam_audit.c \
+-+	pam_modutil_check_user_in_passwd.c \
+- 	pam_modutil_cleanup.c pam_modutil_getpwnam.c pam_modutil_ioloop.c \
+- 	pam_modutil_getgrgid.c pam_modutil_getpwuid.c pam_modutil_getgrnam.c \
+- 	pam_modutil_getspnam.c pam_modutil_getlogin.c pam_modutil_ingroup.c \
+-diff --git a/libpam/include/security/pam_modutil.h b/libpam/include/security/pam_modutil.h
+-index 3a6aec6a..33f87b90 100644
+---- a/libpam/include/security/pam_modutil.h
+-+++ b/libpam/include/security/pam_modutil.h
+-@@ -58,6 +58,11 @@ extern "C" {
+- 
+- #include <security/_pam_types.h>
+- 
+-+extern int PAM_NONNULL((1,2))
+-+pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
+-+                                 const char *user_name,
+-+                                 const char *file_name);
+-+
+- extern struct passwd * PAM_NONNULL((1,2))
+- pam_modutil_getpwnam(pam_handle_t *pamh, const char *user);
+- 
+-diff --git a/libpam/libpam.map b/libpam/libpam.map
+-index c9690a91..3cc7ef35 100644
+---- a/libpam/libpam.map
+-+++ b/libpam/libpam.map
+-@@ -82,3 +82,8 @@ LIBPAM_1.4 {
+-   global:
+-     pam_start_confdir;
+- } LIBPAM_1.0;
+-+
+-+LIBPAM_MODUTIL_1.4.1 {
+-+  global:
+-+    pam_modutil_check_user_in_passwd;
+-+} LIBPAM_MODUTIL_1.3.2;
+-diff --git a/libpam/pam_modutil_check_user_in_passwd.c b/libpam/pam_modutil_check_user_in_passwd.c
+-new file mode 100644
+-index 00000000..b998aa25
+---- /dev/null
+-+++ b/libpam/pam_modutil_check_user_in_passwd.c
+-@@ -0,0 +1,89 @@
+-+#include "pam_modutil_private.h"
+-+#include <security/pam_ext.h>
+-+
+-+#include <stdio.h>
+-+#include <syslog.h>
+-+
+-+int
+-+pam_modutil_check_user_in_passwd(pam_handle_t *pamh,
+-+                                 const char *user_name,
+-+                                 const char *file_name)
+-+{
+-+	int rc;
+-+	size_t user_len;
+-+	FILE *fp;
+-+	char line[BUFSIZ];
+-+
+-+	/* Validate the user name.  */
+-+	if ((user_len = strlen(user_name)) == 0) {
+-+		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
+-+		return PAM_SERVICE_ERR;
+-+	}
+-+
+-+	if (user_len > sizeof(line) - sizeof(":")) {
+-+		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
+-+		return PAM_SERVICE_ERR;
+-+	}
+-+
+-+	if (strchr(user_name, ':') != NULL) {
+-+		/*
+-+		 * "root:x" is not a local user name even if the passwd file
+-+		 * contains a line starting with "root:x:".
+-+		 */
+-+		return PAM_PERM_DENIED;
+-+	}
+-+
+-+	/* Open the passwd file.  */
+-+	if (file_name == NULL) {
+-+		file_name = "/etc/passwd";
+-+	}
+-+	if ((fp = fopen(file_name, "r")) == NULL) {
+-+		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
+-+		return PAM_SERVICE_ERR;
+-+	}
+-+
+-+	/*
+-+	 * Scan the file using fgets() instead of fgetpwent_r() because
+-+	 * the latter is not flexible enough in handling long lines
+-+	 * in passwd files.
+-+	 */
+-+	rc = PAM_PERM_DENIED;
+-+	while (fgets(line, sizeof(line), fp) != NULL) {
+-+		size_t line_len;
+-+		const char *str;
+-+
+-+		/*
+-+		 * Does this line start with the user name
+-+		 * followed by a colon?
+-+		 */
+-+		if (strncmp(user_name, line, user_len) == 0 &&
+-+		    line[user_len] == ':') {
+-+			rc = PAM_SUCCESS;
+-+			break;
+-+		}
+-+		/* Has a newline been read?  */
+-+		line_len = strlen(line);
+-+		if (line_len < sizeof(line) - 1 ||
+-+		    line[line_len - 1] == '\n') {
+-+			/* Yes, continue with the next line.  */
+-+			continue;
+-+		}
+-+
+-+		/* No, read till the end of this line first.  */
+-+		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
+-+			line_len = strlen(line);
+-+			if (line_len == 0 ||
+-+			    line[line_len - 1] == '\n') {
+-+				break;
+-+			}
+-+		}
+-+		if (str == NULL) {
+-+			/* fgets returned NULL, we are done.  */
+-+			break;
+-+		}
+-+		/* Continue with the next line.  */
+-+	}
+-+
+-+	fclose(fp);
+-+	return rc;
+-+}
+-diff --git a/modules/pam_faillock/pam_faillock.c b/modules/pam_faillock/pam_faillock.c
+-index f592d0a2..8bca46ca 100644
+---- a/modules/pam_faillock/pam_faillock.c
+-+++ b/modules/pam_faillock/pam_faillock.c
+-@@ -348,42 +348,7 @@ set_conf_opt(pam_handle_t *pamh, struct options *opts, const char *name, const c
+- static int
+- check_local_user (pam_handle_t *pamh, const char *user)
+- {
+--	struct passwd pw, *pwp;
+--	char buf[16384];
+--	int found = 0;
+--	FILE *fp;
+--	int errn;
+--
+--	fp = fopen(PATH_PASSWD, "r");
+--	if (fp == NULL) {
+--		pam_syslog(pamh, LOG_ERR, "unable to open %s: %m",
+--			   PATH_PASSWD);
+--		return -1;
+--	}
+--
+--	for (;;) {
+--		errn = fgetpwent_r(fp, &pw, buf, sizeof (buf), &pwp);
+--		if (errn == ERANGE) {
+--			pam_syslog(pamh, LOG_WARNING, "%s contains very long lines; corrupted?",
+--				   PATH_PASSWD);
+--			break;
+--		}
+--		if (errn != 0)
+--			break;
+--		if (strcmp(pwp->pw_name, user) == 0) {
+--			found = 1;
+--			break;
+--		}
+--	}
+--
+--	fclose (fp);
+--
+--	if (errn != 0 && errn != ENOENT) {
+--		pam_syslog(pamh, LOG_ERR, "unable to enumerate local accounts: %m");
+--		return -1;
+--	} else {
+--		return found;
+--	}
+-+	return pam_modutil_check_user_in_passwd(pamh, user, NULL);
+- }
+- 
+- static int
+-diff --git a/modules/pam_localuser/pam_localuser.c b/modules/pam_localuser/pam_localuser.c
+-index cb507524..a9f2233c 100644
+---- a/modules/pam_localuser/pam_localuser.c
+-+++ b/modules/pam_localuser/pam_localuser.c
+-@@ -45,92 +45,10 @@
+- #include <unistd.h>
+- 
+- #include <security/pam_modules.h>
+-+#include <security/pam_modutil.h>
+- #include <security/pam_ext.h>
+- #include "pam_inline.h"
+- 
+--static int
+--check_user_in_passwd(pam_handle_t *pamh, const char *user_name,
+--		     const char *file_name)
+--{
+--	int rc;
+--	size_t user_len;
+--	FILE *fp;
+--	char line[BUFSIZ];
+--
+--	/* Validate the user name.  */
+--	if ((user_len = strlen(user_name)) == 0) {
+--		pam_syslog(pamh, LOG_NOTICE, "user name is not valid");
+--		return PAM_SERVICE_ERR;
+--	}
+--
+--	if (user_len > sizeof(line) - sizeof(":")) {
+--		pam_syslog(pamh, LOG_NOTICE, "user name is too long");
+--		return PAM_SERVICE_ERR;
+--	}
+--
+--	if (strchr(user_name, ':') != NULL) {
+--		/*
+--		 * "root:x" is not a local user name even if the passwd file
+--		 * contains a line starting with "root:x:".
+--		 */
+--		return PAM_PERM_DENIED;
+--	}
+--
+--	/* Open the passwd file.  */
+--	if (file_name == NULL) {
+--		file_name = "/etc/passwd";
+--	}
+--	if ((fp = fopen(file_name, "r")) == NULL) {
+--		pam_syslog(pamh, LOG_ERR, "error opening %s: %m", file_name);
+--		return PAM_SERVICE_ERR;
+--	}
+--
+--	/*
+--	 * Scan the file using fgets() instead of fgetpwent_r() because
+--	 * the latter is not flexible enough in handling long lines
+--	 * in passwd files.
+--	 */
+--	rc = PAM_PERM_DENIED;
+--	while (fgets(line, sizeof(line), fp) != NULL) {
+--		size_t line_len;
+--		const char *str;
+--
+--		/*
+--		 * Does this line start with the user name
+--		 * followed by a colon?
+--		 */
+--		if (strncmp(user_name, line, user_len) == 0 &&
+--		    line[user_len] == ':') {
+--			rc = PAM_SUCCESS;
+--			break;
+--		}
+--		/* Has a newline been read?  */
+--		line_len = strlen(line);
+--		if (line_len < sizeof(line) - 1 ||
+--		    line[line_len - 1] == '\n') {
+--			/* Yes, continue with the next line.  */
+--			continue;
+--		}
+--
+--		/* No, read till the end of this line first.  */
+--		while ((str = fgets(line, sizeof(line), fp)) != NULL) {
+--			line_len = strlen(line);
+--			if (line_len == 0 ||
+--			    line[line_len - 1] == '\n') {
+--				break;
+--			}
+--		}
+--		if (str == NULL) {
+--			/* fgets returned NULL, we are done.  */
+--			break;
+--		}
+--		/* Continue with the next line.  */
+--	}
+--
+--	fclose(fp);
+--	return rc;
+--}
+--
+- int
+- pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
+- 		    int argc, const char **argv)
+-@@ -173,7 +91,7 @@ pam_sm_authenticate(pam_handle_t *pamh, int flags UNUSED,
+- 		return rc == PAM_CONV_AGAIN ? PAM_INCOMPLETE : rc;
+- 	}
+- 
+--	return check_user_in_passwd(pamh, user_name, file_name);
+-+	return pam_modutil_check_user_in_passwd(pamh, user_name, file_name);
+- }
+- 
+- int
+--- 
+-2.26.2
+-
+diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
+index 608908cb00..be7cabf6dc 100644
+--- a/package/linux-pam/linux-pam.hash
++++ b/package/linux-pam/linux-pam.hash
+@@ -1,6 +1,6 @@
+ # Locally computed hashes after checking signature at
+-# https://github.com/linux-pam/linux-pam/releases/download/v1.4.0/Linux-PAM-1.4.0.tar.xz.asc
++# https://github.com/linux-pam/linux-pam/releases/download/v1.5.0/Linux-PAM-1.5.1.tar.xz.asc
+ # signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
+-sha256  cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034  Linux-PAM-1.4.0.tar.xz
++sha256  201d40730b1135b1b3cdea09f2c28ac634d73181ccd0172ceddee3649c5792fc  Linux-PAM-1.5.1.tar.xz
+ # Locally computed
+ sha256  133d98e7a2ab3ffd330b4debb0bfc10fea21e4b2b5a5b09de2e924293be5ff08  Copyright
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 57fb2c9cfd..61d9542c02 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_PAM_VERSION = 1.4.0
++LINUX_PAM_VERSION = 1.5.1
+ LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
+ LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
+ LINUX_PAM_INSTALL_STAGING = YES
+@@ -20,8 +20,6 @@ LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ LINUX_PAM_LICENSE = BSD-3-Clause
+ LINUX_PAM_LICENSE_FILES = Copyright
+-# We're patching configure.ac
+-LINUX_PAM_AUTORECONF = YES
+ LINUX_PAM_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+@@ -42,13 +40,6 @@ else
+ LINUX_PAM_CONF_OPTS += --disable-audit
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CRACKLIB),y)
+-LINUX_PAM_CONF_OPTS += --enable-cracklib
+-LINUX_PAM_DEPENDENCIES += cracklib
+-else
+-LINUX_PAM_CONF_OPTS += --disable-cracklib
+-endif
+-
+ # Install default pam config (deny everything except login)
+ define LINUX_PAM_INSTALL_CONFIG
+ 	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
