@@ -1,191 +1,82 @@
-From: Leonid Yuriev <leo@yuriev.ru>
-Date: Fri, 27 Nov 2020 16:51:43 +0300
-Subject: [Buildroot] [PATCH v5 1/1] package/libmdbx: new package
- (library/database).
-Message-ID: <20201127135143.1104192-1-leo@yuriev.ru>
+From: Simon J. Rowe <srowe@mose.org.uk>
+Date: Fri, 27 Nov 2020 14:10:38 +0000
+Subject: [Buildroot] [PATCH 1/1] package/python-defusedxml: new package
+Message-ID: <20201127141038.30065-1-srowe@mose.org.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds libmdbx v0.9.2:
- - libmdbx is one of the fastest compact embeddable key-value ACID database.
- - libmdbx has a specific set of properties and capabilities,
-   focused on creating unique lightweight solutions.
- - libmdbx surpasses the legendary LMDB (Lightning Memory-Mapped Database)
-   in terms of reliability, features and performance.
- - https://github.com/erthink/libmdbx
+From: Simon Rowe <simon.rowe@citrix.com>
 
-Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
+XML bomb protection for Python stdlib modules.
 
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
 ---
-Changes v1 -> v2:
-  - libmdbx version v0.8.2 -> v0.9.1 (released 2020-09-30)
+ package/Config.in                                |  1 +
+ package/python-defusedxml/Config.in              |  6 ++++++
+ package/python-defusedxml/python-defusedxml.hash |  5 +++++
+ package/python-defusedxml/python-defusedxml.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-defusedxml/Config.in
+ create mode 100644 package/python-defusedxml/python-defusedxml.hash
+ create mode 100644 package/python-defusedxml/python-defusedxml.mk
 
-Changes v2 -> v3:
-  - removed outcommented stuff (suggested by Heiko Thiery).
-  - cleaned up and simplified the makefile (suggested by Heiko Thiery).
-  - added patch for C++ header installation.
-  - added patch with fix minor copy&paste typo.
-  - added patch with pthread workaround for buggy toolchain/cmake/buildroot.
-  - added patch for `pthread_yield()`.
-  - passed `utils/check-package package/libmdbx/*` (suggested by Heiko Thiery)
-  - passed `utils/test-pkg -a -p libmdbx`,
-    except w/o threads & w/o MMU (suggested by Heiko Thiery).
-
-Changes v3 -> v4:
-  - fix passing BR2_PACKAGE_LIBMDBX_TOOLS option to cmake.
-  - fix using `depend on` instead of `select`,
-    and add `comment` for C++ toolchain (suggested by Heiko Thiery).
-  - fix minor help typo.
-
-Changes v4 -> v5:
-  - libmdbx version v0.9.1 -> v0.9.2 (released 2020-11-27)
-  - dropped all patch since not needed.
-  - cosmetic changes (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
-  - added dependence of BR2_TOOLCHAIN_HAS_SYNC_4 (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
-  - added dependence of !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
-  - take in account the BR2_SHARED_STATIC_LIBS (suggested by Thomas Petazzoni <thomas.petazzoni@bootlin.com>).
-
-Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
----
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/libmdbx/Config.in    | 45 ++++++++++++++++++++++++++++++++++++
- package/libmdbx/libmdbx.hash |  5 ++++
- package/libmdbx/libmdbx.mk   | 33 ++++++++++++++++++++++++++
- 5 files changed, 87 insertions(+)
- create mode 100644 package/libmdbx/Config.in
- create mode 100644 package/libmdbx/libmdbx.hash
- create mode 100644 package/libmdbx/libmdbx.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9ab1e125f4..758ff6a2d5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1482,6 +1482,9 @@ N:	Leon Anavi <leon.anavi@konsulko.com>
- F:	board/olimex/a10_olinuxino
- F:	configs/olimex_a10_olinuxino_lime_defconfig
- 
-+N:	Leonid Yuriev <leo@yuriev.ru>
-+F:	package/libmdbx/
-+
- N:	Lionel Flandrin <lionel@svkt.org>
- F:	package/python-babel/
- F:	package/python-daemonize/
 diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..a6f95bfaa9 100644
+index 016a99ed1a..868c3b00ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1372,6 +1372,7 @@ menu "Database"
- 	source "package/kompexsqlite/Config.in"
- 	source "package/leveldb/Config.in"
- 	source "package/libgit2/Config.in"
-+	source "package/libmdbx/Config.in"
- 	source "package/libodb/Config.in"
- 	source "package/libodb-boost/Config.in"
- 	source "package/libodb-mysql/Config.in"
-diff --git a/package/libmdbx/Config.in b/package/libmdbx/Config.in
+@@ -942,6 +942,7 @@ menu "External python modules"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-decorator/Config.in"
++	source "package/python-defusedxml/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+diff --git a/package/python-defusedxml/Config.in b/package/python-defusedxml/Config.in
 new file mode 100644
-index 0000000000..d13f73938f
+index 0000000000..85285da5ec
 --- /dev/null
-+++ b/package/libmdbx/Config.in
-@@ -0,0 +1,45 @@
-+config BR2_PACKAGE_LIBMDBX
-+	bool "libmdbx"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
++++ b/package/python-defusedxml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DEFUSEDXML
++	bool "python-defusedxml"
 +	help
-+	  One of the fastest compact key-value ACID database
-+	  without WAL. libmdbx has a specific set of properties
-+	  and capabilities, focused on creating unique lightweight
-+	  solutions.
++	  XML bomb protection for Python stdlib modules
 +
-+	  libmdbx surpasses the legendary LMDB in terms of
-+	  reliability, features and performance.
-+
-+	  https://github.com/erthink/libmdbx
-+
-+if BR2_PACKAGE_LIBMDBX
-+
-+config BR2_PACKAGE_LIBMDBX_TOOLS
-+	bool "install tools"
-+	help
-+	  Install libmdbx tools for checking, dump, restore
-+	  and show statistics of databases.
-+
-+config BR2_PACKAGE_LIBMDBX_CXX
-+	bool "C++ API"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+	help
-+	  Enable modern C++11/14/17/20 API for libmdbx.
-+
-+comment "libmdbx C++ support needs a toolchain w/ C++11, gcc >= 4.8 w/o bug#64735"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
-+endif
-+
-+comment "libmdbx needs MMU, a toolchain w/ threads, gcc >= 4.4 w/ 4-byte atomics"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_SYNC_4 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
++	  https://pypi.org/project/defusedxml/
+diff --git a/package/python-defusedxml/python-defusedxml.hash b/package/python-defusedxml/python-defusedxml.hash
 new file mode 100644
-index 0000000000..0d3501f1d9
+index 0000000000..9f9171858b
 --- /dev/null
-+++ b/package/libmdbx/libmdbx.hash
++++ b/package/python-defusedxml/python-defusedxml.hash
 @@ -0,0 +1,5 @@
-+# Hashes from: https://github.com/erthink/libmdbx/releases/
-+sha256  c35cc53d66d74ebfc86e39441ba26276541ac7892bf91dba1e70c83665a02767  libmdbx-amalgamated-0.9.2.tar.gz
-+
-+# Locally calculated
-+sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
++# md5, sha256 from https://pypi.org/pypi/defusedxml/json
++md5	a59741f675c4cba649de40a99f732897  defusedxml-0.6.0.tar.gz
++sha256	f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5  defusedxml-0.6.0.tar.gz
++# Locally computed sha256 checksums
++sha256	b80ce9da8c42a1f91079627fbbe2bf27210ae108a0ffe5f077d5b08e076c24c8  LICENSE
+diff --git a/package/python-defusedxml/python-defusedxml.mk b/package/python-defusedxml/python-defusedxml.mk
 new file mode 100644
-index 0000000000..f3720130ec
+index 0000000000..6d2a9aff43
 --- /dev/null
-+++ b/package/libmdbx/libmdbx.mk
-@@ -0,0 +1,33 @@
++++ b/package/python-defusedxml/python-defusedxml.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libmdbx
++# python-defusedxml
 +#
 +################################################################################
 +
-+LIBMDBX_VERSION = 0.9.2
-+LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
-+LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
-+LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
-+LIBMDBX_LICENSE = OLDAP-2.8
-+LIBMDBX_LICENSE_FILES = LICENSE
-+LIBMDBX_REDISTRIBUTE = YES
-+LIBMDBX_STRIP_COMPONENTS = 0
-+LIBMDBX_INSTALL_STAGING = YES
++PYTHON_DEFUSEDXML_VERSION = 0.6.0
++PYTHON_DEFUSEDXML_SOURCE = defusedxml-$(PYTHON_DEFUSEDXML_VERSION).tar.gz
++PYTHON_DEFUSEDXML_SITE = https://files.pythonhosted.org/packages/a4/5f/f8aa58ca0cf01cbcee728abc9d88bfeb74e95e6cb4334cfd5bed5673ea77
++PYTHON_DEFUSEDXML_SETUP_TYPE = setuptools
++PYTHON_DEFUSEDXML_LICENSE = Python-2.0
++PYTHON_DEFUSEDXML_LICENSE_FILES = LICENSE
 +
-+LIBMDBX_CONF_OPTS = -DMDBX_INSTALL_MANPAGES=OFF -DBUILD_FOR_NATIVE_CPU=OFF \
-+	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
-+	-DMDBX_BUILD_TOOLS=$(if $(BR2_PACKAGE_LIBMDBX_TOOLS),ON,OFF)
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC=ON
-+else
-+LIBMDBX_CONF_OPTS += -DMDBX_INSTALL_STATIC=OFF
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY=ON -DMDBX_LINK_TOOLS_NONSTATIC=ON
-+else
-+LIBMDBX_CONF_OPTS += -DMDBX_BUILD_SHARED_LIBRARY=OFF -DMDBX_LINK_TOOLS_NONSTATIC=OFF
-+endif
-+
-+$(eval $(cmake-package))
++$(eval $(python-package))
 -- 
-2.29.2
+2.21.3
