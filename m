@@ -1,55 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2020 18:25:49 +0100
-Subject: [Buildroot] [git commit] package/qemu: use a system-wide slirp
-Message-ID: <20201127171156.9E9D087411@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 27 Nov 2020 21:11:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: bump to version 1.3.6e
+Message-ID: <20201127201128.96175-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e237b79ad138dd296477c7ed631ca83f5145fc5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+1.3.6e
+---------
+  + Fixed null pointer deference in mod_sftp when using SCP incorrectly
+    (Issue #1043).
 
-Use a system-wide slirp now that we switched to the up to date
-https://gitlab.freedesktop.org/slirp/libslirp
+1.3.6d
+---------
+  + Fixed issue with FTPS uploads of large files using TLSv1.3 (Issue #959).
 
-qemu already depends on libglib2 so we don't need to add any new
-dependencies
+1.3.6c
+---------
+  + Fixed regression in directory listing latency (Issue #863).
+  + Detect OpenSSH-specific formatted SFTPHostKeys, and log hint for
+    converting them to supported format.
+  + Fixed use-after-free vulnerability during data transfers (Issue #903).
+  + Fixed out-of-bounds read in mod_cap by updating the bundled libcap
+    (Issue #902).
+
+http://proftpd.org/docs/RELEASE_NOTES-1.3.6e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in | 1 +
- package/qemu/qemu.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/proftpd/proftpd.hash | 2 +-
+ package/proftpd/proftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 33d4cccd7b..391fd5faaf 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -58,6 +58,7 @@ comment "Networking options"
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index 1ac54de4ca..983500bb8e 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fa3541c4b34136a7b80cb12a2f6f9a0cab5118a5b0a1653d40af49c6479c35ad  proftpd-1.3.6c.tar.gz
++sha256  2dbe684034ab592742ebdb778a8a234b70f959efeb30feedee3ea77f26f74fbb  proftpd-1.3.6e.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index e126d0e0a4..e35e78607d 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_QEMU_SLIRP
- 	bool "Enable user mode networking (SLIRP)"
-+	select BR2_PACKAGE_SLIRP
- 	help
- 	  Enable user mode network stack, which is the default
- 	  networking backend. It requires no administrator privileges
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 69850ec938..2bac96bd66 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -51,8 +51,10 @@ endif
- 
- endif
- 
--# There is no "--enable-slirp"
--ifeq ($(BR2_PACKAGE_QEMU_SLIRP),)
-+ifeq ($(BR2_PACKAGE_QEMU_SLIRP),y)
-+QEMU_OPTS += --enable-slirp=system
-+QEMU_DEPENDENCIES += slirp
-+else
- QEMU_OPTS += --disable-slirp
- endif
- 
+-PROFTPD_VERSION = 1.3.6c
++PROFTPD_VERSION = 1.3.6e
+ PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
+-- 
+2.29.2
