@@ -1,82 +1,95 @@
-From: Simon J. Rowe <srowe@mose.org.uk>
-Date: Fri, 27 Nov 2020 14:10:38 +0000
-Subject: [Buildroot] [PATCH 1/1] package/python-defusedxml: new package
-Message-ID: <20201127141038.30065-1-srowe@mose.org.uk>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Fri, 27 Nov 2020 15:40:24 +0100
+Subject: [Buildroot] [PATCH v2] configs/arm_foundationv8: bump to Linux
+ 5.9.11
+In-Reply-To: <20201126165831.6341-1-vincent.stehle@laposte.net>
+References: <20201126165831.6341-1-vincent.stehle@laposte.net>
+Message-ID: <20201127144024.21604-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Rowe <simon.rowe@citrix.com>
+- Bump to the latest kernel v5.9.11 and require openssl.
+- Switch to PSCI for bringing up the secondary CPUs.
+- Switch to GICv3.
+- Update the instruction in the readme.txt to use the latest FVP v8
+  Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
 
-XML bomb protection for Python stdlib modules.
-
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- package/Config.in                                |  1 +
- package/python-defusedxml/Config.in              |  6 ++++++
- package/python-defusedxml/python-defusedxml.hash |  5 +++++
- package/python-defusedxml/python-defusedxml.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-defusedxml/Config.in
- create mode 100644 package/python-defusedxml/python-defusedxml.hash
- create mode 100644 package/python-defusedxml/python-defusedxml.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..868c3b00ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -942,6 +942,7 @@ menu "External python modules"
- 	source "package/python-dataproperty/Config.in"
- 	source "package/python-dateutil/Config.in"
- 	source "package/python-decorator/Config.in"
-+	source "package/python-defusedxml/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-dialog3/Config.in"
- 	source "package/python-dicttoxml/Config.in"
-diff --git a/package/python-defusedxml/Config.in b/package/python-defusedxml/Config.in
-new file mode 100644
-index 0000000000..85285da5ec
---- /dev/null
-+++ b/package/python-defusedxml/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_DEFUSEDXML
-+	bool "python-defusedxml"
-+	help
-+	  XML bomb protection for Python stdlib modules
-+
-+	  https://pypi.org/project/defusedxml/
-diff --git a/package/python-defusedxml/python-defusedxml.hash b/package/python-defusedxml/python-defusedxml.hash
-new file mode 100644
-index 0000000000..9f9171858b
---- /dev/null
-+++ b/package/python-defusedxml/python-defusedxml.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/defusedxml/json
-+md5	a59741f675c4cba649de40a99f732897  defusedxml-0.6.0.tar.gz
-+sha256	f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5  defusedxml-0.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	b80ce9da8c42a1f91079627fbbe2bf27210ae108a0ffe5f077d5b08e076c24c8  LICENSE
-diff --git a/package/python-defusedxml/python-defusedxml.mk b/package/python-defusedxml/python-defusedxml.mk
-new file mode 100644
-index 0000000000..6d2a9aff43
---- /dev/null
-+++ b/package/python-defusedxml/python-defusedxml.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-defusedxml
-+#
-+################################################################################
-+
-+PYTHON_DEFUSEDXML_VERSION = 0.6.0
-+PYTHON_DEFUSEDXML_SOURCE = defusedxml-$(PYTHON_DEFUSEDXML_VERSION).tar.gz
-+PYTHON_DEFUSEDXML_SITE = https://files.pythonhosted.org/packages/a4/5f/f8aa58ca0cf01cbcee728abc9d88bfeb74e95e6cb4334cfd5bed5673ea77
-+PYTHON_DEFUSEDXML_SETUP_TYPE = setuptools
-+PYTHON_DEFUSEDXML_LICENSE = Python-2.0
-+PYTHON_DEFUSEDXML_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+
+Hi,
+
+Changes since v1:
+- Fix desynchronization between kernel and boot-wrapper dts.
+- Switch to GICv3.
+- Require openssl for the kernel build.
+
+Best regards,
+Vincent.
+
+
+ board/arm/foundation-v8/readme.txt |  7 ++++---
+ configs/arm_foundationv8_defconfig | 13 ++++++++-----
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
+index 1dedf68cba..b5106f015e 100644
+--- a/board/arm/foundation-v8/readme.txt
++++ b/board/arm/foundation-v8/readme.txt
+@@ -3,17 +3,18 @@ ARM software simulator of the AArch64 architecture.
+ 
+ First, one has to download the AArch64 software simulator from:
+ 
+-  https://silver.arm.com/download/download.tm?pv=2663527
++  https://silver.arm.com/download/download.tm?pv=4807186
+ 
+ Then, use the arm_foundationv8_defconfig configuration to build your
+ Buildroot system.
+ 
+ Finally, boot your system with:
+ 
+- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
++ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
+     --image output/images/linux-system.axf \
+     --block-device output/images/rootfs.ext2 \
+-    --network=nat
++    --network=nat \
++    --cores 4
+ 
+ You can get network access from within the simulated environment
+ by requesting an IP address using DHCP (run the command 'udhcpc').
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index ea19f35502..363f288b87 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,15 +1,18 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++# Linux headers same as kernel, a 5.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_BOOT_WRAPPER_AARCH64=y
+-BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
++BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8-gicv3-psci"
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
++BR2_TARGET_BOOT_WRAPPER_AARCH64_PSCI=y
++BR2_TARGET_BOOT_WRAPPER_AARCH64_GICV3=y
 -- 
-2.21.3
+2.29.2
