@@ -1,54 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 08:52:46 +0100
-Subject: [Buildroot] [git commit branch/next] package/libinput: bump version
- to 1.16.4
-Message-ID: <20201128073844.7629B7FB4A@busybox.osuosl.org>
+Date: Sat, 28 Nov 2020 08:50:13 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/x11r7/xserver_xorg-xserver: drop obsolete patch
+Message-ID: <20201128073844.6CB3B814B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=840f5065b3b1ff6e16b229fc62385b6c971f28de
+commit: https://git.buildroot.net/buildroot/commit/?id=79ca48c48b5e36404892594fb1032e788fdc16f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For details see [1].
+Drop second patch following upstream review:
+https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/555
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
+Indeed, this patch has been dropped from openembedded since 2018 because
+"it is forcing input to use SIGIO, despite the fact that since 2015
+xserver has used an input thread.":
+https://github.com/openembedded/openembedded-core/commit/cde11398e6d74ad8f27334199b4bd99cdf1f0ff7
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 8 +++-----
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ .../0002-Remove-check-for-useSIGIO-option.patch    | 53 ----------------------
+ ... => 0002-include-misc.h-fix-uClibc-build.patch} |  0
+ ...ayland-Makefile.am-fix-build-without-glx.patch} |  0
+ ...-common-xf86Init.c-fix-build-without-glx.patch} |  0
+ ...-on-probing-a-non-PCI-platform-device-on.patch} |  0
+ 5 files changed, 53 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 79bfc5d98b..f2cea28ee3 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
--md5  562614e91c10c75ab1c2b71e5d27f076  libinput-1.16.3.tar.xz
--sha1  ee1e93ee647bdd4598a5910eb654592563657d66  libinput-1.16.3.tar.xz
--sha256  dc5e1ae51ec1cc635ca96f61118b0f07dfea783cab0747a60f3555068bb077e4  libinput-1.16.3.tar.xz
--sha512  cdf87988b24dc0a44b7b6ed3e15e70c7702bf65f1cfe257924967677c7a1f1485011a9e30254ba8962c83885de78f824e7955cedb07322676332d42532ec4a39  libinput-1.16.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
-+sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
-+sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index e5578a3921..3b459d6fb5 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.16.3
-+LIBINPUT_VERSION = 1.16.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+diff --git a/package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
+deleted file mode 100644
+index 68a9d7fc75..0000000000
+--- a/package/x11r7/xserver_xorg-server/0002-Remove-check-for-useSIGIO-option.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From cf407b16cd65ad6e26a9c8e5984e163409a5c0f7 Mon Sep 17 00:00:00 2001
+-From: Prabhu Sundararaj <prabhu.sundararaj@nxp.com>
+-Date: Mon, 30 Jan 2017 16:32:06 -0600
+-Subject: [PATCH] Remove check for useSIGIO option
+-
+-Original patch follows:
+-Commit 6a5a4e60373c1386b311b2a8bb666c32d68a9d99 removes the configure of useSIGIO
+-option.
+-
+-As the xfree86 SIGIO support is reworked to use internal versions of OsBlockSIGIO
+-and OsReleaseSIGIO.
+-
+-No longer the check for useSIGIO is needed
+-
+-Upstream-Status: Pending
+-
+-Signed-off-by: Prabhu Sundararaj <prabhu.sundararaj@nxp.com>
+-
+-Downloaded from
+-https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-graphics/xorg-xserver/xserver-xorg/0003-Remove-check-for-useSIGIO-option.patch
+-
+-Signed-off-by: Myl??ne Josserand <mylene.josserand@free-electrons.com>
+----
+- hw/xfree86/os-support/shared/sigio.c | 6 ------
+- 1 file changed, 6 deletions(-)
+-
+-diff --git a/hw/xfree86/os-support/shared/sigio.c b/hw/xfree86/os-support/shared/sigio.c
+-index 884a71c..be76498 100644
+---- a/hw/xfree86/os-support/shared/sigio.c
+-+++ b/hw/xfree86/os-support/shared/sigio.c
+-@@ -185,9 +185,6 @@ xf86InstallSIGIOHandler(int fd, void (*f) (int, void *), void *closure)
+-     int i;
+-     int installed = FALSE;
+- 
+--    if (!xf86Info.useSIGIO)
+--        return 0;
+--
+-     for (i = 0; i < MAX_FUNCS; i++) {
+-         if (!xf86SigIOFuncs[i].f) {
+-             if (xf86IsPipe(fd))
+-@@ -257,9 +256,6 @@ xf86RemoveSIGIOHandler(int fd)
+-     int max;
+-     int ret;
+- 
+--    if (!xf86Info.useSIGIO)
+--        return 0;
+--
+-     max = 0;
+-     ret = 0;
+-     for (i = 0; i < MAX_FUNCS; i++) {
+--- 
+-2.7.4
+-
+diff --git a/package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/0002-include-misc.h-fix-uClibc-build.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/0003-include-misc.h-fix-uClibc-build.patch
+rename to package/x11r7/xserver_xorg-server/0002-include-misc.h-fix-uClibc-build.patch
+diff --git a/package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0003-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+rename to package/x11r7/xserver_xorg-server/0003-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+diff --git a/package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/0004-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+rename to package/x11r7/xserver_xorg-server/0004-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
+diff --git a/package/x11r7/xserver_xorg-server/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/0005-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
+similarity index 100%
+rename from package/x11r7/xserver_xorg-server/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
+rename to package/x11r7/xserver_xorg-server/0005-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
