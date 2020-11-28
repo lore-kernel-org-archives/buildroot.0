@@ -1,51 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 10:54:30 +0100
-Subject: [Buildroot] [git commit] configs/bananapi_m2_zero: bump Linux and
- U-Boot versions
-Message-ID: <20201203092227.AED47821E0@busybox.osuosl.org>
+Date: Sat, 28 Nov 2020 08:52:46 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.4
+Message-ID: <20201203092227.8EAE9821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9144f098edb9584bb86cd06c7da243ecb5a27a7
+commit: https://git.buildroot.net/buildroot/commit/?id=840f5065b3b1ff6e16b229fc62385b6c971f28de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump Linux kernel to 5.9.11 and U-Boot to 2020.10.
+For details see [1].
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/bananapi_m2_zero_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 8 +++-----
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
-index e82814e336..e5c89fce40 100644
---- a/configs/bananapi_m2_zero_defconfig
-+++ b/configs/bananapi_m2_zero_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 79bfc5d98b..f2cea28ee3 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
+-md5  562614e91c10c75ab1c2b71e5d27f076  libinput-1.16.3.tar.xz
+-sha1  ee1e93ee647bdd4598a5910eb654592563657d66  libinput-1.16.3.tar.xz
+-sha256  dc5e1ae51ec1cc635ca96f61118b0f07dfea783cab0747a60f3555068bb077e4  libinput-1.16.3.tar.xz
+-sha512  cdf87988b24dc0a44b7b6ed3e15e70c7702bf65f1cfe257924967677c7a1f1485011a9e30254ba8962c83885de78f824e7955cedb07322676332d42532ec4a39  libinput-1.16.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
++sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
++sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index e5578a3921..3b459d6fb5 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.16.3
++LIBINPUT_VERSION = 1.16.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
