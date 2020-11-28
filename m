@@ -1,54 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Nov 2020 12:00:40 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain: update option descriptions for
- ARC tools arc-2020.09-release
-Message-ID: <20201128110041.2198596-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Nov 2020 16:00:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bustle: fix license
+Message-ID: <20201128150036.1415801-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.buildroot.net/buildroot/commit/?id=0791abfba0227803b19895ea22326f4e17ac93dc
+bustle binaries are licensed under GPL-3.0:
+https://gitlab.freedesktop.org/bustle/bustle/-/blob/bustle-0.7.5/LICENSE
 
-bumped
-* Binutils 2.34.50 with additional ARC patches
-* GCC 10.0.2 with additional ARC patches
-* GDB 10.0.50 with additional ARC patches
-
-but forgot to update the version numbers stored in option descriptions.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/binutils/Config.in.host | 2 +-
- package/gcc/Config.in.host      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bustle/bustle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index b690b952dc..89c6894a1f 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -39,7 +39,7 @@ config BR2_BINUTILS_VERSION_2_35_X
- 	depends on !BR2_BINFMT_FLAT
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 675ffb0529..1dbad64aef 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -6,7 +6,7 @@
  
- config BR2_BINUTILS_VERSION_ARC
--	bool "binutils arc (2.31)"
-+	bool "binutils arc (2.34.50)"
- 	depends on BR2_arc
+ BUSTLE_VERSION = 0.7.5
+ BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
+-BUSTLE_LICENSE = LGPL-2.1+
++BUSTLE_LICENSE = LGPL-2.1+, GPL-3.0 (binaries)
+ BUSTLE_LICENSE_FILES = LICENSE
+ BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
  
- config BR2_BINUTILS_VERSION_CSKY
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 10688ff568..2ed159314c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -9,7 +9,7 @@ choice
- 	  Select the version of gcc you wish to use.
- 
- config BR2_GCC_VERSION_ARC
--	bool "gcc arc (9.x)"
-+	bool "gcc arc (10.x)"
- 	# Only supported architecture
- 	depends on BR2_arc
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
 -- 
-2.27.0
+2.29.2
