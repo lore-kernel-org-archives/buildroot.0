@@ -1,51 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 10:54:30 +0100
-Subject: [Buildroot] [git commit branch/next] configs/bananapi_m2_zero: bump
- Linux and U-Boot versions
-Message-ID: <20201128093947.8DABF815BB@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Nov 2020 10:57:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/setserial: add license hash
+Message-ID: <20201128095725.1084152-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9144f098edb9584bb86cd06c7da243ecb5a27a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Also reformatted hash file.
 
-Bump Linux kernel to 5.9.11 and U-Boot to 2020.10.
+Fixes:
+http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- configs/bananapi_m2_zero_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/setserial/setserial.hash | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
-index e82814e336..e5c89fce40 100644
---- a/configs/bananapi_m2_zero_defconfig
-+++ b/configs/bananapi_m2_zero_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
+index ce3b369f56..991d2860a9 100644
+--- a/package/setserial/setserial.hash
++++ b/package/setserial/setserial.hash
+@@ -1,3 +1,5 @@
+ # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
+-sha256	7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a	setserial_2.17.orig.tar.gz
+-sha256	33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6	setserial_2.17-45.3.diff.gz
++sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
++sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
++# Locally computed
++sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
+-- 
+2.27.0
