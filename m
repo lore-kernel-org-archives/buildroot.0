@@ -1,51 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 28 Nov 2020 00:22:25 +0100
-Subject: [Buildroot] [PATCH/next v1] package/libinput: bump version to 1.16.4
-Message-ID: <20201127232225.17485-1-ps.report@gmx.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 28 Nov 2020 08:45:55 +0100
+Subject: [Buildroot] [PATCH] package/lua-lyaml: bump to version 6.2.7
+Message-ID: <20201128074555.1827248-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libinput/libinput.hash | 8 +++-----
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/lua-lyaml/lua-lyaml.hash | 4 ++--
+ package/lua-lyaml/lua-lyaml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 79bfc5d98b..f2cea28ee3 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041644.html
--md5  562614e91c10c75ab1c2b71e5d27f076  libinput-1.16.3.tar.xz
--sha1  ee1e93ee647bdd4598a5910eb654592563657d66  libinput-1.16.3.tar.xz
--sha256  dc5e1ae51ec1cc635ca96f61118b0f07dfea783cab0747a60f3555068bb077e4  libinput-1.16.3.tar.xz
--sha512  cdf87988b24dc0a44b7b6ed3e15e70c7702bf65f1cfe257924967677c7a1f1485011a9e30254ba8962c83885de78f824e7955cedb07322676332d42532ec4a39  libinput-1.16.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
-+sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
-+sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index e5578a3921..3b459d6fb5 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
+index 07184e9e4..af3d0ae6d 100644
+--- a/package/lua-lyaml/lua-lyaml.hash
++++ b/package/lua-lyaml/lua-lyaml.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 2c52104e75331e4729e5895168fb8f24769db0b84c68696159e6b6a8908b62d2  lua-lyaml-6.2.6.tar.gz
+-sha256 81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
++sha256  9bb489cefae48b150d66f6bab4141d8d5831fcb7465bfc52a9845fa01efc63b0  lua-lyaml-6.2.7.tar.gz
++sha256  81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
+diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
+index a818ce716..77980f531 100644
+--- a/package/lua-lyaml/lua-lyaml.mk
++++ b/package/lua-lyaml/lua-lyaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.16.3
-+LIBINPUT_VERSION = 1.16.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-LUA_LYAML_VERSION = 6.2.6
++LUA_LYAML_VERSION = 6.2.7
+ LUA_LYAML_NAME_UPSTREAM = lyaml
+ LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
+ LUA_LYAML_LICENSE = MIT
 -- 
-2.29.2
+2.25.1
