@@ -1,40 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Nov 2020 16:36:35 +0100
-Subject: [Buildroot] [git commit] package/pkg-utils.mk: expose CPE ID in
- show-info when available
-Message-ID: <20201203092227.5B929821E0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Nov 2020 10:53:53 +0100
+Subject: [Buildroot] [git commit] configs/aarch64_efi: bump kernel version
+Message-ID: <20201203092227.A5AB1821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c02d4652747aa3d86197ac6879b94955c95a5286
+commit: https://git.buildroot.net/buildroot/commit/?id=aa900caf19abab8614f1232df59170552d0b3673
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit exposes a new per-package property in the "make show-info"
-JSON output: "cpe-id", which exists when a valid CPE ID is available
-for the package.
+Bump Linux kernel version to 5.9.11.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
+Cc: Erico Nunes <nunes.erico@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-utils.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ configs/aarch64_efi_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 4fcb076e21..a2cc160d0b 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -119,6 +119,9 @@ define _json-info-pkg
- 	"reverse_dependencies": [
- 		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES)))
- 	]
-+	$(if $($(1)_CPE_ID_VALID), \
-+		$(comma) "cpe-id": "$($(1)_CPE_ID)" \
-+	)
- 	$(if $($(1)_IGNORE_CVES),
- 		$(comma) "ignore_cves": [
- 			$(call make-comma-list,$(sort $($(1)_IGNORE_CVES)))
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index 2aab6e9699..99600575ed 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -23,13 +23,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/aarch64-efi/post-image.sh support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/aarch64-efi/genimage-efi.cfg"
+ 
+-# Linux headers same as kernel, a 4.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
++# Linux headers same as kernel, a 5.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18.10"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
