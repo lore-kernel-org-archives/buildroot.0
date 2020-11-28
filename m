@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Nov 2020 17:48:57 +0100
-Subject: [Buildroot] [git commit] package/lz4: bump version to 1.9.3
-Message-ID: <20201203092227.7AB85821E0@busybox.osuosl.org>
+Date: Sat, 28 Nov 2020 10:54:30 +0100
+Subject: [Buildroot] [git commit] configs/bananapi_m2_zero: bump Linux and
+ U-Boot versions
+Message-ID: <20201203092227.AED47821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f749946aa802ddc1fa809df98fe9b44279d974ca
+commit: https://git.buildroot.net/buildroot/commit/?id=d9144f098edb9584bb86cd06c7da243ecb5a27a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Bump Linux kernel to 5.9.11 and U-Boot to 2020.10.
+
+Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lz4/lz4.hash | 2 +-
- package/lz4/lz4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/bananapi_m2_zero_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-index 01d0107b3f..0b03089ecd 100644
---- a/package/lz4/lz4.hash
-+++ b/package/lz4/lz4.hash
-@@ -1,4 +1,4 @@
- # sha256 locally computed
--sha256  658ba6191fa44c92280d4aa2c271b0f4fbc0e34d249578dd05e50e76d0e5efcc  lz4-1.9.2.tar.gz
-+sha256  030644df4611007ff7dc962d981f390361e6c97a34e5cbc393ddfbe019ffe2c1  lz4-1.9.3.tar.gz
- sha256  d15d99c8dc6b0ec22174c0e563a95bc40f9363ca7f9d9d793bb5c5a8e8d0af71  lib/LICENSE
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  programs/COPYING
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index fa309e8dbb..b0510d460b 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LZ4_VERSION = 1.9.2
-+LZ4_VERSION = 1.9.3
- LZ4_SITE = $(call github,lz4,lz4,v$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2-Clause (library), GPL-2.0+ (programs)
+diff --git a/configs/bananapi_m2_zero_defconfig b/configs/bananapi_m2_zero_defconfig
+index e82814e336..e5c89fce40 100644
+--- a/configs/bananapi_m2_zero_defconfig
++++ b/configs/bananapi_m2_zero_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Bananapi M2 Zero"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2-zero/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-bananapi-m2-zero"
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="bananapi_m2_zero"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
