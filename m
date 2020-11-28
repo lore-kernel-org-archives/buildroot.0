@@ -1,275 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Nov 2020 12:00:41 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: add upstream fix for arc gcc
-In-Reply-To: <20201128110041.2198596-1-bernd.kuhls@t-online.de>
-References: <20201128110041.2198596-1-bernd.kuhls@t-online.de>
-Message-ID: <20201128110041.2198596-2-bernd.kuhls@t-online.de>
+Date: Sat, 28 Nov 2020 12:00:40 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: update option descriptions for
+ ARC tools arc-2020.09-release
+Message-ID: <20201128110041.2198596-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/792/792e69eefc87d28b92972c452d5e230d86d9e114/
+https://git.buildroot.net/buildroot/commit/?id=0791abfba0227803b19895ea22326f4e17ac93dc
 
-Upstream issue:
-https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/310
+bumped
+* Binutils 2.34.50 with additional ARC patches
+* GCC 10.0.2 with additional ARC patches
+* GDB 10.0.50 with additional ARC patches
+
+but forgot to update the version numbers stored in option descriptions.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-arc-Refurbish-adc-sbc-patterns.patch | 243 ++++++++++++++++++
- 1 file changed, 243 insertions(+)
- create mode 100644 package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
+ package/binutils/Config.in.host | 2 +-
+ package/gcc/Config.in.host      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
-new file mode 100644
-index 0000000000..3292b26a4e
---- /dev/null
-+++ b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
-@@ -0,0 +1,243 @@
-+From b92c22b144d063c4436a6693045ceb57d344c495 Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@synopsys.com>
-+Date: Wed, 11 Nov 2020 12:31:10 +0200
-+Subject: [PATCH] arc: Refurbish adc/sbc patterns
-+
-+The adc/sbc patterns were unecessary spliting, remove that and
-+associated functions.
-+
-+gcc/ChangeLog:
-+
-+2020-10-11  Claudiu Zissulescu  <claziss@synopsys.com>
-+
-+	* config/arc/arc-protos.h (arc_scheduling_not_expected): Remove
-+	it.
-+	(arc_sets_cc_p): Likewise.
-+	(arc_need_delay): Likewise.
-+	* config/arc/arc.c (arc_sets_cc_p): Likewise.
-+	(arc_need_delay): Likewise.
-+	(arc_scheduling_not_expected): Likewise.
-+	* config/arc/arc.md: Convert adc/sbc patterns to simple
-+	instruction definitions.
-+
-+Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
-+
-+Downloaded from upstream commit
-+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/b92c22b144d063c4436a6693045ceb57d344c495
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ gcc/config/arc/arc-protos.h |  3 --
-+ gcc/config/arc/arc.c        | 53 ---------------------
-+ gcc/config/arc/arc.md       | 95 +++++++++++--------------------------
-+ 3 files changed, 29 insertions(+), 122 deletions(-)
-+
-+diff --git a/gcc/config/arc/arc-protos.h b/gcc/config/arc/arc-protos.h
-+index c72d78e3b9e..de4cf47c818 100644
-+--- a/gcc/config/arc/arc-protos.h
-++++ b/gcc/config/arc/arc-protos.h
-+@@ -90,10 +90,7 @@ extern void split_subsi (rtx *);
-+ extern void arc_split_move (rtx *);
-+ extern const char *arc_short_long (rtx_insn *insn, const char *, const char *);
-+ extern rtx arc_regno_use_in (unsigned int, rtx);
-+-extern bool arc_scheduling_not_expected (void);
-+-extern bool arc_sets_cc_p (rtx_insn *insn);
-+ extern int arc_label_align (rtx_insn *label);
-+-extern bool arc_need_delay (rtx_insn *insn);
-+ extern bool arc_text_label (rtx_insn *insn);
-+ 
-+ extern bool arc_short_comparison_p (rtx, int);
-+diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
-+index 5a7b0cb6696..c3ee9181f93 100644
-+--- a/gcc/config/arc/arc.c
-++++ b/gcc/config/arc/arc.c
-+@@ -10341,59 +10341,6 @@ arc_attr_type (rtx_insn *insn)
-+   return get_attr_type (insn);
-+ }
-+ 
-+-/* Return true if insn sets the condition codes.  */
-+-
-+-bool
-+-arc_sets_cc_p (rtx_insn *insn)
-+-{
-+-  if (NONJUMP_INSN_P (insn))
-+-    if (rtx_sequence *seq = dyn_cast <rtx_sequence *> (PATTERN (insn)))
-+-      insn = seq->insn (seq->len () - 1);
-+-  return arc_attr_type (insn) == TYPE_COMPARE;
-+-}
-+-
-+-/* Return true if INSN is an instruction with a delay slot we may want
-+-   to fill.  */
-+-
-+-bool
-+-arc_need_delay (rtx_insn *insn)
-+-{
-+-  rtx_insn *next;
-+-
-+-  if (!flag_delayed_branch)
-+-    return false;
-+-  /* The return at the end of a function needs a delay slot.  */
-+-  if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == USE
-+-      && (!(next = next_active_insn (insn))
-+-	  || ((!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) != SEQUENCE)
-+-	      && arc_attr_type (next) == TYPE_RETURN))
-+-      && (!TARGET_PAD_RETURN
-+-	  || (prev_active_insn (insn)
-+-	      && prev_active_insn (prev_active_insn (insn))
-+-	      && prev_active_insn (prev_active_insn (prev_active_insn (insn))))))
-+-    return true;
-+-  if (NONJUMP_INSN_P (insn)
-+-      ? (GET_CODE (PATTERN (insn)) == USE
-+-	 || GET_CODE (PATTERN (insn)) == CLOBBER
-+-	 || GET_CODE (PATTERN (insn)) == SEQUENCE)
-+-      : JUMP_P (insn)
-+-      ? (GET_CODE (PATTERN (insn)) == ADDR_VEC
-+-	 || GET_CODE (PATTERN (insn)) == ADDR_DIFF_VEC)
-+-      : !CALL_P (insn))
-+-    return false;
-+-  return num_delay_slots (insn) != 0;
-+-}
-+-
-+-/* Return true if the scheduling pass(es) has/have already run,
-+-   i.e. where possible, we should try to mitigate high latencies
-+-   by different instruction selection.  */
-+-
-+-bool
-+-arc_scheduling_not_expected (void)
-+-{
-+-  return cfun->machine->arc_reorg_started;
-+-}
-+-
-+ /* Code has a minimum p2 alignment of 1, which we must restore after
-+    an ADDR_DIFF_VEC.  */
-+ 
-+diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
-+index f91adbc0d94..c635b69ddd5 100644
-+--- a/gcc/config/arc/arc.md
-++++ b/gcc/config/arc/arc.md
-+@@ -2847,43 +2847,25 @@ archs4x, archs4xd"
-+    (set_attr "type" "compare")
-+    (set_attr "length" "4,4,8")])
-+ 
-+-; w/c/c comes first (rather than w/0/C_0) to prevent the middle-end
-+-; needlessly prioritizing the matching constraint.
-+-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional
-+-; execution is used where possible.
-+-(define_insn_and_split "adc"
-+-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
-+-	(plus:SI (plus:SI (ltu:SI (reg:CC_C CC_REG) (const_int 0))
-+-			  (match_operand:SI 1 "nonmemory_operand"
-+-							 "%c,0,c,0,cCal"))
-+-		 (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
-++(define_insn "adc"
-++  [(set (match_operand:SI 0 "register_operand"    "=r,  r,r,r,  r,r")
-++	(plus:SI
-++	 (plus:SI
-++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0))
-++	  (match_operand:SI 1 "nonmemory_operand" "%r,  0,r,0,Cal,r"))
-++	 (match_operand:SI 2 "nonmemory_operand"   "r,C_0,L,I,  r,Cal")))]
-+   "register_operand (operands[1], SImode)
-+    || register_operand (operands[2], SImode)"
-+   "@
-+-	adc %0,%1,%2
-+-	add.cs %0,%1,1
-+-	adc %0,%1,%2
-+-	adc %0,%1,%2
-+-	adc %0,%1,%2"
-+-  ; if we have a bad schedule after sched2, split.
-+-  "reload_completed
-+-   && !optimize_size && (!TARGET_ARC600_FAMILY)
-+-   && arc_scheduling_not_expected ()
-+-   && arc_sets_cc_p (prev_nonnote_insn (insn))
-+-   /* If next comes a return or other insn that needs a delay slot,
-+-      expect the adc to get into the delay slot.  */
-+-   && next_nonnote_insn (insn)
-+-   && !arc_need_delay (next_nonnote_insn (insn))
-+-   /* Restore operands before emitting.  */
-+-   && (extract_insn_cached (insn), 1)"
-+-  [(set (match_dup 0) (match_dup 3))
-+-   (cond_exec
-+-     (ltu (reg:CC_C CC_REG) (const_int 0))
-+-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int 1))))]
-+-  "operands[3] = simplify_gen_binary (PLUS, SImode, operands[1], operands[2]);"
-++    adc\\t%0,%1,%2
-++    add.cs\\t%0,%1,1
-++    adc\\t%0,%1,%2
-++    adc\\t%0,%1,%2
-++    adc\\t%0,%1,%2
-++    adc\\t%0,%1,%2"
-+   [(set_attr "cond" "use")
-+    (set_attr "type" "cc_arith")
-+-   (set_attr "length" "4,4,4,4,8")])
-++   (set_attr "length" "4,4,4,4,8,8")])
-+ 
-+ ; combiner-splitter cmp / scc -> cmp / adc
-+ (define_split
-+@@ -3015,7 +2997,7 @@ archs4x, archs4xd"
-+       DONE;
-+     }
-+   emit_insn (gen_sub_f (l0, l1, l2));
-+-  emit_insn (gen_sbc (h0, h1, h2, gen_rtx_REG (CCmode, CC_REG)));
-++  emit_insn (gen_sbc (h0, h1, h2));
-+   DONE;
-+   ")
-+ 
-+@@ -3030,44 +3012,25 @@ archs4x, archs4xd"
-+    (set_attr "type" "cc_arith")
-+    (set_attr "length" "4")])
-+ 
-+-; w/c/c comes first (rather than Rcw/0/C_0) to prevent the middle-end
-+-; needlessly prioritizing the matching constraint.
-+-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional execution
-+-; is used where possible.
-+-(define_insn_and_split "sbc"
-+-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
-+-	(minus:SI (minus:SI (match_operand:SI 1 "nonmemory_operand"
-+-						"c,0,c,0,cCal")
-+-			    (ltu:SI (match_operand:CC_C 3 "cc_use_register")
-+-				    (const_int 0)))
-+-		  (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
-++(define_insn "sbc"
-++  [(set (match_operand:SI 0 "dest_reg_operand"   "=r,r,r,r,r,r")
-++	(minus:SI
-++	 (minus:SI
-++	  (match_operand:SI 1 "nonmemory_operand" "r,  0,r,0,  r,Cal")
-++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0)))
-++	 (match_operand:SI 2 "nonmemory_operand"  "r,C_0,L,I,Cal,r")))]
-+   "register_operand (operands[1], SImode)
-+    || register_operand (operands[2], SImode)"
-+   "@
-+-	sbc %0,%1,%2
-+-	sub.cs %0,%1,1
-+-	sbc %0,%1,%2
-+-	sbc %0,%1,%2
-+-	sbc %0,%1,%2"
-+-  ; if we have a bad schedule after sched2, split.
-+-  "reload_completed
-+-   && !optimize_size && (!TARGET_ARC600_FAMILY)
-+-   && arc_scheduling_not_expected ()
-+-   && arc_sets_cc_p (prev_nonnote_insn (insn))
-+-   /* If next comes a return or other insn that needs a delay slot,
-+-      expect the adc to get into the delay slot.  */
-+-   && next_nonnote_insn (insn)
-+-   && !arc_need_delay (next_nonnote_insn (insn))
-+-   /* Restore operands before emitting.  */
-+-   && (extract_insn_cached (insn), 1)"
-+-  [(set (match_dup 0) (match_dup 4))
-+-   (cond_exec
-+-     (ltu (reg:CC_C CC_REG) (const_int 0))
-+-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int -1))))]
-+-  "operands[4] = simplify_gen_binary (MINUS, SImode, operands[1], operands[2]);"
-++    sbc\\t%0,%1,%2
-++    sub.cs\\t%0,%1,1
-++    sbc\\t%0,%1,%2
-++    sbc\\t%0,%1,%2
-++    sbc\\t%0,%1,%2
-++    sbc\\t%0,%1,%2"
-+   [(set_attr "cond" "use")
-+    (set_attr "type" "cc_arith")
-+-   (set_attr "length" "4,4,4,4,8")])
-++   (set_attr "length" "4,4,4,4,8,8")])
-+ 
-+ (define_insn "sub_f"
-+   [(set (reg:CC CC_REG)
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index b690b952dc..89c6894a1f 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -39,7 +39,7 @@ config BR2_BINUTILS_VERSION_2_35_X
+ 	depends on !BR2_BINFMT_FLAT
+ 
+ config BR2_BINUTILS_VERSION_ARC
+-	bool "binutils arc (2.31)"
++	bool "binutils arc (2.34.50)"
+ 	depends on BR2_arc
+ 
+ config BR2_BINUTILS_VERSION_CSKY
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 10688ff568..2ed159314c 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -9,7 +9,7 @@ choice
+ 	  Select the version of gcc you wish to use.
+ 
+ config BR2_GCC_VERSION_ARC
+-	bool "gcc arc (9.x)"
++	bool "gcc arc (10.x)"
+ 	# Only supported architecture
+ 	depends on BR2_arc
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
 -- 
 2.27.0
