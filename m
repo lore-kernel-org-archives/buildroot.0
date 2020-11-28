@@ -1,75 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Nov 2020 16:31:37 +0100
-Subject: [Buildroot] [git commit] support/scripts/cve.py: properly match
- CPEs with version '*'
-Message-ID: <20201203092227.400A5821E0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Nov 2020 10:52:49 +0100
+Subject: [Buildroot] [git commit] package/lua-lyaml: bump to version 6.2.7
+Message-ID: <20201203092227.9BB17821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ff7f003e1cfc02241aef8f35429462edd60ed09
+commit: https://git.buildroot.net/buildroot/commit/?id=92abbd708eeedfd4ab4846a47965513ed79dd550
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, when the version encoded in a CPE is '-', we assume all
-versions are affected, but when it's '*' with no further range
-information, we assume no version is affected.
-
-This doesn't make sense, so instead, we handle '*' and '-' in the same
-way. If there's no version information available in the CVE CPE ID, we
-assume all versions are affected.
-
-This increases quite a bit the number of CVEs and package affected:
-
--    "total-cves": 302,
--    "pkg-cves": 100,
-+    "total-cves": 597,
-+    "pkg-cves": 135,
-
-For example, CVE-2007-4476 has a CPE ID of:
-
-    cpe:2.3:a:gnu:tar:*:*:*:*:*:*:*:*
-
-So it should be taken into account. In this specific case, it is
-combined with an AND with CPE ID
-cpe:2.3:o:suse:suse_linux:10:*:enterprise_server:*:*:*:*:* but since
-we don't support this kind of matching, we'd better be on the safe
-side, and report this CVE as affecting tar, do an analysis of the CVE
-impact, and document it in TAR_IGNORE_CVES.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/cve.py | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ package/lua-lyaml/lua-lyaml.hash | 4 ++--
+ package/lua-lyaml/lua-lyaml.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 6396019e0e..e7472cd470 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -144,10 +144,6 @@ class CVE:
-                 # Version is defined, this is a '=' match
-                 op_start = '='
-                 v_start = version
--            elif version == '-':
--                # no version information is available
--                op_start = '='
--                v_start = version
-             else:
-                 # Parse start version, end version and operators
-                 if 'versionStartIncluding' in cpe:
-@@ -206,11 +202,8 @@ class CVE:
-         for cpe in self.each_cpe():
-             if cpe['product'] != name:
-                 continue
--            if cpe['v_start'] == '-':
--                return self.CVE_AFFECTS
-             if not cpe['v_start'] and not cpe['v_end']:
--                print("No CVE affected version")
--                continue
-+                return self.CVE_AFFECTS
-             if not pkg_version:
-                 continue
+diff --git a/package/lua-lyaml/lua-lyaml.hash b/package/lua-lyaml/lua-lyaml.hash
+index 07184e9e45..af3d0ae6da 100644
+--- a/package/lua-lyaml/lua-lyaml.hash
++++ b/package/lua-lyaml/lua-lyaml.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256 2c52104e75331e4729e5895168fb8f24769db0b84c68696159e6b6a8908b62d2  lua-lyaml-6.2.6.tar.gz
+-sha256 81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
++sha256  9bb489cefae48b150d66f6bab4141d8d5831fcb7465bfc52a9845fa01efc63b0  lua-lyaml-6.2.7.tar.gz
++sha256  81e4ea1d897e259b31111adc2d3c185fe23e435942ff3e9de8c8c9c5d01247d0  LICENSE
+diff --git a/package/lua-lyaml/lua-lyaml.mk b/package/lua-lyaml/lua-lyaml.mk
+index a818ce716c..77980f5312 100644
+--- a/package/lua-lyaml/lua-lyaml.mk
++++ b/package/lua-lyaml/lua-lyaml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LUA_LYAML_VERSION = 6.2.6
++LUA_LYAML_VERSION = 6.2.7
+ LUA_LYAML_NAME_UPSTREAM = lyaml
+ LUA_LYAML_SITE = $(call github,gvvaughan,$(LUA_LYAML_NAME_UPSTREAM),v$(LUA_LYAML_VERSION))
+ LUA_LYAML_LICENSE = MIT
