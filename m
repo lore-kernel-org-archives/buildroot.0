@@ -1,41 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 28 Nov 2020 11:26:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc-ng-test: disable TLS for
- nios2
-Message-ID: <20201128102639.1158730-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 28 Nov 2020 11:44:36 +0100
+Subject: [Buildroot] Buildroot 2020.11-rc3 release
+Message-ID: <87zh31pxpn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable TLS for nios2 to avoid the following build failure:
+Hi,
 
-In file included from tst-tls1.c:6:
-tls-macros.h:101:3: error: #error "No support for this architecture so far."
- # error "No support for this architecture so far."
-   ^~~~~
+Buildroot 2020.11-rc3 is released - Go download it at:
 
-Fixes:
- - http://autobuild.buildroot.org/results/303e50d996b7261896f163418831fabb40779ff5
+http://buildroot.net/downloads/buildroot-2020.11-rc3.tar.gz
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/uclibc-ng-test/uclibc-ng-test.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+or
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.mk b/package/uclibc-ng-test/uclibc-ng-test.mk
-index 9f866f5d71..7ebc5bbcf9 100644
---- a/package/uclibc-ng-test/uclibc-ng-test.mk
-+++ b/package/uclibc-ng-test/uclibc-ng-test.mk
-@@ -39,7 +39,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1 NO_NPTL=1 NO_DL=1
- endif
- # no TLS macros available
--ifeq ($(BR2_nds32)$(BR2_s390x),y)
-+ifeq ($(BR2_nds32)$(BR2_nios2)$(BR2_s390x),y)
- UCLIBC_NG_TEST_MAKE_ENV += NO_TLS=1
- endif
- 
+http://buildroot.net/downloads/buildroot-2020.11-rc3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another 2 weeks, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or bug
+tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2020.11-rc2..
+
+    17  Fabrice Fontaine
+    15  Peter Korsgaard
+     4  Peter Seiderer
+     3  Bernd Kuhls
+     3  Heiko Thiery
+     2  Adrian Perez de Castro
+     2  Baruch Siach
+     2  Paul Cercueil
+     1  Aleksander Morgado
+     1  Bartosz Bilas
+     1  Garret Kelly
+     1  Heiko Stuebner
+     1  Julien Olivain
+     1  Michael Nosthoff
+     1  Pierre-Jean Texier
+     1  Romain Naour
+     1  Thomas Petazzoni
+     1  Yann E. MORIN
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11-rc3
+
+Expect the final 2020.11 release within a few days, unless something
+critical shows up.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
