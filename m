@@ -1,34 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Nov 2020 10:57:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/setserial: add license hash
-Message-ID: <20201128095725.1084152-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 28 Nov 2020 11:04:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: also set HAVE_LIBCURL
+Message-ID: <20201128100403.1123560-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also reformatted hash file.
+Set HAVE_LIBCURL when libcurl is available to enable genprotimg and
+libekmfweb:
+https://github.com/ibm-s390-tools/s390-tools/blob/master/README.md
 
-Fixes:
-http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/setserial/setserial.hash | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/s390-tools/s390-tools.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
-index ce3b369f56..991d2860a9 100644
---- a/package/setserial/setserial.hash
-+++ b/package/setserial/setserial.hash
-@@ -1,3 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
--sha256	7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a	setserial_2.17.orig.tar.gz
--sha256	33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6	setserial_2.17-45.3.diff.gz
-+sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
-+sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
-+# Locally computed
-+sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
+diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
+index dd70efe10b..bb261ff80e 100644
+--- a/package/s390-tools/s390-tools.mk
++++ b/package/s390-tools/s390-tools.mk
+@@ -19,9 +19,13 @@ S390_TOOLS_MAKE_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ S390_TOOLS_DEPENDENCIES += libcurl
+-S390_TOOLS_MAKE_OPTS += HAVE_CURL=1
++S390_TOOLS_MAKE_OPTS += \
++	HAVE_CURL=1 \
++	HAVE_LIBCURL=1
+ else
+-S390_TOOLS_MAKE_OPTS += HAVE_CURL=0
++S390_TOOLS_MAKE_OPTS += \
++	HAVE_CURL=0 \
++	HAVE_LIBCURL=0
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JSON_C),y)
 -- 
-2.27.0
+2.29.2
