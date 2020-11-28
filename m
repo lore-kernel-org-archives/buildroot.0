@@ -1,65 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 09:24:09 +0100
-Subject: [Buildroot] [git commit] package/proftpd: security bump to version
- 1.3.6e
-Message-ID: <20201128081355.EA98C81407@busybox.osuosl.org>
+Date: Sat, 28 Nov 2020 08:53:57 +0100
+Subject: [Buildroot] [git commit] package/slirp: add upstream security fix
+ for CVE-2020-29129 / CVE-2020-29130
+Message-ID: <20201128081355.CFF7181407@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ba4aa92981107462e23c4a7d2b1ef291743fe81
+commit: https://git.buildroot.net/buildroot/commit/?id=282fc60ed4bbf30f0c74fe0434053b472eca356b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-1.3.6e
----------
-  + Fixed null pointer deference in mod_sftp when using SCP incorrectly
-    (Issue #1043).
+While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
+routines, ensure that pkt_len is large enough to accommodate the
+respective protocol headers, lest it should do an OOB access.
+Add check to avoid it.
 
-1.3.6d
----------
-  + Fixed issue with FTPS uploads of large files using TLSv1.3 (Issue #959).
-
-1.3.6c
----------
-  + Fixed regression in directory listing latency (Issue #863).
-  + Detect OpenSSH-specific formatted SFTPHostKeys, and log hint for
-    converting them to supported format.
-  + Fixed use-after-free vulnerability during data transfers (Issue #903)
-    [CVE-2020-9273]
-  + Fixed out-of-bounds read in mod_cap by updating the bundled libcap
-    (Issue #902) [CVE-2020-9272]
-
-http://proftpd.org/docs/RELEASE_NOTES-1.3.6e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: mark as security bump, add CVEs]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/proftpd/proftpd.hash | 2 +-
- package/proftpd/proftpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ck-pkt_len-before-reading-protocol-header.patch | 60 ++++++++++++++++++++++
+ package/slirp/slirp.mk                             |  3 ++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
-index 1ac54de4ca..983500bb8e 100644
---- a/package/proftpd/proftpd.hash
-+++ b/package/proftpd/proftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fa3541c4b34136a7b80cb12a2f6f9a0cab5118a5b0a1653d40af49c6479c35ad  proftpd-1.3.6c.tar.gz
-+sha256  2dbe684034ab592742ebdb778a8a234b70f959efeb30feedee3ea77f26f74fbb  proftpd-1.3.6e.tar.gz
- sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index e126d0e0a4..e35e78607d 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
+new file mode 100644
+index 0000000000..4046144712
+--- /dev/null
++++ b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
+@@ -0,0 +1,60 @@
++From 2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f Mon Sep 17 00:00:00 2001
++From: Prasad J Pandit <pjp@fedoraproject.org>
++Date: Thu, 26 Nov 2020 19:27:06 +0530
++Subject: [PATCH] slirp: check pkt_len before reading protocol header
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
++routines, ensure that pkt_len is large enough to accommodate the
++respective protocol headers, lest it should do an OOB access.
++Add check to avoid it.
++
++CVE-2020-29129 CVE-2020-29130
++  QEMU: slirp: out-of-bounds access while processing ARP/NCSI packets
++ -> https://www.openwall.com/lists/oss-security/2020/11/27/1
++
++Reported-by: Qiuhao Li <Qiuhao.Li@outlook.com>
++Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
++Message-Id: <20201126135706.273950-1-ppandit@redhat.com>
++Reviewed-by: Marc-Andr?? Lureau <marcandre.lureau@redhat.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/ncsi.c  | 4 ++++
++ src/slirp.c | 4 ++++
++ 2 files changed, 8 insertions(+)
++
++diff --git a/src/ncsi.c b/src/ncsi.c
++index 3c1dfef..75dcc08 100644
++--- a/src/ncsi.c
+++++ b/src/ncsi.c
++@@ -148,6 +148,10 @@ void ncsi_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
++     uint32_t checksum;
++     uint32_t *pchecksum;
++ 
+++    if (pkt_len < ETH_HLEN + sizeof(struct ncsi_pkt_hdr)) {
+++        return; /* packet too short */
+++    }
+++
++     memset(ncsi_reply, 0, sizeof(ncsi_reply));
++ 
++     memset(reh->h_dest, 0xff, ETH_ALEN);
++diff --git a/src/slirp.c b/src/slirp.c
++index 9bead0c..abb6f9a 100644
++--- a/src/slirp.c
+++++ b/src/slirp.c
++@@ -860,6 +860,10 @@ static void arp_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
++         return;
++     }
++ 
+++    if (pkt_len < ETH_HLEN + sizeof(struct slirp_arphdr)) {
+++        return; /* packet too short */
+++    }
+++
++     ar_op = ntohs(ah->ar_op);
++     switch (ar_op) {
++     case ARPOP_REQUEST:
++-- 
++2.20.1
++
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+index ed6d8855e5..33c568c058 100644
+--- a/package/slirp/slirp.mk
++++ b/package/slirp/slirp.mk
+@@ -14,4 +14,7 @@ SLIRP_LICENSE_FILES = COPYRIGHT
+ SLIRP_INSTALL_STAGING = YES
+ SLIRP_DEPENDENCIES = libglib2
  
--PROFTPD_VERSION = 1.3.6c
-+PROFTPD_VERSION = 1.3.6e
- PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
- PROFTPD_LICENSE = GPL-2.0+
- PROFTPD_LICENSE_FILES = COPYING
++# 0001-slirp-check-pkt_len-before-reading-protocol-header.patch
++SLIRP_IGNORE_CVES += CVE-2020-29129 CVE-2020-29130
++
+ $(eval $(meson-package))
