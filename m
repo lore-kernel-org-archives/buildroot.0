@@ -1,98 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 28 Nov 2020 23:41:46 +0100
-Subject: [Buildroot] [PATCH] package/mariadb: security bump to version
- 10.3.27
-Message-ID: <20201128224147.23260-1-peter@korsgaard.com>
+Date: Sun, 29 Nov 2020 08:57:04 +0100
+Subject: [Buildroot] [PATCH] package/jemalloc: add jemalloc-config to
+ _CONFIG_SCRIPTS handling
+Message-ID: <20201129075704.29962-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
 
-- CVE-2020-15180: during SST a joiner sends an sst method name to the donor.
-  Donor then appends it to the "wsrep_sst_" string to get the name of the
-  sst script to use, e.g.  wsrep_sst_rsync.  There is no validation or
-  filtering here, so if the malicious joiner sends, for example, "rsync `rm
-  -rf /`" the donor will execute that too.
+jemalloc installs a jemalloc-config script, leaking build paths and breaking
+reproducible builds (and per-package builds).
 
-- CVE-2020-14812: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: Locking).  Supported versions that are affected are
-  5.6.49 and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily
-  exploitable vulnerability allows high privileged attacker with network
-  access via multiple protocols to compromise MySQL Server.  Successful
-  attacks of this vulnerability can result in unauthorized ability to cause
-  a hang or frequently repeatable crash (complete DOS) of MySQL Server.
-
-- CVE-2020-14765: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: FTS).  Supported versions that are affected are 5.6.49
-  and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily exploitable
-  vulnerability allows low privileged attacker with network access via
-  multiple protocols to compromise MySQL Server.  Successful attacks of this
-  vulnerability can result in unauthorized ability to cause a hang or
-  frequently repeatable crash (complete DOS) of MySQL Server.
-
-- CVE-2020-14776: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: InnoDB).  Supported versions that are affected are 5.7.31 and
-  prior and 8.0.21 and prior.  Easily exploitable vulnerability allows high
-  privileged attacker with network access via multiple protocols to
-  compromise MySQL Server.  Successful attacks of this vulnerability can
-  result in unauthorized ability to cause a hang or frequently repeatable
-  crash (complete DOS) of MySQL Server.
-
-- CVE-2020-14789: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: FTS).  Supported versions that are affected are 5.7.31
-  and prior and 8.0.21 and prior.  Easily exploitable vulnerability allows
-  high privileged attacker with network access via multiple protocols to
-  compromise MySQL Server.  Successful attacks of this vulnerability can
-  result in unauthorized ability to cause a hang or frequently repeatable
-  crash (complete DOS) of MySQL Server.
-
-- CVE-2020-28912:
-  https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-bui.pdf
-  describes a named pipe privilege vulnerability, specifically for MySQL,
-  where an unprivileged user, located on the same machine as the server, can
-  act as man-in-the-middle between server and client.
-
-Additionally, 10.3.27 fixes a regression added in 10.3.26.
-
-Drop weak md5/sha1 checksums.
+Add it to _CONFIG_SCRIPTS so the paths get fixed up for staging and the
+script removed from target.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 8 +++-----
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/jemalloc/jemalloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 9de97360a4..a210dd9dad 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,8 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.3.23
--md5  473950893d29805d9384ec0ed5d7c276  mariadb-10.3.23.tar.gz
--sha1  c95b6d4cff5e6d63eed05da20561802b9c83e717  mariadb-10.3.23.tar.gz
--sha256  fc405022457d8eec5991b870cc1c9a07b83b551d6165c414c4d8f31523aa86ae  mariadb-10.3.23.tar.gz
--sha512  535cd2ce80a95b6c0a1aa559cc3275dfcd559c3a4f958fab3382923190a16e6bc5b4ad79acaa518244512ff618568c239c0edef8a701d958362ede19a29c2986  mariadb-10.3.23.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.27
-+sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
-+sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index aedc1f04bf..e43a4f7906 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -10,6 +10,7 @@ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLO
+ JEMALLOC_LICENSE = BSD-2-Clause
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
++JEMALLOC_CONFIG_SCRIPTS = jemalloc-config
  
- # Hash for license files
- sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 1d0be060df..83965d0437 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.23
-+MARIADB_VERSION = 10.3.27
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+ # gcc bug internal compiler error: in merge_overlapping_regs, at
+ # regrename.c:304. This bug is fixed since gcc 6.
 -- 
 2.20.1
