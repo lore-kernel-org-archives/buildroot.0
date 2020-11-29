@@ -1,74 +1,129 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 29 Nov 2020 22:42:13 +0100
-Subject: [Buildroot] [PATCH v1] package/kmsxx: fix gcc-10.x compile
-In-Reply-To: <875z5nq2nl.fsf@dell.be.48ers.dk>
-References: <20201129093823.10286-1-ps.report@gmx.net>
- <875z5nq2nl.fsf@dell.be.48ers.dk>
-Message-ID: <20201129224213.355228ad@gmx.net>
+Date: Sun, 29 Nov 2020 23:04:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: fix libcap.pc
+In-Reply-To: <20201128215432.2326411-1-fontaine.fabrice@gmail.com>
+References: <20201128215432.2326411-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201129230456.564bd562@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Fabrice,
 
-On Sun, 29 Nov 2020 22:22:22 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
+On Sat, 28 Nov 2020 22:54:32 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> libcap builds an incorrect libcap.pc because libdir is pulled from the
+> host os:
 >
->  > Backport upstream commit ([1]) adding missing string include.
->  > Fixes:
->  >   - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
+> ifndef lib
+> lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
+> endif
 >
->  >   In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
->  >                    from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
->  >   .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
->  >      17 |  Card(const std::string& device);
->  >         |                  ^~~~~~
+> Fix this error by passing lib=lib in {HOST_LIBCAP,LIBCAP}_BUILD_CMDS
 >
->  > [1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+> Fixes:
+>  - https://bugs.buildroot.org/show_bug.cgi?id=13276
 >
->  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  > ---
->  >  ...ring-to-card.h-to-follow-gcc10-porti.patch | 27 +++++++++++++++++++
->  >  1 file changed, 27 insertions(+)
->  >  create mode 100644 package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libcap/libcap.mk | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 >
->  > diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
->  > new file mode 100644
->  > index 0000000000..3febac40e8
->  > --- /dev/null
->  > +++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
->  > @@ -0,0 +1,27 @@
->  > +From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
->  > +From: Tobias Off <sebastianoff@web.de>
->  > +Date: Thu, 8 Oct 2020 22:37:55 +0200
->  > +Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
->  > + guide
->  > +
->  > +[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
->  > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+> index 2b80a3cb7d..a4a9170193 100644
+> --- a/package/libcap/libcap.mk
+> +++ b/package/libcap/libcap.mk
+> @@ -19,6 +19,7 @@ LIBCAP_MAKE_FLAGS = \
+>  	CROSS_COMPILE="$(TARGET_CROSS)" \
+>  	BUILD_CC="$(HOSTCC)" \
+>  	BUILD_CFLAGS="$(HOST_CFLAGS)" \
+> +	lib=lib \
+>  	SHARED=$(if $(BR2_STATIC_LIBS),,yes) \
+>  	PTHREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,)
 >
-> NIT: Why do you end with a different commit hash than the upstream one
-> (E.G. The From line)?
+> @@ -38,21 +39,21 @@ endef
+>  define LIBCAP_INSTALL_STAGING_CMDS
+>  	$(foreach d,$(LIBCAP_MAKE_DIRS), \
+>  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
+> -			DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
+> +			DESTDIR=$(STAGING_DIR) prefix=/usr install
+>  	)
+>  endef
+>
+>  define LIBCAP_INSTALL_TARGET_CMDS
+>  	$(foreach d,$(LIBCAP_MAKE_DIRS), \
+>  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
+> -			DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
+> +			DESTDIR=$(TARGET_DIR) prefix=/usr install
+>  	)
+>  endef
+>
+>  define HOST_LIBCAP_BUILD_CMDS
+>  	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+>  		DYNAMIC=yes \
+> -		RAISE_SETFCAP=no GOLANG=no
+> +		RAISE_SETFCAP=no GOLANG=no lib=lib
+>  endef
+>
+>  define HOST_LIBCAP_INSTALL_CMDS
 
-Is a change of the hash not normal while re-basing and adding something to
-the commit message?
+Before the patch:
 
-Produced the patch with the following workflow:
+	$ cat ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig/libcap.pc
+prefix=/usr
+exec_prefix=
+libdir=/lib64
+includedir=/usr/include
 
-	$ wget https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
-	$ git am b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
-	$ vi kms++/inc/kms++/card.h     # fixing re-base conflicts
-	$ git add kms++/inc/kms++/card.h
-	$ git am --continue
-	$ git commit --amend --signoff
-	$ git format-patch -1
+Name: libcap
+Description: libcap - linux capabilities library
+Version: 2.45
+Libs: -L${libdir} -lcap
+Libs.private:
+Cflags: -I${includedir}
+
+
+
+After the patch:
+
+	$ cat ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig/libcap.pc
+prefix=/usr
+exec_prefix=
+libdir=/lib
+includedir=/usr/include
+
+Name: libcap
+Description: libcap - linux capabilities library
+Version: 2.45
+Libs: -L${libdir} -lcap
+Libs.private:
+Cflags: -I${includedir}
+
+Some (random) other package:
+
+	$ cat ./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig/fmt.pc
+prefix=/usr
+exec_prefix=/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: fmt
+Description: A modern formatting library
+Version: 7.1.3
+Libs: -L${libdir} -lfmt
+Cflags: -I${includedir}
+
+
+	$ find ./host/arm-buildroot-linux-gnueabihf/sysroot/ -name libcap.so
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libcap.so
+
+	$ find ./host/arm-buildroot-linux-gnueabihf/sysroot/ -name libfmt.so
+./host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libfmt.so
+
+
+Should libcap.pc not use something resulting in 'libdir=/usr/lib'?
 
 Regards,
 Peter
-
->
-> Committed, thanks.
->
