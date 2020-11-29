@@ -1,64 +1,134 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 29 Nov 2020 10:38:23 +0100
-Subject: [Buildroot] [PATCH v1] package/kmsxx: fix gcc-10.x compile
-Message-ID: <20201129093823.10286-1-ps.report@gmx.net>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Sun, 29 Nov 2020 15:14:06 +0000
+Subject: [Buildroot] [PATCH v4 2/4] package/bcc: new package
+In-Reply-To: <20201107002836.3101760-2-romain.naour@gmail.com>
+References: <20201107002836.3101760-1-romain.naour@gmail.com>
+ <20201107002836.3101760-2-romain.naour@gmail.com>
+Message-ID: <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport upstream commit ([1]) adding missing string include.
+Hi Romain
 
-Fixes:
-  - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
+Thanks for updating the series.
 
-  In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
-                   from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
-  .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
-     17 |  Card(const std::string& device);
-        |                  ^~~~~~
+On 11/07/20 01:28, Romain Naour wrote:
+> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> 
+> bcc is a front-end tool for eBPF :
+> https://github.com/iovisor/bcc/blob/master/README.md.
+> eBPF is the most powerful Linux tracer, and bcc
+> allows to write eBPF scripts in C and PYTHON3.
+> 
+> bcc can help to troubleshoot issues quickly on
+> embedded systems (as long as Linux kernel
+> version >= 4.1).
+> 
+> bcc can also make it easy to create observabilty tools,
+> SDN configuration, ddos mitigation, intrusion detection
+> and secure containers. More information is available at:
+> https://ebpf.io/
+> 
+> BCC can be tested on the target :
+> $ mount -t debugfs none /sys/kernel/debug
+> $ cd /usr/share/bcc/tools
+> $ ./execsnoop
+> 
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Qais Yousef <qais.yousef@arm.com>
+> ---
+> v4
+> - Bump to version 0.17.0.
+> - Remove kernel dependency (Qais)
+> - Remove optional kernel option handling (Quais)
+> - Update ebpf url (Quais)
+> - Fix tools path in the commit log (Quais)
+> - Add full tar dependency (used to extract the kernel sources from IKHEADERS module) (Quais)
+> - Make luajit optional dependeny (Quais)
 
-[1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+I don't see a new option in Config.in to enable luajit. Shouldn't we have one
+to enable it?
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...ring-to-card.h-to-follow-gcc10-porti.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+Wouldn't it be better to split luajit support into its own patch?
 
-diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
-new file mode 100644
-index 0000000000..3febac40e8
---- /dev/null
-+++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
-@@ -0,0 +1,27 @@
-+From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
-+From: Tobias Off <sebastianoff@web.de>
-+Date: Thu, 8 Oct 2020 22:37:55 +0200
-+Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
-+ guide
-+
-+[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ kms++/inc/kms++/card.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/kms++/inc/kms++/card.h b/kms++/inc/kms++/card.h
-+index 90ad1f6..f055e27 100644
-+--- a/kms++/inc/kms++/card.h
-++++ b/kms++/inc/kms++/card.h
-+@@ -3,6 +3,7 @@
-+ #include <cstdint>
-+ #include <vector>
-+ #include <map>
-++#include <string>
-+ 
-+ #include "decls.h"
-+ #include "pipeline.h"
-+-- 
-+2.29.2
-+
--- 
-2.29.2
+> - Remove python module install hook (Quais)
+> - Keep BCC_LINUX_CONFIG_FIXUPS but only for kernel built by Buildroot.
+
+I still think this will be a maintenance headache. Are you sure you want to
+continue to maintain this list of fixups for all kernel versions given how fast
+ebpf moves?
+
+[...]
+
+> diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+> new file mode 100644
+> index 0000000000..b75984a36e
+> --- /dev/null
+> +++ b/package/bcc/Config.in
+> @@ -0,0 +1,42 @@
+> +config BR2_PACKAGE_BCC
+> +	bool "bcc"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
+> +	depends on BR2_INSTALL_LIBSTDCPP # clang
+> +	select BR2_PACKAGE_AUDIT # runtime
+> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # to select tar package
+> +	select BR2_PACKAGE_CLANG
+> +	select BR2_PACKAGE_ELFUTILS
+> +	select BR2_PACKAGE_FLEX # needs FlexLexer.h
+> +	select BR2_PACKAGE_IPERF3 # runtime
+> +	select BR2_PACKAGE_LLVM_BPF
+> +	select BR2_PACKAGE_NETPERF # runtime
+> +	select BR2_PACKAGE_PYTHON3
+> +	select BR2_PACKAGE_TAR # Decompress kernel headers required by BCC
+
+I still think IPERF3, NETPERF and AUDIT dependencies are not required and
+should be enabled by the user if they care only.
+
+Are you okay to make them optional so users who don't care can have the choice
+to enable BCC without having to include these packages too?
+
+> +	help
+> +	  BPF Compiler Collection (BCC)
+> +
+> +	  BCC is a toolkit for creating efficient kernel tracing and
+> +	  manipulation programs, and includes several useful tools and
+> +	  examples. It makes use of extended BPF (Berkeley Packet
+> +	  Filters), formally known as eBPF, a new feature that was
+> +	  first added to Linux 3.15. Much of what BCC uses requires
+> +	  Linux 4.1 and above.
+> +
+> +	  Note: Before using bcc, you need either need to :
+> +	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
+> +	  to target folder /lib/module/<kernel_ver>/build.
+> +	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
+> +	  and use generated headers under /sys/kernel/kheaders.tar.xz
+> +	  to populate /lib/module/<kernel_ver>/build.
+> +
+> +	  That's because the clang frontend build eBPF code at runtime.
+
+I still this the Clang build error for i386, x86_64, arm and arm64
+
+	/usr/bin/ld: CMakeFiles/libclang.dir/CIndexer.cpp.o: in function `clang::CIndexer::getClangResourcesPath[abi:cxx11]()':
+	CIndexer.cpp:(.text._ZN5clang8CIndexer21getClangResourcesPathB5cxx11Ev+0x9b): undefined reference to `dladdr'
+	collect2: error: ld returned 1 exit status
+	make[4]: *** [tools/libclang/CMakeFiles/libclang.dir/build.make:395: lib/libclang.so.9] Error 1
+	make[3]: *** [CMakeFiles/Makefile2:8451: tools/libclang/CMakeFiles/libclang.dir/all] Error 2
+
+I had a hacky patch for that in my series. Should we just report this to the
+clang package maintainer in buildroot? I'm assuming you're not hitting it,
+right?
+
+I was based on 2020.08.2 tag.
+
+I couldn't fully test this series yet because of this error.
+
+Thanks
+
+--
+Qais Yousef
