@@ -1,35 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2020 22:15:42 +0100
-Subject: [Buildroot] [git commit] package/bustle: fix license
-Message-ID: <20201129210736.AD16A821E6@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 29 Nov 2020 22:42:13 +0100
+Subject: [Buildroot] [PATCH v1] package/kmsxx: fix gcc-10.x compile
+In-Reply-To: <875z5nq2nl.fsf@dell.be.48ers.dk>
+References: <20201129093823.10286-1-ps.report@gmx.net>
+ <875z5nq2nl.fsf@dell.be.48ers.dk>
+Message-ID: <20201129224213.355228ad@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3ca4f10864009f3b43695366f6cd2504634d7b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-bustle binaries are licensed under GPL-3.0:
-https://gitlab.freedesktop.org/bustle/bustle/-/blob/bustle-0.7.5/LICENSE
+On Sun, 29 Nov 2020 22:22:22 +0100, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bustle/bustle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>
+>  > Backport upstream commit ([1]) adding missing string include.
+>  > Fixes:
+>  >   - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
+>
+>  >   In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
+>  >                    from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
+>  >   .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
+>  >      17 |  Card(const std::string& device);
+>  >         |                  ^~~~~~
+>
+>  > [1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+>
+>  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  > ---
+>  >  ...ring-to-card.h-to-follow-gcc10-porti.patch | 27 +++++++++++++++++++
+>  >  1 file changed, 27 insertions(+)
+>  >  create mode 100644 package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+>
+>  > diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+>  > new file mode 100644
+>  > index 0000000000..3febac40e8
+>  > --- /dev/null
+>  > +++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+>  > @@ -0,0 +1,27 @@
+>  > +From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
+>  > +From: Tobias Off <sebastianoff@web.de>
+>  > +Date: Thu, 8 Oct 2020 22:37:55 +0200
+>  > +Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
+>  > + guide
+>  > +
+>  > +[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
+>  > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> NIT: Why do you end with a different commit hash than the upstream one
+> (E.G. The From line)?
 
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 675ffb0529..1dbad64aef 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -6,7 +6,7 @@
- 
- BUSTLE_VERSION = 0.7.5
- BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
--BUSTLE_LICENSE = LGPL-2.1+
-+BUSTLE_LICENSE = LGPL-2.1+, GPL-3.0 (binaries)
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
- 
+Is a change of the hash not normal while re-basing and adding something to
+the commit message?
+
+Produced the patch with the following workflow:
+
+	$ wget https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+	$ git am b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+	$ vi kms++/inc/kms++/card.h     # fixing re-base conflicts
+	$ git add kms++/inc/kms++/card.h
+	$ git am --continue
+	$ git commit --amend --signoff
+	$ git format-patch -1
+
+Regards,
+Peter
+
+>
+> Committed, thanks.
+>
