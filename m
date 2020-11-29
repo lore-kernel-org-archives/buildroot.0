@@ -1,55 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2020 22:22:22 +0100
-Subject: [Buildroot] [PATCH v1] package/kmsxx: fix gcc-10.x compile
-In-Reply-To: <20201129093823.10286-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 29 Nov 2020 10:38:23 +0100")
-References: <20201129093823.10286-1-ps.report@gmx.net>
-Message-ID: <875z5nq2nl.fsf@dell.be.48ers.dk>
+Date: Sun, 29 Nov 2020 22:20:13 +0100
+Subject: [Buildroot] [git commit] package/jemalloc: add jemalloc-config to
+ _CONFIG_SCRIPTS handling
+Message-ID: <20201129210736.C9A3B81466@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=288ece60bbe182a2192d5553ba15cbdeedea3ba6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Backport upstream commit ([1]) adding missing string include.
- > Fixes:
- >   - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
+Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
 
- >   In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
- >                    from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
- >   .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
- >      17 |  Card(const std::string& device);
- >         |                  ^~~~~~
+jemalloc installs a jemalloc-config script, leaking build paths and breaking
+reproducible builds (and per-package builds).
 
- > [1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+Add it to _CONFIG_SCRIPTS so the paths get fixed up for staging and the
+script removed from target.
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- >  ...ring-to-card.h-to-follow-gcc10-porti.patch | 27 +++++++++++++++++++
- >  1 file changed, 27 insertions(+)
- >  create mode 100644 package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jemalloc/jemalloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
- > new file mode 100644
- > index 0000000000..3febac40e8
- > --- /dev/null
- > +++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
- > @@ -0,0 +1,27 @@
- > +From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
- > +From: Tobias Off <sebastianoff@web.de>
- > +Date: Thu, 8 Oct 2020 22:37:55 +0200
- > +Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
- > + guide
- > +
- > +[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
- > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-NIT: Why do you end with a different commit hash than the upstream one
-(E.G. The From line)?
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index aedc1f04bf..e43a4f7906 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -10,6 +10,7 @@ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLO
+ JEMALLOC_LICENSE = BSD-2-Clause
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
++JEMALLOC_CONFIG_SCRIPTS = jemalloc-config
+ 
+ # gcc bug internal compiler error: in merge_overlapping_regs, at
+ # regrename.c:304. This bug is fixed since gcc 6.
