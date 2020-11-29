@@ -1,50 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2020 22:20:42 +0100
-Subject: [Buildroot] [git commit] package/lynx: fix reproducible build issues
-Message-ID: <20201129210736.D23A0822C3@busybox.osuosl.org>
+Date: Sun, 29 Nov 2020 22:21:37 +0100
+Subject: [Buildroot] [git commit] package/kmsxx: fix gcc-10.x compile
+Message-ID: <20201129210736.E30C0812D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fb7c63687ac4a2d3ef07d2aa425b1922ad69792
+commit: https://git.buildroot.net/buildroot/commit/?id=376dc6c8df1183c4d6a639278a9fc57cbeed1694
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
+Backport upstream commit ([1]) adding missing string include.
 
-Lynx by default contains logic to generate a "configuration info" HTML page,
-which leaks build paths, and adds the build timestamp to the version output.
-Disable both when building in reproducible mode.
+Fixes:
+  - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
 
+  In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
+                   from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
+  .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
+     17 |  Card(const std::string& device);
+        |                  ^~~~~~
+
+[1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lynx/lynx.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ ...de-string-to-card.h-to-follow-gcc10-porti.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index 07a3ddfcf0..d115682d64 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -12,6 +12,13 @@ LYNX_LICENSE_FILES = COPYING
- 
- LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- 
-+ifeq ($(BR2_REPRODUCIBLE),y)
-+# configuration info leaks build paths
-+LYNX_CONF_OPTS += --disable-config-info
-+# disable build timestamp
-+LYNX_CFLAGS += -DNO_BUILDSTAMP
-+endif
+diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+new file mode 100644
+index 0000000000..3febac40e8
+--- /dev/null
++++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+@@ -0,0 +1,27 @@
++From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
++From: Tobias Off <sebastianoff@web.de>
++Date: Thu, 8 Oct 2020 22:37:55 +0200
++Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
++ guide
 +
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- LYNX_DEPENDENCIES += ncurses
- LYNX_CONF_OPTS += --with-screen=ncurses$(if $(BR2_PACKAGE_NCURSES_WCHAR),w)
-@@ -41,6 +48,6 @@ LYNX_DEPENDENCIES += libidn
- LYNX_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libidn`
- endif
- 
--LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)"
-+LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)" CFLAGS="$(TARGET_CFLAGS) $(LYNX_CFLAGS)"
- 
- $(eval $(autotools-package))
++[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ kms++/inc/kms++/card.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/kms++/inc/kms++/card.h b/kms++/inc/kms++/card.h
++index 90ad1f6..f055e27 100644
++--- a/kms++/inc/kms++/card.h
+++++ b/kms++/inc/kms++/card.h
++@@ -3,6 +3,7 @@
++ #include <cstdint>
++ #include <vector>
++ #include <map>
+++#include <string>
++ 
++ #include "decls.h"
++ #include "pipeline.h"
++-- 
++2.29.2
++
