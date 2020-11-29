@@ -1,65 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2020 22:21:37 +0100
-Subject: [Buildroot] [git commit] package/kmsxx: fix gcc-10.x compile
-Message-ID: <20201129210736.E30C0812D9@busybox.osuosl.org>
+Date: Sun, 29 Nov 2020 22:19:29 +0100
+Subject: [Buildroot] [git commit] package/mariadb: security bump to version
+ 10.3.27
+Message-ID: <20201129210736.BA887812D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=376dc6c8df1183c4d6a639278a9fc57cbeed1694
+commit: https://git.buildroot.net/buildroot/commit/?id=163334a707a0d85480019d83b23a341e470c37ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport upstream commit ([1]) adding missing string include.
+Fixes the following security issues:
 
-Fixes:
-  - http://autobuild.buildroot.net/results/53a5f023ae40db18f45ebe7578962914c2d22a44
+- CVE-2020-15180: during SST a joiner sends an sst method name to the donor.
+  Donor then appends it to the "wsrep_sst_" string to get the name of the
+  sst script to use, e.g.  wsrep_sst_rsync.  There is no validation or
+  filtering here, so if the malicious joiner sends, for example, "rsync `rm
+  -rf /`" the donor will execute that too.
 
-  In file included from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/omap/omapcard.h:3,
-                   from .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/src/omap/omapcard.cpp:2:
-  .../build/kmsxx-cb0786049f960f2bd383617151b01318e02e9ff9/kms++/inc/kms++/card.h:17:18: error: 'string' in namespace 'std' does not name a type
-     17 |  Card(const std::string& device);
-        |                  ^~~~~~
+- CVE-2020-14812: Vulnerability in the MySQL Server product of Oracle MySQL
+  (component: Server: Locking).  Supported versions that are affected are
+  5.6.49 and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily
+  exploitable vulnerability allows high privileged attacker with network
+  access via multiple protocols to compromise MySQL Server.  Successful
+  attacks of this vulnerability can result in unauthorized ability to cause
+  a hang or frequently repeatable crash (complete DOS) of MySQL Server.
 
-[1] https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+- CVE-2020-14765: Vulnerability in the MySQL Server product of Oracle MySQL
+  (component: Server: FTS).  Supported versions that are affected are 5.6.49
+  and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily exploitable
+  vulnerability allows low privileged attacker with network access via
+  multiple protocols to compromise MySQL Server.  Successful attacks of this
+  vulnerability can result in unauthorized ability to cause a hang or
+  frequently repeatable crash (complete DOS) of MySQL Server.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+- CVE-2020-14776: Vulnerability in the MySQL Server product of Oracle MySQL
+  (component: InnoDB).  Supported versions that are affected are 5.7.31 and
+  prior and 8.0.21 and prior.  Easily exploitable vulnerability allows high
+  privileged attacker with network access via multiple protocols to
+  compromise MySQL Server.  Successful attacks of this vulnerability can
+  result in unauthorized ability to cause a hang or frequently repeatable
+  crash (complete DOS) of MySQL Server.
+
+- CVE-2020-14789: Vulnerability in the MySQL Server product of Oracle MySQL
+  (component: Server: FTS).  Supported versions that are affected are 5.7.31
+  and prior and 8.0.21 and prior.  Easily exploitable vulnerability allows
+  high privileged attacker with network access via multiple protocols to
+  compromise MySQL Server.  Successful attacks of this vulnerability can
+  result in unauthorized ability to cause a hang or frequently repeatable
+  crash (complete DOS) of MySQL Server.
+
+- CVE-2020-28912:
+  https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-bui.pdf
+  describes a named pipe privilege vulnerability, specifically for MySQL,
+  where an unprivileged user, located on the same machine as the server, can
+  act as man-in-the-middle between server and client.
+
+Additionally, 10.3.27 fixes a regression added in 10.3.26.
+
+Drop weak md5/sha1 checksums.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...de-string-to-card.h-to-follow-gcc10-porti.patch | 27 ++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/mariadb/mariadb.hash | 8 +++-----
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
-new file mode 100644
-index 0000000000..3febac40e8
---- /dev/null
-+++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
-@@ -0,0 +1,27 @@
-+From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
-+From: Tobias Off <sebastianoff@web.de>
-+Date: Thu, 8 Oct 2020 22:37:55 +0200
-+Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
-+ guide
-+
-+[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ kms++/inc/kms++/card.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/kms++/inc/kms++/card.h b/kms++/inc/kms++/card.h
-+index 90ad1f6..f055e27 100644
-+--- a/kms++/inc/kms++/card.h
-++++ b/kms++/inc/kms++/card.h
-+@@ -3,6 +3,7 @@
-+ #include <cstdint>
-+ #include <vector>
-+ #include <map>
-++#include <string>
-+ 
-+ #include "decls.h"
-+ #include "pipeline.h"
-+-- 
-+2.29.2
-+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 9de97360a4..a210dd9dad 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,8 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.23
+-md5  473950893d29805d9384ec0ed5d7c276  mariadb-10.3.23.tar.gz
+-sha1  c95b6d4cff5e6d63eed05da20561802b9c83e717  mariadb-10.3.23.tar.gz
+-sha256  fc405022457d8eec5991b870cc1c9a07b83b551d6165c414c4d8f31523aa86ae  mariadb-10.3.23.tar.gz
+-sha512  535cd2ce80a95b6c0a1aa559cc3275dfcd559c3a4f958fab3382923190a16e6bc5b4ad79acaa518244512ff618568c239c0edef8a701d958362ede19a29c2986  mariadb-10.3.23.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.27
++sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
++sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
+ 
+ # Hash for license files
+ sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 1d0be060df..83965d0437 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.3.23
++MARIADB_VERSION = 10.3.27
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
