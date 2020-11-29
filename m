@@ -1,49 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 29 Nov 2020 22:17:39 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good:
- qmlgl needs gstreamer-gl-1.0
-Message-ID: <20201129210736.BF8B3822BF@busybox.osuosl.org>
+Date: Sun, 29 Nov 2020 22:20:42 +0100
+Subject: [Buildroot] [git commit] package/lynx: fix reproducible build issues
+Message-ID: <20201129210736.D23A0822C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1782f2a42585abf0178d899db17154fdbb7dc022
+commit: https://git.buildroot.net/buildroot/commit/?id=3fb7c63687ac4a2d3ef07d2aa425b1922ad69792
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build of qmlql fails without gstreamer-gl-1.0 since version 1.17.1 and
-https://github.com/GStreamer/gst-plugins-good/commit/2ecba800bfbf177bc56999dc59ecdff00cbc353c
+Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
 
-Fixes:
- - http://autobuild.buildroot.org/results/e1537ebac7cd70b6d868a8b7f0205ce3d8593508
+Lynx by default contains logic to generate a "configuration info" HTML page,
+which leaks build paths, and adds the build timestamp to the version output.
+Disable both when building in reproducible mode.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lynx/lynx.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 4dcf26766a..67df206eea 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -279,6 +279,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
- 	bool "qmlgl (qt5)"
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-@@ -286,6 +287,9 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
- 	help
- 	  QT5 plugin which includes elements qmlglsrc and qmlglsink
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 07a3ddfcf0..d115682d64 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -12,6 +12,13 @@ LYNX_LICENSE_FILES = COPYING
  
-+comment "qmlgl (qt5) needs the gst1-plugins-base opengl library"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+ LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++# configuration info leaks build paths
++LYNX_CONF_OPTS += --disable-config-info
++# disable build timestamp
++LYNX_CFLAGS += -DNO_BUILDSTAMP
++endif
 +
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
- 	bool "shout2"
- 	select BR2_PACKAGE_LIBSHOUT
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ LYNX_DEPENDENCIES += ncurses
+ LYNX_CONF_OPTS += --with-screen=ncurses$(if $(BR2_PACKAGE_NCURSES_WCHAR),w)
+@@ -41,6 +48,6 @@ LYNX_DEPENDENCIES += libidn
+ LYNX_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libidn`
+ endif
+ 
+-LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)"
++LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)" CFLAGS="$(TARGET_CFLAGS) $(LYNX_CFLAGS)"
+ 
+ $(eval $(autotools-package))
