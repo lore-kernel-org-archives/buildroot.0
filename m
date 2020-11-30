@@ -1,76 +1,30 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Nov 2020 07:48:33 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/libcap: new fix to libcap.pc
-Message-ID: <20201130064833.12007-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Nov 2020 07:56:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libplist: drop duplicated COPYING
+ hash
+Message-ID: <20201130065631.13170-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As spotted by Peter Seiderer, prefix must be passed to
-{HOST_LIBCAP,LIBCAP}_BUILD_CMDS so libdir in libcap.pc is set to
-/usr/lib instead of /lib
+Commit 762119b4c5489352a889c2627eb37906647c375d resulted in a duplicated
+line for COPYING hash so drop it
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Also fi host libcap
+ package/libplist/libplist.hash | 1 -
+ 1 file changed, 1 deletion(-)
 
- package/libcap/libcap.mk | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
-
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index a4a9170193..7bb8f57671 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -20,6 +20,7 @@ LIBCAP_MAKE_FLAGS = \
- 	BUILD_CC="$(HOSTCC)" \
- 	BUILD_CFLAGS="$(HOST_CFLAGS)" \
- 	lib=lib \
-+	prefix=/usr \
- 	SHARED=$(if $(BR2_STATIC_LIBS),,yes) \
- 	PTHREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,)
- 
-@@ -39,27 +40,31 @@ endef
- define LIBCAP_INSTALL_STAGING_CMDS
- 	$(foreach d,$(LIBCAP_MAKE_DIRS), \
- 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
--			DESTDIR=$(STAGING_DIR) prefix=/usr install
-+			DESTDIR=$(STAGING_DIR) install
- 	)
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
- 	$(foreach d,$(LIBCAP_MAKE_DIRS), \
- 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
--			DESTDIR=$(TARGET_DIR) prefix=/usr install
-+			DESTDIR=$(TARGET_DIR) install
- 	)
- endef
- 
-+HOST_LIBCAP_MAKE_FLAGS = \
-+	DYNAMIC=yes \
-+	GOLANG=no \
-+	lib=lib \
-+	prefix=$(HOST_DIR) \
-+	RAISE_SETFCAP=no
-+
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
--		DYNAMIC=yes \
--		RAISE_SETFCAP=no GOLANG=no lib=lib
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(HOST_LIBCAP_MAKE_FLAGS)
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
--		DYNAMIC=yes \
--		RAISE_SETFCAP=no GOLANG=no lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 9934ad05eb..58054d0b84 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+ sha256  4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
+ sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+-sha256 7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
 -- 
 2.29.2
