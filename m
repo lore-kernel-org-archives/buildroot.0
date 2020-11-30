@@ -1,34 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 30 Nov 2020 07:37:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcap: new fix to libcap.pc
-Message-ID: <20201130063755.8543-1-fontaine.fabrice@gmail.com>
+Date: Mon, 30 Nov 2020 07:48:33 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/libcap: new fix to libcap.pc
+Message-ID: <20201130064833.12007-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As spotted by Peter Seiderer, prefix must be passed to LIBCAP_BUILD_CMDS
-so libdir in libcap.pc is set to /usr/lib instead of /lib
+As spotted by Peter Seiderer, prefix must be passed to
+{HOST_LIBCAP,LIBCAP}_BUILD_CMDS so libdir in libcap.pc is set to
+/usr/lib instead of /lib
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libcap/libcap.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+ - Also fi host libcap
+
+ package/libcap/libcap.mk | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index a4a9170193..d0e0ab8b74 100644
+index a4a9170193..7bb8f57671 100644
 --- a/package/libcap/libcap.mk
 +++ b/package/libcap/libcap.mk
-@@ -19,6 +19,7 @@ LIBCAP_MAKE_FLAGS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
+@@ -20,6 +20,7 @@ LIBCAP_MAKE_FLAGS = \
  	BUILD_CC="$(HOSTCC)" \
  	BUILD_CFLAGS="$(HOST_CFLAGS)" \
-+	prefix=/usr \
  	lib=lib \
++	prefix=/usr \
  	SHARED=$(if $(BR2_STATIC_LIBS),,yes) \
  	PTHREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,)
-@@ -39,14 +40,14 @@ endef
+ 
+@@ -39,27 +40,31 @@ endef
  define LIBCAP_INSTALL_STAGING_CMDS
  	$(foreach d,$(LIBCAP_MAKE_DIRS), \
  		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
@@ -45,5 +49,28 @@ index a4a9170193..d0e0ab8b74 100644
  	)
  endef
  
++HOST_LIBCAP_MAKE_FLAGS = \
++	DYNAMIC=yes \
++	GOLANG=no \
++	lib=lib \
++	prefix=$(HOST_DIR) \
++	RAISE_SETFCAP=no
++
+ define HOST_LIBCAP_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+-		DYNAMIC=yes \
+-		RAISE_SETFCAP=no GOLANG=no lib=lib
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(HOST_LIBCAP_MAKE_FLAGS)
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
+-		DYNAMIC=yes \
+-		RAISE_SETFCAP=no GOLANG=no lib=lib install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.29.2
