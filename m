@@ -1,82 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Nov 2020 08:12:43 +0100
-Subject: [Buildroot] [PATCH] package/privoxy: security bump to version 3.0.29
-Message-ID: <20201130071244.1933-1-peter@korsgaard.com>
+Date: Mon, 30 Nov 2020 08:53:40 +0100
+Subject: [Buildroot] [PATCH v1] package/kmsxx: fix gcc-10.x compile
+In-Reply-To: <20201129224213.355228ad@gmx.net> (Peter Seiderer's message of
+ "Sun, 29 Nov 2020 22:42:13 +0100")
+References: <20201129093823.10286-1-ps.report@gmx.net>
+ <875z5nq2nl.fsf@dell.be.48ers.dk> <20201129224213.355228ad@gmx.net>
+Message-ID: <87360r1drv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-- Security/Reliability:
-  - Fixed memory leaks when a response is buffered and the buffer
-    limit is reached or Privoxy is running out of memory.
-    Commits bbd53f1010b and 4490d451f9b. OVE-20201118-0001.
-    Sponsored by: Robert Klemme
-  - Fixed a memory leak in the show-status CGI handler when
-    no action files are configured. Commit c62254a686.
-    OVE-20201118-0002.
-    Sponsored by: Robert Klemme
-  - Fixed a memory leak in the show-status CGI handler when
-    no filter files are configured. Commit 1b1370f7a8a.
-    OVE-20201118-0003.
-    Sponsored by: Robert Klemme
-  - Fixes a memory leak when client tags are active.
-    Commit 245e1cf32. OVE-20201118-0004.
-    Sponsored by: Robert Klemme
-  - Fixed a memory leak if multiple filters are executed
-    and the last one is skipped due to a pcre error.
-    Commit 5cfb7bc8fe. OVE-20201118-0005.
-  - Prevent an unlikely dereference of a NULL-pointer that
-    could result in a crash if accept-intercepted-requests
-    was enabled, Privoxy failed to get the request destination
-    from the Host header and a memory allocation failed.
-    Commit 7530132349. CID 267165. OVE-20201118-0006.
-  - Fixed memory leaks in the client-tags CGI handler when
-    client tags are configured and memory allocations fail.
-    Commit cf5640eb2a. CID 267168. OVE-20201118-0007.
-  - Fixed memory leaks in the show-status CGI handler when memory
-    allocations fail. Commit 064eac5fd0 and commit fdee85c0bf3.
-    CID 305233. OVE-20201118-0008.
+Hi,
 
-For more details, see the announcement:
-https://www.openwall.com/lists/oss-security/2020/11/29/1
+ >> > +++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+ >> > @@ -0,0 +1,27 @@
+ >> > +From f7ee1e8c96ffbfc645487e483b928d250a7e79ec Mon Sep 17 00:00:00 2001
+ >> > +From: Tobias Off <sebastianoff@web.de>
+ >> > +Date: Thu, 8 Oct 2020 22:37:55 +0200
+ >> > +Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
+ >> > + guide
+ >> > +
+ >> > +[Upstream: https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch]
+ >> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> 
+ >> NIT: Why do you end with a different commit hash than the upstream one
+ >> (E.G. The From line)?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/privoxy/privoxy.hash | 8 ++++----
- package/privoxy/privoxy.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ > Is a change of the hash not normal while re-basing and adding something to
+ > the commit message?
 
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-index 84daf5c611..850208dd9f 100644
---- a/package/privoxy/privoxy.hash
-+++ b/package/privoxy/privoxy.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%28stable%29/
--md5  c7e8900d5aff33d9a5fc37ac28154f21  privoxy-3.0.28-stable-src.tar.gz
--sha1  fa8f9f355a48afe94afcaef31c5404b2294c1043  privoxy-3.0.28-stable-src.tar.gz
-+# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%29stable%29/
-+md5  493a3a643247e6c8bc60725e9993d4ee  privoxy-3.0.29-stable-src.tar.gz
-+sha1  59873a122729b1b03e1d202d663036d2b5fa1120  privoxy-3.0.29-stable-src.tar.gz
- # Locally computed
--sha256  b5d78cc036aaadb3b7cf860e9d598d7332af468926a26e2d56167f1cb6f2824a  privoxy-3.0.28-stable-src.tar.gz
-+sha256  25c6069efdaf577d47c257da63b03cd6d063fb790e19cc39603d82e5db72489d  privoxy-3.0.29-stable-src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index f12d015efa..3cf1dc9754 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PRIVOXY_VERSION = 3.0.28
-+PRIVOXY_VERSION = 3.0.29
- PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
- PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
- # configure not shipped
+If you need to rebase, yes.
+
+ > Produced the patch with the following workflow:
+
+ > 	$ wget https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+ > 	$ git am b53f9d383c9189a897c44cd88a8fc1b871fdc8a2.patch
+ > 	$ vi kms++/inc/kms++/card.h     # fixing re-base conflicts
+ > 	$ git add kms++/inc/kms++/card.h
+ > 	$ git am --continue
+ > 	$ git commit --amend --signoff
+ > 	$ git format-patch -1
+
+Given that the patch was just adding a single include, I thought it
+would apply cleanly to our version. For such cases, you can simply do:
+
+git clone https://github.com/tomba/kmsxx/
+git format-patch -s --start-number=2 \
+ b53f9d383c9189a897c44cd88a8fc1b871fdc8a2^..b53f9d383c9189a897c44cd88a8fc1b871fdc8a2
+0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+
+But looking closer, the memory/cstdint includes close to this line would
+indeed give issues.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
