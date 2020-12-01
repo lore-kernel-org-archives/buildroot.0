@@ -1,36 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2020 22:39:48 +0100
-Subject: [Buildroot] [git commit branch/next] package/bind: fix license hash
-Message-ID: <20201201212452.654697FD02@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Dec 2020 22:41:02 +0100
+Subject: [Buildroot] [PATCH 3/3] package/linux-firmware: install Ath10k
+ QCA9377 sdio firmware
+In-Reply-To: <20201117212145.12198-3-ju.o@free.fr>
+References: <20201117212145.12198-1-ju.o@free.fr>
+ <20201117212145.12198-3-ju.o@free.fr>
+Message-ID: <eac860ae-a876-b8ac-a08c-3a478a37f4e3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac6dbae320231a02e1b9b69c8c9250e6854aaaa9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e forgot to update hash of
-COPYRIGHT which was updated to replace http by https:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/400171aee8db87c3973987980327051a58a20a80
 
-Fixes:
- - http://autobuild.buildroot.org/results/db614a6fa1e17af2fa5c1d4a0d51cdf770893ca9
+On 17/11/2020 22:21, Julien Olivain wrote:
+> linux-firmware version 20201022 introduced a new sdio firmware for
+> QCA9377 sdio devices. Install it when support is selected.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Series applied to next, thanks.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index e02c06ff3e..cbd9562b56 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
- # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
- sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
--sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-+sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
+ Allow me to compliment you with the excellent splitting of the commits and
+commit messages. It's really helpful!
+
+ Regards,
+ Arnout
+
+> ---
+>  package/linux-firmware/linux-firmware.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> index dc7f392800..c0ca98c45c 100644
+> --- a/package/linux-firmware/linux-firmware.mk
+> +++ b/package/linux-firmware/linux-firmware.mk
+> @@ -193,7 +193,8 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_10K_QCA9377),y)
+>  LINUX_FIRMWARE_FILES += ath10k/QCA9377/hw1.0/board-2.bin \
+>  			ath10k/QCA9377/hw1.0/board.bin \
+>  			ath10k/QCA9377/hw1.0/firmware-5.bin \
+> -			ath10k/QCA9377/hw1.0/firmware-6.bin
+> +			ath10k/QCA9377/hw1.0/firmware-6.bin \
+> +			ath10k/QCA9377/hw1.0/firmware-sdio-5.bin
+>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
+>  endif
+>  
+> 
