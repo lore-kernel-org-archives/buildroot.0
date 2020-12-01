@@ -1,34 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:39:21 +0100
-Subject: [Buildroot] [PATCH v2] configs/arm_foundationv8: bump to Linux
- 5.9.11
-In-Reply-To: <20201127144024.21604-1-vincent.stehle@laposte.net>
-References: <20201126165831.6341-1-vincent.stehle@laposte.net>
- <20201127144024.21604-1-vincent.stehle@laposte.net>
-Message-ID: <20201201233921.684da279@windsurf.home>
+Date: Tue, 1 Dec 2020 23:40:46 +0100
+Subject: [Buildroot] [git commit] package/libxkbcommon: bump version to 1.0.3
+Message-ID: <20201201222534.28B0C81E7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 27 Nov 2020 15:40:24 +0100
-Vincent Stehl? via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c5c66282ba33095eb195881d6f5ca56e92c7f12e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Bump to the latest kernel v5.9.11 and require openssl.
-> - Switch to PSCI for bringing up the secondary CPUs.
-> - Switch to GICv3.
-> - Update the instruction in the readme.txt to use the latest FVP v8
->   Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> ---
+For details see [1], changelog:
 
-Applied to next, thanks.
+- Fix (hopefully) a segfault in xkb_x11_keymap_new_from_device() in some
+  unclear situation (bug introduced in 1.0.2).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+- Fix keymaps created with xkb_x11_keymap_new_from_device() don't have level
+  names (bug introduced in 0.8.0).
+
+[1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041660.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxkbcommon/libxkbcommon.hash | 4 ++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 1725eaecfb..77bb20c3ef 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041659.html
+-sha256  0ea2f88f4472bbf8170c5a7112f5af8848a908ca15df9e9086c3de0189612b2b  libxkbcommon-1.0.2.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041660.html
++sha256  a2202f851e072b84e64a395212cbd976ee18a8ee602008b0bad02a13247dbc52  libxkbcommon-1.0.3.tar.xz
+ 
+ # License file:
+ sha256  086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb  LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index cce5c02735..b592cd99df 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXKBCOMMON_VERSION = 1.0.2
++LIBXKBCOMMON_VERSION = 1.0.3
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
