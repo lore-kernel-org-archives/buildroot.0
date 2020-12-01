@@ -1,44 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 1 Dec 2020 23:24:33 +0100
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-yconf: bump
- version to 1.0.8
-Message-ID: <20201201221510.3907C81682@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-acme: bump
+ version to 1.0.9
+Message-ID: <20201201221510.4412D81682@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76f15737647ff4c3b4cc1f86a2154b63ffa4b1b9
+commit: https://git.buildroot.net/buildroot/commit/?id=878bbbcc7b92cf705d5a77b4f477dc465f62fba6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+The rebar.config.script file adds a dependency to base64url package. Since we remove
+all rebar dependencies, add a patch to remove such dependency. Otherwise rebar would
+try to download it during the build.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-yconf/erlang-p1-yconf.hash | 4 ++--
- package/erlang-p1-yconf/erlang-p1-yconf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...g.script-remove-extra-dependency-to-base6.patch | 26 ++++++++++++++++++++++
+ package/erlang-p1-acme/erlang-p1-acme.hash         |  4 ++--
+ package/erlang-p1-acme/erlang-p1-acme.mk           |  2 +-
+ 3 files changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-yconf/erlang-p1-yconf.hash b/package/erlang-p1-yconf/erlang-p1-yconf.hash
-index 6d0a9f68a1..97e71f85cd 100644
---- a/package/erlang-p1-yconf/erlang-p1-yconf.hash
-+++ b/package/erlang-p1-yconf/erlang-p1-yconf.hash
+diff --git a/package/erlang-p1-acme/0001-rebar.config.script-remove-extra-dependency-to-base6.patch b/package/erlang-p1-acme/0001-rebar.config.script-remove-extra-dependency-to-base6.patch
+new file mode 100644
+index 0000000000..a27730e23c
+--- /dev/null
++++ b/package/erlang-p1-acme/0001-rebar.config.script-remove-extra-dependency-to-base6.patch
+@@ -0,0 +1,26 @@
++From a2422fdf4097d1f5f8c8f88bbe08b9a0f3c35fe6 Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Wed, 25 Nov 2020 22:38:22 +0100
++Subject: [PATCH] rebar.config.script: remove extra dependency to base64url
++
++Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
++---
++ rebar.config.script | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/rebar.config.script b/rebar.config.script
++index a63895e..41b2970 100644
++--- a/rebar.config.script
+++++ b/rebar.config.script
++@@ -62,7 +62,7 @@ Cfg2 = case IsRebar3 of
++                [{plugin_dir, filename:join([filename:dirname(SCRIPT),"plugins"])},
++                 {plugins, [override_deps_versions]}] ++
++                 ModCfg(CONFIG, [deps], fun(V) ->
++-                   V ++ [{base64url, ".*", {git, "git://github.com/dvv/base64url.git", {tag, "v1.0"}}}]
+++                   V
++                 end, [])
++        end,
++ 
++-- 
++2.29.2
++
+diff --git a/package/erlang-p1-acme/erlang-p1-acme.hash b/package/erlang-p1-acme/erlang-p1-acme.hash
+index 036cb923bd..af13e88b1a 100644
+--- a/package/erlang-p1-acme/erlang-p1-acme.hash
++++ b/package/erlang-p1-acme/erlang-p1-acme.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 94724bde03c976cdf51d0d43eece73c70381ef60a9dd7e49292d194c0beaeb53 erlang-p1-yconf-1.0.1.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-+sha256  ab0f7462b8d03d18be1587fa9cfb227923055f765fca4459b4bb42ccef971329  erlang-p1-yconf-1.0.8.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/erlang-p1-yconf/erlang-p1-yconf.mk b/package/erlang-p1-yconf/erlang-p1-yconf.mk
-index 5d44ec7eec..3e3a10ae15 100644
---- a/package/erlang-p1-yconf/erlang-p1-yconf.mk
-+++ b/package/erlang-p1-yconf/erlang-p1-yconf.mk
+-sha256 556a9628c323a5a83116ed78599c891f74447b0bac237c095e776c7009089656 erlang-p1-acme-1.0.1.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
++sha256  e17ba49f45b72200470bc2f176b315bec1028d07a4817859052f98c0a7259632  erlang-p1-acme-1.0.9.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-acme/erlang-p1-acme.mk b/package/erlang-p1-acme/erlang-p1-acme.mk
+index ae77d4a580..21c155e206 100644
+--- a/package/erlang-p1-acme/erlang-p1-acme.mk
++++ b/package/erlang-p1-acme/erlang-p1-acme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_YCONF_VERSION = 1.0.1
-+ERLANG_P1_YCONF_VERSION = 1.0.8
- ERLANG_P1_YCONF_SITE = $(call github,processone,yconf,$(ERLANG_P1_YCONF_VERSION))
- ERLANG_P1_YCONF_LICENSE = Apache-2.0
- ERLANG_P1_YCONF_LICENSE_FILES = LICENSE
+-ERLANG_P1_ACME_VERSION = 1.0.1
++ERLANG_P1_ACME_VERSION = 1.0.9
+ ERLANG_P1_ACME_SITE = $(call github,processone,p1_acme,$(ERLANG_P1_ACME_VERSION))
+ ERLANG_P1_ACME_LICENSE = Apache-2.0
+ ERLANG_P1_ACME_LICENSE_FILES = LICENSE.txt
