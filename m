@@ -1,97 +1,102 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Dec 2020 22:41:08 +0100
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware:
- reformat hash file using the 2 spaces convention
-Message-ID: <20201201212610.5E60382858@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 22:43:39 +0100
+Subject: [Buildroot] [git commit branch/next] package/cups-filters: bump to
+ version 1.28.4
+Message-ID: <20201201213052.1EF1D815C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e68c25b22720f351841cc5d9d14bd62eb1823630
+commit: https://git.buildroot.net/buildroot/commit/?id=ed3062319f93b9539ee4bb5982653fd6246b05ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For readability, this reformatting is done in a separate commit, as this
-package contains many license files.
+While bumping, removing upstreamed patches. Removing also autoreconf
+step cause we are not patching it anymore.
+License hash is changed due to remove of notice for file
+filter/sys5ippprinter.c.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/linux-firmware/linux-firmware.hash | 68 +++++++++++++++---------------
- 1 file changed, 34 insertions(+), 34 deletions(-)
+ ...e.ac-fix-cross-compilation-without-dejavu.patch | 41 ----------------------
+ package/cups-filters/cups-filters.hash             |  4 +--
+ package/cups-filters/cups-filters.mk               |  4 +--
+ 3 files changed, 3 insertions(+), 46 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 2ebd11365f..3f56e3b540 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,35 +1,35 @@
- # Locally calculated
--sha256 83646c58fc4e3ee9a73f4fa74213c849109f48c719322346393f3e5b0fa55044 linux-firmware-20200122.tar.gz
--sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
--sha256 8d5847d2971241d4d6a51c16e206379de53a6d4e203fa6f8e1c1e9279c7c4ad0 LICENSE.amdgpu
--sha256 2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4 LICENCE.Marvell
--sha256 802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2 LICENCE.atheros_firmware
--sha256 3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
--sha256 631065703055d11b099477c508508f20a80b202aad548a7726564bfa59a96c91 ath10k/QCA6174/hw2.1/notice_ath10k_firmware-5.txt
--sha256 8ce5c6ea0542bf4aac31fc3ae16a39792ad22d0eae4543063fac56fb3380f021 ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
--sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d LICENCE.broadcom_bcm43xx
--sha256 a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061 LICENCE.chelsio_firmware
--sha256 60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83 LICENCE.fw_sst_0f28
--sha256 5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4 LICENCE.ibt_firmware
--sha256 0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d LICENCE.it913x
--sha256 e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b LICENCE.iwlwifi_firmware
--sha256 0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3 LICENCE.microchip
--sha256 2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c LICENCE.qat_firmware
--sha256 4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822 LICENCE.qla2xxx
--sha256 d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd LICENCE.ralink-firmware.txt
--sha256 8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508 LICENCE.ralink_a_mediatek_company_firmware
--sha256 a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e LICENCE.rtlwifi_firmware.txt
--sha256 106bef96470001e877fcf7ba0337fa6766a317650eb47fcaeb743eeebd62c4ff LICENCE.ti-connectivity
--sha256 8ea9f4aee5f53ad877041ff089e8c95d34d615ce19a3111e5e1ea70d990ed7ff LICENCE.xc4000
--sha256 30ec8a66503dc73f83937564ae70ca23aa03259e64727ff4195b5b6f695e782f LICENCE.xc5000
--sha256 f8822049f32fef2e90a197bd8cf259f476db75d549456bdca8567616a9c07ace LICENCE.xc5000c
--sha256 a064cbf83e10d72579d236a1e36032681adb8e442943ff75b57020a82992a5ed LICENSE.QualcommAtheros_ar3k
--sha256 337a55102138d7baa143ee4a4c6c91693e0113fece35d380b2a12109e8c23b3f LICENSE.QualcommAtheros_ath10k
--sha256 630fd46c95d3ac6544590c2265ba7348fbc930fb386261a1c04dcd9f403645b8 LICENSE.dib0700
--sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.i915
--sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
--sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
--sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
--sha256 74d203d2fd433b73b63e8e31d8928e3817f6eaf3407c9e607802c20a5c02e6c4 WHENCE
--sha256 fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a qcom/NOTICE.txt
--sha256 bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604 LICENCE.e100
-+sha256  83646c58fc4e3ee9a73f4fa74213c849109f48c719322346393f3e5b0fa55044  linux-firmware-20200122.tar.gz
-+sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
-+sha256  8d5847d2971241d4d6a51c16e206379de53a6d4e203fa6f8e1c1e9279c7c4ad0  LICENSE.amdgpu
-+sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
-+sha256  802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2  LICENCE.atheros_firmware
-+sha256  3b5eb392b2d9d8c46d6aae26d06c187e5ea3029b12d13bc2b8deb8b3ce6bfa53  ath10k/QCA6174/hw3.0/notice_ath10k_firmware-4.txt
-+sha256  631065703055d11b099477c508508f20a80b202aad548a7726564bfa59a96c91  ath10k/QCA6174/hw2.1/notice_ath10k_firmware-5.txt
-+sha256  8ce5c6ea0542bf4aac31fc3ae16a39792ad22d0eae4543063fac56fb3380f021  ath10k/QCA6174/hw3.0/notice_ath10k_firmware-6.txt
-+sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-+sha256  a5777f9e80aca0603b0648454de996168b1c530322550ccda94d6d78bcf6c061  LICENCE.chelsio_firmware
-+sha256  60fbc9cccb455e1a3306c97db942d6f24fa93664be61d54c497637e6d0e2ae83  LICENCE.fw_sst_0f28
-+sha256  5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4  LICENCE.ibt_firmware
-+sha256  0e0c11073ba3c832097da38e0905da36b8a3526f219407977b13b71c6675be7d  LICENCE.it913x
-+sha256  e295020afd7597dc1b3bbe50a84a7e432d9cb92bc053c1c5e657b50d2517627b  LICENCE.iwlwifi_firmware
-+sha256  0fc67bd715b3395f3f2af464781910e9e69c4ba23da304352229b42dc9e986c3  LICENCE.microchip
-+sha256  2051d5bf0755a0668f8c3d9a0d1c41d4b8cc411aba70f720fda71ae9e3b4d25c  LICENCE.qat_firmware
-+sha256  4071a11d878dbc0ac6d9e71203d03b151638f9d7a8bc47a54c3cb964100d5822  LICENCE.qla2xxx
-+sha256  d7bec70668ddd4aae8fb4aa32870e54b49fcdb0b9b007aa9f54b53a1ac7461bd  LICENCE.ralink-firmware.txt
-+sha256  8568352b57f3574f9d5b2753cdb7c6e5eb2b79e82fbb9c9ba6566947467ef508  LICENCE.ralink_a_mediatek_company_firmware
-+sha256  a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e  LICENCE.rtlwifi_firmware.txt
-+sha256  106bef96470001e877fcf7ba0337fa6766a317650eb47fcaeb743eeebd62c4ff  LICENCE.ti-connectivity
-+sha256  8ea9f4aee5f53ad877041ff089e8c95d34d615ce19a3111e5e1ea70d990ed7ff  LICENCE.xc4000
-+sha256  30ec8a66503dc73f83937564ae70ca23aa03259e64727ff4195b5b6f695e782f  LICENCE.xc5000
-+sha256  f8822049f32fef2e90a197bd8cf259f476db75d549456bdca8567616a9c07ace  LICENCE.xc5000c
-+sha256  a064cbf83e10d72579d236a1e36032681adb8e442943ff75b57020a82992a5ed  LICENSE.QualcommAtheros_ar3k
-+sha256  337a55102138d7baa143ee4a4c6c91693e0113fece35d380b2a12109e8c23b3f  LICENSE.QualcommAtheros_ath10k
-+sha256  630fd46c95d3ac6544590c2265ba7348fbc930fb386261a1c04dcd9f403645b8  LICENSE.dib0700
-+sha256  8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e  LICENSE.i915
-+sha256  be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc  LICENSE.qcom
-+sha256  fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f  LICENSE.radeon
-+sha256  2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9  LICENSE.sdma_firmware
-+sha256  74d203d2fd433b73b63e8e31d8928e3817f6eaf3407c9e607802c20a5c02e6c4  WHENCE
-+sha256  fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a  qcom/NOTICE.txt
-+sha256  bef9c828e84f21e7835b4de7daf954a327e1ff777871b58e116039b684c0d604  LICENCE.e100
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
+deleted file mode 100644
+index 650b90a89b..0000000000
+--- a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Jul 2020 23:02:50 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
+-
+-Cross-compilation is broken since commit 1d66106. Indeed, when
+-cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
+-path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
+-provided through --with-test-font-path which will fix the build failure
+-but will result in broken test programs.
+-
+-So when cross-compiling don't try to check if the test-font-path is
+-valid or not and just use the one provided by the user or the default
+-one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
+-
+-Fix #262
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
+----
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index aa905cf5d..4cc4fd6e5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
+- 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
+- )
+- 
+--AS_IF([test -f "$with_test_font_path"],
+--	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+-+AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
+- 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
+- )
+-+AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
+- 
+- # ================
+- # Check for cflags
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 61cb42a438..8c2526ae9d 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
+-sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
++sha256 cf90b96b5c7a906a05070e757ee5566d9680db98a279e60567ea5421c38f11de  cups-filters-1.28.4.tar.gz
++sha256 38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 237d8afe62..3ba031d5a1 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-CUPS_FILTERS_VERSION = 1.27.5
++CUPS_FILTERS_VERSION = 1.28.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+-# We're patching configure.ac
+-CUPS_FILTERS_AUTORECONF = YES
+ 
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+ 
