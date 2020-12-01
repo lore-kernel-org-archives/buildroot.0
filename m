@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 1 Dec 2020 23:24:33 +0100
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-xml: bump
- version to 1.1.44
-Message-ID: <20201201221510.1ADB181682@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-mqtree: bump
+ version to 1.0.10
+Message-ID: <20201201221510.2D83381682@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cab94833faa286155b8579e31ba63aa79572bdd0
+commit: https://git.buildroot.net/buildroot/commit/?id=8edc25ca9bfbf39d0718330b70a7feb5652fd140
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-xml/erlang-p1-xml.hash | 4 ++--
- package/erlang-p1-xml/erlang-p1-xml.mk   | 2 +-
+ package/erlang-p1-mqtree/erlang-p1-mqtree.hash | 4 ++--
+ package/erlang-p1-mqtree/erlang-p1-mqtree.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-xml/erlang-p1-xml.hash b/package/erlang-p1-xml/erlang-p1-xml.hash
-index 07e640341a..f2a4ab83e0 100644
---- a/package/erlang-p1-xml/erlang-p1-xml.hash
-+++ b/package/erlang-p1-xml/erlang-p1-xml.hash
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.hash b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
+index 43e98d0699..cf1a880cb8 100644
+--- a/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 f3226683ec9c8406147a025beebb5b9ed0adcb28099b7c4bb9435a369e9ac3f9 erlang-p1-xml-1.1.37.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
-+sha256  739f37a161a570071469ab1f3d8fc232f004ea616700fe7e46b6d8afa9d03a60  erlang-p1-xml-1.1.44.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
-index c66bd25776..5730181ac6 100644
---- a/package/erlang-p1-xml/erlang-p1-xml.mk
-+++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+-sha256 034d564e92ca8e9d66668548ea510d2cf9fdbad40609622a87374aa907110884 erlang-p1-mqtree-1.0.5.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
++sha256  4f86e272a97152d3f5166dad583dc1b5bda9582f6777f6294fb8328def8b2189  erlang-p1-mqtree-1.0.10.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/erlang-p1-mqtree/erlang-p1-mqtree.mk b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
+index bd5f28237c..19e31ef1b2 100644
+--- a/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
++++ b/package/erlang-p1-mqtree/erlang-p1-mqtree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_XML_VERSION = 1.1.37
-+ERLANG_P1_XML_VERSION = 1.1.44
- ERLANG_P1_XML_SITE = $(call github,processone,fast_xml,$(ERLANG_P1_XML_VERSION))
- ERLANG_P1_XML_LICENSE = Apache-2.0
- ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_MQTREE_VERSION = 1.0.5
++ERLANG_P1_MQTREE_VERSION = 1.0.10
+ ERLANG_P1_MQTREE_SITE = $(call github,processone,mqtree,$(ERLANG_P1_MQTREE_VERSION))
+ ERLANG_P1_MQTREE_LICENSE = Apache-2.0
+ ERLANG_P1_MQTREE_LICENSE_FILES = LICENSE
