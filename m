@@ -1,278 +1,274 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2020 23:01:09 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: add
- upstream security fixes for CVE-2020-14360 / 25712
-Message-ID: <20201201214730.E07F782858@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 22:58:41 +0100
+Subject: [Buildroot] [git commit] toolchain: add upstream fix for arc gcc
+Message-ID: <20201201214730.D4A8082858@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c773336463bc605e2e5ceb8288937b7aacb26d04
+commit: https://git.buildroot.net/buildroot/commit/?id=692829d967c30768859c9e043c15f45edda109ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Fixes:
+http://autobuild.buildroot.net/results/792/792e69eefc87d28b92972c452d5e230d86d9e114/
 
-* CVE-2020-14360 / ZDI CAN 11572 XkbSetMap Out-Of-Bounds Access
+Upstream issue:
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/310
 
-  Insufficient checks on the lengths of the XkbSetMap request can lead to
-  out of bounds memory accesses in the X server.
-
-* CVE-2020-25712 / ZDI-CAN-11839 XkbSetDeviceInfo Heap-based Buffer Overflow
-
-  Insufficient checks on input of the XkbSetDeviceInfo request can lead to a
-  buffer overflow on the head in the X server.
-
-For more details, see the advisory:
-https://www.openwall.com/lists/oss-security/2020/12/01/3
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...eviceInfo-and-SetDeviceIndicators-heap-ov.patch | 100 ++++++++++++++++
- ...008-Check-SetMap-request-length-carefully.patch | 131 +++++++++++++++++++++
- 2 files changed, 231 insertions(+)
+ .../0001-arc-Refurbish-adc-sbc-patterns.patch      | 243 +++++++++++++++++++++
+ 1 file changed, 243 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch b/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
+diff --git a/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
 new file mode 100644
-index 0000000000..8297aa8a9f
+index 0000000000..3292b26a4e
 --- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
-@@ -0,0 +1,100 @@
-+From 87c64fc5b0db9f62f4e361444f4b60501ebf67b9 Mon Sep 17 00:00:00 2001
-+From: Matthieu Herrb <matthieu@herrb.eu>
-+Date: Sun, 11 Oct 2020 17:05:09 +0200
-+Subject: [PATCH] Fix XkbSetDeviceInfo() and SetDeviceIndicators() heap
-+ overflows
++++ b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
+@@ -0,0 +1,243 @@
++From b92c22b144d063c4436a6693045ceb57d344c495 Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Wed, 11 Nov 2020 12:31:10 +0200
++Subject: [PATCH] arc: Refurbish adc/sbc patterns
 +
-+ZDI-CAN 11389 / CVE-2020-25712
++The adc/sbc patterns were unecessary spliting, remove that and
++associated functions.
 +
-+This vulnerability was discovered by:
-+Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
++gcc/ChangeLog:
 +
-+Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++2020-10-11  Claudiu Zissulescu  <claziss@synopsys.com>
++
++	* config/arc/arc-protos.h (arc_scheduling_not_expected): Remove
++	it.
++	(arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	* config/arc/arc.c (arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	(arc_scheduling_not_expected): Likewise.
++	* config/arc/arc.md: Convert adc/sbc patterns to simple
++	instruction definitions.
++
++Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
++
++Downloaded from upstream commit
++https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/b92c22b144d063c4436a6693045ceb57d344c495
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ xkb/xkb.c | 26 +++++++++++++++++++++++---
-+ 1 file changed, 23 insertions(+), 3 deletions(-)
++ gcc/config/arc/arc-protos.h |  3 --
++ gcc/config/arc/arc.c        | 53 ---------------------
++ gcc/config/arc/arc.md       | 95 +++++++++++--------------------------
++ 3 files changed, 29 insertions(+), 122 deletions(-)
 +
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index 8e016cd74..f54cc97f8 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -6536,7 +6536,9 @@ SetDeviceIndicators(char *wire,
-+                     unsigned changed,
-+                     int num,
-+                     int *status_rtrn,
-+-                    ClientPtr client, xkbExtensionDeviceNotify * ev)
-++                    ClientPtr client,
-++                    xkbExtensionDeviceNotify * ev,
-++                    xkbSetDeviceInfoReq * stuff)
-+ {
-+     xkbDeviceLedsWireDesc *ledWire;
-+     int i;
-+@@ -6557,6 +6559,11 @@ SetDeviceIndicators(char *wire,
-+         xkbIndicatorMapWireDesc *mapWire;
-+         XkbSrvLedInfoPtr sli;
++diff --git a/gcc/config/arc/arc-protos.h b/gcc/config/arc/arc-protos.h
++index c72d78e3b9e..de4cf47c818 100644
++--- a/gcc/config/arc/arc-protos.h
+++++ b/gcc/config/arc/arc-protos.h
++@@ -90,10 +90,7 @@ extern void split_subsi (rtx *);
++ extern void arc_split_move (rtx *);
++ extern const char *arc_short_long (rtx_insn *insn, const char *, const char *);
++ extern rtx arc_regno_use_in (unsigned int, rtx);
++-extern bool arc_scheduling_not_expected (void);
++-extern bool arc_sets_cc_p (rtx_insn *insn);
++ extern int arc_label_align (rtx_insn *label);
++-extern bool arc_need_delay (rtx_insn *insn);
++ extern bool arc_text_label (rtx_insn *insn);
 + 
-++        if (!_XkbCheckRequestBounds(client, stuff, ledWire, ledWire + 1)) {
-++            *status_rtrn = BadLength;
-++            return (char *) ledWire;
-++        }
-++
-+         namec = mapc = statec = 0;
-+         sli = XkbFindSrvLedInfo(dev, ledWire->ledClass, ledWire->ledID,
-+                                 XkbXI_IndicatorMapsMask);
-+@@ -6575,6 +6582,10 @@ SetDeviceIndicators(char *wire,
-+             memset((char *) sli->names, 0, XkbNumIndicators * sizeof(Atom));
-+             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
-+                 if (ledWire->namesPresent & bit) {
-++                    if (!_XkbCheckRequestBounds(client, stuff, atomWire, atomWire + 1)) {
-++                        *status_rtrn = BadLength;
-++                        return (char *) atomWire;
-++                    }
-+                     sli->names[n] = (Atom) *atomWire;
-+                     if (sli->names[n] == None)
-+                         ledWire->namesPresent &= ~bit;
-+@@ -6592,6 +6603,10 @@ SetDeviceIndicators(char *wire,
-+         if (ledWire->mapsPresent) {
-+             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
-+                 if (ledWire->mapsPresent & bit) {
-++                    if (!_XkbCheckRequestBounds(client, stuff, mapWire, mapWire + 1)) {
-++                        *status_rtrn = BadLength;
-++                        return (char *) mapWire;
-++                    }
-+                     sli->maps[n].flags = mapWire->flags;
-+                     sli->maps[n].which_groups = mapWire->whichGroups;
-+                     sli->maps[n].groups = mapWire->groups;
-+@@ -6671,7 +6686,7 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
-+     ed.deviceID = dev->id;
-+     wire = (char *) &stuff[1];
-+     if (stuff->change & XkbXI_ButtonActionsMask) {
-+-        int nBtns, sz, i;
-++	int nBtns, sz, i;
-+         XkbAction *acts;
-+         DeviceIntPtr kbd;
-+ 
-+@@ -6683,7 +6698,11 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
-+                 return BadAlloc;
-+             dev->button->xkb_acts = acts;
-+         }
-++        if (stuff->firstBtn + stuff->nBtns > nBtns)
-++            return BadValue;
-+         sz = stuff->nBtns * SIZEOF(xkbActionWireDesc);
-++        if (!_XkbCheckRequestBounds(client, stuff, wire, (char *) wire + sz))
-++            return BadLength;
-+         memcpy((char *) &acts[stuff->firstBtn], (char *) wire, sz);
-+         wire += sz;
-+         ed.reason |= XkbXI_ButtonActionsMask;
-+@@ -6704,7 +6723,8 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
-+         int status = Success;
-+ 
-+         wire = SetDeviceIndicators(wire, dev, stuff->change,
-+-                                   stuff->nDeviceLedFBs, &status, client, &ed);
-++                                   stuff->nDeviceLedFBs, &status, client, &ed,
-++                                   stuff);
-+         if (status != Success)
-+             return status;
-+     }
-+-- 
-+2.20.1
-+
-diff --git a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch b/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
-new file mode 100644
-index 0000000000..a8b33ebf3b
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
-@@ -0,0 +1,131 @@
-+From 446ff2d3177087b8173fa779fa5b77a2a128988b Mon Sep 17 00:00:00 2001
-+From: Matthieu Herrb <matthieu@herrb.eu>
-+Date: Thu, 12 Nov 2020 19:15:07 +0100
-+Subject: [PATCH] Check SetMap request length carefully.
-+
-+Avoid out of bounds memory accesses on too short request.
-+
-+ZDI-CAN 11572 /  CVE-2020-14360
-+
-+This vulnerability was discovered by:
-+Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-+
-+Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ xkb/xkb.c | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 92 insertions(+)
-+
-+diff --git a/xkb/xkb.c b/xkb/xkb.c
-+index f54cc97f8..d056c698c 100644
-+--- a/xkb/xkb.c
-++++ b/xkb/xkb.c
-+@@ -2382,6 +2382,93 @@ SetVirtualModMap(XkbSrvInfoPtr xkbi,
-+     return (char *) wire;
++ extern bool arc_short_comparison_p (rtx, int);
++diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
++index 5a7b0cb6696..c3ee9181f93 100644
++--- a/gcc/config/arc/arc.c
+++++ b/gcc/config/arc/arc.c
++@@ -10341,59 +10341,6 @@ arc_attr_type (rtx_insn *insn)
++   return get_attr_type (insn);
 + }
 + 
-++#define _add_check_len(new) \
-++    if (len > UINT32_MAX - (new) || len > req_len - (new)) goto bad; \
-++    else len += new
-++
-++/**
-++ * Check the length of the SetMap request
-++ */
-++static int
-++_XkbSetMapCheckLength(xkbSetMapReq *req)
-++{
-++    size_t len = sz_xkbSetMapReq, req_len = req->length << 2;
-++    xkbKeyTypeWireDesc *keytype;
-++    xkbSymMapWireDesc *symmap;
-++    BOOL preserve;
-++    int i, map_count, nSyms;
-++
-++    if (req_len < len)
-++        goto bad;
-++    /* types */
-++    if (req->present & XkbKeyTypesMask) {
-++        keytype = (xkbKeyTypeWireDesc *)(req + 1);
-++        for (i = 0; i < req->nTypes; i++) {
-++            _add_check_len(XkbPaddedSize(sz_xkbKeyTypeWireDesc));
-++            if (req->flags & XkbSetMapResizeTypes) {
-++                _add_check_len(keytype->nMapEntries
-++                               * sz_xkbKTSetMapEntryWireDesc);
-++                preserve = keytype->preserve;
-++                map_count = keytype->nMapEntries;
-++                if (preserve) {
-++                    _add_check_len(map_count * sz_xkbModsWireDesc);
-++                }
-++                keytype += 1;
-++                keytype = (xkbKeyTypeWireDesc *)
-++                          ((xkbKTSetMapEntryWireDesc *)keytype + map_count);
-++                if (preserve)
-++                    keytype = (xkbKeyTypeWireDesc *)
-++                              ((xkbModsWireDesc *)keytype + map_count);
-++            }
-++        }
-++    }
-++    /* syms */
-++    if (req->present & XkbKeySymsMask) {
-++        symmap = (xkbSymMapWireDesc *)((char *)req + len);
-++        for (i = 0; i < req->nKeySyms; i++) {
-++            _add_check_len(sz_xkbSymMapWireDesc);
-++            nSyms = symmap->nSyms;
-++            _add_check_len(nSyms*sizeof(CARD32));
-++            symmap += 1;
-++            symmap = (xkbSymMapWireDesc *)((CARD32 *)symmap + nSyms);
-++        }
-++    }
-++    /* actions */
-++    if (req->present & XkbKeyActionsMask) {
-++        _add_check_len(req->totalActs * sz_xkbActionWireDesc 
-++                       + XkbPaddedSize(req->nKeyActs));
-++    }
-++    /* behaviours */
-++    if (req->present & XkbKeyBehaviorsMask) {
-++        _add_check_len(req->totalKeyBehaviors * sz_xkbBehaviorWireDesc);
-++    }
-++    /* vmods */
-++    if (req->present & XkbVirtualModsMask) {
-++        _add_check_len(XkbPaddedSize(Ones(req->virtualMods)));
-++    }
-++    /* explicit */
-++    if (req->present & XkbExplicitComponentsMask) {
-++        /* two bytes per non-zero explicit componen */
-++        _add_check_len(XkbPaddedSize(req->totalKeyExplicit * sizeof(CARD16)));
-++    }
-++    /* modmap */
-++    if (req->present & XkbModifierMapMask) {
-++         /* two bytes per non-zero modmap component */
-++        _add_check_len(XkbPaddedSize(req->totalModMapKeys * sizeof(CARD16)));
-++    }
-++    /* vmodmap */
-++    if (req->present & XkbVirtualModMapMask) {
-++        _add_check_len(req->totalVModMapKeys * sz_xkbVModMapWireDesc);
-++    }
-++    if (len == req_len)
-++        return Success;
-++bad:
-++    ErrorF("[xkb] BOGUS LENGTH in SetMap: expected %ld got %ld\n",
-++           len, req_len);
-++    return BadLength;
-++}
-++
-++
-+ /**
-+  * Check if the given request can be applied to the given device but don't
-+  * actually do anything, except swap values when client->swapped and doswap are both true.
-+@@ -2642,6 +2729,11 @@ ProcXkbSetMap(ClientPtr client)
-+     CHK_KBD_DEVICE(dev, stuff->deviceSpec, client, DixManageAccess);
-+     CHK_MASK_LEGAL(0x01, stuff->present, XkbAllMapComponentsMask);
++-/* Return true if insn sets the condition codes.  */
++-
++-bool
++-arc_sets_cc_p (rtx_insn *insn)
++-{
++-  if (NONJUMP_INSN_P (insn))
++-    if (rtx_sequence *seq = dyn_cast <rtx_sequence *> (PATTERN (insn)))
++-      insn = seq->insn (seq->len () - 1);
++-  return arc_attr_type (insn) == TYPE_COMPARE;
++-}
++-
++-/* Return true if INSN is an instruction with a delay slot we may want
++-   to fill.  */
++-
++-bool
++-arc_need_delay (rtx_insn *insn)
++-{
++-  rtx_insn *next;
++-
++-  if (!flag_delayed_branch)
++-    return false;
++-  /* The return at the end of a function needs a delay slot.  */
++-  if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == USE
++-      && (!(next = next_active_insn (insn))
++-	  || ((!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) != SEQUENCE)
++-	      && arc_attr_type (next) == TYPE_RETURN))
++-      && (!TARGET_PAD_RETURN
++-	  || (prev_active_insn (insn)
++-	      && prev_active_insn (prev_active_insn (insn))
++-	      && prev_active_insn (prev_active_insn (prev_active_insn (insn))))))
++-    return true;
++-  if (NONJUMP_INSN_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == USE
++-	 || GET_CODE (PATTERN (insn)) == CLOBBER
++-	 || GET_CODE (PATTERN (insn)) == SEQUENCE)
++-      : JUMP_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == ADDR_VEC
++-	 || GET_CODE (PATTERN (insn)) == ADDR_DIFF_VEC)
++-      : !CALL_P (insn))
++-    return false;
++-  return num_delay_slots (insn) != 0;
++-}
++-
++-/* Return true if the scheduling pass(es) has/have already run,
++-   i.e. where possible, we should try to mitigate high latencies
++-   by different instruction selection.  */
++-
++-bool
++-arc_scheduling_not_expected (void)
++-{
++-  return cfun->machine->arc_reorg_started;
++-}
++-
++ /* Code has a minimum p2 alignment of 1, which we must restore after
++    an ADDR_DIFF_VEC.  */
 + 
-++    /* first verify the request length carefully */
-++    rc = _XkbSetMapCheckLength(stuff);
-++    if (rc != Success)
-++        return rc;
-++
-+     tmp = (char *) &stuff[1];
++diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
++index f91adbc0d94..c635b69ddd5 100644
++--- a/gcc/config/arc/arc.md
+++++ b/gcc/config/arc/arc.md
++@@ -2847,43 +2847,25 @@ archs4x, archs4xd"
++    (set_attr "type" "compare")
++    (set_attr "length" "4,4,8")])
 + 
-+     /* Check if we can to the SetMap on the requested device. If this
-+-- 
-+2.20.1
-+
++-; w/c/c comes first (rather than w/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional
++-; execution is used where possible.
++-(define_insn_and_split "adc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(plus:SI (plus:SI (ltu:SI (reg:CC_C CC_REG) (const_int 0))
++-			  (match_operand:SI 1 "nonmemory_operand"
++-							 "%c,0,c,0,cCal"))
++-		 (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "adc"
+++  [(set (match_operand:SI 0 "register_operand"    "=r,  r,r,r,  r,r")
+++	(plus:SI
+++	 (plus:SI
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0))
+++	  (match_operand:SI 1 "nonmemory_operand" "%r,  0,r,0,Cal,r"))
+++	 (match_operand:SI 2 "nonmemory_operand"   "r,C_0,L,I,  r,Cal")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	adc %0,%1,%2
++-	add.cs %0,%1,1
++-	adc %0,%1,%2
++-	adc %0,%1,%2
++-	adc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 3))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int 1))))]
++-  "operands[3] = simplify_gen_binary (PLUS, SImode, operands[1], operands[2]);"
+++    adc\\t%0,%1,%2
+++    add.cs\\t%0,%1,1
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ ; combiner-splitter cmp / scc -> cmp / adc
++ (define_split
++@@ -3015,7 +2997,7 @@ archs4x, archs4xd"
++       DONE;
++     }
++   emit_insn (gen_sub_f (l0, l1, l2));
++-  emit_insn (gen_sbc (h0, h1, h2, gen_rtx_REG (CCmode, CC_REG)));
+++  emit_insn (gen_sbc (h0, h1, h2));
++   DONE;
++   ")
++ 
++@@ -3030,44 +3012,25 @@ archs4x, archs4xd"
++    (set_attr "type" "cc_arith")
++    (set_attr "length" "4")])
++ 
++-; w/c/c comes first (rather than Rcw/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional execution
++-; is used where possible.
++-(define_insn_and_split "sbc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(minus:SI (minus:SI (match_operand:SI 1 "nonmemory_operand"
++-						"c,0,c,0,cCal")
++-			    (ltu:SI (match_operand:CC_C 3 "cc_use_register")
++-				    (const_int 0)))
++-		  (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "sbc"
+++  [(set (match_operand:SI 0 "dest_reg_operand"   "=r,r,r,r,r,r")
+++	(minus:SI
+++	 (minus:SI
+++	  (match_operand:SI 1 "nonmemory_operand" "r,  0,r,0,  r,Cal")
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0)))
+++	 (match_operand:SI 2 "nonmemory_operand"  "r,C_0,L,I,Cal,r")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	sbc %0,%1,%2
++-	sub.cs %0,%1,1
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 4))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int -1))))]
++-  "operands[4] = simplify_gen_binary (MINUS, SImode, operands[1], operands[2]);"
+++    sbc\\t%0,%1,%2
+++    sub.cs\\t%0,%1,1
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ (define_insn "sub_f"
++   [(set (reg:CC CC_REG)
