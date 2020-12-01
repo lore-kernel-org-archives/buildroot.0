@@ -1,48 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/mbuffer: bump to version 20200929
-Message-ID: <20201203092226.885BD821E0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 21:44:28 +0100
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2020.8
+Message-ID: <20201203092227.D85938012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee64a2eaad38a0d8564c27acdeac0ea29d2dabd3
+commit: https://git.buildroot.net/buildroot/commit/?id=4e060bf6bc6a7bc381904ce995b9f18372aa2c6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mircea GLIGA <mgliga@bitdefender.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mbuffer/mbuffer.hash | 4 ++--
- package/mbuffer/mbuffer.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbuffer/mbuffer.hash b/package/mbuffer/mbuffer.hash
-index 688ada6900..73a8d3cf44 100644
---- a/package/mbuffer/mbuffer.hash
-+++ b/package/mbuffer/mbuffer.hash
-@@ -1,8 +1,8 @@
- # From http://www.maier-komor.de/mbuffer.html
--md5  df39047654456f260665d66711cabcc5  mbuffer-20200505.tgz
-+md5  e2b4f3b0d0944c08d52c167841bde3c0  mbuffer-20200929.tgz
- 
- # Locally computed after checking signature upstream
--sha256  cc046183149e51814c23b9f83fd748cc1625a88ee128651ea500aa7bd5f01f0b  mbuffer-20200505.tgz
-+sha256  53a6e3c14e9a049f18a09840653dd84f18e7ec7560f2dcf2b61c0ab5f0ead4e8  mbuffer-20200929.tgz
- 
- # Hash for license file
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/mbuffer/mbuffer.mk b/package/mbuffer/mbuffer.mk
-index 6aaf29c9ca..90a72ce657 100644
---- a/package/mbuffer/mbuffer.mk
-+++ b/package/mbuffer/mbuffer.mk
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index e5483a539c..751feb6b2e 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  865d4818820d128a2e505380358275bb964984348b3d0685b6455099e4736972  libostree-2020.6.tar.xz
++sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index e387f99856..9406e023bd 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MBUFFER_VERSION = 20200505
-+MBUFFER_VERSION = 20200929
- MBUFFER_SOURCE = mbuffer-$(MBUFFER_VERSION).tgz
- MBUFFER_SITE = http://www.maier-komor.de/software/mbuffer
- MBUFFER_LICENSE = GPL-3.0+
+-LIBOSTREE_VERSION = 2020.6
++LIBOSTREE_VERSION = 2020.8
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
