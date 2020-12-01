@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Dec 2020 23:02:14 +0100
-Subject: [Buildroot] [PATCH v3,1/1] package/libcap: fix libcap.pc
-In-Reply-To: <20201201192703.402854-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 1 Dec 2020 20:27:03 +0100")
-References: <20201201192703.402854-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9dlxk0p.fsf@dell.be.48ers.dk>
+Date: Tue, 1 Dec 2020 22:50:33 +0100
+Subject: [Buildroot] [git commit] package/setserial: add license hash
+Message-ID: <20201201214730.B03668105D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=23d8b04295c2cd99302dbb87be7367b282a6cd83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libcap builds an incorrect libcap.pc because libdir is pulled from the
- > host os:
+Also reformatted hash file.
 
- > ifndef lib
- > lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
- > endif
+Fixes:
+http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
 
- > Fix this error by passing lib=lib and prefix in
- > {HOST_LIBCAP,LIBCAP}_BUILD_CMDS
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/setserial/setserial.hash | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13276
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Changes v2 -> v3 (after review of Peter Seiderer):
- >  - Merge with initial patch that was not committed yet
-
- > Changes v1 -> v2:
- >  - Also fix host libcap
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
+index ce3b369f56..991d2860a9 100644
+--- a/package/setserial/setserial.hash
++++ b/package/setserial/setserial.hash
+@@ -1,3 +1,5 @@
+ # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
+-sha256	7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a	setserial_2.17.orig.tar.gz
+-sha256	33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6	setserial_2.17-45.3.diff.gz
++sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
++sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
++# Locally computed
++sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
