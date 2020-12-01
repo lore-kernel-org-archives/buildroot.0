@@ -1,80 +1,128 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2020 23:33:02 +0100
-Subject: [Buildroot] [git commit] package/libuhttpd: fix static build with
- mbedtls and zlib
-Message-ID: <20201201222241.80B54815D8@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  1 Dec 2020 23:37:59 +0100
+Subject: [Buildroot] [PATCH/next v1 2/2] package/iwd: bump version to 1.10
+In-Reply-To: <20201201223759.11147-1-ps.report@gmx.net>
+References: <20201201223759.11147-1-ps.report@gmx.net>
+Message-ID: <20201201223759.11147-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50a76d7ae725658d2d052df6dbaf414f13a9f894
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- remove 0001-src-ap.c-fix-build-with-uclibc.patch
+  (upstream committed, see [1])
 
-Fixes:
- - http://autobuild.buildroot.org/results/5891d12e90182460cde1ddfa0ca75e9fd55e3dff
+- drop dynamic library dependency as no longer enforced by ell
+  and no longer needed since commit [2]
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Changelog (since 1.9):
+  - Add support for DHCP v6 configuration.
+  - Add support for DHCP server operation with AP mode.
+  - Add support for IP allocation during the 4-Way Handshake.
+  - Add support for P2P Group-owner handling.
+
+[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=0a6de7932a61ec82aca4f78f71dab7247c897860
+[2] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=bbcfde8743c4dd58379d2017b7f0fabe8d65fffa
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...sts.txt-fix-static-build-with-a-zlib-and-.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ .../0001-src-ap.c-fix-build-with-uclibc.patch | 36 -------------------
+ package/iwd/Config.in                         |  7 ++--
+ package/iwd/iwd.hash                          |  2 +-
+ package/iwd/iwd.mk                            |  2 +-
+ 4 files changed, 5 insertions(+), 42 deletions(-)
+ delete mode 100644 package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
 
-diff --git a/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch b/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
-new file mode 100644
-index 0000000000..289ed1aaed
---- /dev/null
-+++ b/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
-@@ -0,0 +1,51 @@
-+From 0c2d85450e3eb77dfbe11e8612a5131c5f3f3938 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 1 Dec 2020 20:39:54 +0100
-+Subject: [PATCH] src/CMakeLists.txt: fix static build with a zlib and mbedtls
-+
-+Static build with a zlib-enabled mbedtls fails on:
-+
-+[100%] Linking C executable example
-+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libmbedtls.a(ssl_tls.c.o): in function `mbedtls_ssl_transform_free.part.24':
-+ssl_tls.c:(.text+0xbc6): undefined reference to `deflateEnd'
-+
-+As mbedtls does not provide a pkg-config file, search for zlib and link
-+with it if necessary
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/5891d12e90182460cde1ddfa0ca75e9fd55e3dff
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/zhaojh329/libuhttpd/pull/13]
-+---
-+ src/CMakeLists.txt | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 132f243..f00fc8f 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -57,6 +57,7 @@ else()
-+     endif()
-+     find_package(WolfSSL)
-+     find_package(MbedTLS)
-++    find_package(ZLIB)
-+ 
-+ 	if(UHTTPD_USE_OPENSSL)
-+ 		if (NOT OPENSSL_FOUND)
-+@@ -97,7 +98,11 @@ else()
-+ 	elseif(UHTTPD_USE_MBEDTLS)
-+ 		set(SSL_NAME "MbedTLS(PolarSSL)")
-+ 		set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
-+-		set(SSL_LIB ${MBEDTLS_LIBRARIES})
-++		if(ZLIB_FOUND)
-++			set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
-++		else()
-++			set(SSL_LIB ${MBEDTLS_LIBRARIES})
-++		endif()
-+ 		set(UHTTPD_HAVE_MBEDTLS_CONFIG 1)
-+ 	endif()
-+ 
-+-- 
-+2.29.2
-+
+diff --git a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
+deleted file mode 100644
+index 97f8c5a8e7..0000000000
+--- a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 377df79e83e2127a087e1aa5ba6173e195e50933 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 10 Sep 2020 07:47:14 +0200
+-Subject: [PATCH] src/ap.c: fix build with uclibc
+-
+-explicit_bzero is used in src/ap.c since commit
+-d55e00b31d7bccdbb2ea1cdeb0a749df77a51e47 but src/missing.h is not
+-included, as a result build with uclibc fails on:
+-
+-/srv/storage/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/ap.o: in function `ap_probe_req_cb':
+-ap.c:(.text+0x23d8): undefined reference to `explicit_bzero'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream: https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=0a6de7932a61ec82aca4f78f71dab7247c897860]
+----
+- src/ap.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/ap.c b/src/ap.c
+-index c972cfcb..ac705c31 100644
+---- a/src/ap.c
+-+++ b/src/ap.c
+-@@ -31,6 +31,7 @@
+- 
+- #include "linux/nl80211.h"
+- 
+-+#include "src/missing.h"
+- #include "src/iwd.h"
+- #include "src/module.h"
+- #include "src/scan.h"
+--- 
+-2.28.0
+-
+diff --git a/package/iwd/Config.in b/package/iwd/Config.in
+index 4e85fb4fd7..59d4422305 100644
+--- a/package/iwd/Config.in
++++ b/package/iwd/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_IWD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
+-	depends on !BR2_STATIC_LIBS # ell
+ 	depends on BR2_USE_WCHAR # ell
+ 	select BR2_PACKAGE_DBUS # runtime
+ 	select BR2_PACKAGE_ELL
+@@ -14,8 +13,8 @@ config BR2_PACKAGE_IWD
+ 
+ 	  https://iwd.wiki.kernel.org/
+ 
+-comment "iwd needs a toolchain w/ threads, dynamic library, wchar, headers >= 4.12"
++comment "iwd needs a toolchain w/ threads, wchar, headers >= 4.12"
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index 16e01ed473..77a84f156e 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  e4178a105021ef1b7b7c23cbc6f8e45cbab3bb0830da588b406ff4a281e9f948  iwd-1.9.tar.gz
++sha256  4f0007fb7594fe59baed71fb72c8390c472ff11c38b75d1f673375d4129ba5e2  iwd-1.10.tar.gz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 58d332dc07..b1841b5476 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 1.9
++IWD_VERSION = 1.10
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
+-- 
+2.29.2
