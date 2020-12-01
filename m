@@ -1,53 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  1 Dec 2020 23:23:46 +0100
-Subject: [Buildroot] [PATCH] package/docker-containerd: security bump to
- version 1.4.3
-Message-ID: <20201201222346.5039-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 22:54:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/erlang-eimp: bump
+ version to 1.0.17
+Message-ID: <20201201221509.E9C248113D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f932efd90ea16f663e22b5f14fe5ea0969d1000
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- CVE-2020-15257: Access controls for the shim?s API socket verified that
-  the connecting process had an effective UID of 0, but did not otherwise
-  restrict access to the abstract Unix domain socket.  This would allow
-  malicious containers running in the same network namespace as the shim,
-  with an effective UID of 0 but otherwise reduced privileges, to cause new
-  processes to be run with elevated privileges.
-
-For more details, see the advisory:
-https://github.com/containerd/containerd/security/advisories/GHSA-36xw-fx78-c5r4
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-eimp/erlang-eimp.hash | 4 ++--
+ package/erlang-eimp/erlang-eimp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 2ec3d042ba..c5cfc137b8 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
+diff --git a/package/erlang-eimp/erlang-eimp.hash b/package/erlang-eimp/erlang-eimp.hash
+index a0276beded..28d22be16d 100644
+--- a/package/erlang-eimp/erlang-eimp.hash
++++ b/package/erlang-eimp/erlang-eimp.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256	d410b8efc94e4124990f01de7107223971be8c9258fc651decf9e0ba648485b5  docker-containerd-1.4.1.tar.gz
-+sha256	bc6d9452c700af0ebc09c0da8ddba55be4c03ac8928e72ca92d98905800c8018  docker-containerd-1.4.3.tar.gz
- sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 71f9b4c065..d9a0eb28a6 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
+ # Locally calculated
+-sha256 dfcdc211480f974175af615616c7f8c1e8f9dff5d6be5faa3f20c3eb4c60240e erlang-eimp-1.0.12.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
++sha256  1a529fa6e8264d3cad43861db417a1e841b28c0601aa847857fa0d6a81935922  erlang-eimp-1.0.17.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
+index c8cea0e429..d066961cd3 100644
+--- a/package/erlang-eimp/erlang-eimp.mk
++++ b/package/erlang-eimp/erlang-eimp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = 1.4.1
-+DOCKER_CONTAINERD_VERSION = 1.4.3
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
--- 
-2.20.1
+-ERLANG_EIMP_VERSION = 1.0.12
++ERLANG_EIMP_VERSION = 1.0.17
+ ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
+ ERLANG_EIMP_LICENSE = Apache-2.0
+ ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
