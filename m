@@ -1,82 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:39:08 +0100
-Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
- 5.9.11
-Message-ID: <20201203092229.9DDD98012C@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:24:34 +0100
+Subject: [Buildroot] [git commit] package/ejabberd: bump version to 20.07
+Message-ID: <20201203092229.4BFD2811FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7467105d6c8a734900dfe7860521c03e41c26b49
+commit: https://git.buildroot.net/buildroot/commit/?id=0e58c21047f15fa6c59b7d63aa1cd7db1d8e4eb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Bump to the latest kernel v5.9.11 and require openssl.
-- Switch to PSCI for bringing up the secondary CPUs.
-- Switch to GICv3.
-- Update the instruction in the readme.txt to use the latest FVP v8
-  Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
+- Fix the download url to reflect upstream website changes.
+- Fix line numbers in patch 0001.
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/arm/foundation-v8/readme.txt |  7 ++++---
- configs/arm_foundationv8_defconfig | 13 ++++++++-----
- 2 files changed, 12 insertions(+), 8 deletions(-)
+ ...Makefile.in-do-not-download-or-compile-dependencies.patch | 12 ++++++------
+ package/ejabberd/ejabberd.hash                               |  4 ++--
+ package/ejabberd/ejabberd.mk                                 |  4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index 1dedf68cba..b5106f015e 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -3,17 +3,18 @@ ARM software simulator of the AArch64 architecture.
+diff --git a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
+index 01a5362e5f..ffacb6dafd 100644
+--- a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
++++ b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
+@@ -1,6 +1,6 @@
+-From 277103e886c9b3ddfede8b3f5b92d3e94736f404 Mon Sep 17 00:00:00 2001
++From cb583beba1acba55112fbb4636c1c73d9ae691a0 Mon Sep 17 00:00:00 2001
+ From: Johan Oudinet <johan.oudinet@gmail.com>
+-Date: Fri, 23 Nov 2018 16:13:21 +0100
++Date: Fri, 20 Nov 2020 00:33:30 +0100
+ Subject: [PATCH] Makefile.in: do not download or compile dependencies
  
- First, one has to download the AArch64 software simulator from:
+ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+@@ -9,10 +9,10 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+  1 file changed, 2 insertions(+), 2 deletions(-)
  
--  https://silver.arm.com/download/download.tm?pv=2663527
-+  https://silver.arm.com/download/download.tm?pv=4807186
+ diff --git a/Makefile.in b/Makefile.in
+-index 48dca7d8..d2324dae 100644
++index abd64835..06f876bb 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -94,7 +94,7 @@ ifneq ($(INSTALLGROUP),)
++@@ -97,7 +97,7 @@ ifneq ($(INSTALLGROUP),)
+    G_USER=-g $(INSTALLGROUP)
+  endif
+  
+@@ -21,7 +21,7 @@ index 48dca7d8..d2324dae 100644
+  
+  deps: deps/.got
+  
+-@@ -108,7 +108,7 @@ deps/.built: deps/.got
++@@ -111,7 +111,7 @@ deps/.built: deps/.got
+  	$(REBAR) configure-deps
+  	$(REBAR) compile && :> deps/.built
+  
+@@ -31,5 +31,5 @@ index 48dca7d8..d2324dae 100644
+  
+  update:
+ -- 
+-2.17.1
++2.29.2
  
- Then, use the arm_foundationv8_defconfig configuration to build your
- Buildroot system.
+diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
+index 145e7401a9..0d57ada5bb 100644
+--- a/package/ejabberd/ejabberd.hash
++++ b/package/ejabberd/ejabberd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 18ddf61af22fc9b59f8afc6835aae2aee9896eb91cc1030056d6bca6a1fa40d2 ejabberd-19.09.1.tgz
+-sha256 469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb COPYING
++sha256  9e922b938458ae9d72d4e5fdd2d08a1fbad651aae47c9a9d15b79d0bbd1e11f8  ejabberd-20.07.tgz
++sha256  469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb  COPYING
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index 3419c6e59c..a0b4a63542 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- Finally, boot your system with:
- 
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
-+ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
--    --network=nat
-+    --network=nat \
-+    --cores 4
- 
- You can get network access from within the simulated environment
- by requesting an IP address using DHCP (run the command 'udhcpc').
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index ea19f35502..363f288b87 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,15 +1,18 @@
- BR2_aarch64=y
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 5.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_BOOT_WRAPPER_AARCH64=y
--BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8-gicv3-psci"
- BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_PSCI=y
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_GICV3=y
+-EJABBERD_VERSION = 19.09.1
++EJABBERD_VERSION = 20.07
+ EJABBERD_SOURCE = ejabberd-$(EJABBERD_VERSION).tgz
+-EJABBERD_SITE = https://www.process-one.net/downloads/ejabberd/$(EJABBERD_VERSION)
++EJABBERD_SITE = https://static.process-one.net/ejabberd/downloads/$(EJABBERD_VERSION)
+ EJABBERD_LICENSE = GPL-2.0+ with OpenSSL exception
+ EJABBERD_LICENSE_FILES = COPYING
+ EJABBERD_DEPENDENCIES = getent openssl erlang-eimp host-erlang-lager \
