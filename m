@@ -1,44 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 22:54:20 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-utils: bump version to
- 1.0.20
-Message-ID: <20201203092228.78CED821E0@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Dec 2020 21:38:48 +0100
+Subject: [Buildroot] [git commit] package/python-pydal: bump to version
+ 20200910.1
+Message-ID: <20201203092227.C38D7821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a68e516ac52ddbff5f6e0742a1ee4c614e831486
+commit: https://git.buildroot.net/buildroot/commit/?id=c7f98d08fc265435d9bf30a6e31b6fb0f2c96082
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+While bumping updating the sha256 computation method.
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/erlang-p1-utils/erlang-p1-utils.hash | 4 ++--
- package/erlang-p1-utils/erlang-p1-utils.mk   | 2 +-
+ package/python-pydal/python-pydal.hash | 4 ++--
+ package/python-pydal/python-pydal.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.hash b/package/erlang-p1-utils/erlang-p1-utils.hash
-index f749aabe37..dec7c26039 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.hash
-+++ b/package/erlang-p1-utils/erlang-p1-utils.hash
+diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
+index 161395ac52..224f32856f 100644
+--- a/package/python-pydal/python-pydal.hash
++++ b/package/python-pydal/python-pydal.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 2559967770558dc003bcc3c7efc216f6c57c4f23830d5de33c6bf61d8a3f880c erlang-p1-utils-1.0.16.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
-+sha256  234b88227f61ef03a6177d97ed062c62a22760b6fd189a5a24d2fd1599d95ac9  erlang-p1-utils-1.0.20.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-p1-utils/erlang-p1-utils.mk b/package/erlang-p1-utils/erlang-p1-utils.mk
-index 5375971d39..084382cd2b 100644
---- a/package/erlang-p1-utils/erlang-p1-utils.mk
-+++ b/package/erlang-p1-utils/erlang-p1-utils.mk
+-# sha256 from https://pypi.org/project/pyDAL/#files
+-sha256  65bc77933eb9ac84874702629fcb167c18dc242a00cf7cc191899796761349e4  python-pydal-20200714.1.tar.gz
++# sha256 locally computed
++sha256  df54be164bcdab8ffc8db88cb72333cc4b27997ce58c302dd8ade36462d799ea  python-pydal-20200910.1.tar.gz
+ sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
+diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
+index 2ea3790a3d..2cac839a9e 100644
+--- a/package/python-pydal/python-pydal.mk
++++ b/package/python-pydal/python-pydal.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_UTILS_VERSION = 1.0.16
-+ERLANG_P1_UTILS_VERSION = 1.0.20
- ERLANG_P1_UTILS_SITE = $(call github,processone,p1_utils,$(ERLANG_P1_UTILS_VERSION))
- ERLANG_P1_UTILS_LICENSE = Apache-2.0
- ERLANG_P1_UTILS_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYDAL_VERSION = 20200714.1
++PYTHON_PYDAL_VERSION = 20200910.1
+ PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
+ PYTHON_PYDAL_LICENSE = BSD-3-Clause
+ PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
