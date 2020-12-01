@@ -1,34 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Dec 2020 23:01:13 +0100
-Subject: [Buildroot] [PATCH] package/x11r7/xserver_xorg-server: add
- upstream security fixes for CVE-2020-14360 / 25712
-In-Reply-To: <20201201174903.18381-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 1 Dec 2020 18:49:03 +0100")
-References: <20201201174903.18381-1-peter@korsgaard.com>
-Message-ID: <87zh2xxk2e.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Dec 2020 23:02:14 +0100
+Subject: [Buildroot] [PATCH v3,1/1] package/libcap: fix libcap.pc
+In-Reply-To: <20201201192703.402854-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 1 Dec 2020 20:27:03 +0100")
+References: <20201201192703.402854-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9dlxk0p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issues:
- > * CVE-2020-14360 / ZDI CAN 11572 XkbSetMap Out-Of-Bounds Access
+ > libcap builds an incorrect libcap.pc because libdir is pulled from the
+ > host os:
 
- >   Insufficient checks on the lengths of the XkbSetMap request can lead to
- >   out of bounds memory accesses in the X server.
+ > ifndef lib
+ > lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
+ > endif
 
- > * CVE-2020-25712 / ZDI-CAN-11839 XkbSetDeviceInfo Heap-based Buffer Overflow
+ > Fix this error by passing lib=lib and prefix in
+ > {HOST_LIBCAP,LIBCAP}_BUILD_CMDS
 
- >   Insufficient checks on input of the XkbSetDeviceInfo request can lead to a
- >   buffer overflow on the head in the X server.
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=13276
 
- > For more details, see the advisory:
- > https://www.openwall.com/lists/oss-security/2020/12/01/3
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v2 -> v3 (after review of Peter Seiderer):
+ >  - Merge with initial patch that was not committed yet
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Changes v1 -> v2:
+ >  - Also fix host libcap
 
 Committed, thanks.
 
