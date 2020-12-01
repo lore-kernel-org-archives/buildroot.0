@@ -1,54 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Dec 2020 21:43:12 +0100
-Subject: [Buildroot] [PATCH] package/python-pydal: bump to version
- 20200910.1
-In-Reply-To: <20201108170718.1225726-1-angelo@amarulasolutions.com>
-References: <20201108170718.1225726-1-angelo@amarulasolutions.com>
-Message-ID: <ef059f5b-5bc0-0eab-46d2-b90f5e4453b5@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 21:44:28 +0100
+Subject: [Buildroot] [git commit branch/next] package/libostree: bump to
+ version 2020.8
+Message-ID: <20201201203042.DF44D7FC1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4e060bf6bc6a7bc381904ce995b9f18372aa2c6d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 08/11/2020 18:07, Angelo Compagnucci wrote:
-> While bumping updating the sha256 computation method.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-
- Applied to next, thanks.
-
- Regards,
- Arnout
-
-> ---
->  package/python-pydal/python-pydal.hash | 4 ++--
->  package/python-pydal/python-pydal.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-> index 161395ac52..224f32856f 100644
-> --- a/package/python-pydal/python-pydal.hash
-> +++ b/package/python-pydal/python-pydal.hash
-> @@ -1,3 +1,3 @@
-> -# sha256 from https://pypi.org/project/pyDAL/#files
-> -sha256  65bc77933eb9ac84874702629fcb167c18dc242a00cf7cc191899796761349e4  python-pydal-20200714.1.tar.gz
-> +# sha256 locally computed
-> +sha256  df54be164bcdab8ffc8db88cb72333cc4b27997ce58c302dd8ade36462d799ea  python-pydal-20200910.1.tar.gz
->  sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-> diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-> index 2ea3790a3d..2cac839a9e 100644
-> --- a/package/python-pydal/python-pydal.mk
-> +++ b/package/python-pydal/python-pydal.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PYDAL_VERSION = 20200714.1
-> +PYTHON_PYDAL_VERSION = 20200910.1
->  PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
->  PYTHON_PYDAL_LICENSE = BSD-3-Clause
->  PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
-> 
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index e5483a539c..751feb6b2e 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  865d4818820d128a2e505380358275bb964984348b3d0685b6455099e4736972  libostree-2020.6.tar.xz
++sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index e387f99856..9406e023bd 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2020.6
++LIBOSTREE_VERSION = 2020.8
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
