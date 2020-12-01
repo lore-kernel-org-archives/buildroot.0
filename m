@@ -1,40 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:41:15 +0100
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to
- 1.0.3
-In-Reply-To: <20201123205525.1965-1-ps.report@gmx.net>
-References: <20201123205525.1965-1-ps.report@gmx.net>
-Message-ID: <20201201234115.2d9374fc@windsurf.home>
+Date: Tue, 1 Dec 2020 23:41:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/mksh: update to 59c
+Message-ID: <20201201222622.DCC4E815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Nov 2020 21:55:25 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9c26200cb9ad56564d3f0f832aad0cd274c9a330
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> For details see [1], changelog:
-> 
-> - Fix (hopefully) a segfault in xkb_x11_keymap_new_from_device() in some
->   unclear situation (bug introduced in 1.0.2).
-> 
-> - Fix keymaps created with xkb_x11_keymap_new_from_device() don't have level
->   names (bug introduced in 0.8.0).
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2020-November/041660.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/libxkbcommon/libxkbcommon.hash | 4 ++--
->  package/libxkbcommon/libxkbcommon.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mksh/mksh.hash | 4 ++--
+ package/mksh/mksh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Since 1.0.2 -> 1.0.3 has only two commits, which are bug fixes, I've
-applied to master. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mksh/mksh.hash b/package/mksh/mksh.hash
+index 7fc34fa3e3..d81deccb39 100644
+--- a/package/mksh/mksh.hash
++++ b/package/mksh/mksh.hash
+@@ -1,4 +1,4 @@
+ # From http://www.mirbsd.org/mksh.htm#build
+-sha256  907ed1a9586e7f18bdefdd4a763aaa8397b755e15034aa54f4d753bfb272e0e6  mksh-R59b.tgz
++sha256  77ae1665a337f1c48c61d6b961db3e52119b38e58884d1c89684af31f87bc506  mksh-R59c.tgz
+ # Locally computed
+-sha256  fb1e64c95ded58058c7f0cf5269236bc83c3cbda089cbb025b03e08f189bf47e  mksh.1
++sha256  abf44a61ec777c98f8ae7e08e4fe25fe258e0c470215e2eeb22816f6bae72c80  mksh.1
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 05ddc3f4c9..386b1bd016 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MKSH_VERSION = 59b
++MKSH_VERSION = 59c
+ MKSH_SOURCE = mksh-R$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
