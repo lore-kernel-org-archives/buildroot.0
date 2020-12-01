@@ -1,82 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:39:08 +0100
-Subject: [Buildroot] [git commit branch/next] configs/arm_foundationv8: bump
- to Linux 5.9.11
-Message-ID: <20201201222355.A8ECB815FF@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:39:21 +0100
+Subject: [Buildroot] [PATCH v2] configs/arm_foundationv8: bump to Linux
+ 5.9.11
+In-Reply-To: <20201127144024.21604-1-vincent.stehle@laposte.net>
+References: <20201126165831.6341-1-vincent.stehle@laposte.net>
+ <20201127144024.21604-1-vincent.stehle@laposte.net>
+Message-ID: <20201201233921.684da279@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7467105d6c8a734900dfe7860521c03e41c26b49
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 27 Nov 2020 15:40:24 +0100
+Vincent Stehl? via buildroot <buildroot@busybox.net> wrote:
 
-- Bump to the latest kernel v5.9.11 and require openssl.
-- Switch to PSCI for bringing up the secondary CPUs.
-- Switch to GICv3.
-- Update the instruction in the readme.txt to use the latest FVP v8
-  Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
+> - Bump to the latest kernel v5.9.11 and require openssl.
+> - Switch to PSCI for bringing up the secondary CPUs.
+> - Switch to GICv3.
+> - Update the instruction in the readme.txt to use the latest FVP v8
+>   Foundation Platform 11.12 build 38, and to start 4 cores in SMP.
+> 
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/arm/foundation-v8/readme.txt |  7 ++++---
- configs/arm_foundationv8_defconfig | 13 ++++++++-----
- 2 files changed, 12 insertions(+), 8 deletions(-)
+Applied to next, thanks.
 
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index 1dedf68cba..b5106f015e 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -3,17 +3,18 @@ ARM software simulator of the AArch64 architecture.
- 
- First, one has to download the AArch64 software simulator from:
- 
--  https://silver.arm.com/download/download.tm?pv=2663527
-+  https://silver.arm.com/download/download.tm?pv=4807186
- 
- Then, use the arm_foundationv8_defconfig configuration to build your
- Buildroot system.
- 
- Finally, boot your system with:
- 
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
-+ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-6.4/Foundation_Platform \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
--    --network=nat
-+    --network=nat \
-+    --cores 4
- 
- You can get network access from within the simulated environment
- by requesting an IP address using DHCP (run the command 'udhcpc').
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index ea19f35502..363f288b87 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,15 +1,18 @@
- BR2_aarch64=y
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+# Linux headers same as kernel, a 5.9 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.11"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8-gicv3-psci"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_BOOT_WRAPPER_AARCH64=y
--BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8-gicv3-psci"
- BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_PSCI=y
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_GICV3=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
