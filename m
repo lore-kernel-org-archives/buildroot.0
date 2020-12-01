@@ -1,178 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Dec 2020 22:12:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
- dependency
-In-Reply-To: <20201103203837.GJ2887157@scaer>
-References: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
- <20201101130358.GE2887157@scaer>
- <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
- <20201103203837.GJ2887157@scaer>
-Message-ID: <13ab56b7-92e3-6b80-6c74-e5eda212ac53@mind.be>
+Date: Tue, 1 Dec 2020 22:19:29 +0100
+Subject: [Buildroot] [PATCH v2,
+ 2/2] package/abootimg: use util-linux-libs
+In-Reply-To: <20201103205745.123950-2-fontaine.fabrice@gmail.com>
+References: <20201103205745.123950-1-fontaine.fabrice@gmail.com>
+ <20201103205745.123950-2-fontaine.fabrice@gmail.com>
+Message-ID: <9099dcc4-f41e-b8d4-52a9-8485e51c8d5e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Replying to this one, because it's the one with most of the discussion, but my
-comments really pertain to [1]]
- [1]
-http://patchwork.ozlabs.org/project/buildroot/patch/20201103205745.123950-1-fontaine.fabrice at gmail.com/
 
 
-
-On 03/11/2020 21:38, Yann E. MORIN wrote:
-> Fabrice, All,
+On 03/11/2020 21:57, Fabrice Fontaine wrote:
+> abootimg only needs libblkid from util-linux-libs
 > 
-> On 2020-11-01 16:03 +0100, Fabrice Fontaine spake thusly:
->> Le dim. 1 nov. 2020 ? 14:04, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
->>> On 2020-11-01 13:15 +0100, Fabrice Fontaine spake thusly:
->>>> Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
->>>> util-linux-libs but this raises the following build failure:
->>>>
->>>> Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
->>>>
->>>> To fix this build failure, use util-linux or util-linux-libs depending
->>>> on BR2_PACKAGE_UTIL_LINUX_LIBS
->>>
->>> OK, so this is exactly what I did not like in this util-linux vs
->>> util-linus-libs split, and the fact that util-linux-libs is optional...
->>>
->>> IMHO:
->>>
->>>  1. util-linux-libs must be enabled as soon as util-linux is enabled,
->>>
->>>  2. packages should build-depend on util-linux-libs, and never on
->>>     util-linux, and should 'select BR2_PACKAGE_UTIL_LINUX_LIBS' if
->>>     all they need is a library.
->> We can't select BR2_PACKAGE_UTIL_LINUX_LIBS without selecting
->> BR2_PACKAGE_UTIL_LINUX as BR2_PACKAGE_UTIL_LINUX_LIBS is a hidden
->> option of BR2_PACKAGE_UTIL_LINUX.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Select util-linux-libs instead of util-linux
 > 
-> No, we really need to make util-linux-libs a real package, not a hidden
-> one, like
+>  package/abootimg/Config.in   | 2 +-
+>  package/abootimg/abootimg.mk | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
->     config BR2_PACAKGE_UTIL_LINUX_LIBS
->         bool "util-linux-libs"
->         help
->           Only the libraries provided bby util-linux; if you need the
->           tools too, select util-linux.
+> diff --git a/package/abootimg/Config.in b/package/abootimg/Config.in
+> index 30e5bd1fb0..8aa4cb414c 100644
+> --- a/package/abootimg/Config.in
+> +++ b/package/abootimg/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_ABOOTIMG
+>  	bool "abootimg"
+>  	depends on BR2_USE_MMU	# libblkid
+> -	select BR2_PACKAGE_UTIL_LINUX
+> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
+>  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  	help
+>  	  Tool to manipulate Android Boot Images, either on files
+> diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
+> index e906546948..d139d58ceb 100644
+> --- a/package/abootimg/abootimg.mk
+> +++ b/package/abootimg/abootimg.mk
+> @@ -9,8 +9,8 @@ ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
+>  ABOOTIMG_LICENSE = GPL-2.0+
+>  ABOOTIMG_LICENSE_FILES = LICENSE
+>  
+> -# depends on libblkid from util-linux
+> -ABOOTIMG_DEPENDENCIES = util-linux
+> +# depends on libblkid from util-linux-libs
+> +ABOOTIMG_DEPENDENCIES = util-linux-libs
 
- There's no need to make this user-selectable AFAICS.
+ This we definitely want to avoid in general. The problem is that some libraries
+*may* be built in a different way in the second pass than in the first pass. The
+whole reason we have this mess is because parts of util-linux depend on packages
+that depend on util-linux libraries - and some of these parts may be in
+libraries as well! So we *only* want to use util-linux-libs in specific cases
+where we can check very carefully if the dependency chain is OK. For libmount/,
+it is.
 
-> 
-> and:
-> 
->     config BR2_PACAKGE_UTIL_LINUX
->         bool "util-linux"
->         select BR2_PACAKGE_UTIL_LINUX_LIBS
-> 
->     (or:)
-> 
->     config BR2_PACAKGE_UTIL_LINUX_LIBMOUNT
->         bool "libmount"
->         select BR2_PACAKGE_UTIL_LINUX_LIBS
+ I remember that I made this analysis when I applied the util-linux-libs split,
+but unfortunately it doesn't seem to have made it to the commit message...
 
- This was one of the possibilities that was considered/tried when Carlos and I
-worked on the util-linux split. I don't remember the details of why it didn't
-work, but basically it didn't :-) It *might* be just avoiding building
-util-linux twice if it's not needed though.
-
-
-> 
->> Moreover, we'll select BR2_PACKAGE_UTIL_LINUX_LIBS as soon as
->> BR2_PACKAGE_UTIL_LINUX is enabled (as per your first suggestion).
->> As a result, util-linux will always be selected even if packages (such
->> as abootimg) only build-depend on util-linux-libs.
-> 
-> Now that util-linux-libs is a full-gfledged package, it is selctable by
-> packages. See for example eudev os systemd, which already both select
-> BR2_PACKAGE_UTIL_LINUX_LIBS and biuld-depend on util-linux-libs.
-
- And that's exactly the approach that should have been taken by libglib2 as well:
-
-	select BR2_PACKAGE_UTIL_LINUX_LIBS if BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
-
-and unconditionally depend on util-linux-libs in libglib2.mk.
-
-
-> 
->> So, in the end, we'll fix/clean the build order but util-linux will
->> still be built but this is unavoidable unless util-linux-libs is moved
->> to its own package.
-
- Yes, util-linux will definitely always be built.
 
  Regards,
  Arnout
 
-> 
-> It is already its own package; just it is not "user-visible".
-> 
->> Did I misunderstood something?
-> 
-> The above, I guess. ;-)
-> 
->> I'll send a 2-patch serie that implements your first suggestion and
->> your second suggestion on abootimg. If it pleases you, I'll update the
->> other packages.
-> 
-> Well, we can do it multi-pass, of course; fixing packages to build-depend
-> on util-linux-libs is not a lost effort anyway.
-> 
-> Thanks for your work! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>> So, for now I'll apply this patch, because we do need a fix.
->>>
->>> But ultimately, we wnat to sanitise this situation.
->>>
->>> Regards,
->>> Yann E. MORIN.
->>>
->>>> Fixes:
->>>>  - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
->>>>
->>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>>> ---
->>>>  package/libglib2/libglib2.mk | 4 ++++
->>>>  1 file changed, 4 insertions(+)
->>>>
->>>> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
->>>> index 43fcb27fae..6e9dbd7b26 100644
->>>> --- a/package/libglib2/libglib2.mk
->>>> +++ b/package/libglib2/libglib2.mk
->>>> @@ -86,8 +86,12 @@ endif
->>>>
->>>>  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
->>>>  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
->>>> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
->>>>  LIBGLIB2_DEPENDENCIES += util-linux-libs
->>>>  else
->>>> +LIBGLIB2_DEPENDENCIES += util-linux
->>>> +endif
->>>> +else
->>>>  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
->>>>  endif
->>>>
->>>> --
->>>> 2.28.0
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>> --
->>> .-----------------.--------------------.------------------.--------------------.
->>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->>> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->>> '------------------------------^-------^------------------^--------------------'
->> Best Regards,
->>
->> Fabrice
+
+>  
+>  define ABOOTIMG_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 > 
