@@ -1,100 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2020 22:42:58 +0100
-Subject: [Buildroot] [git commit] package/s390-tools: fix build with netsnmp
-Message-ID: <20201201214730.A1E4C8105D@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:01:27 +0100
+Subject: [Buildroot] [git commit] package/libcap: fix libcap.pc
+Message-ID: <20201201214730.EAB3782858@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5b3870c98df5570fc690577d1fdbd4ccc1e44b3
+commit: https://git.buildroot.net/buildroot/commit/?id=07f8ea39139299c83777a338a30cd480633d5706
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure:
+libcap builds an incorrect libcap.pc because libdir is pulled from the
+host os:
 
-/bin/sh: net-snmp-config: command not found
-/home/buildroot/autobuild/run/instance-2/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/9.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: osasnmpd.o: in function `main':
-osasnmpd.c:(.text.startup+0xcc): undefined reference to `snmp_log_perror'
+ifndef lib
+lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
+endif
 
-Moreover, replace perl-net-snmp dependency by netsnmp as osasnmpd is an
-SNMP subagent for the net-snmp package:
-https://github.com/ibm-s390-tools/s390-tools/blob/master/osasnmpd/osasnmpd.8
+Fix this error by passing lib=lib and prefix in
+{HOST_LIBCAP,LIBCAP}_BUILD_CMDS
 
 Fixes:
- - http://autobuild.buildroot.org/results/00796f2ebd5fb0e08ac7a05a9ee566f2bc4bd1c3
+ - https://bugs.buildroot.org/show_bug.cgi?id=13276
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...2-osasnmpd-Makefile-fix-cross-compilation.patch | 41 ++++++++++++++++++++++
- package/s390-tools/s390-tools.mk                   |  8 +++--
- 2 files changed, 46 insertions(+), 3 deletions(-)
+ package/libcap/libcap.mk | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/package/s390-tools/0002-osasnmpd-Makefile-fix-cross-compilation.patch b/package/s390-tools/0002-osasnmpd-Makefile-fix-cross-compilation.patch
-new file mode 100644
-index 0000000000..8e3d1399f2
---- /dev/null
-+++ b/package/s390-tools/0002-osasnmpd-Makefile-fix-cross-compilation.patch
-@@ -0,0 +1,41 @@
-+From d7faa31a871d14ab02b290bdf2b2fa085766d2ac Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 27 Nov 2020 23:43:15 +0100
-+Subject: [PATCH] osasnmpd/Makefile: fix cross-compilation
-+
-+Fix the following build failure by allowing the user to provide
-+NET_SNMP_CONFIG:
-+
-+/bin/sh: net-snmp-config: command not found
-+/home/buildroot/autobuild/run/instance-2/output-1/host/lib/gcc/s390x-buildroot-linux-gnu/9.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: osasnmpd.o: in function `main':
-+osasnmpd.c:(.text.startup+0xcc): undefined reference to `snmp_log_perror'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/00796f2ebd5fb0e08ac7a05a9ee566f2bc4bd1c3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ibm-s390-tools/s390-tools/pull/99]
-+---
-+ osasnmpd/Makefile | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/osasnmpd/Makefile b/osasnmpd/Makefile
-+index 15496b2..8ce0932 100644
-+--- a/osasnmpd/Makefile
-++++ b/osasnmpd/Makefile
-+@@ -1,9 +1,10 @@
-+ include ../common.mak
-+-LDLIBS = `net-snmp-config --agent-libs`
-++NET_SNMP_CONFIG = net-snmp-config
-++LDLIBS = `$(NET_SNMP_CONFIG) --agent-libs`
-+ # On some Linux systems `net-snmp-config --agent-libs` introduces -pie,
-+ # therefore add -fPIC to prevent link failures.
-+ ALL_CFLAGS += -fPIC
-+-ALL_CFLAGS += `net-snmp-config --cflags`
-++ALL_CFLAGS += `$(NET_SNMP_CONFIG) --cflags`
-+ 
-+ OBJS = ibmOSAMib.o ibmOSAMibUtil.o osasnmpd.o
-+ 
-+-- 
-+2.29.2
-+
-diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index 5a3bcffba9..34750bea71 100644
---- a/package/s390-tools/s390-tools.mk
-+++ b/package/s390-tools/s390-tools.mk
-@@ -72,9 +72,11 @@ else
- S390_TOOLS_MAKE_OPTS += HAVE_FUSE=0
- endif
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 2b80a3cb7d..7bb8f57671 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -19,6 +19,8 @@ LIBCAP_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	BUILD_CC="$(HOSTCC)" \
+ 	BUILD_CFLAGS="$(HOST_CFLAGS)" \
++	lib=lib \
++	prefix=/usr \
+ 	SHARED=$(if $(BR2_STATIC_LIBS),,yes) \
+ 	PTHREADS=$(if $(BR2_TOOLCHAIN_HAS_THREADS),yes,)
  
--ifeq ($(BR2_PACKAGE_PERL_NET_SNMP),y)
--S390_TOOLS_DEPENDENCIES += perl-net-snmp
--S390_TOOLS_MAKE_OPTS += HAVE_SNMP=1
-+ifeq ($(BR2_PACKAGE_NETSNMP),y)
-+S390_TOOLS_DEPENDENCIES += netsnmp
-+S390_TOOLS_MAKE_OPTS += \
-+	NET_SNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config \
-+	HAVE_SNMP=1
- else
- S390_TOOLS_MAKE_OPTS += HAVE_SNMP=0
- endif
+@@ -38,27 +40,31 @@ endef
+ define LIBCAP_INSTALL_STAGING_CMDS
+ 	$(foreach d,$(LIBCAP_MAKE_DIRS), \
+ 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
+-			DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib install
++			DESTDIR=$(STAGING_DIR) install
+ 	)
+ endef
+ 
+ define LIBCAP_INSTALL_TARGET_CMDS
+ 	$(foreach d,$(LIBCAP_MAKE_DIRS), \
+ 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(d) $(LIBCAP_MAKE_FLAGS) \
+-			DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib install
++			DESTDIR=$(TARGET_DIR) install
+ 	)
+ endef
+ 
++HOST_LIBCAP_MAKE_FLAGS = \
++	DYNAMIC=yes \
++	GOLANG=no \
++	lib=lib \
++	prefix=$(HOST_DIR) \
++	RAISE_SETFCAP=no
++
+ define HOST_LIBCAP_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+-		DYNAMIC=yes \
+-		RAISE_SETFCAP=no GOLANG=no
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(HOST_LIBCAP_MAKE_FLAGS)
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
+-		DYNAMIC=yes \
+-		RAISE_SETFCAP=no GOLANG=no lib=lib install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
+ endef
+ 
+ $(eval $(generic-package))
