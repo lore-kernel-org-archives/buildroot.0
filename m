@@ -1,114 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/rhash: bump version to 1.4.0
-Message-ID: <20201203092225.A52BF815D8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Dec 2020 22:39:48 +0100
+Subject: [Buildroot] [git commit] package/bind: fix license hash
+Message-ID: <20201203092228.230888012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ead2afda13e5541a7d8e759f5cfec4ab38605dcc
+commit: https://git.buildroot.net/buildroot/commit/?id=ac6dbae320231a02e1b9b69c8c9250e6854aaaa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Project switched license to BSD Zero Clause License:
-https://github.com/rhash/RHash/commit/007a303dacb1ad27fb64e2133dfb8b4e28428af2
+Commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e forgot to update hash of
+COPYRIGHT which was updated to replace http by https:
+https://gitlab.isc.org/isc-projects/bind9/-/commit/400171aee8db87c3973987980327051a58a20a80
 
-Add RHASH_CONFIGURE_CMDS after upstream added a configure script:
-https://github.com/rhash/RHash/commit/cdaf43862229fb0f10d2b6b7448bcded2ef8edde
+Fixes:
+ - http://autobuild.buildroot.org/results/db614a6fa1e17af2fa5c1d4a0d51cdf770893ca9
 
-Make target install-headers was renamed to install-lib-headers:
-https://github.com/rhash/RHash/commit/5184f57ed8c8a3d3ad66d789429bd8d1afc012ff
-
-Make target install-shared was removed, use build-install-binary
-instead:
-https://github.com/rhash/RHash/commit/cdaf43862229fb0f10d2b6b7448bcded2ef8edde
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rhash/rhash.hash |  9 ++++-----
- package/rhash/rhash.mk   | 32 +++++++++++++++++++++-----------
- 2 files changed, 25 insertions(+), 16 deletions(-)
+ package/bind/bind.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rhash/rhash.hash b/package/rhash/rhash.hash
-index 9a29b988a6..29df4daa12 100644
---- a/package/rhash/rhash.hash
-+++ b/package/rhash/rhash.hash
-@@ -1,6 +1,5 @@
--# From https://sourceforge.net/projects/rhash/files/rhash/1.3.5/
--md5 f586644019c10c83c6b6835de4b99e74  rhash-1.3.5-src.tar.gz
--sha1 990c9a0135afe48dee4ce1dbf83578e44735f302  rhash-1.3.5-src.tar.gz
-+# From https://sourceforge.net/projects/rhash/files/rhash/1.4.0/
-+sha1  3db1e87a31c77ca2fa5507db7932ef92e9eb5148  rhash-1.4.0-src.tar.gz
- # Locally calculated
--sha256 98e0688acae29e68c298ffbcdbb0f838864105f9b2bd8857980664435b1f1f2e  rhash-1.3.5-src.tar.gz
--sha256 8cf876d3406a2eed6c17ae804c8958bd78d3a0f63c30d6e2e789ab575e9fde40  COPYING
-+sha256  2ea39540f5c580da0e655f7b483c19e0d31506aed4202d88e8459fa7aeeb8861  rhash-1.4.0-src.tar.gz
-+sha256  953e55838353335148c90b5a38a4894292680b1d4c37228ffddddbf18ce54bf5  COPYING
-diff --git a/package/rhash/rhash.mk b/package/rhash/rhash.mk
-index 28fffe4528..55fb08ecea 100644
---- a/package/rhash/rhash.mk
-+++ b/package/rhash/rhash.mk
-@@ -4,26 +4,36 @@
- #
- ################################################################################
- 
--RHASH_VERSION = 1.3.5
-+RHASH_VERSION = 1.4.0
- RHASH_SOURCE = rhash-$(RHASH_VERSION)-src.tar.gz
- RHASH_SITE = https://sourceforge.net/projects/rhash/files/rhash/$(RHASH_VERSION)
--RHASH_LICENSE = MIT
-+RHASH_LICENSE = 0BSD
- RHASH_LICENSE_FILES = COPYING
- RHASH_INSTALL_STAGING = YES
- RHASH_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- RHASH_ADDLDFLAGS = $(TARGET_NLS_LIBS)
--RHASH_ADDCFLAGS = $(if $(BR2_SYSTEM_ENABLE_NLS),-DUSE_GETTEXT)
-+
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+RHASH_CONF_OPTS += --disable-gettext
-+else
-+RHASH_CONF_OPTS += --enable-gettext
-+endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL)x$(BR2_STATIC_LIBS),yx)
-+RHASH_CONF_OPTS += --enable-openssl
- RHASH_DEPENDENCIES += openssl
--RHASH_ADDCFLAGS += -DOPENSSL_RUNTIME -rdynamic
--RHASH_ADDLDFLAGS += -ldl
-+else
-+RHASH_CONF_OPTS += --disable-openssl
- endif
- 
--RHASH_MAKE_OPTS = \
--	ADDCFLAGS="$(RHASH_ADDCFLAGS)" \
--	ADDLDFLAGS="$(RHASH_ADDLDFLAGS)" \
--	PREFIX="/usr"
-+define RHASH_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure \
-+		--prefix=/usr \
-+		--cc=$(TARGET_CC) \
-+		--target=$(GNU_TARGET_NAME) \
-+		$(RHASH_CONF_OPTS) \
-+	)
-+endef
- 
- ifeq ($(BR2_SHARED_LIBS),y)
- RHASH_BUILD_TARGETS = lib-shared build-shared
-@@ -44,13 +54,13 @@ endef
- define RHASH_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/librhash \
- 		DESTDIR="$(STAGING_DIR)" $(RHASH_MAKE_OPTS) $(RHASH_INSTALL_TARGETS) \
--		install-headers
-+		install-lib-headers
- endef
- 
- ifeq ($(BR2_PACKAGE_RHASH_BIN),y)
- define RHASH_INSTALL_TARGET_RHASH_BIN
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		DESTDIR="$(TARGET_DIR)" $(RHASH_MAKE_OPTS) install-shared
-+		DESTDIR="$(TARGET_DIR)" $(RHASH_MAKE_OPTS) build-install-binary
- endef
- endif
- 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index e02c06ff3e..cbd9562b56 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
+ # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
+ sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
+-sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
++sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
