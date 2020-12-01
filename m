@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:24:17 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-zlib: bump version to
- 1.0.9
-Message-ID: <20201203092228.9BA0D821E0@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 22:54:23 +0100
+Subject: [Buildroot] [git commit] package/erlang-eimp: bump version to 1.0.17
+Message-ID: <20201203092228.8D5A3821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f47e7adb4e3a3748abc3ba9f83020d00a73401b
+commit: https://git.buildroot.net/buildroot/commit/?id=5f932efd90ea16f663e22b5f14fe5ea0969d1000
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The license file hash has changed due to:
-
--Copyright 2002-2019 ProcessOne SARL
-+Copyright 2002-2020 ProcessOne SARL
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-zlib/erlang-p1-zlib.hash | 4 ++--
- package/erlang-p1-zlib/erlang-p1-zlib.mk   | 2 +-
+ package/erlang-eimp/erlang-eimp.hash | 4 ++--
+ package/erlang-eimp/erlang-eimp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
-index ed803d98d8..7ce58762f8 100644
---- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
-+++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+diff --git a/package/erlang-eimp/erlang-eimp.hash b/package/erlang-eimp/erlang-eimp.hash
+index a0276beded..28d22be16d 100644
+--- a/package/erlang-eimp/erlang-eimp.hash
++++ b/package/erlang-eimp/erlang-eimp.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 7d39a3cb92ed7781b6b6ba95704e2591c626d62eddb3c52dcaeac60c339084d7 erlang-p1-zlib-1.0.6.tar.gz
--sha256 6e68ca4488fcdacf80ea0a3f5a6a294d48c2d8dc9de520cc3d6b3f3c1bc12847 LICENSE.txt
-+sha256  f0ac60336b2ddf55ac4f58934580cb8f02dba440d68feb607be312dd35d91269  erlang-p1-zlib-1.0.9.tar.gz
-+sha256  6cd4871db940d055cf272c12c10e0c08febdc94362e404390758fde34b4ce01a  LICENSE.txt
-diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
-index 46a7d12862..0e6ee298ef 100644
---- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
-+++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+-sha256 dfcdc211480f974175af615616c7f8c1e8f9dff5d6be5faa3f20c3eb4c60240e erlang-eimp-1.0.12.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
++sha256  1a529fa6e8264d3cad43861db417a1e841b28c0601aa847857fa0d6a81935922  erlang-eimp-1.0.17.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
+index c8cea0e429..d066961cd3 100644
+--- a/package/erlang-eimp/erlang-eimp.mk
++++ b/package/erlang-eimp/erlang-eimp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_ZLIB_VERSION = 1.0.6
-+ERLANG_P1_ZLIB_VERSION = 1.0.9
- ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
- ERLANG_P1_ZLIB_LICENSE = Apache-2.0
- ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
+-ERLANG_EIMP_VERSION = 1.0.12
++ERLANG_EIMP_VERSION = 1.0.17
+ ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
+ ERLANG_EIMP_LICENSE = Apache-2.0
+ ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
