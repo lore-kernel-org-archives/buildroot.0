@@ -1,33 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 22:50:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kmsxx: fix build with gcc 10
-In-Reply-To: <20201118171827.1009516-1-fontaine.fabrice@gmail.com>
-References: <20201118171827.1009516-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201201225055.2de8718e@windsurf.home>
+Date: Tue, 1 Dec 2020 22:51:26 +0100
+Subject: [Buildroot] [PATCH/next v1] package/kmsxx: bump version to
+ 5489056 and convert to meson build
+In-Reply-To: <20201129175633.388-1-ps.report@gmx.net>
+References: <20201129175633.388-1-ps.report@gmx.net>
+Message-ID: <20201201225126.6651a1e1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 18 Nov 2020 18:18:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 29 Nov 2020 18:56:33 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/59f70fb725c2f07e27dc818839e02f2788ee490c
+> - remove 0001-fix-compiler-errors-with-gcc-10.patch
+>   (upstream)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> - remove 0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
+>   (upstream)
+> 
+> - convert to meson
+> 
+> - add patch to use system fmt instead of git submodule (fixes
+>   configure 'ERROR: Include dir ext/fmt/include does not exist.')
+> 
+> - add patch to use system pybind11 instead of git submodule (fixes
+>   configure 'ERROR: Include dir ext/pybind11/include does not exist.')
+> 
+> - add patch to use python only if pykms is enabled (fixes
+>   configure 'ERROR: Dependency "pybind11" not found, tried pkgconfig')
+> 
+> - add optional libevdev dependency (needed for utils/kmstouch)
+> 
+> - update LICENSE file hash (replaced short copyright notice and
+>   link to  http://mozilla.org/MPL/2.0/ with complete license text)
+> 
+> - lift toolchain headers requirement to at least 4.11 (include
+>   linux/dma-buf.h)
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...card.h-to-follow-gcc10-porting-guide.patch | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch
+> Notes:
+>   - needs https://patchwork.ozlabs.org/project/buildroot/patch/20201129093823.10286-1-ps.report at gmx.net/
 
-I applied to next, in order to be able to apply Peter Seiderer's
-version bump of kmsxx... before I saw that a different gcc 10.x fix was
-merged by Peter in master.
-
-Oh well, there's going to be a bit of merge conflict when we'll bring
-next back into master...
+Applied to next, thanks.
 
 Thomas
 -- 
