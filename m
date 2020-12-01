@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:36:36 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/rust: bump to version 1.48.0
-In-Reply-To: <20201128221153.2328667-1-fontaine.fabrice@gmail.com>
-References: <20201128221153.2328667-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201201233636.1240c824@windsurf.home>
+Date: Tue, 1 Dec 2020 23:36:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: bump to version
+ 1.6.8
+In-Reply-To: <20201128095050.6055-1-egorenar-dev@posteo.net>
+References: <20201128095050.6055-1-egorenar-dev@posteo.net>
+Message-ID: <20201201233644.67e7febb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 28 Nov 2020 23:11:53 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 28 Nov 2020 10:50:50 +0100
+Alexander Egorenkov <egorenar-dev@posteo.net> wrote:
 
-> Update indentation in hash file (two spaces)
-> 
-> https://github.com/rust-lang/rust/blob/master/RELEASES.md#version-1480-2020-11-19
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
 > ---
-> Changes v1 -> v2:
->  - Drop wrong Fixes statement
+>  ...001-PATCH-Define-PN_XNUM-if-missing.patch} |   0
+>  ...move-duplicated-variable-definitions.patch | 104 ------------------
+>  package/makedumpfile/makedumpfile.hash        |   2 +-
+>  package/makedumpfile/makedumpfile.mk          |   4 +-
+>  4 files changed, 3 insertions(+), 107 deletions(-)
+>  rename package/makedumpfile/{0002-PATCH-Define-PN_XNUM-if-missing.patch => 0001-PATCH-Define-PN_XNUM-if-missing.patch} (100%)
+>  delete mode 100644 package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
 
 Applied to next, thanks.
 
