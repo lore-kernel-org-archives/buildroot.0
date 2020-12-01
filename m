@@ -1,49 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 22:47:29 +0100
-Subject: [Buildroot] [git commit] package/fmt: bump version to 7.1.3
-Message-ID: <20201203092228.56B44821E0@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Dec 2020 21:52:46 +0100
+Subject: [Buildroot] [git commit] package/environment-setup: add better
+ kernel handling
+Message-ID: <20201203092228.11383821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a110a5cf4b3d915dfc8bdb7e0a12a84cb9798fbb
+commit: https://git.buildroot.net/buildroot/commit/?id=8a8a87345589adc1477e552c5b26c03988826ac0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1], [2], [3] and [4].
+Exporting ARCH and KERNELDIR makes easier to compile an external kernel
+or out of tree kernel modules.
 
-[1] https://github.com/fmtlib/fmt/releases/tag/7.1.0
-[2] https://github.com/fmtlib/fmt/releases/tag/7.1.1
-[3] https://github.com/fmtlib/fmt/releases/tag/7.1.2
-[4] https://github.com/fmtlib/fmt/releases/tag/7.1.3
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/environment-setup/environment-setup    | 1 +
+ package/environment-setup/environment-setup.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 1f45c212f3..7947a17456 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  decfdf9ad274070fa85f26407b816f5a4d82205ae86bac1990be658d0795ea4d  fmt-7.0.3.zip
-+sha256  5d98c504d0205f912e22449ecdea776b78ce0bb096927334f80781e720084c9f  fmt-7.1.3.zip
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 0539dcc024..000bacfd7b 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
+index 813aa01c7a..e9bc36fdd0 100644
+--- a/package/environment-setup/environment-setup
++++ b/package/environment-setup/environment-setup
+@@ -10,6 +10,7 @@ cat <<'EOF'
+ Some tips:
+ * PATH now contains the SDK utilities
+ * Standard autotools variables (CC, LD, CFLAGS) are exported
++* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are exported
+ * To configure do "./configure $CONFIGURE_FLAGS" or use
+   the "configure" alias
+ * To build CMake-based projects, use the "cmake" alias
+diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
+index fb87c6f0b7..fcad013f0d 100644
+--- a/package/environment-setup/environment-setup.mk
++++ b/package/environment-setup/environment-setup.mk
+@@ -11,6 +11,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 	for var in $(TARGET_CONFIGURE_OPTS); do \
+ 		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
+ 	done
++	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
+ 		--host=$(GNU_TARGET_NAME) \
+@@ -31,6 +32,10 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
+ 		$(ENVIRONMENT_SETUP_FILE)
+ 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+ 		>> $(ENVIRONMENT_SETUP_FILE)
++
++	$(if $(BR2_LINUX_KERNEL),\
++		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
++			>> $(ENVIRONMENT_SETUP_FILE),)
+ endef
  
--FMT_VERSION = 7.0.3
-+FMT_VERSION = 7.1.3
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+ $(eval $(host-generic-package))
