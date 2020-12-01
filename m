@@ -1,128 +1,236 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  1 Dec 2020 23:37:59 +0100
-Subject: [Buildroot] [PATCH/next v1 2/2] package/iwd: bump version to 1.10
-In-Reply-To: <20201201223759.11147-1-ps.report@gmx.net>
-References: <20201201223759.11147-1-ps.report@gmx.net>
-Message-ID: <20201201223759.11147-2-ps.report@gmx.net>
+Date: Tue,  1 Dec 2020 23:37:58 +0100
+Subject: [Buildroot] [PATCH/next v1 1/2] package/ell: bump version to 0.35
+Message-ID: <20201201223759.11147-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove 0001-src-ap.c-fix-build-with-uclibc.patch
-  (upstream committed, see [1])
+- rebased (and renumbered) 001-ell-rtnl-fix-compile-with-older-toolchains.patch
 
-- drop dynamic library dependency as no longer enforced by ell
-  and no longer needed since commit [2]
+- drop dynamic library dependency as no longer needed since
+  upstream commits [1] and [2]
 
-Changelog (since 1.9):
-  - Add support for DHCP v6 configuration.
-  - Add support for DHCP server operation with AP mode.
-  - Add support for IP allocation during the 4-Way Handshake.
-  - Add support for P2P Group-owner handling.
+- add two upstream patches to fix musl/uclibc compile
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=0a6de7932a61ec82aca4f78f71dab7247c897860
-[2] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=bbcfde8743c4dd58379d2017b7f0fabe8d65fffa
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=e129cb4cd2270f308c1564e75859672643dd902b
+[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=a4ac2cb0e14f564754f7e2067ac7dde0a9ab1914
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../0001-src-ap.c-fix-build-with-uclibc.patch | 36 -------------------
- package/iwd/Config.in                         |  7 ++--
- package/iwd/iwd.hash                          |  2 +-
- package/iwd/iwd.mk                            |  2 +-
- 4 files changed, 5 insertions(+), 42 deletions(-)
- delete mode 100644 package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
+ ...l-fix-compile-with-older-toolchains.patch} | 20 ++++----
+ ...002-build-Add-rawmemchr-to-missing.h.patch | 47 +++++++++++++++++++
+ ...l-add-missing-include-in-dhcp-server.patch | 26 ++++++++++
+ package/ell/Config.in                         |  6 +--
+ package/ell/ell.hash                          |  2 +-
+ package/ell/ell.mk                            |  2 +-
+ 6 files changed, 88 insertions(+), 15 deletions(-)
+ rename package/ell/{0002-ell-rtnl-fix-compile-with-older-toolchains.patch => 0001-ell-rtnl-fix-compile-with-older-toolchains.patch} (84%)
+ create mode 100644 package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
+ create mode 100644 package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
 
-diff --git a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch b/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-deleted file mode 100644
-index 97f8c5a8e7..0000000000
---- a/package/iwd/0001-src-ap.c-fix-build-with-uclibc.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 377df79e83e2127a087e1aa5ba6173e195e50933 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 10 Sep 2020 07:47:14 +0200
--Subject: [PATCH] src/ap.c: fix build with uclibc
--
--explicit_bzero is used in src/ap.c since commit
--d55e00b31d7bccdbb2ea1cdeb0a749df77a51e47 but src/missing.h is not
--included, as a result build with uclibc fails on:
--
--/srv/storage/autobuild/run/instance-1/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: src/ap.o: in function `ap_probe_req_cb':
--ap.c:(.text+0x23d8): undefined reference to `explicit_bzero'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/c7a0096a269bfc52bd8e23d453d36d5bfb61441d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream: https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=0a6de7932a61ec82aca4f78f71dab7247c897860]
-----
-- src/ap.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/ap.c b/src/ap.c
--index c972cfcb..ac705c31 100644
----- a/src/ap.c
--+++ b/src/ap.c
--@@ -31,6 +31,7 @@
-- 
-- #include "linux/nl80211.h"
-- 
--+#include "src/missing.h"
-- #include "src/iwd.h"
-- #include "src/module.h"
-- #include "src/scan.h"
---- 
--2.28.0
--
-diff --git a/package/iwd/Config.in b/package/iwd/Config.in
-index 4e85fb4fd7..59d4422305 100644
---- a/package/iwd/Config.in
-+++ b/package/iwd/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_IWD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12 # ell
--	depends on !BR2_STATIC_LIBS # ell
- 	depends on BR2_USE_WCHAR # ell
- 	select BR2_PACKAGE_DBUS # runtime
- 	select BR2_PACKAGE_ELL
-@@ -14,8 +13,8 @@ config BR2_PACKAGE_IWD
+diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
+similarity index 84%
+rename from package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
+rename to package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
+index ba6cafa7a8..0375be854c 100644
+--- a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
++++ b/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
+@@ -1,4 +1,4 @@
+-From 60b4cd4c703be380aef194d31a1ffc4b42431bde Mon Sep 17 00:00:00 2001
++From c4218f71352ae5e39692e030d9af2c665dbb2eee Mon Sep 17 00:00:00 2001
+ From: Peter Seiderer <ps.report@gmx.net>
+ Date: Thu, 9 Apr 2020 22:21:36 +0200
+ Subject: [PATCH] ell/rtnl: fix compile with older toolchains
+@@ -18,6 +18,7 @@ Fixes:
+   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
  
- 	  https://iwd.wiki.kernel.org/
+ [Upstream: https://lists.ofono.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ]
++[Rebased for ell-0.35]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ ---
+  configure.ac | 2 ++
+@@ -25,10 +26,10 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+  2 files changed, 8 insertions(+), 1 deletion(-)
  
--comment "iwd needs a toolchain w/ threads, dynamic library, wchar, headers >= 4.12"
-+comment "iwd needs a toolchain w/ threads, wchar, headers >= 4.12"
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ell
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index 16e01ed473..77a84f156e 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
+ diff --git a/configure.ac b/configure.ac
+-index 0351f89..3be35a4 100644
++index 1e5ead9..bec472d 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -113,6 +113,8 @@ AC_CHECK_LIB(dl, dlopen, dummy=yes,
++@@ -110,6 +110,8 @@ AC_CHECK_FUNC(epoll_create, dummy=yes,
+  
+  AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
+  
+@@ -38,23 +39,24 @@ index 0351f89..3be35a4 100644
+  				[enable ell/glib main loop example]),
+  					[enable_glib=${enableval}])
+ diff --git a/ell/rtnl.c b/ell/rtnl.c
+-index dc83937..3493d34 100644
++index c115573..ccfa6fe 100644
+ --- a/ell/rtnl.c
+ +++ b/ell/rtnl.c
+-@@ -25,8 +25,9 @@
++@@ -25,9 +25,10 @@
+  #endif
+  
+  #define _GNU_SOURCE
+ -#include <linux/if.h>
+ +#include <sys/types.h>
++ #include <linux/icmpv6.h>
+  #include <sys/socket.h>
+ +#include <linux/if.h>
+  #include <arpa/inet.h>
+  
+  #include "util.h"
+-@@ -35,6 +36,10 @@
+- #include "rtnl.h"
+- #include "private.h"
++@@ -524,6 +525,10 @@ LIB_EXPORT bool l_rtnl_route_set_scope(struct l_rtnl_route *rt, uint8_t scope)
++ 	return true;
++ }
+  
+ +#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
+ +#define RTA_PREF 20
+@@ -64,5 +66,5 @@ index dc83937..3493d34 100644
+  {
+  	struct rtattr *rta = rta_buf;
+ -- 
+-2.26.0
++2.29.2
+ 
+diff --git a/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch b/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
+new file mode 100644
+index 0000000000..3e00023001
+--- /dev/null
++++ b/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
+@@ -0,0 +1,47 @@
++From 3916c1cc32be205e185a8a56de5cde1b9ec60e81 Mon Sep 17 00:00:00 2001
++From: Denis Kenzior <denkenz@gmail.com>
++Date: Mon, 30 Nov 2020 13:00:11 -0600
++Subject: [PATCH] build: Add rawmemchr to missing.h
++
++For those systems (i.e. musl) that do not support this
++
++[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac  |  1 +
++ ell/missing.h | 10 ++++++++++
++ 2 files changed, 11 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 1e5ead9..f34add1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -98,6 +98,7 @@ AC_ARG_ENABLE(ubsan, AC_HELP_STRING([--enable-ubsan],
++ ])
++ 
++ AC_CHECK_FUNCS(explicit_bzero)
+++AC_CHECK_FUNCS(rawmemchr)
++ 
++ AC_CHECK_FUNC(signalfd, dummy=yes,
++ 			AC_MSG_ERROR(signalfd support is required))
++diff --git a/ell/missing.h b/ell/missing.h
++index 6b9b0fd..2a3e647 100644
++--- a/ell/missing.h
+++++ b/ell/missing.h
++@@ -67,3 +67,13 @@ static inline void explicit_bzero(void *s, size_t n)
++ #ifndef SO_BINDTOIFINDEX
++ #define SO_BINDTOIFINDEX 62
++ #endif
+++
+++#ifndef HAVE_RAWMEMCHR
+++static inline void *rawmemchr(const void *s, int c)
+++{
+++_Pragma("GCC diagnostic push")
+++_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+++	return memchr(s, c, (size_t) -1);
+++_Pragma("GCC diagnostic pop")
+++}
+++#endif
++-- 
++2.29.2
++
+diff --git a/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch b/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
+new file mode 100644
+index 0000000000..a2ac7b0965
+--- /dev/null
++++ b/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
+@@ -0,0 +1,26 @@
++From 6dfff19d4716ba216de1a3298ed0f667d7782810 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=C3=89rico=20Nogueira?= <ericonr@disroot.org>
++Date: Mon, 30 Nov 2020 18:40:33 -0300
++Subject: [PATCH] ell: add missing include in dhcp-server.
++
++[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=6dfff19d4716ba216de1a3298ed0f667d7782810]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ ell/dhcp-server.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/ell/dhcp-server.c b/ell/dhcp-server.c
++index c983ed4..144e83e 100644
++--- a/ell/dhcp-server.c
+++++ b/ell/dhcp-server.c
++@@ -24,6 +24,7 @@
++ #include <config.h>
++ #endif
++ 
+++#include <linux/types.h>
++ #include <net/ethernet.h>
++ #include <sys/socket.h>
++ #include <arpa/inet.h>
++-- 
++2.29.2
++
+diff --git a/package/ell/Config.in b/package/ell/Config.in
+index d337154878..c7c9164816 100644
+--- a/package/ell/Config.in
++++ b/package/ell/Config.in
+@@ -2,14 +2,12 @@ config BR2_PACKAGE_ELL
+ 	bool "ell"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+-	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Embedded Linux library (ell)
+ 
+ 	  https://01.org/ell
+ 
+-comment "ell needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
++comment "ell needs a toolchain w/ wchar, headers >= 4.12"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index 43324e658d..b93c43a49d 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
 @@ -1,5 +1,5 @@
  # Locally computed
--sha256  e4178a105021ef1b7b7c23cbc6f8e45cbab3bb0830da588b406ff4a281e9f948  iwd-1.9.tar.gz
-+sha256  4f0007fb7594fe59baed71fb72c8390c472ff11c38b75d1f673375d4129ba5e2  iwd-1.10.tar.gz
+-sha256  fc3fd66739008fabf4b62f8bc1b37110cc44b9e8233c34f8d991939d0e0247b6  ell-0.33.tar.gz
++sha256  3f17aaaec2ad8eb8471ff2b18cc8d1bf48e55086bd95d22f327f06fde7c1c277  ell-0.35.tar.gz
  
  # License files
  sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 58d332dc07..b1841b5476 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index f35c022503..8aec067bc0 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IWD_VERSION = 1.9
-+IWD_VERSION = 1.10
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
+-ELL_VERSION = 0.33
++ELL_VERSION = 0.35
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 -- 
 2.29.2
