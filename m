@@ -1,53 +1,23 @@
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Tue, 01 Dec 2020 11:56:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/s390-tools: also set
- HAVE_LIBCURL
-In-Reply-To: <20201128100403.1123560-1-fontaine.fabrice@gmail.com>
-References: <20201128100403.1123560-1-fontaine.fabrice@gmail.com>
-Message-ID: <87360pyeuj.fsf@oc8242746057.ibm.com>
+From: yilu at bupt.edu.cn <yilu@bupt.edu.cn>
+Date: Tue, 1 Dec 2020 20:17:46 +0800
+Subject: [Buildroot] Is it possible to build rpm with buildroot?
+Message-ID: <202012012017451423165@bupt.edu.cn>+D811A4C807F73EA8
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello everyone.
 
-> Set HAVE_LIBCURL when libcurl is available to enable genprotimg and
-> libekmfweb:
-> https://github.com/ibm-s390-tools/s390-tools/blob/master/README.md
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/s390-tools/s390-tools.mk | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-> index dd70efe10b..bb261ff80e 100644
-> --- a/package/s390-tools/s390-tools.mk
-> +++ b/package/s390-tools/s390-tools.mk
-> @@ -19,9 +19,13 @@ S390_TOOLS_MAKE_OPTS = \
->  
->  ifeq ($(BR2_PACKAGE_LIBCURL),y)
->  S390_TOOLS_DEPENDENCIES += libcurl
-> -S390_TOOLS_MAKE_OPTS += HAVE_CURL=1
-> +S390_TOOLS_MAKE_OPTS += \
-> +	HAVE_CURL=1 \
-> +	HAVE_LIBCURL=1
->  else
-> -S390_TOOLS_MAKE_OPTS += HAVE_CURL=0
-> +S390_TOOLS_MAKE_OPTS += \
-> +	HAVE_CURL=0 \
-> +	HAVE_LIBCURL=0
->  endif
->  
->  ifeq ($(BR2_PACKAGE_JSON_C),y)
-> -- 
-> 2.29.2
+I am trying to build rpm for a Linux-like operating system, but instead of rootfs, I want to build rpm. Is it possible to build rpm with buildroot? If it is,  could you give me some advice?
 
-Reviewed-by: Alexander Egorenkov <egorenar@linux.ibm.com> 
+Thanks a lot.
 
-Thank you
 
-Regards
-Alex
+
+Beenle Yi
+yilu at bupt.edu.cn
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201201/49d74aeb/attachment.html>
