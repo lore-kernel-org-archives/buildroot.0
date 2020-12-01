@@ -1,50 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 1 Dec 2020 22:47:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/fmt: bump version to
- 7.1.3
-Message-ID: <20201201213223.E1F6F81452@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kmsxx: fix build with
+ gcc 10
+Message-ID: <20201201213223.EFCCE81452@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a110a5cf4b3d915dfc8bdb7e0a12a84cb9798fbb
+commit: https://git.buildroot.net/buildroot/commit/?id=eefebfe5dfd6dd34f3142c633a44ea1fe21c1ec7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For details see [1], [2], [3] and [4].
+Fixes:
+ - http://autobuild.buildroot.org/results/59f70fb725c2f07e27dc818839e02f2788ee490c
 
-[1] https://github.com/fmtlib/fmt/releases/tag/7.1.0
-[2] https://github.com/fmtlib/fmt/releases/tag/7.1.1
-[3] https://github.com/fmtlib/fmt/releases/tag/7.1.2
-[4] https://github.com/fmtlib/fmt/releases/tag/7.1.3
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...g-to-card.h-to-follow-gcc10-porting-guide.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 1f45c212f3..7947a17456 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  decfdf9ad274070fa85f26407b816f5a4d82205ae86bac1990be658d0795ea4d  fmt-7.0.3.zip
-+sha256  5d98c504d0205f912e22449ecdea776b78ce0bb096927334f80781e720084c9f  fmt-7.1.3.zip
- sha256  825c9324e70f8c839c8ba910543dd4a7daee243b86ef960594c11381a19980b8  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index 0539dcc024..000bacfd7b 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 7.0.3
-+FMT_VERSION = 7.1.3
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch
+new file mode 100644
+index 0000000000..a326577b04
+--- /dev/null
++++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch
+@@ -0,0 +1,25 @@
++From b53f9d383c9189a897c44cd88a8fc1b871fdc8a2 Mon Sep 17 00:00:00 2001
++From: Tobias Off <sebastianoff@web.de>
++Date: Thu, 8 Oct 2020 22:37:55 +0200
++Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
++ guide
++
++[Retrieved (and backported) from:
++https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ kms++/inc/kms++/card.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/kms++/inc/kms++/card.h b/kms++/inc/kms++/card.h
++index 0a7eaaf..f60b184 100644
++--- a/kms++/inc/kms++/card.h
+++++ b/kms++/inc/kms++/card.h
++@@ -4,6 +4,7 @@
++ #include <cstdint>
++ #include <vector>
++ #include <map>
+++#include <string>
++ 
++ #include "decls.h"
++ #include "pipeline.h"
