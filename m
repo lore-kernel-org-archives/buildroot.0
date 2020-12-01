@@ -1,67 +1,178 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Dec 2020 21:53:19 +0100
-Subject: [Buildroot] [PATCH] package/environment-setup: add better
- kernel handling
-In-Reply-To: <20201109165803.2415518-1-angelo@amarulasolutions.com>
-References: <20201109165803.2415518-1-angelo@amarulasolutions.com>
-Message-ID: <45041d67-715a-70a8-8f8e-4bde2869d3a9@mind.be>
+Date: Tue, 1 Dec 2020 22:12:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: fix util-linux-libs
+ dependency
+In-Reply-To: <20201103203837.GJ2887157@scaer>
+References: <20201101121536.1089498-1-fontaine.fabrice@gmail.com>
+ <20201101130358.GE2887157@scaer>
+ <CAPi7W82iy=kfpmsn1-z0F+ffScuVi1ivrMXFKNW+YUZy1vkrBA@mail.gmail.com>
+ <20201103203837.GJ2887157@scaer>
+Message-ID: <13ab56b7-92e3-6b80-6c74-e5eda212ac53@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ [Replying to this one, because it's the one with most of the discussion, but my
+comments really pertain to [1]]
+ [1]
+http://patchwork.ozlabs.org/project/buildroot/patch/20201103205745.123950-1-fontaine.fabrice at gmail.com/
 
 
-On 09/11/2020 17:58, Angelo Compagnucci wrote:
-> Exporting ARCH and KERNELDIR makes easier to compile an external kernel
-> or out of tree kernel modules.
+
+On 03/11/2020 21:38, Yann E. MORIN wrote:
+> Fabrice, All,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> On 2020-11-01 16:03 +0100, Fabrice Fontaine spake thusly:
+>> Le dim. 1 nov. 2020 ? 14:04, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>>> On 2020-11-01 13:15 +0100, Fabrice Fontaine spake thusly:
+>>>> Commit 2acaa86ce630f616b12aa92493e0269421c5bc97 replaced util-linux by
+>>>> util-linux-libs but this raises the following build failure:
+>>>>
+>>>> Makefile:585: *** util-linux-libs is in the dependency chain of libglib2 that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+>>>>
+>>>> To fix this build failure, use util-linux or util-linux-libs depending
+>>>> on BR2_PACKAGE_UTIL_LINUX_LIBS
+>>>
+>>> OK, so this is exactly what I did not like in this util-linux vs
+>>> util-linus-libs split, and the fact that util-linux-libs is optional...
+>>>
+>>> IMHO:
+>>>
+>>>  1. util-linux-libs must be enabled as soon as util-linux is enabled,
+>>>
+>>>  2. packages should build-depend on util-linux-libs, and never on
+>>>     util-linux, and should 'select BR2_PACKAGE_UTIL_LINUX_LIBS' if
+>>>     all they need is a library.
+>> We can't select BR2_PACKAGE_UTIL_LINUX_LIBS without selecting
+>> BR2_PACKAGE_UTIL_LINUX as BR2_PACKAGE_UTIL_LINUX_LIBS is a hidden
+>> option of BR2_PACKAGE_UTIL_LINUX.
+> 
+> No, we really need to make util-linux-libs a real package, not a hidden
+> one, like
+> 
+>     config BR2_PACAKGE_UTIL_LINUX_LIBS
+>         bool "util-linux-libs"
+>         help
+>           Only the libraries provided bby util-linux; if you need the
+>           tools too, select util-linux.
 
- Applied to next, thanks.
+ There's no need to make this user-selectable AFAICS.
+
+> 
+> and:
+> 
+>     config BR2_PACAKGE_UTIL_LINUX
+>         bool "util-linux"
+>         select BR2_PACAKGE_UTIL_LINUX_LIBS
+> 
+>     (or:)
+> 
+>     config BR2_PACAKGE_UTIL_LINUX_LIBMOUNT
+>         bool "libmount"
+>         select BR2_PACAKGE_UTIL_LINUX_LIBS
+
+ This was one of the possibilities that was considered/tried when Carlos and I
+worked on the util-linux split. I don't remember the details of why it didn't
+work, but basically it didn't :-) It *might* be just avoiding building
+util-linux twice if it's not needed though.
+
+
+> 
+>> Moreover, we'll select BR2_PACKAGE_UTIL_LINUX_LIBS as soon as
+>> BR2_PACKAGE_UTIL_LINUX is enabled (as per your first suggestion).
+>> As a result, util-linux will always be selected even if packages (such
+>> as abootimg) only build-depend on util-linux-libs.
+> 
+> Now that util-linux-libs is a full-gfledged package, it is selctable by
+> packages. See for example eudev os systemd, which already both select
+> BR2_PACKAGE_UTIL_LINUX_LIBS and biuld-depend on util-linux-libs.
+
+ And that's exactly the approach that should have been taken by libglib2 as well:
+
+	select BR2_PACKAGE_UTIL_LINUX_LIBS if BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+
+and unconditionally depend on util-linux-libs in libglib2.mk.
+
+
+> 
+>> So, in the end, we'll fix/clean the build order but util-linux will
+>> still be built but this is unavoidable unless util-linux-libs is moved
+>> to its own package.
+
+ Yes, util-linux will definitely always be built.
 
  Regards,
  Arnout
 
-> ---
->  package/environment-setup/environment-setup    | 1 +
->  package/environment-setup/environment-setup.mk | 5 +++++
->  2 files changed, 6 insertions(+)
 > 
-> diff --git a/package/environment-setup/environment-setup b/package/environment-setup/environment-setup
-> index 813aa01c7a..e9bc36fdd0 100644
-> --- a/package/environment-setup/environment-setup
-> +++ b/package/environment-setup/environment-setup
-> @@ -10,6 +10,7 @@ cat <<'EOF'
->  Some tips:
->  * PATH now contains the SDK utilities
->  * Standard autotools variables (CC, LD, CFLAGS) are exported
-> +* Kernel compilation variables (ARCH, CROSS_COMPILE, KERNELDIR) are exported
->  * To configure do "./configure $CONFIGURE_FLAGS" or use
->    the "configure" alias
->  * To build CMake-based projects, use the "cmake" alias
-> diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-> index fb87c6f0b7..fcad013f0d 100644
-> --- a/package/environment-setup/environment-setup.mk
-> +++ b/package/environment-setup/environment-setup.mk
-> @@ -11,6 +11,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
->  	for var in $(TARGET_CONFIGURE_OPTS); do \
->  		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
->  	done
-> +	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
->  	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
->  	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
->  		--host=$(GNU_TARGET_NAME) \
-> @@ -31,6 +32,10 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
->  		$(ENVIRONMENT_SETUP_FILE)
->  	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
->  		>> $(ENVIRONMENT_SETUP_FILE)
-> +
-> +	$(if $(BR2_LINUX_KERNEL),\
-> +		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
-> +			>> $(ENVIRONMENT_SETUP_FILE),)
->  endef
->  
->  $(eval $(host-generic-package))
+> It is already its own package; just it is not "user-visible".
+> 
+>> Did I misunderstood something?
+> 
+> The above, I guess. ;-)
+> 
+>> I'll send a 2-patch serie that implements your first suggestion and
+>> your second suggestion on abootimg. If it pleases you, I'll update the
+>> other packages.
+> 
+> Well, we can do it multi-pass, of course; fixing packages to build-depend
+> on util-linux-libs is not a lost effort anyway.
+> 
+> Thanks for your work! :-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>> So, for now I'll apply this patch, because we do need a fix.
+>>>
+>>> But ultimately, we wnat to sanitise this situation.
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>>> Fixes:
+>>>>  - http://autobuild.buildroot.org/results/8bf6360a343edd10c73a756ab86cdba727f9ea43
+>>>>
+>>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>>> ---
+>>>>  package/libglib2/libglib2.mk | 4 ++++
+>>>>  1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+>>>> index 43fcb27fae..6e9dbd7b26 100644
+>>>> --- a/package/libglib2/libglib2.mk
+>>>> +++ b/package/libglib2/libglib2.mk
+>>>> @@ -86,8 +86,12 @@ endif
+>>>>
+>>>>  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
+>>>>  LIBGLIB2_CONF_OPTS += -Dlibmount=enabled
+>>>> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBS),y)
+>>>>  LIBGLIB2_DEPENDENCIES += util-linux-libs
+>>>>  else
+>>>> +LIBGLIB2_DEPENDENCIES += util-linux
+>>>> +endif
+>>>> +else
+>>>>  LIBGLIB2_CONF_OPTS += -Dlibmount=disabled
+>>>>  endif
+>>>>
+>>>> --
+>>>> 2.28.0
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>> --
+>>> .-----------------.--------------------.------------------.--------------------.
+>>> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>>> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>>> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>>> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>>> '------------------------------^-------^------------------^--------------------'
+>> Best Regards,
+>>
+>> Fabrice
 > 
