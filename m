@@ -1,53 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 22:51:26 +0100
-Subject: [Buildroot] [PATCH/next v1] package/kmsxx: bump version to
- 5489056 and convert to meson build
-In-Reply-To: <20201129175633.388-1-ps.report@gmx.net>
-References: <20201129175633.388-1-ps.report@gmx.net>
-Message-ID: <20201201225126.6651a1e1@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Dec 2020 22:52:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/setserial: add license hash
+In-Reply-To: <20201128095725.1084152-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 28 Nov 2020 10:57:25 +0100")
+References: <20201128095725.1084152-1-bernd.kuhls@t-online.de>
+Message-ID: <87h7p5yz1s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 29 Nov 2020 18:56:33 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> - remove 0001-fix-compiler-errors-with-gcc-10.patch
->   (upstream)
-> 
-> - remove 0002-added-include-string-to-card.h-to-follow-gcc10-porti.patch
->   (upstream)
-> 
-> - convert to meson
-> 
-> - add patch to use system fmt instead of git submodule (fixes
->   configure 'ERROR: Include dir ext/fmt/include does not exist.')
-> 
-> - add patch to use system pybind11 instead of git submodule (fixes
->   configure 'ERROR: Include dir ext/pybind11/include does not exist.')
-> 
-> - add patch to use python only if pykms is enabled (fixes
->   configure 'ERROR: Dependency "pybind11" not found, tried pkgconfig')
-> 
-> - add optional libevdev dependency (needed for utils/kmstouch)
-> 
-> - update LICENSE file hash (replaced short copyright notice and
->   link to  http://mozilla.org/MPL/2.0/ with complete license text)
-> 
-> - lift toolchain headers requirement to at least 4.11 (include
->   linux/dma-buf.h)
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
->   - needs https://patchwork.ozlabs.org/project/buildroot/patch/20201129093823.10286-1-ps.report at gmx.net/
+ > Also reformatted hash file.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
 
-Applied to next, thanks.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
