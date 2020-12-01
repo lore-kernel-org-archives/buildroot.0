@@ -1,91 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2020 09:37:57 -0000
-Subject: [Buildroot] [git commit] package/radvd: bump to version 2.19
-Message-ID: <20201203092226.9EB24821E0@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 1 Dec 2020 22:43:39 +0100
+Subject: [Buildroot] [git commit] package/cups-filters: bump to version
+ 1.28.4
+Message-ID: <20201203092228.4CE9A821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e85ab44493624748398ffb2c6bf4bda409f2de7
+commit: https://git.buildroot.net/buildroot/commit/?id=ed3062319f93b9539ee4bb5982653fd6246b05ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version) and so autoreconf
+While bumping, removing upstreamed patches. Removing also autoreconf
+step cause we are not patching it anymore.
+License hash is changed due to remove of notice for file
+filter/sys5ippprinter.c.
 
-http://www.litech.org/radvd/CHANGES.txt:w
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-fstack-protector-the-toolchain-might-lac.patch | 27 ----------------------
- package/radvd/radvd.hash                           |  6 ++---
- package/radvd/radvd.mk                             |  4 +---
- 3 files changed, 4 insertions(+), 33 deletions(-)
+ ...e.ac-fix-cross-compilation-without-dejavu.patch | 41 ----------------------
+ package/cups-filters/cups-filters.hash             |  4 +--
+ package/cups-filters/cups-filters.mk               |  4 +--
+ 3 files changed, 3 insertions(+), 46 deletions(-)
 
-diff --git a/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch b/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
+diff --git a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch b/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
 deleted file mode 100644
-index 44768086cc..0000000000
---- a/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
+index 650b90a89b..0000000000
+--- a/package/cups-filters/0001-configure.ac-fix-cross-compilation-without-dejavu.patch
 +++ /dev/null
-@@ -1,27 +0,0 @@
--From 324e1ebc7b86f68f49fb4f1c34a4de60d18dd3c1 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Sun, 23 Nov 2014 12:17:11 +0100
--Subject: [PATCH 2/3] Don't force -fstack-protector, the toolchain might lack
-- support for it
+@@ -1,41 +0,0 @@
+-From 6ad1ed8b7939bf75079b0a770e234bfee7d33dbb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Jul 2020 23:02:50 +0200
+-Subject: [PATCH] configure.ac: fix cross-compilation without dejavu
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Cross-compilation is broken since commit 1d66106. Indeed, when
+-cross-compiling, dejavu font won't be installed in /usr/share/fonts. The
+-path (e.g. $(TARGET_DIR)/usr/share/fonts/dejavu/DejaVuSans.ttf) could be
+-provided through --with-test-font-path which will fix the build failure
+-but will result in broken test programs.
+-
+-So when cross-compiling don't try to check if the test-font-path is
+-valid or not and just use the one provided by the user or the default
+-one (e.g. /usr/share/fonts/dejavu/DejaVuSans.ttf)
+-
+-Fix #262
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/OpenPrinting/cups-filters/commit/6ad1ed8b7939bf75079b0a770e234bfee7d33dbb]
 ----
-- Makefile.am | 1 -
-- 1 file changed, 1 deletion(-)
+- configure.ac | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/Makefile.am b/Makefile.am
--index 80633e7..8b5a2e4 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -43,7 +43,6 @@ DISABLE_WARNINGS = \
+-diff --git a/configure.ac b/configure.ac
+-index aa905cf5d..4cc4fd6e5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -796,10 +796,10 @@ AC_ARG_WITH([test-font-path],
+- 	[with_test_font_path=`find /usr/share/fonts -name DejaVuSans.ttf || echo /usr/share/fonts/dejavu/DejaVuSans.ttf`]
+- )
 - 
-- AM_CFLAGS = \
-- 	-fno-strict-aliasing \
---	-fstack-protector \
-- 	$(ENABLE_WARNINGS) \
-- 	$(DISABLE_WARNINGS)
+--AS_IF([test -f "$with_test_font_path"],
+--	[AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])],
+-+AS_IF([test "x$cross_compiling" != "xyes" && ! test -f "$with_test_font_path"],
+- 	[AC_MSG_ERROR(DejaVuSans.ttf font file is missing. Please install a package providing it.)]
+- )
+-+AC_DEFINE_UNQUOTED([TESTFONT], ["$with_test_font_path"], [Path to font used in tests])
 - 
---- 
--2.1.0
--
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index 9ade027d27..a624db24ba 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
+- # ================
+- # Check for cflags
+diff --git a/package/cups-filters/cups-filters.hash b/package/cups-filters/cups-filters.hash
+index 61cb42a438..8c2526ae9d 100644
+--- a/package/cups-filters/cups-filters.hash
++++ b/package/cups-filters/cups-filters.hash
 @@ -1,3 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
--sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
--sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
-+# From http://www.litech.org/radvd/dist/radvd-2.19.tar.gz.sha512
-+sha512  caa621fd77e34ff6858d60a41b0ee02aff967ac14f2b84c402359744f4bece5c1563419860431c328adc0385e9893ed1f2421d652247a3aa0dfc0aaad1e01233  radvd-2.19.tar.gz
-+sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index ba0c78bd1e..7a650dc3c5 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256 08e4081ce50ce2e620af6e950bdcf64cea2ab4c81ab3c5ea05da25d82ad62db6  cups-filters-1.27.5.tar.gz
+-sha256 527463af65312372111804589a9624f4c52813e253062ae351e75af5003f317f  COPYING
++sha256 cf90b96b5c7a906a05070e757ee5566d9680db98a279e60567ea5421c38f11de  cups-filters-1.28.4.tar.gz
++sha256 38192ffdaca98b718f78b2d4abc38bb087f0bbcc9a16d212c98b903b985f900f  COPYING
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 237d8afe62..3ba031d5a1 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--RADVD_VERSION = 2.18
-+RADVD_VERSION = 2.19
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
- # We need to ignore <linux/if_arp.h>, because radvd already includes
-@@ -12,8 +12,6 @@ RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
- RADVD_CONF_ENV = \
- 	ac_cv_prog_cc_c99='-std=gnu99' \
- 	ac_cv_header_linux_if_arp_h=no
--# For 0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
--RADVD_AUTORECONF = YES
- RADVD_LICENSE = BSD-4-Clause-like
- RADVD_LICENSE_FILES = COPYRIGHT
+-CUPS_FILTERS_VERSION = 1.27.5
++CUPS_FILTERS_VERSION = 1.28.4
+ CUPS_FILTERS_SITE = http://openprinting.org/download/cups-filters
+ CUPS_FILTERS_LICENSE = GPL-2.0, GPL-2.0+, GPL-3.0, GPL-3.0+, LGPL-2, LGPL-2.1+, MIT, BSD-4-Clause
+ CUPS_FILTERS_LICENSE_FILES = COPYING
+-# We're patching configure.ac
+-CUPS_FILTERS_AUTORECONF = YES
+ 
+ CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
  
