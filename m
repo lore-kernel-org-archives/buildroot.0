@@ -1,44 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:24:33 +0100
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-pkix: bump
- version to 1.0.6
-Message-ID: <20201201221510.5C46F81682@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:24:34 +0100
+Subject: [Buildroot] [git commit branch/next] package/ejabberd: bump version
+ to 20.07
+Message-ID: <20201201221510.9AAA982BAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbe2c34083a8f77b240f2a613c1670d10626a688
+commit: https://git.buildroot.net/buildroot/commit/?id=0e58c21047f15fa6c59b7d63aa1cd7db1d8e4eb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+- Fix the download url to reflect upstream website changes.
+- Fix line numbers in patch 0001.
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-pkix/erlang-p1-pkix.hash | 4 ++--
- package/erlang-p1-pkix/erlang-p1-pkix.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...Makefile.in-do-not-download-or-compile-dependencies.patch | 12 ++++++------
+ package/ejabberd/ejabberd.hash                               |  4 ++--
+ package/ejabberd/ejabberd.mk                                 |  4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/erlang-p1-pkix/erlang-p1-pkix.hash b/package/erlang-p1-pkix/erlang-p1-pkix.hash
-index b11340b873..b0ee7d58ba 100644
---- a/package/erlang-p1-pkix/erlang-p1-pkix.hash
-+++ b/package/erlang-p1-pkix/erlang-p1-pkix.hash
+diff --git a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
+index 01a5362e5f..ffacb6dafd 100644
+--- a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
++++ b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
+@@ -1,6 +1,6 @@
+-From 277103e886c9b3ddfede8b3f5b92d3e94736f404 Mon Sep 17 00:00:00 2001
++From cb583beba1acba55112fbb4636c1c73d9ae691a0 Mon Sep 17 00:00:00 2001
+ From: Johan Oudinet <johan.oudinet@gmail.com>
+-Date: Fri, 23 Nov 2018 16:13:21 +0100
++Date: Fri, 20 Nov 2020 00:33:30 +0100
+ Subject: [PATCH] Makefile.in: do not download or compile dependencies
+ 
+ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+@@ -9,10 +9,10 @@ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/Makefile.in b/Makefile.in
+-index 48dca7d8..d2324dae 100644
++index abd64835..06f876bb 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -94,7 +94,7 @@ ifneq ($(INSTALLGROUP),)
++@@ -97,7 +97,7 @@ ifneq ($(INSTALLGROUP),)
+    G_USER=-g $(INSTALLGROUP)
+  endif
+  
+@@ -21,7 +21,7 @@ index 48dca7d8..d2324dae 100644
+  
+  deps: deps/.got
+  
+-@@ -108,7 +108,7 @@ deps/.built: deps/.got
++@@ -111,7 +111,7 @@ deps/.built: deps/.got
+  	$(REBAR) configure-deps
+  	$(REBAR) compile && :> deps/.built
+  
+@@ -31,5 +31,5 @@ index 48dca7d8..d2324dae 100644
+  
+  update:
+ -- 
+-2.17.1
++2.29.2
+ 
+diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
+index 145e7401a9..0d57ada5bb 100644
+--- a/package/ejabberd/ejabberd.hash
++++ b/package/ejabberd/ejabberd.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 184069d9055991cb8b7bd07dde8737a0a793e66e1ec1020deb680f83260a3e82 erlang-p1-pkix-1.0.4.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-+sha256  3a39c4ca74f93efa0e4de4c37f9e4d073b1aeb142ad669f12588ad2b3c39724e  erlang-p1-pkix-1.0.6.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/erlang-p1-pkix/erlang-p1-pkix.mk b/package/erlang-p1-pkix/erlang-p1-pkix.mk
-index 9f902d44bb..12ae042138 100644
---- a/package/erlang-p1-pkix/erlang-p1-pkix.mk
-+++ b/package/erlang-p1-pkix/erlang-p1-pkix.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256 18ddf61af22fc9b59f8afc6835aae2aee9896eb91cc1030056d6bca6a1fa40d2 ejabberd-19.09.1.tgz
+-sha256 469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb COPYING
++sha256  9e922b938458ae9d72d4e5fdd2d08a1fbad651aae47c9a9d15b79d0bbd1e11f8  ejabberd-20.07.tgz
++sha256  469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb  COPYING
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index 3419c6e59c..a0b4a63542 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ERLANG_P1_PKIX_VERSION = 1.0.4
-+ERLANG_P1_PKIX_VERSION = 1.0.6
- ERLANG_P1_PKIX_SITE = $(call github,processone,pkix,$(ERLANG_P1_PKIX_VERSION))
- ERLANG_P1_PKIX_LICENSE = Apache-2.0
- ERLANG_P1_PKIX_LICENSE_FILES = LICENSE
+-EJABBERD_VERSION = 19.09.1
++EJABBERD_VERSION = 20.07
+ EJABBERD_SOURCE = ejabberd-$(EJABBERD_VERSION).tgz
+-EJABBERD_SITE = https://www.process-one.net/downloads/ejabberd/$(EJABBERD_VERSION)
++EJABBERD_SITE = https://static.process-one.net/ejabberd/downloads/$(EJABBERD_VERSION)
+ EJABBERD_LICENSE = GPL-2.0+ with OpenSSL exception
+ EJABBERD_LICENSE_FILES = COPYING
+ EJABBERD_DEPENDENCIES = getent openssl erlang-eimp host-erlang-lager \
