@@ -1,42 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2020 09:37:55 -0000
-Subject: [Buildroot] [git commit] package/spdlog: bump to version 1.8.1
-Message-ID: <20201203092226.7F72D821E0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 23:24:34 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-xmpp: bump version to
+ 1.4.10
+Message-ID: <20201203092229.3C07F8361A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74486e3ce1747cb7cec948a5c8985157b2bf49ec
+commit: https://git.buildroot.net/buildroot/commit/?id=7ba849b8037dda5c2d7dc0d978c66c99ab09cf52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+upstream uses include_lib. Adapt the corresponding patch accordingly.
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 68dd7f1978..abb8bf9bdd 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/erlang-p1-xmpp/0001-fix-includes.patch | 4 ++--
+ package/erlang-p1-xmpp/erlang-p1-xmpp.hash     | 4 ++--
+ package/erlang-p1-xmpp/erlang-p1-xmpp.mk       | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/erlang-p1-xmpp/0001-fix-includes.patch b/package/erlang-p1-xmpp/0001-fix-includes.patch
+index d0a267b721..f02037fdc1 100644
+--- a/package/erlang-p1-xmpp/0001-fix-includes.patch
++++ b/package/erlang-p1-xmpp/0001-fix-includes.patch
+@@ -6,11 +6,11 @@ diff --git a/include/xmpp.hrl b/include/xmpp.hrl
+ index afa5f61..678858e 100644
+ --- a/include/xmpp.hrl
+ +++ b/include/xmpp.hrl
+-@@ -26,7 +26,7 @@
++@@ -25,7 +25,7 @@
+  -include("ns.hrl").
+  -include("jid.hrl").
+  -include("xmpp_codec.hrl").
+---include("fxml.hrl").
++--include_lib("fast_xml/include/fxml.hrl").
+ +-include_lib("p1_xml/include/fxml.hrl").
+ 
+  -type stanza() :: iq() | presence() | message().
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
+index 05578f9939..d0a761fcac 100644
+--- a/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  1e68e9b40cf63bb022a4b18cdc1c9d88eb5d97e4fd64fa981950a9cacf57a4bf  spdlog-1.8.0.tar.gz
-+sha256  5197b3147cfcfaa67dd564db7b878e4a4b3d9f3443801722b3915cdeced656cb  spdlog-1.8.1.tar.gz
- sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 8d8c3888bf..3c745f60ad 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
+-sha256 a192349e256c0c0af46e6d7f46c52e6345e61984a266696bb0346934c434f342 erlang-p1-xmpp-1.4.2.tar.gz
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE.txt
++sha256  65c73ffaf8faab5d6fc7d42ada0b5a380f20f3e46056ad98614d81922322d9a2  erlang-p1-xmpp-1.4.10.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
+index 2f74c60df2..f903cb945d 100644
+--- a/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
++++ b/package/erlang-p1-xmpp/erlang-p1-xmpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPDLOG_VERSION = 1.8.0
-+SPDLOG_VERSION = 1.8.1
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
+-ERLANG_P1_XMPP_VERSION = 1.4.2
++ERLANG_P1_XMPP_VERSION = 1.4.10
+ ERLANG_P1_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_P1_XMPP_VERSION))
+ ERLANG_P1_XMPP_LICENSE = Apache-2.0
+ ERLANG_P1_XMPP_LICENSE_FILES = LICENSE.txt
