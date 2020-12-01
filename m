@@ -1,46 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Dec 2020 21:38:48 +0100
-Subject: [Buildroot] [git commit] package/python-pydal: bump to version
- 20200910.1
-Message-ID: <20201203092227.C38D7821E0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 22:47:29 +0100
+Subject: [Buildroot] [git commit] package/kmsxx: fix build with gcc 10
+Message-ID: <20201203092228.6459A8012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7f98d08fc265435d9bf30a6e31b6fb0f2c96082
+commit: https://git.buildroot.net/buildroot/commit/?id=eefebfe5dfd6dd34f3142c633a44ea1fe21c1ec7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While bumping updating the sha256 computation method.
+Fixes:
+ - http://autobuild.buildroot.org/results/59f70fb725c2f07e27dc818839e02f2788ee490c
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pydal/python-pydal.hash | 4 ++--
- package/python-pydal/python-pydal.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...g-to-card.h-to-follow-gcc10-porting-guide.patch | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/package/python-pydal/python-pydal.hash b/package/python-pydal/python-pydal.hash
-index 161395ac52..224f32856f 100644
---- a/package/python-pydal/python-pydal.hash
-+++ b/package/python-pydal/python-pydal.hash
-@@ -1,3 +1,3 @@
--# sha256 from https://pypi.org/project/pyDAL/#files
--sha256  65bc77933eb9ac84874702629fcb167c18dc242a00cf7cc191899796761349e4  python-pydal-20200714.1.tar.gz
-+# sha256 locally computed
-+sha256  df54be164bcdab8ffc8db88cb72333cc4b27997ce58c302dd8ade36462d799ea  python-pydal-20200910.1.tar.gz
- sha256  1f711e93f1e0c2eec576e2e60597dc2ed6f0a661e4749c6b8a39f0d4a72be468  LICENSE.txt
-diff --git a/package/python-pydal/python-pydal.mk b/package/python-pydal/python-pydal.mk
-index 2ea3790a3d..2cac839a9e 100644
---- a/package/python-pydal/python-pydal.mk
-+++ b/package/python-pydal/python-pydal.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYDAL_VERSION = 20200714.1
-+PYTHON_PYDAL_VERSION = 20200910.1
- PYTHON_PYDAL_SITE = $(call github,web2py,pydal,v$(PYTHON_PYDAL_VERSION))
- PYTHON_PYDAL_LICENSE = BSD-3-Clause
- PYTHON_PYDAL_LICENSE_FILES = LICENSE.txt
+diff --git a/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch
+new file mode 100644
+index 0000000000..a326577b04
+--- /dev/null
++++ b/package/kmsxx/0002-added-include-string-to-card.h-to-follow-gcc10-porting-guide.patch
+@@ -0,0 +1,25 @@
++From b53f9d383c9189a897c44cd88a8fc1b871fdc8a2 Mon Sep 17 00:00:00 2001
++From: Tobias Off <sebastianoff@web.de>
++Date: Thu, 8 Oct 2020 22:37:55 +0200
++Subject: [PATCH] added #include <string> to card.h to follow gcc10 porting
++ guide
++
++[Retrieved (and backported) from:
++https://github.com/tomba/kmsxx/commit/b53f9d383c9189a897c44cd88a8fc1b871fdc8a2]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ kms++/inc/kms++/card.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/kms++/inc/kms++/card.h b/kms++/inc/kms++/card.h
++index 0a7eaaf..f60b184 100644
++--- a/kms++/inc/kms++/card.h
+++++ b/kms++/inc/kms++/card.h
++@@ -4,6 +4,7 @@
++ #include <cstdint>
++ #include <vector>
++ #include <map>
+++#include <string>
++ 
++ #include "decls.h"
++ #include "pipeline.h"
