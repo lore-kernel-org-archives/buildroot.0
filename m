@@ -1,44 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:24:33 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-yconf: bump version to
- 1.0.8
-Message-ID: <20201203092228.CF91D821E0@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:37:39 +0100
+Subject: [Buildroot] [git commit] package/python-serial: bump to version 3.5
+Message-ID: <20201203092229.904C8811FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76f15737647ff4c3b4cc1f86a2154b63ffa4b1b9
+commit: https://git.buildroot.net/buildroot/commit/?id=da59c616ba6f011296349f749030b9ef0b9f002d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+License hash changed due to year update.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-yconf/erlang-p1-yconf.hash | 4 ++--
- package/erlang-p1-yconf/erlang-p1-yconf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-serial/python-serial.hash | 6 +++---
+ package/python-serial/python-serial.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/erlang-p1-yconf/erlang-p1-yconf.hash b/package/erlang-p1-yconf/erlang-p1-yconf.hash
-index 6d0a9f68a1..97e71f85cd 100644
---- a/package/erlang-p1-yconf/erlang-p1-yconf.hash
-+++ b/package/erlang-p1-yconf/erlang-p1-yconf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 94724bde03c976cdf51d0d43eece73c70381ef60a9dd7e49292d194c0beaeb53 erlang-p1-yconf-1.0.1.tar.gz
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-+sha256  ab0f7462b8d03d18be1587fa9cfb227923055f765fca4459b4bb42ccef971329  erlang-p1-yconf-1.0.8.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/erlang-p1-yconf/erlang-p1-yconf.mk b/package/erlang-p1-yconf/erlang-p1-yconf.mk
-index 5d44ec7eec..3e3a10ae15 100644
---- a/package/erlang-p1-yconf/erlang-p1-yconf.mk
-+++ b/package/erlang-p1-yconf/erlang-p1-yconf.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
+index 96209a9965..d885d3c0c8 100644
+--- a/package/python-serial/python-serial.hash
++++ b/package/python-serial/python-serial.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pyserial/json
+-md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
+-sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
++md5  1cf25a76da59b530dbfc2cf99392dc83  pyserial-3.5.tar.gz
++sha256  3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb  pyserial-3.5.tar.gz
+ # Locally computed sha256 checksums
+-sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
++sha256  f91cb9813de6a5b142b8f7f2dede630b5134160aedaeaf55f4d6a7e2593ca3f3  LICENSE.txt
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index d583ac65ab..249ea9d5a3 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ERLANG_P1_YCONF_VERSION = 1.0.1
-+ERLANG_P1_YCONF_VERSION = 1.0.8
- ERLANG_P1_YCONF_SITE = $(call github,processone,yconf,$(ERLANG_P1_YCONF_VERSION))
- ERLANG_P1_YCONF_LICENSE = Apache-2.0
- ERLANG_P1_YCONF_LICENSE_FILES = LICENSE
+-PYTHON_SERIAL_VERSION = 3.4
++PYTHON_SERIAL_VERSION = 3.5
+ PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
+-PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
++PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/1e/7d/ae3f0a63f41e4d2f6cb66a5b57197850f919f59e558159a4dd3a818f5082
+ PYTHON_SERIAL_LICENSE = BSD-3-Clause
+ PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
+ PYTHON_SERIAL_SETUP_TYPE = setuptools
