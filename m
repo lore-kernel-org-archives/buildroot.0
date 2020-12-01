@@ -1,45 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2020 09:37:54 -0000
-Subject: [Buildroot] [git commit] package/grep: bump to version 3.6
-Message-ID: <20201203092225.DECBC815D8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 1 Dec 2020 23:24:17 +0100
+Subject: [Buildroot] [git commit] package/erlang-p1-zlib: bump version to
+ 1.0.9
+Message-ID: <20201203092228.9BA0D821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29ece7ead59e3621bcc4f85f07552c5ffe3df3b1
+commit: https://git.buildroot.net/buildroot/commit/?id=5f47e7adb4e3a3748abc3ba9f83020d00a73401b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The license file hash has changed due to:
+
+-Copyright 2002-2019 ProcessOne SARL
++Copyright 2002-2020 ProcessOne SARL
+
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/grep/grep.hash | 4 ++--
- package/grep/grep.mk   | 2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.hash | 4 ++--
+ package/erlang-p1-zlib/erlang-p1-zlib.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index fae3b73e80..9dfe2f2c23 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature
--# http://ftp.gnu.org/gnu/grep/grep-3.5.tar.xz.sig
-+# http://ftp.gnu.org/gnu/grep/grep-3.6.tar.xz.sig
- # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
--sha256  b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a  grep-3.5.tar.xz
-+sha256  667e15e8afe189e93f9f21a7cd3a7b3f776202f417330b248c2ad4f997d9373e  grep-3.6.tar.xz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index bdc22fa46c..198dc854e9 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.hash b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+index ed803d98d8..7ce58762f8 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.hash
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 7d39a3cb92ed7781b6b6ba95704e2591c626d62eddb3c52dcaeac60c339084d7 erlang-p1-zlib-1.0.6.tar.gz
+-sha256 6e68ca4488fcdacf80ea0a3f5a6a294d48c2d8dc9de520cc3d6b3f3c1bc12847 LICENSE.txt
++sha256  f0ac60336b2ddf55ac4f58934580cb8f02dba440d68feb607be312dd35d91269  erlang-p1-zlib-1.0.9.tar.gz
++sha256  6cd4871db940d055cf272c12c10e0c08febdc94362e404390758fde34b4ce01a  LICENSE.txt
+diff --git a/package/erlang-p1-zlib/erlang-p1-zlib.mk b/package/erlang-p1-zlib/erlang-p1-zlib.mk
+index 46a7d12862..0e6ee298ef 100644
+--- a/package/erlang-p1-zlib/erlang-p1-zlib.mk
++++ b/package/erlang-p1-zlib/erlang-p1-zlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GREP_VERSION = 3.5
-+GREP_VERSION = 3.6
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPL-3.0+
+-ERLANG_P1_ZLIB_VERSION = 1.0.6
++ERLANG_P1_ZLIB_VERSION = 1.0.9
+ ERLANG_P1_ZLIB_SITE = $(call github,processone,ezlib,$(ERLANG_P1_ZLIB_VERSION))
+ ERLANG_P1_ZLIB_LICENSE = Apache-2.0
+ ERLANG_P1_ZLIB_LICENSE_FILES = LICENSE.txt
