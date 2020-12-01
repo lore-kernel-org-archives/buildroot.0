@@ -1,118 +1,79 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  1 Dec 2020 20:30:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc-ng-test: fix TLS for nios2
-Message-ID: <20201201193057.403392-1-fontaine.fabrice@gmail.com>
+Date: Tue,  1 Dec 2020 21:23:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: fix static build with
+ mbedtls and zlib
+Message-ID: <20201201202300.427899-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix TLS for nios2 to avoid the following build failure:
-
-In file included from tst-tls1.c:6:
-tls-macros.h:101:3: error: #error "No support for this architecture so far."
- # error "No support for this architecture so far."
-   ^~~~~
-
 Fixes:
- - http://autobuild.buildroot.org/results/303e50d996b7261896f163418831fabb40779ff5
+ - http://autobuild.buildroot.org/results/5891d12e90182460cde1ddfa0ca75e9fd55e3dff
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0001-add-nios2-tls-macros-from-glibc.patch | 84 +++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
+ ...xt-fix-static-build-with-a-zlib-and-.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
 
-diff --git a/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch b/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
+diff --git a/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch b/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
 new file mode 100644
-index 0000000000..574d10c1b8
+index 0000000000..289ed1aaed
 --- /dev/null
-+++ b/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
-@@ -0,0 +1,84 @@
-+From bf6fcd59d1ff51584a703b1d78c9e8fd4f808917 Mon Sep 17 00:00:00 2001
++++ b/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
+@@ -0,0 +1,51 @@
++From 0c2d85450e3eb77dfbe11e8612a5131c5f3f3938 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 28 Nov 2020 11:44:00 +0100
-+Subject: [PATCH] add nios2 tls macros from glibc
++Date: Tue, 1 Dec 2020 20:39:54 +0100
++Subject: [PATCH] src/CMakeLists.txt: fix static build with a zlib and mbedtls
 +
-+Retrieved from
-+https://github.com/bminor/glibc/blob/master/sysdeps/nios2/tls-macros.h
++Static build with a zlib-enabled mbedtls fails on:
++
++[100%] Linking C executable example
++/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libmbedtls.a(ssl_tls.c.o): in function `mbedtls_ssl_transform_free.part.24':
++ssl_tls.c:(.text+0xbc6): undefined reference to `deflateEnd'
++
++As mbedtls does not provide a pkg-config file, search for zlib and link
++with it if necessary
++
++Fixes:
++ - http://autobuild.buildroot.org/results/5891d12e90182460cde1ddfa0ca75e9fd55e3dff
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/wbx-github/uclibc-ng-test/commit/bf6fcd59d1ff51584a703b1d78c9e8fd4f808917]
++[Upstream status: https://github.com/zhaojh329/libuhttpd/pull/13]
 +---
-+ test/tls/tls-macros-nios2.h | 46 +++++++++++++++++++++++++++++++++++++
-+ test/tls/tls-macros.h       |  4 ++++
-+ 2 files changed, 50 insertions(+)
-+ create mode 100644 test/tls/tls-macros-nios2.h
++ src/CMakeLists.txt | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
 +
-+diff --git a/test/tls/tls-macros-nios2.h b/test/tls/tls-macros-nios2.h
-+new file mode 100644
-+index 0000000..7029530
-+--- /dev/null
-++++ b/test/tls/tls-macros-nios2.h
-+@@ -0,0 +1,46 @@
-++#define TLS_LE(x)					\
-++  ({ int *__result;					\
-++     asm ("addi %0, r23, %%tls_le(" #x ")"		\
-++	  : "=r" (__result));		                \
-++     __result; })
-++
-++#define TLS_IE(x)					\
-++  ({ int *__result;					\
-++     int __tmp;                                         \
-++     asm ("nextpc %0 ; "                                \
-++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
-++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
-++          "add %0, %0, %1 ; "                           \
-++          "ldw %1, %%tls_ie(" #x ")(%0) ; "        	\
-++	  "add %1, r23, %1"              		\
-++          : "=&r" (__tmp), "=&r" (__result));           \
-++     __result; })
-++
-++#define TLS_LD(x)					\
-++  ({ char *__result;					\
-++     char *__result2;                                   \
-++     int *__result3;                                    \
-++     int __tmp;                                         \
-++     extern void *__tls_get_addr (void *);		\
-++     asm ("nextpc %0 ; "                                \
-++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
-++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
-++          "add %0, %0, %1 ; "                           \
-++          "addi %0, %0, %%tls_ldm(" #x ")"              \
-++          : "=r" (__result), "=r" (__tmp));             \
-++     __result2 = (char *)__tls_get_addr (__result);	\
-++     asm ("addi %0, %1, %%tls_ldo(" #x ")"              \
-++	  : "=r" (__result3) : "r" (__result2));        \
-++     __result3; })
-++
-++#define TLS_GD(x)					\
-++  ({ int *__result;					\
-++     int __tmp;                                         \
-++     extern void *__tls_get_addr (void *);		\
-++     asm ("nextpc %0 ; "                                \
-++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
-++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
-++          "add %0, %0, %1 ; "                           \
-++          "addi %0, %0, %%tls_gd(" #x ")"		\
-++	  : "=r" (__result), "=r" (__tmp));		\
-++     (int *)__tls_get_addr (__result); })
-+diff --git a/test/tls/tls-macros.h b/test/tls/tls-macros.h
-+index 4a4e916..087b365 100644
-+--- a/test/tls/tls-macros.h
-++++ b/test/tls/tls-macros.h
-+@@ -64,6 +64,10 @@
-+ #include <tls-macros-mips.h>
-+ #endif
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 132f243..f00fc8f 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -57,6 +57,7 @@ else()
++     endif()
++     find_package(WolfSSL)
++     find_package(MbedTLS)
+++    find_package(ZLIB)
 + 
-++#ifdef __nios2__
-++#include <tls-macros-nios2.h>
-++#endif
-++
-+ #if defined(__powerpc__) && !defined(__powerpc64__)
-+ #include <tls-macros-powerpc.h>
-+ #endif
++ 	if(UHTTPD_USE_OPENSSL)
++ 		if (NOT OPENSSL_FOUND)
++@@ -97,7 +98,11 @@ else()
++ 	elseif(UHTTPD_USE_MBEDTLS)
++ 		set(SSL_NAME "MbedTLS(PolarSSL)")
++ 		set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
++-		set(SSL_LIB ${MBEDTLS_LIBRARIES})
+++		if(ZLIB_FOUND)
+++			set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
+++		else()
+++			set(SSL_LIB ${MBEDTLS_LIBRARIES})
+++		endif()
++ 		set(UHTTPD_HAVE_MBEDTLS_CONFIG 1)
++ 	endif()
++ 
++-- 
++2.29.2
++
 -- 
 2.29.2
