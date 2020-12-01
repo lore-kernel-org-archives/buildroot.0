@@ -1,116 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:24:34 +0100
-Subject: [Buildroot] [git commit] package/erlang-p1-sip: bump version to
- 1.0.38
-Message-ID: <20201203092229.265208361A@busybox.osuosl.org>
+Date: Tue, 1 Dec 2020 23:37:32 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp-jinja2: bump to
+ version 1.4.2
+Message-ID: <20201203092229.72601811FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26da19b7c5eb548e7ab958b319dcd38a541e1640
+commit: https://git.buildroot.net/buildroot/commit/?id=064f263aa8e016fee81621c531951279bc72bdf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-upstream is finally using include_lib to include libraries. Adapt the patch
-accordingly.
+License hash changed due to formatting change.
 
-The hash of the license file has changed, due to:
-
--Copyright 2002-2019 ProcessOne SARL
-+Copyright 2002-2020 ProcessOne SARL
-
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-p1-sip/0001-correct-include.patch | 31 ++++++++++++++++++++++++
- package/erlang-p1-sip/0001-fix-includes.patch    | 19 ---------------
- package/erlang-p1-sip/erlang-p1-sip.hash         |  4 +--
- package/erlang-p1-sip/erlang-p1-sip.mk           |  2 +-
- 4 files changed, 34 insertions(+), 22 deletions(-)
+ package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash | 6 +++---
+ package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/erlang-p1-sip/0001-correct-include.patch b/package/erlang-p1-sip/0001-correct-include.patch
-new file mode 100644
-index 0000000000..90d68b5184
---- /dev/null
-+++ b/package/erlang-p1-sip/0001-correct-include.patch
-@@ -0,0 +1,31 @@
-+From 5ad4f871df7cbbc973708cb7380c3410b20bde1c Mon Sep 17 00:00:00 2001
-+From: Philipp Huebner <debalance@debian.org>
-+Date: Tue, 1 Dec 2020 23:07:51 +0100
-+Subject: [PATCH] correct include
-+
-+This part of the code was moved into it's own project and was packaged
-+separately by me. To make the build process work, this small fix is
-+necessary.
-+
-+Author: Philipp Huebner <debalance@debian.org>
-+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-+---
-+ src/esip_socket.erl | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/esip_socket.erl b/src/esip_socket.erl
-+index 4154faa..db5fa92 100644
-+--- a/src/esip_socket.erl
-++++ b/src/esip_socket.erl
-+@@ -37,7 +37,7 @@
-+ 
-+ -include("esip.hrl").
-+ -include("esip_lib.hrl").
-+--include_lib("stun/include/stun.hrl").
-++-include_lib("p1_stun/include/stun.hrl").
-+ 
-+ -define(TCP_SEND_TIMEOUT, 15000).
-+ -define(CONNECT_TIMEOUT, 20000).
-+-- 
-+2.28.0
-+
-diff --git a/package/erlang-p1-sip/0001-fix-includes.patch b/package/erlang-p1-sip/0001-fix-includes.patch
-deleted file mode 100644
-index 80e2ab36c2..0000000000
---- a/package/erlang-p1-sip/0001-fix-includes.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Description: correct include
-- This part of the code was moved into it's own project and was packaged
-- separately by me. To make the build process work, this small fix is
-- necessary.
--Author: Philipp Huebner <debalance@debian.org>
--
--Index: erlang-p1-sip/src/esip_socket.erl
--===================================================================
----- erlang-p1-sip.orig/src/esip_socket.erl
--+++ erlang-p1-sip/src/esip_socket.erl
--@@ -22,7 +22,7 @@
-- 
-- -include("esip.hrl").
-- -include("esip_lib.hrl").
----include("stun.hrl").
--+-include_lib("p1_stun/include/stun.hrl").
-- 
-- -define(TCP_SEND_TIMEOUT, 15000).
-- -define(CONNECT_TIMEOUT, 20000).
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.hash b/package/erlang-p1-sip/erlang-p1-sip.hash
-index 70b20f95dc..e52371e404 100644
---- a/package/erlang-p1-sip/erlang-p1-sip.hash
-+++ b/package/erlang-p1-sip/erlang-p1-sip.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 4c8dbba1dfcbb16a300fea5fd75f5ab2a145f011fa1ebff37e31e1672a9bc285 erlang-p1-sip-1.0.30.tar.gz
--sha256 6e68ca4488fcdacf80ea0a3f5a6a294d48c2d8dc9de520cc3d6b3f3c1bc12847 LICENSE.txt
-+sha256  b46349a7077d8e5f36a216ada4a5c0b51ef3d66005606beb0ea3962069f215a7  erlang-p1-sip-1.0.38.tar.gz
-+sha256  6cd4871db940d055cf272c12c10e0c08febdc94362e404390758fde34b4ce01a  LICENSE.txt
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-index f7f10caf94..2d2f0110c3 100644
---- a/package/erlang-p1-sip/erlang-p1-sip.mk
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+index 3563d2ab4b..44e2ae463f 100644
+--- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
++++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-jinja2/json
+-md5	7eb1a9be9e776c94d3bff73330c213d0  aiohttp-jinja2-1.2.0.tar.gz
+-sha256	2dfe29cfd278d07cd0a851afb98471bc8ce2a830968443e40d67636f3c035d79  aiohttp-jinja2-1.2.0.tar.gz
++md5  d474a6440ac906a9d818a03a540830ba  aiohttp-jinja2-1.4.2.tar.gz
++sha256  9c22a0e48e3b277fc145c67dd8c3b8f609dab36bce9eb337f70dfe716663c9a0  aiohttp-jinja2-1.4.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	2a86817fedf0c52baaa47d7dd975073639dfaaebd37312bd279de54d7f841791  LICENSE
++sha256  d9d867affaeac220a60381cc544681dcd37c668ed6ea5ddbf9948617f828889a  LICENSE
+diff --git a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+index 94a0c9d75a..724acdb601 100644
+--- a/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
++++ b/package/python-aiohttp-jinja2/python-aiohttp-jinja2.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ERLANG_P1_SIP_VERSION = 1.0.30
-+ERLANG_P1_SIP_VERSION = 1.0.38
- ERLANG_P1_SIP_SITE = $(call github,processone,esip,$(ERLANG_P1_SIP_VERSION))
- ERLANG_P1_SIP_LICENSE = Apache-2.0
- ERLANG_P1_SIP_LICENSE_FILES = LICENSE.txt
+-PYTHON_AIOHTTP_JINJA2_VERSION = 1.2.0
++PYTHON_AIOHTTP_JINJA2_VERSION = 1.4.2
+ PYTHON_AIOHTTP_JINJA2_SOURCE = aiohttp-jinja2-$(PYTHON_AIOHTTP_JINJA2_VERSION).tar.gz
+-PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/9c/fb/8f1f8941e1e1937247c6de552668d73ab8ef860a1d633072d9f4e3c9b542
++PYTHON_AIOHTTP_JINJA2_SITE = https://files.pythonhosted.org/packages/da/4f/3b1a0c7177fdb0417308a95bfa8340f19cf84b44f8f2d734cd3052f56644
+ PYTHON_AIOHTTP_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_JINJA2_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_JINJA2_LICENSE_FILES = LICENSE
