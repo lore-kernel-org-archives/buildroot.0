@@ -1,87 +1,75 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed,  2 Dec 2020 19:49:53 +0100
-Subject: [Buildroot] [PATCH 1/2] libtirpc: remove NIS patch
-Message-ID: <20201202184954.19808-1-petr.vorel@gmail.com>
+Date: Wed, 2 Dec 2020 19:51:50 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libtirpc: bump version to 1.3.1
+In-Reply-To: <20201202184954.19808-2-petr.vorel@gmail.com>
+References: <20201202184954.19808-1-petr.vorel@gmail.com>
+ <20201202184954.19808-2-petr.vorel@gmail.com>
+Message-ID: <X8fiRo3ulHD4Yxtw@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It was originally added in 6dc861f2a2 ("libtirpc: new package")
-for libtirpc 0.2.2 (8 years ago). It might have been fixed in
-5f00f8c ("Remove dependency to nis.h"), released in 1.0.2.
+Hi,
 
-Testing with test-pkg shows the only failure for br-riscv32:
-RPC support not available in C library, please disable
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+> -LIBTIRPC_VERSION = 1.2.6
+> +LIBTIRPC_VERSION = 1.3.1
+>  LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+>  LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+>  LIBTIRPC_LICENSE = BSD-3-Clause
 
-But test fails with the same error even when this patch is kept.
+Tested:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Originally sent in
-https://patchwork.ozlabs.org/project/buildroot/patch/20201127203907.16845-1-petr.vorel at gmail.com/
+                             andes-nds32 [ 1/45]: OK
+                             arm-aarch64 [ 2/45]: OK
+                    bootlin-x86-64-glibc [ 3/45]: OK
+                        br-aarch64-glibc [ 4/45]: OK
+                           br-arcle-hs38 [ 5/45]: OK
+                            br-arm-basic [ 6/45]: OK
+                  br-arm-cortex-a9-glibc [ 7/45]: OK
+                   br-arm-cortex-a9-musl [ 8/45]: OK
+                   br-arm-cortex-m4-full [ 9/45]: OK
+                             br-arm-full [10/45]: OK
+                    br-arm-full-nothread [11/45]: SKIPPED
+                      br-arm-full-static [12/45]: OK
+                br-i386-pentium-mmx-musl [13/45]: OK
+                   br-i386-pentium4-full [14/45]: OK
+                    br-microblazeel-full [15/45]: OK
+                      br-mipsel-o32-full [16/45]: OK
+                 br-mips32r6-el-hf-glibc [17/45]: OK
+                      br-mips64-n64-full [18/45]: OK
+                 br-mips64r6-el-hf-glibc [19/45]: OK
+                       br-m68k-5208-full [20/45]: OK
+                      br-m68k-68040-full [21/45]: OK
+                          br-nios2-glibc [22/45]: OK
+                      br-openrisc-uclibc [23/45]: OK
+                  br-powerpc-e500mc-full [24/45]: OK
+               br-powerpc-603e-basic-cpp [25/45]: OK
+             br-powerpc64le-power8-glibc [26/45]: OK
+               br-powerpc64-power7-glibc [27/45]: OK
+                              br-riscv32 [28/45]: FAILED
+                              br-riscv64 [29/45]: OK
+                         br-riscv64-musl [30/45]: OK
+                             br-sh4-full [31/45]: OK
+                         br-sparc-uclibc [32/45]: OK
+                        br-sparc64-glibc [33/45]: OK
+                          br-xtensa-full [34/45]: OK
+                    br-x86-64-core2-full [35/45]: OK
+                          br-x86-64-musl [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                           sourcery-mips [43/45]: OK
+                         sourcery-mips64 [44/45]: OK
+                          sourcery-nios2 [45/45]: OK
+45 builds, 1 skipped, 1 build failed, 0 legal-info failed
 
- ...parts-of-TIRPC-requiring-NIS-support.patch | 50 -------------------
- 1 file changed, 50 deletions(-)
- delete mode 100644 package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+Again, br-riscv32 should not be affected by this change
+(BR2_TOOLCHAIN_EXTERNAL_INET_RPC, broken also without this patchset).
 
-diff --git a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-deleted file mode 100644
-index 101a779ade..0000000000
---- a/package/libtirpc/0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From cb30579c9195ae29c82545c934e0bd9677262bce Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Fri, 20 Dec 2019 17:58:17 +0100
--Subject: [PATCH] Disable parts of TIRPC requiring NIS support
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[yann.morin.1998 at free.fr: update for 0.3.1]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--[joerg.krause at embedded.rocks: update for 0.3.2]
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
--[peda at axentia.se: update for 1.0.1]
--Signed-off-by: Peter Rosin <peda@axentia.se>
--[bernd.kuhls at t-online.de: update for 1.0.2]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[pvorel: update for 1.2.5]
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-----
-- src/Makefile.am | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/Makefile.am b/src/Makefile.am
--index b2d5436..864f984 100644
----- a/src/Makefile.am
--+++ b/src/Makefile.am
--@@ -24,7 +24,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c \
--         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
--         rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
--         svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
---        auth_time.c debug.c 
--+        debug.c
-- 
-- if AUTHDES
-- libtirpc_la_SOURCES += auth_des.c  authdes_prot.c  des_crypt.c  des_impl.c  des_soft.c  svc_auth_des.c
--@@ -45,8 +45,8 @@ if GSS
--     libtirpc_la_CFLAGS = -DHAVE_RPCSEC_GSS $(GSSAPI_CFLAGS)
-- endif
-- 
---libtirpc_la_SOURCES += key_call.c key_prot_xdr.c getpublickey.c
---libtirpc_la_SOURCES += netname.c netnamer.c rpcdname.c rtime.c
--+#libtirpc_la_SOURCES += key_call.c key_prot_xdr.c getpublickey.c
--+#libtirpc_la_SOURCES += netname.c netnamer.c rpcdname.c rtime.c
-- 
-- CLEANFILES	       = cscope.* *~
-- DISTCLEANFILES	       = Makefile.in
---- 
--2.24.0
--
--- 
-2.29.2
+Kind regards,
+Petr
