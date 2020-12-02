@@ -1,95 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  2 Dec 2020 22:11:02 +0100
-Subject: [Buildroot] [PATCH/next v1] package/xerces: bump version to 3.2.3
-Message-ID: <20201202211102.31629-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  2 Dec 2020 22:18:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bind: drop unrecognized option
+Message-ID: <20201202211848.56609-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- removed 0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
-  (upstream [1])
+Drop --enable-newstats option which is not recognized
 
-[1] https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69
+Unrecognized options:
+    --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --disable-nls, --enable-newstats
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...s-to-fail-and-fall-back-to-nothreads.patch | 38 -------------------
- package/xerces/xerces.hash                    |  6 +--
- package/xerces/xerces.mk                      |  2 +-
- 3 files changed, 4 insertions(+), 42 deletions(-)
- delete mode 100644 package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+ package/bind/bind.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
-deleted file mode 100644
-index 8bed7711c4..0000000000
---- a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From c9bfe786331647237b90f5f9e35b4d2cad7aaa69 Mon Sep 17 00:00:00 2001
--From: Roger Leigh <rleigh@apache.org>
--Date: Fri, 12 Oct 2018 12:02:58 +0000
--Subject: [PATCH] cmake: Allow thread checks to fail and fall back to nothreads
--
--Closes: #2155
--
--
--git-svn-id: https://svn.apache.org/repos/asf/xerces/c/trunk at 1843653 13f79535-47bb-0310-9956-ffa450edef68
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from: https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69]
-----
-- cmake/XercesMutexMgrSelection.cmake | 10 +++++++---
-- 1 file changed, 7 insertions(+), 3 deletions(-)
--
--diff --git a/cmake/XercesMutexMgrSelection.cmake b/cmake/XercesMutexMgrSelection.cmake
--index 2f1d71c50..ad698840d 100644
----- a/cmake/XercesMutexMgrSelection.cmake
--+++ b/cmake/XercesMutexMgrSelection.cmake
--@@ -19,11 +19,15 @@
-- 
-- # mutexmgr selection
-- 
---option(threads "Threading support" ON)
--+set(xerces_thread_default ON)
--+find_package(Threads)
--+if(NOT TARGET Threads::Threads)
--+  set(xerces_thread_default ON)
--+endif()
-- 
---include(CheckCXXSourceCompiles)
--+option(threads "Threading support" ${xerces_thread_default})
-- 
---find_package(Threads REQUIRED)
--+include(CheckCXXSourceCompiles)
-- 
-- function(thread_test outvar)
--   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-index 28db0c6062..c75ce860e8 100644
---- a/package/xerces/xerces.hash
-+++ b/package/xerces/xerces.hash
-@@ -1,5 +1,5 @@
--# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.2.tar.xz.sha256
--sha256 6daca3b23364d8d883dc77a73f681242f69389e3564543287ed3d073007e0a8e xerces-c-3.2.2.tar.xz
-+# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.xz.sha256
-+sha256  12fc99a9fc1d1a79bd0e927b8b5637a576d6656f45b0d5e70ee3694d379cc149  xerces-c-3.2.3.tar.xz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 18fc4845f9..d937246fd0 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -47,7 +47,7 @@ BIND_CONF_OPTS += --disable-linux-caps
+ endif
  
- # Hash for license file
--sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index ae42b1e62f..d05facf3b5 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XERCES_VERSION = 3.2.2
-+XERCES_VERSION = 3.2.3
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
- XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
- XERCES_LICENSE = Apache-2.0
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+-BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
++BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
+ BIND_DEPENDENCIES += libxml2
+ else
+ BIND_CONF_OPTS += --with-libxml2=no
 -- 
 2.29.2
