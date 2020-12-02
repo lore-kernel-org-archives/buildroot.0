@@ -1,35 +1,64 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 2 Dec 2020 17:57:31 +0100
-Subject: [Buildroot] [PATCH] package/libgpiod: bump version to 1.6
-In-Reply-To: <CAMRc=MetvQ8Wx6GGD9MW_=Kt_xX+D2f=q1=+R7HdesmnR5OQOg@mail.gmail.com>
-References: <CAMRc=MfTQ4o8TTV6UDR27dGBPqbUJA9EAFykdO0Rb3LDjp4Gkw@mail.gmail.com>
- <57-5f9bc680-3-4a87f08@125885651> <20201030091929.18f77130@windsurf.home>
- <CAMRc=MexG_jDoNuuVzRmNqHD56yYJmwzq43JgGo38equmPiqzQ@mail.gmail.com>
- <20201030101559.0a1fb98c@windsurf.home>
- <CAMRc=MfwZVv10O2DsQitxDsXdpXRSC29VpvqTkC81CkOBUFoLQ@mail.gmail.com>
- <20201030103450.57c772b3@windsurf.home>
- <CAMRc=Mfmk7Bb+eEJ8ikeBfMRir0eBAj7z53eqDK=f-XJqEN5Cg@mail.gmail.com>
- <20201030114153.4e47cdf8@windsurf.home>
- <CAMRc=MdXOK1qScv+b3vr-b9gr9Nwb0Yv=CqdtiCNF6UMM2niMg@mail.gmail.com>
- <854f8b3d-20bd-769a-ee3d-3639529a5fc0@mind.be>
- <CAMRc=Mfu40GYakBHNU_jyAjFLhFhb7r63tVoTY2QZVuikHXP-A@mail.gmail.com>
- <CAMRc=MetvQ8Wx6GGD9MW_=Kt_xX+D2f=q1=+R7HdesmnR5OQOg@mail.gmail.com>
-Message-ID: <7d32b298-f286-da0e-a7a8-3e7481363aeb@green-communications.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 2 Dec 2020 18:18:01 +0100
+Subject: [Buildroot] [PATCH v3] package/trace-cmd: bump to version 2.9.1
+In-Reply-To: <CADYdroNAR6hJbyXRqwZ_Y-CuOGrJ2GPcCcON_tFbiuzfsy5iFA@mail.gmail.com>
+References: <20201103155335.212037-1-nolange79@gmail.com>
+ <1a359277-1c75-f5eb-2998-5c79d837c7ea@mind.be>
+ <CADYdroNAR6hJbyXRqwZ_Y-CuOGrJ2GPcCcON_tFbiuzfsy5iFA@mail.gmail.com>
+Message-ID: <d16cf456-1f03-8021-aa82-ece054a3ddf1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/11/2020 21:31, Bartosz Golaszewski wrote:
-> Thomas,
+
+
+On 02/12/2020 17:37, Norbert Lange wrote:
+> Am Di., 1. Dez. 2020 um 21:35 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
+>>
+>>  Hi Norbert,
+>>
+>> On 03/11/2020 16:53, Norbert Lange wrote:
+[snip]
+>>>  define TRACE_CMD_BUILD_CMDS
+>>> -     $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>>> -             CFLAGS="$(TRACE_CMD_CFLAGS)" \
+>>> -             CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
+>>> -             $(TRACE_CMD_MAKE_OPTS) \
+>>> -             -C $(@D) all
+>>> +     $(TARGET_CONFIGURE_OPTS) \
+>>> +     CFLAGS="$(TRACE_CMD_CFLAGS)" \
+>>> +     CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
+>>
+>>  Can you explain in the commit message why these are passed in the environment
+>> now instead of on the command line?
 > 
-> I made a new release that redefines needed symbols if building on
-> linux pre v5.5. I'm wondering though: what is the correct approach for
-> C libraries if certain kernel uAPI symbols are missing? Redefine them
-> or just live with ifdefs in the code?
+> I do a "normal" build now, instead of using a fragment in a subdirectory.
 
-Include a copy of the latest uapi headers that you use directly in your 
-source tree.
+ Err... Before it was "make all", where do you see the anything about a fragment
+in a subdirectory?
 
-At least, this is what libnl, iproute2, iw, hostapd and wpa_supplicant do.
+> Means the Makefile would like to do stuff like adding include paths which doesnt
+> work if the variables are overriden.
+
+ Yes, that's exactly the kind of explanation I would expect in the commit message.
+
+> 
+> As rationale I would use: "Thats the way you normally build packages",
+> aswell as "Thats how you would DL the source" (instead of doing a git
+> fetch, in regards to last point).
+
+ It was git before because kernel.org has only recently started supporting
+tarball downloads from git (where "recently" is about a year ago I think, maybe
+even two).
+
+
+ Regards,
+ Arnout
+
+> Of course I don't know why it was done in a entirely different manner
+> before, so I might be missing something
+> 
+> Norbert
+> 
