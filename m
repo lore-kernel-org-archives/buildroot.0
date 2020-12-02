@@ -1,42 +1,95 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  2 Dec 2020 22:00:58 +0100
-Subject: [Buildroot] [PATCH/next v1] package/ethtool: bump version to 5.9
-Message-ID: <20201202210058.27985-1-ps.report@gmx.net>
+Date: Wed,  2 Dec 2020 22:11:02 +0100
+Subject: [Buildroot] [PATCH/next v1] package/xerces: bump version to 3.2.3
+Message-ID: <20201202211102.31629-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- removed 0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+  (upstream [1])
+
+[1] https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...s-to-fail-and-fall-back-to-nothreads.patch | 38 -------------------
+ package/xerces/xerces.hash                    |  6 +--
+ package/xerces/xerces.mk                      |  2 +-
+ 3 files changed, 4 insertions(+), 42 deletions(-)
+ delete mode 100644 package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 3c17fca51e..f4503ef907 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
+diff --git a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch b/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
+deleted file mode 100644
+index 8bed7711c4..0000000000
+--- a/package/xerces/0001-cmake-Allow-thread-checks-to-fail-and-fall-back-to-nothreads.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From c9bfe786331647237b90f5f9e35b4d2cad7aaa69 Mon Sep 17 00:00:00 2001
+-From: Roger Leigh <rleigh@apache.org>
+-Date: Fri, 12 Oct 2018 12:02:58 +0000
+-Subject: [PATCH] cmake: Allow thread checks to fail and fall back to nothreads
+-
+-Closes: #2155
+-
+-
+-git-svn-id: https://svn.apache.org/repos/asf/xerces/c/trunk at 1843653 13f79535-47bb-0310-9956-ffa450edef68
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from: https://github.com/apache/xerces-c/commit/c9bfe786331647237b90f5f9e35b4d2cad7aaa69]
+----
+- cmake/XercesMutexMgrSelection.cmake | 10 +++++++---
+- 1 file changed, 7 insertions(+), 3 deletions(-)
+-
+-diff --git a/cmake/XercesMutexMgrSelection.cmake b/cmake/XercesMutexMgrSelection.cmake
+-index 2f1d71c50..ad698840d 100644
+---- a/cmake/XercesMutexMgrSelection.cmake
+-+++ b/cmake/XercesMutexMgrSelection.cmake
+-@@ -19,11 +19,15 @@
+- 
+- # mutexmgr selection
+- 
+--option(threads "Threading support" ON)
+-+set(xerces_thread_default ON)
+-+find_package(Threads)
+-+if(NOT TARGET Threads::Threads)
+-+  set(xerces_thread_default ON)
+-+endif()
+- 
+--include(CheckCXXSourceCompiles)
+-+option(threads "Threading support" ${xerces_thread_default})
+- 
+--find_package(Threads REQUIRED)
+-+include(CheckCXXSourceCompiles)
+- 
+- function(thread_test outvar)
+-   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
+index 28db0c6062..c75ce860e8 100644
+--- a/package/xerces/xerces.hash
++++ b/package/xerces/xerces.hash
 @@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  2f3b54d08d048f5977b80cb6cb4744994370def7553ee634d39dbbb6ccf87546  ethtool-5.8.tar.xz
-+sha256  512932010af87bc3e09773c89baea44bca96c1da1151bbcf109fa0e055a88a6f  ethtool-5.9.tar.xz
- # Locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index 1668171f3a..7d82386ebe 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+-# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.2.tar.xz.sha256
+-sha256 6daca3b23364d8d883dc77a73f681242f69389e3564543287ed3d073007e0a8e xerces-c-3.2.2.tar.xz
++# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.2.3.tar.xz.sha256
++sha256  12fc99a9fc1d1a79bd0e927b8b5637a576d6656f45b0d5e70ee3694d379cc149  xerces-c-3.2.3.tar.xz
+ 
+ # Hash for license file
+-sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index ae42b1e62f..d05facf3b5 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 5.8
-+ETHTOOL_VERSION = 5.9
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-XERCES_VERSION = 3.2.2
++XERCES_VERSION = 3.2.3
+ XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
+ XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
+ XERCES_LICENSE = Apache-2.0
 -- 
 2.29.2
