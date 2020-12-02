@@ -1,54 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Dec 2020 08:16:00 +0100
-Subject: [Buildroot] [git commit] package/docker-containerd: security bump
- to version 1.4.3
-Message-ID: <20201202070158.541BE82A1A@busybox.osuosl.org>
+Date: Wed, 2 Dec 2020 08:16:16 +0100
+Subject: [Buildroot] [git commit] package/gnuplot: security bump to version
+ 5.4.1
+Message-ID: <20201202070158.60A1B7FB66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e1d1278c7112f44ce694958047ee512f20b4360
+commit: https://git.buildroot.net/buildroot/commit/?id=bd5b91fb425b4fc23aadd4f12c06543247d1dd89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
+- Fix CVE-2020-25412: com_line() in command.c in gnuplot 5.4 leads to an
+  out-of-bounds-write from strncpy() that may lead to arbitrary code
+  execution.
+- Drop second patch (already in version)
+- Update indentation in hash file (two spaces)
 
-- CVE-2020-15257: Access controls for the shim???s API socket verified that
-  the connecting process had an effective UID of 0, but did not otherwise
-  restrict access to the abstract Unix domain socket.  This would allow
-  malicious containers running in the same network namespace as the shim,
-  with an effective UID of 0 but otherwise reduced privileges, to cause new
-  processes to be run with elevated privileges.
+http://gnuplot.info/ReleaseNotes_5_4_1.html
 
-For more details, see the advisory:
-https://github.com/containerd/containerd/security/advisories/GHSA-36xw-fx78-c5r4
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnuplot/0002-without-history.patch | 17 -----------------
+ package/gnuplot/gnuplot.hash               |  8 ++++----
+ package/gnuplot/gnuplot.mk                 |  2 +-
+ 3 files changed, 5 insertions(+), 22 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 2ec3d042ba..c5cfc137b8 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256	d410b8efc94e4124990f01de7107223971be8c9258fc651decf9e0ba648485b5  docker-containerd-1.4.1.tar.gz
-+sha256	bc6d9452c700af0ebc09c0da8ddba55be4c03ac8928e72ca92d98905800c8018  docker-containerd-1.4.3.tar.gz
- sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 71f9b4c065..d9a0eb28a6 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
+diff --git a/package/gnuplot/0002-without-history.patch b/package/gnuplot/0002-without-history.patch
+deleted file mode 100644
+index 6091da8415..0000000000
+--- a/package/gnuplot/0002-without-history.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-history.c: Patch to solve the 'undefined reference to gp_read_history'
+-
+-Signed-off-by: Michael Fischer <mf@go-sys.de>
+-
+-diff -purN gnuplot-5.4.0.org/src/history.c gnuplot-5.4.0/src/history.c
+---- gnuplot-5.4.0.org/src/history.c	2019-12-10 07:22:32.000000000 +0100
+-+++ gnuplot-5.4.0/src/history.c	2020-09-14 10:07:36.525441702 +0200
+-@@ -91,7 +91,9 @@ write_history(char *filename)
+- void
+- read_history(char *filename)
+- {
+--    gp_read_history(filename);
+-+#ifdef GNUPLOT_HISTORY
+-+    	gp_read_history(filename);
+-+#endif	
+- }
+- 
+diff --git a/package/gnuplot/gnuplot.hash b/package/gnuplot/gnuplot.hash
+index 260b78314e..9770185c21 100644
+--- a/package/gnuplot/gnuplot.hash
++++ b/package/gnuplot/gnuplot.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.0/
+-md5 ac586178f3b031dea82cd3890cefb21b  gnuplot-5.4.0.tar.gz
+-sha1 b4660dff7d047a453c55fd77faba11f63bb2d5ed  gnuplot-5.4.0.tar.gz
++# From https://sourceforge.net/projects/gnuplot/files/gnuplot/5.4.1/
++md5  80f75b684f1175d36cd6908ff1ceb588  gnuplot-5.4.1.tar.gz
++sha1  bb1cd34f8ec0357eccef70122f0fd531ced5dd29  gnuplot-5.4.1.tar.gz
+ # Locally computed
+-sha256  eb4082f03a399fd1e9e2b380cf7a4f785e77023d8dcc7e17570c1b5570a49c47  gnuplot-5.4.0.tar.gz
++sha256  6b690485567eaeb938c26936e5e0681cf70c856d273cc2c45fabf64d8bc6590e  gnuplot-5.4.1.tar.gz
+ sha256  895928ec0735cca1c8cec42656c7e314a065d0242813bb8693c0c1bf61fd4e4d  Copyright
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+index ef9ef2ac67..746831275a 100644
+--- a/package/gnuplot/gnuplot.mk
++++ b/package/gnuplot/gnuplot.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = 1.4.1
-+DOCKER_CONTAINERD_VERSION = 1.4.3
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+-GNUPLOT_VERSION = 5.4.0
++GNUPLOT_VERSION = 5.4.1
+ GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+ GNUPLOT_LICENSE = gnuplot license (open source)
+ GNUPLOT_LICENSE_FILES = Copyright
