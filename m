@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  2 Dec 2020 21:55:18 +0100
-Subject: [Buildroot] [PATCH/next v1] package/git: bump version to 2.29.2
-Message-ID: <20201202205518.21538-1-ps.report@gmx.net>
+Date: Wed,  2 Dec 2020 22:00:58 +0100
+Subject: [Buildroot] [PATCH/next v1] package/ethtool: bump version to 5.9
+Message-ID: <20201202210058.27985-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index d043590222..87547b4ac0 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 3c17fca51e..f4503ef907 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  6d65132471df9e531807cb2746f8be317e22a343b9385bbe11c9ce7f0d2fc848  git-2.26.2.tar.xz
-+sha256  f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1  git-2.29.2.tar.xz
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  2f3b54d08d048f5977b80cb6cb4744994370def7553ee634d39dbbb6ccf87546  ethtool-5.8.tar.xz
++sha256  512932010af87bc3e09773c89baea44bca96c1da1151bbcf109fa0e055a88a6f  ethtool-5.9.tar.xz
  # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 0a67a7e1e2..0fc081eaa1 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 1668171f3a..7d82386ebe 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.26.2
-+GIT_VERSION = 2.29.2
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+-ETHTOOL_VERSION = 5.8
++ETHTOOL_VERSION = 5.9
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 -- 
 2.29.2
