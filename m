@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  2 Dec 2020 21:48:34 +0100
-Subject: [Buildroot] [PATCH/next v1] package/postgresql: bump version to 13.1
-Message-ID: <20201202204834.19278-1-ps.report@gmx.net>
+Date: Wed,  2 Dec 2020 21:55:18 +0100
+Subject: [Buildroot] [PATCH/next v1] package/git: bump version to 2.29.2
+Message-ID: <20201202205518.21538-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/postgresql/postgresql.hash | 6 ++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 64fa220714..ef676cccc4 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.md5
--md5  f19e48090bbd59ea81826b5fd99e7e97  postgresql-12.5.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v12.5/postgresql-12.5.tar.bz2.sha256
--sha256  bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95  postgresql-12.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
-+sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
- 
- # License file, Locally calculated
- sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4c5f200bdf..979e8931d0 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+diff --git a/package/git/git.hash b/package/git/git.hash
+index d043590222..87547b4ac0 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  6d65132471df9e531807cb2746f8be317e22a343b9385bbe11c9ce7f0d2fc848  git-2.26.2.tar.xz
++sha256  f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1  git-2.29.2.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 0a67a7e1e2..0fc081eaa1 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 12.5
-+POSTGRESQL_VERSION = 13.1
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-GIT_VERSION = 2.26.2
++GIT_VERSION = 2.29.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 -- 
 2.29.2
