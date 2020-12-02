@@ -1,89 +1,95 @@
-From: Tomi Valkeinen <tomi.valkeinen@iki.fi>
-Date: Wed, 2 Dec 2020 13:14:19 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/kmsxx: bump to latest
-In-Reply-To: <20201201224931.2e8693e8@gmx.net>
-References: <20201021082012.1592809-1-tomi.valkeinen@iki.fi>
- <20201201224931.2e8693e8@gmx.net>
-Message-ID: <328fc7ab-06f1-6e60-dd72-b054305e7085@iki.fi>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed,  2 Dec 2020 15:50:24 +0100
+Subject: [Buildroot] [PATCH] package/openblas: allow disabling multithreading
+Message-ID: <20201202145024.13436-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/12/2020 23:49, Peter Seiderer wrote:
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
->> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
->> index 1d174c18b1..0b3013a171 100644
->> --- a/package/kmsxx/Config.in
->> +++ b/package/kmsxx/Config.in
->> @@ -1,12 +1,13 @@
->>  config BR2_PACKAGE_KMSXX
->>  	bool "kms++"
->> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
->> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> 
-> Because of the c++17 option? No test-pkg failure detected without it...
+Buildroot would automatically enable multithreading in OpenBLAS if the
+architecture supports it. However, one may want to avoid OpenBLAS creating
+threads itself and configure single-threaded operation. To accommodate this
+use case, add a config option for multithreading.
 
-gcc web page said "C++17 features are available since GCC 5".
+When multithreading is disabled, but OpenBLAS functions are called in the
+same application by multiple threads, then locking is mandatory. The
+USE_LOCKING flag was added in version 0.3.7 with following release note:
 
->> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-> 
-> Searched for 'fatal error: linux/dma-buf.h: No such file or directory', found
-> 	https://bugs.chromium.org/p/chromium/issues/detail?id=707604
-> suggesting at least 4.11...
+    a new option USE_LOCKING was added to ensure thread safety when OpenBLAS
+    itself is built without multithreading but will be called from multiple
+    threads.
 
-If I recall right, I looked at the kernel tag in which dma-buf.h was added (kernel commit
-c11e391da2a8fe973c3c2398452000bed505851e). Should be in v4.10.
+However, if one knows that OpenBLAS will only be called from single-threaded
+applications, then passing USE_LOCKING is not necessary, so make it a config
+option too.
 
-But the link you gave indicates otherwise. I'm confused... I guess it's safer to just increase it to
-4.11.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
 
->>  	depends on BR2_INSTALL_LIBSTDCPP
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
->>  	select BR2_PACKAGE_LIBDRM
->>  	help
->> -	  libkms++ is a C++11 library for kernel mode setting.
->> +	  libkms++ is a C++17 library for kernel mode setting with Python
->> +	  bindings.
->>
->>  	  Also included are simple test tools for KMS.
->>
->> @@ -14,13 +15,26 @@ config BR2_PACKAGE_KMSXX
->>
->>  if BR2_PACKAGE_KMSXX
->>
->> -config BR2_PACKAGE_KMSXX_INSTALL_TESTS
->> -	bool "Install test programs"
->> +config BR2_PACKAGE_KMSXX_UTILS
->> +	bool "Install kms++utils library and utilities"
->> +	default y
-> 
-> Rename of an option needs Config.in.legacy handling...
+This patch was sent earlier but had no response.
 
-Ok. I haven't looked at how that's done yet. Is it just simpler to keep the old config option?
-"test" didn't quite match what I think the installed binaries are, so I thought to rename it, but
-it's really not a big thing for me.
 
->>  	help
->> -	  This option allows to install the kmsxx test programs.
->> +	  This option installs the kms++ utilities.
->> +
->> +config BR2_PACKAGE_KMSXX_PYTHON
->> +	bool "Install kms++ python bindings"
->> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
->> +	depends on !BR2_PACKAGE_PYTHON # python3
->> +	depends on BR2_USE_WCHAR # python3
->> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
->> +	depends on BR2_USE_MMU # python3
->> +	depends on !BR2_STATIC_LIBS # python3
->> +	select BR2_PACKAGE_PYTHON3
->> +	help
->> +	  This option installs the kms++ python bindings.
-> 
-> Better done in an separate patch...
+ package/openblas/Config.in   | 21 +++++++++++++++++++++
+ package/openblas/openblas.mk |  8 +++++++-
+ 2 files changed, 28 insertions(+), 1 deletion(-)
 
-Ok.
-
- Tomi
+diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+index 3f658c862a..e09f3d0c5a 100644
+--- a/package/openblas/Config.in
++++ b/package/openblas/Config.in
+@@ -73,4 +73,25 @@ config BR2_PACKAGE_OPENBLAS_TARGET
+ 	string "OpenBLAS target CPU"
+ 	default BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ 
++config BR2_PACKAGE_OPENBLAS_USE_THREAD
++	bool "use multithreading"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	help
++	  Tell OpenBLAS to use multithreading, by passing USE_THREAD=1.
++
++config BR2_PACKAGE_OPENBLAS_USE_LOCKING
++	bool "use locking"
++	default y
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Tell OpenBLAS to use locking, by passing USE_LOCKING=1.
++	  Locking is implicitly enabled when USE_THREAD=1, in which case
++	  disabling this option will not have an effect.
++	  However, if USE_THREAD=0 (i.e. OpenBLAS itself will run in
++	  single-threaded mode) but an application makes OpenBLAS
++	  function calls from multiple threads, then locking is
++	  mandatory for correct operation.
++
+ endif
+diff --git a/package/openblas/openblas.mk b/package/openblas/openblas.mk
+index 9701df9148..0fd761c89c 100644
+--- a/package/openblas/openblas.mk
++++ b/package/openblas/openblas.mk
+@@ -25,12 +25,18 @@ OPENBLAS_MAKE_OPTS += ONLY_CBLAS=1
+ endif
+ 
+ # Enable/Disable multi-threading (not for static-only since it uses dlfcn.h)
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_OPENBLAS_USE_THREAD),y)
+ OPENBLAS_MAKE_OPTS += USE_THREAD=1
+ else
+ OPENBLAS_MAKE_OPTS += USE_THREAD=0
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENBLAS_USE_LOCKING),y)
++OPENBLAS_MAKE_OPTS += USE_LOCKING=1
++else
++OPENBLAS_MAKE_OPTS += USE_LOCKING=0
++endif
++
+ # We don't know if OpenMP is available or not, so disable
+ OPENBLAS_MAKE_OPTS += USE_OPENMP=0
+ 
+-- 
+2.26.2
