@@ -1,64 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Dec 2020 18:18:01 +0100
-Subject: [Buildroot] [PATCH v3] package/trace-cmd: bump to version 2.9.1
-In-Reply-To: <CADYdroNAR6hJbyXRqwZ_Y-CuOGrJ2GPcCcON_tFbiuzfsy5iFA@mail.gmail.com>
-References: <20201103155335.212037-1-nolange79@gmail.com>
- <1a359277-1c75-f5eb-2998-5c79d837c7ea@mind.be>
- <CADYdroNAR6hJbyXRqwZ_Y-CuOGrJ2GPcCcON_tFbiuzfsy5iFA@mail.gmail.com>
-Message-ID: <d16cf456-1f03-8021-aa82-ece054a3ddf1@mind.be>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed,  2 Dec 2020 18:25:58 +0100
+Subject: [Buildroot] [PATCH] package/minicom: bump version
+Message-ID: <20201202172558.169751-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Minor fixes.
 
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/minicom/minicom.hash | 4 ++--
+ package/minicom/minicom.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 02/12/2020 17:37, Norbert Lange wrote:
-> Am Di., 1. Dez. 2020 um 21:35 Uhr schrieb Arnout Vandecappelle <arnout@mind.be>:
->>
->>  Hi Norbert,
->>
->> On 03/11/2020 16:53, Norbert Lange wrote:
-[snip]
->>>  define TRACE_CMD_BUILD_CMDS
->>> -     $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->>> -             CFLAGS="$(TRACE_CMD_CFLAGS)" \
->>> -             CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
->>> -             $(TRACE_CMD_MAKE_OPTS) \
->>> -             -C $(@D) all
->>> +     $(TARGET_CONFIGURE_OPTS) \
->>> +     CFLAGS="$(TRACE_CMD_CFLAGS)" \
->>> +     CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
->>
->>  Can you explain in the commit message why these are passed in the environment
->> now instead of on the command line?
-> 
-> I do a "normal" build now, instead of using a fragment in a subdirectory.
-
- Err... Before it was "make all", where do you see the anything about a fragment
-in a subdirectory?
-
-> Means the Makefile would like to do stuff like adding include paths which doesnt
-> work if the variables are overriden.
-
- Yes, that's exactly the kind of explanation I would expect in the commit message.
-
-> 
-> As rationale I would use: "Thats the way you normally build packages",
-> aswell as "Thats how you would DL the source" (instead of doing a git
-> fetch, in regards to last point).
-
- It was git before because kernel.org has only recently started supporting
-tarball downloads from git (where "recently" is about a year ago I think, maybe
-even two).
-
-
- Regards,
- Arnout
-
-> Of course I don't know why it was done in a entirely different manner
-> before, so I might be missing something
-> 
-> Norbert
-> 
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index dafc9da4f4..0b8b1d0745 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 66af38ae98cdf965b9a591013df4256773f18338613ec22bbb83440968289a8a  minicom-23292150e07ec264827fb6cf237ddb0ac9fc043b.tar.gz
+-sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
++sha256  c0a72a099bea13abdf5a315f56a87a75a92000b71e36193188487cdad063b540  minicom-79ef3185df5ae9cdc8307f9b9ba17463743f22f0.tar.gz
++sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index bdbeb53775..7aaf18880e 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINICOM_VERSION = 23292150e07ec264827fb6cf237ddb0ac9fc043b
++MINICOM_VERSION = 79ef3185df5ae9cdc8307f9b9ba17463743f22f0
+ MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
+ MINICOM_SITE_METHOD = git
+ MINICOM_LICENSE = GPL-2.0+
+-- 
+2.25.1
