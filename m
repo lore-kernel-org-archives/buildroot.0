@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  2 Dec 2020 21:15:51 +0100
-Subject: [Buildroot] [PATCH/next v1] package/ripgrep: bump version to 12.1.1
-Message-ID: <20201202201551.6380-1-ps.report@gmx.net>
+Date: Wed,  2 Dec 2020 21:24:23 +0100
+Subject: [Buildroot] [PATCH/next v1] package/nmap: bump version to 7.91
+Message-ID: <20201202202423.483-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/ripgrep/ripgrep.hash | 4 ++--
- package/ripgrep/ripgrep.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nmap/nmap.hash | 6 +++---
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ripgrep/ripgrep.hash b/package/ripgrep/ripgrep.hash
-index 0841c0185c..6b75f6f383 100644
---- a/package/ripgrep/ripgrep.hash
-+++ b/package/ripgrep/ripgrep.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index d7446f1ead..5c684ecabe 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,5 +1,5 @@
+-# From https://nmap.org/dist/sigs/nmap-7.80.tar.bz2.digest.txt (lowercase)
+-sha256 fcfa5a0e42099e12e4bf7a68ebe6fde05553383a682e816a7ec9256ab4773faa  nmap-7.80.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.91.tar.bz2.digest.txt (lowercase)
++sha256  18cc4b5070511c51eb243cdd2b0b30ff9b2c4dc4544c6312f75ce3a67a593300  nmap-7.91.tar.bz2
+ 
  # Locally calculated
--sha256 7035379fce0c1e32552e8ee528b92c3d01b8d3935ea31d26c51a73287be74bb3 ripgrep-0.8.1.tar.gz
--sha256 0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f LICENSE-MIT
-+sha256  2513338d61a5c12c8fea18a0387b3e0651079ef9b31f306050b1f0aaa926271e  ripgrep-12.1.1.tar.gz
-+sha256  0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f  LICENSE-MIT
-diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-index 9dd8d58de1..bbc24e5889 100644
---- a/package/ripgrep/ripgrep.mk
-+++ b/package/ripgrep/ripgrep.mk
+-sha256 a6afaad36c803dc602734451d9421ed363b48d1ca0faadf0907fc2d91a000284  COPYING
++sha256  a6afaad36c803dc602734451d9421ed363b48d1ca0faadf0907fc2d91a000284  COPYING
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 5da1ce925f..a719b268c8 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RIPGREP_VERSION = 0.8.1
-+RIPGREP_VERSION = 12.1.1
- RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
- RIPGREP_LICENSE = MIT
- RIPGREP_LICENSE_FILES = LICENSE-MIT
+-NMAP_VERSION = 7.80
++NMAP_VERSION = 7.91
+ NMAP_SITE = https://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = liblinear libpcap
 -- 
 2.29.2
