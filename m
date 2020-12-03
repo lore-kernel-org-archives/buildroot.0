@@ -1,93 +1,120 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/pixz: bump version to v1.0.7
-Message-ID: <20201203092226.C9338821E0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/quickjs: new package
+Message-ID: <20201203092225.7C6BB815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31f915eaa9175b0aa07985c287037a01aba3bf3f
+commit: https://git.buildroot.net/buildroot/commit/?id=5d50793659acb95050c110d5fc05399df20ce30b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update the hash accordingly.
-- Remove a patch, as its fix is in this new version of pixz.
-
-Signed-off-by: Vincent Stehl?? <vincent.stehle@laposte.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pixz/0001-fix-linkage.patch | 41 -------------------------------------
- package/pixz/pixz.hash              |  2 +-
- package/pixz/pixz.mk                |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/quickjs/Config.in    | 16 ++++++++++++++++
+ package/quickjs/quickjs.hash |  2 ++
+ package/quickjs/quickjs.mk   | 37 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
 
-diff --git a/package/pixz/0001-fix-linkage.patch b/package/pixz/0001-fix-linkage.patch
-deleted file mode 100644
-index 712c280ec2..0000000000
---- a/package/pixz/0001-fix-linkage.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From f385e7be8adb620ca7eb89f84abe4d1df94c1029 Mon Sep 17 00:00:00 2001
--From: Dave Vasilevsky <dave@vasilevsky.ca>
--Date: Sat, 25 Apr 2020 19:16:05 -0400
--Subject: [PATCH] fix linkage
--
--[Retrieved from:
--https://github.com/vasi/pixz/commit/f385e7be8adb620ca7eb89f84abe4d1df94c1029]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/common.c | 2 +-
-- src/pixz.h   | 4 ++--
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/src/common.c b/src/common.c
--index 59d3273..5938633 100644
----- a/src/common.c
--+++ b/src/common.c
--@@ -7,7 +7,7 @@
-- 
-- #pragma mark UTILS
-- 
---FILE *gInFile = NULL;
--+FILE *gInFile = NULL, *gOutFile = NULL;
-- lzma_stream gStream = LZMA_STREAM_INIT;
-- 
-- 
--diff --git a/src/pixz.h b/src/pixz.h
--index 0fa60f2..0939a9a 100644
----- a/src/pixz.h
--+++ b/src/pixz.h
--@@ -54,8 +54,8 @@ void pixz_read(bool verify, size_t nspecs, char **specs);
-- 
-- #pragma mark UTILS
-- 
---FILE *gInFile, *gOutFile;
---lzma_stream gStream;
--+extern FILE *gInFile, *gOutFile;
--+extern lzma_stream gStream;
-- 
-- extern lzma_index *gIndex;
-- 
-diff --git a/package/pixz/pixz.hash b/package/pixz/pixz.hash
-index 5491a016dc..9e2a211cdc 100644
---- a/package/pixz/pixz.hash
-+++ b/package/pixz/pixz.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  02c50746b134fa1b1aae41fcc314d7c6f1919b3d48bcdea01bf11769f83f72e8  pixz-1.0.6.tar.xz
-+sha256  e5e32c6eb0bf112b98e74a5da8fb63b9f2cae71800f599d97ce540e150c8ddc5  pixz-1.0.7.tar.xz
- sha256  d036806b4d1efee7c6d86276451c4d833e9798751417e25daae62dfbe348641b  LICENSE
-diff --git a/package/pixz/pixz.mk b/package/pixz/pixz.mk
-index 8d80f78617..680c05c32c 100644
---- a/package/pixz/pixz.mk
-+++ b/package/pixz/pixz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIXZ_VERSION = 1.0.6
-+PIXZ_VERSION = 1.0.7
- PIXZ_SITE = https://github.com/vasi/pixz/releases/download/v$(PIXZ_VERSION)
- PIXZ_SOURCE = pixz-$(PIXZ_VERSION).tar.xz
- PIXZ_DEPENDENCIES = host-pkgconf libarchive xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 43cc1b55ae..53db631940 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -922,6 +922,7 @@ F:	package/netsurf/
+ F:	package/perl*
+ F:	package/pkg-perl.mk
+ F:	package/pkg-luarocks.mk
++F:	package/quickjs/
+ F:	package/rings/
+ F:	package/tekui/
+ F:	package/wpebackend-fdo/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..8fcea06433 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1245,6 +1245,7 @@ menu "External python modules"
+ 	source "package/python-zope-interface/Config.in"
+ endmenu
+ endif
++	source "package/quickjs/Config.in"
+ 	source "package/ruby/Config.in"
+ 	source "package/tcl/Config.in"
+ if BR2_PACKAGE_TCL
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+new file mode 100644
+index 0000000000..ee53744bde
+--- /dev/null
++++ b/package/quickjs/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_QUICKJS
++	bool "quickjs"
++	depends on !BR2_STATIC_LIBS
++	# No way to check for fenv support.
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_USE_MMU # fork()
++	help
++	  QuickJS is a small and embeddable Javascript engine.
++	  It supports the ES2020 specification including modules,
++	  asynchronous generators, proxies and BigInt.
++
++	  https://bellard.org/quickjs/
++
++comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
+new file mode 100644
+index 0000000000..076e4bddbb
+--- /dev/null
++++ b/package/quickjs/quickjs.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0021a3e8cdc6b61e225411d05e2841d2437e1ccf4b4cabb9a5f7685ebfb57717  quickjs-2020-09-06.tar.xz
+diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
+new file mode 100644
+index 0000000000..557ffb196d
+--- /dev/null
++++ b/package/quickjs/quickjs.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# quickjs
++#
++################################################################################
++
++QUICKJS_VERSION = 2020-09-06
++QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
++QUICKJS_SITE = https://bellard.org/quickjs
++QUICKJS_LICENSE = MIT
++QUICKJS_INSTALL_STAGING = YES
++
++define QUICKJS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		CROSS_PREFIX="$(TARGET_CROSS)" \
++		all
++endef
++
++define QUICKJS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		CROSS_PREFIX="$(TARGET_CROSS)" \
++		DESTDIR=$(STAGING_DIR) \
++		STRIP=/bin/true \
++		prefix=/usr \
++		install
++endef
++
++define QUICKJS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		CROSS_PREFIX="$(TARGET_CROSS)" \
++		DESTDIR=$(TARGET_DIR) \
++		STRIP=/bin/true \
++		prefix=/usr \
++		install
++endef
++
++$(eval $(generic-package))
