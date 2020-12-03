@@ -1,73 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/python-thrift: bump to version
- 0.13.0
-Message-ID: <20201203092226.3FD578012C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qdecoder: bump to version 12.0.8
+Message-ID: <20201203092226.D2AEF821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e39b019becdf9ab54069200b44a6d8fec6c8d7e3
+commit: https://git.buildroot.net/buildroot/commit/?id=32455cb7358aa717e2448c554e3604b5433329f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated through scanpypi
+Update indentation in hash file (two spaces)
 
-https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
+https://github.com/wolkykim/qdecoder/releases/tag/v12.0.8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-thrift/Config.in          | 5 ++---
- package/python-thrift/python-thrift.hash | 6 +++---
- package/python-thrift/python-thrift.mk   | 8 ++++----
- 3 files changed, 9 insertions(+), 10 deletions(-)
+ package/qdecoder/qdecoder.hash | 4 ++--
+ package/qdecoder/qdecoder.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
-index 1ecfda357b..71fef5be81 100644
---- a/package/python-thrift/Config.in
-+++ b/package/python-thrift/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_THRIFT
- 	bool "python-thrift"
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
--	  python-thrift is a Python bindings for the Apache Thrift RPC
--	  system.
-+	  Python bindings for the Apache Thrift RPC system.
- 
--	  http://thrift.apache.org/
-+	  https://thrift.apache.org
-diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
-index 56d99f2a54..1d1d628908 100644
---- a/package/python-thrift/python-thrift.hash
-+++ b/package/python-thrift/python-thrift.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/thrift/json
--md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
--sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
-+md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
-+sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
- # Locally computed sha256 checksums
--sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
-+sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
-diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
-index 21f2355f63..3a908ca91c 100644
---- a/package/python-thrift/python-thrift.mk
-+++ b/package/python-thrift/python-thrift.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/qdecoder/qdecoder.hash b/package/qdecoder/qdecoder.hash
+index 0c95d2c27b..e3fb837597 100644
+--- a/package/qdecoder/qdecoder.hash
++++ b/package/qdecoder/qdecoder.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 01d4852b9343757abe98bbdb9d4bf0dc142ccb602ec921906ddde32c16164376  qdecoder-12.0.7.tar.gz
+-sha256 17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
++sha256  3911576ad8766697a9c8c767458edc953ae686eb53cd31d21e38edd7831ed9aa  qdecoder-12.0.8.tar.gz
++sha256  17e647523e5c5c75fd02861dcf3ea91a146d918ab303460ee58135c9dd70904e  COPYING
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+index ab95885c32..12784fc451 100644
+--- a/package/qdecoder/qdecoder.mk
++++ b/package/qdecoder/qdecoder.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_THRIFT_VERSION = 0.11.0
-+PYTHON_THRIFT_VERSION = 0.13.0
- PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
--PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
--PYTHON_THRIFT_LICENSE = Apache-2.0
--PYTHON_THRIFT_LICENSE_FILES = setup.py
-+PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
- PYTHON_THRIFT_SETUP_TYPE = setuptools
-+PYTHON_THRIFT_LICENSE = Apache-2.0
-+PYTHON_THRIFT_LICENSE_FILES = LICENSE
- 
- $(eval $(python-package))
+-QDECODER_VERSION = 12.0.7
++QDECODER_VERSION = 12.0.8
+ QDECODER_SITE = $(call github,wolkykim,qdecoder,v$(QDECODER_VERSION))
+ QDECODER_LICENSE = BSD-2
+ QDECODER_LICENSE_FILES = COPYING
