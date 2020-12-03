@@ -1,51 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:37:39 +0100
-Subject: [Buildroot] [git commit] package/python-serial: bump to version 3.5
-Message-ID: <20201203092229.904C8811FC@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2020 09:37:57 -0000
+Subject: [Buildroot] [git commit] package/radvd: bump to version 2.19
+Message-ID: <20201203092226.9EB24821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da59c616ba6f011296349f749030b9ef0b9f002d
+commit: https://git.buildroot.net/buildroot/commit/?id=6e85ab44493624748398ffb2c6bf4bda409f2de7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to year update.
+Drop patch (already in version) and so autoreconf
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+http://www.litech.org/radvd/CHANGES.txt:w
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-serial/python-serial.hash | 6 +++---
- package/python-serial/python-serial.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...-fstack-protector-the-toolchain-might-lac.patch | 27 ----------------------
+ package/radvd/radvd.hash                           |  6 ++---
+ package/radvd/radvd.mk                             |  4 +---
+ 3 files changed, 4 insertions(+), 33 deletions(-)
 
-diff --git a/package/python-serial/python-serial.hash b/package/python-serial/python-serial.hash
-index 96209a9965..d885d3c0c8 100644
---- a/package/python-serial/python-serial.hash
-+++ b/package/python-serial/python-serial.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyserial/json
--md5     ed6183b15519a0ae96675e9c3330c69b  pyserial-3.4.tar.gz
--sha256  6e2d401fdee0eab996cf734e67773a0143b932772ca8b42451440cfed942c627  pyserial-3.4.tar.gz
-+md5  1cf25a76da59b530dbfc2cf99392dc83  pyserial-3.5.tar.gz
-+sha256  3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb  pyserial-3.5.tar.gz
- # Locally computed sha256 checksums
--sha256	a89d951d157e2c199fbbe7ecf8d41bc3bc93de166db524aa6b9b610dbccc832d  LICENSE.txt
-+sha256  f91cb9813de6a5b142b8f7f2dede630b5134160aedaeaf55f4d6a7e2593ca3f3  LICENSE.txt
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index d583ac65ab..249ea9d5a3 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch b/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
+deleted file mode 100644
+index 44768086cc..0000000000
+--- a/package/radvd/0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 324e1ebc7b86f68f49fb4f1c34a4de60d18dd3c1 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Sun, 23 Nov 2014 12:17:11 +0100
+-Subject: [PATCH 2/3] Don't force -fstack-protector, the toolchain might lack
+- support for it
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- Makefile.am | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 80633e7..8b5a2e4 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -43,7 +43,6 @@ DISABLE_WARNINGS = \
+- 
+- AM_CFLAGS = \
+- 	-fno-strict-aliasing \
+--	-fstack-protector \
+- 	$(ENABLE_WARNINGS) \
+- 	$(DISABLE_WARNINGS)
+- 
+--- 
+-2.1.0
+-
+diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
+index 9ade027d27..a624db24ba 100644
+--- a/package/radvd/radvd.hash
++++ b/package/radvd/radvd.hash
+@@ -1,3 +1,3 @@
+-# From http://www.litech.org/radvd/dist/radvd-2.18.tar.gz.sha256
+-sha256	4f573e36b96ba92d03b5abbbd5f059b9c8994967812c77852f44049ac5a448fd	radvd-2.18.tar.gz
+-sha256	40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80	COPYRIGHT
++# From http://www.litech.org/radvd/dist/radvd-2.19.tar.gz.sha512
++sha512  caa621fd77e34ff6858d60a41b0ee02aff967ac14f2b84c402359744f4bece5c1563419860431c328adc0385e9893ed1f2421d652247a3aa0dfc0aaad1e01233  radvd-2.19.tar.gz
++sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index ba0c78bd1e..7a650dc3c5 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SERIAL_VERSION = 3.4
-+PYTHON_SERIAL_VERSION = 3.5
- PYTHON_SERIAL_SOURCE = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
--PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/cc/74/11b04703ec416717b247d789103277269d567db575d2fd88f25d9767fe3d
-+PYTHON_SERIAL_SITE = https://files.pythonhosted.org/packages/1e/7d/ae3f0a63f41e4d2f6cb66a5b57197850f919f59e558159a4dd3a818f5082
- PYTHON_SERIAL_LICENSE = BSD-3-Clause
- PYTHON_SERIAL_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_SETUP_TYPE = setuptools
+-RADVD_VERSION = 2.18
++RADVD_VERSION = 2.19
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
+ # We need to ignore <linux/if_arp.h>, because radvd already includes
+@@ -12,8 +12,6 @@ RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
+ RADVD_CONF_ENV = \
+ 	ac_cv_prog_cc_c99='-std=gnu99' \
+ 	ac_cv_header_linux_if_arp_h=no
+-# For 0002-Don-t-force-fstack-protector-the-toolchain-might-lac.patch
+-RADVD_AUTORECONF = YES
+ RADVD_LICENSE = BSD-4-Clause-like
+ RADVD_LICENSE_FILES = COPYRIGHT
+ 
