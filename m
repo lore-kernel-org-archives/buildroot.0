@@ -1,36 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Dec 2020 22:39:48 +0100
-Subject: [Buildroot] [git commit] package/bind: fix license hash
-Message-ID: <20201203092228.230888012C@busybox.osuosl.org>
+Date: Thu, 03 Dec 2020 09:37:53 -0000
+Subject: [Buildroot] [git commit] package/python-thrift: bump to version
+ 0.13.0
+Message-ID: <20201203092226.3FD578012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac6dbae320231a02e1b9b69c8c9250e6854aaaa9
+commit: https://git.buildroot.net/buildroot/commit/?id=e39b019becdf9ab54069200b44a6d8fec6c8d7e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e forgot to update hash of
-COPYRIGHT which was updated to replace http by https:
-https://gitlab.isc.org/isc-projects/bind9/-/commit/400171aee8db87c3973987980327051a58a20a80
+Updated through scanpypi
 
-Fixes:
- - http://autobuild.buildroot.org/results/db614a6fa1e17af2fa5c1d4a0d51cdf770893ca9
+https://github.com/apache/thrift/blob/v0.13.0/CHANGES.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-thrift/Config.in          | 5 ++---
+ package/python-thrift/python-thrift.hash | 6 +++---
+ package/python-thrift/python-thrift.mk   | 8 ++++----
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index e02c06ff3e..cbd9562b56 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
- # Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
- # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
- sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
--sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-+sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
+diff --git a/package/python-thrift/Config.in b/package/python-thrift/Config.in
+index 1ecfda357b..71fef5be81 100644
+--- a/package/python-thrift/Config.in
++++ b/package/python-thrift/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_THRIFT
+ 	bool "python-thrift"
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+-	  python-thrift is a Python bindings for the Apache Thrift RPC
+-	  system.
++	  Python bindings for the Apache Thrift RPC system.
+ 
+-	  http://thrift.apache.org/
++	  https://thrift.apache.org
+diff --git a/package/python-thrift/python-thrift.hash b/package/python-thrift/python-thrift.hash
+index 56d99f2a54..1d1d628908 100644
+--- a/package/python-thrift/python-thrift.hash
++++ b/package/python-thrift/python-thrift.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/thrift/json
+-md5	36165d5c80e6b101dbe9fcf7ef524d51  thrift-0.11.0.tar.gz
+-sha256	7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b  thrift-0.11.0.tar.gz
++md5  c3bc8d9a910d2c9ce26f2ad1f7c96762  thrift-0.13.0.tar.gz
++sha256  9af1c86bf73433afc6010ed376a6c6aca2b54099cc0d61895f640870a9ae7d89  thrift-0.13.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6a62a493bd7c741378619ff61c56282d64f3ad033dc8154b67c808311960bb02  setup.py
++sha256  c13578ae9d0529d0252e1c7375b917bacf58723dce1fcd40c7ed59183401b468  LICENSE
+diff --git a/package/python-thrift/python-thrift.mk b/package/python-thrift/python-thrift.mk
+index 21f2355f63..3a908ca91c 100644
+--- a/package/python-thrift/python-thrift.mk
++++ b/package/python-thrift/python-thrift.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_THRIFT_VERSION = 0.11.0
++PYTHON_THRIFT_VERSION = 0.13.0
+ PYTHON_THRIFT_SOURCE = thrift-$(PYTHON_THRIFT_VERSION).tar.gz
+-PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/c6/b4/510617906f8e0c5660e7d96fbc5585113f83ad547a3989b80297ac72a74c
+-PYTHON_THRIFT_LICENSE = Apache-2.0
+-PYTHON_THRIFT_LICENSE_FILES = setup.py
++PYTHON_THRIFT_SITE = https://files.pythonhosted.org/packages/97/1e/3284d19d7be99305eda145b8aa46b0c33244e4a496ec66440dac19f8274d
+ PYTHON_THRIFT_SETUP_TYPE = setuptools
++PYTHON_THRIFT_LICENSE = Apache-2.0
++PYTHON_THRIFT_LICENSE_FILES = LICENSE
+ 
+ $(eval $(python-package))
