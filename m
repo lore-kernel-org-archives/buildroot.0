@@ -1,247 +1,538 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Dec 2020 20:01:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.3.0
-Message-ID: <20201203190133.2857147-1-bernd.kuhls@t-online.de>
+From: Veronika Kremneva <Veronika.Kremneva@synopsys.com>
+Date: Thu,  3 Dec 2020 22:23:06 +0300
+Subject: [Buildroot] [PATCH] package/gcc: arc: Fix adc/sbc patterns handling
+ in GCC 10
+Message-ID: <20201203192306.9648-1-kremneva@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patch 0002 & 0003.
-Removed patch 0005 which was applied upstream.
+There is a problem while building various packages with GCC 10.x for ARC:
 
-Only Intel and Broadcom drivers depend on expat since upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=81a0f1eca24b8605b9f2506122ff90db7129c39e
+----------------------------->8---------------------------
+make[2]: *** [magick/libGraphicsMagick_la-analyze.lo] Error 1
+make[2]: *** Waiting for unfinished jobs....
+/tmp/ccFqDn0F.s: Assembler messages:
+/tmp/ccFqDn0F.s:1586: Error: operand is not duplicate of the previous one for instruction 'adc'
+----------------------------->8---------------------------
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This failure happens on regular basis and can also be observed in:
+http://autobuild.buildroot.net/results/c9d13a3659e3a45864f9622b29122e666f763c6e/
+http://autobuild.buildroot.net/results/84edcdb0f5759fa587a5638e1bab18379ee1f3b2/
+http://autobuild.buildroot.net/results/6f6acbb1a8708ad840a9361ee72b8d14699b44d9/
+
+More details you can find on filed issue:
+https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/issues/310
+Fix:
+https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/commit/09944fba5bfb8e5543ce043c70d08222cf2f97ff
+
+The following patch applies the fix that will be submitted to GCC 10.x upstream soon.
+
+Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
- ...t-proper-value-for-LIBCLC_INCLUDEDIR.patch | 20 +++++------
- ...tion-to-disable-optional-neon-suppor.patch |  4 +--
- ...xes-to-loader-when-using-x11-and-dri.patch | 35 -------------------
- package/mesa3d/Config.in                      |  7 +++-
- package/mesa3d/mesa3d.hash                    |  6 ++--
- package/mesa3d/mesa3d.mk                      |  7 ++--
- 7 files changed, 27 insertions(+), 54 deletions(-)
- delete mode 100644 package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
+ .../0001-arc-Refurbish-adc-sbc-patterns.patch      | 242 +++++++++++++++++++++
+ .../0001-arc-Refurbish-adc-sbc-patterns.patch      | 242 +++++++++++++++++++++
+ 2 files changed, 484 insertions(+)
+ create mode 100644 package/gcc/10.2.0/0001-arc-Refurbish-adc-sbc-patterns.patch
+ create mode 100644 package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 8e8170a7a5..40d9979e57 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.2.3
-+MESA3D_HEADERS_VERSION = 20.3.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-index b1bb2678b4..e3c70c3f24 100644
---- a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-+++ b/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-@@ -18,7 +18,7 @@ Based on the patch for autotools provided by Valentin Korenblit.
- 
- Signed-off-by: Romain Naour <romain.naour@smile.fr>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for 20.02.0]
-+[rebased for 20.2.0 & 20.3.0]
- ---
-  src/gallium/frontends/clover/meson.build | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -27,15 +27,15 @@ diff --git a/src/gallium/frontends/clover/meson.build b/src/gallium/frontends/cl
- index 62ac5f5278d..ecdeb39669c 100644
- --- a/src/gallium/frontends/clover/meson.build
- +++ b/src/gallium/frontends/clover/meson.build
--@@ -63,7 +63,7 @@
--     clover_cpp_args,
--     clover_opencl_cpp_args,
--     clover_spirv_cpp_args,
---    '-DLIBCLC_INCLUDEDIR="@0@/"'.format(dep_clc.get_pkgconfig_variable('includedir')),
--+    '-DLIBCLC_INCLUDEDIR="/usr/share"',
--     '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_pkgconfig_variable('libexecdir')),
--     '-DCLANG_RESOURCE_DIR="@0@"'.format(join_paths(
--       dep_llvm.get_configtool_variable('libdir'), 'clang',
-+@@ -27,7 +27,7 @@
-+   '-DCL_USE_DEPRECATED_OPENCL_2_0_APIS',
-+   '-DCL_USE_DEPRECATED_OPENCL_2_1_APIS',
-+   '-DCL_USE_DEPRECATED_OPENCL_2_2_APIS',
-+-  '-DLIBCLC_INCLUDEDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'includedir')),
-++  '-DLIBCLC_INCLUDEDIR="/usr/share"',
-+   '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'libexecdir'))
-+ ]
-+ clover_spirv_cpp_args = []
- -- 
- 2.20.1
- 
-diff --git a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-index 4b9878fb90..39e402361f 100644
---- a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-+++ b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-@@ -10,7 +10,7 @@ to force disabling it at compile time.
- [Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for 20.2.0]
-+[rebased for 20.2.0 & 20.3.0]
- ---
-  meson_options.txt                    | 7 +++++++
-  src/gallium/drivers/vc4/meson.build  | 4 ++--
-@@ -21,7 +21,7 @@ diff --git a/meson_options.txt b/meson_options.txt
- index a39596a6f19..0f6b6c62b55 100644
- --- a/meson_options.txt
- +++ b/meson_options.txt
--@@ -124,6 +124,13 @@ option(
-+@@ -123,6 +123,13 @@ option(
-    choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
-    description : 'enable gallium va frontend.',
-  )
-diff --git a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
-deleted file mode 100644
-index 5746bc221e..0000000000
---- a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From da691ec75cc8a7b2d0ac0c5894521afda4bc601d Mon Sep 17 00:00:00 2001
--From: Duncan Hopkins <duncan@duncanhopkins.me.uk>
--Date: Thu, 15 Oct 2020 12:14:57 +0100
--Subject: [PATCH] meson: Add xcb-fixes to loader when using x11 and dri3. Fixes
-- undefined symbol for xcb_xfixes_create_region in loader_dri3_helper.c
--
--loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link. This is dependent on with_platform_x11 and with_dri3.
--But the source meson file does not set this up dependent on with_dri3.
--The build was initialsed using platforms=x11 and gallium-drivers=zink,swrast.
--
--Reviewed-by: Eric Anholt <eric@anholt.net>
--Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/7164>
--(cherry picked from commit cf17d6251653f4a98e7c4f904ea2f0bc0ecedd5c)
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- meson.build | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index fbd3c4b8e8d..670cb521a2b 100644
----- a/meson.build
--+++ b/meson.build
--@@ -1742,7 +1742,8 @@ if with_platform_x11
--       dep_xxf86vm = dependency('xxf86vm')
--     endif
--   endif
---  if (with_egl or (
--+  if (with_egl or 
--+      with_dri3 or (
--       with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
--       with_gallium_omx != 'disabled'))
--     dep_xcb_xfixes = dependency('xcb-xfixes')
---- 
--2.25.4
--
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index ebfc422bf2..45eb62b701 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -5,7 +5,6 @@ menuconfig BR2_PACKAGE_MESA3D
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -139,6 +138,7 @@ comment "Gallium i915: Only one i915 provider can be built"
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for iris-based Intel GPUs.
-@@ -263,6 +263,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
-@@ -278,6 +279,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_arm || BR2_aarch64
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
-@@ -344,6 +346,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
- 	bool "DRI i915 driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -353,6 +356,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	bool "DRI i965 driver"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -391,6 +395,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
- 	depends on BR2_PACKAGE_XORG7 # xorgproto
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	select BR2_PACKAGE_XORGPROTO
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index b59d1f866e..76436bdc70 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-November/000607.html
--sha256  ae1b240e11531df528d14dc214d2dc4d2b4f2e835c6230ba0b492b171eceb82b  mesa-20.2.3.tar.xz
--sha512  e55b57523f6fdb1199586538c119c3e7c81d1a7af86be14c90d140c514f65e54ac0c56bd341686d04b770b80d3ddd92188ee17b3bc23f243aed10c25de7e19a6  mesa-20.2.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000609.html
-+sha256  2999738e888731531cd62b27519fa37566cc0ea2cd7d4d97f46abaa3e949c630  mesa-20.3.0.tar.xz
-+sha512  69ee0bc1e7a69a519597dd55f4d601f35fe51ed6687d6f6beff6aef3da8d82de932220305fc187e06a52aaf0073d434a6e3458619c767b9b7932464a2cbb2cf2  mesa-20.3.0.tar.xz
- 
- # License
- sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 8236b8c396..58fc7b1706 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.2.3
-+MESA3D_VERSION = 20.3.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
-@@ -19,10 +19,13 @@ MESA3D_DEPENDENCIES = \
- 	host-bison \
- 	host-flex \
- 	host-python3-mako \
--	expat \
- 	libdrm \
- 	zlib
- 
-+ifeq ($(BR2_PACKAGE_EXPAT),y)
-+MESA3D_DEPENDENCIES += expat
-+endif
+diff --git a/package/gcc/10.2.0/0001-arc-Refurbish-adc-sbc-patterns.patch b/package/gcc/10.2.0/0001-arc-Refurbish-adc-sbc-patterns.patch
+new file mode 100644
+index 0000000000..ed7b000ede
+--- /dev/null
++++ b/package/gcc/10.2.0/0001-arc-Refurbish-adc-sbc-patterns.patch
+@@ -0,0 +1,242 @@
++From 09944fba5bfb8e5543ce043c70d08222cf2f97ff Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Wed, 11 Nov 2020 12:31:10 +0200
++Subject: [PATCH] arc: Refurbish adc/sbc patterns
 +
- MESA3D_CONF_OPTS = \
- 	-Dgallium-omx=disabled \
- 	-Dpower8=disabled
++The adc/sbc patterns were unecessary spliting, remove that and
++associated functions.
++
++gcc/ChangeLog:
++
++2020-10-11  Claudiu Zissulescu  <claziss@synopsys.com>
++
++	* config/arc/arc-protos.h (arc_scheduling_not_expected): Remove
++	it.
++	(arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	* config/arc/arc.c (arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	(arc_scheduling_not_expected): Likewise.
++	* config/arc/arc.md: Convert adc/sbc patterns to simple
++	instruction definitions.
++
++Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
++Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
++---
++ gcc/config/arc/arc-protos.h |  3 --
++ gcc/config/arc/arc.c        | 53 -------------------------
++ gcc/config/arc/arc.md       | 95 ++++++++++++++-------------------------------
++ 3 files changed, 29 insertions(+), 122 deletions(-)
++
++diff --git a/gcc/config/arc/arc-protos.h b/gcc/config/arc/arc-protos.h
++index c72d78e3b9e..de4cf47c818 100644
++--- a/gcc/config/arc/arc-protos.h
+++++ b/gcc/config/arc/arc-protos.h
++@@ -90,10 +90,7 @@ extern void split_subsi (rtx *);
++ extern void arc_split_move (rtx *);
++ extern const char *arc_short_long (rtx_insn *insn, const char *, const char *);
++ extern rtx arc_regno_use_in (unsigned int, rtx);
++-extern bool arc_scheduling_not_expected (void);
++-extern bool arc_sets_cc_p (rtx_insn *insn);
++ extern int arc_label_align (rtx_insn *label);
++-extern bool arc_need_delay (rtx_insn *insn);
++ extern bool arc_text_label (rtx_insn *insn);
++ 
++ extern bool arc_short_comparison_p (rtx, int);
++diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
++index fcb83c4e23e..2daf83dd009 100644
++--- a/gcc/config/arc/arc.c
+++++ b/gcc/config/arc/arc.c
++@@ -10341,59 +10341,6 @@ arc_attr_type (rtx_insn *insn)
++   return get_attr_type (insn);
++ }
++ 
++-/* Return true if insn sets the condition codes.  */
++-
++-bool
++-arc_sets_cc_p (rtx_insn *insn)
++-{
++-  if (NONJUMP_INSN_P (insn))
++-    if (rtx_sequence *seq = dyn_cast <rtx_sequence *> (PATTERN (insn)))
++-      insn = seq->insn (seq->len () - 1);
++-  return arc_attr_type (insn) == TYPE_COMPARE;
++-}
++-
++-/* Return true if INSN is an instruction with a delay slot we may want
++-   to fill.  */
++-
++-bool
++-arc_need_delay (rtx_insn *insn)
++-{
++-  rtx_insn *next;
++-
++-  if (!flag_delayed_branch)
++-    return false;
++-  /* The return at the end of a function needs a delay slot.  */
++-  if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == USE
++-      && (!(next = next_active_insn (insn))
++-	  || ((!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) != SEQUENCE)
++-	      && arc_attr_type (next) == TYPE_RETURN))
++-      && (!TARGET_PAD_RETURN
++-	  || (prev_active_insn (insn)
++-	      && prev_active_insn (prev_active_insn (insn))
++-	      && prev_active_insn (prev_active_insn (prev_active_insn (insn))))))
++-    return true;
++-  if (NONJUMP_INSN_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == USE
++-	 || GET_CODE (PATTERN (insn)) == CLOBBER
++-	 || GET_CODE (PATTERN (insn)) == SEQUENCE)
++-      : JUMP_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == ADDR_VEC
++-	 || GET_CODE (PATTERN (insn)) == ADDR_DIFF_VEC)
++-      : !CALL_P (insn))
++-    return false;
++-  return num_delay_slots (insn) != 0;
++-}
++-
++-/* Return true if the scheduling pass(es) has/have already run,
++-   i.e. where possible, we should try to mitigate high latencies
++-   by different instruction selection.  */
++-
++-bool
++-arc_scheduling_not_expected (void)
++-{
++-  return cfun->machine->arc_reorg_started;
++-}
++-
++ /* Code has a minimum p2 alignment of 1, which we must restore after
++    an ADDR_DIFF_VEC.  */
++ 
++diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
++index d4d9f59a3ea..6c09c86884f 100644
++--- a/gcc/config/arc/arc.md
+++++ b/gcc/config/arc/arc.md
++@@ -2857,43 +2857,25 @@ archs4x, archs4xd"
++    (set_attr "type" "compare")
++    (set_attr "length" "4,4,8")])
++ 
++-; w/c/c comes first (rather than w/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional
++-; execution is used where possible.
++-(define_insn_and_split "adc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(plus:SI (plus:SI (ltu:SI (reg:CC_C CC_REG) (const_int 0))
++-			  (match_operand:SI 1 "nonmemory_operand"
++-							 "%c,0,c,0,cCal"))
++-		 (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "adc"
+++  [(set (match_operand:SI 0 "register_operand"    "=r,  r,r,r,  r,r")
+++	(plus:SI
+++	 (plus:SI
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0))
+++	  (match_operand:SI 1 "nonmemory_operand" "%r,  0,r,0,Cal,r"))
+++	 (match_operand:SI 2 "nonmemory_operand"   "r,C_0,L,I,  r,Cal")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	adc %0,%1,%2
++-	add.cs %0,%1,1
++-	adc %0,%1,%2
++-	adc %0,%1,%2
++-	adc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 3))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int 1))))]
++-  "operands[3] = simplify_gen_binary (PLUS, SImode, operands[1], operands[2]);"
+++    adc\\t%0,%1,%2
+++    add.cs\\t%0,%1,1
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ ; combiner-splitter cmp / scc -> cmp / adc
++ (define_split
++@@ -3025,7 +3007,7 @@ archs4x, archs4xd"
++       DONE;
++     }
++   emit_insn (gen_sub_f (l0, l1, l2));
++-  emit_insn (gen_sbc (h0, h1, h2, gen_rtx_REG (CCmode, CC_REG)));
+++  emit_insn (gen_sbc (h0, h1, h2));
++   DONE;
++   ")
++ 
++@@ -3040,44 +3022,25 @@ archs4x, archs4xd"
++    (set_attr "type" "cc_arith")
++    (set_attr "length" "4")])
++ 
++-; w/c/c comes first (rather than Rcw/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional execution
++-; is used where possible.
++-(define_insn_and_split "sbc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(minus:SI (minus:SI (match_operand:SI 1 "nonmemory_operand"
++-						"c,0,c,0,cCal")
++-			    (ltu:SI (match_operand:CC_C 3 "cc_use_register")
++-				    (const_int 0)))
++-		  (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "sbc"
+++  [(set (match_operand:SI 0 "dest_reg_operand"   "=r,r,r,r,r,r")
+++	(minus:SI
+++	 (minus:SI
+++	  (match_operand:SI 1 "nonmemory_operand" "r,  0,r,0,  r,Cal")
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0)))
+++	 (match_operand:SI 2 "nonmemory_operand"  "r,C_0,L,I,Cal,r")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	sbc %0,%1,%2
++-	sub.cs %0,%1,1
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 4))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int -1))))]
++-  "operands[4] = simplify_gen_binary (MINUS, SImode, operands[1], operands[2]);"
+++    sbc\\t%0,%1,%2
+++    sub.cs\\t%0,%1,1
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ (define_insn "sub_f"
++   [(set (reg:CC CC_REG)
++-- 
++2.16.2
++
+diff --git a/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
+new file mode 100644
+index 0000000000..ed7b000ede
+--- /dev/null
++++ b/package/gcc/arc-2020.09-release/0001-arc-Refurbish-adc-sbc-patterns.patch
+@@ -0,0 +1,242 @@
++From 09944fba5bfb8e5543ce043c70d08222cf2f97ff Mon Sep 17 00:00:00 2001
++From: Claudiu Zissulescu <claziss@synopsys.com>
++Date: Wed, 11 Nov 2020 12:31:10 +0200
++Subject: [PATCH] arc: Refurbish adc/sbc patterns
++
++The adc/sbc patterns were unecessary spliting, remove that and
++associated functions.
++
++gcc/ChangeLog:
++
++2020-10-11  Claudiu Zissulescu  <claziss@synopsys.com>
++
++	* config/arc/arc-protos.h (arc_scheduling_not_expected): Remove
++	it.
++	(arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	* config/arc/arc.c (arc_sets_cc_p): Likewise.
++	(arc_need_delay): Likewise.
++	(arc_scheduling_not_expected): Likewise.
++	* config/arc/arc.md: Convert adc/sbc patterns to simple
++	instruction definitions.
++
++Signed-off-by: Claudiu Zissulescu <claziss@synopsys.com>
++Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
++---
++ gcc/config/arc/arc-protos.h |  3 --
++ gcc/config/arc/arc.c        | 53 -------------------------
++ gcc/config/arc/arc.md       | 95 ++++++++++++++-------------------------------
++ 3 files changed, 29 insertions(+), 122 deletions(-)
++
++diff --git a/gcc/config/arc/arc-protos.h b/gcc/config/arc/arc-protos.h
++index c72d78e3b9e..de4cf47c818 100644
++--- a/gcc/config/arc/arc-protos.h
+++++ b/gcc/config/arc/arc-protos.h
++@@ -90,10 +90,7 @@ extern void split_subsi (rtx *);
++ extern void arc_split_move (rtx *);
++ extern const char *arc_short_long (rtx_insn *insn, const char *, const char *);
++ extern rtx arc_regno_use_in (unsigned int, rtx);
++-extern bool arc_scheduling_not_expected (void);
++-extern bool arc_sets_cc_p (rtx_insn *insn);
++ extern int arc_label_align (rtx_insn *label);
++-extern bool arc_need_delay (rtx_insn *insn);
++ extern bool arc_text_label (rtx_insn *insn);
++ 
++ extern bool arc_short_comparison_p (rtx, int);
++diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
++index fcb83c4e23e..2daf83dd009 100644
++--- a/gcc/config/arc/arc.c
+++++ b/gcc/config/arc/arc.c
++@@ -10341,59 +10341,6 @@ arc_attr_type (rtx_insn *insn)
++   return get_attr_type (insn);
++ }
++ 
++-/* Return true if insn sets the condition codes.  */
++-
++-bool
++-arc_sets_cc_p (rtx_insn *insn)
++-{
++-  if (NONJUMP_INSN_P (insn))
++-    if (rtx_sequence *seq = dyn_cast <rtx_sequence *> (PATTERN (insn)))
++-      insn = seq->insn (seq->len () - 1);
++-  return arc_attr_type (insn) == TYPE_COMPARE;
++-}
++-
++-/* Return true if INSN is an instruction with a delay slot we may want
++-   to fill.  */
++-
++-bool
++-arc_need_delay (rtx_insn *insn)
++-{
++-  rtx_insn *next;
++-
++-  if (!flag_delayed_branch)
++-    return false;
++-  /* The return at the end of a function needs a delay slot.  */
++-  if (NONJUMP_INSN_P (insn) && GET_CODE (PATTERN (insn)) == USE
++-      && (!(next = next_active_insn (insn))
++-	  || ((!NONJUMP_INSN_P (next) || GET_CODE (PATTERN (next)) != SEQUENCE)
++-	      && arc_attr_type (next) == TYPE_RETURN))
++-      && (!TARGET_PAD_RETURN
++-	  || (prev_active_insn (insn)
++-	      && prev_active_insn (prev_active_insn (insn))
++-	      && prev_active_insn (prev_active_insn (prev_active_insn (insn))))))
++-    return true;
++-  if (NONJUMP_INSN_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == USE
++-	 || GET_CODE (PATTERN (insn)) == CLOBBER
++-	 || GET_CODE (PATTERN (insn)) == SEQUENCE)
++-      : JUMP_P (insn)
++-      ? (GET_CODE (PATTERN (insn)) == ADDR_VEC
++-	 || GET_CODE (PATTERN (insn)) == ADDR_DIFF_VEC)
++-      : !CALL_P (insn))
++-    return false;
++-  return num_delay_slots (insn) != 0;
++-}
++-
++-/* Return true if the scheduling pass(es) has/have already run,
++-   i.e. where possible, we should try to mitigate high latencies
++-   by different instruction selection.  */
++-
++-bool
++-arc_scheduling_not_expected (void)
++-{
++-  return cfun->machine->arc_reorg_started;
++-}
++-
++ /* Code has a minimum p2 alignment of 1, which we must restore after
++    an ADDR_DIFF_VEC.  */
++ 
++diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
++index d4d9f59a3ea..6c09c86884f 100644
++--- a/gcc/config/arc/arc.md
+++++ b/gcc/config/arc/arc.md
++@@ -2857,43 +2857,25 @@ archs4x, archs4xd"
++    (set_attr "type" "compare")
++    (set_attr "length" "4,4,8")])
++ 
++-; w/c/c comes first (rather than w/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional
++-; execution is used where possible.
++-(define_insn_and_split "adc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(plus:SI (plus:SI (ltu:SI (reg:CC_C CC_REG) (const_int 0))
++-			  (match_operand:SI 1 "nonmemory_operand"
++-							 "%c,0,c,0,cCal"))
++-		 (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "adc"
+++  [(set (match_operand:SI 0 "register_operand"    "=r,  r,r,r,  r,r")
+++	(plus:SI
+++	 (plus:SI
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0))
+++	  (match_operand:SI 1 "nonmemory_operand" "%r,  0,r,0,Cal,r"))
+++	 (match_operand:SI 2 "nonmemory_operand"   "r,C_0,L,I,  r,Cal")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	adc %0,%1,%2
++-	add.cs %0,%1,1
++-	adc %0,%1,%2
++-	adc %0,%1,%2
++-	adc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 3))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int 1))))]
++-  "operands[3] = simplify_gen_binary (PLUS, SImode, operands[1], operands[2]);"
+++    adc\\t%0,%1,%2
+++    add.cs\\t%0,%1,1
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2
+++    adc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ ; combiner-splitter cmp / scc -> cmp / adc
++ (define_split
++@@ -3025,7 +3007,7 @@ archs4x, archs4xd"
++       DONE;
++     }
++   emit_insn (gen_sub_f (l0, l1, l2));
++-  emit_insn (gen_sbc (h0, h1, h2, gen_rtx_REG (CCmode, CC_REG)));
+++  emit_insn (gen_sbc (h0, h1, h2));
++   DONE;
++   ")
++ 
++@@ -3040,44 +3022,25 @@ archs4x, archs4xd"
++    (set_attr "type" "cc_arith")
++    (set_attr "length" "4")])
++ 
++-; w/c/c comes first (rather than Rcw/0/C_0) to prevent the middle-end
++-; needlessly prioritizing the matching constraint.
++-; Rcw/0/C_0 comes before w/c/L so that the lower latency conditional execution
++-; is used where possible.
++-(define_insn_and_split "sbc"
++-  [(set (match_operand:SI 0 "dest_reg_operand" "=w,Rcw,w,Rcw,w")
++-	(minus:SI (minus:SI (match_operand:SI 1 "nonmemory_operand"
++-						"c,0,c,0,cCal")
++-			    (ltu:SI (match_operand:CC_C 3 "cc_use_register")
++-				    (const_int 0)))
++-		  (match_operand:SI 2 "nonmemory_operand" "c,C_0,L,I,cCal")))]
+++(define_insn "sbc"
+++  [(set (match_operand:SI 0 "dest_reg_operand"   "=r,r,r,r,r,r")
+++	(minus:SI
+++	 (minus:SI
+++	  (match_operand:SI 1 "nonmemory_operand" "r,  0,r,0,  r,Cal")
+++	  (ltu:SI (reg:CC_C CC_REG) (const_int 0)))
+++	 (match_operand:SI 2 "nonmemory_operand"  "r,C_0,L,I,Cal,r")))]
++   "register_operand (operands[1], SImode)
++    || register_operand (operands[2], SImode)"
++   "@
++-	sbc %0,%1,%2
++-	sub.cs %0,%1,1
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2
++-	sbc %0,%1,%2"
++-  ; if we have a bad schedule after sched2, split.
++-  "reload_completed
++-   && !optimize_size && (!TARGET_ARC600_FAMILY)
++-   && arc_scheduling_not_expected ()
++-   && arc_sets_cc_p (prev_nonnote_insn (insn))
++-   /* If next comes a return or other insn that needs a delay slot,
++-      expect the adc to get into the delay slot.  */
++-   && next_nonnote_insn (insn)
++-   && !arc_need_delay (next_nonnote_insn (insn))
++-   /* Restore operands before emitting.  */
++-   && (extract_insn_cached (insn), 1)"
++-  [(set (match_dup 0) (match_dup 4))
++-   (cond_exec
++-     (ltu (reg:CC_C CC_REG) (const_int 0))
++-     (set (match_dup 0) (plus:SI (match_dup 0) (const_int -1))))]
++-  "operands[4] = simplify_gen_binary (MINUS, SImode, operands[1], operands[2]);"
+++    sbc\\t%0,%1,%2
+++    sub.cs\\t%0,%1,1
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2
+++    sbc\\t%0,%1,%2"
++   [(set_attr "cond" "use")
++    (set_attr "type" "cc_arith")
++-   (set_attr "length" "4,4,4,4,8")])
+++   (set_attr "length" "4,4,4,4,8,8")])
++ 
++ (define_insn "sub_f"
++   [(set (reg:CC CC_REG)
++-- 
++2.16.2
++
 -- 
-2.27.0
+2.16.2
