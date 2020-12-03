@@ -1,52 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:37:35 +0100
-Subject: [Buildroot] [git commit] package/python-serial-asyncio: bump to
- version 0.5
-Message-ID: <20201203092229.803CD811FC@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2020 09:37:55 -0000
+Subject: [Buildroot] [git commit] package/luajit: drop static build handling
+Message-ID: <20201203092226.552E5815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=362cd315f998d0b5c32dbd8d853b5e6e501b99c0
+commit: https://git.buildroot.net/buildroot/commit/?id=2310d3588cd75f9f503e4e219da2b85762ed3247
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to year update.
+Static build of luajit is disabled since commit b2e8f28efac
+("package/luajit: disable for static build"). Remove the related
+BUILDMODE handling as well.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-serial-asyncio/python-serial-asyncio.hash | 6 +++---
- package/python-serial-asyncio/python-serial-asyncio.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/luajit/luajit.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/python-serial-asyncio/python-serial-asyncio.hash b/package/python-serial-asyncio/python-serial-asyncio.hash
-index 268c7d83f5..f5d1d9e485 100644
---- a/package/python-serial-asyncio/python-serial-asyncio.hash
-+++ b/package/python-serial-asyncio/python-serial-asyncio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyserial-asyncio/json
--md5     67244fdc11cc31cf0ebf675c271c71d8  pyserial-asyncio-0.4.tar.gz
--sha256  c40677a8874d8c24d4423a97498746de776f6dbcd0efbb8fa43dcf011a589aee  pyserial-asyncio-0.4.tar.gz
-+md5  64d15bfb20982b2129b02070321f49f3  pyserial-asyncio-0.5.tar.gz
-+sha256  1641e5433a866eeaf6464b3ab88b741e7a89dd8cd0f851b3343b15f425138d33  pyserial-asyncio-0.5.tar.gz
- # Locally computed sha256 checksums
--sha256	f8ded3a7460d3b2850b0cf673e986c70e9d997fd0732d8ab3f3c84f1f191087d  LICENSE.txt
-+sha256  ebc84abdbdec7f9fa6962612c110123897db47b79529d5ae41191ef584b88f2c  LICENSE.txt
-diff --git a/package/python-serial-asyncio/python-serial-asyncio.mk b/package/python-serial-asyncio/python-serial-asyncio.mk
-index 39c3476d9e..bc95f2c44a 100644
---- a/package/python-serial-asyncio/python-serial-asyncio.mk
-+++ b/package/python-serial-asyncio/python-serial-asyncio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 68e6af4f5e..defa21dd3f 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -17,12 +17,6 @@ ifeq ($(BR2_PACKAGE_LUAJIT_COMPAT52),y)
+ LUAJIT_XCFLAGS += -DLUAJIT_ENABLE_LUA52COMPAT
+ endif
  
--PYTHON_SERIAL_ASYNCIO_VERSION = 0.4
-+PYTHON_SERIAL_ASYNCIO_VERSION = 0.5
- PYTHON_SERIAL_ASYNCIO_SOURCE = pyserial-asyncio-$(PYTHON_SERIAL_ASYNCIO_VERSION).tar.gz
--PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/41/3f/e26f71269cbc0890a527a736d9afc5c0d5838a2c188be680558d635b7dc2
-+PYTHON_SERIAL_ASYNCIO_SITE = https://files.pythonhosted.org/packages/e1/97/8dd1bf656796668ed4bd86058c815b130303a00a7b70cf79758e4918814a
- PYTHON_SERIAL_ASYNCIO_LICENSE = BSD-3-Clause
- PYTHON_SERIAL_ASYNCIO_LICENSE_FILES = LICENSE.txt
- PYTHON_SERIAL_ASYNCIO_SETUP_TYPE = setuptools
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LUAJIT_BUILDMODE = static
+-else
+-LUAJIT_BUILDMODE = dynamic
+-endif
+-
+ # The luajit build procedure requires the host compiler to have the
+ # same bitness as the target compiler. Therefore, on a x86 build
+ # machine, we can't build luajit for x86_64, which is checked in
+@@ -50,7 +44,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+-		BUILDMODE=$(LUAJIT_BUILDMODE) \
++		BUILDMODE=dynamic \
+ 		XCFLAGS=$(LUAJIT_XCFLAGS) \
+ 		-C $(@D) amalg
+ endef
