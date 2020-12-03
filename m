@@ -1,43 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:24:33 +0100
-Subject: [Buildroot] [git commit] package/erlang-jiffy: bump version to 1.0.6
-Message-ID: <20201203092228.BCD108012C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2020 09:37:54 -0000
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.11.16
+Message-ID: <20201203092226.5DE0E8361A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=add7a8aaa71731841de301d80516781cc21673c6
+commit: https://git.buildroot.net/buildroot/commit/?id=aaa21d40b3ee7c74fa19f9c6d74d8a8198e66341
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Release notes: https://www.samba.org/samba/history/samba-4.11.16.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/erlang-jiffy/erlang-jiffy.hash | 4 ++--
- package/erlang-jiffy/erlang-jiffy.mk   | 2 +-
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/erlang-jiffy/erlang-jiffy.hash b/package/erlang-jiffy/erlang-jiffy.hash
-index 1c18142b6e..19e4f96012 100644
---- a/package/erlang-jiffy/erlang-jiffy.hash
-+++ b/package/erlang-jiffy/erlang-jiffy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 c555726f592b79894c253ca1dc3c3aec6a5697271d29364d57f8175f387b86f3 erlang-jiffy-0.14.11.tar.gz
--sha256 0fa8afad2f02c08850a16e36fe55376ee19732b3a116a0207f2a73c857777a49 LICENSE
-+sha256  7cf67840c58b8732e12c84c8a3b714774da2601ae5e6a57f286273e25b205516  erlang-jiffy-1.0.6.tar.gz
-+sha256  0fa8afad2f02c08850a16e36fe55376ee19732b3a116a0207f2a73c857777a49  LICENSE
-diff --git a/package/erlang-jiffy/erlang-jiffy.mk b/package/erlang-jiffy/erlang-jiffy.mk
-index 9a688f7c9b..e50a5f598f 100644
---- a/package/erlang-jiffy/erlang-jiffy.mk
-+++ b/package/erlang-jiffy/erlang-jiffy.mk
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 0ce22a8526..45de534ecd 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.11.15.tar.asc
+-sha256  922d461bb2e6e490cf7708b297a9312ea6cda1edc7bdfea4ee665f45ff99038a  samba-4.11.15.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.11.16.tar.asc
++sha256  5a7b1647f2e629b9abfbd880bd01799060663dc0494f8c4d10caa353b5c6e28b  samba-4.11.16.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 51ee2c9c39..5874ef32ad 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_JIFFY_VERSION = 0.14.11
-+ERLANG_JIFFY_VERSION = 1.0.6
- ERLANG_JIFFY_SITE = $(call github,davisp,jiffy,$(ERLANG_JIFFY_VERSION))
- ERLANG_JIFFY_LICENSE = MIT (core), \
- 	BSD-3-Clause (Google double conversion library), \
+-SAMBA4_VERSION = 4.11.15
++SAMBA4_VERSION = 4.11.16
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
