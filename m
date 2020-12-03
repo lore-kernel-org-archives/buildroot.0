@@ -1,46 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 1 Dec 2020 21:38:08 +0100
-Subject: [Buildroot] [git commit] package/python-can: bump to verison 3.3.4
-Message-ID: <20201203092227.B9FFB821E0@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2020 09:37:55 -0000
+Subject: [Buildroot] [git commit] package/spdlog: bump to version 1.8.1
+Message-ID: <20201203092226.7F72D821E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85d36b4cf995ca725e6765a336b01054439732aa
+commit: https://git.buildroot.net/buildroot/commit/?id=74486e3ce1747cb7cec948a5c8985157b2bf49ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-can/python-can.hash | 4 ++--
- package/python-can/python-can.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/spdlog/spdlog.hash | 2 +-
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index ced51d8b75..5330e5899c 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,4 @@
--# sha256 from https://pypi.org/pypi/python-can/json
--sha256	ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488  python-can-3.3.3.tar.gz
-+# sha256 from https://pypi.org/pypi/python-can
-+sha256	2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449  python-can-3.3.4.tar.gz
- # Locally computed sha256 checksums
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 158e89f204..1ab813e2c9 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index 68dd7f1978..abb8bf9bdd 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1e68e9b40cf63bb022a4b18cdc1c9d88eb5d97e4fd64fa981950a9cacf57a4bf  spdlog-1.8.0.tar.gz
++sha256  5197b3147cfcfaa67dd564db7b878e4a4b3d9f3443801722b3915cdeced656cb  spdlog-1.8.1.tar.gz
+ sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 8d8c3888bf..3c745f60ad 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 3.3.3
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/b0/fa/8c6eb8988130f256db4c3cf84537c44684dbb3d528d2e1a1d2209eac4d90
-+PYTHON_CAN_VERSION = 3.3.4
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/97/dd/5e5ae96db41ba57dde127e0600c3d324239ed692e167296c5fdb992cbf41
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-SPDLOG_VERSION = 1.8.0
++SPDLOG_VERSION = 1.8.1
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
