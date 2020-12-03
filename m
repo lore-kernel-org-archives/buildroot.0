@@ -1,45 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:52 -0000
-Subject: [Buildroot] [git commit] package/shadowsocks-libev: bump version to
- 3.3.5
-Message-ID: <20201203092225.19772815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sshfs: bump to version 3.7.1
+Message-ID: <20201203092226.2B454815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb6e1d5dcb20d4ff43e96838552a106166d9c77f
+commit: https://git.buildroot.net/buildroot/commit/?id=75750b45ef7005f49ac6b0433ec5c42c7c28a8bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
+Drop patch (already in version)
+
+https://github.com/libfuse/sshfs/blob/sshfs-3.7.1/ChangeLog.rst
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shadowsocks-libev/shadowsocks-libev.hash | 2 +-
- package/shadowsocks-libev/shadowsocks-libev.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-sshfs.c-fix-build-with-gcc-4.8.patch      | 47 ----------------------
+ package/sshfs/sshfs.hash                           |  2 +-
+ package/sshfs/sshfs.mk                             |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
 
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index cc7993a54f..4f1d6d2fa5 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.hash
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  fce47a956fad0c30def9c71821bcec450a40d3f881548e31e66cedf262b89eb1  shadowsocks-libev-3.3.4.tar.gz
-+sha256  cfc8eded35360f4b67e18dc447b0c00cddb29cc57a3cec48b135e5fb87433488  shadowsocks-libev-3.3.5.tar.gz
- 
- # License files, locally calculated
- sha256  736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 3ba4cb875c..8d7b00f139 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index 312985d8dc..0000000000
+--- a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 31 Oct 2020 21:08:53 +0100
+-Subject: [PATCH] sshfs.c: fix build with gcc 4.8
+-
+-Fix the following build failure with gcc 4.8:
+-
+-../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
+-  for (int i = 0; i < sshfs.max_conns; i++) {
+-  ^
+-
+-This build failure has been added with
+-https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/libfuse/sshfs/pull/233]
+----
+- sshfs.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/sshfs.c b/sshfs.c
+-index d5f2ff7..2c2db42 100644
+---- a/sshfs.c
+-+++ b/sshfs.c
+-@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
+- 			     const char *path)
+- {
+- 	struct conntab_entry *ce;
+-+	int i;
+- 
+- 	if (sshfs.max_conns == 1)
+- 		return &sshfs.conns[0];
+-@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
+- 
+- 	int best_index = 0;
+- 	uint64_t best_score = ~0ULL; /* smaller is better */
+--	for (int i = 0; i < sshfs.max_conns; i++) {
+-+	for (i = 0; i < sshfs.max_conns; i++) {
+- 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
+- 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
+- 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
+--- 
+-2.28.0
+-
+diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
+index b8488013a7..106f06f09f 100644
+--- a/package/sshfs/sshfs.hash
++++ b/package/sshfs/sshfs.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
++sha256  fe5d3436d61b46974889e0c4515899c21a9d67851e3793c209989f72353d7750  sshfs-3.7.1.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
+index 70e7feab1d..6759f6ab3b 100644
+--- a/package/sshfs/sshfs.mk
++++ b/package/sshfs/sshfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHADOWSOCKS_LIBEV_VERSION = 3.3.4
-+SHADOWSOCKS_LIBEV_VERSION = 3.3.5
- SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+-SSHFS_VERSION = 3.7.0
++SSHFS_VERSION = 3.7.1
+ SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
+ SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
+ SSHFS_LICENSE = GPL-2.0
