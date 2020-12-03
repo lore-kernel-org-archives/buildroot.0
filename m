@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 21:44:28 +0100
-Subject: [Buildroot] [git commit] package/libostree: bump to version 2020.8
-Message-ID: <20201203092227.D85938012C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Dec 2020 09:37:54 -0000
+Subject: [Buildroot] [git commit] package/grep: bump to version 3.6
+Message-ID: <20201203092225.DECBC815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e060bf6bc6a7bc381904ce995b9f18372aa2c6d
+commit: https://git.buildroot.net/buildroot/commit/?id=29ece7ead59e3621bcc4f85f07552c5ffe3df3b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/grep/grep.hash | 4 ++--
+ package/grep/grep.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index e5483a539c..751feb6b2e 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  865d4818820d128a2e505380358275bb964984348b3d0685b6455099e4736972  libostree-2020.6.tar.xz
-+sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index e387f99856..9406e023bd 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+diff --git a/package/grep/grep.hash b/package/grep/grep.hash
+index fae3b73e80..9dfe2f2c23 100644
+--- a/package/grep/grep.hash
++++ b/package/grep/grep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# http://ftp.gnu.org/gnu/grep/grep-3.5.tar.xz.sig
++# http://ftp.gnu.org/gnu/grep/grep-3.6.tar.xz.sig
+ # using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
+-sha256  b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a  grep-3.5.tar.xz
++sha256  667e15e8afe189e93f9f21a7cd3a7b3f776202f417330b248c2ad4f997d9373e  grep-3.6.tar.xz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index bdc22fa46c..198dc854e9 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2020.6
-+LIBOSTREE_VERSION = 2020.8
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-GREP_VERSION = 3.5
++GREP_VERSION = 3.6
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPL-3.0+
