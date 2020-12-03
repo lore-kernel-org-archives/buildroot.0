@@ -1,51 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  3 Dec 2020 20:47:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.14
-Message-ID: <20201203194710.3229489-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  3 Dec 2020 21:10:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11vnc: fix CVE-2020-29074
+Message-ID: <20201203201013.585769-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://sourceforge.net/p/fetchmail/git/ci/legacy_64/tree/NEWS
+scan.c in x11vnc 0.9.16 uses IPC_CREAT|0777 in shmget calls, which
+allows access by actors other than the current user.
 
-Removed md5 hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fetchmail/fetchmail.hash | 7 +++----
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ ...ared-memory-segments-to-current-user.patch | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index b40ce7f7b1..759138ec2d 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,7 +1,6 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37037213/
--sha256  26cd936ece146e056cdf79a676a33738b4eab0a5ae2edf3fce5ba034721b09bd  fetchmail-6.4.8.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37162383/
-+sha256  424707390f7cdc6d16db4887931117f2242873846b28cc1d0ae1c0ecf158bdcb  fetchmail-6.4.14.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  900386d69e2731999f142d5c16b4f2b69ed87f7a  fetchmail-6.4.8.tar.xz
--md5  4e5e67efe498038032576fa24c7f848e  fetchmail-6.4.8.tar.xz
-+sha1  f058c877d7909fe196b5d0425b052c99f87f86e3  fetchmail-6.4.14.tar.xz
- # Locally computed:
- sha256  89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 1835059f61..430ec55329 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).8
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).14
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+diff --git a/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch b/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch
+new file mode 100644
+index 0000000000..e4dbdf1894
+--- /dev/null
++++ b/package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch
+@@ -0,0 +1,25 @@
++From 69eeb9f7baa14ca03b16c9de821f9876def7a36a Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Gu=C3=A9nal=20DAVALAN?= <guenal.davalan@uca.fr>
++Date: Wed, 18 Nov 2020 08:40:45 +0100
++Subject: [PATCH] scan: limit access to shared memory segments to current user
++
++[Retrieved from:
++https://github.com/LibVNC/x11vnc/commit/69eeb9f7baa14ca03b16c9de821f9876def7a36a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/scan.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/scan.c b/src/scan.c
++index 43e00d2..12994d5 100644
++--- a/src/scan.c
+++++ b/src/scan.c
++@@ -320,7 +320,7 @@ static int shm_create(XShmSegmentInfo *shm, XImage **ximg_ptr, int w, int h,
++ 
++ #if HAVE_XSHM
++ 	shm->shmid = shmget(IPC_PRIVATE,
++-	    xim->bytes_per_line * xim->height, IPC_CREAT | 0777);
+++	    xim->bytes_per_line * xim->height, IPC_CREAT | 0600);
++ 
++ 	if (shm->shmid == -1) {
++ 		rfbErr("shmget(%s) failed.\n", name);
 -- 
-2.27.0
+2.29.2
