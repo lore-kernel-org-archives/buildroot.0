@@ -1,58 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 03 Dec 2020 09:37:51 -0000
-Subject: [Buildroot] [git commit] package/qt5/qt5base: add -syslog option
-Message-ID: <20201203092225.AF7ED815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.5
+Message-ID: <20201203092225.6F2CF815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=109df4deba86839704d902204d130714e32df0fa
+commit: https://git.buildroot.net/buildroot/commit/?id=17a220d1543ee34a2e292ccbac001b5ffaba407c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-QT can default to outputting the logs to syslog instead of to the
-console with this compile time switch. That behavior can still be
-overridden by setting the environment variable QT_LOGGING_TO_CONSOLE to
-1.
+https://www.mail-archive.com/haproxy at formilux.org/msg38809.html
 
-Signed-off-by: Jeff Zignego <jzignego@hedcontrols.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/Config.in  | 5 +++++
- package/qt5/qt5base/qt5base.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index ce7230c728..ee7c757c60 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -263,6 +263,11 @@ config BR2_PACKAGE_QT5BASE_PNG
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index a127af9195..5140c6a944 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
+-sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
++sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 70ff997fbe..1912a219e1 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- endif
- 
-+config BR2_PACKAGE_QT5BASE_SYSLOG
-+	bool "syslog support"
-+	help
-+	  Logs to the standard UNIX logging mechanism.
-+
- config BR2_PACKAGE_QT5BASE_DBUS
- 	bool "DBus module"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index ed308c1fa2..fa92625738 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -254,6 +254,12 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-journald
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_SYSLOG),y)
-+QT5BASE_CONIGURE_OPTS += -syslog
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-syslog
-+endif
-+
- ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
- # use vivante backend
- QT5BASE_EGLFS_DEVICE = EGLFS_DEVICE_INTEGRATION = eglfs_viv
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
