@@ -1,39 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/rocksdb: bump to version 6.13.3
-Message-ID: <20201203092225.99741815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-yatl: bump to version
+ 20200711.1
+Message-ID: <20201203092226.34842815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcee4254aa50dc8866d3245e5a21ad63b9cbfd2c
+commit: https://git.buildroot.net/buildroot/commit/?id=f3ef4d26dcab297e3480ba129c26b5e899643a64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Refresh first patch
-- Replace second patch (this new iteration of previous patch has not
-  been merged and does not apply cleanly on current version)
-- Update hash of README.md (CircleCI gadget added with
-  https://github.com/facebook/rocksdb/commit/63b59f21d9971fc941e3ee2244783a3c16bd5ad4)
-- LTO is supported since version 6.12.6 and
-  https://github.com/facebook/rocksdb/commit/c0c33a4854587e412742841f199edd4616be6c00
-- DESTDIR and PREFIX are supported since version 6.13.2 and
-  https://github.com/facebook/rocksdb/commit/1e59800718b29d4a762b8ac356767a701f968a4d
-
-https://github.com/facebook/rocksdb/releases/tag/v6.13.3
-
-Fixes:
- - http://autobuild.buildroot.org/results/a9798bb279a668a266c472fb026b68dbccf50431
+https://github.com/web2py/yatl/compare/v20200430.1...master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...d_tools-build_detect_platform-fix-C-tests.patch |   67 +-
- ...8-compatiblity-fix-CRC32-C-implementation.patch | 3787 ++++++++++++++++++
- ...eplace-POWER-crc32c-with-C-implementation.patch | 4058 --------------------
- package/rocksdb/rocksdb.hash                       |    4 +-
- package/rocksdb/rocksdb.mk                         |   16 +-
- 5 files changed, 3857 insertions(+), 4075 deletions(-)
+ package/python-yatl/python-yatl.hash | 4 ++--
+ package/python-yatl/python-yatl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
+index 9238e71b22..534d74b654 100644
+--- a/package/python-yatl/python-yatl.hash
++++ b/package/python-yatl/python-yatl.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/yatl/json
+-md5  930be78b3d6e33f3f920619d673c345a  yatl-20200430.1.tar.gz
+-sha256  5220390b27f010046642c00aded9ffc694e383a3d7a47985c8809d8482c8478a  yatl-20200430.1.tar.gz
++md5  3368146e56b35ba5569ff64054c2a3fd  yatl-20200711.1.tar.gz
++sha256  d37b90e7679d2d2873ac634e66adfcd0cd7e4c34438e76a3192cf984faba2595  yatl-20200711.1.tar.gz
+diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
+index fca39bb5ef..6df5fcd83e 100644
+--- a/package/python-yatl/python-yatl.mk
++++ b/package/python-yatl/python-yatl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_YATL_VERSION = 20200430.1
++PYTHON_YATL_VERSION = 20200711.1
+ PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
+-PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/7f/bd/aa36c1a1d876757e3fa365e6c455097ebd3f2e8e7ded23e75901ff9c9ecf
++PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/b4/f5/b6020f8ccb3e156fbe0ed7e4a35fbdce4d6a7ef6a9ab0c54cb8880fb7c04
+ PYTHON_YATL_SETUP_TYPE = setuptools
+ PYTHON_YATL_LICENSE = BSD-3-Clause
+ 
