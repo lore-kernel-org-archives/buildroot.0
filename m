@@ -1,67 +1,167 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Dec 2020 09:37:51 -0000
-Subject: [Buildroot] [git commit] package/{libuv,
- uvw}: bump to versions 1.40.0, 2.8.0_libuv_v1.40
-Message-ID: <20201203092226.74019821E0@busybox.osuosl.org>
+Date: Thu, 03 Dec 2020 09:37:52 -0000
+Subject: [Buildroot] [git commit] package/quota: bump to version 4.06
+Message-ID: <20201203092226.4B443815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1931f9abf9821140bc9e2685fbf10861234b633a
+commit: https://git.buildroot.net/buildroot/commit/?id=7f156471ab1a18676d7ec24c68173a66e5553df5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+- Drop patch (already in version) and so autoreconf
+- Update hash of COPYING (mailing address updated:
+  https://sourceforge.net/p/linuxquota/code/ci/b6bb53e1124e6b813fe4de5682b9d9a9f8a1fba8)
+- Update indentation in hash file (two spaces)
+
+https://sourceforge.net/p/linuxquota/code/ci/v4.06/tree/Changelog
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- package/uvw/uvw.hash     | 2 +-
- package/uvw/uvw.mk       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-configure.ac-add-disable-pie-option.patch | 55 ----------------------
+ ...a-Use-realloc-3-instead-of-reallocarray-3.patch | 34 +++++++++++++
+ package/quota/quota.hash                           | 10 ++--
+ package/quota/quota.mk                             |  5 +-
+ 4 files changed, 40 insertions(+), 64 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 2aba18490e..c682affae7 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2cd9a757fe6c512440933e2bdcab21143d4aa6249b2541399908ce038b756c9d  libuv-1.38.0.tar.gz
-+sha256  70fe1c9ba4f2c509e8166c0ca2351000237da573bb6c82092339207a9715ba6b  libuv-1.40.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 493168cd99..5876ab8935 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/quota/0001-configure.ac-add-disable-pie-option.patch b/package/quota/0001-configure.ac-add-disable-pie-option.patch
+deleted file mode 100644
+index c3b57fea66..0000000000
+--- a/package/quota/0001-configure.ac-add-disable-pie-option.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From cb20e19028a8996de9305502ba5e5da3bd1181bf Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 2 Apr 2019 09:19:36 +0200
+-Subject: [PATCH] configure.ac: add --disable-pie option
+-
+-PIE is not necessarily supported on all architectures, so add an option
+-to allow the user to disable the PIE.
+-
+-This fixes the build on the m68k architecture:
+- - http://autobuild.buildroot.org/results/25985bbc160e3d62b23c4c613b2a81f3711621e3
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: merged]
+----
+- Makefile.am  |  2 +-
+- configure.ac | 12 ++++++++++++
+- 2 files changed, 13 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 638198d..332bd67 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -1,5 +1,5 @@
+- ACLOCAL_AMFLAGS = -I m4
+--AM_LDFLAGS = -pie
+-+AM_LDFLAGS = @PIE_LDFLAGS@
+- 
+- doc_DATA = \
+-        README.mailserver \
+-diff --git a/configure.ac b/configure.ac
+-index 095ff86..5af4235 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -55,6 +55,18 @@ AS_IF([test "x${prefix}" = "xNONE"], [
+-   AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/share/locale", [Locale-specific data directory])
+- ])
+- 
+-+# ================
+-+# Check for ldflags
+-+# ================
+-+AC_ARG_ENABLE([pie],
+-+   [AS_HELP_STRING([--disable-pie], [Disable Position Independent Executable])],
+-+   [enable_pie="$enableval"],
+-+   [enable_pie=yes]
+-+)
+-+AS_IF([test x"$enable_pie" != "xno"], [
+-+    PIE_LDFLAGS="-pie"
+-+])
+-+AC_SUBST([PIE_LDFLAGS])
+- 
+- # ================
+- # Check for cflags
+--- 
+-2.14.1
+-
+diff --git a/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
+new file mode 100644
+index 0000000000..093d7cc821
+--- /dev/null
++++ b/package/quota/0001-quota-Use-realloc-3-instead-of-reallocarray-3.patch
+@@ -0,0 +1,34 @@
++From 02b222a335527f1031cc9495d8c5ebc1bc5b1d4e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 11 Nov 2020 15:00:47 +0100
++Subject: [PATCH] quota: Use realloc(3) instead of reallocarray(3)
++
++reallocarray(3) has been added to glibc relatively recently (version
++2.26, from 2017) and apparently not all users run new enough glibc. Just
++use realloc(3) for now since in this case there's no real risk of
++overflow.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Jan Kara <jack@suse.cz>
++[Retrieved from:
++https://sourceforge.net/p/linuxquota/code/ci/02b222a335527f1031cc9495d8c5ebc1bc5b1d4e]
++---
++ quota.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/quota.c b/quota.c
++index a6ed61f..a60de12 100644
++--- a/quota.c
+++++ b/quota.c
++@@ -385,7 +385,7 @@ int main(int argc, char **argv)
++ 			  break;
++ 		  case 259:
++ 			  fscount++;
++-			  fsnames = reallocarray(fsnames, fscount, sizeof(char *));
+++			  fsnames = realloc(fsnames, fscount * sizeof(char *));
++ 			  if (!fsnames)
++ 				die(1, _("Not enough memory for filesystem names"));
++ 			  fsnames[fscount - 1] = optarg;
++-- 
++2.28.0
++
+diff --git a/package/quota/quota.hash b/package/quota/quota.hash
+index d9f42e51c7..354a3e2de4 100644
+--- a/package/quota/quota.hash
++++ b/package/quota/quota.hash
+@@ -1,7 +1,7 @@
+-# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.05/ (click on info button)
+-md5	1c1dbd2cd3d680ccac661239b067e147	quota-4.05.tar.gz
+-sha1	d23711f3b204e0a86b8378c32545c95fb149168d	quota-4.05.tar.gz
++# From http://sourceforge.net/projects/linuxquota/files/quota-tools/4.06/ (click on info button)
++md5  aef94648438832b684978d46fdf75110  quota-4.06.tar.gz
++sha1  98288699cc14da42f762301c2b6731ec7c777681  quota-4.06.tar.gz
  
- # When bumping libuv, check if a new version of uvw is available
- # and bump it too.
--LIBUV_VERSION = 1.38.0
-+LIBUV_VERSION = 1.40.0
- LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
-diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
-index f842345ea6..ba8c7b893d 100644
---- a/package/uvw/uvw.hash
-+++ b/package/uvw/uvw.hash
-@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  2695276bb4b154174ac0a6401bde5c0768bca99a43c9a469af67526f7e2e9410  uvw-2.6.0_libuv-v1.38.tar.gz
-+sha256  aa5769f5b9ba50de72ab02a8f8acf298b4aa9ceaef07992418a13a0fa119ce7d  uvw-2.8.0_libuv_v1.40.tar.gz
- sha256  755b2f245af22830c15b60c54469c0d92fbed42009b0d0074cec4b3959905757  LICENSE
-diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
-index dd9b6b27dc..39952caa11 100644
---- a/package/uvw/uvw.mk
-+++ b/package/uvw/uvw.mk
-@@ -4,7 +4,7 @@
+-sha256	ef3b5b5d1014ed1344b46c1826145e20cbef8db967b522403c9a060761cf7ab9	quota-4.05.tar.gz
+-sha256	35b2d9797b83bce16076da9c3273f264f50b8d02f492ee32cd4c51ba6897bceb	COPYING
++sha256  2f3e03039f378d4f0d97acdb49daf581dcaad64d2e1ddf129495fd579fbd268d  quota-4.06.tar.gz
++sha256  32a5fd41e7a257f7f0373988ea8d45cebdbf376060703c242c11c000751b1203  COPYING
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index f4bf9e5c58..18502da9aa 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -4,14 +4,11 @@
  #
  ################################################################################
  
--UVW_VERSION = 2.6.0_libuv-v1.38
-+UVW_VERSION = 2.8.0_libuv_v1.40
- UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
- UVW_INSTALL_STAGING = YES
- UVW_INSTALL_TARGET = NO
+-QUOTA_VERSION = 4.05
++QUOTA_VERSION = 4.06
+ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
+-# We're patching configure.ac
+-QUOTA_AUTORECONF = YES
+-QUOTA_GETTEXTIZE = YES
+ QUOTA_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
+ QUOTA_CONF_OPTS = --disable-pie
+ 
