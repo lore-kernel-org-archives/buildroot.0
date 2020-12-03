@@ -1,64 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 03 Dec 2020 09:37:52 -0000
-Subject: [Buildroot] [git commit] package/dnsmasq: bump to version 2.82
-Message-ID: <20201203092225.3B9F68012C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Merge branch 'master' into next
+Message-ID: <20201203092226.B62FB8012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62257b3247d253639354a5519ac51ca1e4daff05
+commit: https://git.buildroot.net/buildroot/commit/?id=982e2a177d981e553bc01143088eb00c390dfa1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop Makefile modification for pkg-config. Build time PATH ensures that
-the Buildroot pkg-config is used.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dnsmasq/dnsmasq.hash | 4 ++--
- package/dnsmasq/dnsmasq.mk   | 8 +-------
- 2 files changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 99e417f069..401f930baf 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.81.tar.xz.asc
--sha256  749ca903537c5197c26444ac24b0dce242cf42595fdfe6b9a5b9e4c7ad32f8fb  dnsmasq-2.81.tar.xz
-+# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.82.tar.xz.asc
-+sha256  84523646f3116bb5e1151efb66e645030f6e6a8256f29aab444777a343ebc132  dnsmasq-2.82.tar.xz
- # Locally calculated
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 4a7218a2b7..117be38d4b 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DNSMASQ_VERSION = 2.81
-+DNSMASQ_VERSION = 2.82
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
-@@ -77,13 +77,7 @@ DNSMASQ_DEPENDENCIES += ubus
- DNSMASQ_COPTS += -DHAVE_UBUS
- endif
- 
--define DNSMASQ_FIX_PKGCONFIG
--	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
--		$(DNSMASQ_DIR)/Makefile
--endef
--
- define DNSMASQ_BUILD_CMDS
--	$(DNSMASQ_FIX_PKGCONFIG)
- 	$(DNSMASQ_TWEAK_LIBLUA)
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
- endef
+* master: (125 commits)
+  package/jpeg-turbo: security bump to version 2.0.5
+  package/modem-manager: bump to version 1.14.8
+  package/c-ares: security bump to version 1.17.0
+  docs/website: update for 2020.02.8
+  Update for 2020.02.8
+  docs/website: update for 2020.08.2
+  Update for 2020.08.2
+  package/qemu: fix build with 64 bits time_t
+  package/harfbuzz: fix build without threads
+  boot/uboot: fix custom repo error message
+  package/numactl: needs -fPIC
+  package/dovecot-pigeonhole: fix build with per-package directories
+  package/libpam-tacplus: remove duplicate LIBPAM_TACPLUS_AUTORECONF
+  package/openntpd: needs host-bison
+  package/xorriso: fix host option
+  DEVELOPERS: drop Trent Piepho
+  package/postgresql: security bump to version 12.5
+  package/redis: security bump to version 6.0.9
+  Revert "package/linux-backports: bump version to 5.8"
+  package/linux-backports: bump version to 5.8
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
