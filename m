@@ -1,45 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:51 -0000
-Subject: [Buildroot] [git commit] package/fbgrab: bump to version 1.4
-Message-ID: <20201203092225.CF77D8012C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perf: if zstd is enabled,
+ depend on it
+Message-ID: <20201203092226.20E548012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbab0c22d9c367de8425e6c0ae5bdb900e30a681
+commit: https://git.buildroot.net/buildroot/commit/?id=409b29288738bc377bff239d5aebf4d1cb15aefb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for line length deviating from width
+Enables the "-z" flag.
 
-Signed-off-by: Timo Ketola <timo.ketola@exertus.fi>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: V??clav Kubern??t <sir.venceslas@gmail.com>
+Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fbgrab/fbgrab.hash | 2 +-
- package/fbgrab/fbgrab.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-tools/linux-tool-perf.mk.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/fbgrab/fbgrab.hash b/package/fbgrab/fbgrab.hash
-index 414a93c99e..4d9a6b97d4 100644
---- a/package/fbgrab/fbgrab.hash
-+++ b/package/fbgrab/fbgrab.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  2bfdad379579c4ca1a910d0a8ac63183ef2c12a45e6b7d402fd045d83bb3faee  fbgrab-1.3.3.tar.gz
-+sha256  62d7aa82138ac36db0921832f3b5267b4cffc0dc22c8701857ebcb997960a32e  fbgrab-1.4.tar.gz
- sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
-index 6d2f09bc21..1ae03ae43f 100644
---- a/package/fbgrab/fbgrab.mk
-+++ b/package/fbgrab/fbgrab.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index e54f019888..efa747cf8d 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -69,6 +69,10 @@ else
+ PERF_MAKE_FLAGS += NO_LIBAUDIT=1
+ endif
  
--FBGRAB_VERSION = 1.3.3
-+FBGRAB_VERSION = 1.4
- FBGRAB_SITE = $(call github,GunnarMonell,fbgrab,$(FBGRAB_VERSION))
- FBGRAB_DEPENDENCIES = libpng
- FBGRAB_LICENSE = GPL-2.0
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++PERF_DEPENDENCIES += zstd
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ PERF_DEPENDENCIES += libunwind
+ else
