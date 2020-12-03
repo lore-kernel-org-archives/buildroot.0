@@ -1,120 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 03 Dec 2020 09:37:53 -0000
-Subject: [Buildroot] [git commit] package/quickjs: new package
-Message-ID: <20201203092225.7C6BB815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rocksdb: bump to version 6.13.3
+Message-ID: <20201203092225.99741815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d50793659acb95050c110d5fc05399df20ce30b
+commit: https://git.buildroot.net/buildroot/commit/?id=fcee4254aa50dc8866d3245e5a21ad63b9cbfd2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- Refresh first patch
+- Replace second patch (this new iteration of previous patch has not
+  been merged and does not apply cleanly on current version)
+- Update hash of README.md (CircleCI gadget added with
+  https://github.com/facebook/rocksdb/commit/63b59f21d9971fc941e3ee2244783a3c16bd5ad4)
+- LTO is supported since version 6.12.6 and
+  https://github.com/facebook/rocksdb/commit/c0c33a4854587e412742841f199edd4616be6c00
+- DESTDIR and PREFIX are supported since version 6.13.2 and
+  https://github.com/facebook/rocksdb/commit/1e59800718b29d4a762b8ac356767a701f968a4d
+
+https://github.com/facebook/rocksdb/releases/tag/v6.13.3
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a9798bb279a668a266c472fb026b68dbccf50431
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/quickjs/Config.in    | 16 ++++++++++++++++
- package/quickjs/quickjs.hash |  2 ++
- package/quickjs/quickjs.mk   | 37 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
+ ...d_tools-build_detect_platform-fix-C-tests.patch |   67 +-
+ ...8-compatiblity-fix-CRC32-C-implementation.patch | 3787 ++++++++++++++++++
+ ...eplace-POWER-crc32c-with-C-implementation.patch | 4058 --------------------
+ package/rocksdb/rocksdb.hash                       |    4 +-
+ package/rocksdb/rocksdb.mk                         |   16 +-
+ 5 files changed, 3857 insertions(+), 4075 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 43cc1b55ae..53db631940 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -922,6 +922,7 @@ F:	package/netsurf/
- F:	package/perl*
- F:	package/pkg-perl.mk
- F:	package/pkg-luarocks.mk
-+F:	package/quickjs/
- F:	package/rings/
- F:	package/tekui/
- F:	package/wpebackend-fdo/
-diff --git a/package/Config.in b/package/Config.in
-index 016a99ed1a..8fcea06433 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1245,6 +1245,7 @@ menu "External python modules"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-+	source "package/quickjs/Config.in"
- 	source "package/ruby/Config.in"
- 	source "package/tcl/Config.in"
- if BR2_PACKAGE_TCL
-diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-new file mode 100644
-index 0000000000..ee53744bde
---- /dev/null
-+++ b/package/quickjs/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_QUICKJS
-+	bool "quickjs"
-+	depends on !BR2_STATIC_LIBS
-+	# No way to check for fenv support.
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  QuickJS is a small and embeddable Javascript engine.
-+	  It supports the ES2020 specification including modules,
-+	  asynchronous generators, proxies and BigInt.
-+
-+	  https://bellard.org/quickjs/
-+
-+comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-new file mode 100644
-index 0000000000..076e4bddbb
---- /dev/null
-+++ b/package/quickjs/quickjs.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0021a3e8cdc6b61e225411d05e2841d2437e1ccf4b4cabb9a5f7685ebfb57717  quickjs-2020-09-06.tar.xz
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-new file mode 100644
-index 0000000000..557ffb196d
---- /dev/null
-+++ b/package/quickjs/quickjs.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# quickjs
-+#
-+################################################################################
-+
-+QUICKJS_VERSION = 2020-09-06
-+QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
-+QUICKJS_SITE = https://bellard.org/quickjs
-+QUICKJS_LICENSE = MIT
-+QUICKJS_INSTALL_STAGING = YES
-+
-+define QUICKJS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		all
-+endef
-+
-+define QUICKJS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(STAGING_DIR) \
-+		STRIP=/bin/true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+define QUICKJS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CROSS_PREFIX="$(TARGET_CROSS)" \
-+		DESTDIR=$(TARGET_DIR) \
-+		STRIP=/bin/true \
-+		prefix=/usr \
-+		install
-+endef
-+
-+$(eval $(generic-package))
+Patch is too large, so refusing to show it
