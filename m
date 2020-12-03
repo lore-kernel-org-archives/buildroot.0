@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:51 -0000
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.5
-Message-ID: <20201203092225.6F2CF815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: drop unrecognized
+ variables
+Message-ID: <20201203092225.EE1F88012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17a220d1543ee34a2e292ccbac001b5ffaba407c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b615593b96b2d350fae4b3d4145c60715dfcc22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.mail-archive.com/haproxy at formilux.org/msg38809.html
+pgac_cv_snprintf_long_long_int_modifier has been dropped since version
+11.0 and
+https://github.com/postgres/postgres/commit/b929614f5e867c70721b3db31d3dec6cb35e1eb5
+
+pgac_cv_snprintf_size_t_support has been dropped since version 12.0 and
+https://github.com/postgres/postgres/commit/96bf88d52711ad3a0a4cc2d1d9cb0e2acab85e63
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/postgresql/postgresql.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index a127af9195..5140c6a944 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
--sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
-+sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 70ff997fbe..1912a219e1 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 3630b5a385..d984235249 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -13,8 +13,6 @@ POSTGRESQL_INSTALL_STAGING = YES
+ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ POSTGRESQL_CONF_ENV = \
+ 	ac_cv_type_struct_sockaddr_in6=yes \
+-	pgac_cv_snprintf_long_long_int_modifier="ll" \
+-	pgac_cv_snprintf_size_t_support=yes \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ POSTGRESQL_CONF_OPTS = --disable-rpath
+ POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
