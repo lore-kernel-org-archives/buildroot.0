@@ -1,100 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:52 -0000
-Subject: [Buildroot] [git commit] package/sshfs: bump to version 3.7.1
-Message-ID: <20201203092226.2B454815D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbluray: bump version to 1.2.1
+Message-ID: <20201203092225.5A25D8361A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75750b45ef7005f49ac6b0433ec5c42c7c28a8bf
+commit: https://git.buildroot.net/buildroot/commit/?id=b317eb8802ddb9a3079d66cc1cefd3e60f0d9e72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop patch (already in version)
+Reformatted hashes.
 
-https://github.com/libfuse/sshfs/blob/sshfs-3.7.1/ChangeLog.rst
+Release notes: https://www.videolan.org/news.html#news-2020-10-23
+"A minor release of libbluray was pushed today, focused on fixing bugs
+ and improving the support for UHD Blurays."
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-sshfs.c-fix-build-with-gcc-4.8.patch      | 47 ----------------------
- package/sshfs/sshfs.hash                           |  2 +-
- package/sshfs/sshfs.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
+ package/libbluray/libbluray.hash | 6 +++---
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch b/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-deleted file mode 100644
-index 312985d8dc..0000000000
---- a/package/sshfs/0001-sshfs.c-fix-build-with-gcc-4.8.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 35ff9ed71b89f34e5462de1ee63f88edf98aeb69 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 31 Oct 2020 21:08:53 +0100
--Subject: [PATCH] sshfs.c: fix build with gcc 4.8
--
--Fix the following build failure with gcc 4.8:
--
--../sshfs.c:1092:2: error: 'for' loop initial declarations are only allowed in C99 mode
--  for (int i = 0; i < sshfs.max_conns; i++) {
--  ^
--
--This build failure has been added with
--https://github.com/libfuse/sshfs/commit/8822b60d9dbd9907065e7999f616b11ddce6d584
--
--Fixes:
-- - http://autobuild.buildroot.org/results/2dbdc579c55543175716d5f739cabe2ad0864ed6
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/libfuse/sshfs/pull/233]
-----
-- sshfs.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/sshfs.c b/sshfs.c
--index d5f2ff7..2c2db42 100644
----- a/sshfs.c
--+++ b/sshfs.c
--@@ -1068,6 +1068,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-- 			     const char *path)
-- {
-- 	struct conntab_entry *ce;
--+	int i;
-- 
-- 	if (sshfs.max_conns == 1)
-- 		return &sshfs.conns[0];
--@@ -1089,7 +1090,7 @@ static struct conn* get_conn(const struct sshfs_file *sf,
-- 
-- 	int best_index = 0;
-- 	uint64_t best_score = ~0ULL; /* smaller is better */
---	for (int i = 0; i < sshfs.max_conns; i++) {
--+	for (i = 0; i < sshfs.max_conns; i++) {
-- 		uint64_t score = ((uint64_t) sshfs.conns[i].req_count << 43) +
-- 				 ((uint64_t) sshfs.conns[i].dir_count << 22) +
-- 				 ((uint64_t) sshfs.conns[i].file_count << 1) +
---- 
--2.28.0
--
-diff --git a/package/sshfs/sshfs.hash b/package/sshfs/sshfs.hash
-index b8488013a7..106f06f09f 100644
---- a/package/sshfs/sshfs.hash
-+++ b/package/sshfs/sshfs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  6e7e86831f3066b356e7f16e22f1b8a8f177fda05146f6a5eb821c2fd0541c34  sshfs-3.7.0.tar.xz
-+sha256  fe5d3436d61b46974889e0c4515899c21a9d67851e3793c209989f72353d7750  sshfs-3.7.1.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 70e7feab1d..6759f6ab3b 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index c92d9f9549..430d477484 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,4 +1,4 @@
+-# From http://download.videolan.org/pub/videolan/libbluray/1.2.0/libbluray-1.2.0.tar.bz2.sha512
+-sha512 d10413b6b86ff2d2e7c4b0103546f2142727cc5209ddb7b227aa74e27384f2e0b9abee37bf8ccc5b0cdfcaeebfb0669cf20903a247df278a8ad6dbd27469d324  libbluray-1.2.0.tar.bz2
++# From http://download.videolan.org/pub/videolan/libbluray/1.2.1/libbluray-1.2.1.tar.bz2.sha512
++sha512  e9eeee433034266e88c05ae3469c0bd2bf700d7f16e17ad706f48426c143c823e83c16ab79a637f1e85e4eb858aa0577630671f87ba35d179db2a1d8bc8545c4  libbluray-1.2.1.tar.bz2
+ # Locally computed
+-sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
++sha256  b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 67ea139d58..e2d7fc0c7d 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SSHFS_VERSION = 3.7.0
-+SSHFS_VERSION = 3.7.1
- SSHFS_SOURCE = sshfs-$(SSHFS_VERSION).tar.xz
- SSHFS_SITE = https://github.com/libfuse/sshfs/releases/download/sshfs-$(SSHFS_VERSION)
- SSHFS_LICENSE = GPL-2.0
+-LIBBLURAY_VERSION = 1.2.0
++LIBBLURAY_VERSION = 1.2.1
+ LIBBLURAY_SITE = http://download.videolan.org/pub/videolan/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
