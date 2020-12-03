@@ -1,36 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 03 Dec 2020 09:37:52 -0000
-Subject: [Buildroot] [git commit] Merge branch 'master' into next
-Message-ID: <20201203092226.B62FB8012C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.33.0
+Message-ID: <20201203092225.20AA38361F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=982e2a177d981e553bc01143088eb00c390dfa1f
+commit: https://git.buildroot.net/buildroot/commit/?id=dd4e2e39b90e55bef6130b0f941a2343f5f72fbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* master: (125 commits)
-  package/jpeg-turbo: security bump to version 2.0.5
-  package/modem-manager: bump to version 1.14.8
-  package/c-ares: security bump to version 1.17.0
-  docs/website: update for 2020.02.8
-  Update for 2020.02.8
-  docs/website: update for 2020.08.2
-  Update for 2020.08.2
-  package/qemu: fix build with 64 bits time_t
-  package/harfbuzz: fix build without threads
-  boot/uboot: fix custom repo error message
-  package/numactl: needs -fPIC
-  package/dovecot-pigeonhole: fix build with per-package directories
-  package/libpam-tacplus: remove duplicate LIBPAM_TACPLUS_AUTORECONF
-  package/openntpd: needs host-bison
-  package/xorriso: fix host option
-  DEVELOPERS: drop Trent Piepho
-  package/postgresql: security bump to version 12.5
-  package/redis: security bump to version 6.0.9
-  Revert "package/linux-backports: bump version to 5.8"
-  package/linux-backports: bump version to 5.8
-Patch is too large, so refusing to show it
-Patch is too large, so refusing to show it
+Removed sha1 hash, not provided by upstream anymore.
+Sha3 hashes are currently not support by buildroot, for details see
+http://lists.busybox.net/pipermail/buildroot/2020-November/295957.html
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sqlite/sqlite.hash | 9 ++-------
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 162b52d607..4f0e747c3d 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,8 +1,3 @@
+-# From https://www.sqlite.org/download.html
+-sha1  ea14ef2dc4cc7fcbc5ebbb018d3a03faa3a41cb4  sqlite-autoconf-3320300.tar.gz
+-
+-# Calculated based on the hash above
+-sha256  a31507123c1c2e3a210afec19525fd7b5bb1e19a6a34ae5b998fbd7302568b66  sqlite-autoconf-3320300.tar.gz
+-
+-# Locally calculated
++# Locally computed
++sha256  106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15  sqlite-autoconf-3330000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c8b9ba3150..3e8754901a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3320300
++SQLITE_VERSION = 3330000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2020
+ SQLITE_LICENSE = Public domain
