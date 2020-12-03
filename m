@@ -1,160 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 1 Dec 2020 23:32:54 +0100
-Subject: [Buildroot] [git commit] package/makedumpfile: bump to version 1.6.8
-Message-ID: <20201203092229.66EA9811FC@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 03 Dec 2020 09:37:58 -0000
+Subject: [Buildroot] [git commit] package/linux-backports: bump version to
+ 5.8
+Message-ID: <20201203092226.BFD138012C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7422573b4f5fbb118cd89e04606e4a1681d164c1
+commit: https://git.buildroot.net/buildroot/commit/?id=c52fedf063fb3877f98afd4bb5ae112d72f4c874
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ... => 0001-PATCH-Define-PN_XNUM-if-missing.patch} |   0
- ...CH-Remove-duplicated-variable-definitions.patch | 104 ---------------------
- package/makedumpfile/makedumpfile.hash             |   2 +-
- package/makedumpfile/makedumpfile.mk               |   4 +-
- 4 files changed, 3 insertions(+), 107 deletions(-)
+Attempting to compile this package with newer Kernel version (e.g. v5.4)
+fails with message:
 
-diff --git a/package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch b/package/makedumpfile/0001-PATCH-Define-PN_XNUM-if-missing.patch
-similarity index 100%
-rename from package/makedumpfile/0002-PATCH-Define-PN_XNUM-if-missing.patch
-rename to package/makedumpfile/0001-PATCH-Define-PN_XNUM-if-missing.patch
-diff --git a/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch b/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
-deleted file mode 100644
-index aab4f70f06..0000000000
---- a/package/makedumpfile/0001-PATCH-Remove-duplicated-variable-definitions.patch
-+++ /dev/null
-@@ -1,104 +0,0 @@
--From 399f2c9a3acd5bd913e50a4dde52dee6527b297e Mon Sep 17 00:00:00 2001
--From: Kairui Song <kasong@redhat.com>
--Date: Wed, 29 Jan 2020 13:37:13 +0800
--Subject: [PATCH] Remove duplicated variable definitions
--
--When building on Fedora 32 (with GCC 10), following error is observed:
--
--/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2010: multiple definition of
-- `crash_reserved_mem_nr'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2010: first defined here
--/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:2009: multiple definition of
-- `crash_reserved_mem'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:2009: first defined here
--/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1278: multiple definition of
-- `parallel_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1278: first defined here
--/usr/bin/ld: erase_info.o:/tmp/makedumpfile/makedumpfile.h:1265: multiple definition of
-- `splitting_info_t'; elf_info.o:/tmp/makedumpfile/makedumpfile.h:1265: first defined here
--...
--collect2: error: ld returned 1 exit status
--make: *** [Makefile:97: makedumpfile] Error 1
--
--These variables are wrongly defined multiple times. So remove the
--duplicated definitions.
--
--Signed-off-by: Kairui Song <kasong@redhat.com>
--Signed-off-by: Kazuhito Hagio <k-hagio-ab@nec.com>
--Signed-off-by: Alexander Egorenkov <egorenar-dev@posteo.net>
-----
-- makedumpfile.c | 8 ++++----
-- makedumpfile.h | 8 ++++----
-- 2 files changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/makedumpfile.c b/makedumpfile.c
--index e290fbd..ae7336a 100644
----- a/makedumpfile.c
--+++ b/makedumpfile.c
--@@ -10954,7 +10954,7 @@ check_param_for_reassembling_dumpfile(int argc, char *argv[])
-- 		return FALSE;
-- 
-- 	if ((info->splitting_info
---	    = malloc(sizeof(splitting_info_t) * info->num_dumpfile))
--+	    = malloc(sizeof(struct splitting_info) * info->num_dumpfile))
-- 	    == NULL) {
-- 		MSG("Can't allocate memory for splitting_info.\n");
-- 		return FALSE;
--@@ -11042,7 +11042,7 @@ check_param_for_creating_dumpfile(int argc, char *argv[])
-- 			return FALSE;
-- 		}
-- 		if ((info->splitting_info
---		    = malloc(sizeof(splitting_info_t) * info->num_dumpfile))
--+		    = malloc(sizeof(struct splitting_info) * info->num_dumpfile))
-- 		    == NULL) {
-- 			MSG("Can't allocate memory for splitting_info.\n");
-- 			return FALSE;
--@@ -11077,13 +11077,13 @@ check_param_for_creating_dumpfile(int argc, char *argv[])
-- 
-- 	if (info->num_threads) {
-- 		if ((info->parallel_info =
---		     malloc(sizeof(parallel_info_t) * info->num_threads))
--+		     malloc(sizeof(struct parallel_info) * info->num_threads))
-- 		    == NULL) {
-- 			MSG("Can't allocate memory for parallel_info.\n");
-- 			return FALSE;
-- 		}
-- 
---		memset(info->parallel_info, 0, sizeof(parallel_info_t)
--+		memset(info->parallel_info, 0, sizeof(struct parallel_info)
-- 							* info->num_threads);
-- 	}
-- 
--diff --git a/makedumpfile.h b/makedumpfile.h
--index 68d9691..7217407 100644
----- a/makedumpfile.h
--+++ b/makedumpfile.h
--@@ -1262,7 +1262,7 @@ struct splitting_info {
-- 	mdf_pfn_t		end_pfn;
-- 	off_t			offset_eraseinfo;
-- 	unsigned long		size_eraseinfo;
---} splitting_info_t;
--+};
-- 
-- struct parallel_info {
-- 	int			fd_memory;
--@@ -1275,7 +1275,7 @@ struct parallel_info {
-- #ifdef USELZO
-- 	lzo_bytep		wrkmem;
-- #endif
---} parallel_info_t;
--+};
-- 
-- struct ppc64_vmemmap {
-- 	unsigned long		phys;
--@@ -2006,8 +2006,8 @@ struct memory_range {
-- };
-- 
-- #define CRASH_RESERVED_MEM_NR   8
---struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
---int crash_reserved_mem_nr;
--+extern struct memory_range crash_reserved_mem[CRASH_RESERVED_MEM_NR];
--+extern int crash_reserved_mem_nr;
-- 
-- unsigned long read_vmcoreinfo_symbol(char *str_symbol);
-- int readmem(int type_addr, unsigned long long addr, void *bufptr, size_t size);
---- 
--2.28.0
--
-diff --git a/package/makedumpfile/makedumpfile.hash b/package/makedumpfile/makedumpfile.hash
-index 2ecfc5b1c5..1b2df008d2 100644
---- a/package/makedumpfile/makedumpfile.hash
-+++ b/package/makedumpfile/makedumpfile.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  cd3642dfe780d446f2dc328736bb2070007032718f5628262d5f59baf03619a4  makedumpfile-1.6.7.tar.gz
-+sha256  85d79b7090e9a8ce0d426795d3bc1de2858def7e12954d9bc6ae03de160b694c  makedumpfile-1.6.8.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/makedumpfile/makedumpfile.mk b/package/makedumpfile/makedumpfile.mk
-index ad63e280e8..99fb3a71c8 100644
---- a/package/makedumpfile/makedumpfile.mk
-+++ b/package/makedumpfile/makedumpfile.mk
-@@ -4,8 +4,8 @@
+   Generating local configuration database from kernel ...Kernel version parse failed!
+
+Upgrading the package to 5.8 fixes this issue. Anyways, v4.4 is now
+rather old and beat the very purpose of having newer drivers in older
+kernels.
+
+Since backports tag v4.14-rc4-1, the requirement on minimal kernel
+version changed from 3.0 to 3.10. See commit [1]. The minimal kernel
+version check is changed accordingly.
+
+License files are also updated: the linux backports package copies the
+license files from the kernel version used for its generation. v5.8 is
+now "GPL-2.0 WITH Linux-syscall-note". However, there is no such SPDX
+identifier (contrary to what is said in the COPYING file), so we keep it
+as GPL-2.0 (which also keeps it aligned to what we have in linux.mk).
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/backports/backports.git/commit/?id=a0d05f9f9ca50ea8b1d60726fac6b54167257e76
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+[yann.morin.1998 at free.fr: keep license as GPL-2.0, like for linux]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/linux-backports/Config.in            |  2 +-
+ package/linux-backports/linux-backports.hash |  8 +++++---
+ package/linux-backports/linux-backports.mk   | 19 ++++++++++++-------
+ 3 files changed, 18 insertions(+), 11 deletions(-)
+
+diff --git a/package/linux-backports/Config.in b/package/linux-backports/Config.in
+index 362e6e4bc7..251d202fd2 100644
+--- a/package/linux-backports/Config.in
++++ b/package/linux-backports/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_LINUX_BACKPORTS
+ 	  recent kernels, backported to older ones.
+ 
+ 	  This version of linux-backports supports kernels starting
+-	  from 3.0.
++	  from 3.10.
+ 
+ 	  https://backports.wiki.kernel.org
+ 
+diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
+index f39bc2ed27..3e103424f5 100644
+--- a/package/linux-backports/linux-backports.hash
++++ b/package/linux-backports/linux-backports.hash
+@@ -1,4 +1,6 @@
+-# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
+-sha256  a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
++# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v5.8/sha256sums.asc
++sha256  19b4174d89bf11ee221458e11f1e8dace26558498774b823051156f522d2036b  backports-5.8-1.tar.xz
+ # Locally computed
+-sha256  af8067302947c01fd9eee72befa54c7e3ef8a48fecde7fd71277f2290b2bf0f7  COPYING
++sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
++sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
++sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/preferred/GPL-2.0
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 1827ee18b7..068dcffcc8 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -4,12 +4,15 @@
  #
  ################################################################################
  
--MAKEDUMPFILE_VERSION = 1.6.7
--MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,Released-$(subst .,-,$(MAKEDUMPFILE_VERSION)))
-+MAKEDUMPFILE_VERSION = 1.6.8
-+MAKEDUMPFILE_SITE = $(call github,makedumpfile,makedumpfile,$(MAKEDUMPFILE_VERSION))
- MAKEDUMPFILE_DEPENDENCIES = bzip2 elfutils xz zlib
- MAKEDUMPFILE_LICENSE = GPL-2.0
- MAKEDUMPFILE_LICENSE_FILES = COPYING
+-LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
++LINUX_BACKPORTS_VERSION_MAJOR = 5.8
+ LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
+ LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
+ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
+ LINUX_BACKPORTS_LICENSE = GPL-2.0
+-LINUX_BACKPORTS_LICENSE_FILES = COPYING
++LINUX_BACKPORTS_LICENSE_FILES = \
++	COPYING \
++	LICENSES/exceptions/Linux-syscall-note \
++	LICENSES/preferred/GPL-2.0
+ 
+ # flex and bison are needed to generate kconfig parser. We use the
+ # same logic as the linux kernel (we add host dependencies only if
+@@ -91,7 +94,7 @@ $(eval $(kconfig-package))
+ # instead.
+ #
+ # Furthermore, we want to check the kernel version, since linux-backports
+-# only supports kernels >= 3.0. To avoid overriding linux-backports'
++# only supports kernels >= 3.10. To avoid overriding linux-backports'
+ # KCONFIG_STAMP_DOTCONFIG rule defined in the kconfig-package infra, we
+ # use an intermediate stamp-file.
+ #
+@@ -103,10 +106,12 @@ $(LINUX_BACKPORTS_DIR)/$(LINUX_BACKPORTS_KCONFIG_STAMP_DOTCONFIG): $(LINUX_BACKP
+ 
+ .SECONDEXPANSION:
+ $(LINUX_BACKPORTS_DIR)/.stamp_check_kernel_version: $$(LINUX_DIR)/$$(LINUX_KCONFIG_STAMP_DOTCONFIG)
+-	$(Q)LINUX_VERSION_PROBED=$(LINUX_VERSION_PROBED); \
+-	if [ $${LINUX_VERSION_PROBED%%.*} -lt 3 ]; then \
+-		printf "Linux version '%s' is too old for linux-backports (needs 3.0 or later)\n" \
+-			"$${LINUX_VERSION_PROBED}"; \
++	$(Q)KVER=$(LINUX_VERSION_PROBED); \
++	KVER_MAJOR=`echo $${KVER} | sed 's/^\([0-9]*\)\..*/\1/'`; \
++	KVER_MINOR=`echo $${KVER} | sed 's/^[0-9]*\.\([0-9]*\).*/\1/'`; \
++	if [ $${KVER_MAJOR} -lt 3 -o \( $${KVER_MAJOR} -eq 3 -a $${KVER_MINOR} -lt 10 \) ]; then \
++		printf "Linux version '%s' is too old for linux-backports (needs 3.10 or later)\n" \
++			"$${KVER}"; \
+ 		exit 1; \
+ 	fi
+ 	$(Q)touch $(@)
