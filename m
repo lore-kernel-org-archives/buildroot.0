@@ -1,8 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  4 Dec 2020 13:33:11 +0100
-Subject: [Buildroot] [PATCH 1/2] core: add
- BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS
-Message-ID: <20201204123313.14455-1-patrickdepinguin@gmail.com>
+Date: Fri,  4 Dec 2020 13:33:12 +0100
+Subject: [Buildroot] [PATCH 2/2] utils/source-check: new script
+In-Reply-To: <20201204123313.14455-1-patrickdepinguin@gmail.com>
+References: <20201204123313.14455-1-patrickdepinguin@gmail.com>
+Message-ID: <20201204123313.14455-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,78 +12,253 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-If configured, the primary site typically points to a mirror on the intranet
-of an organization. The purpose of BR2_PRIMARY_SITE_ONLY is then to only
-download from this mirror.
+This source-check script is a replacement for 'make source-check' that
+existed in earlier versions of Buildroot.
 
-However, the organization may also have some local Buildroot packages
-that download from a version control repository (git, hg, ...). In this case,
-the mirror will normally not contain the sources, instead they should be
-cloned via the version control tool. So in this case, BR2_PRIMARY_SITE_ONLY
-cannot be used.
+It takes as input a list of defconfigs, and then efficiently determines
+whether all files needed can be downloaded, without actually downloading
+them.
 
-This means that the organization must resort to other means to make sure no
-external downloads are performed.
+The settings of BR2_PRIMARY_SITE, BR2_PRIMARY_SITE_ONLY and
+BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS will be used as specified in the
+respective defconfigs.
 
-This patch attempts to solve this situation by adding
-BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS. This string option can contain
-additional domains from which download is allowed when BR2_PRIMARY_SITE_ONLY
-is set.
-
-The organization can thus set:
-BR2_PRIMARY_SITE_ONLY=y
-BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS="git.example.com hg.example.com"
-
-to disallow any external downloads other than the primary site and the
-mentioned version control domains.
+Note: scp, hg, file, and http(s) protocols are currently covered. Others,
+like git, bzr, svn currently are not. I don't really use these and am not
+sure if it is possible to check remotely if something is valid or not,
+without downloading the entire repository.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- Config.in               | 12 ++++++++++++
- package/pkg-download.mk |  8 +++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ utils/source-check | 220 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 220 insertions(+)
+ create mode 100755 utils/source-check
 
-diff --git a/Config.in b/Config.in
-index e35a78fb71..c9206876ff 100644
---- a/Config.in
-+++ b/Config.in
-@@ -231,6 +231,18 @@ config BR2_PRIMARY_SITE_ONLY
- 	  the project can be built even if the upstream tarball
- 	  locations disappear.
- 
-+config BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS
-+	string "Additional domains to allow downloads from"
-+	depends on BR2_PRIMARY_SITE_ONLY
-+	help
-+	  If BR2_PRIMARY_SITE_ONLY is enabled, version control downloads
-+	  (git, hg, ...) on the 'internal' domain would also be
-+	  disallowed.
-+	  With this option, you can specify additional domains from
-+	  which downloads will be allowed in BR2_PRIMARY_SITE_ONLY-mode.
-+	  Domains should not include a protocol prefix, and multiple
-+	  domains can be separated by spaces.
+diff --git a/utils/source-check b/utils/source-check
+new file mode 100755
+index 0000000000..16566b9e81
+--- /dev/null
++++ b/utils/source-check
+@@ -0,0 +1,220 @@
++#!/usr/bin/env python3
++"""
++source-check: check that all packages needed for the specified defconfigs can be downloaded
 +
- if !BR2_PRIMARY_SITE_ONLY
- 
- config BR2_BACKUP_SITE
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 951d2fb554..d23838a329 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -78,7 +78,13 @@ DOWNLOAD_URIS += \
- 	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
- endif
- 
--ifeq ($(BR2_PRIMARY_SITE_ONLY),)
-+ifeq ($(BR2_PRIMARY_SITE_ONLY),y)
-+# Conditionally add site download if it matches the configured extended domains
-+DOWNLOAD_URIS += \
-+	$(if $(filter $(call qstrip,$(BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS)),$(call domain,$(1))), \
-+		$(patsubst %/,%,$(dir $(call qstrip,$(1)))))
-+else
-+# Unconditionally add site download
- DOWNLOAD_URIS += \
- 	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
++Given a list of defconfigs, determine which URLs are needed to build it, and
++check the accessibility of the packages represented by them. Typically this
++does not actually involve a real download, so this scripts works very fast.
++"""
++
++import json
++import multiprocessing
++import os
++import shutil
++import subprocess
++import sys
++
++# example output of 'make show-info'
++# 'rsync': {'dependencies': ['host-ccache',
++#                            'host-skeleton',
++#                            'host-tar',
++#                            'popt',
++#                            'skeleton',
++#                            'toolchain',
++#                            'zlib'],
++#           'dl_dir': 'rsync',
++#           'downloads': [{'source': 'rsync-3.1.3.tar.gz',
++#                          'uris': ['scp|urlencode+scp://xxx at mirror.example.com/rsync',
++#                                   'scp|urlencode+scp://xxx at mirror.example.com',
++#                                   'http+http://rsync.samba.org/ftp/rsync/src',
++#                                   'http|urlencode+http://sources.buildroot.net/rsync',
++#                                   'http|urlencode+http://sources.buildroot.net']}],
++#           'install_images': False,
++#           'install_staging': False,
++#           'install_target': True,
++#           'licenses': 'GPL-3.0+',
++#           'reverse_dependencies': [],
++#           'type': 'target',
++#           'version': '3.1.3',
++#           'virtual': False},
++
++
++def get_files_to_check_one_defconfig(defconfig):
++    outputdir = 'sourcecheck_%s' % defconfig
++    subprocess.check_call([
++        'make', '--no-print-directory', '-s', 'O=%s' % outputdir,
++        defconfig
++    ])
++    # Note: set suitable-host-package to empty to pretend no suitable tools are
++    # present on the host, and thus force all potentially-needed sources in the
++    # list (e.g. cmake, gzip, ...)
++    output = subprocess.check_output([
++        'make', '--no-print-directory', '-s', 'O=%s' % outputdir,
++        'show-info', 'suitable-host-package='
++    ])
++    info = json.loads(output)
++
++    files_to_check = set()
++
++    for pkg in info:
++        if 'downloads' not in info[pkg]:
++            sys.stderr.write("Warning: %s: no downloads for package '%s'\n" % (defconfig, pkg))
++            continue
++        if not info[pkg]['downloads']:
++            sys.stderr.write("Warning: %s: empty downloads for package '%s'\n" % (defconfig, pkg))
++            continue
++        for download in info[pkg]['downloads']:
++            if 'source' not in download:
++                sys.stderr.write("Warning: %s: no source filename found for package '%s'\n" % (defconfig, pkg))
++                continue
++            if 'uris' not in download:
++                sys.stderr.write("Warning: %s: no uri's found for package '%s'\n" % (defconfig, pkg))
++                continue
++
++            # tuple: (pkg, version, filename, uris)
++            # Note: host packages have the same sources as for target, so strip
++            # the 'host-' prefix. Because we are using a set, this will remove
++            # duplicate entries.
++            pkgname = pkg[5:] if pkg.startswith('host-') else pkg
++            files_to_check.add((
++                pkgname,
++                info[pkg]['version'],
++                download['source'],
++                tuple([uri for uri in download['uris']]),
++            ))
++
++    shutil.rmtree(outputdir)
++    return files_to_check
++
++
++def get_files_to_check(defconfigs):
++    total_files_to_check = set()
++
++    num_processes = multiprocessing.cpu_count() * 2
++    print('Dispatching over %s processes' % num_processes)
++    with multiprocessing.Pool(processes=num_processes) as pool:
++        result_objs = [
++            pool.apply_async(get_files_to_check_one_defconfig, (defconfig,))
++            for defconfig in defconfigs
++        ]
++        results = [p.get() for p in result_objs]
++
++    for result in results:
++        total_files_to_check |= result
++
++    return total_files_to_check
++
++
++def sourcecheck_one_uri(pkg, version, filename, uri):
++
++    def sourcecheck_scp(pkg, version, filename, uri):
++        real_uri = uri.split('+', 1)[1] + '/' + filename
++        if real_uri.startswith('scp://'):
++            real_uri = real_uri[6:]
++        domain, path = real_uri.split(':', 1)
++        with open(os.devnull, 'w') as devnull:
++            ret = subprocess.call(
++                ['ssh', domain, 'test', '-f', path],
++                stderr=devnull
++            )
++        return ret == 0
++
++    def sourcecheck_hg(pkg, version, filename, uri):
++        real_uri = uri.split('+', 1)[1]
++        with open(os.devnull, 'w') as devnull:
++            ret = subprocess.call(
++                ['hg', 'identify', '--rev', version, real_uri],
++                stdout=devnull, stderr=devnull
++            )
++        return ret == 0
++
++    def sourcecheck_file(pkg, version, filename, uri):
++        real_uri = uri.split('+', 1)[1] + '/' + filename
++        if real_uri.startswith('file://'):
++            real_uri = real_uri[7:]
++        return os.path.exists(real_uri)
++
++    def sourcecheck_http(pkg, version, filename, uri):
++        real_uri = uri.split('+', 1)[1] + '/' + filename
++        with open(os.devnull, 'w') as devnull:
++            ret = subprocess.call(
++                ['wget', '--spider', real_uri],
++                stderr=devnull
++            )
++        return ret == 0
++
++    if uri.startswith('scp'):
++        handler = sourcecheck_scp
++    elif uri.startswith('hg'):
++        handler = sourcecheck_hg
++    elif uri.startswith('file'):
++        handler = sourcecheck_file
++    elif uri.startswith('http'):
++        handler = sourcecheck_http
++    else:
++        raise Exception("Cannot handle unknown URI type: '%s' for package '%s'" % (uri, pkg))
++
++    return handler(pkg, version, filename, uri)
++
++
++def sourcecheck_one_file(pkg, version, filename, uris):
++    result = any(
++        sourcecheck_one_uri(pkg, version, filename, uri)
++        for uri in uris
++    )
++    return pkg, version, filename, result
++
++
++def sourcecheck(files_to_check):
++
++    def process_result(result):
++        pkg, version, filename, success = result
++        if success:
++            print(' OK: pkg %s, filename %s' % (pkg, filename))
++        else:
++            sys.stderr.write('NOK: pkg %s, filename %s -- ERROR!\n' % (pkg, filename))
++
++    num_processes = multiprocessing.cpu_count() * 2
++    print('Dispatching over %s processes' % num_processes)
++    with multiprocessing.Pool(processes=num_processes) as pool:
++        result_objs = [
++            pool.apply_async(sourcecheck_one_file, entry, callback=process_result)
++            for entry in files_to_check
++        ]
++        results = [p.get() for p in result_objs]
++
++    succeeded = [
++        (pkg, version, filename, success)
++        for (pkg, version, filename, success) in results
++        if success
++    ]
++    failed = [
++        (pkg, version, filename, success)
++        for (pkg, version, filename, success) in results
++        if not success
++    ]
++
++    print('\nSummary: %s OK, %s NOK, %s total' % (len(succeeded), len(failed), len(results)))
++
++    if len(failed):
++        print('\nFAILED FILES')
++        for pkg, version, filename, success in sorted(failed):
++            print('pkg: %s, version: %s, file: %s/%s' % (pkg, version, pkg, filename))
++
++    return len(failed) == 0
++
++
++def main():
++    defconfigs = sys.argv[1:]
++    if not defconfigs:
++        sys.stderr.write('Error: pass list of defconfigs as arguments\n')
++        sys.exit(1)
++
++    total_files_to_check = get_files_to_check(defconfigs)
++    return sourcecheck(total_files_to_check)
++
++
++if __name__ == '__main__':
++    ret = main()
++    if not ret:
++        sys.exit(1)
 -- 
 2.26.2
