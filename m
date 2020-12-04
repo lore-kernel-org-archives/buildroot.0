@@ -1,73 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  3 Dec 2020 21:28:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to gcc
- -v
-Message-ID: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Thu,  3 Dec 2020 17:45:49 -0800
+Subject: [Buildroot] [PATCH] Revert "package/gdb: prevent gdbserver being
+ selected for RISC-V builds"
+Message-ID: <20201204014549.2669932-1-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+This reverts commit 44a9babcc67cd011e957ba9fd1cf741891957c12.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+As of Buildroot 2020.11 (glibc build of qemu_riscv64_virt_defconfig),
+cross-gdb for RISCV buildis fine and can also attach to a qemu
+instance, so remove the gate on not building it.
+
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 ---
- ...01-configure-allow-cross-compilation.patch | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/rhash/0001-configure-allow-cross-compilation.patch
+ package/gdb/Config.in      | 3 ---
+ package/gdb/Config.in.host | 1 -
+ 2 files changed, 4 deletions(-)
 
-diff --git a/package/rhash/0001-configure-allow-cross-compilation.patch b/package/rhash/0001-configure-allow-cross-compilation.patch
-new file mode 100644
-index 0000000000..e33353f8b3
---- /dev/null
-+++ b/package/rhash/0001-configure-allow-cross-compilation.patch
-@@ -0,0 +1,45 @@
-+From 0605ddf795330c03ff52e993726de99a984cf2f4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 10 Oct 2020 11:07:39 +0200
-+Subject: [PATCH] configure: allow cross-compilation
-+
-+Update configure to allow the user to pass a cross-compiler such as
-+--cc=/home/fabrice/buildroot/output/host/bin/riscv64-buildroot-linux-uclibc-gcc
-+
-+First, use --version instead of -v to avoid a build failure and set
-+cc_vendor to gnu if CC compiler contains gcc
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure b/configure
-+index 2783b85..c8e1ea7 100755
-+--- a/configure
-++++ b/configure
-+@@ -512,9 +512,9 @@ else
-+   CC_TMP="$CC"
-+   test -n "$OPT_CC" && OTHER_CC= || OTHER_CC="gcc cc"
-+   for CC in "$CC_TMP" $OTHER_CC; do
-+-    if run_cmd "$CC -v"; then
-+-      cc_name_tmp=$($CC -v 2>&1 | tail -n 1 | cut -d ' ' -f 1)
-+-      if test "$cc_name_tmp" = "gcc"; then
-++    if run_cmd "$CC --version"; then
-++      cc_name_tmp=$($CC --version 2>&1 | head -n 1 | cut -d ' ' -f 1)
-++      if echo "$cc_name_tmp" | grep -q "gcc"; then
-+         cc_name=$cc_name_tmp
-+         start_check "$CC version"
-+         cc_vendor=gnu
-+@@ -538,7 +538,7 @@ else
-+         finish_check "$cc_name $cc_version"
-+         break
-+       fi
-+-      if $CC -v 2>&1 | grep -q "clang"; then
-++      if $CC --version 2>&1 | grep -q "clang"; then
-+         start_check "$CC version"
-+         cc_vendor=clang
-+         cc_version=$($CC -dumpversion 2>&1)
-+-- 
-+2.29.2
-+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 48ec3e0202ac..c90d47cf0de6 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -20,8 +20,6 @@ config BR2_PACKAGE_GDB
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	# no gdbserver on riscv
+-	select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
+ 	# When the external toolchain gdbserver is copied to the
+ 	# target, we don't allow building a separate gdbserver. The
+ 	# one from the external toolchain should be used.
+@@ -48,7 +46,6 @@ if BR2_PACKAGE_GDB
+ config BR2_PACKAGE_GDB_SERVER
+ 	bool "gdbserver"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+-	depends on !BR2_riscv
+ 	help
+ 	  Build the gdbserver stub to run on the target.
+ 	  A full gdb is needed to debug the progam.
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 4b868e22556b..199f1c72b001 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+-	depends on !BR2_riscv
+ 	depends on !BR2_nds32
+ 
+ comment "Host GDB Options"
 -- 
-2.29.2
+2.25.1
