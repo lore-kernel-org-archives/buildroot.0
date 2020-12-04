@@ -1,61 +1,76 @@
-From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Fri, 4 Dec 2020 08:26:45 +0000
-Subject: [Buildroot] [PATCH] Revert "package/gdb: prevent gdbserver
- being selected for RISC-V builds"
-In-Reply-To: <20201204091325.31cc0f2a@windsurf.home>
-References: <20201204014549.2669932-1-vgupta@synopsys.com>
- <20201204091325.31cc0f2a@windsurf.home>
-Message-ID: <0dcca055-35c9-4089-a9b9-8fa8ca253640@synopsys.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 04 Dec 2020 09:32:26 +0000
+Subject: [Buildroot] [Bug 13356] New: libabseil-cpp: not building for
+ raspberry pi
+Message-ID: <bug-13356-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=13356
 
-On 12/4/20 12:13 AM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu,  3 Dec 2020 17:45:49 -0800
-> Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
->
->> This reverts commit 44a9babcc67cd011e957ba9fd1cf741891957c12.
->>
->> As of Buildroot 2020.11 (glibc build of qemu_riscv64_virt_defconfig),
->> cross-gdb for RISCV buildis fine and can also attach to a qemu
->> instance, so remove the gate on not building it.
-> Is this true for all gdb versions we support ? We currently support
-> 8.2, 8.3 and 9.2.
+            Bug ID: 13356
+           Summary: libabseil-cpp: not building for raspberry pi
+           Product: buildroot
+           Version: 2020.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: buildroot at heine.tech
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-My working setup has gdb 8.3 and I just tested 8.2 works well too - I'm 
-guessing 9.2 should be fine.
+I just stumbled across this but currently don't have the time to investigate
+further.
 
-riscv64-softmmu/qemu-system-riscv64 -M virt -nographic -bios 
-images/fw_jump.elf? -kernel images/Image? -append "root=/dev/vda ro"? 
--drive file=images/rootfs.ext2,format=raw,id=hd0 -device 
-virtio-blk-device,drive=hd0? -netdev user,id=net0 -device 
-virtio-net-device,netdev=net0 -s -S
+libabseil-cpp fails to compile for raspberry pi targets with the following
+error:
+
+In file included from
+/build/build/build/libabseil-cpp-20200923.2/absl/random/internal/randen_hwaes.cc:229:
+/build/build/host/opt/ext-toolchain/lib/gcc/arm-none-linux-gnueabihf/9.2.1/include/arm_neon.h:
+In function 'Vector128 {anonymous}::AesRound(const Vector128&, const
+Vector128&)':
+/build/build/host/opt/ext-toolchain/lib/gcc/arm-none-linux-gnueabihf/9.2.1/include/arm_neon.h:16925:1:
+error: inlining failed in call to always_inline 'uint8x16_t
+vaesmcq_u8(uint8x16_t)': target specific option mismatch
+16925 | vaesmcq_u8 (uint8x16_t __data)
+      | ^~~~~~~~~~
+/build/build/build/libabseil-cpp-20200923.2/absl/random/internal/randen_hwaes.cc:255:20:
+note: called from here
+  255 |   return vaesmcq_u8(vaeseq_u8(state, uint8x16_t{})) ^ round_key;
+      |          ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from
+/build/build/build/libabseil-cpp-20200923.2/absl/random/internal/randen_hwaes.cc:229:
+/build/build/host/opt/ext-toolchain/lib/gcc/arm-none-linux-gnueabihf/9.2.1/include/arm_neon.h:16911:1:
+error: inlining failed in call to always_inline 'uint8x16_t
+vaeseq_u8(uint8x16_t, uint8x16_t)': target specific option mismatch
+16911 | vaeseq_u8 (uint8x16_t __data, uint8x16_t __key)
+      | ^~~~~~~~~
+/build/build/build/libabseil-cpp-20200923.2/absl/random/internal/randen_hwaes.cc:255:20:
+note: called from here
+  255 |   return vaesmcq_u8(vaeseq_u8(state, uint8x16_t{})) ^ round_key;
+      |          ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[4]: ***
+[absl/random/CMakeFiles/random_internal_randen_hwaes_impl.dir/build.make:63:
+absl/random/CMakeFiles/random_internal_randen_hwaes_impl.dir/internal/randen_hwaes.cc.o]
+Error 1
+make[3]: *** [CMakeFiles/Makefile2:2115:
+absl/random/CMakeFiles/random_internal_randen_hwaes_impl.dir/all] Error 2
+make[3]: *** Waiting for unfinished jobs....
 
 
-./host/usr/bin/riscv64-linux-gdb
-GNU gdb (GDB) 8.2.1
-Copyright (C) 2018 Free Software Foundation, Inc.
-(gdb) file build/linux-5.4.58/vmlinux
 
-(gdb) b start_kernel
-Breakpoint 1 at 0xffffffe00000070e
+It is already reported upstream at
+https://github.com/abseil/abseil-cpp/issues/662 (on comment points out it is
+also not compiling for arm/rpi3)
 
-(gdb) target remote :1234
-Remote debugging using :1234
-warning: Target-supplied registers are not supported by the current 
-architecture
-0x0000000000001000 in ?? ()
-(gdb) c
-Continuing.
-
-Breakpoint 1, 0xffffffe00000070c in start_kernel ()
-(gdb) si
-0xffffffe00000070e in start_kernel ()
-
--Vineet
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
