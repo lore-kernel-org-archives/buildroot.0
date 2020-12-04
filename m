@@ -1,87 +1,44 @@
-From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Fri, 4 Dec 2020 13:19:08 +0000
-Subject: [Buildroot] [PATCH v3 1/1] package/systemd: add a menu entry to
- enable portable services
-In-Reply-To: <20201126155533.28179-1-fgervais@distech-controls.com>
-References: <20201126155533.28179-1-fgervais@distech-controls.com>
-Message-ID: <DM6PR01MB375592537E27457D12083884F3F10@DM6PR01MB3755.prod.exchangelabs.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Fri,  4 Dec 2020 14:30:19 +0100
+Subject: [Buildroot] [PATCH] boot/boot-wrapper-aarch64: bump version
+Message-ID: <20201204133019.2258-1-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is there something more required on my part for this patch?
+Bump bootwrapper to the latest version.
 
-The delay might be normal but since my previous patches where
-merged in quite quickly I'd like to make sure I'm not missing something.
-
-
-From: Gervais, Francois <FGervais@distech-controls.com>
-Sent: November 26, 2020 10:55 AM
-To: buildroot at buildroot.org <buildroot@buildroot.org>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>; Yann E . MORIN <yann.morin.1998@free.fr>; Norbert Lange <nolange79@gmail.com>; Gervais, Francois <FGervais@distech-controls.com>
-Subject: [PATCH v3 1/1] package/systemd: add a menu entry to enable portable services 
-?
-Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
-Reviewed-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-?package/systemd/Config.in? | 17 +++++++++++++++++
-?package/systemd/systemd.mk |? 7 ++++++-
-?2 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ec34478e3d..3966ba2fc7 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -343,6 +343,23 @@ comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
-???????????????? !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-???????????????? !BR2_USE_WCHAR
-?
-+config BR2_PACKAGE_SYSTEMD_PORTABLED
-+?????? bool "enable portable services"
-+?????? help
-+???????? Portable services are systemd services that can be dynamically
-+???????? attached and detached from the system.
-+
-+???????? These services must come with their own root directory which
-+???????? they are bond to through an automatically generated drop-in.
-+
-+???????? They also have restrictions applied by the host system in the
-+???????? form of profiles.
-+
-+???????? This functionality is provided by the system service systemd-portabled
-+???????? along with the corresponding CLI portablectl.
-+
-+???????? https://systemd.io/PORTABLE_SERVICES/
-+
-?config BR2_PACKAGE_SYSTEMD_QUOTACHECK
-???????? bool "enable quotacheck tools"
-???????? help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index cb12f667d6..5aed87f452 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -33,7 +33,6 @@ SYSTEMD_CONF_OPTS += \
-???????? -Dman=false \
-???????? -Dmount-path=/usr/bin/mount \
-???????? -Dnss-systemd=true \
--?????? -Dportabled=false \
-???????? -Dquotacheck-path=/usr/sbin/quotacheck \
-???????? -Dquotaon-path=/usr/sbin/quotaon \
-???????? -Drootlibdir='/usr/lib' \
-@@ -417,6 +416,12 @@ else
-?SYSTEMD_CONF_OPTS += -Dpolkit=false
-?endif
-?
-+ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
-+SYSTEMD_CONF_OPTS += -Dportabled=true
-+else
-+SYSTEMD_CONF_OPTS += -Dportabled=false
-+endif
-+
-?ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
-?SYSTEMD_CONF_OPTS += -Dnetworkd=true
-?SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
+
+Hi,
+
+I have tested this with the arm_foundationv8_defconfig and the Foundation-v8
+11.12 build 38.
+
+Best regards,
+Vincent.
+
+
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index 117e113984..3a1af9b02c 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOT_WRAPPER_AARCH64_VERSION = fd74c8cbd0e17483d2299208cad9742bee605ca7
++BOOT_WRAPPER_AARCH64_VERSION = 8d5a765251d9113c3c0f9fa14de42a9e7486fe8a
+ BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+ BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
 -- 
-2.17.1
+2.29.2
