@@ -1,44 +1,112 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Fri,  4 Dec 2020 14:30:19 +0100
-Subject: [Buildroot] [PATCH] boot/boot-wrapper-aarch64: bump version
-Message-ID: <20201204133019.2258-1-vincent.stehle@laposte.net>
+From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+Date: Fri,  4 Dec 2020 11:17:37 -0300
+Subject: [Buildroot] [PATCH 1/1] package/wqy-zenhei: new package
+Message-ID: <20201204141737.27942-1-klaus@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump bootwrapper to the latest version.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
 ---
+ DEVELOPERS                         |  3 +++
+ package/Config.in                  |  1 +
+ package/wqy-zenhei/Config.in       | 13 +++++++++++++
+ package/wqy-zenhei/wqy-zenhei.hash |  3 +++
+ package/wqy-zenhei/wqy-zenhei.mk   | 28 ++++++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/wqy-zenhei/Config.in
+ create mode 100644 package/wqy-zenhei/wqy-zenhei.hash
+ create mode 100644 package/wqy-zenhei/wqy-zenhei.mk
 
-
-Hi,
-
-I have tested this with the arm_foundationv8_defconfig and the Foundation-v8
-11.12 build 38.
-
-Best regards,
-Vincent.
-
-
- boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-index 117e113984..3a1af9b02c 100644
---- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-+++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9f6d18131c..0add90061c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1461,6 +1461,9 @@ F:	package/ramsmp/
+ N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
+ F:	package/libcamera/
  
--BOOT_WRAPPER_AARCH64_VERSION = fd74c8cbd0e17483d2299208cad9742bee605ca7
-+BOOT_WRAPPER_AARCH64_VERSION = 8d5a765251d9113c3c0f9fa14de42a9e7486fe8a
- BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
- BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
- BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
++N:	Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
++F:	package/wqy-zenhei/
++
+ N:	Koen Martens <gmc@sonologic.nl>
+ F:	package/capnproto/
+ F:	package/linuxconsoletools/
+diff --git a/package/Config.in b/package/Config.in
+index 3c5664f723..a2150c541a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -240,6 +240,7 @@ comment "Fonts"
+ 	source "package/ghostscript-fonts/Config.in"
+ 	source "package/inconsolata/Config.in"
+ 	source "package/liberation/Config.in"
++	source "package/wqy-zenhei/Config.in"
+ 
+ comment "Icons"
+ 	source "package/adwaita-icon-theme/Config.in"
+diff --git a/package/wqy-zenhei/Config.in b/package/wqy-zenhei/Config.in
+new file mode 100644
+index 0000000000..26fd1e8a93
+--- /dev/null
++++ b/package/wqy-zenhei/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_WQY_ZENHEI
++	bool "wqy-zenhei (Free Chinese-capable fonts)"
++	help
++	  "WenQuanYi Zen Hei" is a Hei-Ti Style (sans-serif) Chinese
++	  font capable of text formatting and on-screen display of both
++	  simplified and traditional forms of Chinese Hanzi glyphs
++	  (among many other languages). Both the proportional
++	  "WenQuanYi Zen Hei", as well as the monospaced typeface
++	  "WenQuanYi Zen Hei Mono" provides over 35,000 glyphs,
++	  including over 21,000 Chinese Hanzi. This font provides full
++	  coverage of GBK (CP936) charset, CJK Unified Ideographs, as
++	  well as the code-points needed for zh_CN, zh_SG, zh_TW, zh_HK,
++	  zh_MO, ja (Japanese) and ko (Korean) locales for fontconfig.
+diff --git a/package/wqy-zenhei/wqy-zenhei.hash b/package/wqy-zenhei/wqy-zenhei.hash
+new file mode 100644
+index 0000000000..86ae38da4f
+--- /dev/null
++++ b/package/wqy-zenhei/wqy-zenhei.hash
+@@ -0,0 +1,3 @@
++# locally computed sha256 from:
++# https://downloads.sourceforge.net/project/wqy/wqy-zenhei/0.9.45%20%28Fighting-state%20RC1%29/wqy-zenhei-0.9.45.tar.gz
++sha256 e4b7e306475bf9427d1757578f0e4528930c84c44eaa3f167d4c42f110ee75d6  wqy-zenhei-0.9.45.tar.gz
+diff --git a/package/wqy-zenhei/wqy-zenhei.mk b/package/wqy-zenhei/wqy-zenhei.mk
+new file mode 100644
+index 0000000000..ae0915add4
+--- /dev/null
++++ b/package/wqy-zenhei/wqy-zenhei.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# wqy-zenhei
++#
++################################################################################
++
++WQY_ZENHEI_VERSION = 0.9.45
++WQY_ZENHEI_SITE = https://downloads.sourceforge.net/project/wqy/wqy-zenhei/$(WQY_ZENHEI_VERSION)%20%28Fighting-state%20RC1%29
++WQY_ZENHEI_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/wqy-zenhei
++WQY_ZENHEI_LICENSE =  GPL-v2
++WQY_ZENHEI_LICENSE_FILES = COPYING
++
++ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
++define WQY_ZENHEI_FONTCONFIG_CONF_INSTALL_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/43-wqy-zenhei-sharp.conf \
++	    $(TARGET_DIR)/usr/share/fontconfig/conf.avail/43-wqy-zenhei-sharp.conf
++	$(INSTALL) -D -m 0644 $(@D)/44-wqy-zenhei.conf \
++	    $(TARGET_DIR)/usr/share/fontconfig/conf.avail/44-wqy-zenhei.conf
++endef
++endif
++
++define WQY_ZENHEI_INSTALL_TARGET_CMDS
++	mkdir -p $(WQY_ZENHEI_TARGET_DIR)
++	$(INSTALL) -m 644 $(@D)/wqy-zenhei.ttc $(WQY_ZENHEI_TARGET_DIR)
++	$(WQY_ZENHEI_FONTCONFIG_CONF_INSTALL_CMDS)
++endef
++
++$(eval $(generic-package))
 -- 
-2.29.2
+2.17.1
