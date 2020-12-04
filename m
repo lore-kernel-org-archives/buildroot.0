@@ -1,72 +1,64 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Fri, 4 Dec 2020 09:15:29 -0800
-Subject: [Buildroot] [PATCH] Revert "package/gdb: prevent gdbserver
- being selected for RISC-V builds"
-In-Reply-To: <20201204014549.2669932-1-vgupta@synopsys.com>
-References: <20201204014549.2669932-1-vgupta@synopsys.com>
-Message-ID: <CAKmqyKN5w6_RqZ7aj71Q=0RT102D0YrLzLNi5J7_NDBQ-tpw2A@mail.gmail.com>
+From: Florian Larysch <fl@n621.de>
+Date: Fri,  4 Dec 2020 18:45:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/avahi: allow disabling default
+ services
+Message-ID: <20201204174507.8483-1-fl@n621.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 3, 2020 at 5:45 PM Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
->
-> This reverts commit 44a9babcc67cd011e957ba9fd1cf741891957c12.
->
-> As of Buildroot 2020.11 (glibc build of qemu_riscv64_virt_defconfig),
-> cross-gdb for RISCV buildis fine and can also attach to a qemu
-> instance, so remove the gate on not building it.
->
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+By default, Avahi installs service definitions for SSH and SFTP, but
+those might not be present on all systems. Add an option for disabling
+them.
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+As there is no way to tell the Avahi package not to install the service
+files in the first place, we have to manually remove them from the
+target directory.
 
-Alistair
+Signed-off-by: Florian Larysch <fl@n621.de>
+---
+ package/avahi/Config.in | 8 ++++++++
+ package/avahi/avahi.mk  | 9 +++++++++
+ 2 files changed, 17 insertions(+)
 
-> ---
->  package/gdb/Config.in      | 3 ---
->  package/gdb/Config.in.host | 1 -
->  2 files changed, 4 deletions(-)
->
-> diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-> index 48ec3e0202ac..c90d47cf0de6 100644
-> --- a/package/gdb/Config.in
-> +++ b/package/gdb/Config.in
-> @@ -20,8 +20,6 @@ config BR2_PACKAGE_GDB
->         depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
->         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->         depends on BR2_INSTALL_LIBSTDCPP
-> -       # no gdbserver on riscv
-> -       select BR2_PACKAGE_GDB_DEBUGGER if BR2_riscv
->         # When the external toolchain gdbserver is copied to the
->         # target, we don't allow building a separate gdbserver. The
->         # one from the external toolchain should be used.
-> @@ -48,7 +46,6 @@ if BR2_PACKAGE_GDB
->  config BR2_PACKAGE_GDB_SERVER
->         bool "gdbserver"
->         depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-> -       depends on !BR2_riscv
->         help
->           Build the gdbserver stub to run on the target.
->           A full gdb is needed to debug the progam.
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index 4b868e22556b..199f1c72b001 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -5,7 +5,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
->         depends on !BR2_microblaze
->         depends on !BR2_nios2
->         depends on !BR2_or1k
-> -       depends on !BR2_riscv
->         depends on !BR2_nds32
->
->  comment "Host GDB Options"
-> --
-> 2.25.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/avahi/Config.in b/package/avahi/Config.in
+index 5e303d044e..4a000dd676 100644
+--- a/package/avahi/Config.in
++++ b/package/avahi/Config.in
+@@ -42,6 +42,14 @@ config BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY
+ 	  Enable the libdns_sd (Bonjour) compatibility library support
+ 	  for legacy applications.
+ 
++config BR2_PACKAGE_AVAHI_DEFAULT_SERVICES
++	bool "install default service definitions"
++	depends on BR2_PACKAGE_AVAHI_DAEMON
++	default y
++	help
++	  Install the SSH/SFTP service definitions included with the Avahi
++	  daemon by default.
++
+ endif
+ 
+ comment "avahi needs a toolchain w/ threads"
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index eef05f0d2f..b8aea90fcc 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -184,4 +184,13 @@ endef
+ AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
+ endif
+ 
++ifeq (${BR2_PACKAGE_AVAHI_DEFAULT_SERVICES},)
++define AVAHI_REMOVE_DEFAULT_SERVICES
++	for service in ssh sftp-ssh; do \
++		$(RM) -f $(TARGET_DIR)/etc/avahi/services/$${service}.service; \
++	done
++endef
++AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_DEFAULT_SERVICES
++endif
++
+ $(eval $(autotools-package))
+-- 
+2.29.2
