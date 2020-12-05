@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:22:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.13.1
-In-Reply-To: <20201205080547.2428475-1-bernd.kuhls@t-online.de>
-References: <20201205080547.2428475-1-bernd.kuhls@t-online.de>
-Message-ID: <20201205212212.1f12472b@windsurf.home>
+Date: Sat, 5 Dec 2020 21:22:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.8.0
+In-Reply-To: <20201205080953.2443925-1-bernd.kuhls@t-online.de>
+References: <20201205080953.2443925-1-bernd.kuhls@t-online.de>
+Message-ID: <20201205212215.4d6cbea6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Dec 2020 09:05:47 +0100
+On Sat,  5 Dec 2020 09:09:53 +0100
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Reformatted hashes.
-> 
-> Changelog:
-> https://raw.githubusercontent.com/kornelski/pngquant/master/CHANGELOG
+> Release notes:
+> https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/pngquant/pngquant.hash | 4 ++--
->  package/pngquant/pngquant.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/dav1d/dav1d.hash | 2 +-
+>  package/dav1d/dav1d.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
