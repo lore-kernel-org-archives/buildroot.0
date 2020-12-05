@@ -1,298 +1,248 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:39:43 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
- version to 1.20.10
-Message-ID: <20201205202516.246F4835F4@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 21:40:47 +0100
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.3.0
+Message-ID: <20201205202516.3E21C835F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f6e3c0962176855715a24fc0a028ebca11ac742
+commit: https://git.buildroot.net/buildroot/commit/?id=8526bebc88f031bdbe1e0fb07a851a8ae7d11246
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2020-December/003067.html
+Rebased patch 0002 & 0003.
+Removed patch 0005 which was applied upstream.
 
-Remove patches which were applied upstream.
+Only Intel and Broadcom drivers depend on expat since upstream commit:
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=81a0f1eca24b8605b9f2506122ff90db7129c39e
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...eviceInfo-and-SetDeviceIndicators-heap-ov.patch | 100 ----------------
- ...008-Check-SetMap-request-length-carefully.patch | 131 ---------------------
- .../xserver_xorg-server/xserver_xorg-server.hash   |   6 +-
- .../xserver_xorg-server/xserver_xorg-server.mk     |   2 +-
- 4 files changed, 4 insertions(+), 235 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk           |  2 +-
+ ...on-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch | 20 ++++++-------
+ ...on-option-to-disable-optional-neon-suppor.patch |  4 +--
+ ...cb-fixes-to-loader-when-using-x11-and-dri.patch | 35 ----------------------
+ package/mesa3d/Config.in                           |  7 ++++-
+ package/mesa3d/mesa3d.hash                         |  6 ++--
+ package/mesa3d/mesa3d.mk                           |  7 +++--
+ 7 files changed, 27 insertions(+), 54 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch b/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
-deleted file mode 100644
-index 8297aa8a9f..0000000000
---- a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
-+++ /dev/null
-@@ -1,100 +0,0 @@
--From 87c64fc5b0db9f62f4e361444f4b60501ebf67b9 Mon Sep 17 00:00:00 2001
--From: Matthieu Herrb <matthieu@herrb.eu>
--Date: Sun, 11 Oct 2020 17:05:09 +0200
--Subject: [PATCH] Fix XkbSetDeviceInfo() and SetDeviceIndicators() heap
-- overflows
--
--ZDI-CAN 11389 / CVE-2020-25712
--
--This vulnerability was discovered by:
--Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
--
--Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xkb/xkb.c | 26 +++++++++++++++++++++++---
-- 1 file changed, 23 insertions(+), 3 deletions(-)
--
--diff --git a/xkb/xkb.c b/xkb/xkb.c
--index 8e016cd74..f54cc97f8 100644
----- a/xkb/xkb.c
--+++ b/xkb/xkb.c
--@@ -6536,7 +6536,9 @@ SetDeviceIndicators(char *wire,
--                     unsigned changed,
--                     int num,
--                     int *status_rtrn,
---                    ClientPtr client, xkbExtensionDeviceNotify * ev)
--+                    ClientPtr client,
--+                    xkbExtensionDeviceNotify * ev,
--+                    xkbSetDeviceInfoReq * stuff)
-- {
--     xkbDeviceLedsWireDesc *ledWire;
--     int i;
--@@ -6557,6 +6559,11 @@ SetDeviceIndicators(char *wire,
--         xkbIndicatorMapWireDesc *mapWire;
--         XkbSrvLedInfoPtr sli;
-- 
--+        if (!_XkbCheckRequestBounds(client, stuff, ledWire, ledWire + 1)) {
--+            *status_rtrn = BadLength;
--+            return (char *) ledWire;
--+        }
--+
--         namec = mapc = statec = 0;
--         sli = XkbFindSrvLedInfo(dev, ledWire->ledClass, ledWire->ledID,
--                                 XkbXI_IndicatorMapsMask);
--@@ -6575,6 +6582,10 @@ SetDeviceIndicators(char *wire,
--             memset((char *) sli->names, 0, XkbNumIndicators * sizeof(Atom));
--             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
--                 if (ledWire->namesPresent & bit) {
--+                    if (!_XkbCheckRequestBounds(client, stuff, atomWire, atomWire + 1)) {
--+                        *status_rtrn = BadLength;
--+                        return (char *) atomWire;
--+                    }
--                     sli->names[n] = (Atom) *atomWire;
--                     if (sli->names[n] == None)
--                         ledWire->namesPresent &= ~bit;
--@@ -6592,6 +6603,10 @@ SetDeviceIndicators(char *wire,
--         if (ledWire->mapsPresent) {
--             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
--                 if (ledWire->mapsPresent & bit) {
--+                    if (!_XkbCheckRequestBounds(client, stuff, mapWire, mapWire + 1)) {
--+                        *status_rtrn = BadLength;
--+                        return (char *) mapWire;
--+                    }
--                     sli->maps[n].flags = mapWire->flags;
--                     sli->maps[n].which_groups = mapWire->whichGroups;
--                     sli->maps[n].groups = mapWire->groups;
--@@ -6671,7 +6686,7 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
--     ed.deviceID = dev->id;
--     wire = (char *) &stuff[1];
--     if (stuff->change & XkbXI_ButtonActionsMask) {
---        int nBtns, sz, i;
--+	int nBtns, sz, i;
--         XkbAction *acts;
--         DeviceIntPtr kbd;
-- 
--@@ -6683,7 +6698,11 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
--                 return BadAlloc;
--             dev->button->xkb_acts = acts;
--         }
--+        if (stuff->firstBtn + stuff->nBtns > nBtns)
--+            return BadValue;
--         sz = stuff->nBtns * SIZEOF(xkbActionWireDesc);
--+        if (!_XkbCheckRequestBounds(client, stuff, wire, (char *) wire + sz))
--+            return BadLength;
--         memcpy((char *) &acts[stuff->firstBtn], (char *) wire, sz);
--         wire += sz;
--         ed.reason |= XkbXI_ButtonActionsMask;
--@@ -6704,7 +6723,8 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
--         int status = Success;
-- 
--         wire = SetDeviceIndicators(wire, dev, stuff->change,
---                                   stuff->nDeviceLedFBs, &status, client, &ed);
--+                                   stuff->nDeviceLedFBs, &status, client, &ed,
--+                                   stuff);
--         if (status != Success)
--             return status;
--     }
---- 
--2.20.1
--
-diff --git a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch b/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
-deleted file mode 100644
-index a8b33ebf3b..0000000000
---- a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
-+++ /dev/null
-@@ -1,131 +0,0 @@
--From 446ff2d3177087b8173fa779fa5b77a2a128988b Mon Sep 17 00:00:00 2001
--From: Matthieu Herrb <matthieu@herrb.eu>
--Date: Thu, 12 Nov 2020 19:15:07 +0100
--Subject: [PATCH] Check SetMap request length carefully.
--
--Avoid out of bounds memory accesses on too short request.
--
--ZDI-CAN 11572 /  CVE-2020-14360
--
--This vulnerability was discovered by:
--Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
--
--Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- xkb/xkb.c | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
-- 1 file changed, 92 insertions(+)
--
--diff --git a/xkb/xkb.c b/xkb/xkb.c
--index f54cc97f8..d056c698c 100644
----- a/xkb/xkb.c
--+++ b/xkb/xkb.c
--@@ -2382,6 +2382,93 @@ SetVirtualModMap(XkbSrvInfoPtr xkbi,
--     return (char *) wire;
-- }
-- 
--+#define _add_check_len(new) \
--+    if (len > UINT32_MAX - (new) || len > req_len - (new)) goto bad; \
--+    else len += new
--+
--+/**
--+ * Check the length of the SetMap request
--+ */
--+static int
--+_XkbSetMapCheckLength(xkbSetMapReq *req)
--+{
--+    size_t len = sz_xkbSetMapReq, req_len = req->length << 2;
--+    xkbKeyTypeWireDesc *keytype;
--+    xkbSymMapWireDesc *symmap;
--+    BOOL preserve;
--+    int i, map_count, nSyms;
--+
--+    if (req_len < len)
--+        goto bad;
--+    /* types */
--+    if (req->present & XkbKeyTypesMask) {
--+        keytype = (xkbKeyTypeWireDesc *)(req + 1);
--+        for (i = 0; i < req->nTypes; i++) {
--+            _add_check_len(XkbPaddedSize(sz_xkbKeyTypeWireDesc));
--+            if (req->flags & XkbSetMapResizeTypes) {
--+                _add_check_len(keytype->nMapEntries
--+                               * sz_xkbKTSetMapEntryWireDesc);
--+                preserve = keytype->preserve;
--+                map_count = keytype->nMapEntries;
--+                if (preserve) {
--+                    _add_check_len(map_count * sz_xkbModsWireDesc);
--+                }
--+                keytype += 1;
--+                keytype = (xkbKeyTypeWireDesc *)
--+                          ((xkbKTSetMapEntryWireDesc *)keytype + map_count);
--+                if (preserve)
--+                    keytype = (xkbKeyTypeWireDesc *)
--+                              ((xkbModsWireDesc *)keytype + map_count);
--+            }
--+        }
--+    }
--+    /* syms */
--+    if (req->present & XkbKeySymsMask) {
--+        symmap = (xkbSymMapWireDesc *)((char *)req + len);
--+        for (i = 0; i < req->nKeySyms; i++) {
--+            _add_check_len(sz_xkbSymMapWireDesc);
--+            nSyms = symmap->nSyms;
--+            _add_check_len(nSyms*sizeof(CARD32));
--+            symmap += 1;
--+            symmap = (xkbSymMapWireDesc *)((CARD32 *)symmap + nSyms);
--+        }
--+    }
--+    /* actions */
--+    if (req->present & XkbKeyActionsMask) {
--+        _add_check_len(req->totalActs * sz_xkbActionWireDesc 
--+                       + XkbPaddedSize(req->nKeyActs));
--+    }
--+    /* behaviours */
--+    if (req->present & XkbKeyBehaviorsMask) {
--+        _add_check_len(req->totalKeyBehaviors * sz_xkbBehaviorWireDesc);
--+    }
--+    /* vmods */
--+    if (req->present & XkbVirtualModsMask) {
--+        _add_check_len(XkbPaddedSize(Ones(req->virtualMods)));
--+    }
--+    /* explicit */
--+    if (req->present & XkbExplicitComponentsMask) {
--+        /* two bytes per non-zero explicit componen */
--+        _add_check_len(XkbPaddedSize(req->totalKeyExplicit * sizeof(CARD16)));
--+    }
--+    /* modmap */
--+    if (req->present & XkbModifierMapMask) {
--+         /* two bytes per non-zero modmap component */
--+        _add_check_len(XkbPaddedSize(req->totalModMapKeys * sizeof(CARD16)));
--+    }
--+    /* vmodmap */
--+    if (req->present & XkbVirtualModMapMask) {
--+        _add_check_len(req->totalVModMapKeys * sz_xkbVModMapWireDesc);
--+    }
--+    if (len == req_len)
--+        return Success;
--+bad:
--+    ErrorF("[xkb] BOGUS LENGTH in SetMap: expected %ld got %ld\n",
--+           len, req_len);
--+    return BadLength;
--+}
--+
--+
-- /**
--  * Check if the given request can be applied to the given device but don't
--  * actually do anything, except swap values when client->swapped and doswap are both true.
--@@ -2642,6 +2729,11 @@ ProcXkbSetMap(ClientPtr client)
--     CHK_KBD_DEVICE(dev, stuff->deviceSpec, client, DixManageAccess);
--     CHK_MASK_LEGAL(0x01, stuff->present, XkbAllMapComponentsMask);
-- 
--+    /* first verify the request length carefully */
--+    rc = _XkbSetMapCheckLength(stuff);
--+    if (rc != Success)
--+        return rc;
--+
--     tmp = (char *) &stuff[1];
-- 
--     /* Check if we can to the SetMap on the requested device. If this
---- 
--2.20.1
--
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 2b55449e14..d6b3c92e08 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-August/003059.html
--sha256  e219f2e0dfe455467939149d7cd2ee53b79b512cc1d2094ae4f5c9ed9ccd3571  xorg-server-1.20.9.tar.bz2
--sha512  d9b5f93e1b9763a89187d8b272aa7d4ce9709641b8539f4536708af153310e5a4931bffd4229c51a3b0e3b12da7838750aa71b635751fb4c0bb27438cce4e5e6  xorg-server-1.20.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-December/003067.html
-+sha256  977420c082450dc808de301ef56af4856d653eea71519a973c3490a780cb7c99  xorg-server-1.20.10.tar.bz2
-+sha512  a07bee380bb72f2117fe6f831a6e4aded19bea1f2b36e42a019a30348e98d6fe65c0617cf819be9c6b405502f88cafb829df30aab32393774b71f1418a4cefae  xorg-server-1.20.10.tar.bz2
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 8e8170a7a5..40d9979e57 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index de97467745..8ac2d17b24 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.2.3
++MESA3D_HEADERS_VERSION = 20.3.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+index b1bb2678b4..e3c70c3f24 100644
+--- a/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
++++ b/package/mesa3d/0002-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
+@@ -18,7 +18,7 @@ Based on the patch for autotools provided by Valentin Korenblit.
+ 
+ Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[rebased for 20.02.0]
++[rebased for 20.2.0 & 20.3.0]
+ ---
+  src/gallium/frontends/clover/meson.build | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -27,15 +27,15 @@ diff --git a/src/gallium/frontends/clover/meson.build b/src/gallium/frontends/cl
+ index 62ac5f5278d..ecdeb39669c 100644
+ --- a/src/gallium/frontends/clover/meson.build
+ +++ b/src/gallium/frontends/clover/meson.build
+-@@ -63,7 +63,7 @@
+-     clover_cpp_args,
+-     clover_opencl_cpp_args,
+-     clover_spirv_cpp_args,
+--    '-DLIBCLC_INCLUDEDIR="@0@/"'.format(dep_clc.get_pkgconfig_variable('includedir')),
+-+    '-DLIBCLC_INCLUDEDIR="/usr/share"',
+-     '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_pkgconfig_variable('libexecdir')),
+-     '-DCLANG_RESOURCE_DIR="@0@"'.format(join_paths(
+-       dep_llvm.get_configtool_variable('libdir'), 'clang',
++@@ -27,7 +27,7 @@
++   '-DCL_USE_DEPRECATED_OPENCL_2_0_APIS',
++   '-DCL_USE_DEPRECATED_OPENCL_2_1_APIS',
++   '-DCL_USE_DEPRECATED_OPENCL_2_2_APIS',
++-  '-DLIBCLC_INCLUDEDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'includedir')),
+++  '-DLIBCLC_INCLUDEDIR="/usr/share"',
++   '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'libexecdir'))
++ ]
++ clover_spirv_cpp_args = []
+ -- 
+ 2.20.1
+ 
+diff --git a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+index 4b9878fb90..39e402361f 100644
+--- a/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
++++ b/package/mesa3d/0003-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
+@@ -10,7 +10,7 @@ to force disabling it at compile time.
+ [Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[rebased for 20.2.0]
++[rebased for 20.2.0 & 20.3.0]
+ ---
+  meson_options.txt                    | 7 +++++++
+  src/gallium/drivers/vc4/meson.build  | 4 ++--
+@@ -21,7 +21,7 @@ diff --git a/meson_options.txt b/meson_options.txt
+ index a39596a6f19..0f6b6c62b55 100644
+ --- a/meson_options.txt
+ +++ b/meson_options.txt
+-@@ -124,6 +124,13 @@ option(
++@@ -123,6 +123,13 @@ option(
+    choices : ['auto', 'true', 'false', 'enabled', 'disabled'],
+    description : 'enable gallium va frontend.',
+  )
+diff --git a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch b/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
+deleted file mode 100644
+index 5746bc221e..0000000000
+--- a/package/mesa3d/0005-meson-Add-xcb-fixes-to-loader-when-using-x11-and-dri.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From da691ec75cc8a7b2d0ac0c5894521afda4bc601d Mon Sep 17 00:00:00 2001
+-From: Duncan Hopkins <duncan@duncanhopkins.me.uk>
+-Date: Thu, 15 Oct 2020 12:14:57 +0100
+-Subject: [PATCH] meson: Add xcb-fixes to loader when using x11 and dri3. Fixes
+- undefined symbol for xcb_xfixes_create_region in loader_dri3_helper.c
+-
+-loader_dr3_helper.c uses xcb_xfixes_create_region() that requires dep_xcb_xfixes to link. This is dependent on with_platform_x11 and with_dri3.
+-But the source meson file does not set this up dependent on with_dri3.
+-The build was initialsed using platforms=x11 and gallium-drivers=zink,swrast.
+-
+-Reviewed-by: Eric Anholt <eric@anholt.net>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/7164>
+-(cherry picked from commit cf17d6251653f4a98e7c4f904ea2f0bc0ecedd5c)
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- meson.build | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index fbd3c4b8e8d..670cb521a2b 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1742,7 +1742,8 @@ if with_platform_x11
+-       dep_xxf86vm = dependency('xxf86vm')
+-     endif
+-   endif
+--  if (with_egl or (
+-+  if (with_egl or 
+-+      with_dri3 or (
+-       with_gallium_vdpau or with_gallium_xvmc or with_gallium_xa or
+-       with_gallium_omx != 'disabled'))
+-     dep_xcb_xfixes = dependency('xcb-xfixes')
+--- 
+-2.25.4
+-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index ebfc422bf2..45eb62b701 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -5,7 +5,6 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -139,6 +138,7 @@ comment "Gallium i915: Only one i915 provider can be built"
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  Mesa driver for iris-based Intel GPUs.
+@@ -263,6 +263,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ 	bool "Gallium v3d driver"
+ 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_LIBDRM_VC4
+@@ -278,6 +279,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on BR2_arm || BR2_aarch64
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_LIBDRM_VC4
+@@ -344,6 +346,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+ 	bool "DRI i915 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+@@ -353,6 +356,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+ 	bool "DRI i965 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+@@ -391,6 +395,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+ 	depends on BR2_PACKAGE_XORG7 # xorgproto
++	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index b59d1f866e..76436bdc70 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-November/000607.html
+-sha256  ae1b240e11531df528d14dc214d2dc4d2b4f2e835c6230ba0b492b171eceb82b  mesa-20.2.3.tar.xz
+-sha512  e55b57523f6fdb1199586538c119c3e7c81d1a7af86be14c90d140c514f65e54ac0c56bd341686d04b770b80d3ddd92188ee17b3bc23f243aed10c25de7e19a6  mesa-20.2.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000609.html
++sha256  2999738e888731531cd62b27519fa37566cc0ea2cd7d4d97f46abaa3e949c630  mesa-20.3.0.tar.xz
++sha512  69ee0bc1e7a69a519597dd55f4d601f35fe51ed6687d6f6beff6aef3da8d82de932220305fc187e06a52aaf0073d434a6e3458619c767b9b7932464a2cbb2cf2  mesa-20.3.0.tar.xz
+ 
+ # License
+ sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 5af3cbb3f4..77b5899061 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 1.20.9
-+XSERVER_XORG_SERVER_VERSION = 1.20.10
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.2.3
++MESA3D_VERSION = 20.3.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -19,10 +19,13 @@ MESA3D_DEPENDENCIES = \
+ 	host-bison \
+ 	host-flex \
+ 	host-python3-mako \
+-	expat \
+ 	libdrm \
+ 	zlib
+ 
++ifeq ($(BR2_PACKAGE_EXPAT),y)
++MESA3D_DEPENDENCIES += expat
++endif
++
+ MESA3D_CONF_OPTS = \
+ 	-Dgallium-omx=disabled \
+ 	-Dpower8=disabled
