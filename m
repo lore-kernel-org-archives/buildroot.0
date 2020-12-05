@@ -1,52 +1,47 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:50 +0100
-Subject: [Buildroot] [PATCH 03/10] package/perl-http-cookies: bump to
- version 6.09
+Date: Sat,  5 Dec 2020 07:44:51 +0100
+Subject: [Buildroot] [PATCH 04/10] package/perl-http-entity-parser: bump to
+ version 0.25
 In-Reply-To: <20201205064457.606737-1-francois.perrad@gadz.org>
 References: <20201205064457.606737-1-francois.perrad@gadz.org>
-Message-ID: <20201205064457.606737-3-francois.perrad@gadz.org>
+Message-ID: <20201205064457.606737-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff LICENSE:
--This software is Copyright (c) 2002-2019 by Gisle Aas.
-+This software is Copyright (c) 2002 by Gisle Aas.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-cookies/perl-http-cookies.hash | 6 +++---
- package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-http-entity-parser/perl-http-entity-parser.hash | 4 ++--
+ package/perl-http-entity-parser/perl-http-entity-parser.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index 4099ce707..0e812c619 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
+diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.hash b/package/perl-http-entity-parser/perl-http-entity-parser.hash
+index 882bf0a3d..69d5f6e97 100644
+--- a/package/perl-http-entity-parser/perl-http-entity-parser.hash
++++ b/package/perl-http-entity-parser/perl-http-entity-parser.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    8c663710244e70c85775393a8f5be443 HTTP-Cookies-6.08.tar.gz
--sha256 49ebb73576eb41063c04bc079477df094496deec805ae033f3be338c23c3af59 HTTP-Cookies-6.08.tar.gz
-+md5  ac30af9aa9715f1d64826a7e99721613  HTTP-Cookies-6.09.tar.gz
-+sha256  903f017afaa5b78599cc90efc14ecccc8cc2ebfb636eb8c02f8f16ba861d1fe0  HTTP-Cookies-6.09.tar.gz
+-md5  b5ead58775c2f151f2174651807fdf2d  HTTP-Entity-Parser-0.24.tar.gz
+-sha256  f68e0fc87150cb9241ac23d7226fc2a35324d2e8990830c1e2a7203244f1e612  HTTP-Entity-Parser-0.24.tar.gz
++md5  09663f9577975587e832e28ba5f5f8af  HTTP-Entity-Parser-0.25.tar.gz
++sha256  3a8cd0d8cba3d17cd8c04ee82d7341dfaa247dbdd94a49eb94b53f69e483ec3a  HTTP-Entity-Parser-0.25.tar.gz
  
  # computed by scancpan
--sha256 5204690d6efb272e6fde7c3e3b8aba5114e1458b706710eaf607041ac080344d LICENSE
-+sha256  82902ce20c8ed71d7f4e7a6a5b2b26e43a7e2e90c78098fb49aa49e03ac808e0  LICENSE
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index 6f802d644..1e63779b1 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
+ sha256  79c2a066104e71602785fd815c5aea6f7db78c19451d68521380083f9c2a8805  LICENSE
+diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+index 0b09ea41c..2304955bd 100644
+--- a/package/perl-http-entity-parser/perl-http-entity-parser.mk
++++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.08
-+PERL_HTTP_COOKIES_VERSION = 6.09
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
- PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_ENTITY_PARSER_VERSION = 0.24
++PERL_HTTP_ENTITY_PARSER_VERSION = 0.25
+ PERL_HTTP_ENTITY_PARSER_SOURCE = HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
+ PERL_HTTP_ENTITY_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+ PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
 -- 
 2.27.0
