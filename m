@@ -1,97 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:41:41 +0100
-Subject: [Buildroot] [git commit] package/ser2net: bump to version 4.3.0
-Message-ID: <20201205212713.6BA1180DED@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:41:32 +0100
+Subject: [Buildroot] [git commit] package/python-multidict: bump to version
+ 5.0.2
+Message-ID: <20201205212712.A9FE781008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=574eba32a23c9f702eabe467885215dff52f19d4
+commit: https://git.buildroot.net/buildroot/commit/?id=b63a8ca5a8a082c60062abf90fffe663c669adce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop patch that is now upstream.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../ser2net/0001-port.h-include-sys-time.h.patch   | 39 ----------------------
- package/ser2net/ser2net.hash                       |  6 ++--
- package/ser2net/ser2net.mk                         |  4 +--
- 3 files changed, 5 insertions(+), 44 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ser2net/0001-port.h-include-sys-time.h.patch b/package/ser2net/0001-port.h-include-sys-time.h.patch
-deleted file mode 100644
-index daf5372437..0000000000
---- a/package/ser2net/0001-port.h-include-sys-time.h.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 021543b02b6fdb78c9217757736eabac90a647eb Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 26 Sep 2020 12:37:38 +0200
--Subject: [PATCH] port.h: include <sys/time.h>
--
--Include <sys/time.h> to avoid the following build failure on musl:
--
--port.h:361:29: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
--     const char *str, struct timeval *tv,
--                             ^~~~~~~
--portconfig.c: In function 'myconfig':
--portconfig.c:586:9: error: variable 'tv' has initializer but incomplete type
--  struct timeval tv = { 0, 0 };
--         ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/4c0b238186cb2fb2d81807ce006945594f92b2cd
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/cminyard/ser2net/pull/34]
-----
-- port.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/port.h b/port.h
--index 048c5bd..86c3b1d 100644
----- a/port.h
--+++ b/port.h
--@@ -9,6 +9,7 @@
-- #define PORT
-- 
-- #include <netdb.h>
--+#include <sys/time.h>
-- #include "gbuf.h"
-- #include "absout.h"
-- 
---- 
--2.28.0
--
-diff --git a/package/ser2net/ser2net.hash b/package/ser2net/ser2net.hash
-index fd2761075b..2e67a860b1 100644
---- a/package/ser2net/ser2net.hash
-+++ b/package/ser2net/ser2net.hash
-@@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/ser2net/files/ser2net/
--md5  7c0a47bd9b405aedac136c4e290ebfeb  ser2net-4.2.2.tar.gz
--sha1  64e77d3194bbbac6e7e9d5810d06b6ade7bfdcf4  ser2net-4.2.2.tar.gz
-+md5  19e9819e8c4e91ea56c455a3f0f7d2d5  ser2net-4.3.0.tar.gz
-+sha1  dc84a43c4a96d021a6d4fc64fba1f1ba86732018  ser2net-4.3.0.tar.gz
- # Locally computed:
--sha256  60e2aab04c4a346447a7e58e308a830fb74bac208a021229c113fc8ccc7bdfe6  ser2net-4.2.2.tar.gz
-+sha256  5e407d684d0aa0919ddd15af368f890c5940cddd6034b7efc363823f38f6ff0c  ser2net-4.3.0.tar.gz
- sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
-diff --git a/package/ser2net/ser2net.mk b/package/ser2net/ser2net.mk
-index 868d7f3a1d..5dd64f5a4f 100644
---- a/package/ser2net/ser2net.mk
-+++ b/package/ser2net/ser2net.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index a08a14a8a6..6b78301200 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  c2c3311e25636a6f213e998cd1e80d72  multidict-5.0.0.tar.gz
+-sha256  1b324444299c3a49b601b1bf621fc21704e29066f6ac2b7d7e4034a4a18662a1  multidict-5.0.0.tar.gz
++md5  b1dab3349efe90934ae3612f1202b733  multidict-5.0.2.tar.gz
++sha256  e5bf89fe57f702a046c7ec718fe330ed50efd4bcf74722940db2eb0919cddb1c  multidict-5.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a1c5825513279d3085a0ba46880e148ea3710c149bbaedcf2d11605a5ed3c4ad  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index 1084fe0f6a..a7043643c5 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SER2NET_VERSION = 4.2.2
--SER2NET_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
-+SER2NET_VERSION = 4.3.0
-+SER2NET_SITE = https://downloads.sourceforge.net/project/ser2net/ser2net
- SER2NET_LICENSE = GPL-2.0+
- SER2NET_LICENSE_FILES = COPYING
- SER2NET_DEPENDENCIES = gensio libyaml
+-PYTHON_MULTIDICT_VERSION = 5.0.0
++PYTHON_MULTIDICT_VERSION = 5.0.2
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/d2/5a/e95b0f9ebacd42e094e229a9a0a9e44d02876abf64969d0cb07dadcf3c4a
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/da/e6/50c7f52781f45c2b37c77e962c30a3944a9e79a46ea92956e826c24d3432
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
