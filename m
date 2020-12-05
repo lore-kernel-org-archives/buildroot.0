@@ -1,52 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 14:38:57 +0100
-Subject: [Buildroot] [git commit] package/perl-http-cookies: bump to version
- 6.09
-Message-ID: <20201205132743.5A7D17FCEB@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 14:39:05 +0100
+Subject: [Buildroot] [git commit] package/perl-plack: bump to version 1.0048
+Message-ID: <20201205132743.D398A7FCEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4db3fa2d4cb3d6c400badd73bada0c83e87eb507
+commit: https://git.buildroot.net/buildroot/commit/?id=4e9810e532db220f00dbb0248af6ee59c43b7bba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-diff LICENSE:
--This software is Copyright (c) 2002-2019 by Gisle Aas.
-+This software is Copyright (c) 2002 by Gisle Aas.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-cookies/perl-http-cookies.hash | 6 +++---
- package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
+ package/perl-plack/perl-plack.hash | 6 +++---
+ package/perl-plack/perl-plack.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index 4099ce707f..0e812c6192 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
+diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
+index 7324b726ae..c763d2c173 100644
+--- a/package/perl-plack/perl-plack.hash
++++ b/package/perl-plack/perl-plack.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    8c663710244e70c85775393a8f5be443 HTTP-Cookies-6.08.tar.gz
--sha256 49ebb73576eb41063c04bc079477df094496deec805ae033f3be338c23c3af59 HTTP-Cookies-6.08.tar.gz
-+md5  ac30af9aa9715f1d64826a7e99721613  HTTP-Cookies-6.09.tar.gz
-+sha256  903f017afaa5b78599cc90efc14ecccc8cc2ebfb636eb8c02f8f16ba861d1fe0  HTTP-Cookies-6.09.tar.gz
+-md5    9d37086aec1b29bab52a9575687e3557 Plack-1.0047.tar.gz
+-sha256 322c93f5acc0a0f0e11fd4a76188f978bdc14338a9f1df3ae535227017046561 Plack-1.0047.tar.gz
++md5  36282b473b4521219c44a9db437b650f  Plack-1.0048.tar.gz
++sha256  30f5f25e19b437859156a2526f61ca9ab708d50d5730c279189403aabfe542a6  Plack-1.0048.tar.gz
  
  # computed by scancpan
--sha256 5204690d6efb272e6fde7c3e3b8aba5114e1458b706710eaf607041ac080344d LICENSE
-+sha256  82902ce20c8ed71d7f4e7a6a5b2b26e43a7e2e90c78098fb49aa49e03ac808e0  LICENSE
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index 6f802d6447..1e63779b15 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
+-sha256 fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d LICENSE
++sha256  fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d  LICENSE
+diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
+index cccf5a6224..b95f204d23 100644
+--- a/package/perl-plack/perl-plack.mk
++++ b/package/perl-plack/perl-plack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.08
-+PERL_HTTP_COOKIES_VERSION = 6.09
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
- PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+-PERL_PLACK_VERSION = 1.0047
++PERL_PLACK_VERSION = 1.0048
+ PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
+ PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
+ PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
