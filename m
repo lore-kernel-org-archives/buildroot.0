@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:28:00 +0100
-Subject: [Buildroot] [ISSUE] gdk-pixbuf dependency on librsvg for its
- SVG loader
-In-Reply-To: <CANVomh9E4fVo0tP7yTc0goGD5FD9f6BqNymSvLvz3wv6sQDV1g@mail.gmail.com>
-References: <CANVomh9E4fVo0tP7yTc0goGD5FD9f6BqNymSvLvz3wv6sQDV1g@mail.gmail.com>
-Message-ID: <20201205212800.13dce2d0@windsurf.home>
+Date: Sat, 5 Dec 2020 21:28:30 +0100
+Subject: [Buildroot] [PATCH/next v1 1/2] package/ninja: bump version to
+ 1.10.2
+In-Reply-To: <20201202194236.1751-1-ps.report@gmx.net>
+References: <20201202194236.1751-1-ps.report@gmx.net>
+Message-ID: <20201205212830.6cb9158d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed,  2 Dec 2020 20:42:35 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-On Wed, 2 Dec 2020 19:45:42 +0000
-C Larbi <pkl2000us@gmail.com> wrote:
-
-> GDK-PIXBUF provides image handling for gtk3.
+> - rebased 0001-set-minimum-cmake-version-to-3.10.patch
 > 
-> To add SVG support, the librsvg package is required.
+> - removed 0002-remove-fdiagnostics-color-from-make-command.patch
+>   (superseeded by upstream commit [1])
 > 
-> However, the configuration option " --disable-pixbuf-loader" in librsvg.mk
-> prevents the required image loader to be built for GDK.
+> - rebased package/ninja/0003-CMake-fix-object-library-usage.patch
 > 
-> I suggest to the maintainers of the package to add a conditional clause in
-> the makefile to add or remove this configuration option depending on
-> whether the libgtk3 package has been selected
+> [1] https://github.com/ninja-build/ninja/commit/418d59b8a6054ce9ef1a28c07c41d3a0bb386836
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...01-set-minimum-cmake-version-to-3.10.patch | 20 +++---
+>  ...fdiagnostics-color-from-make-command.patch | 29 --------
+>  .../0003-CMake-fix-object-library-usage.patch | 67 ++++++++++---------
+>  package/ninja/ninja.hash                      |  4 +-
+>  package/ninja/ninja.mk                        |  2 +-
+>  5 files changed, 49 insertions(+), 73 deletions(-)
+>  delete mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
 
-Thanks for your suggestion. Could you submit a patch implementing this?
-
-Thanks a lot,
+Both applied. Could you keep an eye of meson-based package failures in
+the coming days? Updates of Meson have had a tendency to break stuff a
+bit in the past. Thanks!
 
 Thomas
 -- 
