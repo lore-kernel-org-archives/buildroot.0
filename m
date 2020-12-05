@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:28:30 +0100
-Subject: [Buildroot] [PATCH/next v1 1/2] package/ninja: bump version to
- 1.10.2
-In-Reply-To: <20201202194236.1751-1-ps.report@gmx.net>
-References: <20201202194236.1751-1-ps.report@gmx.net>
-Message-ID: <20201205212830.6cb9158d@windsurf.home>
+Date: Sat, 5 Dec 2020 21:28:33 +0100
+Subject: [Buildroot] [PATCH/next v1] package/libaio: bump version to
+ 0.3.112
+In-Reply-To: <20201202185838.11828-1-ps.report@gmx.net>
+References: <20201202185838.11828-1-ps.report@gmx.net>
+Message-ID: <20201205212833.28828fe5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Dec 2020 20:42:35 +0100
+On Wed,  2 Dec 2020 19:58:38 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> - rebased 0001-set-minimum-cmake-version-to-3.10.patch
+> - remove 0001-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch
+>   (upstream committed [1])
 > 
-> - removed 0002-remove-fdiagnostics-color-from-make-command.patch
->   (superseeded by upstream commit [1])
+> - remove 0002-Makefile-add-missing-DESTDIR-variable-use.patch
+>   (upstream committed [2])
 > 
-> - rebased package/ninja/0003-CMake-fix-object-library-usage.patch
+> - remove 0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
+>   (upstream committed [3])
 > 
-> [1] https://github.com/ninja-build/ninja/commit/418d59b8a6054ce9ef1a28c07c41d3a0bb386836
+> Changelog (from libaio.spec):
+>   - Add async poll support (Christoph Hellwig)
+>   - Use canonical DESTDIR= environment variable (Thomas Petazzoni)
+>   - Add ability to disable building the shared library (Thomas Petazzoni)
+> 
+> [1] https://pagure.io/libaio/c/970196192771eeda39fabcc59a5dae9613e871a8.patch
+> [2] https://pagure.io/libaio/c/4059161333a14a0c705efecc5765b6cb2a29ae02.patch
+> [3] https://pagure.io/libaio/c/de5775ea1b42ea83e305db9c17372e3f0a8dd3a3.patch
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...01-set-minimum-cmake-version-to-3.10.patch | 20 +++---
->  ...fdiagnostics-color-from-make-command.patch | 29 --------
->  .../0003-CMake-fix-object-library-usage.patch | 67 ++++++++++---------
->  package/ninja/ninja.hash                      |  4 +-
->  package/ninja/ninja.mk                        |  2 +-
->  5 files changed, 49 insertions(+), 73 deletions(-)
->  delete mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
+>  ...-ENABLE_SHARED-boolean-to-allow-stat.patch | 56 ------------------
+>  ...ile-add-missing-DESTDIR-variable-use.patch | 32 -----------
+>  ...t-libgcc-to-avoid-unresolved-symbols.patch | 57 -------------------
+>  package/libaio/libaio.hash                    |  4 +-
+>  package/libaio/libaio.mk                      |  2 +-
+>  5 files changed, 3 insertions(+), 148 deletions(-)
+>  delete mode 100644 package/libaio/0001-src-Makefile-add-ENABLE_SHARED-boolean-to-allow-stat.patch
+>  delete mode 100644 package/libaio/0002-Makefile-add-missing-DESTDIR-variable-use.patch
+>  delete mode 100644 package/libaio/0003-Link-against-libgcc-to-avoid-unresolved-symbols.patch
 
-Both applied. Could you keep an eye of meson-based package failures in
-the coming days? Updates of Meson have had a tendency to break stuff a
-bit in the past. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
