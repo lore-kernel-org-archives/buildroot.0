@@ -1,47 +1,56 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:57 +0100
-Subject: [Buildroot] [PATCH 10/10] package/perl-type-tiny: bump to version
- 1.012000
-In-Reply-To: <20201205064457.606737-1-francois.perrad@gadz.org>
-References: <20201205064457.606737-1-francois.perrad@gadz.org>
-Message-ID: <20201205064457.606737-10-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  5 Dec 2020 08:56:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 14.0
+Message-ID: <20201205075653.2217249-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-type-tiny/perl-type-tiny.hash | 4 ++--
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Reformatted hashes, switched _SITE to https.
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index 85e312c6f..0c14b7d0c 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
+Release notes:
+https://lists.freedesktop.org/archives/pulseaudio-discuss/2020-November/031938.html
+https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/14.0/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/pulseaudio/pulseaudio.hash | 10 +++++-----
+ package/pulseaudio/pulseaudio.mk   |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
+index 11d9a275c8..72f4ca5b06 100644
+--- a/package/pulseaudio/pulseaudio.hash
++++ b/package/pulseaudio/pulseaudio.hash
 @@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  b56b6d578843f509100f49b6ffddc21e  Type-Tiny-1.010006.tar.gz
--sha256  f1568e3f0bf103e65faadc1804c6184fe29bf52559e7ff3c12f4dad437befd82  Type-Tiny-1.010006.tar.gz
-+md5  6b7976fe3a6687a3ffdd5ab2b3b11931  Type-Tiny-1.012000.tar.gz
-+sha256  d3db1220161c2aea6b0b8a2225c4fef526e8dbbe56b4bffe9daabc03e2efea90  Type-Tiny-1.012000.tar.gz
- 
- # computed by scancpan
- sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 3fa119a8c..dbaeebd8b 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
-@@ -4,7 +4,7 @@
+-# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2019-September/031373.html
+-sha256 961b23ca1acfd28f2bc87414c27bb40e12436efcf2158d29721b1e89f3f28057  pulseaudio-13.0.tar.xz
++# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2020-November/031938.html
++sha256  a834775d9382b055504e5ee7625dc50768daac29329531deb6597bf05e06c261  pulseaudio-14.0.tar.xz
+ # Locally computed
+-sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
+-sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
+-sha256 a1064b9838b6b4feee61eaeb0925da4b4834c984b77716558860c4294ed6c015  LICENSE
++sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
++sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
++sha256  a1064b9838b6b4feee61eaeb0925da4b4834c984b77716558860c4294ed6c015  LICENSE
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index e64aa6f97b..52a849aa64 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.010006
-+PERL_TYPE_TINY_VERSION = 1.012000
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+-PULSEAUDIO_VERSION = 13.0
++PULSEAUDIO_VERSION = 14.0
+ PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
+-PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
++PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_LICENSE = LGPL-2.1+ (specific license for modules, see LICENSE file)
+ PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
 -- 
-2.27.0
+2.29.2
