@@ -1,44 +1,45 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:42 +0100
-Subject: [Buildroot] [PATCH 2/2] package/quickjs: depends on glibc
-In-Reply-To: <20201205064442.606683-1-francois.perrad@gadz.org>
-References: <20201205064442.606683-1-francois.perrad@gadz.org>
-Message-ID: <20201205064442.606683-2-francois.perrad@gadz.org>
+Date: Sat,  5 Dec 2020 07:44:48 +0100
+Subject: [Buildroot] [PATCH 01/10] package/perl-date-manip: bump to version
+ 6.83
+Message-ID: <20201205064457.606737-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix build http://autobuild.buildroot.org/results/d45/d456eefffd138a714e367f9520adb662f5e0f57e/
-missing include <stdatomic.h>
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/quickjs/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
-index ee53744bd..91b8bf8dd 100644
---- a/package/quickjs/Config.in
-+++ b/package/quickjs/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_QUICKJS
- 	bool "quickjs"
- 	depends on !BR2_STATIC_LIBS
- 	# No way to check for fenv support.
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  QuickJS is a small and embeddable Javascript engine.
-@@ -11,6 +11,6 @@ config BR2_PACKAGE_QUICKJS
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index 207c59208..90961c74f 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  13c7600ff8a33d585b753874df85e4ea  Date-Manip-6.82.tar.gz
+-sha256  fa96bcf94c6b4b7d3333f073f5d0faad59f546e5aec13ac01718f2e6ef14672a  Date-Manip-6.82.tar.gz
++md5  92be58690a9a64d51fb158198220fd63  Date-Manip-6.83.tar.gz
++sha256  f491b2e1d876c222a59563b1bbd893c1034207ed0337304bf396311d9e9199fa  Date-Manip-6.83.tar.gz
  
- 	  https://bellard.org/quickjs/
+ # computed by scancpan
+ sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index a54a53a1f..ab5134691 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
-+comment "quickjs needs a glibc toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
+-PERL_DATE_MANIP_VERSION = 6.82
++PERL_DATE_MANIP_VERSION = 6.83
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
