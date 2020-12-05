@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:41:29 +0100
-Subject: [Buildroot] [git commit] package/python-yarl: bump to version 1.6.3
-Message-ID: <20201205212712.791BF815A5@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:41:37 +0100
+Subject: [Buildroot] [git commit] package/python-sockjs: bump to version
+ 0.11.0
+Message-ID: <20201205212713.1C2637FA2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76c86f8d1ff7fd3d0b829e7999fa7591f18f1c8b
+commit: https://git.buildroot.net/buildroot/commit/?id=5d9f510ae247174a16da3a5c5ae5423d89a48d07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-yarl/python-yarl.hash | 4 ++--
- package/python-yarl/python-yarl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-sockjs/python-sockjs.hash | 6 +++---
+ package/python-sockjs/python-sockjs.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-yarl/python-yarl.hash b/package/python-yarl/python-yarl.hash
-index 95ee7ef88d..783702c74b 100644
---- a/package/python-yarl/python-yarl.hash
-+++ b/package/python-yarl/python-yarl.hash
+diff --git a/package/python-sockjs/python-sockjs.hash b/package/python-sockjs/python-sockjs.hash
+index 55ea9dc644..137b54a89d 100644
+--- a/package/python-sockjs/python-sockjs.hash
++++ b/package/python-sockjs/python-sockjs.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/yarl/json
--md5  a9b20bf0b8a6962e1101b28908a67bf8  yarl-1.5.1.tar.gz
--sha256  c22c75b5f394f3d47105045ea551e08a3e804dc7e01b37800ca35b58f856c3d6  yarl-1.5.1.tar.gz
-+md5  3b6f2da3db8c645a9440375fd6a414eb  yarl-1.6.3.tar.gz
-+sha256  8a9066529240171b68893d60dca86a763eae2139dd42f42106b03cf4b426bf10  yarl-1.6.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/sockjs/json
+-md5	369417bd103f841f236a8623ea29353c  sockjs-0.10.0.tar.gz
+-sha256	005a820387bb4611b59341eac091b05d4204050dd42e4ea6cfb83607e23e2f06  sockjs-0.10.0.tar.gz
++md5  e28c1a82aa84c3994817905090abb169  sockjs-0.11.0.tar.gz
++sha256  0347d404ed9ef3196506787ed8018f87ee4e2d0baea49d420cdd53a969bec229  sockjs-0.11.0.tar.gz
  # Locally computed sha256 checksums
- sha256  14c0820503ceef15e814a89b037d9efc066870087018294b6ae0f27163872cc5  LICENSE
-diff --git a/package/python-yarl/python-yarl.mk b/package/python-yarl/python-yarl.mk
-index 0b92e6281a..32ec477064 100644
---- a/package/python-yarl/python-yarl.mk
-+++ b/package/python-yarl/python-yarl.mk
+-sha256	7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
++sha256  7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
+diff --git a/package/python-sockjs/python-sockjs.mk b/package/python-sockjs/python-sockjs.mk
+index e0f58e2b61..0aea63f934 100644
+--- a/package/python-sockjs/python-sockjs.mk
++++ b/package/python-sockjs/python-sockjs.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_YARL_VERSION = 1.5.1
-+PYTHON_YARL_VERSION = 1.6.3
- PYTHON_YARL_SOURCE = yarl-$(PYTHON_YARL_VERSION).tar.gz
--PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/ac/dd/59768bb3fa08e8b23e91575bca3ff8d2edbfbceebec8c59eaa24c4215791
-+PYTHON_YARL_SITE = https://files.pythonhosted.org/packages/97/e7/af7219a0fe240e8ef6bb555341a63c43045c21ab0392b4435e754b716fa1
- PYTHON_YARL_LICENSE = Apache-2.0
- PYTHON_YARL_LICENSE_FILES = LICENSE
- PYTHON_YARL_SETUP_TYPE = setuptools
+-PYTHON_SOCKJS_VERSION = 0.10.0
++PYTHON_SOCKJS_VERSION = 0.11.0
+ PYTHON_SOCKJS_SOURCE = sockjs-$(PYTHON_SOCKJS_VERSION).tar.gz
+-PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/35/0e/6aa4f3283b064b04a0c7f3859c8c2c0b736c05cfb07853b6d94073c1bf63
++PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/88/e9/af7b321f70325fd2af3941aa147efd097156150da635e09efc7ccf70e54d
+ PYTHON_SOCKJS_SETUP_TYPE = setuptools
+ PYTHON_SOCKJS_LICENSE = Apache-2.0
+ PYTHON_SOCKJS_LICENSE_FILES = LICENSE.txt
