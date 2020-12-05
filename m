@@ -1,67 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 5 Dec 2020 11:55:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpi-wifi-firmware: bump version
- to 9c0ffe
-In-Reply-To: <20201205083032.25431-1-christian@paral.in>
-References: <20201205083032.25431-1-christian@paral.in>
-Message-ID: <20201205115502.5b838a57@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Dec 2020 14:39:02 +0100
+Subject: [Buildroot] [git commit] package/perl-net-dns: bump to version 1.29
+Message-ID: <20201205132743.AEB6C8156C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+commit: https://git.buildroot.net/buildroot/commit/?id=4fae6fa5d09f4114519281d1e48fdc0bba3bc610
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-net-dns/perl-net-dns.hash | 6 +++---
+ package/perl-net-dns/perl-net-dns.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-first thanks for the patch ;-)
-
-Please try to trim your CC list (hint: try out utils/get-developers  <your_patch>)...
-
-There is already a patch series bumping the rpi firmwares (rpi-bt-firmware [1],
-rpi-firmware [2] and rpi-wifi-firmware [3]) pre-dating your patch..., I would
-like to see the rpi defconfigs linux kernel version bumped in sync with the
-rpi-firmware..., mind to take over the existing patchset and add the defconfigs bump
-(or maybe I find some time for it the next days...)?
-
-Regards,
-Peter
-
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201122214304.266821-2-davidb at 230ruedubac.fr/
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20201122214304.266821-3-davidb at 230ruedubac.fr/
-[3] https://patchwork.ozlabs.org/project/buildroot/patch/20201122214304.266821-4-davidb at 230ruedubac.fr/
-
-
-On Sat,  5 Dec 2020 00:30:32 -0800, Christian Stewart <christian@paral.in> wrote:
-
-> Sync with RPi-Distro repos, add Pi 400 firmware.
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
->  package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> index b8931d2c45..4bea20beb3 100644
-> --- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  05db087504be2f6bc1d902cca605114c7f9d458be0adb3b8026369357a329f7a  rpi-wifi-firmware-d4f7087ecbc8eff9cb64a4650765697157821d64.tar.gz
-> +sha256  cf806f6bdba0f803b90bc210f524a6ac37bac7ad19306c61474bb2dc59875e87  rpi-wifi-firmware-9c0ffe9a7f0753b36ed88f7981905a989d940ea9.tar.gz
->  sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d   LICENCE.broadcom_bcm43xx
-> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> index 6be02509fe..24ba5941b0 100644
-> --- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -RPI_WIFI_FIRMWARE_VERSION = d4f7087ecbc8eff9cb64a4650765697157821d64
-> +RPI_WIFI_FIRMWARE_VERSION = 9c0ffe9a7f0753b36ed88f7981905a989d940ea9
->  RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
->  RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
->  RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
+index dfedb0a950..da09e91b02 100644
+--- a/package/perl-net-dns/perl-net-dns.hash
++++ b/package/perl-net-dns/perl-net-dns.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  204e08e5c8042ce0e7d7f0851af46d50  Net-DNS-1.27.tar.gz
+-sha256  f336277710f3672095b23efe0735d8093fc493070944c57c4ec39191a52abd41  Net-DNS-1.27.tar.gz
++md5  2c9120830a68f18deb43a95826ea6372  Net-DNS-1.29.tar.gz
++sha256  852d6ee87e8f0d014223026581cbb56924ba8cddd3ceb29c6191dbb6122d43c5  Net-DNS-1.29.tar.gz
+ 
+ # computed by scancpan
+-sha256  afa7d288df3e3edbdb34790407ba4a9c7750c2746059d9355f4168bfb3212583  README
++sha256  e4f3224d86bd79ac3d11ea513fcb83c68c20701346653699225331e2b7a2d447  README
+diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
+index 3d9ee3a2ff..f5e8328a1e 100644
+--- a/package/perl-net-dns/perl-net-dns.mk
++++ b/package/perl-net-dns/perl-net-dns.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_DNS_VERSION = 1.27
++PERL_NET_DNS_VERSION = 1.29
+ PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
+ PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
+ PERL_NET_DNS_LICENSE = MIT
