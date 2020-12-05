@@ -1,59 +1,52 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:53 +0100
-Subject: [Buildroot] [PATCH 06/10] package/perl-moo: bump to version 2.004004
+Date: Sat,  5 Dec 2020 07:44:55 +0100
+Subject: [Buildroot] [PATCH 08/10] package/perl-package-stash: bump to
+ version 0.39
 In-Reply-To: <20201205064457.606737-1-francois.perrad@gadz.org>
 References: <20201205064457.606737-1-francois.perrad@gadz.org>
-Message-ID: <20201205064457.606737-6-francois.perrad@gadz.org>
+Message-ID: <20201205064457.606737-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+diff LICENSE:
+-This software is copyright (c) 2018 by Jesse Luehrs.
++This software is copyright (c) 2020 by Jesse Luehrs.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-moo/Config.in     | 1 -
- package/perl-moo/perl-moo.hash | 4 ++--
- package/perl-moo/perl-moo.mk   | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ package/perl-package-stash/perl-package-stash.hash | 6 +++---
+ package/perl-package-stash/perl-package-stash.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-moo/Config.in b/package/perl-moo/Config.in
-index e4a6db290..9b2b4a8ca 100644
---- a/package/perl-moo/Config.in
-+++ b/package/perl-moo/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PERL_MOO
- 	bool "perl-moo"
- 	select BR2_PACKAGE_PERL_CLASS_METHOD_MODIFIERS # runtime
--	select BR2_PACKAGE_PERL_MODULE_RUNTIME # runtime
- 	select BR2_PACKAGE_PERL_ROLE_TINY # runtime
- 	select BR2_PACKAGE_PERL_SUB_QUOTE # runtime
- 	help
-diff --git a/package/perl-moo/perl-moo.hash b/package/perl-moo/perl-moo.hash
-index 00e8117ad..af0dd2e92 100644
---- a/package/perl-moo/perl-moo.hash
-+++ b/package/perl-moo/perl-moo.hash
+diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
+index be8760d2d..0bbac515e 100644
+--- a/package/perl-package-stash/perl-package-stash.hash
++++ b/package/perl-package-stash/perl-package-stash.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  e542104553d616b15631b5c66ccee904  Moo-2.004000.tar.gz
--sha256  323240d000394cf38ec42e865b05cb8928f625c82c9391cd2cdc72b33c51b834  Moo-2.004000.tar.gz
-+md5  51f3732e043a1e856ab6cdc260d2814c  Moo-2.004004.tar.gz
-+sha256  714b77b115788708c6d8ab6f18eea173f8109d397aecd34e32cc71a0ffcf2246  Moo-2.004004.tar.gz
+-md5    dc2d802eea2cb0b52ed9c4dd178761dd Package-Stash-0.38.tar.gz
+-sha256 c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f Package-Stash-0.38.tar.gz
++md5  287d80c9115c9230912aca684f8ca92e  Package-Stash-0.39.tar.gz
++sha256  9165f555112e080493ce0e9129de0886da30b2593fb353a2abd1c76b2d2621b5  Package-Stash-0.39.tar.gz
  
  # computed by scancpan
- sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
-diff --git a/package/perl-moo/perl-moo.mk b/package/perl-moo/perl-moo.mk
-index fce88f6ad..77c6c1e35 100644
---- a/package/perl-moo/perl-moo.mk
-+++ b/package/perl-moo/perl-moo.mk
+-sha256 13aab710649bae5a8bbb1ae725587ece773bf390537dba2da71247bd937d54b4 LICENSE
++sha256  810b319a6f4a53c9cbbef513da17b2f0c872accd149bb889f153f4b78cf8cbb8  LICENSE
+diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
+index b1a83bd95..bc116abca 100644
+--- a/package/perl-package-stash/perl-package-stash.mk
++++ b/package/perl-package-stash/perl-package-stash.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOO_VERSION = 2.004000
-+PERL_MOO_VERSION = 2.004004
- PERL_MOO_SOURCE = Moo-$(PERL_MOO_VERSION).tar.gz
- PERL_MOO_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_MOO_LICENSE = Artistic or GPL-1.0+
+-PERL_PACKAGE_STASH_VERSION = 0.38
++PERL_PACKAGE_STASH_VERSION = 0.39
+ PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
+ PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
