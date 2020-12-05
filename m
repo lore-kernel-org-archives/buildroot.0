@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:21:38 +0100
-Subject: [Buildroot] [git commit] package/utf8proc: bump version to 2.6.0
-Message-ID: <20201205200617.5C9827F8A6@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 21:21:49 +0100
+Subject: [Buildroot] [git commit] package/dav1d: bump version to 0.8.0
+Message-ID: <20201205200617.721F583853@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c079a84e2fff64494dc43270eed5507a4148463
+commit: https://git.buildroot.net/buildroot/commit/?id=6a98371c33c7e5385e5235c768eafdfa4f559d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted hashes.
-
 Release notes:
-https://github.com/JuliaStrings/utf8proc/releases/tag/v2.6.0
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/utf8proc/utf8proc.hash | 4 ++--
- package/utf8proc/utf8proc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dav1d/dav1d.hash | 2 +-
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/utf8proc/utf8proc.hash b/package/utf8proc/utf8proc.hash
-index f7b8776a53..7b60db572d 100644
---- a/package/utf8proc/utf8proc.hash
-+++ b/package/utf8proc/utf8proc.hash
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index 3ff4b1b685..1121ec5cd6 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 d4e8dfc898cfd062493cb7f42d95d70ccdd3a4cd4d90bec0c71b47cca688f1be  utf8proc-2.5.0.tar.gz
--sha256 fbc720fcc90fb44396985646f67e4d19be03e0c0539f7138ed9dc6efba49dc49  LICENSE.md
-+sha256  b36ce1534b8035e7febd95c031215ed279ee9d31cf9b464e28b4c688133b22c5  utf8proc-2.6.0.tar.gz
-+sha256  fbc720fcc90fb44396985646f67e4d19be03e0c0539f7138ed9dc6efba49dc49  LICENSE.md
-diff --git a/package/utf8proc/utf8proc.mk b/package/utf8proc/utf8proc.mk
-index 2bb1939914..50f0c6362b 100644
---- a/package/utf8proc/utf8proc.mk
-+++ b/package/utf8proc/utf8proc.mk
+ # Locally computed
+-sha256  9eac4f50089f54a9f562827bda4a21187d68c01d8b20055eef1d7efca9f84cf8  dav1d-0.7.1.tar.bz2
++sha256  b62eb846fd8af15b402c8f6615a74405fe4448cf16663efd0358d4124db0829f  dav1d-0.8.0.tar.bz2
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 1e84c21b47..c59f496d83 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UTF8PROC_VERSION = 2.5.0
-+UTF8PROC_VERSION = 2.6.0
- UTF8PROC_SITE = $(call github,JuliaStrings,utf8proc,v$(UTF8PROC_VERSION))
- UTF8PROC_LICENSE = MIT
- UTF8PROC_LICENSE_FILES = LICENSE.md
+-DAV1D_VERSION = 0.7.1
++DAV1D_VERSION = 0.8.0
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
