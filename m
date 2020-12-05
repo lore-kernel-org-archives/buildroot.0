@@ -1,92 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:31:22 +0100
-Subject: [Buildroot] [git commit] package/python-pycups: new package
-Message-ID: <20201205211558.E71E8835D1@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:32:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pycups: new package
+In-Reply-To: <20200824214857.4090659-1-joseph.kogut@gmail.com>
+References: <20200824214857.4090659-1-joseph.kogut@gmail.com>
+Message-ID: <20201205223220.2f58c001@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94bba6f015dc7f912be6490952d649a1721f9ad4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 24 Aug 2020 14:48:57 -0700
+Joseph Kogut <joseph.kogut@gmail.com> wrote:
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-pycups/Config.in          |  7 +++++++
- package/python-pycups/python-pycups.hash |  5 +++++
- package/python-pycups/python-pycups.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9f6d18131c..b839a0d113 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1375,6 +1375,7 @@ F:	package/libnss/
- F:	package/lld/
- F:	package/llvm/
- F:	package/python-cython/
-+F:	package/python-pycups/
- F:	package/python-raven/
- F:	package/python-schedule/
- F:	package/python-sentry-sdk/
-diff --git a/package/Config.in b/package/Config.in
-index 3c5664f723..39c91645ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1098,6 +1098,7 @@ menu "External python modules"
- 	source "package/python-pycli/Config.in"
- 	source "package/python-pycparser/Config.in"
- 	source "package/python-pycryptodomex/Config.in"
-+	source "package/python-pycups/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
- 	source "package/python-pyelftools/Config.in"
-diff --git a/package/python-pycups/Config.in b/package/python-pycups/Config.in
-new file mode 100644
-index 0000000000..eeaf70c9e6
---- /dev/null
-+++ b/package/python-pycups/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYCUPS
-+	bool "python-pycups"
-+	depends on BR2_PACKAGE_CUPS
-+	help
-+	  Python bindings for libcups.
-+
-+	  https://github.com/zdohnal/pycups
-diff --git a/package/python-pycups/python-pycups.hash b/package/python-pycups/python-pycups.hash
-new file mode 100644
-index 0000000000..d1498b61cf
---- /dev/null
-+++ b/package/python-pycups/python-pycups.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pycups/json
-+md5  41eef188b86d01ccfdbaaa05cf0f6ca4  pycups-2.0.1.tar.gz
-+sha256  57434ce5f62548eb12949ca8217f066f4eeb21a5d6ab8b13471dce350e380c90  pycups-2.0.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
-new file mode 100644
-index 0000000000..41da3641a0
---- /dev/null
-+++ b/package/python-pycups/python-pycups.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pycups
-+#
-+################################################################################
-+
-+PYTHON_PYCUPS_VERSION = 2.0.1
-+PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
-+PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
-+PYTHON_PYCUPS_SETUP_TYPE = distutils
-+PYTHON_PYCUPS_LICENSE = GPL-2.0+
-+PYTHON_PYCUPS_LICENSE_FILES = COPYING
-+PYTHON_PYCUPS_DEPENDENCIES = cups
-+
-+$(eval $(python-package))
+Applied to master, thanks, with one change. See below.
+
+> +PYTHON_PYCUPS_LICENSE = GNU General Public License (GPL)
+
+We use SPDX identifiers, so I've changed that to GPL-2.0+, after
+checking that it was indeed that version of the license.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
