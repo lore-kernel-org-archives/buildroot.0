@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:51 +0100
-Subject: [Buildroot] [PATCH 04/10] package/perl-http-entity-parser: bump to
- version 0.25
+Date: Sat,  5 Dec 2020 07:44:52 +0100
+Subject: [Buildroot] [PATCH 05/10] package/perl-json-maybexs: bump to
+ version 1.004003
 In-Reply-To: <20201205064457.606737-1-francois.perrad@gadz.org>
 References: <20201205064457.606737-1-francois.perrad@gadz.org>
-Message-ID: <20201205064457.606737-4-francois.perrad@gadz.org>
+Message-ID: <20201205064457.606737-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-entity-parser/perl-http-entity-parser.hash | 4 ++--
- package/perl-http-entity-parser/perl-http-entity-parser.mk   | 2 +-
+ package/perl-json-maybexs/perl-json-maybexs.hash | 4 ++--
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.hash b/package/perl-http-entity-parser/perl-http-entity-parser.hash
-index 882bf0a3d..69d5f6e97 100644
---- a/package/perl-http-entity-parser/perl-http-entity-parser.hash
-+++ b/package/perl-http-entity-parser/perl-http-entity-parser.hash
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
+index 3f1a99c38..a53d4ec61 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  b5ead58775c2f151f2174651807fdf2d  HTTP-Entity-Parser-0.24.tar.gz
--sha256  f68e0fc87150cb9241ac23d7226fc2a35324d2e8990830c1e2a7203244f1e612  HTTP-Entity-Parser-0.24.tar.gz
-+md5  09663f9577975587e832e28ba5f5f8af  HTTP-Entity-Parser-0.25.tar.gz
-+sha256  3a8cd0d8cba3d17cd8c04ee82d7341dfaa247dbdd94a49eb94b53f69e483ec3a  HTTP-Entity-Parser-0.25.tar.gz
+-md5  2c40209b38b7a569b3bfc4d88e47d98c  JSON-MaybeXS-1.004002.tar.gz
+-sha256  3b8e2fdc3b36d0c5edbc78121840dced63798ad49cabcf875d5c5e32336d77b5  JSON-MaybeXS-1.004002.tar.gz
++md5  e46181e34588428d317932744597a7ab  JSON-MaybeXS-1.004003.tar.gz
++sha256  5bee3b17ff9dcffd6e99ab8cf7f35747650bfce1dc622e3ad10b85a194462fbf  JSON-MaybeXS-1.004003.tar.gz
  
  # computed by scancpan
- sha256  79c2a066104e71602785fd815c5aea6f7db78c19451d68521380083f9c2a8805  LICENSE
-diff --git a/package/perl-http-entity-parser/perl-http-entity-parser.mk b/package/perl-http-entity-parser/perl-http-entity-parser.mk
-index 0b09ea41c..2304955bd 100644
---- a/package/perl-http-entity-parser/perl-http-entity-parser.mk
-+++ b/package/perl-http-entity-parser/perl-http-entity-parser.mk
+ sha256  0f2d6b537f7a735c981511875d832bc8ff767bf97d62848cf0bada964e40aadd  LICENSE
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
+index bb11cd3a2..e6891f680 100644
+--- a/package/perl-json-maybexs/perl-json-maybexs.mk
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_ENTITY_PARSER_VERSION = 0.24
-+PERL_HTTP_ENTITY_PARSER_VERSION = 0.25
- PERL_HTTP_ENTITY_PARSER_SOURCE = HTTP-Entity-Parser-$(PERL_HTTP_ENTITY_PARSER_VERSION).tar.gz
- PERL_HTTP_ENTITY_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
- PERL_HTTP_ENTITY_PARSER_DEPENDENCIES = host-perl-module-build-tiny
+-PERL_JSON_MAYBEXS_VERSION = 1.004002
++PERL_JSON_MAYBEXS_VERSION = 1.004003
+ PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
+ PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
