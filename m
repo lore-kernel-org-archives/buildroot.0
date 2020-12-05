@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:26:38 +0100
-Subject: [Buildroot] [PATCH/next v1] package/nmap: bump version to 7.91
-In-Reply-To: <20201202202423.483-1-ps.report@gmx.net>
-References: <20201202202423.483-1-ps.report@gmx.net>
-Message-ID: <20201205212638.17844f61@windsurf.home>
+Date: Sat, 5 Dec 2020 21:26:41 +0100
+Subject: [Buildroot] [PATCH/next v1] package/rsyslog: bump version to
+ 8.2010.0
+In-Reply-To: <20201202200731.25360-1-ps.report@gmx.net>
+References: <20201202200731.25360-1-ps.report@gmx.net>
+Message-ID: <20201205212641.0ee0508e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Dec 2020 21:24:23 +0100
+On Wed,  2 Dec 2020 21:07:31 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
+> - disable new input module options imhttp and impcap
+> 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/nmap/nmap.hash | 6 +++---
->  package/nmap/nmap.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/rsyslog/rsyslog.hash | 2 +-
+>  package/rsyslog/rsyslog.mk   | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
