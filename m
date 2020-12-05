@@ -1,68 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:21:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.1.2
-In-Reply-To: <20200812160843.24064-1-andreas.hilse@googlemail.com>
-References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
-Message-ID: <20201205222153.75769040@windsurf.home>
+Date: Sat, 5 Dec 2020 22:31:22 +0100
+Subject: [Buildroot] [git commit] package/python-pycups: new package
+Message-ID: <20201205211558.E71E8835D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+commit: https://git.buildroot.net/buildroot/commit/?id=94bba6f015dc7f912be6490952d649a1721f9ad4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Aug 2020 18:08:43 +0200
-Andreas Hilse <andreas.hilse@googlemail.com> wrote:
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-pycups/Config.in          |  7 +++++++
+ package/python-pycups/python-pycups.hash |  5 +++++
+ package/python-pycups/python-pycups.mk   | 15 +++++++++++++++
+ 5 files changed, 29 insertions(+)
 
-> - fixes: sysklogd 1.6 klogd with newer glibcs: kernel messages are logged to user facility
-> - sysklogd removed klogd, functionality has been moved to syslogd
-> - now supports config fragments in /etc/syslog.d
-> - disabled sysklogd logger to not interfere with other loggers
-> 
-> Signed-off-by: Andreas Hilse <andreas.hilse@googlemail.com>
-
-I think the commit log should mention that the license has changed,
-with a link to https://github.com/troglobit/sysklogd/releases/tag/v2.1.
-
-However, I was about to apply, but got a build failure:
-
-syslogd.c: In function ?opensys?:
-syslogd.c:486:42: error: ?O_CLOEXEC? undeclared (first use in this function)
-  fd = open(file, O_RDONLY | O_NONBLOCK | O_CLOEXEC, 0);
-                                          ^
-syslogd.c:486:42: note: each undeclared identifier is reported only once for each function it appears in
-make[3]: *** [Makefile:646: syslogd-syslogd.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-syslog.c: In function ?vsyslogp_r?:
-syslog.c:448:27: error: ?O_CLOEXEC? undeclared (first use in this function)
-   O_WRONLY | O_NONBLOCK | O_CLOEXEC, 0)) >= 0) {
-                           ^
-
-which happens with the following defconfig:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2020.02.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_SYSKLOGD=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Could you have a look ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9f6d18131c..b839a0d113 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1375,6 +1375,7 @@ F:	package/libnss/
+ F:	package/lld/
+ F:	package/llvm/
+ F:	package/python-cython/
++F:	package/python-pycups/
+ F:	package/python-raven/
+ F:	package/python-schedule/
+ F:	package/python-sentry-sdk/
+diff --git a/package/Config.in b/package/Config.in
+index 3c5664f723..39c91645ad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1098,6 +1098,7 @@ menu "External python modules"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+ 	source "package/python-pycryptodomex/Config.in"
++	source "package/python-pycups/Config.in"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pydantic/Config.in"
+ 	source "package/python-pyelftools/Config.in"
+diff --git a/package/python-pycups/Config.in b/package/python-pycups/Config.in
+new file mode 100644
+index 0000000000..eeaf70c9e6
+--- /dev/null
++++ b/package/python-pycups/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYCUPS
++	bool "python-pycups"
++	depends on BR2_PACKAGE_CUPS
++	help
++	  Python bindings for libcups.
++
++	  https://github.com/zdohnal/pycups
+diff --git a/package/python-pycups/python-pycups.hash b/package/python-pycups/python-pycups.hash
+new file mode 100644
+index 0000000000..d1498b61cf
+--- /dev/null
++++ b/package/python-pycups/python-pycups.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pycups/json
++md5  41eef188b86d01ccfdbaaa05cf0f6ca4  pycups-2.0.1.tar.gz
++sha256  57434ce5f62548eb12949ca8217f066f4eeb21a5d6ab8b13471dce350e380c90  pycups-2.0.1.tar.gz
++# Locally computed sha256 checksums
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
+new file mode 100644
+index 0000000000..41da3641a0
+--- /dev/null
++++ b/package/python-pycups/python-pycups.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pycups
++#
++################################################################################
++
++PYTHON_PYCUPS_VERSION = 2.0.1
++PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
++PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
++PYTHON_PYCUPS_SETUP_TYPE = distutils
++PYTHON_PYCUPS_LICENSE = GPL-2.0+
++PYTHON_PYCUPS_LICENSE_FILES = COPYING
++PYTHON_PYCUPS_DEPENDENCIES = cups
++
++$(eval $(python-package))
