@@ -1,33 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Dec 2020 18:36:55 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/bind: bump version to 9.16.9
-References: <20201206140737.3890199-1-bernd.kuhls@t-online.de>
- <20201206140737.3890199-2-bernd.kuhls@t-online.de>
-Message-ID: <nehv9hxru6.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 5 Dec 2020 22:48:47 +0100
+Subject: [Buildroot] [git commit] package/pkg-qmake: add
+ <pkg>_SYNC_QT_HEADERS support
+Message-ID: <20201206193042.2B5DD8390C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 06 Dec 2020 15:07:37 +0100 schrieb Bernd Kuhls:
+commit: https://git.buildroot.net/buildroot/commit/?id=39d334faa5c160c730e702cfad2e033f26d38181
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls
-> <bernd.kuhls@t-online.de>
-> ---
-> v2: removed duplicate dependency (Baruch)
+Some qmake based packages need to call the syncqt.pl script before
+building to have a properly populated "include" directory inside the
+package build tree.
 
-Hi,
+This script is normally automatically executed by qmake when a source
+tree is from a git clone: buildroot purges the .git directory hence
+the script never runs, and we need to call it explicitly. Setting
+<pkg>_SYNC_QT_HEADERS = YES will force calling this script.
 
-building the "dhcp (ISC)" package is broken with bind 9.16.x.:
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-qmake.txt |  4 ++++
+ package/pkg-qmake.mk                  | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
 
-../includes/omapip/isclib.h:51:10: fatal error: isc/boolean.h: No such 
-file or directory
-
-Closed the patches series on patchworks after noticing
-https://gitlab.isc.org/isc-projects/dhcp/-/issues/100#note_129883
-
-"Getting ISC DHCP to build with 9.16.x, per Francis, would be labor 
-intensive and not something we should pursue."
-
-Regards, Bernd
+diff --git a/docs/manual/adding-packages-qmake.txt b/docs/manual/adding-packages-qmake.txt
+index e1621e914e..c7e6ff354a 100644
+--- a/docs/manual/adding-packages-qmake.txt
++++ b/docs/manual/adding-packages-qmake.txt
+@@ -79,3 +79,7 @@ also be defined.
+ * +LIBFOO_INSTALL_TARGET_OPTS+, to specify additional targets to pass
+   to the +make+ command during the target installation step. By default,
+   +install+.
++
++* +LIBFOO_SYNC_HEADERS+, to run syncqt.pl before qmake. Some packages
++  need this to have a properly populated include directory before
++  running the build.
+diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk
+index 27727119d7..a77286fe3a 100644
+--- a/package/pkg-qmake.mk
++++ b/package/pkg-qmake.mk
+@@ -20,6 +20,13 @@
+ #
+ ################################################################################
+ 
++#
++# Hook to sync Qt headers
++#
++define QT_HEADERS_SYNC_HOOK
++	$(Q)cd $($(PKG)_BUILDDIR) && $(HOST_DIR)/bin/syncqt.pl -version $(QT5_VERSION)
++endef
++
+ ################################################################################
+ # inner-qmake-package -- defines how the configuration, compilation and
+ # installation of a qmake package should be done, implements a few hooks
+@@ -44,6 +51,11 @@ ifneq ($(1),qt5base)
+ $(2)_DEPENDENCIES 		+= qt5base
+ endif
+ 
++ifeq ($$($(2)_SYNC_QT_HEADERS),YES)
++$(2)_DEPENDENCIES 		+= host-perl
++$(2)_PRE_CONFIGURE_HOOKS        += QT_HEADERS_SYNC_HOOK
++endif
++
+ #
+ # Configure step. Only define it if not already defined by the package
+ # .mk file.
