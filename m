@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:28:59 +0100
-Subject: [Buildroot] [PATCH/next v1] package/less: bump version to 563
-In-Reply-To: <20201202184059.6887-1-ps.report@gmx.net>
-References: <20201202184059.6887-1-ps.report@gmx.net>
-Message-ID: <20201205212859.38f67a8a@windsurf.home>
+Date: Sat, 5 Dec 2020 21:31:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
+ gcc -v
+In-Reply-To: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201205213101.72a80abc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Dec 2020 19:40:59 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu,  3 Dec 2020 21:28:53 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/less/less.hash | 6 +++---
->  package/less/less.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+Why isn't gcc -v working ?
 
 Thomas
 -- 
