@@ -1,235 +1,298 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:34:00 +0100
-Subject: [Buildroot] [git commit] package/ell: bump version to 0.35
-Message-ID: <20201205202516.09ACF81E7F@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 21:39:43 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
+ version to 1.20.10
+Message-ID: <20201205202516.246F4835F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae705ae3e41593a4c07a9cd6bffafa885e124403
+commit: https://git.buildroot.net/buildroot/commit/?id=5f6e3c0962176855715a24fc0a028ebca11ac742
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- rebased (and renumbered) 001-ell-rtnl-fix-compile-with-older-toolchains.patch
+Release notes:
+https://lists.x.org/archives/xorg-announce/2020-December/003067.html
 
-- drop dynamic library dependency as no longer needed since
-  upstream commits [1] and [2]
+Remove patches which were applied upstream.
 
-- add two upstream patches to fix musl/uclibc compile
-
-[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=e129cb4cd2270f308c1564e75859672643dd902b
-[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=a4ac2cb0e14f564754f7e2067ac7dde0a9ab1914
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...l-rtnl-fix-compile-with-older-toolchains.patch} | 20 ++++-----
- .../0002-build-Add-rawmemchr-to-missing.h.patch    | 47 ++++++++++++++++++++++
- ...03-ell-add-missing-include-in-dhcp-server.patch | 26 ++++++++++++
- package/ell/Config.in                              |  6 +--
- package/ell/ell.hash                               |  2 +-
- package/ell/ell.mk                                 |  2 +-
- 6 files changed, 88 insertions(+), 15 deletions(-)
+ ...eviceInfo-and-SetDeviceIndicators-heap-ov.patch | 100 ----------------
+ ...008-Check-SetMap-request-length-carefully.patch | 131 ---------------------
+ .../xserver_xorg-server/xserver_xorg-server.hash   |   6 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   2 +-
+ 4 files changed, 4 insertions(+), 235 deletions(-)
 
-diff --git a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
-similarity index 84%
-rename from package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-rename to package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
-index ba6cafa7a8..0375be854c 100644
---- a/package/ell/0002-ell-rtnl-fix-compile-with-older-toolchains.patch
-+++ b/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
-@@ -1,4 +1,4 @@
--From 60b4cd4c703be380aef194d31a1ffc4b42431bde Mon Sep 17 00:00:00 2001
-+From c4218f71352ae5e39692e030d9af2c665dbb2eee Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Thu, 9 Apr 2020 22:21:36 +0200
- Subject: [PATCH] ell/rtnl: fix compile with older toolchains
-@@ -18,6 +18,7 @@ Fixes:
-   ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
+diff --git a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch b/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
+deleted file mode 100644
+index 8297aa8a9f..0000000000
+--- a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
++++ /dev/null
+@@ -1,100 +0,0 @@
+-From 87c64fc5b0db9f62f4e361444f4b60501ebf67b9 Mon Sep 17 00:00:00 2001
+-From: Matthieu Herrb <matthieu@herrb.eu>
+-Date: Sun, 11 Oct 2020 17:05:09 +0200
+-Subject: [PATCH] Fix XkbSetDeviceInfo() and SetDeviceIndicators() heap
+- overflows
+-
+-ZDI-CAN 11389 / CVE-2020-25712
+-
+-This vulnerability was discovered by:
+-Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+-
+-Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xkb/xkb.c | 26 +++++++++++++++++++++++---
+- 1 file changed, 23 insertions(+), 3 deletions(-)
+-
+-diff --git a/xkb/xkb.c b/xkb/xkb.c
+-index 8e016cd74..f54cc97f8 100644
+---- a/xkb/xkb.c
+-+++ b/xkb/xkb.c
+-@@ -6536,7 +6536,9 @@ SetDeviceIndicators(char *wire,
+-                     unsigned changed,
+-                     int num,
+-                     int *status_rtrn,
+--                    ClientPtr client, xkbExtensionDeviceNotify * ev)
+-+                    ClientPtr client,
+-+                    xkbExtensionDeviceNotify * ev,
+-+                    xkbSetDeviceInfoReq * stuff)
+- {
+-     xkbDeviceLedsWireDesc *ledWire;
+-     int i;
+-@@ -6557,6 +6559,11 @@ SetDeviceIndicators(char *wire,
+-         xkbIndicatorMapWireDesc *mapWire;
+-         XkbSrvLedInfoPtr sli;
+- 
+-+        if (!_XkbCheckRequestBounds(client, stuff, ledWire, ledWire + 1)) {
+-+            *status_rtrn = BadLength;
+-+            return (char *) ledWire;
+-+        }
+-+
+-         namec = mapc = statec = 0;
+-         sli = XkbFindSrvLedInfo(dev, ledWire->ledClass, ledWire->ledID,
+-                                 XkbXI_IndicatorMapsMask);
+-@@ -6575,6 +6582,10 @@ SetDeviceIndicators(char *wire,
+-             memset((char *) sli->names, 0, XkbNumIndicators * sizeof(Atom));
+-             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
+-                 if (ledWire->namesPresent & bit) {
+-+                    if (!_XkbCheckRequestBounds(client, stuff, atomWire, atomWire + 1)) {
+-+                        *status_rtrn = BadLength;
+-+                        return (char *) atomWire;
+-+                    }
+-                     sli->names[n] = (Atom) *atomWire;
+-                     if (sli->names[n] == None)
+-                         ledWire->namesPresent &= ~bit;
+-@@ -6592,6 +6603,10 @@ SetDeviceIndicators(char *wire,
+-         if (ledWire->mapsPresent) {
+-             for (n = 0, bit = 1; n < XkbNumIndicators; n++, bit <<= 1) {
+-                 if (ledWire->mapsPresent & bit) {
+-+                    if (!_XkbCheckRequestBounds(client, stuff, mapWire, mapWire + 1)) {
+-+                        *status_rtrn = BadLength;
+-+                        return (char *) mapWire;
+-+                    }
+-                     sli->maps[n].flags = mapWire->flags;
+-                     sli->maps[n].which_groups = mapWire->whichGroups;
+-                     sli->maps[n].groups = mapWire->groups;
+-@@ -6671,7 +6686,7 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
+-     ed.deviceID = dev->id;
+-     wire = (char *) &stuff[1];
+-     if (stuff->change & XkbXI_ButtonActionsMask) {
+--        int nBtns, sz, i;
+-+	int nBtns, sz, i;
+-         XkbAction *acts;
+-         DeviceIntPtr kbd;
+- 
+-@@ -6683,7 +6698,11 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
+-                 return BadAlloc;
+-             dev->button->xkb_acts = acts;
+-         }
+-+        if (stuff->firstBtn + stuff->nBtns > nBtns)
+-+            return BadValue;
+-         sz = stuff->nBtns * SIZEOF(xkbActionWireDesc);
+-+        if (!_XkbCheckRequestBounds(client, stuff, wire, (char *) wire + sz))
+-+            return BadLength;
+-         memcpy((char *) &acts[stuff->firstBtn], (char *) wire, sz);
+-         wire += sz;
+-         ed.reason |= XkbXI_ButtonActionsMask;
+-@@ -6704,7 +6723,8 @@ _XkbSetDeviceInfoCheck(ClientPtr client, DeviceIntPtr dev,
+-         int status = Success;
+- 
+-         wire = SetDeviceIndicators(wire, dev, stuff->change,
+--                                   stuff->nDeviceLedFBs, &status, client, &ed);
+-+                                   stuff->nDeviceLedFBs, &status, client, &ed,
+-+                                   stuff);
+-         if (status != Success)
+-             return status;
+-     }
+--- 
+-2.20.1
+-
+diff --git a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch b/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
+deleted file mode 100644
+index a8b33ebf3b..0000000000
+--- a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
++++ /dev/null
+@@ -1,131 +0,0 @@
+-From 446ff2d3177087b8173fa779fa5b77a2a128988b Mon Sep 17 00:00:00 2001
+-From: Matthieu Herrb <matthieu@herrb.eu>
+-Date: Thu, 12 Nov 2020 19:15:07 +0100
+-Subject: [PATCH] Check SetMap request length carefully.
+-
+-Avoid out of bounds memory accesses on too short request.
+-
+-ZDI-CAN 11572 /  CVE-2020-14360
+-
+-This vulnerability was discovered by:
+-Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+-
+-Signed-off-by: Matthieu Herrb <matthieu@herrb.eu>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- xkb/xkb.c | 92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- 1 file changed, 92 insertions(+)
+-
+-diff --git a/xkb/xkb.c b/xkb/xkb.c
+-index f54cc97f8..d056c698c 100644
+---- a/xkb/xkb.c
+-+++ b/xkb/xkb.c
+-@@ -2382,6 +2382,93 @@ SetVirtualModMap(XkbSrvInfoPtr xkbi,
+-     return (char *) wire;
+- }
+- 
+-+#define _add_check_len(new) \
+-+    if (len > UINT32_MAX - (new) || len > req_len - (new)) goto bad; \
+-+    else len += new
+-+
+-+/**
+-+ * Check the length of the SetMap request
+-+ */
+-+static int
+-+_XkbSetMapCheckLength(xkbSetMapReq *req)
+-+{
+-+    size_t len = sz_xkbSetMapReq, req_len = req->length << 2;
+-+    xkbKeyTypeWireDesc *keytype;
+-+    xkbSymMapWireDesc *symmap;
+-+    BOOL preserve;
+-+    int i, map_count, nSyms;
+-+
+-+    if (req_len < len)
+-+        goto bad;
+-+    /* types */
+-+    if (req->present & XkbKeyTypesMask) {
+-+        keytype = (xkbKeyTypeWireDesc *)(req + 1);
+-+        for (i = 0; i < req->nTypes; i++) {
+-+            _add_check_len(XkbPaddedSize(sz_xkbKeyTypeWireDesc));
+-+            if (req->flags & XkbSetMapResizeTypes) {
+-+                _add_check_len(keytype->nMapEntries
+-+                               * sz_xkbKTSetMapEntryWireDesc);
+-+                preserve = keytype->preserve;
+-+                map_count = keytype->nMapEntries;
+-+                if (preserve) {
+-+                    _add_check_len(map_count * sz_xkbModsWireDesc);
+-+                }
+-+                keytype += 1;
+-+                keytype = (xkbKeyTypeWireDesc *)
+-+                          ((xkbKTSetMapEntryWireDesc *)keytype + map_count);
+-+                if (preserve)
+-+                    keytype = (xkbKeyTypeWireDesc *)
+-+                              ((xkbModsWireDesc *)keytype + map_count);
+-+            }
+-+        }
+-+    }
+-+    /* syms */
+-+    if (req->present & XkbKeySymsMask) {
+-+        symmap = (xkbSymMapWireDesc *)((char *)req + len);
+-+        for (i = 0; i < req->nKeySyms; i++) {
+-+            _add_check_len(sz_xkbSymMapWireDesc);
+-+            nSyms = symmap->nSyms;
+-+            _add_check_len(nSyms*sizeof(CARD32));
+-+            symmap += 1;
+-+            symmap = (xkbSymMapWireDesc *)((CARD32 *)symmap + nSyms);
+-+        }
+-+    }
+-+    /* actions */
+-+    if (req->present & XkbKeyActionsMask) {
+-+        _add_check_len(req->totalActs * sz_xkbActionWireDesc 
+-+                       + XkbPaddedSize(req->nKeyActs));
+-+    }
+-+    /* behaviours */
+-+    if (req->present & XkbKeyBehaviorsMask) {
+-+        _add_check_len(req->totalKeyBehaviors * sz_xkbBehaviorWireDesc);
+-+    }
+-+    /* vmods */
+-+    if (req->present & XkbVirtualModsMask) {
+-+        _add_check_len(XkbPaddedSize(Ones(req->virtualMods)));
+-+    }
+-+    /* explicit */
+-+    if (req->present & XkbExplicitComponentsMask) {
+-+        /* two bytes per non-zero explicit componen */
+-+        _add_check_len(XkbPaddedSize(req->totalKeyExplicit * sizeof(CARD16)));
+-+    }
+-+    /* modmap */
+-+    if (req->present & XkbModifierMapMask) {
+-+         /* two bytes per non-zero modmap component */
+-+        _add_check_len(XkbPaddedSize(req->totalModMapKeys * sizeof(CARD16)));
+-+    }
+-+    /* vmodmap */
+-+    if (req->present & XkbVirtualModMapMask) {
+-+        _add_check_len(req->totalVModMapKeys * sz_xkbVModMapWireDesc);
+-+    }
+-+    if (len == req_len)
+-+        return Success;
+-+bad:
+-+    ErrorF("[xkb] BOGUS LENGTH in SetMap: expected %ld got %ld\n",
+-+           len, req_len);
+-+    return BadLength;
+-+}
+-+
+-+
+- /**
+-  * Check if the given request can be applied to the given device but don't
+-  * actually do anything, except swap values when client->swapped and doswap are both true.
+-@@ -2642,6 +2729,11 @@ ProcXkbSetMap(ClientPtr client)
+-     CHK_KBD_DEVICE(dev, stuff->deviceSpec, client, DixManageAccess);
+-     CHK_MASK_LEGAL(0x01, stuff->present, XkbAllMapComponentsMask);
+- 
+-+    /* first verify the request length carefully */
+-+    rc = _XkbSetMapCheckLength(stuff);
+-+    if (rc != Success)
+-+        return rc;
+-+
+-     tmp = (char *) &stuff[1];
+- 
+-     /* Check if we can to the SetMap on the requested device. If this
+--- 
+-2.20.1
+-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 2b55449e14..d6b3c92e08 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-August/003059.html
+-sha256  e219f2e0dfe455467939149d7cd2ee53b79b512cc1d2094ae4f5c9ed9ccd3571  xorg-server-1.20.9.tar.bz2
+-sha512  d9b5f93e1b9763a89187d8b272aa7d4ce9709641b8539f4536708af153310e5a4931bffd4229c51a3b0e3b12da7838750aa71b635751fb4c0bb27438cce4e5e6  xorg-server-1.20.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-December/003067.html
++sha256  977420c082450dc808de301ef56af4856d653eea71519a973c3490a780cb7c99  xorg-server-1.20.10.tar.bz2
++sha512  a07bee380bb72f2117fe6f831a6e4aded19bea1f2b36e42a019a30348e98d6fe65c0617cf819be9c6b405502f88cafb829df30aab32393774b71f1418a4cefae  xorg-server-1.20.10.tar.bz2
  
- [Upstream: https://lists.ofono.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ]
-+[Rebased for ell-0.35]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  configure.ac | 2 ++
-@@ -25,10 +26,10 @@ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-  2 files changed, 8 insertions(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 0351f89..3be35a4 100644
-+index 1e5ead9..bec472d 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -113,6 +113,8 @@ AC_CHECK_LIB(dl, dlopen, dummy=yes,
-+@@ -110,6 +110,8 @@ AC_CHECK_FUNC(epoll_create, dummy=yes,
-  
-  AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
-  
-@@ -38,23 +39,24 @@ index 0351f89..3be35a4 100644
-  				[enable ell/glib main loop example]),
-  					[enable_glib=${enableval}])
- diff --git a/ell/rtnl.c b/ell/rtnl.c
--index dc83937..3493d34 100644
-+index c115573..ccfa6fe 100644
- --- a/ell/rtnl.c
- +++ b/ell/rtnl.c
--@@ -25,8 +25,9 @@
-+@@ -25,9 +25,10 @@
-  #endif
-  
-  #define _GNU_SOURCE
- -#include <linux/if.h>
- +#include <sys/types.h>
-+ #include <linux/icmpv6.h>
-  #include <sys/socket.h>
- +#include <linux/if.h>
-  #include <arpa/inet.h>
-  
-  #include "util.h"
--@@ -35,6 +36,10 @@
-- #include "rtnl.h"
-- #include "private.h"
-+@@ -524,6 +525,10 @@ LIB_EXPORT bool l_rtnl_route_set_scope(struct l_rtnl_route *rt, uint8_t scope)
-+ 	return true;
-+ }
-  
- +#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
- +#define RTA_PREF 20
-@@ -64,5 +66,5 @@ index dc83937..3493d34 100644
-  {
-  	struct rtattr *rta = rta_buf;
- -- 
--2.26.0
-+2.29.2
- 
-diff --git a/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch b/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
-new file mode 100644
-index 0000000000..3e00023001
---- /dev/null
-+++ b/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
-@@ -0,0 +1,47 @@
-+From 3916c1cc32be205e185a8a56de5cde1b9ec60e81 Mon Sep 17 00:00:00 2001
-+From: Denis Kenzior <denkenz@gmail.com>
-+Date: Mon, 30 Nov 2020 13:00:11 -0600
-+Subject: [PATCH] build: Add rawmemchr to missing.h
-+
-+For those systems (i.e. musl) that do not support this
-+
-+[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac  |  1 +
-+ ell/missing.h | 10 ++++++++++
-+ 2 files changed, 11 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 1e5ead9..f34add1 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -98,6 +98,7 @@ AC_ARG_ENABLE(ubsan, AC_HELP_STRING([--enable-ubsan],
-+ ])
-+ 
-+ AC_CHECK_FUNCS(explicit_bzero)
-++AC_CHECK_FUNCS(rawmemchr)
-+ 
-+ AC_CHECK_FUNC(signalfd, dummy=yes,
-+ 			AC_MSG_ERROR(signalfd support is required))
-+diff --git a/ell/missing.h b/ell/missing.h
-+index 6b9b0fd..2a3e647 100644
-+--- a/ell/missing.h
-++++ b/ell/missing.h
-+@@ -67,3 +67,13 @@ static inline void explicit_bzero(void *s, size_t n)
-+ #ifndef SO_BINDTOIFINDEX
-+ #define SO_BINDTOIFINDEX 62
-+ #endif
-++
-++#ifndef HAVE_RAWMEMCHR
-++static inline void *rawmemchr(const void *s, int c)
-++{
-++_Pragma("GCC diagnostic push")
-++_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
-++	return memchr(s, c, (size_t) -1);
-++_Pragma("GCC diagnostic pop")
-++}
-++#endif
-+-- 
-+2.29.2
-+
-diff --git a/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch b/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
-new file mode 100644
-index 0000000000..a2ac7b0965
---- /dev/null
-+++ b/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
-@@ -0,0 +1,26 @@
-+From 6dfff19d4716ba216de1a3298ed0f667d7782810 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=C3=89rico=20Nogueira?= <ericonr@disroot.org>
-+Date: Mon, 30 Nov 2020 18:40:33 -0300
-+Subject: [PATCH] ell: add missing include in dhcp-server.
-+
-+[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=6dfff19d4716ba216de1a3298ed0f667d7782810]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ ell/dhcp-server.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/ell/dhcp-server.c b/ell/dhcp-server.c
-+index c983ed4..144e83e 100644
-+--- a/ell/dhcp-server.c
-++++ b/ell/dhcp-server.c
-+@@ -24,6 +24,7 @@
-+ #include <config.h>
-+ #endif
-+ 
-++#include <linux/types.h>
-+ #include <net/ethernet.h>
-+ #include <sys/socket.h>
-+ #include <arpa/inet.h>
-+-- 
-+2.29.2
-+
-diff --git a/package/ell/Config.in b/package/ell/Config.in
-index d337154878..c7c9164816 100644
---- a/package/ell/Config.in
-+++ b/package/ell/Config.in
-@@ -2,14 +2,12 @@ config BR2_PACKAGE_ELL
- 	bool "ell"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
- 	help
- 	  Embedded Linux library (ell)
- 
- 	  https://01.org/ell
- 
--comment "ell needs a toolchain w/ dynamic library, wchar, headers >= 4.12"
-+comment "ell needs a toolchain w/ wchar, headers >= 4.12"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 43324e658d..b93c43a49d 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  fc3fd66739008fabf4b62f8bc1b37110cc44b9e8233c34f8d991939d0e0247b6  ell-0.33.tar.gz
-+sha256  3f17aaaec2ad8eb8471ff2b18cc8d1bf48e55086bd95d22f327f06fde7c1c277  ell-0.35.tar.gz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index f35c022503..8aec067bc0 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index de97467745..8ac2d17b24 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ELL_VERSION = 0.33
-+ELL_VERSION = 0.35
- ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
- ELL_SITE_METHOD = git
- ELL_LICENSE = LGPL-2.1+
+-XSERVER_XORG_SERVER_VERSION = 1.20.9
++XSERVER_XORG_SERVER_VERSION = 1.20.10
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
