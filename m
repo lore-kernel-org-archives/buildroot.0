@@ -1,37 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:25:30 +0100
-Subject: [Buildroot] [PATCH/next v1] package/ripgrep: bump version to
- 12.1.1
-In-Reply-To: <20201202201551.6380-1-ps.report@gmx.net>
-References: <20201202201551.6380-1-ps.report@gmx.net>
-Message-ID: <20201205212530.68a9bab3@windsurf.home>
+Date: Sat, 5 Dec 2020 21:22:57 +0100
+Subject: [Buildroot] [git commit] package/hwdata: bump version to 0.342
+Message-ID: <20201205201041.542B580258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  2 Dec 2020 21:15:51 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b33a28bcf3e21dc6262322e40c809a6f2d8e6ab8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/ripgrep/ripgrep.hash | 4 ++--
->  package/ripgrep/ripgrep.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This bump is already part of my series adding a Cargo package
-infrastructure *and* adding support for Cargo vendoring. And having the
-bump as part of this series is important, as the contents of the
-tarball changes, and therefore its hashes changes, which requires doing
-the bump together with the introduction of Cargo vendoring.
-
-So I'd like to keep the bump part of this series, if you don't mind.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 79f7b4ea32..489f47a7cf 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  1fb83c015ae9da1ee2a176041ca3e949ac2b71f23356a43c9c958b551ea57662  hwdata-0.335.tar.gz
++sha256  f1e79131c870dce4a3b4b75edeefc5c9aef416d488a131c66cb6893be743be63  hwdata-0.342.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index b6a79a44b7..7d718baca8 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HWDATA_VERSION = 0.335
++HWDATA_VERSION = 0.342
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
