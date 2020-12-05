@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 21:22:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.8.0
-In-Reply-To: <20201205080953.2443925-1-bernd.kuhls@t-online.de>
-References: <20201205080953.2443925-1-bernd.kuhls@t-online.de>
-Message-ID: <20201205212215.4d6cbea6@windsurf.home>
+Date: Sat, 5 Dec 2020 21:25:30 +0100
+Subject: [Buildroot] [PATCH/next v1] package/ripgrep: bump version to
+ 12.1.1
+In-Reply-To: <20201202201551.6380-1-ps.report@gmx.net>
+References: <20201202201551.6380-1-ps.report@gmx.net>
+Message-ID: <20201205212530.68a9bab3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  5 Dec 2020 09:09:53 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Wed,  2 Dec 2020 21:15:51 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> Release notes:
-> https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/dav1d/dav1d.hash | 2 +-
->  package/dav1d/dav1d.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/ripgrep/ripgrep.hash | 4 ++--
+>  package/ripgrep/ripgrep.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+This bump is already part of my series adding a Cargo package
+infrastructure *and* adding support for Cargo vendoring. And having the
+bump as part of this series is important, as the contents of the
+tarball changes, and therefore its hashes changes, which requires doing
+the bump together with the introduction of Cargo vendoring.
+
+So I'd like to keep the bump part of this series, if you don't mind.
+
+Thanks!
 
 Thomas
 -- 
