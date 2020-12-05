@@ -1,39 +1,44 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  5 Dec 2020 07:44:41 +0100
-Subject: [Buildroot] [PATCH 1/2] package/quickjs: bump to version 2020-11-08
-Message-ID: <20201205064442.606683-1-francois.perrad@gadz.org>
+Date: Sat,  5 Dec 2020 07:44:42 +0100
+Subject: [Buildroot] [PATCH 2/2] package/quickjs: depends on glibc
+In-Reply-To: <20201205064442.606683-1-francois.perrad@gadz.org>
+References: <20201205064442.606683-1-francois.perrad@gadz.org>
+Message-ID: <20201205064442.606683-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+fix build http://autobuild.buildroot.org/results/d45/d456eefffd138a714e367f9520adb662f5e0f57e/
+missing include <stdatomic.h>
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/quickjs/quickjs.hash | 2 +-
- package/quickjs/quickjs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/quickjs/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-index 076e4bddb..5dbd4575f 100644
---- a/package/quickjs/quickjs.hash
-+++ b/package/quickjs/quickjs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  0021a3e8cdc6b61e225411d05e2841d2437e1ccf4b4cabb9a5f7685ebfb57717  quickjs-2020-09-06.tar.xz
-+sha256  2e9d63dab390a95ed365238f21d8e9069187f7ed195782027f0ab311bb64187b  quickjs-2020-11-08.tar.xz
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-index 557ffb196..1a2e63278 100644
---- a/package/quickjs/quickjs.mk
-+++ b/package/quickjs/quickjs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+index ee53744bd..91b8bf8dd 100644
+--- a/package/quickjs/Config.in
++++ b/package/quickjs/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_QUICKJS
+ 	bool "quickjs"
+ 	depends on !BR2_STATIC_LIBS
+ 	# No way to check for fenv support.
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  QuickJS is a small and embeddable Javascript engine.
+@@ -11,6 +11,6 @@ config BR2_PACKAGE_QUICKJS
  
--QUICKJS_VERSION = 2020-09-06
-+QUICKJS_VERSION = 2020-11-08
- QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
- QUICKJS_SITE = https://bellard.org/quickjs
- QUICKJS_LICENSE = MIT
+ 	  https://bellard.org/quickjs/
+ 
+-comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
++comment "quickjs needs a glibc toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_USES_GLIBC
 -- 
 2.27.0
