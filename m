@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 14:39:05 +0100
-Subject: [Buildroot] [git commit] package/perl-plack: bump to version 1.0048
-Message-ID: <20201205132743.D398A7FCEB@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 14:38:56 +0100
+Subject: [Buildroot] [git commit] package/perl-file-listing: bump to version
+ 6.14
+Message-ID: <20201205132743.642B58156C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e9810e532db220f00dbb0248af6ee59c43b7bba
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3463db6c1491921f351147cecf599aa6923304
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-plack/perl-plack.hash | 6 +++---
- package/perl-plack/perl-plack.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-file-listing/perl-file-listing.hash | 4 ++--
+ package/perl-file-listing/perl-file-listing.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-plack/perl-plack.hash b/package/perl-plack/perl-plack.hash
-index 7324b726ae..c763d2c173 100644
---- a/package/perl-plack/perl-plack.hash
-+++ b/package/perl-plack/perl-plack.hash
+diff --git a/package/perl-file-listing/perl-file-listing.hash b/package/perl-file-listing/perl-file-listing.hash
+index 5496646d29..2358965714 100644
+--- a/package/perl-file-listing/perl-file-listing.hash
++++ b/package/perl-file-listing/perl-file-listing.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    9d37086aec1b29bab52a9575687e3557 Plack-1.0047.tar.gz
--sha256 322c93f5acc0a0f0e11fd4a76188f978bdc14338a9f1df3ae535227017046561 Plack-1.0047.tar.gz
-+md5  36282b473b4521219c44a9db437b650f  Plack-1.0048.tar.gz
-+sha256  30f5f25e19b437859156a2526f61ca9ab708d50d5730c279189403aabfe542a6  Plack-1.0048.tar.gz
+-md5  6f298b96fdc072fbd0e0c2890a70ab2e  File-Listing-6.11.tar.gz
+-sha256  c24c14ece10b949e1cb52d64bc28b42cbaebf87e00293a3f7500950d6be0bf6e  File-Listing-6.11.tar.gz
++md5  cf60a79563185391831613178a79b4cd  File-Listing-6.14.tar.gz
++sha256  15b3a4871e23164a36f226381b74d450af41f12cc94985f592a669fcac7b48ff  File-Listing-6.14.tar.gz
  
  # computed by scancpan
--sha256 fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d LICENSE
-+sha256  fb67655b5d1adedef83aed2c79bf4f89c68d8595a7060815520173f663a3631d  LICENSE
-diff --git a/package/perl-plack/perl-plack.mk b/package/perl-plack/perl-plack.mk
-index cccf5a6224..b95f204d23 100644
---- a/package/perl-plack/perl-plack.mk
-+++ b/package/perl-plack/perl-plack.mk
+ sha256  7f0ccec295e6d7d2be1439cedd7caf6cc6247191f4c10ac56d91ee9bc265ba02  LICENSE
+diff --git a/package/perl-file-listing/perl-file-listing.mk b/package/perl-file-listing/perl-file-listing.mk
+index f8d449ba36..61bbc18eb8 100644
+--- a/package/perl-file-listing/perl-file-listing.mk
++++ b/package/perl-file-listing/perl-file-listing.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PLACK_VERSION = 1.0047
-+PERL_PLACK_VERSION = 1.0048
- PERL_PLACK_SOURCE = Plack-$(PERL_PLACK_VERSION).tar.gz
- PERL_PLACK_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIYAGAWA
- PERL_PLACK_DEPENDENCIES = host-perl-file-sharedir-install
+-PERL_FILE_LISTING_VERSION = 6.11
++PERL_FILE_LISTING_VERSION = 6.14
+ PERL_FILE_LISTING_SOURCE = File-Listing-$(PERL_FILE_LISTING_VERSION).tar.gz
+ PERL_FILE_LISTING_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PL/PLICEASE
+ PERL_FILE_LISTING_LICENSE = Artistic or GPL-1.0+
