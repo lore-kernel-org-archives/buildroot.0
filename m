@@ -1,47 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 14:39:06 +0100
-Subject: [Buildroot] [git commit] package/perl-type-tiny: bump to version
- 1.012000
-Message-ID: <20201205132743.E46F77FCEB@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 14:39:04 +0100
+Subject: [Buildroot] [git commit] package/perl-package-stash: bump to
+ version 0.39
+Message-ID: <20201205132743.C044881393@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88b55942fcb09b5911abd073356719c0220af250
+commit: https://git.buildroot.net/buildroot/commit/?id=344ebc745b22b5f4ea368493cc35ed5e0d5fd40c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+diff LICENSE:
+-This software is copyright (c) 2018 by Jesse Luehrs.
++This software is copyright (c) 2020 by Jesse Luehrs.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-type-tiny/perl-type-tiny.hash | 4 ++--
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-package-stash/perl-package-stash.hash | 6 +++---
+ package/perl-package-stash/perl-package-stash.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index 85e312c6f1..0c14b7d0cc 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
+diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
+index be8760d2d9..0bbac515e2 100644
+--- a/package/perl-package-stash/perl-package-stash.hash
++++ b/package/perl-package-stash/perl-package-stash.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  b56b6d578843f509100f49b6ffddc21e  Type-Tiny-1.010006.tar.gz
--sha256  f1568e3f0bf103e65faadc1804c6184fe29bf52559e7ff3c12f4dad437befd82  Type-Tiny-1.010006.tar.gz
-+md5  6b7976fe3a6687a3ffdd5ab2b3b11931  Type-Tiny-1.012000.tar.gz
-+sha256  d3db1220161c2aea6b0b8a2225c4fef526e8dbbe56b4bffe9daabc03e2efea90  Type-Tiny-1.012000.tar.gz
+-md5    dc2d802eea2cb0b52ed9c4dd178761dd Package-Stash-0.38.tar.gz
+-sha256 c58ee8844df2dda38e3bf66fdf443439aaefaef1a33940edf2055f0afd223a7f Package-Stash-0.38.tar.gz
++md5  287d80c9115c9230912aca684f8ca92e  Package-Stash-0.39.tar.gz
++sha256  9165f555112e080493ce0e9129de0886da30b2593fb353a2abd1c76b2d2621b5  Package-Stash-0.39.tar.gz
  
  # computed by scancpan
- sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index 3fa119a8ce..dbaeebd8b4 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
+-sha256 13aab710649bae5a8bbb1ae725587ece773bf390537dba2da71247bd937d54b4 LICENSE
++sha256  810b319a6f4a53c9cbbef513da17b2f0c872accd149bb889f153f4b78cf8cbb8  LICENSE
+diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
+index b1a83bd957..bc116abca3 100644
+--- a/package/perl-package-stash/perl-package-stash.mk
++++ b/package/perl-package-stash/perl-package-stash.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.010006
-+PERL_TYPE_TINY_VERSION = 1.012000
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_PACKAGE_STASH_VERSION = 0.38
++PERL_PACKAGE_STASH_VERSION = 0.39
+ PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
+ PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+ PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
