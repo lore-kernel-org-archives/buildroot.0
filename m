@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:41:31 +0100
-Subject: [Buildroot] [git commit] package/python-aiohttp: bump to version
- 3.7.3
-Message-ID: <20201205212712.8CD9681008@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:41:33 +0100
+Subject: [Buildroot] [git commit] package/python-aiohttp-remotes: bump to
+ version 1.0.0
+Message-ID: <20201205212712.D370D7FE6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89a950631e7f13dd9c7554a506aa279c5db290bf
+commit: https://git.buildroot.net/buildroot/commit/?id=d5228184c828a1b4da14bdc189dce32360bfd261
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 License hash changed due to year update.
@@ -17,36 +17,36 @@ License hash changed due to year update.
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiohttp/python-aiohttp.hash | 6 +++---
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ package/python-aiohttp-remotes/python-aiohttp-remotes.hash | 6 +++---
+ package/python-aiohttp-remotes/python-aiohttp-remotes.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index fd02bc80d6..36056d2f99 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
+diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
+index 069cdeda1f..a9a6cad2df 100644
+--- a/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
++++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5	ca40144c199a09fc1a141960cf6295f0  aiohttp-3.6.2.tar.gz
--sha256	259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326  aiohttp-3.6.2.tar.gz
-+md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
-+sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-remotes/json
+-md5	70213413433ece4e2110ae90a070d279  aiohttp_remotes-0.1.2.tar.gz
+-sha256	43c3f7e1c5ba27f29fb4dbde5d43b900b5b5fc7e37bf7e35e6eaedabaec4a3fc  aiohttp_remotes-0.1.2.tar.gz
++md5  e90fad4b7aa088207f831698fddd9eea  aiohttp_remotes-1.0.0.tar.gz
++sha256  caec1681de70bac82daa676078d9b125758fb3952fdaa893a6b42bdd995562ef  aiohttp_remotes-1.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-+sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index 5a5964ed5f..e5a1354267 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
+-sha256	5240758b8a5c34a46c166294eaae7dc7034ec45c727fce889c9abf7ef5afc158  LICENSE
++sha256  4e7d0edf250abe2a28027788b8c55a53d1b5c9ff961b8a00643c76aed637ba13  LICENSE
+diff --git a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
+index 5b38ae9112..f04cecd89d 100644
+--- a/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
++++ b/package/python-aiohttp-remotes/python-aiohttp-remotes.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.6.2
-+PYTHON_AIOHTTP_VERSION = 3.7.3
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_AIOHTTP_REMOTES_VERSION = 0.1.2
++PYTHON_AIOHTTP_REMOTES_VERSION = 1.0.0
+ PYTHON_AIOHTTP_REMOTES_SOURCE = aiohttp_remotes-$(PYTHON_AIOHTTP_REMOTES_VERSION).tar.gz
+-PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/cd/2f/93e9198a01485f588d12e19c87cd277542dc28d8b31dc8e1c09fa1c75548
++PYTHON_AIOHTTP_REMOTES_SITE = https://files.pythonhosted.org/packages/40/b6/1178bd1e26e88f9f29b7d1bbfae7b38d39ec9cf787d4685f83ade2e7aa7f
+ PYTHON_AIOHTTP_REMOTES_SETUP_TYPE = distutils
+ PYTHON_AIOHTTP_REMOTES_LICENSE = MIT
+ PYTHON_AIOHTTP_REMOTES_LICENSE_FILES = LICENSE
