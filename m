@@ -1,50 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:41:37 +0100
-Subject: [Buildroot] [git commit] package/python-sockjs: bump to version
- 0.11.0
-Message-ID: <20201205212713.1C2637FA2A@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:41:36 +0100
+Subject: [Buildroot] [git commit] package/python-aiorwlock: bump to version
+ 1.0.0
+Message-ID: <20201205212713.034297FA2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d9f510ae247174a16da3a5c5ae5423d89a48d07
+commit: https://git.buildroot.net/buildroot/commit/?id=61994bc1a36ac743a472ed2f47e24c265a2220ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to year update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sockjs/python-sockjs.hash | 6 +++---
- package/python-sockjs/python-sockjs.mk   | 4 ++--
+ package/python-aiorwlock/python-aiorwlock.hash | 6 +++---
+ package/python-aiorwlock/python-aiorwlock.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-sockjs/python-sockjs.hash b/package/python-sockjs/python-sockjs.hash
-index 55ea9dc644..137b54a89d 100644
---- a/package/python-sockjs/python-sockjs.hash
-+++ b/package/python-sockjs/python-sockjs.hash
+diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
+index 8556f5ebd3..2398b15424 100644
+--- a/package/python-aiorwlock/python-aiorwlock.hash
++++ b/package/python-aiorwlock/python-aiorwlock.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sockjs/json
--md5	369417bd103f841f236a8623ea29353c  sockjs-0.10.0.tar.gz
--sha256	005a820387bb4611b59341eac091b05d4204050dd42e4ea6cfb83607e23e2f06  sockjs-0.10.0.tar.gz
-+md5  e28c1a82aa84c3994817905090abb169  sockjs-0.11.0.tar.gz
-+sha256  0347d404ed9ef3196506787ed8018f87ee4e2d0baea49d420cdd53a969bec229  sockjs-0.11.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
+-md5	8eccf28315b4f851f6f7e9332edeec52  aiorwlock-0.6.0.tar.gz
+-sha256	cd310f33a7ea3bf6fd76fcf0c1ba6e4d7eef4d5ded59e95859494425fb7e599d  aiorwlock-0.6.0.tar.gz
++md5  8d89ed0d80820aad8d9320204779fd62  aiorwlock-1.0.0.tar.gz
++sha256  4f773e31d78037e3ec27056a22200af482768b43da66e2cc33dd64aa5ea6518a  aiorwlock-1.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256	7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
-+sha256  7be23c071df0314fadeba6077a3830340a5121ad88bfa66b0c095051a766e141  LICENSE.txt
-diff --git a/package/python-sockjs/python-sockjs.mk b/package/python-sockjs/python-sockjs.mk
-index e0f58e2b61..0aea63f934 100644
---- a/package/python-sockjs/python-sockjs.mk
-+++ b/package/python-sockjs/python-sockjs.mk
+-sha256	56fb2baf14d84c59c15abbfbb1fdf30a724017e2ce97894a8236764513d10397  LICENSE
++sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
+diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
+index 48e74c02fd..f6f3c97404 100644
+--- a/package/python-aiorwlock/python-aiorwlock.mk
++++ b/package/python-aiorwlock/python-aiorwlock.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SOCKJS_VERSION = 0.10.0
-+PYTHON_SOCKJS_VERSION = 0.11.0
- PYTHON_SOCKJS_SOURCE = sockjs-$(PYTHON_SOCKJS_VERSION).tar.gz
--PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/35/0e/6aa4f3283b064b04a0c7f3859c8c2c0b736c05cfb07853b6d94073c1bf63
-+PYTHON_SOCKJS_SITE = https://files.pythonhosted.org/packages/88/e9/af7b321f70325fd2af3941aa147efd097156150da635e09efc7ccf70e54d
- PYTHON_SOCKJS_SETUP_TYPE = setuptools
- PYTHON_SOCKJS_LICENSE = Apache-2.0
- PYTHON_SOCKJS_LICENSE_FILES = LICENSE.txt
+-PYTHON_AIORWLOCK_VERSION = 0.6.0
++PYTHON_AIORWLOCK_VERSION = 1.0.0
+ PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
+-PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/77/cf/2a2584c4fc1096ae959d7d189f205eb9c872ec58aca2cde16009d2d83b9e
++PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/40/af/e55b3266352f3383c723e0a3304b0df46a59dfc6235b0b1a0a416afd60c1
+ PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
+ PYTHON_AIORWLOCK_LICENSE = Apache-2.0
+ PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
