@@ -1,52 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 5 Dec 2020 22:41:36 +0100
-Subject: [Buildroot] [git commit] package/python-aiorwlock: bump to version
- 1.0.0
-Message-ID: <20201205212713.034297FA2A@busybox.osuosl.org>
+Date: Sat, 5 Dec 2020 22:41:38 +0100
+Subject: [Buildroot] [git commit] package/python-cbor2: bump to version 5.2.0
+Message-ID: <20201205212713.35492815A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61994bc1a36ac743a472ed2f47e24c265a2220ec
+commit: https://git.buildroot.net/buildroot/commit/?id=9709f636094edeaedf454797a46c27186fed3a98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to year update.
+License hash changed due to formating update.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-aiorwlock/python-aiorwlock.hash | 6 +++---
- package/python-aiorwlock/python-aiorwlock.mk   | 4 ++--
+ package/python-cbor2/python-cbor2.hash | 6 +++---
+ package/python-cbor2/python-cbor2.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-aiorwlock/python-aiorwlock.hash b/package/python-aiorwlock/python-aiorwlock.hash
-index 8556f5ebd3..2398b15424 100644
---- a/package/python-aiorwlock/python-aiorwlock.hash
-+++ b/package/python-aiorwlock/python-aiorwlock.hash
+diff --git a/package/python-cbor2/python-cbor2.hash b/package/python-cbor2/python-cbor2.hash
+index a643cdbe25..073d071a58 100644
+--- a/package/python-cbor2/python-cbor2.hash
++++ b/package/python-cbor2/python-cbor2.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiorwlock/json
--md5	8eccf28315b4f851f6f7e9332edeec52  aiorwlock-0.6.0.tar.gz
--sha256	cd310f33a7ea3bf6fd76fcf0c1ba6e4d7eef4d5ded59e95859494425fb7e599d  aiorwlock-0.6.0.tar.gz
-+md5  8d89ed0d80820aad8d9320204779fd62  aiorwlock-1.0.0.tar.gz
-+sha256  4f773e31d78037e3ec27056a22200af482768b43da66e2cc33dd64aa5ea6518a  aiorwlock-1.0.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cbor2/json
+-md5  693c1bd6635bee8a591a70ea924ad676  cbor2-5.1.2.tar.gz
+-sha256  91759bd0ee5ef0d4fa24144dfa551670730baeca8cf2fff1cc59f734ecd21de6  cbor2-5.1.2.tar.gz
++md5  0940aa8bfd1a07f06a983bb6dc78f1ca  cbor2-5.2.0.tar.gz
++sha256  a33aa2e5534fd74401ac95686886e655e3b2ce6383b3f958199b6e70a87c94bf  cbor2-5.2.0.tar.gz
  # Locally computed sha256 checksums
--sha256	56fb2baf14d84c59c15abbfbb1fdf30a724017e2ce97894a8236764513d10397  LICENSE
-+sha256  fa99ee9d7727194a9f8994c67d1948dc42e8e00ab809fd4a47acfae119d11403  LICENSE
-diff --git a/package/python-aiorwlock/python-aiorwlock.mk b/package/python-aiorwlock/python-aiorwlock.mk
-index 48e74c02fd..f6f3c97404 100644
---- a/package/python-aiorwlock/python-aiorwlock.mk
-+++ b/package/python-aiorwlock/python-aiorwlock.mk
+-sha256  6163f7987dfb38d6bc320ce2b70b2f02b862bc41126516d552ef1cd43247e758  LICENSE.txt
++sha256  a6afd126d8f545a15166a22f25fadff4b9fb4978bbdd17e97d97d950b66d2fef  LICENSE.txt
+diff --git a/package/python-cbor2/python-cbor2.mk b/package/python-cbor2/python-cbor2.mk
+index 115eb8d276..17639ccf1c 100644
+--- a/package/python-cbor2/python-cbor2.mk
++++ b/package/python-cbor2/python-cbor2.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIORWLOCK_VERSION = 0.6.0
-+PYTHON_AIORWLOCK_VERSION = 1.0.0
- PYTHON_AIORWLOCK_SOURCE = aiorwlock-$(PYTHON_AIORWLOCK_VERSION).tar.gz
--PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/77/cf/2a2584c4fc1096ae959d7d189f205eb9c872ec58aca2cde16009d2d83b9e
-+PYTHON_AIORWLOCK_SITE = https://files.pythonhosted.org/packages/40/af/e55b3266352f3383c723e0a3304b0df46a59dfc6235b0b1a0a416afd60c1
- PYTHON_AIORWLOCK_SETUP_TYPE = setuptools
- PYTHON_AIORWLOCK_LICENSE = Apache-2.0
- PYTHON_AIORWLOCK_LICENSE_FILES = LICENSE
+-PYTHON_CBOR2_VERSION = 5.1.2
++PYTHON_CBOR2_VERSION = 5.2.0
+ PYTHON_CBOR2_SOURCE = cbor2-$(PYTHON_CBOR2_VERSION).tar.gz
+-PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/3f/14/a7cdcab562ee9b599ce409168eb0a5f7c7190a83f23c92c8c310e56d1b58
++PYTHON_CBOR2_SITE = https://files.pythonhosted.org/packages/02/15/f4d7fb47753099fcd9d7f7c81920d422a3ab2e710400ec0f4a1b511b51ae
+ PYTHON_CBOR2_SETUP_TYPE = setuptools
+ PYTHON_CBOR2_LICENSE = MIT
+ PYTHON_CBOR2_LICENSE_FILES = LICENSE.txt
