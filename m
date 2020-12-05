@@ -1,47 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Dec 2020 09:05:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.13.1
-Message-ID: <20201205080547.2428475-1-bernd.kuhls@t-online.de>
+Date: Sat,  5 Dec 2020 09:09:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dav1d: bump version to 0.8.0
+Message-ID: <20201205080953.2443925-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
-
-Changelog:
-https://raw.githubusercontent.com/kornelski/pngquant/master/CHANGELOG
+Release notes:
+https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pngquant/pngquant.hash | 4 ++--
- package/pngquant/pngquant.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dav1d/dav1d.hash | 2 +-
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
-index f67807cb8f..c73321670c 100644
---- a/package/pngquant/pngquant.hash
-+++ b/package/pngquant/pngquant.hash
-@@ -1,4 +1,4 @@
- # From https://pngquant.org/releases.html
--sha256 3638936cf6270eeeaabcee42e10768d78e4dc07cac9310307835c1f58b140808  pngquant-2.12.5-src.tar.gz
-+sha256  4b911a11aa0c35d364b608c917d13002126185c8c314ba4aa706b62fd6a95a7a  pngquant-2.13.1-src.tar.gz
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index 3ff4b1b685..1121ec5cd6 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
-+sha256  e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
-diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
-index a8845c7972..c5a17e872a 100644
---- a/package/pngquant/pngquant.mk
-+++ b/package/pngquant/pngquant.mk
+-sha256  9eac4f50089f54a9f562827bda4a21187d68c01d8b20055eef1d7efca9f84cf8  dav1d-0.7.1.tar.bz2
++sha256  b62eb846fd8af15b402c8f6615a74405fe4448cf16663efd0358d4124db0829f  dav1d-0.8.0.tar.bz2
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 1e84c21b47..c59f496d83 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PNGQUANT_VERSION = 2.12.5
-+PNGQUANT_VERSION = 2.13.1
- PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
- PNGQUANT_SITE = https://pngquant.org
- PNGQUANT_LICENSE = GPL-3.0+
+-DAV1D_VERSION = 0.7.1
++DAV1D_VERSION = 0.8.0
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 -- 
 2.29.2
