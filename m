@@ -1,56 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:18:25 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/c-ares: security
- bump to version 1.17.0
-Message-ID: <20201206221100.79A63832E6@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:19:24 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/jpeg-turbo: fix
+ license hash
+Message-ID: <20201206221100.A18748182A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d2281d8ec0f16a34080fb61b838b7d244de668b
+commit: https://git.buildroot.net/buildroot/commit/?id=997199c2a6739870f0d30e1ccdb09b1c3ccd2894
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-- avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
-  fuzzing
-- Avoid theoretical buffer overflow in RC4 loop comparison
-- Empty hquery->name could lead to invalid memory access
-- ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
-  passed in
+Commit 105d61c85062b18bc9555011f909c8c8a5a33277 forgot to update hash of
+LICENSE.md (update in year:
+https://github.com/libjpeg-turbo/libjpeg-turbo/commit/00607ec260efa4cfe10f9b36d6e3d3590ae92d79)
 
-https://c-ares.haxx.se/changelog.html#1_17_0
+While at it, also update indentation in hash file (two spaces)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/66fb5c0171af73d4c1c93241b285fac8f8f494f7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c7a369a907f988cf193b06fd4a7ce5547976c21a)
+(cherry picked from commit c9ca2a596e5737cb4e67644d719b45dfec396593)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/c-ares/c-ares.hash | 2 +-
- package/c-ares/c-ares.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 04a87402e9..a24f3d72ea 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce  c-ares-1.16.1.tar.gz
-+sha256  1cecd5dbe21306c7263f8649aa6e9a37aecb985995a3489f487d98df2b40757d  c-ares-1.17.0.tar.gz
- 
- # Hash for license file
- sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index f07a7e566f..d3510b3c81 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_ARES_VERSION = 1.16.1
-+C_ARES_VERSION = 1.17.0
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index abf129bd93..c4d4a0274f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
+-sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
+-md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
++sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+-sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+-sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
++sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
++sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
++sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
