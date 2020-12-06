@@ -1,47 +1,47 @@
-From: rob.r374 at gmail.com <rob.r374@gmail.com>
-Date: Sun, 6 Dec 2020 12:31:05 +0100
-Subject: [Buildroot] How to safely connect to remote embedded systems
- (mostly behind Firewalls) ?
-Message-ID: <011701d6cbc3$49d7f7c0$dd87e740$@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  6 Dec 2020 12:42:46 +0100
+Subject: [Buildroot] [PATCH v1 3/5] package/rpi-bt-firmware: bump version to
+ 9c0ffe9
+In-Reply-To: <20201206114248.24700-1-ps.report@gmx.net>
+References: <20201206114248.24700-1-ps.report@gmx.net>
+Message-ID: <20201206114248.24700-4-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: David Barbion <davidb@230ruedubac.fr>
 
+Signed-off-by: David Barbion <davidb@230ruedubac.fr>
+[Trim patch subject line version hash to 7 digits]
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+index 6e88552544..543c737480 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  05db087504be2f6bc1d902cca605114c7f9d458be0adb3b8026369357a329f7a  rpi-bt-firmware-d4f7087ecbc8eff9cb64a4650765697157821d64.tar.gz
++sha256  cf806f6bdba0f803b90bc210f524a6ac37bac7ad19306c61474bb2dc59875e87  rpi-bt-firmware-9c0ffe9a7f0753b36ed88f7981905a989d940ea9.tar.gz
+ sha256  b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index 785f007cc3..02754c0b46 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-
-I'm preparing buildroot based distribution for ARM Cortex M7
-(noMMU,STM32F769 DISCO board).
-
-I'd like to implement possibility to remotely connect from distant server,
-to check and supervise the system.
-
-I think that >reverse shell< is what I'm looking for (so remote system on
-some trigger connects safely to some distant server, from which I can work
-in shell). I guess dropbear that is already present in my system could be
-used for this.
-
- 
-
-Is this solution safe and how can be implemented efficiently on these
-resource constrained devices ?
-
- 
-
-Thanks,
-
-Regards,
-
-Rob.
-
-
-
+-RPI_BT_FIRMWARE_VERSION = d4f7087ecbc8eff9cb64a4650765697157821d64
++RPI_BT_FIRMWARE_VERSION = 9c0ffe9a7f0753b36ed88f7981905a989d940ea9
+ RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
 -- 
-Ta e-po?ta je bila pregledana z Avast protivirusnim programom.
-https://www.avast.com/antivirus
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201206/d6666edf/attachment.html>
+2.29.2
