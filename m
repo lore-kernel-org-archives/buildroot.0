@@ -1,48 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:19:51 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jpeg-turbo: fix
- license hash
-Message-ID: <20201206221055.3D902825CF@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:26:19 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/python-flask-cors: security bump to version 3.0.9
+Message-ID: <20201206221055.5D1EB825CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=221b1daf31ee1fca1e7c0a8ebe2c7f9f6f4440ae
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b3cf5901037060ad3644b11ab67b0349980d5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 105d61c85062b18bc9555011f909c8c8a5a33277 forgot to update hash of
-LICENSE.md (update in year:
-https://github.com/libjpeg-turbo/libjpeg-turbo/commit/00607ec260efa4cfe10f9b36d6e3d3590ae92d79)
+Fixes the following security issue:
 
-While at it, also update indentation in hash file (two spaces)
+- CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
+  for Flask) before 3.0.9.  It allows ../ directory traversal to access
+  private resources because resource matching does not ensure that pathnames
+  are in a canonical format.
 
-Fixes:
- - http://autobuild.buildroot.org/results/66fb5c0171af73d4c1c93241b285fac8f8f494f7
+Also drop outdated md5 checksum and fix .hash indentation.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c9ca2a596e5737cb4e67644d719b45dfec396593)
+(cherry picked from commit c356b20ba8afa79b08fc3d30a1c3f60d9f3c6f65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/python-flask-cors/python-flask-cors.hash | 7 +++----
+ package/python-flask-cors/python-flask-cors.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index abf129bd93..c4d4a0274f 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
- # From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
--sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
--md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
-+sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
-+md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
- # Locally computed
--sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
--sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
--sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-+sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
-+sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
-+sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
+diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
+index a893b7c890..15b7d41a32 100644
+--- a/package/python-flask-cors/python-flask-cors.hash
++++ b/package/python-flask-cors/python-flask-cors.hash
+@@ -1,5 +1,4 @@
+-# md5, sha256 from https://pypi.org/pypi/flask-cors/json
+-md5	551cc4c0305a171d28caa2b3bc838867  Flask-Cors-3.0.8.tar.gz
+-sha256	72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16  Flask-Cors-3.0.8.tar.gz
++# sha256 from https://pypi.org/pypi/flask-cors/json
++sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
++sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index 60454e27c4..d712109002 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_FLASK_CORS_VERSION = 3.0.8
++PYTHON_FLASK_CORS_VERSION = 3.0.9
+ PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+-PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/9e/11/ca8b95c5bf9644471601e425f0de8cbd09a506bb6c24842cb17a6cd1eea8
++PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+ PYTHON_FLASK_CORS_LICENSE = MIT
+ PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
