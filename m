@@ -1,62 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  6 Dec 2020 10:08:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nmap: fix license
-Message-ID: <20201206090837.319909-1-fontaine.fabrice@gmail.com>
+Date: Sun,  6 Dec 2020 10:32:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pybind: bump to version 2.6.1
+Message-ID: <20201206093230.555847-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 78dc1f185ba0c8c9085d44318f72ab172867b147 forgot to update the
-license file from COPYING to LICENSE.
+Update indentation in hash file (two spaces)
 
-Here is an extract of the ChangeLog for Nmap 7.90 [2020-10-03]:
-
-Upgraded the Nmap license form a sort of hacked-up version of GPLv2 to a
-cleaner and better organized version (still based on GPLv2) now called
-the Nmap Public Source License to avoid confusion. See
-https://nmap.org/npsl/ for more details and annotated license text. This
-NPSL project was started in 2006 (community discussion here:
-https://seclists.org/nmap-dev/2006/q4/126) and then it lost momentum for
-7 years until it was restarted in 2013
-(https://seclists.org/nmap-dev/2013/q1/399) and then we got distracted
-by development again. We still have some ideas for improving the NPSL,
-but it's already much better than the current license, so we're applying
-NPSL Version 0.92 to the code now and can make improvements later if
-needed. This does not change the license of previous Nmap releases.
-
-Fixes:
- - http://autobuild.buildroot.org/results/8cef6a5e99ae341cced405a389346e2faccf6eec
+https://github.com/pybind/pybind11/releases/tag/v2.6.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nmap/nmap.hash | 2 +-
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pybind/python-pybind.hash | 4 ++--
+ package/python-pybind/python-pybind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 5c684ecabe..8f69bbf613 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -2,4 +2,4 @@
- sha256  18cc4b5070511c51eb243cdd2b0b30ff9b2c4dc4544c6312f75ce3a67a593300  nmap-7.91.tar.bz2
- 
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
+index f64f1409d2..a68ac846e2 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind/python-pybind.hash
+@@ -1,4 +1,4 @@
  # Locally calculated
--sha256  a6afaad36c803dc602734451d9421ed363b48d1ca0faadf0907fc2d91a000284  COPYING
-+sha256  8254a9bc733f3312c6dcfe0d5a129c29e96ecb8b33408c652a8c7beb2e25b471  LICENSE
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index a719b268c8..46ffd5aef4 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -11,7 +11,7 @@ NMAP_DEPENDENCIES = liblinear libpcap
- NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included
- NMAP_LICENSE = nmap license
--NMAP_LICENSE_FILES = COPYING
-+NMAP_LICENSE_FILES = LICENSE
+-sha256  90b705137b69ee3b5fc655eaca66d0dc9862ea1759226f7ccd3098425ae69571   python-pybind-2.6.0.tar.gz
++sha256  cdbe326d357f18b83d10322ba202d69f11b2f49e2d87ade0dc2be0c5c34f8e2a  python-pybind-2.6.1.tar.gz
+ # License files, locally calculated
+-sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb   LICENSE
++sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index 435d4a9b50..a6a1bdb976 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # needed by libpcap
- NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
+-PYTHON_PYBIND_VERSION = 2.6.0
++PYTHON_PYBIND_VERSION = 2.6.1
+ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+ PYTHON_PYBIND_LICENSE = BSD-3-Clause
+ PYTHON_PYBIND_LICENSE_FILES = LICENSE
 -- 
 2.29.2
