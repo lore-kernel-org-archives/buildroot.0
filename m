@@ -1,111 +1,146 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 6 Dec 2020 12:02:04 +0100
-Subject: [Buildroot] [PATCH/next 2/2] package/libeXosip2: bump to
- version 5.2.0
-In-Reply-To: <20201122101656.446172-2-fontaine.fabrice@gmail.com>
-References: <20201122101656.446172-1-fontaine.fabrice@gmail.com>
- <20201122101656.446172-2-fontaine.fabrice@gmail.com>
-Message-ID: <CAKcgs2z8Mb-ZX0aZ1RNNxvWr9+5LzHUBjGUCnfXUsg=PjUEc8w@mail.gmail.com>
+Date: Sun, 6 Dec 2020 12:03:31 +0100
+Subject: [Buildroot] [PATCH v4 8/8] configs/imx8mmevk: new defconfig
+In-Reply-To: <20201125183017.15585-9-xroumegue@gmail.com>
+References: <20201109142309.1135596-2-xroumegue@gmail.com>
+ <20201125183017.15585-9-xroumegue@gmail.com>
+Message-ID: <CAKcgs2yxyuArT-wii2Er03QOuvFWzchzy0WQ47b0jmXgcS=o0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Xavier, all,
 
-Thanks for this bump also!
+Successfully tested on my imx8mm evk board.
 
-Le dim. 22 nov. 2020 ? 11:17, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> a ?crit :
+Le mer. 25 nov. 2020 ? 19:31, Xavier Roumegue <xroumegue@gmail.com> a ?crit :
 >
-> - Drop patch (already in version)
-> - Update indentation in hash file (two spaces)
+> Introduce NXP imx8mm evk board configuration that uses mainline atf,
+> uboot and kernel.
 >
-> https://git.savannah.nongnu.org/cgit/exosip.git/tree/ChangeLog?h=5.2.0
+> Mainline uboot mkimage tool generates the boot image.
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+> Tested-by: Julien Olivain <ju.o@free.fr>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  ...pilation-error-introduced-with-epoll.patch | 44 -------------------
->  package/libeXosip2/libeXosip2.hash            |  4 +-
->  package/libeXosip2/libeXosip2.mk              |  2 +-
->  3 files changed, 3 insertions(+), 47 deletions(-)
->  delete mode 100644 package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+>  DEVELOPERS                           |  3 +++
+>  board/freescale/imx8mmevk/readme.txt | 29 ++++++++++++++++++--
+>  configs/imx8mmevk_defconfig          | 40 ++++++++++++++++++++++++++++
+>  3 files changed, 70 insertions(+), 2 deletions(-)
+>  create mode 100644 configs/imx8mmevk_defconfig
 >
-> diff --git a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
-> deleted file mode 100644
-> index b69455bd7a..0000000000
-> --- a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -From 0e0e95dbc380c5eede3a2fc1631294a98078e30f Mon Sep 17 00:00:00 2001
-> -From: Aymeric Moizard <amoizard@gmail.com>
-> -Date: Fri, 13 Mar 2020 16:34:41 +0100
-> -Subject: fix: fix OSIP_MONOTHREAD compilation error introduced with epoll
-> - implementation
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Retrieved from:
-> -http://git.savannah.nongnu.org/cgit/exosip.git/patch/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f]
-> ----
-> - src/eXconf.c | 4 ++++
-> - 1 file changed, 4 insertions(+)
-> -
-> -diff --git a/src/eXconf.c b/src/eXconf.c
-> -index baf90be..6165eb3 100644
-> ---- a/src/eXconf.c
-> -+++ b/src/eXconf.c
-> -@@ -801,12 +801,15 @@ eXosip_init (struct eXosip_t *excontext)
-> -   }
-> -
-> -   if (excontext->poll_method == EXOSIP_USE_EPOLL_LT) {
-> -+#ifndef OSIP_MONOTHREAD
-> -     struct epoll_event ev;
-> -+#endif
-> -     excontext->epfdctl = epoll_create (1);
-> -     if (excontext->epfdctl < 0) {
-> -       return OSIP_UNDEFINED_ERROR;
-> -     }
-> -
-> -+#ifndef OSIP_MONOTHREAD
-> -     memset(&ev, 0, sizeof(struct epoll_event));
-> -     ev.events = EPOLLIN;
-> -     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
-> -@@ -815,6 +818,7 @@ eXosip_init (struct eXosip_t *excontext)
-> -       _eXosip_closesocket (excontext->epfdctl);
-> -       return OSIP_UNDEFINED_ERROR;
-> -     }
-> -+#endif
-> -   }
-> - #endif
-> -
-> ---
-> -cgit v1.2.1
-> -
-> diff --git a/package/libeXosip2/libeXosip2.hash b/package/libeXosip2/libeXosip2.hash
-> index a7d3c56d00..53e27e929c 100644
-> --- a/package/libeXosip2/libeXosip2.hash
-> +++ b/package/libeXosip2/libeXosip2.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 21420c00bf8e0895ff36161766beec12b7e6f1d371030c389dba845e271272e2 libexosip2-5.1.1.tar.gz
-> -sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
-> +sha256  e3ae88df8573c9e08dbc24fe6195a118845e845109a8e291c91ecd6a2a3b7225  libexosip2-5.2.0.tar.gz
-> +sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-> diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-> index 4bd8922b41..dba2b63a02 100644
-> --- a/package/libeXosip2/libeXosip2.mk
-> +++ b/package/libeXosip2/libeXosip2.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9ab1e125f4..a1efd0dc98 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2684,6 +2684,9 @@ F:        package/fwup/
+>  N:     Yair Ben Avraham <yairba@protonmail.com>
+>  F:     package/gloox/
 >
-> -LIBEXOSIP2_VERSION = 5.1.1
-> +LIBEXOSIP2_VERSION = 5.2.0
->  # Since version 5.0, letter 'X' in library's name is in lower case
->  LIBEXOSIP2_SOURCE = libexosip2-$(LIBEXOSIP2_VERSION).tar.gz
->  LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip
+> +N:     Xavier Roumegue <xroumegue@gmail.com>
+> +F:     configs/imx8mmevk_defconfig
+> +
+>  N:     Yann E. MORIN <yann.morin.1998@free.fr>
+>  F:     board/friendlyarm/nanopi-neo/
+>  F:     configs/nanopi_neo_defconfig
+> diff --git a/board/freescale/imx8mmevk/readme.txt b/board/freescale/imx8mmevk/readme.txt
+> index 7b69405d30..be3b54e40d 100644
+> --- a/board/freescale/imx8mmevk/readme.txt
+> +++ b/board/freescale/imx8mmevk/readme.txt
+> @@ -5,8 +5,8 @@ Freescale i.MX8MM EVK board
+>  This file documents the Buildroot support for the Freescale i.MX8MM
+>  EVK board.
+>
+> -Build
+> -=====
+> +Building with NXP ATF, U-Boot and kernel
+> +========================================
+>
+>  First, configure Buildroot for the i.MX8MM EVK board:
+>
+> @@ -32,6 +32,31 @@ You will find in output/images/ the following files:
+>    - u-boot-nodtb.bin
+>    - u-boot-spl-ddr.bin
+>
+> +Building with mainline ATF, U-Boot and kernel
+> +=============================================
+> +First, configure Buildroot for the i.MX8MM EVK board:
+> +
+> +  make imx8mmevk_defconfig
+> +
+> +Build all components:
+> +
+> +  make
+> +
+> +You will find in output/images/ the following files:
+> +    - bl31.bin
+> +    - boot.vfat
+> +    - ddr_fw.bin
+> +    - flash.bin
+> +    - Image
+> +    - imx8mm-evk.dtb
+> +    - [lp]ddr4_*.bin
+> +    - rootfs.ext2
+> +    - rootfs.ext4
+> +    - rootfs.tar
+> +    - sdcard.img
+> +    - u-boot-spl
+> +    - u-boot-spl.bin
+> +
+>  Create a bootable SD card
+>  =========================
+>
+> diff --git a/configs/imx8mmevk_defconfig b/configs/imx8mmevk_defconfig
+> new file mode 100644
+> index 0000000000..089acd506c
+> --- /dev/null
+> +++ b/configs/imx8mmevk_defconfig
+> @@ -0,0 +1,40 @@
+> +BR2_aarch64=y
+> +BR2_ARM_FPU_VFPV3=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.18"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_PACKAGE_FREESCALE_IMX=y
+> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.3"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_FW_FILES="lpddr4*.bin"
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_IMX_FIT=y
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin spl/u-boot-spl"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="ATF_LOAD_ADDR=0x920000"
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 > --
 > 2.29.2
 >
-Acked-by: Gilles Talis <gilles.talis@gmail.com>
+
+Tested-by: Gilles Talis <gilles.talis@gmail.com>
