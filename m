@@ -1,35 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:23:06 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: update email
- address for Pierre-Jean Texier
-Message-ID: <20201206221100.ABC4C8182A@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:25:19 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libcamera: fix
+ BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS handling
+Message-ID: <20201206221100.C1EB4838D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffd0177b5bcbe939ca118be9271a4351c03ce3bc
+commit: https://git.buildroot.net/buildroot/commit/?id=72578f6ebb433626774ab25a02a05707e1c4fe43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 248c2e909ee7cc208e29d3720e04923733aaa5b1)
+Fix BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS handling, change from
+'depends on BR2_m68k' to 'depends on !BR2_m68k'.
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ff60c4c533096f8fd69c31d9f57ed1daa596d08a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
+ package/libcamera/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 285ef9451d..8096c89e4f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2108,7 +2108,7 @@ F:	package/kf5/
- N:	Pierre Floury <pierre.floury@gmail.com>
- F:	package/trace-cmd/
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 39741e4412..e2607032fa 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	bool
+ 	default y
+ 	# Invalid packing size of ControlValue struct on m68k
+-	depends on BR2_m68k
++	depends on !BR2_m68k
  
--N:	Pierre-Jean Texier <pjtexier@koncepto.io>
-+N:	Pierre-Jean Texier <texier.pj2@gmail.com>
- F:	package/fping/
- F:	package/genimage/
- F:	package/haveged/
+ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	bool "libcamera"
