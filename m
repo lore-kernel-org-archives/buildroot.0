@@ -1,60 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:26:19 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/python-flask-cors: security bump to version 3.0.9
-Message-ID: <20201206221055.5D1EB825CF@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:19:47 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jpeg-turbo:
+ security bump to version 2.0.5
+Message-ID: <20201206221055.281D0825CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4b3cf5901037060ad3644b11ab67b0349980d5c
+commit: https://git.buildroot.net/buildroot/commit/?id=ccc0a9a79b6a86bf9c8b9fb6254234807e70a0e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
-- CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
-  for Flask) before 3.0.9.  It allows ../ directory traversal to access
-  private resources because resource matching does not ensure that pathnames
-  are in a canonical format.
+- CVE-2020-13790: ibjpeg-turbo 2.0.4, and mozjpeg 4.0.0, has a heap-based
+  buffer over-read in get_rgb_row() in rdppm.c via a malformed PPM input
+  file
 
-Also drop outdated md5 checksum and fix .hash indentation.
+For more details, see the release notes:
+https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/2.0.5
 
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+[Peter: mark as security bump / extend commit message]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c356b20ba8afa79b08fc3d30a1c3f60d9f3c6f65)
+(cherry picked from commit 105d61c85062b18bc9555011f909c8c8a5a33277)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-flask-cors/python-flask-cors.hash | 7 +++----
- package/python-flask-cors/python-flask-cors.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
-index a893b7c890..15b7d41a32 100644
---- a/package/python-flask-cors/python-flask-cors.hash
-+++ b/package/python-flask-cors/python-flask-cors.hash
-@@ -1,5 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/flask-cors/json
--md5	551cc4c0305a171d28caa2b3bc838867  Flask-Cors-3.0.8.tar.gz
--sha256	72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16  Flask-Cors-3.0.8.tar.gz
-+# sha256 from https://pypi.org/pypi/flask-cors/json
-+sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
- # Locally computed sha256 checksums
--sha256	6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-+sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index 60454e27c4..d712109002 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 874f04fc82..abf129bd93 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.4/
+-sha1 163d8f96d0999526a117de0388624241b54dcd67  libjpeg-turbo-2.0.4.tar.gz
+-md5  d01d9e0c28c27bc0de9f4e2e8ff49855 libjpeg-turbo-2.0.4.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
++sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 33dd8547efd5543639e890efbf2ef52d5a21df81faf41bb940657af916a23406  libjpeg-turbo-2.0.4.tar.gz
++sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+ sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+ sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 126b470630..bcebf1dd6f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FLASK_CORS_VERSION = 3.0.8
-+PYTHON_FLASK_CORS_VERSION = 3.0.9
- PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
--PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/9e/11/ca8b95c5bf9644471601e425f0de8cbd09a506bb6c24842cb17a6cd1eea8
-+PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
+-JPEG_TURBO_VERSION = 2.0.4
++JPEG_TURBO_VERSION = 2.0.5
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
