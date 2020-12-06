@@ -1,22 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Dec 2020 23:23:26 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: update email address for
- Pierre-Jean Texier
-In-Reply-To: <20201117212208.29485-1-texier.pj2@gmail.com> (Pierre-Jean
- Texier's message of "Tue, 17 Nov 2020 22:22:08 +0100")
-References: <20201117212208.29485-1-texier.pj2@gmail.com>
-Message-ID: <87pn3mvajl.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Dec 2020 23:24:37 +0100
+Subject: [Buildroot] [PATCH] package/gvfs: show warning when
+ BR2_STATIC_LIBS=y
+In-Reply-To: <20201118131323.3166176-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Wed, 18 Nov 2020 14:13:22 +0100")
+References: <20201118131323.3166176-1-buildroot@heine.tech>
+Message-ID: <87lfeavahm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <texier.pj2@gmail.com> writes:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
 
- > Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+ > Fixes:
+ > showing "gvfs needs a toolchain w/ wchar, threads, dynamic library"
+ > while also showing "gvfs[ ]"
+ > when !BR2_STATIC_LIBS
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+ > introduced by 4266c9f54f635e8a9d0a7fdedfb1c84c1de10785
+
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+
+Committed to 2020.08.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
