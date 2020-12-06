@@ -1,186 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 6 Dec 2020 17:59:20 +0100
-Subject: [Buildroot] [PATCH v4 2/4] package/bcc: new package
-In-Reply-To: <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
-References: <20201107002836.3101760-1-romain.naour@gmail.com>
- <20201107002836.3101760-2-romain.naour@gmail.com>
- <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
-Message-ID: <bbccfc8c-1210-8e8b-02d4-920dba6a3810@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 6 Dec 2020 18:03:19 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/bind: drop unrecognized
+ option
+In-Reply-To: <20201206140737.3890199-1-bernd.kuhls@t-online.de>
+References: <20201206140737.3890199-1-bernd.kuhls@t-online.de>
+Message-ID: <CAPi7W81J5Qe_zV0M2NXhQ_1VtQfkWmUhm__Jb8VKoxm3tQ77dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Qais,
+Hi Bernd,
 
-Le 29/11/2020 ? 16:14, Qais Yousef a ?crit?:
-> Hi Romain
-> 
-> Thanks for updating the series.
-
-You're welcome!
-
-> 
-> On 11/07/20 01:28, Romain Naour wrote:
->> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->>
->> bcc is a front-end tool for eBPF :
->> https://github.com/iovisor/bcc/blob/master/README.md.
->> eBPF is the most powerful Linux tracer, and bcc
->> allows to write eBPF scripts in C and PYTHON3.
->>
->> bcc can help to troubleshoot issues quickly on
->> embedded systems (as long as Linux kernel
->> version >= 4.1).
->>
->> bcc can also make it easy to create observabilty tools,
->> SDN configuration, ddos mitigation, intrusion detection
->> and secure containers. More information is available at:
->> https://ebpf.io/
->>
->> BCC can be tested on the target :
->> $ mount -t debugfs none /sys/kernel/debug
->> $ cd /usr/share/bcc/tools
->> $ ./execsnoop
->>
->> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Qais Yousef <qais.yousef@arm.com>
->> ---
->> v4
->> - Bump to version 0.17.0.
->> - Remove kernel dependency (Qais)
->> - Remove optional kernel option handling (Quais)
->> - Update ebpf url (Quais)
->> - Fix tools path in the commit log (Quais)
->> - Add full tar dependency (used to extract the kernel sources from IKHEADERS module) (Quais)
->> - Make luajit optional dependeny (Quais)
-> 
-> I don't see a new option in Config.in to enable luajit. Shouldn't we have one
-> to enable it?
-
-For optional dependencies like luajit, we let the user select it.
-
-So if luajit is selected in the defconfig, the build time dependency on luajut
-is added.
-
-> 
-> Wouldn't it be better to split luajit support into its own patch?
-
-You're right on the principle but there is not CMake option to disable luajit
-support. Instead there is ENABLE_CLANG_JIT that also disable python support.
-
-I've added a new patch to disable luajit when ENABLE_CLANG_JIT=ON.
-
-> 
->> - Remove python module install hook (Quais)
->> - Keep BCC_LINUX_CONFIG_FIXUPS but only for kernel built by Buildroot.
-> 
-> I still think this will be a maintenance headache. Are you sure you want to
-> continue to maintain this list of fixups for all kernel versions given how fast
-> ebpf moves?
-
-This option is only used when you build the kernel with Buildroot.
-At some point ebpf kernel options must be stable.
-
-Also the bcc project provide this list of kernel options, so we can follow their
-requirements:
-https://github.com/iovisor/bcc/blob/master/INSTALL.md#kernel-configuration
-
-You can search for LINUX_CONFIG_FIXUPS usage in the Buildroot tree, we can
-notice that some packages requires some kernel options.
-Why not to do so with bcc ?
-
-> 
-> [...]
-> 
->> diff --git a/package/bcc/Config.in b/package/bcc/Config.in
->> new file mode 100644
->> index 0000000000..b75984a36e
->> --- /dev/null
->> +++ b/package/bcc/Config.in
->> @@ -0,0 +1,42 @@
->> +config BR2_PACKAGE_BCC
->> +	bool "bcc"
->> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->> +	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
->> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
->> +	depends on BR2_INSTALL_LIBSTDCPP # clang
->> +	select BR2_PACKAGE_AUDIT # runtime
->> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # to select tar package
->> +	select BR2_PACKAGE_CLANG
->> +	select BR2_PACKAGE_ELFUTILS
->> +	select BR2_PACKAGE_FLEX # needs FlexLexer.h
->> +	select BR2_PACKAGE_IPERF3 # runtime
->> +	select BR2_PACKAGE_LLVM_BPF
->> +	select BR2_PACKAGE_NETPERF # runtime
->> +	select BR2_PACKAGE_PYTHON3
->> +	select BR2_PACKAGE_TAR # Decompress kernel headers required by BCC
-> 
-> I still think IPERF3, NETPERF and AUDIT dependencies are not required and
-> should be enabled by the user if they care only.
-> 
-> Are you okay to make them optional so users who don't care can have the choice
-> to enable BCC without having to include these packages too?
-
-Ok.
-
-> 
->> +	help
->> +	  BPF Compiler Collection (BCC)
->> +
->> +	  BCC is a toolkit for creating efficient kernel tracing and
->> +	  manipulation programs, and includes several useful tools and
->> +	  examples. It makes use of extended BPF (Berkeley Packet
->> +	  Filters), formally known as eBPF, a new feature that was
->> +	  first added to Linux 3.15. Much of what BCC uses requires
->> +	  Linux 4.1 and above.
->> +
->> +	  Note: Before using bcc, you need either need to :
->> +	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
->> +	  to target folder /lib/module/<kernel_ver>/build.
->> +	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
->> +	  and use generated headers under /sys/kernel/kheaders.tar.xz
->> +	  to populate /lib/module/<kernel_ver>/build.
->> +
->> +	  That's because the clang frontend build eBPF code at runtime.
-> 
-> I still this the Clang build error for i386, x86_64, arm and arm64
-> 
-> 	/usr/bin/ld: CMakeFiles/libclang.dir/CIndexer.cpp.o: in function `clang::CIndexer::getClangResourcesPath[abi:cxx11]()':
-> 	CIndexer.cpp:(.text._ZN5clang8CIndexer21getClangResourcesPathB5cxx11Ev+0x9b): undefined reference to `dladdr'
-> 	collect2: error: ld returned 1 exit status
-> 	make[4]: *** [tools/libclang/CMakeFiles/libclang.dir/build.make:395: lib/libclang.so.9] Error 1
-> 	make[3]: *** [CMakeFiles/Makefile2:8451: tools/libclang/CMakeFiles/libclang.dir/all] Error 2
-> 
-> I had a hacky patch for that in my series. Should we just report this to the
-> clang package maintainer in buildroot? I'm assuming you're not hitting it,
-> right?
-
-Guess who is one of the clang package "maintainer" in Buildroot :p
-(use ./utils/get-developers -p clang)
-
-I'm not able the reproduce this issue. Are you using uclibc toolchain ?
-Also, the Buildroot autobuilder didn't report such error, I receive autobuilder
-failure directly to my mail in-box.
-
-> 
-> I was based on 2020.08.2 tag.
-
-Clang is still at  9.x release so we have this version since a while.
-
-> 
-> I couldn't fully test this series yet because of this error.
-
-Please, share your defconfig.
-
-Best regards,
-Romain
-
-> 
-> Thanks
-> 
+Le dim. 6 d?c. 2020 ? 15:07, Bernd Kuhls <bernd.kuhls@t-online.de> a ?crit :
+>
+> From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Drop --enable-newstats option which is not recognized
+>
+> Unrecognized options:
+>     --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --disable-nls, --enable-newstats
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: no changes
+No comment on this patch (obviously), however, concerning the second
+patch of this serie (bump to 9.16.9), here is some feedback:
+- openssl is mandatory since version 9.13.3 and
+  https://github.com/isc-projects/bind9/commit/c3b8130fe8267185e786e9c12527df7c53b37589
+- backtrace should be disabled (enabled by default) or build can fail
+without libunwind
+- gost has been dropped since version 9.13.1 and
+  https://github.com/isc-projects/bind9/commit/27593e65dc4f1565bb45d91eb561a504da627c41
+>
+>  package/bind/bind.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+> index ba60c111ef..183c42f1e8 100644
+> --- a/package/bind/bind.mk
+> +++ b/package/bind/bind.mk
+> @@ -47,7 +47,7 @@ BIND_CONF_OPTS += --disable-linux-caps
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> -BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
+> +BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
+>  BIND_DEPENDENCIES += libxml2
+>  else
+>  BIND_CONF_OPTS += --with-libxml2=no
 > --
-> Qais Yousef
-> 
+> 2.29.2
+>
+Best Regards,
+
+Fabrice
