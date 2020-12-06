@@ -1,109 +1,186 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  6 Dec 2020 16:35:28 +0100
-Subject: [Buildroot] [PATCH] package/minetest{-game}: bump to version 5.3.0
-Message-ID: <20201206153528.1345269-1-romain.naour@gmail.com>
+Date: Sun, 6 Dec 2020 17:59:20 +0100
+Subject: [Buildroot] [PATCH v4 2/4] package/bcc: new package
+In-Reply-To: <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
+References: <20201107002836.3101760-1-romain.naour@gmail.com>
+ <20201107002836.3101760-2-romain.naour@gmail.com>
+ <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
+Message-ID: <bbccfc8c-1210-8e8b-02d4-920dba6a3810@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See Changelog [1]
+Hello Qais,
 
-Disable unittests build with the new BUILD_UNITTESTS option.
+Le 29/11/2020 ? 16:14, Qais Yousef a ?crit?:
+> Hi Romain
+> 
+> Thanks for updating the series.
 
-Update minetest-game licence file hash for:
-  mods/default/license.txt [2]
-  mods/farming/license.txt [3]
+You're welcome!
 
-Update minetest license file hash for:
-  LICENSE.txt [4]
+> 
+> On 11/07/20 01:28, Romain Naour wrote:
+>> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>>
+>> bcc is a front-end tool for eBPF :
+>> https://github.com/iovisor/bcc/blob/master/README.md.
+>> eBPF is the most powerful Linux tracer, and bcc
+>> allows to write eBPF scripts in C and PYTHON3.
+>>
+>> bcc can help to troubleshoot issues quickly on
+>> embedded systems (as long as Linux kernel
+>> version >= 4.1).
+>>
+>> bcc can also make it easy to create observabilty tools,
+>> SDN configuration, ddos mitigation, intrusion detection
+>> and secure containers. More information is available at:
+>> https://ebpf.io/
+>>
+>> BCC can be tested on the target :
+>> $ mount -t debugfs none /sys/kernel/debug
+>> $ cd /usr/share/bcc/tools
+>> $ ./execsnoop
+>>
+>> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Qais Yousef <qais.yousef@arm.com>
+>> ---
+>> v4
+>> - Bump to version 0.17.0.
+>> - Remove kernel dependency (Qais)
+>> - Remove optional kernel option handling (Quais)
+>> - Update ebpf url (Quais)
+>> - Fix tools path in the commit log (Quais)
+>> - Add full tar dependency (used to extract the kernel sources from IKHEADERS module) (Quais)
+>> - Make luajit optional dependeny (Quais)
+> 
+> I don't see a new option in Config.in to enable luajit. Shouldn't we have one
+> to enable it?
 
-[1] https://dev.minetest.net/Changelog#5.2.0_.E2.86.92_5.3.0
-[2] https://github.com/minetest/minetest_game/commit/0662f962842b071525fa00ce970d8cc645bd68a4
-[3] https://github.com/minetest/minetest_game/commit/e5a7af1c4abaf06ad764bf7c5da058fd136871c0
-[4] https://github.com/minetest/minetest/commit/9a64a9fd9427fc3b62d4dc9bf1ca7c15477ebc5a
+For optional dependencies like luajit, we let the user select it.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/minetest-game/minetest-game.hash | 6 +++---
- package/minetest-game/minetest-game.mk   | 2 +-
- package/minetest/minetest.hash           | 4 ++--
- package/minetest/minetest.mk             | 5 +++--
- 4 files changed, 9 insertions(+), 8 deletions(-)
+So if luajit is selected in the defconfig, the build time dependency on luajut
+is added.
 
-diff --git a/package/minetest-game/minetest-game.hash b/package/minetest-game/minetest-game.hash
-index 5bf65bc510..1d22b62fc8 100644
---- a/package/minetest-game/minetest-game.hash
-+++ b/package/minetest-game/minetest-game.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  0c49fd6e310de1aba2e8cb8ae72efe0e06bb6bc8d7c5efea23bc201b6a80ce94  minetest-game-5.2.0.tar.gz
-+sha256  06c6c1d4b97af211dd0fa518a3e68a205f594e9816a4b2477e48d4d21d278e2d  minetest-game-5.3.0.tar.gz
- 
- sha256  f8a254e8d5f6b3ca3873f990986e86c864f943aa5dc9bf56808c5f4bfa509db0  LICENSE.txt
- sha256  ed2afed388c470e08edc1104e4ff6d12b68a32a76b8c52d760a99d4d2d7716f3  mods/beds/license.txt
-@@ -10,12 +10,12 @@ sha256  baf438bc48b7da1b8fc03d37d134473e1c1f33ffe2e926fa650e6d0c64872785  mods/b
- sha256  01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b  mods/butterflies/license.txt
- sha256  6196d390ee0b6331766219aa82f31613fffb62476c03cf960190ab8c232b8822  mods/carts/license.txt
- sha256  b6c3aca8da2f6c272fe431740dda0a349cff419f1f72e55c6de677379fc04169  mods/creative/license.txt
--sha256  66f93a58a7418b86f2ca54e8de931f5c38d9f3e07d407c2c095b632fcda72956  mods/default/license.txt
-+sha256  f78424e0872260d3f3af98e74faf1bbe6b9387cd5464b7ae931d1fc1cc93223c  mods/default/license.txt
- sha256  c0c652890fc80af8eefedbcfe1cd0d16b13b14cd1c7105c9c2bc9abe8cf1620c  mods/doors/license.txt
- sha256  33d0b8726dd27c8f0c96d6dfd611e0e980bbdbb8075fac7476d055518319ec1c  mods/dungeon_loot/license.txt
- sha256  011ebc82e96df3b825777e7531cb5d34cfce1f6ca27b7d3c80793c033d7c4f4e  mods/dye/license.txt
- sha256  29a05b102726b9a3115f7ec06d5188dac7b1c005d8cf1c4d6dc2d5544405a45c  mods/env_sounds/license.txt
--sha256  163ad77a427a21a900a8fe2333dfc82d115e8e799b7e13ca71f6bd47dcf0ec13  mods/farming/license.txt
-+sha256  bdb104cdbe72a27407ade35144a8d1d52dd60c3ca626b5a87555b9d5d5c8af98  mods/farming/license.txt
- sha256  61f826be9adee70ef0e37f3bf4891fecc4b027a21637b32981b98220723d6f37  mods/fire/license.txt
- sha256  01370a00e7b2157a07ee21fa4dac9cc108c7449442f612a3e55cfe18b5b03c2b  mods/fireflies/license.txt
- sha256  d92ac36a0235f4c02f8cfe2137d7d632bd53374c44ead97f20c152dddf475837  mods/flowers/license.txt
-diff --git a/package/minetest-game/minetest-game.mk b/package/minetest-game/minetest-game.mk
-index 38f46a398a..7f1927b78e 100644
---- a/package/minetest-game/minetest-game.mk
-+++ b/package/minetest-game/minetest-game.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINETEST_GAME_VERSION = 5.2.0
-+MINETEST_GAME_VERSION = 5.3.0
- MINETEST_GAME_SITE = $(call github,minetest,minetest_game,$(MINETEST_GAME_VERSION))
- MINETEST_GAME_LICENSE = LGPL-2.1+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, \
- 	CC-BY-SA-4.0, MIT, CC0 1.0, CC-BY-2.0 (mods)
-diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
-index 626f56a31c..3459c9d1a5 100644
---- a/package/minetest/minetest.hash
-+++ b/package/minetest/minetest.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  4996c7c50a6600d0c7140680d4bd995cb9aae910f216b46373953b49d6b13a5d  minetest-5.2.0.tar.gz
-+sha256  65dc2049f24c93fa544500f310a61e289c1b8fa47bf60877b746a2c27a7238d6  minetest-5.3.0.tar.gz
- 
--sha256  03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
-+sha256  d2a488e385226c5b865219c6acc2aa98ba2e01e74dd0ac9dd8c0663bbbe31eb1  LICENSE.txt
-diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
-index e8fe5b45ce..d120353a5f 100644
---- a/package/minetest/minetest.mk
-+++ b/package/minetest/minetest.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MINETEST_VERSION = 5.2.0
-+MINETEST_VERSION = 5.3.0
- MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
- MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
- MINETEST_LICENSE_FILES = LICENSE.txt
-@@ -18,7 +18,8 @@ MINETEST_CONF_OPTS = \
- 	-DENABLE_CURSES=OFF \
- 	-DAPPLY_LOCALE_BLACKLIST=OFF \
- 	-DENABLE_SYSTEM_GMP=ON \
--	-DENABLE_SYSTEM_JSONCPP=ON
-+	-DENABLE_SYSTEM_JSONCPP=ON \
-+	-DBUILD_UNITTESTS=OFF
- 
- ifeq ($(BR2_PACKAGE_MINETEST_CLIENT),y)
- MINETEST_DEPENDENCIES += bzip2 jpeg libgl libpng xlib_libXxf86vm
--- 
-2.25.4
+> 
+> Wouldn't it be better to split luajit support into its own patch?
+
+You're right on the principle but there is not CMake option to disable luajit
+support. Instead there is ENABLE_CLANG_JIT that also disable python support.
+
+I've added a new patch to disable luajit when ENABLE_CLANG_JIT=ON.
+
+> 
+>> - Remove python module install hook (Quais)
+>> - Keep BCC_LINUX_CONFIG_FIXUPS but only for kernel built by Buildroot.
+> 
+> I still think this will be a maintenance headache. Are you sure you want to
+> continue to maintain this list of fixups for all kernel versions given how fast
+> ebpf moves?
+
+This option is only used when you build the kernel with Buildroot.
+At some point ebpf kernel options must be stable.
+
+Also the bcc project provide this list of kernel options, so we can follow their
+requirements:
+https://github.com/iovisor/bcc/blob/master/INSTALL.md#kernel-configuration
+
+You can search for LINUX_CONFIG_FIXUPS usage in the Buildroot tree, we can
+notice that some packages requires some kernel options.
+Why not to do so with bcc ?
+
+> 
+> [...]
+> 
+>> diff --git a/package/bcc/Config.in b/package/bcc/Config.in
+>> new file mode 100644
+>> index 0000000000..b75984a36e
+>> --- /dev/null
+>> +++ b/package/bcc/Config.in
+>> @@ -0,0 +1,42 @@
+>> +config BR2_PACKAGE_BCC
+>> +	bool "bcc"
+>> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+>> +	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
+>> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
+>> +	depends on BR2_INSTALL_LIBSTDCPP # clang
+>> +	select BR2_PACKAGE_AUDIT # runtime
+>> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # to select tar package
+>> +	select BR2_PACKAGE_CLANG
+>> +	select BR2_PACKAGE_ELFUTILS
+>> +	select BR2_PACKAGE_FLEX # needs FlexLexer.h
+>> +	select BR2_PACKAGE_IPERF3 # runtime
+>> +	select BR2_PACKAGE_LLVM_BPF
+>> +	select BR2_PACKAGE_NETPERF # runtime
+>> +	select BR2_PACKAGE_PYTHON3
+>> +	select BR2_PACKAGE_TAR # Decompress kernel headers required by BCC
+> 
+> I still think IPERF3, NETPERF and AUDIT dependencies are not required and
+> should be enabled by the user if they care only.
+> 
+> Are you okay to make them optional so users who don't care can have the choice
+> to enable BCC without having to include these packages too?
+
+Ok.
+
+> 
+>> +	help
+>> +	  BPF Compiler Collection (BCC)
+>> +
+>> +	  BCC is a toolkit for creating efficient kernel tracing and
+>> +	  manipulation programs, and includes several useful tools and
+>> +	  examples. It makes use of extended BPF (Berkeley Packet
+>> +	  Filters), formally known as eBPF, a new feature that was
+>> +	  first added to Linux 3.15. Much of what BCC uses requires
+>> +	  Linux 4.1 and above.
+>> +
+>> +	  Note: Before using bcc, you need either need to :
+>> +	  - For kernel_ver = [4.1, 5.2) : Copy kernel source code
+>> +	  to target folder /lib/module/<kernel_ver>/build.
+>> +	  - Or kernel_ver >= 5.2 : Compile kernel with CONFIG_IKHEADERS
+>> +	  and use generated headers under /sys/kernel/kheaders.tar.xz
+>> +	  to populate /lib/module/<kernel_ver>/build.
+>> +
+>> +	  That's because the clang frontend build eBPF code at runtime.
+> 
+> I still this the Clang build error for i386, x86_64, arm and arm64
+> 
+> 	/usr/bin/ld: CMakeFiles/libclang.dir/CIndexer.cpp.o: in function `clang::CIndexer::getClangResourcesPath[abi:cxx11]()':
+> 	CIndexer.cpp:(.text._ZN5clang8CIndexer21getClangResourcesPathB5cxx11Ev+0x9b): undefined reference to `dladdr'
+> 	collect2: error: ld returned 1 exit status
+> 	make[4]: *** [tools/libclang/CMakeFiles/libclang.dir/build.make:395: lib/libclang.so.9] Error 1
+> 	make[3]: *** [CMakeFiles/Makefile2:8451: tools/libclang/CMakeFiles/libclang.dir/all] Error 2
+> 
+> I had a hacky patch for that in my series. Should we just report this to the
+> clang package maintainer in buildroot? I'm assuming you're not hitting it,
+> right?
+
+Guess who is one of the clang package "maintainer" in Buildroot :p
+(use ./utils/get-developers -p clang)
+
+I'm not able the reproduce this issue. Are you using uclibc toolchain ?
+Also, the Buildroot autobuilder didn't report such error, I receive autobuilder
+failure directly to my mail in-box.
+
+> 
+> I was based on 2020.08.2 tag.
+
+Clang is still at  9.x release so we have this version since a while.
+
+> 
+> I couldn't fully test this series yet because of this error.
+
+Please, share your defconfig.
+
+Best regards,
+Romain
+
+> 
+> Thanks
+> 
+> --
+> Qais Yousef
+> 
