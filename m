@@ -1,40 +1,22 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Dec 2020 15:07:36 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/bind: drop unrecognized option
-Message-ID: <20201206140737.3890199-1-bernd.kuhls@t-online.de>
+Date: Sun, 06 Dec 2020 15:08:53 +0100
+Subject: [Buildroot] [PATCH 2/2] package/bind: bump version to 9.16.9
+References: <20201206134321.3881426-1-bernd.kuhls@t-online.de>
+ <20201206134321.3881426-2-bernd.kuhls@t-online.de> <87pn3nt4u8.fsf@tarshish>
+Message-ID: <l85v9hxru6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Am Sun, 06 Dec 2020 15:57:19 +0200 schrieb Baruch Siach:
 
-Drop --enable-newstats option which is not recognized
+> Duplicate dependency.
 
-Unrecognized options:
-    --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --disable-nls, --enable-newstats
+Hi Baruch,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: no changes
+thanks for the review, sent v2:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=218870
 
- package/bind/bind.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ba60c111ef..183c42f1e8 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -47,7 +47,7 @@ BIND_CONF_OPTS += --disable-linux-caps
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
-+BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
- BIND_DEPENDENCIES += libxml2
- else
- BIND_CONF_OPTS += --with-libxml2=no
--- 
-2.29.2
+Regards, Bernd
