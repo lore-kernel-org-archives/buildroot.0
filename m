@@ -1,86 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:18:27 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/c-ares: fix
- install
-Message-ID: <20201206221100.864AB832E6@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:26:08 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/python-flask-cors: security bump to version 3.0.9
+Message-ID: <20201206221100.D10DE8182A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=538ab0a11e36ce8022d9094294f6b37eca7d7518
+commit: https://git.buildroot.net/buildroot/commit/?id=e3ca66fa4ca9d2843925e2e452ef3ed9ccecc751
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-c-ares 1.17.0 removed install of ares_dns.h which will result in build
-failures with libeXosip and resiprocate
+Fixes the following security issue:
 
-Fixes:
- - http://autobuild.buildroot.org/results/51573434303118fd92f32819e038971edee8bc28
- - http://autobuild.buildroot.org/results/cbf158f0c037d44ef293a8804d18c84e3b731059
+- CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
+  for Flask) before 3.0.9.  It allows ../ directory traversal to access
+  private resources because resource matching does not ensure that pathnames
+  are in a canonical format.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also drop outdated md5 checksum and fix .hash indentation.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b359d0e7e5f8a1208b274ab57b1fae38af00663f)
+(cherry picked from commit c356b20ba8afa79b08fc3d30a1c3f60d9f3c6f65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-src-lib-Makefile.am-install-ares_dns.h.patch | 37 ++++++++++++++++++++++
- package/c-ares/c-ares.mk                           |  2 ++
- 2 files changed, 39 insertions(+)
+ package/python-flask-cors/python-flask-cors.hash | 7 +++----
+ package/python-flask-cors/python-flask-cors.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/c-ares/0001-src-lib-Makefile.am-install-ares_dns.h.patch b/package/c-ares/0001-src-lib-Makefile.am-install-ares_dns.h.patch
-new file mode 100644
-index 0000000000..02422dde38
---- /dev/null
-+++ b/package/c-ares/0001-src-lib-Makefile.am-install-ares_dns.h.patch
-@@ -0,0 +1,37 @@
-+From e2180d95fb67f57b6ffba01fefb4844a1ca4f792 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 18 Nov 2020 08:12:45 +0100
-+Subject: [PATCH] src/lib/Makefile.am: install ares_dns.h
-+
-+This will avoid the following build failure with resiprocate:
-+
-+In file included from dns/DnsCnameRecord.cxx:7:
-+dns/AresCompat.hxx:5:10: fatal error: ares_dns.h: No such file or directory
-+ #include "ares_dns.h"
-+          ^~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/cbf158f0c037d44ef293a8804d18c84e3b731059
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/c-ares/c-ares/pull/376]
-+---
-+ src/lib/Makefile.am | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/lib/Makefile.am b/src/lib/Makefile.am
-+index c918667..92a4152 100644
-+--- a/src/lib/Makefile.am
-++++ b/src/lib/Makefile.am
-+@@ -14,6 +14,8 @@ lib_LTLIBRARIES = libcares.la
-+ 
-+ man_MANS = $(MANPAGES)
-+ 
-++include_HEADERS = ares_dns.h
-++
-+ # adig and ahost are just sample programs and thus not mentioned with the
-+ # regular sources and headers
-+ EXTRA_DIST = Makefile.inc config-win32.h CMakeLists.txt \
-+-- 
-+2.29.2
-+
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index d3510b3c81..ca1baf8af0 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -10,6 +10,8 @@ C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
- C_ARES_LICENSE_FILES = LICENSE.md
-+# We're patching src/lib/Makefile.am
-+C_ARES_AUTORECONF = YES
+diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
+index a893b7c890..15b7d41a32 100644
+--- a/package/python-flask-cors/python-flask-cors.hash
++++ b/package/python-flask-cors/python-flask-cors.hash
+@@ -1,5 +1,4 @@
+-# md5, sha256 from https://pypi.org/pypi/flask-cors/json
+-md5	551cc4c0305a171d28caa2b3bc838867  Flask-Cors-3.0.8.tar.gz
+-sha256	72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16  Flask-Cors-3.0.8.tar.gz
++# sha256 from https://pypi.org/pypi/flask-cors/json
++sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
+ # Locally computed sha256 checksums
+-sha256	6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
++sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index 60454e27c4..d712109002 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-PYTHON_FLASK_CORS_VERSION = 3.0.8
++PYTHON_FLASK_CORS_VERSION = 3.0.9
+ PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+-PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/9e/11/ca8b95c5bf9644471601e425f0de8cbd09a506bb6c24842cb17a6cd1eea8
++PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+ PYTHON_FLASK_CORS_LICENSE = MIT
+ PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
