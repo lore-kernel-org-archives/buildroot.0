@@ -1,30 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 06 Dec 2020 23:26:31 +0100
-Subject: [Buildroot] [PATCH] package/python-flask-cors: security bump to
- version 3.0.9
-In-Reply-To: <20201118154742.6179-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 18 Nov 2020 16:47:42 +0100")
-References: <20201118154742.6179-1-peter@korsgaard.com>
-Message-ID: <87czzmvaeg.fsf@dell.be.48ers.dk>
+Date: Sun, 6 Dec 2020 23:19:51 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jpeg-turbo: fix
+ license hash
+Message-ID: <20201206221055.3D902825CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=221b1daf31ee1fca1e7c0a8ebe2c7f9f6f4440ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fixes the following security issue:
- > - CVE-2020-25032: An issue was discovered in Flask-CORS (aka CORS Middleware
- >   for Flask) before 3.0.9.  It allows ../ directory traversal to access
- >   private resources because resource matching does not ensure that pathnames
- >   are in a canonical format.
+Commit 105d61c85062b18bc9555011f909c8c8a5a33277 forgot to update hash of
+LICENSE.md (update in year:
+https://github.com/libjpeg-turbo/libjpeg-turbo/commit/00607ec260efa4cfe10f9b36d6e3d3590ae92d79)
 
- > Also drop outdated md5 checksum and fix .hash indentation.
+While at it, also update indentation in hash file (two spaces)
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/66fb5c0171af73d4c1c93241b285fac8f8f494f7
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c9ca2a596e5737cb4e67644d719b45dfec396593)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jpeg-turbo/jpeg-turbo.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index abf129bd93..c4d4a0274f 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.5/
+-sha1 9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
+-md5  3a7dc293918775fc933f81e2bce36464 libjpeg-turbo-2.0.5.tar.gz
++sha1  9d4c565d402b2f5661be78d76098073ec7e30f10  libjpeg-turbo-2.0.5.tar.gz
++md5  3a7dc293918775fc933f81e2bce36464  libjpeg-turbo-2.0.5.tar.gz
+ # Locally computed
+-sha256 16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
+-sha256 69e570a251515ced17d4492256d57c89db77ed949652f88a44c80c1ca9607920  LICENSE.md
+-sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
++sha256  16f8f6f2715b3a38ab562a84357c793dd56ae9899ce130563c72cd93d8357b5d  libjpeg-turbo-2.0.5.tar.gz
++sha256  0b7a24c3906d26dfbe24e96e9415549b387c3227140dc6b7ab2fb924254e37a1  LICENSE.md
++sha256  82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
