@@ -1,35 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Dec 2020 23:23:13 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: update email
- address for Pierre-Jean Texier
-Message-ID: <20201206221055.4FA92825CF@busybox.osuosl.org>
+Date: Sun, 6 Dec 2020 23:18:25 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/c-ares: security
+ bump to version 1.17.0
+Message-ID: <20201206221100.79A63832E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=456c78319d6f3b13bd3ac74ba68bba069a69d802
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1d2281d8ec0f16a34080fb61b838b7d244de668b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+- avoid read-heap-buffer-overflow in ares_parse_soa_reply found during
+  fuzzing
+- Avoid theoretical buffer overflow in RC4 loop comparison
+- Empty hquery->name could lead to invalid memory access
+- ares_parse_{a,aaaa}_reply() could return a larger *naddrttls than was
+  passed in
+
+https://c-ares.haxx.se/changelog.html#1_17_0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 248c2e909ee7cc208e29d3720e04923733aaa5b1)
+(cherry picked from commit c7a369a907f988cf193b06fd4a7ce5547976c21a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/c-ares/c-ares.hash | 2 +-
+ package/c-ares/c-ares.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a7b63222db..e9af836242 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2003,7 +2003,7 @@ F:	package/kf5/
- N:	Pierre Floury <pierre.floury@gmail.com>
- F:	package/trace-cmd/
+diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
+index 04a87402e9..a24f3d72ea 100644
+--- a/package/c-ares/c-ares.hash
++++ b/package/c-ares/c-ares.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  d08312d0ecc3bd48eee0a4cc0d2137c9f194e0a28de2028928c0f6cae85f86ce  c-ares-1.16.1.tar.gz
++sha256  1cecd5dbe21306c7263f8649aa6e9a37aecb985995a3489f487d98df2b40757d  c-ares-1.17.0.tar.gz
  
--N:	Pierre-Jean Texier <pjtexier@koncepto.io>
-+N:	Pierre-Jean Texier <texier.pj2@gmail.com>
- F:	package/fping/
- F:	package/genimage/
- F:	package/haveged/
+ # Hash for license file
+ sha256  db4eb63fe09daebdf57d3f79b091bb5ee5070c0d761040e83264e648d307af4c  LICENSE.md
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index f07a7e566f..d3510b3c81 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ARES_VERSION = 1.16.1
++C_ARES_VERSION = 1.17.0
+ C_ARES_SITE = http://c-ares.haxx.se/download
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
