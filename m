@@ -1,73 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 6 Dec 2020 11:58:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nmap: fix license
-In-Reply-To: <20201206090837.319909-1-fontaine.fabrice@gmail.com>
-References: <20201206090837.319909-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201206115810.7411e18d@gmx.net>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 6 Dec 2020 12:01:01 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/libosip2: bump to version
+ 5.2.0
+In-Reply-To: <20201122101656.446172-1-fontaine.fabrice@gmail.com>
+References: <20201122101656.446172-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAKcgs2wR94d3bT+1PvLKTamUf8jgUgTna=p7KUWst9bezwUgQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Fabrice,
 
-On Sun,  6 Dec 2020 10:08:37 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+thanks for the bump.
 
-> Commit 78dc1f185ba0c8c9085d44318f72ab172867b147 forgot to update the
-> license file from COPYING to LICENSE.
+Le dim. 22 nov. 2020 ? 11:17, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
 >
-> Here is an extract of the ChangeLog for Nmap 7.90 [2020-10-03]:
+> Update indentation in hash file (two spaces)
 >
-> Upgraded the Nmap license form a sort of hacked-up version of GPLv2 to a
-> cleaner and better organized version (still based on GPLv2) now called
-> the Nmap Public Source License to avoid confusion. See
-> https://nmap.org/npsl/ for more details and annotated license text. This
-> NPSL project was started in 2006 (community discussion here:
-> https://seclists.org/nmap-dev/2006/q4/126) and then it lost momentum for
-> 7 years until it was restarted in 2013
-> (https://seclists.org/nmap-dev/2013/q1/399) and then we got distracted
-> by development again. We still have some ideas for improving the NPSL,
-> but it's already much better than the current license, so we're applying
-> NPSL Version 0.92 to the code now and can make improvements later if
-> needed. This does not change the license of previous Nmap releases.
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/8cef6a5e99ae341cced405a389346e2faccf6eec
+> https://git.savannah.nongnu.org/cgit/osip.git/tree/ChangeLog?h=5.2.0
 >
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/nmap/nmap.hash | 2 +-
->  package/nmap/nmap.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libosip2/libosip2.hash | 4 ++--
+>  package/libosip2/libosip2.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-> index 5c684ecabe..8f69bbf613 100644
-> --- a/package/nmap/nmap.hash
-> +++ b/package/nmap/nmap.hash
-> @@ -2,4 +2,4 @@
->  sha256  18cc4b5070511c51eb243cdd2b0b30ff9b2c4dc4544c6312f75ce3a67a593300  nmap-7.91.tar.bz2
+> diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+> index 76bc29d5fe..400158cd7f 100644
+> --- a/package/libosip2/libosip2.hash
+> +++ b/package/libosip2/libosip2.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -sha256 61bb28317221a630e47f65389d5ff3e4693996d3128e9e0d5d1399e4feebf64d        libosip2-5.1.1.tar.gz
+> +sha256  4fb48b2ea568bb41c6244b0df2bb7175849ca93e84be53ceb268fdf9351bb375  libosip2-5.2.0.tar.gz
 >
->  # Locally calculated
-> -sha256  a6afaad36c803dc602734451d9421ed363b48d1ca0faadf0907fc2d91a000284  COPYING
-> +sha256  8254a9bc733f3312c6dcfe0d5a129c29e96ecb8b33408c652a8c7beb2e25b471  LICENSE
-> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-> index a719b268c8..46ffd5aef4 100644
-> --- a/package/nmap/nmap.mk
-> +++ b/package/nmap/nmap.mk
-> @@ -11,7 +11,7 @@ NMAP_DEPENDENCIES = liblinear libpcap
->  NMAP_CONF_OPTS = --without-liblua --without-zenmap \
->  	--with-libdnet=included
->  NMAP_LICENSE = nmap license
-> -NMAP_LICENSE_FILES = COPYING
-> +NMAP_LICENSE_FILES = LICENSE
+>  # Hash for license file:
+> -sha256 8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de        COPYING
+> +sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
+> diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+> index e608f671c8..d28027c135 100644
+> --- a/package/libosip2/libosip2.mk
+> +++ b/package/libosip2/libosip2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
->  # needed by libpcap
->  NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
-
-Thanks for fixing my mistake ;-)
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
+> -LIBOSIP2_VERSION = 5.1.1
+> +LIBOSIP2_VERSION = 5.2.0
+>  LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
+>  LIBOSIP2_INSTALL_STAGING = YES
+>  LIBOSIP2_LICENSE = LGPL-2.1+
+> --
+> 2.29.2
+>
+Acked-by: Gilles Talis <gilles.talis@gmail.com>
