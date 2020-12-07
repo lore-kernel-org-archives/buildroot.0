@@ -1,53 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:59:56 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xcb-proto: bump version to
- 1.14.1
-Message-ID: <20201207214421.9FE6784044@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:59:52 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
+ version to 1.2.0
+Message-ID: <20201207214421.705A482A1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce19c37fa51c5c8889e0c7a23c092b9ec9537397
+commit: https://git.buildroot.net/buildroot/commit/?id=3b538ed9c6b4b9d705ad092d8e96cc78f974fdff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted hashes, updated _SITE.
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xcb-proto/xcb-proto.hash | 8 ++++----
- package/x11r7/xcb-proto/xcb-proto.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 ++++------
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xcb-proto/xcb-proto.hash b/package/x11r7/xcb-proto/xcb-proto.hash
-index c6d2d8e341..e6bc2379bf 100644
---- a/package/x11r7/xcb-proto/xcb-proto.hash
-+++ b/package/x11r7/xcb-proto/xcb-proto.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-February/003038.html
--sha256 186a3ceb26f9b4a015f5a44dcc814c93033a5fc39684f36f1ecc79834416a605  xcb-proto-1.14.tar.xz
--sha512 de66d568163b6da2be9d6c59984f3afa3acd119a781378638045fd68018665ef5c9af98f024e9962ba3eb7c7a4d85c27ba70ffafceb2324ccc6940f34de16690  xcb-proto-1.14.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2020-October/003061.html
-+sha256  f04add9a972ac334ea11d9d7eb4fc7f8883835da3e4859c9afa971efdf57fcc3  xcb-proto-1.14.1.tar.xz
-+sha512  140fbf48483bacc7f6b70fdcf76f9e4ff0e87df9cb3a071cea47d8fe4574407cdefcfbd674099014d297e5fc010748e71d8609fca4cc32e8b25c634f928b727d  xcb-proto-1.14.1.tar.xz
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index 7a13a01a15..abd3d16f73 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
+-md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
+-sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
+-sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
+-sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-October/003062.html
++sha256  79f35ace377c5409c05ed71f0e8b75f8ca6ddf0a2f6b6d7ecb770ee10072a621  fonttosfnt-1.2.0.tar.bz2
++sha512  a360bd8535beaef89afa6c0678a40f7c554e9d631e0fcb80bb1363ab72288e27a5e106521610f61c95b8101f79c7f02492a2068411b5f5b695de780d8a1c1b25  fonttosfnt-1.2.0.tar.bz2
  # Locally computed
--sha256 c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-+sha256  c5ffbfeaa501071ceeb97b7de2c0d703fdaa35de01c0fb6cbac1c28453a3e9fd  COPYING
-diff --git a/package/x11r7/xcb-proto/xcb-proto.mk b/package/x11r7/xcb-proto/xcb-proto.mk
-index f7a3ad55b1..8bfe24f848 100644
---- a/package/x11r7/xcb-proto/xcb-proto.mk
-+++ b/package/x11r7/xcb-proto/xcb-proto.mk
-@@ -4,9 +4,9 @@
+-sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
++sha256  f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index ab1d955771..8e48234e29 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XCB_PROTO_VERSION = 1.14
-+XCB_PROTO_VERSION = 1.14.1
- XCB_PROTO_SOURCE = xcb-proto-$(XCB_PROTO_VERSION).tar.xz
--XCB_PROTO_SITE = http://xcb.freedesktop.org/dist
-+XCB_PROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XCB_PROTO_LICENSE = MIT
- XCB_PROTO_LICENSE_FILES = COPYING
- 
+-XAPP_FONTTOSFNT_VERSION = 1.1.0
++XAPP_FONTTOSFNT_VERSION = 1.2.0
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
