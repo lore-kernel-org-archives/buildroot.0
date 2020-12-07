@@ -1,32 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:57:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.66.3
-In-Reply-To: <20201123213557.789056-1-mbrunelle@distech-controls.com>
-References: <20201123213557.789056-1-mbrunelle@distech-controls.com>
-Message-ID: <20201207225750.6d7d0731@windsurf.home>
+Date: Mon, 7 Dec 2020 22:57:58 +0100
+Subject: [Buildroot] [git commit] package/daemon: bump to version 0.7
+Message-ID: <20201207214228.E134683E5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 23 Nov 2020 16:35:57 -0500
-Maxime Brunelle via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6ad7b444892d98602dcd473fd9dc643a4aa3a789
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524
-> package/libglib2 reference: https://gitlab.gnome.org/GNOME/glib/-/issues/2091
-> 
-> Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
-> ---
->  package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
->  package/libglib2/libglib2.hash                     | 4 ++--
->  package/libglib2/libglib2.mk                       | 4 ++--
->  3 files changed, 5 insertions(+), 5 deletions(-)
+The configure script now runs 'make ready'. Drop it from BUILD_CMDS.
 
-Applied to master, thanks.
+Refresh the musl support path.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Upstream now provides sha256 hashes. Format hashes with two spaces.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/daemon/0001-fix-musl.patch | 4 ++--
+ package/daemon/daemon.hash         | 7 +++----
+ package/daemon/daemon.mk           | 5 ++---
+ 3 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/package/daemon/0001-fix-musl.patch b/package/daemon/0001-fix-musl.patch
+index 9454d72ae6..5ebb645973 100644
+--- a/package/daemon/0001-fix-musl.patch
++++ b/package/daemon/0001-fix-musl.patch
+@@ -8,11 +8,11 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ diff -Nuar daemon-0.6.4-orig/daemon.c daemon-0.6.4/daemon.c
+ --- daemon-0.6.4-orig/daemon.c	2010-06-12 16:37:00.000000000 +0300
+ +++ daemon-0.6.4/daemon.c	2017-05-01 22:02:17.721413468 +0300
+-@@ -665,6 +665,7 @@
++@@ -864,6 +864,7 @@
+  #ifdef _RESTORE_POSIX_SOURCE
+  #define _POSIX_SOURCE
+  #endif
+ +#include <sys/ttydefaults.h>
++ #include <dirent.h>
+  #include <sys/wait.h>
+  #include <sys/stat.h>
+- #include <sys/select.h>
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+index ad8637ee81..b1c1dcdc2c 100644
+--- a/package/daemon/daemon.hash
++++ b/package/daemon/daemon.hash
+@@ -1,4 +1,3 @@
+-# md5 from http://www.libslack.org/daemon/; sha256 locally calculated
+-md5 6cd0a28630a29ac279bc501f39baec66 daemon-0.6.4.tar.gz
+-sha256 c4b9ea4aa74d55ea618c34f1e02c080ddf368549037cb239ee60c83191035ca1 daemon-0.6.4.tar.gz
+-sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 LICENSE
++# From http://www.libslack.org/daemon/
++sha256  f66af2ece784c16dcb5219de1f4fa3ae5787bb3374e44bd4b1d3e275e8ff272c  daemon-0.7.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+index 79cf3f7aab..f3a1917fad 100644
+--- a/package/daemon/daemon.mk
++++ b/package/daemon/daemon.mk
+@@ -4,17 +4,16 @@
+ #
+ ################################################################################
+ 
+-DAEMON_VERSION = 0.6.4
++DAEMON_VERSION = 0.7
+ DAEMON_SITE = http://libslack.org/daemon/download
+ DAEMON_LICENSE = GPL-2.0+
+ DAEMON_LICENSE_FILES = LICENSE
+ 
+ define DAEMON_CONFIGURE_CMDS
+-	(cd $(@D); ./config)
++	(cd $(@D); ./configure)
+ endef
+ 
+ define DAEMON_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) ready
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
