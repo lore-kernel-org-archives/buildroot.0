@@ -1,40 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2020 21:38:04 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/monkey: drop
- wrong comment
-Message-ID: <20201207203506.8B7F083E70@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 21:36:00 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] support/dependencies:
+ clarify intended use of host bison/flex
+Message-ID: <20201207203506.7BD4383E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf3cdaf0e43d5fca0f000f9b0a18b0bc732aec72
+commit: https://git.buildroot.net/buildroot/commit/?id=7760a59d07da7f1868fef1a5d3f4b359c5e1f18d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Commit 5fea6e2a2fa816c0c551bca184fb64fc96d76a08 forgot to remove the
-generic-package comment
+We should not rely on host installed bison/flex for target code. This
+ensures better reproducibility of generated code.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+http://lists.busybox.net/pipermail/buildroot/2020-November/296786.html
+
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c4ea32d0061585a41ef724124b82be337442ce2a)
+(cherry picked from commit 1b1c049af29d11badc85ce4833240abe1c3fbcbc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/monkey/monkey.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ support/dependencies/check-host-bison-flex.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index 6159f5522e..5264713120 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -10,10 +10,6 @@ MONKEY_SITE = http://monkey-project.com/releases/$(MONKEY_VERSION_MAJOR)
- MONKEY_LICENSE = Apache-2.0
- MONKEY_LICENSE_FILES = LICENSE
+diff --git a/support/dependencies/check-host-bison-flex.mk b/support/dependencies/check-host-bison-flex.mk
+index 233b6c51cc..14a232fd44 100644
+--- a/support/dependencies/check-host-bison-flex.mk
++++ b/support/dependencies/check-host-bison-flex.mk
+@@ -1,5 +1,9 @@
+ # If the system lacks bison or flex, add
+ # dependencies to suitable host packages
++#
++# BR2_{BISON,FLES}_HOST_DEPENDENCY should only be used to build code
++# that runs on host, e.g. Kconfig. To build code for target use plain
++# host-{bison,flex}.
  
--# This package has a configure script, but it's not using
--# autoconf/automake, so we're using the generic-package
--# infrastructure.
--
- MONKEY_CONF_OPTS = \
- 	-DINSTALL_SYSCONFDIR=/etc/monkey \
- 	-DINSTALL_WEBROOTDIR=/var/www \
+ ifeq ($(shell which bison 2>/dev/null),)
+ BR2_BISON_HOST_DEPENDENCY = host-bison
