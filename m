@@ -1,42 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2020 21:36:00 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] support/dependencies:
- clarify intended use of host bison/flex
-Message-ID: <20201207203506.7BD4383E68@busybox.osuosl.org>
+Date: Mon, 07 Dec 2020 21:51:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cdrkit: fix static build with
+ libmagic
+In-Reply-To: <20201120180409.527540-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 20 Nov 2020 19:04:09 +0100")
+References: <20201120180409.527540-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mtyptk45.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7760a59d07da7f1868fef1a5d3f4b359c5e1f18d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-We should not rely on host installed bison/flex for target code. This
-ensures better reproducibility of generated code.
+ > libmagic is an optional dependency of gensoimage that can raise the
+ > following build failure:
 
-http://lists.busybox.net/pipermail/buildroot/2020-November/296786.html
+ > /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o):
+ > in function `uncompressbuf':
+ > compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
+ > /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > compress.c:(.text+0x828): undefined reference to `lzma_code'
+ > /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+ > compress.c:(.text+0x848): undefined reference to `lzma_end'
+ > collect2: error: ld returned 1 exit status
+ > genisoimage/CMakeFiles/genisoimage.dir/build.make:628: recipe for target 'genisoimage/genisoimage' failed
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1b1c049af29d11badc85ce4833240abe1c3fbcbc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/dependencies/check-host-bison-flex.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/7e06edc363817c9c9a1687ec89e9984a90a2012d
 
-diff --git a/support/dependencies/check-host-bison-flex.mk b/support/dependencies/check-host-bison-flex.mk
-index 233b6c51cc..14a232fd44 100644
---- a/support/dependencies/check-host-bison-flex.mk
-+++ b/support/dependencies/check-host-bison-flex.mk
-@@ -1,5 +1,9 @@
- # If the system lacks bison or flex, add
- # dependencies to suitable host packages
-+#
-+# BR2_{BISON,FLES}_HOST_DEPENDENCY should only be used to build code
-+# that runs on host, e.g. Kconfig. To build code for target use plain
-+# host-{bison,flex}.
- 
- ifeq ($(shell which bison 2>/dev/null),)
- BR2_BISON_HOST_DEPENDENCY = host-bison
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.02.x and 2020.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
