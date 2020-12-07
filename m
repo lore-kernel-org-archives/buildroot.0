@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:59:06 +0100
-Subject: [Buildroot] [PATCH next] package/daemon: bump to version 0.7
-In-Reply-To: <1fd6d6ff9eaedda5e3b3e85c4c5c0b950dcbaec8.1605981054.git.baruch@tkos.co.il>
-References: <1fd6d6ff9eaedda5e3b3e85c4c5c0b950dcbaec8.1605981054.git.baruch@tkos.co.il>
-Message-ID: <20201207225906.58a9f0db@windsurf.home>
+Date: Mon, 7 Dec 2020 22:59:58 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
+ 1.7.0
+Message-ID: <20201207214421.BC684841EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+commit: https://git.buildroot.net/buildroot/commit/?id=b8bfc52c8538a572f9c2d77b8d7a4e378eca92f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Nov 2020 19:50:54 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
+ package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> The configure script now runs 'make ready'. Drop it from BUILD_CMDS.
-> 
-> Refresh the musl support path.
-> 
-> Upstream now provides sha256 hashes. Format hashes with two spaces.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-I have applied, but I have one question, see below.
-
->  define DAEMON_CONFIGURE_CMDS
-> -	(cd $(@D); ./config)
-> +	(cd $(@D); ./configure)
-
-What is the config/configure script doing? Indeed, it seems odd that
-when cross-compiling, we don't need to pass it the
-cross-compiler/cross-linker/CFLAGS, etc. ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 142e4505d0..5b1162f4c5 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-August/003057.html
+-sha256  f108227469419ac04d196df0f3b80ce1f7f65059bb54c0de811f4d8e03fd6ec7  libX11-1.6.12.tar.bz2
+-sha512  79df7d61d9009b0dd3b65f67a62189aa0a43799c01026b3d2d534092596a0b67f246af5e398a89eb1ccc61a27335f81be8262b8a39768a76f62d862cd7415a47  libX11-1.6.12.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-November/003065.html
++sha256  36c8f93b6595437c8cfbc9f08618bcb3041cbd303e140a0013f88e4c2977cb54  libX11-1.7.0.tar.bz2
++sha512  f661ca90350fd8a94f054b00f12f5122cea068ebff706acfd399462236c189a296a2358d17d16166635101cf56cc19303dd407873a159932d093c9f33556f9fb  libX11-1.7.0.tar.bz2
+ 
+ # Locally computed
+ sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index ba9fcef258..f36b5e6ffa 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBX11_VERSION = 1.6.12
++XLIB_LIBX11_VERSION = 1.7.0
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
