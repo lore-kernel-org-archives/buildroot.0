@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2020 21:51:43 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cdrkit: fix
+Date: Mon, 7 Dec 2020 21:51:23 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/cdrkit: fix
  static build with libmagic
-Message-ID: <20201207203613.9B54C83E5B@busybox.osuosl.org>
+Message-ID: <20201207203618.D8A5581385@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f24522299719f2338ffc59055816d0b864cc933
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa7ee975dc8c8fd15245562c5bd9e1a6bcafc14c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 libmagic is an optional dependency of gensoimage that can raise the
 following build failure:
