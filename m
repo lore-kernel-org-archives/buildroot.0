@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:59:54 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xprop: bump version to
- 1.2.5
-Message-ID: <20201207214421.93B2C7F980@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:59:57 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-vesa:
+ bump version to 2.5.0
+Message-ID: <20201207214421.AEFEB82A1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9a8caeee08d09a819ffd2cbbc333e0ffa02a59e
+commit: https://git.buildroot.net/buildroot/commit/?id=10cb4ce34fc1f12c271507ee84dc4eb34fb92fe6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Reformatted hashes.
@@ -17,36 +17,36 @@ Reformatted hashes.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xprop/xapp_xprop.hash | 10 ++++------
- package/x11r7/xapp_xprop/xapp_xprop.mk   |  2 +-
+ .../x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash | 10 ++++------
+ .../x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk   |  2 +-
  2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
-index f513e12c24..43eed80ba4 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.hash
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
+index ee27690093..d179228a74 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2019-March/002969.html
--md5 cc369c28383a5d7144e7197ee7d30bfa  xprop-1.2.4.tar.bz2
--sha1 0549a927d01930218f1d0089d0157eb9538b34a5  xprop-1.2.4.tar.bz2
--sha256 8c77fb096e46c60032b7e2bde9492c3ffcc18734f50b395085a5f10bfd3cf753  xprop-1.2.4.tar.bz2
--sha512 6e770cb89ba87ae057858cc9f0f5498979e78c3ef66ce86361b7c646cc0b70c41a18d76e55ed7225fe715b22b62bc07c56272519a2631b92832e9403ce260da7  xprop-1.2.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-November/003064.html
-+sha256  9b92ed0316bf2486121d8bac88bd1878f16b43bd335f18009b1f941f1eca93a1  xprop-1.2.5.tar.bz2
-+sha512  93cfa621fa76ca6e8e780a252c508380b6dc9db39b67bfca16bb9800f0d39110f5d18189409a8577ef79e98bf5eece17f5e23f2218ca72ae8bb04ee7b429d559  xprop-1.2.5.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002837.html
+-md5 8134201beaf6f77150c7809c3cc802e6  xf86-video-vesa-2.4.0.tar.bz2
+-sha1 99b69044c34292ba062e365c07dcd024462e794b  xf86-video-vesa-2.4.0.tar.bz2
+-sha256 bf443c94d7bf6cd4e248f8a3147f4647be04dc4c80250d9405006263bbdee38c  xf86-video-vesa-2.4.0.tar.bz2
+-sha512 4af5c0a7fd64eba503980198cf510688dff2f33482ceac446455d97255dcc828613387ac57828eb6dce080cb15a8644a2b2e278bf356705fdeaea873ab07c2de  xf86-video-vesa-2.4.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-September/003060.html
++sha256  1f1624f3c73906801ad1bc98335a2cb5676a7a4d18e5374d9a1d18464e54c659  xf86-video-vesa-2.5.0.tar.bz2
++sha512  36fd921f54f33eb25966b5f9ea1e1b3e9009965c012c8b9c676686b472111719921b80cf62dafc746058878253e21f0ef341a2ff2d650df22ca1e35e81716a8b  xf86-video-vesa-2.5.0.tar.bz2
  # Locally computed
--sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-+sha256  f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
-diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
-index a0ad4302cb..75f0d37cdc 100644
---- a/package/x11r7/xapp_xprop/xapp_xprop.mk
-+++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
+-sha256 bda49ba1e860501c20fd444423bc790f6da4f769561b69acc0cbe5abff9409b6  COPYING
++sha256  bda49ba1e860501c20fd444423bc790f6da4f769561b69acc0cbe5abff9409b6  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
+index 425280a119..b08bab4ec8 100644
+--- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
++++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XPROP_VERSION = 1.2.4
-+XAPP_XPROP_VERSION = 1.2.5
- XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
- XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XPROP_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_VESA_VERSION = 2.4.0
++XDRIVER_XF86_VIDEO_VESA_VERSION = 2.5.0
+ XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VESA_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VESA_LICENSE = MIT
