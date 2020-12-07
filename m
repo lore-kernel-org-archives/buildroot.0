@@ -1,54 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 7 Dec 2020 21:51:23 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/cdrkit: fix
- static build with libmagic
-Message-ID: <20201207203618.D8A5581385@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 7 Dec 2020 22:50:15 +0100
+Subject: [Buildroot] [PATCH 2/5] support/scripts/gen-bootlin-toolchains:
+ riscv32 use a pre-2.33 glibc version without RPC support
+In-Reply-To: <20201207204821.3588178-2-romain.naour@gmail.com>
+References: <20201207204821.3588178-1-romain.naour@gmail.com>
+ <20201207204821.3588178-2-romain.naour@gmail.com>
+Message-ID: <20201207225015.57f53daa@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa7ee975dc8c8fd15245562c5bd9e1a6bcafc14c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+Hello,
 
-libmagic is an optional dependency of gensoimage that can raise the
-following build failure:
+On Mon,  7 Dec 2020 21:48:18 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
-compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x828): undefined reference to `lzma_code'
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x848): undefined reference to `lzma_end'
-collect2: error: ld returned 1 exit status
-genisoimage/CMakeFiles/genisoimage.dir/build.make:628: recipe for target 'genisoimage/genisoimage' failed
+> riscv32 has been merged into glibc 2.33 where RPC support has been removed [1].
+> 
+> Add a special handling for the riscv32 Bootlin bleeding-edge 2020.08-1 toolchain
+> since it used a pre-2.33 glibc version [2].
+> 
+> Other glibc Bootlin toolchain use glibc 2.31 with RPC support enabled.
+> 
+> This special handling must be removed when all Bootlin toolchain has been
+> rebuild with glibc > 2.32.
+> 
+> [1] https://sourceware.org/pipermail/libc-announce/2020/000029.html
+> [2] https://git.buildroot.net/buildroot/commit/?id=a4889545aa653e7f001f212eda169e7d676aefc0
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/scripts/gen-bootlin-toolchains | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+> index fce75c51c2..645584d07e 100755
+> --- a/support/scripts/gen-bootlin-toolchains
+> +++ b/support/scripts/gen-bootlin-toolchains
+> @@ -263,8 +263,11 @@ class Toolchain:
+>                  # glibc doesn't support static only configuration
+>                  depends.append("!BR2_STATIC_LIBS")
+>                  selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
+> -                # all glibc toolchains have RPC support
+> -                selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
+> +
+> +                # riscv32 has been merged into glibc 2.33 where RPC support has been removed.
+> +                if not self.arch.startswith("riscv32"):
+> +                    # all glibc < 2.32 toolchains have RPC support
+> +                    selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
 
-Fixes:
- - http://autobuild.buildroot.org/results/7e06edc363817c9c9a1687ec89e9984a90a2012d
+I am not convinced by this approach, as it doesn't work when glibc 2.33
+gets used for other platforms than RISC-V 32. Instead, what we need to do is:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6ca1b3ee2a153d0bcde89576b41146155c03b8f0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cdrkit/cdrkit.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ (1) Fix how toolchains.bootlin.com generates its fragments to no
+     longer assume that glibc == RPC available.
 
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index f49d5150f3..67814f1418 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -18,5 +18,14 @@ else
- CDRKIT_CONF_OPTS += -DBITFIELDS_HTOL=0
- endif
- 
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+CDRKIT_DEPENDENCIES += host-pkgconf file
-+CDRKIT_CONF_OPTS += \
-+	-DUSE_MAGIC=ON \
-+	-DEXTRA_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libmagic`"
-+else
-+CDRKIT_CONF_OPTS += -DUSE_MAGIC=OFF
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
+ (2) Fix the gen-bootlin-toolchains script to also no longer assume
+     that glibc == RPC available, and instead use what the fragment
+     provided by toolchains.bootlin.com for each toolchain says.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
