@@ -1,50 +1,44 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 7 Dec 2020 19:42:19 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-12-06
-In-Reply-To: <20201207101650.4aaf5988@windsurf.home>
-References: <E1kmBem-00064q-IV.thomas-petazzoni-bootlin-com@mx261.i.mail.ru>
- <23e2d4ac-27ba-3967-36da-d1ae1ddfa050@inbox.ru>
- <20201207101650.4aaf5988@windsurf.home>
-Message-ID: <20201207194219.507e55af@gmx.net>
+Date: Mon, 7 Dec 2020 19:44:52 +0100
+Subject: [Buildroot] [PATCH/next v1] package/ripgrep: bump version to
+ 12.1.1
+In-Reply-To: <20201205212530.68a9bab3@windsurf.home>
+References: <20201202201551.6380-1-ps.report@gmx.net>
+ <20201205212530.68a9bab3@windsurf.home>
+Message-ID: <20201207194452.1e739746@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim, Thomas,
+Hello Thomas,
 
-On Mon, 7 Dec 2020 10:16:50 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, 5 Dec 2020 21:25:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> On Mon, 7 Dec 2020 11:56:24 +0300
-> Maxim Kochetkov <fido_max@inbox.ru> wrote:
+> On Wed,  2 Dec 2020 21:15:51 +0100
+> Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> > TimescaleDB have no PostgreSQL 13 support right now.
-> >
-> > https://github.com/timescale/timescaledb/blob/master/CMakeLists.txt
-> >
-> > # Ensure that PostgreSQL version is supported and consistent
-> > # with src/compat.h version check
-> > if ((${PG_VERSION_MAJOR} LESS "11") OR
-> >      (${PG_VERSION_MAJOR} GREATER "12"))
-> >    message(FATAL_ERROR "TimescaleDB only supports PostgreSQL 11 and 12")
-> > endif()
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  package/ripgrep/ripgrep.hash | 4 ++--
+> >  package/ripgrep/ripgrep.mk   | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
 >
-> Then, how do we proceed, since timescaledb requires PostgreSQL, but
-> Buildroot now uses PostgreSQL 13 ? Should we drop timescaledb ? Under
-> what time frame does the timescaledb project intends to support
-> PostgreSQL 13 ? There is apparently a pull request opened at
-> https://github.com/timescale/timescaledb/pull/2498.
+> This bump is already part of my series adding a Cargo package
+> infrastructure *and* adding support for Cargo vendoring. And having the
+> bump as part of this series is important, as the contents of the
+> tarball changes, and therefore its hashes changes, which requires doing
+> the bump together with the introduction of Cargo vendoring.
+>
+> So I'd like to keep the bump part of this series, if you don't mind.
 
-No urgent demand for the postgresql update from my side (as the 12.x
-version is still supported with updates) in case timescaledb will
-not provide an update in the near future (and the pull request is to
-voluminous for an backport)...
+No problem ;-)
 
 Regards,
 Peter
 
-
+>
+> Thanks!
 >
 > Thomas
