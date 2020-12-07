@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:59:58 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.7.0
-Message-ID: <20201207214421.BC684841EC@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:59:53 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbcomp: bump version
+ to 1.4.4
+Message-ID: <20201207214421.8869D82A1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8bfc52c8538a572f9c2d77b8d7a4e378eca92f1
+commit: https://git.buildroot.net/buildroot/commit/?id=71d2e92b84f82bfa774c4b2a376a4f06db5e2bec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 6 +++---
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 8 ++++----
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 142e4505d0..5b1162f4c5 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,6 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-August/003057.html
--sha256  f108227469419ac04d196df0f3b80ce1f7f65059bb54c0de811f4d8e03fd6ec7  libX11-1.6.12.tar.bz2
--sha512  79df7d61d9009b0dd3b65f67a62189aa0a43799c01026b3d2d534092596a0b67f246af5e398a89eb1ccc61a27335f81be8262b8a39768a76f62d862cd7415a47  libX11-1.6.12.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-November/003065.html
-+sha256  36c8f93b6595437c8cfbc9f08618bcb3041cbd303e140a0013f88e4c2977cb54  libX11-1.7.0.tar.bz2
-+sha512  f661ca90350fd8a94f054b00f12f5122cea068ebff706acfd399462236c189a296a2358d17d16166635101cf56cc19303dd407873a159932d093c9f33556f9fb  libX11-1.7.0.tar.bz2
- 
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index 98bd0c43a3..7191d5520e 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-February/003037.html
+-sha256 06242c169fc11caf601cac46d781d467748c6a330e15b36dce46520b8ac8d435  xkbcomp-1.4.3.tar.bz2
+-sha512 827713c0413aecdcad2b61edb7b8c7c7a002e18505b9041f570e2f680907193cb5ff8a5b424695e21110b2d06c145cbf0e397e52347421ee946f06e2a51f135d  xkbcomp-1.4.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-November/003063.html
++sha256  59cce603a607a17722a0a1cf99010f4894e7812beb5d695abbc08474d59af27e  xkbcomp-1.4.4.tar.bz2
++sha512  971eb06277a49083b42154472596f1452fa94cdee28bad345bbcd85b028441bfd975763c20ed92aa69d6605b3fb23d27fee89df91501963b77c863667bae41c4  xkbcomp-1.4.4.tar.bz2
  # Locally computed
- sha256  2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index ba9fcef258..f36b5e6ffa 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+-sha256 f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
++sha256  f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index e97f8fdd8b..69d4aefb94 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.12
-+XLIB_LIBX11_VERSION = 1.7.0
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-XAPP_XKBCOMP_VERSION = 1.4.3
++XAPP_XKBCOMP_VERSION = 1.4.4
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
