@@ -1,31 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:56:20 +0100
-Subject: [Buildroot] [PATCH 1/3] package/flare-engine: require
- sdl2_image with png support
-In-Reply-To: <20201206135607.667917-1-romain.naour@gmail.com>
-References: <20201206135607.667917-1-romain.naour@gmail.com>
-Message-ID: <20201207225620.5e36a4b4@windsurf.home>
+Date: Mon, 7 Dec 2020 22:57:05 +0100
+Subject: [Buildroot] [git commit] package/libglib2: bump version to 2.66.3
+Message-ID: <20201207214154.D7DBD8160D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Dec 2020 14:56:05 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=69fd027e8e410f460dd3fefd1310eede1aacd468
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> flare-engine fail to start if sdl2_image library is build without
-> libpng support.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/flare-engine/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Fixes https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524
+package/libglib2 reference: https://gitlab.gnome.org/GNOME/glib/-/issues/2091
 
-Thanks, series applied!
+Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 7e447a9efc..72304fa4b1 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.64.4',
++   version : '2.66.3',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 55f0bb1678..ac32f1b14b 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.64/glib-2.64.4.sha256sum
+-sha256  f7e0b325b272281f0462e0f7fff25a833820cac19911ff677251daf6d87bce50  glib-2.64.4.tar.xz
++# https://download.gnome.org/sources/glib/2.66/glib-2.66.3.sha256sum
++sha256  79f31365a99cb1cc9db028625635d1438890702acde9e2802eae0acebcf7b5b1  glib-2.66.3.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 6e9dbd7b26..016bc0e118 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.64
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
++LIBGLIB2_VERSION_MAJOR = 2.66
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
