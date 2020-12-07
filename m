@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 07 Dec 2020 21:38:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/monkey: drop wrong comment
-In-Reply-To: <20201120170045.422231-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 20 Nov 2020 18:00:45 +0100")
-References: <20201120170045.422231-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zh2ptkqh.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Dec 2020 21:38:39 +0100
+Subject: [Buildroot] [PATCH] support/dependencies: clarify intended use
+ of host bison/flex
+In-Reply-To: <81a71f6a0a11476b60bc81f70d8f0ad9387dfa78.1605848921.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 20 Nov 2020 07:08:41 +0200")
+References: <81a71f6a0a11476b60bc81f70d8f0ad9387dfa78.1605848921.git.baruch@tkos.co.il>
+Message-ID: <87v9ddtkq8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Commit 5fea6e2a2fa816c0c551bca184fb64fc96d76a08 forgot to remove the
- > generic-package comment
+ > We should not rely on host installed bison/flex for target code. This
+ > ensures better reproducibility of generated code.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > http://lists.busybox.net/pipermail/buildroot/2020-November/296786.html
+
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2020.02.x and 2020.08.x, thanks.
 
