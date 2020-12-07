@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:59:52 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_fonttosfnt: bump
- version to 1.2.0
-Message-ID: <20201207214421.705A482A1A@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:59:54 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xprop: bump version to
+ 1.2.5
+Message-ID: <20201207214421.93B2C7F980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b538ed9c6b4b9d705ad092d8e96cc78f974fdff
+commit: https://git.buildroot.net/buildroot/commit/?id=b9a8caeee08d09a819ffd2cbbc333e0ffa02a59e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Reformatted hashes.
@@ -17,36 +17,36 @@ Reformatted hashes.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 10 ++++------
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |  2 +-
+ package/x11r7/xapp_xprop/xapp_xprop.hash | 10 ++++------
+ package/x11r7/xapp_xprop/xapp_xprop.mk   |  2 +-
  2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-index 7a13a01a15..abd3d16f73 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.hash b/package/x11r7/xapp_xprop/xapp_xprop.hash
+index f513e12c24..43eed80ba4 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.hash
++++ b/package/x11r7/xapp_xprop/xapp_xprop.hash
 @@ -1,7 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2020-January/003035.html
--md5 bf8086aa878f0d1bb7715e5865183cc4  fonttosfnt-1.1.0.tar.bz2
--sha1 0e0ea8c92941bf9126b87fae5bb723c8e1035ae2  fonttosfnt-1.1.0.tar.bz2
--sha256 7283fd477e3de75cce40b91b5012953e30b862975555d4482435e2ee7b0f46dc  fonttosfnt-1.1.0.tar.bz2
--sha512 f4fb9814c23bfd6f83771959444d2c37eb4ba32edee43c37cf21f0181be80c6e278307641b0f4dae4ee5d10db3289e95194f99757ea4bbca343fff15498e7173  fonttosfnt-1.1.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2020-October/003062.html
-+sha256  79f35ace377c5409c05ed71f0e8b75f8ca6ddf0a2f6b6d7ecb770ee10072a621  fonttosfnt-1.2.0.tar.bz2
-+sha512  a360bd8535beaef89afa6c0678a40f7c554e9d631e0fcb80bb1363ab72288e27a5e106521610f61c95b8101f79c7f02492a2068411b5f5b695de780d8a1c1b25  fonttosfnt-1.2.0.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2019-March/002969.html
+-md5 cc369c28383a5d7144e7197ee7d30bfa  xprop-1.2.4.tar.bz2
+-sha1 0549a927d01930218f1d0089d0157eb9538b34a5  xprop-1.2.4.tar.bz2
+-sha256 8c77fb096e46c60032b7e2bde9492c3ffcc18734f50b395085a5f10bfd3cf753  xprop-1.2.4.tar.bz2
+-sha512 6e770cb89ba87ae057858cc9f0f5498979e78c3ef66ce86361b7c646cc0b70c41a18d76e55ed7225fe715b22b62bc07c56272519a2631b92832e9403ce260da7  xprop-1.2.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-November/003064.html
++sha256  9b92ed0316bf2486121d8bac88bd1878f16b43bd335f18009b1f941f1eca93a1  xprop-1.2.5.tar.bz2
++sha512  93cfa621fa76ca6e8e780a252c508380b6dc9db39b67bfca16bb9800f0d39110f5d18189409a8577ef79e98bf5eece17f5e23f2218ca72ae8bb04ee7b429d559  xprop-1.2.5.tar.bz2
  # Locally computed
--sha256 f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
-+sha256  f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
-diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-index ab1d955771..8e48234e29 100644
---- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
-+++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+-sha256 f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
++sha256  f19ff982936cca133b9593a6561c3817512207e0b4c951d0e4eb5956d30d4415 COPYING
+diff --git a/package/x11r7/xapp_xprop/xapp_xprop.mk b/package/x11r7/xapp_xprop/xapp_xprop.mk
+index a0ad4302cb..75f0d37cdc 100644
+--- a/package/x11r7/xapp_xprop/xapp_xprop.mk
++++ b/package/x11r7/xapp_xprop/xapp_xprop.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_FONTTOSFNT_VERSION = 1.1.0
-+XAPP_FONTTOSFNT_VERSION = 1.2.0
- XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
- XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_FONTTOSFNT_LICENSE = MIT
+-XAPP_XPROP_VERSION = 1.2.4
++XAPP_XPROP_VERSION = 1.2.5
+ XAPP_XPROP_SOURCE = xprop-$(XAPP_XPROP_VERSION).tar.bz2
+ XAPP_XPROP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XPROP_LICENSE = MIT
