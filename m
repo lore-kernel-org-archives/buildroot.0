@@ -1,49 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:55:50 +0100
-Subject: [Buildroot] [git commit] package/flare-game: bump to version 1.11
-Message-ID: <20201207214009.4AC497F8CA@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:55:48 +0100
+Subject: [Buildroot] [git commit] package/flare-engine: require sdl2_image
+ with png support
+Message-ID: <20201207214009.359958177A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d09d1b47672823e3dc2fb3a84e2349f6b19906c
+commit: https://git.buildroot.net/buildroot/commit/?id=6c4328a5abae7a89103e1cd399c73dba4bbac63c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A LICENSE.txt file has been added since 1.01 [1].
-
-[1] https://github.com/flareteam/flare-game/commit/b39f98ffc5e2d0bba7cf62f18570082cb5a1f112
+flare-engine fail to start if sdl2_image library is build without
+libpng support.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flare-game/flare-game.hash | 4 ++--
- package/flare-game/flare-game.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/flare-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/flare-game/flare-game.hash b/package/flare-game/flare-game.hash
-index 51646269a3..983c23200f 100644
---- a/package/flare-game/flare-game.hash
-+++ b/package/flare-game/flare-game.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5c8e9d72fcbe59f1861f79ac7b76ceffe3ec61d1df241c32d9133fe158fba4c1  flare-game-1.0.tar.gz
--sha256  9fce5eb663f136449e11293a871ed96db5ba579116a927fc6a70dd20a4a5b9e6  README
-+sha256  c13231c7dd021252487f6cf117f7f2bb24bbda40af0a2b2902d72b5e2d4c242a  flare-game-1.11.tar.gz
-+sha256  3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f  LICENSE.txt
-diff --git a/package/flare-game/flare-game.mk b/package/flare-game/flare-game.mk
-index a70e998d0e..4bebc79595 100644
---- a/package/flare-game/flare-game.mk
-+++ b/package/flare-game/flare-game.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FLARE_GAME_VERSION = 1.0
--FLARE_GAME_SITE =  $(call github,clintbellanger,flare-game,v$(FLARE_GAME_VERSION))
-+FLARE_GAME_VERSION = 1.11
-+FLARE_GAME_SITE =  $(call github,flareteam,flare-game,v$(FLARE_GAME_VERSION))
- FLARE_GAME_LICENSE = CC-BY-SA-3.0 (data files), GPL-2.0 (GNU Unifont), \
- 	OFL-1.1 (Liberation Sans)
- FLARE_GAME_LICENSE_FILES = README
+diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
+index cdcb018948..d08b740af3 100644
+--- a/package/flare-engine/Config.in
++++ b/package/flare-engine/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLARE_ENGINE
+ 	bool "flare-engine"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_LIBPNG # SDL2_IMAGE needs libpng support
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_MIXER
