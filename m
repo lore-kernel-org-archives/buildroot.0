@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 7 Dec 2020 22:55:49 +0100
-Subject: [Buildroot] [git commit] package/flare-engine: bump to version 1.11
-Message-ID: <20201207214009.414B37F8CA@busybox.osuosl.org>
+Date: Mon, 7 Dec 2020 22:55:50 +0100
+Subject: [Buildroot] [git commit] package/flare-game: bump to version 1.11
+Message-ID: <20201207214009.4AC497F8CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3570f67628f9e1a6ea7e2ff82549f496c76ad032
+commit: https://git.buildroot.net/buildroot/commit/?id=4d09d1b47672823e3dc2fb3a84e2349f6b19906c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+A LICENSE.txt file has been added since 1.01 [1].
+
+[1] https://github.com/flareteam/flare-game/commit/b39f98ffc5e2d0bba7cf62f18570082cb5a1f112
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flare-engine/flare-engine.hash | 2 +-
- package/flare-engine/flare-engine.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/flare-game/flare-game.hash | 4 ++--
+ package/flare-game/flare-game.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/flare-engine/flare-engine.hash b/package/flare-engine/flare-engine.hash
-index e03bcc589e..0e37a71922 100644
---- a/package/flare-engine/flare-engine.hash
-+++ b/package/flare-engine/flare-engine.hash
+diff --git a/package/flare-game/flare-game.hash b/package/flare-game/flare-game.hash
+index 51646269a3..983c23200f 100644
+--- a/package/flare-game/flare-game.hash
++++ b/package/flare-game/flare-game.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  4bbd4674513b643be6294188904665c53f0ef2912e803212c05e8fd22a44d74d  flare-engine-1.0.tar.gz
-+sha256  035ffd936d9e120dc2eb792779a0b7ff64574d4a29a1124946deaf7946d1059d  flare-engine-1.11.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index ed9dd19b0e..e2f3eefa28 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
+-sha256  5c8e9d72fcbe59f1861f79ac7b76ceffe3ec61d1df241c32d9133fe158fba4c1  flare-game-1.0.tar.gz
+-sha256  9fce5eb663f136449e11293a871ed96db5ba579116a927fc6a70dd20a4a5b9e6  README
++sha256  c13231c7dd021252487f6cf117f7f2bb24bbda40af0a2b2902d72b5e2d4c242a  flare-game-1.11.tar.gz
++sha256  3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f  LICENSE.txt
+diff --git a/package/flare-game/flare-game.mk b/package/flare-game/flare-game.mk
+index a70e998d0e..4bebc79595 100644
+--- a/package/flare-game/flare-game.mk
++++ b/package/flare-game/flare-game.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--FLARE_ENGINE_VERSION = 1.0
--FLARE_ENGINE_SITE =  $(call github,clintbellanger,flare-engine,v$(FLARE_ENGINE_VERSION))
-+FLARE_ENGINE_VERSION = 1.11
-+FLARE_ENGINE_SITE =  $(call github,flareteam,flare-engine,v$(FLARE_ENGINE_VERSION))
- FLARE_ENGINE_LICENSE = GPL-3.0+
- FLARE_ENGINE_LICENSE_FILES = COPYING
- 
+-FLARE_GAME_VERSION = 1.0
+-FLARE_GAME_SITE =  $(call github,clintbellanger,flare-game,v$(FLARE_GAME_VERSION))
++FLARE_GAME_VERSION = 1.11
++FLARE_GAME_SITE =  $(call github,flareteam,flare-game,v$(FLARE_GAME_VERSION))
+ FLARE_GAME_LICENSE = CC-BY-SA-3.0 (data files), GPL-2.0 (GNU Unifont), \
+ 	OFL-1.1 (Liberation Sans)
+ FLARE_GAME_LICENSE_FILES = README
