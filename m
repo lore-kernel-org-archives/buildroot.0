@@ -1,36 +1,52 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  7 Dec 2020 21:48:19 +0100
-Subject: [Buildroot] [PATCH 3/5]
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate for
- riscv32 toolchain
+Date: Mon,  7 Dec 2020 21:48:18 +0100
+Subject: [Buildroot] [PATCH 2/5] support/scripts/gen-bootlin-toolchains:
+ riscv32 use a pre-2.33 glibc version without RPC support
 In-Reply-To: <20201207204821.3588178-1-romain.naour@gmail.com>
 References: <20201207204821.3588178-1-romain.naour@gmail.com>
-Message-ID: <20201207204821.3588178-3-romain.naour@gmail.com>
+Message-ID: <20201207204821.3588178-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/849510531
+riscv32 has been merged into glibc 2.33 where RPC support has been removed [1].
+
+Add a special handling for the riscv32 Bootlin bleeding-edge 2020.08-1 toolchain
+since it used a pre-2.33 glibc version [2].
+
+Other glibc Bootlin toolchain use glibc 2.31 with RPC support enabled.
+
+This special handling must be removed when all Bootlin toolchain has been
+rebuild with glibc > 2.32.
+
+[1] https://sourceware.org/pipermail/libc-announce/2020/000029.html
+[2] https://git.buildroot.net/buildroot/commit/?id=a4889545aa653e7f001f212eda169e7d676aefc0
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external-bootlin/Config.in.options                 | 1 -
- 1 file changed, 1 deletion(-)
+ support/scripts/gen-bootlin-toolchains | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 3c94ae1535..be9c204193 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -3331,7 +3331,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Bootlin toolchain for the riscv32-ilp32d architecture,
- 	  using the glibc C library. This is a bleeding-edge version,
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index fce75c51c2..645584d07e 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -263,8 +263,11 @@ class Toolchain:
+                 # glibc doesn't support static only configuration
+                 depends.append("!BR2_STATIC_LIBS")
+                 selects.append("BR2_TOOLCHAIN_EXTERNAL_GLIBC")
+-                # all glibc toolchains have RPC support
+-                selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
++
++                # riscv32 has been merged into glibc 2.33 where RPC support has been removed.
++                if not self.arch.startswith("riscv32"):
++                    # all glibc < 2.32 toolchains have RPC support
++                    selects.append("BR2_TOOLCHAIN_HAS_NATIVE_RPC")
+             elif frag.startswith("BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL"):
+                 # musl needs mmu support
+                 depends.append("BR2_USE_MMU")
 -- 
 2.25.4
