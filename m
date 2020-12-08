@@ -1,54 +1,96 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  8 Dec 2020 18:45:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version to
- 20200601
-Message-ID: <20201208174549.167698-1-bernd.kuhls@t-online.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  8 Dec 2020 19:05:24 +0100
+Subject: [Buildroot] [PATCH 1/5] package/jszip: new package
+Message-ID: <20201208180529.9152-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+From: Joeri Barbarien <joeri.barbarien@nokia.com>
 
-Updated license hash due to upstream commit:
-https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/ca-certificates/ca-certificates.hash | 6 +++---
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/jszip/Config.in  |  7 +++++++
+ package/jszip/jszip.hash |  3 +++
+ package/jszip/jszip.mk   | 17 +++++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/jszip/Config.in
+ create mode 100644 package/jszip/jszip.hash
+ create mode 100644 package/jszip/jszip.mk
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 71a8da4784..1ed1c3ca06 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,6 +1,6 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
--sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
-+sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
-+sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
- 
- # Locally computed
--sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
-+sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 79c81a41ea..5c24d4be49 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20190110
-+CA_CERTIFICATES_VERSION = 20200601
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl
- # ca-certificates can be built with either python 2 or python 3
- # but it must be at least python 2.7
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9ab1e125f4..5cb272e7ae 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2503,6 +2503,7 @@ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
+ F:	package/chartjs/
++F:	package/jszip/
+ F:	package/libtelnet/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+diff --git a/package/Config.in b/package/Config.in
+index 016a99ed1a..5fb6eaeccf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1586,6 +1586,7 @@ endmenu
+ endif
+ 	source "package/jsmin/Config.in"
+ 	source "package/json-javascript/Config.in"
++	source "package/jszip/Config.in"
+ 	source "package/openlayers/Config.in"
+ 	source "package/spidermonkey/Config.in"
+ 	source "package/vuejs/Config.in"
+diff --git a/package/jszip/Config.in b/package/jszip/Config.in
+new file mode 100644
+index 0000000000..455891ab12
+--- /dev/null
++++ b/package/jszip/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_JSZIP
++	bool "jszip"
++	help
++	  JSZip is a javascript library for creating, reading and
++	  editing .zip files, with a lovely and simple API.
++
++	  https://stuk.github.io/jszip
+diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
+new file mode 100644
+index 0000000000..13a7765ed9
+--- /dev/null
++++ b/package/jszip/jszip.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	e5343decfb781b15c54c0df9ddedd6c8518c800a4667a0a95741c694a4f38d34  jszip-v3.2.2.tar.gz
++sha256	14450c78405ad2a2173e25740b56406556779149df9c4c83523a8c63d0686210  LICENSE.markdown
+diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
+new file mode 100644
+index 0000000000..0e20f4c40e
+--- /dev/null
++++ b/package/jszip/jszip.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# jszip
++#
++################################################################################
++
++JSZIP_VERSION = v3.2.2
++JSZIP_SITE = $(call github,Stuk,jszip,$(JSZIP_VERSION))
++JSZIP_LICENSE = MIT
++JSZIP_LICENSE_FILES = LICENSE.markdown
++
++define JSZIP_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/jszip.min.js \
++		$(TARGET_DIR)/var/www/jszip/js/jszip.min.js
++endef
++
++$(eval $(generic-package))
 -- 
-2.29.2
+2.26.2
