@@ -1,96 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  8 Dec 2020 18:34:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump version
- to 1.1.1i
-Message-ID: <20201208173433.41469-1-bernd.kuhls@t-online.de>
+Date: Tue,  8 Dec 2020 18:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version to
+ 20200601
+Message-ID: <20201208174549.167698-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased patches 0001 & 0004.
+Reformatted hashes.
 
-Fixes CVE-2020-1971.
-
-Changelog: https://www.openssl.org/news/changelog.html#openssl-111
+Updated license hash due to upstream commit:
+https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...Dont-waste-time-building-manpages-if-we-re-not-going.patch | 4 +++-
- ...Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 4 +++-
- package/libopenssl/libopenssl.hash                            | 4 ++--
- package/libopenssl/libopenssl.mk                              | 2 +-
- 4 files changed, 9 insertions(+), 5 deletions(-)
+ package/ca-certificates/ca-certificates.hash | 6 +++---
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-index f20b6f0834..6527bc23a1 100644
---- a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-+++ b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
-@@ -9,6 +9,8 @@ Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 71a8da4784..1ed1c3ca06 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,6 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
+-sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
++sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
++sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
  
- [rebased on openssl-1.1.0h]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+[rebased on openssl-1.1.1i]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Configurations/unix-Makefile.tmpl | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -17,7 +19,7 @@ diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tm
- index 40cf2c3..777d9ca 100644
- --- a/Configurations/unix-Makefile.tmpl
- +++ b/Configurations/unix-Makefile.tmpl
--@@ -268,7 +268,7 @@ list-tests:
-+@@ -491,7 +491,7 @@ list-tests:
-  	@echo "Tests are not supported with your chosen Configure options"
-  	@ : {- output_on() if !$disabled{tests}; "" -}
-  
-diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-index 3d6eaf49d2..b5070ad74c 100644
---- a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-+++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
-@@ -11,6 +11,8 @@ Reviewed-by: Richard Levitte <levitte@openssl.org>
- (Merged from https://github.com/openssl/openssl/pull/8883)
- [vfazio: fixup for 1.1.1d]
- Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-+[rebased on openssl-1.1.1i]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  Configure | 4 ++++
-  1 file changed, 4 insertions(+)
-@@ -19,7 +21,7 @@ diff --git a/Configure b/Configure
- index 5a699836f3..f9152b1702 100755
- --- a/Configure
- +++ b/Configure
--@@ -1413,6 +1413,10 @@ my %predefined_CXX = $config{CXX}
-+@@ -1417,6 +1417,10 @@ my %predefined_CXX = $config{CXX}
-      ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
-      : ();
-  
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index dcfe7d5c05..5e24ca17ae 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1h.tar.gz.sha256
--sha256  5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9  openssl-1.1.1h.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1i.tar.gz.sha256
-+sha256  e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242  openssl-1.1.1i.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index fe5a444cc7..ac12d17016 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
++sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 79c81a41ea..5c24d4be49 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1h
-+LIBOPENSSL_VERSION = 1.1.1i
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-CA_CERTIFICATES_VERSION = 20190110
++CA_CERTIFICATES_VERSION = 20200601
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
 -- 
 2.29.2
