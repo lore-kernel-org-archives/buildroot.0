@@ -1,9 +1,7 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  8 Dec 2020 19:05:28 +0100
-Subject: [Buildroot] [PATCH 5/5] package/datatables-responsive: new package
-In-Reply-To: <20201208180529.9152-1-patrickdepinguin@gmail.com>
-References: <20201208180529.9152-1-patrickdepinguin@gmail.com>
-Message-ID: <20201208180529.9152-5-patrickdepinguin@gmail.com>
+Date: Tue,  8 Dec 2020 19:16:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/popperjs: new package
+Message-ID: <20201208181638.28938-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,93 +13,83 @@ From: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/datatables-responsive/Config.in       | 12 ++++++++++
- .../datatables-responsive.hash                |  3 +++
- .../datatables-responsive.mk                  | 23 +++++++++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/datatables-responsive/Config.in
- create mode 100644 package/datatables-responsive/datatables-responsive.hash
- create mode 100644 package/datatables-responsive/datatables-responsive.mk
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/popperjs/Config.in     |  6 ++++++
+ package/popperjs/popperjs.hash |  3 +++
+ package/popperjs/popperjs.mk   | 19 +++++++++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/popperjs/Config.in
+ create mode 100644 package/popperjs/popperjs.hash
+ create mode 100644 package/popperjs/popperjs.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 60bbb30271..38a568dee1 100644
+index 9ab1e125f4..a663eb559a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2506,6 +2506,7 @@ F:	package/chartjs/
- F:	package/datatables/
- F:	package/datatables-buttons/
- F:	package/datatables-fixedcolumns/
-+F:	package/datatables-responsive/
- F:	package/jszip/
- F:	package/libtelnet/
- F:	package/opkg-utils/
+@@ -2525,6 +2525,7 @@ F:	package/perl-net-ssh2/
+ F:	package/perl-net-telnet/
+ F:	package/perl-path-class/
+ F:	package/pigz/
++F:	package/popperjs/
+ F:	package/xenomai/
+ F:	support/scripts/size-stats
+ F:	support/testing/tests/package/test_perl_lwp_protocol_https.py
 diff --git a/package/Config.in b/package/Config.in
-index f1792aa46a..c9e28fa25d 100644
+index 016a99ed1a..c931c28bfa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1571,6 +1571,7 @@ endif
- 	source "package/datatables/Config.in"
- 	source "package/datatables-buttons/Config.in"
- 	source "package/datatables-fixedcolumns/Config.in"
-+	source "package/datatables-responsive/Config.in"
- 	source "package/duktape/Config.in"
- 	source "package/explorercanvas/Config.in"
- 	source "package/flot/Config.in"
-diff --git a/package/datatables-responsive/Config.in b/package/datatables-responsive/Config.in
+@@ -1587,6 +1587,7 @@ endif
+ 	source "package/jsmin/Config.in"
+ 	source "package/json-javascript/Config.in"
+ 	source "package/openlayers/Config.in"
++	source "package/popperjs/Config.in"
+ 	source "package/spidermonkey/Config.in"
+ 	source "package/vuejs/Config.in"
+ endmenu
+diff --git a/package/popperjs/Config.in b/package/popperjs/Config.in
 new file mode 100644
-index 0000000000..085824af40
+index 0000000000..eae963100e
 --- /dev/null
-+++ b/package/datatables-responsive/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_DATATABLES_RESPONSIVE
-+	bool "datatables-responsive"
-+	depends on BR2_PACKAGE_DATATABLES
++++ b/package/popperjs/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_POPPERJS
++	bool "popperjs"
 +	help
-+	  In the modern world of responsive web design tables can often
-+	  cause a particular problem for designers due to their row
-+	  based layout.  Responsive is an extension for DataTables that
-+	  resolves that problem by optimising the table's layout for
-+	  different screen sizes through the dynamic insertion and
-+	  removal of columns from the table.
++	  Popper.js, a JavaScript Tooltip & Popover Positioning Engine.
 +
-+	  https://datatables.net/extensions/responsive
-diff --git a/package/datatables-responsive/datatables-responsive.hash b/package/datatables-responsive/datatables-responsive.hash
++	  https://popper.js.org
+diff --git a/package/popperjs/popperjs.hash b/package/popperjs/popperjs.hash
 new file mode 100644
-index 0000000000..b2e55b4ae2
+index 0000000000..9ea5d11fee
 --- /dev/null
-+++ b/package/datatables-responsive/datatables-responsive.hash
++++ b/package/popperjs/popperjs.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256	47caf3b753dd2c537b8834816eaf38c4df214cb4e6a97144e0de4cf82ad24d02  Responsive-2.2.3.zip
-+sha256	da4e1020ae97c095a14d7830c1a8a793e080c062e22d749ecd3fc3c075673dbf  Responsive-2.2.3/License.txt
-diff --git a/package/datatables-responsive/datatables-responsive.mk b/package/datatables-responsive/datatables-responsive.mk
++sha256	83eecef51d10826faca2cd5cabb344e0bef6d4127d7e728db9e4d8308b7b15d1  popperjs-v1.16.0.tar.gz
++sha256	2961310ed05cd9373a08b8191c071425a7fede0ca5d807ca38fa5f5f61c5b834  LICENSE.md
+diff --git a/package/popperjs/popperjs.mk b/package/popperjs/popperjs.mk
 new file mode 100644
-index 0000000000..705dde3421
+index 0000000000..f44dbeb279
 --- /dev/null
-+++ b/package/datatables-responsive/datatables-responsive.mk
-@@ -0,0 +1,23 @@
++++ b/package/popperjs/popperjs.mk
+@@ -0,0 +1,19 @@
 +################################################################################
 +#
-+# datatables-responsive
++# popperjs
 +#
 +################################################################################
 +
-+DATATABLES_RESPONSIVE_VERSION = 2.2.3
-+DATATABLES_RESPONSIVE_SITE = https://datatables.net/releases
-+DATATABLES_RESPONSIVE_SOURCE =  Responsive-$(DATATABLES_RESPONSIVE_VERSION).zip
-+DATATABLES_RESPONSIVE_LICENSE = MIT
-+DATATABLES_RESPONSIVE_LICENSE_FILES = Responsive-$(DATATABLES_RESPONSIVE_VERSION)/License.txt
++POPPERJS_VERSION = v1.16.0
++POPPERJS_SITE = $(call github,popperjs,popper-core,$(POPPERJS_VERSION))
++POPPERJS_LICENSE = MIT
++POPPERJS_LICENSE_FILES = LICENSE.md
 +
-+define DATATABLES_RESPONSIVE_EXTRACT_CMDS
-+	$(UNZIP) $(DATATABLES_RESPONSIVE_DL_DIR)/$(DATATABLES_RESPONSIVE_SOURCE) -d $(@D)
-+endef
-+
-+define DATATABLES_RESPONSIVE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-responsive/css $(TARGET_DIR)/var/www/datatables-responsive/js
-+	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-responsive/css $(@D)/Responsive-$(DATATABLES_RESPONSIVE_VERSION)/css/*.min.css
-+	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-responsive/js $(@D)/Responsive-$(DATATABLES_RESPONSIVE_VERSION)/js/*.min.js
++define POPPERJS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper.min.js \
++		$(TARGET_DIR)/var/www/popperjs/js/popper.min.js
++	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper-utils.min.js \
++		$(TARGET_DIR)/var/www/popperjs/js/popper-utils.min.js
 +endef
 +
 +$(eval $(generic-package))
