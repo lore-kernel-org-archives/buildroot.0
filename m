@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Dec 2020 10:59:50 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/raptor: fix
+Date: Tue, 8 Dec 2020 10:59:41 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/raptor: fix
  CVE-2017-18926
-Message-ID: <20201208094413.6F7DA7FA24@busybox.osuosl.org>
+Message-ID: <20201208094418.1FBA784344@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87f762d618fcc43f8d47a041dfd55bad0dc07eec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a47b278d3252fc738ce1e94bbcaff6e6805a8de3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 raptor_xml_writer_start_element_common in raptor_xml_writer.c in Raptor RDF
 Syntax Library 2.0.15 miscalculates the maximum nspace declarations for the
