@@ -1,164 +1,96 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 8 Dec 2020 16:36:29 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts: add node modules to
- check-bin-arch's IGNORES list
-In-Reply-To: <CAFGQKxfSLb8cgtbTnsYmkHXtsmod=39iHrb9aedoAxrxYF+6Vg@mail.gmail.com>
-References: <20190531075800.7064-1-vcrini@gmail.com>
- <20190804175202.5161324c@windsurf.home>
- <CAFGQKxfSLb8cgtbTnsYmkHXtsmod=39iHrb9aedoAxrxYF+6Vg@mail.gmail.com>
-Message-ID: <CAGm1_kv-r9CUBSQ1mNsin4LNgJyNb=1bN9BqNZsscGueFQ_huQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  8 Dec 2020 18:34:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump version
+ to 1.1.1i
+Message-ID: <20201208173433.41469-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Rebased patches 0001 & 0004.
 
-On Sat, Aug 10, 2019 at 5:44 PM Martin Bark <martin@barkynet.com> wrote:
->
-> Hi,
->
-> On Sun, 4 Aug 2019 at 16:52, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Valerio,
-> >
-> > +Martin Bark in Cc.
-> >
-> > On Fri, 31 May 2019 09:58:00 +0200
-> > Valerio Crini <vcrini@gmail.com> wrote:
-> >
-> > > From: Valerio Crini <valerio.crini@docomodigital.com>
-> > >
-> > > Some node modules as stf ship compiled binaries causing check-bin-arch script
-> > > to return errors.
-> > >
-> > > Signed-off-by: Valerio Crini <valerio.crini@docomodigital.com>
-> > > ---
-> > >  support/scripts/check-bin-arch | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-> > > index 3449bd1aeb..a276b75b92 100755
-> > > --- a/support/scripts/check-bin-arch
-> > > +++ b/support/scripts/check-bin-arch
-> > > @@ -25,6 +25,11 @@ declare -a IGNORES=(
-> > >       # it for a different architecture (e.g. i386 grub on x86_64).
-> > >       "/lib/grub"
-> > >       "/usr/lib/grub"
-> > > +
-> > > +     # Skip files in /usr/lib/node_modules, since it is possible to have it
-> > > +     # for a different architecture (e.g. stf module has some packages already
-> > > +     # compiled for several architectures).
-> > > +     "/usr/lib/node_modules"
-> >
-> > Thanks for providing this patch. Could you give a bit more details
-> > about which libraries get installed, what is their name, etc. ?
-> >
-> > Indeed, rather than ignoring files from /usr/lib/node_modules, it would
-> > be a lot better to remove the libraries that are anyway not useful
-> > because they don't match the CPU architecture of the target. This would
-> > both reduce the filesystem size *and* solve the check-bin-arch issue.
->
-> Yes i agree Thomas, this is the correct solution.  I would recommend
-> you create a custom package for your application and in the BUILD_CMDS
-> use $(NPM) install to install you node_modules followed by code to
-> filter out any files that do not match your CPU architecture.  Here is
-> a script i've used before to do this
->
-> # Remove executables which are not the correct target arch
-> for f in $(find $(@D) -executable -type f) ; do
->     a=$(${TARGET_READELF} -h $f 2>&1 | sed -r -e '/^  Machine:
-> +(.+)/!d; s//\1/;')
->     if [ ! -z "$a" -a "$a" != "${BR2_READELF_ARCH_NAME}" ] ; then
->         echo "Remove: $f Arch: $a"
->         rm -f $f
->     fi
-> done
+Fixes CVE-2020-1971.
 
-Any update on this issue?
+Changelog: https://www.openssl.org/news/changelog.html#openssl-111
 
-I cannot reproduce this issue when installing ref-napi or ffi-napi via
-BR Node.js BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL option and "make
-nodejs-rebuild".
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...Dont-waste-time-building-manpages-if-we-re-not-going.patch | 4 +++-
+ ...Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 4 +++-
+ package/libopenssl/libopenssl.hash                            | 4 ++--
+ package/libopenssl/libopenssl.mk                              | 2 +-
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
-This issue comes only when I install my own package libonrisc [1] that
-uses npm to install the module having these dependencies.Then I get
-the following errors:
-
-ERROR: architecture for
-"/usr/lib/node_modules/libonrisc/node_modules/ffi-napi/node_modules/ref-napi/prebuilds/linux-arm64/electron.napi.armv8.node"
-is "AArch64", should be "ARM"
-ERROR: architecture for
-"/usr/lib/node_modules/libonrisc/node_modules/ref-napi/prebuilds/linux-arm64/electron.napi.armv8.node"
-is "AArch64", should be "ARM"
-ERROR: architecture for
-"/usr/lib/node_modules/libonrisc/node_modules/ref-array-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
-is "Advanced Micro Devices X86-64", should be "ARM"
-ERROR: architecture for
-"/usr/lib/node_modules/libonrisc/node_modules/ref-struct-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
-is "Advanced Micro Devices X86-64", should be "ARM"
-ERROR: architecture for
-"/usr/lib/node_modules/libonrisc/node_modules/ffi-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
-is "Advanced Micro Devices X86-64", should be "ARM"
-
-[1] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/package/libonrisc/libonrisc.mk#L23
-
-Best regards,
-Yegor
-
-> >
-> > If really this isn't possible, then we could define
-> > NODEJS_BIN_ARCH_EXCLUDE in nodejs.mk, to exclude /usr/lib/node_modules/
-> > from the check-bin-arch verification. It's not as good as preventing
-> > the problem, but it's better than a global exclusion.
-> >
-> > In order to investigate this, I tried to do a build with the stf NPM
-> > package, but it failed on bufferutil. I tried the following Buildroot
-> > defconfig:
-> >
-> > BR2_arm=y
-> > BR2_cortex_a8=y
-> > BR2_TOOLCHAIN_EXTERNAL=y
-> > BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
-> > BR2_INIT_NONE=y
-> > BR2_SYSTEM_BIN_SH_NONE=y
-> > # BR2_PACKAGE_BUSYBOX is not set
-> > BR2_PACKAGE_NODEJS=y
-> > BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="stf"
-> > # BR2_TARGET_ROOTFS_TAR is not set
-> >
-> > And it resulted in this:
-> >
-> > [...]
-> > .../home/thomas/projets/buildroot/output/host/bin/npm install -g stf
-> > [...]
-> > > node-gyp rebuild || node suppress-error.js
-> >
-> >   TOUCH Release/obj.target/DTraceProviderStub.stamp
-> >
-> > > bufferutil at 1.3.0 install /home/thomas/projets/buildroot/output/target/usr/lib/node_modules/stf/node_modules/bufferutil
-> > > node-gyp rebuild
-> >
-> >   CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
-> > In file included from ../../nan/nan.h:190:0,
-> >                  from ../src/bufferutil.cc:16:
-> > ../../nan/nan_maybe_43_inl.h: In function ?Nan::Maybe<bool> Nan::ForceSet(v8::Local<v8::Object>, v8::Local<v8::Value>, v8::Local<v8::Value>, v8::PropertyAttribute)?:
-> > ../../nan/nan_maybe_43_inl.h:88:15: error: ?class v8::Object? has no member named ?ForceSet?
-> >    return obj->ForceSet(GetCurrentContext(), key, value, attribs);
-> >                ^~~~~~~~
-> >
-> > Do you know what is going on ?
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+index f20b6f0834..6527bc23a1 100644
+--- a/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
++++ b/package/libopenssl/0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+@@ -9,6 +9,8 @@ Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+ 
+ [rebased on openssl-1.1.0h]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[rebased on openssl-1.1.1i]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  Configurations/unix-Makefile.tmpl | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -17,7 +19,7 @@ diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tm
+ index 40cf2c3..777d9ca 100644
+ --- a/Configurations/unix-Makefile.tmpl
+ +++ b/Configurations/unix-Makefile.tmpl
+-@@ -268,7 +268,7 @@ list-tests:
++@@ -491,7 +491,7 @@ list-tests:
+  	@echo "Tests are not supported with your chosen Configure options"
+  	@ : {- output_on() if !$disabled{tests}; "" -}
+  
+diff --git a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+index 3d6eaf49d2..b5070ad74c 100644
+--- a/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
++++ b/package/libopenssl/0004-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+@@ -11,6 +11,8 @@ Reviewed-by: Richard Levitte <levitte@openssl.org>
+ (Merged from https://github.com/openssl/openssl/pull/8883)
+ [vfazio: fixup for 1.1.1d]
+ Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
++[rebased on openssl-1.1.1i]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  Configure | 4 ++++
+  1 file changed, 4 insertions(+)
+@@ -19,7 +21,7 @@ diff --git a/Configure b/Configure
+ index 5a699836f3..f9152b1702 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1413,6 +1413,10 @@ my %predefined_CXX = $config{CXX}
++@@ -1417,6 +1417,10 @@ my %predefined_CXX = $config{CXX}
+      ? compiler_predefined($config{CROSS_COMPILE}.$config{CXX})
+      : ();
+  
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index dcfe7d5c05..5e24ca17ae 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1h.tar.gz.sha256
+-sha256  5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9  openssl-1.1.1h.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1i.tar.gz.sha256
++sha256  e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242  openssl-1.1.1i.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index fe5a444cc7..ac12d17016 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1h
++LIBOPENSSL_VERSION = 1.1.1i
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-- 
+2.29.2
