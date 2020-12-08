@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue,  8 Dec 2020 19:05:26 +0100
-Subject: [Buildroot] [PATCH 3/5] package/datatables-buttons: new package
+Date: Tue,  8 Dec 2020 19:05:27 +0100
+Subject: [Buildroot] [PATCH 4/5] package/datatables-fixedcolumns: new package
 In-Reply-To: <20201208180529.9152-1-patrickdepinguin@gmail.com>
 References: <20201208180529.9152-1-patrickdepinguin@gmail.com>
-Message-ID: <20201208180529.9152-3-patrickdepinguin@gmail.com>
+Message-ID: <20201208180529.9152-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,90 +17,89 @@ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
  DEVELOPERS                                    |  1 +
  package/Config.in                             |  1 +
- package/datatables-buttons/Config.in          | 12 ++++++++++
- .../datatables-buttons.hash                   |  3 +++
- .../datatables-buttons/datatables-buttons.mk  | 22 +++++++++++++++++++
- 5 files changed, 39 insertions(+)
- create mode 100644 package/datatables-buttons/Config.in
- create mode 100644 package/datatables-buttons/datatables-buttons.hash
- create mode 100644 package/datatables-buttons/datatables-buttons.mk
+ package/datatables-fixedcolumns/Config.in     | 10 ++++++++
+ .../datatables-fixedcolumns.hash              |  3 +++
+ .../datatables-fixedcolumns.mk                | 23 +++++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/datatables-fixedcolumns/Config.in
+ create mode 100644 package/datatables-fixedcolumns/datatables-fixedcolumns.hash
+ create mode 100644 package/datatables-fixedcolumns/datatables-fixedcolumns.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 59e2711bc8..747c94c750 100644
+index 747c94c750..60bbb30271 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2504,6 +2504,7 @@ F:	docs/manual/
- F:	package/cereal/
+@@ -2505,6 +2505,7 @@ F:	package/cereal/
  F:	package/chartjs/
  F:	package/datatables/
-+F:	package/datatables-buttons/
+ F:	package/datatables-buttons/
++F:	package/datatables-fixedcolumns/
  F:	package/jszip/
  F:	package/libtelnet/
  F:	package/opkg-utils/
 diff --git a/package/Config.in b/package/Config.in
-index a460fc8453..66725e4243 100644
+index 66725e4243..f1792aa46a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1569,6 +1569,7 @@ endif
- 	source "package/bootstrap/Config.in"
+@@ -1570,6 +1570,7 @@ endif
  	source "package/chartjs/Config.in"
  	source "package/datatables/Config.in"
-+	source "package/datatables-buttons/Config.in"
+ 	source "package/datatables-buttons/Config.in"
++	source "package/datatables-fixedcolumns/Config.in"
  	source "package/duktape/Config.in"
  	source "package/explorercanvas/Config.in"
  	source "package/flot/Config.in"
-diff --git a/package/datatables-buttons/Config.in b/package/datatables-buttons/Config.in
+diff --git a/package/datatables-fixedcolumns/Config.in b/package/datatables-fixedcolumns/Config.in
 new file mode 100644
-index 0000000000..515038ebe5
+index 0000000000..4d2e5ea06f
 --- /dev/null
-+++ b/package/datatables-buttons/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_DATATABLES_BUTTONS
-+	bool "datatables-buttons"
++++ b/package/datatables-fixedcolumns/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_DATATABLES_FIXEDCOLUMNS
++	bool "datatables-fixedcolumns"
 +	depends on BR2_PACKAGE_DATATABLES
-+	select BR2_PACKAGE_JSZIP
 +	help
-+	  The Buttons library for DataTables provides a framework with
-+	  common options and API that can be used with DataTables, but
-+	  is also very extensible, recognising that you will likely want
-+	  to use buttons which perform an action unique to your
-+	  applications.
++	  When making use of DataTables' x-axis scrolling feature
++	  (scrollX), you may wish to fix the left or right most columns
++	  in place. This extension for DataTables provides exactly this
++	  option.
 +
-+	  https://datatables.net/extensions/buttons
-diff --git a/package/datatables-buttons/datatables-buttons.hash b/package/datatables-buttons/datatables-buttons.hash
++	  https://datatables.net/extensions/fixedcolumns
+diff --git a/package/datatables-fixedcolumns/datatables-fixedcolumns.hash b/package/datatables-fixedcolumns/datatables-fixedcolumns.hash
 new file mode 100644
-index 0000000000..336e4afd24
+index 0000000000..2d848c911b
 --- /dev/null
-+++ b/package/datatables-buttons/datatables-buttons.hash
++++ b/package/datatables-fixedcolumns/datatables-fixedcolumns.hash
 @@ -0,0 +1,3 @@
 +# Locally computed:
-+sha256	427632c0245f488328edab83b53294545744c8de621a5eaa9dd3d257d7ed7775  Buttons-1.6.1.zip
-+sha256	21fa7cbc3c00bcad1e0f3417d465e702bd470d7dc446a6deff80c8fc5eda9148  Buttons-1.6.1/License.txt
-diff --git a/package/datatables-buttons/datatables-buttons.mk b/package/datatables-buttons/datatables-buttons.mk
++sha256	53a7b20ea9dbb6498137cb7260bde8605989ec578e4b71787f5ebc4ef9910bd9  FixedColumns-3.3.0.zip
++sha256	e8e92f97216f9ea00cb2735b933a91ec8e3869bed37b6d63a90f76f41508f2de  FixedColumns-3.3.0/License.txt
+diff --git a/package/datatables-fixedcolumns/datatables-fixedcolumns.mk b/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
 new file mode 100644
-index 0000000000..fe66deac8e
+index 0000000000..82afa00f1a
 --- /dev/null
-+++ b/package/datatables-buttons/datatables-buttons.mk
-@@ -0,0 +1,22 @@
++++ b/package/datatables-fixedcolumns/datatables-fixedcolumns.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# datatables-buttons
++# datatables-fixedcolumns
 +#
 +################################################################################
 +
-+DATATABLES_BUTTONS_VERSION = 1.6.1
-+DATATABLES_BUTTONS_SITE = https://datatables.net/releases
-+DATATABLES_BUTTONS_SOURCE = Buttons-$(DATATABLES_BUTTONS_VERSION).zip
-+DATATABLES_BUTTONS_LICENSE = MIT
-+DATATABLES_BUTTONS_LICENSE_FILES = Buttons-$(DATATABLES_BUTTONS_VERSION)/License.txt
-+define DATATABLES_BUTTONS_EXTRACT_CMDS
-+	$(UNZIP) $(DATATABLES_BUTTONS_DL_DIR)/$(DATATABLES_BUTTONS_SOURCE) -d $(@D)
++DATATABLES_FIXEDCOLUMNS_VERSION = 3.3.0
++DATATABLES_FIXEDCOLUMNS_SITE = https://datatables.net/releases
++DATATABLES_FIXEDCOLUMNS_SOURCE =  FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION).zip
++DATATABLES_FIXEDCOLUMNS_LICENSE = MIT
++DATATABLES_FIXEDCOLUMNS_LICENSE_FILES = FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION)/License.txt
++
++define DATATABLES_FIXEDCOLUMNS_EXTRACT_CMDS
++	$(UNZIP) $(DATATABLES_FIXEDCOLUMNS_DL_DIR)/$(DATATABLES_FIXEDCOLUMNS_SOURCE) -d $(@D)
 +endef
 +
-+define DATATABLES_BUTTONS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-buttons/css $(TARGET_DIR)/var/www/datatables-buttons/js
-+	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/css $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)/css/*.min.css
-+	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/js $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)/js/*.min.js
++define DATATABLES_FIXEDCOLUMNS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-fixedcolumns/css $(TARGET_DIR)/var/www/datatables-fixedcolumns/js
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-fixedcolumns/css $(@D)/FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION)/css/*.min.css
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-fixedcolumns/js $(@D)/FixedColumns-$(DATATABLES_FIXEDCOLUMNS_VERSION)/js/*.min.js
 +endef
 +
 +$(eval $(generic-package))
