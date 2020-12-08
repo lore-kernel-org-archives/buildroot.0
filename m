@@ -1,37 +1,39 @@
-From: Jules Maselbas <jmaselbas@kalray.eu>
-Date: Tue,  8 Dec 2020 11:11:07 +0100
-Subject: [Buildroot] [PATCH] boot/barebox: kconfig needs the toolchain
-Message-ID: <20201208101107.32758-1-jmaselbas@kalray.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 8 Dec 2020 11:55:38 +0100
+Subject: [Buildroot] [PATCH 2/5] support/scripts/gen-bootlin-toolchains:
+ riscv32 use a pre-2.33 glibc version without RPC support
+In-Reply-To: <11768ed6-2527-fa14-a39e-161012088d46@gmail.com>
+References: <20201207204821.3588178-1-romain.naour@gmail.com>
+ <20201207204821.3588178-2-romain.naour@gmail.com>
+ <20201207225015.57f53daa@windsurf.home>
+ <11768ed6-2527-fa14-a39e-161012088d46@gmail.com>
+Message-ID: <20201208115538.7c902ea6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In barebox v2020.09.0, kconfig has been updated to a newer version
-based on Linux 5.9-rc2.  As in linux, kconfig can call the compiler
-to test its capabilities.
+Hello,
 
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
----
- boot/barebox/barebox.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On Mon, 7 Dec 2020 23:30:42 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 422f27312d..2e80954741 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -88,6 +88,11 @@ $(1)_KCONFIG_DEPENDENCIES = \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
- 
-+# Starting with barebox v2020.09.0, the kconfig used calls the
-+# cross-compiler to check its capabilities. So we need the
-+# toolchain before we can call the configurators.
-+$(1)_KCONFIG_DEPENDENCIES += toolchain
-+
- ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
- define $(1)_BUILD_BAREBOXENV_CMDS
- 	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
+> > I am not convinced by this approach, as it doesn't work when glibc 2.33
+> > gets used for other platforms than RISC-V 32. Instead, what we need to do is:
+> > 
+> >  (1) Fix how toolchains.bootlin.com generates its fragments to no
+> >      longer assume that glibc == RPC available.  
+> 
+> Agree, but what about existing fragments ? They doesn't provide information
+> about RPC support. We need to patch them to add
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y like in the next patch.
+
+I would obviously fix the existing fragments. I already fixed fragments
+to address other issues in the past.
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
