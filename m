@@ -1,55 +1,53 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 8 Dec 2020 12:35:13 +0000
-Subject: [Buildroot] [arc-buildroot] [PATCH]
- toolchain/toolchain-buildroot: glibc 2.32 for ARC needs linux-headers >=
- 5.1.0
-In-Reply-To: <20201207224719.3603067-1-romain.naour@gmail.com>
-References: <20201207224719.3603067-1-romain.naour@gmail.com>
-Message-ID: <BN8PR12MB333049473066169F9B28DE3CA1CD0@BN8PR12MB3330.namprd12.prod.outlook.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 08 Dec 2020 12:57:56 +0000
+Subject: [Buildroot] [Bug 13366] New: make pkg-stats: unrelated CVEs linked
+ to linux package
+Message-ID: <bug-13366-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+https://bugs.busybox.net/show_bug.cgi?id=13366
 
-> From: Romain Naour <romain.naour@gmail.com>
-> Sent: Tuesday, December 8, 2020 1:47 AM
-> To: buildroot at buildroot.org <buildroot@buildroot.org>
-> Cc: Romain Naour <romain.naour@gmail.com>; ARC Maintainers <arc-buildroot@synopsys.com>
-> Subject: [arc-buildroot] [PATCH] toolchain/toolchain-buildroot: glibc 2.32 for ARC needs linux-headers >= 5.1.0 
-> ?
-> The ARC support has been merged into glibc 2.32 but it requires
-> linux-headers >= 5.1.0 [1].
-> 
-> Fixes:
-> https://gitlab.com/kubu93/toolchains-builder/-/jobs/895774971
+            Bug ID: 13366
+           Summary: make pkg-stats: unrelated CVEs linked to linux package
+           Product: buildroot
+           Version: 2020.11
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: seems.deviant at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Thanks for?taking care of this one!
- 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0be8ae3679570ff9a193615a035fc8074a8c704f
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: ARC Maintainers <arc-buildroot@synopsys.com>
+Created attachment 8701
+  --> https://bugs.busybox.net/attachment.cgi?id=8701&action=edit
+hypertext
 
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+Steps to reproduce:
 
-> ---
-> ?toolchain/toolchain-buildroot/Config.in | 1 +
-> ?1 file changed, 1 insertion(+)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 2058ff1eb9..ff9877ac24 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -56,6 +56,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
-> ???????? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
-> ???????? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
-> ???????? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
-> +?????? depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
-> ???????? depends on !BR2_powerpc_SPE
-> ???????? depends on BR2_RISCV_ISA_RVA || !BR2_riscv
-> ???????? select BR2_TOOLCHAIN_USES_GLIBC
-> -- 
-> 2.25.4
+$ cat <<EOF > .config
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> EOF
+
+$ make pkg-stats
+
+In my case, there are 110 CVEs linked to linux package, while most of them or
+none at all are related.
+
+The last three entries in CVEs column:
+
+https://security-tracker.debian.org/tracker/CVE-2013-2032 - mediawiki
+https://security-tracker.debian.org/tracker/CVE-2014-3250 - puppet
+https://security-tracker.debian.org/tracker/CVE-2014-4909 - transmission
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
