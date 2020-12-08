@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Dec 2020 10:36:50 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/xen: security
+Date: Tue, 8 Dec 2020 10:35:29 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/xen: security
  bump to version 4.13.2
-Message-ID: <20201208094332.CA245825CA@busybox.osuosl.org>
+Message-ID: <20201208094337.7C911825CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b73859df50add8a7b3bfdccccf7c92f7c6048f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f31ae2618d2c9cf2a350de64f8a6e18082ad6b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Includes XSA-327..XSA-347 security fixes.  For details, see the
 announcement:
