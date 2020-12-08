@@ -1,81 +1,164 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  8 Dec 2020 15:53:38 +0100
-Subject: [Buildroot] [PATCH] package/rng-tools: add jitterentropy library
- option
-Message-ID: <20201208145338.29199-1-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 8 Dec 2020 16:36:29 +0100
+Subject: [Buildroot] [PATCH 1/1] support/scripts: add node modules to
+ check-bin-arch's IGNORES list
+In-Reply-To: <CAFGQKxfSLb8cgtbTnsYmkHXtsmod=39iHrb9aedoAxrxYF+6Vg@mail.gmail.com>
+References: <20190531075800.7064-1-vcrini@gmail.com>
+ <20190804175202.5161324c@windsurf.home>
+ <CAFGQKxfSLb8cgtbTnsYmkHXtsmod=39iHrb9aedoAxrxYF+6Vg@mail.gmail.com>
+Message-ID: <CAGm1_kv-r9CUBSQ1mNsin4LNgJyNb=1bN9BqNZsscGueFQ_huQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi all,
 
-Add a menu entry to enable/disable jitterentropy library. Make it
-enabled by default to preserve the old behavior.
+On Sat, Aug 10, 2019 at 5:44 PM Martin Bark <martin@barkynet.com> wrote:
+>
+> Hi,
+>
+> On Sun, 4 Aug 2019 at 16:52, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello Valerio,
+> >
+> > +Martin Bark in Cc.
+> >
+> > On Fri, 31 May 2019 09:58:00 +0200
+> > Valerio Crini <vcrini@gmail.com> wrote:
+> >
+> > > From: Valerio Crini <valerio.crini@docomodigital.com>
+> > >
+> > > Some node modules as stf ship compiled binaries causing check-bin-arch script
+> > > to return errors.
+> > >
+> > > Signed-off-by: Valerio Crini <valerio.crini@docomodigital.com>
+> > > ---
+> > >  support/scripts/check-bin-arch | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
+> > > index 3449bd1aeb..a276b75b92 100755
+> > > --- a/support/scripts/check-bin-arch
+> > > +++ b/support/scripts/check-bin-arch
+> > > @@ -25,6 +25,11 @@ declare -a IGNORES=(
+> > >       # it for a different architecture (e.g. i386 grub on x86_64).
+> > >       "/lib/grub"
+> > >       "/usr/lib/grub"
+> > > +
+> > > +     # Skip files in /usr/lib/node_modules, since it is possible to have it
+> > > +     # for a different architecture (e.g. stf module has some packages already
+> > > +     # compiled for several architectures).
+> > > +     "/usr/lib/node_modules"
+> >
+> > Thanks for providing this patch. Could you give a bit more details
+> > about which libraries get installed, what is their name, etc. ?
+> >
+> > Indeed, rather than ignoring files from /usr/lib/node_modules, it would
+> > be a lot better to remove the libraries that are anyway not useful
+> > because they don't match the CPU architecture of the target. This would
+> > both reduce the filesystem size *and* solve the check-bin-arch issue.
+>
+> Yes i agree Thomas, this is the correct solution.  I would recommend
+> you create a custom package for your application and in the BUILD_CMDS
+> use $(NPM) install to install you node_modules followed by code to
+> filter out any files that do not match your CPU architecture.  Here is
+> a script i've used before to do this
+>
+> # Remove executables which are not the correct target arch
+> for f in $(find $(@D) -executable -type f) ; do
+>     a=$(${TARGET_READELF} -h $f 2>&1 | sed -r -e '/^  Machine:
+> +(.+)/!d; s//\1/;')
+>     if [ ! -z "$a" -a "$a" != "${BR2_READELF_ARCH_NAME}" ] ; then
+>         echo "Remove: $f Arch: $a"
+>         rm -f $f
+>     fi
+> done
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/rng-tools/Config.in    | 12 +++++++++++-
- package/rng-tools/rng-tools.mk |  9 ++++++++-
- 2 files changed, 19 insertions(+), 2 deletions(-)
+Any update on this issue?
 
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 25b41f40d6..67e3d4185b 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_RNG_TOOLS
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
--	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
- 	select BR2_PACKAGE_LIBSYSFS
- 	select BR2_PACKAGE_OPENSSL
- 	help
-@@ -13,6 +12,17 @@ config BR2_PACKAGE_RNG_TOOLS
- 
- if BR2_PACKAGE_RNG_TOOLS
- 
-+config BR2_PACKAGE_RNG_TOOLS_JITTERENTROPY_LIBRARY
-+	bool "Jitterentropy Library support"
-+	default y
-+	select BR2_PACKAGE_JITTERENTROPY_LIBRARY
-+	help
-+	  Enable Jitterentropy Library support.
-+
-+	  The Jitter RNG provides a noise source using the CPU
-+	  execution timing jitter. It does not depend on any
-+	  system resource other than a high-resolution time stamp.
-+
- config BR2_PACKAGE_RNG_TOOLS_NISTBEACON
- 	bool "NIST Entropy Beacon support"
- 	select BR2_PACKAGE_JANSSON
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 3baddb98ee..8a971de5e9 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -8,7 +8,7 @@ RNG_TOOLS_VERSION = 6.10
- RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
--RNG_TOOLS_DEPENDENCIES = libsysfs jitterentropy-library host-pkgconf openssl
-+RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
- # From git
- RNG_TOOLS_AUTORECONF = YES
- 
-@@ -28,6 +28,13 @@ else
- RNG_TOOLS_CONF_OPTS += --without-rtlsdr
- endif
- 
-+ifeq ($(BR2_PACKAGE_RNG_TOOLS_JITTERENTROPY_LIBRARY),y)
-+RNG_TOOLS_DEPENDENCIES += jitterentropy-library
-+RNG_TOOLS_CONF_OPTS += --enable-jitterentropy
-+else
-+RNG_TOOLS_CONF_OPTS += --disable-jitterentropy
-+endif
-+
- ifeq ($(BR2_PACKAGE_RNG_TOOLS_NISTBEACON),y)
- RNG_TOOLS_DEPENDENCIES += jansson libcurl libxml2
- RNG_TOOLS_CONF_OPTS += --with-nistbeacon
--- 
-2.17.0
+I cannot reproduce this issue when installing ref-napi or ffi-napi via
+BR Node.js BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL option and "make
+nodejs-rebuild".
+
+This issue comes only when I install my own package libonrisc [1] that
+uses npm to install the module having these dependencies.Then I get
+the following errors:
+
+ERROR: architecture for
+"/usr/lib/node_modules/libonrisc/node_modules/ffi-napi/node_modules/ref-napi/prebuilds/linux-arm64/electron.napi.armv8.node"
+is "AArch64", should be "ARM"
+ERROR: architecture for
+"/usr/lib/node_modules/libonrisc/node_modules/ref-napi/prebuilds/linux-arm64/electron.napi.armv8.node"
+is "AArch64", should be "ARM"
+ERROR: architecture for
+"/usr/lib/node_modules/libonrisc/node_modules/ref-array-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
+is "Advanced Micro Devices X86-64", should be "ARM"
+ERROR: architecture for
+"/usr/lib/node_modules/libonrisc/node_modules/ref-struct-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
+is "Advanced Micro Devices X86-64", should be "ARM"
+ERROR: architecture for
+"/usr/lib/node_modules/libonrisc/node_modules/ffi-napi/node_modules/ref-napi/prebuilds/linux-x64/electron.napi.node"
+is "Advanced Micro Devices X86-64", should be "ARM"
+
+[1] https://github.com/visionsystemsgmbh/onrisc_br_bsp/blob/master/package/libonrisc/libonrisc.mk#L23
+
+Best regards,
+Yegor
+
+> >
+> > If really this isn't possible, then we could define
+> > NODEJS_BIN_ARCH_EXCLUDE in nodejs.mk, to exclude /usr/lib/node_modules/
+> > from the check-bin-arch verification. It's not as good as preventing
+> > the problem, but it's better than a global exclusion.
+> >
+> > In order to investigate this, I tried to do a build with the stf NPM
+> > package, but it failed on bufferutil. I tried the following Buildroot
+> > defconfig:
+> >
+> > BR2_arm=y
+> > BR2_cortex_a8=y
+> > BR2_TOOLCHAIN_EXTERNAL=y
+> > BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+> > BR2_INIT_NONE=y
+> > BR2_SYSTEM_BIN_SH_NONE=y
+> > # BR2_PACKAGE_BUSYBOX is not set
+> > BR2_PACKAGE_NODEJS=y
+> > BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="stf"
+> > # BR2_TARGET_ROOTFS_TAR is not set
+> >
+> > And it resulted in this:
+> >
+> > [...]
+> > .../home/thomas/projets/buildroot/output/host/bin/npm install -g stf
+> > [...]
+> > > node-gyp rebuild || node suppress-error.js
+> >
+> >   TOUCH Release/obj.target/DTraceProviderStub.stamp
+> >
+> > > bufferutil at 1.3.0 install /home/thomas/projets/buildroot/output/target/usr/lib/node_modules/stf/node_modules/bufferutil
+> > > node-gyp rebuild
+> >
+> >   CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
+> > In file included from ../../nan/nan.h:190:0,
+> >                  from ../src/bufferutil.cc:16:
+> > ../../nan/nan_maybe_43_inl.h: In function ?Nan::Maybe<bool> Nan::ForceSet(v8::Local<v8::Object>, v8::Local<v8::Value>, v8::Local<v8::Value>, v8::PropertyAttribute)?:
+> > ../../nan/nan_maybe_43_inl.h:88:15: error: ?class v8::Object? has no member named ?ForceSet?
+> >    return obj->ForceSet(GetCurrentContext(), key, value, attribs);
+> >                ^~~~~~~~
+> >
+> > Do you know what is going on ?
+> >
+> > Thanks!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
