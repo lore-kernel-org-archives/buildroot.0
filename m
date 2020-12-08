@@ -1,39 +1,45 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  7 Dec 2020 23:47:19 +0100
-Subject: [Buildroot] [PATCH] toolchain/toolchain-buildroot: glibc 2.32 for
- ARC needs linux-headers >= 5.1.0
-Message-ID: <20201207224719.3603067-1-romain.naour@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 08 Dec 2020 07:44:22 +0200
+Subject: [Buildroot] [PATCH next] package/daemon: bump to version 0.7
+In-Reply-To: <20201207225906.58a9f0db@windsurf.home>
+References: <1fd6d6ff9eaedda5e3b3e85c4c5c0b950dcbaec8.1605981054.git.baruch@tkos.co.il>
+ <20201207225906.58a9f0db@windsurf.home>
+Message-ID: <87im9csvgp.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ARC support has been merged into glibc 2.32 but it requires
-linux-headers >= 5.1.0 [1].
+Hi Thomas,
 
-Fixes:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/895774971
+On Mon, Dec 07 2020, Thomas Petazzoni wrote:
+> On Sat, 21 Nov 2020 19:50:54 +0200
+> Baruch Siach <baruch@tkos.co.il> wrote:
+>>  define DAEMON_CONFIGURE_CMDS
+>> -	(cd $(@D); ./config)
+>> +	(cd $(@D); ./configure)
+>
+> What is the config/configure script doing? Indeed, it seems odd that
+> when cross-compiling, we don't need to pass it the
+> cross-compiler/cross-linker/CFLAGS, etc. ?
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0be8ae3679570ff9a193615a035fc8074a8c704f
+This script does only this:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: ARC Maintainers <arc-buildroot@synopsys.com>
----
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+case "`uname -a`" in
+        Linux*)
+                echo "Configuring for linux"
+                conf/linux
+                ;;
+...
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 2058ff1eb9..ff9877ac24 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -56,6 +56,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 || !BR2_RISCV_64
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 || !BR2_arc
- 	depends on !BR2_powerpc_SPE
- 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
- 	select BR2_TOOLCHAIN_USES_GLIBC
+The conf/linux script modifies a few Makefiles and headers for generic
+Linux build. Nothing architecture specific. This works because we assume
+that host and target are both Linux.
+
+baruch
+
 -- 
-2.25.4
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
