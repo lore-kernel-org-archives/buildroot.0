@@ -1,7 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  9 Dec 2020 16:15:50 +0100
-Subject: [Buildroot] [PATCH] package/opkg-utils: needs Python3 on the host
-Message-ID: <20201209151551.21986-1-patrickdepinguin@gmail.com>
+Date: Wed,  9 Dec 2020 16:32:18 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib/lib_mk.py: handle 'else'
+ and 'elif' statements
+Message-ID: <20201209153219.17253-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +11,73 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The 'opkg.py' script installed by host-opkg-utils has as shebang:
-    #!/usr/bin/env python3
+An 'else' or 'elif' clause inside a make conditional should not be indented
+in the same way as the if/endif clause. check-package did not recognize the
+else statement and expected an indentation.
 
-which may not be available on all host machines.
-Add a potential dependency on host-python3 via BR2_PYTHON3_HOST_DEPENDENCY,
-which will only add the host-python3 dependency if no python3 is already
-available on the host.
+For example:
+
+ifdef FOOBAR
+	interesting
+else
+	more interesting
+endif
+
+would, according to check-package, need to become:
+
+ifdef FOOBAR
+	interesting
+	else
+	more interesting
+endif
+
+Treat 'else' and 'elif' the same as if-like keywords in the Indent test, but
+take into account that 'else' is also valid shell, so we need to correctly
+handle line continuation to prevent complaining about the 'else' in:
+
+ifdef FOOBAR
+	if true; \
+	    ... \
+	else \
+	    ... \
+	fi
+endif
+
+We don't add the 'else' and 'elif' statements to start_conditional, because
+it would cause incorrect nesting counting in class OverriddenVariable.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/opkg-utils/opkg-utils.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ utils/checkpackagelib/lib_mk.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index fa14053f65..a94a4cd5cd 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -10,6 +10,8 @@ OPKG_UTILS_SITE_METHOD = git
- OPKG_UTILS_LICENSE = GPL-2.0+
- OPKG_UTILS_LICENSE_FILES = COPYING
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 45e37e4598..0278354434 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -16,12 +16,13 @@ from checkpackagelib.lib import Utf8Characters         # noqa: F401
  
-+HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
-+
- define HOST_OPKG_UTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
- endef
+ # used in more than one check
+ start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
++continue_conditional = ["elif", "else"]
+ end_conditional = ["endif"]
+ 
+ 
+ class Indent(_CheckFunction):
+     COMMENT = re.compile(r"^\s*#")
+-    CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional)))
++    CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
+     ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
+     END_DEFINE = re.compile(r"^\s*endef\s")
+     MAKEFILE_TARGET = re.compile(r"^[^# \t]+:\s")
+@@ -43,7 +44,7 @@ class Indent(_CheckFunction):
+         expect_tabs = False
+         if self.define or self.backslash or self.makefile_target:
+             expect_tabs = True
+-        if self.CONDITIONAL.search(text):
++        if not self.backslash and self.CONDITIONAL.search(text):
+             expect_tabs = False
+ 
+         # calculate for next line
 -- 
 2.26.2
