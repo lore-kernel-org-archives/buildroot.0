@@ -1,24 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 09 Dec 2020 09:33:42 +0000
-Subject: [Buildroot] [Bug 13366] make pkg-stats: unrelated CVEs linked to
- linux package
-In-Reply-To: <bug-13366-163@https.bugs.busybox.net/>
-References: <bug-13366-163@https.bugs.busybox.net/>
-Message-ID: <bug-13366-163-SLIxGmDRYV@https.bugs.busybox.net/>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed,  9 Dec 2020 12:26:32 +0100
+Subject: [Buildroot] [PATCH] package/libglib2: correct upstream status for
+ patch 0001
+Message-ID: <20201209112634.18600-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13366
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
-Thanks for your feedback. This sorting is just doing alphabetic sorting I
-believe, so it doesn't make much sense for CVEs. It's a bit like sorting the
-"Current version" or "Latest version" columns: it doesn't do anything useful.
-We should perhaps disable the sorting on some columns.
+Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+this is not true. The linked issue is closed with 'Needs information', and
+the code itself is effectively not merged.
 
+Clarify the 'Upstream-status' line to make this more clear.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Note: I leave the actual discussion with upstream to Adam, as he was involved in
+the issue before.
+
+
+
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+index 9d2381bb35..d84a1ab460 100644
+--- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] Fix compile time atomic detection
+ 
+ Improved compile-time detection of atomic support in the compiler.
+ 
+-Upstream-Status: Merged
++Upstream-Status: 'Needs information'
+ See : https://gitlab.gnome.org/GNOME/glib/issues/1063
+ 
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.26.2
