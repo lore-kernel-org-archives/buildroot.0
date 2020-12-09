@@ -1,56 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Dec 2020 22:58:03 +0100
-Subject: [Buildroot] [git commit] package/ca-certificates: bump version to
- 20200601
-Message-ID: <20201208214241.E7E3E813FE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 9 Dec 2020 09:11:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.1.2
+In-Reply-To: <CANabuZeh=hZ6sUdq-2NOnt7AnS70bmb=ZQkxemFKuHc3-AtiyA@mail.gmail.com>
+References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
+ <20201205222153.75769040@windsurf.home>
+ <CANabuZeh=hZ6sUdq-2NOnt7AnS70bmb=ZQkxemFKuHc3-AtiyA@mail.gmail.com>
+Message-ID: <20201209091117.39ab9a0a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dae31592214d14f48ec967e5b78565c5e9bdc5cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Reformatted hashes.
+On Tue, 8 Dec 2020 21:41:27 +0100
+Andreas Hilse <andreas.hilse@googlemail.com> wrote:
 
-Updated license hash due to upstream commit:
-https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
+> Hello Thomas,
+> 
+> > I think the commit log should mention that the license has changed,
+> > with a link to https://github.com/troglobit/sysklogd/releases/tag/v2.1.  
+> Will do when I find out how to update the patch (have to read doc again).
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ca-certificates/ca-certificates.hash | 6 +++---
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+git commit --amend
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 71a8da4784..1ed1c3ca06 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,6 +1,6 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
--sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
-+sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
-+sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
- 
- # Locally computed
--sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
-+sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 79c81a41ea..5c24d4be49 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20190110
-+CA_CERTIFICATES_VERSION = 20200601
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl
- # ca-certificates can be built with either python 2 or python 3
- # but it must be at least python 2.7
+will allow you to update the commit log of the top-most commit.
+
+Otherwise, I suggest you to document yourself about "git interactive
+rebase", this is really the key functionality to understand to be able
+to prepare patch series with Git.
+
+> > syslog.c:448:27: error: ?O_CLOEXEC? undeclared (first use in this  
+> function)
+> >    O_WRONLY | O_NONBLOCK | O_CLOEXEC, 0)) >= 0) {  
+> This is fixable by CFLAGS="-D_GNU_SOURCE" e.g. in MAKE_OPTS.
+> I contacted the sysklogd maintainer through github. Waiting on a response.
+
+Then the particular file using O_CLOEXEC should probably #define
+_GNU_SOURCE before including any header file.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
