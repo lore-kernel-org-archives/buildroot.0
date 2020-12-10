@@ -1,37 +1,34 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 23:07:19 +0100
-Subject: [Buildroot] [PATCH v1 22/31] package/qt5wayland: format hash file
+Date: Thu, 10 Dec 2020 23:07:23 +0100
+Subject: [Buildroot] [PATCH v1 26/31] package/qt5webkit: format hash file
  according to two spaces guideline
 In-Reply-To: <20201210220726.22216-1-ps.report@gmx.net>
 References: <20201210220726.22216-1-ps.report@gmx.net>
-Message-ID: <20201210220726.22216-2-ps.report@gmx.net>
+Message-ID: <20201210220726.22216-6-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5wayland/qt5wayland.hash | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt5webkit/qt5webkit.hash | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-index 24796d2a28..b17dbdd10d 100644
---- a/package/qt5/qt5wayland/qt5wayland.hash
-+++ b/package/qt5/qt5wayland/qt5wayland.hash
-@@ -2,8 +2,8 @@
- sha256  193732229ff816f3aaab9a5e2f6bed71ddddbf1988ce003fe8dd84a92ce9aeb5  qtwayland-everywhere-src-5.15.2.tar.xz
+diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+index 3068ad920d..312d58272a 100644
+--- a/package/qt5/qt5webkit/qt5webkit.hash
++++ b/package/qt5/qt5webkit/qt5webkit.hash
+@@ -2,6 +2,6 @@
+ sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
  
  # Hashes for license files:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
--sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+-sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805 Source/WebCore/LICENSE-LGPL-2
+-sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
+-sha256 a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c LICENSE.LGPLv21
++sha256  7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  Source/WebCore/LICENSE-LGPL-2
++sha256  f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  Source/WebCore/LICENSE-LGPL-2.1
++sha256  a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c  LICENSE.LGPLv21
 -- 
 2.29.2
