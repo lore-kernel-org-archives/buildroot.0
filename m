@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:21:46 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-vaapi: bump
- version to 1.18.2
-Message-ID: <20201210210759.029B385061@busybox.osuosl.org>
+Date: Thu, 10 Dec 2020 22:21:56 +0100
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-interpipe: bump
+ version to v1.1.3
+Message-ID: <20201210210759.35DED85061@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0c1feec9ed4947b1071499244a8a98b3a01a427
+commit: https://git.buildroot.net/buildroot/commit/?id=7c113a81d3858b8095cd40072b2054be66db8871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- change to use git tag instead of commit hash value
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.hash | 2 +-
+ package/gstreamer1/gst1-interpipe/gst1-interpipe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index 8c7dee6c31..a6607ac405 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.1.tar.xz.sha256sum
--sha256  400d3c42810b50b4566df03f37319a6bdd758f969560c40147e7d9a3b0e8a6ea  gstreamer-vaapi-1.18.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.2.tar.xz.sha256sum
-+sha256  8c7b2c74fda095d83dea67accde6a68ba9f608d97ed969fdcf278930f9b1c7c0  gstreamer-vaapi-1.18.2.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 800cfe4394..41ab13a0c4 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+index 4764611487..ec93e4e752 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.hash
+@@ -1,5 +1,5 @@
+ # locally computed hash
+-sha256  4b0d8c5fabe1705ba92ac8409d7d138429df5874ba196101cdd1871936719b1a  gst1-interpipe-94dea528dc9e2d0df02fdf2114deecfef6a23740.tar.gz
++sha256  2fc8dcbe84f3968ee31d724f8a44e078bb5338682d97e4b5ddfc4bfa2d04ab5f  gst1-interpipe-v1.1.3.tar.gz
+ 
+ # Hashes for license files:
+ sha256  16d7caa6cabbfd0ca47e064a7b48cb446d013e84ca88c854d6470851752136d5  COPYING
+diff --git a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+index 9d3402d02b..cc4bc6e948 100644
+--- a/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
++++ b/package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VAAPI_VERSION = 1.18.1
-+GST1_VAAPI_VERSION = 1.18.2
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+-GST1_INTERPIPE_VERSION = 94dea528dc9e2d0df02fdf2114deecfef6a23740
++GST1_INTERPIPE_VERSION = v1.1.3
+ GST1_INTERPIPE_SITE = https://github.com/RidgeRun/gst-interpipe
+ GST1_INTERPIPE_SITE_METHOD = git
+ # fetch gst-interpipe/common sub module
