@@ -1,45 +1,63 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 10 Dec 2020 18:34:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.36.1
-Message-ID: <20201210173418.1075457-1-bernd.kuhls@t-online.de>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Thu, 10 Dec 2020 18:18:06 +0000
+Subject: [Buildroot] [PATCH 1/1] package/sdl_ttf: Update to de50cffd41e6
+Message-ID: <20201210181806.8685-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/v2.36.1-ReleaseNotes
+There is unlikely to be a new SDL_ttf release for the foreseeable future:
+https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The unreleased version from HEAD as of 2020-11-09 has several bugfixes
+and DPI scaling support:
+https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
+
+DPI scaling is used for rendering on HiDPI displays and displays
+with non-square pixels.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/util-linux/util-linux.hash | 2 +-
- package/util-linux/util-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sdl_ttf/sdl_ttf.hash |  2 +-
+ package/sdl_ttf/sdl_ttf.mk   | 15 ++++++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index fce97c4892..c5f5c69a4d 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.36/sha256sums.asc
--sha256  9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1  util-linux-2.36.tar.xz
-+sha256  09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed  util-linux-2.36.1.tar.xz
- # License files, locally calculated
- sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 0b29ef4d6f..b726f89505 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
+index 86a15d6dd4..97416c18c6 100644
+--- a/package/sdl_ttf/sdl_ttf.hash
++++ b/package/sdl_ttf/sdl_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7  SDL_ttf-2.0.11.tar.gz
++sha256  f7bf5f6a4a21542a6ce5440dc0d81f3a26d029ee689e1fade62925b1e6667bd9  de50cffd41e6.tar.gz
+ sha256  b609721d3d4ac67facaf86f068c8b311b6c5f6cef89b6d84268aa38b7867ab7b  COPYING
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 1d94c6c5cf..9ac12ef5b7 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -4,9 +4,18 @@
+ #
+ ################################################################################
  
- UTIL_LINUX_VERSION_MAJOR = 2.36
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+-SDL_TTF_VERSION = 2.0.11
+-SDL_TTF_SOURCE = SDL_ttf-$(SDL_TTF_VERSION).tar.gz
+-SDL_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
++# There is unlikely to be a new SDL_ttf release for the foreseeable future:
++# https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
++#
++# The unreleased version from HEAD as of 2020-11-09 has several bugfixes
++# and DPI scaling support:
++# https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
++#
++# DPI scaling is used for rendering on HiDPI displays and displays
++# with non-square pixels.
++SDL_TTF_VERSION = de50cffd41e6
++SDL_TTF_SOURCE = $(SDL_TTF_VERSION).tar.gz
++SDL_TTF_SITE = https://hg.libsdl.org/SDL_ttf/archive
+ SDL_TTF_LICENSE = Zlib
+ SDL_TTF_LICENSE_FILES = COPYING
  
 -- 
-2.29.2
+2.27.0
