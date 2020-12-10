@@ -1,38 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 23:07:26 +0100
-Subject: [Buildroot] [PATCH v1 29/31] package/qt5xmlpatterns: format hash
- file according to two spaces guideline
-In-Reply-To: <20201210220726.22216-1-ps.report@gmx.net>
-References: <20201210220726.22216-1-ps.report@gmx.net>
-Message-ID: <20201210220726.22216-9-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 10 Dec 2020 23:08:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to version
+ 4.4.2
+Message-ID: <20201210220853.375772-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
+use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
+sqlite3.c. A remote denial of service attack can be performed. For
+example, a SQL injection can be used to execute the crafted SQL command
+sequence. After that, some unexpected RAM data is read.
 
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index 55dace4d06..682e114a7f 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-@@ -2,8 +2,8 @@
- sha256  76ea2162a7c349188d7e7e4f6c77b78e8a205494c90fee3cea3487a1ae2cf2fa  qtxmlpatterns-everywhere-src-5.15.2.tar.xz
+https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index c37db7a20a..96a6a74013 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
++sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 14290745aa..5a9a77c1ee 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hashes for license files:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
--sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+-SQLCIPHER_VERSION = 4.3.0
++SQLCIPHER_VERSION = 4.4.2
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
 -- 
 2.29.2
