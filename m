@@ -1,62 +1,36 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 22:54:05 +0100
-Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10 compatible
- again
-Message-ID: <20201210215405.12318-1-ps.report@gmx.net>
+Date: Thu, 10 Dec 2020 23:05:19 +0100
+Subject: [Buildroot] [PATCH v1 31/31] package/qt5remoteobjects: format hash
+ file according to two spaces guideline
+In-Reply-To: <20201210220519.5654-1-ps.report@gmx.net>
+References: <20201210220519.5654-1-ps.report@gmx.net>
+Message-ID: <20201210220519.5654-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (see [1]):
-
-ToDo: ...
-
-[1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
-  - really use COMPILE_FLAGS (as the patch subject says)
-    (suggested by Yegor Yefremov)
----
- ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+ package/qt5/qt5remoteobjects/qt5remoteobjects.hash | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-new file mode 100644
-index 0000000000..d92959a938
---- /dev/null
-+++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-@@ -0,0 +1,27 @@
-+From 71840d514511291410d514790c25956be9d4dfe5 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 10 Dec 2020 20:29:19 +0100
-+Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
-+ INCLUDE_DIRECTORIES property
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 7f03c35..f582d2f 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
-+ 	set_source_files_properties(src/browse.cc
-+ 		PROPERTIES
-+ 			OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-+-			INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-++			COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
-+ 			COMPILE_DEFINITIONS NINJA_PYTHON="python"
-+ 	)
-+ endif()
-+-- 
-+2.29.2
-+
+diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.hash b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
+index c0f1351790..30c5bfc51d 100644
+--- a/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
++++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
+@@ -2,7 +2,7 @@
+ sha256  6781b6bc90888254ea77ce812736dac00c67fa4eeb3095f5cd65e4b9c15dcfc2  qtremoteobjects-everywhere-src-5.15.2.tar.xz
+ 
+ # Hashes for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+-sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
 -- 
 2.29.2
