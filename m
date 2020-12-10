@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 23:07:20 +0100
-Subject: [Buildroot] [PATCH v1 23/31] package/qt5webchannel: format hash
- file according to two spaces guideline
+Date: Thu, 10 Dec 2020 23:07:25 +0100
+Subject: [Buildroot] [PATCH v1 28/31] package/qt5x11extras: format hash file
+ according to two spaces guideline
 In-Reply-To: <20201210220726.22216-1-ps.report@gmx.net>
 References: <20201210220726.22216-1-ps.report@gmx.net>
-Message-ID: <20201210220726.22216-3-ps.report@gmx.net>
+Message-ID: <20201210220726.22216-8-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5webchannel/qt5webchannel.hash | 10 +++++-----
+ package/qt5/qt5x11extras/qt5x11extras.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
-index dad3cedc09..47c7da3365 100644
---- a/package/qt5/qt5webchannel/qt5webchannel.hash
-+++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
+index dd42ab3ff0..08e6753f21 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.hash
++++ b/package/qt5/qt5x11extras/qt5x11extras.hash
 @@ -2,8 +2,8 @@
- sha256  127fe79c43b386713f151ed7d411cd81e45e29f9c955584f29736f78c9303ec1  qtwebchannel-everywhere-src-5.15.2.tar.xz
+ sha256  7014702ee9a644a5a93da70848ac47c18851d4f8ed622b29a72eed9282fc6e3e  qtx11extras-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
