@@ -1,44 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:02:11 +0100
-Subject: [Buildroot] [git commit] package/libsoundtouch: bump version to 2.2
-Message-ID: <20201210204842.CD0F881019@busybox.osuosl.org>
+Date: Thu, 10 Dec 2020 22:02:10 +0100
+Subject: [Buildroot] [git commit] package/libhdhomerun: bump version to
+ 20200907
+Message-ID: <20201210204842.C201E85F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0456531966903d6d21e07e564eda3db06f925a41
+commit: https://git.buildroot.net/buildroot/commit/?id=b5a1cfd98eb3db64ac50331582255ed37aeac53c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://gitlab.com/soundtouch/soundtouch/-/releases
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsoundtouch/libsoundtouch.hash | 2 +-
- package/libsoundtouch/libsoundtouch.mk   | 2 +-
+ package/libhdhomerun/libhdhomerun.hash | 2 +-
+ package/libhdhomerun/libhdhomerun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsoundtouch/libsoundtouch.hash b/package/libsoundtouch/libsoundtouch.hash
-index aa33bb8a7e..fe6a108e33 100644
---- a/package/libsoundtouch/libsoundtouch.hash
-+++ b/package/libsoundtouch/libsoundtouch.hash
+diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
+index adbe041378..d5ff494adb 100644
+--- a/package/libhdhomerun/libhdhomerun.hash
++++ b/package/libhdhomerun/libhdhomerun.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  3a431facf019f37cc2da112156226d686e941b15d6327f3a41d7ca21dfaf8e94  libsoundtouch-2.1.2.tar.gz
-+sha256  f1ce96bac35779d3b752f4cc8696975b3d58f3deb9db47ffc45862767c2a2bdd  libsoundtouch-2.2.tar.gz
- sha256  6b73f6327136a924821ec044bbd9f17cf8677faf2f2a2b1366a9fff6188c9688  COPYING.TXT
-diff --git a/package/libsoundtouch/libsoundtouch.mk b/package/libsoundtouch/libsoundtouch.mk
-index 9b040e391c..98b5cc75b3 100644
---- a/package/libsoundtouch/libsoundtouch.mk
-+++ b/package/libsoundtouch/libsoundtouch.mk
+-sha256  a61038f0a78c5dcab3508927ba47ac6ec47840f3d42a2df2b02034cfd7400668  libhdhomerun_20200521.tgz
++sha256  cbaeb779c5a4e07db45310ef4271872bcb7c472402ebc3c58e224653c09400ed  libhdhomerun_20200907.tgz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index 7b3a232d1c..42d4de261f 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSOUNDTOUCH_VERSION = 2.1.2
-+LIBSOUNDTOUCH_VERSION = 2.2
- LIBSOUNDTOUCH_SITE = https://gitlab.com/soundtouch/soundtouch/-/archive/$(LIBSOUNDTOUCH_VERSION)
- LIBSOUNDTOUCH_LICENSE = LGPL-2.1+
- LIBSOUNDTOUCH_LICENSE_FILES = COPYING.TXT
+-LIBHDHOMERUN_VERSION = 20200521
++LIBHDHOMERUN_VERSION = 20200907
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
