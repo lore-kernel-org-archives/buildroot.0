@@ -1,83 +1,110 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 9 Dec 2020 23:50:10 +0100
-Subject: [Buildroot] [PATCH/next v1 1/2] package/ninja: bump version to
- 1.10.2
-In-Reply-To: <20201205212830.6cb9158d@windsurf.home>
-References: <20201202194236.1751-1-ps.report@gmx.net>
- <20201205212830.6cb9158d@windsurf.home>
-Message-ID: <20201209235010.5105b11c@gmx.net>
+From: Christian Stewart <christian@paral.in>
+Date: Wed,  9 Dec 2020 23:27:20 -0800
+Subject: [Buildroot] [PATCH v1 1/1] package/delve: new package
+Message-ID: <20201210072721.772056-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Delve is a debugger for the Go programming language.
 
-On Sat, 5 Dec 2020 21:28:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/delve/Config.in  | 18 ++++++++++++++++++
+ package/delve/delve.hash |  3 +++
+ package/delve/delve.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/delve/Config.in
+ create mode 100644 package/delve/delve.hash
+ create mode 100644 package/delve/delve.mk
 
-> On Wed,  2 Dec 2020 20:42:35 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > - rebased 0001-set-minimum-cmake-version-to-3.10.patch
-> >
-> > - removed 0002-remove-fdiagnostics-color-from-make-command.patch
-> >   (superseeded by upstream commit [1])
-> >
-> > - rebased package/ninja/0003-CMake-fix-object-library-usage.patch
-> >
-> > [1] https://github.com/ninja-build/ninja/commit/418d59b8a6054ce9ef1a28c07c41d3a0bb386836
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...01-set-minimum-cmake-version-to-3.10.patch | 20 +++---
-> >  ...fdiagnostics-color-from-make-command.patch | 29 --------
-> >  .../0003-CMake-fix-object-library-usage.patch | 67 ++++++++++---------
-> >  package/ninja/ninja.hash                      |  4 +-
-> >  package/ninja/ninja.mk                        |  2 +-
-> >  5 files changed, 49 insertions(+), 73 deletions(-)
-> >  delete mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
->
-> Both applied. Could you keep an eye of meson-based package failures in
-> the coming days? Updates of Meson have had a tendency to break stuff a
-> bit in the past. Thanks!
-
-No breakage detected (yet?), the only new feature is the following
-deprecation warning:
-
-	DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-	DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-	DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-	DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-
-
-Which can be fixed by the following patch:
-
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -14,13 +14,15 @@ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
-
- [properties]
- needs_exe_wrapper = true
-+sys_root = '@STAGING_DIR@'
-+pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
-+pkg_config_static = '@STATIC@'
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f33f88df43..7ede0cc0f1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -505,6 +505,7 @@ F:	linux/linux-ext-aufs.mk
+ F:	package/aufs/
+ F:	package/aufs-util/
+ F:	package/batman-adv/
++F:	package/delve/
+ F:	package/docker-cli/
+ F:	package/docker-containerd/
+ F:	package/docker-engine/
+diff --git a/package/Config.in b/package/Config.in
+index 39c91645ad..b97937f841 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/cache-calibrator/Config.in"
+ 	source "package/clinfo/Config.in"
+ 	source "package/dacapo/Config.in"
++	source "package/delve/Config.in"
+ 	source "package/dhrystone/Config.in"
+ 	source "package/dieharder/Config.in"
+ 	source "package/dmalloc/Config.in"
+diff --git a/package/delve/Config.in b/package/delve/Config.in
+new file mode 100644
+index 0000000000..008f00d789
+--- /dev/null
++++ b/package/delve/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_DELVE
++	bool "delve"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC # go, cgo
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # go
++	depends on BR2_USE_MMU # go
++	help
++	  Delve is a debugger for the Go programming language.
 +
-+[built-in options]
- c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
--sys_root = '@STAGING_DIR@'
--pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
--pkg_config_static = '@STATIC@'
-
- [host_machine]
- system = 'linux'
-
-
-Regards,
-Peter
-
->
-> Thomas
++	  https://github.com/go-delve/delve
++
++comment "delve needs a glibc toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_USE_MMU
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+new file mode 100644
+index 0000000000..e8bb9c37ad
+--- /dev/null
++++ b/package/delve/delve.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  f8bbaecdfc9d1ff6148900d3dea44b6dd06a7f0197be4e9a75c289b7f62682ab  delve-1.5.0.tar.gz
++sha256	778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+new file mode 100644
+index 0000000000..d524db374f
+--- /dev/null
++++ b/package/delve/delve.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# delve
++#
++################################################################################
++
++DELVE_VERSION = 1.5.0
++DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
++
++DELVE_LICENSE = MIT
++DELVE_LICENSE_FILES = LICENSE
++
++DELVE_DEPENDENCIES = host-pkgconf
++
++DELVE_TAGS = cgo
++
++DELVE_BUILD_TARGETS = cmd/dlv
++
++DELVE_INSTALL_BINS = $(notdir $(DELVE_BUILD_TARGETS))
++
++$(eval $(golang-package))
+-- 
+2.28.0
