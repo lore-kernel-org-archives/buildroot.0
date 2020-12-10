@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:08:18 +0100
-Subject: [Buildroot] [git commit] package/qt5quickcontrols: format hash file
+Date: Thu, 10 Dec 2020 22:08:17 +0100
+Subject: [Buildroot] [git commit] package/qt5multimedia: format hash file
  according to two spaces guideline
-Message-ID: <20201210205344.1CD4480480@busybox.osuosl.org>
+Message-ID: <20201210205344.104BB819AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57a0d032583125a09354c91e8889f0664b46d46d
+commit: https://git.buildroot.net/buildroot/commit/?id=6df1a69e6425382bcf9f2b6ba425234ddc6874f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5quickcontrols/qt5quickcontrols.hash | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/qt5/qt5multimedia/qt5multimedia.hash | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-index 44891b8ee3..1fa0d6430a 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
-@@ -2,7 +2,7 @@
- sha256  c393fb7384b1f047f10e91a6832cf3e6a4c2a41408b8cb2d05af2283e8549fb5  qtquickcontrols-everywhere-src-5.15.2.tar.xz
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
+index 42b7e0e158..b70a4ecf51 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.hash
++++ b/package/qt5/qt5multimedia/qt5multimedia.hash
+@@ -2,9 +2,9 @@
+ sha256  0c3758810e5131aabcf76e4965e4c18b8911af54d9edd9305d2a8278d8346df5  qtmultimedia-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
 -sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
 -sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
 -sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 c1d75c15db4409bcbb182180d582f410a263dc9a631cd546b256e95f1da42165 examples/multimedia/spectrum/3rdparty/fftreal/license.txt
 +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
 +sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
 +sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
++sha256  c1d75c15db4409bcbb182180d582f410a263dc9a631cd546b256e95f1da42165  examples/multimedia/spectrum/3rdparty/fftreal/license.txt
