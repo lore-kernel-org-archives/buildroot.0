@@ -1,63 +1,57 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Thu, 10 Dec 2020 18:18:06 +0000
-Subject: [Buildroot] [PATCH 1/1] package/sdl_ttf: Update to de50cffd41e6
-Message-ID: <20201210181806.8685-1-glex.spb@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 10 Dec 2020 19:48:19 +0100
+Subject: [Buildroot] [PATCH v1 14/14] package/gst1-shark: bump version
+ to v0.7.2
+In-Reply-To: <20201209212716.15472-14-ps.report@gmx.net>
+References: <20201209212716.15472-1-ps.report@gmx.net>
+ <20201209212716.15472-14-ps.report@gmx.net>
+Message-ID: <20201210194819.74a27885@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is unlikely to be a new SDL_ttf release for the foreseeable future:
-https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
+Hello *,
 
-The unreleased version from HEAD as of 2020-11-09 has several bugfixes
-and DPI scaling support:
-https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
+On Wed,  9 Dec 2020 22:27:16 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-DPI scaling is used for rendering on HiDPI displays and displays
-with non-square pixels.
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/gstreamer1/gst1-shark/gst1-shark.hash | 4 ++--
+>  package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
+> index 6f8365cb16..6b4d59f07e 100644
+> --- a/package/gstreamer1/gst1-shark/gst1-shark.hash
+> +++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
+> @@ -1,5 +1,5 @@
+>  # locally computed hash
+> -sha256 aec7f0bbb81775922da2c94a4f84b64b5efd38a616f0d07eb4c3ddb5770b728d  gst1-shark-v0.7.1.tar.gz
+> +sha256  24d910c2e7b4c66c804e53e9f3fc18fb61b0d3b82d8580f0fa9c2b1c563e5ab3  gst1-shark-v0.7.2.tar.gz
+>
+>  # Hashes for license files:
+> -sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
+> +sha256  6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
+> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
+> index 146d1f8456..ea0c5a29cd 100644
+> --- a/package/gstreamer1/gst1-shark/gst1-shark.mk
+> +++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -GST1_SHARK_VERSION = v0.7.1
+> +GST1_SHARK_VERSION = v0.7.2
+>  GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
+>  GST1_SHARK_SITE_METHOD = git
+>  GST1_SHARK_GIT_SUBMODULES = YES
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
----
- package/sdl_ttf/sdl_ttf.hash |  2 +-
- package/sdl_ttf/sdl_ttf.mk   | 15 ++++++++++++---
- 2 files changed, 13 insertions(+), 4 deletions(-)
+There is already a patch ([1]) from Chris Packham pre-dating this one doing
+the same (despite the hash-two-spaces-format change)...
 
-diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
-index 86a15d6dd4..97416c18c6 100644
---- a/package/sdl_ttf/sdl_ttf.hash
-+++ b/package/sdl_ttf/sdl_ttf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7  SDL_ttf-2.0.11.tar.gz
-+sha256  f7bf5f6a4a21542a6ce5440dc0d81f3a26d029ee689e1fade62925b1e6667bd9  de50cffd41e6.tar.gz
- sha256  b609721d3d4ac67facaf86f068c8b311b6c5f6cef89b6d84268aa38b7867ab7b  COPYING
-diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
-index 1d94c6c5cf..9ac12ef5b7 100644
---- a/package/sdl_ttf/sdl_ttf.mk
-+++ b/package/sdl_ttf/sdl_ttf.mk
-@@ -4,9 +4,18 @@
- #
- ################################################################################
- 
--SDL_TTF_VERSION = 2.0.11
--SDL_TTF_SOURCE = SDL_ttf-$(SDL_TTF_VERSION).tar.gz
--SDL_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
-+# There is unlikely to be a new SDL_ttf release for the foreseeable future:
-+# https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
-+#
-+# The unreleased version from HEAD as of 2020-11-09 has several bugfixes
-+# and DPI scaling support:
-+# https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
-+#
-+# DPI scaling is used for rendering on HiDPI displays and displays
-+# with non-square pixels.
-+SDL_TTF_VERSION = de50cffd41e6
-+SDL_TTF_SOURCE = $(SDL_TTF_VERSION).tar.gz
-+SDL_TTF_SITE = https://hg.libsdl.org/SDL_ttf/archive
- SDL_TTF_LICENSE = Zlib
- SDL_TTF_LICENSE_FILES = COPYING
- 
--- 
-2.27.0
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201111075156.4955-1-judge.packham at gmail.com/
