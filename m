@@ -1,83 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Dec 2020 21:47:26 +0100
-Subject: [Buildroot] [PATCH 0/3] package/ti-stgx: tentative bump (branch
- yem/ti-sgx-stuff)
-Message-ID: <cover.1607633239.git.yann.morin.1998@free.fr>
+Date: Thu, 10 Dec 2020 21:47:27 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/beaglebone_qt5: switch to using KMS
+ instead of wayland+weston
+In-Reply-To: <cover.1607633239.git.yann.morin.1998@free.fr>
+References: <cover.1607633239.git.yann.morin.1998@free.fr>
+Message-ID: <513aafb89da88453c8514687923abc80376c20a8.1607633239.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Adam Duskett <Aduskett@gmail.com>
 
-This series is a respin based on the initial patch from Adam:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20200702201125.3639873-1-aduskett at gmail.com/
+weston does not work on the ti-sgx SDK, so switch to using KMS directly,
+and drop the wayland-related config options.
 
-That patch did help some people (see the replies), but unfortunately it
-still has a few shortcomings that I have tried to address, mostly
-unsuccessfully.
-
-The most prominent issue was that the removing of ti-sgx-libgbm was not
-properly propagated to qt5base, and thus the build of qt5base would
-succeed becasue it avoided a problematic code path. Fixing that causes
-qt5base to no longer build, hitting the upstream issue:
-    https://bugreports.qt.io/browse/QTBUG-72567
-
-That has not yet been fixed upstream, and of the proposed patches, or
-various suggestions in various Qt-related forums, none do fix the issue
-either:
-  - patches in the PR itself
-  - https://codereview.qt-project.org/c/qt/qtbase/+/248270
-  - https://forum.qt.io/topic/88588/qtbase-compilation-error-with-device-linux-rasp-pi3-g-qeglfskmsgbmwindow-cpp/8
-  - https://forum.qt.io/topic/91596/raspberry-pi-3-compiling-qt-5-11-0-problem/6
-
-So, I am at a loss at how to actually fix that further...
-
-Still, here is a repsin with at least the changes I deemed necessary to
-reduce the problem-space. Any feedback or further guidance would be
-highly appreciated.
-
-Regards,
-Yann E. MORIN.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Adam Duskett (3):
-      configs/beaglebone_qt5: switch to using KMS instead of wayland+weston
-      package/ti-sgx-demos: use KMS-based demos
-      package/ti-sgx-{km, um}: bump to SDK 06.01.00.08 versions
-
- Config.in.legacy                                   |  7 +++++
- board/beaglebone/readme.txt                        | 12 +++++++-
- .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json      | 15 ++++++++++
- configs/beaglebone_qt5_defconfig                   |  5 +---
- package/Config.in                                  |  1 -
- package/qt5/qt5base/qt5base.mk                     |  4 +--
- package/ti-sgx-demos/ti-sgx-demos.mk               |  2 +-
- package/ti-sgx-km/ti-sgx-km.hash                   |  4 +--
- package/ti-sgx-km/ti-sgx-km.mk                     |  4 +--
- .../0001-Add-missing-sys-sysmacros.h-include.patch | 25 -----------------
- package/ti-sgx-libgbm/Config.in                    | 12 --------
- package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  3 --
- package/ti-sgx-libgbm/ti-sgx-libgbm.mk             | 32 ----------------------
- package/ti-sgx-um/Config.in                        |  1 -
- package/ti-sgx-um/ti-sgx-um.hash                   |  4 +--
- package/ti-sgx-um/ti-sgx-um.mk                     |  4 +--
- 16 files changed, 45 insertions(+), 90 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: split into its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/beaglebone/readme.txt                       | 12 +++++++++++-
+ .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json     | 15 +++++++++++++++
+ configs/beaglebone_qt5_defconfig                  |  5 +----
+ 3 files changed, 27 insertions(+), 5 deletions(-)
  create mode 100644 board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
- delete mode 100644 package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
- delete mode 100644 package/ti-sgx-libgbm/Config.in
- delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.hash
- delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.mk
 
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index e6647dad2a..231e977a89 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -7,7 +7,7 @@ Description
+ This configuration will build a complete image for the beaglebone and
+ the TI AM335x-EVM, the board type is identified by the on-board
+ EEPROM. The configuration is based on the
+-ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
++ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
+ variants and the evm-sk are built too.
+ 
+ For Qt5 support support use the beaglebone_qt5_defconfig.
+@@ -43,10 +43,20 @@ output/images/
+ To copy the image file to the sdcard use dd:
+ $ dd if=output/images/sdcard.img of=/dev/XXX
+ 
++
++Running Qt5 hellowindow opengl demo:
++===================
++# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
++# export QT_QPA_PLATFORM=eglfs
++# export QT_QPA_EGLFS_INTEGRATION=none
++# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
++
++
+ Tested hardware
+ ===============
+ am335x-evm (rev. 1.1A)
+ beagleboneblack (rev. A5A)
+ beaglebone (rev. A6)
+ 
++2020, Adam Duskett <aduskett@gmail.com>
+ 2016, Lothar Felten <lothar.felten@gmail.com>
+diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+new file mode 100644
+index 0000000000..76f5e7d379
+--- /dev/null
++++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+@@ -0,0 +1,15 @@
++{
++  "device": "/dev/dri/card0",
++  "hwcursor": false,
++  "pbuffers": true,
++  "outputs": [
++    {
++      "name": "VGA1",
++      "mode": "off"
++    },
++    {
++      "name": "HDMI1",
++      "mode": "1024x768"
++    }
++  ]
++}
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 5f7b911e5d..6e0371a7d3 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_EXAMPLES=y
+ BR2_PACKAGE_QT5BASE_EGLFS=y
+-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+ BR2_PACKAGE_QT5QUICKCONTROLS=y
+-BR2_PACKAGE_QT5WAYLAND=y
+-BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
+-BR2_PACKAGE_WESTON=y
+ BR2_PACKAGE_TI_SGX_DEMOS=y
+ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
