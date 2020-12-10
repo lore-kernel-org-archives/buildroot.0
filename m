@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:08:11 +0100
-Subject: [Buildroot] [git commit] package/qt5declarative: format hash file
- according to two spaces guideline
-Message-ID: <20201210205343.CC28485FD8@busybox.osuosl.org>
+Date: Thu, 10 Dec 2020 22:08:13 +0100
+Subject: [Buildroot] [git commit] package/qt5graphicaleffects: format hash
+ file according to two spaces guideline
+Message-ID: <20201210205343.E3F5E85FD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a7b3721b299d9011f9d903ed5d761740d724bc2
+commit: https://git.buildroot.net/buildroot/commit/?id=4ccf354edce6a39ffe7ebe1d28f80eb08908cd69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5declarative/qt5declarative.hash | 10 +++++-----
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
-index ca7f1fe29f..ab83b71814 100644
---- a/package/qt5/qt5declarative/qt5declarative.hash
-+++ b/package/qt5/qt5declarative/qt5declarative.hash
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+index 52da93483e..9d7a837b8b 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
 @@ -2,8 +2,8 @@
- sha256  c600d09716940f75d684f61c5bdaced797f623a86db1627da599027f6c635651  qtdeclarative-everywhere-src-5.15.2.tar.xz
+ sha256  ec8d67f64967d5046410490b549c576f9b9e8b47ec68594ae84aa8870173dfe4  qtgraphicaleffects-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
