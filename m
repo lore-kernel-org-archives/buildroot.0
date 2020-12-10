@@ -1,72 +1,57 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 10 Dec 2020 21:20:00 +0100
-Subject: [Buildroot] [RFC v1] package/ninja: fix to be cmake-3.10
- compatible again
-In-Reply-To: <20201210193807.19225-1-ps.report@gmx.net>
-References: <20201210193807.19225-1-ps.report@gmx.net>
-Message-ID: <CAGm1_kvqbRenO4XFLOk3p_CCh95RhBcPQg-RDVa3xLVNabOUdQ@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Thu, 10 Dec 2020 21:28:14 +0100
+Subject: [Buildroot] [PATCH] package/dt-utils: install barebox-state
+ lock file
+In-Reply-To: <87v9dgjop1.fsf@grinn-global.com>
+References: <20201117102534.107484-1-b.bilas@grinn-global.com>
+ <87v9dgjop1.fsf@grinn-global.com>
+Message-ID: <956fdf5f-6355-85c7-05a1-f4729b5f1f1d@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Marcin,
 
-On Thu, Dec 10, 2020 at 8:38 PM Peter Seiderer <ps.report@gmx.net> wrote:
+On 05.12.2020 15:46, Marcin Niestr?j wrote:
+> Hi Bartosz,
 >
-> Fixes (see [1]):
+> Bartosz Bilas <b.bilas@grinn-global.com> writes:
 >
-> ToDo: ...
+>> By default there is no /var/lock/barebox-state file what causes
+>> the following error when we try to execute barebox-state command:
+>>
+>> # barebox-state
+>> Failed to open lock-file /var/lock/barebox-state
+>>
+>> Fix it by adding an empty file in post install hook.
+>>
+>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+>> ---
+>>   package/dt-utils/dt-utils.mk | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+>> index 25c287d434..454b00e3d6 100644
+>> --- a/package/dt-utils/dt-utils.mk
+>> +++ b/package/dt-utils/dt-utils.mk
+>> @@ -12,4 +12,11 @@ DT_UTILS_LICENSE_FILES = COPYING
+>>   DT_UTILS_DEPENDENCIES = udev
+>>   DT_UTILS_AUTORECONF = YES
+>>   
+>> +define DT_UTILS_INSTALL_LOCK_FILE
+>> +	rm -f $(TARGET_DIR)/var/lock/barebox-state
+>> +	mkdir -p $(TARGET_DIR)/var/lock
+>> +	touch $(TARGET_DIR)/var/lock/barebox-state
+>> +endef
+>> +DT_UTILS_POST_INSTALL_TARGET_HOOKS += DT_UTILS_INSTALL_LOCK_FILE
+> I'm afraid this won't help for minimal rootfs images, where /var/lock is
+> a symlink at /tmp. What is the type of rootfs skeleton that you tested
+> your changes with?
+I've been testing this patch using skeleton-init-systemd.
 >
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
->
-> diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> new file mode 100644
-> index 0000000000..a2a5159da5
-> --- /dev/null
-> +++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> @@ -0,0 +1,27 @@
-> +From ec0c02c67f963ac25053dcd8261bc540c49d3a17 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Thu, 10 Dec 2020 20:29:19 +0100
-> +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
-> + INCLUDE_DIRECTORIES property
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + CMakeLists.txt | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 7f03c35..96e91f7 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
-> +       set_source_files_properties(src/browse.cc
-> +               PROPERTIES
-> +                       OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-> +-                      INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-> ++                      COMPILE_OPTIONS "-I${CMAKE_BINARY_DIR}"
-
-COMPILE_OPTIONS is not available in 3.10 but COMPILE_FLAGS
-(https://cmake.org/cmake/help/v3.10/prop_sf/COMPILE_FLAGS.html)
-
-Regards,
-Yegor
-
-> +                       COMPILE_DEFINITIONS NINJA_PYTHON="python"
-> +       )
-> + endif()
-> +--
-> +2.29.2
-> +
-> --
-> 2.29.2
->
+>> +
+>>   $(eval $(autotools-package))
+Best
+Bartek
