@@ -1,50 +1,62 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 22:46:19 +0100
-Subject: [Buildroot] [PATCH v1 01/31] package/qt5: bump version to 5.15.2
-In-Reply-To: <20201210211845.3894b949@windsurf.home>
-References: <20201121211258.12068-1-ps.report@gmx.net>
- <20201210211845.3894b949@windsurf.home>
-Message-ID: <20201210224619.01058d9f@gmx.net>
+Date: Thu, 10 Dec 2020 22:54:05 +0100
+Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10 compatible
+ again
+Message-ID: <20201210215405.12318-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes (see [1]):
 
-On Thu, 10 Dec 2020 21:18:45 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ToDo: ...
 
-> Hello Peter,
->
-> On Sat, 21 Nov 2020 22:12:28 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > qt5base:
-> >   - header.BSD was remove with commit 'Remove license header
-> >     templates from qtbase' ([1])
-> >
-> > qt5tools:
-> >   - rebase 0001-Disable-designer-tool-fixes-configure-error.patch
-> >
-> > qt5webengine:
-> >   - update 3rdparty license info
-> >
-> > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=9ac8b9c92eb01bf755995669ecd7ab3acf21dd7d
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> We only received the first 20 patches of this series of 31 patches.
-> What are the remaining patches ? :-)
+[1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
 
-The remaining hash file format changes..., do not know which mailer
-(sender/receiver or git send-email) decided to drop them..., will
-re-send...
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - really use COMPILE_FLAGS (as the patch subject says)
+    (suggested by Yegor Yefremov)
+---
+ ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
 
-Regards,
-Peter
-
->
-> Thanks!
->
-> Thomas
+diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+new file mode 100644
+index 0000000000..d92959a938
+--- /dev/null
++++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+@@ -0,0 +1,27 @@
++From 71840d514511291410d514790c25956be9d4dfe5 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Thu, 10 Dec 2020 20:29:19 +0100
++Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
++ INCLUDE_DIRECTORIES property
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7f03c35..f582d2f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
++ 	set_source_files_properties(src/browse.cc
++ 		PROPERTIES
++ 			OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
++-			INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+++			COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
++ 			COMPILE_DEFINITIONS NINJA_PYTHON="python"
++ 	)
++ endif()
++-- 
++2.29.2
++
+-- 
+2.29.2
