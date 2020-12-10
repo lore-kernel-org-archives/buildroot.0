@@ -1,57 +1,129 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 19:48:19 +0100
-Subject: [Buildroot] [PATCH v1 14/14] package/gst1-shark: bump version
- to v0.7.2
-In-Reply-To: <20201209212716.15472-14-ps.report@gmx.net>
-References: <20201209212716.15472-1-ps.report@gmx.net>
- <20201209212716.15472-14-ps.report@gmx.net>
-Message-ID: <20201210194819.74a27885@gmx.net>
+Date: Thu, 10 Dec 2020 20:01:39 +0100
+Subject: [Buildroot] [PATCH/next v1 1/2] package/ninja: bump version to
+ 1.10.2
+In-Reply-To: <CAGm1_ksL0d+9NBFiX4RbTe5B9mq=1HWFKPvd3u+YVQ78re1uZQ@mail.gmail.com>
+References: <20201202194236.1751-1-ps.report@gmx.net>
+ <20201205212830.6cb9158d@windsurf.home>
+ <20201209235010.5105b11c@gmx.net>
+ <CAGm1_ksL0d+9NBFiX4RbTe5B9mq=1HWFKPvd3u+YVQ78re1uZQ@mail.gmail.com>
+Message-ID: <20201210200139.030b21d8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+Hello Yegor,
 
-On Wed,  9 Dec 2020 22:27:16 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+On Thu, 10 Dec 2020 11:36:40 +0100, Yegor Yefremov <yegorslists@googlemail.com> wrote:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/gst1-shark/gst1-shark.hash | 4 ++--
->  package/gstreamer1/gst1-shark/gst1-shark.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Hi Peter, all,
 >
-> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.hash b/package/gstreamer1/gst1-shark/gst1-shark.hash
-> index 6f8365cb16..6b4d59f07e 100644
-> --- a/package/gstreamer1/gst1-shark/gst1-shark.hash
-> +++ b/package/gstreamer1/gst1-shark/gst1-shark.hash
-> @@ -1,5 +1,5 @@
->  # locally computed hash
-> -sha256 aec7f0bbb81775922da2c94a4f84b64b5efd38a616f0d07eb4c3ddb5770b728d  gst1-shark-v0.7.1.tar.gz
-> +sha256  24d910c2e7b4c66c804e53e9f3fc18fb61b0d3b82d8580f0fa9c2b1c563e5ab3  gst1-shark-v0.7.2.tar.gz
+> On Wed, Dec 9, 2020 at 11:50 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Hello Thomas,
+> >
+> > On Sat, 5 Dec 2020 21:28:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > > On Wed,  2 Dec 2020 20:42:35 +0100
+> > > Peter Seiderer <ps.report@gmx.net> wrote:
+> > >
+> > > > - rebased 0001-set-minimum-cmake-version-to-3.10.patch
+> > > >
+> > > > - removed 0002-remove-fdiagnostics-color-from-make-command.patch
+> > > >   (superseeded by upstream commit [1])
+> > > >
+> > > > - rebased package/ninja/0003-CMake-fix-object-library-usage.patch
+> > > >
+> > > > [1] https://github.com/ninja-build/ninja/commit/418d59b8a6054ce9ef1a28c07c41d3a0bb386836
+> > > >
+> > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > > ---
+> > > >  ...01-set-minimum-cmake-version-to-3.10.patch | 20 +++---
+> > > >  ...fdiagnostics-color-from-make-command.patch | 29 --------
+> > > >  .../0003-CMake-fix-object-library-usage.patch | 67 ++++++++++---------
+> > > >  package/ninja/ninja.hash                      |  4 +-
+> > > >  package/ninja/ninja.mk                        |  2 +-
+> > > >  5 files changed, 49 insertions(+), 73 deletions(-)
+> > > >  delete mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
+> > >
+> > > Both applied. Could you keep an eye of meson-based package failures in
+> > > the coming days? Updates of Meson have had a tendency to break stuff a
+> > > bit in the past. Thanks!
+> >
+> > No breakage detected (yet?), the only new feature is the following
+> > deprecation warning:
+> >
+> >         DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> >         DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> >         DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> >         DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> >
+> >
+> > Which can be fixed by the following patch:
+> >
+> > --- a/package/meson/cross-compilation.conf.in
+> > +++ b/package/meson/cross-compilation.conf.in
+> > @@ -14,13 +14,15 @@ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+> >
+> >  [properties]
+> >  needs_exe_wrapper = true
+> > +sys_root = '@STAGING_DIR@'
+> > +pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+> > +pkg_config_static = '@STATIC@'
+> > +
+> > +[built-in options]
+> >  c_args = [@TARGET_CFLAGS@]
+> >  c_link_args = [@TARGET_LDFLAGS@]
+> >  cpp_args = [@TARGET_CXXFLAGS@]
+> >  cpp_link_args = [@TARGET_LDFLAGS@]
+> > -sys_root = '@STAGING_DIR@'
+> > -pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+> > -pkg_config_static = '@STATIC@'
+> >
+> >  [host_machine]
+> >  system = 'linux'
 >
->  # Hashes for license files:
-> -sha256 6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
-> +sha256  6d191b8f1fa03cabced18b8e48fddbf960a19f965bed8491e76ed62238f92f0b  COPYING
-> diff --git a/package/gstreamer1/gst1-shark/gst1-shark.mk b/package/gstreamer1/gst1-shark/gst1-shark.mk
-> index 146d1f8456..ea0c5a29cd 100644
-> --- a/package/gstreamer1/gst1-shark/gst1-shark.mk
-> +++ b/package/gstreamer1/gst1-shark/gst1-shark.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -GST1_SHARK_VERSION = v0.7.1
-> +GST1_SHARK_VERSION = v0.7.2
->  GST1_SHARK_SITE =  https://github.com/RidgeRun/gst-shark.git
->  GST1_SHARK_SITE_METHOD = git
->  GST1_SHARK_GIT_SUBMODULES = YES
+> Ninja build breaks on my development host because my host CMake is
+> 3.10.2 and the following source file option like INCLUDE_DIRECTORIES
+> was introduced in a later version:
 
-There is already a patch ([1]) from Chris Packham pre-dating this one doing
-the same (despite the hash-two-spaces-format change)...
+Are you sure this is cmake version related? According to [1]
+INCLUDE_DIRECTORIES is valid for cmake-3.10.x..., what is the exact
+failure message?
+
+>
+>         set_source_files_properties(src/browse.cc
+>                 PROPERTIES
+>                         OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
+>                         INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+>                         COMPILE_DEFINITIONS NINJA_PYTHON="python"
+>         )
+
+The offending code was introduces with commit [2] 'CMake: Add support for
+"browse" mode'...
+
+>
+> The build breaks because build/browse_py.h cannot be found.
+
+This file should be created by the cmake build system, see [3]...,
+so something seems to fail for this build step on your system
+(dependency?, missing tool?)...
+
+>
+> Though I can create a patch for it, I wonder whether it is time to
+> bump the minimal CMake version to something new? To 3.16 for example?
+
+I believe unrelated to the failure...
 
 Regards,
 Peter
 
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20201111075156.4955-1-judge.packham at gmail.com/
+>
+> Best regards,
+> Yegor
+
+[1] https://cmake.org/cmake/help/v3.10/prop_tgt/INCLUDE_DIRECTORIES.html
+[2] https://github.com/ninja-build/ninja/commit/5b80abbc729e94abb5f5776a3438ad57d480c097
+[3] https://github.com/ninja-build/ninja/blob/master/CMakeLists.txt#L151
