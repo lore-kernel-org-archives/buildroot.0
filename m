@@ -1,100 +1,100 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 10 Dec 2020 11:36:40 +0100
-Subject: [Buildroot] [PATCH/next v1 1/2] package/ninja: bump version to
- 1.10.2
-In-Reply-To: <20201209235010.5105b11c@gmx.net>
-References: <20201202194236.1751-1-ps.report@gmx.net>
- <20201205212830.6cb9158d@windsurf.home>
- <20201209235010.5105b11c@gmx.net>
-Message-ID: <CAGm1_ksL0d+9NBFiX4RbTe5B9mq=1HWFKPvd3u+YVQ78re1uZQ@mail.gmail.com>
+From: Patrick Havelange <patrick.havelange@essensium.com>
+Date: Thu, 10 Dec 2020 16:48:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: make sure
+ .cargo/config is used
+In-Reply-To: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
+References: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
+Message-ID: <20201210154850.28578-1-patrick.havelange@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, all,
+The way cargo searches for config file is based (among other rules)
+on the current directory. This means that if cargo is started outside
+of a package directory, its configuration file will not be taken
+into account.
+So just 'cd' into it before running cargo build/install
 
-On Wed, Dec 9, 2020 at 11:50 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Thomas,
->
-> On Sat, 5 Dec 2020 21:28:30 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > On Wed,  2 Dec 2020 20:42:35 +0100
-> > Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > - rebased 0001-set-minimum-cmake-version-to-3.10.patch
-> > >
-> > > - removed 0002-remove-fdiagnostics-color-from-make-command.patch
-> > >   (superseeded by upstream commit [1])
-> > >
-> > > - rebased package/ninja/0003-CMake-fix-object-library-usage.patch
-> > >
-> > > [1] https://github.com/ninja-build/ninja/commit/418d59b8a6054ce9ef1a28c07c41d3a0bb386836
-> > >
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > ---
-> > >  ...01-set-minimum-cmake-version-to-3.10.patch | 20 +++---
-> > >  ...fdiagnostics-color-from-make-command.patch | 29 --------
-> > >  .../0003-CMake-fix-object-library-usage.patch | 67 ++++++++++---------
-> > >  package/ninja/ninja.hash                      |  4 +-
-> > >  package/ninja/ninja.mk                        |  2 +-
-> > >  5 files changed, 49 insertions(+), 73 deletions(-)
-> > >  delete mode 100644 package/ninja/0002-remove-fdiagnostics-color-from-make-command.patch
-> >
-> > Both applied. Could you keep an eye of meson-based package failures in
-> > the coming days? Updates of Meson have had a tendency to break stuff a
-> > bit in the past. Thanks!
->
-> No breakage detected (yet?), the only new feature is the following
-> deprecation warning:
->
->         DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
->         DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
->         DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
->         DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
->
->
-> Which can be fixed by the following patch:
->
-> --- a/package/meson/cross-compilation.conf.in
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -14,13 +14,15 @@ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
->
->  [properties]
->  needs_exe_wrapper = true
-> +sys_root = '@STAGING_DIR@'
-> +pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
-> +pkg_config_static = '@STATIC@'
-> +
-> +[built-in options]
->  c_args = [@TARGET_CFLAGS@]
->  c_link_args = [@TARGET_LDFLAGS@]
->  cpp_args = [@TARGET_CXXFLAGS@]
->  cpp_link_args = [@TARGET_LDFLAGS@]
-> -sys_root = '@STAGING_DIR@'
-> -pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
-> -pkg_config_static = '@STATIC@'
->
->  [host_machine]
->  system = 'linux'
+This fix the issue where the build is failing in offline mode and
+only the dl/package.tar.gz is available.
 
-Ninja build breaks on my development host because my host CMake is
-3.10.2 and the following source file option like INCLUDE_DIRECTORIES
-was introduced in a later version:
+Without this, it would have worked only if the CARGO_HOME cache had
+been populated (by running cargo vendor for example).
 
-        set_source_files_properties(src/browse.cc
-                PROPERTIES
-                        OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-                        INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-                        COMPILE_DEFINITIONS NINJA_PYTHON="python"
-        )
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+---
+ package/pkg-cargo.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-The build breaks because build/browse_py.h cannot be found.
-
-Though I can create a patch for it, I wonder whether it is time to
-bump the minimal CMake version to something new? To 3.16 for example?
-
-Best regards,
-Yegor
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 6653f64594..2047aa80cc 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -51,6 +51,7 @@ $(2)_DL_ENV = CARGO_HOME=$$(HOST_DIR)/share/cargo
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
++	cd $$(@D) && \
+ 	$$(TARGET_MAKE_ENV) \
+ 		$$(TARGET_CONFIGURE_OPTS) \
+ 		$$($(2)_CARGO_ENV) \
+@@ -58,19 +59,20 @@ define $(2)_BUILD_CMDS
+ 			--offline \
+ 			--target $$(RUSTC_TARGET_NAME) \
+ 			$$(if $$(BR2_ENABLE_DEBUG),--debug,--release) \
+-			--manifest-path $$(@D)/Cargo.toml \
++			--manifest-path Cargo.toml \
+ 			--locked \
+ 			$$($(2)_CARGO_BUILD_OPTS)
+ endef
+ else # ifeq ($(4),target)
+ define $(2)_BUILD_CMDS
++	cd $$(@D) && \
+ 	$$(HOST_MAKE_ENV) \
+ 		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+ 		$$($(2)_CARGO_ENV) \
+ 		cargo build \
+ 			--offline \
+ 			--release \
+-			--manifest-path $$(@D)/Cargo.toml \
++			--manifest-path Cargo.toml \
+ 			--locked \
+ 			$$($(2)_CARGO_BUILD_OPTS)
+ endef
+@@ -83,13 +85,14 @@ endif # ifndef $(2)_BUILD_CMDS
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
++	cd $$(@D) && \
+ 	$$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
+ 		cargo install \
+ 			--target $$(RUSTC_TARGET_NAME) \
+ 			--offline \
+ 			--root $$(TARGET_DIR)/usr/ \
+ 			--bins \
+-			--path $$(@D) \
++			--path ./ \
+ 			--force \
+ 			--locked \
+ 			$$($(2)_CARGO_INSTALL_OPTS)
+@@ -98,6 +101,7 @@ endif
+ 
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
++	cd $$(@D) && \
+ 	$$(HOST_MAKE_ENV) \
+ 		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+ 		$$($(2)_CARGO_ENV) \
+@@ -105,7 +109,7 @@ define $(2)_INSTALL_CMDS
+ 			--offline \
+ 			--root $$(HOST_DIR) \
+ 			--bins \
+-			--path $$(@D) \
++			--path ./ \
+ 			--force \
+ 			--locked \
+ 			$$($(2)_CARGO_INSTALL_OPTS)
+-- 
+2.17.1
