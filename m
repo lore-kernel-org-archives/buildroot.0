@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 23:07:25 +0100
-Subject: [Buildroot] [PATCH v1 28/31] package/qt5x11extras: format hash file
- according to two spaces guideline
+Date: Thu, 10 Dec 2020 23:07:26 +0100
+Subject: [Buildroot] [PATCH v1 29/31] package/qt5xmlpatterns: format hash
+ file according to two spaces guideline
 In-Reply-To: <20201210220726.22216-1-ps.report@gmx.net>
 References: <20201210220726.22216-1-ps.report@gmx.net>
-Message-ID: <20201210220726.22216-8-ps.report@gmx.net>
+Message-ID: <20201210220726.22216-9-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/qt5/qt5x11extras/qt5x11extras.hash | 10 +++++-----
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
-index dd42ab3ff0..08e6753f21 100644
---- a/package/qt5/qt5x11extras/qt5x11extras.hash
-+++ b/package/qt5/qt5x11extras/qt5x11extras.hash
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+index 55dace4d06..682e114a7f 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
 @@ -2,8 +2,8 @@
- sha256  7014702ee9a644a5a93da70848ac47c18851d4f8ed622b29a72eed9282fc6e3e  qtx11extras-everywhere-src-5.15.2.tar.xz
+ sha256  76ea2162a7c349188d7e7e4f6c77b78e8a205494c90fee3cea3487a1ae2cf2fa  qtxmlpatterns-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
