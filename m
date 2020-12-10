@@ -1,8 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 10 Dec 2020 23:07:18 +0100
-Subject: [Buildroot] [PATCH v1 21/31] package/qt5virtualkeyboard: format
- hash file according to two spaces guideline
-Message-ID: <20201210220726.22216-1-ps.report@gmx.net>
+Date: Thu, 10 Dec 2020 23:07:19 +0100
+Subject: [Buildroot] [PATCH v1 22/31] package/qt5wayland: format hash file
+ according to two spaces guideline
+In-Reply-To: <20201210220726.22216-1-ps.report@gmx.net>
+References: <20201210220726.22216-1-ps.report@gmx.net>
+Message-ID: <20201210220726.22216-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +12,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash | 10 +++++-----
+ package/qt5/qt5wayland/qt5wayland.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-index 189ce3b356..82f132378e 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+index 24796d2a28..b17dbdd10d 100644
+--- a/package/qt5/qt5wayland/qt5wayland.hash
++++ b/package/qt5/qt5wayland/qt5wayland.hash
 @@ -2,8 +2,8 @@
- sha256  9a3193913be30f09a896e3b8c2f9696d2e9b3f88a63ae9ca8c97a2786b68cf55  qtvirtualkeyboard-everywhere-src-5.15.2.tar.xz
+ sha256  193732229ff816f3aaab9a5e2f6bed71ddddbf1988ce003fe8dd84a92ce9aeb5  qtwayland-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
 -sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
--sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/plugins/openwnn/3rdparty/openwnn/NOTICE
--sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/plugins/pinyin/3rdparty/pinyin/NOTICE
--sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/plugins/tcime/3rdparty/tcime/COPYING
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+-sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
 +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10  src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
-+sha256  05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1  src/plugins/openwnn/3rdparty/openwnn/NOTICE
-+sha256  b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986  src/plugins/pinyin/3rdparty/pinyin/NOTICE
-+sha256  9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6  src/plugins/tcime/3rdparty/tcime/COPYING
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
 -- 
 2.29.2
