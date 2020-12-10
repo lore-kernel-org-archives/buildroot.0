@@ -1,100 +1,45 @@
-From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Thu, 10 Dec 2020 16:48:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: make sure
- .cargo/config is used
-In-Reply-To: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
-References: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
-Message-ID: <20201210154850.28578-1-patrick.havelange@essensium.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 10 Dec 2020 18:34:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: bump version to 2.36.1
+Message-ID: <20201210173418.1075457-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The way cargo searches for config file is based (among other rules)
-on the current directory. This means that if cargo is started outside
-of a package directory, its configuration file will not be taken
-into account.
-So just 'cd' into it before running cargo build/install
+Release notes:
+https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/v2.36.1-ReleaseNotes
 
-This fix the issue where the build is failing in offline mode and
-only the dl/package.tar.gz is available.
-
-Without this, it would have worked only if the CARGO_HOME cache had
-been populated (by running cargo vendor for example).
-
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pkg-cargo.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 6653f64594..2047aa80cc 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -51,6 +51,7 @@ $(2)_DL_ENV = CARGO_HOME=$$(HOST_DIR)/share/cargo
- ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
-+	cd $$(@D) && \
- 	$$(TARGET_MAKE_ENV) \
- 		$$(TARGET_CONFIGURE_OPTS) \
- 		$$($(2)_CARGO_ENV) \
-@@ -58,19 +59,20 @@ define $(2)_BUILD_CMDS
- 			--offline \
- 			--target $$(RUSTC_TARGET_NAME) \
- 			$$(if $$(BR2_ENABLE_DEBUG),--debug,--release) \
--			--manifest-path $$(@D)/Cargo.toml \
-+			--manifest-path Cargo.toml \
- 			--locked \
- 			$$($(2)_CARGO_BUILD_OPTS)
- endef
- else # ifeq ($(4),target)
- define $(2)_BUILD_CMDS
-+	cd $$(@D) && \
- 	$$(HOST_MAKE_ENV) \
- 		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
- 		$$($(2)_CARGO_ENV) \
- 		cargo build \
- 			--offline \
- 			--release \
--			--manifest-path $$(@D)/Cargo.toml \
-+			--manifest-path Cargo.toml \
- 			--locked \
- 			$$($(2)_CARGO_BUILD_OPTS)
- endef
-@@ -83,13 +85,14 @@ endif # ifndef $(2)_BUILD_CMDS
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
-+	cd $$(@D) && \
- 	$$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
- 		cargo install \
- 			--target $$(RUSTC_TARGET_NAME) \
- 			--offline \
- 			--root $$(TARGET_DIR)/usr/ \
- 			--bins \
--			--path $$(@D) \
-+			--path ./ \
- 			--force \
- 			--locked \
- 			$$($(2)_CARGO_INSTALL_OPTS)
-@@ -98,6 +101,7 @@ endif
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index fce97c4892..c5f5c69a4d 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.36/sha256sums.asc
+-sha256  9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1  util-linux-2.36.tar.xz
++sha256  09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed  util-linux-2.36.1.tar.xz
+ # License files, locally calculated
+ sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 0b29ef4d6f..b726f89505 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
-+	cd $$(@D) && \
- 	$$(HOST_MAKE_ENV) \
- 		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
- 		$$($(2)_CARGO_ENV) \
-@@ -105,7 +109,7 @@ define $(2)_INSTALL_CMDS
- 			--offline \
- 			--root $$(HOST_DIR) \
- 			--bins \
--			--path $$(@D) \
-+			--path ./ \
- 			--force \
- 			--locked \
- 			$$($(2)_CARGO_INSTALL_OPTS)
+ UTIL_LINUX_VERSION_MAJOR = 2.36
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
 -- 
-2.17.1
+2.29.2
