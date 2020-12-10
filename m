@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:08:06 +0100
-Subject: [Buildroot] [git commit] package/qt53d: format hash file according
- to two spaces guideline
-Message-ID: <20201210205343.9CAA47F963@busybox.osuosl.org>
+Date: Thu, 10 Dec 2020 22:08:12 +0100
+Subject: [Buildroot] [git commit] package/qt5enginio: format hash file
+ according to two spaces guideline
+Message-ID: <20201210205343.D9E5580FBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c079ab2431eec4a010b0e660a412459d171a8dc
+commit: https://git.buildroot.net/buildroot/commit/?id=7f322ab6f04a74540a02045ba22adacdcc828686
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt53d/qt53d.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/qt5/qt5enginio/qt5enginio.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index c726daec61..43b2132cc7 100644
---- a/package/qt5/qt53d/qt53d.hash
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -2,6 +2,6 @@
- sha256  03ed6a48c813c75296c19f5d721184ab168280b69d2656cf16f877d3d4c55c1d  qt3d-everywhere-src-5.15.2.tar.xz
+diff --git a/package/qt5/qt5enginio/qt5enginio.hash b/package/qt5/qt5enginio/qt5enginio.hash
+index 424c4776e0..8849620905 100644
+--- a/package/qt5/qt5enginio/qt5enginio.hash
++++ b/package/qt5/qt5enginio/qt5enginio.hash
+@@ -2,8 +2,8 @@
+ sha256 d907060b355512ceb7a8c3f6980e3979c20d54320b6804303b6c5e8ed42d3912  qtenginio-opensource-src-1.6.3.tar.xz
  
  # Hashes for license files:
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPL
 -sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216 LICENSE.LGPLv3
-+sha256  edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+-sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+-sha256 f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d LICENSE.FDL
 +sha256  245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
-+sha256  9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPLv3
++sha256  1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8  LICENSE.LGPLv21
++sha256  438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084  LGPL_EXCEPTION.txt
++sha256  5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52  LICENSE.LGPLv3
++sha256  f827ad079686ba92cc94811e35492d0e8966f704008b6da9eeda0b659fb58a8d  LICENSE.FDL
