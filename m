@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 10 Dec 2020 22:08:13 +0100
-Subject: [Buildroot] [git commit] package/qt5graphicaleffects: format hash
- file according to two spaces guideline
-Message-ID: <20201210205343.E3F5E85FD8@busybox.osuosl.org>
+Date: Thu, 10 Dec 2020 22:08:06 +0100
+Subject: [Buildroot] [git commit] package/qt53d: format hash file according
+ to two spaces guideline
+Message-ID: <20201210205343.9CAA47F963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ccf354edce6a39ffe7ebe1d28f80eb08908cd69
+commit: https://git.buildroot.net/buildroot/commit/?id=2c079ab2431eec4a010b0e660a412459d171a8dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt53d/qt53d.hash | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-index 52da93483e..9d7a837b8b 100644
---- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-+++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
-@@ -2,8 +2,8 @@
- sha256  ec8d67f64967d5046410490b549c576f9b9e8b47ec68594ae84aa8870173dfe4  qtgraphicaleffects-everywhere-src-5.15.2.tar.xz
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+index c726daec61..43b2132cc7 100644
+--- a/package/qt5/qt53d/qt53d.hash
++++ b/package/qt5/qt53d/qt53d.hash
+@@ -2,6 +2,6 @@
+ sha256  03ed6a48c813c75296c19f5d721184ab168280b69d2656cf16f877d3d4c55c1d  qt3d-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
--sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
--sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-+sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
-+sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+-sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPL
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+-sha256 9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216 LICENSE.LGPLv3
++sha256  edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
++sha256  245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17  LICENSE.GPLv3
++sha256  9ae1959e86bd49b9680f78e0b49d4e52ae88a3f234d497e175e42a7e8ed59216  LICENSE.LGPLv3
