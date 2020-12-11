@@ -1,58 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 14:54:44 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qemu: use a
- system-wide slirp
-Message-ID: <20201211211702.7CD198469F@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:27:53 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jemalloc: add
+ jemalloc-config to _CONFIG_SCRIPTS handling
+Message-ID: <20201211211702.B59088666D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fe192649840db2424d143d66d955a595a11f0fc
+commit: https://git.buildroot.net/buildroot/commit/?id=b11f85d9c41cbe7ee05b6c63157714db4bf07487
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Use a system-wide slirp now that we switched to the up to date
-https://gitlab.freedesktop.org/slirp/libslirp
+Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
 
-qemu already depends on libglib2 so we don't need to add any new
-dependencies
+jemalloc installs a jemalloc-config script, leaking build paths and breaking
+reproducible builds (and per-package builds).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add it to _CONFIG_SCRIPTS so the paths get fixed up for staging and the
+script removed from target.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7e237b79ad138dd296477c7ed631ca83f5145fc5)
+(cherry picked from commit 288ece60bbe182a2192d5553ba15cbdeedea3ba6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/Config.in | 1 +
- package/qemu/qemu.mk   | 6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/jemalloc/jemalloc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 33d4cccd7b..391fd5faaf 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -58,6 +58,7 @@ comment "Networking options"
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index aedc1f04bf..e43a4f7906 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -10,6 +10,7 @@ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLO
+ JEMALLOC_LICENSE = BSD-2-Clause
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
++JEMALLOC_CONFIG_SCRIPTS = jemalloc-config
  
- config BR2_PACKAGE_QEMU_SLIRP
- 	bool "Enable user mode networking (SLIRP)"
-+	select BR2_PACKAGE_SLIRP
- 	help
- 	  Enable user mode network stack, which is the default
- 	  networking backend. It requires no administrator privileges
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 7fe64e3605..9ae982616d 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -51,8 +51,10 @@ endif
- 
- endif
- 
--# There is no "--enable-slirp"
--ifeq ($(BR2_PACKAGE_QEMU_SLIRP),)
-+ifeq ($(BR2_PACKAGE_QEMU_SLIRP),y)
-+QEMU_OPTS += --enable-slirp=system
-+QEMU_DEPENDENCIES += slirp
-+else
- QEMU_OPTS += --disable-slirp
- endif
- 
+ # gcc bug internal compiler error: in merge_overlapping_regs, at
+ # regrename.c:304. This bug is fixed since gcc 6.
