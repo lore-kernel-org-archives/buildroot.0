@@ -1,45 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Dec 2020 18:35:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to version
- 2.16.9
-Message-ID: <20201211173553.71958-1-fontaine.fabrice@gmail.com>
+Date: Fri, 11 Dec 2020 18:43:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libusb: bump to version 1.0.24
+Message-ID: <20201211174325.78230-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9
+Update indentation in hash file (two spaces)
+
+https://github.com/libusb/libusb/blob/v1.0.24/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
+ package/libusb/libusb.hash | 4 ++--
+ package/libusb/libusb.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 0082eee4a2..39df050609 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8:
--sha256  fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430  mbedtls-2.16.8.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9:
-+sha256  fc17ff7d8c11d08f23ae2800a18269408ad2c24ea6bb8b9363e41a01c2425697  mbedtls-2.16.9.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 5094434e6c..77373d8b34 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+index 272dfb0877..6169a186a5 100644
+--- a/package/libusb/libusb.hash
++++ b/package/libusb/libusb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d  libusb-1.0.23.tar.bz2
+-sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
++sha256  7efd2685f7b327326dcfb85cee426d9b871fd70e22caa15bb68d595ce2a2b12a  libusb-1.0.24.tar.bz2
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index ddc6b27b6c..26e91e3da6 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MBEDTLS_VERSION = 2.16.8
-+MBEDTLS_VERSION = 2.16.9
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).23
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).24
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPL-2.1+
 -- 
 2.29.2
