@@ -1,70 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 11:19:16 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pip: needs
- hashlib module
-Message-ID: <20201211100840.09E4785F1B@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 11:22:21 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/xinetd: add
+ upstream security fix for CVE-2013-4342
+Message-ID: <20201211100840.17B9585F1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e9b814f1b6a27d85e18373e3092968b1942792c
+commit: https://git.buildroot.net/buildroot/commit/?id=eed59b9e3d34862c7c26a01bf1dcc4729e00922b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Without hashlib module pip returns the following errors:
+xinetd does not enforce the user and group configuration directives for
+TCPMUX services, which causes these services to be run as root and makes it
+easier for remote attackers to gain privileges by leveraging another
+vulnerability in a service.
 
-# pip
-ValueError: unsupported hash type sha224
-ERROR:root:code for hash sha256 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha256
-ERROR:root:code for hash sha384 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha384
-ERROR:root:code for hash sha512 was not found.
-Traceback (most recent call last):
-  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
-  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
-ValueError: unsupported hash type sha512
-Traceback (most recent call last):
-  File "/usr/bin/pip", line 11, in <module>
-    load_entry_point('pip==20.0.2', 'console_scripts', 'pip')()
-  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/main.py", line 73, in main
-  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/__init__.py", line 96, in create_command
-  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
-  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/install.py", line 24, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/req_command.py", line 15, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/index/package_finder.py", line 21, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_internal/index/collector.py", line 12, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/requests/__init__.py", line 43, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/__init__.py", line 7, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connectionpool.py", line 29, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connection.py", line 40, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/__init__.py", line 7, in <module>
-  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/ssl_.py", line 8, in <module>
-ImportError: cannot import name md5
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d5e3e1144e2b1795ab9ca4deb9e25f6f98456232)
+(cherry picked from commit d5abf5ff6188593dfc701decf8d33d38a924b45b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pip/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ ...42-xinetd-ignores-user-and-group-directiv.patch | 29 ++++++++++++++++++++++
+ package/xinetd/xinetd.mk                           |  3 +++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
-index d1b7e7f74b..61d8d7d317 100644
---- a/package/python-pip/Config.in
-+++ b/package/python-pip/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PIP
- 	bool "python-pip"
-+	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+diff --git a/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+new file mode 100644
+index 0000000000..bb2ee1fc9a
+--- /dev/null
++++ b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+@@ -0,0 +1,29 @@
++From 91e2401a219121eae15244a6b25d2e79c1af5864 Mon Sep 17 00:00:00 2001
++From: Thomas Swan <thomas.swan@gmail.com>
++Date: Wed, 2 Oct 2013 23:17:17 -0500
++Subject: [PATCH] CVE-2013-4342: xinetd: ignores user and group directives for
++ TCPMUX services
++
++Originally reported to Debian in 2005 <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=324678> and rediscovered <https://bugzilla.redhat.com/show_bug.cgi?id=1006100>, xinetd would execute TCPMUX services without dropping privilege to match the service configuration allowing the service to run with same privilege as the xinetd process (root).
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xinetd/builtins.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/xinetd/builtins.c b/xinetd/builtins.c
++index 3b85579..34a5bac 100644
++--- a/xinetd/builtins.c
+++++ b/xinetd/builtins.c
++@@ -617,7 +617,7 @@ static void tcpmux_handler( const struct server *serp )
++    if( SC_IS_INTERNAL( scp ) ) {
++       SC_INTERNAL(scp, nserp);
++    } else {
++-      exec_server(nserp);
+++      child_process(nserp);
++    }
++ }
++ 
++-- 
++2.20.1
++
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index a2ba10df74..6d6767766b 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -9,6 +9,9 @@ XINETD_SITE = $(call github,xinetd-org,xinetd,xinetd-$(XINETD_VERSION))
+ XINETD_LICENSE = xinetd license
+ XINETD_LICENSE_FILES = COPYRIGHT
+ 
++# 0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
++XINETD_IGNORE_CVES += CVE-2013-4342
++
+ XINETD_CFLAGS = $(TARGET_CFLAGS)
+ 
+ # Three cases here:
