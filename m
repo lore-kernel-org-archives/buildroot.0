@@ -1,108 +1,295 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 13:42:13 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/thermald: fix
- time_t related compile failure
-Message-ID: <20201211123117.89F6381344@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 13:21:28 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/openrc: add
+ upstream security fix for CVE-2018-21269
+Message-ID: <20201211123117.7A8DB81344@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99334b61d10cf5a202f6737cf357251bc36f3f26
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb72fa9371b6b734ec4f36b0a770849dad188a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Add upstream patch [1] to fix (musl) time_t related compile failure.
-
-Fixes:
-
-  - https://bugs.busybox.net/show_bug.cgi?id=13336
-
-  src/thd_trip_point.cpp: In member function ???bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)???:
-  src/thd_trip_point.cpp:250:19: error: format ???%ld??? expects argument of type ???long int???, but argument 6 has type ???time_t??? {aka ???long long int???} [-Werror=format=]
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    251 |        zone_id, cdev->thd_cdev_get_index(),
-    252 |        tm - cdevs[i].last_op_time);
-        |        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        |           |
-        |           time_t {aka long long int}
-  src/thermald.h:82:57: note: in definition of macro ???thd_log_info???
-     82 | #define thd_log_info(...) g_log(NULL, G_LOG_LEVEL_INFO, __VA_ARGS__)
-        |                                                         ^~~~~~~~~~~
-  src/thd_trip_point.cpp:250:59: note: format string is defined here
-    250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-        |                                                         ~~^
-        |                                                           |
-        |                                                           long int
-        |                                                         %lld
-
-[1] https://github.com/intel/thermal_daemon/commit/a7136682b9e6ebdb53c3c8b472bcd5039d62dc78.patch
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1672e250106d5c9a2003f40685e57610238a732e)
+(cherry picked from commit 2d38c5a4e58e6a9591e6bcd4e7febe68e915d0bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...int-fix-32-bit-build-error-with-musl-v1.2.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ .../openrc/0007-checkpath-fix-CVE-2018-21269.patch | 251 +++++++++++++++++++++
+ package/openrc/openrc.mk                           |   3 +
+ 2 files changed, 254 insertions(+)
 
-diff --git a/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
+diff --git a/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch b/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch
 new file mode 100644
-index 0000000000..db5bc99a91
+index 0000000000..121f229864
 --- /dev/null
-+++ b/package/thermald/0001-thd_trip_point-fix-32-bit-build-error-with-musl-v1.2.patch
-@@ -0,0 +1,53 @@
-+From 074575bf3640485ab6d43ae1efed3eff9cebae13 Mon Sep 17 00:00:00 2001
-+From: Naveen Saini <naveen.kumar.saini@intel.com>
-+Date: Thu, 5 Mar 2020 13:45:57 +0800
-+Subject: [PATCH] thd_trip_point: fix 32-bit build error with musl v1.2.0
++++ b/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch
+@@ -0,0 +1,251 @@
++From b6fef599bf8493480664b766040fa9b0d4b1e335 Mon Sep 17 00:00:00 2001
++From: William Hubbs <w.d.hubbs@gmail.com>
++Date: Fri, 20 Nov 2020 09:15:59 -0600
++Subject: [PATCH] checkpath: fix CVE-2018-21269
 +
-+Error log:
-+ ../git/src/thd_trip_point.cpp: In member function 'bool cthd_trip_point::thd_trip_point_check(int, unsigned int, int, bool*)':
-+| ../git/src/thd_trip_point.cpp:250:19: error: format '%ld' expects argument of type 'long int', but argument 6 has type 'time_t' {aka 'long long int'} [-Werror=format=]
-+|   250 |      thd_log_info("Too early to act zone:%d index %d tm %ld\n",
++This walks the directory path to the file we are going to manipulate to make
++sure that when we create the file and change the ownership and permissions
++we are working on the same file.
++Also, all non-terminal symbolic links must be owned by root. This will
++keep a non-root user from making a symbolic link as described in the
++bug. If root creates the symbolic link, it is assumed to be trusted.
 +
-+musl 1.2.0 have new feature:
-+time_t is now 64-bit on all archs (not just 64-bit archs)
++On non-linux platforms, we no longer follow non-terminal symbolic links
++by default. If you need to do that, add the -s option on the checkpath
++command line, but keep in mind that this is not secure.
 +
-+Commit id:
-+https://git.musl-libc.org/cgit/musl/commit/?id=38143339646a4ccce8afe298c34467767c899f51
++This fixes #201.
 +
-+Release note link for musl 1.2.0:
-+https://git.musl-libc.org/cgit/musl/diff/
-+
-+use %jd and typecast with intmax_t which is maximum width integer type
-+
-+Signed-off-by: Naveen Saini <naveen.kumar.saini@intel.com>
-+[Upstream: https://github.com/intel/thermal_daemon/commit/a7136682b9e6ebdb53c3c8b472bcd5039d62dc78.patch]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Patch taken from upstream:
++https://github.com/OpenRC/openrc/commit/b6fef599bf8493480664b766040fa9b0d4b1e335]
++Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 +---
-+ src/thd_trip_point.cpp | 10 ++--------
-+ 1 file changed, 2 insertions(+), 8 deletions(-)
++ man/openrc-run.8   |   6 +++
++ src/rc/checkpath.c | 103 ++++++++++++++++++++++++++++++++++++++++++---
++ 2 files changed, 102 insertions(+), 7 deletions(-)
 +
-+diff --git a/src/thd_trip_point.cpp b/src/thd_trip_point.cpp
-+index 46f692d..6358c27 100644
-+--- a/src/thd_trip_point.cpp
-++++ b/src/thd_trip_point.cpp
-+@@ -242,15 +242,9 @@ bool cthd_trip_point::thd_trip_point_check(int id, unsigned int read_temp,
-+ 				time_t tm;
-+ 				time(&tm);
-+ 				if ((tm - cdevs[i].last_op_time) < cdevs[i].sampling_priod) {
-+-#if defined __x86_64__ && defined __ILP32__
-+-					thd_log_info("Too early to act zone:%d index %d tm %lld\n",
-++					thd_log_info("Too early to act zone:%d index %d tm %jd\n",
-+ 							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#else
-+-					thd_log_info("Too early to act zone:%d index %d tm %ld\n",
-+-							zone_id, cdev->thd_cdev_get_index(),
-+-							tm - cdevs[i].last_op_time);
-+-#endif
-++							(intmax_t)tm - cdevs[i].last_op_time);
-+ 					break;
-+ 				}
-+ 				cdevs[i].last_op_time = tm;
++diff --git a/man/openrc-run.8 b/man/openrc-run.8
++index 1102daaa..ec4b88de 100644
++--- a/man/openrc-run.8
+++++ b/man/openrc-run.8
++@@ -461,6 +461,7 @@ Mark the service as inactive.
++ .Op Fl p , -pipe
++ .Op Fl m , -mode Ar mode
++ .Op Fl o , -owner Ar owner
+++.Op Fl s , -symlinks
++ .Op Fl W , -writable
++ .Op Fl q , -quiet
++ .Ar path ...
++@@ -481,6 +482,11 @@ or with names, and are separated by a colon.
++ The truncate options (-D and -F) cause the directory or file to be
++ cleared of all contents.
++ .Pp
+++If -s is not specified on a non-linux platform, checkpath will refuse to
+++allow non-terminal symbolic links to exist in the path. This is for
+++security reasons so that a non-root user can't create a symbolic link to
+++a root-owned file and take ownership of that file.
+++.Pp
++ If -W is specified, checkpath checks to see if the first path given on
++ the command line is writable.  This is different from how the test
++ command in the shell works, because it also checks to make sure the file
++diff --git a/src/rc/checkpath.c b/src/rc/checkpath.c
++index 448c9cf8..ff54a892 100644
++--- a/src/rc/checkpath.c
+++++ b/src/rc/checkpath.c
++@@ -16,6 +16,7 @@
++  *    except according to the terms contained in the LICENSE file.
++  */
++ 
+++#define _GNU_SOURCE
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ 
++@@ -23,6 +24,7 @@
++ #include <fcntl.h>
++ #include <getopt.h>
++ #include <grp.h>
+++#include <libgen.h>
++ #include <pwd.h>
++ #include <stdio.h>
++ #include <stdlib.h>
++@@ -44,7 +46,7 @@ typedef enum {
++ 
++ const char *applet = NULL;
++ const char *extraopts ="path1 [path2] [...]";
++-const char *getoptstring = "dDfFpm:o:W" getoptstring_COMMON;
+++const char *getoptstring = "dDfFpm:o:sW" getoptstring_COMMON;
++ const struct option longopts[] = {
++ 	{ "directory",          0, NULL, 'd'},
++ 	{ "directory-truncate", 0, NULL, 'D'},
++@@ -53,6 +55,7 @@ const struct option longopts[] = {
++ 	{ "pipe",               0, NULL, 'p'},
++ 	{ "mode",               1, NULL, 'm'},
++ 	{ "owner",              1, NULL, 'o'},
+++	{ "symlinks",           0, NULL, 's'},
++ 	{ "writable",           0, NULL, 'W'},
++ 	longopts_COMMON
++ };
++@@ -64,15 +67,92 @@ const char * const longopts_help[] = {
++ 	"Create a named pipe (FIFO) if not exists",
++ 	"Mode to check",
++ 	"Owner to check (user:group)",
+++	"follow symbolic links (irrelivent on linux)",
++ 	"Check whether the path is writable or not",
++ 	longopts_help_COMMON
++ };
++ const char *usagestring = NULL;
++ 
+++static int get_dirfd(char *path, bool symlinks) {
+++	char *ch;
+++	char *item;
+++	char *linkpath = NULL;
+++	char *path_dupe;
+++	char *str;
+++	int components = 0;
+++	int dirfd;
+++	int flags = 0;
+++	int new_dirfd;
+++	struct stat st;
+++	ssize_t linksize;
+++
+++	if (!path || *path != '/')
+++		eerrorx("%s: empty or relative path", applet);
+++	dirfd = openat(dirfd, "/", O_RDONLY);
+++	if (dirfd == -1)
+++		eerrorx("%s: unable to open the root directory: %s",
+++				applet, strerror(errno));
+++	path_dupe = xstrdup(path);
+++	ch = path_dupe;
+++	while (*ch) {
+++		if (*ch == '/')
+++			components++;
+++		ch++;
+++	}
+++	item = strtok(path_dupe, "/");
+++#ifdef O_PATH
+++	flags |= O_PATH;
+++#endif
+++	if (!symlinks)
+++		flags |= O_NOFOLLOW;
+++	flags |= O_RDONLY;
+++	while (dirfd > 0 && item && components > 1) {
+++		str = xstrdup(linkpath ? linkpath : item);
+++		new_dirfd = openat(dirfd, str, flags);
+++		if (new_dirfd == -1)
+++			eerrorx("%s: %s: could not open %s: %s", applet, path, str,
+++					strerror(errno));
+++		if (fstat(new_dirfd, &st) == -1)
+++			eerrorx("%s: %s: unable to stat %s: %s", applet, path, item,
+++					strerror(errno));
+++		if (S_ISLNK(st.st_mode) ) {
+++			if (st.st_uid != 0)
+++				eerrorx("%s: %s: synbolic link %s not owned by root",
+++						applet, path, str);
+++			linksize = st.st_size+1;
+++			if (linkpath)
+++				free(linkpath);
+++			linkpath = xmalloc(linksize);
+++			memset(linkpath, 0, linksize);
+++			if (readlinkat(new_dirfd, "", linkpath, linksize) != st.st_size)
+++				eerrorx("%s: symbolic link destination changed", applet);
+++			/*
+++			 * now follow the symlink.
+++			 */
+++			close(new_dirfd);
+++		} else {
+++			close(dirfd);
+++			dirfd = new_dirfd;
+++			free(linkpath);
+++			linkpath = NULL;
+++			item = strtok(NULL, "/");
+++			components--;
+++		}
+++	}
+++	free(path_dupe);
+++	if (linkpath) {
+++		free(linkpath);
+++		linkpath = NULL;
+++	}
+++	return dirfd;
+++}
+++
++ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
++-	inode_t type, bool trunc, bool chowner, bool selinux_on)
+++	inode_t type, bool trunc, bool chowner, bool symlinks, bool selinux_on)
++ {
++ 	struct stat st;
+++	char *name = NULL;
+++	int dirfd;
++ 	int fd;
++ 	int flags;
++ 	int r;
++@@ -93,14 +173,16 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
++ #endif
++ 	if (trunc)
++ 		flags |= O_TRUNC;
++-	readfd = open(path, readflags);
+++	xasprintf(&name, "%s", basename_c(path));
+++	dirfd = get_dirfd(path, symlinks);
+++	readfd = openat(dirfd, name, readflags);
++ 	if (readfd == -1 || (type == inode_file && trunc)) {
++ 		if (type == inode_file) {
++ 			einfo("%s: creating file", path);
++ 			if (!mode) /* 664 */
++ 				mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
++ 			u = umask(0);
++-			fd = open(path, flags, mode);
+++			fd = openat(dirfd, name, flags, mode);
++ 			umask(u);
++ 			if (fd == -1) {
++ 				eerror("%s: open: %s", applet, strerror(errno));
++@@ -122,7 +204,7 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
++ 				    strerror (errno));
++ 				return -1;
++ 			}
++-			readfd = open(path, readflags);
+++			readfd = openat(dirfd, name, readflags);
++ 			if (readfd == -1) {
++ 				eerror("%s: unable to open directory: %s", applet,
++ 						strerror(errno));
++@@ -140,7 +222,7 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
++ 				    strerror (errno));
++ 				return -1;
++ 			}
++-			readfd = open(path, readflags);
+++			readfd = openat(dirfd, name, readflags);
++ 			if (readfd == -1) {
++ 				eerror("%s: unable to open fifo: %s", applet,
++ 						strerror(errno));
++@@ -259,6 +341,7 @@ int main(int argc, char **argv)
++ 	int retval = EXIT_SUCCESS;
++ 	bool trunc = false;
++ 	bool chowner = false;
+++	bool symlinks = false;
++ 	bool writable = false;
++ 	bool selinux_on = false;
++ 
++@@ -293,6 +376,11 @@ int main(int argc, char **argv)
++ 				eerrorx("%s: owner `%s' not found",
++ 				    applet, optarg);
++ 			break;
+++		case 's':
+++#ifndef O_PATH
+++			symlinks = true;
+++#endif
+++			break;
++ 		case 'W':
++ 			writable = true;
++ 			break;
++@@ -320,7 +408,8 @@ int main(int argc, char **argv)
++ 	while (optind < argc) {
++ 		if (writable)
++ 			exit(!is_writable(argv[optind]));
++-		if (do_check(argv[optind], uid, gid, mode, type, trunc, chowner, selinux_on))
+++		if (do_check(argv[optind], uid, gid, mode, type, trunc, chowner,
+++					symlinks, selinux_on))
++ 			retval = EXIT_FAILURE;
++ 		optind++;
++ 	}
 +-- 
-+2.29.2
++2.20.1
 +
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 97536dad37..ba1691e70f 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -9,6 +9,9 @@ OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
+ OPENRC_LICENSE = BSD-2-Clause
+ OPENRC_LICENSE_FILES = LICENSE
+ 
++# 0007-checkpath-fix-CVE-2018-21269.patch
++OPENRC_IGNORE_CVES += CVE-2018-21269
++
+ OPENRC_DEPENDENCIES = ncurses
+ 
+ # set LIBNAME so openrc puts files in proper directories and sets proper
