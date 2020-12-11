@@ -1,101 +1,149 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 22:27:11 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mariadb: security
- bump to version 10.3.27
-Message-ID: <20201211211702.AA98886655@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 11 Dec 2020 23:47:10 +0100
+Subject: [Buildroot] [PATCH] package/qemu: bump to version 5.2.0
+Message-ID: <20201211224710.4151147-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4eba7965fe4e12a881aa4a86302b82dd7485f73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+From [1]:
+"The build system is now partly based on Meson. However, building is
+still done with configure and make as in previous versions of QEMU."
 
-Fixes the following security issues:
+Qemu requires meson >= 0.55.3, Buildroot use the latest version 0.56.0.
+In order to add host-meson dependency we have to remove --python option
+since it requires to use the meson bundled into Qemu sources [2].
 
-- CVE-2020-15180: during SST a joiner sends an sst method name to the donor.
-  Donor then appends it to the "wsrep_sst_" string to get the name of the
-  sst script to use, e.g.  wsrep_sst_rsync.  There is no validation or
-  filtering here, so if the malicious joiner sends, for example, "rsync `rm
-  -rf /`" the donor will execute that too.
+Even without --python, python3 is used. See config-host.mak:
+PYTHON=output/host/bin/python3 -B
 
-- CVE-2020-14812: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: Locking).  Supported versions that are affected are
-  5.6.49 and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily
-  exploitable vulnerability allows high privileged attacker with network
-  access via multiple protocols to compromise MySQL Server.  Successful
-  attacks of this vulnerability can result in unauthorized ability to cause
-  a hang or frequently repeatable crash (complete DOS) of MySQL Server.
+See config-host.mak to check if meson and ninja from HOST_DIR are used:
+MESON=output/host/bin/meson
+NINJA=output/host/bin/ninja
 
-- CVE-2020-14765: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: FTS).  Supported versions that are affected are 5.6.49
-  and prior, 5.7.31 and prior and 8.0.21 and prior.  Easily exploitable
-  vulnerability allows low privileged attacker with network access via
-  multiple protocols to compromise MySQL Server.  Successful attacks of this
-  vulnerability can result in unauthorized ability to cause a hang or
-  frequently repeatable crash (complete DOS) of MySQL Server.
+Since the switch to meson is partial and still requires using the
+configure script, keep using generic-package infra.
 
-- CVE-2020-14776: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: InnoDB).  Supported versions that are affected are 5.7.31 and
-  prior and 8.0.21 and prior.  Easily exploitable vulnerability allows high
-  privileged attacker with network access via multiple protocols to
-  compromise MySQL Server.  Successful attacks of this vulnerability can
-  result in unauthorized ability to cause a hang or frequently repeatable
-  crash (complete DOS) of MySQL Server.
+Disable new options introduced in Qemu 5.2.0:
+--disable-virtiofsd
+--disable-vhost-user-blk-server
 
-- CVE-2020-14789: Vulnerability in the MySQL Server product of Oracle MySQL
-  (component: Server: FTS).  Supported versions that are affected are 5.7.31
-  and prior and 8.0.21 and prior.  Easily exploitable vulnerability allows
-  high privileged attacker with network access via multiple protocols to
-  compromise MySQL Server.  Successful attacks of this vulnerability can
-  result in unauthorized ability to cause a hang or frequently repeatable
-  crash (complete DOS) of MySQL Server.
+Runtime tested on gitlab [3]
 
-- CVE-2020-28912:
-  https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-bui.pdf
-  describes a named pipe privilege vulnerability, specifically for MySQL,
-  where an unprivileged user, located on the same machine as the server, can
-  act as man-in-the-middle between server and client.
+[1] https://wiki.qemu.org/ChangeLog/5.2#Build_Information
+[2] https://git.qemu.org/?p=qemu.git;a=blob;f=configure;h=18c26e0389741643748c70ac7788a996ef006834;hb=553032db17440f8de011390e5a1cfddd13751b0b#l1895
+[3] https://gitlab.com/kubu93/buildroot/-/pipelines/228214205
 
-Additionally, 10.3.27 fixes a regression added in 10.3.26.
-
-Drop weak md5/sha1 checksums.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 163334a707a0d85480019d83b23a341e470c37ce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/mariadb/mariadb.hash | 8 +++-----
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ ...age-of-mcontext-structure-on-ARM-uCl.patch |  4 ++--
+ package/qemu/qemu.hash                        |  6 +++---
+ package/qemu/qemu.mk                          | 20 ++++++++++++++-----
+ 3 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 9de97360a4..a210dd9dad 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,8 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.3.23
--md5  473950893d29805d9384ec0ed5d7c276  mariadb-10.3.23.tar.gz
--sha1  c95b6d4cff5e6d63eed05da20561802b9c83e717  mariadb-10.3.23.tar.gz
--sha256  fc405022457d8eec5991b870cc1c9a07b83b551d6165c414c4d8f31523aa86ae  mariadb-10.3.23.tar.gz
--sha512  535cd2ce80a95b6c0a1aa559cc3275dfcd559c3a4f958fab3382923190a16e6bc5b4ad79acaa518244512ff618568c239c0edef8a701d958362ede19a29c2986  mariadb-10.3.23.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.27
-+sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
-+sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
+diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+index 548ec3e765..841708995e 100644
+--- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
++++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+@@ -18,10 +18,10 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
- # Hash for license files
- sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 1d0be060df..83965d0437 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+ diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
+-index 4be78eb9b3..0a690bec55 100644
++index 4ebe25461a..0496674fbd 100644
+ --- a/accel/tcg/user-exec.c
+ +++ b/accel/tcg/user-exec.c
+-@@ -508,7 +508,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
++@@ -536,7 +536,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
+  
+  #if defined(__NetBSD__)
+      pc = uc->uc_mcontext.__gregs[_REG_R15];
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 317c0b1a4e..7d9936adb4 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256 c9174eb5933d9eb5e61f541cd6d1184cd3118dfe4c5c4955bc1bdc4d390fa4e5  qemu-5.1.0.tar.xz
+-sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+-sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  cb18d889b628fbe637672b0326789d9b0e3b8027e0445b936537c78549df17bc  qemu-5.2.0.tar.xz
++sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 2bac96bd66..ecb02e7f48 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.3.23
-+MARIADB_VERSION = 10.3.27
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-QEMU_VERSION = 5.1.0
++QEMU_VERSION = 5.2.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = http://download.qemu.org
+ QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
+@@ -14,8 +14,12 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #       individual source files.
+ 
+ #-------------------------------------------------------------
++
++# The build system is now partly based on Meson.
++# However, building is still done with configure and make as in previous versions of QEMU.
++
+ # Target-qemu
+-QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman host-python3
++QEMU_DEPENDENCIES = host-meson host-pkgconf libglib2 zlib pixman host-python3
+ 
+ # Need the LIBS variable because librt and libm are
+ # not automatically pulled. :-(
+@@ -163,7 +167,8 @@ define QEMU_CONFIGURE_CMDS
+ 			--prefix=/usr \
+ 			--cross-prefix=$(TARGET_CROSS) \
+ 			--audio-drv-list= \
+-			--python=$(HOST_DIR)/bin/python3 \
++			--meson=$(HOST_DIR)/bin/meson \
++			--ninja=$(HOST_DIR)/bin/ninja \
+ 			--enable-kvm \
+ 			--enable-attr \
+ 			--enable-vhost-net \
+@@ -194,6 +199,8 @@ define QEMU_CONFIGURE_CMDS
+ 			--disable-capstone \
+ 			--disable-git-update \
+ 			--disable-opengl \
++			--disable-vhost-user-blk-server \
++			--disable-virtiofsd \
+ 			$(QEMU_OPTS)
+ endef
+ 
+@@ -212,7 +219,7 @@ $(eval $(generic-package))
+ #-------------------------------------------------------------
+ # Host-qemu
+ 
+-HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-python3
++HOST_QEMU_DEPENDENCIES = host-meson host-pkgconf host-zlib host-libglib2 host-pixman host-python3
+ 
+ #       BR ARCH         qemu
+ #       -------         ----
+@@ -327,13 +334,16 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 		--host-cc="$(HOSTCC)" \
+ 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
+ 		--extra-ldflags="$(HOST_LDFLAGS)" \
+-		--python=$(HOST_DIR)/bin/python3 \
++		--meson=$(HOST_DIR)/bin/meson \
++		--ninja=$(HOST_DIR)/bin/ninja \
+ 		--disable-bzip2 \
+ 		--disable-containers \
+ 		--disable-curl \
+ 		--disable-libssh \
+ 		--disable-linux-io-uring \
+ 		--disable-sdl \
++		--disable-vhost-user-blk-server \
++		--disable-virtiofsd \
+ 		--disable-vnc-jpeg \
+ 		--disable-vnc-png \
+ 		--disable-vnc-sasl \
+-- 
+2.25.4
