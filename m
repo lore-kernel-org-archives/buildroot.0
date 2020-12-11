@@ -1,38 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 22:26:14 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/bustle: fix
- license
-Message-ID: <20201211211656.7336883B1C@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:29:43 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libplist: drop
+ duplicated COPYING hash
+Message-ID: <20201211211656.99FA686196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62f2a66ea48851c3c76d8b230fc643e16139d3d1
+commit: https://git.buildroot.net/buildroot/commit/?id=3fa7961fecbd759d3a004ae2bcbbf52259cef2b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-bustle binaries are licensed under GPL-3.0:
-https://gitlab.freedesktop.org/bustle/bustle/-/blob/bustle-0.7.5/LICENSE
+Commit 762119b4c5489352a889c2627eb37906647c375d resulted in a duplicated
+line for COPYING hash so drop it
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f3ca4f10864009f3b43695366f6cd2504634d7b5)
+(cherry picked from commit 26c2db20d83d2d2800f63d97d28dc74fbe2a2625)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bustle/bustle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libplist/libplist.hash | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 675ffb0529..1dbad64aef 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -6,7 +6,7 @@
- 
- BUSTLE_VERSION = 0.7.5
- BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
--BUSTLE_LICENSE = LGPL-2.1+
-+BUSTLE_LICENSE = LGPL-2.1+, GPL-3.0 (binaries)
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
- 
+diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
+index 9934ad05eb..58054d0b84 100644
+--- a/package/libplist/libplist.hash
++++ b/package/libplist/libplist.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+ sha256  4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
+ sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
+-sha256 7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
