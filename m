@@ -1,41 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 22:27:57 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/jemalloc: add
- jemalloc-config to _CONFIG_SCRIPTS handling
-Message-ID: <20201211211656.8819381944@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:24:54 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/proftpd: security
+ bump to version 1.3.6e
+Message-ID: <20201211211656.63E8F86626@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4048e001b14411d54295848b323df1cc3484855
+commit: https://git.buildroot.net/buildroot/commit/?id=ba3cf130ef260393bad8dbafa284bcaa7e11b4aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
+1.3.6e
+---------
+  + Fixed null pointer deference in mod_sftp when using SCP incorrectly
+    (Issue #1043).
 
-jemalloc installs a jemalloc-config script, leaking build paths and breaking
-reproducible builds (and per-package builds).
+1.3.6d
+---------
+  + Fixed issue with FTPS uploads of large files using TLSv1.3 (Issue #959).
 
-Add it to _CONFIG_SCRIPTS so the paths get fixed up for staging and the
-script removed from target.
+1.3.6c
+---------
+  + Fixed regression in directory listing latency (Issue #863).
+  + Detect OpenSSH-specific formatted SFTPHostKeys, and log hint for
+    converting them to supported format.
+  + Fixed use-after-free vulnerability during data transfers (Issue #903)
+    [CVE-2020-9273]
+  + Fixed out-of-bounds read in mod_cap by updating the bundled libcap
+    (Issue #902) [CVE-2020-9272]
 
+http://proftpd.org/docs/RELEASE_NOTES-1.3.6e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: mark as security bump, add CVEs]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 288ece60bbe182a2192d5553ba15cbdeedea3ba6)
+(cherry picked from commit 7ba4aa92981107462e23c4a7d2b1ef291743fe81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jemalloc/jemalloc.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/proftpd/proftpd.hash | 2 +-
+ package/proftpd/proftpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-index aedc1f04bf..e43a4f7906 100644
---- a/package/jemalloc/jemalloc.mk
-+++ b/package/jemalloc/jemalloc.mk
-@@ -10,6 +10,7 @@ JEMALLOC_SITE = https://github.com/jemalloc/jemalloc/releases/download/$(JEMALLO
- JEMALLOC_LICENSE = BSD-2-Clause
- JEMALLOC_LICENSE_FILES = COPYING
- JEMALLOC_INSTALL_STAGING = YES
-+JEMALLOC_CONFIG_SCRIPTS = jemalloc-config
+diff --git a/package/proftpd/proftpd.hash b/package/proftpd/proftpd.hash
+index 1ac54de4ca..983500bb8e 100644
+--- a/package/proftpd/proftpd.hash
++++ b/package/proftpd/proftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fa3541c4b34136a7b80cb12a2f6f9a0cab5118a5b0a1653d40af49c6479c35ad  proftpd-1.3.6c.tar.gz
++sha256  2dbe684034ab592742ebdb778a8a234b70f959efeb30feedee3ea77f26f74fbb  proftpd-1.3.6e.tar.gz
+ sha256  391a473d755c29b5326fb726326ff3c37e42512f53a8f5789fc310232150bf80  COPYING
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index e126d0e0a4..e35e78607d 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # gcc bug internal compiler error: in merge_overlapping_regs, at
- # regrename.c:304. This bug is fixed since gcc 6.
+-PROFTPD_VERSION = 1.3.6c
++PROFTPD_VERSION = 1.3.6e
+ PROFTPD_SITE = $(call github,proftpd,proftpd,v$(PROFTPD_VERSION))
+ PROFTPD_LICENSE = GPL-2.0+
+ PROFTPD_LICENSE_FILES = COPYING
