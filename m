@@ -1,17 +1,17 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Dec 2020 00:17:51 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Sat, 12 Dec 2020 00:17:27 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  package/x11r7/xserver_xorg-server: add upstream security fixes for
  CVE-2020-14360 / 25712
-Message-ID: <20201211230307.000A1850F8@busybox.osuosl.org>
+Message-ID: <20201211230311.E3D5881383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=818acd27e2274553426ccc53ccadae67d84116f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f87af06db7a735f7ea6bc1ad8576fb2e79a45755
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes the following security issues:
 
