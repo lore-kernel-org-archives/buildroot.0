@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 11:34:34 +0100
-Subject: [Buildroot] [PATCH 2/2] cage: package des not require locale
- support
-In-Reply-To: <20201122160008.44129-2-paul@crapouillou.net> (Paul Cercueil's
- message of "Sun, 22 Nov 2020 16:00:08 +0000")
-References: <20201122160008.44129-1-paul@crapouillou.net>
- <20201122160008.44129-2-paul@crapouillou.net>
-Message-ID: <877dposkat.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Dec 2020 11:35:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/openrc: fix build with gcc 10
+In-Reply-To: <20201123191729.2557-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Mon, 23 Nov 2020 20:17:27 +0100")
+References: <20201123191729.2557-1-heiko.thiery@gmail.com>
+Message-ID: <87360csk9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Paul" == Paul Cercueil <paul@crapouillou.net> writes:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
- > Drop dependency on BR2_ENABLE_LOCALE, which was marked as a dependency
- > of wlroots, but wlroots does not depend on it anymore.
+ > Fixes:
+ >  - https://bugs.busybox.net/show_bug.cgi?id=13331
 
- > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+ > Cc: mscdex at mscdex.net
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 Committed to 2020.08.x, thanks.
 
