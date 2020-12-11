@@ -1,39 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 22:31:29 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/setserial: add
- license hash
-Message-ID: <20201211211656.B161981944@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:28:18 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/lynx: fix
+ reproducible build issues
+Message-ID: <20201211211656.915BD81944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=172de8c9d9e443c97630fac67b52414397f4d9b9
+commit: https://git.buildroot.net/buildroot/commit/?id=5a1a715bd11e7473b443797f1169edd5d78e991c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Also reformatted hash file.
+Fixes (part of) http://autobuild.buildroot.net/results/23fe4365ca65f37eace8265a70fbfb9723b8ee9d/
 
-Fixes:
-http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
+Lynx by default contains logic to generate a "configuration info" HTML page,
+which leaks build paths, and adds the build timestamp to the version output.
+Disable both when building in reproducible mode.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 23d8b04295c2cd99302dbb87be7367b282a6cd83)
+(cherry picked from commit 3fb7c63687ac4a2d3ef07d2aa425b1922ad69792)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/setserial/setserial.hash | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/lynx/lynx.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
-index ce3b369f56..991d2860a9 100644
---- a/package/setserial/setserial.hash
-+++ b/package/setserial/setserial.hash
-@@ -1,3 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
--sha256	7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a	setserial_2.17.orig.tar.gz
--sha256	33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6	setserial_2.17-45.3.diff.gz
-+sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
-+sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
-+# Locally computed
-+sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 07a3ddfcf0..d115682d64 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -12,6 +12,13 @@ LYNX_LICENSE_FILES = COPYING
+ 
+ LYNX_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++# configuration info leaks build paths
++LYNX_CONF_OPTS += --disable-config-info
++# disable build timestamp
++LYNX_CFLAGS += -DNO_BUILDSTAMP
++endif
++
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ LYNX_DEPENDENCIES += ncurses
+ LYNX_CONF_OPTS += --with-screen=ncurses$(if $(BR2_PACKAGE_NCURSES_WCHAR),w)
+@@ -41,6 +48,6 @@ LYNX_DEPENDENCIES += libidn
+ LYNX_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libidn`
+ endif
+ 
+-LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)"
++LYNX_CONF_ENV = LIBS="$(LYNX_LIBS)" CFLAGS="$(TARGET_CFLAGS) $(LYNX_CFLAGS)"
+ 
+ $(eval $(autotools-package))
