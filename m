@@ -1,105 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 17:13:55 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/slirp: add
- upstream security fix for CVE-2020-29129 / CVE-2020-29130
-Message-ID: <20201211211656.5AC4A81944@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:30:24 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/privoxy: security
+ bump to version 3.0.29
+Message-ID: <20201211211656.A491A86626@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ac9e8c0748430a688108149d447c59cc0c52820
+commit: https://git.buildroot.net/buildroot/commit/?id=a177ef40e18019dbd4f4162654fdbb508135401c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
-routines, ensure that pkt_len is large enough to accommodate the
-respective protocol headers, lest it should do an OOB access.
-Add check to avoid it.
+From the release notes:
+
+- Security/Reliability:
+  - Fixed memory leaks when a response is buffered and the buffer
+    limit is reached or Privoxy is running out of memory.
+    Commits bbd53f1010b and 4490d451f9b. OVE-20201118-0001.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no action files are configured. Commit c62254a686.
+    OVE-20201118-0002.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no filter files are configured. Commit 1b1370f7a8a.
+    OVE-20201118-0003.
+    Sponsored by: Robert Klemme
+  - Fixes a memory leak when client tags are active.
+    Commit 245e1cf32. OVE-20201118-0004.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak if multiple filters are executed
+    and the last one is skipped due to a pcre error.
+    Commit 5cfb7bc8fe. OVE-20201118-0005.
+  - Prevent an unlikely dereference of a NULL-pointer that
+    could result in a crash if accept-intercepted-requests
+    was enabled, Privoxy failed to get the request destination
+    from the Host header and a memory allocation failed.
+    Commit 7530132349. CID 267165. OVE-20201118-0006.
+  - Fixed memory leaks in the client-tags CGI handler when
+    client tags are configured and memory allocations fail.
+    Commit cf5640eb2a. CID 267168. OVE-20201118-0007.
+  - Fixed memory leaks in the show-status CGI handler when memory
+    allocations fail. Commit 064eac5fd0 and commit fdee85c0bf3.
+    CID 305233. OVE-20201118-0008.
+
+For more details, see the announcement:
+https://www.openwall.com/lists/oss-security/2020/11/29/1
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 282fc60ed4bbf30f0c74fe0434053b472eca356b)
+(cherry picked from commit 9ef54b7d0bc7163b54f35c0ce618beb40a6ed22f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-pkt_len-before-reading-protocol-header.patch | 60 ++++++++++++++++++++++
- package/slirp/slirp.mk                             |  3 ++
- 2 files changed, 63 insertions(+)
+ package/privoxy/privoxy.hash | 8 ++++----
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-new file mode 100644
-index 0000000000..4046144712
---- /dev/null
-+++ b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-@@ -0,0 +1,60 @@
-+From 2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f Mon Sep 17 00:00:00 2001
-+From: Prasad J Pandit <pjp@fedoraproject.org>
-+Date: Thu, 26 Nov 2020 19:27:06 +0530
-+Subject: [PATCH] slirp: check pkt_len before reading protocol header
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
-+routines, ensure that pkt_len is large enough to accommodate the
-+respective protocol headers, lest it should do an OOB access.
-+Add check to avoid it.
-+
-+CVE-2020-29129 CVE-2020-29130
-+  QEMU: slirp: out-of-bounds access while processing ARP/NCSI packets
-+ -> https://www.openwall.com/lists/oss-security/2020/11/27/1
-+
-+Reported-by: Qiuhao Li <Qiuhao.Li@outlook.com>
-+Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
-+Message-Id: <20201126135706.273950-1-ppandit@redhat.com>
-+Reviewed-by: Marc-Andr?? Lureau <marcandre.lureau@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ncsi.c  | 4 ++++
-+ src/slirp.c | 4 ++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/src/ncsi.c b/src/ncsi.c
-+index 3c1dfef..75dcc08 100644
-+--- a/src/ncsi.c
-++++ b/src/ncsi.c
-+@@ -148,6 +148,10 @@ void ncsi_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
-+     uint32_t checksum;
-+     uint32_t *pchecksum;
-+ 
-++    if (pkt_len < ETH_HLEN + sizeof(struct ncsi_pkt_hdr)) {
-++        return; /* packet too short */
-++    }
-++
-+     memset(ncsi_reply, 0, sizeof(ncsi_reply));
-+ 
-+     memset(reh->h_dest, 0xff, ETH_ALEN);
-+diff --git a/src/slirp.c b/src/slirp.c
-+index 9bead0c..abb6f9a 100644
-+--- a/src/slirp.c
-++++ b/src/slirp.c
-+@@ -860,6 +860,10 @@ static void arp_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
-+         return;
-+     }
-+ 
-++    if (pkt_len < ETH_HLEN + sizeof(struct slirp_arphdr)) {
-++        return; /* packet too short */
-++    }
-++
-+     ar_op = ntohs(ah->ar_op);
-+     switch (ar_op) {
-+     case ARPOP_REQUEST:
-+-- 
-+2.20.1
-+
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index ed6d8855e5..33c568c058 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -14,4 +14,7 @@ SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 84daf5c611..850208dd9f 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,6 +1,6 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%28stable%29/
+-md5  c7e8900d5aff33d9a5fc37ac28154f21  privoxy-3.0.28-stable-src.tar.gz
+-sha1  fa8f9f355a48afe94afcaef31c5404b2294c1043  privoxy-3.0.28-stable-src.tar.gz
++# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%29stable%29/
++md5  493a3a643247e6c8bc60725e9993d4ee  privoxy-3.0.29-stable-src.tar.gz
++sha1  59873a122729b1b03e1d202d663036d2b5fa1120  privoxy-3.0.29-stable-src.tar.gz
+ # Locally computed
+-sha256  b5d78cc036aaadb3b7cf860e9d598d7332af468926a26e2d56167f1cb6f2824a  privoxy-3.0.28-stable-src.tar.gz
++sha256  25c6069efdaf577d47c257da63b03cd6d063fb790e19cc39603d82e5db72489d  privoxy-3.0.29-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index f12d015efa..3cf1dc9754 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-+SLIRP_IGNORE_CVES += CVE-2020-29129 CVE-2020-29130
-+
- $(eval $(meson-package))
+-PRIVOXY_VERSION = 3.0.28
++PRIVOXY_VERSION = 3.0.29
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
