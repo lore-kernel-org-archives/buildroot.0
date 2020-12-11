@@ -1,38 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 10:59:01 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ncurses: mark
- CVE-2019-1759{4, 5} as fixed by 20191012 patch
-Message-ID: <20201211100829.53BFE81516@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 11:22:26 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/xinetd: add
+ upstream security fix for CVE-2013-4342
+Message-ID: <20201211100829.84A1481516@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d306007496496f9f5205d64934fcce652f0bd475
+commit: https://git.buildroot.net/buildroot/commit/?id=e2bc50775ab5c8090fef0645ee3cdc9dc4f94147
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-According to the NVE data, these are fixes in the 20191012 patch - So mark
-them as such.
+xinetd does not enforce the user and group configuration directives for
+TCPMUX services, which causes these services to be run as root and makes it
+easier for remote attackers to gain privileges by leveraging another
+vulnerability in a service.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f7fc4bf1b98a4f7a4c0ab90cd22a7b3b75a50706)
+(cherry picked from commit d5abf5ff6188593dfc701decf8d33d38a924b45b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ ...42-xinetd-ignores-user-and-group-directiv.patch | 29 ++++++++++++++++++++++
+ package/xinetd/xinetd.mk                           |  3 +++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index c11650c766..f4e4784a3c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -50,6 +50,9 @@ NCURSES_PATCH = \
- 		ncurses-6.1-20200118.patch.gz \
- 	)
- 
-+# ncurses-6.1-20191012.patch.gz
-+NCURSES_IGNORE_CVES += CVE-2019-17594 CVE-2019-17595
+diff --git a/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+new file mode 100644
+index 0000000000..bb2ee1fc9a
+--- /dev/null
++++ b/package/xinetd/0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
+@@ -0,0 +1,29 @@
++From 91e2401a219121eae15244a6b25d2e79c1af5864 Mon Sep 17 00:00:00 2001
++From: Thomas Swan <thomas.swan@gmail.com>
++Date: Wed, 2 Oct 2013 23:17:17 -0500
++Subject: [PATCH] CVE-2013-4342: xinetd: ignores user and group directives for
++ TCPMUX services
 +
- NCURSES_CONF_OPTS = \
- 	--without-cxx \
- 	--without-cxx-binding \
++Originally reported to Debian in 2005 <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=324678> and rediscovered <https://bugzilla.redhat.com/show_bug.cgi?id=1006100>, xinetd would execute TCPMUX services without dropping privilege to match the service configuration allowing the service to run with same privilege as the xinetd process (root).
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ xinetd/builtins.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/xinetd/builtins.c b/xinetd/builtins.c
++index 3b85579..34a5bac 100644
++--- a/xinetd/builtins.c
+++++ b/xinetd/builtins.c
++@@ -617,7 +617,7 @@ static void tcpmux_handler( const struct server *serp )
++    if( SC_IS_INTERNAL( scp ) ) {
++       SC_INTERNAL(scp, nserp);
++    } else {
++-      exec_server(nserp);
+++      child_process(nserp);
++    }
++ }
++ 
++-- 
++2.20.1
++
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index a2ba10df74..6d6767766b 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -9,6 +9,9 @@ XINETD_SITE = $(call github,xinetd-org,xinetd,xinetd-$(XINETD_VERSION))
+ XINETD_LICENSE = xinetd license
+ XINETD_LICENSE_FILES = COPYRIGHT
+ 
++# 0005-CVE-2013-4342-xinetd-ignores-user-and-group-directiv.patch
++XINETD_IGNORE_CVES += CVE-2013-4342
++
+ XINETD_CFLAGS = $(TARGET_CFLAGS)
+ 
+ # Three cases here:
