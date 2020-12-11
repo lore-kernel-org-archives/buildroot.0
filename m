@@ -1,164 +1,102 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 11 Dec 2020 20:37:53 +0100
-Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10
- compatible again
-In-Reply-To: <CAGm1_ktznMS6DHboQM0RZYcFWbxvnNUGa9yguzeUw+QBnxiJwQ@mail.gmail.com>
-References: <20201210215405.12318-1-ps.report@gmx.net>
- <CAGm1_kuufhqwTTyUeLBcqY5FA7X3U99Or+JVG4d+PxfGsH1c8g@mail.gmail.com>
- <20201211193841.19427c34@gmx.net>
- <CAGm1_ktznMS6DHboQM0RZYcFWbxvnNUGa9yguzeUw+QBnxiJwQ@mail.gmail.com>
-Message-ID: <20201211203753.17c902f0@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 11 Dec 2020 12:19:12 -0800
+Subject: [Buildroot] [PATCH 0/3] package/ti-stgx: tentative bump (branch
+ yem/ti-sgx-stuff)
+In-Reply-To: <cover.1607633239.git.yann.morin.1998@free.fr>
+References: <cover.1607633239.git.yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmrRihGW-iXKkYyTfyCKGU7Nhtt5bhUxES-pLmW8ngQ5Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+All;
 
-On Fri, 11 Dec 2020 20:20:05 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
+I tested the series on an existing build I am using and everything
+compiled fine. However, I did not realize that
+I already have Markus Zehnder's patch from
+https://patchwork.ozlabs.org/project/buildroot/patch/20200702201125.3639873-1-aduskett at gmail.com/
+which allows QT5 to build fine.
 
-> On Fri, Dec 11, 2020 at 7:38 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello Yegor,
-> >
-> > On Fri, 11 Dec 2020 06:37:08 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
-> >
-> > > On Thu, Dec 10, 2020 at 10:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > > >
-> > > > Fixes (see [1]):
-> > > >
-> > > > ToDo: ...
-> > > >
-> > > > [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
-> > > >
-> > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > >
-> > > Works like a charm.
-> >
-> > Thanks for testing, mind to send me the original failure message/log
-> > so I can fill the missing part in the patch commit message?
+As such, please disregard the aforementioned "tested-by's."
+
+Yann, you will have to either include Markus' patch or find a
+different solution.
+
+Adam
+
+On Thu, Dec 10, 2020 at 12:47 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> Here you are (error shown with VERBOSE=ON):
+> Hello All!
 >
-> [ 93%] Building CXX object CMakeFiles/ninja.dir/src/ninja.cc.o
-> [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
-> /home/user/MyProjects/oss/br-test-v2/s2srv/host/bin/ccache
-> /usr/bin/g++  -DNINJA_HAVE_BROWSE  -O2
-> -I/home/user/MyProjects/oss/br-test-v2/s2srv/host/include
-> -Wno-deprecated -fdiagnostics-color   -o
-> CMakeFiles/ninja.dir/src/ninja.cc.o -c
-> /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/ninja.cc
-> /home/user/MyProjects/oss/br-test-v2/s2srv/host/bin/ccache
-> /usr/bin/g++  -DNINJA_HAVE_BROWSE -DNINJA_PYTHON=\"python\"  -O2
-> -I/home/user/MyProjects/oss/br-test-v2/s2srv/host/include
-> -Wno-deprecated -fdiagnostics-color   -o
-> CMakeFiles/ninja.dir/src/browse.cc.o -c
-> /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/browse.cc
-> /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/browse.cc:23:10:
-> fatal error: build/browse_py.h: No such file or directory
->  #include "build/browse_py.h"
->           ^~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-
-Thanks for the log...., but this is a follow-up failure because the file
-is not generated, I believe because the dependency declared for src/browse.cc
-(line 155-161, specially line 158: OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h")
-is not evaluated because the unknown INCLUDE_DIRECTORIES, no warning about this
-earlier in the logs?
-
-139 if(platform_supports_ninja_browse)
-140         # Inlines src/browse.py into the browse_py.h header, so that it can be included
-141         # by src/browse.cc
-142         add_custom_command(
-143                 OUTPUT build/browse_py.h
-144                 MAIN_DEPENDENCY src/browse.py
-145                 DEPENDS src/inline.sh
-146                 COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/build
-147                 COMMAND src/inline.sh kBrowsePy
-148                                                 < src/browse.py
-149                                                 > ${CMAKE_BINARY_DIR}/build/browse_py.h
-150                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-151                 VERBATIM
-152         )
-153
-154         target_compile_definitions(ninja PRIVATE NINJA_HAVE_BROWSE)
-155         target_sources(ninja PRIVATE src/browse.cc)
-156         set_source_files_properties(src/browse.cc
-157                 PROPERTIES
-158                         OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-159                         INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-160                         COMPILE_DEFINITIONS NINJA_PYTHON="python"
-161         )
-162 endif()
-
-Regards,
-Peter
-
+> This series is a respin based on the initial patch from Adam:
+>     https://patchwork.ozlabs.org/project/buildroot/patch/20200702201125.3639873-1-aduskett at gmail.com/
+>
+> That patch did help some people (see the replies), but unfortunately it
+> still has a few shortcomings that I have tried to address, mostly
+> unsuccessfully.
+>
+> The most prominent issue was that the removing of ti-sgx-libgbm was not
+> properly propagated to qt5base, and thus the build of qt5base would
+> succeed becasue it avoided a problematic code path. Fixing that causes
+> qt5base to no longer build, hitting the upstream issue:
+>     https://bugreports.qt.io/browse/QTBUG-72567
+>
+> That has not yet been fixed upstream, and of the proposed patches, or
+> various suggestions in various Qt-related forums, none do fix the issue
+> either:
+>   - patches in the PR itself
+>   - https://codereview.qt-project.org/c/qt/qtbase/+/248270
+>   - https://forum.qt.io/topic/88588/qtbase-compilation-error-with-device-linux-rasp-pi3-g-qeglfskmsgbmwindow-cpp/8
+>   - https://forum.qt.io/topic/91596/raspberry-pi-3-compiling-qt-5-11-0-problem/6
+>
+> So, I am at a loss at how to actually fix that further...
+>
+> Still, here is a repsin with at least the changes I deemed necessary to
+> reduce the problem-space. Any feedback or further guidance would be
+> highly appreciated.
 >
 > Regards,
-> Yegor
+> Yann E. MORIN.
 >
-> > Regards,
-> > Peter
-> >
-> > >
-> > > Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > >
-> > > Regards,
-> > > Yegor
-> > >
-> > > > ---
-> > > > Changes v1 -> v2:
-> > > >   - really use COMPILE_FLAGS (as the patch subject says)
-> > > >     (suggested by Yegor Yefremov)
-> > > > ---
-> > > >  ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
-> > > >  1 file changed, 27 insertions(+)
-> > > >  create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> > > >
-> > > > diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> > > > new file mode 100644
-> > > > index 0000000000..d92959a938
-> > > > --- /dev/null
-> > > > +++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> > > > @@ -0,0 +1,27 @@
-> > > > +From 71840d514511291410d514790c25956be9d4dfe5 Mon Sep 17 00:00:00 2001
-> > > > +From: Peter Seiderer <ps.report@gmx.net>
-> > > > +Date: Thu, 10 Dec 2020 20:29:19 +0100
-> > > > +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
-> > > > + INCLUDE_DIRECTORIES property
-> > > > +
-> > > > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > > +---
-> > > > + CMakeLists.txt | 2 +-
-> > > > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > +
-> > > > +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> > > > +index 7f03c35..f582d2f 100644
-> > > > +--- a/CMakeLists.txt
-> > > > ++++ b/CMakeLists.txt
-> > > > +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
-> > > > +       set_source_files_properties(src/browse.cc
-> > > > +               PROPERTIES
-> > > > +                       OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-> > > > +-                      INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-> > > > ++                      COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
-> > > > +                       COMPILE_DEFINITIONS NINJA_PYTHON="python"
-> > > > +       )
-> > > > + endif()
-> > > > +--
-> > > > +2.29.2
-> > > > +
-> > > > --
-> > > > 2.29.2
-> > > >
-> > > _______________________________________________
-> > > buildroot mailing list
-> > > buildroot at busybox.net
-> > > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Regards,
+> Yann E. MORIN.
+>
+>
+> ----------------------------------------------------------------
+> Adam Duskett (3):
+>       configs/beaglebone_qt5: switch to using KMS instead of wayland+weston
+>       package/ti-sgx-demos: use KMS-based demos
+>       package/ti-sgx-{km, um}: bump to SDK 06.01.00.08 versions
+>
+>  Config.in.legacy                                   |  7 +++++
+>  board/beaglebone/readme.txt                        | 12 +++++++-
+>  .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json      | 15 ++++++++++
+>  configs/beaglebone_qt5_defconfig                   |  5 +---
+>  package/Config.in                                  |  1 -
+>  package/qt5/qt5base/qt5base.mk                     |  4 +--
+>  package/ti-sgx-demos/ti-sgx-demos.mk               |  2 +-
+>  package/ti-sgx-km/ti-sgx-km.hash                   |  4 +--
+>  package/ti-sgx-km/ti-sgx-km.mk                     |  4 +--
+>  .../0001-Add-missing-sys-sysmacros.h-include.patch | 25 -----------------
+>  package/ti-sgx-libgbm/Config.in                    | 12 --------
+>  package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  3 --
+>  package/ti-sgx-libgbm/ti-sgx-libgbm.mk             | 32 ----------------------
+>  package/ti-sgx-um/Config.in                        |  1 -
+>  package/ti-sgx-um/ti-sgx-um.hash                   |  4 +--
+>  package/ti-sgx-um/ti-sgx-um.mk                     |  4 +--
+>  16 files changed, 45 insertions(+), 90 deletions(-)
+>  create mode 100644 board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+>  delete mode 100644 package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
+>  delete mode 100644 package/ti-sgx-libgbm/Config.in
+>  delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.hash
+>  delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.mk
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
