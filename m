@@ -1,91 +1,108 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 11 Dec 2020 19:38:41 +0100
-Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10
- compatible again
-In-Reply-To: <CAGm1_kuufhqwTTyUeLBcqY5FA7X3U99Or+JVG4d+PxfGsH1c8g@mail.gmail.com>
-References: <20201210215405.12318-1-ps.report@gmx.net>
- <CAGm1_kuufhqwTTyUeLBcqY5FA7X3U99Or+JVG4d+PxfGsH1c8g@mail.gmail.com>
-Message-ID: <20201211193841.19427c34@gmx.net>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Fri, 11 Dec 2020 11:08:02 -0800
+Subject: [Buildroot] [PATCH 1/3] configs/beaglebone_qt5: switch to using
+ KMS instead of wayland+weston
+In-Reply-To: <513aafb89da88453c8514687923abc80376c20a8.1607633239.git.yann.morin.1998@free.fr>
+References: <cover.1607633239.git.yann.morin.1998@free.fr>
+ <513aafb89da88453c8514687923abc80376c20a8.1607633239.git.yann.morin.1998@free.fr>
+Message-ID: <CAFSsvmpK2+kHPVWAAifw9cpRHZdYBOKqTwxGZeVwUO4CwLC0xA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+Tested-by: Adam Duskett <aduskett@gmail.com>
 
-On Fri, 11 Dec 2020 06:37:08 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
-
-> On Thu, Dec 10, 2020 at 10:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Fixes (see [1]):
-> >
-> > ToDo: ...
-> >
-> > [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Thu, Dec 10, 2020 at 12:47 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> Works like a charm.
-
-Thanks for testing, mind to send me the original failure message/log
-so I can fill the missing part in the patch commit message?
-
-Regards,
-Peter
-
+> From: Adam Duskett <Aduskett@gmail.com>
 >
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> weston does not work on the ti-sgx SDK, so switch to using KMS directly,
+> and drop the wayland-related config options.
 >
-> Regards,
-> Yegor
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> [yann.morin.1998 at free.fr: split into its own patch]
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  board/beaglebone/readme.txt                       | 12 +++++++++++-
+>  .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json     | 15 +++++++++++++++
+>  configs/beaglebone_qt5_defconfig                  |  5 +----
+>  3 files changed, 27 insertions(+), 5 deletions(-)
+>  create mode 100644 board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
 >
-> > ---
-> > Changes v1 -> v2:
-> >   - really use COMPILE_FLAGS (as the patch subject says)
-> >     (suggested by Yegor Yefremov)
-> > ---
-> >  ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
-> >  1 file changed, 27 insertions(+)
-> >  create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> >
-> > diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> > new file mode 100644
-> > index 0000000000..d92959a938
-> > --- /dev/null
-> > +++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> > @@ -0,0 +1,27 @@
-> > +From 71840d514511291410d514790c25956be9d4dfe5 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Thu, 10 Dec 2020 20:29:19 +0100
-> > +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
-> > + INCLUDE_DIRECTORIES property
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + CMakeLists.txt | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> > +index 7f03c35..f582d2f 100644
-> > +--- a/CMakeLists.txt
-> > ++++ b/CMakeLists.txt
-> > +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
-> > +       set_source_files_properties(src/browse.cc
-> > +               PROPERTIES
-> > +                       OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-> > +-                      INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-> > ++                      COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
-> > +                       COMPILE_DEFINITIONS NINJA_PYTHON="python"
-> > +       )
-> > + endif()
-> > +--
-> > +2.29.2
-> > +
-> > --
-> > 2.29.2
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+> index e6647dad2a..231e977a89 100644
+> --- a/board/beaglebone/readme.txt
+> +++ b/board/beaglebone/readme.txt
+> @@ -7,7 +7,7 @@ Description
+>  This configuration will build a complete image for the beaglebone and
+>  the TI AM335x-EVM, the board type is identified by the on-board
+>  EEPROM. The configuration is based on the
+> -ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
+> +ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
+>  variants and the evm-sk are built too.
+>
+>  For Qt5 support support use the beaglebone_qt5_defconfig.
+> @@ -43,10 +43,20 @@ output/images/
+>  To copy the image file to the sdcard use dd:
+>  $ dd if=output/images/sdcard.img of=/dev/XXX
+>
+> +
+> +Running Qt5 hellowindow opengl demo:
+> +===================
+> +# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
+> +# export QT_QPA_PLATFORM=eglfs
+> +# export QT_QPA_EGLFS_INTEGRATION=none
+> +# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
+> +
+> +
+>  Tested hardware
+>  ===============
+>  am335x-evm (rev. 1.1A)
+>  beagleboneblack (rev. A5A)
+>  beaglebone (rev. A6)
+>
+> +2020, Adam Duskett <aduskett@gmail.com>
+>  2016, Lothar Felten <lothar.felten@gmail.com>
+> diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+> new file mode 100644
+> index 0000000000..76f5e7d379
+> --- /dev/null
+> +++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+> @@ -0,0 +1,15 @@
+> +{
+> +  "device": "/dev/dri/card0",
+> +  "hwcursor": false,
+> +  "pbuffers": true,
+> +  "outputs": [
+> +    {
+> +      "name": "VGA1",
+> +      "mode": "off"
+> +    },
+> +    {
+> +      "name": "HDMI1",
+> +      "mode": "1024x768"
+> +    }
+> +  ]
+> +}
+> diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+> index 5f7b911e5d..6e0371a7d3 100644
+> --- a/configs/beaglebone_qt5_defconfig
+> +++ b/configs/beaglebone_qt5_defconfig
+> @@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
+>  BR2_PACKAGE_QT5=y
+>  BR2_PACKAGE_QT5BASE_EXAMPLES=y
+>  BR2_PACKAGE_QT5BASE_EGLFS=y
+> -BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
+> +BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+>  BR2_PACKAGE_QT5QUICKCONTROLS=y
+> -BR2_PACKAGE_QT5WAYLAND=y
+> -BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
+> -BR2_PACKAGE_WESTON=y
+>  BR2_PACKAGE_TI_SGX_DEMOS=y
+>  BR2_PACKAGE_TI_SGX_KM=y
+>  BR2_PACKAGE_TI_SGX_UM=y
+> --
+> 2.25.1
+>
