@@ -1,39 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 22:31:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/setserial: add
- license hash
-Message-ID: <20201211211702.F037B810E3@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:30:46 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/privoxy: security
+ bump to version 3.0.29
+Message-ID: <20201211211702.E6433866C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=670208cd16dc724893271097ca69b5483b98f21d
+commit: https://git.buildroot.net/buildroot/commit/?id=377fa247b9aecb4bfeef446021375aebcdd76d92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Also reformatted hash file.
+From the release notes:
 
-Fixes:
-http://autobuild.buildroot.net/results/d1c/d1ccecc74755155664cd17c8d33721c804a37b25/
+- Security/Reliability:
+  - Fixed memory leaks when a response is buffered and the buffer
+    limit is reached or Privoxy is running out of memory.
+    Commits bbd53f1010b and 4490d451f9b. OVE-20201118-0001.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no action files are configured. Commit c62254a686.
+    OVE-20201118-0002.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak in the show-status CGI handler when
+    no filter files are configured. Commit 1b1370f7a8a.
+    OVE-20201118-0003.
+    Sponsored by: Robert Klemme
+  - Fixes a memory leak when client tags are active.
+    Commit 245e1cf32. OVE-20201118-0004.
+    Sponsored by: Robert Klemme
+  - Fixed a memory leak if multiple filters are executed
+    and the last one is skipped due to a pcre error.
+    Commit 5cfb7bc8fe. OVE-20201118-0005.
+  - Prevent an unlikely dereference of a NULL-pointer that
+    could result in a crash if accept-intercepted-requests
+    was enabled, Privoxy failed to get the request destination
+    from the Host header and a memory allocation failed.
+    Commit 7530132349. CID 267165. OVE-20201118-0006.
+  - Fixed memory leaks in the client-tags CGI handler when
+    client tags are configured and memory allocations fail.
+    Commit cf5640eb2a. CID 267168. OVE-20201118-0007.
+  - Fixed memory leaks in the show-status CGI handler when memory
+    allocations fail. Commit 064eac5fd0 and commit fdee85c0bf3.
+    CID 305233. OVE-20201118-0008.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For more details, see the announcement:
+https://www.openwall.com/lists/oss-security/2020/11/29/1
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 23d8b04295c2cd99302dbb87be7367b282a6cd83)
+(cherry picked from commit 9ef54b7d0bc7163b54f35c0ce618beb40a6ed22f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/setserial/setserial.hash | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/privoxy/privoxy.hash | 8 ++++----
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
-index ce3b369f56..991d2860a9 100644
---- a/package/setserial/setserial.hash
-+++ b/package/setserial/setserial.hash
-@@ -1,3 +1,5 @@
- # From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
--sha256	7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a	setserial_2.17.orig.tar.gz
--sha256	33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6	setserial_2.17-45.3.diff.gz
-+sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
-+sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
-+# Locally computed
-+sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 84daf5c611..850208dd9f 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,6 +1,6 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%28stable%29/
+-md5  c7e8900d5aff33d9a5fc37ac28154f21  privoxy-3.0.28-stable-src.tar.gz
+-sha1  fa8f9f355a48afe94afcaef31c5404b2294c1043  privoxy-3.0.28-stable-src.tar.gz
++# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%29stable%29/
++md5  493a3a643247e6c8bc60725e9993d4ee  privoxy-3.0.29-stable-src.tar.gz
++sha1  59873a122729b1b03e1d202d663036d2b5fa1120  privoxy-3.0.29-stable-src.tar.gz
+ # Locally computed
+-sha256  b5d78cc036aaadb3b7cf860e9d598d7332af468926a26e2d56167f1cb6f2824a  privoxy-3.0.28-stable-src.tar.gz
++sha256  25c6069efdaf577d47c257da63b03cd6d063fb790e19cc39603d82e5db72489d  privoxy-3.0.29-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index f12d015efa..3cf1dc9754 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PRIVOXY_VERSION = 3.0.28
++PRIVOXY_VERSION = 3.0.29
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
