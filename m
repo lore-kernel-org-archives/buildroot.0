@@ -1,45 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 11 Dec 2020 18:43:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libusb: bump to version 1.0.24
-Message-ID: <20201211174325.78230-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 11 Dec 2020 19:35:08 +0100
+Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.5.0
+Message-ID: <20201211183508.30229-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
-
-https://github.com/libusb/libusb/blob/v1.0.24/ChangeLog
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libusb/libusb.hash | 4 ++--
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 272dfb0877..6169a186a5 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 565b1cccf..4a3ec0cf7 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256 db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d  libusb-1.0.23.tar.bz2
--sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-+sha256  7efd2685f7b327326dcfb85cee426d9b871fd70e22caa15bb68d595ce2a2b12a  libusb-1.0.24.tar.bz2
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index ddc6b27b6c..26e91e3da6 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  62ce5826f0eeeb760d884ea8330cd1552b5d432138b8bade0fa72f35badd02d0  luarocks-3.4.0.tar.gz
++sha256  701d0cc0c7e97cc2cf2c2f4068fce45e52a8854f5dc6c9e49e2014202eec9a4f  luarocks-3.5.0.tar.gz
+ sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 670e7487a..42966ea63 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).23
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).24
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
+-LUAROCKS_VERSION = 3.4.0
++LUAROCKS_VERSION = 3.5.0
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
 -- 
-2.29.2
+2.25.1
