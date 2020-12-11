@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 13:59:02 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/minidlna:
+Date: Fri, 11 Dec 2020 13:58:26 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/minidlna:
  security bump version to 1.3.0
-Message-ID: <20201211124418.52B2980E34@busybox.osuosl.org>
+Message-ID: <20201211124409.94F7D80480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1a789d16308ad26bb74313d9d2d6205c724c64d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b40c56dc9448eab85ea6b0ea5ed5201cf26b3023
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Changelog:
 https://sourceforge.net/p/minidlna/git/ci/master/tree/NEWS
