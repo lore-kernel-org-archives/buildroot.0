@@ -1,28 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 13:59:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to
- 7.4.13
-In-Reply-To: <20201126173430.540104-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 26 Nov 2020 18:34:30 +0100")
-References: <20201126173430.540104-1-bernd.kuhls@t-online.de>
-Message-ID: <87lfe4qz0v.fsf@dell.be.48ers.dk>
+Date: Fri, 11 Dec 2020 13:59:48 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/vsftpd:
+ S70vsftpd: correct -x argument to start-stop-daemon
+Message-ID: <20201211124409.A6A0084391@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f9d0104655d1bbe515f5ceb423ae867a75f3f6a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
- > Rebased patches.
- > Changelog: https://www.php.net/ChangeLog-7.php#7.4.13
+Fixes #13341
 
- > According to the release notes this is a "security bug fix release":
- > https://news-web.php.net/php.announce/301
+The -x / --exec start-stop-daemon option expects the path to the executable,
+not just the name, leading to errors when running the init script:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Starting vsftpd: start-stop-daemon: unable to stat //vsftpd (No such file or directory)
 
-Committed to 2020.02.x and 2020.08.x, thanks.
+Reported-by: tochansky at tochlab.net
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 405f76425d20ef2f84006f2f6db798c338691c13)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vsftpd/S70vsftpd | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vsftpd/S70vsftpd b/package/vsftpd/S70vsftpd
+index 38bcfd431f..62f9a1b744 100644
+--- a/package/vsftpd/S70vsftpd
++++ b/package/vsftpd/S70vsftpd
+@@ -9,12 +9,12 @@ DAEMON=/usr/sbin/$NAME
+ case "$1" in
+   start)
+ 	printf "Starting $DESC: "
+-	start-stop-daemon -S -b -x $NAME
++	start-stop-daemon -S -b -x $DAEMON
+ 	echo "OK"
+ 	;;
+   stop)
+ 	printf "Stopping $DESC: "
+-	start-stop-daemon -K -x $NAME
++	start-stop-daemon -K -x $DAEMON
+ 	echo "OK"
+ 	;;
+   restart|force-reload)
