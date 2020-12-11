@@ -1,38 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 10:59:27 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/ncurses: mark
- CVE-2019-1759{4, 5} as fixed by 20191012 patch
-Message-ID: <20201211100839.EC1B785F1B@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 11:19:16 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pip: needs
+ hashlib module
+Message-ID: <20201211100840.09E4785F1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f79d1d62117da4253a1c597c787807c993cda30e
+commit: https://git.buildroot.net/buildroot/commit/?id=6e9b814f1b6a27d85e18373e3092968b1942792c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-According to the NVE data, these are fixes in the 20191012 patch - So mark
-them as such.
+Without hashlib module pip returns the following errors:
 
+# pip
+ValueError: unsupported hash type sha224
+ERROR:root:code for hash sha256 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha256
+ERROR:root:code for hash sha384 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha384
+ERROR:root:code for hash sha512 was not found.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/hashlib.py", line 147, in <module>
+  File "/usr/lib/python2.7/hashlib.py", line 97, in __get_builtin_constructor
+ValueError: unsupported hash type sha512
+Traceback (most recent call last):
+  File "/usr/bin/pip", line 11, in <module>
+    load_entry_point('pip==20.0.2', 'console_scripts', 'pip')()
+  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/main.py", line 73, in main
+  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/__init__.py", line 96, in create_command
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+  File "/usr/lib/python2.7/site-packages/pip/_internal/commands/install.py", line 24, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/cli/req_command.py", line 15, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/index/package_finder.py", line 21, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_internal/index/collector.py", line 12, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/requests/__init__.py", line 43, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/__init__.py", line 7, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connectionpool.py", line 29, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/connection.py", line 40, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/__init__.py", line 7, in <module>
+  File "/usr/lib/python2.7/site-packages/pip/_vendor/urllib3/util/ssl_.py", line 8, in <module>
+ImportError: cannot import name md5
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f7fc4bf1b98a4f7a4c0ab90cd22a7b3b75a50706)
+(cherry picked from commit d5e3e1144e2b1795ab9ca4deb9e25f6f98456232)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/python-pip/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index c11650c766..f4e4784a3c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -50,6 +50,9 @@ NCURSES_PATCH = \
- 		ncurses-6.1-20200118.patch.gz \
- 	)
- 
-+# ncurses-6.1-20191012.patch.gz
-+NCURSES_IGNORE_CVES += CVE-2019-17594 CVE-2019-17595
-+
- NCURSES_CONF_OPTS = \
- 	--without-cxx \
- 	--without-cxx-binding \
+diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+index d1b7e7f74b..61d8d7d317 100644
+--- a/package/python-pip/Config.in
++++ b/package/python-pip/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_PIP
+ 	bool "python-pip"
++	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
