@@ -1,105 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 14:56:14 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/slirp: add
- upstream security fix for CVE-2020-29129 / CVE-2020-29130
-Message-ID: <20201211211702.8E18D86196@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 22:26:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/bustle: fix
+ license
+Message-ID: <20201211211702.A1F3F86196@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c3abbfa5f4b0ce55b80993f27fae6970203215c4
+commit: https://git.buildroot.net/buildroot/commit/?id=1aeccce6bd281bc14112db5721ad00f33189cbe5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
-routines, ensure that pkt_len is large enough to accommodate the
-respective protocol headers, lest it should do an OOB access.
-Add check to avoid it.
+bustle binaries are licensed under GPL-3.0:
+https://gitlab.freedesktop.org/bustle/bustle/-/blob/bustle-0.7.5/LICENSE
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 282fc60ed4bbf30f0c74fe0434053b472eca356b)
+(cherry picked from commit f3ca4f10864009f3b43695366f6cd2504634d7b5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ck-pkt_len-before-reading-protocol-header.patch | 60 ++++++++++++++++++++++
- package/slirp/slirp.mk                             |  3 ++
- 2 files changed, 63 insertions(+)
+ package/bustle/bustle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-new file mode 100644
-index 0000000000..4046144712
---- /dev/null
-+++ b/package/slirp/0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-@@ -0,0 +1,60 @@
-+From 2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f Mon Sep 17 00:00:00 2001
-+From: Prasad J Pandit <pjp@fedoraproject.org>
-+Date: Thu, 26 Nov 2020 19:27:06 +0530
-+Subject: [PATCH] slirp: check pkt_len before reading protocol header
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+While processing ARP/NCSI packets in 'arp_input' or 'ncsi_input'
-+routines, ensure that pkt_len is large enough to accommodate the
-+respective protocol headers, lest it should do an OOB access.
-+Add check to avoid it.
-+
-+CVE-2020-29129 CVE-2020-29130
-+  QEMU: slirp: out-of-bounds access while processing ARP/NCSI packets
-+ -> https://www.openwall.com/lists/oss-security/2020/11/27/1
-+
-+Reported-by: Qiuhao Li <Qiuhao.Li@outlook.com>
-+Signed-off-by: Prasad J Pandit <pjp@fedoraproject.org>
-+Message-Id: <20201126135706.273950-1-ppandit@redhat.com>
-+Reviewed-by: Marc-Andr?? Lureau <marcandre.lureau@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ncsi.c  | 4 ++++
-+ src/slirp.c | 4 ++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/src/ncsi.c b/src/ncsi.c
-+index 3c1dfef..75dcc08 100644
-+--- a/src/ncsi.c
-++++ b/src/ncsi.c
-+@@ -148,6 +148,10 @@ void ncsi_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
-+     uint32_t checksum;
-+     uint32_t *pchecksum;
-+ 
-++    if (pkt_len < ETH_HLEN + sizeof(struct ncsi_pkt_hdr)) {
-++        return; /* packet too short */
-++    }
-++
-+     memset(ncsi_reply, 0, sizeof(ncsi_reply));
-+ 
-+     memset(reh->h_dest, 0xff, ETH_ALEN);
-+diff --git a/src/slirp.c b/src/slirp.c
-+index 9bead0c..abb6f9a 100644
-+--- a/src/slirp.c
-++++ b/src/slirp.c
-+@@ -860,6 +860,10 @@ static void arp_input(Slirp *slirp, const uint8_t *pkt, int pkt_len)
-+         return;
-+     }
-+ 
-++    if (pkt_len < ETH_HLEN + sizeof(struct slirp_arphdr)) {
-++        return; /* packet too short */
-++    }
-++
-+     ar_op = ntohs(ah->ar_op);
-+     switch (ar_op) {
-+     case ARPOP_REQUEST:
-+-- 
-+2.20.1
-+
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index ed6d8855e5..33c568c058 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -14,4 +14,7 @@ SLIRP_LICENSE_FILES = COPYRIGHT
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 675ffb0529..1dbad64aef 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -6,7 +6,7 @@
  
-+# 0001-slirp-check-pkt_len-before-reading-protocol-header.patch
-+SLIRP_IGNORE_CVES += CVE-2020-29129 CVE-2020-29130
-+
- $(eval $(meson-package))
+ BUSTLE_VERSION = 0.7.5
+ BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
+-BUSTLE_LICENSE = LGPL-2.1+
++BUSTLE_LICENSE = LGPL-2.1+, GPL-3.0 (binaries)
+ BUSTLE_LICENSE_FILES = LICENSE
+ BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
+ 
