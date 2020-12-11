@@ -1,295 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Dec 2020 13:22:04 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openrc: add
- upstream security fix for CVE-2018-21269
-Message-ID: <20201211123111.0FC1785A4A@busybox.osuosl.org>
+Date: Fri, 11 Dec 2020 13:46:27 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 9}.x series
+Message-ID: <20201211123111.19DE98141F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f84c7bcc6478e7352bce46d367ae726df5cfb794
+commit: https://git.buildroot.net/buildroot/commit/?id=693adf96cffa294d1ef15dfa672ca5282e82796c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2d38c5a4e58e6a9591e6bcd4e7febe68e915d0bb)
+(cherry picked from commit 6ca12d89f1182b21aa922f92501cd641ab318398)
+[Peter: drop 5.9.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../openrc/0007-checkpath-fix-CVE-2018-21269.patch | 251 +++++++++++++++++++++
- package/openrc/openrc.mk                           |   3 +
- 2 files changed, 254 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch b/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch
-new file mode 100644
-index 0000000000..121f229864
---- /dev/null
-+++ b/package/openrc/0007-checkpath-fix-CVE-2018-21269.patch
-@@ -0,0 +1,251 @@
-+From b6fef599bf8493480664b766040fa9b0d4b1e335 Mon Sep 17 00:00:00 2001
-+From: William Hubbs <w.d.hubbs@gmail.com>
-+Date: Fri, 20 Nov 2020 09:15:59 -0600
-+Subject: [PATCH] checkpath: fix CVE-2018-21269
-+
-+This walks the directory path to the file we are going to manipulate to make
-+sure that when we create the file and change the ownership and permissions
-+we are working on the same file.
-+Also, all non-terminal symbolic links must be owned by root. This will
-+keep a non-root user from making a symbolic link as described in the
-+bug. If root creates the symbolic link, it is assumed to be trusted.
-+
-+On non-linux platforms, we no longer follow non-terminal symbolic links
-+by default. If you need to do that, add the -s option on the checkpath
-+command line, but keep in mind that this is not secure.
-+
-+This fixes #201.
-+
-+[Patch taken from upstream:
-+https://github.com/OpenRC/openrc/commit/b6fef599bf8493480664b766040fa9b0d4b1e335]
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+---
-+ man/openrc-run.8   |   6 +++
-+ src/rc/checkpath.c | 103 ++++++++++++++++++++++++++++++++++++++++++---
-+ 2 files changed, 102 insertions(+), 7 deletions(-)
-+
-+diff --git a/man/openrc-run.8 b/man/openrc-run.8
-+index 1102daaa..ec4b88de 100644
-+--- a/man/openrc-run.8
-++++ b/man/openrc-run.8
-+@@ -461,6 +461,7 @@ Mark the service as inactive.
-+ .Op Fl p , -pipe
-+ .Op Fl m , -mode Ar mode
-+ .Op Fl o , -owner Ar owner
-++.Op Fl s , -symlinks
-+ .Op Fl W , -writable
-+ .Op Fl q , -quiet
-+ .Ar path ...
-+@@ -481,6 +482,11 @@ or with names, and are separated by a colon.
-+ The truncate options (-D and -F) cause the directory or file to be
-+ cleared of all contents.
-+ .Pp
-++If -s is not specified on a non-linux platform, checkpath will refuse to
-++allow non-terminal symbolic links to exist in the path. This is for
-++security reasons so that a non-root user can't create a symbolic link to
-++a root-owned file and take ownership of that file.
-++.Pp
-+ If -W is specified, checkpath checks to see if the first path given on
-+ the command line is writable.  This is different from how the test
-+ command in the shell works, because it also checks to make sure the file
-+diff --git a/src/rc/checkpath.c b/src/rc/checkpath.c
-+index 448c9cf8..ff54a892 100644
-+--- a/src/rc/checkpath.c
-++++ b/src/rc/checkpath.c
-+@@ -16,6 +16,7 @@
-+  *    except according to the terms contained in the LICENSE file.
-+  */
-+ 
-++#define _GNU_SOURCE
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ 
-+@@ -23,6 +24,7 @@
-+ #include <fcntl.h>
-+ #include <getopt.h>
-+ #include <grp.h>
-++#include <libgen.h>
-+ #include <pwd.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+@@ -44,7 +46,7 @@ typedef enum {
-+ 
-+ const char *applet = NULL;
-+ const char *extraopts ="path1 [path2] [...]";
-+-const char *getoptstring = "dDfFpm:o:W" getoptstring_COMMON;
-++const char *getoptstring = "dDfFpm:o:sW" getoptstring_COMMON;
-+ const struct option longopts[] = {
-+ 	{ "directory",          0, NULL, 'd'},
-+ 	{ "directory-truncate", 0, NULL, 'D'},
-+@@ -53,6 +55,7 @@ const struct option longopts[] = {
-+ 	{ "pipe",               0, NULL, 'p'},
-+ 	{ "mode",               1, NULL, 'm'},
-+ 	{ "owner",              1, NULL, 'o'},
-++	{ "symlinks",           0, NULL, 's'},
-+ 	{ "writable",           0, NULL, 'W'},
-+ 	longopts_COMMON
-+ };
-+@@ -64,15 +67,92 @@ const char * const longopts_help[] = {
-+ 	"Create a named pipe (FIFO) if not exists",
-+ 	"Mode to check",
-+ 	"Owner to check (user:group)",
-++	"follow symbolic links (irrelivent on linux)",
-+ 	"Check whether the path is writable or not",
-+ 	longopts_help_COMMON
-+ };
-+ const char *usagestring = NULL;
-+ 
-++static int get_dirfd(char *path, bool symlinks) {
-++	char *ch;
-++	char *item;
-++	char *linkpath = NULL;
-++	char *path_dupe;
-++	char *str;
-++	int components = 0;
-++	int dirfd;
-++	int flags = 0;
-++	int new_dirfd;
-++	struct stat st;
-++	ssize_t linksize;
-++
-++	if (!path || *path != '/')
-++		eerrorx("%s: empty or relative path", applet);
-++	dirfd = openat(dirfd, "/", O_RDONLY);
-++	if (dirfd == -1)
-++		eerrorx("%s: unable to open the root directory: %s",
-++				applet, strerror(errno));
-++	path_dupe = xstrdup(path);
-++	ch = path_dupe;
-++	while (*ch) {
-++		if (*ch == '/')
-++			components++;
-++		ch++;
-++	}
-++	item = strtok(path_dupe, "/");
-++#ifdef O_PATH
-++	flags |= O_PATH;
-++#endif
-++	if (!symlinks)
-++		flags |= O_NOFOLLOW;
-++	flags |= O_RDONLY;
-++	while (dirfd > 0 && item && components > 1) {
-++		str = xstrdup(linkpath ? linkpath : item);
-++		new_dirfd = openat(dirfd, str, flags);
-++		if (new_dirfd == -1)
-++			eerrorx("%s: %s: could not open %s: %s", applet, path, str,
-++					strerror(errno));
-++		if (fstat(new_dirfd, &st) == -1)
-++			eerrorx("%s: %s: unable to stat %s: %s", applet, path, item,
-++					strerror(errno));
-++		if (S_ISLNK(st.st_mode) ) {
-++			if (st.st_uid != 0)
-++				eerrorx("%s: %s: synbolic link %s not owned by root",
-++						applet, path, str);
-++			linksize = st.st_size+1;
-++			if (linkpath)
-++				free(linkpath);
-++			linkpath = xmalloc(linksize);
-++			memset(linkpath, 0, linksize);
-++			if (readlinkat(new_dirfd, "", linkpath, linksize) != st.st_size)
-++				eerrorx("%s: symbolic link destination changed", applet);
-++			/*
-++			 * now follow the symlink.
-++			 */
-++			close(new_dirfd);
-++		} else {
-++			close(dirfd);
-++			dirfd = new_dirfd;
-++			free(linkpath);
-++			linkpath = NULL;
-++			item = strtok(NULL, "/");
-++			components--;
-++		}
-++	}
-++	free(path_dupe);
-++	if (linkpath) {
-++		free(linkpath);
-++		linkpath = NULL;
-++	}
-++	return dirfd;
-++}
-++
-+ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
-+-	inode_t type, bool trunc, bool chowner, bool selinux_on)
-++	inode_t type, bool trunc, bool chowner, bool symlinks, bool selinux_on)
-+ {
-+ 	struct stat st;
-++	char *name = NULL;
-++	int dirfd;
-+ 	int fd;
-+ 	int flags;
-+ 	int r;
-+@@ -93,14 +173,16 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
-+ #endif
-+ 	if (trunc)
-+ 		flags |= O_TRUNC;
-+-	readfd = open(path, readflags);
-++	xasprintf(&name, "%s", basename_c(path));
-++	dirfd = get_dirfd(path, symlinks);
-++	readfd = openat(dirfd, name, readflags);
-+ 	if (readfd == -1 || (type == inode_file && trunc)) {
-+ 		if (type == inode_file) {
-+ 			einfo("%s: creating file", path);
-+ 			if (!mode) /* 664 */
-+ 				mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH;
-+ 			u = umask(0);
-+-			fd = open(path, flags, mode);
-++			fd = openat(dirfd, name, flags, mode);
-+ 			umask(u);
-+ 			if (fd == -1) {
-+ 				eerror("%s: open: %s", applet, strerror(errno));
-+@@ -122,7 +204,7 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
-+ 				    strerror (errno));
-+ 				return -1;
-+ 			}
-+-			readfd = open(path, readflags);
-++			readfd = openat(dirfd, name, readflags);
-+ 			if (readfd == -1) {
-+ 				eerror("%s: unable to open directory: %s", applet,
-+ 						strerror(errno));
-+@@ -140,7 +222,7 @@ static int do_check(char *path, uid_t uid, gid_t gid, mode_t mode,
-+ 				    strerror (errno));
-+ 				return -1;
-+ 			}
-+-			readfd = open(path, readflags);
-++			readfd = openat(dirfd, name, readflags);
-+ 			if (readfd == -1) {
-+ 				eerror("%s: unable to open fifo: %s", applet,
-+ 						strerror(errno));
-+@@ -259,6 +341,7 @@ int main(int argc, char **argv)
-+ 	int retval = EXIT_SUCCESS;
-+ 	bool trunc = false;
-+ 	bool chowner = false;
-++	bool symlinks = false;
-+ 	bool writable = false;
-+ 	bool selinux_on = false;
-+ 
-+@@ -293,6 +376,11 @@ int main(int argc, char **argv)
-+ 				eerrorx("%s: owner `%s' not found",
-+ 				    applet, optarg);
-+ 			break;
-++		case 's':
-++#ifndef O_PATH
-++			symlinks = true;
-++#endif
-++			break;
-+ 		case 'W':
-+ 			writable = true;
-+ 			break;
-+@@ -320,7 +408,8 @@ int main(int argc, char **argv)
-+ 	while (optind < argc) {
-+ 		if (writable)
-+ 			exit(!is_writable(argv[optind]));
-+-		if (do_check(argv[optind], uid, gid, mode, type, trunc, chowner, selinux_on))
-++		if (do_check(argv[optind], uid, gid, mode, type, trunc, chowner,
-++					symlinks, selinux_on))
-+ 			retval = EXIT_FAILURE;
-+ 		optind++;
-+ 	}
-+-- 
-+2.20.1
-+
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 1f8516f5ee..5876526d68 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -9,6 +9,9 @@ OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
- OPENRC_LICENSE = BSD-2-Clause
- OPENRC_LICENSE_FILES = LICENSE
+diff --git a/linux/Config.in b/linux/Config.in
+index 178a121d93..3c5ac4a108 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
-+# 0007-checkpath-fix-CVE-2018-21269.patch
-+OPENRC_IGNORE_CVES += CVE-2018-21269
-+
- OPENRC_DEPENDENCIES = ncurses
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.77" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.80" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 3490cf7b86..cba0bf2d3a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  a3e03e6970240dddc8174bf9f49b56d774c40125eabe1582d2ebe85b01addbf7  linux-5.4.77.tar.xz
++sha256  49da425c1f3c530fd3ff31d85a0461f6b6dc6e459f7faf3eee23e49a98ce64c7  linux-5.4.80.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  95de46b6bd72f66169629eb0e343b005778539864598eae76c3ca999645d58b5  linux-4.4.243.tar.xz
+-sha256  d3aa189ca7fcc6e52d6c0333a0d7acd8789e9a492b32dbf9476e926ffaa73984  linux-4.9.243.tar.xz
+-sha256  1c233efaa5063983293a02d4692acc9ced9c03e18857364855d4f612347086ac  linux-4.14.206.tar.xz
+-sha256  76dca365255c1a13778c3b24f0eae14f4e66bc12fe79f5e6592b116fc57ef755  linux-4.19.157.tar.xz
++sha256  9e0bdebf18a12d0c899e5e4042e715e24a70ab0fd986a3f4c67c8ec2710bad97  linux-4.4.246.tar.xz
++sha256  49e266c7d72d388e8ce6aa486a1018cc0595ae1b9e99934bce5b484fd8dba9f5  linux-4.9.246.tar.xz
++sha256  cb02465cc8f1972cc14707b25d779c8668d220c39e68a24bb23afd4c58182b9c  linux-4.14.209.tar.xz
++sha256  18345206f9c61e8adafa5204d0ca0b8619f1d9aafd70cbd5cb0fbf1faf521585  linux-4.19.160.tar.xz
+ # Locally computed
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 30796ad483..93e7787d32 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -318,11 +318,11 @@ endchoice
  
- # set LIBNAME so openrc puts files in proper directories and sets proper
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.243"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.243"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.206"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.157"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.77"	if BR2_KERNEL_HEADERS_5_4
++	default "4.4.246"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.246"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.209"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.160"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.80"	if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
