@@ -1,5 +1,5 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 11 Dec 2020 20:21:09 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 11 Dec 2020 20:37:53 +0100
 Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10
  compatible again
 In-Reply-To: <CAGm1_ktznMS6DHboQM0RZYcFWbxvnNUGa9yguzeUw+QBnxiJwQ@mail.gmail.com>
@@ -7,16 +7,17 @@ References: <20201210215405.12318-1-ps.report@gmx.net>
  <CAGm1_kuufhqwTTyUeLBcqY5FA7X3U99Or+JVG4d+PxfGsH1c8g@mail.gmail.com>
  <20201211193841.19427c34@gmx.net>
  <CAGm1_ktznMS6DHboQM0RZYcFWbxvnNUGa9yguzeUw+QBnxiJwQ@mail.gmail.com>
-Message-ID: <CAGm1_kuOYDOgVMdrFi9xjd_OOSHORKR46UD1PEVUsyL0tquJ8g@mail.gmail.com>
+Message-ID: <20201211203753.17c902f0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 11, 2020 at 8:20 PM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
->
+Hello Yegor,
+
+On Fri, 11 Dec 2020 20:20:05 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
+
 > On Fri, Dec 11, 2020 at 7:38 PM Peter Seiderer <ps.report@gmx.net> wrote:
 > >
 > > Hello Yegor,
@@ -60,17 +61,44 @@ On Fri, Dec 11, 2020 at 8:20 PM Yegor Yefremov
 >           ^~~~~~~~~~~~~~~~~~~
 > compilation terminated.
 
-Original one:
+Thanks for the log...., but this is a follow-up failure because the file
+is not generated, I believe because the dependency declared for src/browse.cc
+(line 155-161, specially line 158: OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h")
+is not evaluated because the unknown INCLUDE_DIRECTORIES, no warning about this
+earlier in the logs?
 
-[ 93%] Building CXX object CMakeFiles/ninja.dir/src/ninja.cc.o
-[ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
-/home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/browse.cc:23:10:
-fatal error: build/browse_py.h: No such file or directory
- #include "build/browse_py.h"
-          ^~~~~~~~~~~~~~~~~~~
-compilation terminated.
+139 if(platform_supports_ninja_browse)
+140         # Inlines src/browse.py into the browse_py.h header, so that it can be included
+141         # by src/browse.cc
+142         add_custom_command(
+143                 OUTPUT build/browse_py.h
+144                 MAIN_DEPENDENCY src/browse.py
+145                 DEPENDS src/inline.sh
+146                 COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/build
+147                 COMMAND src/inline.sh kBrowsePy
+148                                                 < src/browse.py
+149                                                 > ${CMAKE_BINARY_DIR}/build/browse_py.h
+150                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+151                 VERBATIM
+152         )
+153
+154         target_compile_definitions(ninja PRIVATE NINJA_HAVE_BROWSE)
+155         target_sources(ninja PRIVATE src/browse.cc)
+156         set_source_files_properties(src/browse.cc
+157                 PROPERTIES
+158                         OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
+159                         INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+160                         COMPILE_DEFINITIONS NINJA_PYTHON="python"
+161         )
+162 endif()
 
+Regards,
+Peter
 
+>
+> Regards,
+> Yegor
+>
 > > Regards,
 > > Peter
 > >
@@ -130,3 +158,7 @@ compilation terminated.
 > > > buildroot at busybox.net
 > > > http://lists.busybox.net/mailman/listinfo/buildroot
 > >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
