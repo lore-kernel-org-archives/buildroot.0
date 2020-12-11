@@ -1,149 +1,177 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 11 Dec 2020 23:47:10 +0100
-Subject: [Buildroot] [PATCH] package/qemu: bump to version 5.2.0
-Message-ID: <20201211224710.4151147-1-romain.naour@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 11 Dec 2020 23:38:31 +0100
+Subject: [Buildroot] [RFC v2] package/ninja: fix to be cmake-3.10
+ compatible again
+In-Reply-To: <20201211203753.17c902f0@gmx.net>
+References: <20201210215405.12318-1-ps.report@gmx.net>
+ <CAGm1_kuufhqwTTyUeLBcqY5FA7X3U99Or+JVG4d+PxfGsH1c8g@mail.gmail.com>
+ <20201211193841.19427c34@gmx.net>
+ <CAGm1_ktznMS6DHboQM0RZYcFWbxvnNUGa9yguzeUw+QBnxiJwQ@mail.gmail.com>
+ <20201211203753.17c902f0@gmx.net>
+Message-ID: <CAGm1_ksn39+fnUA2=N15YAdA0dnGT2MPtRwXRj-nBU1tY68YQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From [1]:
-"The build system is now partly based on Meson. However, building is
-still done with configure and make as in previous versions of QEMU."
+Hello Peter,
 
-Qemu requires meson >= 0.55.3, Buildroot use the latest version 0.56.0.
-In order to add host-meson dependency we have to remove --python option
-since it requires to use the meson bundled into Qemu sources [2].
+On Fri, Dec 11, 2020 at 8:37 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Yegor,
+>
+> On Fri, 11 Dec 2020 20:20:05 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
+>
+> > On Fri, Dec 11, 2020 at 7:38 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> > >
+> > > Hello Yegor,
+> > >
+> > > On Fri, 11 Dec 2020 06:37:08 +0100, Yegor Yefremov via buildroot <buildroot@busybox.net> wrote:
+> > >
+> > > > On Thu, Dec 10, 2020 at 10:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> > > > >
+> > > > > Fixes (see [1]):
+> > > > >
+> > > > > ToDo: ...
+> > > > >
+> > > > > [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
+> > > > >
+> > > > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > >
+> > > > Works like a charm.
+> > >
+> > > Thanks for testing, mind to send me the original failure message/log
+> > > so I can fill the missing part in the patch commit message?
+> >
+> > Here you are (error shown with VERBOSE=ON):
+> >
+> > [ 93%] Building CXX object CMakeFiles/ninja.dir/src/ninja.cc.o
+> > [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
+> > /home/user/MyProjects/oss/br-test-v2/s2srv/host/bin/ccache
+> > /usr/bin/g++  -DNINJA_HAVE_BROWSE  -O2
+> > -I/home/user/MyProjects/oss/br-test-v2/s2srv/host/include
+> > -Wno-deprecated -fdiagnostics-color   -o
+> > CMakeFiles/ninja.dir/src/ninja.cc.o -c
+> > /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/ninja.cc
+> > /home/user/MyProjects/oss/br-test-v2/s2srv/host/bin/ccache
+> > /usr/bin/g++  -DNINJA_HAVE_BROWSE -DNINJA_PYTHON=\"python\"  -O2
+> > -I/home/user/MyProjects/oss/br-test-v2/s2srv/host/include
+> > -Wno-deprecated -fdiagnostics-color   -o
+> > CMakeFiles/ninja.dir/src/browse.cc.o -c
+> > /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/browse.cc
+> > /home/user/MyProjects/oss/br-test-v2/s2srv/build/host-ninja-1.10.2/src/browse.cc:23:10:
+> > fatal error: build/browse_py.h: No such file or directory
+> >  #include "build/browse_py.h"
+> >           ^~~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+>
+> Thanks for the log...., but this is a follow-up failure because the file
+> is not generated, I believe because the dependency declared for src/browse.cc
+> (line 155-161, specially line 158: OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h")
+> is not evaluated because the unknown INCLUDE_DIRECTORIES, no warning about this
+> earlier in the logs?
 
-Even without --python, python3 is used. See config-host.mak:
-PYTHON=output/host/bin/python3 -B
+The file build/browse_py.h was generated. It is only include path that
+is missing. So no earlier warnings.
 
-See config-host.mak to check if meson and ninja from HOST_DIR are used:
-MESON=output/host/bin/meson
-NINJA=output/host/bin/ninja
+Regards,
+Yegor
 
-Since the switch to meson is partial and still requires using the
-configure script, keep using generic-package infra.
-
-Disable new options introduced in Qemu 5.2.0:
---disable-virtiofsd
---disable-vhost-user-blk-server
-
-Runtime tested on gitlab [3]
-
-[1] https://wiki.qemu.org/ChangeLog/5.2#Build_Information
-[2] https://git.qemu.org/?p=qemu.git;a=blob;f=configure;h=18c26e0389741643748c70ac7788a996ef006834;hb=553032db17440f8de011390e5a1cfddd13751b0b#l1895
-[3] https://gitlab.com/kubu93/buildroot/-/pipelines/228214205
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...age-of-mcontext-structure-on-ARM-uCl.patch |  4 ++--
- package/qemu/qemu.hash                        |  6 +++---
- package/qemu/qemu.mk                          | 20 ++++++++++++++-----
- 3 files changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-index 548ec3e765..841708995e 100644
---- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-+++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-@@ -18,10 +18,10 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
--index 4be78eb9b3..0a690bec55 100644
-+index 4ebe25461a..0496674fbd 100644
- --- a/accel/tcg/user-exec.c
- +++ b/accel/tcg/user-exec.c
--@@ -508,7 +508,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-+@@ -536,7 +536,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-  
-  #if defined(__NetBSD__)
-      pc = uc->uc_mcontext.__gregs[_REG_R15];
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 317c0b1a4e..7d9936adb4 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 c9174eb5933d9eb5e61f541cd6d1184cd3118dfe4c5c4955bc1bdc4d390fa4e5  qemu-5.1.0.tar.xz
--sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-+sha256  cb18d889b628fbe637672b0326789d9b0e3b8027e0445b936537c78549df17bc  qemu-5.2.0.tar.xz
-+sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 2bac96bd66..ecb02e7f48 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QEMU_VERSION = 5.1.0
-+QEMU_VERSION = 5.2.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-@@ -14,8 +14,12 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #       individual source files.
- 
- #-------------------------------------------------------------
-+
-+# The build system is now partly based on Meson.
-+# However, building is still done with configure and make as in previous versions of QEMU.
-+
- # Target-qemu
--QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman host-python3
-+QEMU_DEPENDENCIES = host-meson host-pkgconf libglib2 zlib pixman host-python3
- 
- # Need the LIBS variable because librt and libm are
- # not automatically pulled. :-(
-@@ -163,7 +167,8 @@ define QEMU_CONFIGURE_CMDS
- 			--prefix=/usr \
- 			--cross-prefix=$(TARGET_CROSS) \
- 			--audio-drv-list= \
--			--python=$(HOST_DIR)/bin/python3 \
-+			--meson=$(HOST_DIR)/bin/meson \
-+			--ninja=$(HOST_DIR)/bin/ninja \
- 			--enable-kvm \
- 			--enable-attr \
- 			--enable-vhost-net \
-@@ -194,6 +199,8 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-capstone \
- 			--disable-git-update \
- 			--disable-opengl \
-+			--disable-vhost-user-blk-server \
-+			--disable-virtiofsd \
- 			$(QEMU_OPTS)
- endef
- 
-@@ -212,7 +219,7 @@ $(eval $(generic-package))
- #-------------------------------------------------------------
- # Host-qemu
- 
--HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman host-python3
-+HOST_QEMU_DEPENDENCIES = host-meson host-pkgconf host-zlib host-libglib2 host-pixman host-python3
- 
- #       BR ARCH         qemu
- #       -------         ----
-@@ -327,13 +334,16 @@ define HOST_QEMU_CONFIGURE_CMDS
- 		--host-cc="$(HOSTCC)" \
- 		--extra-cflags="$(HOST_QEMU_CFLAGS)" \
- 		--extra-ldflags="$(HOST_LDFLAGS)" \
--		--python=$(HOST_DIR)/bin/python3 \
-+		--meson=$(HOST_DIR)/bin/meson \
-+		--ninja=$(HOST_DIR)/bin/ninja \
- 		--disable-bzip2 \
- 		--disable-containers \
- 		--disable-curl \
- 		--disable-libssh \
- 		--disable-linux-io-uring \
- 		--disable-sdl \
-+		--disable-vhost-user-blk-server \
-+		--disable-virtiofsd \
- 		--disable-vnc-jpeg \
- 		--disable-vnc-png \
- 		--disable-vnc-sasl \
--- 
-2.25.4
+>
+> 139 if(platform_supports_ninja_browse)
+> 140         # Inlines src/browse.py into the browse_py.h header, so that it can be included
+> 141         # by src/browse.cc
+> 142         add_custom_command(
+> 143                 OUTPUT build/browse_py.h
+> 144                 MAIN_DEPENDENCY src/browse.py
+> 145                 DEPENDS src/inline.sh
+> 146                 COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/build
+> 147                 COMMAND src/inline.sh kBrowsePy
+> 148                                                 < src/browse.py
+> 149                                                 > ${CMAKE_BINARY_DIR}/build/browse_py.h
+> 150                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+> 151                 VERBATIM
+> 152         )
+> 153
+> 154         target_compile_definitions(ninja PRIVATE NINJA_HAVE_BROWSE)
+> 155         target_sources(ninja PRIVATE src/browse.cc)
+> 156         set_source_files_properties(src/browse.cc
+> 157                 PROPERTIES
+> 158                         OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
+> 159                         INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+> 160                         COMPILE_DEFINITIONS NINJA_PYTHON="python"
+> 161         )
+> 162 endif()
+>
+> Regards,
+> Peter
+>
+> >
+> > Regards,
+> > Yegor
+> >
+> > > Regards,
+> > > Peter
+> > >
+> > > >
+> > > > Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > > >
+> > > > Regards,
+> > > > Yegor
+> > > >
+> > > > > ---
+> > > > > Changes v1 -> v2:
+> > > > >   - really use COMPILE_FLAGS (as the patch subject says)
+> > > > >     (suggested by Yegor Yefremov)
+> > > > > ---
+> > > > >  ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 27 +++++++++++++++++++
+> > > > >  1 file changed, 27 insertions(+)
+> > > > >  create mode 100644 package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+> > > > >
+> > > > > diff --git a/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+> > > > > new file mode 100644
+> > > > > index 0000000000..d92959a938
+> > > > > --- /dev/null
+> > > > > +++ b/package/ninja/0004-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+> > > > > @@ -0,0 +1,27 @@
+> > > > > +From 71840d514511291410d514790c25956be9d4dfe5 Mon Sep 17 00:00:00 2001
+> > > > > +From: Peter Seiderer <ps.report@gmx.net>
+> > > > > +Date: Thu, 10 Dec 2020 20:29:19 +0100
+> > > > > +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
+> > > > > + INCLUDE_DIRECTORIES property
+> > > > > +
+> > > > > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > > > > +---
+> > > > > + CMakeLists.txt | 2 +-
+> > > > > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > +
+> > > > > +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> > > > > +index 7f03c35..f582d2f 100644
+> > > > > +--- a/CMakeLists.txt
+> > > > > ++++ b/CMakeLists.txt
+> > > > > +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
+> > > > > +       set_source_files_properties(src/browse.cc
+> > > > > +               PROPERTIES
+> > > > > +                       OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
+> > > > > +-                      INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+> > > > > ++                      COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
+> > > > > +                       COMPILE_DEFINITIONS NINJA_PYTHON="python"
+> > > > > +       )
+> > > > > + endif()
+> > > > > +--
+> > > > > +2.29.2
+> > > > > +
+> > > > > --
+> > > > > 2.29.2
+> > > > >
+> > > > _______________________________________________
+> > > > buildroot mailing list
+> > > > buildroot at busybox.net
+> > > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
