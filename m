@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 00:18:24 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x]
+Date: Sun, 13 Dec 2020 00:13:58 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
  package/x11r7/xserver_xorg-server: bump version to 1.20.10
-Message-ID: <20201212233304.1F16C81477@busybox.osuosl.org>
+Message-ID: <20201212233308.EA26682976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6b563576ad922409e5522a2f305e0a9bbabdf19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d7529a552499fc692bb5002f5ec59a5f7a3352ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Release notes:
 https://lists.x.org/archives/xorg-announce/2020-December/003067.html
@@ -22,46 +22,16 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 (cherry picked from commit 5f6e3c0962176855715a24fc0a028ebca11ac742)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-modesettings-needs-dri2.patch             |   0
- .../0002-Remove-check-for-useSIGIO-option.patch    |   0
- .../0003-include-misc.h-fix-uClibc-build.patch     |   0
- ...wayland-Makefile.am-fix-build-without-glx.patch |   0
- ...6-common-xf86Init.c-fix-build-without-glx.patch |   0
- ...t-on-probing-a-non-PCI-platform-device-on.patch |   0
  ...eviceInfo-and-SetDeviceIndicators-heap-ov.patch | 100 ----------------
  ...008-Check-SetMap-request-length-carefully.patch | 131 ---------------------
- package/x11r7/xserver_xorg-server/Config.in        |   4 +-
  .../xserver_xorg-server/xserver_xorg-server.hash   |   6 +-
- 10 files changed, 5 insertions(+), 236 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   2 +-
+ 4 files changed, 4 insertions(+), 235 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.10/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.10/0002-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0002-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0002-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.10/0003-include-misc.h-fix-uClibc-build.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0003-include-misc.h-fix-uClibc-build.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0003-include-misc.h-fix-uClibc-build.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.10/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0004-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.10/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0005-hw-xfree86-common-xf86Init.c-fix-build-without-glx.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch b/package/x11r7/xserver_xorg-server/1.20.10/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.9/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-rename to package/x11r7/xserver_xorg-server/1.20.10/0006-Fix-segfault-on-probing-a-non-PCI-platform-device-on.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch b/package/x11r7/xserver_xorg-server/1.20.9/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
+diff --git a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch b/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
 deleted file mode 100644
 index 8297aa8a9f..0000000000
---- a/package/x11r7/xserver_xorg-server/1.20.9/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
+--- a/package/x11r7/xserver_xorg-server/0007-Fix-XkbSetDeviceInfo-and-SetDeviceIndicators-heap-ov.patch
 +++ /dev/null
 @@ -1,100 +0,0 @@
 -From 87c64fc5b0db9f62f4e361444f4b60501ebf67b9 Mon Sep 17 00:00:00 2001
@@ -164,10 +134,10 @@ index 8297aa8a9f..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/x11r7/xserver_xorg-server/1.20.9/0008-Check-SetMap-request-length-carefully.patch b/package/x11r7/xserver_xorg-server/1.20.9/0008-Check-SetMap-request-length-carefully.patch
+diff --git a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch b/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
 deleted file mode 100644
 index a8b33ebf3b..0000000000
---- a/package/x11r7/xserver_xorg-server/1.20.9/0008-Check-SetMap-request-length-carefully.patch
+--- a/package/x11r7/xserver_xorg-server/0008-Check-SetMap-request-length-carefully.patch
 +++ /dev/null
 @@ -1,131 +0,0 @@
 -From 446ff2d3177087b8173fa779fa5b77a2a128988b Mon Sep 17 00:00:00 2001
@@ -301,36 +271,11 @@ index a8b33ebf3b..0000000000
 --- 
 -2.20.1
 -
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 87f1b37daf..a5333c8b4d 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -61,7 +61,7 @@ choice
- 	bool "X Window System server version"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	bool "1.20.9"
-+	bool "1.20.10"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 
-@@ -79,7 +79,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.20.9" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
-+	default "1.20.10" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
 diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 930900c5ea..2aaf86f325 100644
+index 2b55449e14..d6b3c92e08 100644
 --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
 +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,9 +3,9 @@ sha1  7a95765e56b124758fcd7b609589e65b8870880b  xorg-server-1.14.7.tar.bz2
- sha256  fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f  xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256  0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457  xorg-server-1.17.4.tar.bz2
+@@ -1,6 +1,6 @@
 -# From https://lists.x.org/archives/xorg-announce/2020-August/003059.html
 -sha256  e219f2e0dfe455467939149d7cd2ee53b79b512cc1d2094ae4f5c9ed9ccd3571  xorg-server-1.20.9.tar.bz2
 -sha512  d9b5f93e1b9763a89187d8b272aa7d4ce9709641b8539f4536708af153310e5a4931bffd4229c51a3b0e3b12da7838750aa71b635751fb4c0bb27438cce4e5e6  xorg-server-1.20.9.tar.bz2
@@ -340,3 +285,16 @@ index 930900c5ea..2aaf86f325 100644
  
  # Locally calculated
  sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index de97467745..8ac2d17b24 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSERVER_XORG_SERVER_VERSION = 1.20.9
++XSERVER_XORG_SERVER_VERSION = 1.20.10
+ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
