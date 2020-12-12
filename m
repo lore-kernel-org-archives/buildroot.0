@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 00:45:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Sun, 13 Dec 2020 00:18:24 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  package/x11r7/xserver_xorg-server: bump version to 1.20.10
-Message-ID: <20201212233300.11E4F803DA@busybox.osuosl.org>
+Message-ID: <20201212233304.1F16C81477@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4824ec560c60e5dc0bf7234fb0c624184ca115bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a6b563576ad922409e5522a2f305e0a9bbabdf19
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Release notes:
 https://lists.x.org/archives/xorg-announce/2020-December/003067.html
