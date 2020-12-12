@@ -1,46 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Dec 2020 11:03:39 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x]
- package/docker-containerd: bump to version 1.4.0
-Message-ID: <20201212103041.2734880FA4@busybox.osuosl.org>
+Date: Sat, 12 Dec 2020 09:22:05 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libcap: fix
+ libcap.pc
+Message-ID: <20201212103040.E688183EA9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac7ba1968f1d8b562e59d6570ba5339497bd42f3
+commit: https://git.buildroot.net/buildroot/commit/?id=226803e2135532860be3e06809ddd7c18575f4af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 04b2afc65bdb9c1c0c3435e08710adc7cd231016)
+libcap builds an incorrect libcap.pc because libdir is pulled from the
+host os:
+
+ifndef lib
+lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
+endif
+
+Fix this error by passing lib=lib and prefix in
+{HOST_LIBCAP,LIBCAP}_BUILD_CMDS
+
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13276
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 07f8ea39139299c83777a338a30cd480633d5706)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/docker-containerd.hash | 4 ++--
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcap/libcap.mk | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 6fbb228ed2..4b32d62649 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256	80ea55655612d7d9f9e8e10df5993a3636b088390e1a372962687d70ef265d97  docker-containerd-1.2.14.tar.gz
--sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-+sha256	d6284c69e1933e4c05fe285feebef461efe8cd2030634dcf1cbdcde46abe86be  docker-containerd-1.4.0.tar.gz
-+sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 64cb086fef..c16db6518e 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 4919a4adca..54a42f7be4 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -28,7 +28,9 @@ endif
  
--DOCKER_CONTAINERD_VERSION = 1.2.14
-+DOCKER_CONTAINERD_VERSION = 1.4.0
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+ LIBCAP_MAKE_FLAGS = \
+ 	BUILD_CC="$(HOSTCC)" \
+-	BUILD_CFLAGS="$(HOST_CFLAGS)"
++	BUILD_CFLAGS="$(HOST_CFLAGS)" \
++	lib=lib \
++	prefix=/usr
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP_TOOLS),y)
+ define LIBCAP_BUILD_TOOLS_CMDS
+@@ -51,23 +53,27 @@ endef
+ 
+ define LIBCAP_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libcap $(LIBCAP_MAKE_FLAGS) \
+-		DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib $(LIBCAP_MAKE_INSTALL_TARGET)
++		DESTDIR=$(STAGING_DIR) $(LIBCAP_MAKE_FLAGS) $(LIBCAP_MAKE_INSTALL_TARGET)
+ endef
+ 
+ define LIBCAP_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libcap $(LIBCAP_MAKE_FLAGS) \
+-		DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib $(LIBCAP_MAKE_INSTALL_TARGET)
++		DESTDIR=$(TARGET_DIR) $(LIBCAP_MAKE_FLAGS) $(LIBCAP_MAKE_INSTALL_TARGET)
+ 	$(LIBCAP_INSTALL_TOOLS_CMDS)
+ endef
+ 
++HOST_LIBCAP_MAKE_FLAGS = \
++	lib=lib \
++	prefix=$(HOST_DIR) \
++	RAISE_SETFCAP=no
++
+ define HOST_LIBCAP_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
+-		RAISE_SETFCAP=no
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		$(HOST_LIBCAP_MAKE_FLAGS)
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
+-		RAISE_SETFCAP=no lib=lib install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
+ endef
+ 
+ $(eval $(generic-package))
