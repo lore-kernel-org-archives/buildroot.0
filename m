@@ -1,73 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat, 12 Dec 2020 23:01:23 +0100
-Subject: [Buildroot] [PATCH 0/4 v3] package/ti-stgx: tentative bump (branch
- yem/ti-sgx-stuff)
-Message-ID: <cover.1607810474.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4 v3] configs/beaglebone_qt5: switch to using
+ KMS instead of wayland+weston
+In-Reply-To: <cover.1607810474.git.yann.morin.1998@free.fr>
+References: <cover.1607810474.git.yann.morin.1998@free.fr>
+Message-ID: <65da6c095d6ffc4f3b2c3b34d63e85c6a5aa4ea1.1607810474.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Adam Duskett <Aduskett@gmail.com>
 
-This series is a respin based on the initial patch from Adam:
-    https://patchwork.ozlabs.org/project/buildroot/patch/20200702201125.3639873-1-aduskett at gmail.com/
+weston does not work on the ti-sgx SDK, so switch to using KMS directly,
+and drop the wayland-related config options.
 
-That patch did help some people (see the replies), but unfortunately it
-still has a few shortcomings that I have tried to address.
-
-The two most prominent changes this series implements are:
-
-  - split the original patch into a subset to break the problem-space
-    into more manageable pieces,
-
-  - fix the build of qt5bqse when used with TI SGX GL stack (and
-    probably with a few other similarly weird GL stacks), while still
-    keeping buildability and functionality on all platforms.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Adam Duskett (3):
-      configs/beaglebone_qt5: switch to using KMS instead of wayland+weston
-      package/ti-sgx-demos: use KMS-based demos
-      package/ti-sgx-{km, um}: bump to SDK 06.01.00.08 versions
-
-Yann E. MORIN (1):
-      package/qt5base: fix build with TI SGX GL stack
-
- Config.in.legacy                                   |  7 +++
- board/beaglebone/readme.txt                        | 12 ++++-
- .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json      | 15 ++++++
- configs/beaglebone_qt5_defconfig                   |  5 +-
- package/Config.in                                  |  1 -
- ...on-for-obscure-EGLNativeDisplayType-types.patch | 63 ++++++++++++++++++++++
- package/qt5/qt5base/qt5base.mk                     |  4 +-
- package/ti-sgx-demos/ti-sgx-demos.mk               |  2 +-
- package/ti-sgx-km/ti-sgx-km.hash                   |  4 +-
- package/ti-sgx-km/ti-sgx-km.mk                     |  4 +-
- .../0001-Add-missing-sys-sysmacros.h-include.patch | 25 ---------
- package/ti-sgx-libgbm/Config.in                    | 12 -----
- package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  3 --
- package/ti-sgx-libgbm/ti-sgx-libgbm.mk             | 32 -----------
- package/ti-sgx-um/Config.in                        |  1 -
- package/ti-sgx-um/ti-sgx-um.hash                   |  4 +-
- package/ti-sgx-um/ti-sgx-um.mk                     |  4 +-
- 17 files changed, 108 insertions(+), 90 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: split into its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/beaglebone/readme.txt                       | 12 +++++++++++-
+ .../rootfs_overlay/etc/qt5/eglfs_kms_cfg.json     | 15 +++++++++++++++
+ configs/beaglebone_qt5_defconfig                  |  5 +----
+ 3 files changed, 27 insertions(+), 5 deletions(-)
  create mode 100644 board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
- create mode 100644 package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
- delete mode 100644 package/ti-sgx-libgbm/0001-Add-missing-sys-sysmacros.h-include.patch
- delete mode 100644 package/ti-sgx-libgbm/Config.in
- delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.hash
- delete mode 100644 package/ti-sgx-libgbm/ti-sgx-libgbm.mk
 
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index e6647dad2a..231e977a89 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -7,7 +7,7 @@ Description
+ This configuration will build a complete image for the beaglebone and
+ the TI AM335x-EVM, the board type is identified by the on-board
+ EEPROM. The configuration is based on the
+-ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
++ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
+ variants and the evm-sk are built too.
+ 
+ For Qt5 support support use the beaglebone_qt5_defconfig.
+@@ -43,10 +43,20 @@ output/images/
+ To copy the image file to the sdcard use dd:
+ $ dd if=output/images/sdcard.img of=/dev/XXX
+ 
++
++Running Qt5 hellowindow opengl demo:
++===================
++# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
++# export QT_QPA_PLATFORM=eglfs
++# export QT_QPA_EGLFS_INTEGRATION=none
++# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
++
++
+ Tested hardware
+ ===============
+ am335x-evm (rev. 1.1A)
+ beagleboneblack (rev. A5A)
+ beaglebone (rev. A6)
+ 
++2020, Adam Duskett <aduskett@gmail.com>
+ 2016, Lothar Felten <lothar.felten@gmail.com>
+diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+new file mode 100644
+index 0000000000..76f5e7d379
+--- /dev/null
++++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+@@ -0,0 +1,15 @@
++{
++  "device": "/dev/dri/card0",
++  "hwcursor": false,
++  "pbuffers": true,
++  "outputs": [
++    {
++      "name": "VGA1",
++      "mode": "off"
++    },
++    {
++      "name": "HDMI1",
++      "mode": "1024x768"
++    }
++  ]
++}
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 5f7b911e5d..6e0371a7d3 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_EXAMPLES=y
+ BR2_PACKAGE_QT5BASE_EGLFS=y
+-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+ BR2_PACKAGE_QT5QUICKCONTROLS=y
+-BR2_PACKAGE_QT5WAYLAND=y
+-BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
+-BR2_PACKAGE_WESTON=y
+ BR2_PACKAGE_TI_SGX_DEMOS=y
+ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
