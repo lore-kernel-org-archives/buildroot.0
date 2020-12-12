@@ -1,85 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Dec 2020 09:22:05 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libcap: fix
- libcap.pc
-Message-ID: <20201212103040.E688183EA9@busybox.osuosl.org>
+Date: Sat, 12 Dec 2020 10:54:09 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/netsurf: fix
+ build with gcc 10
+Message-ID: <20201212103041.1774A842E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=226803e2135532860be3e06809ddd7c18575f4af
+commit: https://git.buildroot.net/buildroot/commit/?id=8df445cfddbe2ba68d90b0efc3d655763d33b339
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-libcap builds an incorrect libcap.pc because libdir is pulled from the
-host os:
-
-ifndef lib
-lib=$(shell ldd /usr/bin/ld|egrep "ld-linux|ld.so"|cut -d/ -f2)
-endif
-
-Fix this error by passing lib=lib and prefix in
-{HOST_LIBCAP,LIBCAP}_BUILD_CMDS
-
 Fixes:
- - https://bugs.buildroot.org/show_bug.cgi?id=13276
+ - http://autobuild.buildroot.org/results/e81568c2b4f5ef5d055c9b94e624ba2d23f50d16
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 07f8ea39139299c83777a338a30cd480633d5706)
+(cherry picked from commit 8137735818d19f07038ad9df1b56a5a4c97d0f52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcap/libcap.mk | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ ...internal-font-generated-source-for-GCC-10.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 4919a4adca..54a42f7be4 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -28,7 +28,9 @@ endif
- 
- LIBCAP_MAKE_FLAGS = \
- 	BUILD_CC="$(HOSTCC)" \
--	BUILD_CFLAGS="$(HOST_CFLAGS)"
-+	BUILD_CFLAGS="$(HOST_CFLAGS)" \
-+	lib=lib \
-+	prefix=/usr
- 
- ifeq ($(BR2_PACKAGE_LIBCAP_TOOLS),y)
- define LIBCAP_BUILD_TOOLS_CMDS
-@@ -51,23 +53,27 @@ endef
- 
- define LIBCAP_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libcap $(LIBCAP_MAKE_FLAGS) \
--		DESTDIR=$(STAGING_DIR) prefix=/usr lib=lib $(LIBCAP_MAKE_INSTALL_TARGET)
-+		DESTDIR=$(STAGING_DIR) $(LIBCAP_MAKE_FLAGS) $(LIBCAP_MAKE_INSTALL_TARGET)
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libcap $(LIBCAP_MAKE_FLAGS) \
--		DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib $(LIBCAP_MAKE_INSTALL_TARGET)
-+		DESTDIR=$(TARGET_DIR) $(LIBCAP_MAKE_FLAGS) $(LIBCAP_MAKE_INSTALL_TARGET)
- 	$(LIBCAP_INSTALL_TOOLS_CMDS)
- endef
- 
-+HOST_LIBCAP_MAKE_FLAGS = \
-+	lib=lib \
-+	prefix=$(HOST_DIR) \
-+	RAISE_SETFCAP=no
+diff --git a/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch b/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch
+new file mode 100644
+index 0000000000..da512645a5
+--- /dev/null
++++ b/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch
+@@ -0,0 +1,37 @@
++From 434f6c3fe7d1d2c6a3e6ae6338608a4a4421ab1b Mon Sep 17 00:00:00 2001
++From: Michael Drake <michael.drake@codethink.co.uk>
++Date: Fri, 13 Nov 2020 11:12:58 +0000
++Subject: framebuffer: Fix internal font generated source for GCC 10.
 +
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
--		RAISE_SETFCAP=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		$(HOST_LIBCAP_MAKE_FLAGS)
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) \
--		RAISE_SETFCAP=no lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
- endef
- 
- $(eval $(generic-package))
++[Retrieved (and backported) from:
++https://git.netsurf-browser.org/netsurf.git/commit/?id=434f6c3fe7d1d2c6a3e6ae6338608a4a4421ab1b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/convert_font.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/netsurf/frontends/framebuffer/convert_font.c b/netsurf/frontends/framebuffer/convert_font.c
++index 9f5734b71..d22c85920 100644
++--- a/netsurf/frontends/framebuffer/convert_font.c
+++++ b/netsurf/frontends/framebuffer/convert_font.c
++@@ -290,14 +290,14 @@ static bool generate_font_header(const char *path, struct font_data *data)
++ 
++ 
++ 	for (s = 0; s < 4; s++) {
++-		fprintf(fp, "const uint8_t *%s_section_table;\n",
+++		fprintf(fp, "extern const uint8_t *%s_section_table;\n",
++ 			var_lables[s]);
++-		fprintf(fp, "const uint16_t *%s_sections;\n",
+++		fprintf(fp, "extern const uint16_t *%s_sections;\n",
++ 			var_lables[s]);
++ 
++ 	}
++ 
++-	fprintf(fp, "const uint8_t *font_glyph_data;\n");
+++	fprintf(fp, "extern const uint8_t *font_glyph_data;\n");
++ 
++ 	fprintf(fp, "\n\n");
++ 
++-- 
++cgit v1.2.1
++
