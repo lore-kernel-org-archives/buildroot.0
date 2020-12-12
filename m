@@ -1,51 +1,71 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Sat, 12 Dec 2020 16:26:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/python-pyparsing: bump to version
- 2.4.7
-In-Reply-To: <20201212152603.53957-1-m.niestroj@grinn-global.com>
-References: <20201212152603.53957-1-m.niestroj@grinn-global.com>
-Message-ID: <20201212152603.53957-2-m.niestroj@grinn-global.com>
+Date: Sat, 12 Dec 2020 16:27:08 +0100
+Subject: [Buildroot] [PATCH] package/python-pytest: bump to version 6.1.2
+Message-ID: <20201212152708.54248-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+python-more-itertools was removed as dependency starting from
+[1] (release 6.1.0).
+
+XML module is now a hard requirement.
+
+[1] https://github.com/pytest-dev/pytest/commit/96a48f0c66ebe1ec2305c21390a3f6c059760af5
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 8 ++++----
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-pytest/Config.in          | 2 +-
+ package/python-pytest/python-pytest.hash | 4 ++--
+ package/python-pytest/python-pytest.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index d1161e4f8f..2c52ff0843 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+index ad57547a1b..ebbaeeea58 100644
+--- a/package/python-pytest/Config.in
++++ b/package/python-pytest/Config.in
+@@ -3,11 +3,11 @@ config BR2_PACKAGE_PYTHON_PYTEST
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_INICONFIG # runtime
+-	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_PACKAGING # runtime
+ 	select BR2_PACKAGE_PYTHON_PLUGGY # runtime
+ 	select BR2_PACKAGE_PYTHON_PY # runtime
+ 	select BR2_PACKAGE_PYTHON_TOML # runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
+ 	help
+ 	  pytest is a framework that makes building simple and scalable
+ 	  tests easy. Tests are expressive and readable?no boilerplate
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+index 6f3532a590..8c2a85c922 100644
+--- a/package/python-pytest/python-pytest.hash
++++ b/package/python-pytest/python-pytest.hash
 @@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
--md5 46d02cbe0461fe0571d51649e6006ef5 pyparsing-2.4.2.tar.gz
--sha256 6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80 pyparsing-2.4.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyparsing/json
-+md5  f0953e47a0112f7a65aec2305ffdf7b4  pyparsing-2.4.7.tar.gz
-+sha256  c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1  pyparsing-2.4.7.tar.gz
- # Locally computed sha256 checksums
--sha256	10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-+sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index f419e00d40..0dacf2371d 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+ # md5, sha256 from https://pypi.org/pypi/pytest/json
+-md5	c3e7c811b2b74c60bb5fb951229ebce9  pytest-6.0.1.tar.gz
+-sha256	85228d75db9f45e06e57ef9bf4429267f81ac7c0d742cc9ed63d09886a9fe6f4  pytest-6.0.1.tar.gz
++md5	91a421ffffe3310096b4273b2fa13819  pytest-6.1.2.tar.gz
++sha256	c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e  pytest-6.1.2.tar.gz
+ # Locally computer sha256
+ sha256	7898b9b164d4f93fd9a562fd0f592935518b48c4745303964110eb7f7fe64faf  LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+index c17d579f8c..d47ec0f430 100644
+--- a/package/python-pytest/python-pytest.mk
++++ b/package/python-pytest/python-pytest.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 2.4.2
-+PYTHON_PYPARSING_VERSION = 2.4.7
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/7e/24/eaa8d7003aee23eda270099eeec754d7bf4399f75c6a011ef948304f66a2
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = setuptools
+-PYTHON_PYTEST_VERSION = 6.0.1
++PYTHON_PYTEST_VERSION = 6.1.2
+ PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+-PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/20/4c/d7b19b8661be78461fff0392e33943784340424921578fe1bf300ef59831
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/d4/df/bd7c25c4fe809a17315b3fc9878edf48d31dde7b431b6836848b063c0428
+ PYTHON_PYTEST_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_LICENSE = MIT
+ PYTHON_PYTEST_LICENSE_FILES = LICENSE
 -- 
 2.29.2
