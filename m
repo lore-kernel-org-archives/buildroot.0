@@ -1,59 +1,74 @@
-From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Sat, 12 Dec 2020 18:35:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libusb: bump to version 1.0.24
-In-Reply-To: <20201211174325.78230-1-fontaine.fabrice@gmail.com>
-References: <20201211174325.78230-1-fontaine.fabrice@gmail.com>
-Message-ID: <4072307.ejJDZkT8p0@zgyarmati-w530>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Dec 2020 18:39:36 +0100
+Subject: [Buildroot] [PATCH 0/3] package/ti-stgx: tentative bump (branch
+ yem/ti-sgx-stuff)
+In-Reply-To: <20201212100634.GA3281876@scaer>
+References: <cover.1607633239.git.yann.morin.1998@free.fr>
+ <CAFSsvmrRihGW-iXKkYyTfyCKGU7Nhtt5bhUxES-pLmW8ngQ5Ew@mail.gmail.com>
+ <20201212100634.GA3281876@scaer>
+Message-ID: <20201212173936.GB3281876@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020. december 11., p?ntek 18:43:25 CET Fabrice Fontaine wrote:
-> Update indentation in hash file (two spaces)
-> 
-> https://github.com/libusb/libusb/blob/v1.0.24/ChangeLog
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libusb/libusb.hash | 4 ++--
->  package/libusb/libusb.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-> index 272dfb0877..6169a186a5 100644
-> --- a/package/libusb/libusb.hash
-> +++ b/package/libusb/libusb.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256 db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d 
-> libusb-1.0.23.tar.bz2 -sha256
-> 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-> +sha256  7efd2685f7b327326dcfb85cee426d9b871fd70e22caa15bb68d595ce2a2b12a 
-> libusb-1.0.24.tar.bz2 +sha256 
-> 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-> index ddc6b27b6c..26e91e3da6 100644
-> --- a/package/libusb/libusb.mk
-> +++ b/package/libusb/libusb.mk
-> @@ -5,7 +5,7 @@
->  ###########################################################################
-> #####
-> 
->  LIBUSB_VERSION_MAJOR = 1.0
-> -LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).23
-> +LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).24
->  LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
->  LIBUSB_SITE =
-> https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
-> LIBUSB_LICENSE = LGPL-2.1+
+Adam, All,
 
-Acked-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201212/42ccea22/attachment.asc>
+On 2020-12-12 11:06 +0100, Yann E. MORIN spake thusly:
+> On 2020-12-11 12:19 -0800, Adam Duskett spake thusly:
+[--SNIP--]
+> > Yann, you will have to either include Markus' patch or find a
+> > different solution.
+[--SNIP--]
+> However, I suspect this patch is very incorrect for anything else that
+> does have the eglGetPlatformDisplayEXT extension, like most other GL
+> implmentations such as mesa...
+
+OK, so after another day hacking around this issue, I think I eventually
+nailed the reason why the upstream patch does not work. It is trying to
+cast the nativeDisplay (an int) into a quintptr (an unsigned int). And
+of course, this causes quite some grief to the compiler.
+
+So, I have now two options:
+
+ 1. tweak the upstream patch to use a qintptr (not a quintptr) so that it
+    now reads something like:
+
+    -        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay, nullptr);
+    +        qintptr nativeDisplayPtr = reinterpret_cast<qintptr>(nativeDisplay);
+    +        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, reinterpret_cast<void *>(nativeDisplayPtr), nullptr);
+
+ 2. take an even more direct and expeditious solution, to siply cast
+    into a void*, like:
+
+    -        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay, nullptr);
+    +        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, reinterpret_cast<void *>(nativeDisplay), nullptr);
+
+After all, nativeDisplay is just an opaque type; getPlatformDisplay() is
+just expected to pass that value to the lower-level layers that actually
+talk to the GL implementation. nativeDisplay is thus either a pointer
+already (which can be cast to a void* as the existing code already
+does), or it is an integer of some sort, which is supposed to also fit
+into a pointer.
+
+Yeah, I know this is probably not true for some ABis, like x32, where
+pointers are 32-bit but ints are 64-bit. But Buildroot does not support
+x32 or the likes. Furthermore, getPlatformDisplay() anyway expects a
+void*, so it would never be able to accomodate such situations.
+
+So, I would be highly tempted to go for solution 2: it is easy, works
+always, and it is no much more "meh" than the alternative...
+
+Unless again I still missed something...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
