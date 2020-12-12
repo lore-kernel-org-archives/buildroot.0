@@ -1,68 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Dec 2020 10:54:09 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/netsurf: fix
- build with gcc 10
-Message-ID: <20201212103041.1774A842E4@busybox.osuosl.org>
+Date: Sat, 12 Dec 2020 11:04:18 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/docker-containerd: bump to version 1.4.1
+Message-ID: <20201212103041.372B18107C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8df445cfddbe2ba68d90b0efc3d655763d33b339
+commit: https://git.buildroot.net/buildroot/commit/?id=6674a00d97cc66c0f1286d51a7f333f06ecd99ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/e81568c2b4f5ef5d055c9b94e624ba2d23f50d16
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8137735818d19f07038ad9df1b56a5a4c97d0f52)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 87a8cbe617862747a3bd739d366154ccd30b769c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...internal-font-generated-source-for-GCC-10.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch b/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch
-new file mode 100644
-index 0000000000..da512645a5
---- /dev/null
-+++ b/package/netsurf/0004-framebuffer-Fix-internal-font-generated-source-for-GCC-10.patch
-@@ -0,0 +1,37 @@
-+From 434f6c3fe7d1d2c6a3e6ae6338608a4a4421ab1b Mon Sep 17 00:00:00 2001
-+From: Michael Drake <michael.drake@codethink.co.uk>
-+Date: Fri, 13 Nov 2020 11:12:58 +0000
-+Subject: framebuffer: Fix internal font generated source for GCC 10.
-+
-+[Retrieved (and backported) from:
-+https://git.netsurf-browser.org/netsurf.git/commit/?id=434f6c3fe7d1d2c6a3e6ae6338608a4a4421ab1b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/convert_font.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/netsurf/frontends/framebuffer/convert_font.c b/netsurf/frontends/framebuffer/convert_font.c
-+index 9f5734b71..d22c85920 100644
-+--- a/netsurf/frontends/framebuffer/convert_font.c
-++++ b/netsurf/frontends/framebuffer/convert_font.c
-+@@ -290,14 +290,14 @@ static bool generate_font_header(const char *path, struct font_data *data)
-+ 
-+ 
-+ 	for (s = 0; s < 4; s++) {
-+-		fprintf(fp, "const uint8_t *%s_section_table;\n",
-++		fprintf(fp, "extern const uint8_t *%s_section_table;\n",
-+ 			var_lables[s]);
-+-		fprintf(fp, "const uint16_t *%s_sections;\n",
-++		fprintf(fp, "extern const uint16_t *%s_sections;\n",
-+ 			var_lables[s]);
-+ 
-+ 	}
-+ 
-+-	fprintf(fp, "const uint8_t *font_glyph_data;\n");
-++	fprintf(fp, "extern const uint8_t *font_glyph_data;\n");
-+ 
-+ 	fprintf(fp, "\n\n");
-+ 
-+-- 
-+cgit v1.2.1
-+
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 4b32d62649..2ec3d042ba 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256	d6284c69e1933e4c05fe285feebef461efe8cd2030634dcf1cbdcde46abe86be  docker-containerd-1.4.0.tar.gz
++sha256	d410b8efc94e4124990f01de7107223971be8c9258fc651decf9e0ba648485b5  docker-containerd-1.4.1.tar.gz
+ sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index c16db6518e..14c194bbff 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = 1.4.0
++DOCKER_CONTAINERD_VERSION = 1.4.1
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
