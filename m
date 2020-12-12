@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Dec 2020 12:02:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/x11vnc: fix
+Date: Sat, 12 Dec 2020 12:02:27 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/x11vnc: fix
  CVE-2020-29074
-Message-ID: <20201212104831.97194814CE@busybox.osuosl.org>
+Message-ID: <20201212104838.7CA7E842E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf8b28b6862cb92b45d879cfba57af9a74ba2c40
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=da5fbc6f7874f0b631baa9356d45ca2876567d76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 scan.c in x11vnc 0.9.16 uses IPC_CREAT|0777 in shmget calls, which
 allows access by actors other than the current user.
