@@ -1,63 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Dec 2020 10:13:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bind: fix mdig library dependencies
-In-Reply-To: <20201212091306.222405-1-bernd.kuhls@t-online.de>
-References: <20201212091306.222405-1-bernd.kuhls@t-online.de>
-Message-ID: <20201212091306.222405-2-bernd.kuhls@t-online.de>
+Date: Sat, 12 Dec 2020 10:13:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/bind: bump version to 9.11.25
+Message-ID: <20201212091306.222405-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/bc6/bc61b07591188d49d41a7914b4dd1e985c4a3b4b/
+Release notes:
+https://ftp.isc.org/isc/bind9/9.11.25/RELEASE-NOTES-bind-9.11.25.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-mdig-fix-library-dependencies.patch  | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/bind/0002-mdig-fix-library-dependencies.patch
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/0002-mdig-fix-library-dependencies.patch b/package/bind/0002-mdig-fix-library-dependencies.patch
-new file mode 100644
-index 0000000000..4a786edf5e
---- /dev/null
-+++ b/package/bind/0002-mdig-fix-library-dependencies.patch
-@@ -0,0 +1,34 @@
-+From ba00ed93f3bd021b06c9f9b1c0d9ff10931f2617 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 12 Dec 2020 10:09:55 +0100
-+Subject: [PATCH] mdig: fix library dependencies
-+
-+Fixes buildroot build error:
-+http://autobuild.buildroot.net/results/bc6/bc61b07591188d49d41a7914b4dd1e985c4a3b4b/build-end.log
-+
-+ld: warning: libisccfg.so.163, needed by ../../lib/bind9/.libs/libbind9.so,
-+ not found (try using -rpath or -rpath-link)
-+
-+Upstream status: pending upload
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ bin/tools/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/bin/tools/Makefile.in b/bin/tools/Makefile.in
-+index b12f80a334..e672f6bc87 100644
-+--- a/bin/tools/Makefile.in
-++++ b/bin/tools/Makefile.in
-+@@ -96,7 +96,7 @@ genrandom at EXEEXT@: genrandom. at O@
-+ 
-+ mdig at EXEEXT@: mdig. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS} ${BIND9DEPLIBS}
-+ 	export BASEOBJS="mdig. at O@"; \
-+-	export LIBS0="${DNSLIBS} ${BIND9LIBS}"; \
-++	export LIBS0="${DNSLIBS} ${ISCCFGLIBS} ${BIND9LIBS}"; \
-+ 	${FINALBUILDCMD}
-+ 
-+ dnstap-read at EXEEXT@: dnstap-read. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS}
-+-- 
-+2.29.2
-+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index cbd9562b56..ae196dacd5 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.25/bind-9.11.25.tar.gz.asc
+ # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
+-sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
++sha256  8491c24e5a3da68f421d0fcb946602c8d0ff963012fdd176b8026c8890f3a117  bind-9.11.25.tar.gz
+ sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index ba60c111ef..4098f948a9 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.24
++BIND_VERSION = 9.11.25
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
 -- 
 2.29.2
