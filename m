@@ -1,37 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 10:45:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/flare-engine:
- require sdl2_image with png support
-Message-ID: <20201213094832.ED60182B9C@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:59:20 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libopenssl: bump
+ to version 1.1.1h
+Message-ID: <20201213094833.086AE835B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e20a1c0e3ec069449ca94eee831c2c104662dfb6
+commit: https://git.buildroot.net/buildroot/commit/?id=a74406f0910cafb055329df34e7962889809d6a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-flare-engine fail to start if sdl2_image library is build without
-libpng support.
+For details, see the release notes:
+https://www.openssl.org/news/openssl-1.1.1-notes.html
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6c4328a5abae7a89103e1cd399c73dba4bbac63c)
+(cherry picked from commit 35fad96c2cbe0244187fea08cc7f4215b6c8559e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flare-engine/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
-index cdcb018948..d08b740af3 100644
---- a/package/flare-engine/Config.in
-+++ b/package/flare-engine/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLARE_ENGINE
- 	bool "flare-engine"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # SDL2
-+	select BR2_PACKAGE_LIBPNG # SDL2_IMAGE needs libpng support
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_IMAGE
- 	select BR2_PACKAGE_SDL2_MIXER
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 121e10c410..dcfe7d5c05 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
+-sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1h.tar.gz.sha256
++sha256  5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9  openssl-1.1.1h.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index a300458f85..fe5a444cc7 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1g
++LIBOPENSSL_VERSION = 1.1.1h
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
