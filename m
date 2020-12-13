@@ -1,51 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 10:59:20 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libopenssl: bump
- to version 1.1.1h
-Message-ID: <20201213094833.086AE835B1@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:02:58 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/ca-certificates:
+ bump version to 20200601
+Message-ID: <20201213094836.ECCEB817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a74406f0910cafb055329df34e7962889809d6a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2ba7f7fb96b2a72f93d71ff3eaa2bf3a23a4d117
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-For details, see the release notes:
-https://www.openssl.org/news/openssl-1.1.1-notes.html
+Reformatted hashes.
 
+Updated license hash due to upstream commit:
+https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 35fad96c2cbe0244187fea08cc7f4215b6c8559e)
+(cherry picked from commit dae31592214d14f48ec967e5b78565c5e9bdc5cd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ca-certificates/ca-certificates.hash | 6 +++---
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 121e10c410..dcfe7d5c05 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
--sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1h.tar.gz.sha256
-+sha256  5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9  openssl-1.1.1h.tar.gz
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 71a8da4784..1ed1c3ca06 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,6 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
+-sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
++sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
++sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
  
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index a300458f85..fe5a444cc7 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
++sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 79c81a41ea..5c24d4be49 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1g
-+LIBOPENSSL_VERSION = 1.1.1h
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-CA_CERTIFICATES_VERSION = 20190110
++CA_CERTIFICATES_VERSION = 20200601
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
