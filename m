@@ -1,58 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:03:04 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ca-certificates:
- bump version to 20200601
-Message-ID: <20201213094833.295B582B9C@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:45:26 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/flare-engine:
+ require sdl2_image with png support
+Message-ID: <20201213094836.CD260817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8668693227ed6f6a6437b8b1e5beea50a9d66dc4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e050325057c1cb4cf011c02def548207e0b8c6c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Reformatted hashes.
+flare-engine fail to start if sdl2_image library is build without
+libpng support.
 
-Updated license hash due to upstream commit:
-https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dae31592214d14f48ec967e5b78565c5e9bdc5cd)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6c4328a5abae7a89103e1cd399c73dba4bbac63c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ca-certificates/ca-certificates.hash | 6 +++---
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/flare-engine/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 71a8da4784..1ed1c3ca06 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,6 +1,6 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
--sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
-+sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
-+sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
- 
- # Locally computed
--sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
-+sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 79c81a41ea..5c24d4be49 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20190110
-+CA_CERTIFICATES_VERSION = 20200601
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl
- # ca-certificates can be built with either python 2 or python 3
- # but it must be at least python 2.7
+diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
+index cdcb018948..d08b740af3 100644
+--- a/package/flare-engine/Config.in
++++ b/package/flare-engine/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLARE_ENGINE
+ 	bool "flare-engine"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # SDL2
++	select BR2_PACKAGE_LIBPNG # SDL2_IMAGE needs libpng support
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_MIXER
