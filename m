@@ -1,59 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 14:49:42 +0100
-Subject: [Buildroot] [git commit] package/libksba: bump to version 1.5.0
-Message-ID: <20201213133350.34101813B2@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 14:49:44 +0100
+Subject: [Buildroot] [git commit] package/libgcrypt: bump to version 1.8.7
+Message-ID: <20201213133350.59C72813B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4c58de3b5289744ceb20884f7888868df6f33f5
+commit: https://git.buildroot.net/buildroot/commit/?id=2109c5862a1b57e43e8bdc4bec2f01e26fe3baa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Update hash of AUTHORS file (update in year and URL)
-- Update indentation in hash file
-
-https://dev.gnupg.org/T5146
-https://dev.gnupg.org/T4943
+https://dev.gnupg.org/T5113
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libksba/libksba.hash | 12 ++++++------
- package/libksba/libksba.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/libgcrypt/libgcrypt.hash | 8 ++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
-index 8ab7e6efe8..c8c9d6bdd7 100644
---- a/package/libksba/libksba.hash
-+++ b/package/libksba/libksba.hash
-@@ -1,9 +1,9 @@
- # Locally calculated after checking pgp signature
--sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
-+sha256  ae4af129216b2d7fdea0b5bf2a788cd458a79c983bb09a43f4d525cc87aba0ba  libksba-1.5.0.tar.bz2
- 
- # Hash for license files:
--sha256	240908e1356ffeb5d0730227b6198dcc8e878375d28632fd813e0ed75b35ccc2	AUTHORS
--sha256	6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076	COPYING
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING.GPLv2
--sha256	0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf	COPYING.GPLv3
--sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LGPLv3
-+sha256  4d7ff8486176da695f3c81da2ac7ce1b9e5331e0a1667d9ebfe44057088a4220  AUTHORS
-+sha256  6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
-+sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING.GPLv3
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LGPLv3
-diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
-index 25b17a47da..b2f4db6b62 100644
---- a/package/libksba/libksba.mk
-+++ b/package/libksba/libksba.mk
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index c8aae17c18..fd9169ca8b 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000445.html
+-sha1  406b02873833427898d16bcc8483bc5c91c73d4a  libgcrypt-1.8.6.tar.bz2
++# From https://www.gnupg.org/download/integrity_check.html
++sha1  ea79a279b27bf25cb1564f96693128f8fc9f41d6  libgcrypt-1.8.7.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.6.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.7.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256  0cba2700617b99fc33864a0c16b1fa7fdf9781d9ed3509f5d767178e5fd7b975  libgcrypt-1.8.6.tar.bz2
++sha256  03b70f028299561b7034b8966d7dd77ef16ed139c43440925fe8782561974748  libgcrypt-1.8.7.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index b2c1ea3cbe..6062fbc851 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBKSBA_VERSION = 1.3.5
-+LIBKSBA_VERSION = 1.5.0
- LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
- LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
- LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
+-LIBGCRYPT_VERSION = 1.8.6
++LIBGCRYPT_VERSION = 1.8.7
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
