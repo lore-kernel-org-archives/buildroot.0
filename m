@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:38:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
- version 2.16.9
-In-Reply-To: <20201211173553.71958-1-fontaine.fabrice@gmail.com>
-References: <20201211173553.71958-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201213103856.0c8e0d3d@windsurf.home>
+Date: Sun, 13 Dec 2020 10:39:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.17.2
+In-Reply-To: <20201213092409.126496-1-fontaine.fabrice@gmail.com>
+References: <20201213092409.126496-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201213103903.47dadd1d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 11 Dec 2020 18:35:53 +0100
+On Sun, 13 Dec 2020 10:24:09 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9
+> https://botan.randombit.net/news.html#version-2-17-2-2020-11-13
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/mbedtls/mbedtls.hash | 4 ++--
->  package/mbedtls/mbedtls.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/botan/botan.hash | 2 +-
+>  package/botan/botan.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
