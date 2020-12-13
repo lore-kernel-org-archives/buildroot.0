@@ -1,51 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:21:26 +0100
-Subject: [Buildroot] [git commit] package/python-pyparsing: bump to version
- 2.4.7
-Message-ID: <20201213091419.5F8B4814A2@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:30:16 +0100
+Subject: [Buildroot] [git commit] package/python-urllib3: bump to version
+ 1.26.2
+Message-ID: <20201213091419.75E8B83E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26bd4c90629fb7259ca79ebc97582a5c1f8c76e3
+commit: https://git.buildroot.net/buildroot/commit/?id=6b9dc3d93735dfb7969ab2ff68f9a115b6e76968
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The hash of the license file is changed due to:
+
+-Copyright (c) 2008-2019 Andrey Petrov and contributors (see CONTRIBUTORS.txt)
++Copyright (c) 2008-2020 Andrey Petrov and contributors (see CONTRIBUTORS.txt)
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyparsing/python-pyparsing.hash | 8 ++++----
- package/python-pyparsing/python-pyparsing.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 6 +++---
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
-index d1161e4f8f..2c52ff0843 100644
---- a/package/python-pyparsing/python-pyparsing.hash
-+++ b/package/python-pyparsing/python-pyparsing.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index e29966672a..dbc85c9114 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
--md5 46d02cbe0461fe0571d51649e6006ef5 pyparsing-2.4.2.tar.gz
--sha256 6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80 pyparsing-2.4.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/pyparsing/json
-+md5  f0953e47a0112f7a65aec2305ffdf7b4  pyparsing-2.4.7.tar.gz
-+sha256  c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1  pyparsing-2.4.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5  d47dd21a6e66a03c3633cac468ffd010  urllib3-1.25.11.tar.gz
+-sha256  8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2  urllib3-1.25.11.tar.gz
++md5  2233256ccfe140a915f68703f8c2cc1f  urllib3-1.26.2.tar.gz
++sha256  19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08  urllib3-1.26.2.tar.gz
  # Locally computed sha256 checksums
--sha256	10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-+sha256  10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-index f419e00d40..0dacf2371d 100644
---- a/package/python-pyparsing/python-pyparsing.mk
-+++ b/package/python-pyparsing/python-pyparsing.mk
+-sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
++sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 88e8d2097b..1f212ec69e 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYPARSING_VERSION = 2.4.2
-+PYTHON_PYPARSING_VERSION = 2.4.7
- PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
--PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/7e/24/eaa8d7003aee23eda270099eeec754d7bf4399f75c6a011ef948304f66a2
-+PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210
- PYTHON_PYPARSING_LICENSE = MIT
- PYTHON_PYPARSING_LICENSE_FILES = LICENSE
- PYTHON_PYPARSING_SETUP_TYPE = setuptools
+-PYTHON_URLLIB3_VERSION = 1.25.11
++PYTHON_URLLIB3_VERSION = 1.26.2
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/76/d9/bbbafc76b18da706451fa91bc2ebe21c0daf8868ef3c30b869ac7cb7f01d
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/29/e6/d1a1d78c439cad688757b70f26c50a53332167c364edb0134cadd280e234
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
