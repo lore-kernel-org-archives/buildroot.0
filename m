@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:36:42 +0100
-Subject: [Buildroot] [git commit] package/libressl: security bump to version
- 3.2.3
-Message-ID: <20201213092153.C283F807D7@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:36:44 +0100
+Subject: [Buildroot] [git commit] package/botan: bump to version 2.17.2
+Message-ID: <20201213092153.CDFAA807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87b23b380d6fa7637ddfb2233538901f138b763f
+commit: https://git.buildroot.net/buildroot/commit/?id=67ed81fc5d57039d2ac40641aa3fd8d42bfdc53e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It includes the following security fix:
- * Malformed ASN.1 in a certificate revocation list or a timestamp
-   response token can lead to a NULL pointer dereference.
-
-https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.3-relnotes.txt
+https://botan.randombit.net/news.html#version-2-17-2-2020-11-13
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 9dfb74ff07..0dd0ffcaed 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 612aa1e85a..f8fa6e5151 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
 @@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  a9d1e1d030b8bcc67bf6428b8c0fff14a5602e2236257b9e3d77acaf12e2a7a1  libressl-3.2.2.tar.gz
-+sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  b97044b312aa718349af7851331b064bc7bd5352400d5f80793bace427d01343  Botan-2.17.0.tar.xz
++sha256  ebe27dfe2b55d7e02bf520e926606c48b76b22facb483256b13ab38e018e1e6c  Botan-2.17.2.tar.xz
  # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 41484f5a96..2f7644a8e8 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
+ sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 79c45ffb5f..4fe2e54c55 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 3.2.2
-+LIBRESSL_VERSION = 3.2.3
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+-BOTAN_VERSION = 2.17.0
++BOTAN_VERSION = 2.17.2
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
