@@ -1,47 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 17:42:09 +0100
-Subject: [Buildroot] [PATCH 3/3] package/upmpdcli: bump to version 1.5.5
-In-Reply-To: <20201213164209.940947-1-fontaine.fabrice@gmail.com>
-References: <20201213164209.940947-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201213164209.940947-3-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 17:47:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.6
+Message-ID: <20201213164700.943986-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://www.lesbonscomptes.com/upmpdcli/pages/releases.html#UPMPDCLI-1.5.5
+Two major bugs were fixed in this versions, both leading to a memory
+corruption and random crashes.
+
+https://www.mail-archive.com/haproxy at formilux.org/msg39068.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 68ea707e53..b24aec9834 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 5140c6a944..fbbd2e4bab 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
 @@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.14.tar.gz.sha256:
--sha256  e3d90dedee6a942acc049324ca81b7f008d217d386a3e2590a2ca5670cc9df05  upmpdcli-1.4.14.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.5.tar.gz.sha256:
-+sha256  45fce9c71a45f1ec0d1cb2924bf7ece444c44a918a0c437c1c768baa3d4a345d  upmpdcli-1.5.5.tar.gz
- 
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 6531b90ee9..a987806725 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
+-sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.6.tar.gz.sha256
++sha256  be1c6754cbaceafc4837e0c6036c7f81027a3992516435cbbbc5dc749bf5a087  haproxy-2.2.6.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 1912a219e1..a6e07c9adb 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--UPMPDCLI_VERSION = 1.4.14
-+UPMPDCLI_VERSION = 1.5.5
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).6
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.29.2
