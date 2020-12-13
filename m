@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:36:36 +0100
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.10.0
-Message-ID: <20201213092153.8C70F83E6F@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:36:40 +0100
+Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.5.0
+Message-ID: <20201213092153.ADD9B807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b96459216ce6909643e40805e388d27f04be8a1d
+commit: https://git.buildroot.net/buildroot/commit/?id=b2364df8374ea94d906536699f855df53464eaff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://github.com/intel/libva/blob/master/NEWS
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libva/libva.hash | 6 +++---
- package/libva/libva.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index f40599c719..80f7d3c066 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.9.0/libva-2.9.0.tar.bz2.sha1sum
--sha1  3e20605243096b4e935e1ef6ac7797efbacc44f6  libva-2.9.0.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.10.0/libva-2.10.0.tar.bz2.sha1sum
-+sha1  c33459efcab503eea89379bb627ef8a8f497b5b4  libva-2.10.0.tar.bz2
- # Locally computed
--sha256  e344c1392dde92696c9ffd9cb3c7277d0a3b912236eb4e0fdedf7f375434584b  libva-2.9.0.tar.bz2
-+sha256  fa81e35b50d9818fce5ec9eeeeff08a24a8864ceeb9a5c8e7ae4446eacfc0236  libva-2.10.0.tar.bz2
- sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 75d26fa7fa..0ec6b12868 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 565b1cccfa..4a3ec0cf76 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  62ce5826f0eeeb760d884ea8330cd1552b5d432138b8bade0fa72f35badd02d0  luarocks-3.4.0.tar.gz
++sha256  701d0cc0c7e97cc2cf2c2f4068fce45e52a8854f5dc6c9e49e2014202eec9a4f  luarocks-3.5.0.tar.gz
+ sha256  542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 670e7487af..42966ea639 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.9.0
-+LIBVA_VERSION = 2.10.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+-LUAROCKS_VERSION = 3.4.0
++LUAROCKS_VERSION = 3.5.0
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
