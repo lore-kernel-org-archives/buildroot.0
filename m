@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:36:02 +0100
-Subject: [Buildroot] [PATCH v1 30/31] package/qt5webview: format hash
- file according to two spaces guideline
-In-Reply-To: <20201210220519.5654-1-ps.report@gmx.net>
-References: <20201210220519.5654-1-ps.report@gmx.net>
-Message-ID: <20201213103602.6e777976@windsurf.home>
+Date: Sun, 13 Dec 2020 10:36:36 +0100
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.10.0
+Message-ID: <20201213092153.8C70F83E6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 10 Dec 2020 23:05:18 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b96459216ce6909643e40805e388d27f04be8a1d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5webview/qt5webview.hash | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Release notes: https://github.com/intel/libva/blob/master/NEWS
 
-I have applied the remainder of this series. Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index f40599c719..80f7d3c066 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva/releases/download/2.9.0/libva-2.9.0.tar.bz2.sha1sum
+-sha1  3e20605243096b4e935e1ef6ac7797efbacc44f6  libva-2.9.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.10.0/libva-2.10.0.tar.bz2.sha1sum
++sha1  c33459efcab503eea89379bb627ef8a8f497b5b4  libva-2.10.0.tar.bz2
+ # Locally computed
+-sha256  e344c1392dde92696c9ffd9cb3c7277d0a3b912236eb4e0fdedf7f375434584b  libva-2.9.0.tar.bz2
++sha256  fa81e35b50d9818fce5ec9eeeeff08a24a8864ceeb9a5c8e7ae4446eacfc0236  libva-2.10.0.tar.bz2
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 75d26fa7fa..0ec6b12868 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 2.9.0
++LIBVA_VERSION = 2.10.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
