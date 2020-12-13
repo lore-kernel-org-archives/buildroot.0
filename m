@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:35:13 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5webkit: format hash file
+Date: Sun, 13 Dec 2020 10:35:17 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5x11extras: format hash file
  according to two spaces guideline
-Message-ID: <20201213091933.39BEB81544@busybox.osuosl.org>
+Message-ID: <20201213091933.4EE6581544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d104c8fdae3980444252fa95cb6204a095dda06
+commit: https://git.buildroot.net/buildroot/commit/?id=faf987eda60fb0081dddf36ab6ae2b46e6eaaab9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5webkit/qt5webkit.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/qt5/qt5x11extras/qt5x11extras.hash | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
-index 3068ad920d..312d58272a 100644
---- a/package/qt5/qt5webkit/qt5webkit.hash
-+++ b/package/qt5/qt5webkit/qt5webkit.hash
-@@ -2,6 +2,6 @@
- sha256  28a560becd800a4229bfac317c2e5407cd3cc95308bc4c3ca90dba2577b052cf  qtwebkit-opensource-src-5.9.1.tar.xz
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
+index dd42ab3ff0..08e6753f21 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.hash
++++ b/package/qt5/qt5x11extras/qt5x11extras.hash
+@@ -2,8 +2,8 @@
+ sha256  7014702ee9a644a5a93da70848ac47c18851d4f8ed622b29a72eed9282fc6e3e  qtx11extras-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
--sha256 7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805 Source/WebCore/LICENSE-LGPL-2
--sha256 f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce Source/WebCore/LICENSE-LGPL-2.1
--sha256 a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c LICENSE.LGPLv21
-+sha256  7555fa34bc131a75ca56d65c40cc1ea8f9515d23e353d4c15d58573a042f7805  Source/WebCore/LICENSE-LGPL-2
-+sha256  f2b3bd09663381deb99721109d22b47af1213bb43007a8b56a06c6375c8050ce  Source/WebCore/LICENSE-LGPL-2.1
-+sha256  a3db6c7f3027aa27489c25a2fa259185cdee945780c32e01c60cbfabf4743b6c  LICENSE.LGPLv21
+-sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+-sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+-sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
++sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.LGPL3
++sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
