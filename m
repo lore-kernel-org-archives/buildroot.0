@@ -1,49 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:21:08 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
- bump to version 2.16.9
-Message-ID: <20201213101012.3D9E582215@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:17:30 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pyparsing:
+ update link to project
+Message-ID: <20201213101012.3401982215@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e179ef21932ad681567b54d5bf5a74d8346f5ff8
+commit: https://git.buildroot.net/buildroot/commit/?id=53b53b01ae77619740ac9419b3e942f1e7d0b853
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9
+Old link no longer works, so replace that with link to GitHub.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 455387fa3a8c075c10cd87f44e88fcbdee9fff50)
+(cherry picked from commit 1cec1e3f7f7a2412d2d4b29abe984d78b10cd269)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyparsing/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 0082eee4a2..39df050609 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8:
--sha256  fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430  mbedtls-2.16.8.tar.gz
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9:
-+sha256  fc17ff7d8c11d08f23ae2800a18269408ad2c24ea6bb8b9363e41a01c2425697  mbedtls-2.16.9.tar.gz
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 5094434e6c..77373d8b34 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+index 425ffe326b..926ca07ed7 100644
+--- a/package/python-pyparsing/Config.in
++++ b/package/python-pyparsing/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_PYTHON_PYPARSING
+ 	  module provides a library of classes that client code uses
+ 	  to construct the grammar directly in Python code.
  
--MBEDTLS_VERSION = 2.16.8
-+MBEDTLS_VERSION = 2.16.9
- MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+-	  http://pyparsing.wikispaces.com/
++	  https://github.com/pyparsing/pyparsing/
