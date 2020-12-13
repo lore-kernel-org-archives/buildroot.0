@@ -1,43 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 10:24:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.17.2
-Message-ID: <20201213092409.126496-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 13 Dec 2020 10:21:24 +0100
+Subject: [Buildroot] [git commit] package/python-iniconfig: bump to version
+ 1.1.1
+Message-ID: <20201213091419.4AE52814A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://botan.randombit.net/news.html#version-2-17-2-2020-11-13
+commit: https://git.buildroot.net/buildroot/commit/?id=952e060dad5cb9561957ee05da8ecfe8fd487cef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-iniconfig/python-iniconfig.hash | 4 ++--
+ package/python-iniconfig/python-iniconfig.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 612aa1e85a..f8fa6e5151 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  b97044b312aa718349af7851331b064bc7bd5352400d5f80793bace427d01343  Botan-2.17.0.tar.xz
-+sha256  ebe27dfe2b55d7e02bf520e926606c48b76b22facb483256b13ab38e018e1e6c  Botan-2.17.2.tar.xz
- # Locally computed
- sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 79c45ffb5f..4fe2e54c55 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-iniconfig/python-iniconfig.hash b/package/python-iniconfig/python-iniconfig.hash
+index 708c0553ac..b2469db99b 100644
+--- a/package/python-iniconfig/python-iniconfig.hash
++++ b/package/python-iniconfig/python-iniconfig.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/iniconfig/json
+-md5  464179a74789d033b170101f6aa38c2a  iniconfig-1.0.1.tar.gz
+-sha256  e5f92f89355a67de0595932a6c6c02ab4afddc6fcdc0bfc5becd0d60884d3f69  iniconfig-1.0.1.tar.gz
++md5  0b7f3be87481211c183eae095bcea6f1  iniconfig-1.1.1.tar.gz
++sha256  bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32  iniconfig-1.1.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
+diff --git a/package/python-iniconfig/python-iniconfig.mk b/package/python-iniconfig/python-iniconfig.mk
+index 57f31c4194..5c31c69957 100644
+--- a/package/python-iniconfig/python-iniconfig.mk
++++ b/package/python-iniconfig/python-iniconfig.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BOTAN_VERSION = 2.17.0
-+BOTAN_VERSION = 2.17.2
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
--- 
-2.29.2
+-PYTHON_INICONFIG_VERSION = 1.0.1
++PYTHON_INICONFIG_VERSION = 1.1.1
+ PYTHON_INICONFIG_SOURCE = iniconfig-$(PYTHON_INICONFIG_VERSION).tar.gz
+-PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/aa/6e/60dafce419de21f2f3f29319114808cac9f49b6c15117a419737a4ce3813
++PYTHON_INICONFIG_SITE = https://files.pythonhosted.org/packages/23/a2/97899f6bd0e873fed3a7e67ae8d3a08b21799430fb4da15cfedf10d6e2c2
+ PYTHON_INICONFIG_SETUP_TYPE = setuptools
+ PYTHON_INICONFIG_LICENSE = MIT
+ PYTHON_INICONFIG_LICENSE_FILES = LICENSE
