@@ -1,50 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 18:04:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/suricata: bump to version 6.0.1
-In-Reply-To: <20201213170420.992917-1-fontaine.fabrice@gmail.com>
-References: <20201213170420.992917-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201213170420.992917-2-fontaine.fabrice@gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 13 Dec 2020 18:15:29 +0100
+Subject: [Buildroot] [PATCH] package/iozone: bump to version 3_490
+Message-ID: <20201213171531.5182-1-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These releases are bug fix releases, fixing numerous important issues.
+Also updated indentation in hash file (two spaces)
 
-The 6.0.1 release also improves the experimental HTTP/2 support.
-
-https://suricata-ids.org/2020/12/04/suricata-6-0-1-5-0-5-and-4-1-10-released
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index a6cf43fb66..7435c1b96f 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  3c175a6dee9071141391f64828502cfb6e48dc1a20833e1411fb45be5368923b  suricata-6.0.0.tar.gz
-+sha256  e7a1798fe59c1d213f752feefbf8bb54168f9fa56235cf3380347c696ecdb1ae  suricata-6.0.1.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 94c4784dd4..a8970fe9a4 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index f2f40473c3..61e8ff3abe 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	6155850d1019f2450dc926bbdb5a24abf423ee3bb928ab1e68569cf60a908584	iozone3_489.tar
++sha256  5eadb4235ae2a956911204c50ebf2d8d8d59ddcd4a2841a1baf42f3145ad4fed  iozone3_490.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index a491faf9d4..ebb6243651 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SURICATA_VERSION = 6.0.0
-+SURICATA_VERSION = 6.0.1
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+-IOZONE_VERSION = 3_489
++IOZONE_VERSION = 3_490
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
 -- 
-2.29.2
+2.25.1
