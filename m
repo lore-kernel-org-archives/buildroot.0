@@ -1,70 +1,85 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 22:09:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qemu: fix build with kernel < 5.0
-Message-ID: <20201213210909.300489-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Dec 2020 22:10:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
+ 1.39
+In-Reply-To: <20201213160109.877775-1-fontaine.fabrice@gmail.com>
+References: <20201213160109.877775-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201213211025.GD3281876@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e4ef13e8ca4ac634650ed80a72a0e1da59520628
+Fabrice, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...t-libusb.c-fix-build-with-kernel-5.0.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/qemu/0003-hw-usb-host-libusb.c-fix-build-with-kernel-5.0.patch
+On 2020-12-13 17:01 +0100, Fabrice Fontaine spake thusly:
+> https://dev.gnupg.org/T5031
+> https://dev.gnupg.org/T4859
 
-diff --git a/package/qemu/0003-hw-usb-host-libusb.c-fix-build-with-kernel-5.0.patch b/package/qemu/0003-hw-usb-host-libusb.c-fix-build-with-kernel-5.0.patch
-new file mode 100644
-index 0000000000..2510dc9cd4
---- /dev/null
-+++ b/package/qemu/0003-hw-usb-host-libusb.c-fix-build-with-kernel-5.0.patch
-@@ -0,0 +1,43 @@
-+From ecd615dfe328e3ab551cea3ba243d908936ed382 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 13 Dec 2020 21:27:31 +0100
-+Subject: [PATCH] hw/usb/host-libusb.c: fix build with kernel < 5.0
-+
-+USBDEVFS_GET_SPEED is used since version 5.2.0 and
-+https://gitlab.com/qemu-project/qemu/-/commit/202d69a715a4b1824dcd7ec1683d027ed2bae6d3
-+resulting in the following build failure with kernel < 5.0:
-+
-+../hw/usb/host-libusb.c: In function 'usb_host_open':
-+../hw/usb/host-libusb.c:953:32: error: 'USBDEVFS_GET_SPEED' undeclared (first use in this function); did you mean 'USBDEVFS_GETDRIVER'?
-+         int rc = ioctl(hostfd, USBDEVFS_GET_SPEED, NULL);
-+                                ^~~~~~~~~~~~~~~~~~
-+                                USBDEVFS_GETDRIVER
-+
-+A tentative was made to fix this build failure with
-+https://gitlab.com/qemu-project/qemu/-/commit/4969e697c15ac536d5c0700381d5d026ef7f0588
-+
-+However, the assumtion that distros with old kernels also have old
-+libusb is just wrong so also add a check for defined(USBDEVFS_GET_SPEED)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to qemu-devel at nongnu.org]
-+---
-+ hw/usb/host-libusb.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/hw/usb/host-libusb.c b/hw/usb/host-libusb.c
-+index b950501d10..0343300d3e 100644
-+--- a/hw/usb/host-libusb.c
-++++ b/hw/usb/host-libusb.c
-+@@ -941,7 +941,7 @@ static int usb_host_open(USBHostDevice *s, libusb_device *dev, int hostfd)
-+     usb_host_ep_update(s);
-+ 
-+     libusb_speed = libusb_get_device_speed(dev);
-+-#if LIBUSB_API_VERSION >= 0x01000107 && defined(CONFIG_LINUX)
-++#if LIBUSB_API_VERSION >= 0x01000107 && defined(CONFIG_LINUX) && defined(USBDEVFS_GET_SPEED)
-+     if (hostfd && libusb_speed == 0) {
-+         /*
-+          * Workaround libusb bug: libusb_get_device_speed() does not
-+-- 
-+2.29.2
-+
+That last one states that mips64 big endian is now supported. But we
+already allowed that in Buildroot.
+
+Damn, libgpg-error is weird...
+
+If you can spot any architecture that is now being supported could you
+look at updating BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS accordingly,
+please?
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libgpg-error/libgpg-error.hash | 7 +++++--
+>  package/libgpg-error/libgpg-error.mk   | 2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+> index 05c46d6d43..70aa3a01d8 100644
+> --- a/package/libgpg-error/libgpg-error.hash
+> +++ b/package/libgpg-error/libgpg-error.hash
+> @@ -1,7 +1,10 @@
+> +# From https://www.gnupg.org/download/integrity_check.html
+> +sha1  991a7a53e778a3de5ba8aad711e0bc9453101f4b  libgpg-error-1.39.tar.bz2
+> +
+>  # Locally calculated after checking pgp signature
+> -# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.37.tar.bz2.sig
+> +# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.39.tar.bz2.sig
+>  # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+> -sha256  b32d6ff72a73cf79797f7f2d039e95e9c6f92f0c1450215410840ab62aea9763  libgpg-error-1.37.tar.bz2
+> +sha256  4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f  libgpg-error-1.39.tar.bz2
+>  # Locally calculated
+>  sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+>  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+> index 6281faa662..8980c67012 100644
+> --- a/package/libgpg-error/libgpg-error.mk
+> +++ b/package/libgpg-error/libgpg-error.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBGPG_ERROR_VERSION = 1.37
+> +LIBGPG_ERROR_VERSION = 1.39
+>  LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+>  LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+>  LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
