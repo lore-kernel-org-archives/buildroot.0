@@ -1,48 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:12:55 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/jasper: security
- bump to 2.0.23
-Message-ID: <20201213095905.D3550814E9@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:17:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python-pyparsing: update link
+ to project
+In-Reply-To: <20201212152603.53957-1-m.niestroj@grinn-global.com> (Marcin
+ Niestroj's message of "Sat, 12 Dec 2020 16:26:02 +0100")
+References: <20201212152603.53957-1-m.niestroj@grinn-global.com>
+Message-ID: <875z56ypq6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c3018790e0a9fc58635ff64b87456d39ed3e76a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
-Changes:
-* Fix CVE-2020-27828, heap-overflow in cp_create() in jpc_enc.c
+ > Old link no longer works, so replace that with link to GitHub.
+ > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ac9f50f204899ff502e0d57ac900753beb0ee031)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 5edf45e6db..2a0a4fdff0 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  afc4166bff29b8a0dc46ed5e8d6a208d7976fccfd0b1146e3400c8b2948794a2  jasper-2.0.22.tar.gz
-+sha256  20facc904bd9d38c20e0c090b1be3ae02ae5b2703b803013be2ecad586a18927  jasper-2.0.23.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index ab7cb933bc..3386108323 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.22
-+JASPER_VERSION = 2.0.23
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+-- 
+Bye, Peter Korsgaard
