@@ -1,45 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:11:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: bump to
- version 2.0.22
-Message-ID: <20201213095850.A83D9815B7@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:14:30 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: bump
+ to version 1.3.7
+Message-ID: <20201213095850.D4FDC870CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a1d926e104fb8de9131c84bdadc53c1391b494e
+commit: https://git.buildroot.net/buildroot/commit/?id=c9b60fb1b73c3bfe8f2baf09611265e71d5c307d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Paho-mqtt-c maintainance release. It fixes some bugs including client
+times out and buffer overflow:
+
+https://github.com/eclipse/paho.mqtt.c/milestone/9?closed=1
+
+Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0ca16ace62dc407f73ded69792dd6a9f22492a6e)
+(cherry picked from commit 71e0d12ed1fbc3a9c6e315d990e63a19df831f52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index df8ac8c9c7..bb660e3c5d 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 2482def06dfaa33b8d93cbe992a29723309f3c2b6e75674423a52fc82be10418  jasper-2.0.21.tar.gz
-+sha256 afc4166bff29b8a0dc46ed5e8d6a208d7976fccfd0b1146e3400c8b2948794a2  jasper-2.0.21.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 1351efa563..ab7cb933bc 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 4d9939af31..93ce1b34f2 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  ecbc2c2000c6d8dcf1a76325312c61ed29db0b010acbd40cb92fcd4c014cd017  paho-mqtt-c-1.3.6.tar.gz
++sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index 3ac46397dd..a477c8baaa 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JASPER_VERSION = 2.0.21
-+JASPER_VERSION = 2.0.22
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+-PAHO_MQTT_C_VERSION = 1.3.6
++PAHO_MQTT_C_VERSION = 1.3.7
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
