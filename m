@@ -1,34 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 22:59:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ti-sgx-um: drop ti-sgx-libgbm
- comment
-Message-ID: <20201213215947.678631-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 23:03:29 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/libllcp: drop wrong comment
+Message-ID: <20201213220329.735998-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 814bfc5ec1ab49188d1c8cb7f0d8d857b92d6a03 forgot to drop comment
-from ti-sgx-um
+Dependency on threads comes from libllcp itself not from libusb (which
+is not even selected)
+
+While at it, also add a comment about this dependency
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ti-sgx-um/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v1 -> v2:
+ - Add a comment
 
-diff --git a/package/ti-sgx-um/Config.in b/package/ti-sgx-um/Config.in
-index 6a8b7e87e3..b97469a364 100644
---- a/package/ti-sgx-um/Config.in
-+++ b/package/ti-sgx-um/Config.in
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_TI_SGX_UM
- 	bool "ti-sgx-um"
- 	depends on BR2_PACKAGE_TI_SGX_KM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
--	depends on BR2_PACKAGE_HAS_UDEV # ti-sgx-libgbm
-+	depends on BR2_PACKAGE_HAS_UDEV
- 	# pre-built binaries
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_LIBDRM
+ package/libllcp/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/libllcp/Config.in b/package/libllcp/Config.in
+index 1660e92a87..5dc5c36a67 100644
+--- a/package/libllcp/Config.in
++++ b/package/libllcp/Config.in
+@@ -1,9 +1,12 @@
+ config BR2_PACKAGE_LIBLLCP
+ 	bool "libllcp"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBNFC
+ 	help
+ 	  Library extending libnfc with support for Logical Link Control
+ 	  Protocol.
+ 
+ 	  https://github.com/nfc-tools/libllcp
++
++comment "libllcp needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.29.2
