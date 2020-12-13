@@ -1,34 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:09:15 +0100
-Subject: [Buildroot] [PATCH v1 01/31] package/qt5: bump version to 5.15.2
-In-Reply-To: <20201121211258.12068-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 21 Nov 2020 22:12:28 +0100")
-References: <20201121211258.12068-1-ps.report@gmx.net>
-Message-ID: <87im96yq44.fsf@dell.be.48ers.dk>
+Date: Sun, 13 Dec 2020 11:13:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jasper: security bump to 2.0.23
+In-Reply-To: <20201208075404.30032-1-jubalh@iodoru.org> (Michael Vetter's
+ message of "Tue, 8 Dec 2020 08:54:04 +0100")
+References: <20201208075404.30032-1-jubalh@iodoru.org>
+Message-ID: <87eejuypxt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
 
- > qt5base:
- >   - header.BSD was remove with commit 'Remove license header
- >     templates from qtbase' ([1])
+ > Changes:
+ > * Fix CVE-2020-27828, heap-overflow in cp_create() in jpc_enc.c
 
- > qt5tools:
- >   - rebase 0001-Disable-designer-tool-fixes-configure-error.patch
+ > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 
- > qt5webengine:
- >   - update 3rdparty license info
-
- > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=9ac8b9c92eb01bf755995669ecd7ab3acf21dd7d
-
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Is there a list of fixes somewhere? Should this be backported to
-2020.11.x?
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
