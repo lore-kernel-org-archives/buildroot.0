@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2020 22:10:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
- 1.39
-In-Reply-To: <20201213160109.877775-1-fontaine.fabrice@gmail.com>
-References: <20201213160109.877775-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201213211025.GD3281876@scaer>
+Date: Sun, 13 Dec 2020 22:10:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.35.0
+In-Reply-To: <20201213103931.382238-1-fontaine.fabrice@gmail.com>
+References: <20201213103931.382238-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201213211055.GE3281876@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,13 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-12-13 17:01 +0100, Fabrice Fontaine spake thusly:
-> https://dev.gnupg.org/T5031
-> https://dev.gnupg.org/T4859
-
-That last one states that mips64 big endian is now supported. But we
-already allowed that in Buildroot.
-
-Damn, libgpg-error is weird...
-
-If you can spot any architecture that is now being supported could you
-look at updating BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS accordingly,
-please?
-
+On 2020-12-13 11:39 +0100, Fabrice Fontaine spake thusly:
+> Update hash of license file (update in year:
+> https://github.com/PurpleI2P/i2pd/commit/bc330ff0ea134d5d18d927609d3870192829f70f)
+> 
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.34.0
+> https://github.com/PurpleI2P/i2pd/releases/tag/2.35.0
+> 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Applied to master, thanks.
@@ -34,40 +27,35 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libgpg-error/libgpg-error.hash | 7 +++++--
->  package/libgpg-error/libgpg-error.mk   | 2 +-
->  2 files changed, 6 insertions(+), 3 deletions(-)
+>  package/i2pd/i2pd.hash | 6 +++---
+>  package/i2pd/i2pd.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-> index 05c46d6d43..70aa3a01d8 100644
-> --- a/package/libgpg-error/libgpg-error.hash
-> +++ b/package/libgpg-error/libgpg-error.hash
-> @@ -1,7 +1,10 @@
-> +# From https://www.gnupg.org/download/integrity_check.html
-> +sha1  991a7a53e778a3de5ba8aad711e0bc9453101f4b  libgpg-error-1.39.tar.bz2
-> +
->  # Locally calculated after checking pgp signature
-> -# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.37.tar.bz2.sig
-> +# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.39.tar.bz2.sig
->  # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
-> -sha256  b32d6ff72a73cf79797f7f2d039e95e9c6f92f0c1450215410840ab62aea9763  libgpg-error-1.37.tar.bz2
-> +sha256  4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f  libgpg-error-1.39.tar.bz2
->  # Locally calculated
->  sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
->  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-> diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-> index 6281faa662..8980c67012 100644
-> --- a/package/libgpg-error/libgpg-error.mk
-> +++ b/package/libgpg-error/libgpg-error.mk
+> diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+> index 1a19ccf687..4bfaecab03 100644
+> --- a/package/i2pd/i2pd.hash
+> +++ b/package/i2pd/i2pd.hash
+> @@ -1,4 +1,4 @@
+> -# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
+> -sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
+> +# From https://github.com/PurpleI2P/i2pd/releases/download/2.35.0/SHA512SUMS
+> +sha512  cffc41484a63eba7c7091957cd4d8b8584bb02580d70c69132f1447018be5b3cde7893ae4a0bcb914d53e95c089d4253ece6e20442c9da7810e7800a2b99b117  i2pd-2.35.0.tar.gz
+>  # Locally computed:
+> -sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
+> +sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
+> diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+> index 461f483d1f..1371e708b9 100644
+> --- a/package/i2pd/i2pd.mk
+> +++ b/package/i2pd/i2pd.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -LIBGPG_ERROR_VERSION = 1.37
-> +LIBGPG_ERROR_VERSION = 1.39
->  LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
->  LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
->  LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+> -I2PD_VERSION = 2.33.0
+> +I2PD_VERSION = 2.35.0
+>  I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+>  I2PD_LICENSE = BSD-3-Clause
+>  I2PD_LICENSE_FILES = LICENSE
 > -- 
 > 2.29.2
 > 
