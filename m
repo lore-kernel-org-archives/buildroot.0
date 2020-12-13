@@ -1,63 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Dec 2020 12:19:45 +0100
-Subject: [Buildroot] [PATCH v1 1/3] package/qt5knx: bump version to 5.15.2
- (and fix download)
-Message-ID: <20201213111947.5385-1-ps.report@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 12:23:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libksba: bump to version 1.5.0
+Message-ID: <20201213112354.811861-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- bump version to 5.15.2
-- change download url to original site
+- Update hash of AUTHORS file (update in year and URL)
+- Update indentation in hash file
 
-Fixes:
+https://dev.gnupg.org/T5146
+https://dev.gnupg.org/T4943
 
-  - http://autobuild.buildroot.net/results/a043bb991a827880d6c743e63f070fc6a3b72a2f
-
-  >>> qt5knx 5.15.2 Downloading[27m
-  --2020-12-12 13:42:47--  https://github.com/qt/qtknx/archive/v5.15.2/qt5knx-5.15.2.tar.gz
-  Resolving github.com (github.com)... 140.82.114.3
-  Connecting to github.com (github.com)|140.82.114.3|:443... connected.
-  HTTP request sent, awaiting response... 302 Found
-  Location: https://codeload.github.com/qt/qtknx/tar.gz/v5.15.2/qt5knx-5.15.2 [following]
-  --2020-12-12 13:42:47--  https://codeload.github.com/qt/qtknx/tar.gz/v5.15.2/qt5knx-5.15.2
-  Resolving codeload.github.com (codeload.github.com)... 140.82.114.10
-  Connecting to codeload.github.com (codeload.github.com)|140.82.114.10|:443... connected.
-  HTTP request sent, awaiting response... 404 Not Found
-  2020-12-12 13:42:47 ERROR 404: Not Found.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/qt5/qt5knx/qt5knx.hash | 2 +-
- package/qt5/qt5knx/qt5knx.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libksba/libksba.hash | 12 ++++++------
+ package/libksba/libksba.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/qt5/qt5knx/qt5knx.hash b/package/qt5/qt5knx/qt5knx.hash
-index 05abe706af..0cb964134a 100644
---- a/package/qt5/qt5knx/qt5knx.hash
-+++ b/package/qt5/qt5knx/qt5knx.hash
-@@ -1,5 +1,5 @@
- # Hash locally calculated
--sha256  8ee0df130fad39ef6b9a0bef390b648d3ad6539ffca33e22fb569e889d0bd043  qt5knx-5.15.1.tar.gz
-+sha256  e246de9d7c5103edd6c3b735d2ed1f13f7ff86d32cb08521abb5718538353daf  qt5knx-5.15.2.tar.gz
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index 8ab7e6efe8..c8c9d6bdd7 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,9 +1,9 @@
+ # Locally calculated after checking pgp signature
+-sha256	41444fd7a6ff73a79ad9728f985e71c9ba8cd3e5e53358e70d5f066d35c1a340	libksba-1.3.5.tar.bz2
++sha256  ae4af129216b2d7fdea0b5bf2a788cd458a79c983bb09a43f4d525cc87aba0ba  libksba-1.5.0.tar.bz2
  
- # Hashes for license files:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
-diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
-index 494e63226b..9fc121111c 100644
---- a/package/qt5/qt5knx/qt5knx.mk
-+++ b/package/qt5/qt5knx/qt5knx.mk
-@@ -5,7 +5,8 @@
+ # Hash for license files:
+-sha256	240908e1356ffeb5d0730227b6198dcc8e878375d28632fd813e0ed75b35ccc2	AUTHORS
+-sha256	6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076	COPYING
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING.GPLv2
+-sha256	0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf	COPYING.GPLv3
+-sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LGPLv3
++sha256  4d7ff8486176da695f3c81da2ac7ce1b9e5331e0a1667d9ebfe44057088a4220  AUTHORS
++sha256  6197b98c6bf69838c624809c509d84333de1bc847155168c0e84527446a27076  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
++sha256  0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING.GPLv3
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING.LGPLv3
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index 25b17a47da..b2f4db6b62 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- QT5KNX_VERSION = $(QT5_VERSION)
--QT5KNX_SITE = $(call github,qt,qtknx,v$(QT5_VERSION))
-+QT5KNX_SITE = https://code.qt.io/cgit/qt/qtknx.git
-+QT5KNX_SITE_METHOD = git
- QT5KNX_INSTALL_STAGING = YES
- QT5KNX_LICENSE = GPL-3.0 with exception
- QT5KNX_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
+-LIBKSBA_VERSION = 1.3.5
++LIBKSBA_VERSION = 1.5.0
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
 -- 
 2.29.2
