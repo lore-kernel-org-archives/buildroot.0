@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:20:58 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/mbedtls: security
+Date: Sun, 13 Dec 2020 11:21:08 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
  bump to version 2.16.9
-Message-ID: <20201213101008.15BAB81640@busybox.osuosl.org>
+Message-ID: <20201213101012.3D9E582215@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cf6ab205cd8452e646d70611e73501d03bff45e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e179ef21932ad681567b54d5bf5a74d8346f5ff8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9
 
