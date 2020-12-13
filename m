@@ -1,40 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 10:52:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mongoose: add mbedtls support
-Message-ID: <20201213095215.206459-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Dec 2020 10:55:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.66.3
+In-Reply-To: <20201123213557.789056-1-mbrunelle@distech-controls.com> (Maxime
+ Brunelle via buildroot's message of "Mon,
+ 23 Nov 2020 16:35:57 -0500")
+References: <20201123213557.789056-1-mbrunelle@distech-controls.com>
+Message-ID: <87v9d6yqqc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mbedtls is supported since version 6.7 and
-https://github.com/cesanta/mongoose/commit/65e01dbabc1f458af5ad8984f6eb5cb01ebae284
+>>>>> "Maxime" == Maxime Brunelle via buildroot <buildroot@busybox.net> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mongoose/mongoose.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ > Fixes https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524
+ > package/libglib2 reference: https://gitlab.gnome.org/GNOME/glib/-/issues/2091
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 87f56d7894..5faeafb374 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -16,7 +16,14 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
--MONGOOSE_CFLAGS += -DMG_ENABLE_SSL
-+MONGOOSE_CFLAGS += \
-+	-DMG_ENABLE_SSL \
-+	-DMG_SSL_IF=MG_SSL_IF_OPENSSL
-+else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
-+MONGOOSE_DEPENDENCIES += mbedtls
-+MONGOOSE_CFLAGS += \
-+	-DMG_ENABLE_SSL \
-+	-DMG_SSL_IF=MG_SSL_IF_MBEDTLS
- endif
- 
- define MONGOOSE_BUILD_CMDS
+ > Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
+
+What should we do about the stable branches (2020.02.x / 2020.08.x /
+2020.11.x)? When was this issue introduced?
+
+I see:
+
+2020.02.x: glib 2.62.5, nm 1.20.4
+2020.08.x: glib 2.64.4, nm 1.22.10
+2020.11.x: glib 2.64.4, nm 1.22.10
+
+Master had the same glib / nm versions before this patch, so 2020.08.x /
+2020.11.x are presumably also affected? What about 2020.02.x?
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
