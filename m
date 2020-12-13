@@ -1,20 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 23:39:38 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libresslL: bump
- version to 3.1.2
-Message-ID: <20201213222537.A7AF883E72@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 23:39:54 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libressl:
+ security bump to version 3.1.5
+Message-ID: <20201213222537.C7CA783E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43887867ca18c553c77ab5829099067a78a90fa5
+commit: https://git.buildroot.net/buildroot/commit/?id=69614ac90fdc031a832135a14637be6b0a5063a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e9769585638f78a43d1fe8a2a6c2fe03524b8a9e)
+Fixes the following security issues:
+
+    * Malformed ASN.1 in a certificate revocation list or a timestamp
+      response token can lead to a NULL pointer dereference.
+
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.1.5-relnotes.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/libressl/libressl.hash | 2 +-
@@ -22,25 +26,25 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index fcecc2b434..6b53d54e45 100644
+index eb784868a8..32a9babcc7 100644
 --- a/package/libressl/libressl.hash
 +++ b/package/libressl/libressl.hash
 @@ -1,4 +1,4 @@
  # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 df7b172bf79b957dd27ef36dcaa1fb162562c0e8999e194aa8c1a3df2f15398e  libressl-3.0.2.tar.gz
-+sha256  f88a2f7ea617149a34e40c022d9912963f00eaa6109af421317525e6c978d892  libressl-3.1.2.tar.gz
+-sha256  414c149c9963983f805a081db5bd3aec146b5f82d529bb63875ac941b25dcbb6  libressl-3.1.4.tar.gz
++sha256  2c13ddcec5081c0e7ba7f93d8370a91911173090f1922007e1d90de274500494  libressl-3.1.5.tar.gz
  # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
 diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index c2491bb3a9..c703076268 100644
+index 06b7174c5e..53812c23cc 100644
 --- a/package/libressl/libressl.mk
 +++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 3.0.2
-+LIBRESSL_VERSION = 3.1.2
+-LIBRESSL_VERSION = 3.1.4
++LIBRESSL_VERSION = 3.1.5
  LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
  LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
  LIBRESSL_LICENSE_FILES = COPYING
