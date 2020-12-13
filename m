@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 10:45:26 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/flare-engine:
- require sdl2_image with png support
-Message-ID: <20201213094836.CD260817A2@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:09:15 +0100
+Subject: [Buildroot] [PATCH v1 01/31] package/qt5: bump version to 5.15.2
+In-Reply-To: <20201121211258.12068-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sat, 21 Nov 2020 22:12:28 +0100")
+References: <20201121211258.12068-1-ps.report@gmx.net>
+Message-ID: <87im96yq44.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e050325057c1cb4cf011c02def548207e0b8c6c4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-flare-engine fail to start if sdl2_image library is build without
-libpng support.
+ > qt5base:
+ >   - header.BSD was remove with commit 'Remove license header
+ >     templates from qtbase' ([1])
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6c4328a5abae7a89103e1cd399c73dba4bbac63c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flare-engine/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > qt5tools:
+ >   - rebase 0001-Disable-designer-tool-fixes-configure-error.patch
 
-diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
-index cdcb018948..d08b740af3 100644
---- a/package/flare-engine/Config.in
-+++ b/package/flare-engine/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLARE_ENGINE
- 	bool "flare-engine"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # SDL2
-+	select BR2_PACKAGE_LIBPNG # SDL2_IMAGE needs libpng support
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_IMAGE
- 	select BR2_PACKAGE_SDL2_MIXER
+ > qt5webengine:
+ >   - update 3rdparty license info
+
+ > [1] https://code.qt.io/cgit/qt/qtbase.git/commit/?id=9ac8b9c92eb01bf755995669ecd7ab3acf21dd7d
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Is there a list of fixes somewhere? Should this be backported to
+2020.11.x?
+
+-- 
+Bye, Peter Korsgaard
