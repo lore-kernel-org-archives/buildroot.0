@@ -1,53 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 12:32:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libassuan: bump to version 2.5.4
-Message-ID: <20201213113208.818948-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 12:34:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: bump to version 1.8.7
+Message-ID: <20201213113445.819556-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file
-
-https://dev.gnupg.org/T5112
+https://dev.gnupg.org/T5113
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libassuan/libassuan.hash | 10 +++++-----
- package/libassuan/libassuan.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libgcrypt/libgcrypt.hash | 8 ++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-index bb008d6ed4..3506b4f858 100644
---- a/package/libassuan/libassuan.hash
-+++ b/package/libassuan/libassuan.hash
-@@ -1,8 +1,8 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1 6d81bf42fa91ed2894df8b65764ce899e39776f8  libassuan-2.5.3.tar.bz2
-+sha1  55a35918e95566ef94e8843879a7dd3f87de3781  libassuan-2.5.4.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index c8aae17c18..fd9169ca8b 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2020q3/000445.html
+-sha1  406b02873833427898d16bcc8483bc5c91c73d4a  libgcrypt-1.8.6.tar.bz2
++# From https://www.gnupg.org/download/integrity_check.html
++sha1  ea79a279b27bf25cb1564f96693128f8fc9f41d6  libgcrypt-1.8.7.tar.bz2
  # Locally calculated after checking signature
--# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2.sig
-+# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.4.tar.bz2.sig
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.6.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.7.tar.bz2.sig
  # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702  libassuan-2.5.3.tar.bz2
--sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
--sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-+sha256  c080ee96b3bd519edd696cfcebdecf19a3952189178db9887be713ccbcb5fbf0  libassuan-2.5.4.tar.bz2
-+sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-+sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index 034a9bfdfe..8b618197f9 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
+-sha256  0cba2700617b99fc33864a0c16b1fa7fdf9781d9ed3509f5d767178e5fd7b975  libgcrypt-1.8.6.tar.bz2
++sha256  03b70f028299561b7034b8966d7dd77ef16ed139c43440925fe8782561974748  libgcrypt-1.8.7.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index b2c1ea3cbe..6062fbc851 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBASSUAN_VERSION = 2.5.3
-+LIBASSUAN_VERSION = 2.5.4
- LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
- LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
- LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+-LIBGCRYPT_VERSION = 1.8.6
++LIBGCRYPT_VERSION = 1.8.7
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
 2.29.2
