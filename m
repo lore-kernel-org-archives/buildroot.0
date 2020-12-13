@@ -1,53 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 13 Dec 2020 11:24:46 +0100
-Subject: [Buildroot] [PATCH v1] package/kmsxx: fix fmt dependency (needs
- wchar)
-Message-ID: <20201213102446.19942-1-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Dec 2020 11:20:46 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/mbedtls: security
+ bump to version 2.16.9
+Message-ID: <20201213101003.E7C2F81385@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Propagate the fmt dependency on wchar.
+commit: https://git.buildroot.net/buildroot/commit/?id=f6d6452d650a955db683847076d0cdc05b212b49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes:
+https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9
 
- - http://autobuild.buildroot.net/results/814b0f9c3df0076791ca73579b844ef4d56f13c3
-
-  [ 66%] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
-  In file included from .../build/fmt-7.1.3/include/fmt/os.h:26,
-                   from .../build/fmt-7.1.3/src/os.cc:13:
-  .../build/fmt-7.1.3/include/fmt/format.h:1139:8: error: 'wstring' in namespace 'std' does not name a type
-     std::wstring str() const { return {&buffer_[0], size()}; }
-          ^~~~~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 455387fa3a8c075c10cd87f44e88fcbdee9fff50)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kmsxx/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
-index 6e4d1e61a1..fa327ba18d 100644
---- a/package/kmsxx/Config.in
-+++ b/package/kmsxx/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
-+	depends on BR2_USE_WCHAR # fmt
- 	select BR2_PACKAGE_FMT
- 	select BR2_PACKAGE_LIBDRM
- 	help
-@@ -22,6 +23,7 @@ config BR2_PACKAGE_KMSXX_INSTALL_TESTS
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 0082eee4a2..39df050609 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.8:
+-sha256  fe9e3b15c3375943bdfebbbb20dd6b4f1147b3b5d926248bd835d73247407430  mbedtls-2.16.8.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9:
++sha256  fc17ff7d8c11d08f23ae2800a18269408ad2c24ea6bb8b9363e41a01c2425697  mbedtls-2.16.9.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 5094434e6c..77373d8b34 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8, headers >= 4.11"
-+comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8, headers >= 4.11, wchar"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 \
-+		|| !BR2_USE_WCHAR
--- 
-2.29.2
+-MBEDTLS_VERSION = 2.16.8
++MBEDTLS_VERSION = 2.16.9
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
