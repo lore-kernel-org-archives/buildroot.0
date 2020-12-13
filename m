@@ -1,25 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 10:46:22 +0100
-Subject: [Buildroot] [PATCH 1/3] package/flare-engine: require
- sdl2_image with png support
-In-Reply-To: <20201206135607.667917-1-romain.naour@gmail.com> (Romain Naour's
- message of "Sun, 6 Dec 2020 14:56:05 +0100")
-References: <20201206135607.667917-1-romain.naour@gmail.com>
-Message-ID: <87zh2iyr69.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 10:52:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mongoose: add mbedtls support
+Message-ID: <20201213095215.206459-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+mbedtls is supported since version 6.7 and
+https://github.com/cesanta/mongoose/commit/65e01dbabc1f458af5ad8984f6eb5cb01ebae284
 
- > flare-engine fail to start if sdl2_image library is build without
- > libpng support.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mongoose/mongoose.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 87f56d7894..5faeafb374 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -16,7 +16,14 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
+-MONGOOSE_CFLAGS += -DMG_ENABLE_SSL
++MONGOOSE_CFLAGS += \
++	-DMG_ENABLE_SSL \
++	-DMG_SSL_IF=MG_SSL_IF_OPENSSL
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++MONGOOSE_DEPENDENCIES += mbedtls
++MONGOOSE_CFLAGS += \
++	-DMG_ENABLE_SSL \
++	-DMG_SSL_IF=MG_SSL_IF_MBEDTLS
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
 -- 
-Bye, Peter Korsgaard
+2.29.2
