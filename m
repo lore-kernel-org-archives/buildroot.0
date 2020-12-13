@@ -1,28 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:39:26 +0100
-Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.5.0
-In-Reply-To: <20201211183508.30229-1-francois.perrad@gadz.org>
-References: <20201211183508.30229-1-francois.perrad@gadz.org>
-Message-ID: <20201213103926.266569c7@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Dec 2020 10:46:22 +0100
+Subject: [Buildroot] [PATCH 1/3] package/flare-engine: require
+ sdl2_image with png support
+In-Reply-To: <20201206135607.667917-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Sun, 6 Dec 2020 14:56:05 +0100")
+References: <20201206135607.667917-1-romain.naour@gmail.com>
+Message-ID: <87zh2iyr69.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 11 Dec 2020 19:35:08 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/luarocks.hash | 2 +-
->  package/luarocks/luarocks.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > flare-engine fail to start if sdl2_image library is build without
+ > libpng support.
 
-Applied to master, thanks.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-Thomas
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
