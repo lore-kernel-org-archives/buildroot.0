@@ -1,53 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:14:02 +0100
+Date: Sun, 13 Dec 2020 11:14:08 +0100
 Subject: [Buildroot] [git commit branch/2020.08.x] package/paho-mqtt-c: bump
- to version 1.3.6
-Message-ID: <20201213095854.C9FD881471@busybox.osuosl.org>
+ to version 1.3.7
+Message-ID: <20201213095854.D5E76870CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62791dd994849b8ec4f32b9d96d27616e33abb09
+commit: https://git.buildroot.net/buildroot/commit/?id=c35793d861384437092547ecd875d575e619b45c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Update LICENSE hash, EDL version has been fixed with
-https://github.com/eclipse/paho.mqtt.c/commit/34ec96cac554c4ae1527b92433730233f1bdca40
+Paho-mqtt-c maintainance release. It fixes some bugs including client
+times out and buffer overflow:
 
-https://github.com/eclipse/paho.mqtt.c/milestone/11?closed=1
+https://github.com/eclipse/paho.mqtt.c/milestone/9?closed=1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6eba48124efef25ffc97284d5308124bd087d865)
+Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 71e0d12ed1fbc3a9c6e315d990e63a19df831f52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 4 ++--
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
  package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 3c1a27084b..4d9939af31 100644
+index 4d9939af31..93ce1b34f2 100644
 --- a/package/paho-mqtt-c/paho-mqtt-c.hash
 +++ b/package/paho-mqtt-c/paho-mqtt-c.hash
 @@ -1,5 +1,5 @@
  # Locally computed:
--sha256  996eef9e498519da79108f58a887a34abc50cd76770b19b0300b27783706c71f  paho-mqtt-c-1.3.5.tar.gz
-+sha256  ecbc2c2000c6d8dcf1a76325312c61ed29db0b010acbd40cb92fcd4c014cd017  paho-mqtt-c-1.3.6.tar.gz
+-sha256  ecbc2c2000c6d8dcf1a76325312c61ed29db0b010acbd40cb92fcd4c014cd017  paho-mqtt-c-1.3.6.tar.gz
++sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
  sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
  sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
--sha256  99d3a5c5cc2812f0593a85ec7c1b6dd83e8477b5090c01d9de0d49d49f367a4a  LICENSE
-+sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
 diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index e11f0687df..3ac46397dd 100644
+index 3ac46397dd..a477c8baaa 100644
 --- a/package/paho-mqtt-c/paho-mqtt-c.mk
 +++ b/package/paho-mqtt-c/paho-mqtt-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHO_MQTT_C_VERSION = 1.3.5
-+PAHO_MQTT_C_VERSION = 1.3.6
+-PAHO_MQTT_C_VERSION = 1.3.6
++PAHO_MQTT_C_VERSION = 1.3.7
  PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
  PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
  PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
