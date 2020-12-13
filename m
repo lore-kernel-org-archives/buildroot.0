@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:17:03 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-pyparsing:
+Date: Sun, 13 Dec 2020 11:17:25 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-pyparsing:
  update link to project
-Message-ID: <20201213101003.DC45E81471@busybox.osuosl.org>
+Message-ID: <20201213101008.0910A81640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=286e22faae4b1972b3afd3b332b59405293bee63
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3c15128c8f2c303237440f5bf856d29f318d3452
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Old link no longer works, so replace that with link to GitHub.
 
