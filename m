@@ -1,9 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 13 Dec 2020 18:15:31 +0100
-Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.17
+Date: Sun, 13 Dec 2020 18:15:30 +0100
+Subject: [Buildroot] [PATCH] package/libolm: bump to version 3.2.1
 In-Reply-To: <20201213171531.5182-1-gilles.talis@gmail.com>
 References: <20201213171531.5182-1-gilles.talis@gmail.com>
-Message-ID: <20201213171531.5182-3-gilles.talis@gmail.com>
+Message-ID: <20201213171531.5182-2-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/xapian/xapian.hash | 4 ++--
- package/xapian/xapian.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libolm/libolm.hash | 2 +-
+ package/libolm/libolm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
-index 3ebaea7059..7105fbe7da 100644
---- a/package/xapian/xapian.hash
-+++ b/package/xapian/xapian.hash
-@@ -1,5 +1,5 @@
--# From https://lists.xapian.org/pipermail/xapian-discuss/2020-June/009813.html
--sha256  4937f2f49ff27e39a42150e928c8b45877b0bf456510f0785f50159a5cb6bf70  xapian-core-1.4.16.tar.xz
-+# From https://lists.xapian.org/pipermail/xapian-discuss/2020-August/009814.html
-+sha256  b5eb8556dea1b0cad4167a66223522e66d670ec1eba16c7fdc844ed6b652572e  xapian-core-1.4.17.tar.xz
- 
+diff --git a/package/libolm/libolm.hash b/package/libolm/libolm.hash
+index f521d30c0b..c080c7eaf3 100644
+--- a/package/libolm/libolm.hash
++++ b/package/libolm/libolm.hash
+@@ -1,3 +1,3 @@
  # locally computed
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
-index 19d301e980..3ad816a36f 100644
---- a/package/xapian/xapian.mk
-+++ b/package/xapian/xapian.mk
+-sha256  92ac1eccacbff620a1bc1a168ba204893d83bcb72646e456990ebe2480638696  olm-3.1.5.tar.gz
++sha256  d947d9570345e68696668cb855f1a6a7141b7b89cbcc15a08b1fae18535c4c45  olm-3.2.1.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/libolm/libolm.mk b/package/libolm/libolm.mk
+index 48cb31fb29..034b3449d9 100644
+--- a/package/libolm/libolm.mk
++++ b/package/libolm/libolm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPIAN_VERSION = 1.4.16
-+XAPIAN_VERSION = 1.4.17
- XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
- XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
- XAPIAN_LICENSE = GPL-2.0+
+-LIBOLM_VERSION = 3.1.5
++LIBOLM_VERSION = 3.2.1
+ LIBOLM_SOURCE = olm-$(LIBOLM_VERSION).tar.gz
+ LIBOLM_SITE = https://gitlab.matrix.org/matrix-org/olm/-/archive/$(LIBOLM_VERSION)
+ LIBOLM_LICENSE = Apache-2.0
 -- 
 2.25.1
