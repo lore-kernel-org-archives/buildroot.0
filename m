@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:36:39 +0100
-Subject: [Buildroot] [git commit] package/libusb: bump to version 1.0.24
-Message-ID: <20201213092153.A3A9281050@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:36:42 +0100
+Subject: [Buildroot] [git commit] package/libressl: security bump to version
+ 3.2.3
+Message-ID: <20201213092153.C283F807D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff030934fd3dab38f6e9d8a9920c656abf400c38
+commit: https://git.buildroot.net/buildroot/commit/?id=87b23b380d6fa7637ddfb2233538901f138b763f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+It includes the following security fix:
+ * Malformed ASN.1 in a certificate revocation list or a timestamp
+   response token can lead to a NULL pointer dereference.
 
-https://github.com/libusb/libusb/blob/v1.0.24/ChangeLog
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.3-relnotes.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libusb/libusb.hash | 4 ++--
- package/libusb/libusb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
-index 272dfb0877..6169a186a5 100644
---- a/package/libusb/libusb.hash
-+++ b/package/libusb/libusb.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 db11c06e958a82dac52cf3c65cb4dd2c3f339c8a988665110e0d24d19312ad8d  libusb-1.0.23.tar.bz2
--sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-+sha256  7efd2685f7b327326dcfb85cee426d9b871fd70e22caa15bb68d595ce2a2b12a  libusb-1.0.24.tar.bz2
-+sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index ddc6b27b6c..26e91e3da6 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 9dfb74ff07..0dd0ffcaed 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  a9d1e1d030b8bcc67bf6428b8c0fff14a5602e2236257b9e3d77acaf12e2a7a1  libressl-3.2.2.tar.gz
++sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 41484f5a96..2f7644a8e8 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBUSB_VERSION_MAJOR = 1.0
--LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).23
-+LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).24
- LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
- LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
- LIBUSB_LICENSE = LGPL-2.1+
+-LIBRESSL_VERSION = 3.2.2
++LIBRESSL_VERSION = 3.2.3
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
