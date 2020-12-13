@@ -1,47 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:11:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: bump to
- version 2.0.20
-Message-ID: <20201213095850.91E58815B7@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 11:11:56 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: fix
+ tarball name in hash file
+Message-ID: <20201213095850.B1E72870CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7be0d30464d60da04f4f0c84a9ade82ea8e64ee9
+commit: https://git.buildroot.net/buildroot/commit/?id=a9cd44954694eb2e6b963d58f5a298cce3a3f315
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Bump JasPer to 2.0.20
+tarball name was not updated by commit
+0ca16ace62dc407f73ded69792dd6a9f22492a6e
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a108bbf38ea7d5491134d0746aa33a8f2d422eb5)
+While at it also update indentation in hash file (two spaces)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1356d309d45b5eedeec375e2fdc0cf2ad7839a55
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 245c643fc74435e6a97d8bd502bbccb171127a72)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/jasper/jasper.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 67ad90d730..05cf5fc34e 100644
+index bb660e3c5d..5edf45e6db 100644
 --- a/package/jasper/jasper.hash
 +++ b/package/jasper/jasper.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256 b9d16162a088617ada36450f2374d72165377cb64b33ed197c200bcfb73ec76c  jasper-2.0.19.tar.gz
-+sha256 d55843ce52afa9bfe90f30118329578501040f30d48a027459a68a962695e506  jasper-2.0.20.tar.gz
- sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index f6ae2ead78..9bf7d49971 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.19
-+JASPER_VERSION = 2.0.20
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+-sha256 afc4166bff29b8a0dc46ed5e8d6a208d7976fccfd0b1146e3400c8b2948794a2  jasper-2.0.21.tar.gz
+-sha256 4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
++sha256  afc4166bff29b8a0dc46ed5e8d6a208d7976fccfd0b1146e3400c8b2948794a2  jasper-2.0.22.tar.gz
++sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
