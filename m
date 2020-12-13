@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:35:04 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5wayland: format hash file
- according to two spaces guideline
-Message-ID: <20201213091933.02890815BE@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:35:06 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5webchannel: format hash
+ file according to two spaces guideline
+Message-ID: <20201213091933.0E4AE81544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=080214febe4c3aecdba47e4d418b856068fbb0bb
+commit: https://git.buildroot.net/buildroot/commit/?id=97f3c01d08f7021ff40a7cdc33826af25d7d3326
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5wayland/qt5wayland.hash | 10 +++++-----
+ package/qt5/qt5webchannel/qt5webchannel.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
-index 24796d2a28..b17dbdd10d 100644
---- a/package/qt5/qt5wayland/qt5wayland.hash
-+++ b/package/qt5/qt5wayland/qt5wayland.hash
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+index dad3cedc09..47c7da3365 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.hash
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
 @@ -2,8 +2,8 @@
- sha256  193732229ff816f3aaab9a5e2f6bed71ddddbf1988ce003fe8dd84a92ce9aeb5  qtwayland-everywhere-src-5.15.2.tar.xz
+ sha256  127fe79c43b386713f151ed7d411cd81e45e29f9c955584f29736f78c9303ec1  qtwebchannel-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
