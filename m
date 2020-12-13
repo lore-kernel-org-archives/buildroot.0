@@ -1,43 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 13 Dec 2020 23:03:29 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/libllcp: drop wrong comment
-Message-ID: <20201213220329.735998-1-fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 23:16:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: add s390x support
+Message-ID: <20201213221642.810475-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dependency on threads comes from libllcp itself not from libusb (which
-is not even selected)
-
-While at it, also add a comment about this dependency
+s390x is supported since version 1.14
+http://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commit;h=8338a4ba93367974758dc5e195f67e9d171d4086
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Add a comment
+ package/libgpg-error/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
- package/libllcp/Config.in | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/libllcp/Config.in b/package/libllcp/Config.in
-index 1660e92a87..5dc5c36a67 100644
---- a/package/libllcp/Config.in
-+++ b/package/libllcp/Config.in
-@@ -1,9 +1,12 @@
- config BR2_PACKAGE_LIBLLCP
- 	bool "libllcp"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBNFC
- 	help
- 	  Library extending libnfc with support for Logical Link Control
- 	  Protocol.
+diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
+index 415cd015cf..44e9d67aaf 100644
+--- a/package/libgpg-error/Config.in
++++ b/package/libgpg-error/Config.in
+@@ -7,9 +7,9 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 		BR2_mipsel	|| BR2_mips64		|| BR2_mips64el	|| \
+ 		BR2_m68k	|| BR2_nios2		|| BR2_powerpc	|| \
+ 		BR2_powerpc64 	|| BR2_powerpc64le 	|| BR2_RISCV_64	|| \
+-		BR2_RISCV_32	|| BR2_sh4		|| BR2_sh4eb	|| \
+-		BR2_sh4a	|| BR2_sh4aeb		|| BR2_sparc	|| \
+-		BR2_sparc64	|| BR2_x86_64
++		BR2_RISCV_32	|| BR2_s390x		|| BR2_sh4	|| \
++		BR2_sh4eb	|| BR2_sh4a		|| BR2_sh4aeb	|| \
++		BR2_sparc	|| BR2_sparc64		|| BR2_x86_64
  
- 	  https://github.com/nfc-tools/libllcp
-+
-+comment "libllcp needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_PACKAGE_LIBGPG_ERROR
+ 	bool "libgpg-error"
+@@ -44,6 +44,8 @@ config BR2_PACKAGE_LIBGPG_ERROR_SYSCFG
+ 		if BR2_RISCV_32
+ 	default "riscv64-unknown-linux-gnu" \
+ 		if BR2_RISCV_64
++	default "s390x-unknown-linux-gnu" \
++		if BR2_s390x
+ 	default "sh4-unknown-linux-gnu" \
+ 		if BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb
+ 	default "sparc-unknown-linux-gnu" \
 -- 
 2.29.2
