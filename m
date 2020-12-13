@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 23:39:54 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libressl:
+Date: Sun, 13 Dec 2020 23:38:15 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libressl:
  security bump to version 3.1.5
-Message-ID: <20201213222537.C7CA783E72@busybox.osuosl.org>
+Message-ID: <20201213222542.AF28D81544@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69614ac90fdc031a832135a14637be6b0a5063a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=032baed755aed03d360a506ab0f42b49d65cc2a8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes the following security issues:
 
