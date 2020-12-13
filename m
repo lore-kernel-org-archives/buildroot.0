@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 14:52:21 +0100
-Subject: [Buildroot] [PATCH 0/4 v3] package/ti-stgx: tentative bump
- (branch yem/ti-sgx-stuff)
-In-Reply-To: <cover.1607810474.git.yann.morin.1998@free.fr>
-References: <cover.1607810474.git.yann.morin.1998@free.fr>
-Message-ID: <20201213145221.04b4f9ab@windsurf.home>
+Date: Sun, 13 Dec 2020 14:51:46 +0100
+Subject: [Buildroot] [git commit] package/ti-sgx-demos: use KMS-based demos
+Message-ID: <20201213134819.1F84C8123C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 12 Dec 2020 23:01:23 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=29ff603f0845d505c0c331efdccf03cfccfbea42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Adam Duskett (3):
->       configs/beaglebone_qt5: switch to using KMS instead of wayland+weston
->       package/ti-sgx-demos: use KMS-based demos
->       package/ti-sgx-{km, um}: bump to SDK 06.01.00.08 versions
-> 
-> Yann E. MORIN (1):
->       package/qt5base: fix build with TI SGX GL stack
+Weston does not work with the ti-sgx SDK, so switch to using the
+KMS-based demos.
 
-Thanks, series applied!
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: split off into its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ti-sgx-demos/ti-sgx-demos.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx-demos/ti-sgx-demos.mk
+index 8599e88e9b..ea6c6c6b08 100644
+--- a/package/ti-sgx-demos/ti-sgx-demos.mk
++++ b/package/ti-sgx-demos/ti-sgx-demos.mk
+@@ -12,7 +12,7 @@ TI_SGX_DEMOS_LICENSE = Imagination Technologies License Agreement
+ TI_SGX_DEMOS_LICENSE_FILES = LegalNotice.txt
+ 
+ define TI_SGX_DEMOS_INSTALL_TARGET_CMDS
+-	cp -dpfr $(@D)/targetfs/arm/Examples/Advanced/Wayland/OGLES* \
++	cp -dpfr $(@D)/targetfs/arm/Examples/Advanced/NullWS/OGLES* \
+ 		$(TARGET_DIR)/usr/bin/
+ endef
+ 
