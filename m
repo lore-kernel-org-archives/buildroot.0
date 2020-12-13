@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 10:35:19 +0100
-Subject: [Buildroot] [git commit] package/qt5/qt5xmlpatterns: format hash
- file according to two spaces guideline
-Message-ID: <20201213091933.59C4E81544@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 10:35:04 +0100
+Subject: [Buildroot] [git commit] package/qt5/qt5wayland: format hash file
+ according to two spaces guideline
+Message-ID: <20201213091933.02890815BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=067a1fa122f7f30eefb8fd34fcda4341bd929675
+commit: https://git.buildroot.net/buildroot/commit/?id=080214febe4c3aecdba47e4d418b856068fbb0bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 10 +++++-----
+ package/qt5/qt5wayland/qt5wayland.hash | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-index 55dace4d06..682e114a7f 100644
---- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
-+++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+index 24796d2a28..b17dbdd10d 100644
+--- a/package/qt5/qt5wayland/qt5wayland.hash
++++ b/package/qt5/qt5wayland/qt5wayland.hash
 @@ -2,8 +2,8 @@
- sha256  76ea2162a7c349188d7e7e4f6c77b78e8a205494c90fee3cea3487a1ae2cf2fa  qtxmlpatterns-everywhere-src-5.15.2.tar.xz
+ sha256  193732229ff816f3aaab9a5e2f6bed71ddddbf1988ce003fe8dd84a92ce9aeb5  qtwayland-everywhere-src-5.15.2.tar.xz
  
  # Hashes for license files:
 -sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
