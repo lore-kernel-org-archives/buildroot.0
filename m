@@ -1,34 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:17:30 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pyparsing:
- update link to project
-Message-ID: <20201213101012.3401982215@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 13 Dec 2020 11:39:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: bump to version 2.35.0
+Message-ID: <20201213103931.382238-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53b53b01ae77619740ac9419b3e942f1e7d0b853
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Update hash of license file (update in year:
+https://github.com/PurpleI2P/i2pd/commit/bc330ff0ea134d5d18d927609d3870192829f70f)
 
-Old link no longer works, so replace that with link to GitHub.
+https://github.com/PurpleI2P/i2pd/releases/tag/2.34.0
+https://github.com/PurpleI2P/i2pd/releases/tag/2.35.0
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1cec1e3f7f7a2412d2d4b29abe984d78b10cd269)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pyparsing/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/i2pd/i2pd.hash | 6 +++---
+ package/i2pd/i2pd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
-index 425ffe326b..926ca07ed7 100644
---- a/package/python-pyparsing/Config.in
-+++ b/package/python-pyparsing/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_PYTHON_PYPARSING
- 	  module provides a library of classes that client code uses
- 	  to construct the grammar directly in Python code.
+diff --git a/package/i2pd/i2pd.hash b/package/i2pd/i2pd.hash
+index 1a19ccf687..4bfaecab03 100644
+--- a/package/i2pd/i2pd.hash
++++ b/package/i2pd/i2pd.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/PurpleI2P/i2pd/releases/download/2.33.0/SHA512SUMS
+-sha512  7a3e7a8a908be8a12b675fda4ce923cb2b0eaf3e9b12a513b9ae7b56e9ecb593eef0ea278debb4027406d50ee9a46599a6792a54ce2e2f4e2c44c1fc82479910  i2pd-2.33.0.tar.gz
++# From https://github.com/PurpleI2P/i2pd/releases/download/2.35.0/SHA512SUMS
++sha512  cffc41484a63eba7c7091957cd4d8b8584bb02580d70c69132f1447018be5b3cde7893ae4a0bcb914d53e95c089d4253ece6e20442c9da7810e7800a2b99b117  i2pd-2.35.0.tar.gz
+ # Locally computed:
+-sha256  d147a6acdaf8ec9f6513802ef6cad4a4afcdb5ab6b98d9f6bb26d2b7f4cf454c  LICENSE
++sha256  9c87aff490b272254d716475e3c4973f5f64af1d18f9f6962c1e61e252e1ad9a  LICENSE
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 461f483d1f..1371e708b9 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://pyparsing.wikispaces.com/
-+	  https://github.com/pyparsing/pyparsing/
+-I2PD_VERSION = 2.33.0
++I2PD_VERSION = 2.35.0
+ I2PD_SITE = $(call github,PurpleI2P,i2pd,$(I2PD_VERSION))
+ I2PD_LICENSE = BSD-3-Clause
+ I2PD_LICENSE_FILES = LICENSE
+-- 
+2.29.2
