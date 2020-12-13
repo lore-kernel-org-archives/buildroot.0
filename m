@@ -1,65 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2020 22:28:46 +0100
-Subject: [Buildroot] [PATCH] package/iozone: bump to version 3_490
-In-Reply-To: <20201213171531.5182-1-gilles.talis@gmail.com>
-References: <20201213171531.5182-1-gilles.talis@gmail.com>
-Message-ID: <20201213212846.GK3281876@scaer>
+Date: Sun, 13 Dec 2020 22:44:36 +0100
+Subject: [Buildroot] [git commit] package/kmsxx: fix fmt dependency (needs
+ wchar)
+Message-ID: <20201213212911.4AC458283B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gilles, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=eda104076275b187df9efb1c98ed2db2265f246f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-12-13 18:15 +0100, Gilles Talis spake thusly:
-> Also updated indentation in hash file (two spaces)
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Propagate the fmt dependency on wchar.
 
-Series of three applied to master, thanks.
+Fixes:
 
-Regards,
-Yann E. MORIN.
+ - http://autobuild.buildroot.net/results/814b0f9c3df0076791ca73579b844ef4d56f13c3
 
-> ---
->  package/iozone/iozone.hash | 2 +-
->  package/iozone/iozone.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-> index f2f40473c3..61e8ff3abe 100644
-> --- a/package/iozone/iozone.hash
-> +++ b/package/iozone/iozone.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256	6155850d1019f2450dc926bbdb5a24abf423ee3bb928ab1e68569cf60a908584	iozone3_489.tar
-> +sha256  5eadb4235ae2a956911204c50ebf2d8d8d59ddcd4a2841a1baf42f3145ad4fed  iozone3_490.tar
-> diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-> index a491faf9d4..ebb6243651 100644
-> --- a/package/iozone/iozone.mk
-> +++ b/package/iozone/iozone.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -IOZONE_VERSION = 3_489
-> +IOZONE_VERSION = 3_490
->  IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
->  IOZONE_SITE = http://www.iozone.org/src/current
->  IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  [ 66%] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+  In file included from .../build/fmt-7.1.3/include/fmt/os.h:26,
+                   from .../build/fmt-7.1.3/src/os.cc:13:
+  .../build/fmt-7.1.3/include/fmt/format.h:1139:8: error: 'wstring' in namespace 'std' does not name a type
+     std::wstring str() const { return {&buffer_[0], size()}; }
+          ^~~~~~~
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kmsxx/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+index 6e4d1e61a1..fa327ba18d 100644
+--- a/package/kmsxx/Config.in
++++ b/package/kmsxx/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_KMSXX
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 # linux/dma-buf.h
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm
++	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+ 	select BR2_PACKAGE_LIBDRM
+ 	help
+@@ -22,6 +23,7 @@ config BR2_PACKAGE_KMSXX_INSTALL_TESTS
+ 
+ endif
+ 
+-comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8, headers >= 4.11"
++comment "kms++ needs a toolchain w/ threads, C++, gcc >= 4.8, headers >= 4.11, wchar"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11 \
++		|| !BR2_USE_WCHAR
