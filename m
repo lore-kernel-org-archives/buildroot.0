@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 13 Dec 2020 14:51:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: bump to version 1.8.7
-In-Reply-To: <20201213113445.819556-1-fontaine.fabrice@gmail.com>
-References: <20201213113445.819556-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201213145153.49cc791b@windsurf.home>
+Date: Sun, 13 Dec 2020 14:52:21 +0100
+Subject: [Buildroot] [PATCH 0/4 v3] package/ti-stgx: tentative bump
+ (branch yem/ti-sgx-stuff)
+In-Reply-To: <cover.1607810474.git.yann.morin.1998@free.fr>
+References: <cover.1607810474.git.yann.morin.1998@free.fr>
+Message-ID: <20201213145221.04b4f9ab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 13 Dec 2020 12:34:45 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 12 Dec 2020 23:01:23 +0100
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> https://dev.gnupg.org/T5113
+> Adam Duskett (3):
+>       configs/beaglebone_qt5: switch to using KMS instead of wayland+weston
+>       package/ti-sgx-demos: use KMS-based demos
+>       package/ti-sgx-{km, um}: bump to SDK 06.01.00.08 versions
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libgcrypt/libgcrypt.hash | 8 ++++----
->  package/libgcrypt/libgcrypt.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Yann E. MORIN (1):
+>       package/qt5base: fix build with TI SGX GL stack
 
-Applied to master, thanks.
+Thanks, series applied!
 
 Thomas
 -- 
