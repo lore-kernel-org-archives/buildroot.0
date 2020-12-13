@@ -1,26 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 11:03:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version
- to 20200601
-In-Reply-To: <20201208174549.167698-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 8 Dec 2020 18:45:49 +0100")
-References: <20201208174549.167698-1-bernd.kuhls@t-online.de>
-Message-ID: <87mtyiyqdp.fsf@dell.be.48ers.dk>
+Date: Sun, 13 Dec 2020 11:01:16 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libopenssl: bump
+ to version 1.1.1h
+Message-ID: <20201213094828.AC0C181617@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7a850e0328039c999451715c7f33c6e03ecd6b44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Reformatted hashes.
- > Updated license hash due to upstream commit:
- > https://salsa.debian.org/debian/ca-certificates/-/commit/1e2be69b0823dfb56dc3981b7547afd181e066cc
+For details, see the release notes:
+https://www.openssl.org/news/openssl-1.1.1-notes.html
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 35fad96c2cbe0244187fea08cc7f4215b6c8559e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 121e10c410..dcfe7d5c05 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1g.tar.gz.sha256
+-sha256  ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46  openssl-1.1.1g.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1h.tar.gz.sha256
++sha256  5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9  openssl-1.1.1h.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index a300458f85..fe5a444cc7 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1g
++LIBOPENSSL_VERSION = 1.1.1h
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
