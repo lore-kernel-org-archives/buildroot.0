@@ -1,47 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Dec 2020 22:13:40 +0100
-Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.20.1
-Message-ID: <20201213205849.A85948039D@busybox.osuosl.org>
+Date: Sun, 13 Dec 2020 22:13:35 +0100
+Subject: [Buildroot] [git commit] package/libnpupnp: bump to version 4.0.14
+Message-ID: <20201213205849.9ABFA81358@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28a6a2b7bedef3296c87b7b5212169cd9bec7b69
+commit: https://git.buildroot.net/buildroot/commit/?id=affc398f1bcd9e6277bf26d02fed0e4c1567eba4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.lesbonscomptes.com/upmpdcli/pages/releases.html#_2020_11_26_libupnpp_0_20_1
+https://www.lesbonscomptes.com/upmpdcli/pages/releases.html#_2020_11_15_libnpupnp_4_0_14
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libupnpp/libupnpp.hash | 4 ++--
- package/libupnpp/libupnpp.mk   | 2 +-
+ package/libnpupnp/libnpupnp.hash | 4 ++--
+ package/libnpupnp/libnpupnp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
-index 029e33151d..f94ebc8e43 100644
---- a/package/libupnpp/libupnpp.hash
-+++ b/package/libupnpp/libupnpp.hash
+diff --git a/package/libnpupnp/libnpupnp.hash b/package/libnpupnp/libnpupnp.hash
+index 53a0c16fd3..ce39db4d8d 100644
+--- a/package/libnpupnp/libnpupnp.hash
++++ b/package/libnpupnp/libnpupnp.hash
 @@ -1,5 +1,5 @@
--# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.4.tar.gz.sha256
--sha256  29d1d07d44c8f79573e64e093ad8f0f883b11ef9eb3642a67aa703c1dde60576  libupnpp-0.19.4.tar.gz
-+# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.20.1.tar.gz.sha256
-+sha256  d4da986aeaa7124a1732ce3383b6ac8f28e20cab10f1916709f39e5499ae9c38  libupnpp-0.20.1.tar.gz
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.11.tar.gz.sha256
+-sha256  15b73a5197e649afe44dd15002be131b4b0e20a2b2e9b7ea4a2000b9644fefae  libnpupnp-4.0.11.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libnpupnp-4.0.14.tar.gz.sha256
++sha256  ea5f5bf388bf8c028a25630c58e9a42762fddd357e7e2581b192856e01aad044  libnpupnp-4.0.14.tar.gz
  
  # Hash for license file:
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index fc4599ebc8..1337e951a7 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
+ sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
+diff --git a/package/libnpupnp/libnpupnp.mk b/package/libnpupnp/libnpupnp.mk
+index 23cc52c169..efffd7f8a5 100644
+--- a/package/libnpupnp/libnpupnp.mk
++++ b/package/libnpupnp/libnpupnp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUPNPP_VERSION = 0.19.4
-+LIBUPNPP_VERSION = 0.20.1
- LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
+-LIBNPUPNP_VERSION = 4.0.11
++LIBNPUPNP_VERSION = 4.0.14
+ LIBNPUPNP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBNPUPNP_LICENSE = BSD-3-Clause
+ LIBNPUPNP_LICENSE_FILES = COPYING
