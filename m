@@ -1,50 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Dec 2020 23:38:15 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/libressl:
- security bump to version 3.1.5
-Message-ID: <20201213222542.AF28D81544@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 00:01:52 +0100
+Subject: [Buildroot] [PATCH] package/python-lxml: security bump to version
+ 4.6.2
+Message-ID: <20201213230152.5819-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=032baed755aed03d360a506ab0f42b49d65cc2a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
-
 Fixes the following security issues:
 
-    * Malformed ASN.1 in a certificate revocation list or a timestamp
-      response token can lead to a NULL pointer dereference.
+* 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
+  by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
+  removes more sneaky "style" content.
 
-https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.1.5-relnotes.txt
+* 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
+  which allowed JavaScript to pass through.  The cleaner now removes more
+  sneaky "style" content.
+
+For more details, see the changes file:
+https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index eb784868a8..32a9babcc7 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  414c149c9963983f805a081db5bd3aec146b5f82d529bb63875ac941b25dcbb6  libressl-3.1.4.tar.gz
-+sha256  2c13ddcec5081c0e7ba7f93d8370a91911173090f1922007e1d90de274500494  libressl-3.1.5.tar.gz
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 240314e888..7918e08745 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
  # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 06b7174c5e..53812c23cc 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
+-sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
++sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 7e727a6753..a8874737e2 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBRESSL_VERSION = 3.1.4
-+LIBRESSL_VERSION = 3.1.5
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+-PYTHON_LXML_VERSION = 4.5.1
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
++PYTHON_LXML_VERSION = 4.6.2
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
+-- 
+2.20.1
