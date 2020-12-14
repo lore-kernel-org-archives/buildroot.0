@@ -1,45 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Dec 2020 18:29:30 +0100
-Subject: [Buildroot] [PATCH 2/9 v2] core/pkg-infra: allow per site-method
- sub-version strings
+Date: Mon, 14 Dec 2020 18:29:37 +0100
+Subject: [Buildroot] [PATCH 9/9 v2] package/tar: drop specific version for
+ host variant
 In-Reply-To: <cover.1607966969.git.yann.morin.1998@free.fr>
 References: <cover.1607966969.git.yann.morin.1998@free.fr>
-Message-ID: <fbcca113db46d6a56c04ff582618d952ddd0bdfb.1607966969.git.yann.morin.1998@free.fr>
+Message-ID: <7e2814e5db9fc0d7e715acc6ab0c9f08542037a1.1607966969.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When we want to change the format of an archive we generate (e.g. those
-we generate from git trees), the hashes of those archives will change.
+Now we can generate reproducible archives, with all known tar versions
+starting with 1.27, we don't need to clamp the host-tar version to the
+old 1.29, and can now bump to any later version.
 
-To avoid any issue (e.g. an older Buildroot using newer archives, or the
-other way around) that would conclude that the hashes do not match, we
-want to change the filenames of the generated archives whenever we
-change their format.
+Drop the host-tar version, and use the same as the target variant.
 
-Introduce a new internal variable, specific to each site method, that we
-can set to include a "format version" for the archives generated from
-that site method.
+Note that we still need the _SOURCE trick, to avoid depending on tar to
+extract the tar tarball...
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tar/tar.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6a9389f1b5..c97e22236e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -514,7 +514,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_VERSION = custom
- endif
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 9e0a40e561..7822b1dada 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -29,14 +29,10 @@ endif
  
--$(2)_SOURCE_EXT = .tar.gz
-+$(2)_SOURCE_EXT = $$(BR_SUB_VERSION_$$($(2)_SITE_METHOD)).tar.gz
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
+ $(eval $(autotools-package))
+ 
+-# host-tar is used to create the archives in the VCS download backends and tar
+-# 1.30 and forward have changed the archive format. So archives generated with
+-# earlier versions are not bit-for-bit reproducible and the hashes would not
+-# match. Hence host-tar must be kept at version 1.29.
+-HOST_TAR_VERSION = 1.29
+ # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+ # of needing tar to build tar.
+-HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
++HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
++
+ define HOST_TAR_EXTRACT_CMDS
+ 	mkdir -p $(@D)
+ 	cd $(@D) && \
 -- 
 2.25.1
