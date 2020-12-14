@@ -1,29 +1,32 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 14 Dec 2020 15:09:15 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/kontron_smarc_sal28: use kernel
- 5.10
-In-Reply-To: <20201214093724.1129-2-michael@walle.cc>
-References: <20201214093724.1129-1-michael@walle.cc>
- <20201214093724.1129-2-michael@walle.cc>
-Message-ID: <CAEyMn7aTExzrzaE8_OUFJ58DC1wc0nBLGGgjJG8xD0CEDcrgBA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Dec 2020 15:44:42 +0100
+Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 2.0.0
+In-Reply-To: <20201206104805.13543-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 6 Dec 2020 11:48:05 +0100")
+References: <20201206104805.13543-1-peter@korsgaard.com>
+Message-ID: <87sg88xx9h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Am Mo., 14. Dez. 2020 um 10:37 Uhr schrieb Michael Walle <michael@walle.cc>:
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
+ > A new major version, see the announcement for details:
+ > https://mosquitto.org/blog/2020/12/version-2-0-0-released/
 
-Build and startet on ads2
-(fdtfile=freescale/fsl-ls1028a-kontron-sl28-var3-ads2) and kbox-a-230
-(fdtfile=freescale/fsl-ls1028a-kontron-kbox-a-230-ls).
+ > License has now changed to v2.0 of the Eclipse Public License, so update the
+ > license info and hashes to match.
 
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+ > There is now optional cJSON support, so handle that.
 
-Thank you,
+ > Add upstream post-2.0.0 patches fixing build with cJSON and without TLS
+ > support.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-Heiko
+Bye, Peter Korsgaard
