@@ -1,59 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:44:31 +0100
-Subject: [Buildroot] [git commit] package/python-lxml: security bump to
- version 4.6.2
-Message-ID: <20201214143024.E08DF8160D@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 15:44:02 +0100
+Subject: [Buildroot] [git commit] package/sqlcipher: security bump to
+ version 4.4.2
+Message-ID: <20201214143024.D122383E5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea41a5faab3fda4589956b24d4731292872934a5
+commit: https://git.buildroot.net/buildroot/commit/?id=f38893f8dd7c9fb13b14cf4fe471eb62d345c5f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
+use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
+sqlite3.c. A remote denial of service attack can be performed. For
+example, a SQL injection can be used to execute the crafted SQL command
+sequence. After that, some unexpected RAM data is read.
 
-* 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
-  by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
-  removes more sneaky "style" content.
+https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
 
-* 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
-  which allowed JavaScript to pass through.  The cleaner now removes more
-  sneaky "style" content.
-
-For more details, see the changes file:
-https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 240314e888..7918e08745 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
-+sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 7e727a6753..a8874737e2 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index c37db7a20a..96a6a74013 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
++sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 14290745aa..5a9a77c1ee 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.5.1
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
-+PYTHON_LXML_VERSION = 4.6.2
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-SQLCIPHER_VERSION = 4.3.0
++SQLCIPHER_VERSION = 4.4.2
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
