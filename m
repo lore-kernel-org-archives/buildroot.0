@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:44:42 +0100
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 2.0.0
-In-Reply-To: <20201206104805.13543-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 6 Dec 2020 11:48:05 +0100")
-References: <20201206104805.13543-1-peter@korsgaard.com>
-Message-ID: <87sg88xx9h.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Dec 2020 15:44:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
+ version 4.4.2
+In-Reply-To: <20201210220853.375772-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 10 Dec 2020 23:08:53 +0100")
+References: <20201210220853.375772-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8iwxx95.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > A new major version, see the announcement for details:
- > https://mosquitto.org/blog/2020/12/version-2-0-0-released/
+ > Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
+ > use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
+ > sqlite3.c. A remote denial of service attack can be performed. For
+ > example, a SQL injection can be used to execute the crafted SQL command
+ > sequence. After that, some unexpected RAM data is read.
 
- > License has now changed to v2.0 of the Eclipse Public License, so update the
- > license info and hashes to match.
+ > https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
 
- > There is now optional cJSON support, so handle that.
-
- > Add upstream post-2.0.0 patches fixing build with cJSON and without TLS
- > support.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
