@@ -1,57 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:47:43 +0100
-Subject: [Buildroot] [git commit] package/unbound: security bump to version
- 1.13.0
-Message-ID: <20201214143214.DACC283681@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 15:49:08 +0100
+Subject: [Buildroot] [PATCH] package/libglib2: correct upstream status
+ for patch 0001
+In-Reply-To: <20201209112634.18600-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 9 Dec 2020 12:26:32 +0100")
+References: <20201209112634.18600-1-patrickdepinguin@gmail.com>
+Message-ID: <873608xx23.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4eb320112037445b8310f0fde1cde511ed05ecb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-This version has fixes to connect for UDP sockets, slowing down
-potential ICMP side channel leakage. The fix can be controlled with the
-option udp-connect: yes, it is enabled by default.
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+ > this is not true. The linked issue is closed with 'Needs information', and
+ > the code itself is effectively not merged.
 
-Additionally CVE-2020-28935 is fixed, this solves a problem where the
-pidfile is altered by a symlink, and fails if a symlink is encountered.
-See https://nlnetlabs.nl/downloads/unbound/CVE-2020-28935.txt for more
-information.
+ > Clarify the 'Upstream-status' line to make this more clear.
 
-https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.0
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > ---
+ >  package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/unbound/unbound.hash | 6 ++++--
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ > Note: I leave the actual discussion with upstream to Adam, as he was involved in
+ > the issue before.
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index c2c6ab7ff6..9ccea6eb88 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,3 +1,5 @@
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.0.tar.gz.sha256
-+sha256  a954043a95b0326ca4037e50dace1f3a207a0a19e9a4a22f4c6718fc623db2a1  unbound-1.13.0.tar.gz
-+
- # Locally calculated
--sha256 5b9253a97812f24419bf2e6b3ad28c69287261cf8c8fa79e3e9f6d3bf7ef5835  unbound-1.12.0.tar.gz
--sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-+sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index d60180b6ca..8b7d1e8e9f 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.12.0
-+UNBOUND_VERSION = 1.13.0
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
