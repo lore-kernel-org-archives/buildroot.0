@@ -1,63 +1,43 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 14 Dec 2020 23:08:06 +0100
-Subject: [Buildroot] [PATCH 2/2] Defconfigs: fix rock64_defconfig
-In-Reply-To: <20201214192321.9987-2-xuminready@gmail.com>
-References: <20201214192321.9987-1-xuminready@gmail.com>
- <20201214192321.9987-2-xuminready@gmail.com>
-Message-ID: <f087b97a-7e71-9f9d-16d3-ad69ceaf09b5@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 14 Dec 2020 23:11:34 +0100
+Subject: [Buildroot] [PATCH v1] package/bind: fix compile/linking failure
+In-Reply-To: <293lahxbi4.ln2@ID-313208.user.individual.net>
+References: <20201214202026.29519-1-ps.report@gmx.net>
+ <293lahxbi4.ln2@ID-313208.user.individual.net>
+Message-ID: <20201214231134.564bd4f8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Min,
+Hello Bernd,
 
-Adding Michal in Cc.
+On Mon, 14 Dec 2020 22:49:54 +0100, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Le 14/12/2020 ? 20:23, Min Xu a ?crit?:
-> Signed-off-by: Min Xu <xuminready@gmail.com>
+> Am Mon, 14 Dec 2020 21:20:26 +0100 schrieb Peter Seiderer:
+>
+> > Fixes:
+> >
+> >   -
+> >   http://autobuild.buildroot.net/results/
+> 966a3de94aa97fa8e9895eede29c9cbfb4bd7301
+>
+> Hi Peter,
+>
+> duplicate of http://patchwork.ozlabs.org/project/buildroot/patch/
+> 20201212091306.222405-2-bernd.kuhls at t-online.de/
 
-Please squash your two patches since you add again this defconfig with an
-updated BSP. As explained in the commit log [1] the rock64 defconfig was removed
-since it was broken for a long time due to a too old uboot version (2017.09).
+Sorry for missing your submission, some questions follow in
+reply to your patch...
 
-Also this is not really a fix since you bump uboot from 2017.09 to 2020.07 from
-ayufan-rock64 fork.
+Regards,
+Peter
 
-[1] a5fa2469e6506ea4f5a91739aa099f63a10e45ce
-
-Best regards,
-Romain
-
-
-> ---
->  configs/rock64_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
-> index 30bf12c061..df03e357e2 100644
-> --- a/configs/rock64_defconfig
-> +++ b/configs/rock64_defconfig
-> @@ -17,16 +17,16 @@ BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v1.4"
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-u-boot.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="2017.09-rockchip-ayufan-1035-gd646df03ac"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-mainline-u-boot.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-2020-07"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
->  BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
->  BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-> 
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
