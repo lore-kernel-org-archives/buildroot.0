@@ -1,50 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:51:44 +0100
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.6
-Message-ID: <20201214143746.5839A81547@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 15:52:49 +0100
+Subject: [Buildroot] [git commit] package/suricata: bump to version 6.0.1
+Message-ID: <20201214143746.792A18770F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed5082f012daedad6049491383215fc46af9979b
+commit: https://git.buildroot.net/buildroot/commit/?id=611d06d48670e341ab2906da9b42df64b8b62ff6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Two major bugs were fixed in this versions, both leading to a memory
-corruption and random crashes.
+These releases are bug fix releases, fixing numerous important issues.
 
-https://www.mail-archive.com/haproxy at formilux.org/msg39068.html
+The 6.0.1 release also improves the experimental HTTP/2 support.
+
+https://suricata-ids.org/2020/12/04/suricata-6-0-1-5-0-5-and-4-1-10-released
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/suricata/suricata.hash | 2 +-
+ package/suricata/suricata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 5140c6a944..fbbd2e4bab 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+index a6cf43fb66..7435c1b96f 100644
+--- a/package/suricata/suricata.hash
++++ b/package/suricata/suricata.hash
 @@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
--sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.6.tar.gz.sha256
-+sha256  be1c6754cbaceafc4837e0c6036c7f81027a3992516435cbbbc5dc749bf5a087  haproxy-2.2.6.tar.gz
  # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 1912a219e1..a6e07c9adb 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+-sha256  3c175a6dee9071141391f64828502cfb6e48dc1a20833e1411fb45be5368923b  suricata-6.0.0.tar.gz
++sha256  e7a1798fe59c1d213f752feefbf8bb54168f9fa56235cf3380347c696ecdb1ae  suricata-6.0.1.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+index 94c4784dd4..a8970fe9a4 100644
+--- a/package/suricata/suricata.mk
++++ b/package/suricata/suricata.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).6
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-SURICATA_VERSION = 6.0.0
++SURICATA_VERSION = 6.0.1
+ SURICATA_SITE = https://www.openinfosecfoundation.org/download
+ SURICATA_LICENSE = GPL-2.0
+ SURICATA_LICENSE_FILES = COPYING LICENSE
