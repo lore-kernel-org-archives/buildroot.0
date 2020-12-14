@@ -1,74 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 16:56:11 +0100
-Subject: [Buildroot] [PATCH 1/2] package/linux-headers: drop 5.8 headers
-Message-ID: <20201214155612.19465-1-peter@korsgaard.com>
+From: Brunelle, Maxime <mbrunelle@distech-controls.com>
+Date: Mon, 14 Dec 2020 16:00:50 +0000
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.66.3
+In-Reply-To: <87v9d6yqqc.fsf@dell.be.48ers.dk>
+References: <20201123213557.789056-1-mbrunelle@distech-controls.com>,
+ <87v9d6yqqc.fsf@dell.be.48ers.dk>
+Message-ID: <DM6PR01MB47159A7339605136395945DF8EC70@DM6PR01MB4715.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 5.8.x series is now EOL, so drop it.
+Hi Peter,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                     | 7 +++++++
- linux/linux.hash                     | 1 -
- package/linux-headers/Config.in.host | 5 -----
- 3 files changed, 7 insertions(+), 6 deletions(-)
+I can't say exactly when the issue appeared, but I noticed it in version 2020.05 which had glib 2.64.4 and nm 1.22.10, and version 2020.11.x still has it. Based on that, I would presume 2020.08.x has it too. The reference to the glib2 bug in my patch mentions the segfault started appearing in Ubuntu after updating to 2.63.x.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6d8acadf9c..79e5b2f913 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2021.02"
- 
-+config BR2_KERNEL_HEADERS_5_8
-+	bool "kernel headers version 5.8.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 5.8.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
-+
- config BR2_PACKAGE_TI_SGX_LIBGBM
- 	bool "ti-sgx-libgbm support removed"
- 	select BR2_LEGACY
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 8d17cd8efa..9ebf880671 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43  linux-5.10.tar.xz
- sha256  5eb20a65a410669928f94b3975872e493fa6d0fe441c6a78b7564affa2a5d260  linux-5.9.11.tar.xz
--sha256  4ab4a3f694b7b4cfbe78871eab34c8039ad33692144c45c669827a594da85534  linux-5.8.18.tar.xz
- sha256  49da425c1f3c530fd3ff31d85a0461f6b6dc6e459f7faf3eee23e49a98ce64c7  linux-5.4.80.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256  9e0bdebf18a12d0c899e5e4042e715e24a70ab0fd986a3f4c67c8ec2710bad97  linux-4.4.246.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 20c1ce9f84..a5e474fa2c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -54,10 +54,6 @@ config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 
--config BR2_KERNEL_HEADERS_5_8
--	bool "Linux 5.8.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
--
- config BR2_KERNEL_HEADERS_5_9
- 	bool "Linux 5.9.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-@@ -359,7 +355,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.14.209"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.19.160"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.4.80"	if BR2_KERNEL_HEADERS_5_4
--	default "5.8.18"	if BR2_KERNEL_HEADERS_5_8
- 	default "5.9.11"	if BR2_KERNEL_HEADERS_5_9
- 	default "5.10"		if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+I don't know if you usually backport these changes that can affect other projects. However, I can tell you it was problematic for us because it caused nmcli to randomly crash ~5-10% of the time on various commands. We're now using a fork of 2020.11 with the patch applied without issue so far.
+
+Regards,
+
+Maxime Brunelle
+
+From: Peter Korsgaard <jacmet@gmail.com> on behalf of Peter Korsgaard <peter@korsgaard.com>
+Sent: December 13, 2020 04:55
+To: Maxime Brunelle via buildroot <buildroot@busybox.net>
+Cc: buildroot at buildroot.org <buildroot@buildroot.org>; Brunelle, Maxime <mbrunelle@distech-controls.com>; Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subject: Re: [PATCH 1/1] package/libglib2: bump version to 2.66.3 
+?
+>>>>> "Maxime" == Maxime Brunelle via buildroot <buildroot@busybox.net> writes:
+
+?> Fixes https://urldefense.com/v3/__https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524__;!!Po4YltK3bPMkYw!lFpMjOlcoFL-PFab2EVafw_mR_74rZRSOcwidP_vJwT2Azdtq7EIpk3tj7hxbrOpE-POLj-T$ 
+?> package/libglib2 reference: https://urldefense.com/v3/__https://gitlab.gnome.org/GNOME/glib/-/issues/2091__;!!Po4YltK3bPMkYw!lFpMjOlcoFL-PFab2EVafw_mR_74rZRSOcwidP_vJwT2Azdtq7EIpk3tj7hxbrOpE7dzYXgD$ 
+
+?> Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
+
+What should we do about the stable branches (2020.02.x / 2020.08.x /
+2020.11.x)? When was this issue introduced?
+
+I see:
+
+2020.02.x: glib 2.62.5, nm 1.20.4
+2020.08.x: glib 2.64.4, nm 1.22.10
+2020.11.x: glib 2.64.4, nm 1.22.10
+
+Master had the same glib / nm versions before this patch, so 2020.08.x /
+2020.11.x are presumably also affected? What about 2020.02.x?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
