@@ -1,90 +1,36 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 14 Dec 2020 21:40:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-base: fix build
- with gcc 4.8
-In-Reply-To: <20201214070232.1405442-1-fontaine.fabrice@gmail.com>
-References: <20201214070232.1405442-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201214214038.13645514@gmx.net>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 14 Dec 2020 21:44:26 +0100
+Subject: [Buildroot] [PATCH v1] package/bind: fix compile/linking failure
+In-Reply-To: <20201214202026.29519-1-ps.report@gmx.net>
+References: <20201214202026.29519-1-ps.report@gmx.net>
+Message-ID: <X9fOqhygcYoZlh1D@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Peter,
 
-On Mon, 14 Dec 2020 08:02:32 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Fix build of gst1-plugins-base in version 1.18.2 with gcc 4.8
->
 > Fixes:
->  - http://autobuild.buildroot.org/results/91f8a78a012fb30f323d82d1d7094f28d018a768
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...eo-gstvideoaggregator.c-fix-build-wi.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/gstreamer1/gst1-plugins-base/0001-gst-libs-gst-video-gstvideoaggregator.c-fix-build-wi.patch
->
-> diff --git a/package/gstreamer1/gst1-plugins-base/0001-gst-libs-gst-video-gstvideoaggregator.c-fix-build-wi.patch b/package/gstreamer1/gst1-plugins-base/0001-gst-libs-gst-video-gstvideoaggregator.c-fix-build-wi.patch
-> new file mode 100644
-> index 0000000000..87cd6493f5
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-base/0001-gst-libs-gst-video-gstvideoaggregator.c-fix-build-wi.patch
-> @@ -0,0 +1,45 @@
-> +From 012ca1bcd234ee02f576dd58b1f09baba18b89b0 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 14 Dec 2020 07:42:55 +0100
-> +Subject: [PATCH] gst-libs/gst/video/gstvideoaggregator.c: fix build with gcc
-> + 4.8
-> +
-> +Fix the following build failure with gcc 4.8 which has been added with
-> +https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/commit/d268c193ad39fb970351ed62898be806ebd0a71e:
-> +
-> +../gst-libs/gst/video/gstvideoaggregator.c: In function 'gst_video_aggregator_init':
-> +../gst-libs/gst/video/gstvideoaggregator.c:2762:3: error: 'for' loop initial declarations are only allowed in C99 mode
-> +   for (gint i = 0; i < gst_caps_get_size (src_template); i++) {
-> +   ^
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/merge_requests/974]
 
-As the patch is accepted upstream ([1])
+>   - http://autobuild.buildroot.net/results/966a3de94aa97fa8e9895eede29c9cbfb4bd7301
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+>   .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: warning: libisccfg.so.163, needed by ../../lib/bind9/.libs/libbind9.so, not found (try using -rpath or -rpath-link)
+>   .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../lib/bind9/.libs/libbind9.so: undefined reference to `cfg_obj_line'
 
-Regards,
-Peter
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Thanks for your fix, LGTM.
+Have you tried to send your patch upstream (I haven't seen it in
+https://gitlab.isc.org/isc-projects/bind9/-/merge_requests).
 
-[1] https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/-/commit/d86cf6314f8f178c59600f55321ce73d4ca95d97
+BTW I'll probably update bind to 9.16.8 soon (following suggestion from Peter Korsgaard).
 
+https://kb.isc.org/docs/aa-01540
+BIND 9.11 is our Extended Support Version, supported until December, 2021.
+BIND 9.16 will be our next ESV, followed by BIND 9.20; every second stable version after that will be ESV
 
-> +---
-> + gst-libs/gst/video/gstvideoaggregator.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/gst-libs/gst/video/gstvideoaggregator.c b/gst-libs/gst/video/gstvideoaggregator.c
-> +index 2e3d813be..04dad6563 100644
-> +--- a/gst-libs/gst/video/gstvideoaggregator.c
-> ++++ b/gst-libs/gst/video/gstvideoaggregator.c
-> +@@ -2786,6 +2786,7 @@ gst_video_aggregator_init (GstVideoAggregator * vagg,
-> + {
-> +   GstCaps *src_template;
-> +   GstPadTemplate *pad_template;
-> ++  gint i;
-> +
-> +   vagg->priv = gst_video_aggregator_get_instance_private (vagg);
-> +   vagg->priv->current_caps = NULL;
-> +@@ -2800,7 +2801,7 @@ gst_video_aggregator_init (GstVideoAggregator * vagg,
-> +   pad_template =
-> +       gst_element_class_get_pad_template (GST_ELEMENT_CLASS (klass), "src");
-> +   src_template = gst_pad_template_get_caps (pad_template);
-> +-  for (gint i = 0; i < gst_caps_get_size (src_template); i++) {
-> ++  for (i = 0; i < gst_caps_get_size (src_template); i++) {
-> +     const GValue *v =
-> +         gst_structure_get_value (gst_caps_get_structure (src_template, i),
-> +         "format");
-> +--
-> +2.29.2
-> +
+But your patch will be needed for both.
+
+Kind regards,
+Petr
