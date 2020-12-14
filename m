@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 14 Dec 2020 13:43:47 +0100
-Subject: [Buildroot] [PATCH] package/htop: bump to version 3.0.3
-Message-ID: <20201214124347.78019-1-francois.perrad@gadz.org>
+Date: Mon, 14 Dec 2020 13:43:58 +0100
+Subject: [Buildroot] [PATCH] package/can-utils: bump to version 2020.11.0
+Message-ID: <20201214124358.78073-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/htop/htop.hash | 2 +-
- package/htop/htop.mk   | 2 +-
+ package/can-utils/can-utils.hash | 2 +-
+ package/can-utils/can-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index fb8d0bff4..d788c8e5c 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6471d9505daca5c64073fc37dbab4d012ca4fc6a7040a925dad4a7553e3349c4  htop-3.0.2.tar.gz
-+sha256  5a0909956cd9289871269b1d146580b9c1e11218bb6d454c21d781161b6dae0f  htop-3.0.3.tar.gz
- sha256  c228cc14df980a23ea0c3c9ac957b904dd6a8514f6283db403de22e9179471be  COPYING
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 457926afe..0bea775a5 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
+diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
+index f76576773..d7d462450 100644
+--- a/package/can-utils/can-utils.hash
++++ b/package/can-utils/can-utils.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  a766aad89955b9cfcca27f61ef988fa169565c3657d2789808c0f33a7afa23c8  can-utils-2020.02.04.tar.gz
++sha256  b8e53081c076fca248c39ae9ae5791359a81f1eb3e5fe23ff6fb0d0e1f1033fa  can-utils-2020.11.0.tar.gz
+ sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
+ sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 5227bf485..2cd7777d8 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HTOP_VERSION = 3.0.2
-+HTOP_VERSION = 3.0.3
- HTOP_SITE = https://dl.bintray.com/htop/source
- HTOP_DEPENDENCIES = ncurses
- # Prevent htop build system from searching the host paths
+-CAN_UTILS_VERSION = 2020.02.04
++CAN_UTILS_VERSION = 2020.11.0
+ CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
+ CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
+ CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
 -- 
 2.27.0
