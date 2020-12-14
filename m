@@ -1,46 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:52:31 +0100
-Subject: [Buildroot] [git commit] package/libcap-ng: bump to version 0.8.2
-Message-ID: <20201214143746.6398681547@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 15:51:44 +0100
+Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.6
+Message-ID: <20201214143746.5839A81547@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93048218f6fa9a300b1322c94f34725db3f3daf3
+commit: https://git.buildroot.net/buildroot/commit/?id=ed5082f012daedad6049491383215fc46af9979b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/stevegrubb/libcap-ng/releases/tag/v0.8.2
-https://github.com/stevegrubb/libcap-ng/releases/tag/v0.8.1
+Two major bugs were fixed in this versions, both leading to a memory
+corruption and random crashes.
+
+https://www.mail-archive.com/haproxy at formilux.org/msg39068.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcap-ng/libcap-ng.hash | 2 +-
- package/libcap-ng/libcap-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index d52f466084..f775ae6fc9 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  f14d23b60ae1465b032e4e8cbd4112006572c69a6017d55d5d3c6aad622a9e21  libcap-ng-0.8.tar.gz
-+sha256  52c083b77c2b0d8449dee141f9c3eba76e6d4c5ad44ef05df25891126cb85ae9  libcap-ng-0.8.2.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 03949d740a..88623ae96b 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 5140c6a944..fbbd2e4bab 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
+-sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.6.tar.gz.sha256
++sha256  be1c6754cbaceafc4837e0c6036c7f81027a3992516435cbbbc5dc749bf5a087  haproxy-2.2.6.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 1912a219e1..a6e07c9adb 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCAP_NG_VERSION = 0.8
-+LIBCAP_NG_VERSION = 0.8.2
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).6
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
