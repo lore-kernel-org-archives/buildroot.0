@@ -1,63 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Dec 2020 18:29:36 +0100
-Subject: [Buildroot] [PATCH 8/9 v2] support/dependencies: drop check for
- maximal tar version
+Date: Mon, 14 Dec 2020 18:29:35 +0100
+Subject: [Buildroot] [PATCH 7/9 v2] support/download: change format of
+ archives generated from svn
 In-Reply-To: <cover.1607966969.git.yann.morin.1998@free.fr>
 References: <cover.1607966969.git.yann.morin.1998@free.fr>
-Message-ID: <b6737643fead4b39d3336f0683d4ffa76660bd2a.1607966969.git.yann.morin.1998@free.fr>
+Message-ID: <420776bc1f2478d240ee7e2164939b01ecfbf4e5.1607966969.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So far, we checked that the tar present on the host was at most tar
-1.29, because tar 1.30 changed the way it generates archives.
+Like we recently did for git, switch the archives generated from
+subversion to be reproducible whatever the tar version. Likewise
+for the compression, switch to xz.
 
-Having a maximum tar version requirement meant that we would eventually
-always have to build our own host-tar, as distributions are updating
-the version they use.
-
-But now, we have found a way to generate reproducible archives starting
-with tar 1.27 onward, so we no longer need the check for a maximum tar
-version, so we can drop that requirement.
+We have no in-tree users of the svn backend, that also has hashes.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Vincent Fazio <vfazio@xes-inc.com>
 ---
- support/dependencies/check-host-tar.sh | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ package/pkg-download.mk |  3 +++
+ support/download/svn    | 12 ++++++++----
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-index 934cb61299..b7d607a47a 100755
---- a/support/dependencies/check-host-tar.sh
-+++ b/support/dependencies/check-host-tar.sh
-@@ -33,14 +33,7 @@ fi
- major_min=1
- minor_min=27
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e85f844b45..8e546634ae 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -20,6 +20,9 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ BR_SUB_VERSION_git = _br1
+ BR_SITE_METHOD_Z_git = .xz
  
--# Maximal version = 1.29 (1.30 changed --numeric-owner output for
--# filenames > 100 characters). This is really a fix for a bug in
--# earlier tar versions regarding deterministic output so it is
--# unlikely to be reverted in later versions.
--major_max=1
--minor_max=29
--
--if [ $major -lt $major_min -o $major -gt $major_max ]; then
-+if [ $major -lt $major_min ]; then
- 	# echo nothing: no suitable tar found
- 	exit 1
- fi
-@@ -50,10 +43,5 @@ if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
- 	exit 1
- fi
++BR_SUB_VERSION_svn = _br1
++BR_SITE_METHOD_Z_svn = .xz
++
+ DL_WRAPPER = support/download/dl-wrapper
  
--if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
--	# echo nothing: no suitable tar found
--	exit 1
--fi
--
- # valid
- echo $tar
+ # DL_DIR may have been set already from the environment
+diff --git a/support/download/svn b/support/download/svn
+index 012f286dd9..42307eb236 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -52,12 +52,16 @@ find "${basename}" -not -type d \
+        -and -not -path "./.svn/*" >"${output}.list"
+ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+ 
+-# Create GNU-format tarballs, since that's the format of the tarballs on
+-# sources.buildroot.org and used in the *.hash files
++pax_options="delete=atime,delete=ctime,delete=mtime"
++pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
++
++# Create POSIX tarballs, since that's the format the most reproducible
+ tar cf - --transform="s#^\./#${basename}/#" \
+-         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
++         --numeric-owner --owner=0 --group=0 --mtime="${date}" \
++         --format=posix \
++         --pax-option="${pax_options}" \
+          -T "${output}.list.sorted" >"${output}.tar"
+-gzip -6 -n <"${output}.tar" >"${output}"
++xz -9 <"${output}.tar" >"${output}"
+ 
+ rm -f "${output}.list"
+ rm -f "${output}.list.sorted"
 -- 
 2.25.1
