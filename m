@@ -1,50 +1,109 @@
-From: Brunelle, Maxime <mbrunelle@distech-controls.com>
-Date: Mon, 14 Dec 2020 16:00:50 +0000
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.66.3
-In-Reply-To: <87v9d6yqqc.fsf@dell.be.48ers.dk>
-References: <20201123213557.789056-1-mbrunelle@distech-controls.com>,
- <87v9d6yqqc.fsf@dell.be.48ers.dk>
-Message-ID: <DM6PR01MB47159A7339605136395945DF8EC70@DM6PR01MB4715.prod.exchangelabs.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 14 Dec 2020 17:09:45 +0100
+Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.6
+Message-ID: <20201214160945.96307-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+remove merged patch
 
-I can't say exactly when the issue appeared, but I noticed it in version 2020.05 which had glib 2.64.4 and nm 1.22.10, and version 2020.11.x still has it. Based on that, I would presume 2020.08.x has it too. The reference to the glib2 bug in my patch mentions the segfault started appearing in Ubuntu after updating to 2.63.x.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...ler-warning-fixes-for-NO_SHARED_LIBS.patch | 58 -------------------
+ package/iptables/iptables.hash                |  2 +-
+ package/iptables/iptables.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 60 deletions(-)
+ delete mode 100644 package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
 
-I don't know if you usually backport these changes that can affect other projects. However, I can tell you it was problematic for us because it caused nmcli to randomly crash ~5-10% of the time on various commands. We're now using a fork of 2020.11 with the patch applied without issue so far.
-
-Regards,
-
-Maxime Brunelle
-
-From: Peter Korsgaard <jacmet@gmail.com> on behalf of Peter Korsgaard <peter@korsgaard.com>
-Sent: December 13, 2020 04:55
-To: Maxime Brunelle via buildroot <buildroot@busybox.net>
-Cc: buildroot at buildroot.org <buildroot@buildroot.org>; Brunelle, Maxime <mbrunelle@distech-controls.com>; Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Subject: Re: [PATCH 1/1] package/libglib2: bump version to 2.66.3 
-?
->>>>> "Maxime" == Maxime Brunelle via buildroot <buildroot@busybox.net> writes:
-
-?> Fixes https://urldefense.com/v3/__https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/issues/524__;!!Po4YltK3bPMkYw!lFpMjOlcoFL-PFab2EVafw_mR_74rZRSOcwidP_vJwT2Azdtq7EIpk3tj7hxbrOpE-POLj-T$ 
-?> package/libglib2 reference: https://urldefense.com/v3/__https://gitlab.gnome.org/GNOME/glib/-/issues/2091__;!!Po4YltK3bPMkYw!lFpMjOlcoFL-PFab2EVafw_mR_74rZRSOcwidP_vJwT2Azdtq7EIpk3tj7hxbrOpE7dzYXgD$ 
-
-?> Signed-off-by: Maxime Brunelle <mbrunelle@distech-controls.com>
-
-What should we do about the stable branches (2020.02.x / 2020.08.x /
-2020.11.x)? When was this issue introduced?
-
-I see:
-
-2020.02.x: glib 2.62.5, nm 1.20.4
-2020.08.x: glib 2.64.4, nm 1.22.10
-2020.11.x: glib 2.64.4, nm 1.22.10
-
-Master had the same glib / nm versions before this patch, so 2020.08.x /
-2020.11.x are presumably also affected? What about 2020.02.x?
-
+diff --git a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
+deleted file mode 100644
+index 8d364b378..000000000
+--- a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 6cb8af1ff3951e47def7a16db39289dc9d9c61fe Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+-Date: Tue, 23 Jun 2020 16:09:02 -0700
+-Subject: libxtables: compiler warning fixes for NO_SHARED_LIBS
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes two issues with NO_SHARED_LIBS:
+- - #include <dlfcn.h> is ifdef'ed out and thus dlclose()
+-   triggers an undeclared function compiler warning
+- - dlreg_add() is unused and thus triggers an unused
+-   function warning
+-
+-Test: builds without warnings
+-Signed-off-by: Maciej ?enczykowski <maze@google.com>
+-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+-
+-[Retrieved from:
+-https://git.netfilter.org/iptables/commit/libxtables/xtables.c?id=6cb8af1ff3951e47def7a16db39289dc9d9c61fe]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- libxtables/xtables.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/libxtables/xtables.c b/libxtables/xtables.c
+-index 7fe42580..8907ba20 100644
+---- a/libxtables/xtables.c
+-+++ b/libxtables/xtables.c
+-@@ -206,6 +206,7 @@ struct xtables_target *xtables_targets;
+- static bool xtables_fully_register_pending_match(struct xtables_match *me);
+- static bool xtables_fully_register_pending_target(struct xtables_target *me);
+- 
+-+#ifndef NO_SHARED_LIBS
+- /* registry for loaded shared objects to close later */
+- struct dlreg {
+- 	struct dlreg *next;
+-@@ -237,6 +238,7 @@ static void dlreg_free(void)
+- 		dlreg = next;
+- 	}
+- }
+-+#endif
+- 
+- void xtables_init(void)
+- {
+-@@ -267,7 +269,9 @@ void xtables_init(void)
+- 
+- void xtables_fini(void)
+- {
+-+#ifndef NO_SHARED_LIBS
+- 	dlreg_free();
+-+#endif
+- }
+- 
+- void xtables_set_nfproto(uint8_t nfproto)
+--- 
+-cgit v1.2.3
+-
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index 725770543..120e7e4a8 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
+@@ -1,4 +1,4 @@
+ # From https://netfilter.org/projects/iptables/downloads.html
+-sha256  d457d74512e63aa3f50336e0597d4023c0e3c6845594d38532efb6ebcb294309  iptables-1.8.5.tar.bz2
++sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 442639f15..f83165edb 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPTABLES_VERSION = 1.8.5
++IPTABLES_VERSION = 1.8.6
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.27.0
