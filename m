@@ -1,28 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:44:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
- version 4.4.2
-In-Reply-To: <20201210220853.375772-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 10 Dec 2020 23:08:53 +0100")
-References: <20201210220853.375772-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8iwxx95.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Dec 2020 15:46:27 +0100
+Subject: [Buildroot] [PATCH] package/python-lxml: security bump to
+ version 4.6.2
+In-Reply-To: <20201213230152.5819-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 14 Dec 2020 00:01:52 +0100")
+References: <20201213230152.5819-1-peter@korsgaard.com>
+Message-ID: <87k0tkxx6k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
- > use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
- > sqlite3.c. A remote denial of service attack can be performed. For
- > example, a SQL injection can be used to execute the crafted SQL command
- > sequence. After that, some unexpected RAM data is read.
+ > Fixes the following security issues:
+ > * 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
+ >   by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
+ >   removes more sneaky "style" content.
 
- > https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
+ > * 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
+ >   which allowed JavaScript to pass through.  The cleaner now removes more
+ >   sneaky "style" content.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the changes file:
+ > https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
