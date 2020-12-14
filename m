@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:50:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nmap: fix license
-In-Reply-To: <20201206090837.319909-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 6 Dec 2020 10:08:37 +0100")
-References: <20201206090837.319909-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2i0wif4.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Dec 2020 15:51:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-pybind: bump to version
+ 2.6.1
+In-Reply-To: <20201206093230.555847-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 Dec 2020 10:32:30 +0100")
+References: <20201206093230.555847-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tusowied.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 78dc1f185ba0c8c9085d44318f72ab172867b147 forgot to update the
- > license file from COPYING to LICENSE.
-
- > Here is an extract of the ChangeLog for Nmap 7.90 [2020-10-03]:
-
- > Upgraded the Nmap license form a sort of hacked-up version of GPLv2 to a
- > cleaner and better organized version (still based on GPLv2) now called
- > the Nmap Public Source License to avoid confusion. See
- > https://nmap.org/npsl/ for more details and annotated license text. This
- > NPSL project was started in 2006 (community discussion here:
- > https://seclists.org/nmap-dev/2006/q4/126) and then it lost momentum for
- > 7 years until it was restarted in 2013
- > (https://seclists.org/nmap-dev/2013/q1/399) and then we got distracted
- > by development again. We still have some ideas for improving the NPSL,
- > but it's already much better than the current license, so we're applying
- > NPSL Version 0.92 to the code now and can make improvements later if
- > needed. This does not change the license of previous Nmap releases.
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/8cef6a5e99ae341cced405a389346e2faccf6eec
+ > Update indentation in hash file (two spaces)
+ > https://github.com/pybind/pybind11/releases/tag/v2.6.1
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
