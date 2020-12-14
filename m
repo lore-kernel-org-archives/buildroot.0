@@ -1,148 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Dec 2020 18:29:34 +0100
-Subject: [Buildroot] [PATCH 0/9 v2] support/download: reproducible archives
- whatever tar version (branch yem/dl-git-tar-pax-2)
-Message-ID: <cover.1607966969.git.yann.morin.1998@free.fr>
+Date: Mon, 14 Dec 2020 18:29:31 +0100
+Subject: [Buildroot] [PATCH 3/9 v2] core/pkg-infra: allow per site-method
+ compression
+In-Reply-To: <cover.1607966969.git.yann.morin.1998@free.fr>
+References: <cover.1607966969.git.yann.morin.1998@free.fr>
+Message-ID: <44338d32338b3e9d150542194681e7523d00815e.1607966969.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+So far, we've used the .tar.gz extension for the archives we generate
+(e.g .from git repositories).
 
-This series fixes our download backends, git and svn, to generate
-reproducible archives whatever the tar version, thus removing
-the requirement for a maximum tar version.
+This is essentialy a historical accident, as this was the default
+extension we had back then for archives downloaded via http/ftp.
 
-This however changes the actual format of the generated archives,
-and they are different from the existing ones. So we also change the
-compression to avoid collision with existign archives on s.b.o, that
-need to be read by older Buildroot versions.
+But nowadays, some packages are really big (linux, linux-firmware...)
+and the generated archives are very big.
 
-A huge thank to Vincent for digging up the adequate set of options
-that allows generating reproducible archives. Thanks! :-)
+When we change the format of generated archives, we may also want to
+change the compression scheme, so allow for that.
 
-Note that this series contains commits marked "WIP": they are separate
-commits for ease of review, but they should ultimately be squashed
-together or the series would not be bisectable.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - add support for internal numbering  (Thomas)
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      core/pkg-infra: prepare for alternate default source archives
-      core/pkg-infra: allow per site-method sub-version strings
-      core/pkg-infra: allow per site-method compression
-      WIP: support/download: change format of archives generated from git
-      WIP: boot+packages: update hash to new git-tarballs format
-      WIP: support/testing: update git-hash checks with new archive format
-      support/download: change format of archives generated from svn
-      support/dependencies: drop check for maximal tar version
-      package/tar: drop specific version for host variant
-
- boot/vexpress-firmware/vexpress-firmware.hash         |  2 +-
- package/aer-inject/aer-inject.hash                    |  2 +-
- package/am33x-cm3/am33x-cm3.hash                      |  2 +-
- package/armbian-firmware/armbian-firmware.hash        |  2 +-
- package/at/at.hash                                    |  6 +++---
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash          |  2 +-
- package/bayer2rgb-neon/bayer2rgb-neon.hash            |  4 ++--
- package/brickd/brickd.hash                            |  4 ++--
- package/c-capnproto/c-capnproto.hash                  |  2 +-
- package/dbus-triggerd/dbus-triggerd.hash              |  2 +-
- package/dt-utils/dt-utils.hash                        |  4 ++--
- package/dtv-scan-tables/dtv-scan-tables.hash          |  6 +++---
- package/edid-decode/edid-decode.hash                  |  2 +-
- package/ell/ell.hash                                  |  2 +-
- package/flashbench/flashbench.hash                    |  2 +-
- package/fmc/fmc.hash                                  |  2 +-
- package/fmlib/fmlib.hash                              |  2 +-
- .../imx-alsa-plugins/imx-alsa-plugins.hash            |  2 +-
- package/freescale-imx/imx-lib/imx-lib.hash            |  2 +-
- package/google-breakpad/google-breakpad.hash          |  2 +-
- package/gstreamer1/gst1-interpipe/gst1-interpipe.hash |  2 +-
- package/gstreamer1/gst1-shark/gst1-shark.hash         |  2 +-
- package/imx-mkimage/imx-mkimage.hash                  |  4 ++--
- package/iwd/iwd.hash                                  |  2 +-
- package/kvm-unit-tests/kvm-unit-tests.hash            |  2 +-
- package/kvmtool/kvmtool.hash                          |  2 +-
- package/libbroadvoice/libbroadvoice.hash              |  4 ++--
- package/libcamera/libcamera.hash                      |  2 +-
- package/libclc/libclc.hash                            |  4 ++--
- package/libg7221/libg7221.hash                        |  4 ++--
- package/libilbc/libilbc.hash                          |  4 ++--
- package/libsilk/libsilk.hash                          |  4 ++--
- package/libsvgtiny/libsvgtiny.hash                    |  4 ++--
- package/libuci/libuci.hash                            |  2 +-
- package/libyuv/libyuv.hash                            |  4 ++--
- package/linux-firmware/linux-firmware.hash            |  2 +-
- .../linux-syscall-support/linux-syscall-support.hash  |  2 +-
- package/minicom/minicom.hash                          |  2 +-
- package/mmc-utils/mmc-utils.hash                      |  4 ++--
- package/net-tools/net-tools.hash                      |  2 +-
- package/netcat-openbsd/netcat-openbsd.hash            |  4 ++--
- package/netsurf-buildsystem/netsurf-buildsystem.hash  |  2 +-
- package/odhcp6c/odhcp6c.hash                          |  2 +-
- package/opkg-utils/opkg-utils.hash                    |  2 +-
- package/piglit/piglit.hash                            |  2 +-
- package/pkg-download.mk                               |  6 ++++++
- package/pkg-generic.mk                                |  3 ++-
- package/prelink-cross/prelink-cross.hash              |  2 +-
- package/psplash/psplash.hash                          |  4 ++--
- package/qt-webkit-kiosk/qt-webkit-kiosk.hash          |  2 +-
- package/qt5/qt5coap/qt5coap.hash                      |  2 +-
- package/qt5/qt5knx/qt5knx.hash                        |  2 +-
- package/qt5/qt5mqtt/qt5mqtt.hash                      |  2 +-
- package/rcw/rcw.hash                                  |  4 ++--
- package/rtc-tools/rtc-tools.hash                      |  4 ++--
- package/rtmpdump/rtmpdump.hash                        |  4 ++--
- package/speexdsp/speexdsp.hash                        |  4 ++--
- package/stm32flash/stm32flash.hash                    |  4 ++--
- package/tar/tar.mk                                    |  8 ++------
- package/ti-sgx-demos/ti-sgx-demos.hash                |  4 ++--
- package/ti-sgx-km/ti-sgx-km.hash                      |  2 +-
- package/ti-sgx-um/ti-sgx-um.hash                      |  2 +-
- package/trace-cmd/trace-cmd.hash                      |  6 +++---
- package/tremor/tremor.hash                            |  4 ++--
- package/ubus/ubus.hash                                |  2 +-
- package/uemacs/uemacs.hash                            |  4 ++--
- package/uhttpd/uhttpd.hash                            |  2 +-
- package/ustream-ssl/ustream-ssl.hash                  |  4 ++--
- package/vboot-utils/vboot-utils.hash                  |  2 +-
- package/wilink-bt-firmware/wilink-bt-firmware.hash    |  4 ++--
- .../xdriver_xf86-video-imx-viv.hash                   |  2 +-
- .../xdriver_xf86-video-intel.hash                     |  2 +-
- support/dependencies/check-host-tar.sh                | 14 +-------------
- support/download/git                                  | 19 +++++++++++++------
- support/download/svn                                  | 12 ++++++++----
- .../br2-external/git-hash/package/bad/bad.hash        |  2 +-
- .../br2-external/git-hash/package/good/good.hash      |  2 +-
- .../git-partial-sha1-branch-head.hash                 |  2 +-
- .../git-partial-sha1-reachable-by-branch.hash         |  2 +-
- .../git-partial-sha1-reachable-by-tag.hash            |  2 +-
- .../git-partial-sha1-tag-itself.hash                  |  2 +-
- .../git-partial-sha1-tag-points-to.hash               |  2 +-
- .../git-sha1-branch-head/git-sha1-branch-head.hash    |  2 +-
- .../git-sha1-reachable-by-branch.hash                 |  2 +-
- .../git-sha1-reachable-by-tag.hash                    |  2 +-
- .../git-sha1-tag-itself/git-sha1-tag-itself.hash      |  2 +-
- .../git-sha1-tag-points-to.hash                       |  2 +-
- .../git-submodule-disabled.hash                       |  2 +-
- .../git-submodule-enabled/git-submodule-enabled.hash  |  2 +-
- .../git-refs/package/git-tag/git-tag.hash             |  2 +-
- .../package/git-wrong-content/git-wrong-content.hash  |  2 +-
- 91 files changed, 147 insertions(+), 145 deletions(-)
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c97e22236e..f2a977915b 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -514,7 +514,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_VERSION = custom
+ endif
+ 
+-$(2)_SOURCE_EXT = $$(BR_SUB_VERSION_$$($(2)_SITE_METHOD)).tar.gz
++$(2)_SOURCE_EXT = $$(BR_SUB_VERSION_$$($(2)_SITE_METHOD)).tar$$(or $$(BR_SITE_METHOD_Z_$$($(2)_SITE_METHOD)),.gz)
+ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $$($(3)_SOURCE)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
