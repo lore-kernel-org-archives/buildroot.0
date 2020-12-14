@@ -1,39 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:48:41 +0100
-Subject: [Buildroot] [git commit] package/libglib2: correct upstream status
- for patch 0001
-Message-ID: <20201214143257.0FC7E86E2B@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 15:50:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nmap: fix license
+In-Reply-To: <20201206090837.319909-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 6 Dec 2020 10:08:37 +0100")
+References: <20201206090837.319909-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2i0wif4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43021dfb77b1a841305f625d923688316dc53d4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
-this is not true. The linked issue is closed with 'Needs information', and
-the code itself is effectively not merged.
+ > Commit 78dc1f185ba0c8c9085d44318f72ab172867b147 forgot to update the
+ > license file from COPYING to LICENSE.
 
-Clarify the 'Upstream-status' line to make this more clear.
+ > Here is an extract of the ChangeLog for Nmap 7.90 [2020-10-03]:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Upgraded the Nmap license form a sort of hacked-up version of GPLv2 to a
+ > cleaner and better organized version (still based on GPLv2) now called
+ > the Nmap Public Source License to avoid confusion. See
+ > https://nmap.org/npsl/ for more details and annotated license text. This
+ > NPSL project was started in 2006 (community discussion here:
+ > https://seclists.org/nmap-dev/2006/q4/126) and then it lost momentum for
+ > 7 years until it was restarted in 2013
+ > (https://seclists.org/nmap-dev/2013/q1/399) and then we got distracted
+ > by development again. We still have some ideas for improving the NPSL,
+ > but it's already much better than the current license, so we're applying
+ > NPSL Version 0.92 to the code now and can make improvements later if
+ > needed. This does not change the license of previous Nmap releases.
 
-diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-index 9d2381bb35..d84a1ab460 100644
---- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-+++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] Fix compile time atomic detection
- 
- Improved compile-time detection of atomic support in the compiler.
- 
--Upstream-Status: Merged
-+Upstream-Status: 'Needs information'
- See : https://gitlab.gnome.org/GNOME/glib/issues/1063
- 
- Signed-off-by: Brendan Heading <brendanheading@gmail.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/8cef6a5e99ae341cced405a389346e2faccf6eec
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
