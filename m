@@ -1,44 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 15:52:39 +0100
-Subject: [Buildroot] [git commit] package/libhtp: bump to version 0.5.36
-Message-ID: <20201214143746.6E8D081547@busybox.osuosl.org>
+Date: Mon, 14 Dec 2020 16:04:44 +0100
+Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.10
+In-Reply-To: <20201214093724.1129-1-michael@walle.cc> (Michael Walle's message
+ of "Mon, 14 Dec 2020 10:37:23 +0100")
+References: <20201214093724.1129-1-michael@walle.cc>
+Message-ID: <878sa0whrn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1a8511a92389a36d89e644e5776011ad6606a8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Michael" == Michael Walle <michael@walle.cc> writes:
 
-https://github.com/OISF/libhtp/releases/tag/0.5.36
+ > Signed-off-by: Michael Walle <michael@walle.cc>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libhtp/libhtp.hash | 2 +-
- package/libhtp/libhtp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
-index df75336df6..8bc1506180 100644
---- a/package/libhtp/libhtp.hash
-+++ b/package/libhtp/libhtp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  4c3ac4c6027710455ffe725f24ac6a83b2c13fe0afc83b74df2cca78ba46976a  libhtp-0.5.35.tar.gz
-+sha256  ab1dd6cfd4ab4c36624a5c74793d80d1b7f50f5791620f47bfd831a79e32bc4b  libhtp-0.5.36.tar.gz
- sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
-diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
-index c402cf750e..de82caaa53 100644
---- a/package/libhtp/libhtp.mk
-+++ b/package/libhtp/libhtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHTP_VERSION = 0.5.35
-+LIBHTP_VERSION = 0.5.36
- LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
- LIBHTP_LICENSE = BSD-3-Clause
- LIBHTP_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
