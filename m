@@ -1,142 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Dec 2020 16:03:08 +0100
-Subject: [Buildroot] [git commit] {linux, linux-headers}: add version 5.10
-Message-ID: <20201214144850.737E0817CB@busybox.osuosl.org>
+From: Michael Walle <michael@walle.cc>
+Date: Mon, 14 Dec 2020 16:12:34 +0100
+Subject: [Buildroot] [PATCH] board/kontron/smarc-sal28: remove "known bugs"
+ section
+Message-ID: <20201214151234.15650-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa769e043169c41afc679033c7c0fcfb6db5f31d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Remove the note about non-working network. This was actually fixed with
+linux kernel 5.9. This board is now on 5.10.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                                             |  4 ++--
- linux/linux.hash                                            |  1 +
- package/linux-headers/Config.in.host                        | 13 +++++++++++--
- toolchain/Config.in                                         |  5 +++++
- .../toolchain-external-custom/Config.in.options             |  6 +++++-
- 5 files changed, 24 insertions(+), 5 deletions(-)
+ board/kontron/smarc-sal28/readme.txt | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8b753e6c10..fd6174747e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,7 +28,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (5.9)"
-+	bool "Latest version (5.10)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (4.19.152-cip37)"
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.9.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 00bbf3d1cb..8d17cd8efa 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256  dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43  linux-5.10.tar.xz
- sha256  5eb20a65a410669928f94b3975872e493fa6d0fe441c6a78b7564affa2a5d260  linux-5.9.11.tar.xz
- sha256  4ab4a3f694b7b4cfbe78871eab34c8039ad33692144c45c669827a594da85534  linux-5.8.18.tar.xz
- sha256  49da425c1f3c530fd3ff31d85a0461f6b6dc6e459f7faf3eee23e49a98ce64c7  linux-5.4.80.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2dc2457e28..20c1ce9f84 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_9
-+	default BR2_KERNEL_HEADERS_5_10
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -61,6 +61,10 @@ config BR2_KERNEL_HEADERS_5_8
- config BR2_KERNEL_HEADERS_5_9
- 	bool "Linux 5.9.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+
-+config BR2_KERNEL_HEADERS_5_10
-+	bool "Linux 5.10.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -135,8 +139,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
-+	bool "5.10.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
--	bool "5.9.x or later"
-+	bool "5.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
-@@ -353,6 +361,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.80"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.8.18"	if BR2_KERNEL_HEADERS_5_8
- 	default "5.9.11"	if BR2_KERNEL_HEADERS_5_9
-+	default "5.10"		if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index db2ab0f059..395c8e36b8 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -488,6 +488,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -501,6 +505,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
- 	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	default "5.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	default "5.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index f7aa5454e3..992fd2c150 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -119,8 +119,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
-+	bool "5.10.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
--	bool "5.9.x or later"
-+	bool "5.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_8
+diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
+index 231c751b66..2047f09b64 100644
+--- a/board/kontron/smarc-sal28/readme.txt
++++ b/board/kontron/smarc-sal28/readme.txt
+@@ -71,10 +71,3 @@ You will see something like this at boot time:
+ [    4.563565] GPT:Alternate GPT header not at the end of the disk.
+ [    4.569596] GPT:266272 != 7864319
+ [    4.572925] GPT: Use GNU Parted to correct GPT errors.
+-
+-What does not work
+-==================
+-
+-For reasons unknown, the network card doesn't work if you use the original
+-vendor bootloader. Board support patches for upstream u-boot are currently
+-pending. Stay tuned.
+-- 
+2.20.1
