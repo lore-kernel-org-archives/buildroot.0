@@ -1,140 +1,95 @@
-From: Michael Walle <michael@walle.cc>
-Date: Mon, 14 Dec 2020 10:37:23 +0100
-Subject: [Buildroot] [PATCH 1/2] {linux, linux-headers}: add version 5.10
-Message-ID: <20201214093724.1129-1-michael@walle.cc>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 14 Dec 2020 13:17:03 +0100
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.60
+Message-ID: <20201214121703.1189147-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- linux/Config.in                                     |  4 ++--
- linux/linux.hash                                    |  1 +
- package/linux-headers/Config.in.host                | 13 +++++++++++--
- toolchain/Config.in                                 |  5 +++++
- .../toolchain-external-custom/Config.in.options     |  6 +++++-
- 5 files changed, 24 insertions(+), 5 deletions(-)
+Bump version to 3.60 and remove local patch that has been upstreamed.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8b753e6c10..fd6174747e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -28,7 +28,7 @@ choice
- 	prompt "Kernel version"
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_release_notes
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/0001-fix-old-abi-ppc.patch | 40 -----------------------
+ package/libnss/libnss.hash                |  4 +--
+ package/libnss/libnss.mk                  |  2 +-
+ 3 files changed, 3 insertions(+), 43 deletions(-)
+ delete mode 100644 package/libnss/0001-fix-old-abi-ppc.patch
+
+diff --git a/package/libnss/0001-fix-old-abi-ppc.patch b/package/libnss/0001-fix-old-abi-ppc.patch
+deleted file mode 100644
+index 202b4ad271..0000000000
+--- a/package/libnss/0001-fix-old-abi-ppc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From a7a862bab5e4aae4615ddae3cbe230345f92ed0d Mon Sep 17 00:00:00 2001
+-From: Lauri Kasanen <cand@gmx.com>
+-Date: Mon, 1 Jun 2020 12:11:45 +0300
+-Subject: [PATCH v3] Bug 1642174 /usr/bin/ld: OBJS/Linux_SINGLE_SHLIB/sha512-p8.o:
+- ABI version 2 is not compatible with ABI version 1 output
+-
+-Don't try to build the SHA-2 accelerated asm on old-ABI ppc.
+-
+-Currently make only, I don't have enough gyp-fu to do that side.
+-However, the reporters of 1642174 and 1635625 both used make, not gyp.
+-
+-Signed-off-by: Lauri Kasanen <cand@gmx.com>
+-[Fetch-from: https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+- Manually modified paths to apply to nss subdirectory in release tarball.]
+-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+----
+- lib/freebl/Makefile | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+-index 5f7384429..e0461c7d3 100644
+---- a/nss/lib/freebl/Makefile
+-+++ b/nss/lib/freebl/Makefile
+-@@ -267,9 +267,12 @@ ifeq ($(CPU_ARCH),arm)
+- endif
+- ifeq ($(CPU_ARCH),ppc)
+-     EXTRA_SRCS += gcm-ppc.c
+--    ASFILES += sha512-p8.s
+- ifdef USE_64
+-     DEFINES += -DNSS_NO_INIT_SUPPORT
+-+    PPC_ABI := $(shell $(CC) -dM -E - < /dev/null | awk '$$2 == "_CALL_ELF" {print $$3}')
+-+    ifeq ($(PPC_ABI),2)
+-+        ASFILES += sha512-p8.s
+-+    endif
+- endif # USE_64
+- endif # ppc
+- endif # Linux
+---
+-2.19.1
+-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 02593c7dde..16a2e5c521 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_58_RTM/src/SHA256SUMS
+-sha256  9f73cf789b5f109b978e5239551b609b0cafa88d18f0bc8ce3f976cb629353c0  nss-3.58.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_RTM/src/SHA256SUMS
++sha256  84abd5575ab874c53ae511bd461e5d0868d1a1b384ee40753154cdd1d590fe3d  nss-3.60.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 8e6a77d2cb..d762ac6f64 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "Latest version (5.9)"
-+	bool "Latest version (5.10)"
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (4.19.152-cip37)"
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.9.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 00bbf3d1cb..8d17cd8efa 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256  dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43  linux-5.10.tar.xz
- sha256  5eb20a65a410669928f94b3975872e493fa6d0fe441c6a78b7564affa2a5d260  linux-5.9.11.tar.xz
- sha256  4ab4a3f694b7b4cfbe78871eab34c8039ad33692144c45c669827a594da85534  linux-5.8.18.tar.xz
- sha256  49da425c1f3c530fd3ff31d85a0461f6b6dc6e459f7faf3eee23e49a98ce64c7  linux-5.4.80.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2dc2457e28..20c1ce9f84 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_9
-+	default BR2_KERNEL_HEADERS_5_10
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -61,6 +61,10 @@ config BR2_KERNEL_HEADERS_5_8
- config BR2_KERNEL_HEADERS_5_9
- 	bool "Linux 5.9.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
-+
-+config BR2_KERNEL_HEADERS_5_10
-+	bool "Linux 5.10.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -135,8 +139,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
-+	bool "5.10.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
--	bool "5.9.x or later"
-+	bool "5.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8
-@@ -353,6 +361,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.80"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.8.18"	if BR2_KERNEL_HEADERS_5_8
- 	default "5.9.11"	if BR2_KERNEL_HEADERS_5_9
-+	default "5.10"		if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index db2ab0f059..395c8e36b8 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -488,6 +488,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -501,6 +505,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
- 	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 	default "5.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
- 	default "5.7"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_7
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index f7aa5454e3..992fd2c150 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -119,8 +119,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
-+	bool "5.10.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
--	bool "5.9.x or later"
-+	bool "5.9.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_8
+-LIBNSS_VERSION = 3.58
++LIBNSS_VERSION = 3.60
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-2.20.1
+2.25.1
