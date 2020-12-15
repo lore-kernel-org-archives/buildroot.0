@@ -1,41 +1,215 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 15 Dec 2020 16:00:23 -0000 (UTC)
-Subject: [Buildroot] Slow SNMP daemon startup
-References: <rram42$17q6$1@ciao.gmane.io>
-Message-ID: <rramin$k2f$1@ciao.gmane.io>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Tue, 15 Dec 2020 09:55:27 -0600
+Subject: [Buildroot] [PATCH 4/9 v2] WIP: support/download: change format
+ of archives generated from git
+In-Reply-To: <54edead5e577ece86893047cea709ad59eef9705.1607966969.git.yann.morin.1998@free.fr>
+References: <cover.1607966969.git.yann.morin.1998@free.fr>
+ <54edead5e577ece86893047cea709ad59eef9705.1607966969.git.yann.morin.1998@free.fr>
+Message-ID: <c9873d8d-4922-8433-e782-f21688deda84@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-12-15, Grant Edwards <grant.b.edwards@gmail.com> wrote:
-> After upgrading from an older version of net-snmp (5.7.3 -> 5.8) it
-> now takes the snmp daemon anywhere from 5s to a minute to start up. It
-> used to start with no noticeable delay.
->
-> Has anybody else noticed this?
->
-> Does anybody have any guesses on where to start looking for the problem?
->
-> There's nothing in the syslog to indicate any problem:
->
->  # grep snmp /var/log/messages
->  Jan  1 00:00:08 (none) daemon.info snmpd[944]: Created directory: /var/lib/snmp
->  Jan  1 00:00:08 (none) daemon.info snmpd[944]: Created directory: /var/lib/snmp/cert_indexes
->  Dec 15 15:17:26 (none) daemon.info snmpd[944]: Created directory: /var/lib/snmp/mib_indexes
->  Dec 15 15:17:26 (none) daemon.info snmpd[946]: NET-SNMP version 5.8
->
-> Though it looks like the ntp daemon has stepped the time while snmpd
-> is starting up, so perhaps that's causing a problem...
+Yann,
 
-That's not it. I disable ntp, and it got even worse (over two minutes):
+On 12/14/20 11:29 AM, Yann E. MORIN wrote:
+> ** WIP: needs an update to all the hashes.
+> 
+> Currently, our git archives are reproducible because we ensure that we
+> use one of the few tar versions that generate identical gnu-formatted
+> archives. However, than means that any tar version greater or equal
+> to 1.30 is not compatible. I.e. we're stuck in the past, forever.
+> 
+> However, thanks to some grunt work by Vincent, we now have a set of
+> options that we can pass tar, to generate reproducible archives back
+> from tar-1.27 and up through tar-1.32, the latest released version.
+> 
+> However, those archives are not identical to the previous ones generated
+> in the (now-broken) gnu format.
+> 
+> To avoid any clashing between old and new archives, and new and old
+> Buildroot versions, we need to name the new generated archives
+> differently from the existing ones.
+> 
+> So, we bump the git-specific sub-version (not ti be confused with
+> subversion!) to _br1, not unlike the Debian packaging versioning.
+> 
+> We could also keep the gzip compression (and the .gz extension), but
+> while at it, lets also switch the compression, from the venerable gzip,
+> to the not-so-new-nowadays xz. But since xz is quite slower than xz, we
+> add traces that something is going on, so users do not wonder why there
+> does not seem to be any progress.
+> 
+> The --pax-option, to set specific PAX headers, does not accept RFC2822
+> timestamps which value are too away from some fixed point (set at
+> compile-time?):
+>      tar: Time stamp is out of allowed range
+> 
+> However, the same timestamps passed as strict compliant ISO 8601 is
+> accepted, so that's what we switch to as the date representation (%ci
+> has been supported by git back to 1.6.0, released August 2008).
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> --------
+> PS. Here is a Makefile used to test all the versions of tar, along with
+> a set of options:
+> 
+>   # Versions prior to 1.27 do not build on recent machines, because 'gets'
+>   # got removed (rightfully so), so don't count them as candidates.
+> VERSIONS = 1.27 1.27.1 1.28 1.29 1.30 1.31 1.32
+> DATE = Thu 21 May 2020 06:44:11 PM CEST
+> 
+> TARS = \
+> 	$(patsubst %,test_gnu_%.tar,$(VERSIONS)) \
+> 	$(patsubst %,test_posix_%.tar,$(VERSIONS)) \
+> 	$(patsubst %,test_posix_paxoption_%.tar,$(VERSIONS))
+> 
+> all: $(TARS)
+> 	sha1sum $(^)
+> 
+> .INTERMEDIATE: test_%.tar
+> test_gnu_%.tar: tar.% list
+> 	./$(<) cf - -C test \
+> 		--transform="s#^\./#test-version/#" \
+> 		--numeric-owner --owner=0 --group=0 \
+> 		--mtime="$(DATE)" \
+> 		--format=gnu \
+> 		-T list \
+> 	>$(@)
+> test_posix_%.tar: tar.% list
+> 	./$(<) cf - -C test \
+> 		--transform="s#^\./#test-version/#" \
+> 		--numeric-owner --owner=0 --group=0 \
+> 		--mtime="$(DATE)" \
+> 		--format=posix \
+> 		-T list \
+> 	>$(@)
+> test_posix_paxoption_%.tar: tar.% list
+> 	./$(<) cf - -C test \
+> 		--transform="s#^\./#test-version/#" \
+> 		--numeric-owner --owner=0 --group=0 \
+> 		--mtime="$(DATE)" \
+> 		--format=posix \
+> 		--pax-option='delete=atime,delete=ctime,delete=mtime' \
+> 		--pax-option='exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={$(DATE)}' \
+> 		-T list \
+> 	>$(@)
+> 
+> list: .FORCE
+> list: test
+> 	(cd test && find . -not -type d ) |LC_ALL=C sort >$(@)
+> 
+> LONG = L$$(for i in $$(seq 1 200); do printf 'o'; done)ng
+> test: .FORCE
+> test:
+> 	rm -rf test
+> 	mkdir -p test/bar
+> 	echo foo >test/Foo
+> 	echo bar >test/bar/Bar
+> 	ln -s bar/Bar test/buz
+> 	echo long >test/Very-$(LONG)-filename
+> 	ln test/Very-$(LONG)-filename \
+> 	   test/short
+> 
+> .PRECIOUS: tar.%
+> tar.%: tar-%
+> 	cd $(<) && ./configure
+> 	$(MAKE) -C $(<)
+> 	install -m 0755 $(<)/src/tar $(@)
+> 
+> .PRECIOUS: tar-%
+> tar-%: tar-%.tar.gz
+> 	tar xzf $(<)
+> 
+> .PRECIOUS: tar-%.tar.gz
+> tar-%.tar.gz:
+> 	wget "https://ftp.gnu.org/gnu/tar/$(@)"
+> 
+> .FORCE:
+> 
+> clean:
+> 	rm -rf tar-* tar.* test_* test list
+> ---
+>   package/pkg-download.mk |  3 +++
+>   support/download/git    | 19 +++++++++++++------
+>   2 files changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 951d2fb554..e85f844b45 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -17,6 +17,9 @@ export HG := $(call qstrip,$(BR2_HG))
+>   export SCP := $(call qstrip,$(BR2_SCP))
+>   export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+>   
+Should we add documentation/comments here that explain what circumstances would constitute a bump in the BR_SUB_VERSION 
+value? Like any change in the tar command or compressor in support/download/<backend> that changes the hash for a 
+package? If we're only bumping this on changes to the tarball hash, a more descriptive name (BR_TAR_FORMAT_REV_<method>) 
+may self document?
+> +BR_SUB_VERSION_git = _br1
+> +BR_SITE_METHOD_Z_git = .xz
+Is there a more descriptive name we can use to denote what it's being used for? "Z" doesn't tell me much. TAR_EXT or 
+some such is a bit more self-documenting.
 
-   # grep snmp /var/log/messages
-   Jan  1 00:00:08 (none) daemon.info snmpd[942]: Created directory: /var/lib/snmp
-   Jan  1 00:00:08 (none) daemon.info snmpd[942]: Created directory: /var/lib/snmp/cert_indexes
-   Jan  1 00:02:34 (none) daemon.info snmpd[942]: Created directory: /var/lib/snmp/mib_indexes
-   Jan  1 00:02:34 (none) daemon.info snmpd[944]: NET-SNMP version 5.8
+I know adding more parameters to dl-wrapper to pass to the backends is always met with some resistance, so I won't go so 
+far as to say we should pass the compressor (`xz -9`, `gzip -6`, `cat`) from pkg-download.mk to dl-wrapper, but some 
+in-file documentation that mentions the linkage between this value and the compressor in use in support/download/git 
+should probably be sufficient since this extension also informs what we use to decompress the tarball with (from 
+pkg-utils.mk/pkg-generic.mk). I mean, I'm sure we won't forget, but a few extra comments mentioning the need to keep 
+these in sync wont hurt.
 
---
-Grant
+> +
+>   DL_WRAPPER = support/download/dl-wrapper
+>   
+>   # DL_DIR may have been set already from the environment
+> diff --git a/support/download/git b/support/download/git
+> index 15d8c66e05..b670b23a67 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -170,8 +170,8 @@ _git checkout -f -q "'${cset}'"
+>   _git clean -ffdx
+>   
+>   # Get date of commit to generate a reproducible archive.
+> -# %cD is RFC2822, so it's fully qualified, with TZ and all.
+> -date="$( _git log -1 --pretty=format:%cD )"
+> +# %ci is ISO 8601, so it's fully qualified, with TZ and all.
+> +date="$( _git log -1 --pretty=format:%ci )"
+>   
+>   # There might be submodules, so fetch them.
+>   if [ ${recurse} -eq 1 ]; then
+> @@ -201,12 +201,19 @@ find . -not -type d \
+>          -and -not -path "./.git/*" >"${output}.list"
+>   LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+>   
+> -# Create GNU-format tarballs, since that's the format of the tarballs on
+> -# sources.buildroot.org and used in the *.hash files
+> +# Explicit options to ensure reproducibility of the archive
+> +pax_options="delete=atime,delete=ctime,delete=mtime"
+> +pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
+> +
+> +# Create tarballs in the posix format, since that's the most
+> +# reproducible format
+> +printf 'Creating tarball (%d files)...\n' "$( cat "${output}.list.sorted" |wc -l )"
+>   tar cf - --transform="s#^\./#${basename}/#" \
+> -         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+> +         --numeric-owner --owner=0 --group=0 --mtime="${date}" \
+> +         --format=posix --pax-option="${pax_options}" \
+>            -T "${output}.list.sorted" >"${output}.tar"
+> -gzip -6 -n <"${output}.tar" >"${output}"
+> +printf 'Compressing tarball (%d bytes)...\n' "$( stat -c %s "${output}.tar" )"
+> +xz -9 <"${output}.tar" >"${output}"
+>   
+>   rm -f "${output}.list"
+>   rm -f "${output}.list.sorted"
+> 
+
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
