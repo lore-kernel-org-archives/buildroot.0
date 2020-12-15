@@ -1,297 +1,69 @@
-From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
-Date: Tue, 15 Dec 2020 12:28:20 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/rock64: update defconfig
-In-Reply-To: <20201215004903.8829-1-xuminready@gmail.com>
-References: <20201215004903.8829-1-xuminready@gmail.com>
-Message-ID: <20201215112820.pheyz4hk4mymegpw@marchewa.redembedded.pl>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue, 15 Dec 2020 15:04:07 +0100
+Subject: [Buildroot] [PATCH] package/python-requests: bump to version 2.25.0
+Message-ID: <20201215140407.57321-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-12-15 00:49:03, Min Xu wrote:
-> Revert "configs/rock64_defconfig: remove defconfig" a5fa2469e6506ea4f5a91739aa099f63a10e45ce
-> 
-> bump uboot from 2017.09 to release-2020-07 from ayufan-rock64/linux-mainline-u-boot
-> 
-> Signed-off-by: Min Xu <xuminready@gmail.com>
+LICENSE file content has been changed ([1]) to follow Apache-2.0
+instructions.
 
-Tested-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+[1] https://github.com/psf/requests/commit/22b5a39098223f51fcd2df238e13f9bac86b35a4
 
-> ---
->  DEVELOPERS                                    |  2 +
->  board/pine64/rock64/extlinux.conf             |  4 +
->  board/pine64/rock64/genimage.cfg              | 23 +++++
->  ...328-needs-itb-image-to-boot-properly.patch | 32 +++++++
->  board/pine64/rock64/post-build.sh             |  9 ++
->  board/pine64/rock64/readme.txt                | 95 +++++++++++++++++++
->  configs/rock64_defconfig                      | 38 ++++++++
->  7 files changed, 203 insertions(+)
->  create mode 100644 board/pine64/rock64/extlinux.conf
->  create mode 100644 board/pine64/rock64/genimage.cfg
->  create mode 100644 board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
->  create mode 100755 board/pine64/rock64/post-build.sh
->  create mode 100644 board/pine64/rock64/readme.txt
->  create mode 100644 configs/rock64_defconfig
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a2c7f7f..1944cbb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1858,6 +1858,8 @@ F:	package/libavl/
->  
->  N:	Micha? ?yszczek <michal.lyszczek@bofc.pl>
->  F:	board/altera/socrates_cyclone5/
-> +F:	board/pine64/rock64
-> +F:	configs/rock64_defconfig
->  F:	configs/socrates_cyclone5_defconfig
->  F:	package/netifrc/
->  F:	package/openrc/
-> diff --git a/board/pine64/rock64/extlinux.conf b/board/pine64/rock64/extlinux.conf
-> new file mode 100644
-> index 0000000..bf71982
-> --- /dev/null
-> +++ b/board/pine64/rock64/extlinux.conf
-> @@ -0,0 +1,4 @@
-> +label rock64-buildroot
-> +  kernel /boot/Image
-> +  devicetree /boot/rk3328-rock64.dtb
-> +  append console=ttyS2,1500000n8 root=/dev/mmcblk0p1 ro rootwait
-> diff --git a/board/pine64/rock64/genimage.cfg b/board/pine64/rock64/genimage.cfg
-> new file mode 100644
-> index 0000000..0b5a0d8
-> --- /dev/null
-> +++ b/board/pine64/rock64/genimage.cfg
-> @@ -0,0 +1,23 @@
-> +image sdcard.img {
-> +    hdimage {
-> +    }
-> +
-> +    partition uboot-spl {
-> +        in-partition-table = "no"
-> +        image = "u-boot-tpl-spl.img"
-> +        offset = 32768 # 512 * 0x40 from start of sd card
-> +    }
-> +
-> +    partition uboot {
-> +        in-partition-table = "no"
-> +        image = "u-boot.itb"
-> +        offset = 262144 # 512 * 0x200 from start of sd card
-> +    }
-> +
-> +    partition rootfs {
-> +        partition-type = 0x83
-> +        bootable = "yes"
-> +        image = "rootfs.ext2"
-> +        size = 500M
-> +    }
-> +}
-> diff --git a/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
-> new file mode 100644
-> index 0000000..2d35b78
-> --- /dev/null
-> +++ b/board/pine64/rock64/patches/uboot/0001-Makefile-rk3328-needs-itb-image-to-boot-properly.patch
-> @@ -0,0 +1,32 @@
-> +From 211bf049084e6e374dac253138fa813682910146 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-> +Date: Tue, 5 Feb 2019 22:08:54 +0100
-> +Subject: [PATCH] Makefile: rk3328 needs itb image to boot properly
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-> +---
-> + Makefile | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 8086f3c93e..a6425b5b03 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -799,6 +799,11 @@ ifneq ($(BUILD_ROM),)
-> + ALL-$(CONFIG_X86_RESET_VECTOR) += u-boot.rom
-> + endif
-> + 
-> ++# rk3328 needs itb image to boot properly
-> ++ifeq ($(CONFIG_ROCKCHIP_RK3328),y)
-> ++ALL-y += u-boot.itb
-> ++endif
-> ++
-> + # enable combined SPL/u-boot/dtb rules for tegra
-> + ifeq ($(CONFIG_TEGRA)$(CONFIG_SPL),yy)
-> + ALL-y += u-boot-tegra.bin u-boot-nodtb-tegra.bin
-> +-- 
-> +2.18.1
-> +
-> diff --git a/board/pine64/rock64/post-build.sh b/board/pine64/rock64/post-build.sh
-> new file mode 100755
-> index 0000000..26b53cb
-> --- /dev/null
-> +++ b/board/pine64/rock64/post-build.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +
-> +MKIMAGE=$HOST_DIR/bin/mkimage
-> +BOARD_DIR="$(dirname $0)"
-> +
-> +$MKIMAGE -n rk3328 -T rksd -d $BINARIES_DIR/u-boot-tpl.bin $BINARIES_DIR/u-boot-tpl.img
-> +cat $BINARIES_DIR/u-boot-tpl.img $BINARIES_DIR/u-boot-spl.bin > $BINARIES_DIR/u-boot-tpl-spl.img
-> +
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-> diff --git a/board/pine64/rock64/readme.txt b/board/pine64/rock64/readme.txt
-> new file mode 100644
-> index 0000000..029c676
-> --- /dev/null
-> +++ b/board/pine64/rock64/readme.txt
-> @@ -0,0 +1,95 @@
-> +Intro
-> +=====
-> +
-> +This default configuration will allow you to start experimenting with the
-> +buildroot environment for the Rock64. With this default configuration you
-> +can log in into board via uart and look around.
-> +
-> +Board homepage: https://www.pine64.org/?page_id=7147
-> +
-> +Build
-> +=====
-> +
-> +First, load rock64 config for buildroot
-> +
-> +  $ make rock64_defconfig
-> +
-> +Optionally make changes to buildroot config (to install more programs)
-> +
-> +  $ make menuconfig
-> +
-> +And then build everything
-> +
-> +  $ make
-> +
-> +When completed, following files will be generated in output/images directory:
-> +
-> +  .
-> +  ??? Image
-> +  ??? bl31.bin
-> +  ??? bl31.elf
-> +  ??? rk3328-rock64.dtb
-> +  ??? rootfs.ext2
-> +  ??? rootfs.ext4 -> rootfs.ext2
-> +  ??? rootfs.tar
-> +  ??? sdcard.img
-> +  ??? u-boot-spl.bin
-> +  ??? u-boot-tpl-spl.img
-> +  ??? u-boot-tpl.bin
-> +  ??? u-boot-tpl.img
-> +  ??? u-boot.bin
-> +  ??? u-boot.itb
-> +
-> +Creating bootable SD card
-> +=========================
-> +
-> +!!! THIS COMMAND MAY WIPE YOUR DISK!
-> +!!! MAKE SURE YOU PASSED CORRECT DEVICE!
-> +!!! OR IT THIS WILL WIPE YOUR DISK!
-> +
-> +Simply invoke (as root)
-> +
-> +  # dd if=output/images/sdcard.img of=/dev/sdX && sync
-> +
-> +Where X is your SD card device (not partition), of= argument may also be
-> +/dev/mmcblk0 if you are using built-in sd card reader.
-> +
-> +Runtime
-> +=======
-> +
-> +Login
-> +-----
-> +
-> +By default, buildroot has no password, just type 'root' as login user, and
-> +you will be logged in.
-> +
-> +Serial console
-> +--------------
-> +
-> +Serial console needs to be connected to pins (into 40pin rpi compatible part)
-> +
-> +pin 6:  gnd
-> +pin 8:  tx
-> +pin 10: rx
-> +
-> +Pin numbers are printed on board.
-> +
-> +Uart configuration is not standard. Rock64 uses 1500000 (1,5M) baudrate
-> +with standard 8n1.
-> +
-> +Ethernet
-> +--------
-> +
-> +To enable ethernet you need to load modules for it:
-> +
-> +# modprobe stmmac
-> +# modprobe dwmac-rk
-> +
-> +and since by default there is no dhcp installed, you need to configure ip
-> +address, remember to change address to fit your network.
-> +
-> +# ifconfig eth0 up
-> +# ip addr add 10.1.1.180/24 dev eth0
-> +# ping 10.1.1.1
-> +PING 10.1.1.1 (10.1.1.1): 56 data bytes
-> +64 bytes from 10.1.1.1: seq=0 ttl=64 time=0.695 ms
-> diff --git a/configs/rock64_defconfig b/configs/rock64_defconfig
-> new file mode 100644
-> index 0000000..df03e35
-> --- /dev/null
-> +++ b/configs/rock64_defconfig
-> @@ -0,0 +1,38 @@
-> +BR2_aarch64=y
-> +BR2_GLOBAL_PATCH_DIR="board/pine64/rock64/patches"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rock64/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rock64/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.19"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-rock64"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ayufan-rock64/linux-mainline-u-boot.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="release-2020-07"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock64-rk3328"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin tpl/u-boot-tpl.bin"
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> -- 
-> 2.20.1
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201215/af3ddb4e/attachment.asc>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/python-requests/python-requests.hash | 6 +++---
+ package/python-requests/python-requests.mk   | 4 ++--
+ package/python3-requests/python3-requests.mk | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 84bf2a1aa0..95725a3552 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5  b54bff26a389e5932e8b1c4983a99ce7  requests-2.24.0.tar.gz
+-sha256  b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b  requests-2.24.0.tar.gz
++md5  94cd712029077897e252212c5f402b79  requests-2.25.0.tar.gz
++sha256  7f1a0b932f4a60a1a65caa4263921bb7d9ee911957e0ae4a23a6dd08185ad5f8  requests-2.25.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  8837a2f33a61bcee175c028ff16d1c160aba48a3aebe1495ace709be4e62636b  LICENSE
++sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index eb3997f108..8c7b6c6748 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python3-requests/python3-requests.mk
+-PYTHON_REQUESTS_VERSION = 2.24.0
++PYTHON_REQUESTS_VERSION = 2.25.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
+index cd6a7e1260..2e10c636af 100644
+--- a/package/python3-requests/python3-requests.mk
++++ b/package/python3-requests/python3-requests.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python-requests/python-requests.mk
+-PYTHON3_REQUESTS_VERSION = 2.24.0
++PYTHON3_REQUESTS_VERSION = 2.25.0
+ PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
+-PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
++PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
+ PYTHON3_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON3_REQUESTS_LICENSE = Apache-2.0
+ PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
+-- 
+2.29.2
