@@ -1,71 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Dec 2020 17:36:01 +0100
-Subject: [Buildroot] [PATCH-2020.02.x] package/ruby: add upstream security
- fix for CVE-2020-25613
-Message-ID: <20201215163602.8947-1-peter@korsgaard.com>
+From: Edmundo Ferreira <fc.edmundo@gmail.com>
+Date: Tue, 15 Dec 2020 17:36:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: adds target install of
+ systemd unit files
+Message-ID: <20201215163610.12070-1-edmundo.ferreira@esa.int>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details, see the advisory:
-https://www.ruby-lang.org/en/news/2020/09/29/http-request-smuggling-cve-2020-25613/
+From: Edmundo Ferreira <fc.edmundo@gmail.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Edmundo Ferreira <fc.edmundo@gmail.com>
 ---
- ...ore-strict-to-interpret-some-headers.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/ruby/0001-Make-it-more-strict-to-interpret-some-headers.patch
+ package/openvpn/openvpn.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/ruby/0001-Make-it-more-strict-to-interpret-some-headers.patch b/package/ruby/0001-Make-it-more-strict-to-interpret-some-headers.patch
-new file mode 100644
-index 0000000000..f76de95ff5
---- /dev/null
-+++ b/package/ruby/0001-Make-it-more-strict-to-interpret-some-headers.patch
-@@ -0,0 +1,43 @@
-+From 8946bb38b4d87549f0d99ed73c62c41933f97cc7 Mon Sep 17 00:00:00 2001
-+From: Yusuke Endoh <mame@ruby-lang.org>
-+Date: Tue, 29 Sep 2020 13:15:58 +0900
-+Subject: [PATCH] Make it more strict to interpret some headers
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 3efc9e2354..399cbf7a85 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -79,4 +79,12 @@ define OPENVPN_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S60openvpn
+ endef
+ 
++define OPENVPN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-client at .service \
++		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-client at .service
 +
-+Some regexps were too tolerant.
++	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-server at .service \
++		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-server at .service
++endef
 +
-+[Peter: fixes CVE-2020-25613, upstream:
-+ https://github.com/ruby/webrick/commit/8946bb38b4d87549f0d99ed73c62c41933f97cc7
-+]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/webrick/httprequest.rb | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/lib/webrick/httprequest.rb b/lib/webrick/httprequest.rb
-+index 294bd91..d34eac7 100644
-+--- a/lib/webrick/httprequest.rb
-++++ b/lib/webrick/httprequest.rb
-+@@ -227,9 +227,9 @@ module WEBrick
-+         raise HTTPStatus::BadRequest, "bad URI `#{@unparsed_uri}'."
-+       end
-+ 
-+-      if /close/io =~ self["connection"]
-++      if /\Aclose\z/io =~ self["connection"]
-+         @keep_alive = false
-+-      elsif /keep-alive/io =~ self["connection"]
-++      elsif /\Akeep-alive\z/io =~ self["connection"]
-+         @keep_alive = true
-+       elsif @http_version < "1.1"
-+         @keep_alive = false
-+@@ -508,7 +508,7 @@ module WEBrick
-+       return unless socket
-+       if tc = self['transfer-encoding']
-+         case tc
-+-        when /chunked/io then read_chunked(socket, block)
-++        when /\Achunked\z/io then read_chunked(socket, block)
-+         else raise HTTPStatus::NotImplemented, "Transfer-Encoding: #{tc}."
-+         end
-+       elsif self['content-length'] || @remaining_size
-+-- 
-+2.20.1
-+
+ $(eval $(autotools-package))
 -- 
-2.20.1
+2.17.1
