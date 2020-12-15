@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Dec 2020 22:03:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: fix static
- build with netfilter_conntrack
-In-Reply-To: <20201123211258.496624-1-fontaine.fabrice@gmail.com>
-References: <20201123211258.496624-1-fontaine.fabrice@gmail.com>
-Message-ID: <d8264fc1-da16-14de-f6cd-8e13c2a9caa2@mind.be>
+Date: Tue, 15 Dec 2020 22:04:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc-ng-test: fix TLS for
+ nios2
+In-Reply-To: <20201201193057.403392-1-fontaine.fabrice@gmail.com>
+References: <20201201193057.403392-1-fontaine.fabrice@gmail.com>
+Message-ID: <159fee6f-7bc8-bc23-5dc1-ffd6c6a20453@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,16 @@ To: buildroot@busybox.net
 
 
 
-On 23/11/2020 22:12, Fabrice Fontaine wrote:
+On 01/12/2020 20:30, Fabrice Fontaine wrote:
+> Fix TLS for nios2 to avoid the following build failure:
+> 
+> In file included from tst-tls1.c:6:
+> tls-macros.h:101:3: error: #error "No support for this architecture so far."
+>  # error "No support for this architecture so far."
+>    ^~~~~
+> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
+>  - http://autobuild.buildroot.org/results/303e50d996b7261896f163418831fabb40779ff5
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -25,90 +32,98 @@ On 23/11/2020 22:12, Fabrice Fontaine wrote:
  Arnout
 
 > ---
->  ...-pkg-config-to-find-netfilter_conntr.patch | 62 +++++++++++++++++++
->  .../shadowsocks-libev/shadowsocks-libev.mk    |  2 +
->  2 files changed, 64 insertions(+)
->  create mode 100644 package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+>  ...0001-add-nios2-tls-macros-from-glibc.patch | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
 > 
-> diff --git a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+> diff --git a/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch b/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
 > new file mode 100644
-> index 0000000000..781d3c0e64
+> index 0000000000..574d10c1b8
 > --- /dev/null
-> +++ b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
-> @@ -0,0 +1,62 @@
-> +From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 2001
+> +++ b/package/uclibc-ng-test/0001-add-nios2-tls-macros-from-glibc.patch
+> @@ -0,0 +1,84 @@
+> +From bf6fcd59d1ff51584a703b1d78c9e8fd4f808917 Mon Sep 17 00:00:00 2001
 > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 23 Nov 2020 21:16:38 +0100
-> +Subject: [PATCH] configure.ac: use pkg-config to find netfilter_conntrack
+> +Date: Sat, 28 Nov 2020 11:44:00 +0100
+> +Subject: [PATCH] add nios2 tls macros from glibc
 > +
-> +Use pkg-config to retrieve the dependencies of netfilter_conntrack
-> +and avoid the following build failure when building statically:
-> +
-> +configure:13096: /data/buildroot-test/instance-1/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -I/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -DPCRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -L/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lnetfilter_conntrack -lnfnetlink -lev  -lcares -lsodium -lmbedcrypto -lpcre  >&5
-> +/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
-> +api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
+> +Retrieved from
+> +https://github.com/bminor/glibc/blob/master/sysdeps/nios2/tls-macros.h
 > +
 > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://github.com/shadowsocks/shadowsocks-libev/pull/2773]
+> +[Retrieved from:
+> +https://github.com/wbx-github/uclibc-ng-test/commit/bf6fcd59d1ff51584a703b1d78c9e8fd4f808917]
 > +---
-> + configure.ac    | 5 +++--
-> + src/Makefile.am | 2 +-
-> + 2 files changed, 4 insertions(+), 3 deletions(-)
+> + test/tls/tls-macros-nios2.h | 46 +++++++++++++++++++++++++++++++++++++
+> + test/tls/tls-macros.h       |  4 ++++
+> + 2 files changed, 50 insertions(+)
+> + create mode 100644 test/tls/tls-macros-nios2.h
 > +
-> +diff --git a/configure.ac b/configure.ac
-> +index 9787bc2..207c041 100755
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,
-> + if test x"$enable_connmarktos" = "xyes" ; then
-> + 	AC_MSG_NOTICE([Linux Netfilter Conntrack support requested by --enable-connmarktos: ${enable_connmarktos}])
-> + 	if test "x$enable_connmarktos" != "xno"; then
-> +-	    AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-> ++	    PKG_CHECK_MODULES([NETFILTER_CONNTRACK], [libnetfilter_conntrack],,
-> ++	    [AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-> + 	        if test x"$enable_connmarktos" = "xyes"; then
-> + 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
-> + 	        fi
-> +@@ -262,7 +263,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
-> + 	        if test x"$enable_connmarktos" = "xyes"; then
-> + 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack headers not found])
-> + 	        fi
-> +-	        with_netfilter_conntrack=no])
-> ++	        with_netfilter_conntrack=no])])
-> + 	  # If nothing is broken; enable the libraries usage.
-> + 	  if test "x$with_netfilter_conntrack" != "xno"; then
-> + 		with_netfilter_conntrack=yes
-> +diff --git a/src/Makefile.am b/src/Makefile.am
-> +index c261ed0..b81ced7 100644
-> +--- a/src/Makefile.am
-> ++++ b/src/Makefile.am
-> +@@ -9,7 +9,7 @@ AM_CFLAGS += -I$(top_srcdir)/libcork/include
-> + endif
-> + AM_CFLAGS += $(LIBPCRE_CFLAGS)
+> +diff --git a/test/tls/tls-macros-nios2.h b/test/tls/tls-macros-nios2.h
+> +new file mode 100644
+> +index 0000000..7029530
+> +--- /dev/null
+> ++++ b/test/tls/tls-macros-nios2.h
+> +@@ -0,0 +1,46 @@
+> ++#define TLS_LE(x)					\
+> ++  ({ int *__result;					\
+> ++     asm ("addi %0, r23, %%tls_le(" #x ")"		\
+> ++	  : "=r" (__result));		                \
+> ++     __result; })
+> ++
+> ++#define TLS_IE(x)					\
+> ++  ({ int *__result;					\
+> ++     int __tmp;                                         \
+> ++     asm ("nextpc %0 ; "                                \
+> ++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
+> ++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
+> ++          "add %0, %0, %1 ; "                           \
+> ++          "ldw %1, %%tls_ie(" #x ")(%0) ; "        	\
+> ++	  "add %1, r23, %1"              		\
+> ++          : "=&r" (__tmp), "=&r" (__result));           \
+> ++     __result; })
+> ++
+> ++#define TLS_LD(x)					\
+> ++  ({ char *__result;					\
+> ++     char *__result2;                                   \
+> ++     int *__result3;                                    \
+> ++     int __tmp;                                         \
+> ++     extern void *__tls_get_addr (void *);		\
+> ++     asm ("nextpc %0 ; "                                \
+> ++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
+> ++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
+> ++          "add %0, %0, %1 ; "                           \
+> ++          "addi %0, %0, %%tls_ldm(" #x ")"              \
+> ++          : "=r" (__result), "=r" (__tmp));             \
+> ++     __result2 = (char *)__tls_get_addr (__result);	\
+> ++     asm ("addi %0, %1, %%tls_ldo(" #x ")"              \
+> ++	  : "=r" (__result3) : "r" (__result2));        \
+> ++     __result3; })
+> ++
+> ++#define TLS_GD(x)					\
+> ++  ({ int *__result;					\
+> ++     int __tmp;                                         \
+> ++     extern void *__tls_get_addr (void *);		\
+> ++     asm ("nextpc %0 ; "                                \
+> ++          "1: movhi %1, %%hiadj(_gp_got - 1b) ; "	\
+> ++          "addi %1, %1, %%lo(_gp_got - 1b) ; "		\
+> ++          "add %0, %0, %1 ; "                           \
+> ++          "addi %0, %0, %%tls_gd(" #x ")"		\
+> ++	  : "=r" (__result), "=r" (__tmp));		\
+> ++     (int *)__tls_get_addr (__result); })
+> +diff --git a/test/tls/tls-macros.h b/test/tls/tls-macros.h
+> +index 4a4e916..087b365 100644
+> +--- a/test/tls/tls-macros.h
+> ++++ b/test/tls/tls-macros.h
+> +@@ -64,6 +64,10 @@
+> + #include <tls-macros-mips.h>
+> + #endif
 > + 
-> +-SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
-> ++SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS) $(NETFILTER_CONNTRACK_LIBS)
-> + if !USE_SYSTEM_SHARED_LIB
-> + SS_COMMON_LIBS += $(top_builddir)/libbloom/libbloom.la \
-> +                   $(top_builddir)/libipset/libipset.la \
-> +-- 
-> +2.29.2
-> +
-> diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-> index 3ba4cb875c..d69a377851 100644
-> --- a/package/shadowsocks-libev/shadowsocks-libev.mk
-> +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-> @@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
->  SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
->  SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
->  SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-> +# We're patching configure.ac
-> +SHADOWSOCKS_LIBEV_AUTORECONF = YES
->  SHADOWSOCKS_LIBEV_CONF_OPTS = \
->  	--with-pcre=$(STAGING_DIR)/usr \
->  	--disable-ssp
+> ++#ifdef __nios2__
+> ++#include <tls-macros-nios2.h>
+> ++#endif
+> ++
+> + #if defined(__powerpc__) && !defined(__powerpc64__)
+> + #include <tls-macros-powerpc.h>
+> + #endif
 > 
