@@ -1,87 +1,102 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Dec 2020 21:40:16 +0100
-Subject: [Buildroot] [git commit] package/kismet: fix static build with
- uclibc
-Message-ID: <20201215202614.EF8AA86B0C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Dec 2020 22:02:51 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/systemd: add a menu entry to
+ enable portable services
+In-Reply-To: <DM6PR01MB375592537E27457D12083884F3F10@DM6PR01MB3755.prod.exchangelabs.com>
+References: <20201126155533.28179-1-fgervais@distech-controls.com>
+ <DM6PR01MB375592537E27457D12083884F3F10@DM6PR01MB3755.prod.exchangelabs.com>
+Message-ID: <57717ae0-a3f9-21ba-1354-f54325f99a05@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2dafc4180f456c2f84170567436d234b5b6e95f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/b859eb3850c0beb23e18010dc2f07cd0f5c14440
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...e.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch | 44 ++++++++++++++++++++++
- package/kismet/kismet.mk                           |  2 +
- 2 files changed, 46 insertions(+)
+On 04/12/2020 14:19, Gervais, Francois via buildroot wrote:
+> Is there something more required on my part for this patch?
+> 
+> The delay might be normal but since my previous patches where
+> merged in quite quickly I'd like to make sure I'm not missing something.
 
-diff --git a/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch b/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
-new file mode 100644
-index 0000000000..e2c28a2ebd
---- /dev/null
-+++ b/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
-@@ -0,0 +1,44 @@
-+From e70968bcbca86dd448d619c40cdeaae8b7dcee98 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Nov 2020 23:01:55 +0100
-+Subject: [PATCH] configure.ac: don't override LDFLAGS with CPPFLAGS
-+
-+Don't override LDFLAGS with CPPFLAGS to avoid a build failure when
-+building statically with uclibc due to -static keyword being lost:
-+
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o kismet_cap_linux_wifi ../interface_control.c.o ../wifi_ht_channels.c.o linux_wireless_control.c.o linux_netlink_control.c.o linux_nexmon_control.c.o linux_wireless_rfkill.c.o capture_linux_wifi.c.o ../libkismetdatasource.a -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/home/buildroot/autobuild/run/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/.libs -lnl-genl-3 -lnl-3   -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpthread -lnl-genl-3 -lnl-3 -lpthread   -lpthread -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/
- lib -lprotobuf-c  -lm
-+/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_registered_FDE':
-+/home/buildroot/autobuild/run/instance-3/output-1/build/host-gcc-final-9.3.0/build/xtensa-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde.c:1040: undefined reference to `dl_iterate_phdr'
-+collect2: error: ld returned 1 exit status
-+
-+To fix this build failure, just drop OCPPFLAGS and OLDFLAGS which are
-+not used anymore
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/b859eb3850c0beb23e18010dc2f07cd0f5c14440
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/kismetwireless/kismet/pull/326 (merged)]
-+---
-+ configure.ac | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index aab47fb0..4df37a29 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -619,11 +619,6 @@ else
-+     AC_MSG_RESULT([no])
-+ fi
-+ 
-+-OCPPFLAGS=$CPPFLAGS
-+-CPPFLAGS="$CPPFLAGS"
-+-OLDFLAGS=$LDFLAGS
-+-LDFLAGS="$CPPFLAGS"
-+-
-+ # Do we need libm for math functions?
-+ AC_MSG_CHECKING([for libm math function in std libs])
-+ OCFL="$CFLAGS"
-+-- 
-+2.29.2
-+
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 54d014021f..0a4ae00f08 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -17,6 +17,8 @@ KISMET_DEPENDENCIES = \
- 	zlib
- KISMET_LICENSE = GPL-2.0+
- KISMET_LICENSE_FILES = LICENSE
-+# We're patching configure.ac
-+KISMET_AUTORECONF = YES
- KISMET_CONF_OPTS = --disable-debuglibs
- 
- KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ It's not really normal, but it is usual :-) We have a huge patch backlog, as
+you can see on http://patchwork.ozlabs.org/project/buildroot/list/ It can
+sometimes take up to a year before even a simple patch gets merged, unfortunately.
+
+ That said, I've applied your patch now.
+
+> From: Gervais, Francois <FGervais@distech-controls.com>
+> Sent: November 26, 2020 10:55 AM
+> To: buildroot at buildroot.org <buildroot@buildroot.org>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>; Yann E . MORIN <yann.morin.1998@free.fr>; Norbert Lange <nolange79@gmail.com>; Gervais, Francois <FGervais@distech-controls.com>
+> Subject: [PATCH v3 1/1] package/systemd: add a menu entry to enable portable services 
+> ?
+> Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
+> Reviewed-by: Norbert Lange <nolange79@gmail.com>
+> ---
+> ?package/systemd/Config.in? | 17 +++++++++++++++++
+> ?package/systemd/systemd.mk |? 7 ++++++-
+> ?2 files changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index ec34478e3d..3966ba2fc7 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -343,6 +343,23 @@ comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
+> ???????????????? !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+> ???????????????? !BR2_USE_WCHAR
+> ?
+> +config BR2_PACKAGE_SYSTEMD_PORTABLED
+> +?????? bool "enable portable services"
+> +?????? help
+> +???????? Portable services are systemd services that can be dynamically
+> +???????? attached and detached from the system.
+> +
+> +???????? These services must come with their own root directory which
+> +???????? they are bond to through an automatically generated drop-in.
+> +
+> +???????? They also have restrictions applied by the host system in the
+> +???????? form of profiles.
+> +
+> +???????? This functionality is provided by the system service systemd-portabled
+
+ This line was too long, as reported by utils/check-package. I fixed that while
+applying.
+
+ Regards,
+ Arnout
+
+> +???????? along with the corresponding CLI portablectl.
+> +
+> +???????? https://systemd.io/PORTABLE_SERVICES/
+> +
+> ?config BR2_PACKAGE_SYSTEMD_QUOTACHECK
+> ???????? bool "enable quotacheck tools"
+> ???????? help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index cb12f667d6..5aed87f452 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -33,7 +33,6 @@ SYSTEMD_CONF_OPTS += \
+> ???????? -Dman=false \
+> ???????? -Dmount-path=/usr/bin/mount \
+> ???????? -Dnss-systemd=true \
+> -?????? -Dportabled=false \
+> ???????? -Dquotacheck-path=/usr/sbin/quotacheck \
+> ???????? -Dquotaon-path=/usr/sbin/quotaon \
+> ???????? -Drootlibdir='/usr/lib' \
+> @@ -417,6 +416,12 @@ else
+> ?SYSTEMD_CONF_OPTS += -Dpolkit=false
+> ?endif
+> ?
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
+> +SYSTEMD_CONF_OPTS += -Dportabled=true
+> +else
+> +SYSTEMD_CONF_OPTS += -Dportabled=false
+> +endif
+> +
+> ?ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+> ?SYSTEMD_CONF_OPTS += -Dnetworkd=true
+> ?SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
+> 
