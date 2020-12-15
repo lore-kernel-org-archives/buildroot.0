@@ -1,177 +1,274 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 15 Dec 2020 08:17:30 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2020-12-14
-Message-ID: <20201215081737.9A52620394@silver.osuosl.org>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 15 Dec 2020 09:17:36 +0100
+Subject: [Buildroot] [PATCH v2] package/rcw: rename to qoriq-rcw
+Message-ID: <20201215081736.4791-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This is really only for QoriQ SoCs. Also the upstream package - despite
+its base name of the git repository - is "qoriq-components/rcw". Thus
+rename it to a more specify package name.
 
-Autobuild statistics for 2020-12-14
-===================================
+Please note that this will also rename the installed rcw files from
+$(HOST_DIR)/share/rcw to $(HOST_DIR)/share/qoriq-rcw.
 
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  | 18  |  2  |  0  | 20  |
-  2020.08.x  |  7  |  0  |  1  |  8  |
-  2020.11.x  | 13  |  4  |  1  | 18  |
-    master   | 53  | 53  |  0  | 106 |
+There are no configs or dependencies which uses this package.
 
-Classification of failures by reason for master
------------------------------------------------
+Signed-off-by: Michael Walle <michael@walle.cc>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+changes since v1:
+ - move the legacy option into the correct section in
+   Config.in.legacy.
 
-                  bind-9.11.24 | 24
-                   rhash-1.4.0 | 5 
-              asterisk-16.14.1 | 2 
-      gst1-plugins-base-1.18.2 | 2 
-                 libusb-1.0.24 | 2 
-             timescaledb-1.7.4 | 2 
-               belle-sip-4.3.1 | 1 
-                bitcoin-0.20.1 | 1 
-               domoticz-2020.1 | 1 
-                    git-2.29.2 | 1 
-                   gvfs-1.44.1 | 1 
-            libodb-mysql-2.4.0 | 1 
-              libostree-2020.8 | 1 
-                lmbench-3.0-a9 | 1 
-                  ndisc6-1.0.4 | 1 
-            qt5location-5.15.2 | 1 
-            quickjs-2020-11-08 | 1 
-                rocksdb-6.13.3 | 1 
-                samba4-4.11.17 | 1 
-                snort-2.9.16.1 | 1 
-uclibc-ng-test-c64d6ac77f0e... | 1 
-                       unknown | 1 
+ Config.in.legacy                              |  8 +++
+ DEVELOPERS                                    |  2 +-
+ package/Config.in.host                        |  2 +-
+ package/{rcw => qoriq-rcw}/Config.in.host     |  8 +--
+ .../rcw.hash => qoriq-rcw/qoriq-rcw.hash}     |  2 +-
+ package/qoriq-rcw/qoriq-rcw.mk                | 67 +++++++++++++++++++
+ package/rcw/rcw.mk                            | 67 -------------------
+ 7 files changed, 82 insertions(+), 74 deletions(-)
+ rename package/{rcw => qoriq-rcw}/Config.in.host (86%)
+ rename package/{rcw/rcw.hash => qoriq-rcw/qoriq-rcw.hash} (50%)
+ create mode 100644 package/qoriq-rcw/qoriq-rcw.mk
+ delete mode 100644 package/rcw/rcw.mk
 
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/7531cbd8db351e08cf996be7d8d2c67f0e10d30b |     
-   nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/55405ab2c657b79286f67bc558141476fe16a446 |     
-   nios2     |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/3cac2f1c98c104d9bb0f3b77d0b459f2c7004ef4 |     
-    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/4b5a4bd201bd3f0ac40dc71f95c2bf1bda553a32 | ORPH
-   mipsel    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/7ba0392a516637fc65d36ed5845cc3fc11c2e2a3 | ORPH
-  mips64el   |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/f966eb8fb6a5a65f8919d0c485065bf968d38f30 | ORPH
-  aarch64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/ae9aa906bf2af603cc3adeb43ea83858a0539b11 | ORPH
- aarch64_be  |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/f41c548af4effc15643a5a198756741ad001f9fb | ORPH
-  riscv64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/ffc96c093cea8559e5fcc7a567fe01bbf951ddf7 | ORPH
-    i686     |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/6368430d569b6203ee618a5907830431b8e5abfe | ORPH
-  riscv64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/a1b49545af7e2fdc1fcfc289453f4af8cd13f7b2 | ORPH
-    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/9a51a9340ce1ce6a3fbd597799288e69607d5faa | ORPH
- aarch64_be  |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/2f98ec44ccd4a7646a30009bcaca0cf46b1ac57c | ORPH
-    i586     |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/67770067c3402a15a2df2359e026ab6bd8cc0000 | ORPH
-    arc      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/4fdf4b0fb8f7e220561153d6206895dae95e60bb | ORPH
-    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/c574fa0b3d4cca7819976045097ccdc0ca1266a4 | ORPH
-  mips64el   |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/8491901a4d56e51739145b43da514d642ec1f9e8 | ORPH
-  aarch64    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/478efb0aa59b05d9360fac612ebe6dcc196107cb | ORPH
-    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/b8523008f68c0243828b1ce44357d54d7924dbb5 | ORPH
-    sh4      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/0fed5706d153748ed629ef9b836bfae40c7a0e97 | ORPH
-    i586     |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/d0056b76f906415da32dbce91620755407fd25bb | ORPH
-    sh4      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/7c933d9a52e19a291f2a9e7e494789e2e6ab5cea | ORPH
-   xtensa    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/86c6da9114562e557ef00c5a832111bb66478f40 | ORPH
-  powerpc    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/3df010decde4e6706927ff07984ee4b97b77cc57 | ORPH
- aarch64_be  |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/c34567a1f6eed959162c7f5ff25b4ee8e1155880 | ORPH
-    arm      |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/7d16ad6497b1ce19080b9cfc14018909aeb2efb4 | ORPH
-  powerpc    |          bind-9.11.24          | NOK | http://autobuild.buildroot.net/results/0208f7d50232f76ed5062f98cdb7424055b97971 | ORPH
-    arm      |         bitcoin-0.20.1         | NOK | http://autobuild.buildroot.net/results/1e15374407a406142b972b142396b832af6707f5 |     
-   xtensa    |        domoticz-2020.1         | NOK | http://autobuild.buildroot.net/results/da0847b64e5ee17a540b76ffc18539b51d251481 |     
-    arm      |           git-2.29.2           | NOK | http://autobuild.buildroot.net/results/d41638d1ad8e78dd6f654367c905996b838ee649 |     
-    arm      |    gst1-plugins-base-1.18.2    | NOK | http://autobuild.buildroot.net/results/91f8a78a012fb30f323d82d1d7094f28d018a768 | ORPH
-    arm      |    gst1-plugins-base-1.18.2    | NOK | http://autobuild.buildroot.net/results/a152a219ef8cfc8a61ff1397be90c2a4e36c5c74 | ORPH
-    mips     |          gvfs-1.44.1           | NOK | http://autobuild.buildroot.net/results/6272907229dd8cdcfaa6594b5f628d59248aab54 | ORPH
-    arm      |       libodb-mysql-2.4.0       | NOK | http://autobuild.buildroot.net/results/ba2c5ef1bb54c2751569f79beef21ff486348469 |     
-  riscv64    |        libostree-2020.8        | NOK | http://autobuild.buildroot.net/results/47618c1033917bdb85d4c593cdc64dd6aa3822f4 |     
-    arm      |         libusb-1.0.24          | NOK | http://autobuild.buildroot.net/results/8cd3dd1b3a3a553424c0333aa622891b94ed1001 |     
-    arm      |         libusb-1.0.24          | NOK | http://autobuild.buildroot.net/results/d8564e15542c9275477ab0652d0c123a4b19409f |     
-    arc      |         lmbench-3.0-a9         | NOK | http://autobuild.buildroot.net/results/b0501b6379d105de7c2282998bb80ee445a85533 | ORPH
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/f7bc094af14c2e4fd21d05087f0cd8916da3ec30 | ORPH
-    i586     |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/21a2505f21e40355f236e0c20b69c093a9912c31 |     
-    arc      |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/73f2e2f4f4b621bb0796b1e7a2516c55bab7c665 |     
-microblazeel |          rhash-1.4.0           | NOK | http://autobuild.buildroot.net/results/0cafda586fcfb14f8dee39c592118787c3bf18a0 | ORPH
-    arm      |          rhash-1.4.0           | NOK | http://autobuild.buildroot.net/results/997fad9fc0acb796c0ecc66e74f34386ecc57727 | ORPH
-    arm      |          rhash-1.4.0           | NOK | http://autobuild.buildroot.net/results/a24b49585159aced4335d1544ced626a0eb0ce36 | ORPH
-  nds32le    |          rhash-1.4.0           | NOK | http://autobuild.buildroot.net/results/708a3fe4ad3ff95b4296e3928738f3d189404243 | ORPH
-    mips     |          rhash-1.4.0           | NOK | http://autobuild.buildroot.net/results/4894e1994181fe3cf578c55f206d3f6b2ef932b1 | ORPH
-    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/a693290e7826ec73ea9d691775380391854af24f |     
-    arc      |         samba4-4.11.17         | NOK | http://autobuild.buildroot.net/results/47e88f5d5419a4cb855e37b50ca7a4e21f21613c |     
-    arc      |         snort-2.9.16.1         | NOK | http://autobuild.buildroot.net/results/7cae2ebc72972b33ade5e75a8b9625bfdff996ae |     
-   s390x     |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/88712b51d397cfd20d852f4994367faf9d4c79a6 |     
-    i586     |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/f17558c514b28a1d71059a034047530b628ce8be |     
-  riscv64    | uclibc-ng-test-c64d6ac77f0e... | NOK | http://autobuild.buildroot.net/results/c1be3c4e39e3e9c5d7d958f49ee45c019a049390 |     
-   s390x     |            unknown             | NOK | http://autobuild.buildroot.net/results/4efbb0f01b63a9d48c10e65bb6723117fe9a6a71 |     
-
-
-Classification of failures by reason for 2020.02.x
---------------------------------------------------
-
-        qt5connectivity-5.12.8 | 1 
-                       unknown | 1 
-
-
-Detail of failures for 2020.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  mips64el   |     qt5connectivity-5.12.8     | NOK | http://autobuild.buildroot.net/results/a7920b928a485d7f9edd91e61f2112cdce4a313b |     
-microblazeel |            unknown             | NOK | http://autobuild.buildroot.net/results/d5ef3624334e0aaae1420af5fe26856318b07f8c |     
-
-
-Classification of failures by reason for 2020.08.x
---------------------------------------------------
-
-                        bustle | 1 
-
-
-Detail of failures for 2020.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |             bustle             | TIM | http://autobuild.buildroot.net/results/eec9957bdcf11329613f87e9794038f7452d5835 |     
-
-
-Classification of failures by reason for 2020.11.x
---------------------------------------------------
-
-                        bustle | 1 
-  gobject-introspection-1.64.1 | 1 
-        host-sentry-cli-1.57.0 | 1 
-                    mpv-0.32.0 | 1 
-                 xinetd-2-3-15 | 1 
-
-
-Detail of failures for 2020.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  riscv64    |             bustle             | TIM | http://autobuild.buildroot.net/results/568e251a4d877c9ea0bd17f583319280d20a08bf |     
-   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/b062b5af2fefbcba7566dfb8ef62d8a1d0d928bb | ORPH
-  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/d7acbb47dc42d49e046a8606d3cfff866d6d4d70 |     
-    arm      |           mpv-0.32.0           | NOK | http://autobuild.buildroot.net/results/af4b15dd6534a7bd2a7957d865d8cb5f0ad62938 |     
-    arc      |         xinetd-2-3-15          | NOK | http://autobuild.buildroot.net/results/c3980cc7d92ae0c0902024aa1685b518163aaba4 |     
-
-
-Gitlab CI results for 2020-12-14
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-        TestDockerCompose |  https://gitlab.com/buildroot.org/buildroot/-/jobs/908555863  | ORPH 
-...lp32dGlibcBleedingEdge |  https://gitlab.com/buildroot.org/buildroot/-/jobs/908556305  | ORPH 
-           TestLuaLuaossl |  https://gitlab.com/buildroot.org/buildroot/-/jobs/908555922  | ORPH 
-                 TestRust |  https://gitlab.com/buildroot.org/buildroot/-/jobs/908556111  | ORPH 
-
-
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 0b963cba3a..b29dde8c49 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -166,6 +166,14 @@ config BR2_powerpc_601
+ 	help
+ 	  The support for the PowerPC 601 processors has been removed.
+ 
++config BR2_PACKAGE_HOST_RCW
++	bool "BR2_PACKAGE_HOST_RCW was renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_HOST_QORIQ_RCW
++	help
++	  QoriQ RCW package has been renamed to BR2_PACKAGE_HOST_QORIQ_RCW
++	  to match the upstream package name.
++
+ comment "Legacy options removed in 2020.11"
+ 
+ config BR2_PACKAGE_OPENCV
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a2c7f7f34a..882e8cd825 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1747,8 +1747,8 @@ F:	package/python-pyrex/
+ F:	package/python-pysftp/
+ F:	package/python-tinyrpc/
+ F:	package/python-txdbus/
++F:	package/qoriq-rcw/
+ F:	package/raptor/
+-F:	package/rcw/
+ F:	package/rng-tools/
+ F:	package/rsyslog/
+ F:	package/setools/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 4f69785810..ba6a68c728 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -70,9 +70,9 @@ menu "Host utilities"
+ 	source "package/python-xlrd/Config.in.host"
+ 	source "package/python3/Config.in.host"
+ 	source "package/qemu/Config.in.host"
++	source "package/qoriq-rcw/Config.in.host"
+ 	source "package/raspberrypi-usbboot/Config.in.host"
+ 	source "package/rauc/Config.in.host"
+-	source "package/rcw/Config.in.host"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
+diff --git a/package/rcw/Config.in.host b/package/qoriq-rcw/Config.in.host
+similarity index 86%
+rename from package/rcw/Config.in.host
+rename to package/qoriq-rcw/Config.in.host
+index a9253958d9..1f69c0389c 100644
+--- a/package/rcw/Config.in.host
++++ b/package/qoriq-rcw/Config.in.host
+@@ -1,5 +1,5 @@
+-config BR2_PACKAGE_HOST_RCW
+-	bool "host rcw"
++config BR2_PACKAGE_HOST_QORIQ_RCW
++	bool "host qoriq-rcw"
+ 	help
+ 	  This package provides an reset configuration word(RCW)
+ 	  compiler to build NXP QoriQ/LS PBL/RCW binary(s).
+@@ -11,9 +11,9 @@ config BR2_PACKAGE_HOST_RCW
+ 
+ 	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
+ 
+-if BR2_PACKAGE_HOST_RCW
++if BR2_PACKAGE_HOST_QORIQ_RCW
+ 
+-config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
++config BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH
+ 	string "RCW Source file paths"
+ 	help
+ 	  Space-separated list of .rcw and .rcwi files, that will be
+diff --git a/package/rcw/rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
+similarity index 50%
+rename from package/rcw/rcw.hash
+rename to package/qoriq-rcw/qoriq-rcw.hash
+index 76b6373942..88460716f9 100644
+--- a/package/rcw/rcw.hash
++++ b/package/qoriq-rcw/qoriq-rcw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 b69a6a8b187ba794e0af716a509ced2bbac83da0f6e94b5c7331a34619db21b1 rcw-LSDK-19.09.tar.gz
++sha256 4a9ce5bb1733239bf1b740b705df20f90802b16114e24f3fd56c08a7ba4b56c2 qoriq-rcw-LSDK-19.09.tar.gz
+ sha256 a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd LICENSE
+diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
+new file mode 100644
+index 0000000000..8026f60fbf
+--- /dev/null
++++ b/package/qoriq-rcw/qoriq-rcw.mk
+@@ -0,0 +1,67 @@
++################################################################################
++#
++# qoriq-rcw
++#
++################################################################################
++
++QORIQ_RCW_VERSION = LSDK-19.09
++QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
++QORIQ_RCW_SITE_METHOD = git
++QORIQ_RCW_LICENSE = BSD-3-Clause
++QORIQ_RCW_LICENSE_FILES = LICENSE
++
++HOST_QORIQ_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
++
++QORIQ_RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH))
++
++ifneq ($(QORIQ_RCW_FILES),)
++QORIQ_RCW_INCLUDES = $(filter-out %.rcw,$(QORIQ_RCW_FILES))
++# Get the name of the custom rcw file from the custom list
++QORIQ_RCW_PROJECT = $(notdir $(filter %.rcw,$(QORIQ_RCW_FILES)))
++
++# Error if there are no or more than one .rcw file
++ifeq ($(BR_BUILDING),y)
++ifneq ($(words $(QORIQ_RCW_PROJECT)),1)
++$(error BR2_PACKAGE_HOST_QORIQ_RCW_CUSTOM_PATH must have exactly one .rcw file)
++endif
++endif
++
++ifneq ($(QORIQ_RCW_INCLUDES),)
++define HOST_QORIQ_RCW_ADD_CUSTOM_RCW_INCLUDES
++	mkdir -p $(@D)/custom_board
++	cp -f $(QORIQ_RCW_INCLUDES) $(@D)/custom_board
++endef
++HOST_QORIQ_RCW_POST_PATCH_HOOKS += HOST_QORIQ_RCW_ADD_CUSTOM_RCW_INCLUDES
++endif
++
++define HOST_QORIQ_RCW_ADD_CUSTOM_RCW_FILES
++	mkdir -p $(@D)/custom_board/rcw
++	cp -f $(filter %.rcw,$(QORIQ_RCW_FILES)) $(@D)/custom_board/rcw
++endef
++HOST_QORIQ_RCW_POST_PATCH_HOOKS += HOST_QORIQ_RCW_ADD_CUSTOM_RCW_FILES
++
++# rcw.py is a python3-only script, and we can be using either the
++# system-provided python3, or our own built with host-python3.
++# Fortunately, rcw.py uses #!/usr/bin/env python3, so it will
++# easily find it from PATH.
++define HOST_QORIQ_RCW_BUILD_CMDS
++	PATH=$(BR_PATH) \
++	$(@D)/rcw.py \
++		-i $(@D)/custom_board/rcw/$(QORIQ_RCW_PROJECT) \
++		-I $(@D)/custom_board -o $(@D)/PBL.bin
++endef
++
++define HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE
++	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
++endef
++endif
++
++# Copy source files and script into $(HOST_DIR)/share/qoriq-rcw/ so a developer
++# could use a post image or SDK to build/install PBL files.
++define HOST_QORIQ_RCW_INSTALL_CMDS
++	mkdir -p  $(HOST_DIR)/share/qoriq-rcw
++	cp -a $(@D)/* $(HOST_DIR)/share/qoriq-rcw
++	$(HOST_QORIQ_RCW_INSTALL_DELIVERY_FILE)
++endef
++
++$(eval $(host-generic-package))
+diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+deleted file mode 100644
+index 22e3be4f13..0000000000
+--- a/package/rcw/rcw.mk
++++ /dev/null
+@@ -1,67 +0,0 @@
+-################################################################################
+-#
+-# rcw
+-#
+-################################################################################
+-
+-RCW_VERSION = LSDK-19.09
+-RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
+-RCW_SITE_METHOD = git
+-RCW_LICENSE = BSD-3-Clause
+-RCW_LICENSE_FILES = LICENSE
+-
+-HOST_RCW_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
+-
+-RCW_FILES = $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))
+-
+-ifneq ($(RCW_FILES),)
+-RCW_INCLUDES = $(filter-out %.rcw,$(RCW_FILES))
+-# Get the name of the custom rcw file from the custom list
+-RCW_PROJECT = $(notdir $(filter %.rcw,$(RCW_FILES)))
+-
+-# Error if there are no or more than one .rcw file
+-ifeq ($(BR_BUILDING),y)
+-ifneq ($(words $(RCW_PROJECT)),1)
+-$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH must have exactly one .rcw file)
+-endif
+-endif
+-
+-ifneq ($(RCW_INCLUDES),)
+-define HOST_RCW_ADD_CUSTOM_RCW_INCLUDES
+-	mkdir -p $(@D)/custom_board
+-	cp -f $(RCW_INCLUDES) $(@D)/custom_board
+-endef
+-HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_INCLUDES
+-endif
+-
+-define HOST_RCW_ADD_CUSTOM_RCW_FILES
+-	mkdir -p $(@D)/custom_board/rcw
+-	cp -f $(filter %.rcw,$(RCW_FILES)) $(@D)/custom_board/rcw
+-endef
+-HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+-
+-# rcw.py is a python3-only script, and we can be using either the
+-# system-provided python3, or our own built with host-python3.
+-# Fortunately, rcw.py uses #!/usr/bin/env python3, so it will
+-# easily find it from PATH.
+-define HOST_RCW_BUILD_CMDS
+-	PATH=$(BR_PATH) \
+-	$(@D)/rcw.py \
+-		-i $(@D)/custom_board/rcw/$(RCW_PROJECT) \
+-		-I $(@D)/custom_board -o $(@D)/PBL.bin
+-endef
+-
+-define HOST_RCW_INSTALL_DELIVERY_FILE
+-	$(INSTALL) -D -m 0644 $(@D)/PBL.bin $(BINARIES_DIR)/PBL.bin
+-endef
+-endif
+-
+-# Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
+-# could use a post image or SDK to build/install PBL files.
+-define HOST_RCW_INSTALL_CMDS
+-	mkdir -p  $(HOST_DIR)/share/rcw
+-	cp -a $(@D)/* $(HOST_DIR)/share/rcw
+-	$(HOST_RCW_INSTALL_DELIVERY_FILE)
+-endef
+-
+-$(eval $(host-generic-package))
 -- 
-http://autobuild.buildroot.net
+2.20.1
