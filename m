@@ -1,92 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Dec 2020 19:31:43 +0100
-Subject: [Buildroot] [PATCH] arch/Config.in.powerpc: Drop PPC601 support
-In-Reply-To: <20201215081433.4254-1-michael@walle.cc>
-References: <20201215081433.4254-1-michael@walle.cc>
-Message-ID: <20201215183143.GA3188@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Dec 2020 21:19:51 +0100
+Subject: [Buildroot] [PATCH/next 1/2] package/libosip2: bump to version
+ 5.2.0
+In-Reply-To: <20201122101656.446172-1-fontaine.fabrice@gmail.com>
+References: <20201122101656.446172-1-fontaine.fabrice@gmail.com>
+Message-ID: <ab8df9a5-bde4-fac0-45d2-8dcad5751afd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
 
-On 2020-12-15 09:14 +0100, Michael Walle spake thusly:
-> Linux support was removed in 5.10 [1]. Since no in-tree defconfig
-> depends on it, just remove it.
+
+On 22/11/2020 11:16, Fabrice Fontaine wrote:
+> Update indentation in hash file (two spaces)
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/powerpc?id=f0ed73f3fa2cdca65973659689ec9e46d99a5f60
+> https://git.savannah.nongnu.org/cgit/osip.git/tree/ChangeLog?h=5.2.0
 > 
-> Reported-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master, thanks.
+ Both applied to master, thanks.
 
-I've just re-ordered the legacy entry: we usually add the new legacy
-entries at the to of the list.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
 > ---
->  Config.in.legacy       | 6 ++++++
->  arch/Config.in.powerpc | 4 ----
->  2 files changed, 6 insertions(+), 4 deletions(-)
+>  package/libosip2/libosip2.hash | 4 ++--
+>  package/libosip2/libosip2.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 6d8acadf9c..0b963cba3a 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -160,6 +160,12 @@ config BR2_PACKAGE_IPSEC_TOOLS
->  	  This package has been removed as it has security issues and
->  	  has been abandoned since 2014.
+> diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
+> index 76bc29d5fe..400158cd7f 100644
+> --- a/package/libosip2/libosip2.hash
+> +++ b/package/libosip2/libosip2.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -sha256	61bb28317221a630e47f65389d5ff3e4693996d3128e9e0d5d1399e4feebf64d	libosip2-5.1.1.tar.gz
+> +sha256  4fb48b2ea568bb41c6244b0df2bb7175849ca93e84be53ceb268fdf9351bb375  libosip2-5.2.0.tar.gz
 >  
-> +config BR2_powerpc_601
-> +	bool "PowerPC 601 support removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The support for the PowerPC 601 processors has been removed.
-> +
->  comment "Legacy options removed in 2020.11"
+>  # Hash for license file:
+> -sha256	8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de	COPYING
+> +sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
+> diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+> index e608f671c8..d28027c135 100644
+> --- a/package/libosip2/libosip2.mk
+> +++ b/package/libosip2/libosip2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  config BR2_PACKAGE_OPENCV
-> diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-> index 56c4b526ec..ba56c9c721 100644
-> --- a/arch/Config.in.powerpc
-> +++ b/arch/Config.in.powerpc
-> @@ -44,9 +44,6 @@ config BR2_powerpc_476fp
->  config BR2_powerpc_505
->  	bool "505"
->  	depends on !BR2_ARCH_IS_64
-> -config BR2_powerpc_601
-> -	bool "601"
-> -	depends on !BR2_ARCH_IS_64
->  config BR2_powerpc_602
->  	bool "602"
->  	depends on !BR2_ARCH_IS_64
-> @@ -176,7 +173,6 @@ config BR2_GCC_TARGET_CPU
->  	default "476"		if BR2_powerpc_476
->  	default "476fp"		if BR2_powerpc_476fp
->  	default "505"		if BR2_powerpc_505
-> -	default "601"		if BR2_powerpc_601
->  	default "602"		if BR2_powerpc_602
->  	default "603"		if BR2_powerpc_603
->  	default "603e"		if BR2_powerpc_603e
-> -- 
-> 2.20.1
+> -LIBOSIP2_VERSION = 5.1.1
+> +LIBOSIP2_VERSION = 5.2.0
+>  LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
+>  LIBOSIP2_INSTALL_STAGING = YES
+>  LIBOSIP2_LICENSE = LGPL-2.1+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
