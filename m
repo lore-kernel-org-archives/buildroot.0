@@ -1,76 +1,105 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Dec 2020 22:00:55 +0100
-Subject: [Buildroot] [git commit] package/systemd: add a menu entry to
- enable portable services
-Message-ID: <20201215204630.E46DF815EC@busybox.osuosl.org>
+Date: Tue, 15 Dec 2020 21:43:14 +0100
+Subject: [Buildroot] [git commit] package/shadowsocks-libev: fix static
+ build with netfilter_conntrack
+Message-ID: <20201215204630.CA73282216@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70f35db9f75272ae29936cb0fb7e67c28f098739
+commit: https://git.buildroot.net/buildroot/commit/?id=1294447142d73b8f0766abb638979867b314b600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Gervais <fgervais@distech-controls.com>
-Reviewed-by: Norbert Lange <nolange79@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/systemd/Config.in  | 18 ++++++++++++++++++
- package/systemd/systemd.mk |  7 ++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ ...c-use-pkg-config-to-find-netfilter_conntr.patch | 62 ++++++++++++++++++++++
+ package/shadowsocks-libev/shadowsocks-libev.mk     |  2 +
+ 2 files changed, 64 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ec34478e3d..fbe1a4081b 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -343,6 +343,24 @@ comment "polkit support needs a toolchain with C++, wchar, NPTL, gcc >= 4.9"
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_USE_WCHAR
- 
-+config BR2_PACKAGE_SYSTEMD_PORTABLED
-+	bool "enable portable services"
-+	help
-+	  Portable services are systemd services that can be dynamically
-+	  attached and detached from the system.
+diff --git a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+new file mode 100644
+index 0000000000..781d3c0e64
+--- /dev/null
++++ b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
+@@ -0,0 +1,62 @@
++From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 23 Nov 2020 21:16:38 +0100
++Subject: [PATCH] configure.ac: use pkg-config to find netfilter_conntrack
 +
-+	  These services must come with their own root directory which
-+	  they are bound to through an automatically generated drop-in.
++Use pkg-config to retrieve the dependencies of netfilter_conntrack
++and avoid the following build failure when building statically:
 +
-+	  They also have restrictions applied by the host system in the
-+	  form of profiles.
++configure:13096: /data/buildroot-test/instance-1/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -I/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -DPCRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -L/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lnetfilter_conntrack -lnfnetlink -lev  -lcares -lsodium -lmbedcrypto -lpcre  >&5
++/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
++api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header'
 +
-+	  This functionality is provided by the system service
-+	  systemd-portabled along with the corresponding CLI
-+	  portablectl.
++Fixes:
++ - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
 +
-+	  https://systemd.io/PORTABLE_SERVICES/
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/shadowsocks/shadowsocks-libev/pull/2773]
++---
++ configure.ac    | 5 +++--
++ src/Makefile.am | 2 +-
++ 2 files changed, 4 insertions(+), 3 deletions(-)
 +
- config BR2_PACKAGE_SYSTEMD_QUOTACHECK
- 	bool "enable quotacheck tools"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index cb12f667d6..5aed87f452 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -33,7 +33,6 @@ SYSTEMD_CONF_OPTS += \
- 	-Dman=false \
- 	-Dmount-path=/usr/bin/mount \
- 	-Dnss-systemd=true \
--	-Dportabled=false \
- 	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dquotaon-path=/usr/sbin/quotaon \
- 	-Drootlibdir='/usr/lib' \
-@@ -417,6 +416,12 @@ else
- SYSTEMD_CONF_OPTS += -Dpolkit=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_PORTABLED),y)
-+SYSTEMD_CONF_OPTS += -Dportabled=true
-+else
-+SYSTEMD_CONF_OPTS += -Dportabled=false
-+endif
++diff --git a/configure.ac b/configure.ac
++index 9787bc2..207c041 100755
++--- a/configure.ac
+++++ b/configure.ac
++@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,
++ if test x"$enable_connmarktos" = "xyes" ; then
++ 	AC_MSG_NOTICE([Linux Netfilter Conntrack support requested by --enable-connmarktos: ${enable_connmarktos}])
++ 	if test "x$enable_connmarktos" != "xno"; then
++-	    AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
+++	    PKG_CHECK_MODULES([NETFILTER_CONNTRACK], [libnetfilter_conntrack],,
+++	    [AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
++ 	        if test x"$enable_connmarktos" = "xyes"; then
++ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
++ 	        fi
++@@ -262,7 +263,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
++ 	        if test x"$enable_connmarktos" = "xyes"; then
++ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack headers not found])
++ 	        fi
++-	        with_netfilter_conntrack=no])
+++	        with_netfilter_conntrack=no])])
++ 	  # If nothing is broken; enable the libraries usage.
++ 	  if test "x$with_netfilter_conntrack" != "xno"; then
++ 		with_netfilter_conntrack=yes
++diff --git a/src/Makefile.am b/src/Makefile.am
++index c261ed0..b81ced7 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -9,7 +9,7 @@ AM_CFLAGS += -I$(top_srcdir)/libcork/include
++ endif
++ AM_CFLAGS += $(LIBPCRE_CFLAGS)
++ 
++-SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
+++SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS) $(NETFILTER_CONNTRACK_LIBS)
++ if !USE_SYSTEM_SHARED_LIB
++ SS_COMMON_LIBS += $(top_builddir)/libbloom/libbloom.la \
++                   $(top_builddir)/libipset/libipset.la \
++-- 
++2.29.2
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += -Dnetworkd=true
- SYSTEMD_NETWORKD_USER = systemd-network -1 systemd-network -1 * - - - systemd Network Management
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 8d7b00f139..988e708d11 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
+ SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
+ SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
++# We're patching configure.ac
++SHADOWSOCKS_LIBEV_AUTORECONF = YES
+ SHADOWSOCKS_LIBEV_CONF_OPTS = \
+ 	--with-pcre=$(STAGING_DIR)/usr \
+ 	--disable-ssp
