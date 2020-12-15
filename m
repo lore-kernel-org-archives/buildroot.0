@@ -1,50 +1,100 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 15 Dec 2020 21:17:18 +0100
-Subject: [Buildroot] [git commit] package/libosip2: bump to version 5.2.0
-Message-ID: <20201215200349.8044B870CE@busybox.osuosl.org>
+Date: Tue, 15 Dec 2020 21:17:49 +0100
+Subject: [Buildroot] [git commit] package/libeXosip2: bump to version 5.2.0
+Message-ID: <20201215200349.913CA7FFE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc20092aac864c5c064a30ae56338cc60dd227d4
+commit: https://git.buildroot.net/buildroot/commit/?id=d409f8b4187bd0092daae61de95ba94d1463fa8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+- Drop patch (already in version)
+- Update indentation in hash file (two spaces)
 
-https://git.savannah.nongnu.org/cgit/osip.git/tree/ChangeLog?h=5.2.0
+https://git.savannah.nongnu.org/cgit/exosip.git/tree/ChangeLog?h=5.2.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Acked-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libosip2/libosip2.hash | 4 ++--
- package/libosip2/libosip2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...D-compilation-error-introduced-with-epoll.patch | 44 ----------------------
+ package/libeXosip2/libeXosip2.hash                 |  4 +-
+ package/libeXosip2/libeXosip2.mk                   |  2 +-
+ 3 files changed, 3 insertions(+), 47 deletions(-)
 
-diff --git a/package/libosip2/libosip2.hash b/package/libosip2/libosip2.hash
-index 76bc29d5fe..400158cd7f 100644
---- a/package/libosip2/libosip2.hash
-+++ b/package/libosip2/libosip2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	61bb28317221a630e47f65389d5ff3e4693996d3128e9e0d5d1399e4feebf64d	libosip2-5.1.1.tar.gz
-+sha256  4fb48b2ea568bb41c6244b0df2bb7175849ca93e84be53ceb268fdf9351bb375  libosip2-5.2.0.tar.gz
- 
- # Hash for license file:
--sha256	8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de	COPYING
-+sha256  8d9e95ed0e48df46dc758eb0d86df611f771eab4eed94bebb77dca87f1c897de  COPYING
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index e608f671c8..d28027c135 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
+diff --git a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch b/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
+deleted file mode 100644
+index b69455bd7a..0000000000
+--- a/package/libeXosip2/0001-fix-fix-OSIP_MONOTHREAD-compilation-error-introduced-with-epoll.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From 0e0e95dbc380c5eede3a2fc1631294a98078e30f Mon Sep 17 00:00:00 2001
+-From: Aymeric Moizard <amoizard@gmail.com>
+-Date: Fri, 13 Mar 2020 16:34:41 +0100
+-Subject: fix: fix OSIP_MONOTHREAD compilation error introduced with epoll
+- implementation
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-http://git.savannah.nongnu.org/cgit/exosip.git/patch/?id=0e0e95dbc380c5eede3a2fc1631294a98078e30f]
+----
+- src/eXconf.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/eXconf.c b/src/eXconf.c
+-index baf90be..6165eb3 100644
+---- a/src/eXconf.c
+-+++ b/src/eXconf.c
+-@@ -801,12 +801,15 @@ eXosip_init (struct eXosip_t *excontext)
+-   }
+- 
+-   if (excontext->poll_method == EXOSIP_USE_EPOLL_LT) {
+-+#ifndef OSIP_MONOTHREAD
+-     struct epoll_event ev;
+-+#endif
+-     excontext->epfdctl = epoll_create (1);
+-     if (excontext->epfdctl < 0) {
+-       return OSIP_UNDEFINED_ERROR;
+-     }
+-     
+-+#ifndef OSIP_MONOTHREAD
+-     memset(&ev, 0, sizeof(struct epoll_event));
+-     ev.events = EPOLLIN;
+-     ev.data.fd = jpipe_get_read_descr (excontext->j_socketctl_event);
+-@@ -815,6 +818,7 @@ eXosip_init (struct eXosip_t *excontext)
+-       _eXosip_closesocket (excontext->epfdctl);
+-       return OSIP_UNDEFINED_ERROR;
+-     }
+-+#endif
+-   }
+- #endif
+-   
+--- 
+-cgit v1.2.1
+-
+diff --git a/package/libeXosip2/libeXosip2.hash b/package/libeXosip2/libeXosip2.hash
+index a7d3c56d00..53e27e929c 100644
+--- a/package/libeXosip2/libeXosip2.hash
++++ b/package/libeXosip2/libeXosip2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 21420c00bf8e0895ff36161766beec12b7e6f1d371030c389dba845e271272e2 libexosip2-5.1.1.tar.gz
+-sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
++sha256  e3ae88df8573c9e08dbc24fe6195a118845e845109a8e291c91ecd6a2a3b7225  libexosip2-5.2.0.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 4bd8922b41..dba2b63a02 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSIP2_VERSION = 5.1.1
-+LIBOSIP2_VERSION = 5.2.0
- LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
- LIBOSIP2_INSTALL_STAGING = YES
- LIBOSIP2_LICENSE = LGPL-2.1+
+-LIBEXOSIP2_VERSION = 5.1.1
++LIBEXOSIP2_VERSION = 5.2.0
+ # Since version 5.0, letter 'X' in library's name is in lower case
+ LIBEXOSIP2_SOURCE = libexosip2-$(LIBEXOSIP2_VERSION).tar.gz
+ LIBEXOSIP2_SITE = http://download.savannah.gnu.org/releases/exosip
