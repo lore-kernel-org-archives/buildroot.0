@@ -1,51 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 15 Dec 2020 15:38:29 -0800
-Subject: [Buildroot] host-ninja: ccache: build failure on latest Ubuntu host
- system
-Message-ID: <CA+h8R2pnu3Gn=AzhffpVUsAghS47fGSaDDQ5M5sekGyKdnNckg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 16 Dec 2020 02:21:47 +0000
+Subject: [Buildroot] [Bug 13376] New: Security Architect
+Message-ID: <bug-13376-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=13376
 
-For some reason against latest Ubuntu, Buildroot builds have been
-failing for me since upgrading to 2020.11.x on GitHub Actions:
+            Bug ID: 13376
+           Summary: Security Architect
+           Product: buildroot
+           Version: 2020.08
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: hasini.2020 at yahoo.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-https://github.com/skiffos/SkiffOS/actions/runs/424300538
+Security Architects design, create and monitor the deployment of an
+organization?s network and computer security. To achieve this, these
+individuals build complex security systems and ensure that they function
+properly. They are responsible for the maintenance of the security of an entire
+organization.
 
-The error is related to the ccache, the ccache appears to be getting
-incorrect flags:
+https://www.fieldengineer.com/skills/security-architects
 
->>> host-ninja 1.10.0 Configuring
--- The C compiler identification is unknown
--- The CXX compiler identification is unknown
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - failed
--- Check for working C compiler: host/bin/ccache
--- Check for working C compiler: host/bin/ccache - broken
-CMake Error at CMakeTestCCompiler.cmake:66 (message):
-  The C compiler
-
-    "host/bin/ccache"
-
-  is not able to compile a simple test program.
-
-  It fails with the following output:
-
-   host/bin/ccache: invalid option -- 'O'
-
-It appears that the ccache is getting an option meant for gcc - I
-found a few emails mentioning this from a long time ago which said to
-wrap the CFLAGS with quotes.
-
-Given that this is a fairly standard Ubuntu system I don't think this
-is related to the fact that it's running in a GitHub action (which has
-worked fine in the past).
-
-Thanks for any help on this.
-
-Best regards,
-Christian Stewart
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
