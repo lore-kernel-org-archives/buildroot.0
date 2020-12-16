@@ -1,72 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:19:46 +0100
-Subject: [Buildroot] [git commit] package/python-requests: bump to version
- 2.25.0
-Message-ID: <20201216110920.B812487C8E@busybox.osuosl.org>
+Date: Wed, 16 Dec 2020 12:25:12 +0100
+Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump kernel version
+ to 5.10
+Message-ID: <20201216110921.04AA087EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a6b4c52cabaae58c1dceddfb327f00c9253df8
+commit: https://git.buildroot.net/buildroot/commit/?id=5b0ffd5c3dcf890d28b067848160111e32b1be21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-LICENSE file content has been changed ([1]) to follow Apache-2.0
-instructions.
+Bump the kernel version to 5.10.
 
-[1] https://github.com/psf/requests/commit/22b5a39098223f51fcd2df238e13f9bac86b35a4
-
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-requests/python-requests.hash | 6 +++---
- package/python-requests/python-requests.mk   | 4 ++--
- package/python3-requests/python3-requests.mk | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ configs/imx6-sabresd_defconfig     | 6 +++---
+ configs/imx6-sabresd_qt5_defconfig | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 84bf2a1aa0..95725a3552 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5  b54bff26a389e5932e8b1c4983a99ce7  requests-2.24.0.tar.gz
--sha256  b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b  requests-2.24.0.tar.gz
-+md5  94cd712029077897e252212c5f402b79  requests-2.25.0.tar.gz
-+sha256  7f1a0b932f4a60a1a65caa4263921bb7d9ee911957e0ae4a23a6dd08185ad5f8  requests-2.25.0.tar.gz
- # Locally computed sha256 checksums
--sha256  8837a2f33a61bcee175c028ff16d1c160aba48a3aebe1495ace709be4e62636b  LICENSE
-+sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index eb3997f108..8c7b6c6748 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 574816f7d6..e2e676d704 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
- # Please keep in sync with package/python3-requests/python3-requests.mk
--PYTHON_REQUESTS_VERSION = 2.24.0
-+PYTHON_REQUESTS_VERSION = 2.25.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/da/67/672b422d9daf07365259958912ba533a0ecab839d4084c487a5fe9a5405f
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
-diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
-index cd6a7e1260..2e10c636af 100644
---- a/package/python3-requests/python3-requests.mk
-+++ b/package/python3-requests/python3-requests.mk
-@@ -5,9 +5,9 @@
- ################################################################################
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
  
- # Please keep in sync with package/python-requests/python-requests.mk
--PYTHON3_REQUESTS_VERSION = 2.24.0
-+PYTHON3_REQUESTS_VERSION = 2.25.0
- PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
--PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/f5/4f/280162d4bd4d8aad241a21aecff7a6e46891b905a4341e7ab549ebaf7915
-+PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
- PYTHON3_REQUESTS_SETUP_TYPE = setuptools
- PYTHON3_REQUESTS_LICENSE = Apache-2.0
- PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.63"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index b521f20ee0..f5a0766fcf 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.63"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
