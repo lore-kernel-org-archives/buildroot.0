@@ -1,45 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:16:59 +0100
-Subject: [Buildroot] [git commit] package/go: bump to version 1.15.6
-Message-ID: <20201216110920.8FF3A87C8E@busybox.osuosl.org>
+Date: Wed, 16 Dec 2020 12:24:21 +0100
+Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.6
+Message-ID: <20201216110920.F0BA687C8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=267dd8b4271c72796c66d602ceb9ae1bde6cdb2a
+commit: https://git.buildroot.net/buildroot/commit/?id=81f14be9ba162f9f84fb2a6d89cc9e78776d6cb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-go1.15.6 (released 2020/12/03) includes fixes to the compiler, linker, runtime,
-the go command, and the io package.
+remove merged patch
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...compiler-warning-fixes-for-NO_SHARED_LIBS.patch | 58 ----------------------
+ package/iptables/iptables.hash                     |  2 +-
+ package/iptables/iptables.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 60 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 79d6abe8df..de2cf74cbb 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  c1076b90cf94b73ebed62a81d802cd84d43d02dea8c07abdc922c57a071c84f1  go1.15.5.src.tar.gz
-+sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d2ab9b81dd..d9f4905eb9 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
+deleted file mode 100644
+index 8d364b3789..0000000000
+--- a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 6cb8af1ff3951e47def7a16db39289dc9d9c61fe Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+-Date: Tue, 23 Jun 2020 16:09:02 -0700
+-Subject: libxtables: compiler warning fixes for NO_SHARED_LIBS
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes two issues with NO_SHARED_LIBS:
+- - #include <dlfcn.h> is ifdef'ed out and thus dlclose()
+-   triggers an undeclared function compiler warning
+- - dlreg_add() is unused and thus triggers an unused
+-   function warning
+-
+-Test: builds without warnings
+-Signed-off-by: Maciej ??enczykowski <maze@google.com>
+-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+-
+-[Retrieved from:
+-https://git.netfilter.org/iptables/commit/libxtables/xtables.c?id=6cb8af1ff3951e47def7a16db39289dc9d9c61fe]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- libxtables/xtables.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/libxtables/xtables.c b/libxtables/xtables.c
+-index 7fe42580..8907ba20 100644
+---- a/libxtables/xtables.c
+-+++ b/libxtables/xtables.c
+-@@ -206,6 +206,7 @@ struct xtables_target *xtables_targets;
+- static bool xtables_fully_register_pending_match(struct xtables_match *me);
+- static bool xtables_fully_register_pending_target(struct xtables_target *me);
+- 
+-+#ifndef NO_SHARED_LIBS
+- /* registry for loaded shared objects to close later */
+- struct dlreg {
+- 	struct dlreg *next;
+-@@ -237,6 +238,7 @@ static void dlreg_free(void)
+- 		dlreg = next;
+- 	}
+- }
+-+#endif
+- 
+- void xtables_init(void)
+- {
+-@@ -267,7 +269,9 @@ void xtables_init(void)
+- 
+- void xtables_fini(void)
+- {
+-+#ifndef NO_SHARED_LIBS
+- 	dlreg_free();
+-+#endif
+- }
+- 
+- void xtables_set_nfproto(uint8_t nfproto)
+--- 
+-cgit v1.2.3
+-
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index 725770543d..120e7e4a89 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
+@@ -1,4 +1,4 @@
+ # From https://netfilter.org/projects/iptables/downloads.html
+-sha256  d457d74512e63aa3f50336e0597d4023c0e3c6845594d38532efb6ebcb294309  iptables-1.8.5.tar.bz2
++sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 442639f159..f83165edb9 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.15.5
-+GO_VERSION = 1.15.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-IPTABLES_VERSION = 1.8.5
++IPTABLES_VERSION = 1.8.6
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
