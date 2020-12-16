@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:17:14 +0100
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.15.6
-In-Reply-To: <20201216090225.117198-1-christian@paral.in> (Christian Stewart's
- message of "Wed, 16 Dec 2020 01:02:25 -0800")
-References: <20201216090225.117198-1-christian@paral.in>
-Message-ID: <87zh2euhj9.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Dec 2020 12:17:58 +0100
+Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 2.0.2
+In-Reply-To: <20201215154313.8788-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 15 Dec 2020 16:43:13 +0100")
+References: <20201215154313.8788-1-peter@korsgaard.com>
+Message-ID: <87v9d2uhi1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > go1.15.6 (released 2020/12/03) includes fixes to the compiler, linker, runtime,
- > the go command, and the io package.
+ > Bugfix release.  Drop the now upstreamed patches and add 3 new post-2.0.2
+ > patches from the fixes branch.
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
