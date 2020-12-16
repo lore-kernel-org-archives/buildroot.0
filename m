@@ -1,38 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Dec 2020 02:21:47 +0000
-Subject: [Buildroot] [Bug 13376] New: Security Architect
-Message-ID: <bug-13376-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 16 Dec 2020 07:30:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/htop: fix build without wchar
+Message-ID: <20201216063029.39882-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13376
+Fixes:
+ - http://autobuild.buildroot.org/results/5ad330244546e6f087425be816aea158a1f833cb
 
-            Bug ID: 13376
-           Summary: Security Architect
-           Product: buildroot
-           Version: 2020.08
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: hasini.2020 at yahoo.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ter-restore-non-wide-character-build.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/htop/0001-Meter-restore-non-wide-character-build.patch
 
-Security Architects design, create and monitor the deployment of an
-organization?s network and computer security. To achieve this, these
-individuals build complex security systems and ensure that they function
-properly. They are responsible for the maintenance of the security of an entire
-organization.
-
-https://www.fieldengineer.com/skills/security-architects
-
+diff --git a/package/htop/0001-Meter-restore-non-wide-character-build.patch b/package/htop/0001-Meter-restore-non-wide-character-build.patch
+new file mode 100644
+index 0000000000..5f67d1f0f1
+--- /dev/null
++++ b/package/htop/0001-Meter-restore-non-wide-character-build.patch
+@@ -0,0 +1,32 @@
++From 79970f05f37677fe32aa804e493c5da747a2652f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
++Date: Tue, 15 Dec 2020 12:05:20 +0100
++Subject: [PATCH] Meter: restore non-wide-character build
++
++Use mbstowcs() only with wide ncurses support.
++
++Closes: #401
++
++[Retrieved from:
++https://github.com/htop-dev/htop/commit/79970f05f37677fe32aa804e493c5da747a2652f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Meter.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/Meter.c b/Meter.c
++index b006a584..e849ea4a 100644
++--- a/Meter.c
+++++ b/Meter.c
++@@ -196,7 +196,11 @@ static void BarMeterMode_draw(Meter* this, int x, int y, int w) {
++ 
++    // The text in the bar is right aligned;
++    // calculate needed padding and generate leading spaces
+++#ifdef HAVE_LIBNCURSESW
++    const int textLen = mbstowcs(NULL, buffer, 0);
+++#else
+++   const int textLen = strlen(buffer);
+++#endif
++    const int padding = CLAMP(w - textLen, 0, w);
++ 
++    RichString_begin(bar);
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.29.2
