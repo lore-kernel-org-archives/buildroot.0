@@ -1,20 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:24:36 +0100
-Subject: [Buildroot] [PATCH] package/iptables: bump to version 1.8.6
-In-Reply-To: <20201214160945.96307-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Mon, 14 Dec 2020 17:09:45 +0100")
-References: <20201214160945.96307-1-francois.perrad@gadz.org>
-Message-ID: <871rfquh6z.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Dec 2020 12:25:00 +0100
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: bump kernel version
+In-Reply-To: <20201214171318.7569-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Mon, 14 Dec 2020 14:13:18 -0300")
+References: <20201214171318.7569-1-festevam@gmail.com>
+Message-ID: <87wnxit2lv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > remove merged patch
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > Bump the kernel version to 5.10.
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
