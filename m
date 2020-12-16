@@ -1,43 +1,46 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 16 Dec 2020 01:02:25 -0800
-Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.15.6
-Message-ID: <20201216090225.117198-1-christian@paral.in>
+Date: Wed, 16 Dec 2020 01:12:15 -0800
+Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: fix host ccache support
+ for CMake 3.19
+In-Reply-To: <20201212225224.117940-1-bernd.amend@gmail.com>
+References: <20201212225224.117940-1-bernd.amend@gmail.com>
+Message-ID: <CA+h8R2rsTFsnd9sWhQofOVgK2FS12-bgXLeHEbxWFbwO68Hd6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.15.6 (released 2020/12/03) includes fixes to the compiler, linker, runtime,
-the go command, and the io package.
+All,
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sat, Dec 12, 2020 at 2:57 PM Bernd Amend <bernd.amend@gmail.com> wrote:
+>
+> Starting with CMake 3.4 CMake supports setting a compiler launcher
+> like ccache. The feature is described in
+> https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
+> This should be safe since everything is built for the host using make or ninja.
+> The use of *_ARG1 is discouraged by the cmake developers
+> https://cmake-developers.cmake.narkive.com/OTa9EKfj/cmake-c-compiler-arg-not-documented .
+>
+> Without this patch I get the following error message with CMake 3.19.1 on Arch Linux.
+> Disabling BR2_CCACHE also resolves the issue.
+>
+> /usr/bin/cmake [~]/buildroot/build/host-lzo-2.10/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="[...]" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_P
+> ATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="[...]" -DCMAKE_C_FLAGS="-O2 -I[...]/include" -DCMAKE_CXX_FLAGS="-O2 -I[...]/include" -DCMAKE_EXE_LINKER_FLAGS="-L[...]/lib -Wl,-rpath,[...]/lib" -DCMAKE_SHARED_LINKER_FLAGS="-L[...]/l
+> ib -Wl,-rpath,[...]/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="[...]/bin/ccache" -DCMAKE_CXX_COMPILER="[...]/bin/ccache"
+> -DCMAKE_C_COMPILER_ARG1="/usr/bin/gcc" -DCMAKE_CXX_COMPILER_ARG1="/usr/bin/g++"  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=O
+> FF  -DENABLE_SHARED=ON -DENABLE_STATIC=OFF )
+> -- The C compiler identification is unknown
+> -- Detecting C compiler ABI info
+> -- Detecting C compiler ABI info - failed
+> -- Check for working C compiler: [...]/bin/ccache
+> -- Check for working C compiler: [...]/bin/ccache - broken
+> CMake Error at /usr/share/cmake-3.19/Modules/CMakeTestCCompiler.cmake:66 (message):
+> The C compiler
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 79d6abe8df..de2cf74cbb 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  c1076b90cf94b73ebed62a81d802cd84d43d02dea8c07abdc922c57a071c84f1  go1.15.5.src.tar.gz
-+sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index d2ab9b81dd..d9f4905eb9 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.15.5
-+GO_VERSION = 1.15.6
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
--- 
-2.29.2
+Tested-by: Christian Stewart <christian@paral.in>
+
+Fixes build errors on GitHub Actions.
+
+Best & thanks for the fix,
+Christian Stewart
