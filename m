@@ -1,131 +1,167 @@
 From: Patrick Havelange <patrick.havelange@essensium.com>
-Date: Wed, 16 Dec 2020 14:40:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-cargo.mk: make sure
- .cargo/config is used
-In-Reply-To: <20201210213122.035e149a@windsurf.home>
-References: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
- <20201210154850.28578-1-patrick.havelange@essensium.com>
- <20201210213122.035e149a@windsurf.home>
-Message-ID: <4337425c-31bd-fe1d-19d8-62bdb172ee97@essensium.com>
+Date: Wed, 16 Dec 2020 14:58:39 +0100
+Subject: [Buildroot] [PATCH next 07/12] package/pkg-cargo.mk: introduce
+ the cargo package infrastructure
+In-Reply-To: <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
+References: <20201119213658.1232531-1-thomas.petazzoni@bootlin.com>
+ <20201119213658.1232531-8-thomas.petazzoni@bootlin.com>
+Message-ID: <dad088c8-c08e-740f-3c43-c1d2ac32f6ea@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-12-10 21:31, Thomas Petazzoni wrote:
-> Hello Patrick,
+Hi Thomas,
 
-Hi,
-
+On 2020-11-19 22:36, Thomas Petazzoni wrote:
+> From: Patrick Havelange <patrick.havelange@essensium.com>
 > 
-> On Thu, 10 Dec 2020 16:48:50 +0100
-> Patrick Havelange <patrick.havelange@essensium.com> wrote:
+> In order to be package agnostic, the install phase is now using cargo
+> instead of install. TARGET_CONFIGURE_OPTS is now also set when running
+> cargo in order to support cross compiling C code within cargo.
 > 
->> The way cargo searches for config file is based (among other rules)
->> on the current directory. This means that if cargo is started outside
->> of a package directory, its configuration file will not be taken
->> into account.
->> So just 'cd' into it before running cargo build/install
->>
->> This fix the issue where the build is failing in offline mode and
->> only the dl/package.tar.gz is available.
->>
->> Without this, it would have worked only if the CARGO_HOME cache had
->> been populated (by running cargo vendor for example).
->>
->> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+> [Thomas: add support for host-cargo-package]
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>   package/Makefile.in  |   1 +
+>   package/pkg-cargo.mk | 123 +++++++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 124 insertions(+)
+>   create mode 100644 package/pkg-cargo.mk
 > 
-> Thanks a lot! This does fix the "make ripgrep; make clean ripgrep"
-> issue that Ryan reported. Also, for ripgrep, I no longer see anything
-> being rebuilt during the install step, which is good.
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 51f5cbce4f..2af123f36d 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -427,3 +427,4 @@ include package/pkg-waf.mk
+>   include package/pkg-golang.mk
+>   include package/pkg-meson.mk
+>   include package/pkg-qmake.mk
+> +include package/pkg-cargo.mk
+> diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+> new file mode 100644
+> index 0000000000..52c237aa3c
+> --- /dev/null
+> +++ b/package/pkg-cargo.mk
+> @@ -0,0 +1,123 @@
+> +################################################################################
+> +# Cargo package infrastructure
+> +#
+> +# This file implements an infrastructure that eases development of package
+> +# .mk files for Cargo packages. It should be used for all packages that use
+> +# Cargo as their build system.
+> +#
+> +# See the Buildroot documentation for details on the usage of this
+> +# infrastructure
+> +#
+> +# In terms of implementation, this Cargo infrastructure requires the .mk file
+> +# to only specify metadata information about the package: name, version,
+> +# download URL, etc.
+> +#
+> +# We still allow the package .mk file to override what the different steps
+> +# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
+> +# it is used as the list of commands to perform to build the package,
+> +# instead of the default Cargo behaviour. The package can also define some
+> +# post operation hooks.
+> +#
+> +################################################################################
+> +
+> +################################################################################
+> +# inner-cargo-package -- defines how the configuration, compilation and
+> +# installation of a cargo package should be done, implements a few hooks
+> +# to tune the build process for cargo specifities and calls the generic
+> +# package infrastructure to generate the necessary make targets
+> +#
+> +#  argument 1 is the lowercase package name
+> +#  argument 2 is the uppercase package name, including a HOST_ prefix
+> +#             for host packages
+> +#  argument 3 is the uppercase package name, without the HOST_ prefix
+> +#             for host packages
+> +#  argument 4 is the type (target or host)
+> +################################################################################
+> +
+> +define inner-cargo-package
+> +
+> +# We need host-rustc to run cargo
+> +$(2)_DEPENDENCIES += host-rustc
+> +
+> +$(2)_CARGO_ENV += CARGO_HOME=$$(HOST_DIR)/share/cargo
+> +
+> +#
+> +# Build step. Only define it if not already defined by the package .mk
+> +# file.
+> +#
+> +ifndef $(2)_BUILD_CMDS
+> +ifeq ($(4),target)
+> +define $(2)_BUILD_CMDS
+> +	$$(TARGET_MAKE_ENV) \
+> +		$$(TARGET_CONFIGURE_OPTS) \
+> +		$$($(2)_CARGO_ENV) \
+> +		cargo build \
+> +			--offline \
+> +			--target $$(RUSTC_TARGET_NAME) \
+> +			$$(if $$(BR2_ENABLE_DEBUG),--debug,--release) \
+> +			--manifest-path $$(@D)/Cargo.toml \
+> +			--locked \
+> +			$$($(2)_CARGO_BUILD_OPTS)
+> +endef
+> +else # ifeq ($(4),target)
+> +define $(2)_BUILD_CMDS
+> +	$$(HOST_MAKE_ENV) \
+> +		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+> +		$$($(2)_CARGO_ENV) \
+> +		cargo build \
+> +			--offline \
+> +			--release \
+> +			--manifest-path $$(@D)/Cargo.toml \
+> +			--locked \
+> +			$$($(2)_CARGO_BUILD_OPTS)
+> +endef
+> +endif # ifeq ($(4),target)
+> +endif # ifndef $(2)_BUILD_CMDS
+> +
+> +#
+> +# Target installation step. Only define it if not already defined by
+> +# the package .mk file.
+> +#
+> +ifndef $(2)_INSTALL_TARGET_CMDS
+> +define $(2)_INSTALL_TARGET_CMDS
+> +	$$(TARGET_MAKE_ENV) $$($(2)_CARGO_ENV) \
+> +		cargo install \
+> +			--target $$(RUSTC_TARGET_NAME) \
+> +			--offline \
+> +			--root $$(TARGET_DIR)/usr/ \
+> +			--bins \
+> +			--path $$(@D) \
+> +			--force \
+> +			--locked \
+> +			$$($(2)_CARGO_INSTALL_OPTS)
+> +endef
+> +endif
+> +
+> +ifndef $(2)_INSTALL_CMDS
+> +define $(2)_INSTALL_CMDS
+> +	$$(HOST_MAKE_ENV) \
+> +		RUSTFLAGS="$$(addprefix -C link-args=,$$(HOST_LDFLAGS))" \
+> +		$$($(2)_CARGO_ENV) \
+> +		cargo install \
+> +			--offline \
+> +			--root $$(HOST_DIR) \
+> +			--bins \
+> +			--path $$(@D) \
+> +			--force \
+> +			--locked \
+> +			$$($(2)_CARGO_INSTALL_OPTS)
+> +endef
+> +endif
 
-glad it fixes those issues indeed.
+Nitpick: This is the only minor thing that bothers me a bit: the 
+duplication for the host/target cases of the cargo command flags. Would 
+it not be better if they were merged ?
 
-> 
-> *However*, for host-sentry-cli, even with this patch, quite a bit of
-> stuff gets rebuilt during the install step. Here is how it goes:
-> 
->>> host-sentry-cli 1.59.0 Extracting
-> gzip -d -c /home/thomas/dl/sentry-cli/sentry-cli-1.59.0.tar.gz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0   -xf -
->>>> host-sentry-cli 1.59.0 Patching
->>>> host-sentry-cli 1.59.0 Configuring
->>>> host-sentry-cli 1.59.0 Building
-> cd /home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0 && PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/.rvm/bin:/home/thomas/.local/bin:/home/thomas/projets/git-wrappers" PKG_CONFIG="/home/thomas/projets/buildroot/output/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/home/thomas/projets/buildroot/output/host/lib/pkgconfig:/home/thomas/projets/buildroot/output/host/share/pkgconfig" RUSTFLAGS="-C link-args=-L/home/thomas/projets/buildroot/output/host/lib -C link-args=-Wl,-rpath,/home/thomas/projets/buildroot/output/host/lib" CARGO_HOME=/home/thomas/projets/buildroot/output/host/share/cargo cargo build --offline --release --manifest-path Cargo.toml --locked
->    
->     Compiling libc v0.2.71
->     Compiling cfg-if v0.1.10
->     Compiling autocfg v1.0.0
->     Compiling proc-macro2 v1.0.18
 
-[snip]
 
->     Compiling git2 v0.13.6
->      Finished release [optimized] target(s) in 6m 10s
->>>> host-sentry-cli 1.59.0 Installing to host directory
-> cd /home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0 && PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/usr/share/Modules/bin:/usr/lib64/ccache:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/.rvm/bin:/home/thomas/.local/bin:/home/thomas/projets/git-wrappers" PKG_CONFIG="/home/thomas/projets/buildroot/output/host/bin/pkg-config" PKG_CONFIG_SYSROOT_DIR="/" PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 PKG_CONFIG_LIBDIR="/home/thomas/projets/buildroot/output/host/lib/pkgconfig:/home/thomas/projets/buildroot/output/host/share/pkgconfig" RUSTFLAGS="-C link-args=-L/home/thomas/projets/buildroot/output/host/lib -C link-args=-Wl,-rpath,/home/thomas/projets/buildroot/output/host/lib" CARGO_HOME=/home/thomas/projets/buildroot/output/host/share/cargo cargo install --offline --root /home/thomas/projets/buildroot/outpu
->   t/host --bins --path ./ --force --locked
->    Installing sentry-cli v1.59.0 (/home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0)
->     Compiling syn v1.0.33
->     Compiling synstructure v0.12.4
->     Compiling pest_generator v2.1.3
->     Compiling serde_derive v1.0.114
->     Compiling failure_derive v0.1.8
->     Compiling scroll_derive v0.10.2
->     Compiling pest_derive v2.1.0
->     Compiling failure v0.1.8
->     Compiling which v3.1.1
->     Compiling scroll v0.10.1
->     Compiling runas v0.2.1
->     Compiling goblin v0.2.3
->     Compiling serde v1.0.114
->     Compiling sha1 v0.6.0
->     Compiling serde_json v1.0.56
->     Compiling bstr v0.2.13
->     Compiling chrono v0.4.11
->     Compiling url v2.1.1
->     Compiling string_cache v0.8.0
->     Compiling uuid v0.8.1
->     Compiling csv v1.1.3
->     Compiling globset v0.4.5
->     Compiling sourcemap v5.0.0
->     Compiling plist v0.5.5
->     Compiling anylog v0.5.0
->     Compiling git2 v0.13.6
->     Compiling elementtree v0.5.0
->     Compiling debugid v0.7.2
->     Compiling pdb v0.6.0
->     Compiling proguard v4.0.1
->     Compiling prettytable-rs v0.8.0
->     Compiling ignore v0.4.16
->     Compiling symbolic-common v7.5.0
->     Compiling sentry-types v0.14.1
->     Compiling symbolic-debuginfo v7.5.0
->      Building [====================================================>  ] 299/305: sentry-types, symbolic-debuginfo, ignore
-> 
->     Compiling symbolic v7.5.0
->     Compiling sentry v0.18.1
->     Compiling sentry-cli v1.59.0 (/home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0)
->      Finished release [optimized] target(s) in 2m 35s
->    Installing /home/thomas/projets/buildroot/output/host/bin/sentry-cli
->     Installed package `sentry-cli v1.59.0 (/home/thomas/projets/buildroot/output/build/host-sentry-cli-1.59.0)` (executable `sentry-cli`)
-> 
-> Any idea ?
-
-Sadly no. I've spent some time trying various combinations of flags for 
-cargo build & cargo install, without luck.
-
-I've found this bug-report though : 
-https://github.com/rust-lang/cargo/issues/8703 .
-
-Since the first package being rebuild in this case is 'syn', I've looked 
-at it and indeed it does make (non trivial) use of the [features] 
-section inside its Cargo.toml. So maybe this can explain why syn is 
-being rebuild (and also all similar packages and packages depending on 
-those)?  I'm absolutely not sure of that explanation though.
-
-> 
-> Thomas
-> 
+BR,
 
 Patrick H.
