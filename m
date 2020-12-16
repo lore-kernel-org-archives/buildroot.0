@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:20:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: bump version to 3.34.0
-In-Reply-To: <20201214153322.14408-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 14 Dec 2020 16:33:22 +0100")
-References: <20201214153322.14408-1-bernd.kuhls@t-online.de>
-Message-ID: <87im92uhdr.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Dec 2020 12:20:54 +0100
+Subject: [Buildroot] [PATCH] board/kontron/smarc-sal28: remove "known
+ bugs" section
+In-Reply-To: <20201214151234.15650-1-michael@walle.cc> (Michael Walle's
+ message of "Mon, 14 Dec 2020 16:12:34 +0100")
+References: <20201214151234.15650-1-michael@walle.cc>
+Message-ID: <87eejquhd5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Michael" == Michael Walle <michael@walle.cc> writes:
 
- > Release notes: https://sqlite.org/releaselog/3_34_0.html
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Remove the note about non-working network. This was actually fixed with
+ > linux kernel 5.9. This board is now on 5.10.
+
+ > Signed-off-by: Michael Walle <michael@walle.cc>
 
 Committed, thanks.
 
