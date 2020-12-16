@@ -1,59 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Dec 2020 07:30:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/htop: fix build without wchar
-Message-ID: <20201216063029.39882-1-fontaine.fabrice@gmail.com>
+Date: Wed, 16 Dec 2020 07:40:23 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libnfc: pn53x_usb driver needs gcc >= 4.9
+Message-ID: <20201216064023.41527-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate
+gcc >= 4.9 dependency
+
 Fixes:
- - http://autobuild.buildroot.org/results/5ad330244546e6f087425be816aea158a1f833cb
+ - http://autobuild.buildroot.org/results/6586f4aecf9a47612bfedfc503c9c2948a17e9d6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ter-restore-non-wide-character-build.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/htop/0001-Meter-restore-non-wide-character-build.patch
+Changes v1 -> v2:
+ - Add autobuilder failure
 
-diff --git a/package/htop/0001-Meter-restore-non-wide-character-build.patch b/package/htop/0001-Meter-restore-non-wide-character-build.patch
-new file mode 100644
-index 0000000000..5f67d1f0f1
---- /dev/null
-+++ b/package/htop/0001-Meter-restore-non-wide-character-build.patch
-@@ -0,0 +1,32 @@
-+From 79970f05f37677fe32aa804e493c5da747a2652f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-+Date: Tue, 15 Dec 2020 12:05:20 +0100
-+Subject: [PATCH] Meter: restore non-wide-character build
-+
-+Use mbstowcs() only with wide ncurses support.
-+
-+Closes: #401
-+
-+[Retrieved from:
-+https://github.com/htop-dev/htop/commit/79970f05f37677fe32aa804e493c5da747a2652f]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Meter.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/Meter.c b/Meter.c
-+index b006a584..e849ea4a 100644
-+--- a/Meter.c
-++++ b/Meter.c
-+@@ -196,7 +196,11 @@ static void BarMeterMode_draw(Meter* this, int x, int y, int w) {
-+ 
-+    // The text in the bar is right aligned;
-+    // calculate needed padding and generate leading spaces
-++#ifdef HAVE_LIBNCURSESW
-+    const int textLen = mbstowcs(NULL, buffer, 0);
-++#else
-++   const int textLen = strlen(buffer);
-++#endif
-+    const int padding = CLAMP(w - textLen, 0, w);
-+ 
-+    RichString_begin(bar);
+ package/libnfc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+index 073b8f37f5..ead61e4529 100644
+--- a/package/libnfc/Config.in
++++ b/package/libnfc/Config.in
+@@ -64,13 +64,15 @@ config BR2_PACKAGE_LIBNFC_PN53X_USB
+ 	bool "pn53x_usb driver"
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  support for pn53x_usb driver
+ 
+-comment "pn53x_usb driver needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "pn53x_usb driver needs a toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_LIBNFC_EXAMPLES
+ 	bool "build libnfc examples"
 -- 
 2.29.2
