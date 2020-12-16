@@ -1,88 +1,89 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Dec 2020 08:04:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix static build with readline
-Message-ID: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 16 Dec 2020 00:00:12 -0800
+Subject: [Buildroot] [PATCH 5/5] package/docker-engine: bump version to
+ 20.10.1
+In-Reply-To: <20201216080013.547261-1-christian@paral.in>
+References: <20201216080013.547261-1-christian@paral.in>
+Message-ID: <20201216080013.547261-5-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
+Additionally, fix the ldflags specification of the package version.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The "autogen" script does not actually configure anything anymore, and instead
+exports a LDFLAGS environment variable which we can't use. Instead, specify the
+version information via LDFLAGS directly in the Buildroot makefile, similar to
+containerd and other packages.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- ...re.ac-fix-static-build-with-readline.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+ package/docker-engine/docker-engine.hash |  2 +-
+ package/docker-engine/docker-engine.mk   | 25 +++++++++---------------
+ 2 files changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-new file mode 100644
-index 0000000000..37dbdb18e5
---- /dev/null
-+++ b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-@@ -0,0 +1,61 @@
-+From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 16 Dec 2020 07:51:04 +0100
-+Subject: [PATCH] configure.ac: fix static build with readline
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index e7d5932687..a6313ce351 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	f43331fef1d24e31f43392fc1fed72b48fc17fd432d341d6eb1f68ca11383406  docker-engine-19.03.13.tar.gz
++sha256  f0fda46a82bf8f624eb349370358891d3bc65ef3e320675226f17dba8f62566d  docker-engine-20.10.1.tar.gz
+ sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 8cedf307ba..186aa4223f 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 19.03.13
++DOCKER_ENGINE_VERSION = 20.10.1
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+@@ -13,13 +13,16 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
+ DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
+ DOCKER_ENGINE_GOMOD = github.com/docker/docker
+ 
+-DOCKER_ENGINE_LDFLAGS = \
+-	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+-	-X main.Version=$(DOCKER_ENGINE_VERSION)
+-
+-DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
++DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs
+ DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
+ 
++DOCKER_ENGINE_LDFLAGS = \
++	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.BuildTime="" \
++	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.GitCommit="buildroot" \
++	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.IAmStatic="false" \
++	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.InitCommitID="" \
++	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.Version="$(DOCKER_ENGINE_VERSION)"
 +
-+Retrieve the dependencies of readline through pkg-config (and fallback
-+to -lreadline) to avoid the following build failure:
-+
-+/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
-+display.c:(.text+0x1ab): undefined reference to `tputs'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
-+---
-+ Makefile.am  | 4 ++--
-+ configure.ac | 3 +++
-+ 2 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 3cd7eaa6..493d06cc 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
-+ 			client/network.h client/network.c \
-+ 			client/properties.h client/properties.c \
-+ 			client/wsc.c client/station.c
-+-client_iwctl_LDADD = $(ell_ldadd) -lreadline
-++client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-+ 
-+ if MANUAL_PAGES
-+ man_MANS += client/iwctl.1
-+@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
-+ 				client/display.h client/display.c \
-+ 				client/network.h client/network.c \
-+ 				client/properties.h client/properties.c
-+-unit_test_client_LDADD = $(ell_ldadd) -lreadline
-++unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-+ endif
-+ 
-+ unit_test_sae_SOURCES = unit/test-sae.c \
-+diff --git a/configure.ac b/configure.ac
-+index 7bd917a4..52f27ed9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
-+ if (test "${enable_client}" != "no"); then
-+ 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
-+ 			AC_MSG_ERROR(readline header files are required))
-++	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
-++	AC_SUBST(READLINE_CFLAGS)
-++	AC_SUBST(READLINE_LIBS)
-+ fi
-+ AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
-+ 
-+-- 
-+2.29.2
-+
+ ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+ DOCKER_ENGINE_TAGS += seccomp
+ DOCKER_ENGINE_DEPENDENCIES += libseccomp
+@@ -53,16 +56,6 @@ endif
+ 
+ DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+ 
+-define DOCKER_ENGINE_RUN_AUTOGEN
+-	cd $(@D) && \
+-		BUILDTIME="$$(date)" \
+-		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
+-		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+-		bash ./hack/make/.go-autogen
+-endef
+-
+-DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
+-
+ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
 -- 
-2.29.2
+2.28.0
