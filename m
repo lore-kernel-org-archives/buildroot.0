@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Dec 2020 08:23:37 +0000
-Subject: [Buildroot] [Bug 13376] Security Architect
-In-Reply-To: <bug-13376-163@https.bugs.busybox.net/>
-References: <bug-13376-163@https.bugs.busybox.net/>
-Message-ID: <bug-13376-163-5OtWjqsyUR@https.bugs.busybox.net/>
+From: Wolfgang Grandegger <wg@grandegger.com>
+Date: Wed, 16 Dec 2020 09:31:40 +0100
+Subject: [Buildroot] Weird behaviour of pkgconf/pkg-config
+Message-ID: <bc93457f-79f7-98b2-c1a9-3db590e07101@grandegger.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13376
+Hello,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+I have trouble with "pkgconf", which does not find "libjpeg" when
+building "qt5webengine":
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+  $ host/bin/pkgconf --libs libjpeg
+  Package libjpeg was not found in the pkg-config search path.
+  Perhaps you should add the directory containing `libjpeg.pc'
+  to the PKG_CONFIG_PATH environment variable
+  Package 'libjpeg', required by 'virtual:world', not found
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On the other hand, "pkg-config" works as expected:
+
+  $ host/bin/pkg-config --libs libjpeg
+  -Lhost/bin/../x86_64-buildroot-linux-gnu/sysroot/usr/lib -ljpeg
+
+At a closer look, "pkgconf" seems to search for the '*.pc" files in
+
+  host/lib/pkgconfig/
+
+while "pkg-config" looks into:
+
+  host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/pkgconfig/
+
+Is that the indented behaviour? What am I doing wrong?
+
+Wolfgang
