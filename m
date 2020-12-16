@@ -1,25 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:19:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/git: fix build without threads
-In-Reply-To: <20201215065155.46439-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 15 Dec 2020 07:51:55 +0100")
-References: <20201215065155.46439-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1nquhfg.fsf@dell.be.48ers.dk>
+Date: Wed, 16 Dec 2020 12:20:04 +0100
+Subject: [Buildroot] [PATCH] package/python-requests: bump to version
+ 2.25.0
+In-Reply-To: <20201215140407.57321-1-m.niestroj@grinn-global.com> (Marcin
+ Niestroj's message of "Tue, 15 Dec 2020 15:04:07 +0100")
+References: <20201215140407.57321-1-m.niestroj@grinn-global.com>
+Message-ID: <87mtyeuhej.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
- > Fix build of git version >= 2.29.0 without threads
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d41638d1ad8e78dd6f654367c905996b838ee649
+ > LICENSE file content has been changed ([1]) to follow Apache-2.0
+ > instructions.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [1] https://github.com/psf/requests/commit/22b5a39098223f51fcd2df238e13f9bac86b35a4
 
-Committed, thanks. Don't forget to send the patch upstream.
+ > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
