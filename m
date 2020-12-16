@@ -1,49 +1,60 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 16 Dec 2020 07:40:23 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libnfc: pn53x_usb driver needs gcc >= 4.9
-Message-ID: <20201216064023.41527-1-fontaine.fabrice@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 16 Dec 2020 07:58:22 +0100
+Subject: [Buildroot] host-ninja: ccache: build failure on latest Ubuntu
+ host system
+In-Reply-To: <CA+h8R2pnu3Gn=AzhffpVUsAghS47fGSaDDQ5M5sekGyKdnNckg@mail.gmail.com>
+References: <CA+h8R2pnu3Gn=AzhffpVUsAghS47fGSaDDQ5M5sekGyKdnNckg@mail.gmail.com>
+Message-ID: <CAGm1_ksSBGTwRq17+xSnXCkHzi5A_JQGdKd3fDD5jYPhVgvCRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate
-gcc >= 4.9 dependency
+Hi Christian,
 
-Fixes:
- - http://autobuild.buildroot.org/results/6586f4aecf9a47612bfedfc503c9c2948a17e9d6
+On Wed, Dec 16, 2020 at 12:38 AM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi all,
+>
+> For some reason against latest Ubuntu, Buildroot builds have been
+> failing for me since upgrading to 2020.11.x on GitHub Actions:
+>
+> https://github.com/skiffos/SkiffOS/actions/runs/424300538
+>
+> The error is related to the ccache, the ccache appears to be getting
+> incorrect flags:
+>
+> >>> host-ninja 1.10.0 Configuring
+> -- The C compiler identification is unknown
+> -- The CXX compiler identification is unknown
+> -- Detecting C compiler ABI info
+> -- Detecting C compiler ABI info - failed
+> -- Check for working C compiler: host/bin/ccache
+> -- Check for working C compiler: host/bin/ccache - broken
+> CMake Error at CMakeTestCCompiler.cmake:66 (message):
+>   The C compiler
+>
+>     "host/bin/ccache"
+>
+>   is not able to compile a simple test program.
+>
+>   It fails with the following output:
+>
+>    host/bin/ccache: invalid option -- 'O'
+>
+> It appears that the ccache is getting an option meant for gcc - I
+> found a few emails mentioning this from a long time ago which said to
+> wrap the CFLAGS with quotes.
+>
+> Given that this is a fairly standard Ubuntu system I don't think this
+> is related to the fact that it's running in a GitHub action (which has
+> worked fine in the past).
+>
+> Thanks for any help on this.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Add autobuilder failure
+Please take a look at this patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20201212225224.117940-1-bernd.amend at gmail.com/
 
- package/libnfc/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
-index 073b8f37f5..ead61e4529 100644
---- a/package/libnfc/Config.in
-+++ b/package/libnfc/Config.in
-@@ -64,13 +64,15 @@ config BR2_PACKAGE_LIBNFC_PN53X_USB
- 	bool "pn53x_usb driver"
- 	default y
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  support for pn53x_usb driver
- 
--comment "pn53x_usb driver needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "pn53x_usb driver needs a toolchain w/ threads, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_LIBNFC_EXAMPLES
- 	bool "build libnfc examples"
--- 
-2.29.2
+Best regards,
+Yegor
