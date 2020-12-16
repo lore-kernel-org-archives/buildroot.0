@@ -1,60 +1,88 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 16 Dec 2020 07:58:22 +0100
-Subject: [Buildroot] host-ninja: ccache: build failure on latest Ubuntu
- host system
-In-Reply-To: <CA+h8R2pnu3Gn=AzhffpVUsAghS47fGSaDDQ5M5sekGyKdnNckg@mail.gmail.com>
-References: <CA+h8R2pnu3Gn=AzhffpVUsAghS47fGSaDDQ5M5sekGyKdnNckg@mail.gmail.com>
-Message-ID: <CAGm1_ksSBGTwRq17+xSnXCkHzi5A_JQGdKd3fDD5jYPhVgvCRw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 16 Dec 2020 08:04:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix static build with readline
+Message-ID: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+Fixes:
+ - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
 
-On Wed, Dec 16, 2020 at 12:38 AM Christian Stewart <christian@paral.in> wrote:
->
-> Hi all,
->
-> For some reason against latest Ubuntu, Buildroot builds have been
-> failing for me since upgrading to 2020.11.x on GitHub Actions:
->
-> https://github.com/skiffos/SkiffOS/actions/runs/424300538
->
-> The error is related to the ccache, the ccache appears to be getting
-> incorrect flags:
->
-> >>> host-ninja 1.10.0 Configuring
-> -- The C compiler identification is unknown
-> -- The CXX compiler identification is unknown
-> -- Detecting C compiler ABI info
-> -- Detecting C compiler ABI info - failed
-> -- Check for working C compiler: host/bin/ccache
-> -- Check for working C compiler: host/bin/ccache - broken
-> CMake Error at CMakeTestCCompiler.cmake:66 (message):
->   The C compiler
->
->     "host/bin/ccache"
->
->   is not able to compile a simple test program.
->
->   It fails with the following output:
->
->    host/bin/ccache: invalid option -- 'O'
->
-> It appears that the ccache is getting an option meant for gcc - I
-> found a few emails mentioning this from a long time ago which said to
-> wrap the CFLAGS with quotes.
->
-> Given that this is a fairly standard Ubuntu system I don't think this
-> is related to the fact that it's running in a GitHub action (which has
-> worked fine in the past).
->
-> Thanks for any help on this.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...re.ac-fix-static-build-with-readline.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
 
-Please take a look at this patch:
-https://patchwork.ozlabs.org/project/buildroot/patch/20201212225224.117940-1-bernd.amend at gmail.com/
-
-Best regards,
-Yegor
+diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+new file mode 100644
+index 0000000000..37dbdb18e5
+--- /dev/null
++++ b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+@@ -0,0 +1,61 @@
++From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 16 Dec 2020 07:51:04 +0100
++Subject: [PATCH] configure.ac: fix static build with readline
++
++Retrieve the dependencies of readline through pkg-config (and fallback
++to -lreadline) to avoid the following build failure:
++
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
++display.c:(.text+0x1ab): undefined reference to `tputs'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
++---
++ Makefile.am  | 4 ++--
++ configure.ac | 3 +++
++ 2 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 3cd7eaa6..493d06cc 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
++ 			client/network.h client/network.c \
++ 			client/properties.h client/properties.c \
++ 			client/wsc.c client/station.c
++-client_iwctl_LDADD = $(ell_ldadd) -lreadline
+++client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
++ 
++ if MANUAL_PAGES
++ man_MANS += client/iwctl.1
++@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
++ 				client/display.h client/display.c \
++ 				client/network.h client/network.c \
++ 				client/properties.h client/properties.c
++-unit_test_client_LDADD = $(ell_ldadd) -lreadline
+++unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
++ endif
++ 
++ unit_test_sae_SOURCES = unit/test-sae.c \
++diff --git a/configure.ac b/configure.ac
++index 7bd917a4..52f27ed9 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
++ if (test "${enable_client}" != "no"); then
++ 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
++ 			AC_MSG_ERROR(readline header files are required))
+++	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
+++	AC_SUBST(READLINE_CFLAGS)
+++	AC_SUBST(READLINE_LIBS)
++ fi
++ AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
++ 
++-- 
++2.29.2
++
+-- 
+2.29.2
