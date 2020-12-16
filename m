@@ -1,183 +1,43 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 16 Dec 2020 00:42:46 -0800
-Subject: [Buildroot] [PATCH v1 1/1] package/balena-engine: new package
-Message-ID: <20201216084246.102616-1-christian@paral.in>
+Date: Wed, 16 Dec 2020 01:02:25 -0800
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.15.6
+Message-ID: <20201216090225.117198-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+go1.15.6 (released 2020/12/03) includes fixes to the compiler, linker, runtime,
+the go command, and the io package.
+
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/Config.in                      |   1 +
- package/balena-engine/Config.in        |  27 ++++++
- package/balena-engine/balena-engine.mk | 109 +++++++++++++++++++++++++
- 3 files changed, 137 insertions(+)
- create mode 100644 package/balena-engine/Config.in
- create mode 100644 package/balena-engine/balena-engine.mk
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index dc7139a49a..0fe88511dd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2377,6 +2377,7 @@ menu "System tools"
- 	source "package/atop/Config.in"
- 	source "package/attr/Config.in"
- 	source "package/audit/Config.in"
-+	source "package/balena-engine/Config.in"
- 	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
-diff --git a/package/balena-engine/Config.in b/package/balena-engine/Config.in
-new file mode 100644
-index 0000000000..d7764c3f65
---- /dev/null
-+++ b/package/balena-engine/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_BALENA_ENGINE
-+	bool "balena-engine"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_IPTABLES
-+	select BR2_PACKAGE_SQLITE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  balenaEngine is a new container engine purpose-built for
-+	  embedded and IoT use cases and compatible with Docker
-+	  containers.
-+
-+	  https://github.com/balena-os/balena-engine
-+
-+comment "balena-engine needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_USE_MMU
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-new file mode 100644
-index 0000000000..b3eb2ca75b
---- /dev/null
-+++ b/package/balena-engine/balena-engine.mk
-@@ -0,0 +1,109 @@
-+################################################################################
-+#
-+# balena-engine
-+#
-+################################################################################
-+
-+BALENA_ENGINE_VERSION = 19.03.14
-+BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
-+
-+BALENA_ENGINE_LICENSE = Apache-2.0
-+BALENA_ENGINE_LICENSE_FILES = LICENSE
-+
-+BALENA_ENGINE_DEPENDENCIES = host-pkgconf
-+BALENA_ENGINE_GOMOD = github.com/docker/docker
-+
-+BALENA_ENGINE_LDFLAGS = \
-+	-X github.com/docker/cli/cli/version.Version=N/A \
-+	-X github.com/docker/cli/cli/version.GitCommit= \
-+	-X github.com/docker/cli/cli/version.BuildTime= \
-+	-X github.com/containerd/containerd/version.Version=N/A \
-+	-X github.com/opencontainers/runc.version=N/A
-+
-+BALENA_ENGINE_TAGS = \
-+	cgo \
-+	exclude_graphdriver_zfs \
-+	autogen \
-+	no_buildkit \
-+	no_btrfs \
-+	no_cri \
-+	no_devmapper \
-+	no_zfs \
-+	exclude_disk_quota \
-+	exclude_graphdriver_btrfs \
-+	exclude_graphdriver_devicemapper
-+
-+BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+BALENA_ENGINE_DEPENDENCIES += systemd
-+BALENA_ENGINE_TAGS += journald
-+endif
-+
-+define BALENA_ENGINE_RUN_AUTOGEN
-+	cd $(@D) && \
-+		VERSION=$(BALENA_ENGINE_VERSION) \
-+		PKG_CONFIG=$(PKG_CONFIG_HOST_BINARY) \
-+		$(TARGET_MAKE_ENV) \
-+		$(SHELL) hack/make/.go-autogen
-+endef
-+
-+BALENA_ENGINE_POST_CONFIGURE_HOOKS += BALENA_ENGINE_RUN_AUTOGEN
-+
-+define BALENA_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/systemd/balena-engine.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/balena-engine.service
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/systemd/balena-engine.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/balena-engine.socket
-+endef
-+
-+define BALENA_ENGINE_USERS
-+	- - balena-engine -1 * - - - balenaEngine daemon
-+endef
-+
-+define BALENA_ENGINE_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPVS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-+endef
-+
-+define BALENA_ENGINE_INSTALL_SYMLINK
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-daemon
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd-shim
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd-ctr
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-runc
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-proxy
-+	$(if $(BR2_PACKAGE_TINI),ln -f -s tini $(TARGET_DIR)/usr/bin/balena-engine-init)
-+endef
-+BALENA_ENGINE_POST_INSTALL_TARGET_HOOKS += BALENA_ENGINE_INSTALL_SYMLINK
-+
-+$(eval $(golang-package))
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 79d6abe8df..de2cf74cbb 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  c1076b90cf94b73ebed62a81d802cd84d43d02dea8c07abdc922c57a071c84f1  go1.15.5.src.tar.gz
++sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index d2ab9b81dd..d9f4905eb9 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.5
++GO_VERSION = 1.15.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.29.2
