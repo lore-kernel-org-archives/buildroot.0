@@ -1,110 +1,144 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Dec 2020 12:24:21 +0100
-Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.6
-Message-ID: <20201216110920.F0BA687C8E@busybox.osuosl.org>
+Date: Wed, 16 Dec 2020 12:18:35 +0100
+Subject: [Buildroot] [git commit] package/git: fix build without threads
+Message-ID: <20201216110920.AC66587EB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81f14be9ba162f9f84fb2a6d89cc9e78776d6cb2
+commit: https://git.buildroot.net/buildroot/commit/?id=d154a698b17c8f19f7478d78ecc0f83a2d2e5b61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-remove merged patch
+Fix build of git version >= 2.29.0 without threads
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/d41638d1ad8e78dd6f654367c905996b838ee649
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...compiler-warning-fixes-for-NO_SHARED_LIBS.patch | 58 ----------------------
- package/iptables/iptables.hash                     |  2 +-
- package/iptables/iptables.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 60 deletions(-)
+ package/git/0001-Fix-build-without-threads.patch | 100 +++++++++++++++++++++++
+ package/git/git.mk                               |   2 +
+ 2 files changed, 102 insertions(+)
 
-diff --git a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch b/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-deleted file mode 100644
-index 8d364b3789..0000000000
---- a/package/iptables/0001-libxtables-compiler-warning-fixes-for-NO_SHARED_LIBS.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 6cb8af1ff3951e47def7a16db39289dc9d9c61fe Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
--Date: Tue, 23 Jun 2020 16:09:02 -0700
--Subject: libxtables: compiler warning fixes for NO_SHARED_LIBS
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes two issues with NO_SHARED_LIBS:
-- - #include <dlfcn.h> is ifdef'ed out and thus dlclose()
--   triggers an undeclared function compiler warning
-- - dlreg_add() is unused and thus triggers an unused
--   function warning
--
--Test: builds without warnings
--Signed-off-by: Maciej ??enczykowski <maze@google.com>
--Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
--
--[Retrieved from:
--https://git.netfilter.org/iptables/commit/libxtables/xtables.c?id=6cb8af1ff3951e47def7a16db39289dc9d9c61fe]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- libxtables/xtables.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/libxtables/xtables.c b/libxtables/xtables.c
--index 7fe42580..8907ba20 100644
----- a/libxtables/xtables.c
--+++ b/libxtables/xtables.c
--@@ -206,6 +206,7 @@ struct xtables_target *xtables_targets;
-- static bool xtables_fully_register_pending_match(struct xtables_match *me);
-- static bool xtables_fully_register_pending_target(struct xtables_target *me);
-- 
--+#ifndef NO_SHARED_LIBS
-- /* registry for loaded shared objects to close later */
-- struct dlreg {
-- 	struct dlreg *next;
--@@ -237,6 +238,7 @@ static void dlreg_free(void)
-- 		dlreg = next;
-- 	}
-- }
--+#endif
-- 
-- void xtables_init(void)
-- {
--@@ -267,7 +269,9 @@ void xtables_init(void)
-- 
-- void xtables_fini(void)
-- {
--+#ifndef NO_SHARED_LIBS
-- 	dlreg_free();
--+#endif
-- }
-- 
-- void xtables_set_nfproto(uint8_t nfproto)
---- 
--cgit v1.2.3
--
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 725770543d..120e7e4a89 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
-@@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256  d457d74512e63aa3f50336e0597d4023c0e3c6845594d38532efb6ebcb294309  iptables-1.8.5.tar.bz2
-+sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 442639f159..f83165edb9 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/git/0001-Fix-build-without-threads.patch b/package/git/0001-Fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..7ce85ffaf8
+--- /dev/null
++++ b/package/git/0001-Fix-build-without-threads.patch
+@@ -0,0 +1,100 @@
++From 07d66af3b0800764087c4151d4f6562d4f8cce05 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 14 Dec 2020 23:00:33 +0100
++Subject: [PATCH] Fix build without threads
++
++Build without threads is broken since version 2.29.0 and
++https://github.com/git/git/commit/15b52a44e0c92a0658e891194a5b0610d1f53afc:
++
++In file included from cache.h:4,
++                 from blame.c:1:
++git-compat-util.h:1238:20: error: static declaration of 'flockfile' follows non-static declaration
++ static inline void flockfile(FILE *fh)
++                    ^~~~~~~~~
++In file included from git-compat-util.h:168,
++                 from cache.h:4,
++                 from blame.c:1:
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdio.h:806:13: note: previous declaration of 'flockfile' was here
++ extern void flockfile (FILE *__stream) __THROW;
++             ^~~~~~~~~
++In file included from cache.h:4,
++                 from blame.c:1:
++git-compat-util.h:1242:20: error: static declaration of 'funlockfile' follows non-static declaration
++ static inline void funlockfile(FILE *fh)
++                    ^~~~~~~~~~~
++In file included from git-compat-util.h:168,
++                 from cache.h:4,
++                 from blame.c:1:
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdio.h:813:13: note: previous declaration of 'funlockfile' was here
++ extern void funlockfile (FILE *__stream) __THROW;
++             ^~~~~~~~~~~
++
++To avoid this build failure, check if flockfile is available before
++defining flockfile, funlockfile and getc_unlocked
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d41638d1ad8e78dd6f654367c905996b838ee649
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile          | 5 +++++
++ configure.ac      | 6 ++++++
++ git-compat-util.h | 2 +-
++ 3 files changed, 12 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 6fb86c5862..58d0893a12 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -232,6 +232,8 @@ all::
++ # Define NO_STRUCT_ITIMERVAL if you don't have struct itimerval
++ # This also implies NO_SETITIMER
++ #
+++# Define NO_FLOCKFILE if you don't have flockfile()
+++#
++ # Define NO_FAST_WORKING_DIRECTORY if accessing objects in pack files is
++ # generally faster on your platform than accessing the working directory.
++ #
++@@ -1638,6 +1640,9 @@ endif
++ ifdef NO_SETITIMER
++ 	COMPAT_CFLAGS += -DNO_SETITIMER
++ endif
+++ifdef NO_FLOCKFILE
+++	COMPAT_CFLAGS += -DNO_FLOCKFILE
+++endif
++ ifdef NO_PREAD
++ 	COMPAT_CFLAGS += -DNO_PREAD
++ 	COMPAT_OBJS += compat/pread.o
++diff --git a/configure.ac b/configure.ac
++index 66aedb9288..d4295b5c69 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1132,6 +1132,12 @@ GIT_CHECK_FUNC(setitimer,
++ [NO_SETITIMER=YesPlease])
++ GIT_CONF_SUBST([NO_SETITIMER])
++ #
+++# Define NO_FLOCKFILE if you don't have flockfile.
+++GIT_CHECK_FUNC(flockfile,
+++[NO_FLOCKFILE=],
+++[NO_FLOCKFILE=YesPlease])
+++GIT_CONF_SUBST([NO_FLOCKFILE])
+++#
++ # Define NO_STRCASESTR if you don't have strcasestr.
++ GIT_CHECK_FUNC(strcasestr,
++ [NO_STRCASESTR=],
++diff --git a/git-compat-util.h b/git-compat-util.h
++index 7d509c5022..279cdd941e 100644
++--- a/git-compat-util.h
+++++ b/git-compat-util.h
++@@ -1236,7 +1236,7 @@ int warn_on_fopen_errors(const char *path);
++ # define SHELL_PATH "/bin/sh"
++ #endif
++ 
++-#ifndef _POSIX_THREAD_SAFE_FUNCTIONS
+++#if !defined(_POSIX_THREAD_SAFE_FUNCTIONS) && defined(NO_FLOCKFILE)
++ static inline void flockfile(FILE *fh)
++ {
++ 	; /* nothing */
++-- 
++2.29.2
++
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 0fc081eaa1..6a15e3aeeb 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -10,6 +10,8 @@ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ GIT_LICENSE_FILES = COPYING LGPL-2.1
+ GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
++# We're patching configure.ac
++GIT_AUTORECONF = YES
  
--IPTABLES_VERSION = 1.8.5
-+IPTABLES_VERSION = 1.8.6
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ GIT_DEPENDENCIES += host-pkgconf openssl
