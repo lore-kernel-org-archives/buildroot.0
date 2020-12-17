@@ -1,43 +1,24 @@
-From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Thu, 17 Dec 2020 14:01:22 +0800
-Subject: [Buildroot] [PATCH 5/5] package/docker-engine: bump version to
- 20.10.1
-In-Reply-To: <20201216080013.547261-5-christian@paral.in>
-References: <20201216080013.547261-1-christian@paral.in>
- <20201216080013.547261-5-christian@paral.in>
-Message-ID: <a2bb55e3-2ab0-29ad-9531-21575dcb7e5d@aliyun.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Dec 2020 06:51:43 +0000
+Subject: [Buildroot] [Bug 13376] Security Architect
+In-Reply-To: <bug-13376-163@https.bugs.busybox.net/>
+References: <bug-13376-163@https.bugs.busybox.net/>
+Message-ID: <bug-13376-163-92LjoIO5OJ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+https://bugs.busybox.net/show_bug.cgi?id=13376
 
-After applying this series of patches, the output is as follows:
+--- Comment #1 from John Solomon <johnnsolomon1989@hotmail.com> ---
+Our mission is to build the most respected global Microsoft Dynamics consulting
+partner, enabling organizations to work smarter, faster & simpler through
+future-proofed technology, whilst providing exceptional client experiences.
 
- ??? # docker version
- ??? Client:
- ??? ?Version:?????????? 20.10.1
- ??? ?Git commit:??????? 20.10.1
- ??? ?Built:???????????? unknown-buildtime
+https://www.nevastech.com/
 
- ??? Server:
- ??? ?Engine:
- ??? ? Version:????????? 20.10.1
- ??? ? Git commit:?????? buildroot
- ??? ? Built:
- ??? ?containerd:
- ??? ? Version:????????? 1.4.3
- ??? ? GitCommit:
- ??? ?runc:
- ??? ? Version:????????? 1.0.0-rc92
- ??? ? GitCommit:
- ??? ?docker-init:
- ??? ? Version:????????? 0.19.0
- ??? ? GitCommit:
-
-To make the output more consistent, I suggest setting both BuildTime and 
-GitCommit empty.
-
-Regards, Yuanhao
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
